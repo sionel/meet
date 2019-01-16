@@ -1,0 +1,1 @@
+export { default as ListItemComp } from './ListItemComp';
