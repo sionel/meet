@@ -10,18 +10,18 @@ import {
     TextInput,
     TouchableOpacity
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+// import Icon from 'react-native-vector-icons/FontAwesome';
 
 const SearchFormPresenter = (props) => {
     const { active, value } = props;
     return (  
         <View style={{...styles.wrap}}>
-            <Icon 
+            {/* <Icon 
                 name="search" 
                 size={20} 
                 color="#c8c8c8" 
                 style={{...styles.searchIcon}} 
-            />
+            /> */}
             <TextInput
                 placeholder="Search..."
                 style={{...styles.input}}
@@ -30,11 +30,11 @@ const SearchFormPresenter = (props) => {
             />
             {active && (
                 <TouchableOpacity onPress={()=>props.onChange('')} style={{...styles.closeIcon}}>
-                <Icon 
+                {/* <Icon 
                     name="times-circle" 
                     size={20} 
                     color="#c8c8c8"
-                />
+                /> */}
                 </TouchableOpacity>
             )}
         </View>

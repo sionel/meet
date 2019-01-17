@@ -9,7 +9,7 @@ import {
     View, 
     TouchableHighlight
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+// import Icon from 'react-native-vector-icons/FontAwesome';
 
 const AddButtonPresenter = (props) => {
     return (  
@@ -19,11 +19,11 @@ const AddButtonPresenter = (props) => {
             underlayColor="#0C80EB"
         >
             <View style={{...styles.text}}>
-            <Icon 
+            {/* <Icon 
                 name="plus" 
                 size={25} 
                 color="#fff"
-            />
+            /> */}
             </View>
         </TouchableHighlight>
     );

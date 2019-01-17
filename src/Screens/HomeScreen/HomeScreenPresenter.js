@@ -26,7 +26,7 @@ const HomeScreenPresenter = (props) => (
     <SearchForm />
 
     {/* 화상대화 히스토리 리스트 */}
-    {/* <FlatList 
+    <FlatList 
       style={styles.listContainer}
       data={props.list}
       renderItem={ ({item}) => (
@@ -39,10 +39,10 @@ const HomeScreenPresenter = (props) => (
           onClick={()=>props.onRedirect('Conference')}
         />
       )}
-    /> */}
+    />
 
     {/* 방생성 버튼 */}
-    {/* <AddButton onClick={props.onRedirect} /> */}
+    <AddButton onClick={props.onRedirect} />
   </View>
 );
 

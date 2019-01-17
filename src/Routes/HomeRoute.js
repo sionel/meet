@@ -8,10 +8,9 @@ import {
     createAppContainer,
     createSwitchNavigator,
 } from "react-navigation";
-// import HomeScreen from "../Screens/HomeScreen";
-// import HomeSc from "../Screens/HomeScreen/SearchForm";
-// import HomeScreen2 from "../Pages/Home";
-import HomeScreen2 from "../Pages/Home2";
+
+import HomeScreen from "../Screens/HomeScreen";
+import ConferenceScreen from "../Screens/ConferenceScreen";
 
 
 const commonStyle = { 
@@ -26,7 +25,7 @@ const HomeRoute = createSwitchNavigator({
      * 메인
      */
     Home: {
-        screen: HomeScreen2,
+        screen: HomeScreen,
         headerStyle:{
         color:"#ffffff"
         },
@@ -37,6 +36,22 @@ const HomeRoute = createSwitchNavigator({
             },
             headerTintColor: '#fff',
         }),
+    },
+
+    /**
+     * Conference
+     * 화상대화 접속화면
+     */
+    Conference: {
+        screen: ConferenceScreen,
+        headerStyle:{
+            color:"#fff"
+        },
+        navigationOptions: {
+            header: null,
+            headerLeft: null,
+            gesturesEnabled: false,
+        }
     },
 });
 
