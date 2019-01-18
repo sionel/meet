@@ -51,6 +51,7 @@ target 'JitsiMeet' do
   pod 'react-native-calendar-events',
     :path => '../node_modules/react-native-calendar-events'
 
+  # ReactNavigation Gesture Handler
   pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
 end
 

@@ -7,7 +7,6 @@ import React from 'react'
 import { 
     createAppContainer,
     createStackNavigator,
-    createSwitchNavigator
 } from 'react-navigation';
 
 // 화면을 index로 export해서 불러오면 인식하지 못함 -> 개별적으로 불러오면 해결
