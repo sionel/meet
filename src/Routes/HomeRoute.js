@@ -18,6 +18,7 @@ import {
 
 import HomeScreen from "../Screens/HomeScreen";
 import ConferenceScreen from "../Screens/ConferenceScreen";
+import ConfigurationScreen from "../Screens/ConfigurationScreen";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import iconFont from 'react-native-vector-icons/Fonts/FontAwesome.ttf';
 const commonStyle = { 
@@ -90,6 +91,25 @@ const HomeRoute = createStackNavigator({
             headerLeft: null,
             gesturesEnabled: false,
         }
+    },
+
+    /**
+     * Configuration
+     * 환경설정
+     */
+    Configuration: {
+        screen: ConfigurationScreen,
+        headerStyle:{
+            color:"#fff"
+        },
+        navigationOptions: ({navigation}) => ({
+            header: null,
+            headerLeft:
+                <TouchableOpacity onPress={() => {navigation.dispatch(DrawerActions.toggleDrawer())} }>
+                    <MenuImage navigation={navigation}/>
+                </TouchableOpacity>,
+            gesturesEnabled: false,
+        })
     },
 });
 
