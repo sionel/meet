@@ -7,20 +7,19 @@ import React from 'react'
 import { 
     createAppContainer,
     createSwitchNavigator,
+    createStackNavigator,
 } from "react-navigation";
 
 import HomeScreen from "../Screens/HomeScreen";
 import ConferenceScreen from "../Screens/ConferenceScreen";
 
-
 const commonStyle = { 
     height: 53, 
     color:"white",
-    // backgroundColor: "#3397D6" 
     backgroundColor: "#1C90FB" 
 }
 
-const HomeRoute = createSwitchNavigator({
+const HomeRoute = createStackNavigator({
     /**
      * 메인
      */
@@ -55,5 +54,5 @@ const HomeRoute = createSwitchNavigator({
     },
 });
 
-// export default createAppContainer(HomeRoute);
-export default (HomeRoute);
+export default createAppContainer(HomeRoute);
+// export default (HomeRoute);
