@@ -72,3 +72,5 @@ ios/Pods
 .history
 
 # End of https://www.gitignore.io/api/visualstudiocode
+yarn.lock
+ios/Podfile.lock
