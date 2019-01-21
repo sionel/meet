@@ -42,7 +42,7 @@ const HomeScreenPresenter = (props) => (
     />
 
     {/* 방생성 버튼 */}
-    <AddButton onClick={props.onRedirect} />
+    <AddButton onClick={()=>props.onRedirect('Create')} />
   </View>
 );
 

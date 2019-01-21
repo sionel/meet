@@ -47,7 +47,7 @@ target 'JitsiMeet' do
   pod 'RNGoogleSignin',
     :path => '../node_modules/react-native-google-signin'
   pod 'RNSound', :path => '../node_modules/react-native-sound'
-  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons/FontAwesome'
   pod 'react-native-calendar-events',
     :path => '../node_modules/react-native-calendar-events'
 

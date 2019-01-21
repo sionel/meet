@@ -7,16 +7,7 @@
 import React from "react";
 import ConfigurationScreenPresenter from "./ConfigurationScreenPresenter";
 
-// RN 네비게이션
-import { 
-    // createStackNavigator, 
-    createAppContainer, 
-    // StackActions, 
-    // NavigationActions
-  } from 'react-navigation';
-
 class ConfigurationScreenContainer extends React.Component {
-
     /**
      * STATE
      */
@@ -66,7 +57,6 @@ class ConfigurationScreenContainer extends React.Component {
      */
     handleRedirect = url => {
         const { navigation } = this.props;
-        // alert(url)
         navigation.navigate(url)
     }
 
@@ -90,4 +80,4 @@ class ConfigurationScreenContainer extends React.Component {
     }// render
 }
 
-export default createAppContainer(ConfigurationScreenContainer);
+export default ConfigurationScreenContainer;

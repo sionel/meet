@@ -6,13 +6,10 @@
 import React, {Fragment} from "react";
 import { 
   View, 
-  ScrollView,
+  Button,
   Text, 
   StyleSheet, 
 } from "react-native";
-
-import Participant from './Participant';
-
 
 
 /**
@@ -28,6 +25,11 @@ const CreateScreenPresenter = (props) => {
   return (
     <View style={{...styles.container}}>
       <Text>CREATE PAGE</Text>
+      <Button 
+        title="나가기"
+        onPress={() => props.onRedirect('Home')}
+      />
+      
     </View>
   )
   // #endregion
