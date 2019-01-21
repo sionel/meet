@@ -36,8 +36,8 @@ const toggleMenu = (<Icon name="bars" size={24} color="#fff" style={{marginLeft:
  */
 const MenuImage = ({navigation}) => {
     if(!navigation.state.isDrawerOpen){
-        return <Icon name="bars" size={24} color="#fff" style={{marginLeft:20, zIndex:10}} />
-        // return <Text>Menu{navigation.state.isDrawerOpen == true ? 1:2}</Text>
+        // return <Icon name="bars" size={24} color="#fff" style={{marginLeft:20, zIndex:10}} />
+        return <Text>Menu{navigation.state.isDrawerOpen == true ? 1:2}</Text>
       }else{
         // return <Icon name="times" size={24} color="#fff" style={{marginLeft:20, zIndex:10}} />
         return <Text>Close{navigation.state.isDrawerOpen == true ? 1:2}</Text>

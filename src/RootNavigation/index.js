@@ -14,6 +14,8 @@ import {
 import HomeRoute from '../Routes/HomeRoute';
 // Create Route 
 import CreateRoute from '../Routes/CreateRoute';
+// Login Route 
+import LoginRoute from '../Routes/LoginRoute';
 
 /**
  * Routes
@@ -31,10 +33,19 @@ const Routes = createStackNavigator(
               }
         },
         /**
-         * Home - 메인화면
+         * Create - 대화생성화면
          */
         Create: {
             screen: CreateRoute,
+            navigationOptions: {
+                header: null,
+              }
+        },
+        /**
+         * Login - 로그인화면
+         */
+        Login: {
+            screen: LoginRoute,
             navigationOptions: {
                 header: null,
               }

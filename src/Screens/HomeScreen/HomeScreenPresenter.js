@@ -6,6 +6,7 @@ import React from "react";
 import { 
   View, 
   FlatList,
+  Button,
   StyleSheet,
 } from "react-native";
 // common components
@@ -40,6 +41,9 @@ const HomeScreenPresenter = (props) => (
         />
       )}
     />
+    <View>
+      <Button title="Go login" onPress={()=>props.onRedirect('Login')} />
+    </View>
 
     {/* 방생성 버튼 */}
     <AddButton onClick={()=>props.onRedirect('Create')} />

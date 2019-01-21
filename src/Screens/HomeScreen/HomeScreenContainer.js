@@ -7,6 +7,11 @@ import React from "react";
 import HomeScreenPresenter from "./HomeScreenPresenter";
 
 class HomeScreenContainer extends React.Component {
+    constructor(props){
+        super(props)
+        this.handleRedirect('Login')
+    }
+
     /**
      * STATE
      */
