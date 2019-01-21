@@ -10,98 +10,97 @@ import {
   Text, 
   TextInput,
   StyleSheet, 
-  Svg,
-  Path,
   Button,
+  Image,
   TouchableOpacity
 } from "react-native";
-// import Svg from 'react-native-svg';
-
+import Svg,{ Path } from 'react-native-svg';
+import { 
+  FlatButton,
+  TextField,
+} from '../../components';
 
 const rootPath = `../../../assets`;
 const logo = require(`${rootPath}/wehago_b.svg`);
 
+
 /**
  * LoginScreenPresenter
  */
-const LoginScreenPresenter = (props) => (
-  <View style={styles.container}>
-    {/* TITLE */}
-    <View 
-      style={{
-        flex: 0.1,
-        justifyContent: 'flex-start',
-        marginBottm: 50
-      }}
-    >
-      <Text style={{ fontSize: 33, color:"#333" }}>WEHAGO</Text>
-    </View>
+const LoginScreenPresenter = (props) => {
+  const {
+    userId,
+    userPwd
+  } = props;
 
-    {/* INPUTS */}
-    <View 
-      style={{
-        flex: 0.2
-      }}
-    >
-      <TextInput
-        placeholder="아이디를 입력하세요"
-        placeholderTextColor="#CACACA"
-        style={{width: 270, height: 40, marginTop: 15, color:'#8C8C8C', borderBottomWidth: 1, borderBottomColor: '#CACACA'}}
-      />
-      <TextInput
-        placeholder="패스워드를 입력하세요"
-        placeholderTextColor="#CACACA"
-        style={{width: 270, height: 40, marginTop: 15, color:'#8C8C8C', borderBottomWidth: 1, borderBottomColor: '#CACACA'}}
-      />
-    </View>
-
-    {/* BUTTONS */}
-    <View style={{
-      flex: 0.7,
-      justifyContent: 'flex-start'
-      // marginTop: 20,
-    }}>
+  /**
+   * RETURN
+   */
+  return (
+    <View style={styles.container}>
+      {/* TITLE */}
       <View 
         style={{
-          width: 270,
-          height: 47,
-          backgroundColor: '#1C90FB',
-          color: '#fff',
-          borderRadius: 20,
-          textAlign:'center',
-          justifyContent: 'center',
-          alignItems: 'center'
+          flex: 0.1,
+          justifyContent: 'flex-start',
+          marginBottm: 50
         }}
       >
-        <Text style={{
-          color: '#fff',
-        }}>로그인</Text>
+        <Text style={{ fontSize: 33, color:"#333" }}>WEHAGO</Text>
       </View>
 
-      {/* SUB BUTTONS */}
+      {/* INPUTS */}
+      <View 
+        style={{
+          flex: 0.2
+        }}
+      >
+        <TextField
+          placeholder={"아이디를 입력하세요"}
+          width={270}
+          height={40}
+          onChange={(text)=>props.onChangeValue('userId', text)}
+          value={userId}
+        />
+        <TextField
+          placeholder={"패스워드를 입력하세요"}
+          width={270}
+          height={40}
+          onChange={(text)=>props.onChangeValue('userPwd', text)}
+          value={userPwd}
+        />
+      </View>
+
+      {/* BUTTONS */}
       <View style={{
-        paddingTop: 20,
-        flexDirection: 'row',
+        flex: 0.7,
+        justifyContent: 'flex-start'
       }}>
-        <View style={{flex: 0.4}}>
-          <Text>자동로그인</Text>
+        <FlatButton
+          width={270}
+          height={47}
+          borderRadius={20}
+          onClick={()=>props.onRedirect('Home')}
+        >로그인</FlatButton>
+
+        {/* SUB BUTTONS */}
+        <View style={{paddingTop: 20}}>
+          <Text style={{flex:1, textAlign:'center'}}>최초 로그인 이후 자동 로그인됩니다</Text>
         </View>
-        <View style={{flex: 0.6}}>
-          <Text>아이디찾기 | 패스워드찾기</Text>
-        </View>
+        
+      </View>
+
+      
+
+      <View>
+        <Button 
+          title="나가기"
+          onPress={() => props.onRedirect('Home')}
+        />
       </View>
     </View>
-
-    
-
-    <View>
-      <Button 
-        title="나가기"
-        onPress={() => props.onRedirect('Home')}
-      />
-    </View>
-  </View>
-);
+  )
+};
 
 /**
  * styles

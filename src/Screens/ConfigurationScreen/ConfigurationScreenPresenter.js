@@ -10,8 +10,8 @@ import {
 
 // components
 import {
-  ListItemComp
-} from '../../components'
+  ListItemComp 
+} from '../../components';
 
 /**
  * ConfigurationScreenPresenter
