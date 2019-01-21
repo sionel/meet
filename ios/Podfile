@@ -50,6 +50,11 @@ target 'JitsiMeet' do
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
   pod 'react-native-calendar-events',
     :path => '../node_modules/react-native-calendar-events'
+
+  # ReactNavigation Gesture Handler
+  pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
+  # React native SVG
+  pod 'RNSVG', :path => '../node_modules/react-native-svg'
 end
 
 post_install do |installer|
