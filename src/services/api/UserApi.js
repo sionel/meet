@@ -3,7 +3,7 @@
  * 사용자 관련 API
  */
 
-const wehagoBaseURL = `http://dev.api.wehago.com`;
+const wehagoBaseURL = `https://api.wehago.com`;
 const tempBaseUrl = `https://jsonplaceholder.typicode.com`
 
 // #region
@@ -12,7 +12,7 @@ export default {
      * TEST 
      * 테스트 api
      */
-    login: () => fetch(`${tempBaseUrl}/posts`)
+    test: () => fetch(`${tempBaseUrl}/posts`)
         .then(response => response.json())
         .then(responseJson => responseJson)
         .catch(err => {
@@ -21,31 +21,25 @@ export default {
         }),
 
     /**
-     * TEST 
-     * 테스트 api
+     * Login 
+     * --
+     * JSON형태로 데이터를 전송할수없음 => url encoding방식으로 전달
      */
-    test: async data => {
-        console.log("RJ : ", data);
+    login: async data => {
+        let formData = new FormData();
+        for(let i in data){
+            formData.append(i, data[i]);
+        }
         try{
             const timestamp = new Date();
-            // const url = `${wehagoBaseURL}/auth/login/mobile?timestamp=${timestamp.getMilliseconds()}`;
-            const url = `https://dev.api.wehago.com/auth/login/mobile`;
+            const url = `${wehagoBaseURL}/auth/login/mobile?timestamp=${timestamp.getMilliseconds()}`;
             const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Postman-Token': '9b80fd7d-bd83-4840-ae96-7de32e4d0956',
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    ...data
-                })
+                method: "POST",
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+                body: formData
             });
-            const responseJson = await response.json();
-            console.log("RJ : ", response);
-            return responseJson;
+            return response.json();
         }catch(err){
-            // alert('Test Error!')
             console.log('Test err: ', err)
         }
     }

@@ -70,18 +70,15 @@ class LoginScreenContainer extends React.Component {
     _handleLogin = async () => {
         const { userId, userPwd } = this.state;
         const data = {
-            // login_ip: "0.0.0.1", 
-            // login_browser: 'WEHAGO-APP',
-            // login_os: Platform.OS,
-            // login_device: Platform.OS === "ios" ? "iPhone" : "Android",
-            portal_id: 'seongh7800',
-            portal_password: 'kseongh0080',
-            login_ip: '10.51.114.169',
-            login_device: 'iPhone',
-            login_os: 'IOS 12.1.2',
-            login_browser: 'WEHAGO-APP',
+            portal_id: "seongh7800",
+            portal_password: "kseongh0080",
+            login_ip: "10.51.114.169",
+            login_device: "iPhone",
+            login_os: "IOS 12.1.2",
+            login_browser: "WEHAGO-APP"
         }
-        const testData = await UserApi.test(data);
+        // const testData = await UserApi.test(data);
+        const testData = await UserApi.login(data);
         console.log(testData);
         
     }
