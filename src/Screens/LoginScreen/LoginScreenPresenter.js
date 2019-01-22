@@ -80,7 +80,7 @@ const LoginScreenPresenter = (props) => {
           width={270}
           height={47}
           borderRadius={20}
-          onClick={()=>props.onRedirect('Home')}
+          onClick={props.onLogin}
         >로그인</FlatButton>
 
         {/* SUB BUTTONS */}
