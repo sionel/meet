@@ -11,12 +11,7 @@ const SearchFormPresenter = props => {
 	const { active, value } = props;
 	return (
 		<View style={{ ...styles.wrap }}>
-			{/* <Icon 
-                name="search" 
-                size={20} 
-                color="#c8c8c8" 
-                style={{...styles.searchIcon}} 
-            /> */}
+			<Icon name="search" size={20} color="#c8c8c8" style={{ ...styles.searchIcon }} />
 			<TextInput
 				placeholder="Search..."
 				style={{ ...styles.input }}
@@ -25,11 +20,7 @@ const SearchFormPresenter = props => {
 			/>
 			{active && (
 				<TouchableOpacity onPress={() => props.onChange('')} style={{ ...styles.closeIcon }}>
-					{/* <Icon 
-                    name="times-circle" 
-                    size={20} 
-                    color="#c8c8c8"
-                /> */}
+					<Icon name="times-circle" size={20} color="#c8c8c8" />
 				</TouchableOpacity>
 			)}
 		</View>
