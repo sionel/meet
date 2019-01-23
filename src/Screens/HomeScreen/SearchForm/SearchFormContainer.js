@@ -35,11 +35,17 @@ class SearchFormContainer extends React.Component {
      * 입력창 활성화 시 이벤트발생
      */
 	_handleOnChange = value => {
+		const { onChange } = this.props;
+		onChange(value);
 		this.setState({
 			value,
 			active: value ? true : false
 		});
 	};
 }
+
+SearchFormContainer.defaultProps = {
+	onChange: () => console.log('on change searchform')
+};
 
 export default SearchFormContainer;

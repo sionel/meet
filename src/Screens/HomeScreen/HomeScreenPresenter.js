@@ -17,7 +17,13 @@ import AddButton from './AddButton';
 const HomeScreenPresenter = props => (
 	<View style={styles.container}>
 		{/* 검색바 */}
-		<SearchForm />
+		<SearchForm onChange={props.onSearch} />
+
+		{props.list.length < 1 && (
+			<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+				<Text>검색된 결과가 없습니다 :(</Text>
+			</View>
+		)}
 
 		{/* 화상대화 히스토리 리스트 */}
 		<FlatList

@@ -6,9 +6,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import HomeScreenPresenter from './HomeScreenPresenter';
+import { actionCreators as UserActions } from '../../redux/modules/user';
 import { actionCreators as WetalkActions } from '../../redux/modules/wetalk';
 // service
 import { WetalkApi } from '../../services';
+import { UserApi } from '../../services';
+
+// #region
 
 class HomeScreenContainer extends React.Component {
 	constructor(props) {
@@ -17,7 +21,8 @@ class HomeScreenContainer extends React.Component {
 		if (!auth) {
 			this._handleRedirect('Login');
 		} else {
-			this._handleGetWetalkList();
+			this._handleCheckAuth(); // 자동로그인
+			this._handleGetWetalkList(); // 위톡목록 조회
 		}
 	}
 
@@ -26,38 +31,7 @@ class HomeScreenContainer extends React.Component {
      */
 	state = {
 		refreshing: false,
-		list: [
-			{
-				key: 'item1',
-				active: true,
-				title: 'UI/UX',
-				count: 5
-			},
-			{
-				key: 'item2',
-				active: false,
-				title: '플랫폼기획부',
-				count: 5
-			},
-			{
-				key: 'item3',
-				active: false,
-				title: 'DBP본부',
-				count: 5
-			},
-			{
-				key: 'item4',
-				active: true,
-				title: '도우존',
-				count: 5
-			},
-			{
-				key: 'item5',
-				active: false,
-				title: '더존',
-				count: 5
-			}
-		]
+		searchKeyword: ''
 	};
 
 	// #region
@@ -65,10 +39,15 @@ class HomeScreenContainer extends React.Component {
 	 * Rendering
 	 */
 	render() {
-		const { list, refreshing } = this.state;
-		const { navigation, auth, wetalk } = this.props;
+		const { list, refreshing, searchKeyword } = this.state;
+		const { navigation, auth } = this.props;
+		let wetalk = []; // We talk list
 
-		console.log(wetalk);
+		if (searchKeyword) {
+			wetalk = this.props.wetalk.filter(item => item.room_title.match(searchKeyword));
+		} else {
+			wetalk = this.props.wetalk;
+		}
 
 		return (
 			<HomeScreenPresenter
@@ -78,6 +57,7 @@ class HomeScreenContainer extends React.Component {
 				auth={auth}
 				onRedirect={this._handleRedirect}
 				onRefresh={this._handleRefresh}
+				onSearch={this._handleSearch}
 			/>
 		);
 	}
@@ -109,7 +89,30 @@ class HomeScreenContainer extends React.Component {
 		this.setState({ refreshing: true });
 		this._handleGetWetalkList();
 	};
+
+	/**
+	 * _handleSearch
+	 */
+	_handleSearch = searchKeyword => {
+		this.setState({ searchKeyword });
+	};
+
+	/**
+	 * _handleCheckAuth
+	 */
+	_handleCheckAuth = async () => {
+		const { auth, onLogin } = this.props;
+		let result = await UserApi.check(auth.AUTH_A_TOKEN, auth.last_access_company_no);
+		// 자동로그인
+		if (result.resultCode !== 200) {
+			result = await UserApi.login(data);
+			result.resultData.portal_id = auth.portal_id;
+			result.resultData.portal_password = auth.portal_password;
+			onLogin(result.resultData);
+		}
+	};
 }
+// #endregion
 
 /**
  * Connect - State to Props
@@ -123,6 +126,7 @@ let mapStateToProps = state => ({
  * Connect - Dispatch to Props
  */
 const mapDispatchToProps = dispatch => ({
+	onLogin: user => dispatch(UserActions.login(user)),
 	onSetWetalkList: list => dispatch(WetalkActions.setList(list))
 });
 

@@ -17,8 +17,8 @@ class LoginScreenContainer extends React.Component {
 	 * STATE
 	 */
 	state = {
-		userId: '',
-		userPwd: ''
+		userId: 'seongh7800',
+		userPwd: 'kseongh0080'
 	};
 
 	/**
@@ -64,11 +64,12 @@ class LoginScreenContainer extends React.Component {
 	 */
 	_handleLogin = async () => {
 		const { userId, userPwd } = this.state;
+		const { onLogin } = this.props;
 		const data = {
 			// portal_id: userId,
 			// portal_password: userPwd,
-			portal_id: 'seongh7800',
-			portal_password: 'kseongh0080',
+			portal_id: userId,
+			portal_password: userPwd,
 			login_ip: '10.51.114.169',
 			login_device: 'iPhone',
 			login_os: 'IOS 12.1.2',
@@ -77,7 +78,10 @@ class LoginScreenContainer extends React.Component {
 
 		const result = await UserApi.login(data);
 		if (result.resultCode === 200) {
-			this.props.onLogin(result.resultData);
+			// 아이디패스워드 저장
+			result.resultData.portal_id = data.portal_id;
+			result.resultData.portal_password = data.portal_password;
+			onLogin(result.resultData);
 		} else {
 			console.log(result.resultMsg);
 		}
