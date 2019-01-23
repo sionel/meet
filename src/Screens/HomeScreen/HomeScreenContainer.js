@@ -99,15 +99,15 @@ class HomeScreenContainer extends React.Component {
 		const { auth, onSetWetalkList } = this.props;
 		const result = await WetalkApi.getWetalkList(auth.AUTH_A_TOKEN, auth.last_access_company_no);
 		onSetWetalkList(result.resultData.roomList);
+		this.setState({ refreshing: false });
 	};
 
 	/**
 	 * _handleRefresh
 	 */
 	_handleRefresh = () => {
-		// this.setState({ refreshing: true });
+		this.setState({ refreshing: true });
 		this._handleGetWetalkList();
-		// this.setState({ refreshing: false });
 	};
 }
 
