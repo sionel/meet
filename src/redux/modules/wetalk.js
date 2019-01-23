@@ -1,21 +1,21 @@
 /**
- * test.js
- * 추후 삭제 요망
+ * user
+ * user 스토어
  */
 
-const TEST = 'TEST';
+import { UserApi } from '../../services';
+
+const SET_LIST = 'SET_LIST';
 
 //#region Action Creators
 
 /**
- * Test : Test를 위한 Functoin
+ * setList
  */
-test = test => {
-	console.log(1111111123);
-
+setList = list => {
 	return {
-		type: LOG_IN,
-		test
+		type: SET_LIST,
+		list
 	};
 };
 
@@ -24,7 +24,7 @@ test = test => {
 //#region initialState
 
 const initialState = {
-	test: null
+	list: []
 };
 
 //#endregion initialState
@@ -33,8 +33,8 @@ const initialState = {
 
 reducer = (state = initialState, action) => {
 	switch (action.type) {
-		case TEST:
-			return applyTest(state, action);
+		case SET_LIST:
+			return { ...state, list: action.list };
 		default:
 			return state;
 	}
@@ -42,25 +42,10 @@ reducer = (state = initialState, action) => {
 
 //#endregion Reducer
 
-//#region Reducer Functions
-
-/**
- * applyTest
- */
-applyTest = (state, action) => {
-	const { test } = action;
-	return {
-		...state,
-		test
-	};
-};
-
-//#endregion Reducer Functions
-
 //#region Export
 
 const actionCreators = {
-	test
+	setList
 };
 
 export { actionCreators };

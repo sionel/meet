@@ -1,21 +1,21 @@
 /**
- * test.js
- * 추후 삭제 요망
+ * user
+ * user 스토어
  */
 
-const TEST = 'TEST';
+import { UserApi } from '../../services';
+
+const LOGIN = 'LOGIN';
 
 //#region Action Creators
 
 /**
- * Test : Test를 위한 Functoin
+ * login
  */
-test = test => {
-	console.log(1111111123);
-
+login = auth => {
 	return {
-		type: LOG_IN,
-		test
+		type: LOGIN,
+		auth
 	};
 };
 
@@ -24,7 +24,7 @@ test = test => {
 //#region initialState
 
 const initialState = {
-	test: null
+	auth: null
 };
 
 //#endregion initialState
@@ -33,8 +33,9 @@ const initialState = {
 
 reducer = (state = initialState, action) => {
 	switch (action.type) {
-		case TEST:
-			return applyTest(state, action);
+		case LOGIN:
+			return { ...state, auth: action.auth };
+		// return applyTest(state, action);
 		default:
 			return state;
 	}
@@ -60,7 +61,7 @@ applyTest = (state, action) => {
 //#region Export
 
 const actionCreators = {
-	test
+	login
 };
 
 export { actionCreators };
