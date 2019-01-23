@@ -1,0 +1,112 @@
+import JitsiMeetJS from "../../../jitsi/features/base/lib-jitsi-meet";
+import config from "./config";
+
+/**
+ * ConferenceConnector
+ * 화상회의 방 생성/참가 및 디바이스 연결을 담당하는 클래스
+ */
+class ConferenceConnector {
+  constructor() {
+    // room : 화상대화방
+    this._room = null;
+    this._tracks = [];
+  }
+
+  get tracks() {
+    return this._tracks;
+  }
+  //#region Public Functions
+
+  /**
+   * 대화방 참가
+   */
+  connect = (connection, roomName, name) => {
+    return new Promise(async (resolve, reject) => {
+      // 참여할 room object 생성
+      this._room = this._createRoom(connection, roomName);
+      // 이벤트 연결
+      this._bindEvents(resolve, reject);
+      // 트랙 생성
+      const tracks = await this._createTracks();
+      // 트랙 추가
+      this._addTracks(tracks);
+      // display Name 설정
+      this._room.setDisplayName(name);
+      // 대화방 참가
+      this._room.join();
+    });
+  };
+
+  /**
+   * 자원정리 및 대화방 나가기
+   */
+  dispose = async () => {
+    if (this._room) {
+      try {
+        await this._room.leave();
+        this._room = null;
+      } catch (error) {
+        // Nothing to do
+      }
+    }
+  };
+
+  //#endregion
+
+  //#region Private Functions
+
+  /**
+   * 참가할 대화방을 생성한다.(실제 화상회의의 방을 생성하는 것은 아님)
+   */
+  _createRoom = (connection, roomName) => {
+    const options = Object.assign({}, config);
+    const room = connection.jitsiConnection.initJitsiConference(
+      roomName,
+      options
+    );
+    return room;
+  };
+
+  /**
+   * 화상대화방 관련 이벤트를 바인딩한다.
+   */
+  _bindEvents = (resolve, reject) => {
+    const conferenceEvents = JitsiMeetJS.events.conference;
+    // 대화방 참가 성공 이벤트 연결
+    this._room.on(conferenceEvents.CONFERENCE_JOINED, () => {
+      resolve(this._room);
+    });
+
+    // 컨퍼런스 참가 실패 이벤트 연결
+    this._room.on(conferenceEvents.CONFERENCE_FAILED, () => {
+      reject(new Error("컨퍼런스 참가에 실패했습니다."));
+    });
+  };
+
+  /**
+   * 트랙을 생성한다.
+   */
+  _createTracks = async () => {
+    const devices = ["video", "audio"];
+    const tracks = await JitsiMeetJS.createLocalTracks({
+      devices,
+      resolution: 720
+    });
+    return tracks;
+  };
+
+  /**
+   * 트랙을 추가한다.
+   */
+  _addTracks = tracks => {
+    // 기존에 트랙이 있다면 dispose한다.
+    this._tracks.forEach(async track => await track.dispose());
+    // 대화방에 트랙을 추가한다.
+    tracks.forEach(track => this._room.addTrack(track));
+    this._tracks = tracks;
+  };
+
+  //#endregion
+}
+
+export default ConferenceConnector;
