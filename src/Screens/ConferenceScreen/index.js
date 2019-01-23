@@ -1,2 +1,2 @@
-import ConferenceScreenContainer from "./ConferenceScreenContainer";
+import ConferenceScreenContainer from './ConferenceScreenContainer';
 export default ConferenceScreenContainer;

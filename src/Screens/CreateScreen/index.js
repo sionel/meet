@@ -1,2 +1,2 @@
-import CreateScreenContainer from "./CreateScreenContainer";
+import CreateScreenContainer from './CreateScreenContainer';
 export default CreateScreenContainer;

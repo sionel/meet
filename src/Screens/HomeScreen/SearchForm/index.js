@@ -1,2 +1,2 @@
-import SearchFormContainer from "./SearchFormContainer";
+import SearchFormContainer from './SearchFormContainer';
 export default SearchFormContainer;

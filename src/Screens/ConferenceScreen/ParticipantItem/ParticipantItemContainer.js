@@ -7,21 +7,17 @@ import React from 'react';
 import ParticipantItemPresenter from './ParticipantItemItemPresenter';
 
 class ParticipantItemContainer extends React.Component {
-    /**
+	/**
      * STATE
      */
-    state = {  }
+	state = {};
 
-    /**
+	/**
      * Render
      */
-    render() { 
-        return (  
-            <ParticipantItemPresenter 
-            />
-        );
-    }
+	render() {
+		return <ParticipantItemPresenter />;
+	}
 }
 
- 
 export default ParticipantItemContainer;

@@ -1,2 +1,2 @@
-import ConfigurationScreenContainer from "./ConfigurationScreenContainer";
+import ConfigurationScreenContainer from './ConfigurationScreenContainer';
 export default ConfigurationScreenContainer;
