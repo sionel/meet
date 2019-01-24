@@ -20,7 +20,7 @@ const HomeScreenPresenter = props => (
 		<SearchForm onChange={props.onSearch} />
 
 		{props.list.length < 1 && (
-			<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+			<View style={{ height: '10%', justifyContent: 'center', alignItems: 'center' }}>
 				<Text>검색된 결과가 없습니다 :(</Text>
 			</View>
 		)}
