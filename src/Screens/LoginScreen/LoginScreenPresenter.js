@@ -26,7 +26,8 @@ const LoginScreenPresenter = props => {
 			{/* TITLE */}
 			<View
 				style={{
-					flex: 0.1,
+					flex: 0.75,
+					// height:'25%',
 					justifyContent: 'flex-start',
 					marginBottm: 50
 				}}
@@ -37,7 +38,8 @@ const LoginScreenPresenter = props => {
 			{/* INPUTS */}
 			<View
 				style={{
-					flex: 0.2
+					flex: 3,
+					justifyContent: 'center'
 				}}
 			>
 				<TextField
@@ -59,7 +61,7 @@ const LoginScreenPresenter = props => {
 			{/* BUTTONS */}
 			<View
 				style={{
-					flex: 0.7,
+					flex: 6,
 					justifyContent: 'flex-start'
 				}}
 			>
@@ -71,10 +73,9 @@ const LoginScreenPresenter = props => {
 				<View style={{ paddingTop: 20 }}>
 					<Text style={{ flex: 1, textAlign: 'center' }}>최초 로그인 이후 자동 로그인됩니다</Text>
 				</View>
-			</View>
-
-			<View>
-				<Button title="나가기" onPress={() => props.onRedirect('Home')} />
+				<View>
+					<Button title="나가기" onPress={() => props.onRedirect('Home')} />
+				</View>
 			</View>
 		</View>
 	);
