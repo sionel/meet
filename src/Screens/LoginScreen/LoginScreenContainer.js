@@ -63,6 +63,7 @@ class LoginScreenContainer extends React.Component {
 	 * 로그인함수
 	 */
 	_handleLogin = async () => {
+		const { navigation } = this.props;
 		const { userId, userPwd } = this.state;
 		const { onLogin } = this.props;
 		const data = {
@@ -82,6 +83,7 @@ class LoginScreenContainer extends React.Component {
 			result.resultData.portal_id = data.portal_id;
 			result.resultData.portal_password = data.portal_password;
 			onLogin(result.resultData);
+			navigation.navigate('Home');
 		} else {
 			console.log(result.resultMsg);
 		}

@@ -37,7 +37,7 @@ const HomeScreenPresenter = props => (
 					title={item.room_title}
 					personnel={item.receiver_user_count}
 					updated={item.update_timestamp}
-					active={false}
+					active={item.conference}
 					onClick={() => props.onRedirect('Conference')}
 				/>
 			)}

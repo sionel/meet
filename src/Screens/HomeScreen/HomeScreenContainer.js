@@ -15,9 +15,14 @@ import { UserApi } from '../../services';
 // #region
 
 class HomeScreenContainer extends React.Component {
+	/**
+	 * constructor
+	 */
 	constructor(props) {
 		super(props);
 		const { auth } = this.props;
+
+		// 접속확인
 		if (!auth) {
 			this._handleRedirect('Login');
 		} else {
@@ -27,11 +32,11 @@ class HomeScreenContainer extends React.Component {
 	}
 
 	/**
-     * STATE
-     */
+	 * STATE
+	 */
 	state = {
-		refreshing: false,
-		searchKeyword: ''
+		refreshing: false, // 리프레시 상태
+		searchKeyword: '' // 검색인풋
 	};
 
 	// #region
@@ -39,7 +44,7 @@ class HomeScreenContainer extends React.Component {
 	 * Rendering
 	 */
 	render() {
-		const { list, refreshing, searchKeyword } = this.state;
+		const { refreshing, searchKeyword } = this.state;
 		const { navigation, auth } = this.props;
 		let wetalk = []; // We talk list
 
@@ -73,17 +78,44 @@ class HomeScreenContainer extends React.Component {
 	};
 
 	/**
-	 * 
+	 * _handleGetWetalkList
+	 * 위톡 조회
 	 */
 	_handleGetWetalkList = async () => {
 		const { auth, onSetWetalkList } = this.props;
-		const result = await WetalkApi.getWetalkList(auth.AUTH_A_TOKEN, auth.last_access_company_no);
-		onSetWetalkList(result.resultData.roomList);
+		const wetalkList = await WetalkApi.getWetalkList(auth.AUTH_A_TOKEN, auth.last_access_company_no);
+		const onairList = await WetalkApi.getOnairList(auth.portal_id, auth.last_access_company_no);
+		// 반복길이
+		const wetalkListLength = wetalkList.resultData.roomList.length;
+		const onairListLength = onairList.resultData.video_room_list.length;
+
+		// on 찾기
+		let onairKeyList = {};
+		let temp;
+		for (let i = 0; i < onairListLength; i = i + 1) {
+			temp = onairList.resultData.video_room_list[i];
+			onairKeyList[temp.room_id] = temp;
+		}
+
+		// 맵핑
+		for (let j = 0; j < wetalkListLength; j = j + 1) {
+			temp = wetalkList.resultData.roomList[j];
+			if (onairKeyList[temp.room_id]) {
+				temp.conference = true;
+			} else {
+				temp.conference = false;
+			}
+		}
+		wetalkList.resultData.roomList.sort((a, b) => b.conference - a.conference);
+
+		// to redux
+		onSetWetalkList(wetalkList.resultData.roomList);
 		this.setState({ refreshing: false });
 	};
 
 	/**
 	 * _handleRefresh
+	 * 리프레시 
 	 */
 	_handleRefresh = () => {
 		this.setState({ refreshing: true });
@@ -92,6 +124,7 @@ class HomeScreenContainer extends React.Component {
 
 	/**
 	 * _handleSearch
+	 * 검색 필터
 	 */
 	_handleSearch = searchKeyword => {
 		this.setState({ searchKeyword });
@@ -99,6 +132,7 @@ class HomeScreenContainer extends React.Component {
 
 	/**
 	 * _handleCheckAuth
+	 * 접속자 확인
 	 */
 	_handleCheckAuth = async () => {
 		const { auth, onLogin } = this.props;

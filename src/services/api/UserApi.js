@@ -3,7 +3,7 @@
  * 사용자 관련 API
  */
 
-const wehagoBaseURL = `https://api.wehago.com`;
+import { wehagoBaseURL } from '../../utils';
 const tempBaseUrl = `https://jsonplaceholder.typicode.com`;
 
 // #region
