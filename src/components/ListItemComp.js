@@ -16,9 +16,9 @@ const ListItemComp = props => {
 
 	// render
 	return (
-		<TouchableOpacity style={{ ...styles.container }} onPress={props.onClick}>
+		<TouchableOpacity style={styles.container} onPress={props.onClick}>
 			{/* 아이콘 */}
-			<View style={{ ...styles.iconWrapper }}>
+			<View style={styles.iconWrapper}>
 				<View style={{ ...styles.roomIcon, borderColor: activeColor }}>
 					{/* 아이콘 텍스트 */}
 					<Text style={{ ...styles.iconText, color: props.active ? '#1C90FB' : '#c1c1c1' }}>
@@ -50,7 +50,9 @@ const styles = StyleSheet.create({
 		height: 57,
 		display: 'flex',
 		flexDirection: 'row',
-		marginBottom: 12
+		marginBottom: 12,
+		paddingLeft: '3%',
+		paddingRight: '3%'
 	},
 	// 아이콘 랩
 	iconWrapper: {

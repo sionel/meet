@@ -36,15 +36,23 @@ class HomeScreenContainer extends React.Component {
 	 */
 	state = {
 		refreshing: false, // 리프레시 상태
-		searchKeyword: '' // 검색인풋
+		searchKeyword: '', // 검색인풋
+		modal: false
 	};
+
+	/**
+	 * componentWillUnmount
+	 */
+	componentWillUnmount() {
+		this.setState({ modal: false });
+	}
 
 	// #region
 	/**
 	 * Rendering
 	 */
 	render() {
-		const { refreshing, searchKeyword } = this.state;
+		const { refreshing, searchKeyword, modal } = this.state;
 		const { navigation, auth } = this.props;
 		let wetalk = []; // We talk list
 
@@ -58,8 +66,10 @@ class HomeScreenContainer extends React.Component {
 			<HomeScreenPresenter
 				navigation={navigation}
 				refreshing={refreshing}
+				modal={modal}
 				list={wetalk}
 				auth={auth}
+				onActivateModal={this._handleActivateModal}
 				onRedirect={this._handleRedirect}
 				onRefresh={this._handleRefresh}
 				onSearch={this._handleSearch}
@@ -144,6 +154,16 @@ class HomeScreenContainer extends React.Component {
 			result.resultData.portal_password = auth.portal_password;
 			onLogin(result.resultData);
 		}
+	};
+
+	/**
+	 * _handleActivateModal
+	 * 모달뷰 토글
+	 */
+	_handleActivateModal = () => {
+		this.setState(prev => ({
+			modal: !prev.modal
+		}));
 	};
 }
 // #endregion
