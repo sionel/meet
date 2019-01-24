@@ -1,51 +1,51 @@
 {
-  "name": "WehagoMeet",
-  "version": "0.0.1",
-  "private": true,
-  "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
-  },
-  "dependencies": {
-    "@webcomponents/url": "0.7.1",
-    "i18next": "^13.1.2",
-    "i18next-xhr-backend": "^1.5.1",
-    "jitsi-meet-logger": "github:jitsi/jitsi-meet-logger#6fff754a77a56ab52499f3559105a15886942a1e",
-    "jquery": "^3.3.1",
-    "js-utils": "github:jitsi/js-utils#446497893023aa8dec403e0e4e35a22cae6bc87d",
-    "jwt-decode": "^2.2.0",
-    "lib-jitsi-meet": "^1.0.6",
-    "moment": "^2.23.0",
-    "moment-duration-format": "^2.2.2",
-    "react": "16.6.3",
-    "react-i18next": "^9.0.2",
-    "react-native": "0.57.8",
-    "react-native-background-timer": "2.1.1",
-    "react-native-calendar-events": "1.6.4",
-    "react-native-callstats": "3.53.4",
-    "react-native-fast-image": "5.1.1",
-    "react-native-google-signin": "1.0.2",
-    "react-native-immersive": "2.0.0",
-    "react-native-keep-awake": "4.0.0",
-    "react-native-linear-gradient": "2.5.3",
-    "react-native-sound": "github:jitsi/react-native-sound#e4260ed7f641eeb0377d76eac7987aba72e1cf08",
-    "react-native-svg": "^9.0.0",
-    "react-native-swipeout": "2.3.6",
-    "react-native-vector-icons": "^6.2.0",
-    "react-native-webrtc": "github:jitsi/react-native-webrtc#c1be0cb1c6e8a83dfd406e478082a5ff205a97ec",
-    "react-navigation": "^3.0.9",
-    "react-redux": "^6.0.0",
-    "redux": "^4.0.1",
-    "redux-persist": "^5.10.0",
-    "redux-thunk": "^2.3.0"
-  },
-  "devDependencies": {
-    "babel-jest": "23.6.0",
-    "jest": "23.6.0",
-    "metro-react-native-babel-preset": "0.51.1",
-    "react-test-renderer": "16.6.3"
-  },
-  "jest": {
-    "preset": "react-native"
-  }
+	"name": "WehagoMeet",
+	"version": "0.0.1",
+	"private": true,
+	"scripts": {
+		"start": "node node_modules/react-native/local-cli/cli.js start",
+		"test": "jest"
+	},
+	"dependencies": {
+		"@webcomponents/url": "0.7.1",
+		"i18next": "^13.1.2",
+		"i18next-xhr-backend": "^1.5.1",
+		"jitsi-meet-logger": "github:jitsi/jitsi-meet-logger#6fff754a77a56ab52499f3559105a15886942a1e",
+		"jquery": "^3.3.1",
+		"js-utils": "github:jitsi/js-utils#446497893023aa8dec403e0e4e35a22cae6bc87d",
+		"jwt-decode": "^2.2.0",
+		"lib-jitsi-meet": "^1.0.6",
+		"moment": "^2.23.0",
+		"moment-duration-format": "^2.2.2",
+		"react": "16.6.3",
+		"react-i18next": "^9.0.2",
+		"react-native": "0.57.8",
+		"react-native-background-timer": "2.1.1",
+		"react-native-calendar-events": "1.6.4",
+		"react-native-callstats": "3.53.4",
+		"react-native-fast-image": "5.1.1",
+		"react-native-google-signin": "1.0.2",
+		"react-native-immersive": "2.0.0",
+		"react-native-keep-awake": "4.0.0",
+		"react-native-linear-gradient": "2.5.3",
+		"react-native-sound": "github:jitsi/react-native-sound#e4260ed7f641eeb0377d76eac7987aba72e1cf08",
+		"react-native-svg": "^9.0.0",
+		"react-native-swipeout": "2.3.6",
+		"react-native-vector-icons": "^6.2.0",
+		"react-native-webrtc": "github:jitsi/react-native-webrtc#c1be0cb1c6e8a83dfd406e478082a5ff205a97ec",
+		"react-navigation": "^3.0.9",
+		"react-redux": "^6.0.0",
+		"redux": "^4.0.1",
+		"redux-persist": "^5.10.0",
+		"redux-thunk": "^2.3.0"
+	},
+	"devDependencies": {
+		"babel-jest": "23.6.0",
+		"jest": "23.6.0",
+		"metro-react-native-babel-preset": "0.51.1",
+		"react-test-renderer": "16.6.3"
+	},
+	"jest": {
+		"preset": "react-native"
+	}
 }
