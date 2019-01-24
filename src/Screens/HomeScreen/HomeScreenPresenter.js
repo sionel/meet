@@ -5,9 +5,7 @@
 import React from 'react';
 import { View, Text, FlatList, Button, StyleSheet } from 'react-native';
 // common components
-import { ListItemComp } from '../../components';
-// 검색바
-import SearchForm from './SearchForm';
+import { ListItemComp, SearchForm } from '../../components';
 // 추가버튼
 import AddButton from './AddButton';
 

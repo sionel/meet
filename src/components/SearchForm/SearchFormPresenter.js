@@ -34,13 +34,13 @@ const styles = StyleSheet.create({
 	wrap: {
 		position: 'relative',
 		width: '100%',
-		backgroundColor: '#f1f1f1',
+		backgroundColor: '#f9f9f9',
 		paddingTop: 8,
 		paddingBottom: 8,
-		paddingLeft: 10,
-		paddingRight: 10,
+		paddingLeft: 12,
+		paddingRight: 12,
 		borderBottomWidth: 1,
-		borderColor: '#D2D2D2'
+		borderColor: '#dfdfdf'
 	},
 
 	searchIcon: {
@@ -59,12 +59,12 @@ const styles = StyleSheet.create({
 
 	input: {
 		height: 37,
-		borderColor: '#d2d2d2',
+		borderColor: '#dadada',
 		borderWidth: 1,
 		backgroundColor: '#fff',
 		paddingLeft: 38,
 		paddingRight: 10,
-		borderRadius: 5.5,
+		borderRadius: 25.5,
 		zIndex: 9
 	}
 });

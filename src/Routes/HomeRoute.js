@@ -25,11 +25,28 @@ const commonStyle = {
 const MenuImage = ({ navigation }) => {
 	if (!navigation.state.isDrawerOpen) {
 		return <Icon name="bars" size={24} color="#fff" style={{ marginLeft: 20, zIndex: 10 }} />;
-		// return <Text>Menu{navigation.state.isDrawerOpen == true ? 1:2}</Text>
 	} else {
 		return <Icon name="times" size={24} color="#fff" style={{ marginLeft: 20, zIndex: 10 }} />;
-		// return <Text>Close{navigation.state.isDrawerOpen == true ? 1:2}</Text>
 	}
+};
+
+/**
+ * rightMenuImage
+ * 사이드메뉴 토글아이콘
+ */
+const RightMenuImage = ({ navigation }) => {
+	return (
+		<Icon
+			name="cog"
+			size={24}
+			color="#fff"
+			style={{
+				marginLeft: 20,
+				marginRight: 20,
+				zIndex: 10
+			}}
+		/>
+	);
 };
 
 /**
@@ -62,8 +79,8 @@ const HomeDrwawer = createDrawerNavigator(
 
 const HomeRoute = createStackNavigator({
 	/**
-     * 메인
-     */
+	 * 메인
+	 */
 	Home: {
 		screen: HomeDrwawer,
 		headerStyle: {
@@ -76,13 +93,22 @@ const HomeRoute = createStackNavigator({
 			headerStyle: {
 				...commonStyle
 			},
-			headerLeft: (
+			// headerLeft: (
+			// 	<TouchableOpacity
+			// 		onPress={() => {
+			// 			navigation.dispatch(DrawerActions.toggleDrawer());
+			// 		}}
+			// 	>
+			// 		<MenuImage navigation={navigation} />
+			// 	</TouchableOpacity>
+			// ),
+			headerRight: (
 				<TouchableOpacity
 					onPress={() => {
 						navigation.dispatch(DrawerActions.toggleDrawer());
 					}}
 				>
-					<MenuImage navigation={navigation} />
+					<RightMenuImage navigation={navigation} />
 				</TouchableOpacity>
 			)
 		})
