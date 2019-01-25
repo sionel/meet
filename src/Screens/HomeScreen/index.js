@@ -2,5 +2,5 @@
  * HomeScreen
  */
 
-import HomeScreenContainer from "./HomeScreenContainer";
+import HomeScreenContainer from './HomeScreenContainer';
 export default HomeScreenContainer;

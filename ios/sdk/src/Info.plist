@@ -24,7 +24,7 @@
 		<string>dbapi-8-emm</string>
 	</array>
 	<key>NSPrincipalClass</key>
-	<string/>
+	<string></string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>

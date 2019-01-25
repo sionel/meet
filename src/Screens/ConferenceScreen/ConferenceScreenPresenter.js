@@ -286,7 +286,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     justifyContent: "center",
     alignItems: "flex-end",
-    backgroundColor: "rgba(0,0,0, .1)",
+    backgroundColor: "rgba(0,0,0, .45)",
     flexDirection: "row",
     zIndex: 98
   },

@@ -116,6 +116,7 @@ class ConferenceScreenContainer extends React.Component {
 
     /**
      * _handleScreenTouch
+     * 화면터치이벤트
      */
     _handleScreenTouch = () => {
         this.setState(prev=>({

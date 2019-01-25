@@ -37,12 +37,43 @@ const toggleMenu = (
  */
 const MenuImage = ({ navigation }) => {
   if (!navigation.state.isDrawerOpen) {
-    // return <Icon name="bars" size={24} color="#fff" style={{marginLeft:20, zIndex:10}} />
-    return <Text>Menu{navigation.state.isDrawerOpen == true ? 1 : 2}</Text>;
+    return (
+      <Icon
+        name="bars"
+        size={24}
+        color="#fff"
+        style={{ marginLeft: 20, zIndex: 10 }}
+      />
+    );
   } else {
-    // return <Icon name="times" size={24} color="#fff" style={{marginLeft:20, zIndex:10}} />
-    return <Text>Close{navigation.state.isDrawerOpen == true ? 1 : 2}</Text>;
+    return (
+      <Icon
+        name="times"
+        size={24}
+        color="#fff"
+        style={{ marginLeft: 20, zIndex: 10 }}
+      />
+    );
   }
+};
+
+/**
+ * rightMenuImage
+ * 사이드메뉴 토글아이콘
+ */
+const RightMenuImage = ({ navigation }) => {
+  return (
+    <Icon
+      name="cog"
+      size={24}
+      color="#fff"
+      style={{
+        marginLeft: 20,
+        marginRight: 20,
+        zIndex: 10
+      }}
+    />
+  );
 };
 
 /**
@@ -52,19 +83,10 @@ const HomeDrwawer = createDrawerNavigator(
   {
     Home: {
       screen: HomeScreen
+      // navigationOptions: {
+      // 	drawerLabel: 'Home'
+      // },
     }
-    // Home: {
-    //     screen: HomeScreen,
-    //     navigationOptions: {
-    //       drawerLabel: 'Home'
-    //     },
-    // },
-    // Configuration: {
-    //     screen: ConfigurationScreen,
-    //     navigationOptions: ({navigation}) => ({
-    //       drawerLabel: 'Configuration',
-    //     }),
-    // },
   },
   {
     initialRouteName: "Home",
@@ -83,19 +105,18 @@ const HomeRoute = createStackNavigator({
       color: "#ffffff"
     },
     navigationOptions: ({ navigation }) => ({
-      title: "WEHAGO",
+      title: "WEHAGO V",
       headerTintColor: "#fff",
       gesturesEnabled: false,
-      headerStyle: {
-        ...commonStyle
-      },
-      headerLeft: (
+      headerStyle: commonStyle,
+      headerRight: (
         <TouchableOpacity
           onPress={() => {
-            navigation.dispatch(DrawerActions.toggleDrawer());
+            // navigation.dispatch(DrawerActions.toggleDrawer());
+            navigation.navigate("Configuration");
           }}
         >
-          <MenuImage navigation={navigation} />
+          <RightMenuImage navigation={navigation} />
         </TouchableOpacity>
       )
     })
@@ -115,26 +136,23 @@ const HomeRoute = createStackNavigator({
       headerLeft: null,
       gesturesEnabled: false
     }
-  }
+  },
 
   /**
    * Configuration
    * 환경설정
    */
-  // Configuration: {
-  //     screen: HomeDrwawer,
-  //     headerStyle:{
-  //         color:"#fff"
-  //     },
-  //     navigationOptions: ({navigation}) => ({
-  //         header: null,
-  //         headerLeft:
-  //             <TouchableOpacity onPress={() => {navigation.dispatch(DrawerActions.toggleDrawer())} }>
-  //                 <MenuImage navigation={navigation}/>
-  //             </TouchableOpacity>,
-  //         gesturesEnabled: false,
-  //     })
-  // },
+  Configuration: {
+    screen: ConfigurationScreen,
+    headerStyle: {
+      color: "#fff"
+    },
+    navigationOptions: ({ navigation }) => ({
+      title: "환경설정",
+      headerTintColor: "#fff",
+      headerStyle: commonStyle
+    })
+  }
 });
 
 export default createAppContainer(HomeRoute);
