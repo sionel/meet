@@ -11,7 +11,7 @@ const SearchFormPresenter = props => {
 	const { active, value } = props;
 	return (
 		<View style={styles.wrap}>
-			<Icon name="search" size={22} color="#c8c8c8" style={styles.searchIcon} />
+			<Icon name="search" size={18} color="#c8c8c8" style={styles.searchIcon} />
 			<TextInput
 				placeholder="Search..."
 				ㄴ
@@ -46,15 +46,15 @@ const styles = StyleSheet.create({
 
 	searchIcon: {
 		position: 'absolute',
-		left: 23,
-		top: 15,
+		left: 25,
+		top: 17,
 		zIndex: 10
 	},
 
 	closeIcon: {
 		position: 'absolute',
 		right: 23,
-		top: 16,
+		top: 15,
 		zIndex: 10
 	},
 
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
 		borderColor: '#dadada',
 		borderWidth: 1,
 		backgroundColor: '#fff',
-		paddingLeft: 38,
+		paddingLeft: 41,
 		paddingRight: 10,
 		borderRadius: 25.5,
 		zIndex: 9

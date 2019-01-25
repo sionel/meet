@@ -67,8 +67,6 @@ class LoginScreenContainer extends React.Component {
 		const { userId, userPwd } = this.state;
 		const { onLogin } = this.props;
 		const data = {
-			// portal_id: 'seongh7800',
-			// portal_password: 'kseongh0080',
 			portal_id: userId,
 			portal_password: userPwd,
 			login_ip: '10.51.114.169',
