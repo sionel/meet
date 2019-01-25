@@ -7,33 +7,24 @@ import React from "react";
 import ConferenceScreenPresenter from "./ConferenceScreenPresenter";
 import ConferenceManager from "../../utils/conference/ConferenceManager";
 
+const roomName = "abcdd";
+const name = "김더존";
+
 class ConferenceScreenContainer extends React.Component {
-  /**
-   * constructor
-   */
-  constructor(params) {
-    super(params);
-    // 대화방 화면으로 전환되면 대화방 초기 설정 후 입장한다.
-    this._conferenceManager = new ConferenceManager();
-  }
-
-  state = {
-    participants: []
-  };
-
   /**
    * componentDidMount
    */
   componentDidMount() {
-    const roomName = "abcdd";
-    const name = "김더존";
-    this._connectConference(roomName, name);
+    // 컴포넌트가 마운트 되면 대화방 초기 설정 후 입장한다.
+    this._conferenceManager = new ConferenceManager(this.props.dispatch);
+    this._joinConference(roomName, name);
   }
 
   /**
    * componentWillUnmount
    */
   componentWillUnmount() {
+    // 컴포넌트가 언마운트 되기전 화상회의 관련 리소스를 해제 한다.
     this._conferenceManager.dispose();
   }
 
@@ -41,31 +32,21 @@ class ConferenceScreenContainer extends React.Component {
    * render
    */
   render() {
-    const { participants } = this.state;
+    console.log(this.props);
     return (
-      <ConferenceScreenPresenter {...this.props} participants={participants} />
+      <ConferenceScreenPresenter {...this.props} onClose={this._handleClose} />
     );
   }
 
-  /** 커넥션 생성 */
-  _connectConference = async (roomName, name) => {
-    await this._conferenceManager.connect(
-      roomName,
-      name
-    );
-    setTimeout(() => {
-      const tracks = this._conferenceManager.getLocalTracks();
-      console.log(tracks);
-      this.setState({
-        participants: [
-          {
-            id: "duzon",
-            name: "김더존",
-            tracks
-          }
-        ]
-      });
-    }, 3000);
+  /** 대화방 참가 생성 */
+  _joinConference = async (roomName, name) => {
+    await this._conferenceManager.join(roomName, name);
+  };
+
+  /** 화상대화방 닫기 */
+  _handleClose = () => {
+    const { goBack } = this.props.navigation;
+    goBack();
   };
 }
 
