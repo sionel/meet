@@ -31,7 +31,8 @@ const HomeScreenPresenter = props => {
 				style={styles.listContainer}
 				sections={[
 					{ title: '대화중', data: props.list.filter(item => item.conference === true) },
-					{ title: '대기중', data: props.list.filter(item => item.conference === false) }
+					{ title: '그룹대화', data: props.list.filter(item => item.conference === false && item.room_type === '1') },
+					{ title: '1:1대화', data: props.list.filter(item => item.conference === false && item.room_type === '2') },
 				]}
 				renderSectionHeader={({ section }) =>
 					section.data.length > 0 && <Text style={styles.sectionHeader}>{section.title}</Text>}

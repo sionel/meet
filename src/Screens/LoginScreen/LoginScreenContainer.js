@@ -18,7 +18,8 @@ class LoginScreenContainer extends React.Component {
 	 */
 	state = {
 		userId: '',
-		userPwd: ''
+		userPwd: '',
+		modal: false
 	};
 
 	/**
@@ -26,17 +27,19 @@ class LoginScreenContainer extends React.Component {
 	 */
 	render() {
 		const { navigation } = this.props;
-		const { list, userId, userPwd } = this.state;
+		const { list, userId, userPwd, modal } = this.state;
 
 		return (
 			<LoginScreenPresenter
 				onRedirect={this._handleRedirect}
 				onChangeValue={this._handleChangeValue}
 				onLogin={this._handleLogin}
+				onActivateModal={this._handleActivateModal}
 				navigation={navigation}
 				userPwd={userPwd}
 				userId={userId}
 				list={list}
+				modal={modal}
 			/>
 		);
 	} // render
@@ -83,8 +86,20 @@ class LoginScreenContainer extends React.Component {
 			onLogin(result.resultData);
 			navigation.navigate('Home');
 		} else {
-			console.log(result.resultMsg);
+			this._handleActivateModal();
 		}
+	};
+
+	/**
+	 * _handleActivateModal
+	 * 로그인 실패 시 경고 모달 ON
+	 */
+	_handleActivateModal = () => {
+		this.setState(prev => ({ modal: !prev.modal }));
+		// 자동 close
+		setTimeout(() => {
+			this.setState(prev => ({ modal: !prev.modal }));
+		}, 2100);
 	};
 }
 
