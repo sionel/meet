@@ -76,7 +76,7 @@ const LoginScreenPresenter = props => {
 						<View style={styles.modalContents}>
 							<Text style={styles.modalMessage}>아이디와 패스워드를 확인해 주세요</Text>
 						</View>
-						<TouchableOpacity style={styles.modalCloseButton} onPress={props.onActivateModal}>
+						<TouchableOpacity style={styles.modalCloseButton} onPress={() => props.onActivateModal(false)}>
 							<Icon name="times" size={20} color="#fff" />
 						</TouchableOpacity>
 					</View>

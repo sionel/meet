@@ -94,12 +94,14 @@ class LoginScreenContainer extends React.Component {
 	 * _handleActivateModal
 	 * 로그인 실패 시 경고 모달 ON
 	 */
-	_handleActivateModal = () => {
-		this.setState(prev => ({ modal: !prev.modal }));
+	_handleActivateModal = (val = true) => {
+		this.setState(prev => ({ modal: val }));
 		// 자동 close
-		setTimeout(() => {
-			this.setState(prev => ({ modal: !prev.modal }));
-		}, 2100);
+		if (val) {
+			setTimeout(() => {
+				this.setState(prev => ({ modal: false }));
+			}, 2100);
+		}
 	};
 }
 
