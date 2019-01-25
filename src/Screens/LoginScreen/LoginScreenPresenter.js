@@ -27,7 +27,6 @@ const LoginScreenPresenter = props => {
 			<View
 				style={{
 					flex: 0.75,
-					// height:'25%',
 					justifyContent: 'flex-start',
 					marginBottm: 50
 				}}
@@ -53,6 +52,7 @@ const LoginScreenPresenter = props => {
 					placeholder={'패스워드를 입력하세요'}
 					width={270}
 					height={40}
+					secureTextEntry={true}
 					onChange={text => props.onChangeValue('userPwd', text)}
 					value={userPwd}
 				/>
