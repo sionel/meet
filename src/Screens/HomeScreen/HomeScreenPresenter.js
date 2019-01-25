@@ -43,7 +43,11 @@ const HomeScreenPresenter = props => {
 						updated={item.update_timestamp}
 						active={item.conference}
 						// onClick={() => props.onRedirect('Conference')}
-						onClick={() => props.onActivateModal()}
+						onClick={
+							item.conference === true
+								? () => props.onRedirect('Conference')
+								: () => props.onActivateModal()
+						}
 					/>
 				)}
 			/>

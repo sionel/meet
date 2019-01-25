@@ -10,17 +10,18 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 const SearchFormPresenter = props => {
 	const { active, value } = props;
 	return (
-		<View style={{ ...styles.wrap }}>
-			<Icon name="search" size={20} color="#c8c8c8" style={{ ...styles.searchIcon }} />
+		<View style={styles.wrap}>
+			<Icon name="search" size={22} color="#c8c8c8" style={styles.searchIcon} />
 			<TextInput
 				placeholder="Search..."
-				style={{ ...styles.input }}
+				ㄴ
+				style={styles.input}
 				onChangeText={newText => props.onChange(newText)}
 				value={value}
 			/>
 			{active && (
-				<TouchableOpacity onPress={() => props.onChange('')} style={{ ...styles.closeIcon }}>
-					<Icon name="times-circle" size={20} color="#c8c8c8" />
+				<TouchableOpacity onPress={() => props.onChange('')} style={styles.closeIcon}>
+					<Icon name="times-circle" size={25} color="#c8c8c8" />
 				</TouchableOpacity>
 			)}
 		</View>
@@ -45,20 +46,20 @@ const styles = StyleSheet.create({
 
 	searchIcon: {
 		position: 'absolute',
-		left: 22,
-		top: 15,
+		left: 20,
+		top: 14,
 		zIndex: 10
 	},
 
 	closeIcon: {
 		position: 'absolute',
-		right: 20,
-		top: 17,
+		right: 23,
+		top: 16,
 		zIndex: 10
 	},
 
 	input: {
-		height: 37,
+		height: 40,
 		borderColor: '#dadada',
 		borderWidth: 1,
 		backgroundColor: '#fff',
