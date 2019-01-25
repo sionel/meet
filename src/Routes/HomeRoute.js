@@ -13,7 +13,7 @@ import {
 } from "react-navigation";
 
 import HomeScreen from "../Screens/HomeScreen";
-import ConferenceScreen from "../Screens/ConferenceScreenNew";
+import ConferenceScreen from "../Screens/ConferenceScreen";
 import ConfigurationScreen from "../Screens/ConfigurationScreen";
 import Icon from "react-native-vector-icons/FontAwesome";
 
