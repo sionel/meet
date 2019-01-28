@@ -15,7 +15,6 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     setConferenceMode: mode => {
-      console.log(ownProps);
       return dispatch(localActions.setConferenceMode(mode));
     }
   };

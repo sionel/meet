@@ -32,7 +32,6 @@ class ConferenceScreenContainer extends React.Component {
    * render
    */
   render() {
-    console.log(this.props);
     return (
       <ConferenceScreenPresenter {...this.props} onClose={this._handleClose} />
     );

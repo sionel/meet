@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, ActivityIndicator } from "react-native";
 
 /**
  * ConferenceScreenPresenter
@@ -7,7 +7,15 @@ import { View, StyleSheet } from "react-native";
 const LoadingIndicator = props => {
   if (props.mainUser) {
   }
-  return <View style={styles.container} />;
+  return (
+    <View style={styles.container}>
+      <ActivityIndicator
+        size="large"
+        color="#039BE5"
+        style={styles.indicator}
+      />
+    </View>
+  );
 };
 
 /**
@@ -16,8 +24,11 @@ const LoadingIndicator = props => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "orange"
-  }
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#E3F2FD"
+  },
+  indicator: {}
 });
 
 export default LoadingIndicator;

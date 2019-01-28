@@ -49,6 +49,7 @@ class ConferenceManager {
     await this._dispatch(
       localActoinCreators.joinConference({
         id,
+        name,
         videoTrack,
         audioTrack
       })
