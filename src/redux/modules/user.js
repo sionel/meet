@@ -6,6 +6,7 @@
 import { UserApi } from '../../services';
 
 const LOGIN = 'LOGIN';
+const LOGOUT = 'LOGOUT';
 
 //#region Action Creators
 
@@ -13,6 +14,16 @@ const LOGIN = 'LOGIN';
  * login
  */
 login = auth => {
+	return {
+		type: LOGIN,
+		auth
+	};
+};
+
+/**
+ * logout
+ */
+logout = auth => {
 	return {
 		type: LOGIN,
 		auth
@@ -36,6 +47,8 @@ reducer = (state = initialState, action) => {
 		case LOGIN:
 			return { ...state, auth: action.auth };
 		// return applyTest(state, action);
+		case LOGOUT:
+			return { ...state, auth: null };
 		default:
 			return state;
 	}
@@ -61,7 +74,8 @@ applyTest = (state, action) => {
 //#region Export
 
 const actionCreators = {
-	login
+	login,
+	logout
 };
 
 export { actionCreators };

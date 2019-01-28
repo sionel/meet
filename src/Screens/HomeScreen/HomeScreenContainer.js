@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import HomeScreenPresenter from './HomeScreenPresenter';
 import { actionCreators as UserActions } from '../../redux/modules/user';
 import { actionCreators as WetalkActions } from '../../redux/modules/wetalk';
+import { actionCreators as ConferenceActions } from '../../redux/modules/conference';
 // service
 import { WetalkApi } from '../../services';
 import { UserApi } from '../../services';
@@ -188,7 +189,18 @@ class HomeScreenContainer extends React.Component {
 	 * _handleCreateConference
 	 */
 	_handleCreateConference = selectedRoomId => {
-		alert(selectedRoomId);
+		// room_id, owner_id, owner_name, token, cno
+		const { auth, onCreateConference } = this.props;
+		const bodyData = {
+			room_id: selectedRoomId,
+			owner_id: auth.portal_id,
+			owner_name: '김성훈',
+			cno: auth.last_access_company_no,
+			ccode: 'biz201703300000011',
+			timestamp: 1548384693,
+			token: auth.AUTH_A_TOKEN
+		};
+		onCreateConference(bodyData);
 	};
 }
 // #endregion
@@ -206,7 +218,8 @@ let mapStateToProps = state => ({
  */
 const mapDispatchToProps = dispatch => ({
 	onLogin: user => dispatch(UserActions.login(user)),
-	onSetWetalkList: list => dispatch(WetalkActions.setList(list))
+	onSetWetalkList: list => dispatch(WetalkActions.setList(list)),
+	onCreateConference: bodyData => dispatch(ConferenceActions.createConference(...bodyData))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreenContainer);

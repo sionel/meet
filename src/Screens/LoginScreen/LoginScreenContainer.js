@@ -17,8 +17,8 @@ class LoginScreenContainer extends React.Component {
 	 * STATE
 	 */
 	state = {
-		userId: '',
-		userPwd: '',
+		userId: 'seongh7800',
+		userPwd: 'kseongh0080',
 		modal: false
 	};
 
