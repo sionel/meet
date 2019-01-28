@@ -6,50 +6,14 @@
 
 import React from 'react';
 import ConfigurationScreenPresenter from './ConfigurationScreenPresenter';
+import { connect } from 'react-redux';
+import { actionCreators as UserActions } from '../../redux/modules/user';
 
 class ConfigurationScreenContainer extends React.Component {
 	/**
      * STATE
      */
-	state = {
-		list: [
-			{
-				key: 'item1',
-				img: 'https://facebook.github.io/react-native/docs/assets/favicon.png',
-				title: 'Title Text1',
-				count: 5,
-				active: false
-			},
-			{
-				key: 'item2',
-				img: 'https://facebook.github.io/react-native/docs/assets/favicon.png',
-				title: 'Title Text2',
-				count: 5,
-				active: false
-			},
-			{
-				key: 'item3',
-				img: 'https://facebook.github.io/react-native/docs/assets/favicon.png',
-				title: 'Title Text3',
-				count: 5,
-				active: false
-			},
-			{
-				key: 'item4',
-				img: 'https://facebook.github.io/react-native/docs/assets/favicon.png',
-				title: 'Title Text4',
-				count: 5,
-				active: false
-			},
-			{
-				key: 'item5',
-				img: 'https://facebook.github.io/react-native/docs/assets/favicon.png',
-				title: 'Title Text5',
-				count: 5,
-				active: false
-			}
-		]
-	};
+	state = {};
 
 	/**
      * handleRedirect
@@ -61,14 +25,39 @@ class ConfigurationScreenContainer extends React.Component {
 	};
 
 	/**
-     * Rendering
-     */
+	 * Rendering
+	 */
 	render() {
 		const { navigation } = this.props;
 		const { list } = this.state;
 
-		return <ConfigurationScreenPresenter navigation={navigation} onRedirect={this.handleRedirect} list={list} />;
+		return (
+			<ConfigurationScreenPresenter
+				navigation={navigation}
+				list={list}
+				onRedirect={this.handleRedirect}
+				onLogout={this._handleLogout}
+			/>
+		);
 	} // render
+
+	/**
+	 * _handleLogout
+	 * 로그아웃
+	 */
+	_handleLogout = () => {
+		const { onLogout, navigation } = this.props;
+		onLogout();
+		navigation.navigate('Login');
+	};
 }
 
-export default ConfigurationScreenContainer;
+const mapStateToProps = state => ({
+	user: state.user.auth
+});
+
+const mapDispatchTopProps = dispatch => ({
+	onLogout: () => dispatch(UserActions.logout())
+});
+
+export default connect(mapStateToProps, mapDispatchTopProps)(ConfigurationScreenContainer);

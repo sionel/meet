@@ -17,15 +17,15 @@ class CreateScreenContainer extends React.Component {
      * Rendering
      */
 	render() {
-		return <CreateScreenPresenter onRedirect={this.handleRedirect} />;
+		return <CreateScreenPresenter onRedirect={this._handleRedirect} />;
 	}
 	//#endregion
 
 	/**
-     * handleRedirect
-     * 페이지 이동
-     */
-	handleRedirect = url => {
+	 * _handleRedirect
+	 * 페이지 이동
+	 */
+	_handleRedirect = url => {
 		const { navigation } = this.props;
 		navigation.navigate(url);
 	};
