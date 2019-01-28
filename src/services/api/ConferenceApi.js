@@ -29,32 +29,35 @@ export default {
 	/**
 	 * 화상대화 생성
 	 */
-	createConference: async (room_id, owner_id, owner_name, cno, ccode, timestamp, token) => {
+	create: async (room_id, owner_id, owner_name, cno, ccode, timestamp, token) => {
 		/*
 		"room_id":"_Gj2EWgBeAtpuzEuPdzI",
 		"owner_id":"seongh7800",
 		"owner_name":"김성훈",
 		"cno":"9",
 		*/
-		try {
-			let body = new FormData();
-			const url = `${wehagoBaseURL}/communication/rtc/videoChat`;
-			const response = await fetch(url, {
-				method: 'POST',
-				headers: { Authorization: `Bearer ${token}` },
-				body: {
-					room_id,
-					owner_id,
-					owner_name,
-					cno
-					// ccode,
-					// timestamp
-				}
-			});
-			return response.json();
-		} catch (err) {
-			return err;
-		}
+
+		console.log(123123);
+
+		// try {
+		// 	let body = new FormData();
+		// 	const url = `${wehagoBaseURL}/communication/rtc/videoChat`;
+		// 	const response = await fetch(url, {
+		// 		method: 'POST',
+		// 		headers: { Authorization: `Bearer ${token}` },
+		// 		body: {
+		// 			room_id,
+		// 			owner_id,
+		// 			owner_name,
+		// 			cno
+		// 			// ccode,
+		// 			// timestamp
+		// 		}
+		// 	});
+		// 	return response.json();
+		// } catch (err) {
+		// 	return err;
+		// }
 	},
 
 	/**
