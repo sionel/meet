@@ -30,9 +30,18 @@ const HomeScreenPresenter = props => {
 				onRefresh={props.onRefresh}
 				style={styles.listContainer}
 				sections={[
-					{ title: '대화중', data: props.list.filter(item => item.conference === true) },
-					{ title: '그룹대화', data: props.list.filter(item => item.conference === false && item.room_type === '1') },
-					{ title: '1:1대화', data: props.list.filter(item => item.conference === false && item.room_type === '2') },
+					{
+						title: '대화중',
+						data: props.list.filter(item => item.conference === true)
+					},
+					{
+						title: '그룹대화',
+						data: props.list.filter(item => item.conference === false && item.room_type === '1')
+					},
+					{
+						title: '1:1대화',
+						data: props.list.filter(item => item.conference === false && item.room_type === '2')
+					}
 				]}
 				renderSectionHeader={({ section }) =>
 					section.data.length > 0 && <Text style={styles.sectionHeader}>{section.title}</Text>}
@@ -47,7 +56,7 @@ const HomeScreenPresenter = props => {
 						onClick={
 							item.conference === true
 								? () => props.onRedirect('Conference')
-								: () => props.onActivateModal()
+								: () => props.onActivateModal(item.room_id)
 						}
 					/>
 				)}
@@ -55,7 +64,7 @@ const HomeScreenPresenter = props => {
 
 			{/* 테스트용 버튼 */}
 			<View>
-				<Button title="Go login" onPress={() => props.onRedirect('Login')} />
+				<Button title={'Go login' + props.selectedRoomId} onPress={() => props.onRedirect('Login')} />
 			</View>
 
 			{/* 컨펌모달 */}
@@ -72,7 +81,8 @@ const HomeScreenPresenter = props => {
 							</TouchableOpacity>
 							<TouchableOpacity
 								style={{ ...styles.modalButton, ...styles.modalButtonConfirm }}
-								onPress={() => props.onRedirect('Conference')}
+								onPress={() => props.onCreateConference(props.selectedRoomId)}
+								// onPress={() => props.onRedirect('Conference')}
 							>
 								<Text style={{ color: '#fff' }}>확인</Text>
 							</TouchableOpacity>

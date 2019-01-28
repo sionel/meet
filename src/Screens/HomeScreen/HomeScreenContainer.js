@@ -20,15 +20,7 @@ class HomeScreenContainer extends React.Component {
 	 */
 	constructor(props) {
 		super(props);
-		const { auth } = this.props;
-
-		// 접속확인
-		if (!auth) {
-			this._handleRedirect('Login');
-		} else {
-			this._handleCheckAuth(); // 자동로그인
-			this._handleGetWetalkList(); // 위톡목록 조회
-		}
+		this._handleAutoLogin();
 	}
 
 	/**
@@ -37,8 +29,14 @@ class HomeScreenContainer extends React.Component {
 	state = {
 		refreshing: false, // 리프레시 상태
 		searchKeyword: '', // 검색인풋
+		selectedRoomId: null,
 		modal: false
 	};
+
+	/**
+	 * componentDidMount
+	 */
+	componentDidMount() {}
 
 	/**
 	 * componentWillUnmount
@@ -52,7 +50,7 @@ class HomeScreenContainer extends React.Component {
 	 * Rendering
 	 */
 	render() {
-		const { refreshing, searchKeyword, modal } = this.state;
+		const { refreshing, searchKeyword, selectedRoomId, modal } = this.state;
 		const { navigation, auth } = this.props;
 		let wetalk = []; // We talk list
 
@@ -69,10 +67,12 @@ class HomeScreenContainer extends React.Component {
 				modal={modal}
 				list={wetalk}
 				auth={auth}
+				selectedRoomId={selectedRoomId}
 				onActivateModal={this._handleActivateModal}
 				onRedirect={this._handleRedirect}
 				onRefresh={this._handleRefresh}
 				onSearch={this._handleSearch}
+				onCreateConference={this._handleCreateConference}
 			/>
 		);
 	}
@@ -147,11 +147,12 @@ class HomeScreenContainer extends React.Component {
 	_handleCheckAuth = async () => {
 		const { auth, onLogin } = this.props;
 		let result = await UserApi.check(auth.AUTH_A_TOKEN, auth.last_access_company_no);
+
 		// 자동로그인
 		if (result.resultCode !== 200) {
-			result = await UserApi.login(data);
 			result.resultData.portal_id = auth.portal_id;
 			result.resultData.portal_password = auth.portal_password;
+			result = await UserApi.login(result);
 			onLogin(result.resultData);
 		}
 	};
@@ -160,10 +161,34 @@ class HomeScreenContainer extends React.Component {
 	 * _handleActivateModal
 	 * 모달뷰 토글
 	 */
-	_handleActivateModal = () => {
+	_handleActivateModal = (selectedRoomId = null) => {
 		this.setState(prev => ({
-			modal: !prev.modal
+			modal: !prev.modal,
+			selectedRoomId
 		}));
+	};
+
+	/**
+	 * _handleAutoLogin
+	 * 자동로그인
+	 */
+	_handleAutoLogin = () => {
+		const { auth } = this.props;
+		// console.log('Auth : ', auth);
+
+		// 접속확인
+		if (!auth) {
+			this._handleRedirect('Login');
+		} else {
+			this._handleCheckAuth(); // 자동로그인
+		}
+	};
+
+	/**
+	 * _handleCreateConference
+	 */
+	_handleCreateConference = selectedRoomId => {
+		alert(selectedRoomId);
 	};
 }
 // #endregion
