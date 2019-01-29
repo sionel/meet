@@ -9,34 +9,20 @@ const SubVideoBoxPresenter = props => (
   <ScrollView horizontal={true} style={styles.scrollView}>
     {props.user ? (
       <ParticipantBox
+        key={props.user.id}
         user={props.user}
+        videoTrack={props.user.videoTrack}
         isSelect={props.mainUserId === props.user.id}
       />
     ) : null}
-    {props.user ? (
+    {props.participants.map(participant => (
       <ParticipantBox
-        user={props.user}
-        isSelect={props.mainUserId === props.user.id}
+        key={participant.id}
+        user={participant}
+        videoTrack={participant.videoTrack}
+        isSelect={props.mainUserId === participant.id}
       />
-    ) : null}
-    {props.user ? (
-      <ParticipantBox
-        user={props.user}
-        isSelect={props.mainUserId === props.user.id}
-      />
-    ) : null}
-    {props.user ? (
-      <ParticipantBox
-        user={props.user}
-        isSelect={props.mainUserId === props.user.id}
-      />
-    ) : null}
-    {props.user ? (
-      <ParticipantBox
-        user={props.user}
-        isSelect={props.mainUserId === props.user.id}
-      />
-    ) : null}
+    ))}
   </ScrollView>
 );
 

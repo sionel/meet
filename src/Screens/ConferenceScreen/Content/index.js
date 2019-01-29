@@ -2,13 +2,17 @@ import { connect } from "react-redux";
 import ContentContainer from "./ContentContainer";
 import { actionCreators as localActions } from "../../../redux/modules/local";
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, ownProps) => {
   const {
     local: { conferenceMode }
   } = state;
 
+  const { mainUser } = ownProps;
+
   return {
-    conferenceMode
+    conferenceMode,
+    videoTrack: mainUser.videoTrack,
+    isMuteVideo: mainUser.isMuteVideo
   };
 };
 

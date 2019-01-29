@@ -9,6 +9,7 @@ import storage from "redux-persist/lib/storage";
 import thunk from "redux-thunk";
 import local from "./modules/local";
 import mainUser from "./modules/mainUser";
+import participants from "./modules/participants";
 import test from "./modules/test";
 import user from "./modules/user";
 import wetalk from "./modules/wetalk";
@@ -29,7 +30,7 @@ if (env === "development") {
 const persistConfig = {
   key: "root",
   storage,
-  blacklist: ["local", "mainUser"]
+  blacklist: ["local", "mainUser", "participants"]
 };
 
 /**
@@ -38,6 +39,7 @@ const persistConfig = {
 const reducer = persistCombineReducers(persistConfig, {
   local,
   mainUser,
+  participants,
   test,
   user,
   wetalk

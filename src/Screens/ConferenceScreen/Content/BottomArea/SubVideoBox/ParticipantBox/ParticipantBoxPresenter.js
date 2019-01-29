@@ -7,8 +7,7 @@ import ButtonCameraOff from "../../../../../../../assets/buttons/btn_vc_camera_o
  * ContentPresenter
  */
 const ParticipantBoxPresenter = props => {
-  const stream =
-    props.user.videoTrack && props.user.videoTrack.getOriginalStream();
+  const stream = props.videoTrack && props.videoTrack.getOriginalStream();
 
   const content =
     stream && !props.user.isMuteVideo ? (
@@ -24,7 +23,10 @@ const ParticipantBoxPresenter = props => {
       </View>
     );
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      onPressOut={() => props.setMainUser(props.user.id)}
+    >
       <View
         style={props.isSelect ? styles.videoAreaSelected : styles.videoArea}
       >
@@ -46,14 +48,14 @@ const styles = StyleSheet.create({
   },
   videoArea: {
     flex: 1,
-    backgroundColor: "rgba(255, 255, 255, 0.4)",
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: "gray"
+    backgroundColor: "gray",
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.5)"
   },
   videoAreaSelected: {
     flex: 1,
     backgroundColor: "gray",
-    borderWidth: 2,
+    borderWidth: 5,
     borderColor: "#039BE5"
   },
   video: {

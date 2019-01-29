@@ -56,6 +56,9 @@ target 'JitsiMeet' do
   pod 'RNSVG', :path => '../node_modules/react-native-svg'
   # RNVectorIcons
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+   # lottie
+  pod 'lottie-ios', :path => '../node_modules/lottie-ios'
+  pod 'lottie-react-native', :path => '../node_modules/lottie-react-native'
 end
 
 post_install do |installer|

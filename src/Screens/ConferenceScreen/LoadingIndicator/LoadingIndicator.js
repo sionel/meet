@@ -1,22 +1,29 @@
-import React from "react";
-import { View, StyleSheet, ActivityIndicator } from "react-native";
+import React, { Component } from "react";
+import LottieView from "lottie-react-native";
+import { View, StyleSheet } from "react-native";
 
 /**
  * ConferenceScreenPresenter
  */
-const LoadingIndicator = props => {
-  if (props.mainUser) {
+class LoadingIndicator extends Component {
+  componentDidMount() {
+    this.animation.play();
   }
-  return (
-    <View style={styles.container}>
-      <ActivityIndicator
-        size="large"
-        color="#039BE5"
-        style={styles.indicator}
-      />
-    </View>
-  );
-};
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <LottieView
+          style={styles.indicator}
+          source={require("./camera.json")}
+          ref={animation => {
+            this.animation = animation;
+          }}
+        />
+      </View>
+    );
+  }
+}
 
 /**
  * styles
@@ -28,7 +35,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#E3F2FD"
   },
-  indicator: {}
+  indicator: {
+    width: 90,
+    height: 90
+  }
 });
 
 export default LoadingIndicator;

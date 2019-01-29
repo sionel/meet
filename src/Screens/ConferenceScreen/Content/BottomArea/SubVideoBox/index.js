@@ -4,12 +4,14 @@ import SubVideoBoxContainer from "./SubVideoBoxContainer";
 const mapStateToProps = state => {
   const {
     local: { user },
-    mainUser: { mainUserId }
+    mainUser: { mainUserId },
+    participants: { list }
   } = state;
 
   return {
     mainUserId,
-    user
+    user,
+    participants: list
   };
 };
 

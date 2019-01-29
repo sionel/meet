@@ -9,13 +9,10 @@ import BottomArea from "./BottomArea";
  * ContentPresenter
  */
 const ContentPresenter = props => {
-  const { mainUser } = props;
-  const stream =
-    !mainUser.isMuteVideo &&
-    mainUser.videoTrack &&
-    mainUser.videoTrack.getOriginalStream();
+  const { mainUser, videoTrack, isMuteVideo } = props;
+  const stream = !isMuteVideo && videoTrack && videoTrack.getOriginalStream();
   return (
-    <View style={styles.container}>
+    <View style={styles.container} onLayout={() => console.log("onLayout")}>
       <TouchableOpacity
         activeOpacity={0.7}
         style={styles.container}
