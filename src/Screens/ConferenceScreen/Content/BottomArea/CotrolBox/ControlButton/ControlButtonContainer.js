@@ -6,7 +6,6 @@ import ControlButtonPresenter from "./ControlButtonPresenter";
  */
 class ControlButtonContainer extends Component {
   render() {
-    console.log("ControlButtonContainer");
     return <ControlButtonPresenter {...this.props} />;
   }
 }

@@ -6,10 +6,11 @@ import config from "./config";
  * 화상회의 방 생성/참가 및 디바이스 연결을 담당하는 클래스
  */
 class ConferenceConnector {
-  constructor() {
+  constructor(handlers) {
     // room : 화상대화방
     this._room = null;
     this._tracks = [];
+    this._handlers = handlers;
   }
 
   get tracks() {
@@ -51,6 +52,13 @@ class ConferenceConnector {
     }
   };
 
+  /**
+   * selectParticipant
+   * 메인으로 선택된 사람의 화질을 높인다.
+   */
+  selectParticipant = id => {
+    this._room.selectParticipant(id);
+  };
   //#endregion
 
   //#region Private Functions
@@ -80,6 +88,23 @@ class ConferenceConnector {
     // 컨퍼런스 참가 실패 이벤트 연결
     this._room.on(conferenceEvents.CONFERENCE_FAILED, () => {
       reject(new Error("컨퍼런스 참가에 실패했습니다."));
+    });
+
+    // JOIN_USER 이벤트 연결
+    this._room.on(conferenceEvents.USER_JOINED, (id, user) =>
+      this._handlers.JOIN_USER(user)
+    );
+
+    // JOIN_USER 이벤트 연결
+    this._room.on(conferenceEvents.USER_LEFT, id =>
+      this._handlers.LEFT_USER(id)
+    );
+
+    // 트랙추가 이벤트 연결
+    this._room.on(conferenceEvents.TRACK_ADDED, track => {
+      if (!track.isLocal()) {
+        this._handlers.ADD_REMOTE_TRACK(track);
+      }
     });
   };
 

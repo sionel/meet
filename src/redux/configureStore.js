@@ -3,6 +3,7 @@
  * configureStore {store, persistor} 생성
  */
 const env = process.env.NODE_ENV;
+<<<<<<< HEAD
 import { applyMiddleware, createStore } from 'redux';
 import { persistStore, persistCombineReducers } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
@@ -12,6 +13,17 @@ import mainUser from './modules/mainUser';
 import test from './modules/test';
 import user from './modules/user';
 import wetalk from './modules/wetalk';
+=======
+import { applyMiddleware, createStore } from "redux";
+import { persistStore, persistCombineReducers } from "redux-persist";
+import storage from "redux-persist/lib/storage";
+import thunk from "redux-thunk";
+import local from "./modules/local";
+import mainUser from "./modules/mainUser";
+import participants from "./modules/participants";
+import test from "./modules/test";
+import user from "./modules/user";
+import wetalk from "./modules/wetalk";
 
 /**
  * middleware list
@@ -20,27 +32,28 @@ const middlewares = [thunk];
 
 if (env === 'development') {
 	const { logger } = require('redux-logger');
-	// middlewares.push(logger);
+	middlewares.push(logger);
 }
 
 /**
  * persistConfig
  */
 const persistConfig = {
-	key: 'root',
-	storage,
-	blacklist: ['local', 'mainUser']
+  key: "root",
+  storage,
+  blacklist: ["local", "mainUser", "participants"]
 };
 
 /**
  *  여러 모듈들을 결합하여 리듀서를 생성한다.
  */
 const reducer = persistCombineReducers(persistConfig, {
-	local,
-	mainUser,
-	test,
-	user,
-	wetalk
+  local,
+  mainUser,
+  participants,
+  test,
+  user,
+  wetalk
 });
 
 /**

@@ -13,8 +13,8 @@ const ControlBoxPresenter = props => (
     />
     <ControlButton
       name={"camera"}
-      on={true}
-      onPress={() => console.log("press")}
+      on={!props.local.user.isMuteVideo}
+      onPress={props.toggleMuteVideo}
     />
     <ControlButton
       name={"mic"}

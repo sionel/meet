@@ -1,3 +1,5 @@
+import ConferenceManager from "../../utils/conference/ConferenceManager";
+
 //#region Action Types
 
 // MAIN_USER 설정
@@ -29,6 +31,8 @@ function reducer(state = initialState, action) {
 //#region SET_MAIN_USER
 
 function setMainUser(mainUserId) {
+  const conferenceManager = new ConferenceManager();
+  conferenceManager.selectParticipant(mainUserId);
   return dispatch => {
     dispatch({
       type: SET_MAIN_USER,

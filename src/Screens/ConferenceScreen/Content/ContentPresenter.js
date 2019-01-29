@@ -1,38 +1,52 @@
 import React from "react";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet, TouchableOpacity, dimmen } from "react-native";
 import { RTCView } from "react-native-webrtc";
+import MainVideo from "./MainVideo";
+import TopArea from "./TopArea";
 import BottomArea from "./BottomArea";
 
 /**
  * ContentPresenter
  */
 const ContentPresenter = props => {
-  if (props.stream) {
-    return (
-      <View style={styles.container}>
-        <TouchableOpacity
-          activeOpacity={0.7}
-          style={styles.container}
-          onPressOut={props.toggleConferenceMode}
-        >
-          <RTCView
-            style={styles.container}
-            mirror={true}
-            objectFit={"cover"}
-            streamURL={props.stream.toURL()}
+  const { mainUser, videoTrack, isMuteVideo } = props;
+  const stream = !isMuteVideo && videoTrack && videoTrack.getOriginalStream();
+  return (
+    <View style={styles.container} onLayout={props.onLayout}>
+      <TouchableOpacity
+        activeOpacity={0.7}
+        style={styles.container}
+        onPress={props.toggleConferenceMode}
+      >
+        <MainVideo stream={stream} isMuteVideo={mainUser.isMuteVideo}>
+          <View
+            style={
+              props.orientation === "vertical"
+                ? styles.contentVertical
+                : styles.contentHorizontal
+            }
           >
-            <View style={{ ...styles.box, flex: 1 }} />
-            <View style={{ ...styles.box, flex: 7 }} />
-            <View style={styles.bottomArea}>
-              <BottomArea onClose={props.onClose} />
+            <View style={styles.topArea}>
+              <TopArea orientation={props.orientation} />
             </View>
-          </RTCView>
-        </TouchableOpacity>
-      </View>
-    );
-  } else {
-    return <View style={styles.container} />;
-  }
+            <View style={styles.middleArea} />
+            <View
+              style={
+                props.orientation === "vertical"
+                  ? styles.bottomAreaVertical
+                  : styles.bottomAreaHorizontal
+              }
+            >
+              <BottomArea
+                onClose={props.onClose}
+                orientation={props.orientation}
+              />
+            </View>
+          </View>
+        </MainVideo>
+      </TouchableOpacity>
+    </View>
+  );
 };
 
 /**
@@ -42,14 +56,31 @@ const styles = StyleSheet.create({
   container: {
     flex: 1
   },
-  box: {
-    display: "flex",
-    opacity: 0
+  contentVertical: {
+    flex: 1,
+    flexDirection: "column"
   },
-  bottomArea: {
+  contentHorizontal: {
+    flex: 1,
+    flexDirection: "row"
+  },
+  topArea: {
+    flex: 2
+  },
+  middleArea: {
+    flex: 7
+  },
+  bottomAreaVertical: {
     flex: 2,
     display: "flex",
     flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  bottomAreaHorizontal: {
+    flex: 2,
+    display: "flex",
+    flexDirection: "column",
     justifyContent: "center",
     alignItems: "center"
   }

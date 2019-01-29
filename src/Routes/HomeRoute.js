@@ -13,7 +13,6 @@ import {
 } from "react-navigation";
 
 import HomeScreen from "../Screens/HomeScreen";
-import ConferenceScreen from "../Screens/ConferenceScreen";
 import ConfigurationScreen from "../Screens/ConfigurationScreen";
 import Icon from "react-native-vector-icons/FontAwesome";
 
@@ -121,23 +120,6 @@ const HomeRoute = createStackNavigator({
       )
     })
   },
-
-  /**
-   * Conference
-   * 화상대화 접속화면
-   */
-  Conference: {
-    screen: ConferenceScreen,
-    headerStyle: {
-      color: "#fff"
-    },
-    navigationOptions: {
-      header: null,
-      headerLeft: null,
-      gesturesEnabled: false
-    }
-  },
-
   /**
    * Configuration
    * 환경설정
