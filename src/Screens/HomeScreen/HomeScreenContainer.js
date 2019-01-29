@@ -11,7 +11,7 @@ import { actionCreators as WetalkActions } from '../../redux/modules/wetalk';
 // service
 import { WetalkApi } from '../../services';
 import { UserApi } from '../../services';
-// import { ConferenceApi } from '../../services';
+import { ConferenceApi } from '../../services';
 
 // #region
 
@@ -148,12 +148,13 @@ class HomeScreenContainer extends React.Component {
 	_handleCheckAuth = async () => {
 		const { auth, onLogin } = this.props;
 		let result = await UserApi.check(auth.AUTH_A_TOKEN, auth.last_access_company_no);
+		console.log('RE : ', result);
 
 		// 자동로그인
-		if (result.resultCode !== 200) {
+		if (result.errors) {
+			result = await UserApi.login(auth);
 			result.resultData.portal_id = auth.portal_id;
 			result.resultData.portal_password = auth.portal_password;
-			result = await UserApi.login(result);
 			onLogin(result.resultData);
 		}
 	};
@@ -175,7 +176,7 @@ class HomeScreenContainer extends React.Component {
 	 */
 	_handleAutoLogin = () => {
 		const { auth } = this.props;
-		// console.log('Auth : ', auth);
+		console.log('Auth : ', auth);
 
 		// 접속확인
 		if (!auth) {
@@ -188,19 +189,39 @@ class HomeScreenContainer extends React.Component {
 	/**
 	 * _handleCreateConference
 	 */
-	_handleCreateConference = selectedRoomId => {
+	_handleCreateConference = async selectedRoomId => {
 		// room_id, owner_id, owner_name, token, cno
 		const { auth } = this.props;
-		const bodyData = {
-			room_id: selectedRoomId,
-			owner_id: auth.portal_id,
-			owner_name: '김성훈',
-			cno: auth.last_access_company_no,
-			ccode: 'biz201703300000011',
-			timestamp: 1548384693,
-			token: auth.AUTH_A_TOKEN
-		};
-		// ConferenceApi.create(...bodyData);
+		const bodyData = [
+			selectedRoomId,
+			auth.portal_id,
+			'김성훈',
+			auth.last_access_company_no,
+			'biz201703300000011',
+			'1548384693',
+			auth.AUTH_A_TOKEN
+		];
+
+		// const createResult = await ConferenceApi.create(...bodyData);
+		const createResult = { resultCode: 200 };
+		console.log('createResult : ', createResult);
+
+		// 화상대화 생성가능여부
+		if (createResult.resultCode === 200) {
+			// 생성완료 메시지 보내기
+			const sendWetalkResult = await ConferenceApi.sendWetalk(
+				selectedRoomId,
+				// createResult.resultData,
+				'_Gj2EWgBeAtpuzEuPdzI_20190129091219nmbqw',
+				auth.last_access_company_no,
+				auth.AUTH_A_TOKEN
+			);
+			console.log('sendWetalkResult : ', sendWetalkResult);
+			// this._handleActivateModal();
+			this.setState({ modal: false });
+		} else {
+			alert('화상대화 생성에 실패하였습니다. 다시 시도해 주세요');
+		}
 	};
 }
 // #endregion
