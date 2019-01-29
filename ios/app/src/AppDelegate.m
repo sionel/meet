@@ -20,6 +20,7 @@
 #import "Types.h"
 
 #import <JitsiMeet/JitsiMeet.h>
+#import "Orientation.h"
 
 @import Crashlytics;
 @import Fabric;
@@ -103,6 +104,10 @@
     return [JitsiMeetView application:app
                               openURL:openUrl
                               options:options];
+}
+
+- (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
+    return [Orientation getOrientation];
 }
 
 @end

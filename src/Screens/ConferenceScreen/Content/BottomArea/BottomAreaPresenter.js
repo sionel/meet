@@ -8,8 +8,8 @@ import { ConferenceModes } from "../../../../utils/Constants";
  */
 const BottomAreaPresenter = props =>
   props.conferenceMode === ConferenceModes.CONTROL ? (
-    <CotrolBox onClose={props.onClose} />
+    <CotrolBox onClose={props.onClose} orientation={props.orientation} />
   ) : (
-    <SubVideoBox onClose={props.onClose} />
+    <SubVideoBox onClose={props.onClose} orientation={props.orientation} />
   );
 export default BottomAreaPresenter;

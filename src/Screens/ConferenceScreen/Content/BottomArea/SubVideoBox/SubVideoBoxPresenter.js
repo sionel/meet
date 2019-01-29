@@ -6,7 +6,10 @@ import ParticipantBox from "./ParticipantBox";
  * ContentPresenter
  */
 const SubVideoBoxPresenter = props => (
-  <ScrollView horizontal={true} style={styles.scrollView}>
+  <ScrollView
+    horizontal={props.orientation === "vertical"}
+    style={styles.scrollView}
+  >
     {props.user ? (
       <ParticipantBox
         key={props.user.id}
@@ -28,7 +31,7 @@ const SubVideoBoxPresenter = props => (
 
 const styles = StyleSheet.create({
   scrollView: {
-    marginHorizontal: 15
+    padding: 10
   }
 });
 

@@ -8,7 +8,6 @@ import ButtonCameraOff from "../../../../../assets/buttons/btn_vc_camera_off.png
  */
 const MainVideoPresenter = props => {
   const { isMuteVideo, stream } = props;
-  console.log(stream);
   if (!isMuteVideo && stream) {
     return (
       <RTCView

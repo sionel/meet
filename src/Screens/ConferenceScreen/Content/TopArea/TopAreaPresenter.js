@@ -9,21 +9,40 @@ import { ConferenceModes } from "../../../../utils/Constants";
 const TopAreaPresenter = props => {
   if (props.conferenceMode === ConferenceModes.NORMAL) {
     return (
-      <TouchableOpacity activeOpacity={1} style={styles.container}>
+      <TouchableOpacity
+        activeOpacity={1}
+        style={
+          props.orientation === "vertical"
+            ? styles.containerVertical
+            : styles.containerHorizontal
+        }
+      >
         {/* 경과시간 */}
-        {/* <View style={styles.timeBox}>
+        {/* <View
+          style={
+            props.orientation === "vertical"
+              ? styles.timeBoxVertical
+              : styles.timeBoxHorizontal
+          }
+        >
           <Text style={{ color: "#fff", fontSize: 16.5, padding: 5 }}>
             00:00:19
           </Text>
         </View> */}
-        {props.isMuteVideo ? null : (
-          <View style={styles.settingBox}>
+        <View
+          style={
+            props.orientation === "vertical"
+              ? styles.settingBoxVertical
+              : styles.settingBoxHorizontal
+          }
+        >
+          {props.isMuteVideo ? null : (
             <SettingButton
               name="switch"
               onPress={props.toggleCameraFacingMode}
             />
-          </View>
-        )}
+          )}
+        </View>
       </TouchableOpacity>
     );
   } else {
@@ -35,21 +54,41 @@ const TopAreaPresenter = props => {
  * styles
  */
 const styles = StyleSheet.create({
-  container: {
+  containerVertical: {
     flex: 1,
     flexDirection: "row",
-    paddingHorizontal: 20
+    marginVertical: 40,
+    marginHorizontal: 10,
+    alignItems: "flex-start"
   },
-  timeBox: {
+  containerHorizontal: {
+    flex: 1,
+    flexDirection: "column",
+    marginVertical: 10,
+    marginHorizontal: 20
+  },
+  timeBoxVertical: {
     flex: 2,
     justifyContent: "flex-end",
     alignItems: "flex-start"
   },
-  settingBox: {
+  timeBoxHorizontal: {
+    flex: 2,
+    justifyContent: "flex-start",
+    alignItems: "flex-start"
+  },
+  settingBoxVertical: {
     flex: 1,
     flexDirection: "row",
     justifyContent: "flex-end",
     alignItems: "flex-end"
+  },
+  settingBoxHorizontal: {
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "flex-end",
+    alignItems: "flex-start",
+    marginVertical: 10
   }
 });
 
