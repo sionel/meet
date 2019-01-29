@@ -3,17 +3,7 @@
  * configureStore {store, persistor} 생성
  */
 const env = process.env.NODE_ENV;
-<<<<<<< HEAD
-import { applyMiddleware, createStore } from 'redux';
-import { persistStore, persistCombineReducers } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
-import thunk from 'redux-thunk';
-import local from './modules/local';
-import mainUser from './modules/mainUser';
-import test from './modules/test';
-import user from './modules/user';
-import wetalk from './modules/wetalk';
-=======
+
 import { applyMiddleware, createStore } from "redux";
 import { persistStore, persistCombineReducers } from "redux-persist";
 import storage from "redux-persist/lib/storage";
@@ -30,9 +20,9 @@ import wetalk from "./modules/wetalk";
  */
 const middlewares = [thunk];
 
-if (env === 'development') {
-	const { logger } = require('redux-logger');
-	middlewares.push(logger);
+if (env === "development") {
+  const { logger } = require("redux-logger");
+  middlewares.push(logger);
 }
 
 /**
@@ -60,9 +50,9 @@ const reducer = persistCombineReducers(persistConfig, {
  * configureStore 정의
  */
 const configureStore = () => {
-	let store = createStore(reducer, applyMiddleware(...middlewares));
-	let persistor = persistStore(store);
-	return { store, persistor };
+  let store = createStore(reducer, applyMiddleware(...middlewares));
+  let persistor = persistStore(store);
+  return { store, persistor };
 };
 
 export default configureStore;
