@@ -70,6 +70,18 @@ export default {
 		formData.append('service_data', '[{"video_chat_id":"_Gj2EWgBeAtpuzEuPdzI_20190129091219nmbqw"}]');
 		formData.append('file', '');
 
+		const jsonData = JSON.stringify({
+			room_id: '_Gj2EWgBeAtpuzEuPdzI',
+			chat_type: '1',
+			content_type: '8',
+			content: '',
+			service_code: 'webrtc',
+			service_data: '[{"video_chat_id":"_Gj2EWgBeAtpuzEuPdzI_20190129091219nmbqw"}]',
+			file: '',
+			ccode: 'biz201703300000011',
+			cno: '9'
+		});
+
 		console.log('Form : ', formData);
 
 		try {
@@ -84,17 +96,6 @@ export default {
 				method,
 				headers,
 				body: formData
-				// body: JSON.stringify({
-				// 	room_id: '_Gj2EWgBeAtpuzEuPdzI',
-				// 	chat_type: '1',
-				// 	content_type: '8',
-				// 	content: '',
-				// 	service_code: 'webrtc',
-				// 	service_data: '[{"video_chat_id":"_Gj2EWgBeAtpuzEuPdzI_20190129091219nmbqw"}]',
-				// 	file: '',
-				// 	ccode: 'biz201703300000011',
-				// 	cno: '9'
-				// })
 			});
 			console.log('response : ', response);
 
