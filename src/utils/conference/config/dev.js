@@ -1,13 +1,13 @@
 /**
  * 화상대화 dev config
  */
+
 const config = {
   hosts: {
-    domain: "meet.jit.si",
-    muc: "conference.meet.jit.si",
-    bridge: "jitsi-videobridge.beta.meet.jit.si"
+    domain: "video.wehago.com",
+    muc: "conference.video.wehago.com"
   },
-  bosh: "//meet.jit.si/http-bind",
+  bosh: "//video.wehago.com/http-bind",
   resolution: 720,
   constraints: {
     video: {
