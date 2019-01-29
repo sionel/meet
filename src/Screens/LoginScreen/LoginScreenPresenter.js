@@ -42,8 +42,9 @@ const LoginScreenPresenter = props => {
 					placeholder={'패스워드를 입력하세요'}
 					width={270}
 					height={40}
-					secureTextEntry={true}
+					secret={true}
 					onChange={text => props.onChangeValue('userPwd', text)}
+					onSubmit={props.onEnterKeyDown}
 					value={userPwd}
 				/>
 			</View>
@@ -53,14 +54,6 @@ const LoginScreenPresenter = props => {
 				<FlatButton width={270} height={47} borderRadius={20} onClick={props.onLogin}>
 					로그인
 				</FlatButton>
-
-				{/* SUB BUTTONS */}
-				<View style={{ paddingTop: 20 }}>
-					<Text style={{ flex: 1, textAlign: 'center' }}>최초 로그인 이후 자동 로그인됩니다</Text>
-				</View>
-				<View>
-					<Button title="나가기" onPress={() => props.onRedirect('Home')} />
-				</View>
 			</View>
 
 			{/* 모달 */}

@@ -1,36 +1,11 @@
 import React from 'react';
 import { View, Text, StyleSheet, Button, SectionList, TouchableOpacity } from 'react-native';
 
-// components
-import { ListItemComp } from '../../components';
-
 /**
  * ConfigurationScreenPresenter
  */
 const ConfigurationScreenPresenter = props => {
-	const conferenceConfig = [
-		{
-			title: '알림',
-			view: <Text style={styles.item}>알림</Text>
-		},
-		{
-			title: '서버',
-			view: <Text style={styles.item}>서버</Text>
-		},
-		{
-			title: '전송화질',
-			view: <Text style={styles.item}>전송화질</Text>
-		}
-	];
 	const userConfig = [
-		{
-			title: '이름',
-			view: <Text style={styles.item}>이름</Text>
-		},
-		{
-			title: '자동로그인',
-			view: <Text style={styles.item}>자동로그인</Text>
-		},
 		{
 			title: '로그아웃',
 			view: (
@@ -40,6 +15,7 @@ const ConfigurationScreenPresenter = props => {
 			)
 		}
 	];
+
 	return (
 		<View style={styles.container}>
 			<View
@@ -49,15 +25,11 @@ const ConfigurationScreenPresenter = props => {
 				}}
 			>
 				<SectionList
-					sections={[{ title: '화상대화', data: conferenceConfig }, { title: '개인정보', data: userConfig }]}
+					sections={[{ title: '개인정보', data: userConfig }]}
 					renderSectionHeader={({ section }) => <Text style={styles.sectionHeader}>{section.title}</Text>}
 					renderItem={({ item }) => item.view}
 					keyExtractor={(item, index) => index}
 				/>
-			</View>
-
-			<View>
-				<Button title="나가기" onPress={() => props.onRedirect('Home')} />
 			</View>
 		</View>
 	);

@@ -19,6 +19,7 @@ class LoginScreenContainer extends React.Component {
 	state = {
 		userId: '',
 		userPwd: '',
+		nextInput: null,
 		modal: false
 	};
 
@@ -27,7 +28,7 @@ class LoginScreenContainer extends React.Component {
 	 */
 	render() {
 		const { navigation } = this.props;
-		const { list, userId, userPwd, modal } = this.state;
+		const { list, userId, userPwd, modal, nextInput } = this.state;
 
 		return (
 			<LoginScreenPresenter
@@ -35,11 +36,13 @@ class LoginScreenContainer extends React.Component {
 				onChangeValue={this._handleChangeValue}
 				onLogin={this._handleLogin}
 				onActivateModal={this._handleActivateModal}
+				onEnterKeyDown={this._handleEnterKeyDown}
 				navigation={navigation}
 				userPwd={userPwd}
 				userId={userId}
 				list={list}
 				modal={modal}
+				nextInput={nextInput}
 			/>
 		);
 	} // render
@@ -102,6 +105,14 @@ class LoginScreenContainer extends React.Component {
 				this.setState(prev => ({ modal: false }));
 			}, 2100);
 		}
+	};
+
+	/**
+	 * _handleEnterKeyDown
+	 * 엔터키 입력 시
+	 */
+	_handleEnterKeyDown = e => {
+		this._handleLogin();
 	};
 }
 

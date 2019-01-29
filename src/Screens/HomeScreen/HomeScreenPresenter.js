@@ -6,13 +6,15 @@ import React from 'react';
 import { View, Text, FlatList, Button, StyleSheet, Modal, TouchableOpacity, SectionList } from 'react-native';
 // common components
 import { ListItemComp, SearchForm } from '../../components';
-// 추가버튼
-import AddButton from './AddButton';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 /**
  * HomeScreenPresenter
  */
 const HomeScreenPresenter = props => {
+	const activateList = props.list.filter(item => item.conference === true);
+	const groupList = props.list.filter(item => item.conference === false && item.room_type === '2');
+	const personnelList = props.list.filter(item => item.conference === false && item.room_type === '1');
 	return (
 		<View style={styles.container}>
 			{/* 검색바 */}
@@ -30,18 +32,9 @@ const HomeScreenPresenter = props => {
 				onRefresh={props.onRefresh}
 				style={styles.listContainer}
 				sections={[
-					{
-						title: '대화중',
-						data: props.list.filter(item => item.conference === true)
-					},
-					{
-						title: '그룹대화',
-						data: props.list.filter(item => item.conference === false && item.room_type === '1')
-					},
-					{
-						title: '1:1대화',
-						data: props.list.filter(item => item.conference === false && item.room_type === '2')
-					}
+					{ title: '대화중', data: activateList },
+					{ title: '그룹대화', data: groupList },
+					{ title: '1:1대화', data: personnelList }
 				]}
 				renderSectionHeader={({ section }) =>
 					section.data.length > 0 && <Text style={styles.sectionHeader}>{section.title}</Text>}
@@ -63,22 +56,48 @@ const HomeScreenPresenter = props => {
 			/>
 
 			{/* 테스트용 버튼 */}
-			<View>
+			{/* <View>
 				<Button title={'Go login' + props.selectedRoomId} onPress={() => props.onRedirect('Login')} />
-			</View>
+			</View> */}
+			{/* 방생성 버튼 */}
+			{/* <AddButton onClick={() => props.onRedirect('Create')} /> */}
 
 			{/* 컨펌모달 */}
-			<Modal animationType="fade" transparent={true} visible={props.modal}>
+			<Modal animationType="fade" transparent={true} visible={props.modal} blurRadius={1}>
 				<View style={styles.modalWrap}>
 					<View style={styles.modalContentWrap}>
-						<Text style={styles.modalMessage}>새로운 화상대화를 시작하시겠습니까?</Text>
-						<View style={styles.modalButtons}>
-							<TouchableOpacity
-								style={{ ...styles.modalButton, ...styles.modalButtonCancel }}
-								onPress={() => props.onActivateModal()}
+						<TouchableOpacity
+							style={{
+								position: 'absolute',
+								right: 10,
+								top: 10,
+								zIndex: 11
+							}}
+							onPress={() => props.onActivateModal()}
+						>
+							<Icon
+								name="times-circle"
+								size={30}
+								color="#CACACA"
+								style={{
+									zIndex: 10
+								}}
+							/>
+						</TouchableOpacity>
+
+						<View style={styles.modalMessage}>
+							<Text
+								style={{
+									fontSize: 22,
+									color: '#1C90FB',
+									marginBottom: 20
+								}}
 							>
-								<Text style={{ color: '#333' }}>취소</Text>
-							</TouchableOpacity>
+								알림
+							</Text>
+							<Text>새로운 화상대화를 시작하시겠습니까?</Text>
+						</View>
+						<View style={styles.modalButtons}>
 							<TouchableOpacity
 								style={{ ...styles.modalButton, ...styles.modalButtonConfirm }}
 								onPress={() => props.onCreateConference(props.selectedRoomId)}
@@ -90,9 +109,6 @@ const HomeScreenPresenter = props => {
 					</View>
 				</View>
 			</Modal>
-
-			{/* 방생성 버튼 */}
-			{/* <AddButton onClick={() => props.onRedirect('Create')} /> */}
 		</View>
 	);
 };
@@ -132,11 +148,11 @@ const styles = StyleSheet.create({
 	},
 
 	modalWrap: {
-		marginTop: 22,
+		// marginTop: 22,
 		flex: 1,
 		justifyContent: 'center',
-		alignItems: 'center'
-		// backgroundColor: 'rgba(0,0,0,.2)'
+		alignItems: 'center',
+		backgroundColor: 'rgba(0,0,0, .75)'
 	},
 
 	modalContentWrap: {
@@ -155,19 +171,22 @@ const styles = StyleSheet.create({
 	},
 
 	modalMessage: {
-		paddingTop: 37,
-		paddingBottom: 37,
+		paddingTop: 20,
+		paddingBottom: 30,
 		paddingLeft: 20,
 		paddingRight: 20
+		// borderWidth: 1,
+		// borderColor: '#1C90FB'
 	},
 
 	modalButtons: { flexDirection: 'row' },
 	modalButton: {
-		flex: 0.5,
+		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
 		paddingTop: 15,
-		paddingBottom: 15
+		paddingBottom: 15,
+		marginBottom: -1
 	},
 	modalButtonCancel: { backgroundColor: '#f1f1f1' },
 	modalButtonConfirm: { backgroundColor: '#1C90FB' }
