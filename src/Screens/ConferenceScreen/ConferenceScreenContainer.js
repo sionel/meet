@@ -16,10 +16,6 @@ class ConferenceScreenContainer extends React.Component {
     Orientation.unlockAllOrientations();
   }
 
-  componentWillUnmount() {
-    Orientation.lockToPortrait();
-  }
-
   /**
    * componentDidMount
    */
@@ -33,6 +29,7 @@ class ConferenceScreenContainer extends React.Component {
    * componentWillUnmount
    */
   componentWillUnmount() {
+    Orientation.lockToPortrait();
     // 컴포넌트가 언마운트 되기전 화상회의 관련 리소스를 해제 한다.
     this._conferenceManager.dispose();
   }
