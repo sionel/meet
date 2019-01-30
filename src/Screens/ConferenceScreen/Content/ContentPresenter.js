@@ -9,8 +9,7 @@ import BottomArea from "./BottomArea";
  * ContentPresenter
  */
 const ContentPresenter = props => {
-  const { mainUser, videoTrack, isMuteVideo } = props;
-  const stream = !isMuteVideo && videoTrack && videoTrack.getOriginalStream();
+  const { mainUser } = props;
   return (
     <View style={styles.container} onLayout={props.onLayout}>
       <TouchableOpacity
@@ -18,7 +17,7 @@ const ContentPresenter = props => {
         style={styles.container}
         onPress={props.toggleConferenceMode}
       >
-        <MainVideo stream={stream} isMuteVideo={mainUser.isMuteVideo}>
+        <MainVideo mainUser={mainUser}>
           <View
             style={
               props.orientation === "vertical"

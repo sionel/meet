@@ -11,8 +11,11 @@ const LEAVE_CONFERENCE = "LEAVE_CONFERENCE";
 // SET_CONFERENCE_MODE
 const SET_CONFERENCE_MODE = "SET_CONFERENCE_MODE";
 
-// TOGGLE_MUTE_AUDIO
+// TOGGLE_MUTE_VIDEO
 const TOGGLE_MUTE_VIDEO = "TOGGLE_MUTE_VIDEO";
+
+// TOGGLE_MUTE_AUDIO
+const TOGGLE_MUTE_MIC = "TOGGLE_MUTE_MIC";
 
 // TOGGLE_CAMERA_FACING_MODE
 const TOGGLE_CAMERA_FACING_MODE = "TOGGLE_CAMERA_FACING_MODE";
@@ -43,6 +46,10 @@ function reducer(state = initialState, action) {
       return applyToggleMuteVideo(state, action);
     case TOGGLE_CAMERA_FACING_MODE:
       return applyToggleCameraFacingMode(state, action);
+    case TOGGLE_CAMERA_FACING_MODE:
+      return applyToggleCameraFacingMode(state, action);
+    case TOGGLE_MUTE_MIC:
+      return applyToggleMuteMic(state, action);
     default:
       return state;
   }
@@ -68,7 +75,9 @@ function applyJoinConference(state, action) {
     name: conferenceInfo.name,
     isLocal: true,
     videoTrack: conferenceInfo.videoTrack,
-    audioTrack: conferenceInfo.audioTrack
+    audioTrack: conferenceInfo.audioTrack,
+    isMuteMic: false,
+    isMuteVideo: false
   };
   return {
     ...state,
@@ -183,12 +192,48 @@ function applyToggleCameraFacingMode(state) {
 
 //#endregion
 
+//#region TOGGLE_MUTE_MIC
+
+function toggleMuteMic() {
+  return dispatch => {
+    dispatch({
+      type: TOGGLE_MUTE_MIC
+    });
+  };
+}
+
+function applyToggleMuteMic(state) {
+  const { user } = state;
+  if (user && user.audioTrack) {
+    const currentMute = user.isMuteMic;
+    if (currentMute) {
+      user.audioTrack.unmute();
+    } else {
+      user.audioTrack.mute();
+    }
+    return {
+      ...state,
+      user: {
+        ...user,
+        isMuteMic: !currentMute
+      }
+    };
+  }
+
+  return {
+    ...state
+  };
+}
+
+//#endregion TOGGLE_MUTE_MIC
+
 export const actionCreators = {
   setConferenceMode,
   joinConference,
   leaveConference,
   toggleMuteVideo,
-  toggleCameraFacingMode
+  toggleCameraFacingMode,
+  toggleMuteMic
 };
 
 export default reducer;

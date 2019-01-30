@@ -127,6 +127,7 @@ function applySetRemoteTrack(state, action) {
       findUser.videoTrack = track;
     } else if (type === "audio") {
       findUser.audioTrack = track;
+      track.mute();
     }
   }
   return {

@@ -6,6 +6,7 @@ import MainVideoPresenter from "./MainVideoPresenter";
  */
 class MainVideoContainer extends React.Component {
   render() {
+    console.log(this.props);
     return <MainVideoPresenter {...this.props} />;
   }
 }
