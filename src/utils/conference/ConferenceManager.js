@@ -88,7 +88,8 @@ class ConferenceManager {
     const handler = {
       JOIN_USER: this._joinUser,
       LEFT_USER: this._leftUser,
-      ADD_REMOTE_TRACK: this._addRemoteTrack
+      ADD_REMOTE_TRACK: this._addRemoteTrack,
+      VIDEO_MUTE_CHANGED: this._videoMutedChanged
     };
     return handler;
   };
@@ -128,6 +129,14 @@ class ConferenceManager {
    */
   _addRemoteTrack = track => {
     this._dispatch(participantsAcionCreators.setRemoteTrack(track));
+  };
+
+  /**
+   * VIDEO_MUTE_CHANGED
+   * 카메라가 오프되면 발생한다.
+   */
+  _videoMutedChanged = track => {
+    this._dispatch(participantsAcionCreators.updateMuteVideo(track));
   };
 }
 

@@ -10,7 +10,7 @@ const ParticipantBoxPresenter = props => {
   const stream = props.videoTrack && props.videoTrack.getOriginalStream();
 
   const content =
-    stream && !props.user.isMuteVideo ? (
+    stream && !props.isMuteVideo ? (
       <RTCView
         style={styles.video}
         mirror={false}

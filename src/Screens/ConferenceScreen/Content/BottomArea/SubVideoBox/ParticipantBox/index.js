@@ -2,6 +2,17 @@ import { connect } from "react-redux";
 import ParticipantBoxContainer from "./ParticipantBoxContainer";
 import { actionCreators as mainUserActionCreators } from "../../../../../../redux/modules/mainUser";
 
+const mapStateToProps = (state, ownProps) => {
+  const {
+    user,
+    user: { isMuteVideo },
+    user: { videoTrack },
+    isSelect
+  } = ownProps;
+
+  return { user, isMuteVideo, videoTrack, isSelect };
+};
+
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     setMainUser: id => {
@@ -11,6 +22,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 };
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(ParticipantBoxContainer);

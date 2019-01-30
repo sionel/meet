@@ -22,7 +22,6 @@ const SubVideoBoxPresenter = props => (
       <ParticipantBox
         key={participant.id}
         user={participant}
-        videoTrack={participant.videoTrack}
         isSelect={props.mainUserId === participant.id}
       />
     ))}
