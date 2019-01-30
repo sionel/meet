@@ -16,19 +16,6 @@ const commonStyle = {
 	color: 'white',
 	backgroundColor: '#1C90FB'
 };
-const toggleMenu = <Icon name="bars" size={24} color="#fff" style={{ marginLeft: 20, zIndex: 10 }} />;
-
-/**
- * MenuImage
- * 사이드메뉴 토글아이콘
- */
-const MenuImage = ({ navigation }) => {
-	if (!navigation.state.isDrawerOpen) {
-		return <Icon name="bars" size={24} color="#fff" style={{ marginLeft: 20, zIndex: 10 }} />;
-	} else {
-		return <Icon name="times" size={24} color="#fff" style={{ marginLeft: 20, zIndex: 10 }} />;
-	}
-};
 
 /**
  * rightMenuImage

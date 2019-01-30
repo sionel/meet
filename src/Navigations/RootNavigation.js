@@ -14,6 +14,10 @@ const RootNavigation = createStackNavigator(
 		Main: {
 			screen: MainNavigation
 		},
+
+		/**
+     * Conference Navigation
+     */
 		Conference: {
 			screen: ConferenceScreen,
 			navigationOptions: {
@@ -22,6 +26,10 @@ const RootNavigation = createStackNavigator(
 				gesturesEnabled: false
 			}
 		},
+
+		/**
+     * Login Navigation
+     */
 		Login: {
 			screen: LoginScreen,
 			navigationOptions: {

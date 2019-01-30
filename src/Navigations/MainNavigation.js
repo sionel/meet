@@ -2,16 +2,13 @@
  * Route INDEX
  */
 
-import React from 'react';
 import { createAppContainer, createStackNavigator } from 'react-navigation';
 
 // 화면을 index로 export해서 불러오면 인식하지 못함 -> 개별적으로 불러오면 해결
 // Home Route
 import HomeRoute from '../Routes/HomeRoute';
 // Create Route
-import CreateRoute from '../Routes/CreateRoute';
-// Login Route
-import LoginRoute from '../Routes/LoginRoute';
+// import CreateRoute from '../Routes/CreateRoute';
 
 /**
  * Routes
@@ -27,25 +24,7 @@ const Routes = createStackNavigator(
 			navigationOptions: {
 				header: null
 			}
-		},
-		/**
-     * Create - 대화생성화면
-     */
-		Create: {
-			screen: CreateRoute,
-			navigationOptions: {
-				header: null
-			}
 		}
-		/**
-     * Login - 로그인화면
-     */
-		// Login: {
-		//   screen: LoginRoute,
-		//   navigationOptions: {
-		//     header: null
-		//   }
-		// }
 	},
 	// initial
 	{
