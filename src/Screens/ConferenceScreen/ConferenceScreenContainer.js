@@ -6,11 +6,20 @@
 import React from "react";
 import ConferenceScreenPresenter from "./ConferenceScreenPresenter";
 import ConferenceManager from "../../utils/conference/ConferenceManager";
+import Orientation from "react-native-orientation-locker";
 
 const roomName = "abcdd";
 const name = "김더존";
 
 class ConferenceScreenContainer extends React.Component {
+  componentWillMount() {
+    Orientation.unlockAllOrientations();
+  }
+
+  componentWillUnmount() {
+    Orientation.lockToPortrait();
+  }
+
   /**
    * componentDidMount
    */
