@@ -37,15 +37,19 @@ const HomeScreenPresenter = props => {
 					{ title: '그룹대화', data: groupList }
 				]}
 				renderSectionHeader={({ section }) =>
-					section.data.length > 0 && <Text style={styles.sectionHeader}>{section.title}</Text>}
+					section.data.length > 0 && (
+						<Text key={section.title} style={styles.sectionHeader}>
+							{section.title}
+						</Text>
+					)}
 				renderItem={({ item }) => (
 					// 히스토리 아이템
 					<ListItemComp
+						key={item.room_id}
 						title={item.room_title}
 						personnel={item.receiver_user_count}
 						updated={item.update_timestamp}
 						active={item.conference}
-						// onClick={() => props.onRedirect('Conference')}
 						onClick={
 							item.conference === true
 								? () => props.onRedirect('Conference')

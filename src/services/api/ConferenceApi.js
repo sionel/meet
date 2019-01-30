@@ -4,7 +4,7 @@
  */
 
 import { wehagoBaseURL } from '../../utils';
-
+import 'url-search-params-polyfill';
 // #region
 export default {
 	/**

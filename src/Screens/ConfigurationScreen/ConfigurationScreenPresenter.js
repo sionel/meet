@@ -27,7 +27,10 @@ const ConfigurationScreenPresenter = props => {
 				<SectionList
 					sections={[{ title: '개인정보', data: userConfig }]}
 					renderSectionHeader={({ section }) => <Text style={styles.sectionHeader}>{section.title}</Text>}
-					renderItem={({ item }) => item.view}
+					renderItem={({ item }) => {
+						item.view.key = item.title;
+						return item.view;
+					}}
 					keyExtractor={(item, index) => index}
 				/>
 			</View>
