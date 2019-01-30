@@ -33,8 +33,8 @@ const HomeScreenPresenter = props => {
 				style={styles.listContainer}
 				sections={[
 					{ title: '대화중', data: activateList },
-					{ title: '그룹대화', data: groupList },
-					{ title: '1:1대화', data: personnelList }
+					{ title: '1:1대화', data: personnelList },
+					{ title: '그룹대화', data: groupList }
 				]}
 				renderSectionHeader={({ section }) =>
 					section.data.length > 0 && <Text style={styles.sectionHeader}>{section.title}</Text>}

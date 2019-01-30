@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
 		padding: '3%'
 	},
 
-	modalWrap: { marginTop: 22, backgroundColor: '#F15F5F' },
+	modalWrap: { marginTop: 30, backgroundColor: '#F15F5F' },
 	modalContents: {
 		flex: 5,
 		justifyContent: 'center',
