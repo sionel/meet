@@ -16,6 +16,10 @@ class ConferenceConnector {
   get tracks() {
     return this._tracks;
   }
+
+  get room() {
+    return this._room;
+  }
   //#region Public Functions
 
   /**
@@ -104,6 +108,13 @@ class ConferenceConnector {
     this._room.on(conferenceEvents.TRACK_ADDED, track => {
       if (!track.isLocal()) {
         this._handlers.ADD_REMOTE_TRACK(track);
+      }
+    });
+
+    // 비디오 Mute 변경
+    this._room.on(conferenceEvents.TRACK_MUTE_CHANGED, track => {
+      if (track.getType() === "video") {
+        this._handlers.VIDEO_MUTE_CHANGED(track);
       }
     });
   };

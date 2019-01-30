@@ -5,13 +5,17 @@ import { actionCreators as localActionCreators } from "../../../../../redux/modu
 const mapStateToProps = state => {
   const { local } = state;
   return {
-    local
+    isMuteVideo: local.user.isMuteVideo,
+    isMuteMic: local.user.isMuteMic,
+    isMuteSpeaker: local.user.isMuteSpeaker
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    toggleMuteVideo: () => dispatch(localActionCreators.toggleMuteVideo())
+    toggleMuteVideo: () => dispatch(localActionCreators.toggleMuteVideo()),
+    toggleMuteMic: () => dispatch(localActionCreators.toggleMuteMic()),
+    toggleMuteSpeaker: () => dispatch(localActionCreators.toggleMuteSpeaker())
   };
 };
 

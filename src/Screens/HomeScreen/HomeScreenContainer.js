@@ -3,7 +3,7 @@
  * 화상대화 히스토리 컨테이너
  */
 
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import HomeScreenPresenter from './HomeScreenPresenter';
 import { actionCreators as UserActions } from '../../redux/modules/user';
@@ -15,18 +15,18 @@ import { ConferenceApi } from '../../services';
 
 // #region
 
-class HomeScreenContainer extends Component {
+class HomeScreenContainer extends React.Component {
 	/**
-	 * constructor
-	 */
+   * constructor
+   */
 	constructor(props) {
 		super(props);
 		this._handleAutoLogin();
 	}
 
 	/**
-	 * STATE
-	 */
+   * STATE
+   */
 	state = {
 		refreshing: false, // 리프레시 상태
 		searchKeyword: '', // 검색인풋
@@ -35,23 +35,21 @@ class HomeScreenContainer extends Component {
 	};
 
 	/**
-	 * componentWillUnmount
-	 */
+   * componentDidMount
+   */
+	componentDidMount() {}
+
+	/**
+   * componentWillUnmount
+   */
 	componentWillUnmount() {
 		this.setState({ modal: false });
 	}
 
-	/**
-	 * componentDidMount
-	 */
-	componentDidMount() {
-		this._handleRefresh();
-	}
-
 	// #region
 	/**
-	 * Rendering
-	 */
+   * Rendering
+   */
 	render() {
 		const { refreshing, searchKeyword, selectedRoomId, modal } = this.state;
 		const { navigation, auth } = this.props;
@@ -82,88 +80,88 @@ class HomeScreenContainer extends Component {
 	// #endregion
 
 	/**
-	 * _handleRedirect
-	 * 페이지 이동
-	 */
+   * _handleRedirect
+   * 페이지 이동
+   */
 	_handleRedirect = url => {
 		const { navigation } = this.props;
 		navigation.navigate(url);
 	};
 
 	/**
-	 * _handleRefresh
-	 * 리프레시 
-	 */
+   * _handleGetWetalkList
+   * 위톡 조회
+   */
+	_handleGetWetalkList = async () => {
+		const { auth, onSetWetalkList } = this.props;
+		const wetalkList = await WetalkApi.getWetalkList(auth.AUTH_A_TOKEN, auth.last_access_company_no);
+		const onairList = await WetalkApi.getOnairList(auth.portal_id, auth.last_access_company_no);
+		// 반복길이
+		const wetalkListLength = wetalkList.resultData.roomList.length;
+		const onairListLength = onairList.resultData.video_room_list.length;
+
+		// on 찾기
+		let onairKeyList = {};
+		let temp;
+		for (let i = 0; i < onairListLength; i = i + 1) {
+			temp = onairList.resultData.video_room_list[i];
+			onairKeyList[temp.room_id] = temp;
+		}
+
+		// 맵핑
+		for (let j = 0; j < wetalkListLength; j = j + 1) {
+			temp = wetalkList.resultData.roomList[j];
+			if (onairKeyList[temp.room_id]) {
+				temp.conference = true;
+			} else {
+				temp.conference = false;
+			}
+		}
+		wetalkList.resultData.roomList.sort((a, b) => b.conference - a.conference);
+
+		// to redux
+		onSetWetalkList(wetalkList.resultData.roomList);
+		this.setState({ refreshing: false });
+	};
+
+	/**
+   * _handleRefresh
+   * 리프레시
+   */
 	_handleRefresh = () => {
 		this.setState({ refreshing: true });
 		this._handleGetWetalkList();
 	};
 
 	/**
-	 * _handleGetWetalkList
-	 * 위톡 조회
-	 */
-	_handleGetWetalkList = async () => {
-		const { auth, onSetWetalkList } = this.props;
-		const wetalkList = await WetalkApi.getWetalkList(
-			auth.AUTH_A_TOKEN,
-			auth.last_access_company_no,
-			auth.portal_id
-		);
-		console.log('wetalkList : ', wetalkList);
-
-		// to redux
-		onSetWetalkList(wetalkList.resultData.video_room_list);
-		this.setState({ refreshing: false });
-	};
-
-	/**
-	 * _handleSearch
-	 * 검색 필터
-	 */
+   * _handleSearch
+   * 검색 필터
+   */
 	_handleSearch = searchKeyword => {
 		this.setState({ searchKeyword });
 	};
 
 	/**
-	 * _handleCheckAuth
-	 * 접속자 확인
-	 */
+   * _handleCheckAuth
+   * 접속자 확인
+   */
 	_handleCheckAuth = async () => {
 		const { auth, onLogin } = this.props;
 		let result = await UserApi.check(auth.AUTH_A_TOKEN, auth.last_access_company_no);
+
 		// 자동로그인
 		if (result.errors) {
 			result = await UserApi.login(auth);
-			// get user data API
-			const checkResult = await UserApi.check(
-				loginResult.resultData.AUTH_A_TOKEN,
-				loginResult.resultData.last_access_company_no
-			);
-			// 유저정보
-			const userData = {
-				// login api data
-				portal_id: loginResult.resultData.portal_id,
-				portal_password: loginResult.resultData.portal_password,
-				last_access_company_no: loginResult.resultData.last_access_company_no,
-				AUTH_A_TOKEN: loginResult.resultData.AUTH_A_TOKEN,
-				AUTH_R_TOKEN: loginResult.resultData.AUTH_R_TOKEN,
-				// check api data
-				profile_url: checkResult.resultData.profile_url,
-				user_contact: checkResult.resultData.user_contact,
-				user_email: checkResult.resultData.user_email,
-				user_name: checkResult.resultData.user_name,
-				user_no: checkResult.resultData.user_no,
-				employee_list: checkResult.employee_list // 회사정보
-			};
-			onLogin(userData);
+			result.resultData.portal_id = auth.portal_id;
+			result.resultData.portal_password = auth.portal_password;
+			onLogin(result.resultData);
 		}
 	};
 
 	/**
-	 * _handleActivateModal
-	 * 모달뷰 토글
-	 */
+   * _handleActivateModal
+   * 모달뷰 토글
+   */
 	_handleActivateModal = (selectedRoomId = null) => {
 		this.setState(prev => ({
 			modal: !prev.modal,
@@ -172,12 +170,11 @@ class HomeScreenContainer extends Component {
 	};
 
 	/**
-	 * _handleAutoLogin
-	 * 자동로그인
-	 */
+   * _handleAutoLogin
+   * 자동로그인
+   */
 	_handleAutoLogin = () => {
 		const { auth } = this.props;
-		// console.log('AUTH : ', auth);
 
 		// 접속확인
 		if (!auth) {
@@ -188,48 +185,34 @@ class HomeScreenContainer extends Component {
 	};
 
 	/**
-	 * _handleCreateConference
-	 */
+   * _handleCreateConference
+   */
 	_handleCreateConference = async selectedRoomId => {
 		// room_id, owner_id, owner_name, token, cno
 		const { auth } = this.props;
-		// const company_code = await auth.employee_list.filter(e => e.company_no === auth.last_access_company_no)[0].company_code
-		const company_code = auth.employee_list.filter(e => e.company_no == auth.last_access_company_no)[0]
-			.company_code;
-		console.log(company_code);
-
 		const bodyData = [
-			// 방 id
 			selectedRoomId,
-			// 유저아이디
 			auth.portal_id,
-			// 유저이름
-			auth.user_name,
-			// 회사번호
+			'김성훈',
 			auth.last_access_company_no,
-			// 회사코드
-			company_code,
-			// 시간
+			'biz201703300000011',
 			'1548384693',
-			// 토큰
 			auth.AUTH_A_TOKEN
 		];
-		console.log(bodyData);
 
-		const createResult = await ConferenceApi.create(...bodyData);
-		console.log('createResult : ', createResult);
+		// const createResult = await ConferenceApi.create(...bodyData);
+		const createResult = { resultCode: 200 };
 
 		// 화상대화 생성가능여부
 		if (createResult.resultCode === 200) {
 			// 생성완료 메시지 보내기
 			const sendWetalkResult = await ConferenceApi.sendWetalk(
 				selectedRoomId,
-				createResult.resultData,
+				// createResult.resultData,
+				'_Gj2EWgBeAtpuzEuPdzI_20190129091219nmbqw',
 				auth.last_access_company_no,
-				company_code,
 				auth.AUTH_A_TOKEN
 			);
-			console.log('sendWetalkResult : ', sendWetalkResult);
 			// this._handleActivateModal();
 			this.setState({ modal: false });
 		} else {

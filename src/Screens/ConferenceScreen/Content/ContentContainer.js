@@ -1,8 +1,9 @@
 import React from "react";
-import { Dimensions } from "react-native";
+import { Dimensions, NativeModules } from "react-native";
 import ContentPresenter from "./ContentPresenter";
 import { ConferenceModes } from "../../../utils/Constants";
 
+const { AudioMode } = NativeModules;
 /**
  * ContentContainer : 화상대화 화면
  */
@@ -13,6 +14,11 @@ class ContentContainer extends React.Component {
         ? "vertical"
         : "horizontal"
   };
+
+  componentDidMount() {
+    AudioMode.setMode(AudioMode.VIDEO_CALL);
+  }
+
   render() {
     return (
       <ContentPresenter
@@ -45,7 +51,6 @@ class ContentContainer extends React.Component {
       Dimensions.get("window").height > Dimensions.get("window").width
         ? "vertical"
         : "horizontal";
-    console.log(currentOrientation);
     if (orientation !== currentOrientation) {
       this.setState({ orientation: currentOrientation });
     }

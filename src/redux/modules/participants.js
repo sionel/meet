@@ -10,6 +10,9 @@ const LEFT_USER = "LEFT_USER";
 // 참여자의 트랙 추가
 const SET_REMOTE_TRACK = "SET_REMOTE_TRACK";
 
+// UPDATE_MUTE_VIDEO
+const UPDATE_MUTE_VIDEO = "UPDATE_MUTE_VIDEO";
+
 //#endregion Action Types
 
 //#region Initial State
@@ -30,6 +33,8 @@ function reducer(state = initialState, action) {
       return applyLeftUser(state, action);
     case SET_REMOTE_TRACK:
       return applySetRemoteTrack(state, action);
+    case UPDATE_MUTE_VIDEO:
+      return applyUpdateMuteVideo(state, action);
     default:
       return state;
   }
@@ -132,10 +137,43 @@ function applySetRemoteTrack(state, action) {
 
 //#endregion SET_REMOTE_TRACK
 
+//#region UPDATE_MUTE_VIDEO
+
+function updateMuteVideo(track) {
+  return dispatch => {
+    dispatch({
+      type: UPDATE_MUTE_VIDEO,
+      track
+    });
+  };
+}
+
+function applyUpdateMuteVideo(state, action) {
+  const { track } = action;
+  const list = state.list.slice(0);
+  const findUser = list.find(user => {
+    if (user.videoTrack && user.id === track.getParticipantId()) {
+      return true;
+    }
+    return false;
+  });
+  if (findUser) {
+    findUser.isMuteVideo = track.isMuted();
+  }
+
+  return {
+    ...state,
+    list
+  };
+}
+
+//#endregion UPDATE_MUTE_VIDEO
+
 export const actionCreators = {
   joinUser,
   leftUser,
-  setRemoteTrack
+  setRemoteTrack,
+  updateMuteVideo
 };
 
 export default reducer;
