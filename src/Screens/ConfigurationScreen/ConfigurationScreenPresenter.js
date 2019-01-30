@@ -8,11 +8,7 @@ const ConfigurationScreenPresenter = props => {
 	const userConfig = [
 		{
 			title: '로그아웃',
-			view: (
-				<TouchableOpacity onPress={props.onLogout}>
-					<Text style={styles.item}>로그아웃</Text>
-				</TouchableOpacity>
-			)
+			action: () => props.onLogout()
 		}
 	];
 
@@ -26,12 +22,16 @@ const ConfigurationScreenPresenter = props => {
 			>
 				<SectionList
 					sections={[{ title: '개인정보', data: userConfig }]}
-					renderSectionHeader={({ section }) => <Text style={styles.sectionHeader}>{section.title}</Text>}
-					renderItem={({ item }) => {
-						item.view.key = item.title;
-						return item.view;
-					}}
-					keyExtractor={(item, index) => index}
+					renderSectionHeader={({ section }) => (
+						<Text key={section.title} style={styles.sectionHeader}>
+							{section.title}
+						</Text>
+					)}
+					renderItem={({ item }, index) => (
+						<TouchableOpacity key={index} onPress={item.action}>
+							<Text style={styles.item}>로그아웃</Text>
+						</TouchableOpacity>
+					)}
 				/>
 			</View>
 		</View>

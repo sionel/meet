@@ -12,9 +12,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
  * HomeScreenPresenter
  */
 const HomeScreenPresenter = props => {
-	const activateList = props.list.filter(item => item.conference === true);
-	const groupList = props.list.filter(item => item.conference === false && item.room_type === '2');
-	const personnelList = props.list.filter(item => item.conference === false && item.room_type === '1');
+	const activateList = props.list.filter(item => item.is_video_access === 'T');
+	const groupList = props.list.filter(item => item.is_video_access === 'F');
 	return (
 		<View style={styles.container}>
 			{/* 검색바 */}
@@ -28,14 +27,11 @@ const HomeScreenPresenter = props => {
 
 			{/* 화상대화 히스토리 리스트 */}
 			<SectionList
+				keyExtractor={(item, index) => index.toString()}
 				refreshing={props.refreshing}
 				onRefresh={props.onRefresh}
 				style={styles.listContainer}
-				sections={[
-					{ title: '대화중', data: activateList },
-					{ title: '1:1대화', data: personnelList },
-					{ title: '그룹대화', data: groupList }
-				]}
+				sections={[{ title: '대화중', data: activateList }, { title: '그룹대화', data: groupList }]}
 				renderSectionHeader={({ section }) =>
 					section.data.length > 0 && (
 						<Text key={section.title} style={styles.sectionHeader}>
@@ -49,9 +45,9 @@ const HomeScreenPresenter = props => {
 						title={item.room_title}
 						personnel={item.receiver_user_count}
 						updated={item.update_timestamp}
-						active={item.conference}
+						active={item.is_video_access === 'T' ? true : false}
 						onClick={
-							item.conference === true
+							item.is_video_access === 'T'
 								? () => props.onRedirect('Conference')
 								: () => props.onActivateModal(item.room_id)
 						}
