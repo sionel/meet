@@ -3,7 +3,7 @@
  * 화상대화 히스토리 컨테이너
  */
 
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import HomeScreenPresenter from './HomeScreenPresenter';
 import { actionCreators as UserActions } from '../../redux/modules/user';
@@ -15,7 +15,7 @@ import { ConferenceApi } from '../../services';
 
 // #region
 
-class HomeScreenContainer extends React.Component {
+class HomeScreenContainer extends Component {
 	/**
 	 * constructor
 	 */
@@ -148,14 +148,32 @@ class HomeScreenContainer extends React.Component {
 	_handleCheckAuth = async () => {
 		const { auth, onLogin } = this.props;
 		let result = await UserApi.check(auth.AUTH_A_TOKEN, auth.last_access_company_no);
-		console.log('RE : ', result);
 
 		// 자동로그인
 		if (result.errors) {
 			result = await UserApi.login(auth);
-			result.resultData.portal_id = auth.portal_id;
-			result.resultData.portal_password = auth.portal_password;
-			onLogin(result.resultData);
+			// get user data API
+			const checkResult = await UserApi.check(
+				loginResult.resultData.AUTH_A_TOKEN,
+				loginResult.resultData.last_access_company_no
+			);
+			// 유저정보
+			const userData = {
+				// login api data
+				portal_id: loginResult.resultData.portal_id,
+				portal_password: loginResult.resultData.portal_password,
+				last_access_company_no: loginResult.resultData.last_access_company_no,
+				AUTH_A_TOKEN: loginResult.resultData.AUTH_A_TOKEN,
+				AUTH_R_TOKEN: loginResult.resultData.AUTH_R_TOKEN,
+				// check api data
+				profile_url: checkResult.resultData.profile_url,
+				user_contact: checkResult.resultData.user_contact,
+				user_email: checkResult.resultData.user_email,
+				user_name: checkResult.resultData.user_name,
+				user_no: checkResult.resultData.user_no,
+				employee_list: checkResult.employee_list // 회사정보
+			};
+			onLogin(userData);
 		}
 	};
 
@@ -176,8 +194,6 @@ class HomeScreenContainer extends React.Component {
 	 */
 	_handleAutoLogin = () => {
 		const { auth } = this.props;
-		console.log('Auth : ', auth);
-
 		// 접속확인
 		if (!auth) {
 			this._handleRedirect('Login');
@@ -192,18 +208,30 @@ class HomeScreenContainer extends React.Component {
 	_handleCreateConference = async selectedRoomId => {
 		// room_id, owner_id, owner_name, token, cno
 		const { auth } = this.props;
+		// const company_code = await auth.employee_list.filter(e => e.company_no === auth.last_access_company_no)[0].company_code
+		const company_code = auth.employee_list.filter(e => e.company_no == auth.last_access_company_no)[0]
+			.company_code;
+		console.log(company_code);
+
 		const bodyData = [
+			// 방 id
 			selectedRoomId,
+			// 유저아이디
 			auth.portal_id,
-			'김성훈',
+			// 유저이름
+			auth.user_name,
+			// 회사번호
 			auth.last_access_company_no,
-			'biz201703300000011',
+			// 회사코드
+			company_code,
+			// 시간
 			'1548384693',
+			// 토큰
 			auth.AUTH_A_TOKEN
 		];
+		console.log(bodyData);
 
-		// const createResult = await ConferenceApi.create(...bodyData);
-		const createResult = { resultCode: 200 };
+		const createResult = await ConferenceApi.create(...bodyData);
 		console.log('createResult : ', createResult);
 
 		// 화상대화 생성가능여부
@@ -211,9 +239,9 @@ class HomeScreenContainer extends React.Component {
 			// 생성완료 메시지 보내기
 			const sendWetalkResult = await ConferenceApi.sendWetalk(
 				selectedRoomId,
-				// createResult.resultData,
-				'_Gj2EWgBeAtpuzEuPdzI_20190129091219nmbqw',
+				createResult.resultData,
 				auth.last_access_company_no,
+				company_code,
 				auth.AUTH_A_TOKEN
 			);
 			console.log('sendWetalkResult : ', sendWetalkResult);

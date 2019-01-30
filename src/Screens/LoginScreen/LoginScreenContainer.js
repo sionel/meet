@@ -9,6 +9,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { actionCreators as UserActions } from '../../redux/modules/user';
 import LoginScreenPresenter from './LoginScreenPresenter';
+import { CustomLottie } from '../../components';
 // service
 import { UserApi } from '../../services';
 
@@ -17,10 +18,11 @@ class LoginScreenContainer extends React.Component {
 	 * STATE
 	 */
 	state = {
-		userId: '',
-		userPwd: '',
+		userId: 'seongh7800',
+		userPwd: 'kseongh0080',
 		nextInput: null,
-		modal: false
+		modal: false,
+		waiting: false
 	};
 
 	/**
@@ -28,7 +30,11 @@ class LoginScreenContainer extends React.Component {
 	 */
 	render() {
 		const { navigation } = this.props;
-		const { list, userId, userPwd, modal, nextInput } = this.state;
+		const { list, userId, userPwd, modal, nextInput, waiting } = this.state;
+
+		if (waiting) {
+			return <CustomLottie source={'waiting'} width={225} height={225} />;
+		}
 
 		return (
 			<LoginScreenPresenter
@@ -43,6 +49,7 @@ class LoginScreenContainer extends React.Component {
 				list={list}
 				modal={modal}
 				nextInput={nextInput}
+				phrases="Loading"
 			/>
 		);
 	} // render
@@ -81,12 +88,35 @@ class LoginScreenContainer extends React.Component {
 			login_browser: 'WEHAGO-APP'
 		};
 
-		const result = await UserApi.login(data);
-		if (result.resultCode === 200) {
-			// 아이디패스워드 저장
-			result.resultData.portal_id = data.portal_id;
-			result.resultData.portal_password = data.portal_password;
-			onLogin(result.resultData);
+		// Login API
+		let userData = {};
+		const loginResult = await UserApi.login(data);
+
+		if (loginResult.resultCode === 200) {
+			// get user data API
+			const checkResult = await UserApi.check(
+				loginResult.resultData.AUTH_A_TOKEN,
+				loginResult.resultData.last_access_company_no
+			);
+
+			// 유저정보
+			userData = {
+				// login api data
+				portal_id: loginResult.resultData.portal_id,
+				portal_password: loginResult.resultData.portal_password,
+				last_access_company_no: loginResult.resultData.last_access_company_no,
+				AUTH_A_TOKEN: loginResult.resultData.AUTH_A_TOKEN,
+				AUTH_R_TOKEN: loginResult.resultData.AUTH_R_TOKEN,
+				// check api data
+				profile_url: checkResult.resultData.profile_url,
+				user_contact: checkResult.resultData.user_contact,
+				user_email: checkResult.resultData.user_email,
+				user_name: checkResult.resultData.user_name,
+				user_no: checkResult.resultData.user_no,
+				employee_list: checkResult.resultData.employee_list // 회사정보
+			};
+			onLogin(userData);
+
 			navigation.navigate('Home');
 		} else {
 			this._handleActivateModal();

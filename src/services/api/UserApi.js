@@ -28,8 +28,6 @@ export default {
 	 */
 	login: async data => {
 		// urlencoded방식으로 변환
-		console.log('DDD : ', data);
-
 		let formData = new FormData();
 		for (let i in data) {
 			formData.append(i, data[i]);
@@ -44,7 +42,6 @@ export default {
 			});
 			return response.json();
 		} catch (err) {
-			console.log('Test err: ', err);
 			return false;
 		}
 	},
