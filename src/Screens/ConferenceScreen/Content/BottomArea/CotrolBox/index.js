@@ -6,14 +6,16 @@ const mapStateToProps = state => {
   const { local } = state;
   return {
     isMuteVideo: local.user.isMuteVideo,
-    isMuteMic: local.user.isMuteMic
+    isMuteMic: local.user.isMuteMic,
+    isMuteSpeaker: local.user.isMuteSpeaker
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     toggleMuteVideo: () => dispatch(localActionCreators.toggleMuteVideo()),
-    toggleMuteMic: () => dispatch(localActionCreators.toggleMuteMic())
+    toggleMuteMic: () => dispatch(localActionCreators.toggleMuteMic()),
+    toggleMuteSpeaker: () => dispatch(localActionCreators.toggleMuteSpeaker())
   };
 };
 

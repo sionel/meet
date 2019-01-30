@@ -16,6 +16,10 @@ class ConferenceConnector {
   get tracks() {
     return this._tracks;
   }
+
+  get room() {
+    return this._room;
+  }
   //#region Public Functions
 
   /**

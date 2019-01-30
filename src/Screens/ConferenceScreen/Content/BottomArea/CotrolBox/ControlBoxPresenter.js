@@ -6,11 +6,11 @@ import ControlButton from "./ControlButton";
  */
 const ControlBoxPresenter = props => (
   <Fragment>
-    <ControlButton
+    {/* <ControlButton
       name={"speaker"}
-      on={true}
-      onPress={() => console.log("press")}
-    />
+      on={!props.isMuteSpeaker}
+      onPress={props.toggleMuteSpeaker}
+    /> */}
     <ControlButton
       name={"camera"}
       on={!props.isMuteVideo}

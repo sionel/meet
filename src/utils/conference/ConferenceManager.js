@@ -8,6 +8,7 @@ import ConferenceConnector from "./ConferenceConnector";
 import { actionCreators as localActionCreators } from "../../redux/modules/local";
 import { actionCreators as mainUserActionCreators } from "../../redux/modules/mainUser";
 import { actionCreators as participantsAcionCreators } from "../../redux/modules/participants";
+import APIManager from "../../services/api/ApiManager";
 
 /**
  * ConferenceManager 화상대화 접속을 총괄하는 매니저
@@ -43,6 +44,16 @@ class ConferenceManager {
       roomName,
       name
     );
+
+    this._apiManager = new APIManager(
+      this._conferenceConnector.room.myUserId(),
+      {
+        roomId: roomName,
+        name: name
+      }
+    );
+    this._apiManager.insertUser();
+
     const id = "localUser";
     const tracks = this._conferenceConnector.tracks;
     const videoTrack = tracks.find(track => track.getType() === "video");
@@ -62,6 +73,10 @@ class ConferenceManager {
    * 연결을 해제한다.
    */
   dispose = async () => {
+    if (this._apiManager) {
+      await this._apiManager.deleteUser();
+    }
+
     if (this._conferenceConnector) {
       await this._conferenceConnector.dispose();
     }
