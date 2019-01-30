@@ -21,7 +21,6 @@ class APIManger {
    * 방에 유저가 참여하면 Wehago에 알림
    */
   insertUser = async () => {
-    debugger;
     try {
       const { roomId } = this.info;
       // 유저리스트를 가지고 온다.
