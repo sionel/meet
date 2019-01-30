@@ -5,6 +5,8 @@
 
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import LottieView from 'lottie-react-native';
+import CustomLottie from './CustomLottie';
 
 const ListItemComp = props => {
 	// active가 true일 경우 활성화 색
@@ -34,7 +36,9 @@ const ListItemComp = props => {
 				{/* <Text style={{ ...styles.participant }}>{props.personnel} 명</Text> */}
 				<Text style={{ ...styles.participant }}>updated: {displayUpdated}</Text>
 				{/* 활성화 라이트 */}
-				<View style={{ ...styles.activeLight, backgroundColor: activeColor }} />
+				<View style={{ ...styles.activeLight, backgroundColor: activeColor }}>
+					{props.active && <CustomLottie source="broadcast" width={30} height={30} />}
+				</View>
 			</View>
 		</TouchableOpacity>
 	);
