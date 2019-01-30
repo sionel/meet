@@ -29,15 +29,20 @@ class ConferenceManager {
   /**
    * connect : 화상대화 참가
    */
-  join = async (roomName, name) => {
+  join = async (roomName, name, handleClose) => {
     // 초기화
     this._init();
     // 대화방 연결을 위한 Connection
     this._connection = new Connection();
     // 대화방 연결을 위한 ConferenceConnector
-    this._conferenceConnector = new ConferenceConnector(this._createHandlers());
+    this._conferenceConnector = new ConferenceConnector(
+      this._createHandlers(handleClose)
+    );
     // connection 연결
-    await this._connection.connect(roomName);
+    await this._connection.connect(
+      roomName,
+      handleClose
+    );
     // 대화방 참가
     await this._conferenceConnector.connect(
       this._connection,
@@ -99,12 +104,13 @@ class ConferenceManager {
   /**
    * init: 화상대화 연결을 위한 초기화
    */
-  _createHandlers = () => {
+  _createHandlers = handleClose => {
     const handler = {
       JOIN_USER: this._joinUser,
       LEFT_USER: this._leftUser,
       ADD_REMOTE_TRACK: this._addRemoteTrack,
-      VIDEO_MUTE_CHANGED: this._videoMutedChanged
+      VIDEO_MUTE_CHANGED: this._videoMutedChanged,
+      SUSPEND_DETECTED: handleClose
     };
     return handler;
   };

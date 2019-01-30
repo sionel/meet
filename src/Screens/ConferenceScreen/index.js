@@ -5,12 +5,16 @@ const mapStateToProps = state => {
   const {
     local: { user },
     mainUser: { mainUserId },
-    participants: { list }
+    participants: { list },
+    user: {
+      auth: { user_name }
+    }
   } = state;
 
   const mainUser = getMainUser(mainUserId, user, list);
   return {
-    mainUser
+    mainUser,
+    user_name
   };
 };
 

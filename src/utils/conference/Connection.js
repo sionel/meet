@@ -27,12 +27,12 @@ class Connection {
   /**
    * Connection을 연결한다.
    */
-  connect = async roomName => {
+  connect = async (roomName, handleClose) => {
     return new Promise((resolve, reject) => {
       // jitsi connection 을 생성한다.
       this._jitsiConnection = this._creaeteJitsiConnection(roomName);
       // 이벤트를 바인딩한다. -> 바인딩된 이벤트가 호출되어야지 프라미스가 종료된다.
-      this._bindEvents(this.jitsiConnection, resolve, reject);
+      this._bindEvents(this.jitsiConnection, resolve, reject, handleClose);
       // 커넥션을 연결한다.
       this._jitsiConnection.connect({});
     });
@@ -68,7 +68,7 @@ class Connection {
   /**
    * 이벤트를 연결한다.
    */
-  _bindEvents = (jitsiConnection, resolve, reject) => {
+  _bindEvents = (jitsiConnection, resolve, reject, handleClose) => {
     // 커넥션 연결 성공시 발생하는 이벤트 바인딩
     jitsiConnection.addEventListener(
       JitsiConnectionEvents.CONNECTION_ESTABLISHED,
@@ -81,6 +81,18 @@ class Connection {
       () => {
         reject();
       }
+    );
+
+    // 연결 실패 이벤트 바인딩
+    jitsiConnection.addEventListener(
+      JitsiConnectionEvents.CONNECTION_FAILED,
+      handleClose
+    );
+
+    // CONNECTION_DISCONNECTED
+    jitsiConnection.addEventListener(
+      JitsiConnectionEvents.CONNECTION_DISCONNECTED,
+      handleClose
     );
   };
   //#endregion

@@ -9,9 +9,6 @@ import ConferenceManager from "../../utils/conference/ConferenceManager";
 import Orientation from "react-native-orientation-locker";
 import { AppState, StatusBar } from "react-native";
 
-const roomName = "abcdd";
-const name = "김더존";
-
 class ConferenceScreenContainer extends React.Component {
   constructor() {
     super();
@@ -25,9 +22,14 @@ class ConferenceScreenContainer extends React.Component {
    * componentDidMount
    */
   componentDidMount() {
+    const { navigation, user_name } = this.props;
+    const item = navigation.getParam("item");
     // 컴포넌트가 마운트 되면 대화방 초기 설정 후 입장한다.
     this._conferenceManager = new ConferenceManager(this.props.dispatch);
-    this._joinConference(roomName, name);
+    if (!item.videoRoomId) {
+      item.videoRoomId = "abcd";
+    }
+    this._joinConference(item.videoRoomId.toLowerCase(), user_name);
     AppState.addEventListener("change", this._handleAppStateChange);
   }
 
@@ -57,7 +59,7 @@ class ConferenceScreenContainer extends React.Component {
 
   /** 대화방 참가 생성 */
   _joinConference = async (roomName, name) => {
-    await this._conferenceManager.join(roomName, name);
+    await this._conferenceManager.join(roomName, name, this._handleClose);
   };
 
   /** 화상대화방 닫기 */
