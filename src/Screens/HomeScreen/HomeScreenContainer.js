@@ -95,6 +95,8 @@ class HomeScreenContainer extends Component {
    * 리프레시
    */
 	_handleRefresh = () => {
+		console.log('Asdkjasldkjsakldjsakljksljda : ', 11111);
+
 		this.setState({ refreshing: true });
 		this._handleGetWetalkList();
 	};
@@ -105,15 +107,14 @@ class HomeScreenContainer extends Component {
    */
 	_handleGetWetalkList = async () => {
 		const { auth, onSetWetalkList } = this.props;
-		const wetalkList = await WetalkApi.getWetalkList_old(
+		const wetalkList = await WetalkApi.getWetalkList(
 			auth.AUTH_A_TOKEN,
 			auth.last_access_company_no,
-			// auth.portal_id
-			0
+			auth.portal_id
+			// 0
 		);
 
-		// onSetWetalkList(wetalkList.resultData.video_room_list);
-		onSetWetalkList(wetalkList.resultData.roomList);
+		onSetWetalkList(wetalkList.resultData.video_room_list);
 		this.setState({ refreshing: false });
 	};
 
@@ -158,6 +159,7 @@ class HomeScreenContainer extends Component {
 				employee_list: checkResult.employee_list // 회사정보
 			};
 			onLogin(userData);
+			this._handleRefresh();
 		}
 	};
 
