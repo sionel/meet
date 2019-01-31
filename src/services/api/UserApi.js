@@ -27,19 +27,24 @@ export default {
 	 * JSON형태로 데이터를 전송할수없음 => urlencoded방식으로 전달
 	 */
 	login: async data => {
-		// urlencoded방식으로 변환
-		let formData = new FormData();
-		for (let i in data) {
-			formData.append(i, data[i]);
-		}
+		const body = {
+			portal_id: data.portal_id,
+			portal_password: data.portal_password,
+			// 기기정보
+			login_ip: '10.51.114.169',
+			login_device: 'iPhone',
+			login_os: 'IOS 12.1.2',
+			login_browser: 'WEHAGO-APP'
+		};
+
 		try {
-			const timestamp = new Date();
-			const url = `${wehagoBaseURL}/auth/login/mobile?timestamp=${timestamp.getMilliseconds()}`;
+			const url = `${wehagoBaseURL}/auth/login/mobile`;
 			const response = await fetch(url, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
-				body: formData
+				body: new URLSearchParams(body).toString()
 			});
+
 			return response.json();
 		} catch (err) {
 			return false;
