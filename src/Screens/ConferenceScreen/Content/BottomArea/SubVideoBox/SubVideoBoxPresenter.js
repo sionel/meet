@@ -30,7 +30,8 @@ const SubVideoBoxPresenter = props => (
 
 const styles = StyleSheet.create({
   scrollView: {
-    padding: 10
+    padding: 10,
+    margin: 10
   }
 });
 

@@ -67,17 +67,17 @@ const styles = StyleSheet.create({
     flex: 2
   },
   middleArea: {
-    flex: 7
+    flex: 9
   },
   bottomAreaVertical: {
-    flex: 2,
+    flex: 3,
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center"
   },
   bottomAreaHorizontal: {
-    flex: 2,
+    flex: 3,
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
