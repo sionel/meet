@@ -117,6 +117,11 @@ class ConferenceConnector {
         this._handlers.VIDEO_MUTE_CHANGED(track);
       }
     });
+
+    // SUSPEND_DETECTED
+    this._room.on(conferenceEvents.SUSPEND_DETECTED, () =>
+      handlers.SUSPEND_DETECTED()
+    );
   };
 
   /**

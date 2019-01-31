@@ -33,6 +33,19 @@ class ConferenceScreenContainer extends React.Component {
     AppState.addEventListener("change", this._handleAppStateChange);
   }
 
+  /** */
+  componentDidUpdate(prevProps) {
+    const { mainUserId } = this.props;
+    if (
+      this._conferenceManager &&
+      mainUserId &&
+      mainUserId !== prevProps.mainUserId
+    ) {
+      const conferenceManager = new ConferenceManager();
+      conferenceManager.selectParticipant(mainUserId);
+    }
+  }
+
   /**
    * componentWillUnmount
    */
