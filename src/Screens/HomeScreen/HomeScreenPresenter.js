@@ -12,9 +12,9 @@ import Icon from 'react-native-vector-icons/FontAwesome';
  * HomeScreenPresenter
  */
 const HomeScreenPresenter = props => {
-	const groupList = props.list.filter(item => item.room_type === '2');
-	const personnelList = props.list.filter(item => item.room_type === '1');
-	// const activateList = props.list.filter(item => item.is_video_access === "T");
+	const groupList = props.list.filter(item => item.room_type === '2' && item.is_video_access === 'F');
+	const personnelList = props.list.filter(item => item.room_type === '1' && item.is_video_access === 'F');
+	const activateList = props.list.filter(item => item.is_video_access === 'T');
 	// const groupList = props.list.filter(item => item.is_video_access === "F");
 	return (
 		<View style={styles.container}>
@@ -34,7 +34,7 @@ const HomeScreenPresenter = props => {
 				onRefresh={props.onRefresh}
 				style={styles.listContainer}
 				sections={[
-					// { title: "대화중", data: activateList },
+					{ title: '대화중', data: activateList },
 					{ title: '그룹대화', data: groupList },
 					{ title: '1:1대화', data: personnelList }
 				]}
