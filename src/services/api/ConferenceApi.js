@@ -99,7 +99,8 @@ export default {
 				headers: { Authorization: `Bearer ${token}` }
 			};
 			const response = await fetch(url, requestData);
-			return response.json();
+			const result = await response.json();
+			return result;
 		} catch (err) {
 			return err;
 		}

@@ -25,6 +25,7 @@ class HomeScreenContainer extends Component {
 		super(props);
 		this._isFocus = true;
 		this._refreshTimeStamp = Date.now();
+		this._handleAutoLogin();
 	}
 
 	/**
@@ -94,6 +95,7 @@ class HomeScreenContainer extends Component {
 					onRefresh={this._handleRefresh}
 					onSearch={this._handleSearch}
 					onCreateConference={this._handleCreateConference}
+					onCheckConference={this._handleCheckConference}
 				/>
 			</Fragment>
 		);
@@ -188,22 +190,24 @@ class HomeScreenContainer extends Component {
    * _handleActivateModal
    * 모달뷰 토글
    */
-	_handleActivateModal = async (selectedRoomId, conferenceId = null) => {
-		if (conferenceId) {
-			const result = await ConferenceApi.check(conferenceId);
-			if (!result.resultData) {
-				alert('이미 종료된 대화방입니다.');
-				return;
-			}
-			this._handleRedirect('Conference', {
-				item: { videoRoomId: conferenceId }
-			});
-		} else {
-			this.setState(prev => ({
-				modal: !prev.modal,
-				selectedRoomId
-			}));
+	_handleActivateModal = async (selectedRoomId = null) => {
+		this.setState(prev => ({
+			modal: !prev.modal,
+			selectedRoomId
+		}));
+	};
+
+	/**
+   * _handleActivateModal
+   * 모달뷰 토글
+   */
+	_handleCheckConference = async conferenceId => {
+		const result = await ConferenceApi.check(conferenceId);
+		if (result.resultData == null) {
+			alert('이미 종료된 대화방입니다.' + JSON.stringify(result));
+			return;
 		}
+		this._handleRedirect('Conference', { item: { videoRoomId: conferenceId } });
 	};
 
 	/**
