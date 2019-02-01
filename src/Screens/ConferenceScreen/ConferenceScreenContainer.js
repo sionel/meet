@@ -26,10 +26,7 @@ class ConferenceScreenContainer extends React.Component {
     const item = navigation.getParam("item");
     // 컴포넌트가 마운트 되면 대화방 초기 설정 후 입장한다.
     this._conferenceManager = new ConferenceManager(this.props.dispatch);
-    if (!item.videoRoomId) {
-      item.videoRoomId = "abcd";
-    }
-    this._joinConference(item.videoRoomId.toLowerCase(), user_name);
+    this._joinConference(item.videoRoomId, user_name);
     AppState.addEventListener("change", this._handleAppStateChange);
   }
 

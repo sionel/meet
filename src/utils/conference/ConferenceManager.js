@@ -40,13 +40,13 @@ class ConferenceManager {
     );
     // connection 연결
     await this._connection.connect(
-      roomName,
+      roomName.toLowerCase(),
       handleClose
     );
     // 대화방 참가
     await this._conferenceConnector.connect(
       this._connection,
-      roomName,
+      roomName.toLowerCase(),
       name
     );
 

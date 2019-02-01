@@ -129,7 +129,9 @@ class APIManger {
         error: jqXHR => {
           reject(jqXHR);
         },
-        success: result => resolve(result)
+        success: result => {
+          resolve(result);
+        }
       });
     });
   };
