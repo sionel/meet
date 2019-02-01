@@ -3,7 +3,7 @@
  * 화상대화 히스토리 컨테이너
  */
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { AppState } from 'react-native';
 import { connect } from 'react-redux';
 import HomeScreenPresenter from './HomeScreenPresenter';
@@ -13,6 +13,7 @@ import { actionCreators as WetalkActions } from '../../redux/modules/wetalk';
 import { WetalkApi } from '../../services';
 import { UserApi } from '../../services';
 import { ConferenceApi } from '../../services';
+import { NavigationEvents } from 'react-navigation';
 
 // #region
 
@@ -22,6 +23,8 @@ class HomeScreenContainer extends Component {
    */
 	constructor(props) {
 		super(props);
+		this._isFocus = true;
+		this._refreshTimeStamp = Date.now();
 	}
 
 	/**
@@ -36,13 +39,6 @@ class HomeScreenContainer extends Component {
 	};
 
 	/**
-   * UNSAFE_componentWillMount
-   */
-	UNSAFE_componentWillMount() {
-		this._handleAutoLogin();
-	}
-
-	/**
    * componentWillUnmount
    */
 	componentWillUnmount() {
@@ -54,7 +50,12 @@ class HomeScreenContainer extends Component {
    */
 	componentDidMount() {
 		AppState.addEventListener('change', this._handleAppStateChange);
-		this._handleRefresh();
+		setInterval(() => {
+			if (Date.now() > this._refreshTimeStamp + 3000) {
+				// 리프레쉬 할 시간이 지났으면 리프레쉬 한다.
+				this._handleRefresh();
+			}
+		}, 15000);
 	}
 
 	// #region
@@ -73,19 +74,28 @@ class HomeScreenContainer extends Component {
 		}
 
 		return (
-			<HomeScreenPresenter
-				navigation={navigation}
-				refreshing={refreshing}
-				modal={modal}
-				list={wetalk}
-				auth={auth}
-				selectedRoomId={selectedRoomId}
-				onActivateModal={this._handleActivateModal}
-				onRedirect={this._handleRedirect}
-				onRefresh={this._handleRefresh}
-				onSearch={this._handleSearch}
-				onCreateConference={this._handleCreateConference}
-			/>
+			<Fragment>
+				<NavigationEvents
+					onDidFocus={() => {
+						this._isFocus = true;
+						this._handleRefressAfterWhile();
+					}}
+					onDidBlur={() => (this._isFocus = false)}
+				/>
+				<HomeScreenPresenter
+					navigation={navigation}
+					refreshing={refreshing}
+					modal={modal}
+					list={wetalk}
+					auth={auth}
+					selectedRoomId={selectedRoomId}
+					onActivateModal={this._handleActivateModal}
+					onRedirect={this._handleRedirect}
+					onRefresh={this._handleRefresh}
+					onSearch={this._handleSearch}
+					onCreateConference={this._handleCreateConference}
+				/>
+			</Fragment>
 		);
 	}
 	// #endregion
@@ -99,13 +109,20 @@ class HomeScreenContainer extends Component {
 		navigation.navigate(url, param);
 	};
 
+	_handleRefressAfterWhile = () => {
+		setTimeout(this._handleRefresh, 250);
+	};
+
 	/**
    * _handleRefresh
    * 리프레시
    */
 	_handleRefresh = () => {
-		this.setState({ refreshing: true });
-		this._handleGetWetalkList();
+		if (AppState.currentState === 'active' && this._isFocus) {
+			this._refreshTimeStamp = Date.now();
+			this.setState({ refreshing: true });
+			this._handleGetWetalkList();
+		}
 	};
 
 	/**
@@ -171,23 +188,11 @@ class HomeScreenContainer extends Component {
    * _handleActivateModal
    * 모달뷰 토글
    */
-	_handleActivateModal = (selectedRoomId, conferenceId) => {
-		if (conferenceId) {
-			this._handleCheckConference(conferenceId);
-		} else {
-		}
+	_handleActivateModal = (selectedRoomId = null) => {
 		this.setState(prev => ({
 			modal: !prev.modal,
 			selectedRoomId
 		}));
-	};
-
-	/**
-	 * 생성된 화상대화 확인
-	 */
-	_handleCheckConference = () => {
-			const result = await ConferenceApi.check(conferenceId);
-			console.log('conferenceId : ', result);
 	};
 
 	/**
@@ -245,15 +250,13 @@ class HomeScreenContainer extends Component {
 	};
 
 	/**
-	 * _handleAppStateChange
+   * _handleAppStateChange
    * 포그라운드 전환 시 상태변환
-	 */
+   */
 	_handleAppStateChange = nextAppState => {
 		if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
 			// 포그라운드 전환시 아래 로직 실행
-			setTimeout(() => {
-				this._handleRefresh();
-			}, 250);
+			this._handleRefressAfterWhile();
 		}
 		this.setState({ appState: nextAppState });
 	};
