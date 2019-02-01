@@ -91,7 +91,7 @@ export default {
 	 * check
 	 * 대화방 생성확인 API
 	 */
-	check: async conferenceId => {
+	check: async (conferenceId, token) => {
 		try {
 			const url = `${wehagoBaseURL}/communication/rtc/videoChat?video_chat_id=${conferenceId}`;
 			const requestData = {

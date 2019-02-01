@@ -202,11 +202,12 @@ class HomeScreenContainer extends Component {
    * 모달뷰 토글
    */
 	_handleCheckConference = async conferenceId => {
-		// const result = await ConferenceApi.check(conferenceId);
-		// if (result.resultData == null) {
-		// 	alert('이미 종료된 대화방입니다.' + JSON.stringify(result));
-		// 	return;
-		// }
+		const { auth } = this.props;
+		const result = await ConferenceApi.check(conferenceId, auth.AUTH_A_TOKEN);
+		if (!result.resultData) {
+			alert('이미 종료된 대화방입니다.' + JSON.stringify(result));
+			return;
+		}
 		this._handleRedirect('Conference', { item: { videoRoomId: conferenceId } });
 	};
 
