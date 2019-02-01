@@ -25,7 +25,7 @@ class CustomLottie extends Component {
 	};
 
 	/**
-	 * 
+	 * componentDidMount
 	 */
 	componentDidMount() {
 		this.animation.play();
@@ -33,7 +33,7 @@ class CustomLottie extends Component {
 	}
 
 	/**
-	 * 
+	 * componentWillUnmount
 	 */
 	componentWillUnmount() {
 		AppState.removeEventListener('change', this._handleAppStateChange);
@@ -66,11 +66,11 @@ class CustomLottie extends Component {
 	}
 
 	/**
-	 * 
+	 * _handleAppStateChange
 	 */
 	_handleAppStateChange = nextAppState => {
 		if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
-			console.log('App has come to the foreground!');
+			// 포그라운드 전환시 아래 로직 실행
 			this.animation.play();
 		}
 		this.setState({ appState: nextAppState });
