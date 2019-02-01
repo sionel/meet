@@ -188,7 +188,14 @@ class HomeScreenContainer extends Component {
    * _handleActivateModal
    * 모달뷰 토글
    */
-	_handleActivateModal = (selectedRoomId = null) => {
+	_handleActivateModal = async (selectedRoomId, conferenceId = null) => {
+		if (conferenceId) {
+			const result = await ConferenceApi.check(conferenceId);
+			if (!result.resultData) {
+				alert('이미 종료된 대화방입니다.');
+				return;
+			}
+		}
 		this.setState(prev => ({
 			modal: !prev.modal,
 			selectedRoomId

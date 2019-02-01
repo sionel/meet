@@ -15,7 +15,6 @@ const HomeScreenPresenter = props => {
 	const groupList = props.list.filter(item => item.room_type === '2' && item.is_video_access === 'F');
 	const personnelList = props.list.filter(item => item.room_type === '1' && item.is_video_access === 'F');
 	const activateList = props.list.filter(item => item.is_video_access === 'T');
-	console.log(activateList[0].video_chat_id);
 
 	return (
 		<View style={styles.container}>
