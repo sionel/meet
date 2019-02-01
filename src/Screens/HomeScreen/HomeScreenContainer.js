@@ -54,8 +54,7 @@ class HomeScreenContainer extends Component {
    */
 	componentDidMount() {
 		AppState.addEventListener('change', this._handleAppStateChange);
-		// this._handleRefresh();
-		console.log('tttt : ', this.props.auth);
+		this._handleRefresh();
 	}
 
 	// #region
@@ -115,12 +114,16 @@ class HomeScreenContainer extends Component {
    */
 	_handleGetWetalkList = async () => {
 		const { auth, onSetWetalkList } = this.props;
+		// 위톡조회 API
 		const wetalkList = await WetalkApi.getWetalkList(
 			auth.AUTH_A_TOKEN,
 			auth.last_access_company_no,
 			auth.portal_id
-			// 0
 		);
+		// 토큰만료시
+		if (wetalkList.errors) {
+			this._handleAutoLogin();
+		}
 		onSetWetalkList(wetalkList.resultData.video_room_list);
 		this.setState({ refreshing: false });
 	};
@@ -148,12 +151,6 @@ class HomeScreenContainer extends Component {
 				return navigation.navigate('Login');
 			}
 
-			// get user data API
-			// const checkResult = await UserApi.check(
-			// 	loginResult.resultData.AUTH_A_TOKEN,
-			// 	loginResult.resultData.last_access_company_no
-			// );
-
 			// 유저정보
 			const userData = {
 				...auth,
@@ -163,13 +160,6 @@ class HomeScreenContainer extends Component {
 				last_access_company_no: result.resultData.last_access_company_no,
 				AUTH_A_TOKEN: result.resultData.AUTH_A_TOKEN,
 				AUTH_R_TOKEN: result.resultData.AUTH_R_TOKEN
-				// check api data
-				// profile_url: checkResult.resultData.profile_url,
-				// user_contact: checkResult.resultData.user_contact,
-				// user_email: checkResult.resultData.user_email,
-				// user_name: checkResult.resultData.user_name,
-				// user_no: checkResult.resultData.user_no,
-				// employee_list: checkResult.employee_list // 회사정보
 			};
 
 			onLogin(userData);
@@ -232,7 +222,6 @@ class HomeScreenContainer extends Component {
 				company_code,
 				auth.AUTH_A_TOKEN
 			);
-			// this._handleActivateModal();
 			this.setState({ modal: false });
 
 			// 대화방에 참여한다.
