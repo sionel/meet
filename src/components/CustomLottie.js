@@ -5,19 +5,43 @@
 
 import React, { Component } from 'react';
 import LottieView from 'lottie-react-native';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, AppState } from 'react-native';
 
 class CustomLottie extends Component {
+	/**
+	 * State
+	 */
+	state = {
+		appState: AppState.currentState
+	};
+
+	/**
+	 * resource
+	 */
 	files = {
 		waiting: require('./lotties/waiting.json'),
 		broadcast: require('./lotties/broadcast.json'),
 		cc: require('./lotties/animation-w400-h300.json')
 	};
 
+	/**
+	 * componentDidMount
+	 */
 	componentDidMount() {
 		this.animation.play();
+		AppState.addEventListener('change', this._handleAppStateChange);
 	}
 
+	/**
+	 * componentWillUnmount
+	 */
+	componentWillUnmount() {
+		AppState.removeEventListener('change', this._handleAppStateChange);
+	}
+
+	/**
+	 * Render
+	 */
 	render() {
 		const { source, width, height, customStyle, phrases } = this.props;
 		const files = this.files;
@@ -40,6 +64,17 @@ class CustomLottie extends Component {
 			</View>
 		);
 	}
+
+	/**
+	 * _handleAppStateChange
+	 */
+	_handleAppStateChange = nextAppState => {
+		if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
+			// 포그라운드 전환시 아래 로직 실행
+			this.animation.play();
+		}
+		this.setState({ appState: nextAppState });
+	};
 }
 
 /**

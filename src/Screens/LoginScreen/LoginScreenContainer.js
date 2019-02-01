@@ -102,8 +102,8 @@ class LoginScreenContainer extends React.Component {
 			// 유저정보
 			userData = {
 				// login api data
-				portal_id: loginResult.resultData.portal_id,
-				portal_password: loginResult.resultData.portal_password,
+				portal_id: data.portal_id,
+				portal_password: data.portal_password,
 				last_access_company_no: loginResult.resultData.last_access_company_no,
 				AUTH_A_TOKEN: loginResult.resultData.AUTH_A_TOKEN,
 				AUTH_R_TOKEN: loginResult.resultData.AUTH_R_TOKEN,
@@ -115,6 +115,8 @@ class LoginScreenContainer extends React.Component {
 				user_no: checkResult.resultData.user_no,
 				employee_list: checkResult.resultData.employee_list // 회사정보
 			};
+			console.log('userData : ', userData);
+
 			onLogin(userData);
 
 			navigation.navigate('Home');
