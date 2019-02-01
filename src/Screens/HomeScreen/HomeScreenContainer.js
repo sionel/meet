@@ -195,11 +195,15 @@ class HomeScreenContainer extends Component {
 				alert('이미 종료된 대화방입니다.');
 				return;
 			}
+			this._handleRedirect('Conference', {
+				item: { videoRoomId: conferenceId }
+			});
+		} else {
+			this.setState(prev => ({
+				modal: !prev.modal,
+				selectedRoomId
+			}));
 		}
-		this.setState(prev => ({
-			modal: !prev.modal,
-			selectedRoomId
-		}));
 	};
 
 	/**
