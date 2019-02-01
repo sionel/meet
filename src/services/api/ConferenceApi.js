@@ -85,6 +85,24 @@ export default {
 		} catch (err) {
 			throw err;
 		}
+	},
+
+	/**
+	 * check
+	 * 대화방 생성확인 API
+	 */
+	check: async conferenceId => {
+		try {
+			const url = `${wehagoBaseURL}/communication/rtc/videoChat?video_chat_id=${conferenceId}`;
+			const requestData = {
+				method: 'GET',
+				headers: { Authorization: `Bearer ${token}` }
+			};
+			const response = await fetch(url, requestData);
+			return response.json();
+		} catch (err) {
+			return err;
+		}
 	}
 };
 // #endregion

@@ -171,11 +171,23 @@ class HomeScreenContainer extends Component {
    * _handleActivateModal
    * 모달뷰 토글
    */
-	_handleActivateModal = (selectedRoomId = null) => {
+	_handleActivateModal = (selectedRoomId, conferenceId) => {
+		if (conferenceId) {
+			this._handleCheckConference(conferenceId);
+		} else {
+		}
 		this.setState(prev => ({
 			modal: !prev.modal,
 			selectedRoomId
 		}));
+	};
+
+	/**
+	 * 생성된 화상대화 확인
+	 */
+	_handleCheckConference = () => {
+			const result = await ConferenceApi.check(conferenceId);
+			console.log('conferenceId : ', result);
 	};
 
 	/**
