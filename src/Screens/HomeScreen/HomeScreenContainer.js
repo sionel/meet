@@ -39,7 +39,6 @@ class HomeScreenContainer extends Component {
    * UNSAFE_componentWillMount
    */
 	UNSAFE_componentWillMount() {
-		console.log('UNSAFE_componentWillMount()');
 		this._handleAutoLogin();
 	}
 
@@ -56,6 +55,7 @@ class HomeScreenContainer extends Component {
 	componentDidMount() {
 		AppState.addEventListener('change', this._handleAppStateChange);
 		// this._handleRefresh();
+		console.log('tttt : ', this.props.auth);
 	}
 
 	// #region
@@ -105,8 +105,6 @@ class HomeScreenContainer extends Component {
    * 리프레시
    */
 	_handleRefresh = () => {
-		console.log('Asdkjasldkjsakldjsakljksljda : ', 11111);
-
 		this.setState({ refreshing: true });
 		this._handleGetWetalkList();
 	};
@@ -123,8 +121,6 @@ class HomeScreenContainer extends Component {
 			auth.portal_id
 			// 0
 		);
-
-		console.log('AUTH_A_TOKENAUTH_A_TOKENAUTH_A_TOKENAUTH_A_TOKENAUTH_A_TOKEN');
 		onSetWetalkList(wetalkList.resultData.video_room_list);
 		this.setState({ refreshing: false });
 	};
@@ -142,33 +138,40 @@ class HomeScreenContainer extends Component {
    * 접속자 확인
    */
 	_handleCheckAuth = async () => {
-		const { auth, onLogin } = this.props;
+		const { auth, onLogin, navigation } = this.props;
 		let result = await UserApi.check(auth.AUTH_A_TOKEN, auth.last_access_company_no);
-
 		// 자동로그인
 		if (result.errors) {
 			result = await UserApi.login(auth);
+			if (result.resultCode !== 200) {
+				alert('다시 로그인!');
+				return navigation.navigate('Login');
+			}
+
 			// get user data API
-			const checkResult = await UserApi.check(
-				loginResult.resultData.AUTH_A_TOKEN,
-				loginResult.resultData.last_access_company_no
-			);
+			// const checkResult = await UserApi.check(
+			// 	loginResult.resultData.AUTH_A_TOKEN,
+			// 	loginResult.resultData.last_access_company_no
+			// );
+
 			// 유저정보
 			const userData = {
+				...auth,
 				// login api data
 				portal_id: auth.portal_id,
 				portal_password: auth.portal_password,
-				last_access_company_no: loginResult.resultData.last_access_company_no,
-				AUTH_A_TOKEN: loginResult.resultData.AUTH_A_TOKEN,
-				AUTH_R_TOKEN: loginResult.resultData.AUTH_R_TOKEN,
+				last_access_company_no: result.resultData.last_access_company_no,
+				AUTH_A_TOKEN: result.resultData.AUTH_A_TOKEN,
+				AUTH_R_TOKEN: result.resultData.AUTH_R_TOKEN
 				// check api data
-				profile_url: checkResult.resultData.profile_url,
-				user_contact: checkResult.resultData.user_contact,
-				user_email: checkResult.resultData.user_email,
-				user_name: checkResult.resultData.user_name,
-				user_no: checkResult.resultData.user_no,
-				employee_list: checkResult.employee_list // 회사정보
+				// profile_url: checkResult.resultData.profile_url,
+				// user_contact: checkResult.resultData.user_contact,
+				// user_email: checkResult.resultData.user_email,
+				// user_name: checkResult.resultData.user_name,
+				// user_no: checkResult.resultData.user_no,
+				// employee_list: checkResult.employee_list // 회사정보
 			};
+
 			onLogin(userData);
 			this._handleRefresh();
 		}
@@ -205,9 +208,7 @@ class HomeScreenContainer extends Component {
    * _handleCreateConference
    */
 	_handleCreateConference = async selectedRoomId => {
-		// room_id, owner_id, owner_name, token, cno
 		const { auth } = this.props;
-		// const company_code = await auth.employee_list.filter(e => e.company_no === auth.last_access_company_no)[0].company_code
 		const company_code = auth.employee_list.filter(e => e.company_no == auth.last_access_company_no)[0]
 			.company_code;
 
@@ -217,7 +218,6 @@ class HomeScreenContainer extends Component {
 			auth.user_name, // 유저이름
 			auth.last_access_company_no, // 회사번호
 			company_code, // 회사코드
-			'1548384693', // 시간 - 서버에서 자동으로 생성됨 - 삭제가능
 			auth.AUTH_A_TOKEN // 토큰
 		];
 		const createResult = await ConferenceApi.create(...bodyData);
@@ -250,7 +250,9 @@ class HomeScreenContainer extends Component {
 	_handleAppStateChange = nextAppState => {
 		if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
 			// 포그라운드 전환시 아래 로직 실행
-			this._handleRefresh();
+			setTimeout(() => {
+				this._handleRefresh();
+			}, 250);
 		}
 		this.setState({ appState: nextAppState });
 	};

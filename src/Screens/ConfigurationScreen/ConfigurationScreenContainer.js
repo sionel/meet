@@ -28,7 +28,7 @@ class ConfigurationScreenContainer extends React.Component {
 	 * Rendering
 	 */
 	render() {
-		const { navigation } = this.props;
+		const { navigation, onDestroyToken } = this.props;
 		const { list } = this.state;
 
 		return (
@@ -37,6 +37,7 @@ class ConfigurationScreenContainer extends React.Component {
 				list={list}
 				onRedirect={this.handleRedirect}
 				onLogout={this._handleLogout}
+				onDestroyToken={onDestroyToken}
 			/>
 		);
 	} // render
@@ -57,7 +58,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchTopProps = dispatch => ({
-	onLogout: () => dispatch(UserActions.logout())
+	onLogout: () => dispatch(UserActions.logout()),
+	onDestroyToken: () => dispatch(UserActions.token())
 });
 
 export default connect(mapStateToProps, mapDispatchTopProps)(ConfigurationScreenContainer);

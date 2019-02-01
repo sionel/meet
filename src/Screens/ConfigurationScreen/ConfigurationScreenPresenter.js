@@ -7,6 +7,10 @@ import { View, Text, StyleSheet, Button, SectionList, TouchableOpacity } from 'r
 const ConfigurationScreenPresenter = props => {
 	const userConfig = [
 		{
+			title: 'onDestroyToken',
+			action: () => props.onDestroyToken()
+		},
+		{
 			title: '로그아웃',
 			action: () => props.onLogout()
 		}
@@ -29,7 +33,7 @@ const ConfigurationScreenPresenter = props => {
 					)}
 					renderItem={({ item }, index) => (
 						<TouchableOpacity key={index} onPress={item.action}>
-							<Text style={styles.item}>로그아웃</Text>
+							<Text style={styles.item}>{item.title}</Text>
 						</TouchableOpacity>
 					)}
 				/>

@@ -7,6 +7,7 @@ import { UserApi } from '../../services';
 
 const LOGIN = 'LOGIN';
 const LOGOUT = 'LOGOUT';
+const TOKEN = 'TOKEN';
 
 //#region Action Creators
 
@@ -30,6 +31,16 @@ logout = auth => {
 	};
 };
 
+/**
+ * tokenTest
+ */
+token = auth => {
+	return {
+		type: TOKEN,
+		newToken: 100
+	};
+};
+
 //#endregion
 
 //#region initialState
@@ -49,6 +60,13 @@ reducer = (state = initialState, action) => {
 		// return applyTest(state, action);
 		case LOGOUT:
 			return { ...state, auth: null };
+		case TOKEN:
+			let aa = state.auth;
+			aa.AUTH_A_TOKEN = action.newToken;
+			return {
+				...state,
+				auth: aa
+			};
 		default:
 			return state;
 	}
@@ -75,7 +93,8 @@ applyTest = (state, action) => {
 
 const actionCreators = {
 	login,
-	logout
+	logout,
+	token
 };
 
 export { actionCreators };

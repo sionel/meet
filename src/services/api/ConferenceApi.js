@@ -10,7 +10,7 @@ export default {
 	/**
 	 * 화상대화 생성
 	 */
-	create: async (room_id, owner_id, owner_name, cno, ccode, timestamp, token) => {
+	create: async (room_id, owner_id, owner_name, cno, ccode, token) => {
 		/*
 		"room_id":"_Gj2EWgBeAtpuzEuPdzI",
 		"owner_id":"seongh7800",
@@ -30,8 +30,7 @@ export default {
 					owner_id,
 					owner_name,
 					cno,
-					ccode,
-					timestamp
+					ccode
 				})
 			});
 			return response.json();
