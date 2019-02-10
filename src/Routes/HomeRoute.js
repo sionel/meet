@@ -5,17 +5,26 @@
 
 import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { connect } from 'react-redux';
 import { createStackNavigator, createAppContainer, createDrawerNavigator, DrawerActions } from 'react-navigation';
 
 import HomeScreen from '../Screens/HomeScreen';
 import ConfigurationScreen from '../Screens/ConfigurationScreen';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+import RouteTitle from './RouteTitle';
+
 const commonStyle = {
 	height: 53,
 	color: 'white',
 	backgroundColor: '#1C90FB'
 };
+
+const HomeRouteTitle = props => {
+	return <Text>{props.auth.last_company}</Text>;
+};
+
+// export default HomeRouteTitle;
 
 /**
  * rightMenuImage
@@ -65,14 +74,13 @@ const HomeRoute = createStackNavigator({
 			color: '#ffffff'
 		},
 		navigationOptions: ({ navigation }) => ({
-			title: 'WEHAGO Meet',
+			headerTitle: <RouteTitle />,
 			headerTintColor: '#fff',
 			gesturesEnabled: false,
 			headerStyle: commonStyle,
 			headerRight: (
 				<TouchableOpacity
 					onPress={() => {
-						// navigation.dispatch(DrawerActions.toggleDrawer());
 						navigation.navigate('Configuration');
 					}}
 				>

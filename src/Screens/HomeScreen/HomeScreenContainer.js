@@ -4,7 +4,7 @@
  */
 
 import React, { Component, Fragment } from 'react';
-import { AppState } from 'react-native';
+import { AppState, StatusBar } from 'react-native';
 import { connect } from 'react-redux';
 import HomeScreenPresenter from './HomeScreenPresenter';
 import { actionCreators as UserActions } from '../../redux/modules/user';
@@ -54,7 +54,8 @@ class HomeScreenContainer extends Component {
 		setInterval(() => {
 			if (Date.now() > this._refreshTimeStamp + 3000) {
 				// 리프레쉬 할 시간이 지났으면 리프레쉬 한다.
-				this._handleRefresh();
+				// this._handleRefresh();
+				this._handleAutoLogin();
 			}
 		}, 15000);
 	}
@@ -76,6 +77,7 @@ class HomeScreenContainer extends Component {
 
 		return (
 			<Fragment>
+				<StatusBar barStyle="light-content" />
 				<NavigationEvents
 					onDidFocus={() => {
 						this._isFocus = true;
@@ -92,7 +94,9 @@ class HomeScreenContainer extends Component {
 					selectedRoomId={selectedRoomId}
 					onActivateModal={this._handleActivateModal}
 					onRedirect={this._handleRedirect}
-					onRefresh={this._handleRefresh}
+					onRefresh={this._handleAutoLogin}
+					// onRefresh={this._handleCheckAuth}
+					// onRefresh={this._handleRefresh}
 					onSearch={this._handleSearch}
 					onCreateConference={this._handleCreateConference}
 					onCheckConference={this._handleCheckConference}
@@ -111,6 +115,18 @@ class HomeScreenContainer extends Component {
 		navigation.navigate(url, param);
 	};
 
+	/**
+   * _handleSearch
+   * 검색 필터
+   */
+	_handleSearch = searchKeyword => {
+		this.setState({ searchKeyword });
+	};
+
+	/**
+	 * 
+	 * 
+	 */
 	_handleRefressAfterWhile = () => {
 		setTimeout(this._handleRefresh, 250);
 	};
@@ -124,6 +140,7 @@ class HomeScreenContainer extends Component {
 			this._refreshTimeStamp = Date.now();
 			this.setState({ refreshing: true });
 			this._handleGetWetalkList();
+			// this._handleCheckAuth();
 		}
 	};
 
@@ -133,55 +150,135 @@ class HomeScreenContainer extends Component {
    */
 	_handleGetWetalkList = async () => {
 		const { auth, onSetWetalkList } = this.props;
+		console.log('WETALK 1 : ', auth);
+
 		// 위톡조회 API
 		const wetalkList = await WetalkApi.getWetalkList(
 			auth.AUTH_A_TOKEN,
 			auth.last_access_company_no,
 			auth.portal_id
 		);
+		console.log('WETALK 2 : ', wetalkList);
+
 		// 토큰만료시
-		if (wetalkList.errors) {
-			this._handleAutoLogin();
-		}
+		// if (wetalkList.errors) {
+		// 	this._handleAutoLogin();
+		// }
 		onSetWetalkList(wetalkList.resultData.video_room_list);
 		this.setState({ refreshing: false });
 	};
 
 	/**
-   * _handleSearch
-   * 검색 필터
-   */
-	_handleSearch = searchKeyword => {
-		this.setState({ searchKeyword });
-	};
-
-	/**
-   * _handleCheckAuth
-   * 접속자 확인
-   */
-	_handleCheckAuth = async () => {
+	 * 
+	 */
+	_handleAutoLogin = async () => {
 		const { auth, onLogin, navigation } = this.props;
-		let result = await UserApi.check(auth.AUTH_A_TOKEN, auth.last_access_company_no);
-		// 자동로그인
-		if (result.errors) {
-			result = await UserApi.login(auth);
-			if (result.resultCode !== 200) {
+		let checkResult,
+			loginResult,
+			userData = {};
+
+		// 재 로그인이 필요한 경우 (저장된 정보가 없을 경우)
+		if (!auth || (!auth.portal_id && !auth.portal_password)) {
+			return this._handleRedirect('Login');
+		}
+
+		// 접속자 확인
+		checkResult = await UserApi.check(auth.AUTH_A_TOKEN, auth.last_access_company_no);
+		// 재 로그인
+		if (checkResult.errors) {
+			loginResult = await UserApi.login(auth);
+
+			if (loginResult.resultCode !== 200) {
 				alert('다시 로그인!');
 				return navigation.navigate('Login');
 			}
 
-			// 유저정보
-			const userData = {
+			checkResult = await UserApi.check(
+				loginResult.resultData.AUTH_A_TOKEN,
+				loginResult.resultData.last_access_company_no
+			);
+			userData = {
 				...auth,
-				// login api data
-				portal_id: auth.portal_id,
-				portal_password: auth.portal_password,
-				last_access_company_no: result.resultData.last_access_company_no,
-				AUTH_A_TOKEN: result.resultData.AUTH_A_TOKEN,
-				AUTH_R_TOKEN: result.resultData.AUTH_R_TOKEN
+				AUTH_A_TOKEN: loginResult.resultData.AUTH_A_TOKEN,
+				AUTH_R_TOKEN: loginResult.resultData.AUTH_R_TOKEN,
+				last_access_company_no: checkResult.resultData.last_access_company_no,
+				last_company: checkResult.resultData.employee_list.filter(
+					e => e.company_no == checkResult.resultData.last_access_company_no
+				)[0]
 			};
+		} else {
+			userData = {
+				...auth,
+				last_access_company_no: checkResult.resultData.last_access_company_no,
+				last_company: checkResult.resultData.employee_list.filter(
+					e => e.company_no == checkResult.resultData.last_access_company_no
+				)[0]
+			};
+		}
+		onLogin(userData);
+		this._handleRefresh();
+	};
 
-			onLogin(userData);
+	/**
+   * _handleCheckAuth
+   * 접속자 확인 및 자동로그인
+   */
+	_handleCheckAuth = async () => {
+		const { auth, onLogin, navigation } = this.props;
+		let result, loginResult, checkResult, userData, last_company;
+		// 접속확인
+		if (!auth || (!auth.portal_id && !auth.portal_password)) {
+			// 로그인 필요
+			this._handleRedirect('Login');
+		} else {
+			/* 자동 로그인 로직 */
+			checkResult = await UserApi.check(auth.AUTH_A_TOKEN, auth.last_access_company_no);
+			console.log('checkResult 1 : ', checkResult);
+
+			// #region
+			if (checkResult.errors) {
+				loginResult = await UserApi.login(auth);
+				console.log('checkResult 2 : ', loginResult);
+				if (result.resultCode !== 200) {
+					alert('다시 로그인!');
+					return navigation.navigate('Login');
+				}
+				checkResult = await UserApi.check(
+					loginResult.resultData.AUTH_A_TOKEN,
+					loginResult.resultData.last_access_company_no
+				);
+
+				// 유저정보
+				userData = {
+					...auth,
+					// login api data
+					portal_id: auth.portal_id,
+					portal_password: auth.portal_password,
+					AUTH_A_TOKEN: loginResult.resultData.AUTH_A_TOKEN,
+					AUTH_R_TOKEN: loginResult.resultData.AUTH_R_TOKEN,
+					last_access_company_no: checkResult.resultData.last_access_company_no,
+					last_company: checkResult.resultData.employee_list.filter(
+						e => e.company_no == checkResult.resultData.last_access_company_no
+					)[0]
+				};
+				console.log('Auth result3 : ', userData);
+
+				onLogin(userData);
+			} else {
+				if (auth.last_access_company_no != checkResult.resultData.last_access_company_no) {
+					userData = {
+						...auth,
+						last_access_company_no: checkResult.resultData.last_access_company_no,
+						last_company: checkResult.resultData.employee_list.filter(
+							e => e.company_no == checkResult.resultData.last_access_company_no
+						)[0]
+					};
+					console.log('Auth result3-2 : ', userData);
+					onLogin(userData);
+				}
+			}
+
+			// #endregion
 			this._handleRefresh();
 		}
 	};
@@ -209,22 +306,6 @@ class HomeScreenContainer extends Component {
 			return;
 		}
 		this._handleRedirect('Conference', { item: { videoRoomId: conferenceId } });
-	};
-
-	/**
-   * _handleAutoLogin
-   * 자동로그인
-   */
-	_handleAutoLogin = () => {
-		const { auth } = this.props;
-		// console.log('AUTH : ', auth);
-
-		// 접속확인
-		if (!auth) {
-			this._handleRedirect('Login');
-		} else {
-			this._handleCheckAuth(); // 자동로그인
-		}
 	};
 
 	/**

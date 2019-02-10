@@ -56,8 +56,6 @@ export default {
 	 * 로그인 및 사용자 정보 확인 - 토큰만료 또는 정보변경시 자동로그인
 	 */
 	check: async (token, cno) => {
-		console.log('token : ', token);
-
 		try {
 			const url = `${wehagoBaseURL}/common/user/userinfo/detail?cno=${cno}`;
 			const response = await fetch(url, {
@@ -67,8 +65,6 @@ export default {
 				}
 			});
 			const jjj = await response.json();
-			console.log('JJJ : ', jjj);
-
 			return jjj;
 		} catch (err) {
 			return err;

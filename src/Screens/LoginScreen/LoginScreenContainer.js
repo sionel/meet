@@ -113,9 +113,12 @@ class LoginScreenContainer extends React.Component {
 				user_email: checkResult.resultData.user_email,
 				user_name: checkResult.resultData.user_name,
 				user_no: checkResult.resultData.user_no,
-				employee_list: checkResult.resultData.employee_list // 회사정보
+				employee_list: checkResult.resultData.employee_list, // 회사정보
+				last_company: checkResult.resultData.employee_list.filter(
+					e => e.company_no == loginResult.resultData.last_access_company_no
+				)[0]
 			};
-			console.log('userData : ', userData);
+			// console.log(' USER : ', userData);
 
 			onLogin(userData);
 
