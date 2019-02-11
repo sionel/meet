@@ -3,7 +3,7 @@
  * 공통모듈
  */
 
-import { UserApi, WetalkApi } from '../services';
+// import { UserApi, WetalkApi } from '../services';
 
 /**
  * Back-end URL

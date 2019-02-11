@@ -161,9 +161,9 @@ class HomeScreenContainer extends Component {
 		console.log('WETALK 2 : ', wetalkList);
 
 		// 토큰만료시
-		// if (wetalkList.errors) {
-		// 	this._handleAutoLogin();
-		// }
+		if (wetalkList.errors) {
+			return this._handleAutoLogin();
+		}
 		onSetWetalkList(wetalkList.resultData.video_room_list);
 		this.setState({ refreshing: false });
 	};
@@ -220,7 +220,6 @@ class HomeScreenContainer extends Component {
 				onLogin(userData);
 			}
 		}
-
 		this._handleRefresh();
 	};
 
