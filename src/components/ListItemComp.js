@@ -12,13 +12,17 @@ const ListItemComp = props => {
 	// active가 true일 경우 활성화 색
 	const activeColor = props.active ? '#1C90FB' : '#eaeaea';
 	const updated = new Date(props.updated);
+	// 퇴사자 스타일
+	const disableStyle = props.disable ? { opacity: 0.45 } : { opacity: 1 };
+	// 클릭이벤트
+	const onClickEvent = props.disable ? () => alert('통화할 수 없는 사용자입니다.') : props.onClick;
 	let displayUpdated = `${updated.getFullYear()}년 `;
 	displayUpdated += `${updated.getMonth() + 1 < 10 ? `0` : ``}${updated.getMonth() + 1}월 `;
 	displayUpdated += `${updated.getDate() < 10 ? `0` : ``}${updated.getDate()}일`;
 
 	// render
 	return (
-		<TouchableOpacity style={styles.container} onPress={props.onClick}>
+		<TouchableOpacity style={[styles.container, disableStyle]} onPress={onClickEvent}>
 			{/* 아이콘 */}
 			<View style={styles.iconWrapper}>
 				<View style={{ ...styles.roomIcon, borderColor: activeColor }}>
@@ -32,6 +36,7 @@ const ListItemComp = props => {
 			<View style={{ ...styles.textFlex }}>
 				{/* 방제목 */}
 				<Text style={{ ...styles.roomName }}>{props.title}</Text>
+				{/* <View style={{ backgroundColor: 'red', width: 10, height: 10 }} /> */}
 				{/* 참가자 */}
 				{/* <Text style={{ ...styles.participant }}>{props.personnel} 명</Text> */}
 				<Text style={{ ...styles.participant }}>updated: {displayUpdated}</Text>
@@ -109,5 +114,9 @@ const styles = StyleSheet.create({
 		borderRadius: 100
 	}
 });
+
+ListItemComp.defaultProps = {
+	disable: false
+};
 
 export default ListItemComp;

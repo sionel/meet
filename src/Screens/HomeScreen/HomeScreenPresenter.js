@@ -52,6 +52,7 @@ const HomeScreenPresenter = props => {
 						personnel={item.receiver_user_count}
 						updated={item.update_timestamp}
 						active={item.is_video_access === 'T' ? true : false}
+						disable={item.receiver_user_count === 1 ? true : false}
 						onClick={() =>
 							item.is_video_access === 'T'
 								? props.onCheckConference(item.video_chat_id)
