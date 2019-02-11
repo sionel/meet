@@ -140,7 +140,6 @@ class HomeScreenContainer extends Component {
 			this._refreshTimeStamp = Date.now();
 			this.setState({ refreshing: true });
 			this._handleGetWetalkList();
-			// this._handleCheckAuth();
 		}
 	};
 
@@ -150,7 +149,6 @@ class HomeScreenContainer extends Component {
    */
 	_handleGetWetalkList = async () => {
 		const { auth, onSetWetalkList } = this.props;
-		console.log('WETALK 1 : ', auth);
 
 		// 위톡조회 API
 		const wetalkList = await WetalkApi.getWetalkList(
@@ -158,7 +156,6 @@ class HomeScreenContainer extends Component {
 			auth.last_access_company_no,
 			auth.portal_id
 		);
-		console.log('WETALK 2 : ', wetalkList);
 
 		// 토큰만료시
 		if (wetalkList.errors) {
@@ -169,7 +166,8 @@ class HomeScreenContainer extends Component {
 	};
 
 	/**
-	 * 
+	 * _handleAutoLogin
+	 * 접속자확인 및 자동로그인
 	 */
 	_handleAutoLogin = async () => {
 		const { auth, onLogin, navigation } = this.props;
@@ -221,70 +219,6 @@ class HomeScreenContainer extends Component {
 			}
 		}
 		this._handleRefresh();
-	};
-
-	/**
-   * _handleCheckAuth
-   * 접속자 확인 및 자동로그인
-   */
-	_handleCheckAuth = async () => {
-		const { auth, onLogin, navigation } = this.props;
-		let result, loginResult, checkResult, userData, last_company;
-		// 접속확인
-		if (!auth || (!auth.portal_id && !auth.portal_password)) {
-			// 로그인 필요
-			this._handleRedirect('Login');
-		} else {
-			/* 자동 로그인 로직 */
-			checkResult = await UserApi.check(auth.AUTH_A_TOKEN, auth.last_access_company_no);
-			console.log('checkResult 1 : ', checkResult);
-
-			// #region
-			if (checkResult.errors) {
-				loginResult = await UserApi.login(auth);
-				console.log('checkResult 2 : ', loginResult);
-				if (result.resultCode !== 200) {
-					alert('다시 로그인!');
-					return navigation.navigate('Login');
-				}
-				checkResult = await UserApi.check(
-					loginResult.resultData.AUTH_A_TOKEN,
-					loginResult.resultData.last_access_company_no
-				);
-
-				// 유저정보
-				userData = {
-					...auth,
-					// login api data
-					portal_id: auth.portal_id,
-					portal_password: auth.portal_password,
-					AUTH_A_TOKEN: loginResult.resultData.AUTH_A_TOKEN,
-					AUTH_R_TOKEN: loginResult.resultData.AUTH_R_TOKEN,
-					last_access_company_no: checkResult.resultData.last_access_company_no,
-					last_company: checkResult.resultData.employee_list.filter(
-						e => e.company_no == checkResult.resultData.last_access_company_no
-					)[0]
-				};
-				console.log('Auth result3 : ', userData);
-
-				onLogin(userData);
-			} else {
-				if (auth.last_access_company_no != checkResult.resultData.last_access_company_no) {
-					userData = {
-						...auth,
-						last_access_company_no: checkResult.resultData.last_access_company_no,
-						last_company: checkResult.resultData.employee_list.filter(
-							e => e.company_no == checkResult.resultData.last_access_company_no
-						)[0]
-					};
-					console.log('Auth result3-2 : ', userData);
-					onLogin(userData);
-				}
-			}
-
-			// #endregion
-			this._handleRefresh();
-		}
 	};
 
 	/**
