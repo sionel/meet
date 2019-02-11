@@ -5,7 +5,6 @@
  */
 
 import React from 'react';
-// import { Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { actionCreators as UserActions } from '../../redux/modules/user';
 import LoginScreenPresenter from './LoginScreenPresenter';

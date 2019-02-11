@@ -25,7 +25,8 @@ class HomeScreenContainer extends Component {
 		super(props);
 		this._isFocus = true;
 		this._refreshTimeStamp = Date.now();
-		this._handleAutoLogin();
+		// this._handleAutoLogin();
+		this._handleRefresh();
 	}
 
 	/**
@@ -54,8 +55,8 @@ class HomeScreenContainer extends Component {
 		setInterval(() => {
 			if (Date.now() > this._refreshTimeStamp + 3000) {
 				// 리프레쉬 할 시간이 지났으면 리프레쉬 한다.
-				// this._handleRefresh();
-				this._handleAutoLogin();
+				this._handleRefresh();
+				// this._handleAutoLogin();
 			}
 		}, 15000);
 	}
@@ -94,9 +95,9 @@ class HomeScreenContainer extends Component {
 					selectedRoomId={selectedRoomId}
 					onActivateModal={this._handleActivateModal}
 					onRedirect={this._handleRedirect}
-					onRefresh={this._handleAutoLogin}
+					// onRefresh={this._handleAutoLogin}
 					// onRefresh={this._handleCheckAuth}
-					// onRefresh={this._handleRefresh}
+					onRefresh={this._handleRefresh}
 					onSearch={this._handleSearch}
 					onCreateConference={this._handleCreateConference}
 					onCheckConference={this._handleCheckConference}
@@ -139,7 +140,8 @@ class HomeScreenContainer extends Component {
 		if (AppState.currentState === 'active' && this._isFocus) {
 			this._refreshTimeStamp = Date.now();
 			this.setState({ refreshing: true });
-			this._handleGetWetalkList();
+			// this._handleGetWetalkList();
+			this._handleAutoLogin();
 		}
 	};
 
@@ -161,8 +163,8 @@ class HomeScreenContainer extends Component {
 		if (wetalkList.errors) {
 			return this._handleAutoLogin();
 		}
-		onSetWetalkList(wetalkList.resultData.video_room_list);
 		this.setState({ refreshing: false });
+		onSetWetalkList(wetalkList.resultData.video_room_list);
 	};
 
 	/**
@@ -218,7 +220,8 @@ class HomeScreenContainer extends Component {
 				onLogin(userData);
 			}
 		}
-		this._handleRefresh();
+		// this._handleRefresh();
+		this._handleGetWetalkList();
 	};
 
 	/**

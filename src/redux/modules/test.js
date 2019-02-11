@@ -2,19 +2,44 @@
  * test.js
  * 추후 삭제 요망
  */
+import { UserApi } from '../../services';
 
-const TEST = "TEST";
+const TEST = 'TEST';
+const POSTS = 'POSTS';
+const ERROR = 'ERROR';
 
 //#region Action Creators
+
+export const getPosts = () => {
+	return dispatch => {
+		UserApi.test()
+			.then(resp => {
+				dispatch(test(resp));
+			})
+			.catch(err => {
+				alert('Error');
+				return;
+			});
+	};
+};
 
 /**
  * Test : Test를 위한 Functoin
  */
-test = test => {
-  return {
-    type: LOG_IN,
-    test
-  };
+posts = posts => {
+	return {
+		type: POSTS,
+		test
+	};
+};
+
+/**
+ * Test : Test를 위한 Functoin
+ */
+error = () => {
+	return {
+		type: ERROR
+	};
 };
 
 //#endregion
@@ -22,7 +47,7 @@ test = test => {
 //#region initialState
 
 const initialState = {
-  test: null
+	posts: null
 };
 
 //#endregion initialState
@@ -30,12 +55,14 @@ const initialState = {
 //#region Reducer
 
 reducer = (state = initialState, action) => {
-  switch (action.type) {
-    case TEST:
-      return applyTest(state, action);
-    default:
-      return state;
-  }
+	switch (action.type) {
+		case TEST:
+			return applyTest(state, action);
+		case POSTS:
+			return applyTest(state, action);
+		default:
+			return state;
+	}
 };
 
 //#endregion Reducer
@@ -46,11 +73,11 @@ reducer = (state = initialState, action) => {
  * applyTest
  */
 applyTest = (state, action) => {
-  const { test } = action;
-  return {
-    ...state,
-    test
-  };
+	const { test } = action;
+	return {
+		...state,
+		test
+	};
 };
 
 //#endregion Reducer Functions
@@ -58,7 +85,8 @@ applyTest = (state, action) => {
 //#region Export
 
 const actionCreators = {
-  test
+	posts,
+	error
 };
 
 export { actionCreators };
