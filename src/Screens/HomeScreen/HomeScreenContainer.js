@@ -206,16 +206,21 @@ class HomeScreenContainer extends Component {
 					e => e.company_no == checkResult.resultData.last_access_company_no
 				)[0]
 			};
+			onLogin(userData);
 		} else {
-			userData = {
-				...auth,
-				last_access_company_no: checkResult.resultData.last_access_company_no,
-				last_company: checkResult.resultData.employee_list.filter(
-					e => e.company_no == checkResult.resultData.last_access_company_no
-				)[0]
-			};
+			// 최종선택 회사가 달라진 경우
+			if (auth.last_access_company_no != checkResult.resultData.last_access_company_no) {
+				userData = {
+					...auth,
+					last_access_company_no: checkResult.resultData.last_access_company_no,
+					last_company: checkResult.resultData.employee_list.filter(
+						e => e.company_no == checkResult.resultData.last_access_company_no
+					)[0]
+				};
+				onLogin(userData);
+			}
 		}
-		onLogin(userData);
+
 		this._handleRefresh();
 	};
 
