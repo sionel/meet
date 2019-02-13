@@ -12,10 +12,21 @@ const ListItemComp = props => {
 	// active가 true일 경우 활성화 색
 	const activeColor = props.active ? '#1C90FB' : '#eaeaea';
 	const updated = new Date(props.updated);
-	// 퇴사자 스타일
-	const disableStyle = props.disable ? { opacity: 0.45 } : { opacity: 1 };
+	let disableStyle = { opacity: 1 };
+	let onClickEvent = props.onClick;
+	let iconText = (
+		<Text style={{ ...styles.iconText, color: props.active ? '#1C90FB' : '#c1c1c1' }}>{props.title[0]}</Text>
+	);
+
+	// 퇴사자일경우
+	if (props.disable) {
+		disableStyle = { opacity: 0.35 };
+		onClickEvent = () => alert('통화할 수 없는 사용자입니다.');
+		iconText = (
+			<Text style={{ ...styles.iconText, fontSize: 15, color: props.active ? '#1C90FB' : '#c1c1c1' }}>퇴사</Text>
+		);
+	}
 	// 클릭이벤트
-	const onClickEvent = props.disable ? () => alert('통화할 수 없는 사용자입니다.') : props.onClick;
 	let displayUpdated = `${updated.getFullYear()}년 `;
 	displayUpdated += `${updated.getMonth() + 1 < 10 ? `0` : ``}${updated.getMonth() + 1}월 `;
 	displayUpdated += `${updated.getDate() < 10 ? `0` : ``}${updated.getDate()}일`;
@@ -27,9 +38,7 @@ const ListItemComp = props => {
 			<View style={styles.iconWrapper}>
 				<View style={{ ...styles.roomIcon, borderColor: activeColor }}>
 					{/* 아이콘 텍스트 */}
-					<Text style={{ ...styles.iconText, color: props.active ? '#1C90FB' : '#c1c1c1' }}>
-						{props.title[0]}
-					</Text>
+					{iconText}
 				</View>
 			</View>
 			{/* 내용 */}
