@@ -37,6 +37,23 @@
 		DE4C456121DE1E4E00EA0709 /* FIRUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = DE4C455F21DE1E4E00EA0709 /* FIRUtilities.m */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		ACA0EFFA221583E800A97DB8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = ACA0EFE4221583DA00A97DB8 /* RCTLinking.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RCTLinking;
+		};
+		ACA0EFFC221583E800A97DB8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = ACA0EFE4221583DA00A97DB8 /* RCTLinking.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 2D2A28471D9B043800D4039D;
+			remoteInfo = "RCTLinking-tvOS";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		0B26BE701EC5BC3C00EEFB41 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -84,6 +101,7 @@
 		AC7CC01A21F808CD00D5371A /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialIcons.ttf; sourceTree = "<group>"; };
 		AC7CC01B21F808CD00D5371A /* Feather.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Feather.ttf; sourceTree = "<group>"; };
 		AC7CC01C21F808CD00D5371A /* AntDesign.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = AntDesign.ttf; sourceTree = "<group>"; };
+		ACA0EFE4221583DA00A97DB8 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../../../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		B3B083EB1D4955FF0069CEE7 /* app.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = app.entitlements; sourceTree = "<group>"; };
 		DE4C455D21DE1E4300EA0709 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		DE4C455F21DE1E4E00EA0709 /* FIRUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FIRUtilities.m; sourceTree = "<group>"; };
@@ -146,6 +164,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				ACA0EFF5221583E500A97DB8 /* Libraries */,
 				AC7CC00D21F8088C00D5371A /* Fonts */,
 				B3B083EB1D4955FF0069CEE7 /* app.entitlements */,
 				0B26BE711EC5BC4D00EEFB41 /* Frameworks */,
@@ -186,6 +205,24 @@
 			);
 			name = Fonts;
 			path = "../../node_modules/react-native-vector-icons/Fonts";
+			sourceTree = "<group>";
+		};
+		ACA0EFF5221583E500A97DB8 /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				ACA0EFE4221583DA00A97DB8 /* RCTLinking.xcodeproj */,
+			);
+			name = Libraries;
+			path = "New Group1";
+			sourceTree = "<group>";
+		};
+		ACA0EFF6221583E800A97DB8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				ACA0EFFB221583E800A97DB8 /* libRCTLinking.a */,
+				ACA0EFFD221583E800A97DB8 /* libRCTLinking-tvOS.a */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -249,12 +286,35 @@
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = ACA0EFF6221583E800A97DB8 /* Products */;
+					ProjectRef = ACA0EFE4221583DA00A97DB8 /* RCTLinking.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* jitsi-meet */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		ACA0EFFB221583E800A97DB8 /* libRCTLinking.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRCTLinking.a;
+			remoteRef = ACA0EFFA221583E800A97DB8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		ACA0EFFD221583E800A97DB8 /* libRCTLinking-tvOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libRCTLinking-tvOS.a";
+			remoteRef = ACA0EFFC221583E800A97DB8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		13B07F8E1A680F5B00A75B9A /* Resources */ = {

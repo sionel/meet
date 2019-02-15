@@ -21,6 +21,7 @@
 
 #import <JitsiMeet/JitsiMeet.h>
 #import "Orientation.h"
+#import <React/RCTLinkingManager.h>
 
 @import Crashlytics;
 @import Fabric;
