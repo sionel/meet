@@ -288,7 +288,8 @@ class HomeScreenContainer extends Component {
    * _handleCreateConference
    */
 	_handleCreateConference = async (selectedRoomId, externalData = null) => {
-		let { auth } = this.props;
+		let auth;
+		let company_code;
 		// 위하고에서 접속인지 아닌지 구분
 		if (externalData !== null) {
 			auth = {
@@ -298,11 +299,11 @@ class HomeScreenContainer extends Component {
 				last_access_company_no: externalData.cno,
 				AUTH_A_TOKEN: externalData.access
 			};
+			company_code = externalData.cno;
+		} else {
+			auth = this.props.auth;
+			company_code = auth.employee_list.filter(e => e.company_no == auth.last_access_company_no)[0].company_code;
 		}
-		console.log('externalData : ', auth);
-
-		const company_code = auth.employee_list.filter(e => e.company_no == auth.last_access_company_no)[0]
-			.company_code;
 
 		const bodyData = [
 			selectedRoomId, // 방 id
