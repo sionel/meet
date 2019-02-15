@@ -14,6 +14,7 @@ import { WetalkApi } from '../../services';
 import { UserApi } from '../../services';
 import { ConferenceApi } from '../../services';
 import { NavigationEvents } from 'react-navigation';
+import { querystringParser } from '../../utils';
 
 // #region
 
@@ -44,14 +45,7 @@ class HomeScreenContainer extends Component {
    * componentDidMount
    */
 	componentDidMount() {
-		Linking.getInitialURL()
-			.then(url => {
-				if (url) {
-					console.log('Initial url is: ' + url);
-					alert(url);
-				}
-			})
-			.catch(err => console.error('An error occurred', err));
+		this._handleOpenDeepLink();
 		AppState.addEventListener('change', this._handleAppStateChange);
 		setInterval(() => {
 			if (Date.now() > this._refreshTimeStamp + 3000) {
@@ -114,10 +108,30 @@ class HomeScreenContainer extends Component {
 	// #endregion
 
 	/**
-	 * 
+	 * _handleOpenURL
 	 */
 	_handleOpenURL(event) {
 		console.log('event.url : ', event.url);
+	}
+
+	/**
+	 * _handleOpenDeepLink
+	 * 딥링크접속 시 테스트
+	 */
+	_handleOpenDeepLink() {
+		Linking.getInitialURL()
+			.then(url => {
+				if (url) {
+					const result = querystringParser(url);
+					// 화상대화 타입 (생성:0/참여:1)
+					if (result.type == '1') {
+						this._handleCheckConference(result.room_id, result);
+					} else {
+						this._handleCreateConference(result.room_id, result);
+					}
+				}
+			})
+			.catch(err => alert('다시 시도해 주세요') /* console.error('An error occurred', err) */);
 	}
 
 	/**
@@ -250,11 +264,21 @@ class HomeScreenContainer extends Component {
    * _handleActivateModal
    * 모달뷰 토글
    */
-	_handleCheckConference = async conferenceId => {
-		const { auth } = this.props;
+	_handleCheckConference = async (conferenceId, externalData = null) => {
+		let { auth } = this.props;
+		// 위하고에서 접속인지 아닌지 구분
+		if (externalData !== null) {
+			auth = {
+				conferenceId,
+				portal_id: externalData.owner_id,
+				user_name: externalData.owner_name,
+				last_access_company_no: externalData.cno,
+				AUTH_A_TOKEN: externalData.access
+			};
+		}
 		const result = await ConferenceApi.check(conferenceId, auth.AUTH_A_TOKEN);
 		if (!result.resultData) {
-			alert('이미 종료된 대화방입니다.' + JSON.stringify(result));
+			alert('이미 종료된 대화방입니다.');
 			return;
 		}
 		this._handleRedirect('Conference', { item: { videoRoomId: conferenceId } });
@@ -263,8 +287,20 @@ class HomeScreenContainer extends Component {
 	/**
    * _handleCreateConference
    */
-	_handleCreateConference = async selectedRoomId => {
-		const { auth } = this.props;
+	_handleCreateConference = async (selectedRoomId, externalData = null) => {
+		let { auth } = this.props;
+		// 위하고에서 접속인지 아닌지 구분
+		if (externalData !== null) {
+			auth = {
+				selectedRoomId,
+				portal_id: externalData.owner_id,
+				user_name: externalData.owner_name,
+				last_access_company_no: externalData.cno,
+				AUTH_A_TOKEN: externalData.access
+			};
+		}
+		console.log('externalData : ', auth);
+
 		const company_code = auth.employee_list.filter(e => e.company_no == auth.last_access_company_no)[0]
 			.company_code;
 

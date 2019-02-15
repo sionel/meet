@@ -33,7 +33,8 @@ const HomeRouteTitle = props => {
 const RightMenuImage = ({ navigation }) => {
 	return (
 		<Icon
-			name="cog"
+			// name="cog"
+			name="sliders"
 			size={24}
 			color="#fff"
 			style={{
