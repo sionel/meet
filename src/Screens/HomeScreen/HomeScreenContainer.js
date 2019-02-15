@@ -4,7 +4,7 @@
  */
 
 import React, { Component, Fragment } from 'react';
-import { AppState, StatusBar } from 'react-native';
+import { AppState, StatusBar, Linking } from 'react-native';
 import { connect } from 'react-redux';
 import HomeScreenPresenter from './HomeScreenPresenter';
 import { actionCreators as UserActions } from '../../redux/modules/user';
@@ -25,6 +25,7 @@ class HomeScreenContainer extends Component {
 		super(props);
 		this._isFocus = true;
 		this._refreshTimeStamp = Date.now();
+		// Linking.addEventListener('url', this._handleOpenURL);
 		this._handleRefresh();
 	}
 
@@ -40,16 +41,16 @@ class HomeScreenContainer extends Component {
 	};
 
 	/**
-   * componentWillUnmount
-   */
-	componentWillUnmount() {
-		AppState.removeEventListener('change', this._handleAppStateChange);
-	}
-
-	/**
    * componentDidMount
    */
 	componentDidMount() {
+		Linking.getInitialURL()
+			.then(url => {
+				if (url) {
+					console.log('Initial url is: ' + url);
+				}
+			})
+			.catch(err => console.error('An error occurred', err));
 		AppState.addEventListener('change', this._handleAppStateChange);
 		setInterval(() => {
 			if (Date.now() > this._refreshTimeStamp + 3000) {
@@ -57,6 +58,14 @@ class HomeScreenContainer extends Component {
 				this._handleRefresh();
 			}
 		}, 15000);
+	}
+
+	/**
+   * componentWillUnmount
+   */
+	componentWillUnmount() {
+		// Linking.removeEventListener('url', this._handleOpenURL);
+		AppState.removeEventListener('change', this._handleAppStateChange);
 	}
 
 	// #region
@@ -102,6 +111,13 @@ class HomeScreenContainer extends Component {
 		);
 	}
 	// #endregion
+
+	/**
+	 * 
+	 */
+	_handleOpenURL(event) {
+		console.log('event.url : ', event.url);
+	}
 
 	/**
    * _handleRedirect
