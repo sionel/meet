@@ -26,7 +26,6 @@ class HomeScreenContainer extends Component {
 		super(props);
 		this._isFocus = true;
 		this._refreshTimeStamp = Date.now();
-		// Linking.addEventListener('url', this._handleOpenURL);
 		this._handleRefresh();
 	}
 
@@ -45,6 +44,7 @@ class HomeScreenContainer extends Component {
    * componentDidMount
    */
 	componentDidMount() {
+		// Linking.addEventListener('url', this._handleOpenDeepLink);
 		this._handleOpenDeepLink();
 		AppState.addEventListener('change', this._handleAppStateChange);
 		setInterval(() => {
@@ -59,7 +59,7 @@ class HomeScreenContainer extends Component {
    * componentWillUnmount
    */
 	componentWillUnmount() {
-		// Linking.removeEventListener('url', this._handleOpenURL);
+		// Linking.removeEventListener('url', this._handleOpenDeepLink);
 		AppState.removeEventListener('change', this._handleAppStateChange);
 	}
 
