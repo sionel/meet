@@ -46,10 +46,11 @@ class HomeScreenContainer extends Component {
 	componentDidMount() {
 		Linking.getInitialURL().then(url => {
 			if (url) {
-				this._handleOpenDeepLink({ url });
+				this._handleOpenURL({ url });
 			}
 		});
-		Linking.addEventListener('url', this._handleOpenDeepLink);
+		// Linking.addEventListener('url', this._handleOpenURL);
+		Linking.addEventListener('url', this._handleOpenURL);
 		AppState.addEventListener('change', this._handleAppStateChange);
 		setInterval(() => {
 			if (Date.now() > this._refreshTimeStamp + 3000) {
@@ -63,7 +64,7 @@ class HomeScreenContainer extends Component {
    * componentWillUnmount
    */
 	componentWillUnmount() {
-		Linking.removeEventListener('url', this._handleOpenDeepLink);
+		Linking.removeEventListener('url', this._handleOpenURL);
 		AppState.removeEventListener('change', this._handleAppStateChange);
 	}
 
@@ -111,16 +112,17 @@ class HomeScreenContainer extends Component {
 	}
 	// #endregion
 
-	_handleOpenURL(event) {
-		alert(event.url);
-	}
+	_handleOpenURL = event => {
+		// alert(event.url);
+		// alert(typeof this._handleOpenLink);
+		this._handleOpenLink(event.url);
+	};
 
 	/**
    * _handleOpenDeepLink
    * 딥링크접속 시 테스트
    */
 	_handleOpenDeepLink = e => {
-		alert(111);
 		Linking.getInitialURL()
 			.then(url => {
 				if (url) {
