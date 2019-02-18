@@ -53,33 +53,9 @@
 -    (BOOL)application:(UIApplication *)application
   continueUserActivity:(NSUserActivity *)userActivity
     restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> *restorableObjects))restorationHandler {
-
-    if ([FIRUtilities appContainsRealServiceInfoPlist]) {
-        // 1. Attempt to handle Universal Links through Firebase in order to support
-        //    its Dynamic Links (which we utilize for the purposes of deferred deep
-        //    linking).
-        BOOL handled
-          = [[FIRDynamicLinks dynamicLinks]
-                handleUniversalLink:userActivity.webpageURL
-                         completion:^(FIRDynamicLink * _Nullable dynamicLink, NSError * _Nullable error) {
-           NSURL *dynamicLinkURL = dynamicLink.url;
-           if (dynamicLinkURL) {
-             userActivity.webpageURL = dynamicLinkURL;
-             [JitsiMeetView application:application
+  return [RCTLinkingManager application:application
                    continueUserActivity:userActivity
                      restorationHandler:restorationHandler];
-           }
-        }];
-
-        if (handled) {
-          return handled;
-        }
-    }
-
-    // 2. Default to plain old, non-Firebase-assisted Universal Links.
-    return [JitsiMeetView application:application
-                 continueUserActivity:userActivity
-                   restorationHandler:restorationHandler];
 }
 
 //- (BOOL)application:(UIApplication *)app
@@ -106,12 +82,11 @@
 //                              openURL:openUrl
 //                              options:options];
 //}
-- (BOOL)application:(UIApplication *)app
+- (BOOL)application:(UIApplication *)application
             openURL:(NSURL *)url
-            options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
-  return [JitsiMeetView application:app
-                            openURL:url
-                            options: options];
+            options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
+{
+  return [RCTLinkingManager application:application openURL:url options:options];
 }
 
 - (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
