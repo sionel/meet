@@ -4,7 +4,7 @@
  */
 
 import React, { Component, Fragment } from 'react';
-import { AppState, StatusBar, Linking } from 'react-native';
+import { AppState, StatusBar, Linking, Platform, NativeModules } from 'react-native';
 import { connect } from 'react-redux';
 import HomeScreenPresenter from './HomeScreenPresenter';
 import { actionCreators as UserActions } from '../../redux/modules/user';
@@ -24,6 +24,11 @@ class HomeScreenContainer extends Component {
    */
 	constructor(props) {
 		super(props);
+
+		// deeplink
+		this._handleOpenDeepLink();
+		Linking.addEventListener('url', this._handleOpenURL);
+
 		this._isFocus = true;
 		this._refreshTimeStamp = Date.now();
 		this._handleRefresh();
@@ -37,15 +42,14 @@ class HomeScreenContainer extends Component {
 		refreshing: false, // 리프레시 상태
 		searchKeyword: '', // 검색인풋
 		selectedRoomId: null,
-		modal: false
+		modal: false,
+		url: null
 	};
 
 	/**
    * componentDidMount
    */
 	componentDidMount() {
-		// Linking.addEventListener('url', this._handleOpenDeepLink);
-		this._handleOpenDeepLink();
 		AppState.addEventListener('change', this._handleAppStateChange);
 		setInterval(() => {
 			if (Date.now() > this._refreshTimeStamp + 3000) {
@@ -59,7 +63,7 @@ class HomeScreenContainer extends Component {
    * componentWillUnmount
    */
 	componentWillUnmount() {
-		// Linking.removeEventListener('url', this._handleOpenDeepLink);
+		Linking.removeEventListener('url', this._handleOpenURL);
 		AppState.removeEventListener('change', this._handleAppStateChange);
 	}
 
@@ -107,32 +111,38 @@ class HomeScreenContainer extends Component {
 	}
 	// #endregion
 
-	/**
-	 * _handleOpenURL
-	 */
 	_handleOpenURL(event) {
-		console.log('event.url : ', event.url);
+		alert(event.url);
 	}
 
 	/**
 	 * _handleOpenDeepLink
 	 * 딥링크접속 시 테스트
 	 */
-	_handleOpenDeepLink() {
+	_handleOpenDeepLink = () => {
 		Linking.getInitialURL()
 			.then(url => {
 				if (url) {
-					const result = querystringParser(url);
-					// 화상대화 타입 (생성:0/참여:1)
-					if (result.type == '1') {
-						this._handleCheckConference(result.room_id, result);
-					} else {
-						this._handleCreateConference(result.room_id, result);
-					}
+					alert(url);
+					this._handleOpenLink(url);
 				}
 			})
 			.catch(err => alert('다시 시도해 주세요') /* console.error('An error occurred', err) */);
-	}
+	};
+
+	/**
+	 * _handleOpenURL
+	 * 딥링크로 전달받은 화상대화 접속
+	 */
+	_handleOpenLink = url => {
+		const result = querystringParser(url);
+		// 화상대화 타입 (생성:0/참여:1)
+		if (result.type == '1') {
+			this._handleCheckConference(result.room_id, result);
+		} else {
+			this._handleCreateConference(result.room_id, result);
+		}
+	};
 
 	/**
    * _handleRedirect
@@ -152,7 +162,6 @@ class HomeScreenContainer extends Component {
 	};
 
 	/**
-	 * 
 	 * 
 	 */
 	_handleRefressAfterWhile = () => {
@@ -344,7 +353,7 @@ class HomeScreenContainer extends Component {
 			// 포그라운드 전환시 아래 로직 실행
 			this._handleRefressAfterWhile();
 		}
-		this.setState({ appState: nextAppState });
+		this.setState({ appState: nextAppState, url: 111 });
 	};
 }
 // #endregion
