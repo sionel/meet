@@ -5,11 +5,13 @@
 import React, { Component } from 'react';
 import MainPresenter from './MainPresenter';
 import Orientation from 'react-native-orientation-locker';
+import { Platform, Linking } from 'react-native';
 
 class MainContainer extends Component {
 	componentWillMount() {
 		Orientation.lockToPortrait();
 	}
+
 	render() {
 		return <MainPresenter {...this.props} />;
 	}

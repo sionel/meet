@@ -82,36 +82,29 @@
                    restorationHandler:restorationHandler];
 }
 
-//- (BOOL)application:(UIApplication *)app
-//            openURL:(NSURL *)url
-//            options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
-//
-//    NSURL *openUrl = url;
-//
-//    if ([FIRUtilities appContainsRealServiceInfoPlist]) {
-//        // Process Firebase Dynamic Links
-//        FIRDynamicLink *dynamicLink = [[FIRDynamicLinks dynamicLinks] dynamicLinkFromCustomSchemeURL:url];
-//        if (dynamicLink != nil) {
-//            NSURL *dynamicLinkURL = dynamicLink.url;
-//            if (dynamicLinkURL != nil
-//                    && (dynamicLink.matchType == FIRDLMatchTypeUnique
-//                        || dynamicLink.matchType == FIRDLMatchTypeDefault)) {
-//                // Strong match, process it.
-//                openUrl = dynamicLinkURL;
-//            }
-//        }
-//    }
-//
-//    return [JitsiMeetView application:app
-//                              openURL:openUrl
-//                              options:options];
-//}
 - (BOOL)application:(UIApplication *)app
             openURL:(NSURL *)url
             options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
-  return [JitsiMeetView application:app
-                            openURL:url
-                            options: options];
+
+    NSURL *openUrl = url;
+
+    if ([FIRUtilities appContainsRealServiceInfoPlist]) {
+        // Process Firebase Dynamic Links
+        FIRDynamicLink *dynamicLink = [[FIRDynamicLinks dynamicLinks] dynamicLinkFromCustomSchemeURL:url];
+        if (dynamicLink != nil) {
+            NSURL *dynamicLinkURL = dynamicLink.url;
+            if (dynamicLinkURL != nil
+                    && (dynamicLink.matchType == FIRDLMatchTypeUnique
+                        || dynamicLink.matchType == FIRDLMatchTypeDefault)) {
+                // Strong match, process it.
+                openUrl = dynamicLinkURL;
+            }
+        }
+    }
+
+    return [JitsiMeetView application:app
+                              openURL:openUrl
+                              options:options];
 }
 
 - (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {

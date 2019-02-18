@@ -25,9 +25,7 @@ class HomeScreenContainer extends Component {
 	constructor(props) {
 		super(props);
 
-		// deeplink
-		this._handleOpenDeepLink();
-		Linking.addEventListener('url', this._handleOpenURL);
+		// deep link
 
 		this._isFocus = true;
 		this._refreshTimeStamp = Date.now();
@@ -63,7 +61,6 @@ class HomeScreenContainer extends Component {
    * componentWillUnmount
    */
 	componentWillUnmount() {
-		Linking.removeEventListener('url', this._handleOpenURL);
 		AppState.removeEventListener('change', this._handleAppStateChange);
 	}
 
@@ -110,10 +107,6 @@ class HomeScreenContainer extends Component {
 		);
 	}
 	// #endregion
-
-	_handleOpenURL(event) {
-		alert(event.url);
-	}
 
 	/**
 	 * _handleOpenDeepLink
