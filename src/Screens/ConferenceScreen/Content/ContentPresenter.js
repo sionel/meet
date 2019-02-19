@@ -26,7 +26,7 @@ const ContentPresenter = props => {
 									: styles.bottomAreaHorizontal
 							}
 						>
-							<BottomArea onClose={props.onClose} orientation={props.orientation} />
+							<BottomArea onClose={props.onClose} orientation={props.orientation} callType={2} />
 						</View>
 					</View>
 				</MainVideo>
