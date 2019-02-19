@@ -297,7 +297,7 @@ class HomeScreenContainer extends Component {
 		// 	return;
 		// }
 		// CallType 은 임시 값
-		const callType = 2; // 1:화상 / 2:음성
+		const callType = externalData.call_type; // 1:화상 / 2:음성
 		this._handleRedirect('Conference', { item: { videoRoomId: conferenceId, callType } });
 	};
 
