@@ -1,21 +1,16 @@
-import { connect } from "react-redux";
-import SubVideoBoxContainer from "./SubVideoBoxContainer";
+import { connect } from 'react-redux';
+import SubVideoBoxContainer from './SubVideoBoxContainer';
 
 const mapStateToProps = state => {
-  const {
-    local: { user },
-    mainUser: { mainUserId },
-    participants: { list }
-  } = state;
+	const { local: { user }, mainUser: { mainUserId }, participants: { list } } = state;
 
-  return {
-    mainUserId,
-    user,
-    participants: list
-  };
+	// console.log('PARTICIPANT : ', participants);
+
+	return {
+		mainUserId,
+		user,
+		participants: list
+	};
 };
 
-export default connect(
-  mapStateToProps,
-  null
-)(SubVideoBoxContainer);
+export default connect(mapStateToProps, null)(SubVideoBoxContainer);

@@ -290,15 +290,20 @@ class HomeScreenContainer extends Component {
 				last_access_company_no: externalData.cno,
 				AUTH_A_TOKEN: externalData.access
 			};
+			// CallType 은 임시 값
+			alert(externalData.call_type);
+			const callType = externalData.call_type; // 1:화상 / 2:음성
+			this._handleRedirect('Conference', { item: { videoRoomId: conferenceId, callType } });
+			return;
 		}
 		const result = await ConferenceApi.check(conferenceId, auth.AUTH_A_TOKEN);
-		// if (!result.resultData) {
-		// 	alert('이미 종료된 대화방입니다.');
-		// 	return;
-		// }
-		// CallType 은 임시 값
-		const callType = 2; // 1:화상 / 2:음성
-		this._handleRedirect('Conference', { item: { videoRoomId: conferenceId, callType } });
+		// console.log('result : ', result);
+
+		if (!result.resultData) {
+			alert('이미 종료된 대화방입니다.');
+			return;
+		}
+		this._handleRedirect('Conference', { item: { videoRoomId: conferenceId, callType: 0 } });
 	};
 
 	/**
