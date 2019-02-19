@@ -28,7 +28,7 @@ class ConferenceConnector {
   /**
    * 대화방 참가
    */
-  connect = (connection, roomName, name, wehagoId) => {
+  connect = (connection, roomName, name, auth) => {
     return new Promise(async (resolve, reject) => {
       // 참여할 room object 생성
       this._room = this._createRoom(connection, roomName);
@@ -45,7 +45,11 @@ class ConferenceConnector {
       // wehago id를 커맨드로 전송한다.
       this._room.sendCommand(WEHAGO_ID, {
         value: this._room.myUserId(),
-        attributes: { wehagoId }
+        attributes: {
+          wehagoId: auth.portal_id,
+          companyFullpath: auth.last_company.full_path,
+          profile_url: auth.profile_url ? auth.profile_url : ""
+        }
       });
 
       // 대화방 참가
