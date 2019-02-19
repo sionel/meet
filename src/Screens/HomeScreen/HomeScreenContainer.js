@@ -295,7 +295,9 @@ class HomeScreenContainer extends Component {
 		// 	alert('이미 종료된 대화방입니다.');
 		// 	return;
 		// }
-		this._handleRedirect('Conference', { item: { videoRoomId: conferenceId } });
+		// CallType 은 임시 값
+		const callType = 2; // 1:화상 / 2:음성
+		this._handleRedirect('Conference', { item: { videoRoomId: conferenceId, callType } });
 	};
 
 	/**

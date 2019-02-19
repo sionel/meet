@@ -6,7 +6,8 @@ import MainVideoPresenter from './MainVideoPresenter';
  */
 class MainVideoContainer extends React.Component {
 	render() {
-		return <MainVideoPresenter {...this.props} isMuteVideo={false} />;
+		return <MainVideoPresenter {...this.props} />;
+		// return <MainVideoPresenter {...this.props} isMuteVideo={false} />;
 	}
 }
 

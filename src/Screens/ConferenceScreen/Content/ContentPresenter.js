@@ -9,14 +9,14 @@ import BottomArea from './BottomArea';
  * ContentPresenter
  */
 const ContentPresenter = props => {
-	const { mainUser } = props;
+	const { mainUser, callType } = props;
 	return (
 		<View style={styles.container} onLayout={props.onLayout}>
 			<TouchableOpacity activeOpacity={0.7} style={styles.container} onPress={props.toggleConferenceMode}>
-				<MainVideo mainUser={mainUser}>
+				<MainVideo mainUser={mainUser} callType={callType}>
 					<View style={props.orientation === 'vertical' ? styles.contentVertical : styles.contentHorizontal}>
 						<View style={styles.topArea}>
-							<TopArea orientation={props.orientation} />
+							{callType == 1 && <TopArea orientation={props.orientation} />}
 						</View>
 						<View style={styles.middleArea} />
 						<View
@@ -26,7 +26,7 @@ const ContentPresenter = props => {
 									: styles.bottomAreaHorizontal
 							}
 						>
-							<BottomArea onClose={props.onClose} orientation={props.orientation} callType={2} />
+							<BottomArea onClose={props.onClose} orientation={props.orientation} callType={callType} />
 						</View>
 					</View>
 				</MainVideo>
