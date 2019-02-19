@@ -21,6 +21,7 @@ class CustomLottie extends Component {
 	files = {
 		waiting: require('./lotties/waiting.json'),
 		broadcast: require('./lotties/broadcast.json'),
+		voiceBroadcast: require('./lotties/voice_broadcast.json'),
 		cc: require('./lotties/animation-w400-h300.json')
 	};
 
@@ -43,7 +44,7 @@ class CustomLottie extends Component {
 	 * Render
 	 */
 	render() {
-		const { source, width, height, customStyle, phrases } = this.props;
+		const { source, width, height, customStyle, phrases, children } = this.props;
 		const files = this.files;
 
 		return (
@@ -55,12 +56,25 @@ class CustomLottie extends Component {
 						...customStyle
 					}}
 					source={files[source]}
-					// source={require('./lotties/broadcast.json')}
 					ref={animation => {
 						this.animation = animation;
 					}}
 				/>
 				{phrases !== '' && <Text style={{ marginTop: -72, color: '#1C90FB' }}>Loading</Text>}
+				{children && (
+					<View
+						style={{
+							position: 'absolute',
+							justifyContent: 'center',
+							alignItems: 'center',
+							textAlign: 'center',
+							padding: 0,
+							margin: 0
+						}}
+					>
+						{children}
+					</View>
+				)}
 			</View>
 		);
 	}
