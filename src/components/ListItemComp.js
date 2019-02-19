@@ -8,12 +8,24 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import LottieView from "lottie-react-native";
 import CustomLottie from "./CustomLottie";
 
+function getFirtsChar(str) {
+  split = str.split(/([\uD800-\uDBFF][\uDC00-\uDFFF])/);
+  if (split[0] === str) {
+    return split[0][0];
+  } else if (split[0].lenth !== 0) {
+    return split[0][0];
+  } else {
+    return "";
+  }
+}
+
 const ListItemComp = props => {
   // active가 true일 경우 활성화 색
   const activeColor = props.active ? "#1C90FB" : "#eaeaea";
   const updated = new Date(props.updated);
   let disableStyle = { opacity: 1 };
   let onClickEvent = props.onClick;
+
   let iconText = (
     <Text
       style={{
@@ -21,7 +33,7 @@ const ListItemComp = props => {
         color: props.active ? "#1C90FB" : "#c1c1c1"
       }}
     >
-      {typeof props.title[0] === "string" ? "a" : props.title[0]}
+      {getFirtsChar(props.title)}
     </Text>
   );
 
