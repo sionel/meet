@@ -29,7 +29,7 @@ class ConferenceManager {
   /**
    * connect : 화상대화 참가
    */
-  join = async (roomName, name, handleClose) => {
+  join = async (roomName, name, handleClose, wehagoId) => {
     // 초기화
     this._init();
     // 대화방 연결을 위한 Connection
@@ -39,15 +39,13 @@ class ConferenceManager {
       this._createHandlers(handleClose)
     );
     // connection 연결
-    await this._connection.connect(
-      roomName.toLowerCase(),
-      handleClose
-    );
+    await this._connection.connect(roomName.toLowerCase(), handleClose);
     // 대화방 참가
     await this._conferenceConnector.connect(
       this._connection,
       roomName.toLowerCase(),
-      name
+      name,
+      wehagoId
     );
 
     this._apiManager = new APIManager(

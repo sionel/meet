@@ -7,14 +7,15 @@ const mapStateToProps = state => {
     mainUser: { mainUserId },
     participants: { list },
     user: {
-      auth: { user_name }
+      auth: { user_name, portal_id }
     }
   } = state;
 
   const mainUser = getMainUser(mainUserId, user, list);
   return {
     mainUser,
-    user_name
+    user_name,
+    portal_id
   };
 };
 
