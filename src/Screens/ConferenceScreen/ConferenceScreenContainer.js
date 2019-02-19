@@ -22,12 +22,11 @@ class ConferenceScreenContainer extends React.Component {
    * componentDidMount
    */
 	componentDidMount() {
-		const { navigation, user_name } = this.props;
+		const { navigation, user_name, auth } = this.props;
 		const item = navigation.getParam('item');
-
 		// 컴포넌트가 마운트 되면 대화방 초기 설정 후 입장한다.
 		this._conferenceManager = new ConferenceManager(this.props.dispatch);
-		this._joinConference(item.videoRoomId, user_name);
+		this._joinConference(item.videoRoomId, user_name, auth);
 		AppState.addEventListener('change', this._handleAppStateChange);
 		// 전화 타입 - 화상:1 / 음성:2
 		this.callType = item.callType;
@@ -64,8 +63,8 @@ class ConferenceScreenContainer extends React.Component {
 	}
 
 	/** 대화방 참가 생성 */
-	_joinConference = async (roomName, name) => {
-		await this._conferenceManager.join(roomName, name, this._handleClose);
+	_joinConference = async (roomName, name, auth) => {
+		await this._conferenceManager.join(roomName, name, this._handleClose, auth);
 	};
 
 	/** 화상대화방 닫기 */

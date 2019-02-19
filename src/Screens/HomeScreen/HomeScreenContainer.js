@@ -246,6 +246,7 @@ class HomeScreenContainer extends Component {
 					e => e.company_no == checkResult.resultData.last_access_company_no
 				)[0]
 			};
+
 			onLogin(userData);
 		} else {
 			// 최종선택 회사가 달라진 경우

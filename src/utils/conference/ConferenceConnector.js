@@ -1,6 +1,9 @@
 import JitsiMeetJS from "../../../jitsi/features/base/lib-jitsi-meet";
 import config from "./config";
 
+// 위하고 아이디 커멘드 이름 정의
+const WEHAGO_ID = "wehagoid";
+
 /**
  * ConferenceConnector
  * 화상회의 방 생성/참가 및 디바이스 연결을 담당하는 클래스
@@ -25,7 +28,7 @@ class ConferenceConnector {
   /**
    * 대화방 참가
    */
-  connect = (connection, roomName, name) => {
+  connect = (connection, roomName, name, auth) => {
     return new Promise(async (resolve, reject) => {
       // 참여할 room object 생성
       this._room = this._createRoom(connection, roomName);
@@ -35,8 +38,20 @@ class ConferenceConnector {
       const tracks = await this._createTracks();
       // 트랙 추가
       this._addTracks(tracks);
+
       // display Name 설정
       this._room.setDisplayName(name);
+
+      // wehago id를 커맨드로 전송한다.
+      this._room.sendCommand(WEHAGO_ID, {
+        value: this._room.myUserId(),
+        attributes: {
+          wehagoId: auth.portal_id,
+          companyFullpath: auth.last_company.full_path,
+          profile_url: auth.profile_url ? auth.profile_url : ""
+        }
+      });
+
       // 대화방 참가
       this._room.join();
     });
@@ -120,8 +135,14 @@ class ConferenceConnector {
 
     // SUSPEND_DETECTED
     this._room.on(conferenceEvents.SUSPEND_DETECTED, () =>
-      handlers.SUSPEND_DETECTED()
+      this._handlers.SUSPEND_DETECTED()
     );
+
+    // 위하고 접속 아이디 및 정보 가져오기
+    this._room.addCommandListener(WEHAGO_ID, user => {
+      const id = user.value;
+      this._handlers.SET_USER_INFO(id, user.attributes);
+    });
   };
 
   /**
