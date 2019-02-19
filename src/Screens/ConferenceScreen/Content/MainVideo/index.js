@@ -5,11 +5,13 @@ import MainVideoContainer from "./MainVideoContainer";
 
 const mapStateToProps = (state, ownProps) => {
   const {
+    mainUser,
     mainUser: { isMuteVideo },
     mainUser: { videoTrack }
   } = ownProps;
 
   return {
+    mainUser,
     stream: !isMuteVideo && videoTrack && videoTrack.getOriginalStream(),
     isMuteVideo,
     videoType: videoTrack && videoTrack.videoType

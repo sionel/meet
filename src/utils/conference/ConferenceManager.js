@@ -163,7 +163,6 @@ class ConferenceManager {
    * 위하고 아이디등 유저 정보를 설정한다.
    */
   _setUserInfo = (id, info) => {
-    console.log("_setUserInfo");
     this._dispatch(participantsAcionCreators.setUserInfo(id, info));
   };
 }

@@ -57,7 +57,9 @@ function joinUser(user) {
       user
     });
     if (length == 0) {
-      dispatch(mainUserActionCreators.setMainUser(user.getId()));
+      setTimeout(() => {
+        dispatch(mainUserActionCreators.setMainUser(user.getId()));
+      }, 500);
     }
   };
 }
@@ -75,6 +77,7 @@ function applyJoinUser(state, action) {
     userInfo: null
   };
   list.push(participant);
+
   return {
     ...state,
     list
