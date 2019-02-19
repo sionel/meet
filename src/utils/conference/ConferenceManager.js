@@ -108,7 +108,8 @@ class ConferenceManager {
       LEFT_USER: this._leftUser,
       ADD_REMOTE_TRACK: this._addRemoteTrack,
       VIDEO_MUTE_CHANGED: this._videoMutedChanged,
-      SUSPEND_DETECTED: handleClose
+      SUSPEND_DETECTED: handleClose,
+      SET_USER_INFO: this._setUserInfo
     };
     return handler;
   };
@@ -156,6 +157,14 @@ class ConferenceManager {
    */
   _videoMutedChanged = track => {
     this._dispatch(participantsAcionCreators.updateMuteVideo(track));
+  };
+
+  /**
+   * 위하고 아이디등 유저 정보를 설정한다.
+   */
+  _setUserInfo = (id, info) => {
+    console.log("_setUserInfo");
+    this._dispatch(participantsAcionCreators.setUserInfo(id, info));
   };
 }
 

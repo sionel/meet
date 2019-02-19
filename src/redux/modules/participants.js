@@ -13,6 +13,9 @@ const SET_REMOTE_TRACK = "SET_REMOTE_TRACK";
 // UPDATE_MUTE_VIDEO
 const UPDATE_MUTE_VIDEO = "UPDATE_MUTE_VIDEO";
 
+// SET_USER_INFO
+const SET_USER_INFO = "SET_USER_INFO";
+
 //#endregion Action Types
 
 //#region Initial State
@@ -35,6 +38,8 @@ function reducer(state = initialState, action) {
       return applySetRemoteTrack(state, action);
     case UPDATE_MUTE_VIDEO:
       return applyUpdateMuteVideo(state, action);
+    case SET_USER_INFO:
+      return applySetUserInfo(state, action);
     default:
       return state;
   }
@@ -66,7 +71,8 @@ function applyJoinUser(state, action) {
     name: user.getDisplayName(),
     isMuteVideo: false,
     videoTrack: null,
-    audioTrack: null
+    audioTrack: null,
+    userInfo: null
   };
   list.push(participant);
   return {
@@ -169,11 +175,47 @@ function applyUpdateMuteVideo(state, action) {
 
 //#endregion UPDATE_MUTE_VIDEO
 
+//#region SET_USER_INFO
+
+function setUserInfo(id, info) {
+  return dispatch => {
+    dispatch({
+      type: SET_USER_INFO,
+      id,
+      info
+    });
+  };
+}
+
+function applySetUserInfo(state, action) {
+  const { id, info } = action;
+  const list = state.list.slice(0);
+  const findUser = list.find(user => {
+    if (user.id === id) {
+      return true;
+    }
+    return false;
+  });
+
+  if (findUser) {
+    findUser.userInfo = info;
+  }
+
+  console.log(list);
+  return {
+    ...state,
+    list
+  };
+}
+
+//#endregion SET_USER_INFO
+
 export const actionCreators = {
   joinUser,
   leftUser,
   setRemoteTrack,
-  updateMuteVideo
+  updateMuteVideo,
+  setUserInfo
 };
 
 export default reducer;

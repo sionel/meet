@@ -135,8 +135,14 @@ class ConferenceConnector {
 
     // SUSPEND_DETECTED
     this._room.on(conferenceEvents.SUSPEND_DETECTED, () =>
-      handlers.SUSPEND_DETECTED()
+      this._handlers.SUSPEND_DETECTED()
     );
+
+    // 위하고 접속 아이디 및 정보 가져오기
+    this._room.addCommandListener(WEHAGO_ID, user => {
+      const id = user.value;
+      this._handlers.SET_USER_INFO(id, user.attributes);
+    });
   };
 
   /**
