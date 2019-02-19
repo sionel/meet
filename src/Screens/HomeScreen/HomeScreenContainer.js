@@ -114,7 +114,8 @@ class HomeScreenContainer extends Component {
 
 	_handleOpenURL = event => {
 		// alert(event.url);
-		// alert(typeof this._handleOpenLink);
+		// const result = querystringParser(url);
+		// this._handleRedirect('Conference', { item: { videoRoomId: result.room_id } });
 		this._handleOpenLink(event.url);
 	};
 
@@ -139,85 +140,16 @@ class HomeScreenContainer extends Component {
    */
 	_handleOpenLink = url => {
 		const result = querystringParser(url);
+		this._handleCheckConference(result.room_id, result); // 테스트
 		// 화상대화 타입 (생성:0/참여:1)
-		if (result.type == '1') {
-			this._handleCheckConference(result.room_id, result);
-		} else {
-			this._handleCreateConference(result.room_id, result);
-		}
-	};
-
-	render() {
-		const { refreshing, searchKeyword, selectedRoomId, modal } = this.state;
-		const { navigation, auth } = this.props;
-		let wetalk = []; // We talk list
-
-		if (searchKeyword) {
-			wetalk = this.props.wetalk.filter(item => item.room_title.match(searchKeyword));
-		} else {
-			wetalk = this.props.wetalk;
-		}
-
-		return (
-			<Fragment>
-				<StatusBar barStyle="light-content" />
-				<NavigationEvents
-					onDidFocus={() => {
-						this._isFocus = true;
-						this._handleRefressAfterWhile();
-					}}
-					onDidBlur={() => (this._isFocus = false)}
-				/>
-				<HomeScreenPresenter
-					navigation={navigation}
-					refreshing={refreshing}
-					modal={modal}
-					list={wetalk}
-					auth={auth}
-					selectedRoomId={selectedRoomId}
-					onActivateModal={this._handleActivateModal}
-					onRedirect={this._handleRedirect}
-					onRefresh={this._handleRefresh}
-					onSearch={this._handleSearch}
-					onCreateConference={this._handleCreateConference}
-					onCheckConference={this._handleCheckConference}
-				/>
-			</Fragment>
-		);
-	}
-	// #endregion
-
-	/**
-   * _handleOpenDeepLink
-   * 딥링크접속 시 테스트
-   */
-	_handleOpenDeepLink = () => {
-		Linking.getInitialURL()
-			.then(url => {
-				if (url) {
-					alert(url);
-					this._handleOpenLink(url);
-				}
-			})
-			.catch(err => alert('다시 시도해 주세요') /* console.error('An error occurred', err) */);
+		// if (result.type == '1') {
+		// 	this._handleCheckConference(result.room_id, result);
+		// } else {
+		// 	this._handleCreateConference(result.room_id, result);
+		// }
 	};
 
 	/**
-   * _handleOpenURL
-   * 딥링크로 전달받은 화상대화 접속
-   */
-	_handleOpenLink = url => {
-		const result = querystringParser(url);
-		// 화상대화 타입 (생성:0/참여:1)
-		if (result.type == '1') {
-			this._handleCheckConference(result.room_id, result);
-		} else {
-			this._handleCreateConference(result.room_id, result);
-		}
-	};
-
-	/**
->>>>>>> 7481d00bf91f28ae891df997760de0a64d935ece
    * _handleRedirect
    * 페이지 이동
    */
@@ -359,10 +291,10 @@ class HomeScreenContainer extends Component {
 			};
 		}
 		const result = await ConferenceApi.check(conferenceId, auth.AUTH_A_TOKEN);
-		if (!result.resultData) {
-			alert('이미 종료된 대화방입니다.');
-			return;
-		}
+		// if (!result.resultData) {
+		// 	alert('이미 종료된 대화방입니다.');
+		// 	return;
+		// }
 		this._handleRedirect('Conference', { item: { videoRoomId: conferenceId } });
 	};
 
