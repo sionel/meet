@@ -9,7 +9,7 @@ import { CustomLottie } from '../../../../components';
  * MainVideoPresenter
  */
 const MainVideoPresenter = props => {
-	const { isMuteVideo, stream, videoType, callType } = props;
+	const { isMuteVideo, stream, videoType, callType, mainUser } = props;
 	if (!isMuteVideo && stream && callType != 2) {
 		return (
 			<RTCView
@@ -34,14 +34,18 @@ const MainVideoPresenter = props => {
 									</Text>
 									<Text style={{ fontSize: 25, color: '#c0c0c0', textAlign: 'center' }}>요청중입니다</Text> */}
 									<Text style={{ fontSize: 20, color: '#c0c0c0', textAlign: 'center' }}>통화중</Text>
-									<Text style={{ fontSize: 25, color: '#c0c0c0', textAlign: 'center' }}>05:42</Text>
+									{/* <Text style={{ fontSize: 25, color: '#c0c0c0', textAlign: 'center' }}>05:42</Text> */}
 								</View>
 								<Image style={styles.profileImage} source={ProfileImage} />
 								<View style={{ position: 'absolute', top: 180, alignItems: 'center' }}>
 									<Text style={{ fontSize: 23, fontWeight: 'bold', color: '#fff' }}>
 										Manuel Neure
 									</Text>
-									<Text style={{ fontSize: 15, color: '#fff' }}>(주)더존비즈온</Text>
+									<Text style={{ fontSize: 15, color: '#fff' }}>
+										{mainUser.userInfo && mainUser.userInfo.companyFullpath
+											? mainUser.userInfo.companyFullpath
+											: ''}
+									</Text>
 								</View>
 							</CustomLottie>
 						</View>
