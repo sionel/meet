@@ -69,7 +69,7 @@ class ConferenceManager {
         audioTrack
       })
     );
-    this._dispatch(mainUserActionCreators.setMainUser(id));
+    this._dispatch(mainUserActionCreators.setMainUserNotExist(id));
   };
 
   /**
