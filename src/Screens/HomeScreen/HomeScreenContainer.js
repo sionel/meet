@@ -303,7 +303,7 @@ class HomeScreenContainer extends Component {
 			alert('이미 종료된 대화방입니다.');
 			return;
 		}
-		this._handleRedirect('Conference', { item: { videoRoomId: conferenceId, callType: 0 } });
+		this._handleRedirect('Conference', { item: { videoRoomId: conferenceId, callType: 1 } });
 	};
 
 	/**
