@@ -11,7 +11,7 @@ const ControlBoxPresenter = props => (
 				on={!props.isMuteSpeaker}
 				onPress={props.toggleMuteSpeaker}
 			/> */}
-		{props.callType == 1 && (
+		{props.callType != 2 && (
 			<ControlButton name={'camera'} on={!props.isMuteVideo} onPress={props.toggleMuteVideo} />
 		)}
 		<ControlButton name={'mic'} on={!props.isMuteMic} onPress={props.toggleMuteMic} />
