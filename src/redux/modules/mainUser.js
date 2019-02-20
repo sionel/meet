@@ -3,6 +3,9 @@
 // MAIN_USER 설정
 const SET_MAIN_USER = "SET_MAIN_USER";
 
+// 메인유저가 없을때만 MAIN_USER 설정
+const SET_MAIN_USER_NOTEXIST = "SET_MAIN_USER_NOTEXIST";
+
 //#endregion Action Types
 
 //#region Initial State
@@ -19,6 +22,8 @@ function reducer(state = initialState, action) {
   switch (action.type) {
     case SET_MAIN_USER:
       return applySetMainUser(state, action);
+    case SET_MAIN_USER_NOTEXIST:
+      return applySetMainUserNotExist(state, action);
     default:
       return state;
   }
@@ -47,8 +52,32 @@ function applySetMainUser(state, action) {
 
 //#endregion
 
+//#region SET_MAIN_USER_NOTEXIST
+
+function setMainUserNotExist(mainUserId) {
+  return (dispatch, getState) => {
+    if (!getState().mainUser.mainUserId) {
+      dispatch({
+        type: SET_MAIN_USER_NOTEXIST,
+        mainUserId
+      });
+    }
+  };
+}
+
+function applySetMainUserNotExist(state, action) {
+  const { mainUserId } = action;
+  return {
+    ...state,
+    mainUserId
+  };
+}
+
+//#endregion
+
 export const actionCreators = {
-  setMainUser
+  setMainUser,
+  setMainUserNotExist
 };
 
 export default reducer;

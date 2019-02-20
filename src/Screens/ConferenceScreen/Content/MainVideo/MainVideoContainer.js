@@ -9,11 +9,17 @@ class MainVideoContainer extends React.Component {
     time: 0
   };
   componentDidMount() {
-    setInterval(() => {
+    this._timer = setInterval(() => {
       this.setState({
         time: this.state.time + 1
       });
     }, 1000);
+  }
+
+  componentWillUnmount() {
+    if (this._timer) {
+      clearInterval(this._timer);
+    }
   }
   render() {
     return <MainVideoPresenter {...this.props} time={this.state.time} />;

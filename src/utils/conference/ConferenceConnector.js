@@ -43,7 +43,7 @@ class ConferenceConnector {
       this._room.setDisplayName(name);
 
       // wehago id를 커맨드로 전송한다.
-      this._room.sendCommand(WEHAGO_ID, {
+      this._room.sendCommandOnce(WEHAGO_ID, {
         value: this._room.myUserId(),
         attributes: {
           wehagoId: auth.portal_id,

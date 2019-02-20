@@ -57,9 +57,7 @@ function joinUser(user) {
       user
     });
     if (length == 0) {
-      setTimeout(() => {
-        dispatch(mainUserActionCreators.setMainUser(user.getId()));
-      }, 500);
+      dispatch(mainUserActionCreators.setMainUser(user.getId()));
     }
   };
 }
@@ -204,7 +202,6 @@ function applySetUserInfo(state, action) {
     findUser.userInfo = info;
   }
 
-  console.log(list);
   return {
     ...state,
     list
