@@ -127,7 +127,7 @@ class HomeScreenContainer extends Component {
 		Linking.getInitialURL()
 			.then(url => {
 				if (url) {
-					alert(url);
+					// alert(url);
 					this._handleOpenLink(url);
 				}
 			})
@@ -291,7 +291,7 @@ class HomeScreenContainer extends Component {
 				AUTH_A_TOKEN: externalData.access
 			};
 			// CallType 은 임시 값
-			alert(externalData.call_type);
+			// alert(externalData.call_type);
 			const callType = externalData.call_type; // 1:화상 / 2:음성
 			this._handleRedirect('Conference', { item: { videoRoomId: conferenceId, callType } });
 			return;
