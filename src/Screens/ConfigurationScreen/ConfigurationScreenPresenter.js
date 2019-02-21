@@ -11,6 +11,10 @@ const ConfigurationScreenPresenter = props => {
 		//   action: () => props.onDestroyToken()
 		// },
 		{
+			title: '버전정보',
+			action: () => alert('0.1.5.9 버전')
+		},
+		{
 			title: '로그아웃',
 			action: () => props.onLogout()
 		}
@@ -25,7 +29,7 @@ const ConfigurationScreenPresenter = props => {
 				}}
 			>
 				<SectionList
-					sections={[{ title: '개인정보', data: userConfig }]}
+					sections={[{ title: '시스템', data: userConfig }]}
 					renderSectionHeader={({ section }) => (
 						<Text key={section.title} style={styles.sectionHeader}>
 							{section.title}
