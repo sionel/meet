@@ -281,6 +281,8 @@ class HomeScreenContainer extends Component {
    */
 	_handleCheckConference = async (conferenceId, externalData = null) => {
 		let { auth } = this.props;
+		let callType = 1;
+		let isCreator;
 		// 위하고에서 접속인지 아닌지 구분
 		if (externalData !== null) {
 			auth = {
@@ -290,20 +292,27 @@ class HomeScreenContainer extends Component {
 				last_access_company_no: externalData.cno,
 				AUTH_A_TOKEN: externalData.access
 			};
-			// CallType 은 임시 값
-			// alert(externalData.call_type);
-			const callType = externalData.call_type; // 1:화상 / 2:음성
-			this._handleRedirect('Conference', { item: { videoRoomId: conferenceId, callType } });
-			return;
-		}
-		const result = await ConferenceApi.check(conferenceId, auth.AUTH_A_TOKEN);
-		// console.log('result : ', result);
 
-		if (!result.resultData) {
-			alert('이미 종료된 대화방입니다.');
-			return;
+			callType = externalData.call_type; // 1:화상 / 2:음성
+			isCreator = externalData.is_creater; // 1:생성자 / 2:참여자
+			// this._handleRedirect('Conference', { item: { videoRoomId: conferenceId, callType } });
+			// return;
+		} else {
+			// 생성여부 체크
+			const result = await ConferenceApi.check(conferenceId, auth.AUTH_A_TOKEN);
+			if (!result.resultData) {
+				alert('이미 종료된 대화방입니다.');
+				return;
+			}
 		}
-		this._handleRedirect('Conference', { item: { videoRoomId: conferenceId, callType: 1 } });
+		// 화상대화로 진입
+		this._handleRedirect('Conference', {
+			item: {
+				videoRoomId: conferenceId,
+				callType,
+				isCreator
+			}
+		});
 	};
 
 	/**

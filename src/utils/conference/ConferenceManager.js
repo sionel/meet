@@ -45,6 +45,14 @@ class ConferenceManager {
 			roomId: roomName,
 			name: name
 		});
+
+		// 접속자 확인 로직
+		// this._apiManager.getParticipant(1, result => {
+		// 	if (result.length < 1) {
+		// 		alert(1);
+		// 	}
+		// });
+
 		this._apiManager.insertUser();
 
 		const id = 'localUser';
