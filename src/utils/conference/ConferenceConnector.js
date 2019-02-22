@@ -98,15 +98,16 @@ class ConferenceConnector {
 		const conferenceEvents = JitsiMeetJS.events.conference;
 
 		// ===== Additional ===== //
-		// this._room.on(conferenceEvents.WRONG_STATE, () => {
-		// 	alert(111);
-		// 	resolve(this._room);
-		// });
+		this._room.on(conferenceEvents.CONNECTION_DROPPED_ERROR, () => {});
+
 		this._room.on(conferenceEvents.PARTICIPANT_CONN_STATUS_CHANGED, (userId, status) => {
 			/**
+			 * active : 카메라 꺼졌을 때
        * inactive : 참여했을 때
-       * 
+       * interrupted : 연결이 끊어졌을 때 - 네트워크
+       * restoring : 복원중 - 네트워크 - 해결메시지가 없음! : 일단 무시
        */
+			this._handlers.CHANGED_USER_STATUS(userId, status);
 			resolve(this._room);
 		});
 		// ===== Additional ===== //

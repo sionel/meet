@@ -107,7 +107,8 @@ class ConferenceManager {
 			ADD_REMOTE_TRACK: this._addRemoteTrack,
 			VIDEO_MUTE_CHANGED: this._videoMutedChanged,
 			SUSPEND_DETECTED: handleClose,
-			SET_USER_INFO: this._setUserInfo
+			SET_USER_INFO: this._setUserInfo,
+			CHANGED_USER_STATUS: this._changedUserStatus
 		};
 		return handler;
 	};
@@ -162,6 +163,13 @@ class ConferenceManager {
    */
 	_setUserInfo = (id, info) => {
 		this._dispatch(participantsAcionCreators.setUserInfo(id, info));
+	};
+
+	/**
+	 * 
+	 */
+	_changedUserStatus = (userId, status) => {
+		this._dispatch(participantsAcionCreators.changedStatus(userId, status));
 	};
 }
 
