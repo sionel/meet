@@ -40,7 +40,7 @@ class ConferenceScreenContainer extends React.Component {
 			}, time);
 
 		if (item.isCreator == 2) {
-			delayLoading(3000);
+			delayLoading(4200);
 		} else {
 			delayLoading(0);
 		}
