@@ -6,6 +6,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import { Linking } from 'react-native';
 import { actionCreators as UserActions } from '../../redux/modules/user';
 import LoginScreenPresenter from './LoginScreenPresenter';
 import { CustomLottie } from '../../components';
@@ -21,7 +22,8 @@ class LoginScreenContainer extends React.Component {
 		userPwd: '',
 		nextInput: null,
 		modal: false,
-		waiting: false
+		waiting: false,
+		autoLoginFlag: true
 	};
 
 	/**
@@ -29,7 +31,7 @@ class LoginScreenContainer extends React.Component {
 	 */
 	render() {
 		const { navigation } = this.props;
-		const { list, userId, userPwd, modal, nextInput, waiting } = this.state;
+		const { list, userId, userPwd, modal, nextInput, waiting, autoLoginFlag } = this.state;
 
 		if (waiting) {
 			return <CustomLottie source={'waiting'} width={225} height={225} />;
@@ -40,9 +42,11 @@ class LoginScreenContainer extends React.Component {
 				onRedirect={this._handleRedirect}
 				onChangeValue={this._handleChangeValue}
 				onLogin={this._handleLogin}
+				onLoginForWehago={this._handleLoginForWehago}
 				onActivateModal={this._handleActivateModal}
 				onEnterKeyDown={this._handleEnterKeyDown}
 				navigation={navigation}
+				autoLoginFlag={autoLoginFlag}
 				userPwd={userPwd}
 				userId={userId}
 				list={list}
@@ -125,6 +129,18 @@ class LoginScreenContainer extends React.Component {
 		} else {
 			this._handleActivateModal();
 		}
+	};
+
+	/**
+	 * _handleLoginForWehago
+	 */
+	_handleLoginForWehago = () => {
+		alert('준비중입니다.');
+		return;
+		Linking.openURL('wehago://type=login&from=wehagomeet').catch(err => {
+			alert('일시적인 오류가 발생했습니다. 다시 시도해 주세요');
+			console.error('An error occurred', err);
+		});
 	};
 
 	/**

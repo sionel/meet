@@ -5,10 +5,11 @@
  */
 
 import React from 'react';
-import { View, Text, TextInput, StyleSheet, Button, Image, TouchableOpacity, Modal } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Button, Image, TouchableOpacity, Modal, CheckBox } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { FlatButton, TextField } from '../../components';
 import Icon from 'react-native-vector-icons/FontAwesome';
+// import CheckBox from 'react-native-check-box';
 
 const rootPath = `../../../assets`;
 const logo = require(`${rootPath}/wehago_b.svg`);
@@ -17,7 +18,7 @@ const logo = require(`${rootPath}/wehago_b.svg`);
  * LoginScreenPresenter
  */
 const LoginScreenPresenter = props => {
-	const { userId, userPwd } = props;
+	const { userId, userPwd, autoLoginFlag } = props;
 
 	/**
    * RETURN
@@ -51,8 +52,22 @@ const LoginScreenPresenter = props => {
 
 			{/* BUTTONS */}
 			<View style={styles.bottomArea}>
-				<FlatButton width={270} height={47} borderRadius={20} onClick={props.onLogin}>
+				<FlatButton width={270} height={47} borderRadius={15} onClick={props.onLogin}>
 					로그인
+				</FlatButton>
+			</View>
+			{/* BUTTONS */}
+			<View style={styles.bottomArea2}>
+				<FlatButton
+					width={270}
+					height={47}
+					borderRadius={15}
+					color={'#1C90FB'}
+					backgroundColor={'#fff'}
+					borderWidth={1}
+					onClick={props.onLoginForWehago}
+				>
+					WEHAGO 로그인
 				</FlatButton>
 			</View>
 
@@ -103,8 +118,12 @@ const styles = StyleSheet.create({
 	},
 
 	bottomArea: {
-		flex: 6,
+		flex: 4,
 		justifyContent: 'flex-start'
+	},
+	bottomArea2: {
+		flex: 2,
+		justifyContent: 'center'
 	},
 
 	listContainer: {

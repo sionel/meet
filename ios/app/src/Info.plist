@@ -94,6 +94,8 @@
 	</array>
 	<key>UIStatusBarStyle</key>
 	<string>UIStatusBarStyleLightContent</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<string></string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
@@ -105,5 +107,7 @@
 	<false/>
 	<key>firebase_crashlytics_collection_enabled</key>
 	<string>false</string>
+	<key>LSApplicationCategoryType</key>
+	<string>LSApplicationQueriesSchemes</string>
 </dict>
 </plist>
