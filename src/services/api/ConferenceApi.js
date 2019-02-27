@@ -20,14 +20,13 @@ export default {
 		try {
 			const url = `${wehagoBaseURL}/communication/rtc/videoChat`;
 			const headers = securityRequest(token, url, HASH_KEY);
-			// alert(JSON.stringify(headers));
 			const response = await fetch(url, {
 				method: 'POST',
-				headers,
-				// headers: {
-				// 	'Content-Type': 'application/json',
-				// 	Authorization: `Bearer ${token}`
-				// },
+				headers: {
+					'Content-Type': 'application/json',
+					// Authorization: `Bearer ${token}`
+					...headers
+				},
 				body: JSON.stringify({
 					room_id,
 					owner_id,
@@ -81,8 +80,8 @@ export default {
 				// headers,
 				headers: {
 					'Content-Type': 'application/x-www-form-urlencoded',
-					Authorization: `Bearer ${token}`
-					// ...headers
+					// Authorization: `Bearer ${token}`
+					...headers
 				},
 				// body
 				body: new URLSearchParams(bodyData).toString()

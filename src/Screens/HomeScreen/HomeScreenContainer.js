@@ -352,6 +352,7 @@ class HomeScreenContainer extends Component {
 			company_code, // 회사코드
 			auth.AUTH_A_TOKEN, // 토큰
 			auth.HASH_KEY
+			// null
 		];
 		const createResult = await ConferenceApi.create(...bodyData);
 		// 화상대화 생성가능여부

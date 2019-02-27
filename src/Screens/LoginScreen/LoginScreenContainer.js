@@ -95,18 +95,20 @@ class LoginScreenContainer extends React.Component {
 		// Login API
 		let userData = {};
 		const loginResult = await UserApi.login(data);
+		console.log('LLL ; ', loginResult);
 
 		if (loginResult.resultCode === 200) {
 			// get user data API
 			const checkResult = await UserApi.check(
 				loginResult.resultData.AUTH_A_TOKEN,
-				loginResult.resultData.last_access_company_no
+				loginResult.resultData.last_access_company_no,
+				loginResult.resultData.HASH_KEY
 			);
 
 			// 유저정보
 			userData = {
 				// login api data
-				// portal_id: data.portal_id, // 아이디
+				portal_id: data.portal_id, // 아이디
 				// portal_password: data.portal_password, // 패스워드
 				last_access_company_no: loginResult.resultData.last_access_company_no,
 				AUTH_A_TOKEN: loginResult.resultData.AUTH_A_TOKEN,
@@ -123,7 +125,7 @@ class LoginScreenContainer extends React.Component {
 					e => e.company_no == loginResult.resultData.last_access_company_no
 				)[0]
 			};
-			// console.log(' USER : ', userData);
+			console.log(' USER : ', userData);
 
 			onLogin(userData);
 

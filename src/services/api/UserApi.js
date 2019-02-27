@@ -17,7 +17,6 @@ export default {
 			.then(response => response.json())
 			.then(responseJson => responseJson)
 			.catch(err => {
-				// alert('Login Error!')
 				console.log('login err: ', err);
 			}),
 
@@ -56,7 +55,6 @@ export default {
 	 * 로그인 및 사용자 정보 확인 - 토큰만료 또는 정보변경시 자동로그인
 	 */
 	check: async (token, cno, HASH_KEY) => {
-		// alert(1);
 		try {
 			const url = `${wehagoBaseURL}/common/user/userinfo/detail?cno=${cno}`;
 			const headers = securityRequest(token, url, HASH_KEY);

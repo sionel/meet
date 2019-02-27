@@ -13,7 +13,7 @@ class APIManger {
 	constructor(connectionId, info) {
 		// 초기 설정
 		this.connectionId = connectionId;
-		this.info = info;
+		// this.info = info;
 		this.info = info;
 		this.dummyWehagoId = this._createRandomString();
 	}
@@ -25,7 +25,8 @@ class APIManger {
 		let participant = [];
 		try {
 			const url = `${baseApiUrl}videoChatMember?video_chat_id=${videoRoomId}`;
-			const result = await fetch(url);
+			const headers = this._makeHeaders(url);
+			const result = await fetch(url, headers);
 			participant = await result.json();
 			// return participant;
 			callback(participant.resultData);
@@ -61,6 +62,12 @@ class APIManger {
 
 				await this._callApi(url, data, 'POST', xhr => {
 					xhr.setRequestHeader('signature', signature);
+					xhr.setRequestHeader('Authorization', headers['Authorization']);
+					xhr.setRequestHeader('transaction-id', headers['transaction-id']);
+					xhr.setRequestHeader('client-id', headers['client-id']);
+					xhr.setRequestHeader('service', headers['service']);
+					xhr.setRequestHeader('wehago-sign', headers['wehago-sign']);
+					xhr.setRequestHeader('timestamp', headers['timestamp']);
 				});
 			}
 		} catch (error) {}
@@ -87,6 +94,12 @@ class APIManger {
 				const signature = this._createSignature(`/communication/rtc/videoChatMemberDel${token}`);
 				await this._callApi(url, data, 'POST', xhr => {
 					xhr.setRequestHeader('signature', signature);
+					xhr.setRequestHeader('Authorization', headers['Authorization']);
+					xhr.setRequestHeader('transaction-id', headers['transaction-id']);
+					xhr.setRequestHeader('client-id', headers['client-id']);
+					xhr.setRequestHeader('service', headers['service']);
+					xhr.setRequestHeader('wehago-sign', headers['wehago-sign']);
+					xhr.setRequestHeader('timestamp', headers['timestamp']);
 				});
 			}
 			if (isExist && userList.resultData.length <= 1) {
@@ -107,6 +120,12 @@ class APIManger {
 		const signature = this._createSignature(`/communication/rtc/videoChatDel${token}`);
 		await this._callApi(url, data, 'POST', xhr => {
 			xhr.setRequestHeader('signature', signature);
+			xhr.setRequestHeader('Authorization', headers['Authorization']);
+			xhr.setRequestHeader('transaction-id', headers['transaction-id']);
+			xhr.setRequestHeader('client-id', headers['client-id']);
+			xhr.setRequestHeader('service', headers['service']);
+			xhr.setRequestHeader('wehago-sign', headers['wehago-sign']);
+			xhr.setRequestHeader('timestamp', headers['timestamp']);
 		});
 	};
 
@@ -160,7 +179,14 @@ class APIManger {
 		const data = { video_chat_id: roomId };
 
 		const result = await this._callApi(url, data, 'GET', xhr => {
+			const headers = this._makeHeaders(url);
 			xhr.setRequestHeader('signature', signature);
+			xhr.setRequestHeader('Authorization', headers['Authorization']);
+			xhr.setRequestHeader('transaction-id', headers['transaction-id']);
+			xhr.setRequestHeader('client-id', headers['client-id']);
+			xhr.setRequestHeader('service', headers['service']);
+			xhr.setRequestHeader('wehago-sign', headers['wehago-sign']);
+			xhr.setRequestHeader('timestamp', headers['timestamp']);
 		});
 		return result;
 	};
@@ -173,6 +199,14 @@ class APIManger {
 			.toString(36)
 			.replace('0.', '')
 			.substring(0, 10);
+	};
+
+	/**
+	 * MAKE HEADERS
+	 */
+	_makeHeaders = url => {
+		const { token, HASH_KEY } = this.info;
+		return securityRequest(token, url, HASH_KEY);
 	};
 }
 
