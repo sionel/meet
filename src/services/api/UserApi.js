@@ -3,7 +3,7 @@
  * 사용자 관련 API
  */
 
-import { wehagoBaseURL } from '../../utils';
+import { wehagoBaseURL, securityRequest } from '../../utils';
 const tempBaseUrl = `https://jsonplaceholder.typicode.com`;
 
 // #region
@@ -27,6 +27,7 @@ export default {
 	 * JSON형태로 데이터를 전송할수없음 => urlencoded방식으로 전달
 	 */
 	login: async data => {
+		const url = `${wehagoBaseURL}/auth/login/mobile`;
 		const body = {
 			portal_id: data.portal_id,
 			portal_password: data.portal_password,
@@ -36,9 +37,8 @@ export default {
 			login_os: 'IOS 12.1.2',
 			login_browser: 'WEHAGO-APP'
 		};
-
+		// const headers = securityRequest()
 		try {
-			const url = `${wehagoBaseURL}/auth/login/mobile`;
 			const response = await fetch(url, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
@@ -55,14 +55,17 @@ export default {
 	 * check
 	 * 로그인 및 사용자 정보 확인 - 토큰만료 또는 정보변경시 자동로그인
 	 */
-	check: async (token, cno) => {
+	check: async (token, cno, HASH_KEY) => {
+		// alert(1);
 		try {
 			const url = `${wehagoBaseURL}/common/user/userinfo/detail?cno=${cno}`;
+			const headers = securityRequest(token, url, HASH_KEY);
 			const response = await fetch(url, {
 				method: 'GET',
-				headers: {
-					Authorization: `Bearer ${token}`
-				}
+				headers
+				// headers: {
+				// 	Authorization: `Bearer ${token}`
+				// }
 			});
 			const jjj = await response.json();
 			return jjj;

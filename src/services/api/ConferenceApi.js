@@ -3,14 +3,14 @@
  * 사용자 관련 API
  */
 
-import { wehagoBaseURL } from '../../utils';
+import { wehagoBaseURL, securityRequest } from '../../utils';
 import 'url-search-params-polyfill';
 // #region
 export default {
 	/**
 	 * 화상대화 생성
 	 */
-	create: async (room_id, owner_id, owner_name, cno, ccode, token) => {
+	create: async (room_id, owner_id, owner_name, cno, ccode, token, HASH_KEY) => {
 		/*
 		"room_id":"_Gj2EWgBeAtpuzEuPdzI",
 		"owner_id":"seongh7800",
@@ -19,12 +19,15 @@ export default {
 		*/
 		try {
 			const url = `${wehagoBaseURL}/communication/rtc/videoChat`;
+			const headers = securityRequest(token, url, HASH_KEY);
+			// alert(JSON.stringify(headers));
 			const response = await fetch(url, {
 				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: `Bearer ${token}`
-				},
+				headers,
+				// headers: {
+				// 	'Content-Type': 'application/json',
+				// 	Authorization: `Bearer ${token}`
+				// },
 				body: JSON.stringify({
 					room_id,
 					owner_id,
@@ -33,6 +36,7 @@ export default {
 					ccode
 				})
 			});
+
 			return response.json();
 		} catch (err) {
 			return err;
@@ -42,7 +46,7 @@ export default {
 	/**
 	 * We talk발송
 	 */
-	sendWetalk: async (room_id, video_chat_id, cno, ccode, token) => {
+	sendWetalk: async (room_id, video_chat_id, cno, ccode, token, HASH_KEY) => {
 		let body = new FormData();
 		// 가변값
 		body.append('room_id', room_id);
@@ -71,11 +75,14 @@ export default {
 
 		try {
 			const url = `${wehagoBaseURL}/communication/we-talk/talk-send`;
+			const headers = securityRequest(token, url, HASH_KEY);
 			const requestData = {
 				method: 'POST',
+				// headers,
 				headers: {
 					'Content-Type': 'application/x-www-form-urlencoded',
 					Authorization: `Bearer ${token}`
+					// ...headers
 				},
 				// body
 				body: new URLSearchParams(bodyData).toString()
@@ -91,12 +98,13 @@ export default {
 	 * check
 	 * 대화방 생성확인 API
 	 */
-	check: async (conferenceId, token) => {
+	check: async (conferenceId, token, HASH_KEY) => {
 		try {
 			const url = `${wehagoBaseURL}/communication/rtc/videoChat?video_chat_id=${conferenceId}`;
+			const headers = securityRequest(token, url, HASH_KEY);
 			const requestData = {
 				method: 'GET',
-				headers: { Authorization: `Bearer ${token}` }
+				headers
 			};
 			const response = await fetch(url, requestData);
 			const result = await response.json();

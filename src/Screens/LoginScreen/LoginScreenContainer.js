@@ -45,6 +45,7 @@ class LoginScreenContainer extends React.Component {
 				onLoginForWehago={this._handleLoginForWehago}
 				onActivateModal={this._handleActivateModal}
 				onEnterKeyDown={this._handleEnterKeyDown}
+				onTokenLogin={this.props.onTokenLogin}
 				navigation={navigation}
 				autoLoginFlag={autoLoginFlag}
 				userPwd={userPwd}
@@ -105,11 +106,12 @@ class LoginScreenContainer extends React.Component {
 			// 유저정보
 			userData = {
 				// login api data
-				portal_id: data.portal_id,
-				portal_password: data.portal_password,
+				// portal_id: data.portal_id, // 아이디
+				// portal_password: data.portal_password, // 패스워드
 				last_access_company_no: loginResult.resultData.last_access_company_no,
 				AUTH_A_TOKEN: loginResult.resultData.AUTH_A_TOKEN,
 				AUTH_R_TOKEN: loginResult.resultData.AUTH_R_TOKEN,
+				HASH_KEY: loginResult.resultData.HASH_KEY,
 				// check api data
 				profile_url: checkResult.resultData.profile_url,
 				user_contact: checkResult.resultData.user_contact,

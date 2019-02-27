@@ -65,7 +65,8 @@ const LoginScreenPresenter = props => {
 					color={'#1C90FB'}
 					backgroundColor={'#fff'}
 					borderWidth={1}
-					onClick={props.onLoginForWehago}
+					// onClick={props.onLoginForWehago}
+					onClick={() => props.onTokenLogin(1, 1)}
 				>
 					WEHAGO 로그인
 				</FlatButton>

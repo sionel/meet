@@ -140,7 +140,12 @@ class HomeScreenContainer extends Component {
    */
 	_handleOpenLink = url => {
 		const result = querystringParser(url);
-		this._handleCheckConference(result.room_id, result); // 테스트
+		if (result.type === '3') {
+			// 위하고 로그인일 경우
+			alert('위하고 인증!');
+		} else {
+			this._handleCheckConference(result.room_id, result); // 테스트
+		}
 		// 화상대화 타입 (생성:0/참여:1)
 		// if (result.type == '1') {
 		// 	this._handleCheckConference(result.room_id, result);
@@ -191,12 +196,13 @@ class HomeScreenContainer extends Component {
    */
 	_handleGetWetalkList = async () => {
 		const { auth, onSetWetalkList } = this.props;
-
+		console.log('AUTH : ', auth.AUTH_A_TOKEN);
 		// 위톡조회 API
 		const wetalkList = await WetalkApi.getWetalkList(
 			auth.AUTH_A_TOKEN,
 			auth.last_access_company_no,
-			auth.portal_id
+			auth.portal_id,
+			auth.HASH_KEY
 		);
 
 		// 토큰만료시
@@ -213,19 +219,21 @@ class HomeScreenContainer extends Component {
    */
 	_handleAutoLogin = async () => {
 		const { auth, onLogin, navigation } = this.props;
+
 		let checkResult,
 			loginResult,
 			userData = {};
 
 		// 재 로그인이 필요한 경우 (저장된 정보가 없을 경우)
-		if (!auth || (!auth.portal_id && !auth.portal_password)) {
+		if (!auth /* || (!auth.portal_id && !auth.portal_password)*/) {
 			return this._handleRedirect('Login');
 		}
 
 		// 접속자 확인
-		checkResult = await UserApi.check(auth.AUTH_A_TOKEN, auth.last_access_company_no);
+		checkResult = await UserApi.check(auth.AUTH_A_TOKEN, auth.last_access_company_no, auth.HASH_KEY);
 		// 재 로그인
 		if (checkResult.errors) {
+			return navigation.navigate('Login');
 			loginResult = await UserApi.login(auth);
 
 			if (loginResult.resultCode !== 200) {
@@ -235,7 +243,8 @@ class HomeScreenContainer extends Component {
 
 			checkResult = await UserApi.check(
 				loginResult.resultData.AUTH_A_TOKEN,
-				loginResult.resultData.last_access_company_no
+				loginResult.resultData.last_access_company_no,
+				loginResult.resultData.HASH_KEY
 			);
 			userData = {
 				...auth,
@@ -299,7 +308,7 @@ class HomeScreenContainer extends Component {
 			// return;
 		} else {
 			// 생성여부 체크
-			const result = await ConferenceApi.check(conferenceId, auth.AUTH_A_TOKEN);
+			const result = await ConferenceApi.check(conferenceId, auth.AUTH_A_TOKEN, auth.HASH_KEY);
 			if (!result.resultData) {
 				alert('이미 종료된 대화방입니다.');
 				return;
@@ -335,17 +344,16 @@ class HomeScreenContainer extends Component {
 			auth = this.props.auth;
 			company_code = auth.employee_list.filter(e => e.company_no == auth.last_access_company_no)[0].company_code;
 		}
-
 		const bodyData = [
 			selectedRoomId, // 방 id
 			auth.portal_id, // 유저아이디
 			auth.user_name, // 유저이름
 			auth.last_access_company_no, // 회사번호
 			company_code, // 회사코드
-			auth.AUTH_A_TOKEN // 토큰
+			auth.AUTH_A_TOKEN, // 토큰
+			auth.HASH_KEY
 		];
 		const createResult = await ConferenceApi.create(...bodyData);
-
 		// 화상대화 생성가능여부
 		if (createResult.resultCode === 200) {
 			// 생성완료 메시지 보내기
@@ -354,7 +362,8 @@ class HomeScreenContainer extends Component {
 				createResult.resultData,
 				auth.last_access_company_no,
 				company_code,
-				auth.AUTH_A_TOKEN
+				auth.AUTH_A_TOKEN,
+				auth.HASH_KEY
 			);
 			this.setState({ modal: false });
 

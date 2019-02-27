@@ -30,7 +30,10 @@ class ConferenceScreenContainer extends React.Component {
 		// 전화 타입 - 화상:1 / 음성:2
 		this.callType = item.callType;
 		// 컴포넌트가 마운트 되면 대화방 초기 설정 후 입장한다.
-		this._conferenceManager = new ConferenceManager(this.props.dispatch);
+		this._conferenceManager = new ConferenceManager(this.props.dispatch, {
+			token: auth.AUTH_A_TOKEN,
+			HASH_KEY: auth.HASH_KEY
+		});
 
 		// 참가자/생성자 여부 확인 후 로딩딜레이
 		const delayLoading = time =>

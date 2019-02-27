@@ -8,6 +8,7 @@ import { UserApi } from '../../services';
 const LOGIN = 'LOGIN';
 const LOGOUT = 'LOGOUT';
 const TOKEN = 'TOKEN';
+const TOKEN_LOGIN = 'TOKEN_LOGIN';
 
 //#region Action Creators
 
@@ -41,6 +42,32 @@ token = auth => {
 	};
 };
 
+/**
+ * tokenLogin : ACTION
+ */
+tokenLogin = (token, cno) => {
+	alert('준비중입니다.');
+	// return;
+	const result = UserApi.check(token, cno);
+	console.log('tokenLogin : ', typeof result);
+
+	return dispatch => {
+		dispatch({
+			type: TOKEN_LOGIN,
+			payload: {
+				token
+			}
+		});
+	};
+};
+
+/**
+ * applyTokenLogin
+ */
+applyTokenLogin = (state, action) => {
+	return state;
+};
+
 //#endregion
 
 //#region initialState
@@ -67,6 +94,8 @@ reducer = (state = initialState, action) => {
 				...state,
 				auth: aa
 			};
+		case TOKEN_LOGIN:
+			applyTokenLogin(state, action);
 		default:
 			return state;
 	}
@@ -94,7 +123,8 @@ applyTest = (state, action) => {
 const actionCreators = {
 	login,
 	logout,
-	token
+	token,
+	tokenLogin
 };
 
 export { actionCreators };
