@@ -13,6 +13,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 const rootPath = `../../../assets`;
 const logo = require(`${rootPath}/wehago_b.svg`);
+const logo_login = require(`${rootPath}/logo_login.png`);
 
 /**
  * LoginScreenPresenter
@@ -27,7 +28,14 @@ const LoginScreenPresenter = props => {
 		<View style={styles.container}>
 			{/* TITLE */}
 			<View style={styles.topArea}>
-				<Text style={styles.logo}>WEHAGO</Text>
+				{/* <Text style={styles.logo}>WEHAGO</Text> */}
+				<Image
+					style={{
+						width: 207,
+						height: 63
+					}}
+					source={logo_login}
+				/>
 			</View>
 
 			{/* INPUTS */}
