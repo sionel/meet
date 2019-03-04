@@ -30,6 +30,9 @@ class ConferenceManager {
    * connect : 화상대화 참가
    */
 	join = async (roomName, name, handleClose, auth) => {
+		console.log('Roo : ', roomName);
+		console.log('Roo : ', name);
+
 		// 초기화
 		this._init();
 		// 대화방 연결을 위한 Connection
@@ -40,6 +43,7 @@ class ConferenceManager {
 		await this._connection.connect(roomName.toLowerCase(), handleClose);
 		// 대화방 참가
 		await this._conferenceConnector.connect(this._connection, roomName.toLowerCase(), name, auth);
+		// await this._conferenceConnector.connect(this._connection, roomName, name, auth);
 
 		this._apiManager = new APIManager(this._conferenceConnector.room.myUserId(), {
 			roomId: roomName,
@@ -75,7 +79,8 @@ class ConferenceManager {
    */
 	dispose = async () => {
 		// if (this._apiManager) {
-		//   await this._apiManager.deleteUser();
+		// 	alert(1123);
+		// 	await this._apiManager.deleteUser();
 		// }
 
 		if (this._conferenceConnector) {

@@ -23,42 +23,15 @@ export default {
 		try {
 			const data = {
 				method: 'GET',
-				headers
-				// headers: {
-				// 	Authorization: `Bearer ${a_token}`,
-				// 	'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-				// }
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+					...headers
+				}
 			};
 			const response = await fetch(url, data);
 			return response.json();
 		} catch (err) {
 			alert('error');
-			return false;
-		}
-	},
-
-	/**
-   * We talk list
-   * 위톡 리스트 - 구버전
-   */
-	getWetalkList_old: async (a_token, cno, room_type = 0) => {
-		/*
-		a_token: 인증토큰
-		cno: 회사코드
-		room_type: 0 - 전체 
-		*/
-		const url = `${wehagoBaseURL}/communication/we-talk/room-list?room_type=${room_type}&cno=${cno}`;
-
-		try {
-			const response = await fetch(url, {
-				method: 'GET',
-				headers: {
-					Authorization: `Bearer ${a_token}`,
-					'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-				}
-			});
-			return response.json();
-		} catch (err) {
 			return false;
 		}
 	},
@@ -73,7 +46,11 @@ export default {
 		*/
 		try {
 			const url = `${wehagoBaseURL}/communication/rtc/rtc-room-list?user_id=${portal_id}&cno=${cno}`;
-			const response = await fetch(url);
+			const headers = securityRequest(a_token, url, HASH_KEY);
+			const response = await fetch(url, {
+				method: 'GET',
+				headers
+			});
 			const responseJson = await response.json();
 			return responseJson;
 		} catch (err) {

@@ -86,7 +86,9 @@ _getServiceCode = () => {
 		if (path) {
 			serviceCode = path.split('/')[0];
 		}
+
 		serviceCode = serviceCode.toLowerCase();
+
 		if (serviceCode === 'm') {
 			serviceCode = path.split('/')[1];
 		}
@@ -110,7 +112,8 @@ _getService = url => {
 
 _getWehagoSign = (url, timestamp, transactionId, HASH_KEY) => {
 	let hash_key = HASH_KEY;
-	hash_key = CryptoJS.SHA256((hash_key + timestamp).toString(CryptoJS.enc.Utf8), hash_key).toString(
+	// alert(hash_key);
+	hash_key = CryptoJS.SHA256((String(hash_key) + timestamp).toString(CryptoJS.enc.Utf8), String(hash_key)).toString(
 		CryptoJS.enc.Base64
 	);
 	let wehagoSign = CryptoJS.enc.Base64.stringify(

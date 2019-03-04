@@ -38,10 +38,8 @@ class ConferenceConnector {
 			const tracks = await this._createTracks();
 			// 트랙 추가
 			this._addTracks(tracks);
-
 			// display Name 설정
 			this._room.setDisplayName(name);
-
 			// wehago id를 커맨드로 전송한다.
 			this._room.sendCommand(WEHAGO_ID, {
 				value: this._room.myUserId(),
