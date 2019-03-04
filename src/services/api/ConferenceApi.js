@@ -24,7 +24,6 @@ export default {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
-					// Authorization: `Bearer ${token}`
 					...headers
 				},
 				body: JSON.stringify({
@@ -77,10 +76,8 @@ export default {
 			const headers = securityRequest(token, url, HASH_KEY);
 			const requestData = {
 				method: 'POST',
-				// headers,
 				headers: {
 					'Content-Type': 'application/x-www-form-urlencoded',
-					// Authorization: `Bearer ${token}`
 					...headers
 				},
 				// body

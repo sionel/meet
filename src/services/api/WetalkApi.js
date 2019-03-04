@@ -30,11 +30,9 @@ export default {
 				// }
 			};
 			const response = await fetch(url, data);
-			console.log('response : ', response);
 			return response.json();
 		} catch (err) {
 			alert('error');
-			console.log('ERROR : ', err);
 			return false;
 		}
 	},
@@ -61,7 +59,6 @@ export default {
 			});
 			return response.json();
 		} catch (err) {
-			console.log('Test err: ', err);
 			return false;
 		}
 	},
@@ -80,7 +77,6 @@ export default {
 			const responseJson = await response.json();
 			return responseJson;
 		} catch (err) {
-			console.log('getOnairList Error: ', err);
 			return err;
 		}
 	}

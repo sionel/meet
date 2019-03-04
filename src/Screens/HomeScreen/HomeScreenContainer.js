@@ -196,7 +196,6 @@ class HomeScreenContainer extends Component {
    */
 	_handleGetWetalkList = async () => {
 		const { auth, onSetWetalkList } = this.props;
-		console.log('AUTH : ', auth.AUTH_A_TOKEN);
 		// 위톡조회 API
 		const wetalkList = await WetalkApi.getWetalkList(
 			auth.AUTH_A_TOKEN,

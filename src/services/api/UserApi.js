@@ -61,9 +61,6 @@ export default {
 			const response = await fetch(url, {
 				method: 'GET',
 				headers
-				// headers: {
-				// 	Authorization: `Bearer ${token}`
-				// }
 			});
 			const jjj = await response.json();
 			return jjj;
