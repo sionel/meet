@@ -121,7 +121,7 @@ class LoginScreenContainer extends React.Component {
 	 * _handleLogin
 	 * 로그인함수
 	 */
-	_handleLogin = async () => {
+	_handleLogin = async (wehagoLogin = false) => {
 		const { navigation } = this.props;
 		const { userId, userPwd } = this.state;
 		const { onLogin } = this.props;
@@ -133,46 +133,91 @@ class LoginScreenContainer extends React.Component {
 			login_os: 'IOS 12.1.2',
 			login_browser: 'WEHAGO-APP'
 		};
-
-		// Login API
-		let userData = {};
+		// result data
 		const loginResult = await UserApi.login(data);
+		let userData = {}; // Login API
 
 		if (loginResult.resultCode === 200) {
-			// get user data API
-			const checkResult = await UserApi.check(
+			this._handleSaveUserinfo(
 				loginResult.resultData.AUTH_A_TOKEN,
-				loginResult.resultData.last_access_company_no,
-				loginResult.resultData.HASH_KEY
+				loginResult.resultData.AUTH_R_TOKEN,
+				loginResult.resultData.HASH_KEY,
+				loginResult.resultData.last_access_company_no
 			);
+			// get user data API
+			// const checkResult = await UserApi.check(
+			// 	loginResult.resultData.AUTH_A_TOKEN,
+			// 	loginResult.resultData.last_access_company_no,
+			// 	loginResult.resultData.HASH_KEY
+			// );
 
-			// 유저정보
-			userData = {
-				// login api data
-				portal_id: data.portal_id, // 아이디
-				// portal_password: data.portal_password, // 패스워드
-				last_access_company_no: loginResult.resultData.last_access_company_no,
-				AUTH_A_TOKEN: loginResult.resultData.AUTH_A_TOKEN,
-				AUTH_R_TOKEN: loginResult.resultData.AUTH_R_TOKEN,
-				HASH_KEY: loginResult.resultData.HASH_KEY,
-				// check api data
-				profile_url: checkResult.resultData.profile_url,
-				user_contact: checkResult.resultData.user_contact,
-				user_email: checkResult.resultData.user_email,
-				user_name: checkResult.resultData.user_name,
-				user_no: checkResult.resultData.user_no,
-				employee_list: checkResult.resultData.employee_list, // 회사정보
-				last_company: checkResult.resultData.employee_list.filter(
-					e => e.company_no == loginResult.resultData.last_access_company_no
-				)[0]
-			};
-			// console.log(' USER : ', userData);
+			// // 유저정보
+			// userData = {
+			// 	// login api data
+			// 	AUTH_A_TOKEN: loginResult.resultData.AUTH_A_TOKEN,
+			// 	AUTH_R_TOKEN: loginResult.resultData.AUTH_R_TOKEN,
+			// 	HASH_KEY: loginResult.resultData.HASH_KEY,
+			// 	// check api data
+			// 	user_no: checkResult.resultData.user_no,
+			// 	portal_id: checkResult.resultData.portal_id, // 아이디
+			// 	user_name: checkResult.resultData.user_name,
+			// 	user_email: checkResult.resultData.user_email,
+			// 	profile_url: checkResult.resultData.profile_url,
+			// 	user_contact: checkResult.resultData.user_contact,
+			// 	employee_list: checkResult.resultData.employee_list, // 회사정보
+			// 	last_access_company_no: checkResult.resultData.last_access_company_no,
+			// 	last_company: checkResult.resultData.employee_list.filter(
+			// 		e => e.company_no == loginResult.resultData.last_access_company_no
+			// 	)[0]
+			// };
+			// // console.log(' USER : ', userData);
 
-			onLogin(userData);
+			// onLogin(userData);
 
-			navigation.navigate('Home');
+			// navigation.navigate('Home');
 		} else {
 			this._handleActivateModal();
+		}
+	};
+
+	/**
+	 * _handleSaveUserinfo
+	 */
+	_handleSaveUserinfo = async (AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno) => {
+		/**
+		 * cno
+		 * AUTH_A_TOKEN
+		 * AUTH_R_TOKEN
+		 * HASH_KEY
+		 */
+
+		const { onLogin, navigation } = this.props;
+		const checkResult = await UserApi.check(AUTH_A_TOKEN, cno, HASH_KEY);
+
+		if (checkResult.resultCode !== 200) {
+			alert('다시 시도해 주세요');
+		} else {
+			// 유저정보
+			const userData = {
+				// login api data
+				AUTH_A_TOKEN,
+				AUTH_R_TOKEN,
+				HASH_KEY,
+				// check api data
+				user_no: checkResult.resultData.user_no,
+				portal_id: checkResult.resultData.portal_id, // 아이디
+				user_name: checkResult.resultData.user_name,
+				user_email: checkResult.resultData.user_email,
+				profile_url: checkResult.resultData.profile_url,
+				user_contact: checkResult.resultData.user_contact,
+				employee_list: checkResult.resultData.employee_list, // 회사정보
+				last_access_company_no: checkResult.resultData.last_access_company_no,
+				last_company: checkResult.resultData.employee_list.filter(
+					e => e.company_no == checkResult.resultData.last_access_company_no
+				)[0]
+			};
+			onLogin(userData);
+			navigation.navigate('Home');
 		}
 	};
 
@@ -192,12 +237,10 @@ class LoginScreenContainer extends React.Component {
 	 * 
 	 */
 	_handleGetWehagoToken = event => {
-		alert(event.url);
+		// alert(event.url);
 		const result = querystringParser(event.url);
-		if (result.type === '3') {
-			// 위하고 로그인일 경우
-			alert('위하고 인증! Parameter : ' + JSON.stringify(result));
-		}
+		Linking.removeEventListener('url', this._handleGetWehagoToken);
+		this._handleSaveUserinfo(result.mAuth_a_token, result.mAuth_r_token, result.mHASH_KEY, result.cno);
 	};
 
 	/**
