@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Modal, FlatList } from 'react-native';
-import { FlatButton, TextField, ListItemComp, CustomWebView } from '../../components';
+import { FlatButton, TextField, ListItemComp, CustomWebView, AppIntroSlide } from '../../components';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const rootPath = `../../../assets`;
@@ -17,6 +17,8 @@ const logo_login = require(`${rootPath}/logo_login.png`);
  */
 const LoginScreenPresenter = props => {
 	const { userId, userPwd, autoLoginFlag, webView } = props;
+
+	return <AppIntroSlide />;
 
 	if (webView) {
 		return (
@@ -69,18 +71,19 @@ const LoginScreenPresenter = props => {
 
 			{/* BUTTONS */}
 			<View style={styles.bottomArea}>
-				<FlatButton width={270} height={47} borderRadius={15} onClick={props.onLogin}>
+				<FlatButton width={275} height={52} borderRadius={30} onClick={props.onLogin}>
 					로그인
 				</FlatButton>
 			</View>
 			{/* BUTTONS */}
 			<View style={styles.bottomArea2}>
 				<FlatButton
-					width={270}
-					height={47}
-					borderRadius={15}
+					width={275}
+					height={52}
+					borderRadius={30}
 					color={'#1C90FB'}
 					backgroundColor={'#fff'}
+					borderColor={'#1C90FB'}
 					borderWidth={1}
 					onClick={props.onLoginForWehago}
 					// onClick={props.onAgreement}

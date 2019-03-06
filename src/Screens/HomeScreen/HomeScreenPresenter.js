@@ -52,6 +52,7 @@ const HomeScreenPresenter = props => {
 						title={item.room_title}
 						personnel={item.receiver_user_count}
 						updated={item.update_timestamp}
+						lottie={true}
 						active={item.is_video_access === 'T' ? true : false}
 						disable={item.receiver_user_count === 1 && item.room_type === '1' ? true : false}
 						onClick={() =>

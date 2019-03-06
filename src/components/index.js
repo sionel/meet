@@ -5,3 +5,4 @@ export { default as TextField } from './TextField';
 export { default as SearchForm } from './SearchForm';
 export { default as CustomLottie } from './CustomLottie';
 export { default as CustomWebView } from './CustomWebView';
+export { default as AppIntroSlide } from './AppIntroSlide';
