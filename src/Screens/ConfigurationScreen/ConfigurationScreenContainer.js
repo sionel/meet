@@ -13,7 +13,9 @@ class ConfigurationScreenContainer extends React.Component {
 	/**
      * STATE
      */
-	state = {};
+	state = {
+		webView: false
+	};
 
 	/**
      * handleRedirect
@@ -29,18 +31,28 @@ class ConfigurationScreenContainer extends React.Component {
 	 */
 	render() {
 		const { navigation, onDestroyToken } = this.props;
-		const { list } = this.state;
+		const { list, webView } = this.state;
 
 		return (
 			<ConfigurationScreenPresenter
 				navigation={navigation}
 				list={list}
+				webView={webView}
 				onRedirect={this.handleRedirect}
 				onLogout={this._handleLogout}
+				onChangeValue={this._handleChangeValue}
 				onDestroyToken={onDestroyToken}
 			/>
 		);
 	} // render
+
+	/**
+	 * _handleChangeValue
+	 * 페이지 이동
+	 */
+	_handleChangeValue = (target, value) => {
+		this.setState({ [target]: value });
+	};
 
 	/**
 	 * _handleLogout

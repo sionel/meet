@@ -41,7 +41,8 @@ const RootNavigation = createStackNavigator(
 	},
 	// initial
 	{
-		initialRouteName: 'Main',
+		// initialRouteName: 'Main',
+		initialRouteName: 'Login',
 		mode: 'modal',
 		headerMode: 'none'
 	}

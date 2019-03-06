@@ -58,10 +58,6 @@ const HomeScreenPresenter = props => {
 							item.is_video_access === 'T'
 								? props.onCheckConference(item.video_chat_id)
 								: props.onActivateModal(item.room_id)}
-						// onClick={() =>
-						// 	props.onRedirect('Conference', {
-						// 		item: { videoRoomId: item.video_chat_id }
-						// 	})}
 					/>
 				)}
 			/>

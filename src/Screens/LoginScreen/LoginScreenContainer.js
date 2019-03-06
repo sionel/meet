@@ -12,6 +12,7 @@ import LoginScreenPresenter from './LoginScreenPresenter';
 import { CustomLottie } from '../../components';
 // service
 import { UserApi } from '../../services';
+import { querystringParser } from '../../utils';
 
 class LoginScreenContainer extends React.Component {
 	/**
@@ -23,16 +24,41 @@ class LoginScreenContainer extends React.Component {
 		nextInput: null,
 		modal: false,
 		waiting: false,
-		autoLoginFlag: true
+		autoLoginFlag: true,
+		webView: false
 	};
+
+	/**
+	 * 
+	 */
+	componentDidMount() {
+		Linking.getInitialURL().then(url => {
+			if (url) {
+				alert(url);
+				this._handleGetWehagoToken({ url });
+			}
+		});
+		// Linking.addEventListener('url', this._handleOpenURL);
+		Linking.addEventListener('url', this._handleGetWehagoToken);
+		this._handleCheckUser();
+	}
+
+	/**
+	 * 
+	 */
+	/**
+   * componentWillUnmount
+   */
+	componentWillUnmount() {
+		Linking.removeEventListener('url', this._handleGetWehagoToken);
+	}
 
 	/**
 	 * Rendering
 	 */
 	render() {
-		const { navigation } = this.props;
-		const { list, userId, userPwd, modal, nextInput, waiting, autoLoginFlag } = this.state;
-
+		const { navigation, permission } = this.props;
+		const { list, userId, userPwd, modal, nextInput, waiting, autoLoginFlag, webView } = this.state;
 		if (waiting) {
 			return <CustomLottie source={'waiting'} width={225} height={225} />;
 		}
@@ -46,12 +72,15 @@ class LoginScreenContainer extends React.Component {
 				onActivateModal={this._handleActivateModal}
 				onEnterKeyDown={this._handleEnterKeyDown}
 				onTokenLogin={this.props.onTokenLogin}
+				onAgreement={this.props.onAgreement}
 				navigation={navigation}
 				autoLoginFlag={autoLoginFlag}
 				userPwd={userPwd}
 				userId={userId}
 				list={list}
 				modal={modal}
+				webView={webView}
+				permissionModal={permission}
 				nextInput={nextInput}
 				phrases="Loading"
 			/>
@@ -64,6 +93,19 @@ class LoginScreenContainer extends React.Component {
 	 */
 	_handleChangeValue = (target, value) => {
 		this.setState({ [target]: value });
+	};
+
+	/**
+	 * 유저정보 체크 _handleCheckUser
+	 */
+	_handleCheckUser = async () => {
+		const { user } = this.props;
+		if (user.AUTH_A_TOKEN) {
+			const result = await UserApi.check(user.AUTH_A_TOKEN, user.last_access_company_no, user.HASH_KEY);
+			if (result.resultCode == 200) {
+				this._handleRedirect('Home');
+			}
+		}
 	};
 
 	/**
@@ -95,7 +137,6 @@ class LoginScreenContainer extends React.Component {
 		// Login API
 		let userData = {};
 		const loginResult = await UserApi.login(data);
-		console.log('LLL ; ', loginResult);
 
 		if (loginResult.resultCode === 200) {
 			// get user data API
@@ -125,7 +166,7 @@ class LoginScreenContainer extends React.Component {
 					e => e.company_no == loginResult.resultData.last_access_company_no
 				)[0]
 			};
-			console.log(' USER : ', userData);
+			// console.log(' USER : ', userData);
 
 			onLogin(userData);
 
@@ -139,12 +180,24 @@ class LoginScreenContainer extends React.Component {
 	 * _handleLoginForWehago
 	 */
 	_handleLoginForWehago = () => {
-		alert('준비중입니다.');
-		return;
-		Linking.openURL('wehago://type=login&from=wehagomeet').catch(err => {
+		// alert('준비중입니다.');
+		// return;
+		Linking.openURL('wehago://?wehagomeet=login').catch(err => {
 			alert('일시적인 오류가 발생했습니다. 다시 시도해 주세요');
 			console.error('An error occurred', err);
 		});
+	};
+
+	/**
+	 * 
+	 */
+	_handleGetWehagoToken = event => {
+		alert(event.url);
+		const result = querystringParser(event.url);
+		if (result.type === '3') {
+			// 위하고 로그인일 경우
+			alert('위하고 인증! Parameter : ' + JSON.stringify(result));
+		}
 	};
 
 	/**
@@ -172,12 +225,14 @@ class LoginScreenContainer extends React.Component {
 
 // map state to props
 let mapStateToProps = state => ({
-	user: state.user.auth
+	user: state.user.auth,
+	permission: state.user.permission
 });
 
 // map dispatch to props
 let mapDispatchToProps = dispatch => ({
-	onLogin: user => dispatch(UserActions.login(user))
+	onLogin: user => dispatch(UserActions.login(user)),
+	onAgreement: () => dispatch(UserActions.agreement())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginScreenContainer);

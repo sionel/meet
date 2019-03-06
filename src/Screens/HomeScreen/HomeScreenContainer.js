@@ -142,7 +142,7 @@ class HomeScreenContainer extends Component {
 		const result = querystringParser(url);
 		if (result.type === '3') {
 			// 위하고 로그인일 경우
-			alert('위하고 인증!');
+			alert('위하고 인증! Parameter : ' + JSON.stringify(result));
 		} else {
 			this._handleCheckConference(result.room_id, result); // 테스트
 		}
@@ -218,7 +218,7 @@ class HomeScreenContainer extends Component {
    */
 	_handleAutoLogin = async () => {
 		const { auth, onLogin, navigation } = this.props;
-
+		// alert(JSON.stringify(auth));
 		let checkResult,
 			loginResult,
 			userData = {};

@@ -5,12 +5,20 @@
 
 import { UserApi } from '../../services';
 
+const AGREEMENT = 'AGREEMENT';
 const LOGIN = 'LOGIN';
 const LOGOUT = 'LOGOUT';
 const TOKEN = 'TOKEN';
 const TOKEN_LOGIN = 'TOKEN_LOGIN';
 
 //#region Action Creators
+
+/**
+ * agreement
+ */
+agreement = () => {
+	return { type: AGREEMENT };
+};
 
 /**
  * login
@@ -73,7 +81,8 @@ applyTokenLogin = (state, action) => {
 //#region initialState
 
 const initialState = {
-	auth: null
+	auth: null,
+	permission: false
 };
 
 //#endregion initialState
@@ -82,6 +91,8 @@ const initialState = {
 
 reducer = (state = initialState, action) => {
 	switch (action.type) {
+		case AGREEMENT:
+			return { ...state, permission: !state.permission };
 		case LOGIN:
 			return { ...state, auth: action.auth };
 		// return applyTest(state, action);
@@ -124,7 +135,8 @@ const actionCreators = {
 	login,
 	logout,
 	token,
-	tokenLogin
+	tokenLogin,
+	agreement
 };
 
 export { actionCreators };

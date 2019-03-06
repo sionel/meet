@@ -70,7 +70,7 @@ const HomeRoute = createStackNavigator({
    * 메인
    */
 	Home: {
-		screen: HomeDrwawer,
+		screen: HomeScreen,
 		headerStyle: {
 			color: '#ffffff'
 		},

@@ -1,15 +1,26 @@
-import React from 'react';
-import { View, Text, StyleSheet, Button, SectionList, TouchableOpacity } from 'react-native';
-
 /**
  * ConfigurationScreenPresenter
  */
+
+import React from 'react';
+import { View, Text, StyleSheet, SectionList, TouchableOpacity, Modal } from 'react-native';
+import { CustomWebView } from '../../components';
+
 const ConfigurationScreenPresenter = props => {
+	const { webView } = props;
 	const userConfig = [
 		// {
 		//   title: "onDestroyToken",
 		//   action: () => props.onDestroyToken()
 		// },
+		{
+			title: '이용약관',
+			action: () => props.onChangeValue('webView', true)
+		},
+		{
+			title: '개인정보 처리방침',
+			action: () => props.onChangeValue('webView', true)
+		},
 		{
 			title: '버전정보',
 			action: () => alert('0.1.5.9 버전')
@@ -43,6 +54,16 @@ const ConfigurationScreenPresenter = props => {
 					keyExtractor={(item, index) => index}
 				/>
 			</View>
+
+			<Modal animationType="slide" transparent={true} visible={webView} blurRadius={1}>
+				<CustomWebView
+					view={webView}
+					contentTitle="약관 및 정책"
+					buttonTitle="확인"
+					url="https://www.wehago.com/#/common/policy"
+					onClickButton={() => props.onChangeValue('webView', false)}
+				/>
+			</Modal>
 		</View>
 	);
 };

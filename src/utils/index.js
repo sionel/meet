@@ -35,6 +35,7 @@ export const querystringParser = url => {
 				result[name] = value || '';
 			}
 	});
+	// alert(result);
 	return result;
 };
 

@@ -18,7 +18,8 @@ const SvgButton = props => {
 		// method
 		onClick,
 		borderWidth,
-		borderColor
+		borderColor,
+		customStyle
 	} = props;
 
 	return (
@@ -32,7 +33,8 @@ const SvgButton = props => {
 				justifyContent: 'center',
 				alignItems: 'center',
 				borderWidth,
-				borderColor
+				borderColor,
+				...customStyle
 			}}
 			onPress={onClick}
 		>
@@ -42,13 +44,15 @@ const SvgButton = props => {
 };
 
 SvgButton.defaultProps = {
-	width: 270,
+	// width: 270,
+	width: '100%',
 	height: 47,
 	backgroundColor: '#1C90FB',
 	color: '#fff',
 	borderRadius: 12.5,
 	borderWidth: 0,
 	borderColor: '#1C90FB',
+	customStyle: {},
 	onClick: () => {
 		alert('on click');
 	}

@@ -5,21 +5,30 @@
  */
 
 import React from 'react';
-import { View, Text, TextInput, StyleSheet, Button, Image, TouchableOpacity, Modal, CheckBox } from 'react-native';
-import Svg, { Path } from 'react-native-svg';
-import { FlatButton, TextField } from '../../components';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Modal, FlatList } from 'react-native';
+import { FlatButton, TextField, ListItemComp, CustomWebView } from '../../components';
 import Icon from 'react-native-vector-icons/FontAwesome';
-// import CheckBox from 'react-native-check-box';
 
 const rootPath = `../../../assets`;
-const logo = require(`${rootPath}/wehago_b.svg`);
 const logo_login = require(`${rootPath}/logo_login.png`);
 
 /**
  * LoginScreenPresenter
  */
 const LoginScreenPresenter = props => {
-	const { userId, userPwd, autoLoginFlag } = props;
+	const { userId, userPwd, autoLoginFlag, webView } = props;
+
+	if (webView) {
+		return (
+			<CustomWebView
+				view={webView}
+				contentTitle="약관 및 정책"
+				buttonTitle="확인"
+				url="https://www.wehago.com/#/common/policy"
+				onClickButton={() => props.onChangeValue('webView', false)}
+			/>
+		);
+	}
 
 	/**
    * RETURN
@@ -73,8 +82,8 @@ const LoginScreenPresenter = props => {
 					color={'#1C90FB'}
 					backgroundColor={'#fff'}
 					borderWidth={1}
-					// onClick={props.onLoginForWehago}
-					onClick={() => props.onTokenLogin(1, 1)}
+					onClick={props.onLoginForWehago}
+					// onClick={props.onAgreement}
 				>
 					WEHAGO 로그인
 				</FlatButton>
@@ -99,6 +108,116 @@ const LoginScreenPresenter = props => {
 					</View>
 				</View>
 			</Modal>
+
+			{/* 권한 컨펌모달 */}
+			<Modal animationType="fade" transparent={true} visible={!props.permissionModal} blurRadius={1}>
+				<View style={styles.permission_modalWrap}>
+					<View style={styles.permission_modalContentWrap}>
+						<View style={styles.permission_modalMessage}>
+							<Text
+								style={{
+									fontSize: 18,
+									color: '#1C90FB',
+									marginBottom: 10
+								}}
+							>
+								WEHAGO Meet 권한 안내
+							</Text>
+							<View
+								style={{
+									borderTopWidth: 1,
+									borderColor: '#bbdefe',
+									paddingTop: 18
+								}}
+							>
+								<Text style={{ fontSize: 16, fontWeight: '500' }}>필수 접근권한</Text>
+								<View
+									style={{
+										backgroundColor: '#f1f1f1',
+										marginTop: 8,
+										marginBottom: 12,
+										paddingTop: 15,
+										paddingLeft: 10,
+										paddingRight: 10
+									}}
+								>
+									<FlatList
+										data={[
+											{ key: 1, title: '카메라', description: '화상대화 카메라', icon: 'camera' },
+											{ key: 2, title: '마이크', description: '화상대화 내 음성 전송', icon: 'microphone' },
+											{ key: 3, title: '스피커', description: '화상대화 음성 출력', icon: 'volume-up' },
+											{ key: 4, title: '알림', description: '화상대화 실시간 알림', icon: 'bell' }
+										]}
+										renderItem={({ item }) => (
+											<ListItemComp
+												key={String(item.key)}
+												title={item.title}
+												updated={item.description}
+												descriptionType={'text'}
+												iconSize={70}
+											>
+												<Icon name={item.icon} size={20} color="#333" />
+											</ListItemComp>
+										)}
+									/>
+								</View>
+								<Text style={{ fontSize: 16, fontWeight: '500' }}>이용약관 및 법률고지</Text>
+								<View
+									style={{
+										// backgroundColor: '#f1f1f1',
+										marginTop: 8,
+										marginBottom: 12
+										// padding: 10
+									}}
+								>
+									<FlatButton
+										height={40}
+										borderRadius={0}
+										color={'#333'}
+										borderWidth={1}
+										borderColor={'#c8c8c8'}
+										backgroundColor={'none'}
+										onClick={() => props.onChangeValue('webView', true)}
+									>
+										이용약관 보기
+									</FlatButton>
+									<FlatButton
+										height={40}
+										borderRadius={0}
+										color={'#333'}
+										borderWidth={1}
+										borderColor={'#c8c8c8'}
+										backgroundColor={'none'}
+										customStyle={{ borderTopWidth: 0 }}
+										onClick={() => props.onChangeValue('webView', true)}
+									>
+										법률고지 보기
+									</FlatButton>
+								</View>
+								{/* <Text style={{ fontSize: 16, fontWeight: '500' }}>선택 접근권한</Text> */}
+							</View>
+						</View>
+						<View style={styles.permission_modalButtons}>
+							<TouchableOpacity
+								style={{ ...styles.permission_modalButton, ...styles.permission_modalButtonConfirm }}
+								// onPress={() => props.onChangeValue('permissionModal', false)}
+								onPress={props.onAgreement}
+							>
+								<Text style={{ color: '#fff' }}>동의</Text>
+							</TouchableOpacity>
+						</View>
+					</View>
+				</View>
+			</Modal>
+
+			{/* 웹뷰모달 */}
+
+			{/* <CustomWebView
+				view={webView}
+				contentTitle="약관 및 정책"
+				buttonTitle="확인"
+				url="https://www.wehago.com/#/common/policy"
+			/> */}
 		</View>
 	);
 };
@@ -154,7 +273,51 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		backgroundColor: '#FF8383'
-	}
+	},
+
+	permission_modalWrap: {
+		// marginTop: 22,
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		backgroundColor: 'rgba(0,0,0, .75)'
+	},
+
+	permission_modalContentWrap: {
+		backgroundColor: '#fff',
+		width: '100%',
+		maxWidth: 300,
+		padding: 0,
+		shadowColor: '#000',
+		shadowOffset: {
+			width: 0,
+			height: 2
+		},
+		shadowOpacity: 0.25,
+		shadowRadius: 3.84,
+		elevation: 5
+	},
+
+	permission_modalMessage: {
+		paddingTop: 15,
+		paddingBottom: 10,
+		paddingLeft: 20,
+		paddingRight: 20
+		// borderWidth: 1,
+		// borderColor: '#1C90FB'
+	},
+
+	permission_modalButtons: { flexDirection: 'row' },
+	permission_modalButton: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		paddingTop: 15,
+		paddingBottom: 15,
+		marginBottom: -1
+	},
+	permission_modalButtonCancel: { backgroundColor: '#f1f1f1' },
+	permission_modalButtonConfirm: { backgroundColor: '#1C90FB' }
 });
 
 export default LoginScreenPresenter;
