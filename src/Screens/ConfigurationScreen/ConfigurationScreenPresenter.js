@@ -23,7 +23,7 @@ const ConfigurationScreenPresenter = props => {
 		},
 		{
 			title: '버전정보',
-			action: () => alert('0.1.5.9 버전')
+			action: () => alert('0.1.7 버전')
 		},
 		{
 			title: '로그아웃',

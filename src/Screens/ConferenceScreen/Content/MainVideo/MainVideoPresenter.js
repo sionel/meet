@@ -2,7 +2,8 @@ import React from 'react';
 import { View, StyleSheet, Image, Text } from 'react-native';
 import { RTCView } from 'react-native-webrtc';
 import ButtonCameraOff from '../../../../../assets/buttons/btn_vc_camera_off.png';
-import ProfileImage from '../../../../../assets/smapleImages/nnn.jpg';
+// import ProfileImage from '../../../../../assets/smapleImages/nnn.jpg';
+import ProfileImage from '../../../../../assets/smapleImages/nnn2.png';
 import { CustomLottie } from '../../../../components';
 
 /**
