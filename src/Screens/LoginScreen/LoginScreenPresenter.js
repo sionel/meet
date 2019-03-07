@@ -18,7 +18,7 @@ const logo_login = require(`${rootPath}/logo_login.png`);
 const LoginScreenPresenter = props => {
 	const { userId, userPwd, autoLoginFlag, webView } = props;
 
-	return <AppIntroSlide />;
+	// return <AppIntroSlide />;
 
 	if (webView) {
 		return (
