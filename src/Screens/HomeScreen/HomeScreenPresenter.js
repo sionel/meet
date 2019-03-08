@@ -45,7 +45,7 @@ const HomeScreenPresenter = props => {
 							{section.title}
 						</Text>
 					)}
-				renderItem={({ item }) => (
+				renderItem={({ item, index }) => (
 					// 히스토리 아이템
 					<ListItemComp
 						key={item.room_id}

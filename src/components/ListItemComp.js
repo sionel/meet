@@ -174,6 +174,7 @@ ListItemComp.defaultProps = {
 	disable: false,
 	active: false,
 	lottie: null,
+	underline: false,
 	descriptionType: 'date' // text
 };
 
