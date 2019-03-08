@@ -16,7 +16,7 @@ const ContentPresenter = props => {
 				<MainVideo mainUser={mainUser} callType={callType}>
 					<View style={props.orientation === 'vertical' ? styles.contentVertical : styles.contentHorizontal}>
 						<View style={styles.topArea}>
-							{callType == 1 && <TopArea orientation={props.orientation} />}
+							{callType != 2 && <TopArea orientation={props.orientation} />}
 						</View>
 						<View style={styles.middleArea} />
 						<View

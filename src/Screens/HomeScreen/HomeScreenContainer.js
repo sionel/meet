@@ -225,6 +225,8 @@ class HomeScreenContainer extends Component {
 
 		// 재 로그인이 필요한 경우 (저장된 정보가 없을 경우)
 		if (!auth /* || (!auth.portal_id && !auth.portal_password)*/) {
+			alert('접속 정보가 유효하지 않습니다. 다시 로그인 해주세요');
+			console.log('AUTH : ', auth);
 			return this._handleRedirect('Login');
 		}
 
