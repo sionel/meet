@@ -21,9 +21,17 @@ DerivedData
 *.ipa
 *.xcuserstate
 project.xcworkspace
-# 
+
 # Android/IntelliJ
 #
+
+# Android/Eclipse
+android/app/bin/
+android/app/.classpath
+android/app/.settings/
+android/.settings/
+# android/gradle.properties
+.project
 build/
 .idea
 .gradle
