@@ -125,12 +125,12 @@ const slides = [
 ];
 
 class AppIntroSlide extends React.Component {
-	state = {
-		showRealApp: false
-	};
-
-	componentDidMount() {
-		this._handleGetIntroState();
+	constructor(props) {
+		super(props);
+		
+		this.state = {
+			showRealApp: this.props.intro
+		};
 	}
 	
 	_renderItem = (item, index) => {
@@ -167,7 +167,6 @@ class AppIntroSlide extends React.Component {
 
 	_handleGetIntroState = () => {
 		const { intro } = this.props;
-		console.log(intro);
 		this.setState({ showRealApp: intro });
 	};
 
