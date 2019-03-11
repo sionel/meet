@@ -86,8 +86,10 @@
 // export default AppIntroSlide;
 
 import React from 'react';
+import { connect } from 'react-redux';
 import { StyleSheet, View, Text, Image } from 'react-native';
 import AppIntroSlider from 'react-native-app-intro-slider';
+import { actionCreators as UserActions } from '../redux/modules/user';
 
 const rootPath = `../../assets`;
 const introImages = [
@@ -122,11 +124,15 @@ const slides = [
 	}
 ];
 
-export default class AppIntroSlide extends React.Component {
+class AppIntroSlide extends React.Component {
 	state = {
 		showRealApp: false
 	};
 
+	componentDidMount() {
+		this._handleGetIntroState();
+	}
+	
 	_renderItem = (item, index) => {
 		return (
 			<View
@@ -154,8 +160,15 @@ export default class AppIntroSlide extends React.Component {
 		);
 	};
 
-	_onDone = () => {
-		this.setState({ showRealApp: true });
+	_onDone = async () => {
+		await this.props.onIntro();
+		this._handleGetIntroState();
+	};
+
+	_handleGetIntroState = () => {
+		const { intro } = this.props;
+		console.log(intro);
+		this.setState({ showRealApp: intro });
 	};
 
 	render() {
@@ -175,3 +188,15 @@ export default class AppIntroSlide extends React.Component {
 		);
 	}
 }
+
+// map state to props
+let mapStateToProps = state => ({
+	intro: state.user.intro,
+});
+
+// map dispatch to props
+let mapDispatchToProps = dispatch => ({
+	onIntro: () => dispatch(UserActions.intro()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AppIntroSlide);
