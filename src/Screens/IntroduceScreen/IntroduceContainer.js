@@ -6,26 +6,38 @@ import React, { Component } from 'react';
 import { AppRegistry, StyleSheet, Text, View } from 'react-native';
 import AppIntroSlider from 'react-native-app-intro-slider';
 
+const rootPath = `../../../assets`;
+const introImages = [
+	require(`${rootPath}/introImages/intro01.png`),
+	require(`${rootPath}/introImages/intro02.png`),
+	require(`${rootPath}/introImages/intro03.png`),
+	require(`${rootPath}/introImages/intro04.png`),
+	require(`${rootPath}/introImages/intro05.png`)
+];
+
 const slides = [
 	{
 		key: 'somethun',
 		title: 'Title 1',
 		text: 'Description.\nSay something cool',
-		image: require('https://images.unsplash.com/photo-1551729140-4b0ce561dfff?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80'),
+		image: require(`${rootPath}/introImages/intro01.png`),
+		// image: require('https://images.unsplash.com/photo-1551729140-4b0ce561dfff?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80'),
 		backgroundColor: '#59b2ab'
 	},
 	{
 		key: 'somethun-dos',
 		title: 'Title 2',
 		text: 'Other cool stuff',
-		image: require('https://images.unsplash.com/photo-1551729140-4b0ce561dfff?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80'),
+		image: require(`${rootPath}/introImages/intro01.png`),
+		// image: require('https://images.unsplash.com/photo-1551729140-4b0ce561dfff?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80'),
 		backgroundColor: '#febe29'
 	},
 	{
 		key: 'somethun1',
 		title: 'Rocket guy',
 		text: "I'm already out of descriptions\n\nLorem ipsum bla bla bla",
-		image: require('https://images.unsplash.com/photo-1551729140-4b0ce561dfff?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80'),
+		image: require(`${rootPath}/introImages/intro01.png`),
+		// image: require('https://images.unsplash.com/photo-1551729140-4b0ce561dfff?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80'),
 		backgroundColor: '#22bcb5'
 	}
 ];
