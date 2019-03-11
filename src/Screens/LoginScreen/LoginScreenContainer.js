@@ -34,7 +34,6 @@ class LoginScreenContainer extends React.Component {
 	componentDidMount() {
 		Linking.getInitialURL().then(url => {
 			if (url) {
-				// alert(url);
 				this._handleGetWehagoToken({ url });
 			}
 		});
@@ -100,7 +99,6 @@ class LoginScreenContainer extends React.Component {
 	 */
 	_handleCheckUser = async () => {
 		const { user } = this.props;
-		// alert(JSON.stringify(user));
 		if (user.AUTH_A_TOKEN) {
 			const result = await UserApi.check(user.AUTH_A_TOKEN, user.last_access_company_no, user.HASH_KEY);
 			if (result.resultCode == 200) {
@@ -145,37 +143,6 @@ class LoginScreenContainer extends React.Component {
 				loginResult.resultData.HASH_KEY,
 				loginResult.resultData.last_access_company_no
 			);
-			// get user data API
-			// const checkResult = await UserApi.check(
-			// 	loginResult.resultData.AUTH_A_TOKEN,
-			// 	loginResult.resultData.last_access_company_no,
-			// 	loginResult.resultData.HASH_KEY
-			// );
-
-			// // 유저정보
-			// userData = {
-			// 	// login api data
-			// 	AUTH_A_TOKEN: loginResult.resultData.AUTH_A_TOKEN,
-			// 	AUTH_R_TOKEN: loginResult.resultData.AUTH_R_TOKEN,
-			// 	HASH_KEY: loginResult.resultData.HASH_KEY,
-			// 	// check api data
-			// 	user_no: checkResult.resultData.user_no,
-			// 	portal_id: checkResult.resultData.portal_id, // 아이디
-			// 	user_name: checkResult.resultData.user_name,
-			// 	user_email: checkResult.resultData.user_email,
-			// 	profile_url: checkResult.resultData.profile_url,
-			// 	user_contact: checkResult.resultData.user_contact,
-			// 	employee_list: checkResult.resultData.employee_list, // 회사정보
-			// 	last_access_company_no: checkResult.resultData.last_access_company_no,
-			// 	last_company: checkResult.resultData.employee_list.filter(
-			// 		e => e.company_no == loginResult.resultData.last_access_company_no
-			// 	)[0]
-			// };
-			// // console.log(' USER : ', userData);
-
-			// onLogin(userData);
-
-			// navigation.navigate('Home');
 		} else {
 			this._handleActivateModal();
 		}
@@ -195,7 +162,7 @@ class LoginScreenContainer extends React.Component {
 		const { onLogin, navigation } = this.props;
 		const checkResult = await UserApi.check(AUTH_A_TOKEN, cno, HASH_KEY);
 
-		if (checkResult.resultCode !== 200) {
+		if (checkResult.resultCode != 200) {
 			alert('다시 시도해 주세요');
 		} else {
 			// 유저정보
@@ -226,8 +193,6 @@ class LoginScreenContainer extends React.Component {
 	 * _handleLoginForWehago
 	 */
 	_handleLoginForWehago = () => {
-		// alert('준비중입니다.');
-		// return;
 		Linking.openURL('wehago://?wehagomeet=login').catch(err => {
 			alert('일시적인 오류가 발생했습니다. 다시 시도해 주세요');
 			console.error('An error occurred', err);
@@ -238,7 +203,6 @@ class LoginScreenContainer extends React.Component {
 	 * 
 	 */
 	_handleGetWehagoToken = event => {
-		// alert(event.url);
 		const result = querystringParser(event.url);
 		Linking.removeEventListener('url', this._handleGetWehagoToken);
 		this._handleSaveUserinfo(result.mAuth_a_token, result.mAuth_r_token, result.mHASH_KEY, result.cno);
