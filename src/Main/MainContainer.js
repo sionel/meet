@@ -5,6 +5,7 @@
 import React, { Component } from "react";
 import MainPresenter from "./MainPresenter";
 import Orientation from "react-native-orientation-locker";
+import { AppIntroSlide } from "../components";
 
 class MainContainer extends Component {
   componentWillMount() {
@@ -12,7 +13,11 @@ class MainContainer extends Component {
   }
 
   render() {
-    return <MainPresenter {...this.props} />;
+    return (
+      <AppIntroSlide>
+        <MainPresenter {...this.props} />
+      </AppIntroSlide>
+    );
   }
 }
 export default MainContainer;

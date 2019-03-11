@@ -85,85 +85,91 @@
 
 // export default AppIntroSlide;
 
-import React from 'react';
-import { StyleSheet, View, Text, Image } from 'react-native';
-import AppIntroSlider from 'react-native-app-intro-slider';
+import React from "react";
+import { StyleSheet, View, Text, Image } from "react-native";
+import AppIntroSlider from "react-native-app-intro-slider";
 const rootPath = `../../assets`;
 const logo_login = require(`${rootPath}/logo_login.png`);
 const slides = [
-	{
-		key: 1,
-		title: 'Title 1',
-		text: 'Description.\nSay something cool',
-		image: require(`${rootPath}/logo_login.png`),
-		backgroundColor: '#1C90FB'
-	},
-	{
-		key: 2,
-		title: 'Title 2',
-		text: 'Other cool stuff',
-		image: require(`${rootPath}/icon.png`),
-		backgroundColor: '#febe29'
-	},
-	{
-		key: 3,
-		title: 'Rocket guy',
-		text: "I'm already out of descriptions",
-		image: require(`${rootPath}/smapleImages/nnn.jpg`),
-		backgroundColor: '#22bcb5'
-	}
+  {
+    key: 1,
+    title: "Title 1",
+    text: "Description.\nSay something cool",
+    image: require(`${rootPath}/logo_login.png`),
+    backgroundColor: "#1C90FB"
+  },
+  {
+    key: 2,
+    title: "Title 2",
+    text: "Other cool stuff",
+    image: require(`${rootPath}/icon.png`),
+    backgroundColor: "#febe29"
+  },
+  {
+    key: 3,
+    title: "Rocket guy",
+    text: "I'm already out of descriptions",
+    image: require(`${rootPath}/smapleImages/nnn.jpg`),
+    backgroundColor: "#22bcb5"
+  }
 ];
 
 export default class AppIntroSlide extends React.Component {
-	state = {
-		showRealApp: false
-	};
-	_renderItem = (item, index) => {
-		return (
-			<View
-				style={{
-					flex: 1,
-					justifyContent: 'center',
-					alignItems: 'center',
-					padding: 50,
-					// width: '100%',
-					backgroundColor: item.backgroundColor
-				}}
-			>
-				<Text style={{ color: '#fff', textAlign: 'center', width: '100%' }}>{item.title}</Text>
-				{/* 
+  state = {
+    showRealApp: false
+  };
+
+  _renderItem = (item, index) => {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          padding: 50,
+          // width: '100%',
+          backgroundColor: item.backgroundColor
+        }}
+      >
+        <Text style={{ color: "#fff", textAlign: "center", width: "100%" }}>
+          {item.title}
+        </Text>
+        {/* 
 				이미지 원본크기로 지정해야 가로크기가 맞음..
 				*/}
-				<Image source={item.image} style={{ width: 275 }} />
-				<View style={{ backgroundColor: '#f1f1f1', width: '100%' }}>
-					<Text>asdasdlka</Text>
-				</View>
-				<Text style={{ color: '#fff', textAlign: 'center' }}>{JSON.stringify(item.text)}</Text>
-			</View>
-		);
-	};
-	_onDone = () => {
-		// User finished the introduction. Show real app through
-		// navigation or simply by controlling state
-		this.setState({ showRealApp: true });
-	};
-	render() {
-		if (this.state.showRealApp) {
-			alert('Done !');
-		}
-		// if (this.state.showRealApp) {
-		// 	return <App />;
-		// } else {
-		return (
-			<View
-				style={{
-					flex: 1,
-					width: '100%'
-				}}
-			>
-				<AppIntroSlider renderItem={this._renderItem} slides={slides} onDone={this._onDone} />
-			</View>
-		);
-		// }
-	}
+        <Image source={item.image} style={{ width: 275 }} />
+        <View style={{ backgroundColor: "#f1f1f1", width: "100%" }}>
+          <Text>asdasdlka</Text>
+        </View>
+        <Text style={{ color: "#fff", textAlign: "center" }}>
+          {JSON.stringify(item.text)}
+        </Text>
+      </View>
+    );
+  };
+
+  _onDone = () => {
+    this.setState({ showRealApp: true });
+  };
+
+  render() {
+    return (
+      <View
+        style={{
+          flex: 1,
+          width: "100%"
+        }}
+      >
+        {this.state.showRealApp ? (
+          this.props.children
+        ) : (
+          <AppIntroSlider
+            renderItem={this._renderItem}
+            slides={slides}
+            onDone={this._onDone}
+          />
+        )}
+      </View>
+    );
+  }
 }

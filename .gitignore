@@ -21,6 +21,7 @@ DerivedData
 *.ipa
 *.xcuserstate
 project.xcworkspace
+# project.pbxproj
 
 # Android/IntelliJ
 #
@@ -29,6 +30,10 @@ build/
 .gradle
 local.properties
 *.iml
+
+# Android/Eclipse
+android/app/bin/
+.project
 
 # node.js
 #
@@ -72,5 +77,6 @@ ios/Pods
 .history
 
 # End of https://www.gitignore.io/api/visualstudiocode
+package-lock.json
 yarn.lock
 ios/Podfile.lock
