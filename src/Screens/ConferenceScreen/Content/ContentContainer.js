@@ -9,7 +9,8 @@ const { AudioMode } = NativeModules;
  */
 class ContentContainer extends React.Component {
 	state = {
-		orientation: Dimensions.get('window').height > Dimensions.get('window').width ? 'vertical' : 'horizontal'
+		orientation: Dimensions.get('window').height > Dimensions.get('window').width ? 'vertical' : 'horizontal',
+		isVideoReverse: false
 	};
 
 	componentDidMount() {
@@ -22,6 +23,7 @@ class ContentContainer extends React.Component {
 				{...this.state}
 				{...this.props}
 				toggleConferenceMode={this._toggleConferenceMode}
+				onReverseVideo={this._handleReverseVideo}
 				onLayout={this._setOrientation}
 			/>
 		);
@@ -49,6 +51,13 @@ class ContentContainer extends React.Component {
 		if (orientation !== currentOrientation) {
 			this.setState({ orientation: currentOrientation });
 		}
+	};
+
+	/**
+	 * 카메라 좌우반전
+	 */
+	_handleReverseVideo = () => {
+		this.setState(prev => ({ isVideoReverse: !prev.isVideoReverse }));
 	};
 }
 
