@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
 		height: 57,
 		display: 'flex',
 		flexDirection: 'row',
-		marginBottom: 10,
+		marginBottom: 7,
 		paddingLeft: '3%',
 		paddingRight: '3%'
 	},
