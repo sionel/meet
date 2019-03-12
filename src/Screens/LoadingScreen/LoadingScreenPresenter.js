@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Modal, FlatList } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 
 const rootPath = `../../../assets`;
 const logo_login = require(`${rootPath}/logo_login.png`);

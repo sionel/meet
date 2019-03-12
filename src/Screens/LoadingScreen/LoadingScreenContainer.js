@@ -47,22 +47,25 @@ class LoadingScreenContainer extends React.Component {
 	 */
 	_handleCheckUser = async () => {
 		const { user } = this.props;
-		if (user.AUTH_A_TOKEN) {
-			const result = await UserApi.check(user.AUTH_A_TOKEN, user.last_access_company_no, user.HASH_KEY);
-			if (result.resultCode == 200) {
-				this._handleRedirect('Home');
+		if (user) {
+			if (user.AUTH_A_TOKEN) {
+				const result = await UserApi.check(user.AUTH_A_TOKEN, user.last_access_company_no, user.HASH_KEY);
+				if (result.resultCode == 200) {
+					return this.props.navigation.navigate('Home');
+				}
 			}
 		}
+		this.props.navigation.navigate('Login');
 	};
 
 	/**
 	 * _handleRedirect
 	 * 페이지 이동
 	 */
-	_handleRedirect = url => {
-		const { navigation } = this.props;
-		navigation.navigate(url);
-	};
+	// _handleRedirect = url => {
+	// 	const { navigation } = this.props;
+	// 	navigation.navigate(url);
+	// };
 
 	/**
 	 * 

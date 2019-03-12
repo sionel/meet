@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { Linking } from 'react-native';
+import { Linking, Platform } from 'react-native';
 import { actionCreators as UserActions } from '../../redux/modules/user';
 import LoginScreenPresenter from './LoginScreenPresenter';
 import { CustomLottie } from '../../components';
@@ -146,12 +146,29 @@ class LoginScreenContainer extends React.Component {
 	 * _handleLoginForWehago
 	 */
 	_handleLoginForWehago = () => {
-		Linking.openURL('wehago://?wehagomeet=login').then((data) => {
-			console.log(data);
-		}).catch(err => {
-			alert('일시적인 오류가 발생했습니다. 다시 시도해 주세요');
-			// console.error('An error occurred', err);
-		});
+		const url = 'wehago://?wehagomeet=login';
+		const iosMarketURL = "";
+		const androidMarketURL = "";
+
+		Linking.canOpenURL(url)
+			.then(supported => {
+				if (!supported) { // not supported
+					if (Platform.OS === "ios") {
+						Linking.openURL(iosMarketURL);
+					} else if (Platform.OS === "android") {
+						Linking.openURL(androidMarketURL);
+					}
+				} else { // supported
+					Linking.openURL(url).then((data) => {
+						console.log(data);
+					})
+				}
+			})
+			.catch(err => {
+				alert('앱 정보가 없습니다.');
+				console.log(err);
+				// console.error('An error occurred', err);
+			});
 	};
 
 	/**
