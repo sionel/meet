@@ -45,11 +45,8 @@ const MainVideoPresenter = props => {
 	if (!isMuteVideo && stream && callType != 2) {
 		return (
 			<RTCView
-				style={{
-					...styles.videoContainer
-				}}
-				// mirror={false}
-				mirror={props.isVideoReverse}
+				style={styles.videoContainer}
+				mirror={false}
 				objectFit={videoType && videoType === 'desktop' ? 'fit' : 'cover'}
 				streamURL={stream.toURL()}
 			>

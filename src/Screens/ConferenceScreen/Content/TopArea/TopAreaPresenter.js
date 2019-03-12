@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import SettingButton from './SettingButton';
 import { ConferenceModes } from '../../../../utils/Constants';
@@ -28,21 +28,9 @@ const TopAreaPresenter = props => {
 				<View
 					style={props.orientation === 'vertical' ? styles.settingBoxVertical : styles.settingBoxHorizontal}
 				>
-					{props.isMuteVideo ? null : (
-						<Fragment>
-							<SettingButton name="switch" onPress={props.toggleCameraFacingMode} />
-							<SettingButton
-								name="reverse"
-								onPress={props.onReverseVideo}
-								width={25}
-								height={25}
-								areaWdith={28}
-								areaHeight={28}
-							/>
-						</Fragment>
-					)}
+					{/* <Text>V:{JSON.stringify(props.isMuteVideo)}</Text> */}
+					{props.isMuteVideo ? null : <SettingButton name="switch" onPress={props.toggleCameraFacingMode} />}
 				</View>
-				{/* isVideoReverse */}
 			</TouchableOpacity>
 		);
 	} else {
