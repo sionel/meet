@@ -29,34 +29,10 @@ class LoginScreenContainer extends React.Component {
 	};
 
 	/**
-	 * 
-	 */
-	componentDidMount() {
-		Linking.getInitialURL().then(url => {
-			if (url) {
-				this._handleGetWehagoToken({ url });
-			}
-		});
-		// Linking.addEventListener('url', this._handleOpenURL);
-		Linking.addEventListener('url', this._handleGetWehagoToken);
-		this._handleCheckUser();
-	}
-
-	/**
-	 * 
-	 */
-	/**
-   * componentWillUnmount
-   */
-	componentWillUnmount() {
-		Linking.removeEventListener('url', this._handleGetWehagoToken);
-	}
-
-	/**
 	 * Rendering
 	 */
 	render() {
-		const { navigation, permission } = this.props;
+		const { permission } = this.props;
 		const { list, userId, userPwd, modal, nextInput, waiting, autoLoginFlag, webView } = this.state;
 		if (waiting) {
 			return <CustomLottie source={'waiting'} width={225} height={225} />;
@@ -64,7 +40,6 @@ class LoginScreenContainer extends React.Component {
 
 		return (
 			<LoginScreenPresenter
-				onRedirect={this._handleRedirect}
 				onChangeValue={this._handleChangeValue}
 				onLogin={this._handleLogin}
 				onLoginForWehago={this._handleLoginForWehago}
@@ -72,7 +47,6 @@ class LoginScreenContainer extends React.Component {
 				onEnterKeyDown={this._handleEnterKeyDown}
 				onTokenLogin={this.props.onTokenLogin}
 				onAgreement={this.props.onAgreement}
-				navigation={navigation}
 				autoLoginFlag={autoLoginFlag}
 				userPwd={userPwd}
 				userId={userId}
@@ -92,28 +66,6 @@ class LoginScreenContainer extends React.Component {
 	 */
 	_handleChangeValue = (target, value) => {
 		this.setState({ [target]: value });
-	};
-
-	/**
-	 * 유저정보 체크 _handleCheckUser
-	 */
-	_handleCheckUser = async () => {
-		const { user } = this.props;
-		if (user.AUTH_A_TOKEN) {
-			const result = await UserApi.check(user.AUTH_A_TOKEN, user.last_access_company_no, user.HASH_KEY);
-			if (result.resultCode == 200) {
-				this._handleRedirect('Home');
-			}
-		}
-	};
-
-	/**
-	 * _handleRedirect
-	 * 페이지 이동
-	 */
-	_handleRedirect = url => {
-		const { navigation } = this.props;
-		navigation.navigate(url);
 	};
 
 	/**
@@ -185,6 +137,7 @@ class LoginScreenContainer extends React.Component {
 				)[0]
 			};
 			onLogin(userData);
+	
 			navigation.navigate('Home');
 		}
 	};
@@ -193,9 +146,11 @@ class LoginScreenContainer extends React.Component {
 	 * _handleLoginForWehago
 	 */
 	_handleLoginForWehago = () => {
-		Linking.openURL('wehago://?wehagomeet=login').catch(err => {
+		Linking.openURL('wehago://?wehagomeet=login').then((data) => {
+			console.log(data);
+		}).catch(err => {
 			alert('일시적인 오류가 발생했습니다. 다시 시도해 주세요');
-			console.error('An error occurred', err);
+			// console.error('An error occurred', err);
 		});
 	};
 

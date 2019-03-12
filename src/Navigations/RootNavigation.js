@@ -2,6 +2,7 @@ import { createAppContainer, createStackNavigator } from 'react-navigation';
 import MainNavigation from './MainNavigation';
 import ConferenceScreen from '../Screens/ConferenceScreen';
 import LoginScreen from '../Screens/LoginScreen';
+import LoadingScreen from '../Screens/LoadingScreen';
 
 /**
  * RootNavigation
@@ -37,12 +38,23 @@ const RootNavigation = createStackNavigator(
 				headerLeft: null,
 				gesturesEnabled: false
 			}
+		},
+		
+		/**
+		 * Loding Navigation
+		 */
+		Loading: {
+			screen: LoadingScreen,
+			navigationOptions: {
+				header: null,
+				headerLeft: null,
+				gesturesEnabled: false
+			}
 		}
 	},
 	// initial
 	{
-		// initialRouteName: 'Main',
-		initialRouteName: 'Login',
+		initialRouteName: 'Loading',
 		mode: 'modal',
 		headerMode: 'none'
 	}
