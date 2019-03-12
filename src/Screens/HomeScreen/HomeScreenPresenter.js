@@ -69,7 +69,7 @@ const HomeScreenPresenter = props => {
 				<Button title={'Go login' + props.selectedRoomId} onPress={() => props.onRedirect('Login')} />
 			</View> */}
 			{/* 방생성 버튼 */}
-			{/* <AddButton onClick={() => props.onRedirect('Create')} /> */}
+			<AddButton onClick={() => props.onRedirect('Create')} />
 
 			{/* 컨펌모달 */}
 			<Modal animationType="fade" transparent={true} visible={props.modal} blurRadius={1}>
