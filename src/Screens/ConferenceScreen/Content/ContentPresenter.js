@@ -9,14 +9,16 @@ import BottomArea from './BottomArea';
  * ContentPresenter
  */
 const ContentPresenter = props => {
-	const { mainUser, callType } = props;
+	const { mainUser, callType, isVideoReverse } = props;
 	return (
 		<View style={styles.container} onLayout={props.onLayout}>
 			<TouchableOpacity activeOpacity={0.7} style={styles.container} onPress={props.toggleConferenceMode}>
-				<MainVideo mainUser={mainUser} callType={callType}>
+				<MainVideo mainUser={mainUser} callType={callType} isVideoReverse={isVideoReverse}>
 					<View style={props.orientation === 'vertical' ? styles.contentVertical : styles.contentHorizontal}>
 						<View style={styles.topArea}>
-							{callType != 2 && <TopArea orientation={props.orientation} />}
+							{callType != 2 && (
+								<TopArea orientation={props.orientation} onReverseVideo={props.onReverseVideo} />
+							)}
 						</View>
 						<View style={styles.middleArea} />
 						<View
@@ -44,11 +46,13 @@ const styles = StyleSheet.create({
 	},
 	contentVertical: {
 		flex: 1,
-		flexDirection: 'column'
+		flexDirection: 'column',
+		transform: [{ rotateY: '0deg' }] // 좌우반전
 	},
 	contentHorizontal: {
 		flex: 1,
-		flexDirection: 'row'
+		flexDirection: 'row',
+		transform: [{ rotateY: '0deg' }] // 좌우반전
 	},
 	topArea: {
 		flex: 2
