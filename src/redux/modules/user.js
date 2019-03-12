@@ -10,6 +10,7 @@ const LOGIN = 'LOGIN';
 const LOGOUT = 'LOGOUT';
 const TOKEN = 'TOKEN';
 const TOKEN_LOGIN = 'TOKEN_LOGIN';
+const INTRO = 'INTRO';
 
 //#region Action Creators
 
@@ -51,6 +52,13 @@ token = auth => {
 };
 
 /**
+ * intro skip
+ */
+intro = () => {
+	return { type: INTRO }
+}
+
+/**
  * tokenLogin : ACTION
  */
 tokenLogin = (token, cno) => {
@@ -82,7 +90,8 @@ applyTokenLogin = (state, action) => {
 
 const initialState = {
 	auth: null,
-	permission: false
+	permission: false,
+	intro: false
 };
 
 //#endregion initialState
@@ -107,6 +116,8 @@ reducer = (state = initialState, action) => {
 			};
 		case TOKEN_LOGIN:
 			applyTokenLogin(state, action);
+		case INTRO:
+			return { ...state, intro: true }
 		default:
 			return state;
 	}
@@ -136,7 +147,8 @@ const actionCreators = {
 	logout,
 	token,
 	tokenLogin,
-	agreement
+	agreement,
+	intro
 };
 
 export { actionCreators };
