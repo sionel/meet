@@ -13,19 +13,13 @@ import ConfigurationScreen from '../Screens/ConfigurationScreen';
 import CreateScreen from '../Screens/CreateScreen';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import RouteTitle from './RouteTitle';
+// import RouteTitle from './RouteTitle';
 
 const commonStyle = {
 	height: 53,
 	color: 'white',
 	backgroundColor: '#1C90FB'
 };
-
-const HomeRouteTitle = props => {
-	return <Text>{props.auth.last_company}</Text>;
-};
-
-// export default HomeRouteTitle;
 
 /**
  * rightMenuImage
@@ -53,10 +47,10 @@ const RightMenuImage = ({ navigation }) => {
 const HomeDrwawer = createDrawerNavigator(
 	{
 		Home: {
-			screen: HomeScreen
-			// navigationOptions: {
-			// 	drawerLabel: 'Home'
-			// },
+			screen: HomeScreen,
+			navigationOptions: {
+				drawerLabel: 'Home'
+			}
 		}
 	},
 	{
@@ -76,7 +70,8 @@ const HomeRoute = createStackNavigator({
 			color: '#ffffff'
 		},
 		navigationOptions: ({ navigation }) => ({
-			headerTitle: <RouteTitle />,
+			// headerTitle: <RouteTitle />,
+			headerTitle: '<RouteTitle />',
 			headerTintColor: '#fff',
 			gesturesEnabled: false,
 			headerStyle: commonStyle,
