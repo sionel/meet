@@ -13,7 +13,7 @@ import ConfigurationScreen from '../Screens/ConfigurationScreen';
 import CreateScreen from '../Screens/CreateScreen';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-// import RouteTitle from './RouteTitle';
+import RouteTitle from './RouteTitle';
 
 const commonStyle = {
 	height: 53,
@@ -70,8 +70,8 @@ const HomeRoute = createStackNavigator({
 			color: '#ffffff'
 		},
 		navigationOptions: ({ navigation }) => ({
-			// headerTitle: <RouteTitle />,
-			headerTitle: '<RouteTitle />',
+			headerTitle: <RouteTitle />,
+			// headerTitle: '<RouteTitle />',
 			headerTintColor: '#fff',
 			gesturesEnabled: false,
 			headerStyle: commonStyle,

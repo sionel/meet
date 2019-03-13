@@ -157,6 +157,7 @@ applyTest = (state, action) => {
 applyChangeCompany = (state, action) => {
 	const { cno } = action.payload;
 	const newAuth = { ...state.auth, last_access_company_no: cno };
+	console.log('newAuth : ', newAuth);
 	return {
 		...state,
 		auth: newAuth

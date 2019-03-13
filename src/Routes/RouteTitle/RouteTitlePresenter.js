@@ -14,29 +14,31 @@ const RouteTitlePresenter = props => {
 		color: '#f1f1f1'
 	};
 
-	if (this.props.auth) {
+	if (props.auth) {
 		// 기본값
 		placeholder = {};
 		// 회사목록
-		// employeeList = this.props.auth.employee_list.map(e => ({
+		// employeeList = props.auth.employee_list.map(e => ({
 		// 	label: e.company_name_kr,
 		// 	value: e.company_no
 		// }));
 		// // 선택된 회사
-		// selectedCompany = this.props.auth.last_access_company_no;
+		// selectedCompany = props.auth.last_access_company_no;
 	}
 
 	return (
 		<View>
 			<RNPickerSelect
 				placeholder={placeholder}
-				items={this.state.employeeList}
+				items={props.employeeList}
 				onValueChange={value => {
-					// this.props.onChangeCompany(value);
-					this.setState({ selectedCompany: value });
+					// alert(value);
+					props.onChangeCompany(value);
+					// setState({ selectedCompany: value });
 				}}
 				style={{ ...pickerSelectStyles }}
-				value={this.state.selectedCompany}
+				value={props.auth.last_access_company_no}
+				// value={props.selectedCompany}
 				useNativeAndroidPickerStyle={true}
 				textInputProps={{ underlineColorAndroid: 'cyan' }}
 				Icon={() => {

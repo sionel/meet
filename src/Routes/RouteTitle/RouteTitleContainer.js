@@ -3,10 +3,14 @@
  */
 
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { Text } from 'react-native';
 import RouteTitlePresenter from './RouteTitlePresenter';
 
 class RouteTitleContainer extends React.Component {
+	// state = {
+	// 	employeeList: [],
+	// 	selectedCompany: null
+	// }
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -18,11 +22,23 @@ class RouteTitleContainer extends React.Component {
 		};
 	}
 
-	shouldComponentUpdate = (nextProps, nextState) => {
+	/**
+	 * 
+	 */
+
+	/**
+	 * 
+	 */
+	shouldComponentUpdate(nextProps, nextState) {
 		console.log('NEXT : ', nextProps);
 		console.log('nextState : ', nextState);
 		return true;
-	};
+	}
+
+	/**
+	 * 
+	 */
+	componentWillUpdate(nextProps, nextState) {}
 
 	/**
 	 * 
@@ -31,6 +47,7 @@ class RouteTitleContainer extends React.Component {
 		if (!this.props.auth) {
 			return <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 17 }}>-</Text>;
 		}
+		// return <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 17 }}>-2</Text>;
 		return <RouteTitlePresenter {...this.state} {...this.props} />;
 	} // render
 }

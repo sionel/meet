@@ -89,7 +89,7 @@ const ListItemComp = props => {
 				</View>
 			</View>
 			{/* 내용 */}
-			<View style={{ ...styles.textFlex, borderBottomWidth: props.underline }}>
+			<View style={{ ...styles.textFlex, borderBottomWidth: props.underline ? 1 : 0 }}>
 				{/* 방제목 */}
 				<Text style={{ ...styles.roomName }}>{props.title}</Text>
 				{/* <View style={{ backgroundColor: 'red', width: 10, height: 10 }} /> */}
