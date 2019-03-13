@@ -1,4 +1,4 @@
-package org.jitsi.meet.sdk;
+package com.wehago.meet.sdk;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -49,7 +49,7 @@ public class ConnectionService extends android.telecom.ConnectionService {
      * created for the call.
      */
     static final String EXTRA_PHONE_ACCOUNT_HANDLE
-        = "org.jitsi.meet.sdk.connection_service.PHONE_ACCOUNT_HANDLE";
+        = "com.wehago.meet.sdk.connection_service.PHONE_ACCOUNT_HANDLE";
 
     /**
      * Connections mapped by call UUID.
@@ -334,7 +334,7 @@ public class ConnectionService extends android.telecom.ConnectionService {
             data.putString("callUUID", getCallUUID());
             ReactContextUtils.emitEvent(
                     null,
-                    "org.jitsi.meet:features/connection_service#disconnect",
+                    "com.wehago.meet:features/connection_service#disconnect",
                     data);
             // The JavaScript side will not go back to the native with
             // 'endCall', so the Connection must be removed immediately.
@@ -355,7 +355,7 @@ public class ConnectionService extends android.telecom.ConnectionService {
             data.putString("callUUID", getCallUUID());
             ReactContextUtils.emitEvent(
                     null,
-                    "org.jitsi.meet:features/connection_service#abort",
+                    "com.wehago.meet:features/connection_service#abort",
                     data);
             // The JavaScript side will not go back to the native with
             // 'endCall', so the Connection must be removed immediately.

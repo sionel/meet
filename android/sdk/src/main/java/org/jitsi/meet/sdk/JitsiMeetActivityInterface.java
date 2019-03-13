@@ -1,4 +1,4 @@
-package org.jitsi.meet.sdk;
+package com.wehago.meet.sdk;
 
 import android.support.v4.app.ActivityCompat;
 

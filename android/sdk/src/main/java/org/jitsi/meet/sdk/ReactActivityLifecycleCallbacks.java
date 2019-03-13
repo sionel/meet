@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.jitsi.meet.sdk;
+package com.wehago.meet.sdk;
 
 import android.annotation.TargetApi;
 import android.app.Activity;

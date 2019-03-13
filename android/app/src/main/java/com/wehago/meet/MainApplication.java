@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.jitsi.meet;
+package com.wehago.meet;
 
 import android.app.Application;
 

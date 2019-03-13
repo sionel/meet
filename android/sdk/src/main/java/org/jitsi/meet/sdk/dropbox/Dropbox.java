@@ -1,4 +1,4 @@
-package org.jitsi.meet.sdk.dropbox;
+package com.wehago.meet.sdk.dropbox;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;

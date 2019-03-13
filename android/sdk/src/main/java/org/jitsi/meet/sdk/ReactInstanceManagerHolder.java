@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.jitsi.meet.sdk;
+package com.wehago.meet.sdk;
 
 import android.app.Application;
 import android.support.annotation.Nullable;
@@ -53,8 +53,8 @@ class ReactInstanceManagerHolder {
                 new PictureInPictureModule(reactContext),
                 new ProximityModule(reactContext),
                 new WiFiStatsModule(reactContext),
-                new org.jitsi.meet.sdk.dropbox.Dropbox(reactContext),
-                new org.jitsi.meet.sdk.net.NAT64AddrInfoModule(reactContext)));
+                new com.wehago.meet.sdk.dropbox.Dropbox(reactContext),
+                new com.wehago.meet.sdk.net.NAT64AddrInfoModule(reactContext)));
 
         if (android.os.Build.VERSION.SDK_INT
                 >= android.os.Build.VERSION_CODES.O) {

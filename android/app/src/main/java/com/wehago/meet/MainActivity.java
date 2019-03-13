@@ -15,15 +15,15 @@
  * limitations under the License.
  */
 
-package org.jitsi.meet;
+package com.wehago.meet;
 
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
-import org.jitsi.meet.sdk.JitsiMeetActivity;
-import org.jitsi.meet.sdk.JitsiMeetView;
-import org.jitsi.meet.sdk.JitsiMeetViewListener;
+import com.wehago.meet.sdk.JitsiMeetActivity;
+import com.wehago.meet.sdk.JitsiMeetView;
+import com.wehago.meet.sdk.JitsiMeetViewListener;
 
 import com.crashlytics.android.Crashlytics;
 import com.facebook.react.bridge.UiThreadUtil;

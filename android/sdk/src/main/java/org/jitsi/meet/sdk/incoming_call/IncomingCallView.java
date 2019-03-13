@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.jitsi.meet.sdk.incoming_call;
+package com.wehago.meet.sdk.incoming_call;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -22,8 +22,8 @@ import android.support.annotation.NonNull;
 
 import com.facebook.react.bridge.ReadableMap;
 
-import org.jitsi.meet.sdk.BaseReactView;
-import org.jitsi.meet.sdk.ListenerUtils;
+import com.wehago.meet.sdk.BaseReactView;
+import com.wehago.meet.sdk.ListenerUtils;
 
 import java.lang.reflect.Method;
 import java.util.Map;
