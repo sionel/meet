@@ -5,19 +5,9 @@
 import React from 'react';
 import { View, Text, StyleSheet, SectionList, TouchableOpacity, Modal, Picker } from 'react-native';
 import { ListItemComp, SearchForm } from '../../components';
+import RNPickerSelect from 'react-native-picker-select';
 
 const CreateScreenPresenter = props => {
-	return (
-		<Picker
-			selectedValue={'JavaScript'}
-			style={{ height: 50, width: 100 }}
-			onValueChange={(itemValue, itemIndex) => alert(1)}
-		>
-			<Picker.Item label="Java" value="java" />
-			<Picker.Item label="JavaScript" value="js" />
-		</Picker>
-	);
-
 	const userConfig = [
 		// {
 		//   title: "onDestroyToken",

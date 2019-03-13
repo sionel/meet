@@ -11,6 +11,7 @@ const LOGOUT = 'LOGOUT';
 const TOKEN = 'TOKEN';
 const TOKEN_LOGIN = 'TOKEN_LOGIN';
 const INTRO = 'INTRO';
+const CHANGE_COMPANY = 'CHANGE_COMPANY';
 
 //#region Action Creators
 
@@ -55,8 +56,18 @@ token = auth => {
  * intro skip
  */
 intro = () => {
-	return { type: INTRO }
-}
+	return { type: INTRO };
+};
+
+/**
+ * CHANGE_COMPANY
+ */
+changeCompany = cno => {
+	return {
+		type: CHANGE_COMPANY,
+		payload: { cno }
+	};
+};
 
 /**
  * tokenLogin : ACTION
@@ -117,7 +128,9 @@ reducer = (state = initialState, action) => {
 		case TOKEN_LOGIN:
 			applyTokenLogin(state, action);
 		case INTRO:
-			return { ...state, intro: true }
+			return { ...state, intro: true };
+		case CHANGE_COMPANY:
+			applyChangeCompany(state, action);
 		default:
 			return state;
 	}
@@ -138,6 +151,18 @@ applyTest = (state, action) => {
 	};
 };
 
+/**
+ * 
+ */
+applyChangeCompany = (state, action) => {
+	const { cno } = action.payload;
+	const newAuth = { ...state.auth, last_access_company_no: cno };
+	return {
+		...state,
+		auth: newAuth
+	};
+};
+
 //#endregion Reducer Functions
 
 //#region Export
@@ -148,7 +173,8 @@ const actionCreators = {
 	token,
 	tokenLogin,
 	agreement,
-	intro
+	intro,
+	changeCompany
 };
 
 export { actionCreators };

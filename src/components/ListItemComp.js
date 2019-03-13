@@ -4,9 +4,13 @@
  */
 
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import LottieView from 'lottie-react-native';
 import CustomLottie from './CustomLottie';
+
+const rootPath = `../../assets/smapleImages/`;
+const playImage = require(`${rootPath}/play.png`);
+// const playImage = require(`../../assets/smapleImages/play.png`);
 
 function getFirtsChar(str) {
 	split = str.split(/([\uD800-\uDBFF][\uDC00-\uDFFF])/);
@@ -95,7 +99,11 @@ const ListItemComp = props => {
 				{/* 활성화 라이트 */}
 				{props.lottie && (
 					<View style={{ ...styles.activeLight, backgroundColor: activeColor }}>
-						{props.active && <CustomLottie source="broadcast" width={30} height={30} />}
+						{props.active && (
+							<CustomLottie source="broadcast" width={35} height={35}>
+								{/* <Image style={{ width: 6, height: 6 }} source={playImage} /> */}
+							</CustomLottie>
+						)}
 					</View>
 				)}
 			</View>
