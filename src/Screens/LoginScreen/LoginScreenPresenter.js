@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Modal, FlatList } from 'react-native';
-import { FlatButton, TextField, ListItemComp, CustomWebView, AppIntroSlide } from '../../components';
+import { FlatButton, TextField, ListItemComp, CustomWebView } from '../../components';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const rootPath = `../../../assets`;
@@ -17,8 +17,6 @@ const logo_login = require(`${rootPath}/logo_login.png`);
  */
 const LoginScreenPresenter = props => {
 	const { userId, userPwd, autoLoginFlag, webView } = props;
-
-	// return <AppIntroSlide />;
 
 	if (webView) {
 		return (

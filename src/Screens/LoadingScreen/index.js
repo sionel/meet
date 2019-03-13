@@ -1,9 +1,9 @@
 /**
- * LoginScreen index
+ * LoadingScreen index
  */
 
 import { connect } from 'react-redux';
-import LoginScreenContainer from './LoginScreenContainer';
+import LoadingScreenContainer from './LoadingScreenContainer';
 import { actionCreators as UserActions } from '../../redux/modules/user';
 
 const mapStateToProps = null;
@@ -14,4 +14,4 @@ const mapDispatchToProps = dispatch => {
 	};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginScreenContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(LoadingScreenContainer);

@@ -129,6 +129,7 @@ class AppIntroSlide extends React.Component {
 		super(props);
 		
 		this.state = {
+			// showRealApp: false
 			showRealApp: this.props.intro
 		};
 	}
