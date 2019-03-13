@@ -25,8 +25,8 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		bottom: 27,
 		right: 20,
-		width: 70,
-		height: 70,
+		width: 67,
+		height: 67,
 		borderRadius: 100,
 		backgroundColor: '#1C90FB',
 		zIndex: 50,
@@ -42,5 +42,11 @@ const styles = StyleSheet.create({
 		alignItems: 'center'
 	}
 });
+
+AddButtonPresenter.defaultProps = {
+	onClick: () => {
+		alert('Call');
+	}
+};
 
 export default AddButtonPresenter;

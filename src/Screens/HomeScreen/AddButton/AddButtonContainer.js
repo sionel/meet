@@ -16,7 +16,7 @@ class AddButtonContainer extends React.Component {
      * Rendering
      */
 	render() {
-		return <AddButtonPresenter onClick={this._handleClick} />;
+		return <AddButtonPresenter {...this.props} />;
 	}
 
 	/**

@@ -12,6 +12,27 @@ import { CustomLottie } from '../../../../components';
 const MainVideoPresenter = props => {
 	const { isMuteVideo, stream, videoType, mainUser, callType } = props;
 
+	const displayTime = (
+		<View
+			style={{
+				marginTop: 50,
+				marginLeft: 25,
+				position: 'absolute'
+			}}
+		>
+			<Text
+				style={{
+					fontSize: 20,
+					color: '#fff',
+					textAlign: 'center',
+					zIndex: 999
+				}}
+			>
+				{second2String(props.time)}
+			</Text>
+		</View>
+	);
+
 	const muteView = (
 		<View
 			style={{
@@ -50,6 +71,7 @@ const MainVideoPresenter = props => {
 				objectFit={videoType && videoType === 'desktop' ? 'fit' : 'cover'}
 				streamURL={stream.toURL()}
 			>
+				{displayTime}
 				{mainUser.status === 'interrupted' && muteView}
 				{props.children}
 			</RTCView>

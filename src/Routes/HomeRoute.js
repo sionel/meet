@@ -10,6 +10,7 @@ import { createStackNavigator, createAppContainer, createDrawerNavigator, Drawer
 
 import HomeScreen from '../Screens/HomeScreen';
 import ConfigurationScreen from '../Screens/ConfigurationScreen';
+import CreateScreen from '../Screens/CreateScreen';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import RouteTitle from './RouteTitle';
@@ -90,6 +91,7 @@ const HomeRoute = createStackNavigator({
 			)
 		})
 	},
+
 	/**
    * Configuration
    * 환경설정
@@ -101,6 +103,22 @@ const HomeRoute = createStackNavigator({
 		},
 		navigationOptions: ({ navigation }) => ({
 			title: '환경설정',
+			headerTintColor: '#fff',
+			headerStyle: commonStyle
+		})
+	},
+
+	/**
+   * Create
+   * 화상대화 생성
+   */
+	Create: {
+		screen: CreateScreen,
+		headerStyle: {
+			color: '#fff'
+		},
+		navigationOptions: ({ navigation }) => ({
+			title: '새 화상대화',
 			headerTintColor: '#fff',
 			headerStyle: commonStyle
 		})

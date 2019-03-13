@@ -35,6 +35,7 @@
     "react-native-keep-awake": "4.0.0",
     "react-native-linear-gradient": "2.5.3",
     "react-native-orientation-locker": "^1.1.1",
+    "react-native-picker-select": "^6.0.0",
     "react-native-sound": "github:jitsi/react-native-sound#e4260ed7f641eeb0377d76eac7987aba72e1cf08",
     "react-native-svg": "^9.0.0",
     "react-native-swipeout": "2.3.6",
