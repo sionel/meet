@@ -85,7 +85,7 @@ const ListItemComp = props => {
 				</View>
 			</View>
 			{/* 내용 */}
-			<View style={{ ...styles.textFlex }}>
+			<View style={{ ...styles.textFlex, borderBottomWidth: props.underline }}>
 				{/* 방제목 */}
 				<Text style={{ ...styles.roomName }}>{props.title}</Text>
 				{/* <View style={{ backgroundColor: 'red', width: 10, height: 10 }} /> */}
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
 		height: 57,
 		display: 'flex',
 		flexDirection: 'row',
-		marginBottom: 12,
+		marginBottom: 10,
 		paddingLeft: '3%',
 		paddingRight: '3%'
 	},
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
 	textFlex: {
 		flex: 0.8,
 		height: '100%',
-		paddingBottom: 3,
+		// paddingBottom: 2,
 		borderBottomWidth: 1,
 		borderBottomColor: '#ececec',
 		justifyContent: 'center',
@@ -174,7 +174,7 @@ ListItemComp.defaultProps = {
 	disable: false,
 	active: false,
 	lottie: null,
-	underline: false,
+	underline: true,
 	descriptionType: 'date' // text
 };
 

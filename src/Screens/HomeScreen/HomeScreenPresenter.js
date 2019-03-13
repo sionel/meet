@@ -35,9 +35,9 @@ const HomeScreenPresenter = props => {
 				onRefresh={props.onRefresh}
 				style={styles.listContainer}
 				sections={[
-					{ title: '대화중', data: activateList },
-					{ title: `그룹대화(${groupList.length})`, data: groupList },
-					{ title: `1:1대화(${personnelList.length})`, data: personnelList }
+					{ title: '대화중', data: activateList, length: activateList.length - 1 },
+					{ title: `그룹대화(${groupList.length})`, data: groupList, length: groupList.length - 1 },
+					{ title: `1:1대화(${personnelList.length})`, data: personnelList, length: personnelList.length - 1 }
 				]}
 				renderSectionHeader={({ section }) =>
 					section.data.length > 0 && (
@@ -45,7 +45,7 @@ const HomeScreenPresenter = props => {
 							{section.title}
 						</Text>
 					)}
-				renderItem={({ item, index }) => (
+				renderItem={({ item, index, section }) => (
 					// 히스토리 아이템
 					<ListItemComp
 						key={item.room_id}
@@ -53,6 +53,7 @@ const HomeScreenPresenter = props => {
 						personnel={item.receiver_user_count}
 						updated={item.update_timestamp}
 						lottie={true}
+						underline={index < section.length ? true : false}
 						active={item.is_video_access === 'T' ? true : false}
 						disable={item.receiver_user_count === 1 && item.room_type === '1' ? true : false}
 						onClick={() =>
