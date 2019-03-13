@@ -136,3 +136,11 @@ _getLocation = url => {
 	};
 	return ret;
 };
+
+/**
+ * changeValue
+ * input 데이터 변경 함수
+ */
+handleChangeValue = (obj, target, value) => {
+	obj.setState({ [target]: value });
+};

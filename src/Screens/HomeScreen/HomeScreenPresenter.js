@@ -2,19 +2,23 @@
  * HomeScreenPresenter
  * 화상대화 히스토리 프레젠터
  */
-import React from 'react';
-import { View, Text, FlatList, Button, StyleSheet, Modal, TouchableOpacity, SectionList } from 'react-native';
+
+import React, { Fragment } from 'react';
+import { View, Text, StyleSheet, Modal, TouchableOpacity, SectionList, Image } from 'react-native';
 // common components
-import { ListItemComp, SearchForm } from '../../components';
+import { ListItemComp, SearchForm, CustomLottie } from '../../components';
 import AddButton from './AddButton';
 import Icon from 'react-native-vector-icons/FontAwesome';
+
+const rootPath = `../../../assets`;
+const waitingImage = require(`${rootPath}/waiting.gif`);
 
 /**
  * HomeScreenPresenter
  */
 const HomeScreenPresenter = props => {
-	const groupList = props.list.filter(item => item.room_type === '2' && item.is_video_access === 'F');
-	const personnelList = props.list.filter(item => item.room_type === '1' && item.is_video_access === 'F');
+	// const groupList = props.list.filter(item => item.room_type === '2' && item.is_video_access === 'F');
+	// const personnelList = props.list.filter(item => item.room_type === '1' && item.is_video_access === 'F');
 	const activateList = props.list.filter(item => item.is_video_access === 'T');
 
 	return (
@@ -23,8 +27,29 @@ const HomeScreenPresenter = props => {
 			<SearchForm onChange={props.onSearch} />
 
 			{props.list.length < 1 && (
-				<View style={styles.notResult}>
-					<Text>검색된 결과가 없습니다 :(</Text>
+				//  <View style={styles.notResult}>
+				<View
+					style={{
+						flex: 1.5,
+						width: '100%',
+						// backgroundColor: 'red',
+						justifyContent: 'center',
+						alignItems: 'center'
+					}}
+				>
+					<Image
+						style={{
+							width: '90%',
+							height: '80%'
+							// maxWidth: 300
+							// maxHeight: 255
+						}}
+						source={waitingImage}
+					/>
+					<Text style={{ fontSize: 20, fontWeight: '500', color: '#1C90FB', marginTop: -35 }}>
+						검색된 결과가 없습니다 :(
+					</Text>
+					<Text style={{ fontSize: 17, fontWeight: '500', color: '#b1b1b1' }}>No Contents</Text>
 				</View>
 			)}
 
@@ -35,9 +60,9 @@ const HomeScreenPresenter = props => {
 				onRefresh={props.onRefresh}
 				style={styles.listContainer}
 				sections={[
-					{ title: '대화중', data: activateList, length: activateList.length - 1 },
-					{ title: `그룹대화(${groupList.length})`, data: groupList, length: groupList.length - 1 },
-					{ title: `1:1대화(${personnelList.length})`, data: personnelList, length: personnelList.length - 1 }
+					{ title: '대화중', data: activateList, length: activateList.length - 1 }
+					// { title: `그룹대화(${groupList.length})`, data: groupList, length: groupList.length - 1 },
+					// { title: `1:1대화(${personnelList.length})`, data: personnelList, length: personnelList.length - 1 }
 				]}
 				renderSectionHeader={({ section }) =>
 					section.data.length > 0 && (
@@ -64,10 +89,6 @@ const HomeScreenPresenter = props => {
 				)}
 			/>
 
-			{/* 테스트용 버튼 */}
-			{/* <View>
-				<Button title={'Go login' + props.selectedRoomId} onPress={() => props.onRedirect('Login')} />
-			</View> */}
 			{/* 방생성 버튼 */}
 			<AddButton onClick={() => props.onRedirect('Create')} />
 
@@ -110,7 +131,6 @@ const HomeScreenPresenter = props => {
 							<TouchableOpacity
 								style={{ ...styles.modalButton, ...styles.modalButtonConfirm }}
 								onPress={() => props.onCreateConference(props.selectedRoomId)}
-								// onPress={() => props.onRedirect('Conference')}
 							>
 								<Text style={{ color: '#fff' }}>확인</Text>
 							</TouchableOpacity>
