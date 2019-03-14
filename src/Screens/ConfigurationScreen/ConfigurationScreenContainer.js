@@ -6,8 +6,6 @@
 
 import React from 'react';
 import ConfigurationScreenPresenter from './ConfigurationScreenPresenter';
-import { connect } from 'react-redux';
-import { actionCreators as UserActions } from '../../redux/modules/user';
 
 class ConfigurationScreenContainer extends React.Component {
 	/**
@@ -65,13 +63,4 @@ class ConfigurationScreenContainer extends React.Component {
 	};
 }
 
-const mapStateToProps = state => ({
-	user: state.user.auth
-});
-
-const mapDispatchTopProps = dispatch => ({
-	onLogout: () => dispatch(UserActions.logout()),
-	onDestroyToken: () => dispatch(UserActions.token())
-});
-
-export default connect(mapStateToProps, mapDispatchTopProps)(ConfigurationScreenContainer);
+export default ConfigurationScreenContainer;

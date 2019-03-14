@@ -5,10 +5,7 @@
 
 import React, { Component, Fragment } from 'react';
 import { AppState, StatusBar, Linking, Platform, NativeModules } from 'react-native';
-import { connect } from 'react-redux';
 import HomeScreenPresenter from './HomeScreenPresenter';
-import { actionCreators as UserActions } from '../../redux/modules/user';
-import { actionCreators as WetalkActions } from '../../redux/modules/wetalk';
 // service
 import { WetalkApi } from '../../services';
 import { UserApi } from '../../services';
@@ -387,21 +384,4 @@ class HomeScreenContainer extends Component {
 }
 // #endregion
 
-/**
- * Connect - State to Props
- */
-let mapStateToProps = state => ({
-	auth: state.user.auth,
-	wetalk: state.wetalk.list
-});
-
-/**
- * Connect - Dispatch to Props
- */
-const mapDispatchToProps = dispatch => ({
-	onLogin: user => dispatch(UserActions.login(user)),
-	onSetWetalkList: list => dispatch(WetalkActions.setList(list))
-	// onCreateConference: bodyData => dispatch(ConferenceActions.createConference(...bodyData))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(HomeScreenContainer);
+export default HomeScreenContainer

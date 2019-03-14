@@ -31,10 +31,10 @@ export default {
 			portal_id: data.portal_id,
 			portal_password: data.portal_password,
 			// 기기정보
-			login_ip: '10.51.114.169',
-			login_device: 'iPhone',
-			login_os: 'IOS 12.1.2',
-			login_browser: 'WEHAGO-APP'
+			login_ip: data.login_ip,
+			login_device: data.login_device,
+			login_os: data.login_os,
+			login_browser: data.login_browser
 		};
 		// const headers = securityRequest()
 		try {
@@ -62,8 +62,8 @@ export default {
 				method: 'GET',
 				headers
 			});
-			const jjj = await response.json();
-			return jjj;
+			const responseJson = await response.json();
+			return responseJson;
 		} catch (err) {
 			return err;
 		}

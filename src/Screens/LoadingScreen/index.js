@@ -6,7 +6,10 @@ import { connect } from 'react-redux';
 import LoadingScreenContainer from './LoadingScreenContainer';
 import { actionCreators as UserActions } from '../../redux/modules/user';
 
-const mapStateToProps = null;
+// map state to props
+const mapStateToProps = state => ({
+	user: state.user.auth
+});
 
 const mapDispatchToProps = dispatch => {
 	return {

@@ -5,12 +5,9 @@
  */
 
 import React from 'react';
-import { connect } from 'react-redux';
-import { Linking } from 'react-native';
 import LoadingScreenPresenter from './LoadingScreenPresenter';
 // service
 import { UserApi } from '../../services';
-import { querystringParser } from '../../utils';
 
 class LoadingScreenContainer extends React.Component {
 	/**
@@ -55,9 +52,4 @@ class LoadingScreenContainer extends React.Component {
 	// };
 }
 
-// map state to props
-let mapStateToProps = state => ({
-	user: state.user.auth
-});
-
-export default connect(mapStateToProps)(LoadingScreenContainer);
+export default LoadingScreenContainer;

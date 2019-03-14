@@ -15,8 +15,12 @@ const mapStateToProps = state => ({
 // map dispatch to props
 const mapDispatchToProps = dispatch => {
   return {
-    onTokenLogin: (token, cno) => dispatch(UserActions.tokenLogin(token, cno)),
-    onLogin: user => dispatch(UserActions.login(user)),
+    // onTokenLogin: (token, cno) => dispatch(UserActions.tokenLogin(token, cno)),
+		loginRequest: data => dispatch(UserActions.loginRequest(data)),
+		loginCheckRequest: (AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY) => 
+			dispatch(UserActions.loginCheckRequest(
+				AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY
+			)),
     onAgreement: () => dispatch(UserActions.agreement())
   };
 };

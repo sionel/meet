@@ -6,8 +6,6 @@
 
 import React from 'react';
 import CreateScreenPresenter from './CreateScreenPresenter';
-import { connect } from 'react-redux';
-import { actionCreators as UserActions } from '../../redux/modules/user';
 
 class CreateScreenContainer extends React.Component {
 	/**
@@ -50,4 +48,4 @@ class CreateScreenContainer extends React.Component {
 	};
 }
 
-export default connect(null, null)(CreateScreenContainer);
+export default CreateScreenContainer;

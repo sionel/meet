@@ -9,7 +9,7 @@ const AGREEMENT = 'AGREEMENT';
 const LOGIN = 'LOGIN';
 const LOGOUT = 'LOGOUT';
 const TOKEN = 'TOKEN';
-const TOKEN_LOGIN = 'TOKEN_LOGIN';
+// const TOKEN_LOGIN = 'TOKEN_LOGIN';
 const INTRO = 'INTRO';
 const CHANGE_COMPANY = 'CHANGE_COMPANY';
 
@@ -18,24 +18,59 @@ const CHANGE_COMPANY = 'CHANGE_COMPANY';
 /**
  * agreement
  */
-agreement = () => {
+function agreement() {
 	return { type: AGREEMENT };
 };
 
 /**
  * login
  */
-login = auth => {
+function login(auth) {
 	return {
 		type: LOGIN,
 		auth
 	};
 };
 
+function loginRequest(data) {
+	return async () => {
+		return await UserApi.login(data);
+	}
+}
+
+function loginCheckRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY) {
+	return async (dispatch) => {
+		const checkResult = await UserApi.check(AUTH_A_TOKEN, cno, HASH_KEY);
+		if (checkResult.resultCode === 200) {
+			const userData = {
+				// login api data
+				AUTH_A_TOKEN,
+				AUTH_R_TOKEN,
+				HASH_KEY,
+				// check api data
+				user_no: checkResult.resultData.user_no,
+				portal_id: checkResult.resultData.portal_id, // 아이디
+				user_name: checkResult.resultData.user_name,
+				user_email: checkResult.resultData.user_email,
+				profile_url: checkResult.resultData.profile_url,
+				user_contact: checkResult.resultData.user_contact,
+				employee_list: checkResult.resultData.employee_list, // 회사정보
+				last_access_company_no: checkResult.resultData.last_access_company_no,
+				last_company: checkResult.resultData.employee_list.filter(
+					e => e.company_no == checkResult.resultData.last_access_company_no
+				)[0]
+			};
+			return dispatch(login(userData));
+		} else {
+			return false;
+		}
+	}
+}
+
 /**
  * logout
  */
-logout = auth => {
+function logout(auth) {
 	return {
 		type: LOGIN,
 		auth
@@ -45,7 +80,7 @@ logout = auth => {
 /**
  * tokenTest
  */
-token = auth => {
+function token(auth) {
 	return {
 		type: TOKEN,
 		newToken: 100
@@ -55,14 +90,14 @@ token = auth => {
 /**
  * intro skip
  */
-intro = () => {
+function intro() {
 	return { type: INTRO };
 };
 
 /**
  * CHANGE_COMPANY
  */
-changeCompany = cno => {
+function changeCompany(cno) {
 	return {
 		type: CHANGE_COMPANY,
 		payload: { cno }
@@ -72,28 +107,28 @@ changeCompany = cno => {
 /**
  * tokenLogin : ACTION
  */
-tokenLogin = (token, cno) => {
-	alert('준비중입니다.');
-	// return;
-	const result = UserApi.check(token, cno);
-	console.log('tokenLogin : ', typeof result);
+// function tokenLogin(token, cno) {
+// 	alert('준비중입니다.');
+// 	// return;
+// 	const result = UserApi.check(token, cno);
+// 	console.log('tokenLogin : ', typeof result);
 
-	return dispatch => {
-		dispatch({
-			type: TOKEN_LOGIN,
-			payload: {
-				token
-			}
-		});
-	};
-};
+// 	function retur(dispatch) {
+// 		dispatch({
+// 			type: TOKEN_LOGIN,
+// 			payload: {
+// 				token
+// 			}
+// 		});
+// 	};
+// };
 
 /**
  * applyTokenLogin
  */
-applyTokenLogin = (state, action) => {
-	return state;
-};
+// function applyTokenLogin(state, action) {
+// 	return state;
+// };
 
 //#endregion
 
@@ -109,7 +144,7 @@ const initialState = {
 
 //#region Reducer
 
-reducer = (state = initialState, action) => {
+function reducer(state = initialState, action) {
 	switch (action.type) {
 		case AGREEMENT:
 			return { ...state, permission: !state.permission };
@@ -119,14 +154,14 @@ reducer = (state = initialState, action) => {
 		case LOGOUT:
 			return { ...state, auth: null };
 		case TOKEN:
-			let aa = state.auth;
-			aa.AUTH_A_TOKEN = action.newToken;
+			let auth = state.auth;
+			auth.AUTH_A_TOKEN = action.newToken;
 			return {
 				...state,
-				auth: aa
+				auth
 			};
-		case TOKEN_LOGIN:
-			applyTokenLogin(state, action);
+		// case TOKEN_LOGIN:
+		// 	return applyTokenLogin(state, action);
 		case INTRO:
 			return { ...state, intro: true };
 		case CHANGE_COMPANY:
@@ -143,18 +178,18 @@ reducer = (state = initialState, action) => {
 /**
  * applyTest
  */
-applyTest = (state, action) => {
-	const { test } = action;
-	return {
-		...state,
-		test
-	};
-};
+// function applyTest(state, action) {
+// 	const { test } = action;
+// 	return {
+// 		...state,
+// 		test
+// 	};
+// };
 
 /**
  * 
  */
-applyChangeCompany = (state, action) => {
+function applyChangeCompany(state, action) {
 	const { cno } = action.payload;
 	const newAuth = { ...state.auth, last_access_company_no: cno };
 	console.log('newAuth : ', newAuth);
@@ -170,9 +205,11 @@ applyChangeCompany = (state, action) => {
 
 const actionCreators = {
 	login,
+	loginRequest,
+	loginCheckRequest,
 	logout,
 	token,
-	tokenLogin,
+	// tokenLogin,
 	agreement,
 	intro,
 	changeCompany
