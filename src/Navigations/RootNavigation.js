@@ -43,18 +43,18 @@ const RootNavigation = createStackNavigator(
 		/**
 		 * Loding Navigation
 		 */
-		Loading: {
-			screen: LoadingScreen,
-			navigationOptions: {
-				header: null,
-				headerLeft: null,
-				gesturesEnabled: false
-			}
-		}
+		// Loading: {
+		// 	screen: LoadingScreen,
+		// 	navigationOptions: {
+		// 		header: null,
+		// 		headerLeft: null,
+		// 		gesturesEnabled: false
+		// 	}
+		// }
 	},
 	// initial
 	{
-		initialRouteName: 'Loading',
+		initialRouteName: 'Login',
 		mode: 'modal',
 		headerMode: 'none'
 	}

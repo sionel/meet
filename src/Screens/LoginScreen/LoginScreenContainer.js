@@ -20,12 +20,14 @@ class LoginScreenContainer extends React.Component {
 		userPwd: '',
 		nextInput: null,
 		modal: false,
-		waiting: false,
+		waiting: true,
 		autoLoginFlag: true,
 		webView: false
 	};
 
 	componentDidMount() {
+		this._handleCheckUser();
+
 		Linking.getInitialURL().then(url => {
 			if (url) {
 				this._handleGetWehagoToken({ url });
@@ -53,7 +55,7 @@ class LoginScreenContainer extends React.Component {
 				onChangeValue={this._handleChangeValue}
 				onLogin={this._handleLogin}
 				onLoginForWehago={this._handleLoginForWehago}
-				onActivateModal={this._handleActivateModal}
+				onActivateModal={this._handleAc_handleCheckUsertivateModal}
 				onEnterKeyDown={this._handleEnterKeyDown}
 				// onTokenLogin={this.props.onTokenLogin}
 				onAgreement={this.props.onAgreement}
@@ -76,6 +78,23 @@ class LoginScreenContainer extends React.Component {
 	 */
 	_handleChangeValue = (target, value) => {
 		this.setState({ [target]: value });
+	};
+
+	/**
+	 * 유저정보 체크 _handleCheckUser
+	 */
+	_handleCheckUser = async () => {
+		const { user, loginCheckRequest } = this.props;
+		if (user) {
+			if (user.AUTH_A_TOKEN) {
+				const result = await loginCheckRequest(user.AUTH_A_TOKEN, user.AUTH_R_TOKEN, user.last_access_company_no, user.HASH_KEY);
+				if (result) {
+					return this.props.navigation.navigate('Home');
+				}
+			}
+		}
+		
+		this.setState({ waiting: false });
 	};
 
 	/**
