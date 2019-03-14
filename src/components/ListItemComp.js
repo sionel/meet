@@ -106,6 +106,20 @@ const ListItemComp = props => {
 						)}
 					</View>
 				)}
+				{props.customLottie && (
+					<View
+						style={{ ...styles.activeLight, top: 10, width: 30, height: 30, backgroundColor: activeColor }}
+					>
+						<Image
+							style={{
+								width: '100%',
+								height: '100%',
+								opacity: 0.73
+							}}
+							source={require(`../../assets/buttons/playButton.png`)}
+						/>
+					</View>
+				)}
 			</View>
 		</TouchableOpacity>
 	);

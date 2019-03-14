@@ -6,7 +6,7 @@
 import React, { Fragment } from 'react';
 import { View, Text, StyleSheet, Modal, TouchableOpacity, SectionList, Image } from 'react-native';
 // common components
-import { ListItemComp, SearchForm, CustomLottie } from '../../components';
+import { ListItemComp, SearchForm, CustomModal, Placeholder } from '../../components';
 import AddButton from './AddButton';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -17,8 +17,6 @@ const waitingImage = require(`${rootPath}/waiting.gif`);
  * HomeScreenPresenter
  */
 const HomeScreenPresenter = props => {
-	// const groupList = props.list.filter(item => item.room_type === '2' && item.is_video_access === 'F');
-	// const personnelList = props.list.filter(item => item.room_type === '1' && item.is_video_access === 'F');
 	const activateList = props.list.filter(item => item.is_video_access === 'T');
 
 	return (
@@ -26,32 +24,9 @@ const HomeScreenPresenter = props => {
 			{/* 검색바 */}
 			<SearchForm onChange={props.onSearch} />
 
-			{props.list.length < 1 && (
-				//  <View style={styles.notResult}>
-				<View
-					style={{
-						flex: 1.5,
-						width: '100%',
-						// backgroundColor: 'red',
-						justifyContent: 'center',
-						alignItems: 'center'
-					}}
-				>
-					<Image
-						style={{
-							width: '90%',
-							height: '80%'
-							// maxWidth: 300
-							// maxHeight: 255
-						}}
-						source={waitingImage}
-					/>
-					<Text style={{ fontSize: 20, fontWeight: '500', color: '#1C90FB', marginTop: -35 }}>
-						검색된 결과가 없습니다 :(
-					</Text>
-					<Text style={{ fontSize: 17, fontWeight: '500', color: '#b1b1b1' }}>No Contents</Text>
-				</View>
-			)}
+			{(props.list.length < 1 || activateList.length < 1) && (
+					<Placeholder mainText="진행중인 회의가 없어요 :(" subText="새로운 화상회의를 생성해 보세요" />
+				)}
 
 			{/* 화상대화 히스토리 리스트 */}
 			<SectionList
@@ -59,11 +34,7 @@ const HomeScreenPresenter = props => {
 				refreshing={props.refreshing}
 				onRefresh={props.onRefresh}
 				style={styles.listContainer}
-				sections={[
-					{ title: '대화중', data: activateList, length: activateList.length - 1 }
-					// { title: `그룹대화(${groupList.length})`, data: groupList, length: groupList.length - 1 },
-					// { title: `1:1대화(${personnelList.length})`, data: personnelList, length: personnelList.length - 1 }
-				]}
+				sections={[{ title: '회의중', data: activateList, length: activateList.length - 1 }]}
 				renderSectionHeader={({ section }) =>
 					section.data.length > 0 && (
 						<Text key={section.title} style={styles.sectionHeader}>
