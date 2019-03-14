@@ -5,9 +5,7 @@
  */
 
 import React from 'react';
-import { connect } from 'react-redux';
 import { Linking, Platform } from 'react-native';
-import { actionCreators as UserActions } from '../../redux/modules/user';
 import LoginScreenPresenter from './LoginScreenPresenter';
 import { CustomLottie } from '../../components';
 // service
@@ -27,6 +25,20 @@ class LoginScreenContainer extends React.Component {
 		autoLoginFlag: true,
 		webView: false
 	};
+
+	componentDidMount() {
+		Linking.getInitialURL().then(url => {
+			if (url) {
+				this._handleGetWehagoToken({ url });
+			}
+		});
+		// Linking.addEventListener('url', this._handleOpenURL);
+		Linking.addEventListener('url', this._handleGetWehagoToken);
+	}
+
+	componentWillUnmount() {
+		Linking.removeEventListener('url', this._handleGetWehagoToken);
+	}
 
 	/**
 	 * Rendering
@@ -150,25 +162,18 @@ class LoginScreenContainer extends React.Component {
 		const iosMarketURL = "";
 		const androidMarketURL = "";
 
-		Linking.canOpenURL(url)
-			.then(supported => {
-				if (!supported) { // not supported
-					if (Platform.OS === "ios") {
-						Linking.openURL(iosMarketURL);
-					} else if (Platform.OS === "android") {
-						Linking.openURL(androidMarketURL);
-					}
-				} else { // supported
-					Linking.openURL(url).then((data) => {
-						console.log(data);
-					})
-				}
-			})
-			.catch(err => {
-				alert('앱 정보가 없습니다.');
-				console.log(err);
-				// console.error('An error occurred', err);
-			});
+		Linking.openURL(url).catch(err => {
+			console.log(err);
+			if (Platform.OS === "ios") {
+				Linking.openURL(iosMarketURL).catch(err => {
+					alert("스토어 정보가 없습니다.\n" + err);
+				});
+			} else if (Platform.OS === "android") {
+				Linking.openURL(androidMarketURL).catch(err => {
+					alert("스토어 정보가 없습니다.\n" + err);
+				});
+			}
+		});
 	};
 
 	/**
@@ -203,16 +208,4 @@ class LoginScreenContainer extends React.Component {
 	};
 }
 
-// map state to props
-let mapStateToProps = state => ({
-	user: state.user.auth,
-	permission: state.user.permission
-});
-
-// map dispatch to props
-let mapDispatchToProps = dispatch => ({
-	onLogin: user => dispatch(UserActions.login(user)),
-	onAgreement: () => dispatch(UserActions.agreement())
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(LoginScreenContainer);
+export default LoginScreenContainer;

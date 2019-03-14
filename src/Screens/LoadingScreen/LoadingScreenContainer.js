@@ -17,20 +17,7 @@ class LoadingScreenContainer extends React.Component {
 	 * 
 	 */
 	componentDidMount() {
-		Linking.getInitialURL().then(url => {
-			if (url) {
-				this._handleGetWehagoToken({ url });
-			}
-		});
-		Linking.addEventListener('url', this._handleGetWehagoToken);
 		this._handleCheckUser();
-	}
-
-	/**
-   * componentWillUnmount
-   */
-	componentWillUnmount() {
-		Linking.removeEventListener('url', this._handleGetWehagoToken);
 	}
 
 	/**
@@ -66,15 +53,6 @@ class LoadingScreenContainer extends React.Component {
 	// 	const { navigation } = this.props;
 	// 	navigation.navigate(url);
 	// };
-
-	/**
-	 * 
-	 */
-	_handleGetWehagoToken = event => {
-		const result = querystringParser(event.url);
-		Linking.removeEventListener('url', this._handleGetWehagoToken);
-		this._handleSaveUserinfo(result.mAuth_a_token, result.mAuth_r_token, result.mHASH_KEY, result.cno);
-	};
 }
 
 // map state to props
