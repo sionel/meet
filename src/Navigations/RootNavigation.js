@@ -13,7 +13,12 @@ const RootNavigation = createStackNavigator(
      * Main Navigation
      */
 		Main: {
-			screen: MainNavigation
+			screen: MainNavigation,
+			navigationOptions: {
+				header: null,
+				headerLeft: null,
+				gesturesEnabled: false
+			}
 		},
 
 		/**
@@ -39,7 +44,7 @@ const RootNavigation = createStackNavigator(
 				gesturesEnabled: false
 			}
 		},
-		
+
 		/**
 		 * Loding Navigation
 		 */

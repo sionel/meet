@@ -14,17 +14,6 @@ const TopAreaPresenter = props => {
 				style={props.orientation === 'vertical' ? styles.containerVertical : styles.containerHorizontal}
 			>
 				{/* 경과시간 */}
-				{/* <View
-          style={
-            props.orientation === "vertical"
-              ? styles.timeBoxVertical
-              : styles.timeBoxHorizontal
-          }
-        >
-          <Text style={{ color: "#fff", fontSize: 16.5, padding: 5 }}>
-            00:00:19
-          </Text>
-        </View> */}
 				<View
 					style={props.orientation === 'vertical' ? styles.settingBoxVertical : styles.settingBoxHorizontal}
 				>

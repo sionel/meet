@@ -14,16 +14,10 @@ const RouteTitlePresenter = props => {
 		color: '#f1f1f1'
 	};
 
-	if (props.auth) {
+	if (!props.auth) {
 		// 기본값
 		placeholder = {};
-		// 회사목록
-		// employeeList = props.auth.employee_list.map(e => ({
-		// 	label: e.company_name_kr,
-		// 	value: e.company_no
-		// }));
-		// // 선택된 회사
-		// selectedCompany = props.auth.last_access_company_no;
+		return <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 17 }}>-</Text>;
 	}
 
 	return (
@@ -32,13 +26,10 @@ const RouteTitlePresenter = props => {
 				placeholder={placeholder}
 				items={props.employeeList}
 				onValueChange={value => {
-					// alert(value);
-					props.onChangeCompany(value);
-					// setState({ selectedCompany: value });
+					props.onChangeValue(value);
 				}}
 				style={{ ...pickerSelectStyles }}
-				value={props.auth.last_access_company_no}
-				// value={props.selectedCompany}
+				value={props.selectedCompany}
 				useNativeAndroidPickerStyle={true}
 				textInputProps={{ underlineColorAndroid: 'cyan' }}
 				Icon={() => {

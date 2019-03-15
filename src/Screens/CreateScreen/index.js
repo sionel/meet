@@ -3,19 +3,28 @@
  */
 
 import CreateScreenContainer from './CreateScreenContainer';
-// import { connect } from 'react-redux';
-// import { actionCreators as UserActions } from '../../redux/modules/user';
+import { connect } from 'react-redux';
+// actions
+import { actionCreators as UserActions } from '../../redux/modules/user';
+import { actionCreators as WetalkActions } from '../../redux/modules/wetalk';
 
-// map state to props
-// const mapStateToProps = state => ({
-	
-// });
+/**
+ * Connect - State to Props
+ */
+let mapStateToProps = state => ({
+	auth: state.user.auth,
+	wetalk: state.wetalk.list
+});
 
-// const mapDispatchToProps = dispatch => {
-// 	return {
-		
-// 	};
-// };
+/**
+ * Connect - Dispatch to Props
+ */
+const mapDispatchToProps = dispatch => ({
+	onLogin: user => dispatch(UserActions.login(user)),
+	onSetWetalkList: list => dispatch(WetalkActions.setList(list))
+});
 
-// export default connect(mapStateToProps, mapDispatchToProps)(CreateScreenContainer);
-export default CreateScreenContainer;
+/**
+ * export
+ */
+export default connect(mapStateToProps, mapDispatchToProps)(CreateScreenContainer);

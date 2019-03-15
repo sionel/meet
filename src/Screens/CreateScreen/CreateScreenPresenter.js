@@ -1,53 +1,72 @@
 /**
  * CreateScreenPresenter
+ * 화상대화 히스토리 프레젠터
  */
 
 import React from 'react';
-import { View, Text, StyleSheet, SectionList, TouchableOpacity, Modal, Picker } from 'react-native';
-import { ListItemComp, SearchForm } from '../../components';
-import RNPickerSelect from 'react-native-picker-select';
+import { View, Text, StyleSheet, SectionList } from 'react-native';
+// common components
+import { ListItemComp, SearchForm, Placeholder, CustomModal } from '../../components';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
+/**
+ * CreateScreenPresenter
+ */
 const CreateScreenPresenter = props => {
-	const userConfig = [
-		// {
-		//   title: "onDestroyToken",
-		//   action: () => props.onDestroyToken()
-		// },
-		{
-			title: '이용약관',
-			action: () => props.onChangeValue('webView', true)
-		},
-		{
-			title: '개인정보 처리방침',
-			action: () => props.onChangeValue('webView', true)
-		}
-	];
+	const groupList = props.list.filter(item => item.room_type === '2' && item.is_video_access === 'F');
+	const personnelList = props.list.filter(item => item.room_type === '1' && item.is_video_access === 'F');
 
 	return (
 		<View style={styles.container}>
-			<View
-				style={{
-					flex: 1,
-					width: '100%'
-				}}
-			>
-				{/* 검색바 */}
-				<SearchForm />
-				<SectionList
-					sections={[{ title: '시스템', data: userConfig }]}
-					renderSectionHeader={({ section }) => (
+			{/* 검색바 */}
+			<SearchForm onChange={props.onSearch} />
+
+			{props.list.length < 1 && <Placeholder mainText="검색하신 위톡은 존재하지 않아요 :(" subText="위하고에서 위톡을 생성해 보세요" />}
+
+			{/* 화상대화 히스토리 리스트 */}
+			<SectionList
+				keyExtractor={(item, index) => index.toString()}
+				refreshing={props.refreshing}
+				onRefresh={props.onRefresh}
+				style={styles.listContainer}
+				sections={[
+					{ title: `그룹대화(${groupList.length})`, data: groupList, length: groupList.length - 1 },
+					{ title: `1:1대화(${personnelList.length})`, data: personnelList, length: personnelList.length - 1 }
+				]}
+				renderSectionHeader={({ section }) =>
+					section.data.length > 0 && (
 						<Text key={section.title} style={styles.sectionHeader}>
 							{section.title}
 						</Text>
 					)}
-					renderItem={({ item }, index) => (
-						<TouchableOpacity key={index} onPress={item.action}>
-							<Text style={styles.item}>{item.title}</Text>
-						</TouchableOpacity>
-					)}
-					keyExtractor={(item, index) => index}
-				/>
-			</View>
+				renderItem={({ item, index, section }) => (
+					// 히스토리 아이템
+					<ListItemComp
+						key={item.room_id}
+						title={item.room_title}
+						personnel={item.receiver_user_count}
+						updated={item.update_timestamp}
+						lottie={false}
+						customLottie={true}
+						underline={index < section.length ? true : false}
+						active={item.is_video_access === 'T' ? true : false}
+						disable={item.receiver_user_count === 1 && item.room_type === '1' ? true : false}
+						onClick={() =>
+							item.is_video_access === 'T'
+								? props.onCheckConference(item.video_chat_id)
+								: props.onActivateModal(item.room_id)}
+					/>
+				)}
+			/>
+
+			<CustomModal
+				display={props.modal}
+				title="화상대화 생성"
+				text="화상대화를 생성하시겠습니까?"
+				feedbackText="시작하기"
+				onClickClose={() => props.onActivateModal(null)}
+				onClickFeedback={() => props.onCreateConference(props.selectedRoomId)}
+			/>
 		</View>
 	);
 };
@@ -64,8 +83,14 @@ const styles = StyleSheet.create({
 	},
 
 	listContainer: {
-		width: '100%',
-		padding: '3%'
+		width: '100%'
+		// padding: '4% 3%'
+	},
+
+	notResult: {
+		height: '10%',
+		justifyContent: 'center',
+		alignItems: 'center'
 	},
 
 	sectionHeader: {
@@ -79,11 +104,50 @@ const styles = StyleSheet.create({
 		color: '#3f3f3f',
 		backgroundColor: 'rgba(247,247,247,1.0)'
 	},
-	item: {
-		padding: 10,
-		fontSize: 15,
-		height: 44
-	}
+
+	modalWrap: {
+		// marginTop: 22,
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		backgroundColor: 'rgba(0,0,0, .75)'
+	},
+
+	modalContentWrap: {
+		backgroundColor: '#fff',
+		width: '100%',
+		maxWidth: 300,
+		padding: 0,
+		shadowColor: '#000',
+		shadowOffset: {
+			width: 0,
+			height: 2
+		},
+		shadowOpacity: 0.25,
+		shadowRadius: 3.84,
+		elevation: 5
+	},
+
+	modalMessage: {
+		paddingTop: 20,
+		paddingBottom: 30,
+		paddingLeft: 20,
+		paddingRight: 20
+		// borderWidth: 1,
+		// borderColor: '#1C90FB'
+	},
+
+	modalButtons: { flexDirection: 'row' },
+	modalButton: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		paddingTop: 15,
+		paddingBottom: 15,
+		marginBottom: -1
+	},
+	modalButtonCancel: { backgroundColor: '#f1f1f1' },
+	modalButtonConfirm: { backgroundColor: '#1C90FB' }
 });
 
 export default CreateScreenPresenter;

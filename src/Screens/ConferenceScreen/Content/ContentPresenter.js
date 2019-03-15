@@ -9,7 +9,8 @@ import BottomArea from './BottomArea';
  * ContentPresenter
  */
 const ContentPresenter = props => {
-	const { mainUser, callType, isVideoReverse } = props;
+	const { mainUser, callType, isVideoReverse, speaker } = props;
+
 	return (
 		<View style={styles.container} onLayout={props.onLayout}>
 			<TouchableOpacity activeOpacity={0.7} style={styles.container} onPress={props.toggleConferenceMode}>
@@ -28,7 +29,14 @@ const ContentPresenter = props => {
 									: styles.bottomAreaHorizontal
 							}
 						>
-							<BottomArea onClose={props.onClose} orientation={props.orientation} callType={callType} />
+							{/* 하단 영역 */}
+							<BottomArea
+								onClose={props.onClose}
+								onChangeSpeaker={props.onChangeSpeaker}
+								orientation={props.orientation}
+								callType={callType}
+								speaker={speaker}
+							/>
 						</View>
 					</View>
 				</MainVideo>

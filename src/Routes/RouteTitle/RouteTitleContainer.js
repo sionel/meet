@@ -18,38 +18,41 @@ class RouteTitleContainer extends React.Component {
 				label: e.company_name_kr,
 				value: e.company_no
 			})),
-			selectedCompany: this.props.auth.last_access_company_no
+			selectedCompany: this.props.auth.last_access_company_no ? this.props.auth.last_access_company_no : null
 		};
 	}
 
 	/**
 	 * 
 	 */
-
-	/**
-	 * 
-	 */
 	shouldComponentUpdate(nextProps, nextState) {
-		console.log('NEXT : ', nextProps);
-		console.log('nextState : ', nextState);
-		return true;
-	}
+		try {
+			this.props.onChangeCompany(nextState.selectedCompany);
+			if (this.state.selectedCompany != nextState.selectedCompany) {
+				return true;
+			}
+			return false;
+		} catch (e) {
+			return false;
+		}
 
-	/**
-	 * 
-	 */
+		// return false;
+	}
 	componentWillUpdate(nextProps, nextState) {}
 
 	/**
 	 * 
 	 */
 	render() {
-		if (!this.props.auth) {
-			return <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 17 }}>-</Text>;
-		}
-		// return <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 17 }}>-2</Text>;
-		return <RouteTitlePresenter {...this.state} {...this.props} />;
-	} // render
+		return <RouteTitlePresenter {...this.state} {...this.props} onChangeValue={this._handleChangeValue} />;
+	}
+
+	/**
+	 * 
+	 */
+	_handleChangeValue = selectedCompany => {
+		this.setState({ selectedCompany });
+	};
 }
 
 export default RouteTitleContainer;

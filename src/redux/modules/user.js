@@ -165,7 +165,13 @@ function reducer(state = initialState, action) {
 		case INTRO:
 			return { ...state, intro: true };
 		case CHANGE_COMPANY:
-			applyChangeCompany(state, action);
+			let newAuth = state.auth;
+			newAuth.last_access_company_no = action.payload.cno;
+			console.log('NEW : ', newAuth);
+
+			// applyChangeCompany(state, action);
+			return { ...state, auth: newAuth };
+		// return state;
 		default:
 			return state;
 	}
@@ -192,7 +198,7 @@ function reducer(state = initialState, action) {
 function applyChangeCompany(state, action) {
 	const { cno } = action.payload;
 	const newAuth = { ...state.auth, last_access_company_no: cno };
-	console.log('newAuth : ', newAuth);
+	console.log('newAuth : ', newAuth.last_access_company_no);
 	return {
 		...state,
 		auth: newAuth
