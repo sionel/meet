@@ -11,7 +11,6 @@ import { CustomLottie } from '../../../../components';
  */
 const MainVideoPresenter = props => {
 	const { isMuteVideo, stream, videoType, mainUser, callType } = props;
-
 	const displayTime = (
 		<View
 			style={{

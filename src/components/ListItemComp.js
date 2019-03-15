@@ -108,7 +108,7 @@ const ListItemComp = props => {
 				)}
 				{props.customLottie && (
 					<View
-						style={{ ...styles.activeLight, top: 10, width: 30, height: 30, backgroundColor: activeColor }}
+						style={{ ...styles.activeLight, top: 12, width: 27, height: 27, backgroundColor: activeColor }}
 					>
 						<Image
 							style={{

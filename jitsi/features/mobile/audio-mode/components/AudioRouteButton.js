@@ -1,12 +1,7 @@
 // @flow
 
 import React from 'react';
-import {
-    findNodeHandle,
-    NativeModules,
-    requireNativeComponent,
-    View
-} from 'react-native';
+import { findNodeHandle, NativeModules, requireNativeComponent, View } from 'react-native';
 import { connect } from 'react-redux';
 
 import { openDialog } from '../../../base/dialog';
@@ -20,9 +15,7 @@ import AudioRoutePickerDialog from './AudioRoutePickerDialog';
  * The {@code MPVolumeView} React {@code Component}. It will only be available
  * on iOS.
  */
-const MPVolumeView
-    = NativeModules.MPVolumeViewManager
-        && requireNativeComponent('MPVolumeView');
+const MPVolumeView = NativeModules.MPVolumeViewManager && requireNativeComponent('MPVolumeView');
 
 /**
  * The style required to hide the {@code MPVolumeView}, since it's displayed
@@ -31,64 +24,62 @@ const MPVolumeView
 const HIDE_VIEW_STYLE = { display: 'none' };
 
 type Props = AbstractButtonProps & {
-
-    /**
+	/**
      * The redux {@code dispatch} function used to open/show the
      * {@code AudioRoutePickerDialog}.
      */
-    dispatch: Function
+	dispatch: Function
 };
 
 /**
  * A toolbar button which triggers an audio route picker when pressed.
  */
 class AudioRouteButton extends AbstractButton<Props, *> {
-    accessibilityLabel = 'toolbar.accessibilityLabel.audioRoute';
-    iconName = 'icon-volume';
-    label = 'toolbar.audioRoute';
+	accessibilityLabel = 'toolbar.accessibilityLabel.audioRoute';
+	iconName = 'icon-volume';
+	label = 'toolbar.audioRoute';
 
-    _volumeComponent: ?Object;
+	_volumeComponent: ?Object;
 
-    /**
+	/**
      * Initializes a new {@code AudioRouteButton} instance.
      *
      * @param {Props} props - The React {@code Component} props to initialize
      * the new {@code AudioRouteButton} instance with.
      */
-    constructor(props: Props) {
-        super(props);
+	constructor(props: Props) {
+		super(props);
 
-        /**
+		/**
          * The internal reference to the React {@code MPVolumeView} for
          * showing the volume control view.
          *
          * @private
          * @type {ReactElement}
          */
-        this._volumeComponent = null;
+		this._volumeComponent = null;
 
-        // Bind event handlers so they are only bound once per instance.
-        this._setVolumeComponent = this._setVolumeComponent.bind(this);
-    }
+		// Bind event handlers so they are only bound once per instance.
+		this._setVolumeComponent = this._setVolumeComponent.bind(this);
+	}
 
-    /**
+	/**
      * Handles clicking / pressing the button, and opens the appropriate dialog.
      *
      * @private
      * @returns {void}
      */
-    _handleClick() {
-        if (MPVolumeView) {
-            NativeModules.MPVolumeViewManager.show(
-                findNodeHandle(this._volumeComponent));
-        } else if (AudioRoutePickerDialog) {
-            this.props.dispatch(openDialog(AudioRoutePickerDialog));
-        }
-    }
+	_handleClick() {
+		if (MPVolumeView) {
+			NativeModules.MPVolumeViewManager.show(findNodeHandle(this._volumeComponent));
+		} else if (AudioRoutePickerDialog) {
+			this.props.dispatch(openDialog(AudioRoutePickerDialog));
+		}
+	}
 
-    _setVolumeComponent: (?Object) => void;
+	_setVolumeComponent: (?Object) => void;
 
-    /**
+	/**
      * Sets the internal reference to the React Component wrapping the
      * {@code MPVolumeView} component.
      *
@@ -96,35 +87,30 @@ class AudioRouteButton extends AbstractButton<Props, *> {
      * @private
      * @returns {void}
      */
-    _setVolumeComponent(component) {
-        this._volumeComponent = component;
-    }
+	_setVolumeComponent(component) {
+		this._volumeComponent = component;
+	}
 
-    /**
+	/**
      * Implements React's {@link Component#render()}.
      *
      * @inheritdoc
      * @returns {React$Node}
      */
-    render() {
-        if (!MPVolumeView && !AudioRoutePickerDialog) {
-            return null;
-        }
+	render() {
+		if (!MPVolumeView && !AudioRoutePickerDialog) {
+			return null;
+		}
 
-        const element = super.render();
+		const element = super.render();
 
-        return (
-            <View>
-                { element }
-                {
-                    MPVolumeView
-                        && <MPVolumeView
-                            ref = { this._setVolumeComponent }
-                            style = { HIDE_VIEW_STYLE } />
-                }
-            </View>
-        );
-    }
+		return (
+			<View>
+				{element}
+				{MPVolumeView && <MPVolumeView ref={this._setVolumeComponent} style={HIDE_VIEW_STYLE} />}
+			</View>
+		);
+	}
 }
 
 export default translate(connect()(AudioRouteButton));

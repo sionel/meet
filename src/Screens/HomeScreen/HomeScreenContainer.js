@@ -73,6 +73,7 @@ class HomeScreenContainer extends Component {
    * Rendering
    */
 	render() {
+		console.log('Platform : ', Platform);
 		const { refreshing, searchKeyword, selectedRoomId, modal } = this.state;
 		const { navigation, auth } = this.props;
 		let wetalk = []; // We talk list

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, NativeModules } from 'react-native';
+import { Dimensions, NativeModules, Platform } from 'react-native';
 import ContentPresenter from './ContentPresenter';
 import { ConferenceModes } from '../../../utils/Constants';
 
@@ -8,15 +8,26 @@ const { AudioMode } = NativeModules;
  * ContentContainer : 화상대화 화면
  */
 class ContentContainer extends React.Component {
+	/**
+	 * STATE
+	 */
 	state = {
 		orientation: Dimensions.get('window').height > Dimensions.get('window').width ? 'vertical' : 'horizontal',
-		isVideoReverse: false
+		isVideoReverse: false,
+		speaker: 2
 	};
 
+	/**
+	 * 
+	 */
 	componentDidMount() {
-		AudioMode.setMode(AudioMode.VIDEO_CALL);
+		// 스피커폰 설정
+		this._handleChangeSpeaker(AudioMode.VIDEO_CALL);
 	}
 
+	/**
+	 * REDNER
+	 */
 	render() {
 		return (
 			<ContentPresenter
@@ -25,6 +36,7 @@ class ContentContainer extends React.Component {
 				toggleConferenceMode={this._toggleConferenceMode}
 				onReverseVideo={this._handleReverseVideo}
 				onLayout={this._setOrientation}
+				onChangeSpeaker={this._handleChangeSpeaker}
 			/>
 		);
 	}
@@ -58,6 +70,18 @@ class ContentContainer extends React.Component {
 	 */
 	_handleReverseVideo = () => {
 		this.setState(prev => ({ isVideoReverse: !prev.isVideoReverse }));
+	};
+
+	/**
+	 * 스피커폰 활성화
+	 */
+	_handleChangeSpeaker = () => {
+		/*
+		[ 1(수화기) | 2(스피커) ]
+		*/
+		const { speaker } = this.state;
+		AudioMode.setMode(speaker);
+		this.setState(prev => ({ speaker: prev.speaker == 2 ? 1 : 2 }));
 	};
 }
 

@@ -63,6 +63,7 @@ const CreateScreenPresenter = props => {
 				display={props.modal}
 				title="화상대화 생성"
 				text="화상대화를 생성하시겠습니까?"
+				feedbackText="시작하기"
 				onClickClose={() => props.onActivateModal(null)}
 				onClickFeedback={() => props.onCreateConference(props.selectedRoomId)}
 			/>
