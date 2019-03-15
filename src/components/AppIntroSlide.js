@@ -67,7 +67,7 @@ class AppIntroSlide extends React.Component {
 				이미지 원본크기로 지정해야 가로크기가 맞음..
 				*/}
         {/* <Image source={item.image} style={{ width: 275 }} /> */}
-        <Image source={item.image} style={{ width: 375 }} />
+        <Image source={item.image} style={{ width: "100%" }} />
         {/* <View style={{ backgroundColor: '#f1f1f1', width: '100%' }}>
 					<Text>asdasdlka</Text>
 				</View>

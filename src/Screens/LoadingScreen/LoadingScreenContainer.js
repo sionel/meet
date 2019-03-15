@@ -6,10 +6,12 @@
 
 import React from 'react';
 import LoadingScreenPresenter from './LoadingScreenPresenter';
+import LoginScreen from '../LoginScreen';
 // service
 import { UserApi } from '../../services';
 
 class LoadingScreenContainer extends React.Component {
+	state = { loading: true };
 	/**
 	 * 
 	 */
@@ -22,8 +24,10 @@ class LoadingScreenContainer extends React.Component {
 	 */
 	render() {
 		return (
-			<LoadingScreenPresenter />
-		);
+			this.state.loading
+			? <LoadingScreenPresenter />
+			: <LoginScreen />
+		)
 	} // render
 
 	/**
@@ -39,7 +43,9 @@ class LoadingScreenContainer extends React.Component {
 				}
 			}
 		}
-		this.props.navigation.navigate('Login');
+		
+		this.setState({ loading: false });
+		// this.props.navigation.navigate('Login');
 	};
 
 	/**

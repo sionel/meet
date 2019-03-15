@@ -5,11 +5,14 @@
  */
 
 import React from 'react';
-import { Linking, Platform } from 'react-native';
+import { Linking, Platform, NativeModules } from 'react-native';
+import { StackActions, NavigationActions } from 'react-navigation';
 import LoginScreenPresenter from './LoginScreenPresenter';
 import { CustomLottie } from '../../components';
 // service
 import { querystringParser } from '../../utils';
+
+const { PlatformConstants } = NativeModules;
 
 class LoginScreenContainer extends React.Component {
 	/**
@@ -26,14 +29,14 @@ class LoginScreenContainer extends React.Component {
 	};
 
 	componentDidMount() {
-		this._handleCheckUser();
-
 		Linking.getInitialURL().then(url => {
 			if (url) {
 				this._handleGetWehagoToken({ url });
 			}
 		});
 		Linking.addEventListener('url', this._handleGetWehagoToken);
+
+		this._handleCheckUser();
 	}
 
 	componentWillUnmount() {
@@ -88,13 +91,20 @@ class LoginScreenContainer extends React.Component {
 		if (user) {
 			if (user.AUTH_A_TOKEN) {
 				const result = await loginCheckRequest(user.AUTH_A_TOKEN, user.AUTH_R_TOKEN, user.last_access_company_no, user.HASH_KEY);
-				if (result) {
-					return this.props.navigation.navigate('Home');
-				}
+				setTimeout(() => {
+					if (result) {
+						// this.props.navigation.pop();
+						return this.props.navigation.navigate('Home');
+					} else {
+						return this.setState({ waiting: false });
+					}
+				}, 1000);
 			}
+		} else {		
+			setTimeout(() => {
+				return this.setState({ waiting: false });
+			}, 1000);
 		}
-		
-		this.setState({ waiting: false });
 	};
 
 	/**
@@ -105,14 +115,23 @@ class LoginScreenContainer extends React.Component {
 		// const { navigation } = this.props;
 		const { userId, userPwd } = this.state;
 		const { loginRequest } = this.props;
+		const osData = Platform.OS === "ios" ? {
+			login_ip: "localhost:8081",
+			login_device: PlatformConstants.systemName  + " " + PlatformConstants.interfaceIdiom,
+			login_os: PlatformConstants.systemName + " " + PlatformConstants.osVersion,
+		}	: {
+			login_ip: PlatformConstants.ServerHost,
+			login_device: PlatformConstants.Model,
+			login_os: Platform.OS + " " + PlatformConstants.Release,
+		};
 		const data = {
 			portal_id: userId,
 			portal_password: userPwd,
-			login_ip: '10.51.114.169',
-			login_device: 'iPhone',
-			login_os: 'IOS 12.1.2',
-			login_browser: 'WEHAGO-APP'
+			login_browser: 'WEHAGO-APP',
+			...osData
 		};
+		alert(data.login_ip);
+
 		// result data
 		const { resultCode, resultData } = await loginRequest(data);
 

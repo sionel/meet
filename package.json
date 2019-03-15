@@ -8,7 +8,9 @@
     "ios": "react-native run-ios",
     "android": "~/Library/Android/sdk/emulator/emulator @Nexus_5X_API_28&react-native run-android",
     "pod": "cd ios&&pod install&&cd ..",
-    "build-android": "./android/gradlew assembleRelease"
+    "build-android": "cd ./android&&./gradlew assembleRelease&&cd ..",
+    "debug-android": "react-native run-android --variant=debug",
+    "set-android": "~/Library/Android/sdk/platform-tools/adb -s 21bcfb073d057ece reverse tcp:8081 tcp:8081"
   },
   "dependencies": {
     "@webcomponents/url": "0.7.1",
