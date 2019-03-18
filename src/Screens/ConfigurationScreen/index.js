@@ -8,7 +8,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchTopProps = dispatch => ({
 	onLogout: () => dispatch(UserActions.logout()),
-	onDestroyToken: () => dispatch(UserActions.token())
+	onDestroyToken: () => dispatch(UserActions.token()),
+	onToggleVisibleAppIntro: () => dispatch(UserActions.toggleVisibleAppIntro())
 });
 
 export default connect(mapStateToProps, mapDispatchTopProps)(ConfigurationScreenContainer);

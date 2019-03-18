@@ -26,6 +26,9 @@ class RouteTitleContainer extends React.Component {
 	 * 
 	 */
 	shouldComponentUpdate(nextProps, nextState) {
+		if (nextProps !== this.props) {
+			return false;
+		}
 		try {
 			this.props.onChangeCompany(nextState.selectedCompany);
 			if (this.state.selectedCompany != nextState.selectedCompany) {
@@ -38,7 +41,7 @@ class RouteTitleContainer extends React.Component {
 
 		// return false;
 	}
-	componentWillUpdate(nextProps, nextState) {}
+	// componentWillUpdate(nextProps, nextState) {}
 
 	/**
 	 * 

@@ -41,10 +41,10 @@ class AppIntroSlide extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      // showRealApp: false
-      showRealApp: this.props.intro
-    };
+    // this.state = {
+    //   // showRealApp: false
+    //   showRealApp: this.props.intro
+    // };
   }
 
   _renderItem = (item, index) => {
@@ -76,15 +76,15 @@ class AppIntroSlide extends React.Component {
     );
   };
 
-  _onDone = async () => {
-    await this.props.onIntro();
-    this._handleGetIntroState();
+  _onDone = () => {
+    return this.props.onIntro();
+    // this._handleGetIntroState();
   };
 
-  _handleGetIntroState = () => {
-    const { intro } = this.props;
-    this.setState({ showRealApp: intro });
-  };
+  // _handleGetIntroState = () => {
+  //   const { intro } = this.props;
+  //   this.setState({ showRealApp: intro });
+  // };
 
   _renderNextButton = () => {
     return (
@@ -105,7 +105,7 @@ class AppIntroSlide extends React.Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
-        {this.state.showRealApp ? (
+        {this.props.intro ? (
           this.props.children
         ) : (
           <AppIntroSlider

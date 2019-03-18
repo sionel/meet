@@ -28,7 +28,7 @@ class ConfigurationScreenContainer extends React.Component {
 	 * Rendering
 	 */
 	render() {
-		const { navigation, onDestroyToken } = this.props;
+		const { navigation, onDestroyToken, onToggleVisibleAppIntro } = this.props;
 		const { list, webView } = this.state;
 
 		return (
@@ -40,6 +40,7 @@ class ConfigurationScreenContainer extends React.Component {
 				onLogout={this._handleLogout}
 				onChangeValue={this._handleChangeValue}
 				onDestroyToken={onDestroyToken}
+				onToggleVisibleAppIntro={onToggleVisibleAppIntro}
 			/>
 		);
 	} // render

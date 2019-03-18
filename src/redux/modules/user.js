@@ -210,8 +210,10 @@ function applyChangeCompany(state, action) {
 
 //#region TOGGLE_VISIBLE_APPINTRO
 function toggleVisibleAppIntro() {
-  return {
-		type: TOGGLE_VISIBLE_APPINTRO
+  return dispatch => {
+		dispatch({
+			type: TOGGLE_VISIBLE_APPINTRO
+		});
 	};
 }
 

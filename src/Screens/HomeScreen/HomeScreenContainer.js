@@ -49,7 +49,7 @@ class HomeScreenContainer extends Component {
 		// Linking.addEventListener('url', this._handleOpenURL);
 		Linking.addEventListener('url', this._handleOpenURL);
 		AppState.addEventListener('change', this._handleAppStateChange);
-		setInterval(() => {
+		this._interval = setInterval(() => {
 			if (Date.now() > this._refreshTimeStamp + 3000) {
 				// 리프레쉬 할 시간이 지났으면 리프레쉬 한다.
 				this._handleRefresh();
@@ -61,6 +61,7 @@ class HomeScreenContainer extends Component {
    * componentWillUnmount
    */
 	componentWillUnmount() {
+		clearInterval(this._interval);
 		Linking.removeEventListener('url', this._handleOpenURL);
 		AppState.removeEventListener('change', this._handleAppStateChange);
 	}
