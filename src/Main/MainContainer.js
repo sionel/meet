@@ -12,7 +12,6 @@ class MainContainer extends Component {
   state = { isLogin: false };
 
   shouldComponentUpdate(nextProps, nextStates) {
-    console.log(nextStates);
     if (nextStates.isLogin !== this.state.isLogin)
       return true;
 

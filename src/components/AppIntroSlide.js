@@ -140,13 +140,13 @@ const styles = StyleSheet.create({
 });
 
 // map state to props
-let mapStateToProps = state => ({
-  intro: state.user.intro
+const mapStateToProps = state => ({
+  intro: state.user.appIntro
 });
 
 // map dispatch to props
-let mapDispatchToProps = dispatch => ({
-  onIntro: () => dispatch(UserActions.intro())
+const mapDispatchToProps = dispatch => ({
+  onIntro: () => dispatch(UserActions.toggleVisibleAppIntro())
 });
 
 export default connect(

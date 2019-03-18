@@ -10,8 +10,8 @@ const LOGIN = 'LOGIN';
 const LOGOUT = 'LOGOUT';
 const TOKEN = 'TOKEN';
 // const TOKEN_LOGIN = 'TOKEN_LOGIN';
-const INTRO = 'INTRO';
 const CHANGE_COMPANY = 'CHANGE_COMPANY';
+const TOGGLE_VISIBLE_APPINTRO = "TOGGLE_VISIBLE_APPINTRO";
 
 //#region Action Creators
 
@@ -90,9 +90,9 @@ function token(auth) {
 /**
  * intro skip
  */
-function intro() {
-	return { type: INTRO };
-};
+// function intro() {
+// 	return { type: INTRO };
+// };
 
 /**
  * CHANGE_COMPANY
@@ -137,7 +137,7 @@ function changeCompany(cno) {
 const initialState = {
 	auth: null,
 	permission: false,
-	intro: false
+	appIntro: false
 };
 
 //#endregion initialState
@@ -162,8 +162,8 @@ function reducer(state = initialState, action) {
 			};
 		// case TOKEN_LOGIN:
 		// 	return applyTokenLogin(state, action);
-		case INTRO:
-			return { ...state, intro: true };
+		case TOGGLE_VISIBLE_APPINTRO:
+			return applyToggleVisibleAppIntro(state, action);
 		case CHANGE_COMPANY:
 			let newAuth = state.auth;
 			newAuth.last_access_company_no = action.payload.cno;
@@ -207,6 +207,24 @@ function applyChangeCompany(state, action) {
 
 //#endregion Reducer Functions
 
+
+//#region TOGGLE_VISIBLE_APPINTRO
+function toggleVisibleAppIntro() {
+  return {
+		type: TOGGLE_VISIBLE_APPINTRO
+	};
+}
+
+function applyToggleVisibleAppIntro(state, action) {
+  const { appIntro } = state;
+  return {
+    ...state,
+    appIntro: !appIntro
+  }
+}
+
+//#endregion TOGGLE_VISIBLE_APPINTRO
+
 //#region Export
 
 const actionCreators = {
@@ -217,8 +235,8 @@ const actionCreators = {
 	token,
 	// tokenLogin,
 	agreement,
-	intro,
-	changeCompany
+	changeCompany,
+	toggleVisibleAppIntro
 };
 
 export { actionCreators };
