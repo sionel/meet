@@ -30,8 +30,8 @@ class ConferenceManager {
    * connect : 화상대화 참가
    */
 	join = async (roomName, name, handleClose, auth) => {
-		console.log('Roo : ', roomName);
-		console.log('Roo : ', name);
+		// console.log('Roo : ', roomName);
+		// console.log('Roo : ', name);
 
 		// 초기화
 		this._init();

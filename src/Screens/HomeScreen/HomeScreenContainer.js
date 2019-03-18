@@ -46,7 +46,6 @@ class HomeScreenContainer extends Component {
 				this._handleOpenURL({ url });
 			}
 		});
-		// Linking.addEventListener('url', this._handleOpenURL);
 		Linking.addEventListener('url', this._handleOpenURL);
 		AppState.addEventListener('change', this._handleAppStateChange);
 		setInterval(() => {
@@ -136,6 +135,7 @@ class HomeScreenContainer extends Component {
    */
 	_handleOpenLink = url => {
 		const result = querystringParser(url);
+		// console.log('RESULT :: ', result);
 		if (result.type === '3') {
 			// 위하고 로그인일 경우
 		} else {
@@ -229,29 +229,6 @@ class HomeScreenContainer extends Component {
 		// 재 로그인
 		if (checkResult.errors) {
 			return navigation.navigate('Login');
-			loginResult = await UserApi.login(auth);
-
-			if (loginResult.resultCode !== 200) {
-				alert('다시 로그인!');
-				return navigation.navigate('Login');
-			}
-
-			checkResult = await UserApi.check(
-				loginResult.resultData.AUTH_A_TOKEN,
-				loginResult.resultData.last_access_company_no,
-				loginResult.resultData.HASH_KEY
-			);
-			userData = {
-				...auth,
-				AUTH_A_TOKEN: loginResult.resultData.AUTH_A_TOKEN,
-				AUTH_R_TOKEN: loginResult.resultData.AUTH_R_TOKEN,
-				last_access_company_no: checkResult.resultData.last_access_company_no,
-				last_company: checkResult.resultData.employee_list.filter(
-					e => e.company_no == checkResult.resultData.last_access_company_no
-				)[0]
-			};
-
-			onLogin(userData);
 		} else {
 			// 최종선택 회사가 달라진 경우
 			if (auth.last_access_company_no != checkResult.resultData.last_access_company_no) {
@@ -287,7 +264,7 @@ class HomeScreenContainer extends Component {
 		let { auth } = this.props;
 		let callType = 1;
 		let isCreator;
-		// 위하고에서 접속인지 아닌지 구분
+		// 위하고(외부)에서 접속인지 아닌지 구분
 		if (externalData !== null) {
 			auth = {
 				conferenceId,
@@ -299,8 +276,6 @@ class HomeScreenContainer extends Component {
 
 			callType = externalData.call_type; // 1:화상 / 2:음성
 			isCreator = externalData.is_creater; // 1:생성자 / 2:참여자
-			// this._handleRedirect('Conference', { item: { videoRoomId: conferenceId, callType } });
-			// return;
 		} else {
 			// 생성여부 체크
 			const result = await ConferenceApi.check(conferenceId, auth.AUTH_A_TOKEN, auth.HASH_KEY);
@@ -379,10 +354,12 @@ class HomeScreenContainer extends Component {
 		if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
 			// 포그라운드 전환시 아래 로직 실행
 			this._handleRefressAfterWhile();
+		} else {
+			// Linking.removeEventListener('url', this._handleOpenURL);
 		}
 		this.setState({ appState: nextAppState, url: 111 });
 	};
 }
 // #endregion
 
-export default HomeScreenContainer
+export default HomeScreenContainer;

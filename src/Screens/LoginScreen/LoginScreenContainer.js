@@ -90,7 +90,12 @@ class LoginScreenContainer extends React.Component {
 		const { user, loginCheckRequest } = this.props;
 		if (user) {
 			if (user.AUTH_A_TOKEN) {
-				const result = await loginCheckRequest(user.AUTH_A_TOKEN, user.AUTH_R_TOKEN, user.last_access_company_no, user.HASH_KEY);
+				const result = await loginCheckRequest(
+					user.AUTH_A_TOKEN,
+					user.AUTH_R_TOKEN,
+					user.last_access_company_no,
+					user.HASH_KEY
+				);
 				setTimeout(() => {
 					if (result) {
 						// this.props.navigation.pop();
@@ -100,7 +105,7 @@ class LoginScreenContainer extends React.Component {
 					}
 				}, 1000);
 			}
-		} else {		
+		} else {
 			setTimeout(() => {
 				return this.setState({ waiting: false });
 			}, 1000);
@@ -115,22 +120,25 @@ class LoginScreenContainer extends React.Component {
 		// const { navigation } = this.props;
 		const { userId, userPwd } = this.state;
 		const { loginRequest } = this.props;
-		const osData = Platform.OS === "ios" ? {
-			login_ip: "localhost:8081",
-			login_device: PlatformConstants.systemName  + " " + PlatformConstants.interfaceIdiom,
-			login_os: PlatformConstants.systemName + " " + PlatformConstants.osVersion,
-		}	: {
-			login_ip: PlatformConstants.ServerHost,
-			login_device: PlatformConstants.Model,
-			login_os: Platform.OS + " " + PlatformConstants.Release,
-		};
+		const osData =
+			Platform.OS === 'ios'
+				? {
+						login_ip: 'localhost:8081',
+						login_device: PlatformConstants.systemName + ' ' + PlatformConstants.interfaceIdiom,
+						login_os: PlatformConstants.systemName + ' ' + PlatformConstants.osVersion
+					}
+				: {
+						login_ip: PlatformConstants.ServerHost,
+						login_device: PlatformConstants.Model,
+						login_os: Platform.OS + ' ' + PlatformConstants.Release
+					};
 		const data = {
 			portal_id: userId,
 			portal_password: userPwd,
 			login_browser: 'WEHAGO-APP',
 			...osData
 		};
-		alert(data.login_ip);
+		// alert(data.login_ip);
 
 		// result data
 		const { resultCode, resultData } = await loginRequest(data);
@@ -170,18 +178,18 @@ class LoginScreenContainer extends React.Component {
 	 */
 	_handleLoginForWehago = () => {
 		const url = 'wehago://?wehagomeet=login';
-		const iosMarketURL = "http://itunes.apple.com/kr/app/wehago/id1363039300?mt=8";
-		const androidMarketURL = "https://play.google.com/store/apps/details?id=com/duzon.lulubizpotal";
+		const iosMarketURL = 'http://itunes.apple.com/kr/app/wehago/id1363039300?mt=8';
+		const androidMarketURL = 'https://play.google.com/store/apps/details?id=com/duzon.lulubizpotal';
 
 		Linking.openURL(url).catch(err => {
 			console.log(err);
-			if (Platform.OS === "ios") {
+			if (Platform.OS === 'ios') {
 				Linking.openURL(iosMarketURL).catch(err => {
-					alert("스토어 정보가 없습니다.\n" + err);
+					alert('스토어 정보가 없습니다.\n' + err);
 				});
-			} else if (Platform.OS === "android") {
+			} else if (Platform.OS === 'android') {
 				Linking.openURL(androidMarketURL).catch(err => {
-					alert("스토어 정보가 없습니다.\n" + err);
+					alert('스토어 정보가 없습니다.\n' + err);
 				});
 			}
 		});
@@ -192,7 +200,7 @@ class LoginScreenContainer extends React.Component {
 	 */
 	_handleGetWehagoToken = event => {
 		const result = querystringParser(event.url);
-		Linking.removeEventListener('url', this._handleGetWehagoToken);
+		// Linking.removeEventListener('url', this._handleGetWehagoToken);
 		this._handleSaveUserinfo(result.mAuth_a_token, result.mAuth_r_token, result.mHASH_KEY, result.cno);
 	};
 
