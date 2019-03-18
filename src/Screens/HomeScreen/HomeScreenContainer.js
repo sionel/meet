@@ -70,7 +70,7 @@ class HomeScreenContainer extends Component {
    * Rendering
    */
 	render() {
-		console.log('Platform : ', Platform);
+		// console.log('Platform : ', Platform);
 		const { refreshing, searchKeyword, selectedRoomId, modal } = this.state;
 		const { navigation, auth } = this.props;
 		let wetalk = []; // We talk list
@@ -212,8 +212,8 @@ class HomeScreenContainer extends Component {
    * 접속자확인 및 자동로그인
    */
 	_handleAutoLogin = async () => {
-		const { auth, onLogin, navigation } = this.props;
-		let checkResult,
+		const { auth, onLogin, navigation, loginCheckRequest } = this.props;
+		let 
 			loginResult,
 			userData = {};
 
@@ -221,14 +221,17 @@ class HomeScreenContainer extends Component {
 		if (!auth /* || (!auth.portal_id && !auth.portal_password)*/) {
 			alert('접속 정보가 유효하지 않습니다. 다시 로그인 해주세요');
 			console.log('AUTH : ', auth);
-			return this._handleRedirect('Login');
+			return this._handleRedirect('Main');
 		}
+		// alert(JSON.stringify(await AudioMode.getAudioDevices()));
 
 		// 접속자 확인
-		checkResult = await UserApi.check(auth.AUTH_A_TOKEN, auth.last_access_company_no, auth.HASH_KEY);
+		const checkResult = await loginCheckRequest(auth.AUTH_A_TOKEN, auth.AUTH_R_TOKEN, auth.last_access_company_no, auth.HASH_KEY);
+		// checkResult = await UserApi.check(auth.AUTH_A_TOKEN, auth.last_access_company_no, auth.HASH_KEY);
 		// 재 로그인
-		if (checkResult.errors) {
-			return navigation.navigate('Login');
+		// if (checkResult.errors) {
+		if (!checkResult) {
+			return alert("다시 로그인 해주세요");// navigation.navigate('Login');
 			loginResult = await UserApi.login(auth);
 
 			if (loginResult.resultCode !== 200) {
@@ -254,12 +257,12 @@ class HomeScreenContainer extends Component {
 			onLogin(userData);
 		} else {
 			// 최종선택 회사가 달라진 경우
-			if (auth.last_access_company_no != checkResult.resultData.last_access_company_no) {
+			if (auth.last_access_company_no != checkResult.auth.last_access_company_no) {
 				userData = {
 					...auth,
-					last_access_company_no: checkResult.resultData.last_access_company_no,
-					last_company: checkResult.resultData.employee_list.filter(
-						e => e.company_no == checkResult.resultData.last_access_company_no
+					last_access_company_no: checkResult.auth.last_access_company_no,
+					last_company: checkResult.auth.employee_list.filter(
+						e => e.company_no == checkResult.auth.last_access_company_no
 					)[0]
 				};
 				onLogin(userData);

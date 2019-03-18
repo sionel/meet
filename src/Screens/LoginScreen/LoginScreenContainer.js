@@ -93,8 +93,9 @@ class LoginScreenContainer extends React.Component {
 				const result = await loginCheckRequest(user.AUTH_A_TOKEN, user.AUTH_R_TOKEN, user.last_access_company_no, user.HASH_KEY);
 				setTimeout(() => {
 					if (result) {
+						return this.props.handleOnLogin();
 						// this.props.navigation.pop();
-						return this.props.navigation.navigate('Home');
+						// return this.props.navigation.navigate('Home');
 					} else {
 						return this.setState({ waiting: false });
 					}
@@ -130,7 +131,6 @@ class LoginScreenContainer extends React.Component {
 			login_browser: 'WEHAGO-APP',
 			...osData
 		};
-		alert(data.login_ip);
 
 		// result data
 		const { resultCode, resultData } = await loginRequest(data);
@@ -161,7 +161,8 @@ class LoginScreenContainer extends React.Component {
 		const { navigation, loginCheckRequest } = this.props;
 		const result = await loginCheckRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY);
 		if (result) {
-			navigation.navigate('Home');
+			// navigation.navigate('Home');
+			this.props.handleOnLogin();
 		}
 	};
 
@@ -171,7 +172,7 @@ class LoginScreenContainer extends React.Component {
 	_handleLoginForWehago = () => {
 		const url = 'wehago://?wehagomeet=login';
 		const iosMarketURL = "http://itunes.apple.com/kr/app/wehago/id1363039300?mt=8";
-		const androidMarketURL = "https://play.google.com/store/apps/details?id=com/duzon.lulubizpotal";
+		const androidMarketURL = "https://play.google.com/store/apps/details?id=com.duzon.android.lulubizpotal";
 
 		Linking.openURL(url).catch(err => {
 			console.log(err);

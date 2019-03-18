@@ -62,6 +62,7 @@ function loginCheckRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY) {
 			};
 			return dispatch(login(userData));
 		} else {
+			dispatch(logout());
 			return false;
 		}
 	}
@@ -70,10 +71,9 @@ function loginCheckRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY) {
 /**
  * logout
  */
-function logout(auth) {
+function logout() {
 	return {
-		type: LOGIN,
-		auth
+		type: LOGOUT
 	};
 };
 

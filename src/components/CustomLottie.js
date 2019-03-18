@@ -98,9 +98,10 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		justifyContent: 'center',
-		alignItems: 'center'
-		// backgroundColor: '#E3F2FD'
-		// backgroundColor: '#1C90FB'
+		alignItems: 'center',
+		backgroundColor: '#FFF',
+		width: "100%",
+		height: "100%"
 	}
 });
 
