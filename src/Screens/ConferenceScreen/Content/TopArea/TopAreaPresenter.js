@@ -25,7 +25,7 @@ const TopAreaPresenter = props => {
 								height={25}
 								areaWdith={25}
 								areaHeight={28}
-								onPress={() => props.onChangeState('drawingMode', !props.drawingMode)}
+								onPress={() => props.onChangeState('drawing', !props.drawingMode)}
 							/>
 							<SettingButton name="switch" onPress={props.toggleCameraFacingMode} />
 							<SettingButton

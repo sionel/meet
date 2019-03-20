@@ -6,6 +6,10 @@ import React, { Component } from 'react';
 import DrawingPresenter from './DrawingPresenter';
 
 class DrawingContainer extends Component {
+	constructor(props) {
+		super(props);
+	}
+
 	/**
    * State
    */
@@ -13,14 +17,22 @@ class DrawingContainer extends Component {
 		selectedColor: 'lightskyblue', // 선택된 색
 		selectedStroke: 1, // 선택된 색
 		colors: ['lightskyblue', 'orange', 'lime'],
-		strokes: [1, 2, 3, 5, 7]
+		strokes: [1, 2, 3, 5, 7],
+		canvas: null
 	};
 
 	/**
     * Render
     */
 	render() {
-		return <DrawingPresenter onChangeState={this._handleChangeState} onStrokeEnd={this._handleStrokeEnd} />;
+		return (
+			<DrawingPresenter
+				{...this.state}
+				onChangeState={this._handleChangeState}
+				onStrokeEnd={this._handleStrokeEnd}
+				onCanvas={this._handleCanvas}
+			/>
+		);
 	}
 
 	/**
@@ -35,6 +47,15 @@ class DrawingContainer extends Component {
 	 */
 	_handleStrokeEnd = rs => {
 		console.log('onStrokeEnd : ', rs);
+	};
+
+	/**
+	 * 
+	 */
+	_handleCanvas = canvas => {
+		const ctx = canvas.getContext('2d');
+		ctx.fillStyle = 'purple';
+		ctx.fillRect(0, 0, 100, 100);
 	};
 }
 

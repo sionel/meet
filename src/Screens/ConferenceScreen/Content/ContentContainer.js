@@ -37,9 +37,17 @@ class ContentContainer extends React.Component {
 				onReverseVideo={this._handleReverseVideo}
 				onLayout={this._setOrientation}
 				onChangeSpeaker={this._handleChangeSpeaker}
+				onChangeState={this._handleChangeState}
 			/>
 		);
 	}
+
+	/**
+	 * _handleChangeState 
+	 */
+	_handleChangeState = (target, value) => {
+		this.setState({ [target]: value });
+	};
 
 	/**
    * 대화 모드(참여자가 보일지 / 컨트롤 버튼이 보일지) 변경

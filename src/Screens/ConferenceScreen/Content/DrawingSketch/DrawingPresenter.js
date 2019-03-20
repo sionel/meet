@@ -3,12 +3,11 @@
  */
 
 import React from 'react';
-import { AppRegistry, StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-// import RNSketchCanvas from '@terrylinla/react-native-sketch-canvas';
-// import { SketchCanvas } from '@terrylinla/react-native-sketch-canvas';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import Canvas from 'react-native-canvas';
 
 const DrawingPresenter = props => {
-	const { strokes, colors } = props;
+	const { strokes, colors, selectedColor, selectedStroke } = props;
 	return (
 		<View style={styles.container}>
 			<View
@@ -49,14 +48,9 @@ const DrawingPresenter = props => {
 			</View>
 			{/*  */}
 			<View style={{ flex: 9, flexDirection: 'row' }}>
-				{/* <SketchCanvas
-					style={{
-						flex: 1
-					}}
-					strokeWidth={selectedStroke}
-					strokeColor={selectedColor}
-					onStrokeEnd={rs => props._handleStrokeEnd(rs)}
-				/> */}
+				{/* ===== ===== */}
+				<Canvas ref={props.onCanvas} />
+				{/* ===== ===== */}
 			</View>
 			{/*  */}
 			<View

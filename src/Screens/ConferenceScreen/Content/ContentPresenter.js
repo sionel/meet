@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity, dimmen } from 'react-native';
-// import { RTCView } from 'react-native-webrtc';
+import { RTCView } from 'react-native-webrtc';
 import DrawingSketch from './DrawingSketch';
 import MainVideo from './MainVideo';
 import TopArea from './TopArea';
@@ -15,7 +15,9 @@ const ContentPresenter = props => {
 	return (
 		<View style={styles.container} onLayout={props.onLayout}>
 			<TouchableOpacity activeOpacity={0.7} style={styles.container} onPress={props.toggleConferenceMode}>
-				{props.drawingMode ? null : (
+				{props.drawing ? (
+					<DrawingSketch drawing={props.drawing} onChangeState={props.onChangeState} />
+				) : (
 					<MainVideo mainUser={mainUser} callType={callType} isVideoReverse={isVideoReverse}>
 						<View
 							style={props.orientation === 'vertical' ? styles.contentVertical : styles.contentHorizontal}
@@ -24,7 +26,7 @@ const ContentPresenter = props => {
 								{callType != 2 && (
 									<TopArea
 										orientation={props.orientation}
-										drawingMode={props.drawingMode}
+										drawing={props.drawing}
 										onReverseVideo={props.onReverseVideo}
 										onChangeState={props.onChangeState}
 									/>
