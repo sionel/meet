@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import SettingButton from './SettingButton';
-import { ConferenceModes } from '../../../../utils/Constants';
+import { ConferenceModes } from '../../../../utils/ConstantsBackup';
 
 /**
  * TopAreaPresenter
@@ -19,6 +19,14 @@ const TopAreaPresenter = props => {
 				>
 					{props.isMuteVideo ? null : (
 						<Fragment>
+							{/* <SettingButton
+								name="pen"
+								width={25}
+								height={25}
+								areaWdith={25}
+								areaHeight={28}
+								onPress={() => props.onChangeState('drawingMode', !props.drawingMode)}
+							/> */}
 							<SettingButton name="switch" onPress={props.toggleCameraFacingMode} />
 							<SettingButton
 								name="reverse"

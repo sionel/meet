@@ -147,6 +147,7 @@ class ConferenceConnector {
 		this._room.addCommandListener(WEHAGO_ID, user => {
 			const id = user.value;
 			this._handlers.SET_USER_INFO(id, user.attributes);
+			//
 		});
 	};
 

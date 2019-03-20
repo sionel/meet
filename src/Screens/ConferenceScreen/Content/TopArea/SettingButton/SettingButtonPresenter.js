@@ -6,6 +6,7 @@ import buttonSetting from '../../../../../../assets/buttons/btn_tnavi_setting_no
 import buttonDocshare from '../../../../../../assets/buttons/btn_tnavi_docshare_none.png';
 import buttonToggleScreen from '../../../../../../assets/buttons/btn_tnavi_swscreen_none.png';
 import buttonReverseVideo from '../../../../../../assets/buttons/btn_video_reverse.png';
+import buttonPen from '../../../../../../assets/buttons/btn_pen.png';
 /**
  * SettingButtonPresenter
  */
@@ -54,6 +55,8 @@ const getButtonSource = name => {
 			return buttonToggleScreen;
 		case 'reverse':
 			return buttonReverseVideo;
+		case 'pen':
+			return buttonPen;
 		default:
 			return null;
 	}
