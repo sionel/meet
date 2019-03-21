@@ -4,7 +4,7 @@
  */
 
 import React, { Component, Fragment } from 'react';
-import { AppState, StatusBar, Linking, Platform, NativeModules } from 'react-native';
+import { AppState, StatusBar, Linking, Platform, NativeModules, DeviceEventEmitter } from 'react-native';
 import HomeScreenPresenter from './HomeScreenPresenter';
 // service
 import { WetalkApi } from '../../services';
@@ -12,6 +12,8 @@ import { UserApi } from '../../services';
 import { ConferenceApi } from '../../services';
 import { NavigationEvents } from 'react-navigation';
 import { querystringParser } from '../../utils';
+
+// import AudioJackManager from '../../utils/AudioJackManager';
 
 // #region
 
@@ -55,6 +57,7 @@ class HomeScreenContainer extends Component {
 				this._handleRefresh();
 			}
 		}, 15000);
+		// AudioJackManager.addListener(({isPluggedIn}) => alert("audio connect : " + isPluggedIn));
 	}
 
 	/**
@@ -64,6 +67,7 @@ class HomeScreenContainer extends Component {
 		clearInterval(this._interval);
 		Linking.removeEventListener('url', this._handleOpenURL);
 		AppState.removeEventListener('change', this._handleAppStateChange);
+		audioJackListener.remove();
 	}
 
 	// #region
@@ -191,6 +195,7 @@ class HomeScreenContainer extends Component {
    * 위톡 조회
    */
 	_handleGetWetalkList = async () => {
+		// console.log(await AudioJackManager.isPluggedIn());
 		const { auth, onSetWetalkList } = this.props;
 		// 위톡조회 API
 		const wetalkList = await WetalkApi.getWetalkList(
@@ -202,6 +207,7 @@ class HomeScreenContainer extends Component {
 
 		// 토큰만료시
 		if (wetalkList.errors) {
+			alert("wetalkList.error: " + JSON.stringify(wetalkList.errors));
 			return this._handleAutoLogin();
 		}
 		this.setState({ refreshing: false });
@@ -213,49 +219,21 @@ class HomeScreenContainer extends Component {
    * 접속자확인 및 자동로그인
    */
 	_handleAutoLogin = async () => {
-		const { auth, onLogin, navigation, loginCheckRequest } = this.props;
-		let 
-			loginResult,
-			userData = {};
+		const { auth, onLogin, loginCheckRequest } = this.props;
+		let userData = {};
 
 		// 재 로그인이 필요한 경우 (저장된 정보가 없을 경우)
-		if (!auth /* || (!auth.portal_id && !auth.portal_password)*/) {
-			alert('접속 정보가 유효하지 않습니다. 다시 로그인 해주세요');
-			console.log('AUTH : ', auth);
-			return this._handleRedirect('Main');
-		}
-		// alert(JSON.stringify(await AudioMode.getAudioDevices()));
+		// if (!auth.AUTH_A_TOKEN /* || (!auth.portal_id && !auth.portal_password)*/) {
+		// 	alert('auth is null\n접속 정보가 유효하지 않습니다. 다시 로그인 해주세요');
+		// 	return this._handleRedirect('Main');
+		// }
 
 		// 접속자 확인
+		const copyAuth = JSON.stringify(auth);
 		const checkResult = await loginCheckRequest(auth.AUTH_A_TOKEN, auth.AUTH_R_TOKEN, auth.last_access_company_no, auth.HASH_KEY);
-		// checkResult = await UserApi.check(auth.AUTH_A_TOKEN, auth.last_access_company_no, auth.HASH_KEY);
 		// 재 로그인
-		// if (checkResult.errors) {
-		if (!checkResult) {
-			return alert("다시 로그인 해주세요");// navigation.navigate('Login');
-			loginResult = await UserApi.login(auth);
-
-			if (loginResult.resultCode !== 200) {
-				alert('다시 로그인!');
-				return navigation.navigate('Login');
-			}
-
-			checkResult = await UserApi.check(
-				loginResult.resultData.AUTH_A_TOKEN,
-				loginResult.resultData.last_access_company_no,
-				loginResult.resultData.HASH_KEY
-			);
-			userData = {
-				...auth,
-				AUTH_A_TOKEN: loginResult.resultData.AUTH_A_TOKEN,
-				AUTH_R_TOKEN: loginResult.resultData.AUTH_R_TOKEN,
-				last_access_company_no: checkResult.resultData.last_access_company_no,
-				last_company: checkResult.resultData.employee_list.filter(
-					e => e.company_no == checkResult.resultData.last_access_company_no
-				)[0]
-			};
-
-			onLogin(userData);
+		if (checkResult.errors) {
+			alert("Home: 인증실패\nError: " + JSON.stringify(checkResult.errors) + "\nToken: " + copyAuth);
 		} else {
 			// 최종선택 회사가 달라진 경우
 			if (auth.last_access_company_no != checkResult.auth.last_access_company_no) {

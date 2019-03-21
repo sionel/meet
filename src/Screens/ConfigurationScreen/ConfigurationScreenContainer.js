@@ -41,6 +41,7 @@ class ConfigurationScreenContainer extends React.Component {
 				onChangeValue={this._handleChangeValue}
 				onDestroyToken={onDestroyToken}
 				onToggleVisibleAppIntro={onToggleVisibleAppIntro}
+				log={this.props.log}
 			/>
 		);
 	} // render
@@ -58,9 +59,9 @@ class ConfigurationScreenContainer extends React.Component {
 	 * 로그아웃
 	 */
 	_handleLogout = () => {
-		const { onLogout, navigation } = this.props;
-		onLogout();
-		navigation.navigate('Main');
+		// const { onLogout, navigation } = this.props;
+		this.props.onLogout();
+		// navigation.navigate('Main');
 	};
 }
 

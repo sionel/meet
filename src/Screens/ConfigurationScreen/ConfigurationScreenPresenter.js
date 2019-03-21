@@ -30,6 +30,10 @@ const ConfigurationScreenPresenter = props => {
 		// 	action: () => props.onToggleVisibleAppIntro()
 		// },
 		{
+			title: '로그 보기',
+			action: () => alert(JSON.stringify(props.log).replace(/,/gi, ",\n"))
+		},
+		{
 			title: '로그아웃',
 			action: () => props.onLogout()
 		}

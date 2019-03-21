@@ -144,14 +144,14 @@ const LoginScreenPresenter = props => {
 								>
 									<FlatList
 										data={[
-											{ key: 1, title: '카메라', description: '화상대화 카메라', icon: 'camera' },
-											{ key: 2, title: '마이크', description: '화상대화 내 음성 전송', icon: 'microphone' },
-											{ key: 3, title: '스피커', description: '화상대화 음성 출력', icon: 'volume-up' },
-											{ key: 4, title: '알림', description: '화상대화 실시간 알림', icon: 'bell' }
+											{ key: "1", title: '카메라', description: '화상대화 카메라', icon: 'camera' },
+											{ key: "2", title: '마이크', description: '화상대화 내 음성 전송', icon: 'microphone' },
+											{ key: "3", title: '스피커', description: '화상대화 음성 출력', icon: 'volume-up' },
+											{ key: "4", title: '알림', description: '화상대화 실시간 알림', icon: 'bell' }
 										]}
 										renderItem={({ item }) => (
 											<ListItemComp
-												key={String(item.key)}
+												key={item.key}
 												title={item.title}
 												updated={item.description}
 												descriptionType={'text'}

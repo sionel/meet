@@ -13,14 +13,42 @@ const TOKEN = 'TOKEN';
 const CHANGE_COMPANY = 'CHANGE_COMPANY';
 const TOGGLE_VISIBLE_APPINTRO = "TOGGLE_VISIBLE_APPINTRO";
 
+const EVENT_LOG = "EVENT_LOG";
+
 //#region Action Creators
+
+/**
+ * Event Log
+ */
+function eventLog(event) {
+	return dispatch => {
+		dispatch({
+			type: EVENT_LOG,
+			event
+		});
+	};
+}
+
+function applyEventLog(state, action) {
+	const newLog = {
+		date: Date.now(),
+		message: action.event
+	}
+	return {
+		...state,
+		log: {
+			...state.log,
+			[newLog.date]: newLog.message
+		}
+	};
+}
 
 /**
  * agreement
  */
 function agreement() {
 	return { type: AGREEMENT };
-};
+}
 
 /**
  * login
@@ -40,31 +68,33 @@ function loginRequest(data) {
 
 function loginCheckRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY) {
 	return async (dispatch) => {
-		const checkResult = await UserApi.check(AUTH_A_TOKEN, cno, HASH_KEY);
-		if (checkResult.resultCode === 200) {
-			const userData = {
-				// login api data
-				AUTH_A_TOKEN,
-				AUTH_R_TOKEN,
-				HASH_KEY,
-				// check api data
-				user_no: checkResult.resultData.user_no,
-				portal_id: checkResult.resultData.portal_id, // 아이디
-				user_name: checkResult.resultData.user_name,
-				user_email: checkResult.resultData.user_email,
-				profile_url: checkResult.resultData.profile_url,
-				user_contact: checkResult.resultData.user_contact,
-				employee_list: checkResult.resultData.employee_list, // 회사정보
-				last_access_company_no: checkResult.resultData.last_access_company_no,
-				last_company: checkResult.resultData.employee_list.filter(
-					e => e.company_no == checkResult.resultData.last_access_company_no
-				)[0]
-			};
-			return dispatch(login(userData));
-		} else {
-			dispatch(logout());
-			return false;
-		}
+			const checkResult = await UserApi.check(AUTH_A_TOKEN, cno, HASH_KEY);
+			// alert(JSON.stringify(checkResult));
+			if (checkResult.resultCode === 200) {
+				const userData = {
+					// login api data
+					AUTH_A_TOKEN,
+					AUTH_R_TOKEN,
+					HASH_KEY,
+					// check api data
+					user_no: checkResult.resultData.user_no,
+					portal_id: checkResult.resultData.portal_id, // 아이디
+					user_name: checkResult.resultData.user_name,
+					user_email: checkResult.resultData.user_email,
+					profile_url: checkResult.resultData.profile_url,
+					user_contact: checkResult.resultData.user_contact,
+					employee_list: checkResult.resultData.employee_list, // 회사정보
+					last_access_company_no: checkResult.resultData.last_access_company_no,
+					last_company: checkResult.resultData.employee_list.filter(
+						e => e.company_no == checkResult.resultData.last_access_company_no
+					)[0]
+				};
+				return dispatch(login(userData));
+			} else {
+				const result = checkResult.errors ? checkResult : { errors: checkResult };
+				dispatch(eventLog(result));
+				return result;
+			}
 	}
 }
 
@@ -73,9 +103,9 @@ function loginCheckRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY) {
  */
 function logout() {
 	return {
-		type: LOGOUT
+		type: LOGOUT,
 	};
-};
+}
 
 /**
  * tokenTest
@@ -85,7 +115,7 @@ function token(auth) {
 		type: TOKEN,
 		newToken: 100
 	};
-};
+}
 
 /**
  * intro skip
@@ -102,7 +132,7 @@ function changeCompany(cno) {
 		type: CHANGE_COMPANY,
 		payload: { cno }
 	};
-};
+}
 
 /**
  * tokenLogin : ACTION
@@ -135,9 +165,10 @@ function changeCompany(cno) {
 //#region initialState
 
 const initialState = {
-	auth: null,
+	auth: {},
 	permission: false,
-	appIntro: false
+	appIntro: false,
+	log: {}
 };
 
 //#endregion initialState
@@ -152,7 +183,7 @@ function reducer(state = initialState, action) {
 			return { ...state, auth: action.auth };
 		// return applyTest(state, action);
 		case LOGOUT:
-			return { ...state, auth: null };
+			return { ...state, auth: {} };
 		case TOKEN:
 			let auth = state.auth;
 			auth.AUTH_A_TOKEN = action.newToken;
@@ -172,10 +203,12 @@ function reducer(state = initialState, action) {
 			// applyChangeCompany(state, action);
 			return { ...state, auth: newAuth };
 		// return state;
+		case EVENT_LOG:
+			return applyEventLog(state, action);
 		default:
 			return state;
 	}
-};
+}
 
 //#endregion Reducer
 
@@ -203,7 +236,7 @@ function applyChangeCompany(state, action) {
 		...state,
 		auth: newAuth
 	};
-};
+}
 
 //#endregion Reducer Functions
 
