@@ -8,7 +8,7 @@ import { actionCreators as UserActions } from '../../redux/modules/user';
 
 // map state to props
 const mapStateToProps = state => ({
-  user: state.user.auth,
+  auth: state.user.auth,
   permission: state.user.permission
 });
 

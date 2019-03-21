@@ -4,7 +4,7 @@
  */
 
 import React, { Component, Fragment } from 'react';
-import { AppState, StatusBar, Linking, Platform, NativeModules } from 'react-native';
+import { AppState, StatusBar, Linking, Platform, NativeModules, DeviceEventEmitter } from 'react-native';
 import HomeScreenPresenter from './HomeScreenPresenter';
 // service
 import { WetalkApi } from '../../services';
@@ -12,6 +12,8 @@ import { UserApi } from '../../services';
 import { ConferenceApi } from '../../services';
 import { NavigationEvents } from 'react-navigation';
 import { querystringParser } from '../../utils';
+
+// import AudioJackManager from '../../utils/AudioJackManager';
 
 // #region
 
@@ -48,20 +50,23 @@ class HomeScreenContainer extends Component {
 		});
 		Linking.addEventListener('url', this._handleOpenURL);
 		AppState.addEventListener('change', this._handleAppStateChange);
-		setInterval(() => {
+		this._interval = setInterval(() => {
 			if (Date.now() > this._refreshTimeStamp + 3000) {
 				// 리프레쉬 할 시간이 지났으면 리프레쉬 한다.
 				this._handleRefresh();
 			}
 		}, 15000);
+		// AudioJackManager.addListener(({isPluggedIn}) => alert("audio connect : " + isPluggedIn));
 	}
 
 	/**
    * componentWillUnmount
    */
 	componentWillUnmount() {
+		clearInterval(this._interval);
 		Linking.removeEventListener('url', this._handleOpenURL);
 		AppState.removeEventListener('change', this._handleAppStateChange);
+		audioJackListener.remove();
 	}
 
 	// #region
@@ -69,7 +74,7 @@ class HomeScreenContainer extends Component {
    * Rendering
    */
 	render() {
-		console.log('Platform : ', Platform);
+		// console.log('Platform : ', Platform);
 		const { refreshing, searchKeyword, selectedRoomId, modal } = this.state;
 		const { navigation, auth } = this.props;
 		let wetalk = []; // We talk list
@@ -190,6 +195,7 @@ class HomeScreenContainer extends Component {
    * 위톡 조회
    */
 	_handleGetWetalkList = async () => {
+		// console.log(await AudioJackManager.isPluggedIn());
 		const { auth, onSetWetalkList } = this.props;
 		// 위톡조회 API
 		const wetalkList = await WetalkApi.getWetalkList(
@@ -202,6 +208,7 @@ class HomeScreenContainer extends Component {
 
 		// 토큰만료시
 		if (wetalkList.errors) {
+			alert('wetalkList.error: ' + JSON.stringify(wetalkList.errors));
 			return this._handleAutoLogin();
 		}
 		this.setState({ refreshing: false });
@@ -213,31 +220,34 @@ class HomeScreenContainer extends Component {
    * 접속자확인 및 자동로그인
    */
 	_handleAutoLogin = async () => {
-		const { auth, onLogin, navigation } = this.props;
-		let checkResult,
-			loginResult,
-			userData = {};
+		const { auth, onLogin, loginCheckRequest } = this.props;
+		let userData = {};
 
 		// 재 로그인이 필요한 경우 (저장된 정보가 없을 경우)
-		if (!auth /* || (!auth.portal_id && !auth.portal_password)*/) {
-			alert('접속 정보가 유효하지 않습니다. 다시 로그인 해주세요');
-			console.log('AUTH : ', auth);
-			return this._handleRedirect('Login');
-		}
+		// if (!auth.AUTH_A_TOKEN /* || (!auth.portal_id && !auth.portal_password)*/) {
+		// 	alert('auth is null\n접속 정보가 유효하지 않습니다. 다시 로그인 해주세요');
+		// 	return this._handleRedirect('Main');
+		// }
 
 		// 접속자 확인
-		checkResult = await UserApi.check(auth.AUTH_A_TOKEN, auth.last_access_company_no, auth.HASH_KEY);
+		const copyAuth = JSON.stringify(auth);
+		const checkResult = await loginCheckRequest(
+			auth.AUTH_A_TOKEN,
+			auth.AUTH_R_TOKEN,
+			auth.last_access_company_no,
+			auth.HASH_KEY
+		);
 		// 재 로그인
 		if (checkResult.errors) {
-			return navigation.navigate('Login');
+			alert('Home: 인증실패\nError: ' + JSON.stringify(checkResult.errors) + '\nToken: ' + copyAuth);
 		} else {
 			// 최종선택 회사가 달라진 경우
-			if (auth.last_access_company_no != checkResult.resultData.last_access_company_no) {
+			if (auth.last_access_company_no != checkResult.auth.last_access_company_no) {
 				userData = {
 					...auth,
-					last_access_company_no: checkResult.resultData.last_access_company_no,
-					last_company: checkResult.resultData.employee_list.filter(
-						e => e.company_no == checkResult.resultData.last_access_company_no
+					last_access_company_no: checkResult.auth.last_access_company_no,
+					last_company: checkResult.auth.employee_list.filter(
+						e => e.company_no == checkResult.auth.last_access_company_no
 					)[0]
 				};
 				onLogin(userData);

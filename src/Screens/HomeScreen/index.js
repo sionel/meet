@@ -17,6 +17,10 @@ const mapStateToProps = state => ({
  */
 const mapDispatchToProps = dispatch => ({
 	onLogin: user => dispatch(UserActions.login(user)),
+	loginCheckRequest: (AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY) => 
+		dispatch(UserActions.loginCheckRequest(
+			AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY
+		)),
 	onSetWetalkList: list => dispatch(WetalkActions.setList(list))
 	// onCreateConference: bodyData => dispatch(ConferenceActions.createConference(...bodyData))
 });

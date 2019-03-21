@@ -5,11 +5,21 @@
 
 import { connect } from "react-redux";
 import MainContainer from "./MainContainer";
+// import { actionCreators as UserActions } from '../redux/modules/user';
 
-/**
- * 모든 Asset이 로드된 후 처음 렌더링 되는 컴포넌트 입니다.
- */
-export default connect(
-  null,
-  null
-)(MainContainer);
+// map state to props
+const mapStateToProps = state => ({
+  auth: state.user.auth,
+});
+
+// map dispatch to props
+// const mapDispatchToProps = dispatch => {
+//   return {
+// 		loginCheckRequest: (AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY) => 
+// 			dispatch(UserActions.loginCheckRequest(
+// 				AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY
+// 			))
+//   };
+// };
+
+export default connect(mapStateToProps)(MainContainer);

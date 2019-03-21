@@ -10,10 +10,38 @@ const LOGIN = 'LOGIN';
 const LOGOUT = 'LOGOUT';
 const TOKEN = 'TOKEN';
 // const TOKEN_LOGIN = 'TOKEN_LOGIN';
-const INTRO = 'INTRO';
 const CHANGE_COMPANY = 'CHANGE_COMPANY';
+const TOGGLE_VISIBLE_APPINTRO = 'TOGGLE_VISIBLE_APPINTRO';
+
+const EVENT_LOG = 'EVENT_LOG';
 
 //#region Action Creators
+
+/**
+ * Event Log
+ */
+function eventLog(event) {
+	return dispatch => {
+		dispatch({
+			type: EVENT_LOG,
+			event
+		});
+	};
+}
+
+function applyEventLog(state, action) {
+	const newLog = {
+		date: Date.now(),
+		message: action.event
+	};
+	return {
+		...state,
+		log: {
+			...state.log,
+			[newLog.date]: newLog.message
+		}
+	};
+}
 
 /**
  * agreement
@@ -41,6 +69,7 @@ function loginRequest(data) {
 function loginCheckRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY) {
 	return async dispatch => {
 		const checkResult = await UserApi.check(AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY);
+		// alert(JSON.stringify(checkResult));
 		if (checkResult.resultCode === 200) {
 			const userData = {
 				// login api data
@@ -62,7 +91,9 @@ function loginCheckRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY) {
 			};
 			return dispatch(login(userData));
 		} else {
-			return false;
+			const result = checkResult.errors ? checkResult : { errors: checkResult };
+			dispatch(eventLog(result));
+			return result;
 		}
 	};
 }
@@ -70,10 +101,9 @@ function loginCheckRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY) {
 /**
  * logout
  */
-function logout(auth) {
+function logout() {
 	return {
-		type: LOGIN,
-		auth
+		type: LOGOUT
 	};
 }
 
@@ -90,9 +120,9 @@ function token(auth) {
 /**
  * intro skip
  */
-function intro() {
-	return { type: INTRO };
-}
+// function intro() {
+// 	return { type: INTRO };
+// };
 
 /**
  * CHANGE_COMPANY
@@ -135,9 +165,10 @@ function changeCompany(cno) {
 //#region initialState
 
 const initialState = {
-	auth: null,
+	auth: {},
 	permission: false,
-	intro: false
+	appIntro: false,
+	log: {}
 };
 
 //#endregion initialState
@@ -152,7 +183,7 @@ function reducer(state = initialState, action) {
 			return { ...state, auth: action.auth };
 		// return applyTest(state, action);
 		case LOGOUT:
-			return { ...state, auth: null };
+			return { ...state, auth: {} };
 		case TOKEN:
 			let auth = state.auth;
 			auth.AUTH_A_TOKEN = action.newToken;
@@ -162,8 +193,8 @@ function reducer(state = initialState, action) {
 			};
 		// case TOKEN_LOGIN:
 		// 	return applyTokenLogin(state, action);
-		case INTRO:
-			return { ...state, intro: true };
+		case TOGGLE_VISIBLE_APPINTRO:
+			return applyToggleVisibleAppIntro(state, action);
 		case CHANGE_COMPANY:
 			let newAuth = state.auth;
 			newAuth.last_access_company_no = action.payload.cno;
@@ -172,6 +203,8 @@ function reducer(state = initialState, action) {
 			// applyChangeCompany(state, action);
 			return { ...state, auth: newAuth };
 		// return state;
+		case EVENT_LOG:
+			return applyEventLog(state, action);
 		default:
 			return state;
 	}
@@ -207,6 +240,25 @@ function applyChangeCompany(state, action) {
 
 //#endregion Reducer Functions
 
+//#region TOGGLE_VISIBLE_APPINTRO
+function toggleVisibleAppIntro() {
+	return dispatch => {
+		dispatch({
+			type: TOGGLE_VISIBLE_APPINTRO
+		});
+	};
+}
+
+function applyToggleVisibleAppIntro(state, action) {
+	const { appIntro } = state;
+	return {
+		...state,
+		appIntro: !appIntro
+	};
+}
+
+//#endregion TOGGLE_VISIBLE_APPINTRO
+
 //#region Export
 
 const actionCreators = {
@@ -217,8 +269,8 @@ const actionCreators = {
 	token,
 	// tokenLogin,
 	agreement,
-	intro,
-	changeCompany
+	changeCompany,
+	toggleVisibleAppIntro
 };
 
 export { actionCreators };

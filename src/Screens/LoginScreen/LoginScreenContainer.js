@@ -86,27 +86,43 @@ class LoginScreenContainer extends React.Component {
 	/**
 	 * 유저정보 체크 _handleCheckUser
 	 */
-	_handleCheckUser = async () => {
-		const { user, loginCheckRequest } = this.props;
-		if (user) {
-			if (user.AUTH_A_TOKEN) {
-				const result = await loginCheckRequest(
-					user.AUTH_A_TOKEN,
-					user.AUTH_R_TOKEN,
-					user.last_access_company_no,
-					user.HASH_KEY
-				);
-				setTimeout(() => {
-					if (result) {
-						// this.props.navigation.pop();
-						return this.props.navigation.navigate('Home');
-					} else {
-						return this.setState({ waiting: false });
+	_handleCheckUser = async (count = 1) => {
+		const { auth, loginCheckRequest } = this.props;
+		if (auth.AUTH_A_TOKEN) {
+			const copyAuth = JSON.stringify(auth);
+			const result = await loginCheckRequest(
+				auth.AUTH_A_TOKEN,
+				auth.AUTH_R_TOKEN,
+				auth.last_access_company_no,
+				auth.HASH_KEY
+			);
+
+			setTimeout(() => {
+				if (result.errors) {
+					switch (result.errors.code) {
+						case 'E002':
+							alert('토큰이 만료되었습니다.\n다시 로그인 해주세요.');
+							return this.setState({ waiting: false });
+						default:
+							if (count < 5) {
+								alert('로그인 실패\n재시도중 (' + count + '/5)');
+								return setTimeout(() => {
+									this._handleCheckUser(++count);
+								}, 1000);
+							} else {
+								alert('Login: 인증실패\nError: ' + JSON.stringify(result.errors) + '\nToken: ' + copyAuth);
+								return this.setState({ waiting: false });
+							}
 					}
-				}, 1000);
-			}
+				} else {
+					// alert("로그인 성공!");
+					// console.warn("로그인 성공");
+					return this.props.handleOnLogin();
+				}
+			}, 1000);
 		} else {
 			setTimeout(() => {
+				alert('Login: 토큰없음');
 				return this.setState({ waiting: false });
 			}, 1000);
 		}
@@ -123,7 +139,7 @@ class LoginScreenContainer extends React.Component {
 		const osData =
 			Platform.OS === 'ios'
 				? {
-						login_ip: 'localhost:8081',
+						login_ip: '127.0.0.1:8081',
 						login_device: PlatformConstants.systemName + ' ' + PlatformConstants.interfaceIdiom,
 						login_os: PlatformConstants.systemName + ' ' + PlatformConstants.osVersion
 					}
@@ -138,7 +154,6 @@ class LoginScreenContainer extends React.Component {
 			login_browser: 'WEHAGO-APP',
 			...osData
 		};
-		// alert(data.login_ip);
 
 		// result data
 		const { resultCode, resultData } = await loginRequest(data);
@@ -169,7 +184,8 @@ class LoginScreenContainer extends React.Component {
 		const { navigation, loginCheckRequest } = this.props;
 		const result = await loginCheckRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY);
 		if (result) {
-			navigation.navigate('Home');
+			// navigation.navigate('Home');
+			this.props.handleOnLogin();
 		}
 	};
 
@@ -179,7 +195,7 @@ class LoginScreenContainer extends React.Component {
 	_handleLoginForWehago = () => {
 		const url = 'wehago://?wehagomeet=login';
 		const iosMarketURL = 'http://itunes.apple.com/kr/app/wehago/id1363039300?mt=8';
-		const androidMarketURL = 'https://play.google.com/store/apps/details?id=com/duzon.lulubizpotal';
+		const androidMarketURL = 'https://play.google.com/store/apps/details?id=com.duzon.android.lulubizpotal';
 
 		Linking.openURL(url).catch(err => {
 			console.log(err);

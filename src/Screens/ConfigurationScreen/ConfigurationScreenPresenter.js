@@ -25,6 +25,14 @@ const ConfigurationScreenPresenter = props => {
 			title: '버전정보',
 			action: () => alert('0.1.7 버전')
 		},
+		// {
+		// 	title: '앱인트로 보기',
+		// 	action: () => props.onToggleVisibleAppIntro()
+		// },
+		{
+			title: '로그 보기',
+			action: () => alert(JSON.stringify(props.log).replace(/,/gi, ",\n"))
+		},
 		{
 			title: '로그아웃',
 			action: () => props.onLogout()

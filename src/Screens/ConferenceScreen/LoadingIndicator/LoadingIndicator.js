@@ -1,25 +1,27 @@
 import React, { Component } from "react";
-import LottieView from "lottie-react-native";
-import { View, StyleSheet } from "react-native";
+// import LottieView from "lottie-react-native";
+import { View, StyleSheet, Image } from "react-native";
+import CameraLoading from "./cameraLoading.gif";
 
 /**
  * ConferenceScreenPresenter
  */
 class LoadingIndicator extends Component {
   componentDidMount() {
-    this.animation.play();
+    // this.animation.play();
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <LottieView
+        <Image style={styles.indicator} source={CameraLoading} />
+        {/* <LottieView
           style={styles.indicator}
           source={require("./camera.json")}
           ref={animation => {
             this.animation = animation;
           }}
-        />
+        /> */}
       </View>
     );
   }
@@ -33,11 +35,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#E3F2FD"
+    backgroundColor: "#0069E0"
   },
   indicator: {
-    width: 90,
-    height: 90
+    width: 360,
+    height: 360,
   }
 });
 
