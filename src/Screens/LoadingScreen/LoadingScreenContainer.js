@@ -23,11 +23,7 @@ class LoadingScreenContainer extends React.Component {
 	 * Rendering
 	 */
 	render() {
-		return (
-			this.state.loading
-			? <LoadingScreenPresenter />
-			: <LoginScreen />
-		)
+		return this.state.loading ? <LoadingScreenPresenter /> : <LoginScreen />;
 	} // render
 
 	/**
@@ -37,13 +33,18 @@ class LoadingScreenContainer extends React.Component {
 		const { user } = this.props;
 		if (user) {
 			if (user.AUTH_A_TOKEN) {
-				const result = await UserApi.check(user.AUTH_A_TOKEN, user.last_access_company_no, user.HASH_KEY);
+				const result = await UserApi.check(
+					user.AUTH_A_TOKEN,
+					user.AUTH_R_TOKEN,
+					user.last_access_company_no,
+					user.HASH_KEY
+				);
 				if (result.resultCode == 200) {
 					return this.props.navigation.navigate('Home');
 				}
 			}
 		}
-		
+
 		this.setState({ loading: false });
 		// this.props.navigation.navigate('Login');
 	};

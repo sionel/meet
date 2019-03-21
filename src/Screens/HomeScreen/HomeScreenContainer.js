@@ -194,6 +194,7 @@ class HomeScreenContainer extends Component {
 		// 위톡조회 API
 		const wetalkList = await WetalkApi.getWetalkList(
 			auth.AUTH_A_TOKEN,
+			auth.AUTH_R_TOKEN,
 			auth.last_access_company_no,
 			auth.portal_id,
 			auth.HASH_KEY
@@ -278,7 +279,7 @@ class HomeScreenContainer extends Component {
 			isCreator = externalData.is_creater; // 1:생성자 / 2:참여자
 		} else {
 			// 생성여부 체크
-			const result = await ConferenceApi.check(conferenceId, auth.AUTH_A_TOKEN, auth.HASH_KEY);
+			const result = await ConferenceApi.check(conferenceId, auth.AUTH_A_TOKEN, auth.AUTH_R_TOKEN, auth.HASH_KEY);
 			if (!result.resultData) {
 				alert('이미 종료된 대화방입니다.');
 				return;
@@ -321,6 +322,7 @@ class HomeScreenContainer extends Component {
 			auth.last_access_company_no, // 회사번호
 			company_code, // 회사코드
 			auth.AUTH_A_TOKEN, // 토큰
+			auth.AUTH_R_TOKEN, // 토큰
 			auth.HASH_KEY
 			// null
 		];
@@ -334,6 +336,7 @@ class HomeScreenContainer extends Component {
 				auth.last_access_company_no,
 				company_code,
 				auth.AUTH_A_TOKEN,
+				auth.AUTH_R_TOKEN,
 				auth.HASH_KEY
 			);
 			this.setState({ modal: false });

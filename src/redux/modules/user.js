@@ -20,7 +20,7 @@ const CHANGE_COMPANY = 'CHANGE_COMPANY';
  */
 function agreement() {
 	return { type: AGREEMENT };
-};
+}
 
 /**
  * login
@@ -30,17 +30,17 @@ function login(auth) {
 		type: LOGIN,
 		auth
 	};
-};
+}
 
 function loginRequest(data) {
 	return async () => {
 		return await UserApi.login(data);
-	}
+	};
 }
 
 function loginCheckRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY) {
-	return async (dispatch) => {
-		const checkResult = await UserApi.check(AUTH_A_TOKEN, cno, HASH_KEY);
+	return async dispatch => {
+		const checkResult = await UserApi.check(AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY);
 		if (checkResult.resultCode === 200) {
 			const userData = {
 				// login api data
@@ -64,7 +64,7 @@ function loginCheckRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY) {
 		} else {
 			return false;
 		}
-	}
+	};
 }
 
 /**
@@ -75,7 +75,7 @@ function logout(auth) {
 		type: LOGIN,
 		auth
 	};
-};
+}
 
 /**
  * tokenTest
@@ -85,14 +85,14 @@ function token(auth) {
 		type: TOKEN,
 		newToken: 100
 	};
-};
+}
 
 /**
  * intro skip
  */
 function intro() {
 	return { type: INTRO };
-};
+}
 
 /**
  * CHANGE_COMPANY
@@ -102,7 +102,7 @@ function changeCompany(cno) {
 		type: CHANGE_COMPANY,
 		payload: { cno }
 	};
-};
+}
 
 /**
  * tokenLogin : ACTION
@@ -175,7 +175,7 @@ function reducer(state = initialState, action) {
 		default:
 			return state;
 	}
-};
+}
 
 //#endregion Reducer
 
@@ -203,7 +203,7 @@ function applyChangeCompany(state, action) {
 		...state,
 		auth: newAuth
 	};
-};
+}
 
 //#endregion Reducer Functions
 

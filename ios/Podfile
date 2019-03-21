@@ -62,6 +62,8 @@ target 'JitsiMeet' do
   
   pod 'react-native-orientation-locker', :path => '../node_modules/react-native-orientation-locker/react-native-orientation-locker.podspec'
   pod 'react-native-webview', :path => '../node_modules/react-native-webview'
+  pod 'RNSketchCanvas', :path => '../node_modules/react-native-sketch-canvas'
+  # pod 'RNSketchCanvas', :podspec => '../node_modules/react-native-sketch-canvas'
 end
 
 post_install do |installer|

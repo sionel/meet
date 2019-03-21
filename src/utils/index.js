@@ -3,9 +3,10 @@
  * 공통모듈
  */
 
-// import { UserApi, WetalkApi } from '../services';
+import { Platform } from 'react-native';
 import CryptoJS from 'crypto-js';
-
+const OS = Platform.OS;
+const OSID = OS === 'ios' ? 'mobile-ios' : 'mobile-android';
 /**
  * Back-end URL
  */
@@ -41,25 +42,31 @@ export const querystringParser = url => {
 
 /**
  * 인증 API securityRequest
- * @param {*} token 
+ * @param {*} a_token 
+ * @param {*} r_token 
  * @param {*} url 
  * @param {*} HASH_KEY 
  */
-export const securityRequest = (token, url, HASH_KEY) => {
+export const securityRequest = (a_token, r_token, url, HASH_KEY) => {
 	const transactionId = _getTransactionId();
-	const clientId = _getServiceCode();
+	const clientId = OSID;
+	// const clientId = _getServiceCode();
 	const service = _getService(url);
 	const timestamp = Math.floor(Date.now() / 1000);
 	const wehagoSign = _getWehagoSign(url, timestamp, transactionId, HASH_KEY);
-
-	return {
-		Authorization: `Bearer ${token}`,
+	const rs = {
+		Authorization: `Bearer ${a_token}`,
 		'transaction-id': transactionId,
-		'client-id': clientId,
-		service: service,
 		'wehago-sign': wehagoSign,
-		timestamp: timestamp
+		'client-id': clientId,
+		'Wehago-S': HASH_KEY,
+		timestamp: timestamp,
+		service: service,
+		Cookie: `AUTH_A_TOKEN=${a_token}; AUTH_R_TOKEN=${r_token}`
 	};
+	console.log('RRRRRRR : ', rs);
+
+	return rs;
 };
 
 _getTransactionId = () => {

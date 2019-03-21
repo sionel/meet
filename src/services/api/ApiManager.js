@@ -14,7 +14,6 @@ class APIManger {
 	constructor(connectionId, info) {
 		// 초기 설정
 		this.connectionId = connectionId;
-		// this.info = info;
 		this.info = info;
 		this.dummyWehagoId = this._createRandomString();
 	}
@@ -33,7 +32,6 @@ class APIManger {
 			};
 			const result = await fetch(url, headers);
 			participant = await result.json();
-			// return participant;
 			callback(participant.resultData);
 		} catch (e) {
 			alert('사소한 문제가 발생했습니다. 다시 시도해 주세요');
@@ -71,23 +69,15 @@ class APIManger {
 					// 	signature,
 					// 	...headers
 					// };
-					xhr.setRequestHeader('signature', signature);
-					xhr.setRequestHeader('Authorization', headers['Authorization']);
 					xhr.setRequestHeader('transaction-id', headers['transaction-id']);
-					xhr.setRequestHeader('client-id', headers['client-id']);
-					xhr.setRequestHeader('service', headers['service']);
+					xhr.setRequestHeader('Authorization', headers['Authorization']);
 					xhr.setRequestHeader('wehago-sign', headers['wehago-sign']);
+					xhr.setRequestHeader('client-id', headers['client-id']);
 					xhr.setRequestHeader('timestamp', headers['timestamp']);
-
-					// xhr.setRequestHeader({
-					// 	signature: signature,
-					// 	Authorization: headers['Authorization'],
-					// 	'transaction-id': headers['transaction-id'],
-					// 	'client-id': headers['client-id'],
-					// 	service: headers['service'],
-					// 	'wehago-sign': headers['wehago-sign'],
-					// 	timestamp: headers['timestamp']
-					// });
+					xhr.setRequestHeader('service', headers['service']);
+					xhr.setRequestHeader('signature', signature);
+					// xhr.setRequestHeader('Wehago-S', signature);
+					// xhr.setRequestHeader('Cookie', signature);
 				});
 			}
 		} catch (error) {
@@ -120,23 +110,15 @@ class APIManger {
 					// 	signature,
 					// 	...headers
 					// };
-					xhr.setRequestHeader('signature', signature);
-					xhr.setRequestHeader('Authorization', headers['Authorization']);
 					xhr.setRequestHeader('transaction-id', headers['transaction-id']);
-					xhr.setRequestHeader('client-id', headers['client-id']);
-					xhr.setRequestHeader('service', headers['service']);
+					xhr.setRequestHeader('Authorization', headers['Authorization']);
 					xhr.setRequestHeader('wehago-sign', headers['wehago-sign']);
+					xhr.setRequestHeader('client-id', headers['client-id']);
 					xhr.setRequestHeader('timestamp', headers['timestamp']);
-
-					// xhr.setRequestHeader({
-					// 	signature: signature,
-					// 	Authorization: headers['Authorization'],
-					// 	'transaction-id': headers['transaction-id'],
-					// 	'client-id': headers['client-id'],
-					// 	service: headers['service'],
-					// 	'wehago-sign': headers['wehago-sign'],
-					// 	timestamp: headers['timestamp']
-					// });
+					xhr.setRequestHeader('service', headers['service']);
+					xhr.setRequestHeader('signature', signature);
+					// xhr.setRequestHeader('Wehago-S', signature);
+					// xhr.setRequestHeader('Cookie', signature);
 				});
 			}
 			if (isExist && userList.resultData.length <= 1) {
@@ -163,23 +145,15 @@ class APIManger {
 			// 	signature,
 			// 	...headers
 			// };
-			xhr.setRequestHeader('signature', signature);
-			xhr.setRequestHeader('Authorization', headers['Authorization']);
 			xhr.setRequestHeader('transaction-id', headers['transaction-id']);
-			xhr.setRequestHeader('client-id', headers['client-id']);
-			xhr.setRequestHeader('service', headers['service']);
+			xhr.setRequestHeader('Authorization', headers['Authorization']);
 			xhr.setRequestHeader('wehago-sign', headers['wehago-sign']);
+			xhr.setRequestHeader('client-id', headers['client-id']);
 			xhr.setRequestHeader('timestamp', headers['timestamp']);
-
-			// xhr.setRequestHeader({
-			// 	signature: signature,
-			// 	Authorization: headers['Authorization'],
-			// 	'transaction-id': headers['transaction-id'],
-			// 	'client-id': headers['client-id'],
-			// 	service: headers['service'],
-			// 	'wehago-sign': headers['wehago-sign'],
-			// 	timestamp: headers['timestamp']
-			// });
+			xhr.setRequestHeader('service', headers['service']);
+			xhr.setRequestHeader('signature', signature);
+			// xhr.setRequestHeader('Wehago-S', signature);
+			// xhr.setRequestHeader('Cookie', signature);
 		});
 	};
 
@@ -240,23 +214,15 @@ class APIManger {
 			// 	signature,
 			// 	...headers
 			// };
-			xhr.setRequestHeader('signature', signature);
-			xhr.setRequestHeader('Authorization', headers['Authorization']);
 			xhr.setRequestHeader('transaction-id', headers['transaction-id']);
-			xhr.setRequestHeader('client-id', headers['client-id']);
-			xhr.setRequestHeader('service', headers['service']);
+			xhr.setRequestHeader('Authorization', headers['Authorization']);
 			xhr.setRequestHeader('wehago-sign', headers['wehago-sign']);
+			xhr.setRequestHeader('client-id', headers['client-id']);
 			xhr.setRequestHeader('timestamp', headers['timestamp']);
-
-			// xhr.setRequestHeader({
-			// 	signature: signature,
-			// 	Authorization: headers['Authorization'],
-			// 	'transaction-id': headers['transaction-id'],
-			// 	'client-id': headers['client-id'],
-			// 	service: headers['service'],
-			// 	'wehago-sign': headers['wehago-sign'],
-			// 	timestamp: headers['timestamp']
-			// });
+			xhr.setRequestHeader('service', headers['service']);
+			xhr.setRequestHeader('signature', signature);
+			// xhr.setRequestHeader('Wehago-S', signature);
+			// xhr.setRequestHeader('Cookie', signature);
 		});
 		return result;
 	};

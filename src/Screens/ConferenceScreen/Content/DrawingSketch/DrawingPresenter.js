@@ -5,6 +5,8 @@
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import Canvas from 'react-native-canvas';
+import RNSketchCanvas from '@terrylinla/react-native-sketch-canvas';
+import { SketchCanvas } from '@terrylinla/react-native-sketch-canvas';
 
 const DrawingPresenter = props => {
 	const { strokes, colors, selectedColor, selectedStroke } = props;
@@ -23,7 +25,7 @@ const DrawingPresenter = props => {
 				{strokes.map(stroke => (
 					<TouchableOpacity
 						key={String(stroke)}
-						onPress={() => props._handleChangeState('selectedStroke', stroke)}
+						onPress={() => props.onChangeState('selectedStroke', stroke)}
 					>
 						<View
 							style={{
@@ -49,7 +51,23 @@ const DrawingPresenter = props => {
 			{/*  */}
 			<View style={{ flex: 9, flexDirection: 'row' }}>
 				{/* ===== ===== */}
-				<Canvas ref={props.onCanvas} />
+				{/* <Canvas
+					ref={props.onCanvas}
+					style={{
+						backgroundColor: '#f1f1f1',
+						borderWidth: 1,
+						borderColor: '#333',
+						width: 200
+					}}
+				/> */}
+				<SketchCanvas
+					style={{
+						flex: 1
+					}}
+					strokeWidth={selectedStroke}
+					strokeColor={selectedColor}
+					// onStrokeEnd={rs => this._handleStrokeEnd(rs)}
+				/>
 				{/* ===== ===== */}
 			</View>
 			{/*  */}
@@ -64,7 +82,7 @@ const DrawingPresenter = props => {
 				}}
 			>
 				{colors.map(color => (
-					<TouchableOpacity key={color} onPress={() => props._handleChangeState('selectedColor', color)}>
+					<TouchableOpacity key={color} onPress={() => props.onChangeState('selectedColor', color)}>
 						<View
 							style={{
 								width: 45,

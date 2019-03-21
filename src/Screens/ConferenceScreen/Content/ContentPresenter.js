@@ -14,10 +14,10 @@ const ContentPresenter = props => {
 
 	return (
 		<View style={styles.container} onLayout={props.onLayout}>
-			<TouchableOpacity activeOpacity={0.7} style={styles.container} onPress={props.toggleConferenceMode}>
-				{props.drawing ? (
-					<DrawingSketch drawing={props.drawing} onChangeState={props.onChangeState} />
-				) : (
+			{props.drawing ? (
+				<DrawingSketch drawing={props.drawing} onChangeState={props.onChangeState} />
+			) : (
+				<TouchableOpacity activeOpacity={0.7} style={styles.container} onPress={props.toggleConferenceMode}>
 					<MainVideo mainUser={mainUser} callType={callType} isVideoReverse={isVideoReverse}>
 						<View
 							style={props.orientation === 'vertical' ? styles.contentVertical : styles.contentHorizontal}
@@ -51,8 +51,8 @@ const ContentPresenter = props => {
 							</View>
 						</View>
 					</MainVideo>
-				)}
-			</TouchableOpacity>
+				</TouchableOpacity>
+			)}
 		</View>
 	);
 };

@@ -10,7 +10,7 @@ export default {
 	/**
 	 * 화상대화 생성
 	 */
-	create: async (room_id, owner_id, owner_name, cno, ccode, token, HASH_KEY) => {
+	create: async (room_id, owner_id, owner_name, cno, ccode, a_token, r_token, HASH_KEY) => {
 		/*
 		"room_id":"_Gj2EWgBeAtpuzEuPdzI",
 		"owner_id":"seongh7800",
@@ -19,7 +19,7 @@ export default {
 		*/
 		try {
 			const url = `${wehagoBaseURL}/communication/rtc/videoChat`;
-			const headers = securityRequest(token, url, HASH_KEY);
+			const headers = securityRequest(a_token, r_token, url, HASH_KEY);
 			const response = await fetch(url, {
 				method: 'POST',
 				headers: {
@@ -44,7 +44,7 @@ export default {
 	/**
 	 * We talk발송
 	 */
-	sendWetalk: async (room_id, video_chat_id, cno, ccode, token, HASH_KEY) => {
+	sendWetalk: async (room_id, video_chat_id, cno, ccode, a_token, r_token, HASH_KEY) => {
 		let body = new FormData();
 		// 가변값
 		body.append('room_id', room_id);
@@ -73,7 +73,7 @@ export default {
 
 		try {
 			const url = `${wehagoBaseURL}/communication/we-talk/talk-send`;
-			const headers = securityRequest(token, url, HASH_KEY);
+			const headers = securityRequest(a_token, r_token, url, HASH_KEY);
 			const requestData = {
 				method: 'POST',
 				headers: {
@@ -94,10 +94,10 @@ export default {
 	 * check
 	 * 대화방 생성확인 API
 	 */
-	check: async (conferenceId, token, HASH_KEY) => {
+	check: async (conferenceId, a_token, r_token, HASH_KEY) => {
 		try {
 			const url = `${wehagoBaseURL}/communication/rtc/videoChat?video_chat_id=${conferenceId}`;
-			const headers = securityRequest(token, url, HASH_KEY);
+			const headers = securityRequest(a_token, r_token, url, HASH_KEY);
 			const requestData = {
 				method: 'GET',
 				headers

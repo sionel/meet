@@ -54,10 +54,10 @@ export default {
 	 * check
 	 * 로그인 및 사용자 정보 확인 - 토큰만료 또는 정보변경시 자동로그인
 	 */
-	check: async (token, cno, HASH_KEY) => {
+	check: async (a_token, r_token, cno, HASH_KEY) => {
 		try {
 			const url = `${wehagoBaseURL}/common/user/userinfo/detail?cno=${cno}`;
-			const headers = securityRequest(token, url, HASH_KEY);
+			const headers = securityRequest(a_token, r_token, url, HASH_KEY);
 			const response = await fetch(url, {
 				method: 'GET',
 				headers
