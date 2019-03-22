@@ -22,7 +22,10 @@ class CustomLottie extends Component {
 		waiting: require('./lotties/waiting.json'),
 		broadcast: require('./lotties/broadcast.json'),
 		voiceBroadcast: require('./lotties/voice_broadcast.json'),
-		cc: require('./lotties/animation-w400-h300.json')
+		cc: require('./lotties/animation-w400-h300.json'),
+		bear: require('./lotties/bear.json'),
+		notFound: require('./lotties/not_found.json'),
+		vr: require('./lotties/custom_vr.json')
 	};
 
 	/**
@@ -100,8 +103,8 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		backgroundColor: '#FFF',
-		width: "100%",
-		height: "100%"
+		width: '100%',
+		height: '100%'
 	}
 });
 

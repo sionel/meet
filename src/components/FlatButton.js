@@ -4,7 +4,7 @@
  * SVG전용 버튼
  */
 
-import React from 'react';
+import React, { Fragment } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 
 const SvgButton = props => {
@@ -38,13 +38,14 @@ const SvgButton = props => {
 			}}
 			onPress={onClick}
 		>
-			<Text style={{ color }}>{props.children}</Text>
+			{/* {props.children ? props.children : <Text style={{ color }}>{props.title}</Text>} */}
+			{props.children ? <Fragment>{props.children}</Fragment> : <Text style={{ color }}>{props.title}</Text>}
 		</TouchableOpacity>
 	);
 };
 
 SvgButton.defaultProps = {
-	// width: 270,
+	title: 'Button',
 	width: '100%',
 	height: 47,
 	backgroundColor: '#1C90FB',

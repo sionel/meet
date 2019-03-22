@@ -89,7 +89,7 @@ const ListItemComp = props => {
 				</View>
 			</View>
 			{/* 내용 */}
-			<View style={{ ...styles.textFlex, borderBottomWidth: props.underline ? 1 : 0 }}>
+			<View style={{ ...styles.textFlex, borderBottomWidth: props.underline ? 1 : 0, paddingRight: '13%' }}>
 				{/* 방제목 */}
 				<Text style={{ ...styles.roomName }}>{props.title}</Text>
 				{/* <View style={{ backgroundColor: 'red', width: 10, height: 10 }} /> */}
@@ -108,16 +108,28 @@ const ListItemComp = props => {
 				)}
 				{props.customLottie && (
 					<View
-						style={{ ...styles.activeLight, top: 12, width: 27, height: 27, backgroundColor: activeColor }}
+						style={{
+							...styles.activeLight,
+							top: 12,
+							width: 57,
+							height: 32,
+							borderRadius: 7,
+							justifyContent: 'center',
+							alignItems: 'center',
+							// backgroundColor: activeColor
+							borderWidth: 1,
+							borderColor: '#c1c1c1'
+						}}
 					>
-						<Image
+						<Text style={{ color: '#717171' }}>시작</Text>
+						{/* <Image
 							style={{
 								width: '100%',
 								height: '100%',
 								opacity: 0.73
 							}}
 							source={require(`../../assets/buttons/playButton.png`)}
-						/>
+						/> */}
 					</View>
 				)}
 			</View>

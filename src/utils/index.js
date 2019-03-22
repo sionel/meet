@@ -64,7 +64,6 @@ export const securityRequest = (a_token, r_token, url, HASH_KEY) => {
 		service: service,
 		Cookie: `AUTH_A_TOKEN=${a_token}; AUTH_R_TOKEN=${r_token}`
 	};
-	console.log('RRRRRRR : ', rs);
 
 	return rs;
 };

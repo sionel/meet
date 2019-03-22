@@ -16,7 +16,7 @@ const RootNavigation = createStackNavigator(
 			screen: MainNavigation,
 			navigationOptions: {
 				header: null,
-				headerLeft: null,
+				// headerLeft: null,
 				gesturesEnabled: false
 			}
 		},
@@ -31,7 +31,7 @@ const RootNavigation = createStackNavigator(
 				headerLeft: null,
 				gesturesEnabled: false
 			}
-		},
+		}
 
 		/**
      * Login Navigation

@@ -11,6 +11,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 const rootPath = `../../../assets`;
 const logo_login = require(`${rootPath}/logo_login.png`);
+const wehago_favicon = require(`${rootPath}/wehago_favicon.png`);
 
 /**
  * LoginScreenPresenter
@@ -40,8 +41,8 @@ const LoginScreenPresenter = props => {
 				{/* <Text style={styles.logo}>WEHAGO</Text> */}
 				<Image
 					style={{
-						width: 207,
-						height: 63
+						width: 200,
+						height: 64
 					}}
 					source={logo_login}
 				/>
@@ -50,15 +51,15 @@ const LoginScreenPresenter = props => {
 			{/* INPUTS */}
 			<View style={styles.middleArea}>
 				<TextField
-					placeholder={'아이디를 입력하세요'}
-					width={270}
+					placeholder={'아이디'}
+					width={285}
 					height={40}
 					onChange={text => props.onChangeValue('userId', text)}
 					value={userId}
 				/>
 				<TextField
-					placeholder={'패스워드를 입력하세요'}
-					width={270}
+					placeholder={'패스워드'}
+					width={285}
 					height={40}
 					secret={true}
 					onChange={text => props.onChangeValue('userPwd', text)}
@@ -69,25 +70,45 @@ const LoginScreenPresenter = props => {
 
 			{/* BUTTONS */}
 			<View style={styles.bottomArea}>
-				<FlatButton width={275} height={52} borderRadius={30} onClick={props.onLogin}>
-					로그인
-				</FlatButton>
+				<FlatButton
+					title={'로그인'}
+					color={'#818181'}
+					backgroundColor={'#E1E1E1'}
+					borderColor={'#E1E1E1'}
+					borderWidth={1}
+					width={295}
+					height={52}
+					borderRadius={30}
+					onClick={props.onLogin}
+				/>
 			</View>
 			{/* BUTTONS */}
 			<View style={styles.bottomArea2}>
 				<FlatButton
-					width={275}
+					title={'WEHAGO 앱으로 로그인'}
+					width={295}
 					height={52}
-					borderRadius={30}
-					color={'#1C90FB'}
-					backgroundColor={'#fff'}
+					borderRadius={5}
+					color={'#fff'}
+					backgroundColor={'#1C90FB'}
 					borderColor={'#1C90FB'}
 					borderWidth={1}
+					customStyle={{ flexDirection: 'row' }}
 					onClick={props.onLoginForWehago}
-					// onClick={props.onAgreement}
 				>
-					WEHAGO 로그인
+					<Image
+						style={{
+							width: 24,
+							height: 24,
+							marginRight: 5
+						}}
+						source={wehago_favicon}
+					/>
+					<Text style={{ color: '#fff' }}>WEHAGO 앱으로 로그인</Text>
 				</FlatButton>
+				<Text style={{ paddingTop: 12, paddingBottom: 15, textAlign: 'center', color: 'rgb(51,51,51)' }}>
+					WEHAGO 앱이 설치되어 있다면 바로 시작하세요.
+				</Text>
 			</View>
 
 			{/* 모달 */}
@@ -144,10 +165,10 @@ const LoginScreenPresenter = props => {
 								>
 									<FlatList
 										data={[
-											{ key: "1", title: '카메라', description: '화상대화 카메라', icon: 'camera' },
-											{ key: "2", title: '마이크', description: '화상대화 내 음성 전송', icon: 'microphone' },
-											{ key: "3", title: '스피커', description: '화상대화 음성 출력', icon: 'volume-up' },
-											{ key: "4", title: '알림', description: '화상대화 실시간 알림', icon: 'bell' }
+											{ key: '1', title: '카메라', description: '화상대화 카메라', icon: 'camera' },
+											{ key: '2', title: '마이크', description: '화상대화 내 음성 전송', icon: 'microphone' },
+											{ key: '3', title: '스피커', description: '화상대화 음성 출력', icon: 'volume-up' },
+											{ key: '4', title: '알림', description: '화상대화 실시간 알림', icon: 'bell' }
 										]}
 										renderItem={({ item }) => (
 											<ListItemComp

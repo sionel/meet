@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { Image, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { createStackNavigator, createAppContainer, createDrawerNavigator, DrawerActions } from 'react-navigation';
 
@@ -20,7 +20,23 @@ const commonStyle = {
 	color: 'white',
 	backgroundColor: '#1C90FB'
 };
+const backBtn = require('../../assets/buttons/back_btn.png');
 
+/**
+ * Back button
+ * 뒤로가기버튼
+ */
+const BackButton = ({ navigation, to }) => {
+	return (
+		<TouchableOpacity
+			onPress={() => {
+				navigation.navigate(to);
+			}}
+		>
+			<Image source={backBtn} style={{ width: 23, height: 20, marginLeft: 16 }} />
+		</TouchableOpacity>
+	);
+};
 /**
  * rightMenuImage
  * 사이드메뉴 토글아이콘
@@ -96,8 +112,10 @@ const HomeRoute = createStackNavigator({
 		headerStyle: {
 			color: '#fff'
 		},
+
 		navigationOptions: ({ navigation }) => ({
 			title: '환경설정',
+			headerLeft: <BackButton navigation={navigation} to={'Home'} />,
 			headerTintColor: '#fff',
 			headerStyle: commonStyle
 		})
@@ -114,6 +132,7 @@ const HomeRoute = createStackNavigator({
 		},
 		navigationOptions: ({ navigation }) => ({
 			title: '새 화상대화',
+			headerLeft: <BackButton navigation={navigation} to={'Home'} />,
 			headerTintColor: '#fff',
 			headerStyle: commonStyle
 		})

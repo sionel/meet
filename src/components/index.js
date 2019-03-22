@@ -8,3 +8,4 @@ export { default as CustomWebView } from './CustomWebView';
 export { default as AppIntroSlide } from './AppIntroSlide';
 export { default as Placeholder } from './Placeholder';
 export { default as CustomModal } from './CustomModal';
+export { default as SectionListHeader } from './SectionListHeader';

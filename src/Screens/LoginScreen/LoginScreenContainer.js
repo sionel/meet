@@ -122,7 +122,7 @@ class LoginScreenContainer extends React.Component {
 			}, 1000);
 		} else {
 			setTimeout(() => {
-				alert('Login: 토큰없음');
+				// alert('Login: 토큰없음');
 				return this.setState({ waiting: false });
 			}, 1000);
 		}
@@ -139,12 +139,12 @@ class LoginScreenContainer extends React.Component {
 		const osData =
 			Platform.OS === 'ios'
 				? {
-						login_ip: '127.0.0.1:8081',
-						login_device: PlatformConstants.systemName + ' ' + PlatformConstants.interfaceIdiom,
+						login_ip: '10.101.31.236',
+						login_device: 'iPhone',
 						login_os: PlatformConstants.systemName + ' ' + PlatformConstants.osVersion
 					}
 				: {
-						login_ip: PlatformConstants.ServerHost,
+						login_ip: '10.101.31.236',
 						login_device: PlatformConstants.Model,
 						login_os: Platform.OS + ' ' + PlatformConstants.Release
 					};

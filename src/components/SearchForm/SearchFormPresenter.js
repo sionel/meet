@@ -13,7 +13,7 @@ const SearchFormPresenter = props => {
 		<View style={styles.wrap}>
 			<Icon name="search" size={18} color="#c8c8c8" style={styles.searchIcon} />
 			<TextInput
-				placeholder="Search..."
+				placeholder="검색"
 				ㄴ
 				style={styles.input}
 				onChangeText={newText => props.onChange(newText)}
@@ -35,13 +35,12 @@ const styles = StyleSheet.create({
 	wrap: {
 		position: 'relative',
 		width: '100%',
-		backgroundColor: '#f9f9f9',
-		paddingTop: 8,
-		paddingBottom: 8,
-		paddingLeft: 12,
-		paddingRight: 12,
+		// backgroundColor: '#f9f9f9',
+		backgroundColor: '#e7e7e7',
+		padding: 8,
 		borderBottomWidth: 1,
-		borderColor: '#dfdfdf'
+		borderColor: '#dfdfdf',
+		zIndex: 5
 	},
 
 	searchIcon: {
@@ -65,7 +64,8 @@ const styles = StyleSheet.create({
 		backgroundColor: '#fff',
 		paddingLeft: 41,
 		paddingRight: 10,
-		borderRadius: 25.5,
+		borderRadius: 5,
+		// borderRadius: 25.5,
 		zIndex: 9
 	}
 });

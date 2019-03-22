@@ -4,46 +4,55 @@
 
 import React, { Component } from 'react';
 import { View, Text, Image } from 'react-native';
+import CustomLottie from '../CustomLottie';
 
-const waitingImage = require(`./waiting.gif`);
+// const waitingImage = require(`./waiting.gif`);
+const waitingImage = require(`./imgEmptyMeet.png`);
 
 const Placeholder = props => {
 	return (
 		<View
 			style={{
-				flex: 1.5,
+				// flex: 1,
+				position: 'absolute',
 				width: '100%',
-				// backgroundColor: 'red',
+				height: '100%',
+				backgroundColor: '#eaeaea',
 				justifyContent: 'center',
 				alignItems: 'center',
+				zIndex: 1,
 				...props.layoutStyle
 			}}
 		>
 			<Image
 				style={{
-					width: '90%',
-					height: '80%',
-					maxWidth: 300,
-					maxHeight: 255
+					width: 180,
+					height: 180,
+					marginBottom: 23
 				}}
 				source={waitingImage}
 			/>
+			{/* <CustomLottie source="vr" width={105} height={345} /> */}
+			{props.mainText !== '' && (
+				<Text
+					style={{
+						fontSize: 20,
+						fontWeight: '500',
+						color: '#1C90FB',
+						marginTop: -5,
+						...props.mainTextStyle
+					}}
+				>
+					{props.mainText}
+				</Text>
+			)}
+
 			<Text
 				style={{
-					fontSize: 20,
+					fontSize: 18,
 					fontWeight: '500',
-					color: '#1C90FB',
-					marginTop: -35,
-					...props.mainTextStyle
-				}}
-			>
-				{props.mainText}
-			</Text>
-			<Text
-				style={{
-					fontSize: 17,
-					fontWeight: '500',
-					color: '#b1b1b1',
+					color: '#505050',
+					textAlign: 'center',
 					...props.subTextStyle
 				}}
 			>
@@ -54,7 +63,7 @@ const Placeholder = props => {
 };
 
 Placeholder.defaultProps = {
-	mainText: '데이터가 없습니다 :(',
+	mainText: '',
 	subText: 'No Contents',
 	layoutStyle: {},
 	mainTextStyle: {},

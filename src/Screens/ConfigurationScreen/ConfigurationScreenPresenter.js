@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { View, Text, StyleSheet, SectionList, TouchableOpacity, Modal } from 'react-native';
-import { CustomWebView } from '../../components';
+import { CustomWebView, SectionListHeader } from '../../components';
 
 const ConfigurationScreenPresenter = props => {
 	const { webView } = props;
@@ -31,7 +31,7 @@ const ConfigurationScreenPresenter = props => {
 		// },
 		{
 			title: '로그 보기',
-			action: () => alert(JSON.stringify(props.log).replace(/,/gi, ",\n"))
+			action: () => alert(JSON.stringify(props.log).replace(/,/gi, ',\n'))
 		},
 		{
 			title: '로그아웃',
@@ -49,11 +49,7 @@ const ConfigurationScreenPresenter = props => {
 			>
 				<SectionList
 					sections={[{ title: '시스템', data: userConfig }]}
-					renderSectionHeader={({ section }) => (
-						<Text key={section.title} style={styles.sectionHeader}>
-							{section.title}
-						</Text>
-					)}
+					renderSectionHeader={({ section }) => <SectionListHeader title={section.title} />}
 					renderItem={({ item }, index) => (
 						<TouchableOpacity key={index} onPress={item.action}>
 							<Text style={styles.item}>{item.title}</Text>
@@ -92,17 +88,6 @@ const styles = StyleSheet.create({
 		padding: '3%'
 	},
 
-	sectionHeader: {
-		paddingTop: 7,
-		paddingLeft: '4%',
-		paddingRight: '4%',
-		paddingBottom: 7,
-		marginBottom: 10,
-		fontSize: 14,
-		fontWeight: 'bold',
-		color: '#3f3f3f',
-		backgroundColor: 'rgba(247,247,247,1.0)'
-	},
 	item: {
 		padding: 10,
 		fontSize: 15,

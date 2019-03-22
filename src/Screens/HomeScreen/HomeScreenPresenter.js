@@ -6,7 +6,7 @@
 import React, { Fragment } from 'react';
 import { View, Text, StyleSheet, Modal, TouchableOpacity, SectionList, Image } from 'react-native';
 // common components
-import { ListItemComp, SearchForm, CustomModal, Placeholder } from '../../components';
+import { ListItemComp, SearchForm, CustomModal, Placeholder, CustomLottie, SectionListHeader } from '../../components';
 import AddButton from './AddButton';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -25,7 +25,7 @@ const HomeScreenPresenter = props => {
 			<SearchForm onChange={props.onSearch} />
 
 			{(props.list.length < 1 || activateList.length < 1) && (
-					<Placeholder mainText="진행중인 회의가 없어요 :(" subText="새로운 화상회의를 생성해 보세요" />
+					<Placeholder mainText={'진행중인 화상회의가 없습니다.'} subText={'대화를 시작하려면 +버튼을 누르세요.'} />
 				)}
 
 			{/* 화상대화 히스토리 리스트 */}
@@ -34,13 +34,9 @@ const HomeScreenPresenter = props => {
 				refreshing={props.refreshing}
 				onRefresh={props.onRefresh}
 				style={styles.listContainer}
-				sections={[{ title: '회의중', data: activateList, length: activateList.length - 1 }]}
+				sections={[{ title: '진행중', data: activateList, length: activateList.length - 1 }]}
 				renderSectionHeader={({ section }) =>
-					section.data.length > 0 && (
-						<Text key={section.title} style={styles.sectionHeader}>
-							{section.title}
-						</Text>
-					)}
+					section.data.length > 0 && <SectionListHeader title={section.title} />}
 				renderItem={({ item, index, section }) => (
 					// 히스토리 아이템
 					<ListItemComp
@@ -133,18 +129,6 @@ const styles = StyleSheet.create({
 		height: '10%',
 		justifyContent: 'center',
 		alignItems: 'center'
-	},
-
-	sectionHeader: {
-		paddingTop: 7,
-		paddingLeft: '4%',
-		paddingRight: '4%',
-		paddingBottom: 7,
-		marginBottom: 10,
-		fontSize: 14,
-		fontWeight: 'bold',
-		color: '#3f3f3f',
-		backgroundColor: 'rgba(247,247,247,1.0)'
 	},
 
 	modalWrap: {

@@ -4,11 +4,12 @@
  */
 
 import React from 'react';
-import { StyleSheet, View, TouchableHighlight, Platform } from 'react-native';
+import { StyleSheet, View, TouchableHighlight, Platform, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+const plusIcon = require('./plus.png');
 
 const AddButtonPresenter = props => {
-	const size = Platform.isPad ? 85 : props.size;
+	const size = Platform.isPad ? 80 : props.size;
 	return (
 		<TouchableHighlight
 			style={{ ...styles.wrap, width: size, height: size }}
@@ -16,7 +17,7 @@ const AddButtonPresenter = props => {
 			underlayColor="#0C80EB"
 		>
 			<View style={{ ...styles.text }}>
-				<Icon name="phone" size={25} color="#fff" />
+				<Text style={{ fontSize: 35, color: '#fff', textAlign: 'center' }}>+</Text>
 			</View>
 		</TouchableHighlight>
 	);
@@ -43,13 +44,14 @@ const styles = StyleSheet.create({
 
 	text: {
 		flex: 1,
+		padding: 0,
 		justifyContent: 'center',
 		alignItems: 'center'
 	}
 });
 
 AddButtonPresenter.defaultProps = {
-	size: 70,
+	size: 65,
 	onClick: () => {
 		alert('Call');
 	}

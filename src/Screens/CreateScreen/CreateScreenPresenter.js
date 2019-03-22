@@ -6,7 +6,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, SectionList } from 'react-native';
 // common components
-import { ListItemComp, SearchForm, Placeholder, CustomModal } from '../../components';
+import { ListItemComp, SearchForm, Placeholder, CustomModal, SectionListHeader } from '../../components';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 /**
@@ -21,7 +21,7 @@ const CreateScreenPresenter = props => {
 			{/* 검색바 */}
 			<SearchForm onChange={props.onSearch} />
 
-			{props.list.length < 1 && <Placeholder mainText="검색하신 위톡은 존재하지 않아요 :(" subText="위하고에서 위톡을 생성해 보세요" />}
+			{props.list.length < 1 && <Placeholder mainText="검색 결과가 없습니다." subText={'위하고에서 위톡을 생성해 보세요'} />}
 
 			{/* 화상대화 히스토리 리스트 */}
 			<SectionList
@@ -34,11 +34,7 @@ const CreateScreenPresenter = props => {
 					{ title: `1:1대화(${personnelList.length})`, data: personnelList, length: personnelList.length - 1 }
 				]}
 				renderSectionHeader={({ section }) =>
-					section.data.length > 0 && (
-						<Text key={section.title} style={styles.sectionHeader}>
-							{section.title}
-						</Text>
-					)}
+					section.data.length > 0 && <SectionListHeader title={section.title} />}
 				renderItem={({ item, index, section }) => (
 					// 히스토리 아이템
 					<ListItemComp
@@ -91,18 +87,6 @@ const styles = StyleSheet.create({
 		height: '10%',
 		justifyContent: 'center',
 		alignItems: 'center'
-	},
-
-	sectionHeader: {
-		paddingTop: 7,
-		paddingLeft: '4%',
-		paddingRight: '4%',
-		paddingBottom: 7,
-		marginBottom: 10,
-		fontSize: 14,
-		fontWeight: 'bold',
-		color: '#3f3f3f',
-		backgroundColor: 'rgba(247,247,247,1.0)'
 	},
 
 	modalWrap: {
