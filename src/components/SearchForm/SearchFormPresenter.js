@@ -35,9 +35,11 @@ const styles = StyleSheet.create({
 	wrap: {
 		position: 'relative',
 		width: '100%',
-		// backgroundColor: '#f9f9f9',
-		backgroundColor: '#e7e7e7',
+		backgroundColor: '#fafafa',
+		// backgroundColor: '#e7e7e7',
 		padding: 8,
+		paddingLeft: 10,
+		paddingRight: 10,
 		borderBottomWidth: 1,
 		borderColor: '#dfdfdf',
 		zIndex: 5
@@ -64,8 +66,8 @@ const styles = StyleSheet.create({
 		backgroundColor: '#fff',
 		paddingLeft: 41,
 		paddingRight: 10,
-		borderRadius: 5,
-		// borderRadius: 25.5,
+		// borderRadius: 5,
+		borderRadius: 25.5,
 		zIndex: 9
 	}
 });

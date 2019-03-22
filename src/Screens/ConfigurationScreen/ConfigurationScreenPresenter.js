@@ -23,7 +23,7 @@ const ConfigurationScreenPresenter = props => {
 		},
 		{
 			title: '버전정보',
-			action: () => alert('0.1.7 버전')
+			action: () => alert('v1.0.2')
 		},
 		// {
 		// 	title: '앱인트로 보기',

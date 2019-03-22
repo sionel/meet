@@ -192,8 +192,8 @@ class HomeScreenContainer extends Component {
    * 위톡 조회
    */
 	_handleGetWetalkList = async () => {
-		// console.log(await AudioJackManager.isPluggedIn());
 		const { auth, onSetWetalkList } = this.props;
+		console.log('CNO : ', auth.last_access_company_no);
 		// 위톡조회 API
 		const wetalkList = await WetalkApi.getWetalkList(
 			auth.AUTH_A_TOKEN,
@@ -218,6 +218,8 @@ class HomeScreenContainer extends Component {
    */
 	_handleAutoLogin = async (count = 0) => {
 		const { auth, onLogin, loginCheckRequest } = this.props;
+		console.log('auth222 : ', auth);
+
 		let userData = {};
 
 		// 재 로그인이 필요한 경우 (저장된 정보가 없을 경우)
@@ -237,7 +239,7 @@ class HomeScreenContainer extends Component {
 		// 재 로그인
 		if (checkResult.errors) {
 			// alert('Home: 인증실패\nError: ' + JSON.stringify(checkResult.errors) + '\nToken: ' + copyAuth);
-			return this.props.onLogout()
+			return this.props.onLogout();
 		} else {
 			// 최종선택 회사가 달라진 경우
 			if (auth.last_access_company_no != checkResult.auth.last_access_company_no) {
