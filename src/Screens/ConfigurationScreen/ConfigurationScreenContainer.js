@@ -41,7 +41,7 @@ class ConfigurationScreenContainer extends React.Component {
 				onChangeValue={this._handleChangeValue}
 				onDestroyToken={onDestroyToken}
 				onToggleVisibleAppIntro={onToggleVisibleAppIntro}
-				log={this.props.log}
+				// log={this.props.log}
 			/>
 		);
 	} // render

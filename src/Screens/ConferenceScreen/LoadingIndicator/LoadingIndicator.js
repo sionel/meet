@@ -14,7 +14,7 @@ class LoadingIndicator extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Image style={styles.indicator} source={CameraLoading} />
+        <Image style={styles.indicator} source={CameraLoading} resizeMode="contain" />
         {/* <LottieView
           style={styles.indicator}
           source={require("./camera.json")}
@@ -35,11 +35,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#0069E0"
+    backgroundColor: "#0069E0",
   },
   indicator: {
-    width: 360,
-    height: 360,
+    width: "33%",
+    height: "33%"
   }
 });
 

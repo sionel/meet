@@ -14,7 +14,7 @@ const CHANGE_COMPANY = 'CHANGE_COMPANY';
 const TOGGLE_VISIBLE_APPINTRO = 'TOGGLE_VISIBLE_APPINTRO';
 
 const EVENT_LOG = 'EVENT_LOG';
-
+const LIKE_LOGOUT = 'LIKE_LOGOUT';
 //#region Action Creators
 
 /**
@@ -107,6 +107,12 @@ function logout() {
 	};
 }
 
+function likeLogout() {
+	return {
+		type: LIKE_LOGOUT
+	};
+}
+
 /**
  * tokenTest
  */
@@ -165,6 +171,7 @@ function changeCompany(cno) {
 //#region initialState
 
 const initialState = {
+	isLogin: false,
 	auth: {},
 	permission: false,
 	appIntro: false,
@@ -180,10 +187,12 @@ function reducer(state = initialState, action) {
 		case AGREEMENT:
 			return { ...state, permission: !state.permission };
 		case LOGIN:
-			return { ...state, auth: action.auth };
+			return { ...state, auth: action.auth, isLogin: true };
 		// return applyTest(state, action);
 		case LOGOUT:
-			return { ...state, auth: {} };
+			return { ...state, auth: {}, isLogin: false };
+		case LIKE_LOGOUT:
+			return { ...state, isLogin: false };
 		case TOKEN:
 			let auth = state.auth;
 			auth.AUTH_A_TOKEN = action.newToken;
@@ -266,6 +275,7 @@ const actionCreators = {
 	loginRequest,
 	loginCheckRequest,
 	logout,
+	likeLogout,
 	token,
 	// tokenLogin,
 	agreement,

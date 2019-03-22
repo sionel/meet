@@ -15,7 +15,7 @@ class MainContainer extends Component {
     if (nextStates.isLogin !== this.state.isLogin)
       return true;
 
-    if (!nextProps.auth.user_no) {
+    if (!nextProps.isLogin) {
       this.setState({ isLogin: false });
     }
 

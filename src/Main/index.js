@@ -10,6 +10,7 @@ import MainContainer from "./MainContainer";
 // map state to props
 const mapStateToProps = state => ({
   auth: state.user.auth,
+  isLogin: state.user.isLogin
 });
 
 // map dispatch to props

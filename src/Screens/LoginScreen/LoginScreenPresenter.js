@@ -122,9 +122,9 @@ const LoginScreenPresenter = props => {
 				<View style={styles.modalWrap}>
 					<View style={{ flexDirection: 'row' }}>
 						<View style={styles.modalContents}>
-							<Text style={styles.modalMessage}>아이디와 패스워드를 확인해 주세요</Text>
+							<Text style={styles.modalMessage}>{props.modalText}</Text>
 						</View>
-						<TouchableOpacity style={styles.modalCloseButton} onPress={() => props.onActivateModal(false)}>
+						<TouchableOpacity style={styles.modalCloseButton} onPress={() => props.onActivateModal("", false)}>
 							<Icon name="times" size={20} color="#fff" />
 						</TouchableOpacity>
 					</View>
@@ -281,20 +281,20 @@ const styles = StyleSheet.create({
 		padding: '3%'
 	},
 
-	modalWrap: { marginTop: 30, backgroundColor: '#F15F5F' },
+	modalWrap: { paddingTop: 32, backgroundColor: '#F15F5F' },
 	modalContents: {
 		flex: 5,
 		justifyContent: 'center',
 		paddingTop: 17,
 		paddingBottom: 17,
-		paddingLeft: 10
+		paddingLeft: 17
 	},
 	modalMessage: { color: '#fff', fontSize: 15 },
 	modalCloseButton: {
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
-		backgroundColor: '#FF8383'
+		// backgroundColor: '#FF8383'
 	},
 
 	permission_modalWrap: {
