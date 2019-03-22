@@ -5,9 +5,10 @@
  */
 
 import React from 'react';
-import { Linking, Platform, NativeModules } from 'react-native';
-import { StackActions, NavigationActions } from 'react-navigation';
+import { Linking, Platform, NativeModules, View } from 'react-native';
+
 import LoginScreenPresenter from './LoginScreenPresenter';
+import LoginFailAlert from './Content/LoginFailAlert';
 import { CustomLottie } from '../../components';
 // service
 import { querystringParser } from '../../utils';
@@ -23,6 +24,7 @@ class LoginScreenContainer extends React.Component {
 		userPwd: '',
 		nextInput: null,
 		modal: false,
+		modalText: "",
 		waiting: true,
 		autoLoginFlag: true,
 		webView: false
@@ -48,9 +50,15 @@ class LoginScreenContainer extends React.Component {
 	 */
 	render() {
 		const { permission } = this.props;
-		const { list, userId, userPwd, modal, nextInput, waiting, autoLoginFlag, webView } = this.state;
+		const { list, userId, userPwd, modal, modalText, nextInput, waiting, autoLoginFlag, webView } = this.state;
 		if (waiting) {
-			return <CustomLottie source={'waiting'} width={225} height={225} />;
+			return (
+				<View style={{ flex: 1 }}>
+					<CustomLottie source={'waiting'} width={225} height={225}>
+						<LoginFailAlert modal={modal} modalText={modalText} onCancelTryLogin={this._handleCancelTryLogin} />
+					</CustomLottie>
+				</View>
+			);
 		}
 
 		return (
@@ -58,7 +66,7 @@ class LoginScreenContainer extends React.Component {
 				onChangeValue={this._handleChangeValue}
 				onLogin={this._handleLogin}
 				onLoginForWehago={this._handleLoginForWehago}
-				onActivateModal={this._handleAc_handleCheckUsertivateModal}
+				onActivateModal={this._handleActivateModal}
 				onEnterKeyDown={this._handleEnterKeyDown}
 				// onTokenLogin={this.props.onTokenLogin}
 				onAgreement={this.props.onAgreement}
@@ -67,6 +75,7 @@ class LoginScreenContainer extends React.Component {
 				userId={userId}
 				list={list}
 				modal={modal}
+				modalText={this.state.modalText}
 				webView={webView}
 				permissionModal={permission}
 				nextInput={nextInput}
@@ -101,28 +110,24 @@ class LoginScreenContainer extends React.Component {
 				if (result.errors) {
 					switch (result.errors.code) {
 						case 'E002':
-							alert('토큰이 만료되었습니다.\n다시 로그인 해주세요.');
-							return this.setState({ waiting: false });
+							this.setState({ waiting: false });
+							return this._handleActivateModal("토큰이 만료되었습니다. 다시 로그인 해주세요.");
 						default:
-							if (count < 5) {
-								alert('로그인 실패\n재시도중 (' + count + '/5)');
+							if (count < 6 && this.state.waiting) {
+								this._handleActivateModal("로그인 실패\n재시도중 (" + count + "/5)");
 								return setTimeout(() => {
 									this._handleCheckUser(++count);
 								}, 1000);
 							} else {
-								alert('Login: 인증실패\nError: ' + JSON.stringify(result.errors) + '\nToken: ' + copyAuth);
 								return this.setState({ waiting: false });
 							}
 					}
 				} else {
-					// alert("로그인 성공!");
-					// console.warn("로그인 성공");
 					return this.props.handleOnLogin();
 				}
 			}, 1000);
 		} else {
 			setTimeout(() => {
-				alert('Login: 토큰없음');
 				return this.setState({ waiting: false });
 			}, 1000);
 		}
@@ -166,9 +171,13 @@ class LoginScreenContainer extends React.Component {
 				resultData.last_access_company_no
 			);
 		} else {
-			this._handleActivateModal();
+			this._handleActivateModal("아이디와 패스워드를 확인해 주세요");
 		}
 	};
+
+	_handleCancelTryLogin = () => {
+		this.setState({ waiting: false, modal: false });
+	}
 
 	/**
 	 * _handleSaveUserinfo
@@ -201,11 +210,11 @@ class LoginScreenContainer extends React.Component {
 			console.log(err);
 			if (Platform.OS === 'ios') {
 				Linking.openURL(iosMarketURL).catch(err => {
-					alert('스토어 정보가 없습니다.\n' + err);
+					alert('스토어 정보가 없습니다.');
 				});
 			} else if (Platform.OS === 'android') {
 				Linking.openURL(androidMarketURL).catch(err => {
-					alert('스토어 정보가 없습니다.\n' + err);
+					alert('스토어 정보가 없습니다.');
 				});
 			}
 		});
@@ -224,8 +233,8 @@ class LoginScreenContainer extends React.Component {
 	 * _handleActivateModal
 	 * 로그인 실패 시 경고 모달 ON
 	 */
-	_handleActivateModal = (val = true) => {
-		this.setState(prev => ({ modal: val }));
+	_handleActivateModal = (text = "", val = true) => {
+		this.setState(prev => ({ modal: val, modalText: text }));
 		// 자동 close
 		if (val) {
 			setTimeout(() => {

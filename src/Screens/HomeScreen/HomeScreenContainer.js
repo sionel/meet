@@ -4,7 +4,7 @@
  */
 
 import React, { Component, Fragment } from 'react';
-import { AppState, StatusBar, Linking, Platform, NativeModules, DeviceEventEmitter } from 'react-native';
+import { AppState, StatusBar, Linking } from 'react-native';
 import HomeScreenPresenter from './HomeScreenPresenter';
 // service
 import { WetalkApi } from '../../services';
@@ -12,8 +12,6 @@ import { UserApi } from '../../services';
 import { ConferenceApi } from '../../services';
 import { NavigationEvents } from 'react-navigation';
 import { querystringParser } from '../../utils';
-
-// import AudioJackManager from '../../utils/AudioJackManager';
 
 // #region
 
@@ -48,6 +46,7 @@ class HomeScreenContainer extends Component {
 				this._handleOpenURL({ url });
 			}
 		});
+
 		Linking.addEventListener('url', this._handleOpenURL);
 		AppState.addEventListener('change', this._handleAppStateChange);
 		this._interval = setInterval(() => {
@@ -56,7 +55,6 @@ class HomeScreenContainer extends Component {
 				this._handleRefresh();
 			}
 		}, 15000);
-		// AudioJackManager.addListener(({isPluggedIn}) => alert("audio connect : " + isPluggedIn));
 	}
 
 	/**
@@ -66,7 +64,6 @@ class HomeScreenContainer extends Component {
 		clearInterval(this._interval);
 		Linking.removeEventListener('url', this._handleOpenURL);
 		AppState.removeEventListener('change', this._handleAppStateChange);
-		audioJackListener.remove();
 	}
 
 	// #region
@@ -219,7 +216,7 @@ class HomeScreenContainer extends Component {
    * _handleAutoLogin
    * 접속자확인 및 자동로그인
    */
-	_handleAutoLogin = async () => {
+	_handleAutoLogin = async (count = 0) => {
 		const { auth, onLogin, loginCheckRequest } = this.props;
 		let userData = {};
 
@@ -239,7 +236,8 @@ class HomeScreenContainer extends Component {
 		);
 		// 재 로그인
 		if (checkResult.errors) {
-			alert('Home: 인증실패\nError: ' + JSON.stringify(checkResult.errors) + '\nToken: ' + copyAuth);
+			// alert('Home: 인증실패\nError: ' + JSON.stringify(checkResult.errors) + '\nToken: ' + copyAuth);
+			return this.props.onLogout()
 		} else {
 			// 최종선택 회사가 달라진 경우
 			if (auth.last_access_company_no != checkResult.auth.last_access_company_no) {

@@ -4,7 +4,7 @@ import { actionCreators as UserActions } from '../../redux/modules/user';
 
 const mapStateToProps = state => ({
 	user: state.user.auth,
-	log: state.user.log
+	// log: state.user.log
 });
 
 const mapDispatchTopProps = dispatch => ({

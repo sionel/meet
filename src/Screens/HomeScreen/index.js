@@ -17,6 +17,7 @@ const mapStateToProps = state => ({
  */
 const mapDispatchToProps = dispatch => ({
 	onLogin: user => dispatch(UserActions.login(user)),
+	onLogout: () => dispatch(UserActions.likeLogout()),
 	loginCheckRequest: (AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY) => 
 		dispatch(UserActions.loginCheckRequest(
 			AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY

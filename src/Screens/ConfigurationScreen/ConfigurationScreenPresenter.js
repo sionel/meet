@@ -29,10 +29,10 @@ const ConfigurationScreenPresenter = props => {
 		// 	title: '앱인트로 보기',
 		// 	action: () => props.onToggleVisibleAppIntro()
 		// },
-		{
-			title: '로그 보기',
-			action: () => alert(JSON.stringify(props.log).replace(/,/gi, ",\n"))
-		},
+		// {
+		// 	title: '로그 보기',
+		// 	action: () => alert(JSON.stringify(props.log).replace(/,/gi, /,\n/))
+		// },
 		{
 			title: '로그아웃',
 			action: () => props.onLogout()
