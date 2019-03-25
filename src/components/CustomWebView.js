@@ -56,7 +56,7 @@ CustomWebView.defaultProps = {
 	titleStyle: {},
 	contentStyle: {},
 	onClickButton: () => {
-		alert('on Click');
+		console.log('on Click');
 	}
 };
 

@@ -193,7 +193,7 @@ class HomeScreenContainer extends Component {
    */
 	_handleGetWetalkList = async () => {
 		const { auth, onSetWetalkList } = this.props;
-		console.log('CNO : ', auth.last_access_company_no);
+		// console.log('CNO : ', auth.last_access_company_no);
 		// 위톡조회 API
 		const wetalkList = await WetalkApi.getWetalkList(
 			auth.AUTH_A_TOKEN,
@@ -205,7 +205,7 @@ class HomeScreenContainer extends Component {
 
 		// 토큰만료시
 		if (wetalkList.errors) {
-			alert('wetalkList.error: ' + JSON.stringify(wetalkList.errors));
+			// alert('wetalkList.error: ' + JSON.stringify(wetalkList.errors));
 			return this._handleAutoLogin();
 		}
 		this.setState({ refreshing: false });

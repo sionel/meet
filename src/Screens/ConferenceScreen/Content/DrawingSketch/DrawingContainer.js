@@ -82,7 +82,6 @@ class DrawingContainer extends Component {
    * 
    */
 	_handleDrawListener = event => {
-		alert(1);
 		switch (event.type) {
 			case 'mousedown':
 				this._handleInitDraw(event);

@@ -55,7 +55,7 @@ SvgButton.defaultProps = {
 	borderColor: '#1C90FB',
 	customStyle: {},
 	onClick: () => {
-		alert('on click');
+		console.log('on click');
 	}
 };
 
