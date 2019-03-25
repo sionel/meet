@@ -31,7 +31,7 @@ export default {
 			const response = await fetch(url, data);
 			return response.json();
 		} catch (err) {
-			alert('error');
+			alert('사소한 문제가 발생했습니다. 다시 시도해 주세요');
 			return false;
 		}
 	}
