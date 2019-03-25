@@ -79,7 +79,7 @@ class LoginScreenContainer extends React.Component {
 				userId={userId}
 				list={list}
 				modal={modal}
-				modalText={this.state.modalText}
+				modalText={modalText}
 				webView={webView}
 				permissionModal={permission}
 				nextInput={nextInput}

@@ -21,6 +21,7 @@ import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -31,6 +32,7 @@ class ReactPackageAdapter
     public List<NativeModule> createNativeModules(
             ReactApplicationContext reactContext) {
         return Collections.emptyList();
+        // return Arrays.<NativeModule>asList(new AudioJackModule(reactContext));
     }
 
     @Override

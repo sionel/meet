@@ -5,7 +5,6 @@ const LoginFailAlert = (props) => {
   return (
     <Modal
       animationType="slide"
-      transparent={false}
       visible={props.modal}
       transparent={true}
       animationType="fade"

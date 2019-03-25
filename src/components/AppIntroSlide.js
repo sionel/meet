@@ -15,93 +15,29 @@ const introImages = [
 const logo_login = require(`${rootPath}/logo_login.png`);
 const slides = [
   {
-    key: 1,
+    key: '1',
     title: 'Title 1',
     text: 'Description.\nSay something cool',
     image: introImages[0],
     backgroundColor: '#1C90FB'
   },
   {
-    key: 2,
+    key: '2',
     title: 'Title 2',
     text: 'Other cool stuff',
     image: introImages[1],
-    backgroundColor: '#febe29'
+    backgroundColor: '#c34bef'
   },
   {
-    key: 3,
+    key: '3',
     title: 'Rocket guy',
     text: "I'm already out of descriptions",
     image: introImages[2],
-    backgroundColor: '#22bcb5'
+    backgroundColor: '#8ad335'
   }
 ];
 
 class AppIntroSlide extends React.Component {
-  constructor(props) {
-    super(props);
-
-    // this.state = {
-    //   // showRealApp: false
-    //   showRealApp: this.props.intro
-    // };
-  }
-
-  _renderItem = (item, index) => {
-    return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          padding: 0,
-          width: item.width,
-          height: item.height,
-          backgroundColor: item.backgroundColor
-        }}
-      >
-        <Text style={{ color: '#fff', textAlign: 'center', width: '100%' }}>
-          {item.title}
-        </Text>
-        {/* 
-				이미지 원본크기로 지정해야 가로크기가 맞음..
-				*/}
-        {/* <Image source={item.image} style={{ width: 275 }} /> */}
-        <Image source={item.image} style={{ width: "100%" }} />
-        {/* <View style={{ backgroundColor: '#f1f1f1', width: '100%' }}>
-					<Text>asdasdlka</Text>
-				</View>
-				<Text style={{ color: '#fff', textAlign: 'center' }}>{JSON.stringify(item.text)}</Text> */}
-      </View>
-    );
-  };
-
-  _onDone = () => {
-    return this.props.onIntro();
-    // this._handleGetIntroState();
-  };
-
-  // _handleGetIntroState = () => {
-  //   const { intro } = this.props;
-  //   this.setState({ showRealApp: intro });
-  // };
-
-  _renderNextButton = () => {
-    return (
-      <View style={styles.nextButton}>
-        <Text style={styles.nextButtonText}>Next</Text>
-      </View>
-    );
-  };
-
-  _renderDoneButton = () => {
-    return (
-      <View style={styles.nextButton}>
-        <Text style={styles.nextButtonText}>Done</Text>
-      </View>
-    );
-  };
-
   render() {
     return (
       <View style={{ flex: 1 }}>
@@ -119,6 +55,55 @@ class AppIntroSlide extends React.Component {
       </View>
     );
   }
+
+  _renderItem = (item, index) => {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'flex-start',
+          padding: 0,
+          backgroundColor: item.backgroundColor,
+          overflow: "hidden"
+        }}
+      >
+        {/* 
+				이미지 원본크기로 지정해야 가로크기가 맞음..
+				*/}
+        <Image
+          source={item.image}
+          style={{ width: item.width, height: item.height }}
+          resizeMode="contain" />
+        {/* <View style={{
+          width: item.width, height: item.width / 474 * 843}}>
+          <Image
+            source={item.image}
+            style={{ flex:1, width: item.width, height: item.width / 474 * 843 }}
+          />
+        </View> */}
+      </View>
+    );
+  };
+
+  _onDone = () => {
+    return this.props.onIntro();
+  };
+
+  _renderNextButton = () => {
+    return (
+      <View style={styles.nextButton}>
+        <Text style={styles.nextButtonText}>Next</Text>
+      </View>
+    );
+  };
+
+  _renderDoneButton = () => {
+    return (
+      <View style={styles.nextButton}>
+        <Text style={styles.nextButtonText}>Done</Text>
+      </View>
+    );
+  };
 }
 
 const styles = StyleSheet.create({

@@ -3,13 +3,17 @@
  * 최상위화면 컨테이너
  */
 import React, { Component } from "react";
-import MainPresenter from "./MainPresenter";
 import Orientation from "react-native-orientation-locker";
+import MainPresenter from "./MainPresenter";
 import LoginScreen from '../Screens/LoginScreen';
 import { AppIntroSlide } from "../components";
 
 class MainContainer extends Component {
   state = { isLogin: false };
+
+  componentDidMount() {
+    Orientation.lockToPortrait();
+  }
 
   shouldComponentUpdate(nextProps, nextStates) {
     if (nextStates.isLogin !== this.state.isLogin)
@@ -20,10 +24,6 @@ class MainContainer extends Component {
     }
 
     return false;
-  }
-  
-  componentWillMount() {
-    Orientation.lockToPortrait();
   }
 
   render() {

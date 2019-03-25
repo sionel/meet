@@ -114,7 +114,6 @@ const LoginScreenPresenter = props => {
 			{/* 모달 */}
 			<Modal
 				animationType="slide"
-				transparent={false}
 				visible={props.modal}
 				transparent={true}
 				animationType="fade"
@@ -200,9 +199,8 @@ const LoginScreenPresenter = props => {
 										borderColor={'#c8c8c8'}
 										backgroundColor={'none'}
 										onClick={() => props.onChangeValue('webView', true)}
-									>
-										이용약관 보기
-									</FlatButton>
+										title="이용약관 보기"
+									/>
 									<FlatButton
 										height={40}
 										borderRadius={0}
@@ -212,9 +210,8 @@ const LoginScreenPresenter = props => {
 										backgroundColor={'none'}
 										customStyle={{ borderTopWidth: 0 }}
 										onClick={() => props.onChangeValue('webView', true)}
-									>
-										법률고지 보기
-									</FlatButton>
+										title="법률고지 보기"
+									/>
 								</View>
 								{/* <Text style={{ fontSize: 16, fontWeight: '500' }}>선택 접근권한</Text> */}
 							</View>
