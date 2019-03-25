@@ -10,7 +10,7 @@ import { CustomLottie } from '../../../../components';
  * MainVideoPresenter
  */
 const MainVideoPresenter = props => {
-	const { isMuteVideo, stream, videoType, mainUser, callType } = props;
+	const { isMuteVideo, stream, videoType, mainUser, callType, isVideoReverse } = props;
 	const displayTime = (
 		<View
 			style={{
@@ -66,7 +66,8 @@ const MainVideoPresenter = props => {
 		return (
 			<RTCView
 				style={styles.videoContainer}
-				mirror={false}
+				// mirror={true}
+				mirror={isVideoReverse}
 				objectFit={videoType && videoType === 'desktop' ? 'fit' : 'cover'}
 				streamURL={stream.toURL()}
 			>

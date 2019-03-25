@@ -218,7 +218,6 @@ class HomeScreenContainer extends Component {
    */
 	_handleAutoLogin = async (count = 0) => {
 		const { auth, onLogin, loginCheckRequest } = this.props;
-		console.log('auth222 : ', auth);
 
 		let userData = {};
 

@@ -17,7 +17,6 @@ const waitingImage = require(`${rootPath}/waiting.gif`);
  * HomeScreenPresenter
  */
 const HomeScreenPresenter = props => {
-	console.log('WE Talk : ', props);
 	const activateList = props.list.filter(item => item.is_video_access === 'T');
 
 	return (

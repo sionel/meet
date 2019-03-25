@@ -25,6 +25,27 @@ class RouteTitleContainer extends React.Component {
 	/**
 	 * 
 	 */
+	shouldComponentUpdate(nextProps, nextState) {
+		if (nextProps !== this.props) {
+			return false;
+		}
+		try {
+			this.props.onChangeCompany(nextState.selectedCompany);
+			if (this.state.selectedCompany != nextState.selectedCompany) {
+				return true;
+			}
+			return false;
+		} catch (e) {
+			return false;
+		}
+
+		// return false;
+	}
+	// componentWillUpdate(nextProps, nextState) {}
+
+	/**
+	 * 
+	 */
 	render() {
 		return <RouteTitlePresenter {...this.state} {...this.props} onChangeValue={this._handleChangeValue} />;
 	}
@@ -33,8 +54,7 @@ class RouteTitleContainer extends React.Component {
 	 * 
 	 */
 	_handleChangeValue = selectedCompany => {
-		this.props.onChangeCompany(selectedCompany);
-		// this.setState({ selectedCompany });
+		this.setState({ selectedCompany });
 	};
 }
 

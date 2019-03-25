@@ -77,7 +77,6 @@ class ContentContainer extends React.Component {
 	 * 카메라 좌우반전
 	 */
 	_handleReverseVideo = () => {
-		alert(this.state.isVideoReverse);
 		this.setState(prev => ({ isVideoReverse: !prev.isVideoReverse }));
 	};
 
