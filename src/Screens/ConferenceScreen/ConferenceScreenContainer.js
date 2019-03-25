@@ -4,10 +4,13 @@
  */
 
 import React, { Fragment } from 'react';
+import { NativeModules } from 'react-native';
 import ConferenceScreenPresenter from './ConferenceScreenPresenter';
 import ConferenceManager from '../../utils/conference/ConferenceManager';
 import Orientation from 'react-native-orientation-locker';
 import { AppState, StatusBar } from 'react-native';
+
+const { PlatformConstants } = NativeModules;
 
 class ConferenceScreenContainer extends React.Component {
 	constructor() {
@@ -17,14 +20,16 @@ class ConferenceScreenContainer extends React.Component {
 			callType: 1
 		};
 	}
-	componentWillMount() {
-		Orientation.unlockAllOrientations();
-	}
 
 	/**
    * componentDidMount
    */
 	componentDidMount() {
+		if (PlatformConstants.interfaceIdiom === "phone")
+			Orientation.unlockAllOrientations();
+		else {
+			Orientation.lockToPortrait();
+		}
 		const { navigation, user_name, auth } = this.props;
 		const item = navigation.getParam('item');
 		// 전화 타입 - 화상:1 / 음성:2

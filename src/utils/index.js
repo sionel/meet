@@ -110,6 +110,7 @@ _getServiceCode = () => {
 };
 
 _getService = url => {
+	console.log(url);
 	let service = '';
 	if (url.split('/').length > 2) {
 		service = url.split('/')[3];

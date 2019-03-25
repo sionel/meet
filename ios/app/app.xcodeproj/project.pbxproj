@@ -249,8 +249,6 @@
 				B35383AD1DDA0083008F406A /* Adjust embedded framework architectures */,
 				0BB7DA181EC9E695007AAE98 /* Adjust ATS */,
 				DEC2069321CBBD6900072F03 /* Setup Fabric */,
-				250E4F1DA01B64C36FC14E49 /* [CP] Embed Pods Frameworks */,
-				E49FD35DEBE76AE786381B83 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -382,25 +380,6 @@
 			shellPath = /bin/sh;
 			shellScript = "../scripts/run-packager.sh";
 		};
-		250E4F1DA01B64C36FC14E49 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/../Pods/Target Support Files/Pods-jitsi-meet/Pods-jitsi-meet-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		B35383AD1DDA0083008F406A /* Adjust embedded framework architectures */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -454,25 +433,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "${PODS_ROOT}/Fabric/run\n";
-		};
-		E49FD35DEBE76AE786381B83 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/../Pods/Target Support Files/Pods-jitsi-meet/Pods-jitsi-meet-resources.sh\"\n";
-			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
