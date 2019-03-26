@@ -47,11 +47,11 @@ class CustomLottie extends Component {
 	 * Render
 	 */
 	render() {
-		const { source, width, height, customStyle, phrases, children } = this.props;
+		const { source, width, height, customStyle, phrases, children, containerStyle } = this.props;
 		const files = this.files;
 
 		return (
-			<View style={styles.container}>
+			<View style={{ ...styles.container, ...containerStyle }}>
 				<LottieView
 					style={{
 						width,
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
-		backgroundColor: '#FFF',
+		// backgroundColor: '#FFF',
 		width: '100%',
 		height: '100%'
 	}
@@ -116,7 +116,8 @@ CustomLottie.defaultProps = {
 	width: 45,
 	height: 45,
 	customStyle: {},
-	phrases: ''
+	phrases: '',
+	containerStyle: {}
 };
 
 export default CustomLottie;

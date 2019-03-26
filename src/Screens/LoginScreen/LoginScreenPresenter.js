@@ -112,18 +112,16 @@ const LoginScreenPresenter = props => {
 			</View>
 
 			{/* 모달 */}
-			<Modal
-				animationType="slide"
-				visible={props.modal}
-				transparent={true}
-				animationType="fade"
-			>
+			<Modal animationType="slide" visible={props.modal} transparent={true} animationType="fade">
 				<View style={styles.modalWrap}>
 					<View style={{ flexDirection: 'row' }}>
 						<View style={styles.modalContents}>
 							<Text style={styles.modalMessage}>{props.modalText}</Text>
 						</View>
-						<TouchableOpacity style={styles.modalCloseButton} onPress={() => props.onActivateModal("", false)}>
+						<TouchableOpacity
+							style={styles.modalCloseButton}
+							onPress={() => props.onActivateModal('', false)}
+						>
 							<Icon name="times" size={20} color="#fff" />
 						</TouchableOpacity>
 					</View>
@@ -132,57 +130,166 @@ const LoginScreenPresenter = props => {
 
 			{/* 권한 컨펌모달 */}
 			<Modal animationType="fade" transparent={true} visible={!props.permissionModal} blurRadius={1}>
+				{/* <Modal animationType="fade" transparent={true} visible={!props.permissionModal} blurRadius={1}> */}
 				<View style={styles.permission_modalWrap}>
 					<View style={styles.permission_modalContentWrap}>
 						<View style={styles.permission_modalMessage}>
 							<Text
 								style={{
-									fontSize: 18,
-									color: '#1C90FB',
+									fontSize: 16,
+									// color: '#1C90FB',
+									color: 'rgb(51,51,51)',
 									marginBottom: 10
 								}}
 							>
-								WEHAGO Meet 권한 안내
+								{'WEHAGO Meet\n앱 이용을 위한 권한 안내'}
 							</Text>
 							<View
 								style={{
 									borderTopWidth: 1,
-									borderColor: '#bbdefe',
-									paddingTop: 18
+									// borderBottomWidth: 1,
+									borderColor: 'rgb(200,200,200)',
+									paddingTop: 18,
+									paddingBottom: 15
 								}}
 							>
-								<Text style={{ fontSize: 16, fontWeight: '500' }}>필수 접근권한</Text>
+								<Text style={{ fontSize: 15, color: '#1C90FB', fontWeight: '800' }}>필수적 접근권한</Text>
 								<View
 									style={{
 										backgroundColor: '#f1f1f1',
 										marginTop: 8,
 										marginBottom: 12,
-										paddingTop: 15,
-										paddingLeft: 10,
-										paddingRight: 10
+										paddingTop: 5
 									}}
 								>
 									<FlatList
 										data={[
-											{ key: '1', title: '카메라', description: '화상대화 카메라', icon: 'camera' },
+											{
+												key: '1',
+												title: '카메라',
+												description: '사진 및 동영상 촬영, QR코드 스캔',
+												icon: 'camera'
+											},
 											{ key: '2', title: '마이크', description: '화상대화 내 음성 전송', icon: 'microphone' },
-											{ key: '3', title: '스피커', description: '화상대화 음성 출력', icon: 'volume-up' },
-											{ key: '4', title: '알림', description: '화상대화 실시간 알림', icon: 'bell' }
+											{
+												key: '2',
+												title: '기기 및 앱기록',
+												description: '앱서비스 최적화 및 기기오류',
+												icon: 'cogs'
+											}
 										]}
 										renderItem={({ item }) => (
-											<ListItemComp
-												key={item.key}
-												title={item.title}
-												updated={item.description}
-												descriptionType={'text'}
-												iconSize={70}
+											<View
+												style={{
+													width: '100%',
+													flexDirection: 'row'
+												}}
 											>
-												<Icon name={item.icon} size={20} color="#333" />
-											</ListItemComp>
+												<View
+													style={{
+														flex: 2,
+														marginBottom: 10,
+														justifyContent: 'center',
+														alignItems: 'center'
+													}}
+												>
+													<View
+														style={{
+															padding: 10,
+															width: 40,
+															height: 40,
+															borderRadius: 50,
+															backgroundColor: 'rgb(28,144,251)',
+															justifyContent: 'center',
+															alignItems: 'center'
+														}}
+													>
+														<Icon name={item.icon} size={17} color="#fff" />
+													</View>
+												</View>
+												<View
+													style={{
+														flex: 8,
+														height: 40,
+														paddingLeft: 8,
+														justifyContent: 'center'
+													}}
+												>
+													<Text style={{ fontSize: 15, marginBottom: 3.5 }}>
+														{item.title}
+													</Text>
+													<Text style={{ fontSize: 12, color: 'rgb(114,125,134)' }}>
+														{item.description}
+													</Text>
+												</View>
+											</View>
 										)}
 									/>
 								</View>
-								<Text style={{ fontSize: 16, fontWeight: '500' }}>이용약관 및 법률고지</Text>
+								<Text style={{ fontSize: 15, color: '#1C90FB', fontWeight: '800' }}>선택적 접근권한</Text>
+								<View
+									style={{
+										backgroundColor: '#f1f1f1',
+										marginTop: 8,
+										marginBottom: 12,
+										paddingTop: 5
+									}}
+								>
+									<FlatList
+										data={[{ key: '1', title: '알림', description: '푸시 알림 등록 및 수신', icon: 'bell' }]}
+										renderItem={({ item }) => (
+											<View
+												style={{
+													width: '100%',
+													flexDirection: 'row'
+												}}
+											>
+												<View
+													style={{
+														flex: 2,
+														marginBottom: 10,
+														justifyContent: 'center',
+														alignItems: 'center'
+													}}
+												>
+													<View
+														style={{
+															padding: 10,
+															width: 40,
+															height: 40,
+															borderRadius: 50,
+															backgroundColor: 'rgb(28,144,251)',
+															justifyContent: 'center',
+															alignItems: 'center'
+														}}
+													>
+														<Icon name={item.icon} size={17} color="#fff" />
+													</View>
+												</View>
+												<View
+													style={{
+														flex: 8,
+														height: 40,
+														paddingLeft: 8,
+														justifyContent: 'center'
+													}}
+												>
+													<Text style={{ fontSize: 15, marginBottom: 3.5 }}>
+														{item.title}
+													</Text>
+													<Text style={{ fontSize: 12, color: 'rgb(114,125,134)' }}>
+														{item.description}
+													</Text>
+												</View>
+											</View>
+										)}
+									/>
+								</View>
+
+								<Text style={{ fontSize: 13, textAlign: 'center', color: 'rgb(114,125,134)' }}>
+									선택적 접근권한은 해당 기능 사용 시 동의가 필요하며 미동의 시에도 서비스 이용가능합니다.
+								</Text>
+								{/* <Text style={{ fontSize: 16, fontWeight: '500' }}>이용약관 및 법률고지</Text>
 								<View
 									style={{
 										// backgroundColor: '#f1f1f1',
@@ -212,8 +319,7 @@ const LoginScreenPresenter = props => {
 										onClick={() => props.onChangeValue('webView', true)}
 										title="법률고지 보기"
 									/>
-								</View>
-								{/* <Text style={{ fontSize: 16, fontWeight: '500' }}>선택 접근권한</Text> */}
+								</View> */}
 							</View>
 						</View>
 						<View style={styles.permission_modalButtons}>
@@ -222,7 +328,7 @@ const LoginScreenPresenter = props => {
 								// onPress={() => props.onChangeValue('permissionModal', false)}
 								onPress={props.onAgreement}
 							>
-								<Text style={{ color: '#fff' }}>동의</Text>
+								<Text style={{ color: '#fff' }}>확인</Text>
 							</TouchableOpacity>
 						</View>
 					</View>
@@ -290,7 +396,7 @@ const styles = StyleSheet.create({
 	modalCloseButton: {
 		flex: 1,
 		justifyContent: 'center',
-		alignItems: 'center',
+		alignItems: 'center'
 		// backgroundColor: '#FF8383'
 	},
 

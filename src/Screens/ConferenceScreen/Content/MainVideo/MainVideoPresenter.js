@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { View, StyleSheet, Image, Text } from 'react-native';
 import { RTCView } from 'react-native-webrtc';
 import ButtonCameraOff from '../../../../../assets/buttons/btn_vc_camera_off.png';
+import ButtonCameraOff2 from '../../../../../assets/icons/icoCameraWhLargeOff_2x.png';
 // import ProfileImage from '../../../../../assets/smapleImages/nnn.jpg';
-import ProfileImage from '../../../../../assets/smapleImages/nnn2.png';
+import ProfileImage from '../../../../../assets/icons/imgVcNophoto_2x.png';
+// import ProfileImage from '../../../../../assets/smapleImages/nnn2.png';
 import { CustomLottie } from '../../../../components';
 
 /**
@@ -67,7 +69,7 @@ const MainVideoPresenter = props => {
 			<RTCView
 				style={styles.videoContainer}
 				// mirror={true}
-				mirror={isVideoReverse}
+				// mirror={isVideoReverse }
 				objectFit={videoType && videoType === 'desktop' ? 'fit' : 'cover'}
 				streamURL={stream.toURL()}
 			>
@@ -80,20 +82,17 @@ const MainVideoPresenter = props => {
 		return (
 			<View style={styles.muteContainer}>
 				{callType == 2 ? (
-					<View style={{ ...styles.imageContainer, backgroundColor: '#303030' }}>
+					// {callType != 2 ? (
+					<View style={{ ...styles.imageContainer }}>
 						<View>
-							<CustomLottie source="voiceBroadcast" width={320} height={320}>
+							<CustomLottie source="voiceBroadcast" width={280} height={280}>
 								<View
 									style={{
 										position: 'absolute',
-										top: -175,
+										top: -205,
 										justifyContent: 'center'
 									}}
 								>
-									{/* <Text style={{ fontSize: 25, color: '#c0c0c0', textAlign: 'center' }}>
-										Neure님께 대화
-									</Text>
-									<Text style={{ fontSize: 25, color: '#c0c0c0', textAlign: 'center' }}>요청중입니다</Text> */}
 									<Text
 										style={{
 											fontSize: 20,
@@ -132,10 +131,13 @@ const MainVideoPresenter = props => {
 						</View>
 					</View>
 				) : (
-					<View style={styles.imageContainer}>
-						{mainUser.status === 'interrupted' && muteView}
-						<Image source={ButtonCameraOff} />
-					</View>
+					<Fragment>
+						{displayTime}
+						<View style={styles.imageContainer}>
+							{mainUser.status === 'interrupted' && muteView}
+							<Image source={ButtonCameraOff2} style={{ width: 60, height: 55 }} />
+						</View>
+					</Fragment>
 				)}
 				{props.children}
 			</View>
@@ -151,9 +153,12 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: 'gray'
 	},
+	rrr: {
+		transform: [{ rotateY: '180deg' }] // 좌우반전
+	},
 	muteContainer: {
 		flex: 1,
-		backgroundColor: '#7D7D7D'
+		backgroundColor: '#1D1D1D'
 		// backgroundColor: 'gray'
 	},
 	imageContainer: {
@@ -166,13 +171,15 @@ const styles = StyleSheet.create({
 	},
 	profileImage: {
 		marginTop: -7,
-		marginLeft: 7.5,
+		marginLeft: 7,
 		padding: 0,
-		width: 172,
-		height: 172,
-		borderRadius: 85,
-		borderWidth: 10,
-		borderColor: '#1C90FB'
+		width: 150,
+		height: 150,
+		borderRadius: 145 / 2,
+		borderWidth: 2,
+		backgroundColor: '#1D1D1D',
+		borderColor: '#d1d1d1'
+		// borderColor: '#1C90FB'
 	}
 });
 

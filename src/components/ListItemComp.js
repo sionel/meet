@@ -33,7 +33,7 @@ const ListItemComp = props => {
 	const updated = new Date(props.updated);
 	let disableStyle = { opacity: 1 };
 	let onClickEvent = props.onClick;
-	const iconWidth = 57 * (props.iconSize / 100);
+	const iconWidth = 54 * (props.iconSize / 100);
 	const iconTextWidth = 17 * (props.iconSize / 100);
 	let iconText = (
 		<Text
@@ -80,7 +80,16 @@ const ListItemComp = props => {
 
 	// render
 	return (
-		<TouchableOpacity style={{ ...styles.container, height: iconWidth, disableStyle }} onPress={onClickEvent}>
+		<TouchableOpacity
+			style={{
+				...styles.container,
+				height: iconWidth + 7,
+				disableStyle,
+				borderBottomWidth: 1
+				// borderBottomWidth: props.underline ? 1 : 0
+			}}
+			onPress={onClickEvent}
+		>
 			{/* 아이콘 */}
 			<View style={styles.iconWrapper}>
 				<View style={{ ...styles.roomIcon, width: iconWidth, borderColor: activeColor }}>
@@ -89,21 +98,15 @@ const ListItemComp = props => {
 				</View>
 			</View>
 			{/* 내용 */}
-			<View style={{ ...styles.textFlex, borderBottomWidth: props.underline ? 1 : 0, paddingRight: '13%' }}>
+			<View style={{ ...styles.textWrapper, paddingRight: '13%' }}>
 				{/* 방제목 */}
 				<Text style={{ ...styles.roomName }}>{props.title}</Text>
-				{/* <View style={{ backgroundColor: 'red', width: 10, height: 10 }} /> */}
 				{/* 참가자 */}
-				{/* <Text style={{ ...styles.participant }}>{props.personnel} 명</Text> */}
-				<Text style={{ ...styles.participant }}>{displayUpdated}</Text>
+				{/* <Text style={{ ...styles.participant }}>{displayUpdated}</Text> */}
 				{/* 활성화 라이트 */}
 				{props.lottie && (
 					<View style={{ ...styles.activeLight, backgroundColor: activeColor }}>
-						{props.active && (
-							<CustomLottie source="broadcast" width={35} height={35}>
-								{/* <Image style={{ width: 6, height: 6 }} source={playImage} /> */}
-							</CustomLottie>
-						)}
+						{props.active && <CustomLottie source="broadcast" width={35} height={35} />}
 					</View>
 				)}
 				{props.customLottie && (
@@ -144,22 +147,25 @@ const styles = StyleSheet.create({
 	// wrapper
 	container: {
 		width: '100%',
-		height: 57,
+		height: 54,
 		display: 'flex',
 		flexDirection: 'row',
 		marginBottom: 7,
-		paddingLeft: '3%',
-		paddingRight: '3%'
+		paddingBottom: 7,
+		paddingLeft: 13,
+		paddingRight: 13,
+		borderColor: 'rgb(235,235,235)'
 	},
 	// 아이콘 랩
 	iconWrapper: {
-		flex: 0.2
+		// flex: 0.2
+		// width: 62
 	},
 	// 룸아이콘
 	roomIcon: {
 		flex: 1,
-		width: 57,
-		height: 57,
+		width: 54,
+		height: 54,
 		justifyContent: 'center',
 		alignItems: 'center',
 		borderRadius: 100,
@@ -175,7 +181,7 @@ const styles = StyleSheet.create({
 	roomName: {
 		fontSize: 16,
 		fontWeight: '600',
-		color: '#3c3c3c'
+		color: 'rgb(80,80,80)'
 	},
 	// 참가자
 	participant: {
@@ -184,11 +190,13 @@ const styles = StyleSheet.create({
 		color: '#3f3f3f'
 	},
 
-	textFlex: {
-		flex: 0.8,
+	textWrapper: {
+		flex: 1,
+		// width: '85%',
 		height: '100%',
-		// paddingBottom: 2,
-		borderBottomWidth: 1,
+		paddingLeft: 12,
+		borderBottomWidth: 0,
+		// borderBottomWidth: 1,
 		borderBottomColor: '#ececec',
 		justifyContent: 'center',
 		alignItems: 'flex-start'

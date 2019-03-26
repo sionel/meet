@@ -54,7 +54,12 @@ class LoginScreenContainer extends React.Component {
 		if (waiting) {
 			return (
 				<View style={{ flex: 1 }}>
-					<CustomLottie source={'waiting'} width={225} height={225}>
+					<CustomLottie
+						source={'waiting'}
+						containerStyle={{ backgroundColor: '#fff' }}
+						width={225}
+						height={225}
+					>
 						<LoginFailAlert
 							modal={modal}
 							modalText={modalText}

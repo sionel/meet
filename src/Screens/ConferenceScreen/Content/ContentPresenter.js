@@ -5,7 +5,6 @@ import DrawingSketch from './DrawingSketch';
 import MainVideo from './MainVideo';
 import TopArea from './TopArea';
 import BottomArea from './BottomArea';
-
 /**
  * ContentPresenter
  */

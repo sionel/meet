@@ -25,8 +25,7 @@ class ConferenceScreenContainer extends React.Component {
    * componentDidMount
    */
 	componentDidMount() {
-		if (PlatformConstants.interfaceIdiom === "phone")
-			Orientation.unlockAllOrientations();
+		if (PlatformConstants.interfaceIdiom === 'phone') Orientation.unlockAllOrientations();
 		else {
 			Orientation.lockToPortrait();
 		}
@@ -48,7 +47,7 @@ class ConferenceScreenContainer extends React.Component {
 			}, time);
 
 		if (item.isCreator == 2) {
-			delayLoading(4200);
+			delayLoading(4500);
 		} else {
 			delayLoading(0);
 		}

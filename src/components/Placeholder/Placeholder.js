@@ -17,8 +17,9 @@ const Placeholder = props => {
 				position: 'absolute',
 				width: '100%',
 				height: '100%',
+				paddingTop: '30%',
 				backgroundColor: '#eaeaea',
-				justifyContent: 'center',
+				justifyContent: 'flex-start',
 				alignItems: 'center',
 				zIndex: 1,
 				...props.layoutStyle
@@ -51,7 +52,7 @@ const Placeholder = props => {
 				style={{
 					fontSize: 18,
 					fontWeight: '500',
-					color: '#505050',
+					color: 'rgb(80,80,80)',
 					textAlign: 'center',
 					...props.subTextStyle
 				}}

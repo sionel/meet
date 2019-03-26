@@ -2,48 +2,47 @@
  * MainContainer
  * 최상위화면 컨테이너
  */
-import React, { Component } from "react";
-import Orientation from "react-native-orientation-locker";
-import MainPresenter from "./MainPresenter";
+import React, { Component } from 'react';
+import Orientation from 'react-native-orientation-locker';
+import MainPresenter from './MainPresenter';
 import LoginScreen from '../Screens/LoginScreen';
-import { AppIntroSlide } from "../components";
+import { AppIntroSlide } from '../components';
 
 class MainContainer extends Component {
-  state = { isLogin: false };
+	state = { isLogin: false };
 
-  componentDidMount() {
-    Orientation.lockToPortrait();
-  }
+	componentDidMount() {
+		Orientation.lockToPortrait();
+	}
 
-  shouldComponentUpdate(nextProps, nextStates) {
-    if (nextStates.isLogin !== this.state.isLogin)
-      return true;
+	shouldComponentUpdate(nextProps, nextStates) {
+		if (nextStates.isLogin !== this.state.isLogin) return true;
 
-    if (!nextProps.isLogin) {
-      this.setState({ isLogin: false });
-    }
+		if (!nextProps.isLogin) {
+			this.setState({ isLogin: false });
+		}
 
-    return false;
-  }
+		return false;
+	}
 
-  render() {
-    return (
-      <AppIntroSlide>
-        {
-          this.state.isLogin
-          ? <MainPresenter {...this.props} />
-          : <LoginScreen handleOnLogin={this._handleOnLogin} />
-        }
-      </AppIntroSlide>
-    );
-  }
+	render() {
+		return (
+			<AppIntroSlide>
+				{this.state.isLogin ? (
+					<MainPresenter {...this.props} />
+				) : (
+					<LoginScreen handleOnLogin={this._handleOnLogin} />
+				)}
+			</AppIntroSlide>
+		);
+	}
 
-  /**
+	/**
    * 로그인 권한은 LoginScreen 이 가지고 있음
    * LoginScreen 에서 _handleOnLogin을 통해서 로그인 상태를 관리함
    */
-  _handleOnLogin = () => {
-    this.setState({ isLogin: true });
-  }
+	_handleOnLogin = () => {
+		this.setState({ isLogin: true });
+	};
 }
 export default MainContainer;

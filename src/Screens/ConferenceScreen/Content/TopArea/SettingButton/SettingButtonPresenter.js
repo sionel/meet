@@ -4,7 +4,8 @@ import { TouchableOpacity, Image, StyleSheet } from 'react-native';
 import buttonTalk from '../../../../../../assets/buttons/btn_tnavi_talk_none.png';
 import buttonSetting from '../../../../../../assets/buttons/btn_tnavi_setting_none.png';
 import buttonDocshare from '../../../../../../assets/buttons/btn_tnavi_docshare_none.png';
-import buttonToggleScreen from '../../../../../../assets/buttons/btn_tnavi_swscreen_none.png';
+// import buttonToggleScreen from '../../../../../../assets/buttons/btn_tnavi_swscreen_none.png';
+import buttonToggleScreen from '../../../../../../assets/buttons/btnTnaviSwscreenNone_2x.png';
 import buttonReverseVideo from '../../../../../../assets/buttons/btn_video_reverse.png';
 import buttonPen from '../../../../../../assets/buttons/btn_pen.png';
 /**

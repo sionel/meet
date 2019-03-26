@@ -28,14 +28,14 @@ const TopAreaPresenter = props => {
 								onPress={() => props.onChangeState('drawing', !props.drawingMode)}
 							/> */}
 							<SettingButton name="switch" onPress={props.toggleCameraFacingMode} />
-							<SettingButton
+							{/* <SettingButton
 								name="reverse"
 								onPress={props.onReverseVideo}
 								width={25}
 								height={25}
 								areaWdith={28}
 								areaHeight={28}
-							/>
+							/> */}
 						</Fragment>
 					)}
 				</View>

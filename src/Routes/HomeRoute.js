@@ -33,7 +33,7 @@ const BackButton = ({ navigation, to }) => {
 				navigation.navigate(to);
 			}}
 		>
-			<Image source={backBtn} style={{ width: 23, height: 20, marginLeft: 16 }} />
+			<Image source={backBtn} style={{ width: 23, height: 20, marginLeft: 20 }} />
 		</TouchableOpacity>
 	);
 };

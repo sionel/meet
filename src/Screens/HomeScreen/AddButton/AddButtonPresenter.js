@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { StyleSheet, View, TouchableHighlight, Platform, Text } from 'react-native';
+import { StyleSheet, View, TouchableHighlight, Platform, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 const plusIcon = require('./plus.png');
 
@@ -17,7 +17,7 @@ const AddButtonPresenter = props => {
 			underlayColor="#0C80EB"
 		>
 			<View style={{ ...styles.text }}>
-				<Text style={{ fontSize: 35, color: '#fff', textAlign: 'center' }}>+</Text>
+				<Image source={plusIcon} style={{ width: 25, height: 25 }} />
 			</View>
 		</TouchableHighlight>
 	);
