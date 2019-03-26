@@ -6,7 +6,7 @@ import React, { Component } from "react";
 import Orientation from "react-native-orientation-locker";
 import MainPresenter from "./MainPresenter";
 import LoginScreen from '../Screens/LoginScreen';
-import { AppIntroSlide } from "../components";
+import AppIntroSlide from "../components/AppIntroSlide";
 
 class MainContainer extends Component {
   state = { isLogin: false };
