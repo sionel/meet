@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Modal, FlatList } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Modal, FlatList, Platform } from 'react-native';
 import { FlatButton, TextField, ListItemComp, CustomWebView } from '../../components';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -84,6 +84,7 @@ const LoginScreenPresenter = props => {
 				/>
 			</View>
 			{/* BUTTONS */}
+			{ Platform.OS === "ios" &&
 			<View style={styles.bottomArea2}>
 				<FlatButton
 					title={'WEHAGO 앱으로 로그인'}
@@ -111,6 +112,7 @@ const LoginScreenPresenter = props => {
 					WEHAGO 앱이 설치되어 있다면 바로 시작하세요.
 				</Text>
 			</View>
+			}
 
 			{/* 모달 */}
 			<Modal animationType="slide" visible={props.modal} transparent={true} animationType="fade">
