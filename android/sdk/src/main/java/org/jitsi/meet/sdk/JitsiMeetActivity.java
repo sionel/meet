@@ -31,6 +31,8 @@ import com.facebook.react.modules.core.PermissionListener;
 
 import java.net.URL;
 
+import org.devio.rn.splashscreen.SplashScreen; 
+
 /**
  * Base Activity for applications integrating Jitsi Meet at a higher level. It
  * contains all the required wiring between the {@code JitsiMeetView} and
@@ -190,6 +192,7 @@ public class JitsiMeetActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SplashScreen.show(this, R.style.SplashScreenTheme);
         super.onCreate(savedInstanceState);
 
         // In Debug builds React needs permission to write over other apps in

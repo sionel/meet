@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Platform } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -22,7 +22,7 @@ const RouteTitlePresenter = props => {
 
 	// 임시 사용
 	return (
-		<Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 17 }}>
+		<Text style={[{ color: '#fff', fontWeight: 'bold', fontSize: 17 }, Platform.OS !== "ios" && { marginLeft: 20 }]}>
 			{props.auth.employee_list.filter(e => e.company_no == props.auth.last_access_company_no)[0].company_name_kr}
 		</Text>
 	);

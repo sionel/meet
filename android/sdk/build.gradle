@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -43,12 +44,13 @@ dependencies {
     implementation project(':react-native-linear-gradient')
     implementation project(':react-native-sound')
     implementation project(':react-native-vector-icons')
-    implementation project(':react-native-webrtc')
+    implementation project(':WebRTCModule')
     implementation project(':react-native-gesture-handler')
     implementation project(':react-native-orientation-locker')
     implementation project(':react-native-system-setting')
     implementation project(':react-native-svg')
     implementation project(':lottie-react-native')
+    implementation project(':react-native-splash-screen')
 
     testImplementation 'junit:junit:4.12'
 }

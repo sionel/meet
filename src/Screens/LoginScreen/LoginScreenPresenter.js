@@ -45,6 +45,7 @@ const LoginScreenPresenter = props => {
 						height: 64
 					}}
 					source={logo_login}
+					resizeMode="contain"
 				/>
 			</View>
 

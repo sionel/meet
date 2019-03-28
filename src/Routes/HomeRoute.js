@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { Image, TouchableOpacity } from 'react-native';
+import { Image, TouchableOpacity, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { createStackNavigator, createAppContainer, createDrawerNavigator, DrawerActions } from 'react-navigation';
 
@@ -92,6 +92,7 @@ const HomeRoute = createStackNavigator({
 			gesturesEnabled: false,
 			headerStyle: commonStyle,
 			headerRight: (
+				// Platform.OS === "ios" &&
 				<TouchableOpacity
 					onPress={() => {
 						navigation.navigate('Configuration');
@@ -99,7 +100,17 @@ const HomeRoute = createStackNavigator({
 				>
 					<RightMenuImage navigation={navigation} />
 				</TouchableOpacity>
-			)
+			),
+			// headerLeft: (
+			// 	Platform.OS === "android" &&
+			// 	<TouchableOpacity
+			// 		onPress={() => {
+			// 			navigation.navigate('Configuration');
+			// 		}}
+			// 	>
+			// 		<RightMenuImage navigation={navigation} />
+			// 	</TouchableOpacity>
+			// )
 		})
 	},
 
