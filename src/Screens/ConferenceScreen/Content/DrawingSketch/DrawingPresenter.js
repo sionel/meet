@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import Canvas from 'react-native-canvas';
+// import Canvas from 'react-native-canvas';
 import RNSketchCanvas from '@terrylinla/react-native-sketch-canvas';
 import { SketchCanvas } from '@terrylinla/react-native-sketch-canvas';
 

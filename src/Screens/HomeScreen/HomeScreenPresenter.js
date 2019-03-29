@@ -4,7 +4,7 @@
  */
 
 import React, { Fragment } from 'react';
-import { View, Text, StyleSheet, Modal, TouchableOpacity, SectionList, Image } from 'react-native';
+import { View, Text, StyleSheet, Modal, TouchableOpacity, SectionList } from 'react-native';
 // common components
 import { ListItemComp, SearchForm, CustomModal, Placeholder, CustomLottie, SectionListHeader } from '../../components';
 import AddButton from './AddButton';

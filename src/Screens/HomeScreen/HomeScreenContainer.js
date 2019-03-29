@@ -4,7 +4,7 @@
  */
 
 import React, { Component, Fragment } from 'react';
-import { AppState, StatusBar, Linking } from 'react-native';
+import { AppState, StatusBar, Linking, NativeModules } from 'react-native';
 import HomeScreenPresenter from './HomeScreenPresenter';
 // service
 import { WetalkApi } from '../../services';
@@ -23,6 +23,7 @@ class HomeScreenContainer extends Component {
 		super(props);
 		this._isFocus = true;
 		this._refreshTimeStamp = Date.now();
+		console.log('NativeModules : ', NativeModules);
 	}
 
 	/**

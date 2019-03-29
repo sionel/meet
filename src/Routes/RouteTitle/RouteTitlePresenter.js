@@ -2,8 +2,8 @@
  * 
  */
 
-import React from 'react';
-import { View, Text, StyleSheet, Platform } from 'react-native';
+import React, { Fragment } from 'react';
+import { View, Text, StyleSheet, Platform, StatusBar } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -22,9 +22,20 @@ const RouteTitlePresenter = props => {
 
 	// 임시 사용
 	return (
-		<Text style={[{ color: '#fff', fontWeight: 'bold', fontSize: 17 }, Platform.OS !== "ios" && { marginLeft: 20 }]}>
-			{props.auth.employee_list.filter(e => e.company_no == props.auth.last_access_company_no)[0].company_name_kr}
-		</Text>
+		<Fragment>
+			<StatusBar backgroundColor="#1C90FB" barStyle="light-content" />
+			<Text
+				style={[
+					{ color: '#fff', fontWeight: 'bold', fontSize: 17 },
+					Platform.OS !== 'ios' && { marginLeft: 20 }
+				]}
+			>
+				{
+					props.auth.employee_list.filter(e => e.company_no == props.auth.last_access_company_no)[0]
+						.company_name_kr
+				}
+			</Text>
+		</Fragment>
 	);
 
 	// 접속회사 변경 시 사용
