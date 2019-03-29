@@ -1,16 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, View, Text, Image, Dimensions, Platform } from 'react-native';
+import { StyleSheet, View, Text, Image, Dimensions } from 'react-native';
 import AppIntroSlider from './react-native-intro-slider/AppIntroSlider';
 import { actionCreators as UserActions } from '../../redux/modules/user';
+import Orientation from 'react-native-orientation-locker';
 
 const { width, height } = Dimensions.get('window');
 const ratio = 375 / 449;
-
-const isTablet = (
-  Platform.OS === 'ios' &&
-  Platform.isPad
-);
 
 const introImages = [
   require("./images/walkthroughs01/imgIntroMeet.png"),
@@ -195,13 +191,13 @@ class AppIntroSlide extends React.Component {
 const styles = StyleSheet.create({
   nextButton: {
     backgroundColor: 'rgba(0, 0, 0, .7)',
-    height: 56 + (isTablet ? 30 : 0),
+    height: 56,
     justifyContent: 'center',
     alignItems: 'center'
   },
   doneButton: {
     backgroundColor: 'rgb(30, 63, 94)',
-    height: 56 + (isTablet ? 30 : 0),
+    height: 56,
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -220,6 +216,7 @@ const styles = StyleSheet.create({
     color: 'rgb(100, 113, 133)',
     fontSize: 18,
     textAlign: 'center',
+    // lineHeight: 16.5
   },
   dotStyle: {
     width: 4,
