@@ -16,7 +16,7 @@ class MainContainer extends Component {
 	componentDidMount() {
 		Orientation.lockToPortrait();
 		setTimeout(() => {
-			Platform.Os !== "ios" && SplashScreen.hide();
+			Platform.OS !== "ios" && SplashScreen.hide();
 		}, 1000);
 	}
 
