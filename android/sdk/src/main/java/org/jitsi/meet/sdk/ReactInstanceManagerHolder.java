@@ -47,7 +47,7 @@ class ReactInstanceManagerHolder {
             = new ArrayList<>(Arrays.<NativeModule>asList(
                 new AndroidSettingsModule(reactContext),
                 new AppInfoModule(reactContext),
-                new AudioJackModule(reactContext),
+                // new AudioJackModule(reactContext),
                 new AudioModeModule(reactContext),
                 new ExternalAPIModule(reactContext),
                 new LocaleDetector(reactContext),
