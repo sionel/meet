@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+// apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 
 boolean googleServicesEnabled = project.file('google-services.json').exists()
 
