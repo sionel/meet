@@ -3,7 +3,9 @@
  * 최상위화면 컨테이너
  */
 import React, { Component } from 'react';
+import { Platform } from 'react-native';
 import Orientation from 'react-native-orientation-locker';
+import SplashScreen from 'react-native-splash-screen'
 import MainPresenter from './MainPresenter';
 import LoginScreen from '../Screens/LoginScreen';
 import AppIntroSlide from '../components/AppIntroSlide';
@@ -13,6 +15,9 @@ class MainContainer extends Component {
 
 	componentDidMount() {
 		Orientation.lockToPortrait();
+		setTimeout(() => {
+			Platform.OS !== "ios" && SplashScreen.hide();
+		}, 1000);
 	}
 
 	shouldComponentUpdate(nextProps, nextStates) {

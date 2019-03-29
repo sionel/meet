@@ -109,6 +109,8 @@ allprojects {
                 versionQualifier = '-jitsi-1' // 9/0/0 + react-native 0.57
             else if ('lottie-react-native' == project.name)
                 versionQualifier = '-jitsi-1' // 2.5.11 + react-native 0.57
+            else if ('react-native-splash-screen' == project.name)
+                versionQualifier = '-jitsi-1' // x.x.x + react-native 0.57
 
             project.version = "${json.version}${versionQualifier}"
 
