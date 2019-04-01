@@ -5,7 +5,8 @@
  */
 
 import React from 'react';
-import { Linking, Platform, NativeModules, View } from 'react-native';
+import { Linking, Platform, NativeModules, View, Keyboard, Dimensions } from 'react-native';
+// import Orientation from 'react-native-orientation-locker';
 
 import LoginScreenPresenter from './LoginScreenPresenter';
 import LoginFailAlert from './Content/LoginFailAlert';
@@ -13,7 +14,9 @@ import { CustomLottie } from '../../components';
 // service
 import { querystringParser } from '../../utils';
 
-const { PlatformConstants } = NativeModules;
+const { PlatformConstants, DeviceInfo } = NativeModules;
+
+const deviceHeight = Dimensions.get('window').height;
 
 class LoginScreenContainer extends React.Component {
 	/**
@@ -27,10 +30,13 @@ class LoginScreenContainer extends React.Component {
 		modalText: '',
 		waiting: true,
 		autoLoginFlag: true,
-		webView: false
+		webView: false,
+		// height: deviceHeight
 	};
 
 	componentDidMount() {
+		// Orientation.addDeviceOrientationListener(this._handleDeviceOrientation);
+
 		Linking.getInitialURL().then(url => {
 			if (url) {
 				this._handleGetWehagoToken({ url });
@@ -42,6 +48,7 @@ class LoginScreenContainer extends React.Component {
 	}
 
 	componentWillUnmount() {
+		// Orientation.removeDeviceOrientationListener(this._handleDeviceOrientation);
 		Linking.removeEventListener('url', this._handleGetWehagoToken);
 	}
 
@@ -89,9 +96,17 @@ class LoginScreenContainer extends React.Component {
 				permissionModal={permission}
 				nextInput={nextInput}
 				phrases="Loading"
+				height={deviceHeight}
 			/>
 		);
 	} // render
+
+	/**
+	 * 화면 회전 시
+	 */
+	// _handleDeviceOrientation = () => {
+	// 	console.log(DeviceInfo.Dimensions);
+	// }
 
 	/**
 	 * _handleChangeValue
