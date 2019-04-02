@@ -8,6 +8,7 @@ const LoginFailAlert = (props) => {
       visible={props.modal}
       transparent={true}
       animationType="fade"
+      onRequestClose={props.onCancelTryLogin}
     >
       <View style={styles.modalWrap}>
         <View style={styles.modalContents}>
@@ -19,7 +20,7 @@ const LoginFailAlert = (props) => {
               style={styles.modalButton}
               title="취소"
               color="#FFF"
-              onPress={() => props.onCancelTryLogin()}
+              onPress={props.onCancelTryLogin}
             />
           </View>
         </View>

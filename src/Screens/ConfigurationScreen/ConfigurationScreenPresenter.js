@@ -59,7 +59,7 @@ const ConfigurationScreenPresenter = props => {
 				/>
 			</View>
 
-			<Modal animationType="slide" transparent={true} visible={webView} blurRadius={1}>
+			<Modal animationType="slide" transparent={true} visible={webView} blurRadius={1} onRequestClose={() => props.onChangeValue('webView', false)}>
 				<CustomWebView
 					view={webView}
 					contentTitle="약관 및 정책"

@@ -118,7 +118,7 @@ const LoginScreenPresenter = props => {
 			</ScrollView>
 
 			{/* 모달 */}
-			<Modal animationType="slide" visible={props.modal} transparent={true} animationType="fade">
+			<Modal animationType="slide" visible={props.modal} transparent={true} animationType="fade" onRequestClose={() => props.onActivateModal('', false)}>
 				<View style={styles.modalWrap}>
 					<View style={{ flexDirection: 'row' }}>
 						<View style={styles.modalContents}>
@@ -135,7 +135,7 @@ const LoginScreenPresenter = props => {
 			</Modal>
 
 			{/* 권한 컨펌모달 */}
-			<Modal animationType="fade" transparent={true} visible={!props.permissionModal} blurRadius={1}>
+			<Modal animationType="fade" transparent={true} visible={!props.permissionModal} blurRadius={1} onRequestClose={props.onAgreement}>
 				{/* <Modal animationType="fade" transparent={true} visible={!props.permissionModal} blurRadius={1}> */}
 				<View style={styles.permission_modalWrap}>
 					<View style={styles.permission_modalContentWrap}>
