@@ -134,7 +134,7 @@ class ReactInstanceManagerHolder {
                 .setApplication(application)
                 .setBundleAssetName("index.android.bundle")
                 .setJSMainModulePath("index.android")
-                .addPackage(new co.apptailor.googlesignin.RNGoogleSigninPackage())
+                // .addPackage(new co.apptailor.googlesignin.RNGoogleSigninPackage())
                 .addPackage(new com.BV.LinearGradient.LinearGradientPackage())
                 .addPackage(new com.calendarevents.CalendarEventsPackage())
                 .addPackage(new com.corbt.keepawake.KCKeepAwakePackage())

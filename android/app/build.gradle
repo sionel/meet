@@ -5,9 +5,9 @@ boolean googleServicesEnabled = project.file('google-services.json').exists()
 
 // Crashlytics integration is done as part of Firebase now, so it gets
 // automagically activated with google-services.json
-if (googleServicesEnabled) {
-    apply plugin: 'io.fabric'
-}
+// if (googleServicesEnabled) {
+//     apply plugin: 'io.fabric'
+// }
 
 
 android {
@@ -68,7 +68,7 @@ android {
 }
 
 repositories {
-    maven { url 'https://maven.fabric.io/public' }
+    // maven { url 'https://maven.fabric.io/public' }
 }
 
 dependencies {
@@ -95,9 +95,9 @@ dependencies {
     // Firebase
     //  - Crashlytics
     //  - Dynamic Links
-    implementation 'com.google.firebase:firebase-core:16.0.6'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.8'
-    implementation 'com.google.firebase:firebase-dynamic-links:16.1.5'
+    // implementation 'com.google.firebase:firebase-core:16.0.6'
+    // implementation 'com.crashlytics.sdk.android:crashlytics:2.9.8'
+    // implementation 'com.google.firebase:firebase-dynamic-links:16.1.5'
 }
 
 gradle.projectsEvaluated {
