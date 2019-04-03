@@ -5,8 +5,8 @@
 
 import React from 'react';
 import { Image, TouchableOpacity, Platform } from 'react-native';
-import { connect } from 'react-redux';
-import { createStackNavigator, createAppContainer, createDrawerNavigator, DrawerActions } from 'react-navigation';
+// import { connect } from 'react-redux';
+import { createStackNavigator, createAppContainer } from 'react-navigation';
 
 import HomeScreen from '../Screens/HomeScreen';
 import ConfigurationScreen from '../Screens/ConfigurationScreen';
@@ -60,21 +60,21 @@ const RightMenuImage = ({ navigation }) => {
 /**
  * Drawer 메뉴
  */
-const HomeDrwawer = createDrawerNavigator(
-	{
-		Home: {
-			screen: HomeScreen,
-			navigationOptions: {
-				drawerLabel: 'Home'
-			}
-		}
-	},
-	{
-		initialRouteName: 'Home',
-		// contentComponent: ,
-		drawerWidth: 240
-	}
-);
+// const HomeDrwawer = createDrawerNavigator(
+// 	{
+// 		Home: {
+// 			screen: HomeScreen,
+// 			navigationOptions: {
+// 				drawerLabel: 'Home'
+// 			}
+// 		}
+// 	},
+// 	{
+// 		initialRouteName: 'Home',
+// 		// contentComponent: ,
+// 		drawerWidth: 240
+// 	}
+// );
 
 const HomeRoute = createStackNavigator({
 	/**
@@ -148,6 +148,8 @@ const HomeRoute = createStackNavigator({
 			headerStyle: commonStyle
 		})
 	}
+}, {
+	cardStyle: { transparent: true }
 });
 
 export default createAppContainer(HomeRoute);

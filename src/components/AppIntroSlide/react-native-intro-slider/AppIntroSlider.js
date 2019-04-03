@@ -13,11 +13,12 @@ import DefaultSlide from './DefaultSlide';
 
 const { width, height } = Dimensions.get('window');
 
+// iphone X, XS = 812, XR, XS MAX = 896
 const isIphoneX = (
   Platform.OS === 'ios' &&
   !Platform.isPad &&
   !Platform.isTVOS &&
-  (height === 812 || width === 812)
+  (height === 812 || width === 812 || height === 896 || width === 896)
 );
 const isTablet = (
   Platform.OS === 'ios' &&

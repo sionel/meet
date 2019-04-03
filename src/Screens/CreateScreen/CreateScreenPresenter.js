@@ -73,7 +73,7 @@ const CreateScreenPresenter = props => {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: 'white',
+		backgroundColor: 'transparent',
 		justifyContent: 'center',
 		alignItems: 'center'
 	},

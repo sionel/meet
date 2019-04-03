@@ -28,7 +28,8 @@ const Routes = createStackNavigator(
 	},
 	// initial
 	{
-		initialRouteName: 'Home'
+		initialRouteName: 'Home',
+		cardStyle: { backgroundColor: 'none', transparent: true }
 	}
 );
 

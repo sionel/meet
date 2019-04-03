@@ -63,7 +63,7 @@ class LoginScreenContainer extends React.Component {
 				<View style={{ flex: 1 }}>
 					<CustomLottie
 						source={'waiting'}
-						containerStyle={{ backgroundColor: '#fff' }}
+						containerStyle={{ backgroundColor: 'transparent' }}
 						width={225}
 						height={225}
 					>

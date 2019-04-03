@@ -61,7 +61,8 @@ const RootNavigation = createStackNavigator(
 	{
 		initialRouteName: 'Main',
 		mode: 'modal',
-		headerMode: 'none'
+		headerMode: 'none',
+		cardStyle: { backgroundColor: '#FFF', transparent: true }
 	}
 );
 

@@ -144,7 +144,7 @@ class AppIntroSlide extends React.Component {
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, backgroundColor: 'transparent' }}>
         {this.props.intro ? (
           this.props.children
         ) : (

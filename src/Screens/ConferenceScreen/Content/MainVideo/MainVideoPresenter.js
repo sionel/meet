@@ -16,8 +16,8 @@ const MainVideoPresenter = props => {
 	const displayTime = (
 		<View
 			style={{
-				marginTop: 50,
-				marginLeft: 25,
+				top: 50,
+				left: 25,
 				position: 'absolute'
 			}}
 		>
@@ -38,9 +38,10 @@ const MainVideoPresenter = props => {
 		<View
 			style={{
 				position: 'absolute',
-				flex: 1,
-				width: '100%',
-				height: '100%',
+				top: 0,
+				bottom: 0,
+				left: 0,
+				right: 0,
 				justifyContent: 'center',
 				alignItems: 'center',
 				backgroundColor: 'rgba(255,255,255, .67)',

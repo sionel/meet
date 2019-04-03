@@ -33,89 +33,101 @@ const LoginScreenPresenter = props => {
 	/**
    * RETURN
    */
+
+	const mainView = (
+		<View style={{
+			flex: 1,
+			alignItems: 'center',
+			width: '100%',
+			height: props.height - (StatusBar.currentHeight || 0)
+		}}>
+			{/* TITLE */}
+			<View style={styles.topArea}>
+				{/* <Text style={styles.logo}>WEHAGO</Text> */}
+				<Image
+					style={{
+						width: 200,
+						height: 64
+					}}
+					source={logo_login}
+					resizeMode="contain"
+				/>
+			</View>
+
+			{/* INPUTS */}
+			<View style={styles.middleArea}>
+				<TextField
+					placeholder={'아이디'}
+					width={285}
+					height={40}
+					onChange={text => props.onChangeValue('userId', text)}
+					value={userId}
+				/>
+				<TextField
+					placeholder={'패스워드'}
+					width={285}
+					height={40}
+					secret={true}
+					onChange={text => props.onChangeValue('userPwd', text)}
+					onSubmit={props.onEnterKeyDown}
+					value={userPwd}
+				/>
+			</View>
+
+			{/* Login BUTTONS */}
+			<View style={styles.bottomArea}>
+				<FlatButton
+					title={'로그인'}
+					color={props.userId && props.userPwd.length > 7 ? '#fff' : '#818181'}
+					backgroundColor={props.userId && props.userPwd.length > 7 ? '#1C90FB' : '#E1E1E1'}
+					borderColor={props.userId && props.userPwd.length > 7 ? '#1C90FB' : '#E1E1E1'}
+					borderWidth={1}
+					width={295}
+					height={52}
+					borderRadius={30}
+					onClick={props.userPwd.length > 7 ? props.onLogin : () => props.onActivateModal('아이디와 패스워드를 확인해 주세요')}
+				/>
+			</View>
+
+			{/* Login with WEHAGO BUTTONS */}
+			<View style={styles.bottomArea2}>
+				<FlatButton
+					title={'WEHAGO 앱으로 로그인'}
+					width={295}
+					height={52}
+					borderRadius={5}
+					color={'#fff'}
+					backgroundColor={'#1C90FB'}
+					borderColor={'#1C90FB'}
+					borderWidth={1}
+					customStyle={{ flexDirection: 'row' }}
+					onClick={props.onLoginForWehago}
+				>
+					<Image
+						style={{
+							width: 24,
+							height: 24,
+							marginRight: 5
+						}}
+						source={wehago_favicon}
+					/>
+					<Text style={{ color: '#fff' }}>WEHAGO 앱으로 로그인</Text>
+				</FlatButton>
+				<Text style={{ paddingTop: 12, paddingBottom: 15, textAlign: 'center', color: 'rgb(51,51,51)' }}>
+					WEHAGO 앱이 설치되어 있다면 바로 시작하세요.
+				</Text>
+			</View>
+		</View>
+	)
 	return (
 		<View style={styles.container}>
-			<ScrollView style={{ width: "100%", height: props.height }}>
-				<View style={{ flex: 1, alignItems: 'center', width: "100%", height: props.height - StatusBar.currentHeight }}>
-					{/* TITLE */}
-					<View style={styles.topArea}>
-						{/* <Text style={styles.logo}>WEHAGO</Text> */}
-						<Image
-							style={{
-								width: 200,
-								height: 64
-							}}
-							source={logo_login}
-							resizeMode="contain"
-						/>
-					</View>
-
-					{/* INPUTS */}
-					<View style={styles.middleArea}>
-						<TextField
-							placeholder={'아이디'}
-							width={285}
-							height={40}
-							onChange={text => props.onChangeValue('userId', text)}
-							value={userId}
-						/>
-						<TextField
-							placeholder={'패스워드'}
-							width={285}
-							height={40}
-							secret={true}
-							onChange={text => props.onChangeValue('userPwd', text)}
-							onSubmit={props.onEnterKeyDown}
-							value={userPwd}
-						/>
-					</View>
-
-					{/* BUTTONS */}
-					<View style={styles.bottomArea}>
-						<FlatButton
-							title={'로그인'}
-							color={props.userId && props.userPwd ? '#fff' : '#818181'}
-							backgroundColor={props.userId && props.userPwd ? '#1C90FB' : '#E1E1E1'}
-							borderColor={props.userId && props.userPwd ? '#1C90FB' : '#E1E1E1'}
-							borderWidth={1}
-							width={295}
-							height={52}
-							borderRadius={30}
-							onClick={props.onLogin}
-						/>
-					</View>
-					{/* BUTTONS */}
-					{ Platform.OS === "ios" &&
-					<View style={styles.bottomArea2}>
-						<FlatButton
-							title={'WEHAGO 앱으로 로그인'}
-							width={295}
-							height={52}
-							borderRadius={5}
-							color={'#fff'}
-							backgroundColor={'#1C90FB'}
-							borderColor={'#1C90FB'}
-							borderWidth={1}
-							customStyle={{ flexDirection: 'row' }}
-							onClick={props.onLoginForWehago}
-						>
-							<Image
-								style={{
-									width: 24,
-									height: 24,
-									marginRight: 5
-								}}
-								source={wehago_favicon}
-							/>
-							<Text style={{ color: '#fff' }}>WEHAGO 앱으로 로그인</Text>
-						</FlatButton>
-						<Text style={{ paddingTop: 12, paddingBottom: 15, textAlign: 'center', color: 'rgb(51,51,51)' }}>
-							WEHAGO 앱이 설치되어 있다면 바로 시작하세요.
-						</Text>
-					</View>
-					}
-				</View>
-			</ScrollView>
+			{Platform.OS === 'ios' ? (
+        mainView
+      ) : (
+        <ScrollView style={{ width: '100%', height: props.height }}>
+          {mainView}
+        </ScrollView>
+      )}
 
 			{/* 모달 */}
 			<Modal animationType="slide" visible={props.modal} transparent={true} animationType="fade" onRequestClose={() => props.onActivateModal('', false)}>
@@ -359,7 +371,7 @@ const LoginScreenPresenter = props => {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: '#fff',
+		backgroundColor: 'transparent',
 		// alignItems: 'center',
 		width: '100%'
 	},
