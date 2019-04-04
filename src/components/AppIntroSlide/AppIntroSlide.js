@@ -13,11 +13,11 @@ const isTablet = (
 );
 
 const introImages = [
-  require("./images/walkthroughs01/imgIntroMeet.png"),
-  require("./images/walkthroughs02/walkthroughs02.png"),
-  require("./images/walkthroughs03/walkthroughs03.png"),
-  require("./images/walkthroughs04/walkthroughs04.png"),
-  require("./images/walkthroughs05/walkthroughs05.png")
+  require("./images/img_intro_meet/drawable-xxxhdpi/img_intro_meet.png"),
+  require("./images/walkthroughs_02/drawable-xxxhdpi/walkthroughs_02.png"),
+  require("./images/walkthroughs_03/drawable-xxxhdpi/walkthroughs_03.png"),
+  require("./images/walkthroughs_04/drawable-xxxhdpi/walkthroughs_04.png"),
+  require("./images/walkthroughs_05/drawable-xxxhdpi/walkthroughs_05.png")
 ];
 
 class AppIntroSlide extends React.Component {  
@@ -220,6 +220,7 @@ const styles = StyleSheet.create({
     color: 'rgb(100, 113, 133)',
     fontSize: 18,
     textAlign: 'center',
+    height: 50
   },
   dotStyle: {
     width: 4,
