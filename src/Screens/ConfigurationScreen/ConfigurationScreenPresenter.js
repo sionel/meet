@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { View, Text, StyleSheet, SectionList, TouchableOpacity, Modal } from 'react-native';
+import { View, Text, StyleSheet, SectionList, TouchableOpacity, Modal, Alert } from 'react-native';
 import { CustomWebView, SectionListHeader } from '../../components';
 
 const ConfigurationScreenPresenter = props => {
@@ -23,7 +23,12 @@ const ConfigurationScreenPresenter = props => {
 		},
 		{
 			title: '버전정보',
-			action: () => alert('v1.0.2')
+			action: () => Alert.alert(
+				'버전정보',
+				'1.0.2',
+				[{ text: 'OK'}],
+				{ cancelable: true }
+			)
 		},
 		// {
 		// 	title: '앱인트로 보기',

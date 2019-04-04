@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { Linking, Platform, NativeModules, View, Keyboard, Dimensions } from 'react-native';
+import { Linking, Platform, NativeModules, View, Alert, Dimensions } from 'react-native';
 // import Orientation from 'react-native-orientation-locker';
 
 import LoginScreenPresenter from './LoginScreenPresenter';
@@ -243,11 +243,21 @@ class LoginScreenContainer extends React.Component {
 			console.log(err);
 			if (Platform.OS === 'ios') {
 				Linking.openURL(iosMarketURL).catch(err => {
-					alert('스토어 정보가 없습니다.');
+					Alert.alert(
+						'스토어 정보가 없습니다.',
+						'',
+						[{ text: 'OK'}],
+						{ cancelable: true }
+					)
 				});
 			} else if (Platform.OS === 'android') {
 				Linking.openURL(androidMarketURL).catch(err => {
-					alert('스토어 정보가 없습니다.');
+					Alert.alert(
+						'스토어 정보가 없습니다.',
+						'',
+						[{ text: 'OK'}],
+						{ cancelable: true }
+					)
 				});
 			}
 		});

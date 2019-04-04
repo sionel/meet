@@ -47,6 +47,7 @@ const TextField = props => {
 			secureTextEntry={secret}
 			autoCapitalize={!autoCapitalize ? 'none' : 'words'}
 			onSubmitEditing={typeof onSubmit === 'string' ? () => inputs[onSubmit].focus() : onSubmit}
+			returnKeyType={typeof onSubmit === 'string' ? 'next' : 'go'}
 			// autoFocus={refs === 'inputId'}
 			ref={ref => inputs[refs] = ref}
 		/>
