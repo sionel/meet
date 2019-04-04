@@ -10,7 +10,7 @@
     "android": "react-native run-android",
     "device": "~/Library/Android/sdk/emulator/emulator @Nexus_5X_API_28",
     "pod": "cd ios && pod cache clean --all && pod install && cd ..",
-    "build-android": "cd ./android && ./gradlew assembleRelease && cd ..",
+    "build-android": "cd ./android && ./gradlew installRelease && cd ..",
     "set-android": "~/Library/Android/sdk/platform-tools/adb -s ce0418241231d014017e reverse tcp:8081 tcp:8081"
   },
   "dependencies": {

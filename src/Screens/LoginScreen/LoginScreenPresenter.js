@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { ScrollView, View, Text, StyleSheet, Image, TouchableOpacity, Modal, FlatList, Platform, StatusBar } from 'react-native';
+import { ScrollView, View, Text, StyleSheet, Image, TouchableOpacity, Modal, FlatList, Platform, StatusBar, Dimensions } from 'react-native';
 import { FlatButton, TextField, ListItemComp, CustomWebView } from '../../components';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -13,6 +13,14 @@ const rootPath = `../../../assets`;
 const logo_login = require(`${rootPath}/logo_login.png`);
 const wehago_favicon = require(`${rootPath}/wehago_favicon.png`);
 
+const { width, height } = Dimensions.get('window');
+
+const isIphoneX = (
+  Platform.OS === 'ios' &&
+  !Platform.isPad &&
+  !Platform.isTVOS &&
+  (height === 812 || width === 812 || height === 896 || width === 896)
+);
 /**
  * LoginScreenPresenter
  */
@@ -30,6 +38,7 @@ const LoginScreenPresenter = props => {
 			/>
 		);
 	}
+
 	/**
    * RETURN
    */
@@ -62,6 +71,8 @@ const LoginScreenPresenter = props => {
 					height={40}
 					onChange={text => props.onChangeValue('userId', text)}
 					value={userId}
+					onSubmit={'inputPwd'}
+					refs={'inputId'}
 				/>
 				<TextField
 					placeholder={'패스워드'}
@@ -71,6 +82,7 @@ const LoginScreenPresenter = props => {
 					onChange={text => props.onChangeValue('userPwd', text)}
 					onSubmit={props.onEnterKeyDown}
 					value={userPwd}
+					refs={'inputPwd'}
 				/>
 			</View>
 
@@ -402,9 +414,10 @@ const styles = StyleSheet.create({
 		padding: '3%'
 	},
 
-	modalWrap: { paddingTop: 32, backgroundColor: '#F15F5F' },
+	modalWrap: { paddingTop: isIphoneX ? 32 : 0, backgroundColor: '#F15F5F', justifyContent: 'space-between' },
 	modalContents: {
-		flex: 5,
+		// flex: 5,
+		flex: 1,
 		justifyContent: 'center',
 		paddingTop: 17,
 		paddingBottom: 17,
@@ -412,9 +425,11 @@ const styles = StyleSheet.create({
 	},
 	modalMessage: { color: '#fff', fontSize: 15 },
 	modalCloseButton: {
-		flex: 1,
+		// flex: 1,
+		width: 40,
 		justifyContent: 'center',
-		alignItems: 'center'
+		// alignItems: 'flex-end',
+		paddingRight: 17
 		// backgroundColor: '#FF8383'
 	},
 

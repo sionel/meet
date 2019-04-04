@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, View, Text, Button, StyleSheet } from 'react-native';
+import { Modal, View, Text, Button, StyleSheet, Platform } from 'react-native';
 
 const LoginFailAlert = (props) => {
   return (
@@ -19,7 +19,7 @@ const LoginFailAlert = (props) => {
             <Button
               style={styles.modalButton}
               title="취소"
-              color="#FFF"
+              color={Platform.OS === 'ios' ? '#FFF' : "#444"}
               onPress={props.onCancelTryLogin}
             />
           </View>
@@ -53,10 +53,11 @@ const styles = StyleSheet.create({
     borderColor: "#FFF",
     borderRadius: 5,
     marginTop: 10,
+    paddingLeft: 1,
+    paddingRight: 1,
     width: 80
   },
   modalButton: {
-    color: '#fff',
     fontSize: 18
   }
 })

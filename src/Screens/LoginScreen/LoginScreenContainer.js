@@ -97,6 +97,7 @@ class LoginScreenContainer extends React.Component {
 				nextInput={nextInput}
 				phrases="Loading"
 				height={deviceHeight}
+				// onSubmitNext={this._submitNext}
 			/>
 		);
 	} // render
@@ -106,6 +107,14 @@ class LoginScreenContainer extends React.Component {
 	 */
 	// _handleDeviceOrientation = () => {
 	// 	console.log(DeviceInfo.Dimensions);
+	// }
+
+	// _focusNextField = key => {
+	// 	this.inputs[key].focus();
+	// }
+
+	// _submitNext = () => {
+	// 	this.focusNextField('next-field');
 	// }
 
 	/**
@@ -260,11 +269,16 @@ class LoginScreenContainer extends React.Component {
 	_handleActivateModal = (text = '', val = true) => {
 		this.setState(prev => ({ modal: val, modalText: text }));
 		// 자동 close
-		if (val) {
-			setTimeout(() => {
-				this.setState(prev => ({ modal: false }));
-			}, 2100);
-		}
+		clearTimeout(this._toggleModalVisible);
+		this._toggleModalVisible = setTimeout(() => {
+			this.setState(prev => ({ modal: false }));
+		}, 2100);
+		// this._toggleModalVisible();
+		// if (val) {
+		// 	setTimeout(() => {
+		// 		this.setState(prev => ({ modal: false }));
+		// 	}, 2100);
+		// }
 	};
 
 	/**
