@@ -18,15 +18,15 @@ const MainVideoPresenter = props => {
 			style={{
 				top: 50,
 				left: 25,
-				position: 'absolute'
+				position: 'absolute',
+				// zIndex: 99
 			}}
 		>
 			<Text
 				style={{
 					fontSize: 20,
 					color: '#fff',
-					textAlign: 'center',
-					zIndex: 999
+					textAlign: 'center'
 				}}
 			>
 				{second2String(props.time)}
@@ -45,7 +45,7 @@ const MainVideoPresenter = props => {
 				justifyContent: 'center',
 				alignItems: 'center',
 				backgroundColor: 'rgba(255,255,255, .67)',
-				zIndex: 9
+				// zIndex: 9
 			}}
 		>
 			<Text

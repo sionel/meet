@@ -13,14 +13,14 @@ const rootPath = `../../../assets`;
 const logo_login = require(`${rootPath}/logo_login.png`);
 const wehago_favicon = require(`${rootPath}/wehago_favicon.png`);
 
-const { width, height } = Dimensions.get('window');
+// const { width, height } = Dimensions.get('window');
+// const isIphoneX = (
+//   Platform.OS === 'ios' &&
+//   !Platform.isPad &&
+//   !Platform.isTVOS &&
+//   (height === 812 || width === 812 || height === 896 || width === 896)
+// );
 
-const isIphoneX = (
-  Platform.OS === 'ios' &&
-  !Platform.isPad &&
-  !Platform.isTVOS &&
-  (height === 812 || width === 812 || height === 896 || width === 896)
-);
 /**
  * LoginScreenPresenter
  */
@@ -133,6 +133,8 @@ const LoginScreenPresenter = props => {
 	)
 	return (
 		<View style={styles.container}>
+			<StatusBar barStyle={Platform.OS === 'ios' ? 'dark-content' : 'light-content'} />
+
 			{Platform.OS === 'ios' ? (
         mainView
       ) : (
@@ -143,7 +145,7 @@ const LoginScreenPresenter = props => {
 
 			{/* 모달 */}
 			<Modal animationType="slide" visible={props.modal} transparent={true} animationType="fade" onRequestClose={() => props.onActivateModal('', false)}>
-				<View style={styles.modalWrap}>
+				<View style={[styles.modalWrap, { paddingTop: 0 + (props.hasNotch ? 24 : 0) + (Platform.OS === 'ios' ? 12 : 0) }]}>
 					<View style={{ flexDirection: 'row' }}>
 						<View style={styles.modalContents}>
 							<Text style={styles.modalMessage}>{props.modalText}</Text>
@@ -414,7 +416,11 @@ const styles = StyleSheet.create({
 		padding: '3%'
 	},
 
-	modalWrap: { paddingTop: isIphoneX ? 32 : 0, backgroundColor: '#F15F5F', justifyContent: 'space-between' },
+	modalWrap: {
+		// paddingTop: props.hasNotch ? 32 : 0,
+		backgroundColor: '#F15F5F',
+		justifyContent: 'space-between'
+	},
 	modalContents: {
 		// flex: 5,
 		flex: 1,

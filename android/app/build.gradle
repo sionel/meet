@@ -78,6 +78,9 @@ dependencies {
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
 
+    // For animated GIF support
+    implementation 'com.facebook.fresco:animated-gif:1.10.0'
+
     implementation project(':sdk')
 
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.1'

@@ -85,8 +85,8 @@ allprojects {
                 versionQualifier = '-jitsi-2' // 1.6.4 + react-native 0.57
             else if ('react-native-fast-image' == project.name)
                 versionQualifier = '-jitsi-2' // 5.1.1 + react-native 0.57
-            else if ('react-native-google-signin' == project.name)
-                versionQualifier = '-jitsi-2' // 1.0.2 + react-native 0.57
+            // else if ('react-native-google-signin' == project.name)
+            //     versionQualifier = '-jitsi-2' // 1.0.2 + react-native 0.57
             else if ('react-native-immersive' == project.name)
                 versionQualifier = '-jitsi-5' // 2.0.0 + react-native 0.57
             else if ('react-native-keep-awake' == project.name)
@@ -111,6 +111,8 @@ allprojects {
                 versionQualifier = '-jitsi-1' // 2.5.11 + react-native 0.57
             else if ('react-native-splash-screen' == project.name)
                 versionQualifier = '-jitsi-1' // x.x.x + react-native 0.57
+            else if ('react-native-device-info' == project.name)
+                versionQualifier = '-jitsi-1' // 1.4.2 + react-native 0.57
 
             project.version = "${json.version}${versionQualifier}"
 

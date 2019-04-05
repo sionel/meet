@@ -10,20 +10,23 @@ import {
   StatusBar,
 } from 'react-native';
 import DefaultSlide from './DefaultSlide';
+import DeviceInfo from 'react-native-device-info';
 
 const { width, height } = Dimensions.get('window');
 
 // iphone X, XS = 812, XR, XS MAX = 896
-const isIphoneX = (
-  Platform.OS === 'ios' &&
-  !Platform.isPad &&
-  !Platform.isTVOS &&
-  (height === 812 || width === 812 || height === 896 || width === 896)
-);
-const isTablet = (
-  Platform.OS === 'ios' &&
-  Platform.isPad
-);
+// const isIphoneX = (
+//   Platform.OS === 'ios' &&
+//   !Platform.isPad &&
+//   !Platform.isTVOS &&
+//   (height === 812 || width === 812 || height === 896 || width === 896)
+// );
+// const isTablet = (
+//   Platform.OS === 'ios' &&
+//   Platform.isPad
+// );
+const isIphoneX = DeviceInfo.hasNotch();
+const isTablet = DeviceInfo.isTablet();
 
 export default class AppIntroSlider extends React.Component {
   static defaultProps = {

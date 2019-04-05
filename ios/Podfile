@@ -64,6 +64,8 @@ target 'JitsiMeet' do
   # pod 'react-native-webview', :path => '../node_modules/react-native-webview'
   pod 'RNSketchCanvas', :path => '../node_modules/@terrylinla/react-native-sketch-canvas'
   # pod 'RNSketchCanvas', :podspec => '../node_modules/react-native-sketch-canvas'
+
+  pod 'RNDeviceInfo', :path => '../node_modules/react-native-device-info'
 end
 
 post_install do |installer|

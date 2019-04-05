@@ -40,7 +40,12 @@ const ConfigurationScreenPresenter = props => {
 		// },
 		{
 			title: '로그아웃',
-			action: () => props.onLogout()
+			action: () => Alert.alert(
+				'로그아웃 하시겠습니까?',
+				'',
+				[{ text: '예', onPress: () => props.onLogout()}, { text: '아니오', style: 'cancel'}],
+				{ cancelable: false }
+			)
 		}
 	];
 

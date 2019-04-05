@@ -5,16 +5,15 @@
  */
 
 import React from 'react';
-import { Linking, Platform, NativeModules, View, Alert, Dimensions } from 'react-native';
+import { Linking, Platform, View, Alert, Dimensions } from 'react-native';
 // import Orientation from 'react-native-orientation-locker';
+import DeviceInfo from 'react-native-device-info';
 
 import LoginScreenPresenter from './LoginScreenPresenter';
 import LoginFailAlert from './Content/LoginFailAlert';
 import { CustomLottie } from '../../components';
 // service
 import { querystringParser } from '../../utils';
-
-const { PlatformConstants, DeviceInfo } = NativeModules;
 
 const deviceHeight = Dimensions.get('window').height;
 
@@ -97,6 +96,7 @@ class LoginScreenContainer extends React.Component {
 				nextInput={nextInput}
 				phrases="Loading"
 				height={deviceHeight}
+				hasNotch={DeviceInfo.hasNotch()}
 				// onSubmitNext={this._submitNext}
 			/>
 		);
@@ -174,17 +174,18 @@ class LoginScreenContainer extends React.Component {
 		// const { navigation } = this.props;
 		const { userId, userPwd } = this.state;
 		const { loginRequest } = this.props;
+		const deviceIP = await DeviceInfo.getIPAddress();
 		const osData =
 			Platform.OS === 'ios'
 				? {
-						login_ip: '10.101.31.236',
-						login_device: 'iPhone',
-						login_os: PlatformConstants.systemName + ' ' + PlatformConstants.osVersion
+						login_ip: deviceIP,
+						login_device: DeviceInfo.getModel(),
+						login_os: DeviceInfo.getSystemName() + ' ' + DeviceInfo.getSystemVersion()
 					}
 				: {
-						login_ip: '10.101.31.236',
-						login_device: PlatformConstants.Model,
-						login_os: Platform.OS + ' ' + PlatformConstants.Release
+						login_ip: deviceIP,
+						login_device: DeviceInfo.getModel(),
+						login_os: DeviceInfo.getSystemName() + ' ' + DeviceInfo.getSystemVersion()
 					};
 		const data = {
 			portal_id: userId,

@@ -1,16 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet, View, Text, Image, Dimensions, Platform } from 'react-native';
+import DeviceInfo from 'react-native-device-info';
 import AppIntroSlider from './react-native-intro-slider/AppIntroSlider';
 import { actionCreators as UserActions } from '../../redux/modules/user';
 
 const { width, height } = Dimensions.get('window');
 const ratio = 375 / 449;
 
-const isTablet = (
-  Platform.OS === 'ios' &&
-  Platform.isPad
-);
+// const isTablet = (
+//   Platform.OS === 'ios' &&
+//   Platform.isPad
+// );
+const isTablet = DeviceInfo.isTablet();
 
 const introImages = [
   require("./images/img_intro_meet/drawable-xxxhdpi/img_intro_meet.png"),
