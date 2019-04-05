@@ -3,6 +3,10 @@ import config from './config';
 
 // 위하고 아이디 커멘드 이름 정의
 const WEHAGO_ID = 'wehagoid';
+// 드로잉 이미지 전달 커멘드 타입
+export const UPDATE_DRAWING_DATA = 'UPDATE_DRAWING_DATA';
+// 문서공유 모드 설정 커맨드 타입
+export const SET_DOCUMENT_IS_SHARE = 'SET_DOCUMENT_IS_SHARE';
 
 /**
  * ConferenceConnector
@@ -148,6 +152,32 @@ class ConferenceConnector {
 			const id = user.value;
 			this._handlers.SET_USER_INFO(id, user.attributes);
 			//
+		});
+
+		/**
+     * 문서 공유/드로잉 설정 감지
+     */
+		this._room.addCommandListener(SET_DOCUMENT_IS_SHARE, value => {
+			this._handlers.CHANGED_DOCUMENT_SHARE_MODE(value.attributes.isDocumentShare);
+		});
+
+		/**
+     * 드로잉 데이터 변경 감지
+     */
+		this._room.addCommandListener(UPDATE_DRAWING_DATA, value => {
+			console.log('UPDATE_DRAWING_DATA : ', value);
+			// const { attributes: { drawData }, value: userId } = value;
+
+			// if (!this._drawingManager) {
+			//   this._drawingManager = getDrawingManager();
+			// }
+
+			// 데이터 변경자가 본인과 다를 경우 캔버스 그리기
+			// if (userId !== this._room.myUserId()) {
+			//   const _drawData = JSON.parse(drawData);
+			//   handlers.ADD_DRAW_DATA(_drawData);
+			//   this._drawingManager.participantDraw(_drawData, userId);
+			// }
 		});
 	};
 

@@ -9,12 +9,12 @@ import BottomArea from './BottomArea';
  * ContentPresenter
  */
 const ContentPresenter = props => {
-	const { mainUser, callType, isVideoReverse, speaker } = props;
+	const { mainUser, callType, isVideoReverse, speaker, drawingMode } = props;
 
 	return (
 		<View style={styles.container} onLayout={props.onLayout}>
-			{props.drawing ? (
-				<DrawingSketch drawing={props.drawing} onChangeState={props.onChangeState} />
+			{drawingMode ? (
+				<DrawingSketch drawing={drawingMode} onChangeDrawing={props.setDrawingMode} />
 			) : (
 				<TouchableOpacity activeOpacity={0.7} style={styles.container} onPress={props.toggleConferenceMode}>
 					<MainVideo mainUser={mainUser} callType={callType} isVideoReverse={isVideoReverse}>
@@ -25,9 +25,10 @@ const ContentPresenter = props => {
 								{callType != 2 && (
 									<TopArea
 										orientation={props.orientation}
-										drawing={props.drawing}
+										drawing={props.drawingMode}
 										onReverseVideo={props.onReverseVideo}
 										onChangeState={props.onChangeState}
+										onChangeDrawing={props.setDrawingMode}
 									/>
 								)}
 							</View>

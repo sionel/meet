@@ -15,6 +15,7 @@ class ContentContainer extends React.Component {
 		orientation: Dimensions.get('window').height > Dimensions.get('window').width ? 'vertical' : 'horizontal',
 		isVideoReverse: false,
 		speaker: 2
+		// drawing: false
 	};
 
 	/**
@@ -29,6 +30,9 @@ class ContentContainer extends React.Component {
 	 * REDNER
 	 */
 	render() {
+		console.log('Drawing : ', this.state);
+		console.log('Drawing : ', this.props);
+
 		return (
 			<ContentPresenter
 				{...this.state}

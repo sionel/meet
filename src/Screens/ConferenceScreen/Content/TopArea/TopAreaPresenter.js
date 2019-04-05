@@ -19,14 +19,6 @@ const TopAreaPresenter = props => {
 				>
 					{props.isMuteVideo ? null : (
 						<Fragment>
-							{/* <SettingButton
-								name="pen"
-								width={25}
-								height={25}
-								areaWdith={25}
-								areaHeight={28}
-								onPress={() => props.onChangeState('drawing', !props.drawingMode)}
-							/> */}
 							<SettingButton name="switch" onPress={props.toggleCameraFacingMode} />
 							{/* <SettingButton
 								name="reverse"
@@ -36,6 +28,14 @@ const TopAreaPresenter = props => {
 								areaWdith={28}
 								areaHeight={28}
 							/> */}
+							<SettingButton
+								name="pen"
+								width={25}
+								height={25}
+								areaWdith={25}
+								areaHeight={28}
+								onPress={() => props.onChangeDrawing(!props.drawing)}
+							/>
 						</Fragment>
 					)}
 				</View>

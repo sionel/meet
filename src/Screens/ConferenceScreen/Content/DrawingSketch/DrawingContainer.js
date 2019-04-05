@@ -21,10 +21,34 @@ class DrawingContainer extends Component {
    * State
    */
 	state = {
-		selectedColor: 'lightskyblue', // 선택된 색
-		selectedStroke: 1, // 선택된 색
-		colors: ['lightskyblue', 'orange', 'lime'],
-		strokes: [1, 2, 3, 5, 7]
+		selectedTab: 0,
+		selectedColor: 'stroke', // 선택된 색
+		// selectedColor: 'lightskyblue', // 선택된 색
+		selectedStroke: 0, // 선택된 색
+		selctedEraser: 0,
+		palette: true, // 탭 사용여부
+
+		stroke: 0,
+		color: 0,
+		eraser: 0,
+
+		tabs: [
+			{
+				id: 'stroke',
+				title: '선굵기',
+				values: [1, 2, 3, 5, 7]
+			},
+			{
+				id: 'color',
+				title: '색상',
+				values: ['lightskyblue', 'orange', 'lime']
+			},
+			{
+				id: 'eraser',
+				title: '지우개',
+				values: ['part', 'all']
+			}
+		]
 	};
 
 	/**
@@ -39,6 +63,7 @@ class DrawingContainer extends Component {
 		return (
 			<DrawingPresenter
 				{...this.state}
+				{...this.props}
 				onChangeState={this._handleChangeState}
 				onStrokeEnd={this._handleStrokeEnd}
 				onCanvas={this._handleCanvas}
@@ -66,8 +91,8 @@ class DrawingContainer extends Component {
 	_handleCanvas = canvas => {
 		this.canvas = canvas;
 		this.ctx = canvas.getContext('2d');
-		console.log('this.canvas : ', this.canvas);
-		console.log('this.canvas : ', this.ctx);
+		// console.log('this.canvas : ', this.canvas);
+		// console.log('this.canvas : ', this.ctx);
 		// 마우스이벤트 등록
 		this.canvas.addMessageListener('mousedown', this._handleDrawListener);
 		this.canvas.addMessageListener('mousemove', this._handleDrawListener);

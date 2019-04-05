@@ -36,7 +36,7 @@ const SettingButtonPresenter = props => (
  */
 SettingButtonPresenter.propTypes = {
 	// 버튼 이름입니다.
-	name: PropTypes.oneOf(['talk', 'setting', 'share', 'switch', 'reverse']).isRequired,
+	name: PropTypes.oneOf(['talk', 'setting', 'share', 'switch', 'reverse', 'pen']).isRequired,
 	// 버튼이 클릭되면 발생하는 이벤트 입니다.
 	onPress: PropTypes.func.isRequired
 };

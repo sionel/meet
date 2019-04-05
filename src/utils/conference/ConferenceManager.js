@@ -113,7 +113,8 @@ class ConferenceManager {
 			VIDEO_MUTE_CHANGED: this._videoMutedChanged,
 			SUSPEND_DETECTED: handleClose,
 			SET_USER_INFO: this._setUserInfo,
-			CHANGED_USER_STATUS: this._changedUserStatus
+			CHANGED_USER_STATUS: this._changedUserStatus,
+			CHANGED_DOCUMENT_SHARE_MODE: this._changeDocumentShareMode
 		};
 		return handler;
 	};
@@ -175,6 +176,13 @@ class ConferenceManager {
 	 */
 	_changedUserStatus = (userId, status) => {
 		this._dispatch(participantsAcionCreators.changedStatus(userId, status));
+	};
+
+	/**
+	 * 문서공유/드로잉모드 전환
+	 */
+	_changeDocumentShareMode = status => {
+		this._dispatch(mainUserActionCreators.setDrawingMode());
 	};
 }
 

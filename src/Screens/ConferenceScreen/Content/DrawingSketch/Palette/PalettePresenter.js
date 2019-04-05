@@ -1,43 +1,34 @@
 /**
- * DrawingPresenter
+ * Palette Presenter
  */
 
 import React, { Fragment } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Button } from 'react-native';
-import { SketchCanvas } from '@terrylinla/react-native-sketch-canvas';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-const DrawingPresenter = props => {
+const PalettePresenter = props => {
 	const { selectedTab, stroke, color, eraser, palette, tabs } = props;
 
 	return (
-		<View style={styles.container}>
-			{/* 팔레트 디스플레이 */}
-			<View style={{ ...styles.tabWrapper, height: palette ? 150 : 100 }}>
-				<Fragment>
-					<View
-						style={{
-							position: 'absolute',
-							right: 15,
-							top: 50,
-							zIndex: 9
-						}}
-					>
-						<Button title="완료" color={'#fff'} onPress={() => props.onChangeDrawing(!props.drawing)} />
-					</View>
-					<View style={styles.mainSettingWrapper}>
-						{tabs.map((tab, tabIndex) => (
-							<TouchableOpacity key={tab.id} onPress={() => props.onChangeState('selectedTab', tabIndex)}>
-								<View
-									style={{
-										...styles.mainSettingItem,
-										opacity: selectedTab === tabIndex ? 0.35 : 1
-									}}
-								/>
-							</TouchableOpacity>
-						))}
-					</View>
-					{palette && (
+		<Fragment>
+			<View style={{ ...styles.tabWrapper, height: palette ? 150 : 58 }}>
+				{palette && (
+					<Fragment>
+						<View style={styles.mainSettingWrapper}>
+							{tabs.map((tab, tabIndex) => (
+								<TouchableOpacity
+									key={tab.id}
+									onPress={() => props.onChangeState('selectedTab', tabIndex)}
+								>
+									<View
+										style={{
+											...styles.mainSettingItem,
+											opacity: selectedTab === tabIndex ? 0.35 : 1
+										}}
+									/>
+								</TouchableOpacity>
+							))}
+						</View>
 						<View style={styles.detailSettingWrapper}>
 							{tabs[selectedTab].values.map((value, valueIndex) => (
 								<TouchableOpacity
@@ -55,8 +46,8 @@ const DrawingPresenter = props => {
 								</TouchableOpacity>
 							))}
 						</View>
-					)}
-				</Fragment>
+					</Fragment>
+				)}
 			</View>
 			<TouchableOpacity
 				key={'color'}
@@ -77,38 +68,28 @@ const DrawingPresenter = props => {
 					// onStrokeEnd={rs => props.onStrokeEnd(rs)}
 				/>
 			</View>
-			<View style={styles.childrenWrapper}>{}</View>
-			{/*  */}
-		</View>
+			<TouchableOpacity
+				key={'color'}
+				onPress={() => props.onChangeState('palette', !palette)}
+				style={{ flex: 0, flexDirection: 'row', alignContent: 'center', justifyContent: 'center' }}
+			>
+				<Icon name={`angle-${palette ? `up` : `down`}`} size={40} color={'#333'} style={styles.tabToggleIcon} />
+			</TouchableOpacity>
+		</Fragment>
 	);
 };
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		width: '100%',
-		justifyContent: 'flex-start',
-		alignItems: 'center',
-		backgroundColor: '#F5FCFF'
-		// paddingLeft: 15
-	},
-
 	tabWrapper: {
-		// flex: 1.8,
-		// position: 'absolute',
-
-		// height: 150,
-		height: 'auto',
 		backgroundColor: '#333',
 		width: '100%',
 		zIndex: 7
 	},
 
 	mainSettingWrapper: {
-		height: 95,
-		paddingLeft: 15,
+		flex: 85,
 		flexDirection: 'row',
-		justifyContent: 'flex-start',
+		justifyContent: 'center',
 		alignItems: 'flex-end'
 	},
 
@@ -125,12 +106,11 @@ const styles = StyleSheet.create({
 	},
 
 	detailSettingWrapper: {
-		height: 60,
-		paddingLeft: 15,
+		flex: 65,
 		backgroundColor: '#333',
 		flexDirection: 'row',
 		width: '100%',
-		justifyContent: 'flex-start',
+		justifyContent: 'center',
 		alignItems: 'center'
 	},
 
@@ -163,13 +143,7 @@ const styles = StyleSheet.create({
 		shadowOpacity: 0.22,
 		shadowRadius: 2.22,
 		elevation: 3
-	},
-
-	childrenWrapper: {
-		position: 'absolute',
-		bottom: 0,
-		width: '100%'
 	}
 });
 
-export default DrawingPresenter;
+export default PalettePresenter;
