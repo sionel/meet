@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, View, Text, Image, Dimensions, Platform } from 'react-native';
+import { StyleSheet, View, Text, Image, Dimensions, Platform, StatusBar } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import AppIntroSlider from './react-native-intro-slider/AppIntroSlider';
 import { actionCreators as UserActions } from '../../redux/modules/user';
@@ -22,7 +22,7 @@ const introImages = [
   require("./images/walkthroughs_05/drawable-xxxhdpi/walkthroughs_05.png")
 ];
 
-class AppIntroSlide extends React.Component {  
+class AppIntroSlide extends React.Component {
   slides = [
     {
       key: '0',
@@ -147,6 +147,7 @@ class AppIntroSlide extends React.Component {
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: 'transparent' }}>
+        <StatusBar hidden={true} />
         {this.props.intro ? (
           this.props.children
         ) : (

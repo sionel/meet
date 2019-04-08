@@ -8,6 +8,8 @@ import React from 'react';
 import { ScrollView, View, Text, StyleSheet, Image, TouchableOpacity, Modal, FlatList, Platform, StatusBar, Dimensions } from 'react-native';
 import { FlatButton, TextField, ListItemComp, CustomWebView } from '../../components';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Orientation from 'react-native-orientation-locker';
+import DeviceInfo from 'react-native-device-info';
 
 const rootPath = `../../../assets`;
 const logo_login = require(`${rootPath}/logo_login.png`);
@@ -26,6 +28,7 @@ const wehago_favicon = require(`${rootPath}/wehago_favicon.png`);
  */
 const LoginScreenPresenter = props => {
 	const { userId, userPwd, autoLoginFlag, webView } = props;
+	DeviceInfo.isTablet() ? Orientation.unlockAllOrientations() : Orientation.lockToPortrait();
 
 	if (webView) {
 		return (
@@ -133,7 +136,7 @@ const LoginScreenPresenter = props => {
 	)
 	return (
 		<View style={styles.container}>
-			<StatusBar barStyle={Platform.OS === 'ios' ? 'dark-content' : 'light-content'} />
+			<StatusBar barStyle={'dark-content'} backgroundColor={'transparent'} hidden={false} />
 
 			{Platform.OS === 'ios' ? (
         mainView

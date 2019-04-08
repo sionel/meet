@@ -4,7 +4,8 @@
  */
 import React, { Component } from 'react';
 import { Platform } from 'react-native';
-import Orientation from 'react-native-orientation-locker';
+// import Orientation from 'react-native-orientation-locker';
+// import DeviceInfo from 'react-native-device-info';
 import SplashScreen from 'react-native-splash-screen'
 import MainPresenter from './MainPresenter';
 import LoginScreen from '../Screens/LoginScreen';
@@ -14,7 +15,8 @@ class MainContainer extends Component {
 	state = { isLogin: false };
 
 	componentDidMount() {
-		Orientation.lockToPortrait();
+		// isTablet ? Orientation.unlockAllOrientations() : Orientation.lockToPortrait();
+		// Orientation.unlockAllOrientations();
 		setTimeout(() => {
 			Platform.OS !== "ios" && SplashScreen.hide();
 		}, 1000);

@@ -10,6 +10,7 @@ import {
   StatusBar,
 } from 'react-native';
 import DefaultSlide from './DefaultSlide';
+import Orientation from 'react-native-orientation-locker';
 import DeviceInfo from 'react-native-device-info';
 
 const { width, height } = Dimensions.get('window');
@@ -48,6 +49,10 @@ export default class AppIntroSlider extends React.Component {
     height,
     activeIndex: 0,
   };
+
+  componentDidMount() {
+    !isTablet && Orientation.lockToPortrait();
+  }
 
   goToSlide = (pageNum) => {
     this.setState({ activeIndex: pageNum });

@@ -4,7 +4,7 @@
  */
 
 import React, { Component, Fragment } from 'react';
-import { AppState, StatusBar, Linking } from 'react-native';
+import { AppState, StatusBar, Linking, Platform, Dimensions, SafeAreaView } from 'react-native';
 import HomeScreenPresenter from './HomeScreenPresenter';
 // service
 import { WetalkApi } from '../../services';
@@ -83,8 +83,8 @@ class HomeScreenContainer extends Component {
 		}
 
 		return (
-			<Fragment>
-				<StatusBar barStyle="light-content" />
+			<SafeAreaView style={{ flex: 1 }}>
+				<StatusBar barStyle="light-content" backgroundColor={'#1C90FB'} />
 				<NavigationEvents
 					onDidFocus={() => {
 						this._isFocus = true;
@@ -106,7 +106,7 @@ class HomeScreenContainer extends Component {
 					onCreateConference={this._handleCreateConference}
 					onCheckConference={this._handleCheckConference}
 				/>
-			</Fragment>
+			</SafeAreaView>
 		);
 	}
 	// #endregion

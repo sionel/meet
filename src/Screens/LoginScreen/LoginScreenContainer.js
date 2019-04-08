@@ -6,8 +6,8 @@
 
 import React from 'react';
 import { Linking, Platform, View, Alert, Dimensions } from 'react-native';
-// import Orientation from 'react-native-orientation-locker';
 import DeviceInfo from 'react-native-device-info';
+import Orientation from 'react-native-orientation-locker';
 
 import LoginScreenPresenter from './LoginScreenPresenter';
 import LoginFailAlert from './Content/LoginFailAlert';
@@ -34,8 +34,6 @@ class LoginScreenContainer extends React.Component {
 	};
 
 	componentDidMount() {
-		// Orientation.addDeviceOrientationListener(this._handleDeviceOrientation);
-
 		Linking.getInitialURL().then(url => {
 			if (url) {
 				this._handleGetWehagoToken({ url });
@@ -47,7 +45,6 @@ class LoginScreenContainer extends React.Component {
 	}
 
 	componentWillUnmount() {
-		// Orientation.removeDeviceOrientationListener(this._handleDeviceOrientation);
 		Linking.removeEventListener('url', this._handleGetWehagoToken);
 	}
 
@@ -58,6 +55,7 @@ class LoginScreenContainer extends React.Component {
 		const { permission } = this.props;
 		const { list, userId, userPwd, modal, modalText, nextInput, waiting, autoLoginFlag, webView } = this.state;
 		if (waiting) {
+			Orientation.unlockAllOrientations();
 			return (
 				<View style={{ flex: 1 }}>
 					<CustomLottie

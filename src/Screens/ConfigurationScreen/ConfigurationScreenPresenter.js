@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { View, Text, StyleSheet, SectionList, TouchableOpacity, Modal, Alert } from 'react-native';
+import { View, Text, StyleSheet, SectionList, TouchableOpacity, Modal, Alert, SafeAreaView } from 'react-native';
 import { CustomWebView, SectionListHeader } from '../../components';
 
 const ConfigurationScreenPresenter = props => {
@@ -51,7 +51,7 @@ const ConfigurationScreenPresenter = props => {
 
 	return (
 		<View style={styles.container}>
-			<View
+			<SafeAreaView
 				style={{
 					flex: 1,
 					width: '100%'
@@ -67,7 +67,7 @@ const ConfigurationScreenPresenter = props => {
 					)}
 					keyExtractor={(item, index) => index}
 				/>
-			</View>
+			</SafeAreaView>
 
 			<Modal animationType="slide" transparent={true} visible={webView} blurRadius={1} onRequestClose={() => props.onChangeValue('webView', false)}>
 				<CustomWebView
