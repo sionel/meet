@@ -190,6 +190,12 @@ class APIManager {
 				}
 			});
 		});
+		// NEW
+		// NEW
+		// NEW
+
+		// NEW
+
 		// 수정필요
 	};
 
