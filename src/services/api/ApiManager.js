@@ -190,6 +190,7 @@ class APIManager {
 				}
 			});
 		});
+		// 수정필요
 	};
 
 	/**
@@ -248,7 +249,12 @@ class APIManager {
 		// const { token, HASH_KEY } = this.info;
 		// token, HASH_KEY 모두 undefined
 		// ConferenceManager.js/join() 에서 해당 값을 넘겨주지 않고 있음
-		return securityRequest("vcvZsk7471fMweERvr3c6zmI2emKcn", "eGnIbyMY57HxxcZKE4zYYw9lzZeDEX", url, "195562397410753821916402270099163728463");
+		return securityRequest(
+			'vcvZsk7471fMweERvr3c6zmI2emKcn',
+			'eGnIbyMY57HxxcZKE4zYYw9lzZeDEX',
+			url,
+			'195562397410753821916402270099163728463'
+		);
 	};
 }
 
