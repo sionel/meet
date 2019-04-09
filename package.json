@@ -3,15 +3,14 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-		"clean": "rm -rf node_modules && npm i && cd ios && rm -rf Pods Podfile.lock && cd .. && npm run pod",
+		"clean": "rm -rf node_modules package-lock.json && npm i && cd ios && rm -rf Pods Podfile.lock && cd .. && npm run pod",
 		"start": "node node_modules/react-native/local-cli/cli.js start",
 		"test": "jest",
 		"ios": "react-native run-ios",
 		"android": "react-native run-android",
 		"device": "~/Library/Android/sdk/emulator/emulator @Nexus_5X_API_28",
 		"pod": "cd ios && pod cache clean --all && pod install && cd ..",
-		"build-android":
-			"cd ./android && rm -rf build && cd ./app && rm -rf build && cd .. && cd ./sdk && rm -rf build  && cd .. && ./gradlew installRelease && cd ..",
+		"build-android": "cd ./android && rm -rf build && cd ./app && rm -rf build && cd .. && cd ./sdk && rm -rf build  && cd .. && ./gradlew installRelease && cd ..",
 		"set-android": "~/Library/Android/sdk/platform-tools/adb -s ce0418241231d014017e reverse tcp:8081 tcp:8081"
 	},
 	"dependencies": {

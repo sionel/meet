@@ -21,6 +21,24 @@ class MainVideoContainer extends React.Component {
 			clearInterval(this._timer);
 		}
 	}
+
+	shouldComponentUpdate(nextProps, nextState) {
+		if (nextProps.isMuteVideo !== this.props.isMuteVideo ||
+			// nextProps.stream !== this.props.stream ||
+			// nextProps.videoType !== this.props.videoType ||
+			// nextProps.mainUser !== this.props.mainUser ||
+			nextProps.callType !== this.props.callType ||
+			nextState.time !== this.state.time) {
+				console.log('render');
+				return true;
+			}
+		else {
+			console.log('something is changed');
+			return false
+		};
+	}
+	
+
 	render() {
 		console.log('RENDERING');
 		return <MainVideoPresenter {...this.props} time={this.state.time} />;

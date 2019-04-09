@@ -5,7 +5,7 @@
  */
 
 import React, { Component, Fragment } from 'react';
-import { AppState, StatusBar, Linking, Platform, NativeModules, SafeAreaView } from 'react-native';
+import { AppState, StatusBar, Linking, Platform, NativeModules, View } from 'react-native';
 
 import CreateScreenPresenter from './CreateScreenPresenter';
 // service
@@ -42,7 +42,7 @@ class CreateScreenContainer extends React.Component {
 		}
 
 		return (
-			<SafeAreaView style={{ flex: 1 }}>
+			<View>
 				<StatusBar barStyle="light-content" backgroundColor={'#1C90FB'} />
 				<NavigationEvents
 					onDidFocus={() => {
@@ -60,7 +60,7 @@ class CreateScreenContainer extends React.Component {
 					onCheckConference={this._handleCheckConference}
 					onCreateConference={this._handleCreateConference}
 				/>
-			</SafeAreaView>
+			</View>
 		);
 	} // render
 

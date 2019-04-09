@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { View, Text, StyleSheet, SectionList } from 'react-native';
+import { View, Text, StyleSheet, SectionList, SafeAreaView } from 'react-native';
 // common components
 import { ListItemComp, SearchForm, Placeholder, CustomModal, SectionListHeader } from '../../components';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -23,6 +23,7 @@ const CreateScreenPresenter = props => {
 
 			{props.list.length < 1 && <Placeholder mainText="검색 결과가 없습니다." subText={'위하고에서 위톡을 생성해 보세요'} />}
 
+			<SafeAreaView forceInset={{ top: 'always' }}>
 			{/* 화상대화 히스토리 리스트 */}
 			<SectionList
 				keyExtractor={(item, index) => index.toString()}
@@ -54,6 +55,7 @@ const CreateScreenPresenter = props => {
 					/>
 				)}
 			/>
+			</SafeAreaView>
 
 			<CustomModal
 				display={props.modal}

@@ -39,18 +39,20 @@ const MainVideoPresenter = props => {
 			style={{
 				position: 'absolute',
 				top: 0,
-				bottom: 0,
+				// bottom: 0,
+				height: 41,
 				left: 0,
 				right: 0,
 				justifyContent: 'center',
 				alignItems: 'center',
-				backgroundColor: 'rgba(255,255,255, .67)',
+				// backgroundColor: 'rgba(255,255,255, .67)',
+				backgroundColor: '#F15F5F',
 				// zIndex: 9
 			}}
 		>
 			<Text
 				style={{
-					backgroundColor: 'black',
+					// backgroundColor: 'black',
 					width: '100%',
 					padding: 10,
 					color: '#fff',
@@ -72,7 +74,7 @@ const MainVideoPresenter = props => {
 				<RTCView
 					style={styles.RTCVideo}
 					// mirror={true}
-					// mirror={isVideoReverse }
+					mirror={isVideoReverse}
 					objectFit={videoType && videoType === 'desktop' ? 'fit' : 'cover'}
 					streamURL={stream.toURL()}
 				/>
@@ -80,7 +82,8 @@ const MainVideoPresenter = props => {
 				{/* Video 화면 위에 있는 요소들을 absolute 로 띄운다 */}
 				<View style={styles.videoContainer}>
 					{displayTime}
-					{mainUser.status === 'interrupted' && muteView}
+					{/* {mainUser.status === 'interrupted' && muteView} */}
+					{muteView}
 					{props.children}
 				</View>
 			</View>

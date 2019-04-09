@@ -105,6 +105,7 @@ const LoginScreenPresenter = props => {
 			</View>
 
 			{/* Login with WEHAGO BUTTONS */}
+				{Platform.OS === 'ios' &&
 			<View style={styles.bottomArea2}>
 				<FlatButton
 					title={'WEHAGO 앱으로 로그인'}
@@ -132,6 +133,7 @@ const LoginScreenPresenter = props => {
 					WEHAGO 앱이 설치되어 있다면 바로 시작하세요.
 				</Text>
 			</View>
+				}
 		</View>
 	)
 	return (
