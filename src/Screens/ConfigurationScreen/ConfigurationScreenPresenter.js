@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { View, Text, StyleSheet, SectionList, TouchableOpacity, Modal } from 'react-native';
+import { View, Text, StyleSheet, SectionList, TouchableOpacity, Modal, Alert, SafeAreaView } from 'react-native';
 import { CustomWebView, SectionListHeader } from '../../components';
 
 const ConfigurationScreenPresenter = props => {
@@ -23,7 +23,12 @@ const ConfigurationScreenPresenter = props => {
 		},
 		{
 			title: '버전정보',
-			action: () => alert('v1.0.2')
+			action: () => Alert.alert(
+				'버전정보',
+				'1.0.2',
+				[{ text: 'OK'}],
+				{ cancelable: true }
+			)
 		},
 		// {
 		// 	title: '앱인트로 보기',
@@ -35,13 +40,18 @@ const ConfigurationScreenPresenter = props => {
 		// },
 		{
 			title: '로그아웃',
-			action: () => props.onLogout()
+			action: () => Alert.alert(
+				'로그아웃 하시겠습니까?',
+				'',
+				[{ text: '예', onPress: () => props.onLogout()}, { text: '아니오', style: 'cancel'}],
+				{ cancelable: false }
+			)
 		}
 	];
 
 	return (
 		<View style={styles.container}>
-			<View
+			<SafeAreaView
 				style={{
 					flex: 1,
 					width: '100%'
@@ -57,9 +67,9 @@ const ConfigurationScreenPresenter = props => {
 					)}
 					keyExtractor={(item, index) => index}
 				/>
-			</View>
+			</SafeAreaView>
 
-			<Modal animationType="slide" transparent={true} visible={webView} blurRadius={1}>
+			<Modal animationType="slide" transparent={true} visible={webView} blurRadius={1} onRequestClose={() => props.onChangeValue('webView', false)}>
 				<CustomWebView
 					view={webView}
 					contentTitle="약관 및 정책"
@@ -78,7 +88,7 @@ const ConfigurationScreenPresenter = props => {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: 'white',
+		backgroundColor: 'transparent',
 		justifyContent: 'center',
 		alignItems: 'center'
 	},

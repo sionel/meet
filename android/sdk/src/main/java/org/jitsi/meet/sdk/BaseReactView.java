@@ -45,7 +45,7 @@ public abstract class BaseReactView<ListenerT>
      * Background color used by {@code BaseReactView} and the React Native root
      * view.
      */
-    protected static int BACKGROUND_COLOR = 0xFF111111;
+    protected static int BACKGROUND_COLOR = 0xFFFFFF;
 
     /**
      * The collection of all existing {@code BaseReactView}s. Used to find the

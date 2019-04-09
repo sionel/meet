@@ -18,6 +18,7 @@
 package com.wehago.meet.sdk;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -341,5 +342,13 @@ public class JitsiMeetActivity
         } else {
             view.setWelcomePageEnabled(welcomePageEnabled);
         }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Intent intent = new Intent("onConfigurationChanged");
+        intent.putExtra("newConfig", newConfig);
+        this.sendBroadcast(intent);
     }
 }

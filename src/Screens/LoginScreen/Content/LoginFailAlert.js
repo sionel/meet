@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, View, Text, Button, StyleSheet } from 'react-native';
+import { Modal, View, Text, Button, StyleSheet, Platform } from 'react-native';
 
 const LoginFailAlert = (props) => {
   return (
@@ -8,6 +8,7 @@ const LoginFailAlert = (props) => {
       visible={props.modal}
       transparent={true}
       animationType="fade"
+      onRequestClose={props.onCancelTryLogin}
     >
       <View style={styles.modalWrap}>
         <View style={styles.modalContents}>
@@ -18,8 +19,8 @@ const LoginFailAlert = (props) => {
             <Button
               style={styles.modalButton}
               title="취소"
-              color="#FFF"
-              onPress={() => props.onCancelTryLogin()}
+              color={Platform.OS === 'ios' ? '#FFF' : "#444"}
+              onPress={props.onCancelTryLogin}
             />
           </View>
         </View>
@@ -52,10 +53,11 @@ const styles = StyleSheet.create({
     borderColor: "#FFF",
     borderRadius: 5,
     marginTop: 10,
+    paddingLeft: 1,
+    paddingRight: 1,
     width: 80
   },
   modalButton: {
-    color: '#fff',
     fontSize: 18
   }
 })

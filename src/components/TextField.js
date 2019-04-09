@@ -6,6 +6,8 @@
 import React from 'react';
 import { View, Text, TextInput } from 'react-native';
 
+let inputs = {};
+
 const TextField = props => {
 	const {
 		// data
@@ -22,8 +24,12 @@ const TextField = props => {
 		onChange,
 		secret,
 		autoCapitalize,
-		onSubmit
+		onSubmit,
+		refs
 	} = props;
+
+	inputs[refs] = React.createRef();
+
 	return (
 		<TextInput
 			style={{
@@ -40,7 +46,10 @@ const TextField = props => {
 			onChangeText={onChange}
 			secureTextEntry={secret}
 			autoCapitalize={!autoCapitalize ? 'none' : 'words'}
-			onSubmitEditing={onSubmit}
+			onSubmitEditing={typeof onSubmit === 'string' ? () => inputs[onSubmit].focus() : onSubmit}
+			returnKeyType={typeof onSubmit === 'string' ? 'next' : 'go'}
+			// autoFocus={refs === 'inputId'}
+			ref={ref => inputs[refs] = ref}
 		/>
 	);
 };
@@ -58,7 +67,8 @@ TextField.defaultProps = {
 	secret: false,
 	autoCapitalize: false,
 	onSubmit: () => 0,
-	onChange: () => alert('onChange')
+	onChange: () => alert('onChange'),
+	refs: null
 };
 
 export default TextField;

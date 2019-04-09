@@ -16,17 +16,17 @@ const MainVideoPresenter = props => {
 	const displayTime = (
 		<View
 			style={{
-				marginTop: 50,
-				marginLeft: 25,
-				position: 'absolute'
+				top: 50,
+				left: 25,
+				position: 'absolute',
+				// zIndex: 99
 			}}
 		>
 			<Text
 				style={{
 					fontSize: 20,
 					color: '#fff',
-					textAlign: 'center',
-					zIndex: 999
+					textAlign: 'center'
 				}}
 			>
 				{second2String(props.time)}
@@ -38,13 +38,14 @@ const MainVideoPresenter = props => {
 		<View
 			style={{
 				position: 'absolute',
-				flex: 1,
-				width: '100%',
-				height: '100%',
+				top: 0,
+				bottom: 0,
+				left: 0,
+				right: 0,
 				justifyContent: 'center',
 				alignItems: 'center',
 				backgroundColor: 'rgba(255,255,255, .67)',
-				zIndex: 9
+				// zIndex: 9
 			}}
 		>
 			<Text
@@ -66,17 +67,23 @@ const MainVideoPresenter = props => {
 	const userInfo = mainUser.userInfo;
 	if (!isMuteVideo && stream && callType != 2) {
 		return (
-			<RTCView
-				style={styles.videoContainer}
-				// mirror={true}
-				// mirror={isVideoReverse }
-				objectFit={videoType && videoType === 'desktop' ? 'fit' : 'cover'}
-				streamURL={stream.toURL()}
-			>
-				{displayTime}
-				{mainUser.status === 'interrupted' && muteView}
-				{props.children}
-			</RTCView>
+			<View style={{ flex: 1 }}>
+				{/* RTCVideo 를 메인화면으로 설정하고 */}
+				<RTCView
+					style={styles.RTCVideo}
+					// mirror={true}
+					// mirror={isVideoReverse }
+					objectFit={videoType && videoType === 'desktop' ? 'fit' : 'cover'}
+					streamURL={stream.toURL()}
+				/>
+
+				{/* Video 화면 위에 있는 요소들을 absolute 로 띄운다 */}
+				<View style={styles.videoContainer}>
+					{displayTime}
+					{mainUser.status === 'interrupted' && muteView}
+					{props.children}
+				</View>
+			</View>
 		);
 	} else {
 		return (
@@ -84,7 +91,7 @@ const MainVideoPresenter = props => {
 				{callType == 2 ? (
 					// {callType != 2 ? (
 					<View style={{ ...styles.imageContainer }}>
-						<View>
+						<View style={{ display: 'flex' }}>
 							<CustomLottie source="voiceBroadcast" width={280} height={280}>
 								<View
 									style={{
@@ -149,9 +156,16 @@ const MainVideoPresenter = props => {
  * styles
  */
 const styles = StyleSheet.create({
-	videoContainer: {
+	RTCVideo: {
 		flex: 1,
 		backgroundColor: 'gray'
+	},
+	videoContainer: {
+		position: 'absolute',
+		top: 0,
+		bottom: 0,
+		left: 0,
+		right: 0
 	},
 	rrr: {
 		transform: [{ rotateY: '180deg' }] // 좌우반전
@@ -166,8 +180,10 @@ const styles = StyleSheet.create({
 		display: 'flex',
 		justifyContent: 'center',
 		alignItems: 'center',
-		width: '100%',
-		height: '100%'
+		top: 0,
+		bottom: 0,
+		left: 0,
+		right: 0
 	},
 	profileImage: {
 		marginTop: -7,

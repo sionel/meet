@@ -7,7 +7,7 @@ import React, { Fragment } from 'react';
 import { NativeModules } from 'react-native';
 import ConferenceScreenPresenter from './ConferenceScreenPresenter';
 import ConferenceManager from '../../utils/conference/ConferenceManager';
-import Orientation from 'react-native-orientation-locker';
+// import Orientation from 'react-native-orientation-locker';
 import { AppState, StatusBar } from 'react-native';
 
 const { PlatformConstants } = NativeModules;
@@ -25,10 +25,10 @@ class ConferenceScreenContainer extends React.Component {
    * componentDidMount
    */
 	componentDidMount() {
-		if (PlatformConstants.interfaceIdiom === 'phone') Orientation.unlockAllOrientations();
-		else {
-			Orientation.lockToPortrait();
-		}
+		// if (PlatformConstants.interfaceIdiom === 'phone') Orientation.unlockAllOrientations();
+		// else {
+		// 	Orientation.lockToPortrait();
+		// }
 		const { navigation, user_name, auth } = this.props;
 		const item = navigation.getParam('item');
 		// 전화 타입 - 화상:1 / 음성:2
@@ -66,7 +66,7 @@ class ConferenceScreenContainer extends React.Component {
    * componentWillUnmount
    */
 	componentWillUnmount() {
-		Orientation.lockToPortrait();
+		// Orientation.lockToPortrait();
 		// 컴포넌트가 언마운트 되기전 화상회의 관련 리소스를 해제 한다.
 		this._conferenceManager.dispose();
 	}
@@ -77,7 +77,8 @@ class ConferenceScreenContainer extends React.Component {
 	render() {
 		return (
 			<Fragment>
-				<StatusBar barStyle="light-content" />
+				{/* <StatusBar barStyle="light-content" /> */}
+				<StatusBar hidden={true} />
 				<ConferenceScreenPresenter {...this.props} callType={this.callType} onClose={this._handleClose} />
 			</Fragment>
 		);

@@ -10,9 +10,9 @@
 		"android": "react-native run-android",
 		"device": "~/Library/Android/sdk/emulator/emulator @Nexus_5X_API_28",
 		"pod": "cd ios && pod cache clean --all && pod install && cd ..",
-		"build-android": "cd ./android && ./gradlew assembleRelease && cd ..",
-		"debug-android": "react-native run-android --variant=debug",
-		"set-android": "~/Library/Android/sdk/platform-tools/adb -s 25e180cc641c7ece reverse tcp:8081 tcp:8081"
+		"build-android":
+			"cd ./android && rm -rf build && cd ./app && rm -rf build && cd .. && cd ./sdk && rm -rf build  && cd .. && ./gradlew installRelease && cd ..",
+		"set-android": "~/Library/Android/sdk/platform-tools/adb -s ce0418241231d014017e reverse tcp:8081 tcp:8081"
 	},
 	"dependencies": {
 		"@terrylinla/react-native-sketch-canvas": "^0.8.0",
@@ -36,10 +36,11 @@
 		"react-native-background-timer": "2.1.1",
 		"react-native-calendar-events": "1.6.4",
 		"react-native-callstats": "3.53.4",
+		"react-native-canvas": "^0.1.30",
 		"react-native-check-box": "^2.1.7",
+		"react-native-device-info": "^1.4.2",
 		"react-native-fast-image": "5.1.1",
 		"react-native-gesture-handler": "^1.1.0",
-		"react-native-google-signin": "1.0.2",
 		"react-native-immersive": "2.0.0",
 		"react-native-keep-awake": "4.0.0",
 		"react-native-linear-gradient": "2.5.3",

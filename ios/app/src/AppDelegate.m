@@ -23,9 +23,9 @@
 #import "Orientation.h"
 #import <React/RCTLinkingManager.h>
 
-@import Crashlytics;
-@import Fabric;
-@import Firebase;
+// @import Crashlytics;
+// @import Fabric;
+// @import Firebase;
 
 
 @implementation AppDelegate
@@ -34,11 +34,11 @@
   didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
     // Initialize Crashlytics and Firebase if a valid GoogleService-Info.plist file was provided.
-    if ([FIRUtilities appContainsRealServiceInfoPlist]) {
-        NSLog(@"Enablign Crashlytics and Firebase");
-        [FIRApp configure];
-        [Fabric with:@[[Crashlytics class]]];
-    }
+    // if ([FIRUtilities appContainsRealServiceInfoPlist]) {
+    //     NSLog(@"Enablign Crashlytics and Firebase");
+    //     [FIRApp configure];
+    //     [Fabric with:@[[Crashlytics class]]];
+    // }
 
     // Set the conference activity type defined in this application.
     // This cannot be defined by the SDK.

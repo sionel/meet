@@ -37,6 +37,7 @@ const SvgButton = props => {
 				...customStyle
 			}}
 			onPress={onClick}
+			activeOpacity={0.8}
 		>
 			{/* {props.children ? props.children : <Text style={{ color }}>{props.title}</Text>} */}
 			{props.children ? <Fragment>{props.children}</Fragment> : <Text style={{ color }}>{props.title}</Text>}

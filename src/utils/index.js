@@ -48,6 +48,8 @@ export const querystringParser = url => {
  * @param {*} HASH_KEY 
  */
 export const securityRequest = (a_token, r_token, url, HASH_KEY) => {
+	// a_token, r_token, url, HASH_KEY 모두 값이 안들어옴 >> ApiManager.js/_makeHeaders()
+
 	const transactionId = _getTransactionId();
 	const clientId = OSID;
 	// const clientId = _getServiceCode();
@@ -110,7 +112,7 @@ _getServiceCode = () => {
 };
 
 _getService = url => {
-	console.log(url);
+	console.log("_getService : " + url);
 	let service = '';
 	if (url.split('/').length > 2) {
 		service = url.split('/')[3];

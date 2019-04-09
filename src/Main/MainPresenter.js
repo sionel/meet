@@ -5,9 +5,11 @@
 
 import React from 'react';
 import { View, StyleSheet, StatusBar } from 'react-native';
+import Orientation from 'react-native-orientation-locker';
 import RootNavigation from '../Navigations/RootNavigation';
 
 const MainPresenter = props => {
+	Orientation.unlockAllOrientations();
 	return (
 		<View style={styles.container}>
 			<StatusBar hidden={false} />
@@ -22,7 +24,7 @@ const MainPresenter = props => {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: '#fff'
+		backgroundColor: 'transparent'
 	}
 });
 

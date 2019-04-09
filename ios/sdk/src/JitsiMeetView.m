@@ -419,7 +419,7 @@ static NSMapTable<NSString *, JitsiMeetView *> *views;
     // parts of the application and causes less perceived visual flicker than
     // the default background color.
     self.backgroundColor
-        = [UIColor colorWithRed:.07f green:.07f blue:.07f alpha:1];
+        = [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1];
 }
 
 @end

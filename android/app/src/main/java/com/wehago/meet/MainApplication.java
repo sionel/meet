@@ -68,8 +68,8 @@ public class MainApplication extends Application { // implements ReactApplicatio
         super.onCreate();
         // SoLoader.init(this, false);
 
-        if (!LeakCanary.isInAnalyzerProcess(this)) {
-            LeakCanary.install(this);
-        }
+        // if (!LeakCanary.isInAnalyzerProcess(this)) {
+        //     LeakCanary.install(this);
+        // }
     }
 }

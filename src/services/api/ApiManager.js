@@ -7,7 +7,7 @@ const baseApiUrl = config.baseApiUrl;
 const baseGuestUrl = config.baseGuestUrl;
 const baseGuestApiUrl = config.baseGuestApiUrl;
 
-class APIManger {
+class APIManager {
 	/**
    * constructor
    */
@@ -64,7 +64,8 @@ class APIManger {
 				const signature = this._createSignature(`/communication/rtc/videoChatMember${token}`);
 
 				await this._callApi(url, data, 'POST', xhr => {
-					const headers = this._makeHeaders(url);
+					const headers = this._makeHeaders(url, token, signature);
+					// const headers = this._makeHeaders(url);
 					// return {
 					// 	signature,
 					// 	...headers
@@ -105,7 +106,8 @@ class APIManger {
 				const token = await this._getToken('/communication/rtc/videoChatMemberDel');
 				const signature = this._createSignature(`/communication/rtc/videoChatMemberDel${token}`);
 				await this._callApi(url, data, 'POST', xhr => {
-					const headers = this._makeHeaders(url);
+					const headers = this._makeHeaders(url, token, signature);
+					// const headers = this._makeHeaders(url);
 					// return {
 					// 	signature,
 					// 	...headers
@@ -140,7 +142,8 @@ class APIManger {
 		const token = await this._getToken('/communication/rtc/videoChatDel');
 		const signature = this._createSignature(`/communication/rtc/videoChatDel${token}`);
 		await this._callApi(url, data, 'POST', xhr => {
-			const headers = this._makeHeaders(url);
+			const headers = this._makeHeaders(url, token, signature);
+			// const headers = this._makeHeaders(url);
 			// return {
 			// 	signature,
 			// 	...headers
@@ -209,7 +212,8 @@ class APIManger {
 		const data = { video_chat_id: roomId };
 
 		const result = await this._callApi(url, data, 'GET', xhr => {
-			const headers = this._makeHeaders(url);
+			const headers = this._makeHeaders(url, token, signature);
+			// const headers = this._makeHeaders(url);
 			// return {
 			// 	signature,
 			// 	...headers
@@ -240,10 +244,12 @@ class APIManger {
 	/**
 	 * MAKE HEADERS
 	 */
-	_makeHeaders = url => {
-		const { token, HASH_KEY } = this.info;
-		return securityRequest(token, url, HASH_KEY);
+	_makeHeaders = (url, token, HASH_KEY) => {
+		// const { token, HASH_KEY } = this.info;
+		// token, HASH_KEY 모두 undefined
+		// ConferenceManager.js/join() 에서 해당 값을 넘겨주지 않고 있음
+		return securityRequest("vcvZsk7471fMweERvr3c6zmI2emKcn", "eGnIbyMY57HxxcZKE4zYYw9lzZeDEX", url, "195562397410753821916402270099163728463");
 	};
 }
 
-export default APIManger;
+export default APIManager;

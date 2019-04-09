@@ -5,19 +5,30 @@
  */
 
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Modal, FlatList, Platform } from 'react-native';
+import { ScrollView, View, Text, StyleSheet, Image, TouchableOpacity, Modal, FlatList, Platform, StatusBar, Dimensions } from 'react-native';
 import { FlatButton, TextField, ListItemComp, CustomWebView } from '../../components';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Orientation from 'react-native-orientation-locker';
+import DeviceInfo from 'react-native-device-info';
 
 const rootPath = `../../../assets`;
 const logo_login = require(`${rootPath}/logo_login.png`);
 const wehago_favicon = require(`${rootPath}/wehago_favicon.png`);
+
+// const { width, height } = Dimensions.get('window');
+// const isIphoneX = (
+//   Platform.OS === 'ios' &&
+//   !Platform.isPad &&
+//   !Platform.isTVOS &&
+//   (height === 812 || width === 812 || height === 896 || width === 896)
+// );
 
 /**
  * LoginScreenPresenter
  */
 const LoginScreenPresenter = props => {
 	const { userId, userPwd, autoLoginFlag, webView } = props;
+	DeviceInfo.isTablet() ? Orientation.unlockAllOrientations() : Orientation.lockToPortrait();
 
 	if (webView) {
 		return (
@@ -34,8 +45,14 @@ const LoginScreenPresenter = props => {
 	/**
    * RETURN
    */
-	return (
-		<View style={styles.container}>
+
+	const mainView = (
+		<View style={{
+			flex: 1,
+			alignItems: 'center',
+			width: '100%',
+			height: props.height - (StatusBar.currentHeight || 0)
+		}}>
 			{/* TITLE */}
 			<View style={styles.topArea}>
 				{/* <Text style={styles.logo}>WEHAGO</Text> */}
@@ -57,6 +74,8 @@ const LoginScreenPresenter = props => {
 					height={40}
 					onChange={text => props.onChangeValue('userId', text)}
 					value={userId}
+					onSubmit={'inputPwd'}
+					refs={'inputId'}
 				/>
 				<TextField
 					placeholder={'패스워드'}
@@ -66,25 +85,26 @@ const LoginScreenPresenter = props => {
 					onChange={text => props.onChangeValue('userPwd', text)}
 					onSubmit={props.onEnterKeyDown}
 					value={userPwd}
+					refs={'inputPwd'}
 				/>
 			</View>
 
-			{/* BUTTONS */}
+			{/* Login BUTTONS */}
 			<View style={styles.bottomArea}>
 				<FlatButton
 					title={'로그인'}
-					color={'#818181'}
-					backgroundColor={'#E1E1E1'}
-					borderColor={'#E1E1E1'}
+					color={props.userId && props.userPwd.length > 7 ? '#fff' : '#818181'}
+					backgroundColor={props.userId && props.userPwd.length > 7 ? '#1C90FB' : '#E1E1E1'}
+					borderColor={props.userId && props.userPwd.length > 7 ? '#1C90FB' : '#E1E1E1'}
 					borderWidth={1}
 					width={295}
 					height={52}
 					borderRadius={30}
-					onClick={props.onLogin}
+					onClick={props.userPwd.length > 7 ? props.onLogin : () => props.onActivateModal('아이디와 패스워드를 확인해 주세요')}
 				/>
 			</View>
-			{/* BUTTONS */}
-			{ Platform.OS === "ios" &&
+
+			{/* Login with WEHAGO BUTTONS */}
 			<View style={styles.bottomArea2}>
 				<FlatButton
 					title={'WEHAGO 앱으로 로그인'}
@@ -112,11 +132,23 @@ const LoginScreenPresenter = props => {
 					WEHAGO 앱이 설치되어 있다면 바로 시작하세요.
 				</Text>
 			</View>
-			}
+		</View>
+	)
+	return (
+		<View style={styles.container}>
+			<StatusBar barStyle={'dark-content'} backgroundColor={'transparent'} hidden={false} />
+
+			{Platform.OS === 'ios' ? (
+        mainView
+      ) : (
+        <ScrollView style={{ width: '100%', height: props.height }}>
+          {mainView}
+        </ScrollView>
+      )}
 
 			{/* 모달 */}
-			<Modal animationType="slide" visible={props.modal} transparent={true} animationType="fade">
-				<View style={styles.modalWrap}>
+			<Modal animationType="slide" visible={props.modal} transparent={true} animationType="fade" onRequestClose={() => props.onActivateModal('', false)}>
+				<View style={[styles.modalWrap, { paddingTop: 0 + (props.hasNotch ? 24 : 0) + (Platform.OS === 'ios' ? 12 : 0) }]}>
 					<View style={{ flexDirection: 'row' }}>
 						<View style={styles.modalContents}>
 							<Text style={styles.modalMessage}>{props.modalText}</Text>
@@ -132,7 +164,7 @@ const LoginScreenPresenter = props => {
 			</Modal>
 
 			{/* 권한 컨펌모달 */}
-			<Modal animationType="fade" transparent={true} visible={!props.permissionModal} blurRadius={1}>
+			<Modal animationType="fade" transparent={true} visible={!props.permissionModal} blurRadius={1} onRequestClose={props.onAgreement}>
 				{/* <Modal animationType="fade" transparent={true} visible={!props.permissionModal} blurRadius={1}> */}
 				<View style={styles.permission_modalWrap}>
 					<View style={styles.permission_modalContentWrap}>
@@ -356,14 +388,14 @@ const LoginScreenPresenter = props => {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: '#fff',
-		alignItems: 'center',
-		width: '100%',
-		paddingTop: 100
+		backgroundColor: 'transparent',
+		// alignItems: 'center',
+		width: '100%'
 	},
 
 	topArea: {
 		flex: 0.75,
+		paddingTop: 100,
 		justifyContent: 'flex-start'
 	},
 	logo: { fontSize: 33, color: '#333' },
@@ -387,9 +419,14 @@ const styles = StyleSheet.create({
 		padding: '3%'
 	},
 
-	modalWrap: { paddingTop: 32, backgroundColor: '#F15F5F' },
+	modalWrap: {
+		// paddingTop: props.hasNotch ? 32 : 0,
+		backgroundColor: '#F15F5F',
+		justifyContent: 'space-between'
+	},
 	modalContents: {
-		flex: 5,
+		// flex: 5,
+		flex: 1,
 		justifyContent: 'center',
 		paddingTop: 17,
 		paddingBottom: 17,
@@ -397,9 +434,11 @@ const styles = StyleSheet.create({
 	},
 	modalMessage: { color: '#fff', fontSize: 15 },
 	modalCloseButton: {
-		flex: 1,
+		// flex: 1,
+		width: 40,
 		justifyContent: 'center',
-		alignItems: 'center'
+		// alignItems: 'flex-end',
+		paddingRight: 17
 		// backgroundColor: '#FF8383'
 	},
 

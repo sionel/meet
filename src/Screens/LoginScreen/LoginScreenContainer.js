@@ -5,7 +5,9 @@
  */
 
 import React from 'react';
-import { Linking, Platform, NativeModules, View } from 'react-native';
+import { Linking, Platform, View, Alert, Dimensions } from 'react-native';
+import DeviceInfo from 'react-native-device-info';
+import Orientation from 'react-native-orientation-locker';
 
 import LoginScreenPresenter from './LoginScreenPresenter';
 import LoginFailAlert from './Content/LoginFailAlert';
@@ -13,7 +15,7 @@ import { CustomLottie } from '../../components';
 // service
 import { querystringParser } from '../../utils';
 
-const { PlatformConstants } = NativeModules;
+const deviceHeight = Dimensions.get('window').height;
 
 class LoginScreenContainer extends React.Component {
 	/**
@@ -27,7 +29,8 @@ class LoginScreenContainer extends React.Component {
 		modalText: '',
 		waiting: true,
 		autoLoginFlag: true,
-		webView: false
+		webView: false,
+		// height: deviceHeight
 	};
 
 	componentDidMount() {
@@ -52,11 +55,12 @@ class LoginScreenContainer extends React.Component {
 		const { permission } = this.props;
 		const { list, userId, userPwd, modal, modalText, nextInput, waiting, autoLoginFlag, webView } = this.state;
 		if (waiting) {
+			Orientation.unlockAllOrientations();
 			return (
 				<View style={{ flex: 1 }}>
 					<CustomLottie
 						source={'waiting'}
-						containerStyle={{ backgroundColor: '#fff' }}
+						containerStyle={{ backgroundColor: 'transparent' }}
 						width={225}
 						height={225}
 					>
@@ -89,9 +93,27 @@ class LoginScreenContainer extends React.Component {
 				permissionModal={permission}
 				nextInput={nextInput}
 				phrases="Loading"
+				height={deviceHeight}
+				hasNotch={DeviceInfo.hasNotch()}
+				// onSubmitNext={this._submitNext}
 			/>
 		);
 	} // render
+
+	/**
+	 * 화면 회전 시
+	 */
+	// _handleDeviceOrientation = () => {
+	// 	console.log(DeviceInfo.Dimensions);
+	// }
+
+	// _focusNextField = key => {
+	// 	this.inputs[key].focus();
+	// }
+
+	// _submitNext = () => {
+	// 	this.focusNextField('next-field');
+	// }
 
 	/**
 	 * _handleChangeValue
@@ -150,17 +172,18 @@ class LoginScreenContainer extends React.Component {
 		// const { navigation } = this.props;
 		const { userId, userPwd } = this.state;
 		const { loginRequest } = this.props;
+		const deviceIP = await DeviceInfo.getIPAddress();
 		const osData =
 			Platform.OS === 'ios'
 				? {
-						login_ip: '10.101.31.236',
-						login_device: 'iPhone',
-						login_os: PlatformConstants.systemName + ' ' + PlatformConstants.osVersion
+						login_ip: deviceIP,
+						login_device: DeviceInfo.getModel(),
+						login_os: DeviceInfo.getSystemName() + ' ' + DeviceInfo.getSystemVersion()
 					}
 				: {
-						login_ip: '10.101.31.236',
-						login_device: PlatformConstants.Model,
-						login_os: Platform.OS + ' ' + PlatformConstants.Release
+						login_ip: deviceIP,
+						login_device: DeviceInfo.getModel(),
+						login_os: DeviceInfo.getSystemName() + ' ' + DeviceInfo.getSystemVersion()
 					};
 		const data = {
 			portal_id: userId,
@@ -219,11 +242,21 @@ class LoginScreenContainer extends React.Component {
 			console.log(err);
 			if (Platform.OS === 'ios') {
 				Linking.openURL(iosMarketURL).catch(err => {
-					alert('스토어 정보가 없습니다.');
+					Alert.alert(
+						'스토어 정보가 없습니다.',
+						'',
+						[{ text: 'OK'}],
+						{ cancelable: true }
+					)
 				});
 			} else if (Platform.OS === 'android') {
 				Linking.openURL(androidMarketURL).catch(err => {
-					alert('스토어 정보가 없습니다.');
+					Alert.alert(
+						'스토어 정보가 없습니다.',
+						'',
+						[{ text: 'OK'}],
+						{ cancelable: true }
+					)
 				});
 			}
 		});
@@ -245,11 +278,16 @@ class LoginScreenContainer extends React.Component {
 	_handleActivateModal = (text = '', val = true) => {
 		this.setState(prev => ({ modal: val, modalText: text }));
 		// 자동 close
-		if (val) {
-			setTimeout(() => {
-				this.setState(prev => ({ modal: false }));
-			}, 2100);
-		}
+		clearTimeout(this._toggleModalVisible);
+		this._toggleModalVisible = setTimeout(() => {
+			this.setState(prev => ({ modal: false }));
+		}, 2100);
+		// this._toggleModalVisible();
+		// if (val) {
+		// 	setTimeout(() => {
+		// 		this.setState(prev => ({ modal: false }));
+		// 	}, 2100);
+		// }
 	};
 
 	/**

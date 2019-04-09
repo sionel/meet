@@ -11,7 +11,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
  */
 const CustomModal = props => {
 	return (
-		<Modal animationType="fade" transparent={true} visible={props.display} blurRadius={1}>
+		<Modal animationType="fade" transparent={true} visible={props.display} blurRadius={1} onRequestClose={props.onClickClose}>
 			<View style={styles.modalWrap}>
 				<View style={styles.modalContentWrap}>
 					{/* Close 버튼 */}

@@ -60,7 +60,7 @@ const HomeScreenPresenter = props => {
 			<AddButton onClick={() => props.onRedirect('Create')} />
 
 			{/* 컨펌모달 */}
-			<Modal animationType="fade" transparent={true} visible={props.modal} blurRadius={1}>
+			<Modal animationType="fade" transparent={true} visible={props.modal} blurRadius={1} onRequestClose={() => props.onActivateModal(null)}>
 				<View style={styles.modalWrap}>
 					<View style={styles.modalContentWrap}>
 						<TouchableOpacity
@@ -115,7 +115,7 @@ const HomeScreenPresenter = props => {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: 'white',
+		backgroundColor: 'transparent',
 		justifyContent: 'center',
 		alignItems: 'center'
 	},

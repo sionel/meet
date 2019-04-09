@@ -134,7 +134,7 @@ class ReactInstanceManagerHolder {
                 .setApplication(application)
                 .setBundleAssetName("index.android.bundle")
                 .setJSMainModulePath("index.android")
-                .addPackage(new co.apptailor.googlesignin.RNGoogleSigninPackage())
+                // .addPackage(new co.apptailor.googlesignin.RNGoogleSigninPackage())
                 .addPackage(new com.BV.LinearGradient.LinearGradientPackage())
                 .addPackage(new com.calendarevents.CalendarEventsPackage())
                 .addPackage(new com.corbt.keepawake.KCKeepAwakePackage())
@@ -151,6 +151,7 @@ class ReactInstanceManagerHolder {
                 .addPackage(new com.horcrux.svg.SvgPackage())
                 .addPackage(new com.airbnb.android.react.lottie.LottiePackage())
                 .addPackage(new org.devio.rn.splashscreen.SplashScreenReactPackage())
+                .addPackage(new com.learnium.RNDeviceInfo.RNDeviceInfo())
                 .addPackage(new ReactPackageAdapter() {
                     @Override
                     public List<NativeModule> createNativeModules(
