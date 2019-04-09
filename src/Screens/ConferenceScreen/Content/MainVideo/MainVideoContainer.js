@@ -22,6 +22,7 @@ class MainVideoContainer extends React.Component {
 		}
 	}
 	render() {
+		console.log('RENDERING');
 		return <MainVideoPresenter {...this.props} time={this.state.time} />;
 		// return <MainVideoPresenter {...this.props} isMuteVideo={false} />;
 	}

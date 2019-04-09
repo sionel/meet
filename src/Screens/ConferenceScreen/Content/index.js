@@ -5,14 +5,14 @@ import { actionCreators as mainUserActions } from '../../../redux/modules/mainUs
 
 const mapStateToProps = (state, ownProps) => {
 	const { local: { conferenceMode } } = state;
-	const { drawingMode } = state.mainUser;
+	// const { drawingMode } = state.mainUser;
 	const { mainUser } = ownProps;
 
 	return {
 		conferenceMode,
 		videoTrack: mainUser.videoTrack,
 		isMuteVideo: mainUser.isMuteVideo,
-		drawingMode
+		drawingMode: state.mainUser.drawingMode
 	};
 };
 

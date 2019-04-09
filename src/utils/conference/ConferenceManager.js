@@ -182,7 +182,7 @@ class ConferenceManager {
 	 * 문서공유/드로잉모드 전환
 	 */
 	_changeDocumentShareMode = status => {
-		this._dispatch(mainUserActionCreators.setDrawingMode());
+		this._dispatch(mainUserActionCreators.setDrawingMode(status === 'true' ? true : false));
 	};
 }
 

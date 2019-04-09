@@ -30,9 +30,6 @@ class ContentContainer extends React.Component {
 	 * REDNER
 	 */
 	render() {
-		console.log('Drawing : ', this.state);
-		console.log('Drawing : ', this.props);
-
 		return (
 			<ContentPresenter
 				{...this.state}

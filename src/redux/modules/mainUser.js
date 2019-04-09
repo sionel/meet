@@ -93,10 +93,11 @@ function setDrawingMode(drawingMode) {
 }
 
 function applySetDrawingMode(state, action) {
+	const { drawingMode } = action;
 	return {
 		...state,
-		drawingMode: !state.drawingMode
-		// drawingMode: action.drawingMode
+		// drawingMode: !state.drawingMode
+		drawingMode: action.drawingMode
 	};
 }
 

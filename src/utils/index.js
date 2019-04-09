@@ -151,3 +151,21 @@ _getLocation = url => {
 handleChangeValue = (obj, target, value) => {
 	obj.setState({ [target]: value });
 };
+
+/**
+ * 
+ */
+let drawingManager;
+export const setDrawingManager = drawing => {
+	if (!drawingManager) {
+		drawingManager = drawing;
+	}
+	window.drawingManager = drawingManager;
+};
+
+/**
+ * 
+ */
+export const getDrawingManager = () => {
+	return drawingManager;
+};
