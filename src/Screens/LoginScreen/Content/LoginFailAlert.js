@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, View, Text, Button, StyleSheet, Platform } from 'react-native';
 
-const LoginFailAlert = (props) => {
+const LoginFailAlert = props => {
   return (
     <Modal
       animationType="slide"
@@ -12,14 +12,12 @@ const LoginFailAlert = (props) => {
     >
       <View style={styles.modalWrap}>
         <View style={styles.modalContents}>
-          <Text style={styles.modalMessage}>
-            {props.modalText}
-          </Text>
+          <Text style={styles.modalMessage}>{props.modalText}</Text>
           <View style={styles.modalButtonView}>
             <Button
               style={styles.modalButton}
               title="취소"
-              color={Platform.OS === 'ios' ? '#FFF' : "#444"}
+              color={Platform.OS === 'ios' ? '#FFF' : '#444'}
               onPress={props.onCancelTryLogin}
             />
           </View>
@@ -46,11 +44,11 @@ const styles = StyleSheet.create({
   modalMessage: {
     color: '#fff',
     fontSize: 18,
-    textAlign: "center"
+    textAlign: 'center'
   },
   modalButtonView: {
     borderWidth: 1,
-    borderColor: "#FFF",
+    borderColor: '#FFF',
     borderRadius: 5,
     marginTop: 10,
     paddingLeft: 1,
@@ -60,6 +58,6 @@ const styles = StyleSheet.create({
   modalButton: {
     fontSize: 18
   }
-})
+});
 
 export default LoginFailAlert;

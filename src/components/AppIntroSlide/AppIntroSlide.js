@@ -1,6 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, View, Text, Image, Dimensions, Platform, StatusBar } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  Dimensions,
+  Platform,
+  StatusBar
+} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import AppIntroSlider from './react-native-intro-slider/AppIntroSlider';
 import { actionCreators as UserActions } from '../../redux/modules/user';
@@ -15,11 +23,11 @@ const ratio = 375 / 449;
 const isTablet = DeviceInfo.isTablet();
 
 const introImages = [
-  require("./images/img_intro_meet/drawable-xxxhdpi/img_intro_meet.png"),
-  require("./images/walkthroughs_02/drawable-xxxhdpi/walkthroughs_02.png"),
-  require("./images/walkthroughs_03/drawable-xxxhdpi/walkthroughs_03.png"),
-  require("./images/walkthroughs_04/drawable-xxxhdpi/walkthroughs_04.png"),
-  require("./images/walkthroughs_05/drawable-xxxhdpi/walkthroughs_05.png")
+  require('./images/img_intro_meet/drawable-xxxhdpi/img_intro_meet.png'),
+  require('./images/walkthroughs_02/drawable-xxxhdpi/walkthroughs_02.png'),
+  require('./images/walkthroughs_03/drawable-xxxhdpi/walkthroughs_03.png'),
+  require('./images/walkthroughs_04/drawable-xxxhdpi/walkthroughs_04.png'),
+  require('./images/walkthroughs_05/drawable-xxxhdpi/walkthroughs_05.png')
 ];
 
 class AppIntroSlide extends React.Component {
@@ -30,10 +38,10 @@ class AppIntroSlide extends React.Component {
         <View
           style={{
             flex: 1,
-            width: "100%",
+            width: '100%',
             backgroundColor: 'rgb(0, 105, 224)',
-            justifyContent: "center",
-            alignItems: "center"
+            justifyContent: 'center',
+            alignItems: 'center'
           }}
         >
           <Image
@@ -41,8 +49,26 @@ class AppIntroSlide extends React.Component {
             style={{ width: 144, height: 144 }}
             resizeMode="contain"
           />
-          <Text style={{ marginTop: 70.5, color: '#FFF', fontSize: 25, fontWeight: '700', textAlign: "center" }}>{"언제 어디서나\nWEHAGO Meet"}</Text>
-          <Text style={{ marginTop: 24.5, color: 'rgb(193, 219, 246)', fontSize: 16 }}>시간과 장소의 제약 없는 효율적인 화상회의</Text>
+          <Text
+            style={{
+              marginTop: 70.5,
+              color: '#FFF',
+              fontSize: 25,
+              fontWeight: '700',
+              textAlign: 'center'
+            }}
+          >
+            {'언제 어디서나\nWEHAGO Meet'}
+          </Text>
+          <Text
+            style={{
+              marginTop: 24.5,
+              color: 'rgb(193, 219, 246)',
+              fontSize: 16
+            }}
+          >
+            시간과 장소의 제약 없는 효율적인 화상회의
+          </Text>
         </View>
       )
     },
@@ -52,19 +78,23 @@ class AppIntroSlide extends React.Component {
         <View
           style={{
             flex: 1,
-            width: "100%",
+            width: '100%',
             backgroundColor: 'rgb(244, 250, 254)',
-            justifyContent: "center",
-            alignItems: "center"
+            justifyContent: 'center',
+            alignItems: 'center'
           }}
         >
-          <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+          <View
+            style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+          >
             <Text style={styles.textTitle}>WAHAGO 연동</Text>
-            <Text style={styles.textContent}>{"새로운 회의를 만들거나 진행중인\nWE톡 화상회의에 바로 참여"}</Text>
+            <Text style={styles.textContent}>
+              {'새로운 회의를 만들거나 진행중인\nWE톡 화상회의에 바로 참여'}
+            </Text>
           </View>
           <Image
             source={introImages[1]}
-            style={{ width: "100%", flex: 2 }}
+            style={{ width: '100%', flex: 2 }}
             resizeMode="contain"
           />
         </View>
@@ -74,21 +104,25 @@ class AppIntroSlide extends React.Component {
       key: '2',
       view: (
         <View
-        style={{
-          flex: 1,
-          width: "100%",
+          style={{
+            flex: 1,
+            width: '100%',
             backgroundColor: 'rgb(244, 250, 254)',
-            justifyContent: "center",
-            alignItems: "center"
+            justifyContent: 'center',
+            alignItems: 'center'
           }}
         >
-          <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+          <View
+            style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+          >
             <Text style={styles.textTitle}>화상 및 음성전화</Text>
-            <Text style={styles.textContent}>{"연결된 조직도 직원부터\n거래처까지 화상/음성전화 지원"}</Text>
+            <Text style={styles.textContent}>
+              {'연결된 조직도 직원부터\n거래처까지 화상/음성전화 지원'}
+            </Text>
           </View>
           <Image
             source={introImages[2]}
-            style={{ width: "100%", flex: 2 }}
+            style={{ width: '100%', flex: 2 }}
             resizeMode="contain"
           />
         </View>
@@ -100,19 +134,23 @@ class AppIntroSlide extends React.Component {
         <View
           style={{
             flex: 1,
-            width: "100%",
+            width: '100%',
             backgroundColor: 'rgb(244, 250, 254)',
-            justifyContent: "center",
-            alignItems: "center"
+            justifyContent: 'center',
+            alignItems: 'center'
           }}
         >
-          <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+          <View
+            style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+          >
             <Text style={styles.textTitle}>실시간 공유기능</Text>
-            <Text style={styles.textContent}>{"PC화면이나 문서를 실시간으로 공유\n화상회의 중 대화기능 제공"}</Text>
+            <Text style={styles.textContent}>
+              {'PC화면이나 문서를 실시간으로 공유\n화상회의 중 대화기능 제공'}
+            </Text>
           </View>
           <Image
             source={introImages[3]}
-            style={{ width: "100%", flex: 2 }}
+            style={{ width: '100%', flex: 2 }}
             resizeMode="contain"
           />
         </View>
@@ -124,19 +162,23 @@ class AppIntroSlide extends React.Component {
         <View
           style={{
             flex: 1,
-            width: "100%",
+            width: '100%',
             backgroundColor: 'rgb(244, 250, 254)',
-            justifyContent: "center",
-            alignItems: "center"
+            justifyContent: 'center',
+            alignItems: 'center'
           }}
         >
-          <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+          <View
+            style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+          >
             <Text style={styles.textTitle}>고화질의 화상회의</Text>
-            <Text style={styles.textContent}>{"네트워크 속도에 따라\n자동으로 조절되는 화질"}</Text>
+            <Text style={styles.textContent}>
+              {'네트워크 속도에 따라\n자동으로 조절되는 화질'}
+            </Text>
           </View>
           <Image
             source={introImages[4]}
-            style={{ width: "100%", flex: 2 }}
+            style={{ width: '100%', flex: 2 }}
             resizeMode="contain"
           />
         </View>
