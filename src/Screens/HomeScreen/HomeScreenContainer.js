@@ -23,7 +23,6 @@ class HomeScreenContainer extends Component {
 		super(props);
 		this._isFocus = true;
 		this._refreshTimeStamp = Date.now();
-		console.log('NativeModules : ', NativeModules);
 	}
 
 	/**
