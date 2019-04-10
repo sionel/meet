@@ -49,7 +49,13 @@ const CreateScreenPresenter = props => {
         keyExtractor={(item, index) => index.toString()}
         refreshing={props.refreshing}
         onRefresh={props.onRefresh}
-        style={styles.listContainer}
+        style={[
+          styles.listContainer,
+          props.hasNotch && {
+            paddingLeft: props.orientation === 'LANDSCAPE-LEFT' ? 24 : 0,
+            paddingRight: props.orientation === 'LANDSCAPE-RIGHT' ? 24 : 0
+          }
+        ]}
         sections={[
           {
             title: `그룹대화(${groupList.length})`,

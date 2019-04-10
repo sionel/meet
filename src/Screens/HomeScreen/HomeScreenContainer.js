@@ -10,8 +10,10 @@ import {
   Linking,
   Platform,
   Dimensions,
-  SafeAreaView
+  View
 } from 'react-native';
+import DeviceInfo from 'react-native-device-info';
+import Orientation from 'react-native-orientation-locker';
 import HomeScreenPresenter from './HomeScreenPresenter';
 // service
 import { WetalkApi } from '../../services';
@@ -19,6 +21,8 @@ import { UserApi } from '../../services';
 import { ConferenceApi } from '../../services';
 import { NavigationEvents } from 'react-navigation';
 import { querystringParser } from '../../utils';
+
+const hasNotch = DeviceInfo.hasNotch();
 
 // #region
 
@@ -41,13 +45,16 @@ class HomeScreenContainer extends Component {
     searchKeyword: '', // 검색인풋
     selectedRoomId: null,
     modal: false,
-    url: null
+    url: null,
+    orientation: Orientation.getInitialOrientation()
   };
 
   /**
    * componentDidMount
    */
   componentDidMount() {
+    Orientation.addDeviceOrientationListener(this._handleOrientation);
+
     Linking.getInitialURL().then(url => {
       if (url) {
         this._handleOpenURL({ url });
@@ -69,6 +76,7 @@ class HomeScreenContainer extends Component {
    */
   componentWillUnmount() {
     clearInterval(this._interval);
+    Orientation.removeDeviceOrientationListener(this._handleOrientation);
     Linking.removeEventListener('url', this._handleOpenURL);
     AppState.removeEventListener('change', this._handleAppStateChange);
   }
@@ -92,7 +100,7 @@ class HomeScreenContainer extends Component {
     }
 
     return (
-      <SafeAreaView style={{ flex: 1 }}>
+      <View style={{ flex: 1 }}>
         <StatusBar barStyle="light-content" backgroundColor={'#1C90FB'} />
         <NavigationEvents
           onDidFocus={() => {
@@ -114,11 +122,20 @@ class HomeScreenContainer extends Component {
           onSearch={this._handleSearch}
           onCreateConference={this._handleCreateConference}
           onCheckConference={this._handleCheckConference}
+          orientation={this.state.orientation}
+          hasNotch={hasNotch}
         />
-      </SafeAreaView>
+      </View>
     );
   }
   // #endregion
+
+  /**
+   * _handleOrientation
+   */
+  _handleOrientation = orientation => {
+    this.setState({ orientation });
+  };
 
   _handleOpenURL = event => {
     // const result = querystringParser(url);

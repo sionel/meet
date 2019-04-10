@@ -60,12 +60,7 @@ const ConfigurationScreenPresenter = props => {
 
   return (
     <View style={styles.container}>
-      <SafeAreaView
-        style={{
-          flex: 1,
-          width: '100%'
-        }}
-      >
+      <View style={{ flex: 1, width: '100%' }}>
         <SectionList
           sections={[{ title: '시스템', data: userConfig }]}
           renderSectionHeader={({ section }) => (
@@ -77,8 +72,14 @@ const ConfigurationScreenPresenter = props => {
             </TouchableOpacity>
           )}
           keyExtractor={(item, index) => index}
+          style={
+            props.hasNotch && {
+              paddingLeft: props.orientation === 'LANDSCAPE-LEFT' ? 24 : 0,
+              paddingRight: props.orientation === 'LANDSCAPE-RIGHT' ? 24 : 0
+            }
+          }
         />
-      </SafeAreaView>
+      </View>
 
       <Modal
         animationType="slide"
