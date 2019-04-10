@@ -151,11 +151,16 @@ class HomeScreenContainer extends Component {
    */
   _handleOpenLink = url => {
     const result = querystringParser(url);
-    // console.log('RESULT :: ', result);
-    if (result.type === '3') {
-      // 위하고 로그인일 경우
-    } else {
-      this._handleCheckConference(result.room_id, result); // 테스트
+
+    switch (result.type) {
+      case '3':
+        break;
+      case '9':
+        alert(JSON.stringify(result));
+        break;
+      default:
+        this._handleCheckConference(result.room_id, result); // 테스트
+        break;
     }
     // 화상대화 타입 (생성:0/참여:1)
     // if (result.type == '1') {
@@ -283,8 +288,8 @@ class HomeScreenContainer extends Component {
   };
 
   /**
-   * _handleActivateModal
-   * 모달뷰 토글
+   * _handleCheckConference
+   * 화상대화 생성/확인
    */
   _handleCheckConference = async (conferenceId, externalData = null) => {
     let { auth } = this.props;

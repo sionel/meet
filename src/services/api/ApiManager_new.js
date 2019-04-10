@@ -70,23 +70,9 @@ class APIManager {
           `/communication/rtc/videoChatMember${token}`
         );
 
-        await this._callApi(url, data, 'POST', xhr => {
-          const headers = this._makeHeaders(url, token, signature);
-          // const headers = this._makeHeaders(url);
-          // return {
-          // 	signature,
-          // 	...headers
-          // };
-          xhr.setRequestHeader('transaction-id', headers['transaction-id']);
-          xhr.setRequestHeader('Authorization', headers['Authorization']);
-          xhr.setRequestHeader('wehago-sign', headers['wehago-sign']);
-          xhr.setRequestHeader('client-id', headers['client-id']);
-          xhr.setRequestHeader('timestamp', headers['timestamp']);
-          xhr.setRequestHeader('service', headers['service']);
-          xhr.setRequestHeader('signature', signature);
-          xhr.setRequestHeader('Wehago-S', headers['Wehago-S']);
-          xhr.setRequestHeader('Cookie', headers['Cookie']);
-        });
+        const headers = this._makeHeaders(url, token, signature);
+        headers.signature = signature;
+        await this._callApi(url, data, 'POST', headers);
       }
     } catch (error) {
       console.log('insertUser ERROR : ', error);
@@ -132,13 +118,13 @@ class APIManager {
           xhr.setRequestHeader('timestamp', headers['timestamp']);
           xhr.setRequestHeader('service', headers['service']);
           xhr.setRequestHeader('signature', signature);
-          xhr.setRequestHeader('Wehago-S', headers['Wehago-S']);
-          xhr.setRequestHeader('Cookie', headers['Cookie']);
+          // xhr.setRequestHeader('Wehago-S', signature);
+          // xhr.setRequestHeader('Cookie', signature);
         });
       }
-      // if (isExist && userList.resultData.length <= 1) {
-      //   this._deleteRoom();
-      // }
+      if (isExist && userList.resultData.length <= 1) {
+        this._deleteRoom();
+      }
     } catch (error) {
       console.log('deleteUser ERROR : ', error);
     }
@@ -170,8 +156,8 @@ class APIManager {
       xhr.setRequestHeader('timestamp', headers['timestamp']);
       xhr.setRequestHeader('service', headers['service']);
       xhr.setRequestHeader('signature', signature);
-      xhr.setRequestHeader('Wehago-S', headers['Wehago-S']);
-      xhr.setRequestHeader('Cookie', headers['Cookie']);
+      // xhr.setRequestHeader('Wehago-S', signature);
+      // xhr.setRequestHeader('Cookie', signature);
     });
   };
 
@@ -185,24 +171,39 @@ class APIManager {
   /**
    * API를 호출한다.
    **/
-  _callApi = (url, data, method, beforeSend) => {
-    return new Promise((resolve, reject) => {
-      $.ajax({
-        url: url,
-        data: data,
-        type: method,
-        xhrFields: {
-          withCredentials: false
-        },
-        beforeSend: beforeSend,
-        error: jqXHR => {
-          reject(jqXHR);
-        },
-        success: result => {
-          resolve(result);
-        }
+  _callApi = async (url, data = null, method, beforeSend) => {
+    const body = data != null ? JSON.stringify(data) : data;
+    console.log('Body : ', body);
+
+    try {
+      const response = await fetch(url, {
+        method,
+        headers: beforeSend,
+        body
       });
-    });
+      return response;
+    } catch (e) {
+      throw e;
+    }
+    // return new Promise((resolve, reject) => {
+    //   $.ajax({
+    //     url: url,
+    //     data: data,
+    //     type: method,
+    //     xhrFields: {
+    //       withCredentials: false
+    //     },
+    //     beforeSend: beforeSend,
+    //     error: jqXHR => {
+    //       // alert('tq?');
+    //       reject(jqXHR);
+    //     },
+    //     success: result => {
+    //       // alert(JSON.stringify(result));
+    //       resolve(result);
+    //     }
+    //   });
+    // });
   };
 
   /**
@@ -219,16 +220,16 @@ class APIManager {
    */
   _getUserList = async () => {
     const { roomId } = this.info;
-    const url = `${baseGuestApiUrl}videoChatMember`;
+    const url = `${baseGuestApiUrl}videoChatMember?video_chat_id=${roomId}`;
     const token = await this._getToken(
       `/communication/rtc/videoChatMember?video_chat_id=${roomId}`
     );
     const signature = this._createSignature(
       `/communication/rtc/videoChatMember?video_chat_id=${roomId}${token}`
     );
-    const data = { video_chat_id: roomId };
+    // const data = { video_chat_id: roomId };
 
-    const result = await this._callApi(url, data, 'GET', xhr => {
+    const result = await this._callApi(url, null, 'GET', xhr => {
       const headers = this._makeHeaders(url, token, signature);
       // const headers = this._makeHeaders(url);
       // return {
@@ -242,8 +243,8 @@ class APIManager {
       xhr.setRequestHeader('timestamp', headers['timestamp']);
       xhr.setRequestHeader('service', headers['service']);
       xhr.setRequestHeader('signature', signature);
-      xhr.setRequestHeader('Wehago-S', headers['Wehago-S']);
-      xhr.setRequestHeader('Cookie', headers['Cookie']);
+      // xhr.setRequestHeader('Wehago-S', signature);
+      // xhr.setRequestHeader('Cookie', signature);
     });
     return result;
   };
@@ -266,14 +267,22 @@ class APIManager {
     // token, HASH_KEY 모두 undefined
     // ConferenceManager.js/join() 에서 해당 값을 넘겨주지 않고 있음
     return securityRequest(
+      'vcvZsk7471fMweERvr3c6zmI2emKcn',
+      'eGnIbyMY57HxxcZKE4zYYw9lzZeDEX',
+      url,
+      '195562397410753821916402270099163728463'
+    );
+  };
+
+  /**
+   * MAKE HEADERS
+   */
+  _makeHeaders = url => {
+    return securityRequest(
       this.info.a_token,
       this.info.r_token,
       url,
       this.info.hash_key
-      // 'vcvZsk7471fMweERvr3c6zmI2emKcn',
-      // 'eGnIbyMY57HxxcZKE4zYYw9lzZeDEX',
-      // url,
-      // '195562397410753821916402270099163728463'
     );
   };
 }
