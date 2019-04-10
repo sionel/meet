@@ -18,21 +18,24 @@ class ConfigurationScreenContainer extends React.Component {
    */
   state = {
     webView: false,
-    orientation: Orientation.getInitialOrientation()
+    orientation: 'UNKNOWN'
   };
 
   /**
    * componentDidMount
    */
   componentDidMount() {
-    Orientation.addDeviceOrientationListener(this._handleOrientation);
+    Orientation.getOrientation(orientation => {
+      this.setState({ orientation });
+    });
+    Orientation.addOrientationListener(this._handleOrientation);
   }
 
   /**
    * componentWillUnmount
    */
   componentWillUnmount() {
-    Orientation.removeDeviceOrientationListener(this._handleOrientation);
+    Orientation.removeOrientationListener(this._handleOrientation);
   }
 
   /**

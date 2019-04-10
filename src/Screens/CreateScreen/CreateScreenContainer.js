@@ -37,18 +37,21 @@ class CreateScreenContainer extends React.Component {
     selectedRoomId: null,
     modal: false,
     url: null,
-    orientation: Orientation.getInitialOrientation()
+    orientation: 'UNKNOWN'
   };
 
   componentDidMount() {
-    Orientation.addDeviceOrientationListener(this._handleOrientation);
+    Orientation.getOrientation(orientation => {
+      this.setState({ orientation });
+    });
+    Orientation.addOrientationListener(this._handleOrientation);
   }
 
   /**
    * componentWillUnmount
    */
   componentWillUnmount() {
-    Orientation.removeDeviceOrientationListener(this._handleOrientation);
+    Orientation.removeOrientationListener(this._handleOrientation);
   }
 
   /**

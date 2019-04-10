@@ -46,14 +46,17 @@ class HomeScreenContainer extends Component {
     selectedRoomId: null,
     modal: false,
     url: null,
-    orientation: Orientation.getInitialOrientation()
+    orientation: 'UNKNOWN'
   };
 
   /**
    * componentDidMount
    */
   componentDidMount() {
-    Orientation.addDeviceOrientationListener(this._handleOrientation);
+    Orientation.getOrientation(orientation => {
+      this.setState({ orientation });
+    });
+    Orientation.addOrientationListener(this._handleOrientation);
 
     Linking.getInitialURL().then(url => {
       if (url) {
@@ -76,7 +79,7 @@ class HomeScreenContainer extends Component {
    */
   componentWillUnmount() {
     clearInterval(this._interval);
-    Orientation.removeDeviceOrientationListener(this._handleOrientation);
+    Orientation.removeOrientationListener(this._handleOrientation);
     Linking.removeEventListener('url', this._handleOpenURL);
     AppState.removeEventListener('change', this._handleAppStateChange);
   }
