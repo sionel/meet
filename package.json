@@ -3,7 +3,7 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-		"clean": "rm -rf node_modules && npm i && cd ios && rm -rf Pods Podfile.lock && cd .. && npm run pod",
+		"clean": "rm -rf node_modules package-lock.json && npm i && cd ios && rm -rf Pods Podfile.lock && cd .. && npm run pod",
 		"start": "node node_modules/react-native/local-cli/cli.js start",
 		"test": "jest",
 		"ios": "react-native run-ios",

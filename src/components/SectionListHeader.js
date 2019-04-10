@@ -31,8 +31,8 @@ const styles = StyleSheet.create({
 	},
 	textStyle: {
 		fontSize: 14,
-		lineHeight: 14,
-		height: 14,
+		lineHeight: 16,
+		// height: 14,
 		fontWeight: 'bold',
 		color: 'rgb(140, 140, 140)'
 	}
