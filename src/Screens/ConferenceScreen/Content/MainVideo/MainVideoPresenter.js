@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { View, StyleSheet, Image, Text } from 'react-native';
+import { View, StyleSheet, Image, Text, Platform } from 'react-native';
 import { RTCView } from 'react-native-webrtc';
 import ButtonCameraOff from '../../../../../assets/buttons/btn_vc_camera_off.png';
 import ButtonCameraOff2 from '../../../../../assets/icons/icoCameraWhLargeOff_2x.png';

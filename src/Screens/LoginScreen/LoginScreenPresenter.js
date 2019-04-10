@@ -134,40 +134,42 @@ const LoginScreenPresenter = props => {
       </View>
 
       {/* Login with WEHAGO BUTTONS */}
-      <View style={styles.bottomArea2}>
-        <FlatButton
-          title={'WEHAGO 앱으로 로그인'}
-          width={295}
-          height={52}
-          borderRadius={5}
-          color={'#fff'}
-          backgroundColor={'#1C90FB'}
-          borderColor={'#1C90FB'}
-          borderWidth={1}
-          customStyle={{ flexDirection: 'row' }}
-          onClick={props.onLoginForWehago}
-        >
-          <Image
+      {Platform.OS === 'ios' && (
+        <View style={styles.bottomArea2}>
+          <FlatButton
+            title={'WEHAGO 앱으로 로그인'}
+            width={295}
+            height={52}
+            borderRadius={5}
+            color={'#fff'}
+            backgroundColor={'#1C90FB'}
+            borderColor={'#1C90FB'}
+            borderWidth={1}
+            customStyle={{ flexDirection: 'row' }}
+            onClick={props.onLoginForWehago}
+          >
+            <Image
+              style={{
+                width: 24,
+                height: 24,
+                marginRight: 5
+              }}
+              source={wehago_favicon}
+            />
+            <Text style={{ color: '#fff' }}>WEHAGO 앱으로 로그인</Text>
+          </FlatButton>
+          <Text
             style={{
-              width: 24,
-              height: 24,
-              marginRight: 5
+              paddingTop: 12,
+              paddingBottom: 15,
+              textAlign: 'center',
+              color: 'rgb(51,51,51)'
             }}
-            source={wehago_favicon}
-          />
-          <Text style={{ color: '#fff' }}>WEHAGO 앱으로 로그인</Text>
-        </FlatButton>
-        <Text
-          style={{
-            paddingTop: 12,
-            paddingBottom: 15,
-            textAlign: 'center',
-            color: 'rgb(51,51,51)'
-          }}
-        >
-          WEHAGO 앱이 설치되어 있다면 바로 시작하세요.
-        </Text>
-      </View>
+          >
+            WEHAGO 앱이 설치되어 있다면 바로 시작하세요.
+          </Text>
+        </View>
+      )}
     </View>
   );
   return (

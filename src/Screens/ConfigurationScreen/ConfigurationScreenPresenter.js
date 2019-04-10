@@ -11,7 +11,8 @@ import {
   TouchableOpacity,
   Modal,
   Alert,
-  SafeAreaView
+  SafeAreaView,
+  Platform
 } from 'react-native';
 import { CustomWebView, SectionListHeader } from '../../components';
 
@@ -33,7 +34,12 @@ const ConfigurationScreenPresenter = props => {
     {
       title: '버전정보',
       action: () =>
-        Alert.alert('버전정보', '1.0.2', [{ text: 'OK' }], { cancelable: true })
+        Alert.alert(
+          '버전정보',
+          Platform.OS === 'ios' ? '1.0.2' : '0.1.0',
+          [{ text: 'OK' }],
+          { cancelable: true }
+        )
     },
     // {
     // 	title: '앱인트로 보기',
