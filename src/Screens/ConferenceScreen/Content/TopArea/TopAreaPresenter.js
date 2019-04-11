@@ -1,5 +1,11 @@
 import React, { Fragment } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Platform
+} from 'react-native';
 import SettingButton from './SettingButton';
 import { ConferenceModes } from '../../../../utils/ConstantsBackup';
 
@@ -9,7 +15,8 @@ import { ConferenceModes } from '../../../../utils/ConstantsBackup';
 const TopAreaPresenter = props => {
   if (props.conferenceMode === ConferenceModes.NORMAL) {
     return (
-      <TouchableOpacity
+      // <TouchableOpacity
+      <View
         activeOpacity={1}
         style={
           props.orientation === 'vertical'
@@ -31,16 +38,16 @@ const TopAreaPresenter = props => {
                 name="switch"
                 onPress={props.toggleCameraFacingMode}
               />
-              {Platform.OS !== 'ios' && (
-                <SettingButton
-                  name="reverse"
-                  onPress={props.onReverseVideo}
-                  width={25}
-                  height={25}
-                  areaWdith={28}
-                  areaHeight={28}
-                />
-              )}
+              {/* {Platform.OS !== 'ios' && ( */}
+              <SettingButton
+                name="reverse"
+                onPress={props.onReverseVideo}
+                width={25}
+                height={25}
+                areaWdith={28}
+                areaHeight={28}
+              />
+              {/* )} */}
               {/* <SettingButton
 								name="pen"
 								width={25}
@@ -52,8 +59,9 @@ const TopAreaPresenter = props => {
             </Fragment>
           )}
         </View>
+        {/* </TouchableOpacity> */}
         {/* isVideoReverse */}
-      </TouchableOpacity>
+      </View>
     );
   } else {
     return <View style={styles.container} />;

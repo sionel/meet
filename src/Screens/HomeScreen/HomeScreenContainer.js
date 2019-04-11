@@ -10,7 +10,8 @@ import {
   Linking,
   Platform,
   Dimensions,
-  View
+  View,
+  NativeModules
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import Orientation from 'react-native-orientation-locker';
@@ -23,6 +24,8 @@ import { NavigationEvents } from 'react-navigation';
 import { querystringParser } from '../../utils';
 
 const hasNotch = DeviceInfo.hasNotch();
+const { WebRTCModule } = NativeModules;
+console.log(WebRTCModule);
 
 // #region
 
