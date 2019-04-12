@@ -82,7 +82,8 @@ const MainVideoPresenter = props => {
           style={styles.RTCVideo}
           // mirror={true}
           mirror={isVideoReverse}
-          objectFit={videoType && videoType === 'desktop' ? 'fit' : 'cover'}
+          objectFit={'contain'}
+          // objectFit={videoType && videoType === 'desktop' ? 'fit' : 'cover'}
           streamURL={stream.toURL()}
         />
 
@@ -175,7 +176,8 @@ const MainVideoPresenter = props => {
 const styles = StyleSheet.create({
   RTCVideo: {
     flex: 1,
-    backgroundColor: 'gray'
+    backgroundColor: '#1D1D1D'
+    // backgroundColor: 'gray'
   },
   videoContainer: {
     position: 'absolute',
