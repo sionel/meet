@@ -5,6 +5,7 @@
 
 import { Platform } from 'react-native';
 import CryptoJS from 'crypto-js';
+
 const OS = Platform.OS;
 const OSID = OS === 'ios' ? 'mobile-ios' : 'mobile-android';
 /**

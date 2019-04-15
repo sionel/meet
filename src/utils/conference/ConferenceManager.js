@@ -196,6 +196,15 @@ class ConferenceManager {
       mainUserActionCreators.setDrawingMode(status === 'true' ? true : false)
     );
   };
+
+  /**
+   * setDrawingData
+   * 드로잉데이터 전송
+   */
+  setDrawingData = data => {
+    // alert(JSON.stringify(data));
+    this._conferenceConnector.setDrawingData(data);
+  };
 }
 
 export default ConferenceManager;

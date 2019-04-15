@@ -88,6 +88,7 @@ class ConferenceScreenContainer extends React.Component {
           {...this.props}
           callType={this.callType}
           onClose={this._handleClose}
+          onSetDrawingData={this._handleSetDrawingData}
         />
       </Fragment>
     );
@@ -121,6 +122,14 @@ class ConferenceScreenContainer extends React.Component {
     if (this._appState !== 'active' && nextAppState !== 'active') {
       this._handleClose();
     }
+  };
+
+  /**
+   * _handleSetDrawingData
+   * 드로잉데이터 전송
+   */
+  _handleSetDrawingData = data => {
+    this._conferenceManager.setDrawingData(data);
   };
 }
 

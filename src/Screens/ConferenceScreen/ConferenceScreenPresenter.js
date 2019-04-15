@@ -10,10 +10,15 @@ import Content from './Content';
  * ConferenceScreenPresenter
  */
 const ConferenceScreenPresenter = props =>
-	props.mainUser ? (
-		<Content mainUser={props.mainUser} onClose={props.onClose} callType={props.callType} />
-	) : (
-		<LoadingIndicator />
-	);
+  props.mainUser ? (
+    <Content
+      mainUser={props.mainUser}
+      onClose={props.onClose}
+      callType={props.callType}
+      onSetDrawingData={props.onSetDrawingData}
+    />
+  ) : (
+    <LoadingIndicator />
+  );
 
 export default ConferenceScreenPresenter;
