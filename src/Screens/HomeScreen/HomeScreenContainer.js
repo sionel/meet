@@ -11,11 +11,19 @@ import {
   Platform,
   Dimensions,
   View,
-  NativeModules
+  Text,
+  NativeModules,
+  TouchableOpacity
+  // DrawerLayoutAndroid
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import Orientation from 'react-native-orientation-locker';
+import GestureRecognizer, {
+  swipeDirections
+} from 'react-native-swipe-gestures';
+
 import HomeScreenPresenter from './HomeScreenPresenter';
+
 // service
 import { WetalkApi } from '../../services';
 import { UserApi } from '../../services';
@@ -23,9 +31,9 @@ import { ConferenceApi } from '../../services';
 import { NavigationEvents } from 'react-navigation';
 import { querystringParser } from '../../utils';
 
+import DrawerContent from '../../components/DrawerContent';
+const { height, width } = Dimensions.get('window');
 const hasNotch = DeviceInfo.hasNotch();
-const { WebRTCModule } = NativeModules;
-console.log(WebRTCModule);
 
 // #region
 
@@ -87,6 +95,10 @@ class HomeScreenContainer extends Component {
     AppState.removeEventListener('change', this._handleAppStateChange);
   }
 
+  onSwipeRight(gestureState) {
+    this.props.navigation.openDrawer();
+  }
+
   // #region
   /**
    * Rendering
@@ -115,6 +127,14 @@ class HomeScreenContainer extends Component {
           }}
           onDidBlur={() => (this._isFocus = false)}
         />
+        {/* <GestureRecognizer
+          onSwipeRight={state => this.onSwipeRight(state)}
+          style={{ flex: 1 }}
+        > */}
+        {/* <DrawerLayoutAndroid
+          drawerWidth={Math.min(height, width) * 0.75}
+          renderNavigationView={() => <DrawerContent navigation={navigation} />}
+        > */}
         <HomeScreenPresenter
           navigation={navigation}
           refreshing={refreshing}
@@ -131,6 +151,8 @@ class HomeScreenContainer extends Component {
           orientation={this.state.orientation}
           hasNotch={hasNotch}
         />
+        {/* </DrawerLayoutAndroid> */}
+        {/* </GestureRecognizer> */}
       </View>
     );
   }

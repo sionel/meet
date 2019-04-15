@@ -1,2 +1,19 @@
+// import React from 'react';
 import AppIntroSlide from './AppIntroSlide';
-export default AppIntroSlide;
+import { connect } from 'react-redux';
+import { actionCreators as UserActions } from '../../redux/modules/user';
+
+// map state to props
+const mapStateToProps = state => ({
+  intro: state.user.appIntro
+});
+
+// map dispatch to props
+const mapDispatchToProps = dispatch => ({
+  onIntro: () => dispatch(UserActions.toggleVisibleAppIntro())
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AppIntroSlide);
