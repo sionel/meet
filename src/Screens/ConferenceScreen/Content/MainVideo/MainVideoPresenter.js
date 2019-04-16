@@ -5,7 +5,8 @@ import {
   Image,
   Text,
   Platform,
-  ScrollView
+  ScrollView,
+  TouchableHighlight
 } from 'react-native';
 import { RTCView } from 'react-native-webrtc';
 import ButtonCameraOff from '../../../../../assets/buttons/btn_vc_camera_off.png';
@@ -87,7 +88,6 @@ const MainVideoPresenter = props => {
     return (
       <View style={{ flex: 1 }}>
         {/* RTCVideo 를 메인화면으로 설정하고 */}
-
         <RTCView
           style={styles.RTCVideo}
           // mirror={true}
@@ -101,13 +101,13 @@ const MainVideoPresenter = props => {
         {/* Video 화면 위에 있는 요소들을 absolute 로 띄운다 */}
         {displayTime}
         {mainUser.status === 'interrupted' && muteView}
-        {/* {muteView} */}
-        <View style={styles.videoContainer}>
-          {/* {displayTime} */}
-          {/* {mainUser.status === 'interrupted' && muteView} */}
-          {/* {muteView} */}
-          {props.children}
-        </View>
+        <View style={styles.videoContainer}>{props.children}</View>
+        {/* <View style={styles.videoContainer}>
+            {displayTime}
+            {mainUser.status === 'interrupted' && muteView}
+            {muteView}
+            {props.children}
+        </View> */}
       </View>
     );
   } else {
@@ -189,7 +189,12 @@ const MainVideoPresenter = props => {
  */
 const styles = StyleSheet.create({
   RTCVideo: {
-    flex: 1,
+    // flex: 1,
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
     // height: '100%',
     backgroundColor: '#1D1D1D'
     // backgroundColor: 'gray'

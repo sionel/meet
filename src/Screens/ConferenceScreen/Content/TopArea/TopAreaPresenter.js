@@ -16,39 +16,39 @@ const TopAreaPresenter = props => {
   if (props.conferenceMode === ConferenceModes.NORMAL) {
     return (
       // <TouchableOpacity
+      // <View
+      //   activeOpacity={1}
+      //   style={
+      //     props.orientation === 'vertical'
+      //       ? styles.containerVertical
+      //       : styles.containerHorizontal
+      //   }
+      // >
       <View
-        activeOpacity={1}
         style={
           props.orientation === 'vertical'
-            ? styles.containerVertical
-            : styles.containerHorizontal
+            ? styles.settingBoxVertical
+            : styles.settingBoxHorizontal
         }
       >
-        {/* 경과시간 */}
-        <View
-          style={
-            props.orientation === 'vertical'
-              ? styles.settingBoxVertical
-              : styles.settingBoxHorizontal
-          }
-        >
-          {props.isMuteVideo ? null : (
-            <Fragment>
-              <SettingButton
-                name="switch"
-                onPress={props.toggleCameraFacingMode}
-              />
-              {/* {Platform.OS !== 'ios' && ( */}
-              <SettingButton
-                name="reverse"
-                onPress={props.onReverseVideo}
-                width={25}
-                height={25}
-                areaWdith={28}
-                areaHeight={28}
-              />
-              {/* )} */}
-              {/* <SettingButton
+        {/* 기능 버튼 */}
+        {props.isMuteVideo ? null : (
+          <Fragment>
+            <SettingButton
+              name="switch"
+              onPress={props.toggleCameraFacingMode}
+            />
+            {/* {Platform.OS !== 'ios' && ( */}
+            <SettingButton
+              name="reverse"
+              onPress={props.onReverseVideo}
+              width={25}
+              height={25}
+              areaWdith={28}
+              areaHeight={28}
+            />
+            {/* )} */}
+            {/* <SettingButton
 								name="pen"
 								width={25}
 								height={25}
@@ -56,9 +56,9 @@ const TopAreaPresenter = props => {
 								areaHeight={28}
 								onPress={() => props.onChangeDrawing(!props.drawing)}
 							/> */}
-            </Fragment>
-          )}
-        </View>
+          </Fragment>
+        )}
+        {/* </View> */}
         {/* </TouchableOpacity> */}
         {/* isVideoReverse */}
       </View>

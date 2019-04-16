@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity, dimmen } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, dimmen, Text } from 'react-native';
 import { RTCView } from 'react-native-webrtc';
 import DrawingSketch from './DrawingSketch';
 import MainVideo from './MainVideo';
@@ -32,19 +32,21 @@ const ContentPresenter = props => {
             callType={callType}
             isVideoReverse={isVideoReverse}
             // orientation={props.orientation}
-            onPress={props.toggleConferenceMode}
+            // onPress={props.toggleConferenceMode}
             orientation={props.orientation}
             hasNotch={props.hasNotch}
           >
             <TouchableOpacity
-              style={
-                props.orientation === 'vertical'
-                  ? styles.contentVertical
-                  : styles.contentHorizontal
-              }
+              style={{ flex: 1 }}
               onPress={props.toggleConferenceMode}
             >
-              <View style={styles.topArea}>
+              <View
+                style={
+                  props.orientation === 'vertical'
+                    ? styles.topAreaVertical
+                    : styles.topAreaHorizontal
+                }
+              >
                 {callType != 2 && (
                   <TopArea
                     orientation={props.orientation}
@@ -55,7 +57,8 @@ const ContentPresenter = props => {
                   />
                 )}
               </View>
-              <View style={styles.middleArea} />
+
+              {/* 하단 영역 */}
               <View
                 style={
                   props.orientation === 'vertical'
@@ -63,7 +66,6 @@ const ContentPresenter = props => {
                     : styles.bottomAreaHorizontal
                 }
               >
-                {/* 하단 영역 */}
                 <BottomArea
                   onClose={props.onClose}
                   onChangeSpeaker={props.onChangeSpeaker}
@@ -74,6 +76,7 @@ const ContentPresenter = props => {
               </View>
             </TouchableOpacity>
           </MainVideo>
+          {/* 싱단 영역 */}
         </View>
         // </TouchableOpacity>
       )}
@@ -86,7 +89,9 @@ const ContentPresenter = props => {
  */
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    width: '100%',
+    height: '100%'
   },
   contentVertical: {
     flex: 1,
@@ -101,18 +106,42 @@ const styles = StyleSheet.create({
   topArea: {
     flex: 2
   },
+  topAreaVertical: {
+    position: 'absolute',
+    top: 50,
+    right: 25,
+    display: 'flex',
+    flexDirection: 'column'
+  },
+  topAreaHorizontal: {
+    position: 'absolute',
+    bottom: 50,
+    left: 25,
+    display: 'flex',
+    flexDirection: 'row'
+  },
   middleArea: {
     flex: 9
   },
   bottomAreaVertical: {
-    flex: 3,
+    position: 'absolute',
+    bottom: '5%',
+    left: 0,
+    right: 0,
+    // height: '21.5%',
+    // flex: 3,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center'
   },
   bottomAreaHorizontal: {
-    flex: 3,
+    position: 'absolute',
+    right: '5%',
+    top: 0,
+    bottom: 0,
+    // width: '21.5%',
+    // flex: 3,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
