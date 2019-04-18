@@ -24,8 +24,6 @@ import { NavigationEvents } from 'react-navigation';
 import { querystringParser } from '../../utils';
 
 const hasNotch = DeviceInfo.hasNotch();
-const { WebRTCModule } = NativeModules;
-console.log(WebRTCModule);
 
 // #region
 

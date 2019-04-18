@@ -16,7 +16,7 @@ import DeviceInfo from 'react-native-device-info';
 const { width, height } = Dimensions.get('window');
 
 // iphone X, XS = 812, XR, XS MAX = 896
-// const isIphoneX = (
+// const hasNotch = (
 //   Platform.OS === 'ios' &&
 //   !Platform.isPad &&
 //   !Platform.isTVOS &&
@@ -26,7 +26,7 @@ const { width, height } = Dimensions.get('window');
 //   Platform.OS === 'ios' &&
 //   Platform.isPad
 // );
-const isIphoneX = DeviceInfo.hasNotch();
+const hasNotch = DeviceInfo.hasNotch();
 const isTablet = DeviceInfo.isTablet();
 
 export default class AppIntroSlider extends React.Component {
@@ -82,10 +82,10 @@ export default class AppIntroSlider extends React.Component {
       (this.props.bottomButton
         ? (this.props.showSkipButton ? 44 : 0) + 44
         : 0) +
-      (isIphoneX ? 34 : 0) +
+      (hasNotch ? 34 : 0) +
       64;
     const topSpacer =
-      (isIphoneX ? 44 : 0) +
+      (hasNotch ? 44 : 0) +
       (Platform.OS === 'ios' ? 20 : StatusBar.currentHeight);
     const props = { ...item.item, bottomSpacer, topSpacer, width, height };
 
@@ -276,13 +276,13 @@ const styles = StyleSheet.create({
   },
   // paginationContainer: {
   //   position: 'absolute',
-  //   bottom: 0 + (isIphoneX ? 34 : 0),
+  //   bottom: 0 + (hasNotch ? 34 : 0),
   //   left: 0,
   //   right: 0,
   // },
   paginationDots: {
     position: 'absolute',
-    top: 16 + (isIphoneX ? 34 : 0),
+    top: 16 + (hasNotch ? 34 : 0),
     left: 0,
     right: 0,
     height: 16,
@@ -310,7 +310,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    height: 56 + (isIphoneX ? 34 : 0) + (isTablet ? 30 : 0),
+    height: 56 + (hasNotch ? 34 : 0) + (isTablet ? 30 : 0),
     marginHorizontal: 0
   },
   bottomButton: {
