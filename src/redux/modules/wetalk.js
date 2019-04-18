@@ -6,6 +6,7 @@
 import { UserApi } from '../../services';
 
 const SET_LIST = 'SET_LIST';
+const SET_INITIAL_LIST = 'SET_INITIAL_LIST';
 
 //#region Action Creators
 
@@ -13,10 +14,19 @@ const SET_LIST = 'SET_LIST';
  * setList
  */
 setList = list => {
-	return {
-		type: SET_LIST,
-		list
-	};
+  return {
+    type: SET_LIST,
+    list
+  };
+};
+
+/**
+ * setInitialList
+ */
+setInitialList = () => {
+  return {
+    type: SET_INITIAL_LIST
+  };
 };
 
 //#endregion
@@ -24,7 +34,7 @@ setList = list => {
 //#region initialState
 
 const initialState = {
-	list: []
+  list: []
 };
 
 //#endregion initialState
@@ -32,12 +42,14 @@ const initialState = {
 //#region Reducer
 
 reducer = (state = initialState, action) => {
-	switch (action.type) {
-		case SET_LIST:
-			return { ...state, list: action.list };
-		default:
-			return state;
-	}
+  switch (action.type) {
+    case SET_LIST:
+      return { ...state, list: action.list };
+    case SET_INITIAL_LIST:
+      return { ...state, list: [] };
+    default:
+      return state;
+  }
 };
 
 //#endregion Reducer
@@ -45,7 +57,8 @@ reducer = (state = initialState, action) => {
 //#region Export
 
 const actionCreators = {
-	setList
+  setList,
+  setInitialList
 };
 
 export { actionCreators };

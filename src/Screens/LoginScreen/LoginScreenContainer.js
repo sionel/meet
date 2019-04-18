@@ -245,7 +245,9 @@ class LoginScreenContainer extends React.Component {
       cno,
       HASH_KEY
     );
-    if (result) {
+    if (result.errors) {
+      alert('사소한 문제가 발생했습니다. 다시 시도해주세요.');
+    } else {
       // navigation.navigate('Home');
       this.props.handleOnLogin();
     }
