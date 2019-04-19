@@ -249,8 +249,14 @@ class LoginScreenContainer extends React.Component {
       HASH_KEY
     );
     if (result.errors) {
-      alert('사소한 문제가 발생했습니다. 다시 시도해주세요.');
-    } else {
+      if (result.errors.code === 'E002') {
+        // alert('result11 : ' + JSON.stringify(result));
+        // await this.props.onLogout();
+        // this.forceUpdate();
+      } else {
+        alert('사소한 문제가 발생했습니다. 다시 시도해주세요.');
+      }
+    } else if (result.user_name || result.auth.user_name) {
       // navigation.navigate('Home');
       this.props.handleOnLogin();
     }

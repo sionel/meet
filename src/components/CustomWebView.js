@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { Text, View, WebView, TouchableOpacity } from 'react-native';
+import { Text, View, WebView, TouchableOpacity, Platform } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DeviceInfo from 'react-native-device-info';
 
@@ -25,13 +25,13 @@ const CustomWebView = props => {
       <View
         style={{
           width: '100%',
-          height: 54 + (hasNotch ? 24 : 0),
-          // paddingTop: 20,
+          height: 54 + (hasNotch ? 24 : 0) + (Platform.OS === 'ios' ? 12 : 0),
+          paddingBottom: 12,
           paddingLeft: 20,
           paddingRight: 20,
           backgroundColor: '#1C90FB',
-          justifyContent: 'flex-end',
-          alignItems: 'center',
+          justifyContent: 'center',
+          alignItems: 'flex-end',
           flexDirection: 'row',
           boxShadow: '0 1 0 1 rgba(0,0,0, .5)',
           ...headerStyle
