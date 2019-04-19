@@ -7,6 +7,7 @@ import MainVideoPresenter from './MainVideoPresenter';
 class MainVideoContainer extends React.Component {
   state = {
     time: 0
+    // objectFit: 'contain'
   };
   componentDidMount() {
     this._timer = setInterval(() => {
@@ -22,28 +23,41 @@ class MainVideoContainer extends React.Component {
     }
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    if (
-      nextProps.isMuteVideo !== this.props.isMuteVideo ||
-      // nextProps.stream !== this.props.stream ||
-      // nextProps.videoType !== this.props.videoType ||
-      // nextProps.mainUser !== this.props.mainUser ||
-      nextProps.callType !== this.props.callType ||
-      nextState.time !== this.state.time
-    ) {
-      // console.log('render');
-      return true;
-    } else {
-      // console.log('something is changed');
-      return false;
-    }
-  }
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   if (
+  //     nextProps.isMuteVideo !== this.props.isMuteVideo ||
+  //     nextProps.stream !== this.props.stream ||
+  //     nextProps.videoType !== this.props.videoType ||
+  //     nextProps.mainUser !== this.props.mainUser ||
+  //     nextProps.callType !== this.props.callType ||
+  //     nextState.time !== this.state.time ||
+  //     nextState.isVideoReverse !== this.state.isVideoReverse
+  //   ) {
+  //     // console.log('render');
+  //     return true;
+  //   } else {
+  //     // console.log('something is changed');
+  //     return false;
+  //   }
+  // }
 
   render() {
     // console.log('RENDERING');
-    return <MainVideoPresenter {...this.props} time={this.state.time} />;
+    return (
+      <MainVideoPresenter
+        {...this.props}
+        {...this.state}
+        // onChangeObjectFit={this._handleChangeObjectFit}
+      />
+    );
     // return <MainVideoPresenter {...this.props} isMuteVideo={false} />;
   }
+
+  // _handleChangeObjectFit = () => {
+  //   this.setState(({ objectFit }) => ({
+  //     objectFit: objectFit === 'cover' ? 'contain' : 'cover'
+  //   }));
+  // };
 }
 
 export default MainVideoContainer;

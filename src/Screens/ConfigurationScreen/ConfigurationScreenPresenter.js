@@ -33,13 +33,14 @@ const ConfigurationScreenPresenter = props => {
     },
     {
       title: '버전정보',
-      action: () =>
-        Alert.alert(
-          '버전정보',
-          Platform.OS === 'ios' ? '1.0.2' : '0.1.0',
-          [{ text: 'OK' }],
-          { cancelable: true }
-        )
+      content: Platform.OS === 'ios' ? '1.1.1' : '0.1.1'
+      // action: () =>
+      //   Alert.alert(
+      //     '버전정보',
+      //     Platform.OS === 'ios' ? '1.0.2' : '0.1.0',
+      //     [{ text: 'OK' }],
+      //     { cancelable: true }
+      //   )
     },
     // {
     // 	title: '앱인트로 보기',
@@ -73,8 +74,13 @@ const ConfigurationScreenPresenter = props => {
             <SectionListHeader title={section.title} />
           )}
           renderItem={({ item }, index) => (
-            <TouchableOpacity key={index} onPress={item.action}>
+            <TouchableOpacity
+              key={index}
+              onPress={item.action}
+              style={{ flexDirection: 'row', justifyContent: 'space-between' }}
+            >
               <Text style={styles.item}>{item.title}</Text>
+              <Text style={[styles.item, styles.content]}>{item.content}</Text>
             </TouchableOpacity>
           )}
           keyExtractor={(item, index) => index}
@@ -126,6 +132,9 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 15,
     height: 44
+  },
+  content: {
+    color: '#999'
   }
 });
 

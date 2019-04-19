@@ -93,6 +93,7 @@ class ConfigurationScreenContainer extends React.Component {
   _handleLogout = () => {
     // const { onLogout, navigation } = this.props;
     this.props.onLogout();
+    this.props.onSetInitialList();
     // navigation.navigate('Main');
   };
 }

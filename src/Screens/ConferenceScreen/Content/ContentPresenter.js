@@ -19,22 +19,31 @@ const ContentPresenter = props => {
           onChangeDrawing={props.setDrawingMode}
         />
       ) : (
-        <TouchableOpacity
-          activeOpacity={0.7}
-          style={styles.container}
-          onPress={props.toggleConferenceMode}
-        >
+        // <TouchableOpacity
+        //   activeOpacity={0.7}
+        //   style={styles.container}
+        //   onPress={props.toggleConferenceMode}
+        // >
+        // 위에꺼로 좌우반전하면 ㅈ됨
+        // 아래 View 로 해야 잘됨
+        <View style={styles.container}>
           <MainVideo
             mainUser={mainUser}
             callType={callType}
             isVideoReverse={isVideoReverse}
+            // orientation={props.orientation}
+            onPress={props.toggleConferenceMode}
+            orientation={props.orientation}
+            hasNotch={props.hasNotch}
+            objectFit={props.objectFit}
           >
-            <View
+            <TouchableOpacity
               style={
                 props.orientation === 'vertical'
                   ? styles.contentVertical
                   : styles.contentHorizontal
               }
+              onPress={props.toggleConferenceMode}
             >
               <View style={styles.topArea}>
                 {callType != 2 && (
@@ -44,6 +53,8 @@ const ContentPresenter = props => {
                     onReverseVideo={props.onReverseVideo}
                     onChangeState={props.onChangeState}
                     onChangeDrawing={props.setDrawingMode}
+                    onChangeObjectFit={props.onChangeObjectFit}
+                    objectFit={props.objectFit}
                   />
                 )}
               </View>
@@ -64,9 +75,10 @@ const ContentPresenter = props => {
                   speaker={speaker}
                 />
               </View>
-            </View>
+            </TouchableOpacity>
           </MainVideo>
-        </TouchableOpacity>
+        </View>
+        // </TouchableOpacity>
       )}
     </View>
   );
@@ -81,13 +93,13 @@ const styles = StyleSheet.create({
   },
   contentVertical: {
     flex: 1,
-    flexDirection: 'column',
-    transform: [{ rotateY: '0deg' }] // 좌우반전
+    flexDirection: 'column'
+    // transform: [{ rotateY: '0deg' }] // 좌우반전
   },
   contentHorizontal: {
     flex: 1,
-    flexDirection: 'row',
-    transform: [{ rotateY: '0deg' }] // 좌우반전
+    flexDirection: 'row'
+    // transform: [{ rotateY: '0deg' }] // 좌우반전
   },
   topArea: {
     flex: 2
