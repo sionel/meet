@@ -15,7 +15,9 @@ import { CustomLottie } from '../../components';
 // service
 import { querystringParser } from '../../utils';
 
-const deviceHeight = Dimensions.get('window').height;
+// const deviceHeight = Dimensions.get('window').height;
+const isTablet = DeviceInfo.isTablet();
+const { height, width } = Dimensions.get('window');
 
 class LoginScreenContainer extends React.Component {
   /**
@@ -103,7 +105,8 @@ class LoginScreenContainer extends React.Component {
         permissionModal={permission}
         nextInput={nextInput}
         phrases="Loading"
-        height={deviceHeight}
+        // height={deviceHeight}
+        height={isTablet ? height : Math.max(width, height)}
         hasNotch={DeviceInfo.hasNotch()}
         // onSubmitNext={this._submitNext}
       />
@@ -264,7 +267,6 @@ class LoginScreenContainer extends React.Component {
       'https://play.google.com/store/apps/details?id=com.duzon.android.lulubizpotal';
 
     Linking.openURL(url).catch(err => {
-      console.log(err);
       if (Platform.OS === 'ios') {
         Linking.openURL(iosMarketURL).catch(err => {
           Alert.alert('스토어 정보가 없습니다.', '', [{ text: 'OK' }], {

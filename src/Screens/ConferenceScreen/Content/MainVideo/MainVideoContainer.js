@@ -6,8 +6,8 @@ import MainVideoPresenter from './MainVideoPresenter';
  */
 class MainVideoContainer extends React.Component {
   state = {
-    time: 0,
-    objectFit: 'contain'
+    time: 0
+    // objectFit: 'contain'
   };
   componentDidMount() {
     this._timer = setInterval(() => {
@@ -47,17 +47,17 @@ class MainVideoContainer extends React.Component {
       <MainVideoPresenter
         {...this.props}
         {...this.state}
-        onChangeObjectFit={this._handleChangeObjectFit}
+        // onChangeObjectFit={this._handleChangeObjectFit}
       />
     );
     // return <MainVideoPresenter {...this.props} isMuteVideo={false} />;
   }
 
-  _handleChangeObjectFit = () => {
-    this.setState(({ objectFit }) => ({
-      objectFit: objectFit === 'cover' ? 'contain' : 'cover'
-    }));
-  };
+  // _handleChangeObjectFit = () => {
+  //   this.setState(({ objectFit }) => ({
+  //     objectFit: objectFit === 'cover' ? 'contain' : 'cover'
+  //   }));
+  // };
 }
 
 export default MainVideoContainer;

@@ -35,10 +35,17 @@ const TopAreaPresenter = props => {
           {props.isMuteVideo ? null : (
             <Fragment>
               <SettingButton
+                name={props.objectFit === 'contain' ? 'zoomIn' : 'zoomOut'}
+                onPress={props.onChangeObjectFit}
+                width={25}
+                height={25}
+                areaWdith={28}
+                areaHeight={28}
+              />
+              <SettingButton
                 name="switch"
                 onPress={props.toggleCameraFacingMode}
               />
-              {/* {Platform.OS !== 'ios' && ( */}
               <SettingButton
                 name="reverse"
                 onPress={props.onReverseVideo}
@@ -47,7 +54,6 @@ const TopAreaPresenter = props => {
                 areaWdith={28}
                 areaHeight={28}
               />
-              {/* )} */}
               {/* <SettingButton
 								name="pen"
 								width={25}

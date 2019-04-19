@@ -20,7 +20,8 @@ class ContentContainer extends React.Component {
         ? 'vertical'
         : 'horizontal',
     isVideoReverse: false,
-    speaker: 2
+    speaker: 2,
+    objectFit: 'contain'
     // drawing: false
   };
 
@@ -51,9 +52,16 @@ class ContentContainer extends React.Component {
         onLayout={this._setOrientation}
         onChangeSpeaker={this._handleChangeSpeaker}
         onChangeState={this._handleChangeState}
+        onChangeObjectFit={this._handleChangeObjectFit}
       />
     );
   }
+
+  _handleChangeObjectFit = () => {
+    this.setState(({ objectFit }) => ({
+      objectFit: objectFit === 'cover' ? 'contain' : 'cover'
+    }));
+  };
 
   /**
    * _handleChangeState
