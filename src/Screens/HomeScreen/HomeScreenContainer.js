@@ -174,7 +174,7 @@ class HomeScreenContainer extends Component {
     const result = querystringParser(url);
     // console.log('RESULT :: ', result);
     // if (result.type === '3') {
-    if (!result.type) {
+    if (typeof result === 'string') {
       // 위하고 로그인일 경우
     } else {
       this._handleCheckConference(result.room_id, result); // 테스트
