@@ -1,6 +1,7 @@
 /**
  * Drawing maker
  */
+import { Dimensions } from 'react-native';
 
 class DrawingManager {
   /**
@@ -9,10 +10,19 @@ class DrawingManager {
   constructor(dispatch) {
     // Singleton
     if (!DrawingManager.instance) {
+      // 기본 화면비율
+      this.BASE_WIDTH = 1024;
+      this.BASE_HEIGHT = 768;
+      this.SCREEN_WIDTH = Dimensions.get('window').width; // 화면 가로길이;
+      this.SCREEN_HEIGHT =
+        this.SCREEN_WIDTH * ((this.BASE_HEIGHT * 100) / this.BASE_WIDTH / 100); // 화면 가로길이;
+      this.CONTRAST_SCALE = (this.SCREEN_WIDTH * 100) / this.BASE_WIDTH;
+
+      this.canvas = null; // canvas
+      this.tempId = 0; // 드로잉 아이디
+      this.history = []; // 드로잉 기록
+
       // 싱글톤 변수 할당
-      this.canvas = null;
-      this.tempId = 0;
-      this.history = [];
       DrawingManager.instance = this;
       this._dispatch = dispatch;
     }
@@ -20,10 +30,36 @@ class DrawingManager {
   }
 
   /**
+   * getter
+   */
+  get = target => {
+    switch (target) {
+      case 'BASE_WIDTH':
+      case 'BASE_HEIGHT':
+      case 'SCREEN_WIDTH':
+      case 'SCREEN_HEIGHT':
+      case 'canvas':
+        return this[target];
+
+      default:
+        return null;
+    }
+  };
+
+  /**
    *
    */
   setRef = ref => {
     this.canvas = ref;
+  };
+
+  /**
+   *
+   */
+  clearAll = (send = false) => {
+    alert(1);
+    this.canvas.clear();
+    return true;
   };
 
   /**
@@ -34,6 +70,8 @@ class DrawingManager {
     to: mobile , pc
     */
     if (to === 'mobile') {
+      console.log('RAW DATA : ', data);
+
       const newData = this._handleConvertPcToMobile(data);
       if (this.canvas) {
         this.canvas.addPath(newData);
@@ -47,13 +85,14 @@ class DrawingManager {
    * PC데이터 -> Mobile데이터
    */
   _handleConvertPcToMobile = data => {
-    console.log('RAW DATA : ', data);
-    let drawDataToJson = JSON.parse(data.attributes.drawData);
+    let drawDataToJson = JSON.parse(data.attributes.data);
     let newData = {
       drawer: 'wehago_meet_web',
       size: {
-        width: 900,
-        height: 512
+        width: this.BASE_WIDTH,
+        height: this.BASE_HEIGHT
+        // width: 900,
+        // height: 512
       },
       path: {
         id: 0,
@@ -65,14 +104,18 @@ class DrawingManager {
 
     // newData.path.id = String(data.value);
     newData.path.id = Number(this.tempId++);
-    newData.path.color = String(drawDataToJson.lineColor);
-    newData.path.width = Number(drawDataToJson.lineWidth);
+    newData.path.color = String(drawDataToJson.strokeColor);
+    // 선 굵기 비율
+    newData.path.width = Number(
+      drawDataToJson.strokeWidth * (this.SCREEN_WIDTH / this.BASE_WIDTH)
+    );
+    // newData.path.width = Number(drawDataToJson.strokeWidth);
     newData.path.data = [];
-    drawDataToJson.data.map(item => {
+
+    drawDataToJson.paths.map(item => {
       newData.path.data.push(`${item.x},${item.y}`);
     });
     this.history.push(newData);
-
     return newData;
   };
 
@@ -86,25 +129,28 @@ class DrawingManager {
     let newData = {
       value: id,
       tagName: 'UPDATE_DRAWING_DATA',
-      drawData: '',
+      attributes: {
+        data: {
+          drawMode: true,
+          strokeColor: color,
+          strokeWidth: width,
+          paths: []
+        },
+        isMobile: true
+      },
       children: []
-    };
-    let attributes = {
-      lineColor: color,
-      lineWidth: width,
-      data: []
     };
     let location;
 
     data.map(item => {
       location = item.split(',');
-      attributes.data.push({
-        x: location[0],
-        y: location[1]
+      newData.attributes.data.paths.push({
+        x: Number((location[0] / this.SCREEN_WIDTH) * this.BASE_WIDTH),
+        y: Number((location[1] / this.SCREEN_HEIGHT) * this.BASE_HEIGHT)
       });
     });
 
-    newData.drawData = JSON.stringify(attributes);
+    newData.attributes.data = JSON.stringify(newData.attributes.data);
     return newData;
   };
 }

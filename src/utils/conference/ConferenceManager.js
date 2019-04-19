@@ -205,6 +205,15 @@ class ConferenceManager {
     // alert(JSON.stringify(data));
     this._conferenceConnector.setDrawingData(data);
   };
+
+  /**
+   * setClear
+   * 드로잉데이터 전송
+   */
+  setClear = () => {
+    alert(111);
+    this._conferenceConnector.setClear();
+  };
 }
 
 export default ConferenceManager;

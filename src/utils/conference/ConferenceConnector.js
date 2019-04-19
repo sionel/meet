@@ -7,6 +7,8 @@ import DrawingMananger from '../../utils/DrawingManager';
 const WEHAGO_ID = 'wehagoid';
 // 드로잉 이미지 전달 커멘드 타입
 export const UPDATE_DRAWING_DATA = 'UPDATE_DRAWING_DATA';
+// 드로잉 전체 지우기
+export const CLEAR_DRAWING_CANVAS = 'CLEAR_DRAWING_CANVAS';
 // 문서공유 모드 설정 커맨드 타입
 export const SET_DOCUMENT_IS_SHARE = 'SET_DOCUMENT_IS_SHARE';
 
@@ -204,6 +206,25 @@ class ConferenceConnector {
         this._drawingManager.handleConvertFormat('mobile', value);
       }
     });
+
+    /**
+     * 드로잉 캔버스 클리어 감지
+     */
+    this._room.addCommandListener(CLEAR_DRAWING_CANVAS, value => {
+      // if (!this._drawingManager) {
+      //   this._drawingManager = getDrawingManager();
+      // }
+
+      const { value: userId } = value;
+
+      if (
+        userId !== this._room.myUserId() &&
+        this._drawingManager &&
+        this._drawingManager.get('canvas')
+      ) {
+        this._drawingManager.clearAll();
+      }
+    });
   };
 
   /**
@@ -233,20 +254,26 @@ class ConferenceConnector {
    *
    */
   setDrawingData = data => {
-    // console.log('DATA : ', data);
     const newdata = this._drawingManager.handleConvertFormat('pc', data);
-    console.log('rne? ', newdata);
 
     // 로그 기록이 있을 경우 참여자들에게 기록 전송
     if (data) {
       this._room.sendCommand(UPDATE_DRAWING_DATA, {
         value: this._room.myUserId(),
-        attributes: { drawData: newdata.drawData }
+        attributes: newdata.attributes
       });
-      // this.handlers.addDrawData(this.logs);
-      // this.participantDraw(this.logs);
-      // this.drawData = [...this.drawData, this.logs];
     }
+  };
+
+  /**
+   *
+   */
+  setClear = () => {
+    // 지우기 액션 send
+    this._drawingManager.clearAll();
+    this._room.sendCommandOnce(CLEAR_DRAWING_CANVAS, {
+      value: this._room.myUserId()
+    });
   };
 
   //#endregion

@@ -6,13 +6,13 @@ import React, { Fragment } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Button } from 'react-native';
 import { SketchCanvas } from '@terrylinla/react-native-sketch-canvas';
 import DrawingBoard from './DrawingBoard';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 const DrawingPresenter = props => {
-  const { selectedTab, stroke, color, eraser, palette, tabs } = props;
+  const { selectedTab, stroke, color, eraser, palette, tabs, display } = props;
 
   return (
-    <View style={styles.container}>
+    <View style={{ ...styles.container, display: display ? '' : 'none' }}>
       {/* 팔레트 디스플레이 */}
       <View style={{ ...styles.tabWrapper, height: palette ? 150 : 100 }}>
         <Fragment>
@@ -39,9 +39,16 @@ const DrawingPresenter = props => {
                 <View
                   style={{
                     ...styles.mainSettingItem,
-                    opacity: selectedTab === tabIndex ? 0.35 : 1
+                    // borderColor: '#fff',
+                    opacity: selectedTab === tabIndex ? 0.85 : 1,
+                    backgroundColor:
+                      selectedTab === tabIndex
+                        ? 'rgba(255,255,255, 0.45)'
+                        : '#00000000'
                   }}
-                />
+                >
+                  <Icon name={tab.icon} size={20} color={'#fff'} />
+                </View>
               </TouchableOpacity>
             ))}
           </View>
@@ -51,17 +58,19 @@ const DrawingPresenter = props => {
                 <TouchableOpacity
                   key={String(value)}
                   onPress={() =>
-                    props.onChangeState(tabs[selectedTab].id, valueIndex)
+                    selectedTab === 2 && value === 0
+                      ? props.onClear()
+                      : props.onChangeState(tabs[selectedTab].id, valueIndex)
                   }
                 >
                   <View
                     style={{
                       ...styles.detailSettingItem,
                       opacity:
-                        props[tabs[selectedTab].id] === valueIndex ? 0.35 : 1
+                        props[tabs[selectedTab].id] === valueIndex ? 0.45 : 1
                     }}
                   >
-                    <Text>{value}</Text>
+                    {tabs[selectedTab].render(value)}
                   </View>
                 </TouchableOpacity>
               ))}
@@ -73,17 +82,16 @@ const DrawingPresenter = props => {
         key={'color'}
         onPress={() => props.onChangeState('palette', !palette)}
         style={{
-          flex: 0,
+          // flex: 0,
           flexDirection: 'row',
           alignContent: 'center',
-          justifyContent: 'center',
-          backgroundColor: '#00000000'
+          justifyContent: 'center'
         }}
       >
         <Icon
           name={`angle-${palette ? `up` : `down`}`}
           size={40}
-          color={'#333'}
+          color={'#fff'}
           style={styles.tabToggleIcon}
         />
       </TouchableOpacity>
@@ -119,10 +127,13 @@ const DrawingPresenter = props => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    position: 'absolute',
+    zIndex: 22,
     width: '100%',
+    height: '100%',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF'
+    backgroundColor: '#1D1D1D'
     // paddingLeft: 15
   },
 
@@ -134,6 +145,8 @@ const styles = StyleSheet.create({
     height: 'auto',
     backgroundColor: '#333',
     width: '100%',
+    borderBottomWidth: 1,
+    borderColor: '#c1c1c1',
     zIndex: 7
   },
 
@@ -148,13 +161,15 @@ const styles = StyleSheet.create({
   mainSettingItem: {
     width: 39,
     height: 39,
-    borderWidth: 3,
-    borderColor: '#fff',
+    // borderWidth: 3,
+    // borderColor: '#fff',
     borderRadius: 25,
     marginTop: 7.5,
     marginBottom: 7.5,
     marginLeft: 7.5,
-    marginRight: 7.5
+    marginRight: 7.5,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
 
   detailSettingWrapper: {
@@ -164,7 +179,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '100%',
     justifyContent: 'flex-start',
-    alignItems: 'center'
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderColor: '#c1c1c1'
   },
 
   detailSettingItem: {
@@ -202,5 +219,9 @@ const styles = StyleSheet.create({
     width: '100%'
   }
 });
+
+DrawingPresenter.defaultProps = {
+  display: true
+};
 
 export default DrawingPresenter;

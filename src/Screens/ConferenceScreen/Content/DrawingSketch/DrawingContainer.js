@@ -3,8 +3,10 @@
  */
 
 import React, { Component } from 'react';
+import { View, Text } from 'react-native';
 import DrawingPresenter from './DrawingPresenter';
-// import { DrawingManager } from '../../../../utils';
+import DrawingManager from '../../../../utils/DrawingManager';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 class DrawingContainer extends Component {
   constructor(props) {
@@ -18,7 +20,7 @@ class DrawingContainer extends Component {
     };
     this._initialized = false;
     // 드로잉매니저
-    // this._drawingManager = new DrawingManager();
+    this._drawingManager = new DrawingManager();
   }
 
   /**
@@ -39,18 +41,55 @@ class DrawingContainer extends Component {
     tabs: [
       {
         id: 'stroke',
+        icon: 'pen',
         title: '선굵기',
-        values: [1, 2, 3, 5, 7]
+        values: [1, 3, 5, 7, 9],
+        // render: size => <Text>{size}</Text>
+        render: size => (
+          <View
+            style={{
+              width: '97%',
+              height: size,
+              backgroundColor: '#333',
+              borderRadius: 15
+            }}
+          />
+        )
       },
       {
         id: 'color',
+        icon: 'palette',
         title: '색상',
-        values: ['lightskyblue', 'orange', 'lime']
+        values: ['lightskyblue', 'orange', 'lime'],
+        render: backgroundColor => (
+          <View
+            style={{
+              width: 25,
+              height: 25,
+              borderRadius: 25,
+              backgroundColor
+            }}
+          />
+        )
       },
       {
         id: 'eraser',
+        icon: 'eraser',
         title: '지우개',
-        values: [1, 2, 3, 5, 7]
+        values: [3, 5, 7, 9, 12, 0],
+        render: size =>
+          size !== 0 ? (
+            <View
+              style={{
+                width: '97%',
+                height: size,
+                backgroundColor: '#777777',
+                borderRadius: 15
+              }}
+            />
+          ) : (
+            <Icon name={'trash'} size={15} color={'#e54840'} />
+          )
       }
     ]
   };
@@ -71,6 +110,7 @@ class DrawingContainer extends Component {
         onChangeState={this._handleChangeState}
         onStrokeEnd={this._handleStrokeEnd}
         onCanvas={this._handleCanvas}
+        onClearAll={this._handleClearAll}
       />
     );
   }
@@ -86,7 +126,7 @@ class DrawingContainer extends Component {
    * _handleStrokeEnd
    */
   _handleStrokeEnd = rs => {
-    console.log('onStrokeEnd : ', rs);
+    // console.log('onStrokeEnd : ', rs);
   };
 
   /**
@@ -169,6 +209,13 @@ class DrawingContainer extends Component {
     const x = event.pageX - this.canvas.offsetLeft;
     const y = event.pageY - this.canvas.offsetTop;
     return { X: x, Y: y };
+  };
+
+  /**
+   *
+   */
+  _handleClearAll = () => {
+    // this.props.onClear();
   };
 }
 
