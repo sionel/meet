@@ -197,7 +197,8 @@ class HomeScreenContainer extends Component {
   _handleOpenLink = url => {
     const result = querystringParser(url);
     // console.log('RESULT :: ', result);
-    if (result.type === '3') {
+    // if (result.type === '3') {
+    if (typeof result === 'string') {
       // 위하고 로그인일 경우
     } else {
       this._handleCheckConference(result.room_id, result); // 테스트
@@ -294,10 +295,15 @@ class HomeScreenContainer extends Component {
       auth.last_access_company_no,
       auth.HASH_KEY
     );
+
     // 재 로그인
     if (checkResult.errors) {
+      if (checkResult.errors.code === 'E002') {
+        return this.props.onLogout();
+      } else {
+        return this.props.onDisconnect();
+      }
       // alert('Home: 인증실패\nError: ' + JSON.stringify(checkResult.errors) + '\nToken: ' + copyAuth);
-      return this.props.onLogout();
     } else {
       // 최종선택 회사가 달라진 경우
       if (
@@ -312,8 +318,8 @@ class HomeScreenContainer extends Component {
         };
         onLogin(userData);
       }
+      this._handleGetWetalkList();
     }
-    this._handleGetWetalkList();
   };
 
   /**

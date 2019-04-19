@@ -35,6 +35,7 @@ const ContentPresenter = props => {
             // onPress={props.toggleConferenceMode}
             orientation={props.orientation}
             hasNotch={props.hasNotch}
+            objectFit={props.objectFit}
           >
             <TouchableOpacity
               style={{ flex: 1 }}
@@ -54,6 +55,8 @@ const ContentPresenter = props => {
                     onReverseVideo={props.onReverseVideo}
                     onChangeState={props.onChangeState}
                     onChangeDrawing={props.setDrawingMode}
+                    onChangeObjectFit={props.onChangeObjectFit}
+                    objectFit={props.objectFit}
                   />
                 )}
               </View>

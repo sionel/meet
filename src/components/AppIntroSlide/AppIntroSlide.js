@@ -208,7 +208,7 @@ class AppIntroSlide extends React.Component {
 
   _renderItem = (item, index) => {
     return (
-      <View style={{ flex: 1, width: item.width, height: item.height }}>
+      <View style={{ flex: 1, width: item.width, height: '100%' }}>
         {item.view}
       </View>
     );

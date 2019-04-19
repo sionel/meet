@@ -30,7 +30,7 @@ const MainVideoPresenter = props => {
   } = props;
   const displayTime = (
     <View
-      onTouchEnd={props.onChangeObjectFit}
+      // onTouchEnd={props.onChangeObjectFit}
       style={{
         top: 50,
         left: 25,
