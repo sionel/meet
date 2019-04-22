@@ -16,16 +16,18 @@ const DrawerContentPresenter = props => {
         <View style={styles.profile}>
           <Image source={ProfileImage} style={styles.profile_img} />
         </View>
-        <View style={{ padding: 16 }}>
-          <Text>
-            {props.auth.user_name} ({props.auth.portal_id})
-          </Text>
-          {/* <Text>{props.auth.portal_id}</Text> */}
-          {/* <Text>{props.auth.last_company.full_path}</Text> */}
-          <Text>{props.auth.last_company.company_name_kr}</Text>
-          {/* <Text>{JSON.stringify(props.auth)}</Text> */}
-          {/* <Text>{props.auth.profile_url}</Text> */}
-        </View>
+        {props.auth.user_name && (
+          <View style={{ padding: 16 }}>
+            <Text>
+              {props.auth.user_name} ({props.auth.portal_id})
+            </Text>
+            {/* <Text>{props.auth.portal_id}</Text> */}
+            {/* <Text>{props.auth.last_company.full_path}</Text> */}
+            <Text>{props.auth.last_company.company_name_kr}</Text>
+            {/* <Text>{JSON.stringify(props.auth)}</Text> */}
+            {/* <Text>{props.auth.profile_url}</Text> */}
+          </View>
+        )}
       </View>
 
       {props.drawerList.map(item => (
@@ -34,8 +36,9 @@ const DrawerContentPresenter = props => {
           activeOpacity={0.9}
           underlayColor={'#00000010'}
           onPress={() => {
-            props.navigation.closeDrawer();
-            props.navigation.navigate(item.src);
+            item.action();
+            // props.navigation.closeDrawer();
+            // props.navigation.navigate(item.src);
           }}
         >
           <Text style={styles.listItem}>{item.name}</Text>

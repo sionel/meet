@@ -86,7 +86,9 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 30 / 2,
-    margin: 7
+    margin: 7,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   buttonImage: {
     width: 30,

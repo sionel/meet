@@ -59,12 +59,12 @@ const RightMenuImage = ({ navigation }) => {
   return (
     <Icon
       // name="cog"
-      name="sliders"
-      size={24}
+      name="bars"
+      size={20}
       color="#fff"
       style={{
         marginLeft: 20,
-        marginRight: 20,
+        // marginRight: 20,
         zIndex: 10
       }}
     />
@@ -107,7 +107,8 @@ const HomeRoute = createStackNavigator(
         headerTintColor: '#fff',
         gesturesEnabled: false,
         headerStyle: commonStyle,
-        headerRight: (
+        // headerRight: (
+        headerLeft: (
           // Platform.OS === 'ios' &&
           <TouchableOpacity
             onPress={() => {

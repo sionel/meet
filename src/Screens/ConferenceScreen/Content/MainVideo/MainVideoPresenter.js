@@ -32,7 +32,7 @@ const MainVideoPresenter = props => {
     <View
       // onTouchEnd={props.onChangeObjectFit}
       style={{
-        top: 50,
+        top: props.hasNotch ? 50 : 25,
         left: 25,
         position: 'absolute',
         zIndex: 5

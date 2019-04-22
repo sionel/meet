@@ -11,15 +11,15 @@ const ParticipantBoxPresenter = props => {
 
   const content =
     stream && !props.isMuteVideo ? (
-      <View style={styles.video}>
-        <RTCView
-          style={styles.video}
-          mirror={false}
-          objectFit={'contain'}
-          streamURL={stream.toURL()}
-        />
-      </View>
+      // <View style={{ width: '100%', height: '100%' }}>
+      <RTCView
+        style={styles.video}
+        mirror={false}
+        objectFit={'contain'}
+        streamURL={stream.toURL()}
+      />
     ) : (
+      // </View>
       <View style={styles.video}>
         <Image source={ButtonCameraOff} style={styles.imageCameraOff} />
       </View>
@@ -50,20 +50,20 @@ const styles = StyleSheet.create({
   },
   videoArea: {
     flex: 1,
-    backgroundColor: 'gray',
+    backgroundColor: '#1D1D1D',
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.5)'
   },
   videoAreaSelected: {
     flex: 1,
-    backgroundColor: 'gray',
+    backgroundColor: '#1D1D1D',
     borderWidth: 5,
     borderColor: '#039BE5'
   },
   video: {
     flex: 1,
     // opacity: 1,
-    backgroundColor: 'gray',
+    backgroundColor: '#1D1D1D',
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',

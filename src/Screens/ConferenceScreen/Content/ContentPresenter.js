@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity, dimmen, Text } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { RTCView } from 'react-native-webrtc';
 import DrawingSketch from './DrawingSketch';
 import MainVideo from './MainVideo';
@@ -42,11 +42,17 @@ const ContentPresenter = props => {
               onPress={props.toggleConferenceMode}
             >
               <View
-                style={
+                style={[
                   props.orientation === 'vertical'
-                    ? styles.topAreaVertical
-                    : styles.topAreaHorizontal
-                }
+                    ? [
+                        styles.topAreaVertical,
+                        { top: props.hasNotch ? 50 : 20 }
+                      ]
+                    : [
+                        styles.topAreaHorizontal,
+                        { bottom: props.hasNotch ? 50 : 25 }
+                      ]
+                ]}
               >
                 {callType != 2 && (
                   <TopArea
@@ -111,14 +117,14 @@ const styles = StyleSheet.create({
   },
   topAreaVertical: {
     position: 'absolute',
-    top: 50,
+    // top: 25,
     right: 25,
     display: 'flex',
     flexDirection: 'column'
   },
   topAreaHorizontal: {
     position: 'absolute',
-    bottom: 50,
+    // bottom: 25,
     left: 25,
     display: 'flex',
     flexDirection: 'row'
