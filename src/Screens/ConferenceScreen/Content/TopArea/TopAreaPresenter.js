@@ -108,8 +108,10 @@ const styles = StyleSheet.create({
   },
   settingBoxHorizontal: {
     flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'flex-end',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    // flexDirection: 'column',
+    // justifyContent: 'flex-end',
     alignItems: 'flex-start',
     marginVertical: 10
   }

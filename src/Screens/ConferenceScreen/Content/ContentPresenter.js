@@ -46,11 +46,11 @@ const ContentPresenter = props => {
                   props.orientation === 'vertical'
                     ? [
                         styles.topAreaVertical,
-                        { top: props.hasNotch ? 50 : 20 }
+                        { top: props.hasNotch ? 40 : 20 }
                       ]
                     : [
                         styles.topAreaHorizontal,
-                        { bottom: props.hasNotch ? 50 : 25 }
+                        { left: props.hasNotch ? 35 : 20 }
                       ]
                 ]}
               >
@@ -118,14 +118,14 @@ const styles = StyleSheet.create({
   topAreaVertical: {
     position: 'absolute',
     // top: 25,
-    right: 25,
+    right: 20,
     display: 'flex',
     flexDirection: 'column'
   },
   topAreaHorizontal: {
     position: 'absolute',
-    // bottom: 25,
-    left: 25,
+    bottom: 15,
+    // left: 25,
     display: 'flex',
     flexDirection: 'row'
   },

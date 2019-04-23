@@ -32,15 +32,16 @@ const MainVideoPresenter = props => {
     <View
       // onTouchEnd={props.onChangeObjectFit}
       style={{
-        top: props.hasNotch ? 50 : 25,
-        left: 25,
+        top: props.hasNotch && props.orientation === 'vertical' ? 50 : 25,
+        left: props.hasNotch && props.orientation !== 'vertical' ? 45 : 25,
+        // left: 25,
         position: 'absolute',
         zIndex: 5
       }}
     >
       <Text
         style={{
-          fontSize: 20,
+          fontSize: Platform.OS === 'ios' ? 22 : 20,
           color: '#fff',
           textAlign: 'center'
         }}
