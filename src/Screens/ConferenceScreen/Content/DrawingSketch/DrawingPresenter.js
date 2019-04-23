@@ -17,7 +17,8 @@ const DrawingPresenter = props => {
     palette,
     tabs,
     display,
-    orientation
+    orientation,
+    hasNotch
   } = props;
 
   return (
@@ -32,8 +33,9 @@ const DrawingPresenter = props => {
       <View
         style={{
           ...styles.tabWrapper,
-          height: palette ? 150 : 100,
-          ...styles[`tabWrapper_${orientation}`]
+          ...styles[`tabWrapper_${orientation}`],
+          height: orientation === 'horizontal' ? '100%' : palette ? 150 : 100,
+          width: orientation === 'vertical' ? '100%' : palette ? 150 : 100
         }}
       >
         <TouchableOpacity
@@ -42,8 +44,7 @@ const DrawingPresenter = props => {
         >
           <Text style={{ fontSize: 18, color: '#fff' }}>완료</Text>
         </TouchableOpacity>
-        <Fragment>
-          {/* <View
+        {/* <View
             style={{
               position: 'absolute',
               right: 15,
@@ -57,74 +58,75 @@ const DrawingPresenter = props => {
               onPress={() => props.onChangeDrawing(!props.drawing)}
             />
           </View> */}
+        <View
+          style={{
+            ...styles.mainSettingWrapper,
+            ...styles[`mainSettingWrapper_${orientation}`]
+          }}
+        >
+          {tabs.map((tab, tabIndex) => (
+            <TouchableOpacity
+              key={tab.id}
+              onPress={() => props.onChangeState('selectedTab', tabIndex)}
+            >
+              <View
+                style={{
+                  ...styles.mainSettingItem,
+                  // borderColor: '#fff',
+                  opacity: selectedTab === tabIndex ? 0.85 : 1,
+                  backgroundColor:
+                    selectedTab === tabIndex
+                      ? 'rgba(255,255,255, 0.45)'
+                      : '#00000000'
+                }}
+              >
+                <Icon name={tab.icon} size={20} color={'#fff'} />
+              </View>
+            </TouchableOpacity>
+          ))}
+        </View>
+        {palette && (
           <View
             style={{
-              ...styles.mainSettingWrapper,
-              ...styles[`mainSettingWrapper_${orientation}`]
+              ...styles.detailSettingWrapper,
+              ...styles[`detailSettingWrapper_${orientation}`]
+              // flexDirection: orientation === 'vertical' ? 'row' : 'column'
             }}
           >
-            {tabs.map((tab, tabIndex) => (
+            {tabs[selectedTab].values.map((value, valueIndex) => (
               <TouchableOpacity
-                key={tab.id}
-                onPress={() => props.onChangeState('selectedTab', tabIndex)}
+                key={String(value)}
+                onPress={() =>
+                  selectedTab === 2 && value === 0
+                    ? props.onClear()
+                    : props.onChangeState(tabs[selectedTab].id, valueIndex)
+                }
               >
                 <View
                   style={{
-                    ...styles.mainSettingItem,
-                    // borderColor: '#fff',
-                    opacity: selectedTab === tabIndex ? 0.85 : 1,
-                    backgroundColor:
-                      selectedTab === tabIndex
-                        ? 'rgba(255,255,255, 0.45)'
-                        : '#00000000'
+                    ...styles.detailSettingItem,
+                    ...styles[`detailSettingItem_${orientation}`],
+                    opacity:
+                      props[tabs[selectedTab].id] === valueIndex ? 0.45 : 1
                   }}
                 >
-                  <Icon name={tab.icon} size={20} color={'#fff'} />
+                  {tabs[selectedTab].render(value)}
                 </View>
               </TouchableOpacity>
             ))}
           </View>
-          {palette && (
-            <View
-              style={{
-                ...styles.detailSettingWrapper,
-                ...styles[`detailSettingWrapper_${orientation}`]
-                // flexDirection: orientation === 'vertical' ? 'row' : 'column'
-              }}
-            >
-              {tabs[selectedTab].values.map((value, valueIndex) => (
-                <TouchableOpacity
-                  key={String(value)}
-                  onPress={() =>
-                    selectedTab === 2 && value === 0
-                      ? props.onClear()
-                      : props.onChangeState(tabs[selectedTab].id, valueIndex)
-                  }
-                >
-                  <View
-                    style={{
-                      ...styles.detailSettingItem,
-                      ...styles[`detailSettingItem_${orientation}`],
-                      opacity:
-                        props[tabs[selectedTab].id] === valueIndex ? 0.45 : 1
-                    }}
-                  >
-                    {tabs[selectedTab].render(value)}
-                  </View>
-                </TouchableOpacity>
-              ))}
-            </View>
-          )}
-        </Fragment>
+        )}
       </View>
       <TouchableOpacity
         key={'color'}
         onPress={() => props.onChangeState('palette', !palette)}
-        style={{
-          // flexDirection: 'row',
-          alignContent: 'center',
-          justifyContent: 'center'
-        }}
+        style={
+          {
+            // flexDirection: 'row',
+            // alignContent: 'center',
+            // justifyContent: 'center'
+          }
+        }
       >
         <Icon
           name={`angle-${
@@ -139,8 +141,8 @@ const DrawingPresenter = props => {
           size={40}
           color={'#fff'}
           style={{
-            ...styles.tabToggleIcon,
-            ...styles[`tabToggleIcon_${orientation}`]
+            ...styles.tabToggleIcon
+            // ...styles[`tabToggleIcon_${orientation}`]
           }}
         />
       </TouchableOpacity>
@@ -174,12 +176,16 @@ const DrawingPresenter = props => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
     position: 'absolute',
     zIndex: 22,
-    width: '100%',
-    height: '100%',
-    justifyContent: 'flex-start',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    // width: '100%',
+    // height: '100%',
+    // justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: '#1D1D1D'
     // paddingLeft: 15
@@ -202,9 +208,9 @@ const styles = StyleSheet.create({
   tabWrapper: {
     // flex: 0.3,
     // position: 'absolute',
-    width: '100%',
+    // width: '100%',
     // height: 150,
-    height: 'auto',
+    // height: 'auto',
     backgroundColor: '#333',
     // width: '100%',
 
@@ -213,13 +219,13 @@ const styles = StyleSheet.create({
   },
   // 세로
   tabWrapper_vertical: {
-    width: '100%',
+    // width: '100%',
     borderBottomWidth: 1
   },
   // 가로
   tabWrapper_horizontal: {
-    width: 95,
-    height: '100%',
+    // width: 150,
+    // height: '100%',
     borderRightWidth: 1,
     flexDirection: 'row'
     // flexDirection: 'column'
@@ -306,8 +312,10 @@ const styles = StyleSheet.create({
 
   // 접기 버튼
   tabToggleIcon: {
-    alignContent: 'center',
-    justifyContent: 'center'
+    marginLeft: 10,
+    marginRight: 10
+    // alignContent: 'center',
+    // justifyContent: 'center'
     // shadowColor: '#000',
     // shadowOffset: {
     //   width: 0,
@@ -318,11 +326,11 @@ const styles = StyleSheet.create({
     // elevation: 3
   },
   tabToggleIcon_vertical: {
-    bottom: 20,
-    zIndex: 99
+    // bottom: 20,
+    // zIndex: 99
   },
   tabToggleIcon_horizontal: {
-    left: 0
+    // left: 0
   },
 
   childrenWrapper: {

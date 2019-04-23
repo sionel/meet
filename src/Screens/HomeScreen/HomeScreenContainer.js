@@ -18,9 +18,9 @@ import {
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import Orientation from 'react-native-orientation-locker';
-import GestureRecognizer, {
-  swipeDirections
-} from 'react-native-swipe-gestures';
+// import GestureRecognizer, {
+//   swipeDirections
+// } from 'react-native-swipe-gestures';
 
 import HomeScreenPresenter from './HomeScreenPresenter';
 

@@ -22,6 +22,7 @@ const ContentPresenter = props => {
         orientation={props.orientation}
         onChangeDrawing={props.setDrawingMode}
         onSetDrawingData={props.onSetDrawingData}
+        hasNotch={props.hasNotch}
       />
       {/* )} */}
       {/* 위에꺼로 좌우반전하면 ㅈ됨 // 아래 View 로 해야 잘됨 */}
