@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity, dimmen } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { RTCView } from 'react-native-webrtc';
 import DrawingSketch from './DrawingSketch';
 import MainVideo from './MainVideo';
@@ -24,24 +24,32 @@ const ContentPresenter = props => {
         onSetDrawingData={props.onSetDrawingData}
       />
       {/* )} */}
-      <TouchableOpacity
-        activeOpacity={0.7}
-        style={styles.container}
-        onPress={props.toggleConferenceMode}
-      >
+      // 위에꺼로 좌우반전하면 ㅈ됨 // 아래 View 로 해야 잘됨
+      <View style={styles.container}>
         <MainVideo
           mainUser={mainUser}
           callType={callType}
           isVideoReverse={isVideoReverse}
+          // orientation={props.orientation}
+          // onPress={props.toggleConferenceMode}
+          orientation={props.orientation}
+          hasNotch={props.hasNotch}
+          objectFit={props.objectFit}
         >
-          <View
-            style={
-              props.orientation === 'vertical'
-                ? styles.contentVertical
-                : styles.contentHorizontal
-            }
+          <TouchableOpacity
+            style={{ flex: 1 }}
+            onPress={props.toggleConferenceMode}
           >
-            <View style={styles.topArea}>
+            <View
+              style={[
+                props.orientation === 'vertical'
+                  ? [styles.topAreaVertical, { top: props.hasNotch ? 40 : 20 }]
+                  : [
+                      styles.topAreaHorizontal,
+                      { left: props.hasNotch ? 35 : 20 }
+                    ]
+              ]}
+            >
               {callType != 2 && (
                 <TopArea
                   orientation={props.orientation}
@@ -49,10 +57,13 @@ const ContentPresenter = props => {
                   onReverseVideo={props.onReverseVideo}
                   onChangeState={props.onChangeState}
                   onChangeDrawing={props.setDrawingMode}
+                  onChangeObjectFit={props.onChangeObjectFit}
+                  objectFit={props.objectFit}
                 />
               )}
             </View>
-            <View style={styles.middleArea} />
+
+            {/* 하단 영역 */}
             <View
               style={
                 props.orientation === 'vertical'
@@ -60,7 +71,6 @@ const ContentPresenter = props => {
                   : styles.bottomAreaHorizontal
               }
             >
-              {/* 하단 영역 */}
               <BottomArea
                 onClose={props.onClose}
                 onChangeSpeaker={props.onChangeSpeaker}
@@ -69,9 +79,10 @@ const ContentPresenter = props => {
                 speaker={speaker}
               />
             </View>
-          </View>
+          </TouchableOpacity>
         </MainVideo>
-      </TouchableOpacity>
+        {/* 싱단 영역 */}
+      </View>
     </View>
   );
 };
@@ -82,33 +93,58 @@ const ContentPresenter = props => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    zIndex: 20
+    width: '100%',
+    height: '100%'
   },
   contentVertical: {
     flex: 1,
-    flexDirection: 'column',
-    transform: [{ rotateY: '0deg' }] // 좌우반전
+    flexDirection: 'column'
+    // transform: [{ rotateY: '0deg' }] // 좌우반전
   },
   contentHorizontal: {
     flex: 1,
-    flexDirection: 'row',
-    transform: [{ rotateY: '0deg' }] // 좌우반전
+    flexDirection: 'row'
+    // transform: [{ rotateY: '0deg' }] // 좌우반전
   },
   topArea: {
     flex: 2
+  },
+  topAreaVertical: {
+    position: 'absolute',
+    // top: 25,
+    right: 20,
+    display: 'flex',
+    flexDirection: 'column'
+  },
+  topAreaHorizontal: {
+    position: 'absolute',
+    bottom: 15,
+    // left: 25,
+    display: 'flex',
+    flexDirection: 'row'
   },
   middleArea: {
     flex: 9
   },
   bottomAreaVertical: {
-    flex: 3,
+    position: 'absolute',
+    bottom: '5%',
+    left: 0,
+    right: 0,
+    // height: '21.5%',
+    // flex: 3,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center'
   },
   bottomAreaHorizontal: {
-    flex: 3,
+    position: 'absolute',
+    right: '5%',
+    top: 0,
+    bottom: 0,
+    // width: '21.5%',
+    // flex: 3,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',

@@ -1,5 +1,11 @@
 import React, { Fragment } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Platform
+} from 'react-native';
 import SettingButton from './SettingButton';
 import { ConferenceModes } from '../../../../utils/ConstantsBackup';
 
@@ -9,49 +15,58 @@ import { ConferenceModes } from '../../../../utils/ConstantsBackup';
 const TopAreaPresenter = props => {
   if (props.conferenceMode === ConferenceModes.NORMAL) {
     return (
-      <TouchableOpacity
-        activeOpacity={1}
+      // <TouchableOpacity
+      // <View
+      //   activeOpacity={1}
+      //   style={
+      //     props.orientation === 'vertical'
+      //       ? styles.containerVertical
+      //       : styles.containerHorizontal
+      //   }
+      // >
+      <View
         style={
           props.orientation === 'vertical'
-            ? styles.containerVertical
-            : styles.containerHorizontal
+            ? styles.settingBoxVertical
+            : styles.settingBoxHorizontal
         }
       >
-        {/* 경과시간 */}
-        <View
-          style={
-            props.orientation === 'vertical'
-              ? styles.settingBoxVertical
-              : styles.settingBoxHorizontal
-          }
-        >
-          {props.isMuteVideo ? null : (
-            <Fragment>
-              <SettingButton
-                name="switch"
-                onPress={props.toggleCameraFacingMode}
-              />
-              <SettingButton
-                name="reverse"
-                onPress={props.onReverseVideo}
-                width={25}
-                height={25}
-                areaWdith={28}
-                areaHeight={28}
-              />
-              <SettingButton
-                name="pen"
-                width={25}
-                height={25}
-                areaWdith={25}
-                areaHeight={28}
-                onPress={() => props.onChangeDrawing(!props.drawing)}
-              />
-            </Fragment>
-          )}
-        </View>
+        {props.isMuteVideo ? null : (
+          <Fragment>
+            <SettingButton
+              name={props.objectFit === 'contain' ? 'zoomIn' : 'zoomOut'}
+              onPress={props.onChangeObjectFit}
+              width={25}
+              height={25}
+              areaWdith={28}
+              areaHeight={28}
+            />
+            <SettingButton
+              name="switch"
+              onPress={props.toggleCameraFacingMode}
+            />
+            <SettingButton
+              name="reverse"
+              onPress={props.onReverseVideo}
+              width={25}
+              height={25}
+              areaWdith={28}
+              areaHeight={28}
+            />
+            {/* <SettingButton
+								name="pen"
+								width={25}
+								height={25}
+								areaWdith={25}
+								areaHeight={28}
+								onPress={() => props.onChangeDrawing(!props.drawing)}
+							/> */}
+          </Fragment>
+        )}
+        {/* </View> */}
+        {/* </TouchableOpacity> */}
         {/* isVideoReverse */}
-      </TouchableOpacity>
+      </View>
     );
   } else {
     return <View style={styles.container} />;
@@ -93,8 +108,10 @@ const styles = StyleSheet.create({
   },
   settingBoxHorizontal: {
     flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'flex-end',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    // flexDirection: 'column',
+    // justifyContent: 'flex-end',
     alignItems: 'flex-start',
     marginVertical: 10
   }

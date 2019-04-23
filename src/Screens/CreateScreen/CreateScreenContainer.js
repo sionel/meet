@@ -11,7 +11,7 @@ import {
   Linking,
   Platform,
   NativeModules,
-  SafeAreaView
+  View
 } from 'react-native';
 
 import CreateScreenPresenter from './CreateScreenPresenter';
@@ -22,6 +22,11 @@ import { ConferenceApi } from '../../services';
 import { NavigationEvents } from 'react-navigation';
 import { querystringParser } from '../../utils';
 
+import DeviceInfo from 'react-native-device-info';
+import Orientation from 'react-native-orientation-locker';
+
+const hasNotch = DeviceInfo.hasNotch();
+
 class CreateScreenContainer extends React.Component {
   /**
    * STATE
@@ -31,8 +36,23 @@ class CreateScreenContainer extends React.Component {
     searchKeyword: '', // 검색인풋
     selectedRoomId: null,
     modal: false,
-    url: null
+    url: null,
+    orientation: 'UNKNOWN'
   };
+
+  componentDidMount() {
+    Orientation.getOrientation(orientation => {
+      this.setState({ orientation });
+    });
+    Orientation.addOrientationListener(this._handleOrientation);
+  }
+
+  /**
+   * componentWillUnmount
+   */
+  componentWillUnmount() {
+    Orientation.removeOrientationListener(this._handleOrientation);
+  }
 
   /**
    * Rendering
@@ -51,7 +71,7 @@ class CreateScreenContainer extends React.Component {
     }
 
     return (
-      <SafeAreaView style={{ flex: 1 }}>
+      <View style={{ flex: 1 }}>
         <StatusBar barStyle="light-content" backgroundColor={'#1C90FB'} />
         <NavigationEvents
           onDidFocus={() => {
@@ -68,10 +88,19 @@ class CreateScreenContainer extends React.Component {
           onActivateModal={this._handleActivateModal}
           onCheckConference={this._handleCheckConference}
           onCreateConference={this._handleCreateConference}
+          orientation={this.state.orientation}
+          hasNotch={hasNotch}
         />
-      </SafeAreaView>
+      </View>
     );
   } // render
+
+  /**
+   * _handleOrientation
+   */
+  _handleOrientation = orientation => {
+    this.setState({ orientation });
+  };
 
   /**
    * _handleRedirect

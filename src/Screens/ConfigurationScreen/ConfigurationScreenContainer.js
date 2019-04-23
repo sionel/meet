@@ -7,13 +7,36 @@
 import React from 'react';
 import ConfigurationScreenPresenter from './ConfigurationScreenPresenter';
 
+import DeviceInfo from 'react-native-device-info';
+import Orientation from 'react-native-orientation-locker';
+
+const hasNotch = DeviceInfo.hasNotch();
+
 class ConfigurationScreenContainer extends React.Component {
   /**
    * STATE
    */
   state = {
-    webView: false
+    webView: false,
+    orientation: 'UNKNOWN'
   };
+
+  /**
+   * componentDidMount
+   */
+  componentDidMount() {
+    Orientation.getOrientation(orientation => {
+      this.setState({ orientation });
+    });
+    Orientation.addOrientationListener(this._handleOrientation);
+  }
+
+  /**
+   * componentWillUnmount
+   */
+  componentWillUnmount() {
+    Orientation.removeOrientationListener(this._handleOrientation);
+  }
 
   /**
    * handleRedirect
@@ -42,9 +65,18 @@ class ConfigurationScreenContainer extends React.Component {
         onDestroyToken={onDestroyToken}
         onToggleVisibleAppIntro={onToggleVisibleAppIntro}
         // log={this.props.log}
+        orientation={this.state.orientation}
+        hasNotch={hasNotch}
       />
     );
   } // render
+
+  /**
+   * _handleOrientation
+   */
+  _handleOrientation = orientation => {
+    this.setState({ orientation });
+  };
 
   /**
    * _handleChangeValue
@@ -61,6 +93,7 @@ class ConfigurationScreenContainer extends React.Component {
   _handleLogout = () => {
     // const { onLogout, navigation } = this.props;
     this.props.onLogout();
+    this.props.onSetInitialList();
     // navigation.navigate('Main');
   };
 }

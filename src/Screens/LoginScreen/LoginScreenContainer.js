@@ -15,7 +15,9 @@ import { CustomLottie } from '../../components';
 // service
 import { querystringParser } from '../../utils';
 
-const deviceHeight = Dimensions.get('window').height;
+// const deviceHeight = Dimensions.get('window').height;
+const isTablet = DeviceInfo.isTablet();
+const { height, width } = Dimensions.get('window');
 
 class LoginScreenContainer extends React.Component {
   /**
@@ -103,7 +105,8 @@ class LoginScreenContainer extends React.Component {
         permissionModal={permission}
         nextInput={nextInput}
         phrases="Loading"
-        height={deviceHeight}
+        // height={deviceHeight}
+        height={isTablet ? height : Math.max(width, height)}
         hasNotch={DeviceInfo.hasNotch()}
         // onSubmitNext={this._submitNext}
       />
@@ -245,7 +248,15 @@ class LoginScreenContainer extends React.Component {
       cno,
       HASH_KEY
     );
-    if (result) {
+    if (result.errors) {
+      if (result.errors.code === 'E002') {
+        // alert('result11 : ' + JSON.stringify(result));
+        // await this.props.onLogout();
+        // this.forceUpdate();
+      } else {
+        alert('사소한 문제가 발생했습니다. 다시 시도해주세요.');
+      }
+    } else if (result.user_name || result.auth.user_name) {
       // navigation.navigate('Home');
       this.props.handleOnLogin();
     }
@@ -262,7 +273,6 @@ class LoginScreenContainer extends React.Component {
       'https://play.google.com/store/apps/details?id=com.duzon.android.lulubizpotal';
 
     Linking.openURL(url).catch(err => {
-      console.log(err);
       if (Platform.OS === 'ios') {
         Linking.openURL(iosMarketURL).catch(err => {
           Alert.alert('스토어 정보가 없습니다.', '', [{ text: 'OK' }], {

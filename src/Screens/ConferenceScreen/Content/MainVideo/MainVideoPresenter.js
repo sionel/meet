@@ -1,5 +1,13 @@
 import React, { Fragment } from 'react';
-import { View, StyleSheet, Image, Text } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Image,
+  Text,
+  Platform,
+  ScrollView,
+  TouchableHighlight
+} from 'react-native';
 import { RTCView } from 'react-native-webrtc';
 import ButtonCameraOff from '../../../../../assets/buttons/btn_vc_camera_off.png';
 import ButtonCameraOff2 from '../../../../../assets/icons/icoCameraWhLargeOff_2x.png';
@@ -22,16 +30,18 @@ const MainVideoPresenter = props => {
   } = props;
   const displayTime = (
     <View
+      // onTouchEnd={props.onChangeObjectFit}
       style={{
-        top: 50,
-        left: 25,
-        position: 'absolute'
-        // zIndex: 99
+        top: props.hasNotch && props.orientation === 'vertical' ? 50 : 25,
+        left: props.hasNotch && props.orientation !== 'vertical' ? 45 : 25,
+        // left: 25,
+        position: 'absolute',
+        zIndex: 5
       }}
     >
       <Text
         style={{
-          fontSize: 20,
+          fontSize: Platform.OS === 'ios' ? 22 : 20,
           color: '#fff',
           textAlign: 'center'
         }}
@@ -45,7 +55,7 @@ const MainVideoPresenter = props => {
     <View
       style={{
         position: 'absolute',
-        top: 0,
+        top: 36,
         // bottom: 0,
         height: 41,
         left: 0,
@@ -53,14 +63,15 @@ const MainVideoPresenter = props => {
         justifyContent: 'center',
         alignItems: 'center',
         // backgroundColor: 'rgba(255,255,255, .67)',
-        backgroundColor: '#F15F5F'
-        // zIndex: 9
+        // backgroundColor: '#F15F5F',
+        zIndex: 4
       }}
     >
       <Text
         style={{
           // backgroundColor: 'black',
-          width: '100%',
+          backgroundColor: '#F15F5F',
+          // width: '100%',
           padding: 10,
           color: '#fff',
           textAlign: 'center',
@@ -82,17 +93,22 @@ const MainVideoPresenter = props => {
           style={styles.RTCVideo}
           // mirror={true}
           mirror={isVideoReverse}
-          objectFit={videoType && videoType === 'desktop' ? 'fit' : 'cover'}
+          objectFit={
+            videoType && videoType === 'desktop' ? 'contain' : props.objectFit
+          }
           streamURL={stream.toURL()}
         />
 
         {/* Video 화면 위에 있는 요소들을 absolute 로 띄운다 */}
-        <View style={styles.videoContainer}>
-          {displayTime}
-          {mainUser.status === 'interrupted' && muteView}
-          {/* {muteView} */}
-          {props.children}
-        </View>
+        {displayTime}
+        {mainUser.status === 'interrupted' && muteView}
+        <View style={styles.videoContainer}>{props.children}</View>
+        {/* <View style={styles.videoContainer}>
+            {displayTime}
+            {mainUser.status === 'interrupted' && muteView}
+            {muteView}
+            {props.children}
+        </View> */}
       </View>
     );
   } else {
@@ -174,8 +190,15 @@ const MainVideoPresenter = props => {
  */
 const styles = StyleSheet.create({
   RTCVideo: {
-    flex: 1,
-    backgroundColor: 'gray'
+    // flex: 1,
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    // height: '100%',
+    backgroundColor: '#1D1D1D'
+    // backgroundColor: 'gray'
   },
   videoContainer: {
     position: 'absolute',

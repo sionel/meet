@@ -33,7 +33,7 @@ const logo_login = require(`${rootPath}/logo_login.png`);
 const wehago_favicon = require(`${rootPath}/wehago_favicon.png`);
 
 // const { width, height } = Dimensions.get('window');
-// const isIphoneX = (
+// const hasNotch = (
 //   Platform.OS === 'ios' &&
 //   !Platform.isPad &&
 //   !Platform.isTVOS &&

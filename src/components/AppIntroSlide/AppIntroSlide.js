@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import {
   StyleSheet,
   View,
@@ -11,7 +10,6 @@ import {
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import AppIntroSlider from './react-native-intro-slider/AppIntroSlider';
-import { actionCreators as UserActions } from '../../redux/modules/user';
 
 const { width, height } = Dimensions.get('window');
 const ratio = 375 / 449;
@@ -210,7 +208,7 @@ class AppIntroSlide extends React.Component {
 
   _renderItem = (item, index) => {
     return (
-      <View style={{ flex: 1, width: item.width, height: item.height }}>
+      <View style={{ flex: 1, width: item.width, height: '100%' }}>
         {item.view}
       </View>
     );
@@ -279,17 +277,4 @@ const styles = StyleSheet.create({
   }
 });
 
-// map state to props
-const mapStateToProps = state => ({
-  intro: state.user.appIntro
-});
-
-// map dispatch to props
-const mapDispatchToProps = dispatch => ({
-  onIntro: () => dispatch(UserActions.toggleVisibleAppIntro())
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AppIntroSlide);
+export default AppIntroSlide;

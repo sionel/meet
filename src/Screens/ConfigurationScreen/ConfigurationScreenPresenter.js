@@ -11,7 +11,8 @@ import {
   TouchableOpacity,
   Modal,
   Alert,
-  SafeAreaView
+  SafeAreaView,
+  Platform
 } from 'react-native';
 import { CustomWebView, SectionListHeader } from '../../components';
 
@@ -32,8 +33,14 @@ const ConfigurationScreenPresenter = props => {
     },
     {
       title: '버전정보',
-      action: () =>
-        Alert.alert('버전정보', '1.0.2', [{ text: 'OK' }], { cancelable: true })
+      content: Platform.OS === 'ios' ? '1.1.2' : '0.1.2'
+      // action: () =>
+      //   Alert.alert(
+      //     '버전정보',
+      //     Platform.OS === 'ios' ? '1.0.2' : '0.1.0',
+      //     [{ text: 'OK' }],
+      //     { cancelable: true }
+      //   )
     },
     // {
     // 	title: '앱인트로 보기',
@@ -60,25 +67,31 @@ const ConfigurationScreenPresenter = props => {
 
   return (
     <View style={styles.container}>
-      <SafeAreaView
-        style={{
-          flex: 1,
-          width: '100%'
-        }}
-      >
+      <View style={{ flex: 1, width: '100%' }}>
         <SectionList
           sections={[{ title: '시스템', data: userConfig }]}
           renderSectionHeader={({ section }) => (
             <SectionListHeader title={section.title} />
           )}
           renderItem={({ item }, index) => (
-            <TouchableOpacity key={index} onPress={item.action}>
+            <TouchableOpacity
+              key={index}
+              onPress={item.action}
+              style={{ flexDirection: 'row', justifyContent: 'space-between' }}
+            >
               <Text style={styles.item}>{item.title}</Text>
+              <Text style={[styles.item, styles.content]}>{item.content}</Text>
             </TouchableOpacity>
           )}
           keyExtractor={(item, index) => index}
+          style={
+            props.hasNotch && {
+              paddingLeft: props.orientation === 'LANDSCAPE-LEFT' ? 24 : 0,
+              paddingRight: props.orientation === 'LANDSCAPE-RIGHT' ? 24 : 0
+            }
+          }
         />
-      </SafeAreaView>
+      </View>
 
       <Modal
         animationType="slide"
@@ -119,6 +132,9 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 15,
     height: 44
+  },
+  content: {
+    color: '#999'
   }
 });
 

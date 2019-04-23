@@ -10,15 +10,30 @@ import {
   Linking,
   Platform,
   Dimensions,
-  SafeAreaView
+  View,
+  Text,
+  NativeModules,
+  TouchableOpacity
+  // DrawerLayoutAndroid
 } from 'react-native';
+import DeviceInfo from 'react-native-device-info';
+import Orientation from 'react-native-orientation-locker';
+import GestureRecognizer, {
+  swipeDirections
+} from 'react-native-swipe-gestures';
+
 import HomeScreenPresenter from './HomeScreenPresenter';
+
 // service
 import { WetalkApi } from '../../services';
 import { UserApi } from '../../services';
 import { ConferenceApi } from '../../services';
 import { NavigationEvents } from 'react-navigation';
 import { querystringParser } from '../../utils';
+
+import DrawerContent from '../../components/DrawerContent';
+const { height, width } = Dimensions.get('window');
+const hasNotch = DeviceInfo.hasNotch();
 
 // #region
 
@@ -41,13 +56,19 @@ class HomeScreenContainer extends Component {
     searchKeyword: '', // 검색인풋
     selectedRoomId: null,
     modal: false,
-    url: null
+    url: null,
+    orientation: 'UNKNOWN'
   };
 
   /**
    * componentDidMount
    */
   componentDidMount() {
+    Orientation.getOrientation(orientation => {
+      this.setState({ orientation });
+    });
+    Orientation.addOrientationListener(this._handleOrientation);
+
     Linking.getInitialURL().then(url => {
       if (url) {
         this._handleOpenURL({ url });
@@ -69,8 +90,13 @@ class HomeScreenContainer extends Component {
    */
   componentWillUnmount() {
     clearInterval(this._interval);
+    Orientation.removeOrientationListener(this._handleOrientation);
     Linking.removeEventListener('url', this._handleOpenURL);
     AppState.removeEventListener('change', this._handleAppStateChange);
+  }
+
+  onSwipeRight(gestureState) {
+    this.props.navigation.openDrawer();
   }
 
   // #region
@@ -92,7 +118,7 @@ class HomeScreenContainer extends Component {
     }
 
     return (
-      <SafeAreaView style={{ flex: 1 }}>
+      <View style={{ flex: 1 }}>
         <StatusBar barStyle="light-content" backgroundColor={'#1C90FB'} />
         <NavigationEvents
           onDidFocus={() => {
@@ -101,6 +127,14 @@ class HomeScreenContainer extends Component {
           }}
           onDidBlur={() => (this._isFocus = false)}
         />
+        {/* <GestureRecognizer
+          onSwipeRight={state => this.onSwipeRight(state)}
+          style={{ flex: 1 }}
+        > */}
+        {/* <DrawerLayoutAndroid
+          drawerWidth={Math.min(height, width) * 0.75}
+          renderNavigationView={() => <DrawerContent navigation={navigation} />}
+        > */}
         <HomeScreenPresenter
           navigation={navigation}
           refreshing={refreshing}
@@ -114,11 +148,22 @@ class HomeScreenContainer extends Component {
           onSearch={this._handleSearch}
           onCreateConference={this._handleCreateConference}
           onCheckConference={this._handleCheckConference}
+          orientation={this.state.orientation}
+          hasNotch={hasNotch}
         />
-      </SafeAreaView>
+        {/* </DrawerLayoutAndroid> */}
+        {/* </GestureRecognizer> */}
+      </View>
     );
   }
   // #endregion
+
+  /**
+   * _handleOrientation
+   */
+  _handleOrientation = orientation => {
+    this.setState({ orientation });
+  };
 
   _handleOpenURL = event => {
     // const result = querystringParser(url);
@@ -151,16 +196,12 @@ class HomeScreenContainer extends Component {
    */
   _handleOpenLink = url => {
     const result = querystringParser(url);
-
-    switch (result.type) {
-      case '3':
-        break;
-      case '9':
-        alert(JSON.stringify(result));
-        break;
-      default:
-        this._handleCheckConference(result.room_id, result); // 테스트
-        break;
+    // console.log('RESULT :: ', result);
+    // if (result.type === '3') {
+    if (typeof result === 'string') {
+      // 위하고 로그인일 경우
+    } else {
+      this._handleCheckConference(result.room_id, result); // 테스트
     }
     // 화상대화 타입 (생성:0/참여:1)
     // if (result.type == '1') {
@@ -254,10 +295,15 @@ class HomeScreenContainer extends Component {
       auth.last_access_company_no,
       auth.HASH_KEY
     );
+
     // 재 로그인
     if (checkResult.errors) {
+      if (checkResult.errors.code === 'E002') {
+        return this.props.onLogout();
+      } else {
+        return this.props.onDisconnect();
+      }
       // alert('Home: 인증실패\nError: ' + JSON.stringify(checkResult.errors) + '\nToken: ' + copyAuth);
-      return this.props.onLogout();
     } else {
       // 최종선택 회사가 달라진 경우
       if (
@@ -272,8 +318,8 @@ class HomeScreenContainer extends Component {
         };
         onLogin(userData);
       }
+      this._handleGetWetalkList();
     }
-    this._handleGetWetalkList();
   };
 
   /**
