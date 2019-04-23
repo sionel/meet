@@ -31,38 +31,35 @@ const TopAreaPresenter = props => {
             : styles.settingBoxHorizontal
         }
       >
-        {props.isMuteVideo ? null : (
-          <Fragment>
-            <SettingButton
-              name={props.objectFit === 'contain' ? 'zoomIn' : 'zoomOut'}
-              onPress={props.onChangeObjectFit}
-              width={25}
-              height={25}
-              areaWdith={28}
-              areaHeight={28}
-            />
-            <SettingButton
-              name="switch"
-              onPress={props.toggleCameraFacingMode}
-            />
-            <SettingButton
-              name="reverse"
-              onPress={props.onReverseVideo}
-              width={25}
-              height={25}
-              areaWdith={28}
-              areaHeight={28}
-            />
-            <SettingButton
-              name="pen"
-              width={25}
-              height={25}
-              areaWdith={25}
-              areaHeight={28}
-              onPress={() => props.onChangeDrawing(!props.drawing)}
-            />
-          </Fragment>
-        )}
+        {/* {props.isMuteVideo ? null : ( */}
+        <Fragment>
+          <SettingButton
+            name={props.objectFit === 'contain' ? 'zoomIn' : 'zoomOut'}
+            onPress={props.onChangeObjectFit}
+            width={25}
+            height={25}
+            areaWdith={28}
+            areaHeight={28}
+          />
+          <SettingButton name="switch" onPress={props.toggleCameraFacingMode} />
+          <SettingButton
+            name="reverse"
+            onPress={props.onReverseVideo}
+            width={25}
+            height={25}
+            areaWdith={28}
+            areaHeight={28}
+          />
+          <SettingButton
+            name="pen"
+            width={25}
+            height={25}
+            areaWdith={25}
+            areaHeight={28}
+            onPress={() => props.onChangeDrawing(!props.drawing)}
+          />
+        </Fragment>
+        {/* )} */}
         {/* </View> */}
         {/* </TouchableOpacity> */}
         {/* isVideoReverse */}

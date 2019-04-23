@@ -25,7 +25,7 @@ const DrawingPresenter = props => {
     <View
       style={{
         ...styles.container,
-        display: display ? '' : 'none',
+        display: display ? 'flex' : 'none',
         flexDirection: orientation === 'vertical' ? 'column' : 'row'
       }}
     >
@@ -177,14 +177,15 @@ const DrawingPresenter = props => {
 const styles = StyleSheet.create({
   container: {
     // flex: 1,
-    position: 'absolute',
-    zIndex: 22,
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    // width: '100%',
-    // height: '100%',
+    // position: 'absolute',
+    // zIndex: 22,
+    // top: 0,
+    // bottom: 0,
+    // left: 0,
+    // right: 0,
+    position: 'relative',
+    width: '100%',
+    height: '100%',
     // justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: '#1D1D1D'
