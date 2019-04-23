@@ -24,7 +24,7 @@ const ContentPresenter = props => {
         onSetDrawingData={props.onSetDrawingData}
       />
       {/* )} */}
-      // 위에꺼로 좌우반전하면 ㅈ됨 // 아래 View 로 해야 잘됨
+      {/* 위에꺼로 좌우반전하면 ㅈ됨 // 아래 View 로 해야 잘됨 */}
       <View style={styles.container}>
         <MainVideo
           mainUser={mainUser}
