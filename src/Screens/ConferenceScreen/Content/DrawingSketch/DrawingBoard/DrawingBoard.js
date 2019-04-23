@@ -17,14 +17,9 @@ class DrawingBoard extends Component {
 
   render() {
     const { user, stroke, color, onStrokeEnd } = this.props;
-
-    // const width = Dimensions.get('window').width; // 화면 가로길이
-    // const height = width * ((BASE_HEIGHT * 100) / BASE_WIDTH / 100); // 웹에서 받아온 데이터의 화면과 비례한 세로길이
-    // const height = width * ((521 * 100) / 910 / 100); // 웹에서 받아온 데이터의 화면과 비례한 세로길이
     const width = this._drawingManager.get('SCREEN_WIDTH');
     const height = this._drawingManager.get('SCREEN_HEIGHT');
     const backgroundColor = '#fff';
-    // console.log('onSetDrawingData : ', onStrokeEnd);
 
     return (
       <Fragment>

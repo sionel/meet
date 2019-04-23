@@ -211,7 +211,6 @@ class ConferenceManager {
    * 드로잉데이터 전송
    */
   setClear = () => {
-    alert(111);
     this._conferenceConnector.setClear();
   };
 }

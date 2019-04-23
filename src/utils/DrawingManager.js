@@ -10,10 +10,13 @@ class DrawingManager {
   constructor(dispatch) {
     // Singleton
     if (!DrawingManager.instance) {
+      const width = Dimensions.get('window').width;
+      const height = Dimensions.get('window').height;
+
       // 기본 화면비율
       this.BASE_WIDTH = 1024;
       this.BASE_HEIGHT = 768;
-      this.SCREEN_WIDTH = Dimensions.get('window').width; // 화면 가로길이;
+      this.SCREEN_WIDTH = width >= height ? height : width; // 화면 가로길이;
       this.SCREEN_HEIGHT =
         this.SCREEN_WIDTH * ((this.BASE_HEIGHT * 100) / this.BASE_WIDTH / 100); // 화면 가로길이;
       this.CONTRAST_SCALE = (this.SCREEN_WIDTH * 100) / this.BASE_WIDTH;
@@ -57,7 +60,6 @@ class DrawingManager {
    *
    */
   clearAll = (send = false) => {
-    alert(1);
     this.canvas.clear();
     return true;
   };
@@ -70,8 +72,6 @@ class DrawingManager {
     to: mobile , pc
     */
     if (to === 'mobile') {
-      console.log('RAW DATA : ', data);
-
       const newData = this._handleConvertPcToMobile(data);
       if (this.canvas) {
         this.canvas.addPath(newData);

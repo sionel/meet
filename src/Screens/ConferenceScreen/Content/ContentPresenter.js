@@ -19,6 +19,7 @@ const ContentPresenter = props => {
         display={drawingMode}
         drawing={drawingMode}
         onClear={props.onClear}
+        orientation={props.orientation}
         onChangeDrawing={props.setDrawingMode}
         onSetDrawingData={props.onSetDrawingData}
       />
