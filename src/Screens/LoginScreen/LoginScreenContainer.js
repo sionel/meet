@@ -266,26 +266,35 @@ class LoginScreenContainer extends React.Component {
    * _handleLoginForWehago
    */
   _handleLoginForWehago = () => {
-    const url = 'wehago://?wehagomeet=login';
+    const iosUrl = 'wehago://?wehagomeet=login';
+    const androidUrl = 'wehago://app?name=meet';
     const iosMarketURL =
       'http://itunes.apple.com/kr/app/wehago/id1363039300?mt=8';
     const androidMarketURL =
       'https://play.google.com/store/apps/details?id=com.duzon.android.lulubizpotal';
 
-    Linking.openURL(url).catch(err => {
-      if (Platform.OS === 'ios') {
-        Linking.openURL(iosMarketURL).catch(err => {
-          Alert.alert('스토어 정보가 없습니다.', '', [{ text: 'OK' }], {
-            cancelable: true
-          });
+    Linking.openURL(Platform.OS === 'ios' ? iosUrl : androidUrl).catch(err => {
+      Linking.openURL(
+        Platform.OS === 'ios' ? iosMarketURL : androidMarketURL
+      ).catch(err => {
+        Alert.alert('스토어 정보가 없습니다.', '', [{ text: 'OK' }], {
+          cancelable: true
         });
-      } else if (Platform.OS === 'android') {
-        Linking.openURL(androidMarketURL).catch(err => {
-          Alert.alert('스토어 정보가 없습니다.', '', [{ text: 'OK' }], {
-            cancelable: true
-          });
-        });
-      }
+      });
+
+      // if (Platform.OS === 'ios') {
+      //   Linking.openURL(iosMarketURL).catch(err => {
+      //     Alert.alert('스토어 정보가 없습니다.', '', [{ text: 'OK' }], {
+      //       cancelable: true
+      //     });
+      //   });
+      // } else if (Platform.OS === 'android') {
+      //   Linking.openURL(androidMarketURL).catch(err => {
+      //     Alert.alert('스토어 정보가 없습니다.', '', [{ text: 'OK' }], {
+      //       cancelable: true
+      //     });
+      //   });
+      // }
     });
   };
 
@@ -293,6 +302,7 @@ class LoginScreenContainer extends React.Component {
    *
    */
   _handleGetWehagoToken = event => {
+    alert(event.url);
     const result = querystringParser(event.url);
     // Linking.removeEventListener('url', this._handleGetWehagoToken);
     this._handleSaveUserinfo(

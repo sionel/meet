@@ -7,6 +7,8 @@ import { StyleSheet, View, Text, TouchableOpacity, Button } from 'react-native';
 import { SketchCanvas } from '@terrylinla/react-native-sketch-canvas';
 import DrawingBoard from './DrawingBoard';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import DeviceInfo from 'react-native-device-info';
+const hasNotch = DeviceInfo.hasNotch();
 
 const DrawingPresenter = props => {
   const {
@@ -17,15 +19,14 @@ const DrawingPresenter = props => {
     palette,
     tabs,
     display,
-    orientation,
-    hasNotch
+    orientation
   } = props;
 
   return (
     <View
       style={{
         ...styles.container,
-        display: display ? '' : 'none',
+        display: display ? 'flex' : 'none',
         flexDirection: orientation === 'vertical' ? 'column' : 'row'
       }}
     >
@@ -34,8 +35,26 @@ const DrawingPresenter = props => {
         style={{
           ...styles.tabWrapper,
           ...styles[`tabWrapper_${orientation}`],
-          height: orientation === 'horizontal' ? '100%' : palette ? 150 : 100,
-          width: orientation === 'vertical' ? '100%' : palette ? 150 : 100
+          height:
+            orientation === 'horizontal'
+              ? '100%'
+              : palette
+              ? hasNotch
+                ? 150
+                : 125
+              : hasNotch
+              ? 100
+              : 75,
+          width:
+            orientation === 'vertical'
+              ? '100%'
+              : palette
+              ? hasNotch
+                ? 150
+                : 125
+              : hasNotch
+              ? 100
+              : 75
         }}
       >
         <TouchableOpacity
@@ -44,20 +63,6 @@ const DrawingPresenter = props => {
         >
           <Text style={{ fontSize: 18, color: '#fff' }}>완료</Text>
         </TouchableOpacity>
-        {/* <View
-            style={{
-              position: 'absolute',
-              right: 15,
-              top: 50,
-              zIndex: 9
-            }}
-          >
-            <Button
-              title="완료"
-              color={'#fff'}
-              onPress={() => props.onChangeDrawing(!props.drawing)}
-            />
-          </View> */}
         <View
           style={{
             ...styles.mainSettingWrapper,
@@ -85,6 +90,8 @@ const DrawingPresenter = props => {
             </TouchableOpacity>
           ))}
         </View>
+
+        {/* 확장 역역 */}
         {palette && (
           <View
             style={{
@@ -147,7 +154,7 @@ const DrawingPresenter = props => {
         />
       </TouchableOpacity>
 
-      {/*  */}
+      {/* Sketch Board */}
       <View
         style={{
           flex: 1,
@@ -177,14 +184,15 @@ const DrawingPresenter = props => {
 const styles = StyleSheet.create({
   container: {
     // flex: 1,
-    position: 'absolute',
-    zIndex: 22,
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    // width: '100%',
-    // height: '100%',
+    // position: 'absolute',
+    // zIndex: 22,
+    // top: 0,
+    // bottom: 0,
+    // left: 0,
+    // right: 0,
+    position: 'relative',
+    width: '100%',
+    height: '100%',
     // justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: '#1D1D1D'
@@ -195,13 +203,13 @@ const styles = StyleSheet.create({
   modeChangeButton_vertical: {
     position: 'absolute',
     right: 15,
-    top: 58,
+    top: hasNotch ? 58 : 33,
     zIndex: 9
   },
   modeChangeButton_horizontal: {
     position: 'absolute',
     top: 20,
-    left: 50,
+    left: hasNotch ? 50 : 25,
     zIndex: 9
   },
 
@@ -233,7 +241,7 @@ const styles = StyleSheet.create({
 
   mainSettingWrapper: {
     width: '100%',
-    height: 95,
+    height: hasNotch ? 95 : 70,
     paddingLeft: 15,
     flexDirection: 'row',
     justifyContent: 'flex-start',
@@ -241,13 +249,13 @@ const styles = StyleSheet.create({
   },
   // 세로
   mainSettingWrapper_vertical: {
-    height: 95,
+    height: hasNotch ? 95 : 70,
     flexDirection: 'row'
   },
   // 가로
   mainSettingWrapper_horizontal: {
     justifyContent: 'flex-end',
-    width: 90,
+    width: hasNotch ? 90 : 65,
     height: '100%',
     flexDirection: 'column'
     // justifyContent: 'flex-end'
