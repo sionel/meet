@@ -52,7 +52,7 @@ const ContentPresenter = props => {
                     ]
               ]}
             >
-              {callType !== 2 && (
+              {callType !== 2 && !drawingMode && (
                 <TopArea
                   orientation={props.orientation}
                   drawing={props.drawingMode}

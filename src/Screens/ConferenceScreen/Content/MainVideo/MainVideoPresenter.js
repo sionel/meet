@@ -56,11 +56,12 @@ const MainVideoPresenter = props => {
     <View
       style={{
         position: 'absolute',
-        top: 36,
+        top: '50%',
         // bottom: 0,
         height: 41,
-        left: 0,
-        right: 0,
+        left: '50%',
+        width: '50%',
+        // right: 0,
         justifyContent: 'center',
         alignItems: 'center',
         // backgroundColor: 'rgba(255,255,255, .67)',
