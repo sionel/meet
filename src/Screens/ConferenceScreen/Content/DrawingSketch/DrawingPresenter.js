@@ -44,20 +44,6 @@ const DrawingPresenter = props => {
         >
           <Text style={{ fontSize: 18, color: '#fff' }}>완료</Text>
         </TouchableOpacity>
-        {/* <View
-            style={{
-              position: 'absolute',
-              right: 15,
-              top: 50,
-              zIndex: 9
-            }}
-          >
-            <Button
-              title="완료"
-              color={'#fff'}
-              onPress={() => props.onChangeDrawing(!props.drawing)}
-            />
-          </View> */}
         <View
           style={{
             ...styles.mainSettingWrapper,
@@ -85,6 +71,8 @@ const DrawingPresenter = props => {
             </TouchableOpacity>
           ))}
         </View>
+
+        {/* 확장 역역 */}
         {palette && (
           <View
             style={{
@@ -147,7 +135,7 @@ const DrawingPresenter = props => {
         />
       </TouchableOpacity>
 
-      {/*  */}
+      {/* Sketch Board */}
       <View
         style={{
           flex: 1,

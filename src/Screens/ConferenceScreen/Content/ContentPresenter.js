@@ -36,6 +36,7 @@ const ContentPresenter = props => {
           orientation={props.orientation}
           hasNotch={props.hasNotch}
           objectFit={props.objectFit}
+          drawing={drawingMode}
         >
           <TouchableOpacity
             style={{ flex: 1 }}
@@ -65,21 +66,23 @@ const ContentPresenter = props => {
             </View>
 
             {/* 하단 영역 */}
-            <View
-              style={
-                props.orientation === 'vertical'
-                  ? styles.bottomAreaVertical
-                  : styles.bottomAreaHorizontal
-              }
-            >
-              <BottomArea
-                onClose={props.onClose}
-                onChangeSpeaker={props.onChangeSpeaker}
-                orientation={props.orientation}
-                callType={callType}
-                speaker={speaker}
-              />
-            </View>
+            {!drawingMode && (
+              <View
+                style={
+                  props.orientation === 'vertical'
+                    ? styles.bottomAreaVertical
+                    : styles.bottomAreaHorizontal
+                }
+              >
+                <BottomArea
+                  onClose={props.onClose}
+                  onChangeSpeaker={props.onChangeSpeaker}
+                  orientation={props.orientation}
+                  callType={callType}
+                  speaker={speaker}
+                />
+              </View>
+            )}
           </TouchableOpacity>
         </MainVideo>
         {/* 싱단 영역 */}

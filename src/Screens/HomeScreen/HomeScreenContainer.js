@@ -344,6 +344,7 @@ class HomeScreenContainer extends Component {
     // 위하고(외부)에서 접속인지 아닌지 구분
     if (externalData !== null) {
       auth = {
+        ...auth,
         conferenceId,
         portal_id: externalData.owner_id,
         user_name: externalData.owner_name,

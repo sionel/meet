@@ -189,7 +189,7 @@ const MainVideoPresenter = props => {
 
   return (
     <View style={{ flex: 1, backgroundColor: '#1D1D1D' }}>
-      {!isMuteVideo && stream && callType !== 2 ? (
+      {!isMuteVideo && stream && callType !== 2 && !props.drawing ? (
         <RTCView
           style={styles.RTCVideo}
           // mirror={true}
@@ -253,7 +253,12 @@ const MainVideoPresenter = props => {
         </View>
       ) : (
         <View style={styles.imageContainer}>
-          <Image source={ButtonCameraOff2} style={{ width: 60, height: 55 }} />
+          {!props.drawing && (
+            <Image
+              source={ButtonCameraOff2}
+              style={{ width: 60, height: 55 }}
+            />
+          )}
         </View>
       )}
 
