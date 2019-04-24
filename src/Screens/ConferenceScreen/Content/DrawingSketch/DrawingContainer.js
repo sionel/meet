@@ -43,7 +43,7 @@ class DrawingContainer extends Component {
         id: 'stroke',
         icon: 'pen',
         title: '선굵기',
-        values: [1, 3, 5, 7, 9],
+        values: [3, 5, 7, 9, 13],
         // render: size => <Text>{size}</Text>
         render: size => (
           <View

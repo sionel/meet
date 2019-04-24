@@ -86,6 +86,7 @@ class DrawingManager {
    */
   _handleConvertPcToMobile = data => {
     let drawDataToJson = JSON.parse(data.attributes.data);
+    console.log('Add Command : ', drawDataToJson);
     let newData = {
       drawer: 'wehago_meet_web',
       size: {
@@ -116,6 +117,7 @@ class DrawingManager {
       newData.path.data.push(`${item.x},${item.y}`);
     });
     this.history.push(newData);
+    console.log('Parse data : ', newData);
     return newData;
   };
 
@@ -136,7 +138,8 @@ class DrawingManager {
           strokeWidth: width,
           paths: []
         },
-        isMobile: true
+        // isMobile: true
+        isMobile: false
       },
       children: []
     };
@@ -151,6 +154,7 @@ class DrawingManager {
     });
 
     newData.attributes.data = JSON.stringify(newData.attributes.data);
+    // console.log('NEW : ', newData);
     return newData;
   };
 }
