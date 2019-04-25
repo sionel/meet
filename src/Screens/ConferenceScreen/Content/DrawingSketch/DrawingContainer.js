@@ -60,7 +60,16 @@ class DrawingContainer extends Component {
         id: 'color',
         icon: 'palette',
         title: '색상',
-        values: ['lightskyblue', 'orange', 'lime'],
+        values: [
+          '#000',
+          '#6a6aff',
+          '#258cff',
+          // '#00c8cb',
+          '#ffc126',
+          '#ff6e26',
+          '#f04247',
+          '#fff'
+        ],
         render: backgroundColor => (
           <View
             style={{
@@ -76,7 +85,7 @@ class DrawingContainer extends Component {
         id: 'eraser',
         icon: 'eraser',
         title: '지우개',
-        values: [3, 5, 7, 9, 12, 0],
+        values: [7, 9, 12, 15, 0],
         render: size =>
           size !== 0 ? (
             <View
@@ -90,6 +99,24 @@ class DrawingContainer extends Component {
           ) : (
             <Icon name={'trash'} size={15} color={'#e54840'} />
           )
+      },
+      {
+        id: 'undo',
+        icon: 'undo',
+        title: '이전',
+        // value: [1,2],
+        onPress: () => {
+          this._drawingManager.undo();
+        }
+      },
+      {
+        id: 'redo',
+        icon: 'redo',
+        title: '다시',
+        // value: [1,2],
+        onPress: () => {
+          this._drawingManager.redo();
+        }
       }
     ]
   };

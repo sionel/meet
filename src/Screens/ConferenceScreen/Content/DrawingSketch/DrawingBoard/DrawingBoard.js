@@ -28,7 +28,9 @@ class DrawingBoard extends Component {
           style={{
             width,
             height,
-            backgroundColor
+            backgroundColor,
+            borderWidth: 2,
+            borderColor: '#d1d1d1'
           }}
           user={user}
           strokeWidth={stroke}

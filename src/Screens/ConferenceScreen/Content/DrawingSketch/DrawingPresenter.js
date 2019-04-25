@@ -72,7 +72,11 @@ const DrawingPresenter = props => {
           {tabs.map((tab, tabIndex) => (
             <TouchableOpacity
               key={tab.id}
-              onPress={() => props.onChangeState('selectedTab', tabIndex)}
+              onPress={() =>
+                tab.onPress
+                  ? tab.onPress()
+                  : props.onChangeState('selectedTab', tabIndex)
+              }
             >
               <View
                 style={{
@@ -127,13 +131,14 @@ const DrawingPresenter = props => {
       <TouchableOpacity
         key={'color'}
         onPress={() => props.onChangeState('palette', !palette)}
-        style={
-          {
-            // flexDirection: 'row',
-            // alignContent: 'center',
-            // justifyContent: 'center'
-          }
-        }
+        style={{
+          // width: '100%',
+          backgroundColor: '#fff',
+          // flexDirection: 'row',
+          alignContent: 'center',
+          justifyContent: 'center',
+          textAlign: 'center'
+        }}
       >
         <Icon
           name={`angle-${
@@ -146,7 +151,7 @@ const DrawingPresenter = props => {
               : `right`
           }`}
           size={40}
-          color={'#fff'}
+          color={'#333'}
           style={{
             ...styles.tabToggleIcon
             // ...styles[`tabToggleIcon_${orientation}`]
@@ -161,7 +166,9 @@ const DrawingPresenter = props => {
           justifyContent: 'center',
           alignItems: 'center',
           zIndex: 5,
-          backgroundColor: '#1D1D1D',
+          padding: 15,
+          backgroundColor: '#f2f2f2',
+          // backgroundColor: '#1D1D1D',
           width: '100%',
           hieght: '100%'
         }}
@@ -219,7 +226,7 @@ const styles = StyleSheet.create({
     // width: '100%',
     // height: 150,
     // height: 'auto',
-    backgroundColor: '#333',
+    backgroundColor: '#1f1f1f',
     // width: '100%',
 
     borderColor: '#c1c1c1',
@@ -228,13 +235,13 @@ const styles = StyleSheet.create({
   // 세로
   tabWrapper_vertical: {
     // width: '100%',
-    borderBottomWidth: 1
+    // borderBottomWidth: 1
   },
   // 가로
   tabWrapper_horizontal: {
     // width: 150,
     // height: '100%',
-    borderRightWidth: 1,
+    // borderRightWidth: 1,
     flexDirection: 'row'
     // flexDirection: 'column'
   },
@@ -275,7 +282,8 @@ const styles = StyleSheet.create({
 
   detailSettingWrapper: {
     paddingLeft: 15,
-    backgroundColor: '#333',
+    // backgroundColor: '#333',
+    backgroundColor: '#3f3f3f',
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
@@ -284,8 +292,8 @@ const styles = StyleSheet.create({
   // 세로
   detailSettingWrapper_vertical: {
     height: 60,
-    width: '100%',
-    borderBottomWidth: 1
+    width: '100%'
+    // borderBottomWidth: 1
   },
   // 가로
   detailSettingWrapper_horizontal: {
@@ -293,7 +301,7 @@ const styles = StyleSheet.create({
     width: 65,
     paddingTop: 10,
     paddingRight: 15,
-    borderRightWidth: 1,
+    // borderRightWidth: 1,
     flexDirection: 'column'
   },
 

@@ -16,7 +16,7 @@ class DrawingManager {
       // 기본 화면비율
       this.BASE_WIDTH = 1024;
       this.BASE_HEIGHT = 768;
-      this.SCREEN_WIDTH = width >= height ? height : width; // 화면 가로길이;
+      this.SCREEN_WIDTH = (width >= height ? height : width) - 30; // 화면 가로길이;
       this.SCREEN_HEIGHT =
         this.SCREEN_WIDTH * ((this.BASE_HEIGHT * 100) / this.BASE_WIDTH / 100); // 화면 가로길이;
       this.CONTRAST_SCALE = (this.SCREEN_WIDTH * 100) / this.BASE_WIDTH;
@@ -156,6 +156,20 @@ class DrawingManager {
     newData.attributes.data = JSON.stringify(newData.attributes.data);
     // console.log('NEW : ', newData);
     return newData;
+  };
+
+  /**
+   * REDO
+   */
+  redo = () => {
+    this.canvas.redo();
+  };
+
+  /**
+   * UNDO
+   */
+  undo = () => {
+    this.canvas.undo();
   };
 }
 
