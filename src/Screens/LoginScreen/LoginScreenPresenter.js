@@ -68,19 +68,19 @@ const LoginScreenPresenter = props => {
     inputRange: [0, 1],
     outputRange: ['0deg', '360deg']
   });
-  const spinning = () => {
-    Animated.loop(
-      Animated.timing(rotate, {
-        toValue: 1,
-        duration: 1000,
-        useNativeDriver: true,
-        easing: Easing.out(Easing.poly(1))
-      })
-    ).start();
-  };
+  const spinning = Animated.loop(
+    Animated.timing(rotate, {
+      toValue: 1,
+      duration: 1000,
+      useNativeDriver: true,
+      easing: Easing.out(Easing.poly(1))
+    })
+  );
 
   if (props.logging) {
-    spinning();
+    spinning.start();
+  } else {
+    spinning.stop();
   }
 
   /**

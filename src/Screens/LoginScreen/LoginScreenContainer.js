@@ -5,7 +5,15 @@
  */
 
 import React from 'react';
-import { Linking, Platform, View, Alert, Dimensions } from 'react-native';
+import {
+  Linking,
+  Platform,
+  View,
+  Alert,
+  Dimensions,
+  UIManager,
+  LayoutAnimation
+} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import Orientation from 'react-native-orientation-locker';
 
@@ -34,6 +42,14 @@ class LoginScreenContainer extends React.Component {
     webView: false,
     logging: false
   };
+
+  constructor(props) {
+    super(props);
+    if (Platform.OS === 'android') {
+      UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+  }
 
   componentDidMount() {
     Linking.getInitialURL().then(url => {

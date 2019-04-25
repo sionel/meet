@@ -13,7 +13,9 @@ import {
   View,
   Text,
   NativeModules,
-  TouchableOpacity
+  TouchableOpacity,
+  UIManager,
+  LayoutAnimation
   // DrawerLayoutAndroid
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
@@ -45,6 +47,11 @@ class HomeScreenContainer extends Component {
     super(props);
     this._isFocus = true;
     this._refreshTimeStamp = Date.now();
+
+    if (Platform.OS === 'android') {
+      UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
   }
 
   /**
