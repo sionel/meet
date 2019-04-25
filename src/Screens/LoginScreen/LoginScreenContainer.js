@@ -302,7 +302,7 @@ class LoginScreenContainer extends React.Component {
    *
    */
   _handleGetWehagoToken = event => {
-    alert(event.url);
+    // alert(event.url);
     const result = querystringParser(event.url);
     // Linking.removeEventListener('url', this._handleGetWehagoToken);
     this._handleSaveUserinfo(

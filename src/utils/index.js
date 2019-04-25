@@ -116,7 +116,7 @@ _getServiceCode = () => {
 };
 
 _getService = url => {
-  console.log('_getService : ' + url);
+  // console.log('_getService : ' + url);
   let service = '';
   if (url.split('/').length > 2) {
     service = url.split('/')[3];
