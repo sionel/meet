@@ -4,7 +4,14 @@
  */
 
 import React from 'react';
-import { Image, TouchableOpacity, Dimensions, Platform } from 'react-native';
+import {
+  Image,
+  TouchableOpacity,
+  Dimensions,
+  Platform,
+  View,
+  Animated
+} from 'react-native';
 
 import {
   createStackNavigator,
@@ -56,18 +63,70 @@ const BackButton = ({ navigation, to }) => {
  * 사이드메뉴 토글아이콘
  */
 const RightMenuImage = ({ navigation }) => {
+  const { state } = navigation;
+
+  const opacity = new Animated.Value(1);
+  const rotate = new Animated.Value(0);
+  const spin = rotate.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '360deg']
+  });
+
+  if (state.drawerMovementDirection) {
+    Animated.timing(opacity, {
+      toValue: 0.3,
+      duration: 20
+    }).start(() =>
+      Animated.timing(opacity, {
+        toValue: 1,
+        duration: 200
+      }).start()
+    );
+    Animated.timing(rotate, {
+      toValue: 1,
+      duration: 400
+    }).start();
+  }
+
   return (
-    <Icon
-      // name="cog"
-      name="bars"
-      size={20}
-      color="#fff"
+    <View
       style={{
-        marginLeft: 20,
-        // marginRight: 20,
-        zIndex: 10
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingLeft: 10
       }}
-    />
+    >
+      <Animated.View
+        style={{
+          transform: [{ rotate: spin }],
+          opacity: opacity,
+          alignItems: 'center',
+          justifyContent: 'center',
+          margin: 10
+        }}
+      >
+        <Icon
+          // name="cog"
+          name={
+            state.drawerMovementDirection === 'opening'
+              ? 'close'
+              : state.drawerMovementDirection === 'closing'
+              ? 'bars'
+              : state.isDrawerOpen
+              ? 'close'
+              : 'bars'
+            // iconName
+          }
+          size={20}
+          color="#fff"
+          style={{
+            // marginLeft: 20,
+            // marginRight: 20,
+            zIndex: 10
+          }}
+        />
+      </Animated.View>
+    </View>
   );
 };
 
@@ -115,6 +174,7 @@ const HomeRoute = createStackNavigator(
               // navigation.navigate('Configuration');
               navigation.toggleDrawer();
             }}
+            activeOpacity={1}
           >
             <RightMenuImage navigation={navigation} />
           </TouchableOpacity>

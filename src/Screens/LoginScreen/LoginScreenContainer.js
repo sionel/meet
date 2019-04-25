@@ -31,8 +31,8 @@ class LoginScreenContainer extends React.Component {
     modalText: '',
     waiting: true,
     autoLoginFlag: true,
-    webView: false
-    // height: deviceHeight
+    webView: false,
+    logging: false
   };
 
   componentDidMount() {
@@ -64,7 +64,8 @@ class LoginScreenContainer extends React.Component {
       nextInput,
       waiting,
       autoLoginFlag,
-      webView
+      webView,
+      logging
     } = this.state;
     if (waiting) {
       Orientation.unlockAllOrientations();
@@ -109,6 +110,7 @@ class LoginScreenContainer extends React.Component {
         height={isTablet ? height : Math.max(width, height)}
         hasNotch={DeviceInfo.hasNotch()}
         // onSubmitNext={this._submitNext}
+        logging={logging}
       />
     );
   } // render
@@ -186,6 +188,8 @@ class LoginScreenContainer extends React.Component {
    * 로그인함수
    */
   _handleLogin = async (wehagoLogin = false) => {
+    this.setState({ logging: true });
+
     // const { navigation } = this.props;
     const { userId, userPwd } = this.state;
     const { loginRequest } = this.props;
@@ -222,6 +226,7 @@ class LoginScreenContainer extends React.Component {
         resultData.last_access_company_no
       );
     } else {
+      this.setState({ logging: false });
       this._handleActivateModal('아이디와 패스워드를 확인해 주세요');
     }
   };
@@ -248,6 +253,7 @@ class LoginScreenContainer extends React.Component {
       cno,
       HASH_KEY
     );
+    this.setState({ logging: false });
     if (result.errors) {
       if (result.errors.code === 'E002') {
         // alert('result11 : ' + JSON.stringify(result));
