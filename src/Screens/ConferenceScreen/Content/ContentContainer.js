@@ -1,5 +1,11 @@
 import React from 'react';
-import { Dimensions, NativeModules, Platform } from 'react-native';
+import {
+  Dimensions,
+  NativeModules,
+  Platform,
+  ToastAndroid,
+  BackHandler
+} from 'react-native';
 import ContentPresenter from './ContentPresenter';
 import { ConferenceModes } from '../../../utils/Constants';
 // import Orientation from 'react-native-orientation-locker';
@@ -36,6 +42,15 @@ class ContentContainer extends React.Component {
     // });
     // 스피커폰 설정
     this._handleChangeSpeaker(AudioMode.VIDEO_CALL);
+    BackHandler.addEventListener('hardwareBackPress', this._handleBackButton);
+  }
+
+  componentWillUnmount() {
+    // 앱 종료를 막음
+    BackHandler.removeEventListener(
+      'hardwareBackPress',
+      this._handleBackButton
+    );
   }
 
   /**
@@ -56,6 +71,29 @@ class ContentContainer extends React.Component {
       />
     );
   }
+
+  /**
+   * _handleBackButton
+   */
+  _handleBackButton = () => {
+    // 1000(1초) 안에 back 버튼을 한번 더 클릭 할 경우 앱 종료
+    if (this.exitContent == undefined || !this.exitContent) {
+      ToastAndroid.show(
+        '한번 더 누르면 화상대화가 종료됩니다.',
+        ToastAndroid.SHORT
+      );
+      this.exitContent = true;
+
+      this.timeout = setTimeout(() => {
+        this.exitContent = false;
+      }, 1000);
+    } else {
+      clearTimeout(this.timeout);
+
+      this.props.onClose(); // 컴포넌트 종료
+    }
+    return true;
+  };
 
   _handleChangeObjectFit = () => {
     this.setState(({ objectFit }) => ({

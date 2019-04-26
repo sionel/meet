@@ -73,15 +73,15 @@ const RightMenuImage = ({ navigation }) => {
   });
 
   if (state.drawerMovementDirection) {
-    Animated.timing(opacity, {
-      toValue: 0.3,
-      duration: 20
-    }).start(() =>
-      Animated.timing(opacity, {
-        toValue: 1,
-        duration: 200
-      }).start()
-    );
+    // Animated.timing(opacity, {
+    //   toValue: 0.3,
+    //   duration: 20
+    // }).start(() =>
+    //   Animated.timing(opacity, {
+    //     toValue: 1,
+    //     duration: 200
+    //   }).start()
+    // );
     Animated.timing(rotate, {
       toValue: 1,
       duration: 400

@@ -15,8 +15,10 @@ import {
   NativeModules,
   TouchableOpacity,
   UIManager,
-  LayoutAnimation
+  LayoutAnimation,
   // DrawerLayoutAndroid
+  ToastAndroid,
+  BackHandler
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import Orientation from 'react-native-orientation-locker';
@@ -90,6 +92,8 @@ class HomeScreenContainer extends Component {
         this._handleRefresh();
       }
     }, 15000);
+
+    BackHandler.addEventListener('hardwareBackPress', this._handleBackButton);
   }
 
   /**
@@ -100,11 +104,18 @@ class HomeScreenContainer extends Component {
     Orientation.removeOrientationListener(this._handleOrientation);
     Linking.removeEventListener('url', this._handleOpenURL);
     AppState.removeEventListener('change', this._handleAppStateChange);
+
+    // 앱 종료를 막음
+    this.exitApp = false;
+    BackHandler.removeEventListener(
+      'hardwareBackPress',
+      this._handleBackButton
+    );
   }
 
-  onSwipeRight(gestureState) {
-    this.props.navigation.openDrawer();
-  }
+  // onSwipeRight(gestureState) {
+  //   this.props.navigation.openDrawer();
+  // }
 
   // #region
   /**
@@ -164,6 +175,31 @@ class HomeScreenContainer extends Component {
     );
   }
   // #endregion
+
+  /**
+   * _handleBackButton
+   */
+  _handleBackButton = () => {
+    // if(this.props.navigation)
+    if (!this.props.navigation.isFocused()) return false;
+
+    this.props.navigation.closeDrawer();
+
+    // 1000(1초) 안에 back 버튼을 한번 더 클릭 할 경우 앱 종료
+    if (this.exitApp == undefined || !this.exitApp) {
+      ToastAndroid.show('한번 더 누르면 앱이 종료됩니다.', ToastAndroid.SHORT);
+      this.exitApp = true;
+
+      this.timeout = setTimeout(() => {
+        this.exitApp = false;
+      }, 1000);
+    } else {
+      clearTimeout(this.timeout);
+
+      BackHandler.exitApp(); // 앱 종료
+    }
+    return true;
+  };
 
   /**
    * _handleOrientation
