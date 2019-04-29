@@ -30,7 +30,7 @@ const ParticipantBoxPresenter = props => {
       onPressOut={() => props.setMainUser(props.user.id)}
     >
       <View
-        style={props.isSelect ? styles.videoAreaSelected : styles.videoArea}
+        style={[styles.videoArea, props.isSelect && styles.videoAreaSelected]}
       >
         {content}
       </View>
@@ -55,8 +55,6 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255, 255, 255, 0.5)'
   },
   videoAreaSelected: {
-    flex: 1,
-    backgroundColor: '#1D1D1D',
     borderWidth: 5,
     borderColor: '#039BE5'
   },

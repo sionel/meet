@@ -1,13 +1,5 @@
 import React, { Fragment } from 'react';
-import {
-  View,
-  StyleSheet,
-  Image,
-  Text,
-  Platform,
-  ScrollView,
-  TouchableHighlight
-} from 'react-native';
+import { View, StyleSheet, Image, Text, Platform } from 'react-native';
 import { RTCView } from 'react-native-webrtc';
 import ButtonCameraOff from '../../../../../assets/buttons/btn_vc_camera_off.png';
 import ButtonCameraOff2 from '../../../../../assets/icons/icoCameraWhLargeOff_2x.png';
@@ -56,12 +48,12 @@ const MainVideoPresenter = props => {
     <View
       style={{
         position: 'absolute',
-        top: '50%',
+        top: '45%',
         // bottom: 0,
         height: 41,
-        left: '50%',
-        width: '50%',
-        // right: 0,
+        left: 0,
+        // width: '50%',
+        right: 0,
         justifyContent: 'center',
         alignItems: 'center',
         // backgroundColor: 'rgba(255,255,255, .67)',
@@ -87,106 +79,6 @@ const MainVideoPresenter = props => {
   );
 
   const userInfo = mainUser.userInfo;
-
-  // if (!isMuteVideo && stream && callType != 2) {
-  //   return (
-  //     <View style={{ flex: 1 }}>
-  //       {/* RTCVideo 를 메인화면으로 설정하고 */}
-  //       <RTCView
-  //         style={styles.RTCVideo}
-  //         // mirror={true}
-  //         mirror={isVideoReverse}
-  //         objectFit={
-  //           videoType && videoType === 'desktop' ? 'contain' : props.objectFit
-  //         }
-  //         streamURL={stream.toURL()}
-  //       />
-
-  //       {/* Video 화면 위에 있는 요소들을 absolute 로 띄운다 */}
-  //       {displayTime}
-  //       {mainUser.status === 'interrupted' && muteView}
-  //       <View style={styles.videoContainer}>{props.children}</View>
-  //       {/* <View style={styles.videoContainer}>
-  //           {displayTime}
-  //           {mainUser.status === 'interrupted' && muteView}
-  //           {muteView}
-  //           {props.children}
-  //       </View> */}
-  //     </View>
-  //   );
-  // } else {
-  //   return (
-  //     <View style={styles.muteContainer}>
-  //       {callType == 2 ? (
-  //         // {callType != 2 ? (
-  //         <View style={{ ...styles.imageContainer }}>
-  //           <View style={{ display: 'flex' }}>
-  //             <CustomLottie source="voiceBroadcast" width={280} height={280}>
-  //               <View
-  //                 style={{
-  //                   position: 'absolute',
-  //                   top: -205,
-  //                   justifyContent: 'center'
-  //                 }}
-  //               >
-  //                 <Text
-  //                   style={{
-  //                     fontSize: 20,
-  //                     color: '#c0c0c0',
-  //                     textAlign: 'center'
-  //                   }}
-  //                 >
-  //                   통화중
-  //                 </Text>
-  //                 <Text
-  //                   style={{
-  //                     fontSize: 25,
-  //                     color: '#c0c0c0',
-  //                     textAlign: 'center'
-  //                   }}
-  //                 >
-  //                   {second2String(props.time)}
-  //                 </Text>
-  //               </View>
-  //               <Image style={styles.profileImage} source={ProfileImage} />
-  //               <View
-  //                 style={{
-  //                   position: 'absolute',
-  //                   top: 180,
-  //                   alignItems: 'center'
-  //                 }}
-  //               >
-  //                 <Text
-  //                   style={{ fontSize: 25, fontWeight: 'bold', color: '#fff' }}
-  //                 >
-  //                   {mainUser.name}
-  //                 </Text>
-  //                 <Text style={{ fontSize: 13, color: '#fff', paddingTop: 10 }}>
-  //                   {userInfo && userInfo.companyFullpath
-  //                     ? userInfo.companyFullpath
-  //                     : ''}
-  //                 </Text>
-  //               </View>
-  //             </CustomLottie>
-  //           </View>
-  //         </View>
-  //       ) : (
-  //         <Fragment>
-  //           {displayTime}
-  //           <View style={styles.imageContainer}>
-  //             {mainUser.status === 'interrupted' && muteView}
-  //             <Image
-  //               source={ButtonCameraOff2}
-  //               style={{ width: 60, height: 55 }}
-  //             />
-  //           </View>
-  //         </Fragment>
-  //       )}
-  //       {/* {props.children} */}
-  //       <View style={styles.videoContainer}>{props.children}</View>
-  //     </View>
-  //   );
-  // }
 
   return (
     <View style={{ flex: 1, backgroundColor: '#1D1D1D' }}>
@@ -262,10 +154,12 @@ const MainVideoPresenter = props => {
           )}
         </View>
       )}
-
       {displayTime}
       {mainUser.status === 'interrupted' && muteView}
-      <View style={styles.videoContainer}>{props.children}</View>
+
+      {props.children && (
+        <View style={styles.videoContainer}>{props.children}</View>
+      )}
     </View>
   );
 };
@@ -283,7 +177,6 @@ const styles = StyleSheet.create({
     right: 0,
     // height: '100%',
     backgroundColor: '#1D1D1D'
-    // backgroundColor: 'gray'
   },
   videoContainer: {
     position: 'absolute',

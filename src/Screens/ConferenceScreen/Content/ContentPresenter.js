@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { RTCView } from 'react-native-webrtc';
 import DrawingSketch from './DrawingSketch';
 import MainVideo from './MainVideo';
@@ -25,8 +25,36 @@ const ContentPresenter = props => {
         hasNotch={props.hasNotch}
       />
       {/* )} */}
-      {/* 위에꺼로 좌우반전하면 ㅈ됨 // 아래 View 로 해야 잘됨 */}
-      <View style={styles.container}>
+
+      {/* START 싱단 영역 */}
+      <View
+        style={[
+          styles.topArea,
+          props.orientation === 'vertical'
+            ? [styles.topAreaVertical, { top: props.hasNotch ? 40 : 20 }]
+            : [styles.topAreaHorizontal, { left: props.hasNotch ? 35 : 20 }]
+        ]}
+      >
+        {callType !== 2 && !drawingMode && (
+          <TopArea
+            orientation={props.orientation}
+            drawing={props.drawingMode}
+            onReverseVideo={props.onReverseVideo}
+            onChangeState={props.onChangeState}
+            onChangeDrawing={props.setDrawingMode}
+            onChangeObjectFit={props.onChangeObjectFit}
+            objectFit={props.objectFit}
+          />
+        )}
+      </View>
+      {/* END 싱단 영역 */}
+
+      {/* START MAIN VIDEO 영역 */}
+      <TouchableOpacity
+        style={{ flex: 1 }}
+        onPress={props.toggleConferenceMode}
+        activeOpacity={1}
+      >
         <MainVideo
           mainUser={mainUser}
           callType={callType}
@@ -37,56 +65,30 @@ const ContentPresenter = props => {
           hasNotch={props.hasNotch}
           objectFit={props.objectFit}
           drawing={drawingMode}
-        >
-          <TouchableOpacity
-            style={{ flex: 1 }}
-            onPress={props.toggleConferenceMode}
-          >
-            <View
-              style={[
-                props.orientation === 'vertical'
-                  ? [styles.topAreaVertical, { top: props.hasNotch ? 40 : 20 }]
-                  : [
-                      styles.topAreaHorizontal,
-                      { left: props.hasNotch ? 35 : 20 }
-                    ]
-              ]}
-            >
-              {callType !== 2 && !drawingMode && (
-                <TopArea
-                  orientation={props.orientation}
-                  drawing={props.drawingMode}
-                  onReverseVideo={props.onReverseVideo}
-                  onChangeState={props.onChangeState}
-                  onChangeDrawing={props.setDrawingMode}
-                  onChangeObjectFit={props.onChangeObjectFit}
-                  objectFit={props.objectFit}
-                />
-              )}
-            </View>
+        />
+      </TouchableOpacity>
+      {/* END MAIN VIDEO 영역 */}
 
-            {/* 하단 영역 */}
-            {!drawingMode && (
-              <View
-                style={
-                  props.orientation === 'vertical'
-                    ? styles.bottomAreaVertical
-                    : styles.bottomAreaHorizontal
-                }
-              >
-                <BottomArea
-                  onClose={props.onClose}
-                  onChangeSpeaker={props.onChangeSpeaker}
-                  orientation={props.orientation}
-                  callType={callType}
-                  speaker={speaker}
-                />
-              </View>
-            )}
-          </TouchableOpacity>
-        </MainVideo>
-        {/* 싱단 영역 */}
-      </View>
+      {/* START 하단 영역 */}
+      {!drawingMode && (
+        <View
+          style={[
+            styles.bottomArea,
+            props.orientation === 'vertical'
+              ? styles.bottomAreaVertical
+              : styles.bottomAreaHorizontal
+          ]}
+        >
+          <BottomArea
+            onClose={props.onClose}
+            onChangeSpeaker={props.onChangeSpeaker}
+            orientation={props.orientation}
+            callType={callType}
+            speaker={speaker}
+          />
+        </View>
+      )}
+      {/* END 하단 영역 */}
     </View>
   );
 };
@@ -111,48 +113,41 @@ const styles = StyleSheet.create({
     // transform: [{ rotateY: '0deg' }] // 좌우반전
   },
   topArea: {
+    position: 'absolute',
+    display: 'flex',
     flex: 2
   },
   topAreaVertical: {
-    position: 'absolute',
     // top: 25,
     right: 20,
-    display: 'flex',
     flexDirection: 'column'
   },
   topAreaHorizontal: {
-    position: 'absolute',
     bottom: 15,
     // left: 25,
-    display: 'flex',
     flexDirection: 'row'
   },
   middleArea: {
     flex: 9
   },
-  bottomAreaVertical: {
+  bottomArea: {
     position: 'absolute',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 9
+  },
+  bottomAreaVertical: {
     bottom: '5%',
     left: 0,
     right: 0,
-    // height: '21.5%',
-    // flex: 3,
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center'
+    flexDirection: 'row'
   },
   bottomAreaHorizontal: {
-    position: 'absolute',
     right: '5%',
     top: 0,
     bottom: 0,
-    // width: '21.5%',
-    // flex: 3,
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center'
+    flexDirection: 'column'
   }
 });
 
