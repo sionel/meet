@@ -26,6 +26,26 @@ const ContentPresenter = props => {
       />
       {/* )} */}
 
+      {/* START MAIN VIDEO 영역 */}
+      <TouchableOpacity
+        style={{ flex: 1 }}
+        onPress={props.toggleConferenceMode}
+        activeOpacity={1}
+      >
+        <MainVideo
+          mainUser={mainUser}
+          callType={callType}
+          isVideoReverse={isVideoReverse}
+          // orientation={props.orientation}
+          // onPress={props.toggleConferenceMode}
+          orientation={props.orientation}
+          hasNotch={props.hasNotch}
+          objectFit={props.objectFit}
+          drawing={drawingMode}
+        />
+      </TouchableOpacity>
+      {/* END MAIN VIDEO 영역 */}
+
       {/* START 싱단 영역 */}
       <View
         style={[
@@ -48,26 +68,6 @@ const ContentPresenter = props => {
         )}
       </View>
       {/* END 싱단 영역 */}
-
-      {/* START MAIN VIDEO 영역 */}
-      <TouchableOpacity
-        style={{ flex: 1 }}
-        onPress={props.toggleConferenceMode}
-        activeOpacity={1}
-      >
-        <MainVideo
-          mainUser={mainUser}
-          callType={callType}
-          isVideoReverse={isVideoReverse}
-          // orientation={props.orientation}
-          // onPress={props.toggleConferenceMode}
-          orientation={props.orientation}
-          hasNotch={props.hasNotch}
-          objectFit={props.objectFit}
-          drawing={drawingMode}
-        />
-      </TouchableOpacity>
-      {/* END MAIN VIDEO 영역 */}
 
       {/* START 하단 영역 */}
       {!drawingMode && (
