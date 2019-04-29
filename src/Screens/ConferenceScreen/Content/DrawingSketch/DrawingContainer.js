@@ -64,7 +64,7 @@ class DrawingContainer extends Component {
           '#000',
           '#6a6aff',
           '#258cff',
-          // '#00c8cb',
+          '#00c8cb',
           '#ffc126',
           '#ff6e26',
           '#f04247',
@@ -108,16 +108,16 @@ class DrawingContainer extends Component {
         onPress: () => {
           this._drawingManager.undo();
         }
-      },
-      {
-        id: 'redo',
-        icon: 'redo',
-        title: '다시',
-        // value: [1,2],
-        onPress: () => {
-          this._drawingManager.redo();
-        }
       }
+      // {
+      //   id: 'redo',
+      //   icon: 'redo',
+      //   title: '다시',
+      //   // value: [1,2],
+      //   onPress: () => {
+      //     this._drawingManager.redo();
+      //   }
+      // }
     ]
   };
 

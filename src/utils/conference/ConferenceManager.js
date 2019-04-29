@@ -124,7 +124,8 @@ class ConferenceManager {
       SUSPEND_DETECTED: handleClose,
       SET_USER_INFO: this._setUserInfo,
       CHANGED_USER_STATUS: this._changedUserStatus,
-      CHANGED_DOCUMENT_SHARE_MODE: this._changeDocumentShareMode
+      // CHANGED_DOCUMENT_SHARE_MODE: this._changeDocumentShareMode
+      CHANGED_DOCUMENT_SHARE_MODE: this.changeDocumentShareMode
     };
     return handler;
   };
@@ -191,9 +192,12 @@ class ConferenceManager {
   /**
    * 문서공유/드로잉모드 전환
    */
-  _changeDocumentShareMode = status => {
+  // _changeDocumentShareMode = status => {
+  changeDocumentShareMode = status => {
     this._dispatch(
-      mainUserActionCreators.setDrawingMode(status === 'true' ? true : false)
+      mainUserActionCreators.setDrawingMode(
+        status === 'true' || status === true ? true : false
+      )
     );
   };
 
@@ -204,6 +208,15 @@ class ConferenceManager {
   setDrawingData = data => {
     // alert(JSON.stringify(data));
     this._conferenceConnector.setDrawingData(data);
+  };
+
+  /**
+   * setToogleDocumentShare
+   * 드로잉데이터 전송
+   */
+  setToogleDocumentShare = data => {
+    // alert(JSON.stringify(data));
+    this._conferenceConnector.setToogleDocumentShare(data);
   };
 
   /**

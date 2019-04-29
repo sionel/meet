@@ -180,6 +180,7 @@ class ConferenceConnector {
         value: userId,
         attributes: { isDocumentShare }
       } = value;
+      console.log('SET_DOCUMENT_IS_SHARE : ', value);
       if (userId !== this._room.myUserId()) {
         this._handlers.CHANGED_DOCUMENT_SHARE_MODE(
           value.attributes.isDocumentShare
@@ -248,6 +249,23 @@ class ConferenceConnector {
     // 대화방에 트랙을 추가한다.
     tracks.forEach(track => this._room.addTrack(track));
     this._tracks = tracks;
+  };
+
+  /**
+   * 드로잉 모드 전환 공유
+   */
+  setToogleDocumentShare = isDocumentShare => {
+    // 공유모드 설정 참가자들에게 공유
+    this._room.sendCommand(SET_DOCUMENT_IS_SHARE, {
+      value: this._room.myUserId(),
+      attributes: {
+        isDocumentShare
+      }
+    });
+    this._handlers.CHANGED_DOCUMENT_SHARE_MODE(
+      // value.attributes.isDocumentShare
+      isDocumentShare
+    );
   };
 
   /**

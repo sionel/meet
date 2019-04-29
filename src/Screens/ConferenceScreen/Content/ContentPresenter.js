@@ -22,6 +22,7 @@ const ContentPresenter = props => {
         orientation={props.orientation}
         onChangeDrawing={props.setDrawingMode}
         onSetDrawingData={props.onSetDrawingData}
+        onChangeDrawingMode={props.onChangeDrawingMode}
         hasNotch={props.hasNotch}
       />
       {/* )} */}
@@ -61,6 +62,7 @@ const ContentPresenter = props => {
                   onChangeDrawing={props.setDrawingMode}
                   onChangeObjectFit={props.onChangeObjectFit}
                   objectFit={props.objectFit}
+                  onChangeDrawingMode={props.onChangeDrawingMode}
                 />
               )}
             </View>

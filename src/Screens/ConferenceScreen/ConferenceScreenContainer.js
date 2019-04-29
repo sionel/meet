@@ -90,6 +90,7 @@ class ConferenceScreenContainer extends React.Component {
           onClose={this._handleClose}
           onClear={this._handleClear}
           onSetDrawingData={this._handleSetDrawingData}
+          onChangeDrawingMode={this._handleChangeDrawingMode}
         />
       </Fragment>
     );
@@ -139,6 +140,13 @@ class ConferenceScreenContainer extends React.Component {
    */
   _handleClear = () => {
     this._conferenceManager.setClear();
+  };
+
+  /**
+   * _handleChangeDrawingMode
+   */
+  _handleChangeDrawingMode = value => {
+    this._conferenceManager.setToogleDocumentShare(value);
   };
 }
 
