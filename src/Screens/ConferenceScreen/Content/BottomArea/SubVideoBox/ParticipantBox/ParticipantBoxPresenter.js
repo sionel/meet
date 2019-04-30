@@ -12,7 +12,8 @@ import DeviceInfo from 'react-native-device-info';
 import ButtonCameraOff from '../../../../../../../assets/buttons/btn_vc_camera_off.png';
 
 const apiLevel = DeviceInfo.getAPILevel();
-const canUseStream = Platform.OS === 'android' && apiLevel >= 26;
+const canUseStream =
+  (Platform.OS === 'android' && apiLevel >= 26) || Platform.OS === 'ios';
 
 /**
  * ContentPresenter
