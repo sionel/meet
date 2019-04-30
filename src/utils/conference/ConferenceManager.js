@@ -30,7 +30,7 @@ class ConferenceManager {
   /**
    * connect : 화상대화 참가
    */
-  join = async (roomName, name, handleClose, auth) => {
+  join = async (roomName, name, handleClose, auth, iscreator) => {
     // 초기화
     this._init();
     // 대화방 연결을 위한 Connection
@@ -49,25 +49,20 @@ class ConferenceManager {
       auth
     );
 
-    this._apiManager = new APIManager(
-      this._conferenceConnector.room.myUserId(),
-      {
-        roomId: roomName,
-        name: name,
-        a_token: auth.AUTH_A_TOKEN,
-        r_token: auth.AUTH_R_TOKEN,
-        hash_key: auth.HASH_KEY
-      }
-    );
-
-    // 접속자 확인 로직
-    // this._apiManager.getParticipant(1, result => {
-    // 	if (result.length < 1) {
-    // 		alert(1);
-    // 	}
-    // });
-
-    this._apiManager.insertUser();
+    // 외부 접속이 아닐 때만 API 전송
+    if (auth.is_creater && auth.is_creater !== '9') {
+      this._apiManager = new APIManager(
+        this._conferenceConnector.room.myUserId(),
+        {
+          roomId: roomName,
+          name: name,
+          a_token: auth.AUTH_A_TOKEN,
+          r_token: auth.AUTH_R_TOKEN,
+          hash_key: auth.HASH_KEY
+        }
+      );
+      this._apiManager.insertUser();
+    }
 
     const id = 'localUser';
     const tracks = this._conferenceConnector.tracks;

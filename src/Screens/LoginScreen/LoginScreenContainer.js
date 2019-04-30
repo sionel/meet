@@ -275,9 +275,13 @@ class LoginScreenContainer extends React.Component {
         // alert('result11 : ' + JSON.stringify(result));
         // await this.props.onLogout();
         // this.forceUpdate();
+        Alert.alert('Login', '토큰이 만료되었습니다.');
+      } else if (result.errors.code === '401') {
+        Alert.alert('Login', '권한이 없습니다.');
       } else {
-        alert('사소한 문제가 발생했습니다. 다시 시도해주세요.');
+        Alert.alert('Login', '사소한 문제가 발생했습니다. 다시 시도해주세요.');
       }
+      this.setState({ waiting: false });
     } else if (result.user_name || result.auth.user_name) {
       // navigation.navigate('Home');
       this.props.handleOnLogin();
@@ -321,12 +325,15 @@ class LoginScreenContainer extends React.Component {
   };
 
   /**
-   *
+   * DeepLink 로 접근한 경우
    */
   _handleGetWehagoToken = event => {
-    // alert(event.url);
     const result = querystringParser(event.url);
-    // Linking.removeEventListener('url', this._handleGetWehagoToken);
+
+    // 화상대화 요청인지 판별
+    if (result.is_creater) return;
+
+    // 로그인 진행
     this._handleSaveUserinfo(
       result.mAuth_a_token,
       result.mAuth_r_token,

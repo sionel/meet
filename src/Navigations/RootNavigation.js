@@ -8,62 +8,62 @@ import ConferenceScreen from '../Screens/ConferenceScreen';
  * RootNavigation
  */
 const RootNavigation = createStackNavigator(
-	{
-		/**
+  {
+    /**
      * Main Navigation
      */
-		Main: {
-			screen: MainNavigation,
-			navigationOptions: {
-				header: null,
-				// headerLeft: null,
-				gesturesEnabled: false
-			}
-		},
+    Main: {
+      screen: MainNavigation,
+      navigationOptions: {
+        header: null,
+        // headerLeft: null,
+        gesturesEnabled: false
+      }
+    },
 
-		/**
+    /**
      * Conference Navigation
      */
-		Conference: {
-			screen: ConferenceScreen,
-			navigationOptions: {
-				header: null,
-				headerLeft: null,
-				gesturesEnabled: false
-			}
-		}
+    Conference: {
+      screen: ConferenceScreen,
+      navigationOptions: {
+        header: null,
+        headerLeft: null,
+        gesturesEnabled: false
+      }
+    }
 
-		/**
+    /**
      * Login Navigation
      */
-		// Login: {
-		// 	screen: LoginScreen,
-		// 	navigationOptions: {
-		// 		header: null,
-		// 		headerLeft: null,
-		// 		gesturesEnabled: false
-		// 	}
-		// },
+    // Login: {
+    // 	screen: LoginScreen,
+    // 	navigationOptions: {
+    // 		header: null,
+    // 		headerLeft: null,
+    // 		gesturesEnabled: false
+    // 	}
+    // },
 
-		/**
-		 * Loding Navigation
-		 */
-		// Loading: {
-		// 	screen: LoadingScreen,
-		// 	navigationOptions: {
-		// 		header: null,
-		// 		headerLeft: null,
-		// 		gesturesEnabled: false
-		// 	}
-		// }
-	},
-	// initial
-	{
-		initialRouteName: 'Main',
-		mode: 'modal',
-		headerMode: 'none',
-		cardStyle: { backgroundColor: '#FFF', transparent: true }
-	}
+    /**
+     * Loding Navigation
+     */
+    // Loading: {
+    // 	screen: LoadingScreen,
+    // 	navigationOptions: {
+    // 		header: null,
+    // 		headerLeft: null,
+    // 		gesturesEnabled: false
+    // 	}
+    // }
+  },
+  // initial
+  {
+    initialRouteName: 'Main',
+    mode: 'modal',
+    headerMode: 'none',
+    cardStyle: { backgroundColor: '#FFF', transparent: true }
+  }
 );
 
 export default createAppContainer(RootNavigation);

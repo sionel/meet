@@ -73,18 +73,22 @@ class HomeScreenContainer extends Component {
    * componentDidMount
    */
   componentDidMount() {
+    // 화면 회전 처리
     Orientation.getOrientation(orientation => {
       this.setState({ orientation });
     });
     Orientation.addOrientationListener(this._handleOrientation);
 
+    // 딥링크에 처리
     Linking.getInitialURL().then(url => {
       if (url) {
+        console.log('url : ' + url);
         this._handleOpenURL({ url });
       }
     });
-
     Linking.addEventListener('url', this._handleOpenURL);
+
+    // 주기적으로 앱 업데이트
     AppState.addEventListener('change', this._handleAppStateChange);
     this._interval = setInterval(() => {
       if (Date.now() > this._refreshTimeStamp + 3000) {
@@ -93,6 +97,7 @@ class HomeScreenContainer extends Component {
       }
     }, 15000);
 
+    // 뒤로가기 버튼 동작
     BackHandler.addEventListener('hardwareBackPress', this._handleBackButton);
   }
 
@@ -209,6 +214,9 @@ class HomeScreenContainer extends Component {
   };
 
   _handleOpenURL = event => {
+    console.log('=============ㅁㄴㅇㄹ=============');
+    console.log(event);
+    console.log('===========ㅁㄴㅇㄹ===============');
     // const result = querystringParser(url);
     // this._handleRedirect('Conference', { item: { videoRoomId: result.room_id } });
     this._handleOpenLink(event.url);
@@ -225,12 +233,7 @@ class HomeScreenContainer extends Component {
           this._handleOpenLink(url);
         }
       })
-      .catch(
-        err =>
-          alert(
-            '다시 시도해 주세요'
-          ) /* console.error('An error occurred', err) */
-      );
+      .catch(err => alert('다시 시도해 주세요'));
   };
 
   /**
@@ -242,9 +245,13 @@ class HomeScreenContainer extends Component {
     // console.log('RESULT :: ', result);
     // if (result.type === '3') {
     if (typeof result === 'string') {
-      // 위하고 로그인일 경우
+      // 위하고 로그인일 경우 예외처리
+      return;
+    } else if (result.is_creater) {
+      // 화상대화 실행
+      this._handleCheckConference(result.room_id, result);
     } else {
-      this._handleCheckConference(result.room_id, result); // 테스트
+      return;
     }
     // 화상대화 타입 (생성:0/참여:1)
     // if (result.type == '1') {
@@ -396,7 +403,7 @@ class HomeScreenContainer extends Component {
       };
 
       callType = externalData.call_type; // 1:화상 / 2:음성
-      isCreator = externalData.is_creater; // 1:생성자 / 2:참여자
+      isCreator = externalData.is_creater; // 0:생성자 / 1:참여자 / 9:비즈박스알파
     } else {
       // 생성여부 체크
       const result = await ConferenceApi.check(
@@ -490,7 +497,7 @@ class HomeScreenContainer extends Component {
     } else {
       // Linking.removeEventListener('url', this._handleOpenURL);
     }
-    this.setState({ appState: nextAppState, url: 111 });
+    this.setState({ appState: nextAppState });
   };
 }
 // #endregion

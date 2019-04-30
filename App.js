@@ -11,15 +11,15 @@ import Main from './src/Main';
 const { persistor, store } = configureStore();
 
 export default class App extends Component {
-	render() {
-		return (
-			<Provider store={store}>
-				<PersistGate persistor={persistor}>
-					<Main />
-				</PersistGate>
-			</Provider>
-		);
-	}
+  render() {
+    return (
+      <Provider store={store}>
+        <PersistGate persistor={persistor}>
+          <Main />
+        </PersistGate>
+      </Provider>
+    );
+  }
 }
 
 // Register the main/root Component of WehagoMeetView.

@@ -82,7 +82,7 @@ const MainVideoPresenter = props => {
 
   return (
     <View style={{ flex: 1, backgroundColor: '#1D1D1D' }}>
-      {!isMuteVideo && stream && callType !== 2 && !props.drawing ? (
+      {!isMuteVideo && stream && callType == 1 && !props.drawing ? (
         <RTCView
           style={styles.RTCVideo}
           // mirror={true}
@@ -92,7 +92,7 @@ const MainVideoPresenter = props => {
           }
           streamURL={stream.toURL()}
         />
-      ) : callType === 2 ? (
+      ) : callType == 2 ? (
         <View style={{ ...styles.imageContainer }}>
           <View style={{ display: 'flex' }}>
             <CustomLottie source="voiceBroadcast" width={280} height={280}>
@@ -154,7 +154,7 @@ const MainVideoPresenter = props => {
           )}
         </View>
       )}
-      {displayTime}
+      {callType == 1 && displayTime}
       {mainUser.status === 'interrupted' && muteView}
 
       {props.children && (

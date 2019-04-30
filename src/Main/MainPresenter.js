@@ -9,23 +9,23 @@ import Orientation from 'react-native-orientation-locker';
 import RootNavigation from '../Navigations/RootNavigation';
 
 const MainPresenter = props => {
-	Orientation.unlockAllOrientations();
-	return (
-		<View style={styles.container}>
-			<StatusBar hidden={false} />
-			<RootNavigation />
-		</View>
-	);
+  Orientation.unlockAllOrientations();
+  return (
+    <View style={styles.container}>
+      <StatusBar hidden={false} />
+      <RootNavigation />
+    </View>
+  );
 };
 
 /**
  * styles
  */
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: 'transparent'
-	}
+  container: {
+    flex: 1,
+    backgroundColor: 'transparent'
+  }
 });
 
 export default MainPresenter;
