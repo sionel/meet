@@ -51,7 +51,8 @@ class ConferenceConnector {
       // display Name 설정
       this._room.setDisplayName(name);
       // wehago id를 커맨드로 전송한다.
-      this._room.sendCommand(WEHAGO_ID, {
+      // this._room.sendCommand(WEHAGO_ID, {
+      this._room.sendCommandOnce(WEHAGO_ID, {
         value: this._room.myUserId(),
         attributes: {
           wehagoId: auth.portal_id,
@@ -256,7 +257,8 @@ class ConferenceConnector {
    */
   setToogleDocumentShare = isDocumentShare => {
     // 공유모드 설정 참가자들에게 공유
-    this._room.sendCommand(SET_DOCUMENT_IS_SHARE, {
+    // this._room.sendCommand(SET_DOCUMENT_IS_SHARE, {
+    this._room.sendCommandOnce(SET_DOCUMENT_IS_SHARE, {
       value: this._room.myUserId(),
       attributes: {
         isDocumentShare
@@ -276,7 +278,8 @@ class ConferenceConnector {
 
     // 로그 기록이 있을 경우 참여자들에게 기록 전송
     if (data) {
-      this._room.sendCommand(UPDATE_DRAWING_DATA, {
+      // this._room.sendCommand(UPDATE_DRAWING_DATA, {
+      this._room.sendCommandOnce(UPDATE_DRAWING_DATA, {
         value: this._room.myUserId(),
         attributes: newdata.attributes
       });
@@ -289,6 +292,7 @@ class ConferenceConnector {
   setClear = () => {
     // 지우기 액션 send
     this._drawingManager.clearAll();
+    // this._room.sendCommandOnce(CLEAR_DRAWING_CANVAS, {
     this._room.sendCommandOnce(CLEAR_DRAWING_CANVAS, {
       value: this._room.myUserId()
     });
