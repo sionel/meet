@@ -56,7 +56,8 @@ const TopAreaPresenter = props => {
             height={25}
             areaWdith={25}
             areaHeight={28}
-            onPress={() => props.onChangeDrawing(!props.drawing)}
+            // onPress={() => props.onChangeDrawing(!props.drawing)}
+            onPress={() => props.onChangeDrawingMode(!props.drawing)}
           />
         </Fragment>
         {/* )} */}

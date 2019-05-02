@@ -3,17 +3,17 @@
  */
 
 const config = {
-  // hosts: {
-  //   domain: 'beta.meet.jit.si',
-  //   muc: 'conference.beta.meet.jit.si',
-  //   bridge: 'jitsi-videobridge.beta.meet.jit.si'
-  // },
-  // bosh: '//beta.meet.jit.si/http-bind',
   hosts: {
-    domain: 'video.wehago.com',
-    muc: 'conference.video.wehago.com'
+    domain: 'beta.meet.jit.si',
+    muc: 'conference.beta.meet.jit.si',
+    bridge: 'jitsi-videobridge.beta.meet.jit.si'
   },
-  bosh: '//video.wehago.com/http-bind',
+  bosh: '//beta.meet.jit.si/http-bind',
+  // hosts: {
+  //   domain: 'video.wehago.com',
+  //   muc: 'conference.video.wehago.com'
+  // },
+  // bosh: '//video.wehago.com/http-bind',
 
   resolution: 720,
   constraints: {

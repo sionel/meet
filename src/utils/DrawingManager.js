@@ -16,7 +16,7 @@ class DrawingManager {
       // 기본 화면비율
       this.BASE_WIDTH = 1024;
       this.BASE_HEIGHT = 768;
-      this.SCREEN_WIDTH = width >= height ? height : width; // 화면 가로길이;
+      this.SCREEN_WIDTH = (width >= height ? height : width) - 30; // 화면 가로길이;
       this.SCREEN_HEIGHT =
         this.SCREEN_WIDTH * ((this.BASE_HEIGHT * 100) / this.BASE_WIDTH / 100); // 화면 가로길이;
       this.CONTRAST_SCALE = (this.SCREEN_WIDTH * 100) / this.BASE_WIDTH;
@@ -24,6 +24,7 @@ class DrawingManager {
       this.canvas = null; // canvas
       this.tempId = 0; // 드로잉 아이디
       this.history = []; // 드로잉 기록
+      this.wastebasket = []; // 드로잉 휴지통
 
       // 싱글톤 변수 할당
       DrawingManager.instance = this;
@@ -86,7 +87,6 @@ class DrawingManager {
    */
   _handleConvertPcToMobile = data => {
     let drawDataToJson = JSON.parse(data.attributes.data);
-    console.log('Add Command : ', drawDataToJson);
     let newData = {
       drawer: 'wehago_meet_web',
       size: {
@@ -109,6 +109,7 @@ class DrawingManager {
     // 선 굵기 비율
     newData.path.width = Number(
       drawDataToJson.strokeWidth * (this.SCREEN_WIDTH / this.BASE_WIDTH)
+      // drawDataToJson.strokeWidth * (this.SCREEN_WIDTH / this.BASE_WIDTH)
     );
     // newData.path.width = Number(drawDataToJson.strokeWidth);
     newData.path.data = [];
@@ -152,10 +153,25 @@ class DrawingManager {
         y: Number((location[1] / this.SCREEN_HEIGHT) * this.BASE_HEIGHT)
       });
     });
-
+    this.history.push(drawingData);
     newData.attributes.data = JSON.stringify(newData.attributes.data);
     // console.log('NEW : ', newData);
     return newData;
+  };
+
+  /**
+   * REDO
+   */
+  redo = () => {};
+
+  /**
+   * UNDO
+   */
+  undo = () => {
+    if (this.history.length > 0) {
+      this.wastebasket.push(this.history.pop());
+    }
+    this.canvas.undo();
   };
 }
 
