@@ -3,12 +3,20 @@
  */
 
 import React, { Fragment } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Button } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  Button,
+  Platform
+} from 'react-native';
 import { SketchCanvas } from '@terrylinla/react-native-sketch-canvas';
 import DrawingBoard from './DrawingBoard';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import DeviceInfo from 'react-native-device-info';
 const hasNotch = DeviceInfo.hasNotch();
+const isIOS = Platform.OS === 'ios';
 
 const DrawingPresenter = props => {
   const {
@@ -34,14 +42,17 @@ const DrawingPresenter = props => {
       <View
         style={{
           flex: 1,
+          display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
           zIndex: 5,
           padding: 15,
           backgroundColor: '#f2f2f2',
           // backgroundColor: '#1D1D1D',
-          width: '100%',
-          height: '100%'
+          // width: '100%',
+          // height: '100%'
+          height: orientation === 'horizontal' ? '100%' : 'auto',
+          width: orientation === 'vertical' ? '100%' : 'auto'
         }}
       >
         <DrawingBoard
@@ -53,36 +64,37 @@ const DrawingPresenter = props => {
           }
         />
       </View>
-      <View style={styles.childrenWrapper}>{}</View>
+      {/* <View style={styles.childrenWrapper}>{}</View> */}
 
       {/* 팔레트 디스플레이 */}
       <View
         style={{
           ...styles.tabWrapper,
           ...styles[`tabWrapper_${orientation}`],
-          // height: 100,
+
           height:
             orientation === 'horizontal'
               ? '100%'
               : palette
               ? hasNotch
-                ? 150
-                : 125
+                ? 175
+                : 150
               : hasNotch
-              ? 100
-              : 75,
+              ? 125
+              : 100,
           width:
             orientation === 'vertical'
               ? '100%'
               : palette
               ? hasNotch
-                ? 150
-                : 125
+                ? 175
+                : 150
               : hasNotch
-              ? 100
-              : 75
+              ? 125
+              : 100
         }}
       >
+        {/* START 접기 버튼 */}
         <TouchableOpacity
           key={'color'}
           onPress={() => props.onChangeState('palette', !palette)}
@@ -90,6 +102,7 @@ const DrawingPresenter = props => {
             ...styles.tabToggleWrapper,
             ...styles[`tabToggleWrapper_${orientation}`]
           }}
+          activeOpacity={1}
         >
           <Icon
             name={`angle-${
@@ -109,17 +122,9 @@ const DrawingPresenter = props => {
             }}
           />
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles[`modeChangeButton_${orientation}`]}
-          // onPress={() => alert(!props.drawing)}
-          // onPress={() => props.onChangeDrawing(!props.drawing)}
-          onPress={() => props.onChangeDrawingMode(false)}
-        >
-          <Text style={{ fontSize: 18, color: '#fff' }}>완료</Text>
-        </TouchableOpacity>
+        {/* END 접기 버튼 */}
 
-        {/* 토글버튼 */}
-
+        {/* START 팔레트 서브 버튼 */}
         {palette && (
           <View
             style={{
@@ -153,40 +158,69 @@ const DrawingPresenter = props => {
             {/* === 서브탭 === */}
           </View>
         )}
+        {/* END 팔레트 서브 버튼 */}
 
         {/* ===== 메인선택 ===== */}
         <View
-          style={{
-            ...styles.mainSettingWrapper,
-            ...styles[`mainSettingWrapper_${orientation}`]
-          }}
+          style={[
+            styles.mainSettingWrapper,
+            styles[`mainTabWrapper_${orientation}`]
+          ]}
         >
           {/* === 메인탭 === */}
-          {tabs.map((tab, tabIndex) => (
-            <TouchableOpacity
-              key={tab.id}
-              onPress={() =>
-                tab.onPress
-                  ? tab.onPress()
-                  : props.onChangeState('selectedTab', tabIndex)
-              }
-            >
-              <View
-                style={{
-                  ...styles.mainSettingItem,
-                  // borderColor: '#fff',
-                  opacity: selectedTab === tabIndex ? 0.85 : 1,
-                  backgroundColor:
-                    selectedTab === tabIndex
-                      ? 'rgba(255,255,255, 0.45)'
-                      : '#00000000'
-                }}
+          <View
+            style={[
+              styles.mainTabWrapper,
+              styles[`mainTabWrapper_${orientation}`]
+            ]}
+          >
+            {tabs.map((tab, tabIndex) => (
+              <TouchableOpacity
+                key={tab.id}
+                onPress={() =>
+                  tab.onPress
+                    ? tab.onPress()
+                    : props.onChangeState('selectedTab', tabIndex)
+                }
               >
-                <Icon name={tab.icon} size={20} color={'#fff'} />
-              </View>
-            </TouchableOpacity>
-          ))}
+                <View
+                  style={{
+                    ...styles.mainSettingItem,
+                    // borderColor: '#fff',
+                    opacity: selectedTab === tabIndex ? 0.85 : 1,
+                    backgroundColor:
+                      selectedTab === tabIndex
+                        ? 'rgba(255,255,255, 0.45)'
+                        : '#00000000'
+                  }}
+                >
+                  <Icon name={tab.icon} size={20} color={'#fff'} />
+                </View>
+              </TouchableOpacity>
+            ))}
+          </View>
           {/* === 메인탭 === */}
+
+          {/* START 완료 버튼 */}
+          <View
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: orientation === 'vertical' ? 'flex-end' : 'center',
+              marginRight: orientation === 'vertical' ? 7.5 : 0,
+              marginTop: orientation === 'horizontal' ? 7.5 : 0
+            }}
+          >
+            <TouchableOpacity
+              // style={styles[`modeChangeButton_${orientation}`]}
+              // onPress={() => alert(!props.drawing)}
+              // onPress={() => props.onChangeDrawing(!props.drawing)}
+              onPress={() => props.onChangeDrawingMode(false)}
+            >
+              <Text style={{ fontSize: 18, color: '#fff' }}>완료</Text>
+            </TouchableOpacity>
+          </View>
+          {/* END 완료 버튼 */}
         </View>
         {/* ===== 메인선택 ===== */}
       </View>
@@ -207,56 +241,84 @@ const styles = StyleSheet.create({
   modeChangeButton_vertical: {
     position: 'absolute',
     right: 15,
-    bottom: 69,
+    bottom: 33 + hasNotch ? 24 : 0 + isIOS ? 12 : 0,
     zIndex: 9
   },
   modeChangeButton_horizontal: {
     position: 'absolute',
-    right: 25,
+    // right: 25,
     top: 20,
     // left: hasNotch ? 50 : 25,
-    right: hasNotch ? 62 : 40,
+    right: 16 + hasNotch ? 24 : 0 + isIOS ? 12 : 0,
     zIndex: 9
   },
 
   tabWrapper: {
-    bottom: 0,
+    display: 'flex',
+    // height: 200,
+    // bottom: 0,
     backgroundColor: '#1f1f1f',
     borderColor: '#c1c1c1',
-    justifyContent: 'flex-end',
     zIndex: 7
   },
   // 세로
   tabWrapper_vertical: {
-    position: 'absolute',
-    justifyContent: 'flex-end',
-    alignItems: 'flex-end'
+    // position: 'absolute',
+    // justifyContent: 'space-between',
+    // alignItems: 'flex-start',
+    width: '100%'
   },
   // 가로
   tabWrapper_horizontal: {
-    position: 'relative',
-    flexDirection: 'row'
+    // position: 'relative',
+    flexDirection: 'row',
+    height: '100%'
+    // justifyContent: 'flex-end',
+    // alignItems: 'center'
   },
 
   mainSettingWrapper: {
-    width: '100%',
-    height: hasNotch ? 95 : 70,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start'
+    display: 'flex'
+    // height: hasNotch ? 95 : 70,
   },
   // 세로
   mainSettingWrapper_vertical: {
-    height: hasNotch ? 105 : 70,
-    flexDirection: 'row'
+    width: '100%',
+    // height: 70 + hasNotch ? 24 : 0 + isIOS ? 12 : 0,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
   },
   // 가로
   mainSettingWrapper_horizontal: {
-    justifyContent: 'flex-end',
-    alignItems: 'flex-start',
-    width: hasNotch ? 105 : 75,
+    // justifyContent: 'flex-end',
+    // alignItems: 'flex-start',
+    // width: 70 + hasNotch ? 24 : 0 + isIOS ? 12 : 0,
     height: '100%',
     flexDirection: 'column'
+    // justifyContent: 'center',
+    // alignItems: 'center'
+  },
+
+  mainTabWrapper: {
+    flex: 1,
+    // height: hasNotch ? 95 : 70,
+    justifyContent: 'flex-start',
+    alignItems: 'center'
+  },
+  // 세로
+  mainTabWrapper_vertical: {
+    // width: '100%',
+    // height: 70 + hasNotch ? 24 : 0 + isIOS ? 12 : 0,
+    flexDirection: 'row'
+  },
+  // 가로
+  mainTabWrapper_horizontal: {
+    // justifyContent: 'flex-end',
+    // alignItems: 'flex-start',
+    // width: 70 + hasNotch ? 24 : 0 + isIOS ? 12 : 0,
+    // height: '100%',
+    flexDirection: 'column-reverse'
   },
 
   mainSettingItem: {
@@ -273,22 +335,24 @@ const styles = StyleSheet.create({
 
   detailSettingWrapper: {
     backgroundColor: '#3f3f3f',
-    flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
     borderColor: '#c1c1c1'
   },
   // 세로
   detailSettingWrapper_vertical: {
-    height: 60,
-    width: '100%'
+    height: 50,
+    width: '100%',
+    flexDirection: 'row',
+    paddingTop: 7.5
     // borderBottomWidth: 1
   },
   // 가로
   detailSettingWrapper_horizontal: {
     justifyContent: 'flex-end',
-    width: 65,
-    paddingTop: 10,
+    width: 55,
+    height: '100%',
+    // paddingTop: 10,
     // paddingRight: 15,
     flexDirection: 'column'
   },
@@ -303,7 +367,6 @@ const styles = StyleSheet.create({
     marginBottom: 7.5,
     marginLeft: 7.5,
     marginRight: 7.5,
-
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -311,15 +374,17 @@ const styles = StyleSheet.create({
   detailSettingItem_vertical: {},
   // 가로
   detailSettingItem_horizontal: {
-    marginBottom: 14
+    // marginBottom: 14
   },
 
   // 탭토글 컨테이너
   tabToggleWrapper: {
-    // height: '100%',
+    display: 'flex',
+    // height: 100,
     alignContent: 'center',
     justifyContent: 'center',
-    textAlign: 'center'
+    textAlign: 'center',
+    backgroundColor: '#f2f2f2'
   },
   // 탭토글 컨테이너
   tabToggleWrapper_vertical: {
@@ -335,7 +400,10 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   tabToggleIcon_vertical: {},
-  tabToggleIcon_horizontal: {},
+  tabToggleIcon_horizontal: {
+    marginLeft: 10,
+    marginRight: 10
+  },
 
   childrenWrapper: {
     position: 'absolute',
