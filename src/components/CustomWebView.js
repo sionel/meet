@@ -7,7 +7,7 @@ import { Text, View, WebView, TouchableOpacity, Platform } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DeviceInfo from 'react-native-device-info';
 
-const hasNotch = DeviceInfo.hasNotch();
+const hasNotch = DeviceInfo.hasNotch() && Platform.OS === 'ios';
 
 const CustomWebView = props => {
   const {

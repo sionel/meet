@@ -15,8 +15,8 @@ import { SketchCanvas } from '@terrylinla/react-native-sketch-canvas';
 import DrawingBoard from './DrawingBoard';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import DeviceInfo from 'react-native-device-info';
-const hasNotch = DeviceInfo.hasNotch();
 const isIOS = Platform.OS === 'ios';
+const hasNotch = DeviceInfo.hasNotch() && isIOS;
 
 const DrawingPresenter = props => {
   const {

@@ -12,7 +12,7 @@ import { ConferenceModes } from '../../../utils/Constants';
 import DeviceInfo from 'react-native-device-info';
 
 const { AudioMode } = NativeModules;
-const hasNotch = DeviceInfo.hasNotch();
+const hasNotch = DeviceInfo.hasNotch() && Platform.OS === 'ios';
 /**
  * ContentContainer : 화상대화 화면
  */
