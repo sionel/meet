@@ -18,6 +18,8 @@ const MainVideoPresenter = props => {
     videoType,
     mainUser,
     callType,
+    selectedRoomName,
+    conferenceMode,
     isVideoReverse
   } = props;
 
@@ -39,7 +41,9 @@ const MainVideoPresenter = props => {
           textAlign: 'center'
         }}
       >
-        {second2String(props.time)}
+        {conferenceMode === 'control'
+          ? selectedRoomName
+          : second2String(props.time)}
       </Text>
     </View>
   );

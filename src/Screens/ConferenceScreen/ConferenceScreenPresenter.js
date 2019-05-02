@@ -15,6 +15,7 @@ const ConferenceScreenPresenter = props =>
       mainUser={props.mainUser}
       onClose={props.onClose}
       callType={props.callType}
+      selectedRoomName={props.selectedRoomName}
       onClear={props.onClear}
       onSetDrawingData={props.onSetDrawingData}
       onChangeDrawingMode={props.onChangeDrawingMode}

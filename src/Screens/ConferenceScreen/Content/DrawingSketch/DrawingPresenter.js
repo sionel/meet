@@ -349,12 +349,12 @@ const styles = StyleSheet.create({
   },
   // 가로
   detailSettingWrapper_horizontal: {
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-start',
     width: 55,
     height: '100%',
     // paddingTop: 10,
     // paddingRight: 15,
-    flexDirection: 'column'
+    flexDirection: 'column-reverse'
   },
 
   detailSettingItem: {

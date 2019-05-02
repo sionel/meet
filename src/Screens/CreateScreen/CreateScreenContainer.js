@@ -35,6 +35,7 @@ class CreateScreenContainer extends React.Component {
     refreshing: false, // 리프레시 상태
     searchKeyword: '', // 검색인풋
     selectedRoomId: null,
+    selectedRoomName: null,
     modal: false,
     url: null,
     orientation: 'UNKNOWN'
@@ -169,7 +170,9 @@ class CreateScreenContainer extends React.Component {
 
       // 대화방에 참여한다.
       const videoRoomId = sendWetalkResult.resultData.chatList[0].mobile_key;
-      this._handleRedirect('Conference', { item: { videoRoomId } });
+      this._handleRedirect('Conference', {
+        item: { videoRoomId, selectedRoom: this.state.selectedRoomName }
+      });
     } else {
       alert('화상대화 생성에 실패하였습니다. 다시 시도해 주세요');
     }
@@ -213,7 +216,8 @@ class CreateScreenContainer extends React.Component {
       item: {
         videoRoomId: conferenceId,
         callType,
-        isCreator
+        isCreator,
+        selectedRoomName: this.state.selectedRoomName
       }
     });
   };
@@ -222,10 +226,11 @@ class CreateScreenContainer extends React.Component {
    * _handleActivateModal
    * 모달뷰 토글
    */
-  _handleActivateModal = (selectedRoomId = null) => {
+  _handleActivateModal = (selectedRoomId = null, selectedRoomName = null) => {
     this.setState(prev => ({
       modal: !prev.modal,
-      selectedRoomId
+      selectedRoomId,
+      selectedRoomName
     }));
   };
 }

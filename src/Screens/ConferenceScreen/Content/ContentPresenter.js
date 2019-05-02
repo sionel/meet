@@ -9,7 +9,15 @@ import BottomArea from './BottomArea';
  * ContentPresenter
  */
 const ContentPresenter = props => {
-  const { mainUser, callType, isVideoReverse, speaker, drawingMode } = props;
+  const {
+    mainUser,
+    callType,
+    selectedRoomName,
+    isVideoReverse,
+    speaker,
+    drawingMode,
+    conferenceMode
+  } = props;
 
   return (
     <View style={styles.container} onLayout={props.onLayout}>
@@ -36,6 +44,7 @@ const ContentPresenter = props => {
         <MainVideo
           mainUser={mainUser}
           callType={callType}
+          selectedRoomName={selectedRoomName}
           isVideoReverse={isVideoReverse}
           // orientation={props.orientation}
           // onPress={props.toggleConferenceMode}
@@ -43,6 +52,7 @@ const ContentPresenter = props => {
           hasNotch={props.hasNotch}
           objectFit={props.objectFit}
           drawing={drawingMode}
+          conferenceMode={conferenceMode}
         />
       </TouchableOpacity>
       {/* END MAIN VIDEO 영역 */}
