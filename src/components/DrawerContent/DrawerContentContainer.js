@@ -1,8 +1,19 @@
 import React, { Component } from 'react';
-import { Alert } from 'react-native';
 import DrawerContentPresenter from './DrawerContentPresenter';
 
 class DrawerContentContainer extends Component {
+  static defaultProps = {
+    auth: {
+      employee_list: [
+        {
+          title: '',
+          key: '',
+          action: () => {}
+        }
+      ]
+    }
+  };
+
   state = { selectCompany: false };
 
   render() {
@@ -26,22 +37,18 @@ class DrawerContentContainer extends Component {
       }
     ];
 
-    const companyList = [
-      {
-        title: '1',
-        company_id: '1',
-        action: () => {
-          this._handleCompanyChange('params');
-        }
-      },
-      {
-        title: '2',
-        company_id: '2',
-        action: () => {
-          this._handleCompanyChange('params');
-        }
-      }
-    ];
+    const companyList =
+      auth.employee_list &&
+      auth.employee_list.map(item => {
+        return {
+          title: item.company_name_kr,
+          key: item.company_no,
+          action: () => {
+            this._handleCompanyChange(item.company_no);
+            // alert(item.company_no);
+          }
+        };
+      });
 
     return (
       <DrawerContentPresenter

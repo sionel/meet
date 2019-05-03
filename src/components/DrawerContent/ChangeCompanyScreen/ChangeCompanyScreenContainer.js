@@ -6,7 +6,7 @@ export default class ChangeCompanyScreenContainer extends Component {
     return (
       <ChangeCompanyScreenPresenter
         visible={this.props.visible}
-        companyList={this.props.companyList}
+        items={this.props.items}
         onDisibleModal={this.props.onDisibleModal}
       />
     );

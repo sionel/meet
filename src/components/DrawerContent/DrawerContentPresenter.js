@@ -77,7 +77,7 @@ const DrawerContentPresenter = props => {
       <ChangeCompanyScreen
         visible={props.selectCompany}
         onDisibleModal={() => props.onChangeState('selectCompany', false)}
-        companyList={props.companyList}
+        items={props.companyList}
       />
     </View>
   );

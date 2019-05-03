@@ -42,12 +42,12 @@ const ChangeCompanyScreenPresenter = props => {
           style={{
             width: '100%',
             maxWidth: 486,
-            height: props.companyList.length * 50,
+            height: props.items.length * 50,
             maxHeight: Math.min(width, height) * 0.8
           }}
         >
           <ScrollView style={styles.container}>
-            {props.companyList.map(item => (
+            {props.items.map(item => (
               <TouchableOpacity
                 onPress={item.action}
                 style={{
@@ -55,6 +55,7 @@ const ChangeCompanyScreenPresenter = props => {
                   borderBottomWidth: 1,
                   borderBottomColor: '#ccc'
                 }}
+                key={item.key}
               >
                 <Text
                   style={{
@@ -79,5 +80,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff'
   }
 });
+
+ChangeCompanyScreenPresenter.defaultProps = {
+  items: [
+    {
+      title: '',
+      key: '',
+      action: () => {}
+    }
+  ]
+};
 
 export default ChangeCompanyScreenPresenter;
