@@ -217,6 +217,7 @@ class HomeScreenContainer extends Component {
     console.log('=============ㅁㄴㅇㄹ=============');
     console.log(event);
     console.log('===========ㅁㄴㅇㄹ===============');
+    alert(JSON.stringify(event));
     // const result = querystringParser(url);
     // this._handleRedirect('Conference', { item: { videoRoomId: result.room_id } });
     this._handleOpenLink(event.url);

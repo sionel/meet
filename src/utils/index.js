@@ -11,6 +11,7 @@ const OSID = OS === 'ios' ? 'mobile-ios' : 'mobile-android';
 /**
  * Back-end URL
  */
+export const wehagoBaseURL0 = `https://api0.wehago.com`;
 export const wehagoBaseURL = `https://api.wehago.com`;
 
 /**
@@ -159,7 +160,7 @@ _getLocation = url => {
   return ret;
 };
 
-_createSignature = url => {
+export const _createSignature = url => {
   return CryptoJS.enc.Base64.stringify(CryptoJS.SHA256(url));
 };
 

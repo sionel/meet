@@ -211,7 +211,7 @@ function reducer(state = initialState, action) {
       return applyToggleVisibleAppIntro(state, action);
     case CHANGE_COMPANY:
       let newAuth = state.auth;
-      console.log('NEW CNO : ', action.payload.cno);
+      // console.log('NEW CNO : ', action.payload.cno);
       return {
         ...state,
         auth: { ...newAuth, last_access_company_no: action.payload.cno }
@@ -245,7 +245,7 @@ function reducer(state = initialState, action) {
 function applyChangeCompany(state, action) {
   const { cno } = action.payload;
   const newAuth = { ...state.auth, last_access_company_no: cno };
-  console.log('newAuth : ', newAuth.last_access_company_no);
+  // console.log('newAuth : ', newAuth.last_access_company_no);
   return {
     ...state,
     auth: newAuth

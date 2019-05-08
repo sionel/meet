@@ -199,9 +199,10 @@ class LoginScreenContainer extends React.Component {
     }
   };
 
-  /**
-   * _handleLogin
-   * 로그인함수
+  /** --------------------
+   *  _handleLogin
+   *  --------------------
+   *  로그인함수
    */
   _handleLogin = async (wehagoLogin = false) => {
     this.setState({ logging: true });
@@ -233,6 +234,7 @@ class LoginScreenContainer extends React.Component {
 
     // result data
     const { resultCode, resultData } = await loginRequest(data);
+    console.log('resultCoderesultCoderesultCoderesultCode :', resultData);
 
     if (resultCode === 200) {
       this._handleSaveUserinfo(
@@ -247,12 +249,18 @@ class LoginScreenContainer extends React.Component {
     }
   };
 
+  /** --------------------
+   *  _handleCancelTryLogin
+   *  --------------------
+   */
   _handleCancelTryLogin = () => {
     this.setState({ waiting: false, modal: false });
   };
 
-  /**
-   * _handleSaveUserinfo
+  /** --------------------
+   *  _handleSaveUserinfo
+   *  --------------------
+   * 유저정보 저장
    */
   _handleSaveUserinfo = async (AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno) => {
     /**
@@ -271,6 +279,7 @@ class LoginScreenContainer extends React.Component {
     );
     this.setState({ logging: false });
     if (result.errors) {
+      // alert(JSON.stringify(result.errors));
       if (result.errors.code === 'E002') {
         // alert('result11 : ' + JSON.stringify(result));
         // await this.props.onLogout();
