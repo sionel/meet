@@ -24,6 +24,7 @@ const ChangeCompanyScreenPresenter = props => {
         'landscape-left',
         'landscape-right'
       ]}
+      onRequestClose={() => {}}
     >
       <TouchableOpacity
         onPress={props.onDisibleModal}

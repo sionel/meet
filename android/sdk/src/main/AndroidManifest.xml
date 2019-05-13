@@ -35,6 +35,12 @@
         android:resizeableActivity="true"
         android:supportsPictureInPicture="true"
         android:windowSoftInputMode="adjustResize">
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <data android:scheme="com.wehago.meet" />
+      </intent-filter>
     </activity>
     <service android:name="com.wehago.meet.sdk.ConnectionService"
         android:permission="android.permission.BIND_TELECOM_CONNECTION_SERVICE">

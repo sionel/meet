@@ -6,6 +6,7 @@
 
 import React from 'react';
 import {
+  AppState,
   Linking,
   Platform,
   View,
@@ -40,16 +41,17 @@ class LoginScreenContainer extends React.Component {
     waiting: true,
     autoLoginFlag: true,
     webView: false,
-    logging: false
+    logging: false,
+    appState: AppState.currentState
   };
 
-  constructor(props) {
-    super(props);
-    if (Platform.OS === 'android') {
-      UIManager.setLayoutAnimationEnabledExperimental(true);
-    }
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
-  }
+  // constructor(props) {
+  //   super(props);
+  //   if (Platform.OS === 'android') {
+  //     UIManager.setLayoutAnimationEnabledExperimental(true);
+  //   }
+  //   LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+  // }
 
   componentDidMount() {
     Linking.getInitialURL().then(url => {
@@ -59,11 +61,13 @@ class LoginScreenContainer extends React.Component {
     });
     Linking.addEventListener('url', this._handleGetWehagoToken);
 
+    AppState.addEventListener('change', this._handleAppStateChange);
     this._handleCheckUser();
   }
 
   componentWillUnmount() {
     Linking.removeEventListener('url', this._handleGetWehagoToken);
+    AppState.removeEventListener('change', this._handleAppStateChange);
   }
 
   /**
@@ -270,6 +274,8 @@ class LoginScreenContainer extends React.Component {
      * HASH_KEY
      */
 
+    if (!AUTH_A_TOKEN) return;
+
     const { navigation, loginCheckRequest } = this.props;
     const result = await loginCheckRequest(
       AUTH_A_TOKEN,
@@ -295,6 +301,30 @@ class LoginScreenContainer extends React.Component {
       // navigation.navigate('Home');
       this.props.handleOnLogin();
     }
+  };
+
+  /**
+   * _handleAppStateChange
+   * 포그라운드 전환 시 상태변환
+   */
+  _handleAppStateChange = nextAppState => {
+    console.log(this.state.appState.match(/inactive|background/));
+    if (
+      this.state.appState.match(/inactive|background/) &&
+      nextAppState === 'active'
+    ) {
+      console.log('object');
+      // 포그라운드 전환시 아래 로직 실행
+      Linking.getInitialURL().then(url => {
+        if (url) {
+          this._handleGetWehagoToken({ url });
+        }
+      });
+    }
+    //  else {
+    //   Linking.addEventListener('url', this._handleGetWehagoToken);
+    // }
+    this.setState({ appState: nextAppState });
   };
 
   /**
@@ -338,6 +368,7 @@ class LoginScreenContainer extends React.Component {
    */
   _handleGetWehagoToken = event => {
     const result = querystringParser(event.url);
+    alert('login: ' + JSON.stringify(event));
 
     // 화상대화 요청인지 판별
     if (result.is_creater || result.type) return;

@@ -218,7 +218,7 @@ class HomeScreenContainer extends Component {
     console.log('=============ㅁㄴㅇㄹ=============');
     console.log(event);
     console.log('===========ㅁㄴㅇㄹ===============');
-    alert(JSON.stringify(event));
+    alert('home: ' + JSON.stringify(event));
     // const result = querystringParser(url);
     // this._handleRedirect('Conference', { item: { videoRoomId: result.room_id } });
     this._handleOpenLink(event.url);
@@ -503,11 +503,19 @@ class HomeScreenContainer extends Component {
       this.state.appState.match(/inactive|background/) &&
       nextAppState === 'active'
     ) {
+      console.log(this.state.appState);
       // 포그라운드 전환시 아래 로직 실행
       this._handleRefressAfterWhile();
-    } else {
-      // Linking.removeEventListener('url', this._handleOpenURL);
+
+      Linking.getInitialURL().then(url => {
+        if (url) {
+          this._handleOpenURL({ url });
+        }
+      });
     }
+    // else {
+    //   Linking.addEventListener('url', this._handleOpenURL);
+    // }
     this.setState({ appState: nextAppState });
   };
 }
