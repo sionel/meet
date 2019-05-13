@@ -7,6 +7,7 @@ import {
   StyleSheet
 } from 'react-native';
 
+import ChangeCompanyScreen from './ChangeCompanyScreen';
 import ProfileImage from '../../../assets/icons/imgVcNophoto_2x.png';
 
 const DrawerContentPresenter = props => {
@@ -67,15 +68,17 @@ const DrawerContentPresenter = props => {
           key={item.src}
           activeOpacity={0.9}
           underlayColor={'#00000010'}
-          onPress={() => {
-            item.action();
-            // props.navigation.closeDrawer();
-            // props.navigation.navigate(item.src);
-          }}
+          onPress={item.action}
         >
           <Text style={styles.listItem}>{item.name}</Text>
         </TouchableHighlight>
       ))}
+
+      <ChangeCompanyScreen
+        visible={props.selectCompany}
+        onDisibleModal={() => props.onChangeState('selectCompany', false)}
+        items={props.companyList}
+      />
     </View>
   );
 };

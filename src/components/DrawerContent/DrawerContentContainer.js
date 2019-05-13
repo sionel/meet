@@ -1,8 +1,21 @@
 import React, { Component } from 'react';
-import { Alert } from 'react-native';
 import DrawerContentPresenter from './DrawerContentPresenter';
 
 class DrawerContentContainer extends Component {
+  static defaultProps = {
+    auth: {
+      employee_list: [
+        {
+          title: '',
+          key: '',
+          action: () => {}
+        }
+      ]
+    }
+  };
+
+  state = { selectCompany: false };
+
   render() {
     const { navigation, auth } = this.props;
     const drawerList = [
@@ -11,9 +24,7 @@ class DrawerContentContainer extends Component {
         name: '회사변경',
         src: 'Company',
         action: () => {
-          Alert.alert('', '준비중입니다.', [{ text: 'OK' }], {
-            cancelable: true
-          });
+          this._handleChangeState('selectCompany', true);
         }
       },
       {
@@ -26,14 +37,41 @@ class DrawerContentContainer extends Component {
       }
     ];
 
+    const companyList =
+      auth.employee_list &&
+      auth.employee_list.map(item => {
+        return {
+          title: item.company_name_kr,
+          key: item.company_no,
+          action: () => {
+            this._handleCompanyChange(item.company_no);
+            // alert(item.company_no);
+          }
+        };
+      });
+
     return (
       <DrawerContentPresenter
         auth={auth}
         navigation={navigation}
         drawerList={drawerList}
+        companyList={companyList}
+        selectCompany={this.state.selectCompany}
+        onChangeState={this._handleChangeState}
       />
     );
   }
+
+  _handleChangeState = (target, state) => {
+    this.setState({ [target]: state });
+  };
+
+  _handleCompanyChange = params => {
+    // API 호출
+    // 띠리리삐리리뿅
+
+    this._handleChangeState('selectCompany', false);
+  };
 }
 
 export default DrawerContentContainer;

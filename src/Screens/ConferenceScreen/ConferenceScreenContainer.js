@@ -33,6 +33,7 @@ class ConferenceScreenContainer extends React.Component {
     const item = navigation.getParam('item');
     // 전화 타입 - 화상:1 / 음성:2
     this.callType = item.callType;
+    this.selectedRoomName = item.selectedRoomName;
     // 컴포넌트가 마운트 되면 대화방 초기 설정 후 입장한다.
     this._conferenceManager = new ConferenceManager(this.props.dispatch, {
       token: auth.AUTH_A_TOKEN,
@@ -87,6 +88,7 @@ class ConferenceScreenContainer extends React.Component {
         <ConferenceScreenPresenter
           {...this.props}
           callType={this.callType}
+          selectedRoomName={this.selectedRoomName}
           onClose={this._handleClose}
           onClear={this._handleClear}
           onSetDrawingData={this._handleSetDrawingData}
