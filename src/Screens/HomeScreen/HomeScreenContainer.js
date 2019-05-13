@@ -37,7 +37,7 @@ import { querystringParser } from '../../utils';
 
 import DrawerContent from '../../components/DrawerContent';
 const { height, width } = Dimensions.get('window');
-const hasNotch = DeviceInfo.hasNotch();
+const hasNotch = DeviceInfo.hasNotch() && Platform.OS === 'ios';
 
 // #region
 
