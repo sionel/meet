@@ -340,7 +340,7 @@ class LoginScreenContainer extends React.Component {
     const result = querystringParser(event.url);
 
     // 화상대화 요청인지 판별
-    if (result.is_creater) return;
+    if (result.is_creater || result.type) return;
 
     // 로그인 진행
     this._handleSaveUserinfo(
