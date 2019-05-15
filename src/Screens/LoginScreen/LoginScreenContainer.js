@@ -54,18 +54,44 @@ class LoginScreenContainer extends React.Component {
   // }
 
   componentDidMount() {
-    Linking.getInitialURL().then(url => {
-      if (url) {
-        this._handleGetWehagoToken({ url });
-      }
-    });
-    Linking.addEventListener('url', this._handleGetWehagoToken);
+    // if (this.props.rootTag == '11') {
+    //   this._handleLoginForWehago();
+    // }
+    // Linking.getInitialURL().then(url => {
+    //   if (url) {
+    //     this._handleGetWehagoToken({ url });
+    //   }
+    // });
+    // Linking.addEventListener('url', this._handleGetWehagoToken);
 
-    AppState.addEventListener('change', this._handleAppStateChange);
+    // AppState.addEventListener('change', this._handleAppStateChange);
     this._handleCheckUser();
   }
 
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   if (
+  //     this.state.appState.match(/inactive|background/) &&
+  //     nextState.appState === 'active'
+  //   )
+  //     return false;
+  //   return true;
+  // }
+
+  // shouldComponentUpdate(p, s) {
+  //   console.log(this.props.url, this.props.rootTag);
+  //   console.log(p.url, p.rootTag);
+  //   if (this.props.url !== p.url || this.props.rootTag !== p.rootTag)
+  //     return false;
+  //   // if (this.props.rootTag == '11') {
+  //   //   console.log(this.props.url);
+  //   //   return false;
+  //   // }
+
+  //   return true;
+  // }
+
   componentWillUnmount() {
+    console.log('bye');
     Linking.removeEventListener('url', this._handleGetWehagoToken);
     AppState.removeEventListener('change', this._handleAppStateChange);
   }
@@ -238,7 +264,7 @@ class LoginScreenContainer extends React.Component {
 
     // result data
     const { resultCode, resultData } = await loginRequest(data);
-    console.log('resultCoderesultCoderesultCoderesultCode :', resultData);
+    // console.log('resultCoderesultCoderesultCoderesultCode :', resultData);
 
     if (resultCode === 200) {
       this._handleSaveUserinfo(
@@ -304,30 +330,6 @@ class LoginScreenContainer extends React.Component {
   };
 
   /**
-   * _handleAppStateChange
-   * 포그라운드 전환 시 상태변환
-   */
-  _handleAppStateChange = nextAppState => {
-    console.log(this.state.appState.match(/inactive|background/));
-    if (
-      this.state.appState.match(/inactive|background/) &&
-      nextAppState === 'active'
-    ) {
-      console.log('object');
-      // 포그라운드 전환시 아래 로직 실행
-      Linking.getInitialURL().then(url => {
-        if (url) {
-          this._handleGetWehagoToken({ url });
-        }
-      });
-    }
-    //  else {
-    //   Linking.addEventListener('url', this._handleGetWehagoToken);
-    // }
-    this.setState({ appState: nextAppState });
-  };
-
-  /**
    * _handleLoginForWehago
    */
   _handleLoginForWehago = () => {
@@ -368,10 +370,11 @@ class LoginScreenContainer extends React.Component {
    */
   _handleGetWehagoToken = event => {
     const result = querystringParser(event.url);
-    alert('login: ' + JSON.stringify(event));
 
     // 화상대화 요청인지 판별
     if (result.is_creater || result.type) return;
+
+    alert('login: ' + JSON.stringify(event));
 
     // 로그인 진행
     this._handleSaveUserinfo(
@@ -380,6 +383,30 @@ class LoginScreenContainer extends React.Component {
       result.mHASH_KEY,
       result.cno
     );
+  };
+
+  /**
+   * _handleAppStateChange
+   * 포그라운드 전환 시 상태변환
+   */
+  _handleAppStateChange = nextAppState => {
+    console.log(this.state.appState, nextAppState);
+    if (
+      this.state.appState.match(/inactive|background/) &&
+      nextAppState === 'active'
+    ) {
+      // 포그라운드 전환시 아래 로직 실행
+      Linking.getInitialURL().then(url => {
+        if (url) {
+          alert('url4: ' + url);
+          // this._handleGetWehagoToken({ url });
+        }
+      });
+    }
+    //  else {
+    //   Linking.addEventListener('url', this._handleGetWehagoToken);
+    // }
+    this.setState({ appState: nextAppState });
   };
 
   /**

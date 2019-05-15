@@ -38,9 +38,15 @@
         <action android:name="android.intent.action.VIEW" />
         <category android:name="android.intent.category.BROWSABLE" />
         <category android:name="android.intent.category.DEFAULT" />
+        <data android:scheme="com.wehago.meet" />
+      </intent-filter>
+      <!-- <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <category android:name="android.intent.category.DEFAULT" />
         <data android:host="beta.meet.jit.si" android:scheme="https" />
         <data android:host="meet.jit.si" android:scheme="https" />
-      </intent-filter>
+      </intent-filter> -->
       <!-- <intent-filter>
         <action android:name="android.intent.action.VIEW" />
         <category android:name="android.intent.category.BROWSABLE" />

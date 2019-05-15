@@ -83,7 +83,7 @@ class HomeScreenContainer extends Component {
     // 딥링크에 처리
     Linking.getInitialURL().then(url => {
       if (url) {
-        console.log('url : ' + url);
+        console.log('url3 : ' + url);
         this._handleOpenURL({ url });
       }
     });
@@ -251,6 +251,7 @@ class HomeScreenContainer extends Component {
       return;
     } else if (result.is_creater) {
       // 화상대화 실행
+      console.log(result);
       this._handleCheckConference(result.room_id, result);
     } else {
       return;
@@ -503,19 +504,18 @@ class HomeScreenContainer extends Component {
       this.state.appState.match(/inactive|background/) &&
       nextAppState === 'active'
     ) {
-      console.log(this.state.appState);
       // 포그라운드 전환시 아래 로직 실행
       this._handleRefressAfterWhile();
 
-      Linking.getInitialURL().then(url => {
-        if (url) {
-          this._handleOpenURL({ url });
-        }
-      });
+      // Linking.getInitialURL().then(async url => {
+      //   if (url) {
+      //     console.log('url4: ' + url);
+      //     this._handleOpenURL({ url });
+      //   } else {
+      //     console.log('no url');
+      //   }
+      // });
     }
-    // else {
-    //   Linking.addEventListener('url', this._handleOpenURL);
-    // }
     this.setState({ appState: nextAppState });
   };
 }

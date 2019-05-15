@@ -13,7 +13,7 @@ const MainPresenter = props => {
   return (
     <View style={styles.container}>
       <StatusBar hidden={false} />
-      <RootNavigation />
+      <RootNavigation uriPrefix={'com.wehago.meet'} />
     </View>
   );
 };

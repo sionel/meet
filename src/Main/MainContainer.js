@@ -12,7 +12,7 @@ import LoginScreen from '../Screens/LoginScreen';
 import AppIntroSlide from '../components/AppIntroSlide';
 
 class MainContainer extends Component {
-  state = { isLogin: false };
+  state = { isLogin: false, url: null };
 
   componentDidMount() {
     // isTablet ? Orientation.unlockAllOrientations() : Orientation.lockToPortrait();
@@ -20,12 +20,23 @@ class MainContainer extends Component {
     setTimeout(() => {
       Platform.OS !== 'ios' && SplashScreen.hide();
     }, 1000);
+
+    console.log(this.props.url || 'nop');
   }
 
   shouldComponentUpdate(nextProps, nextStates) {
+    if (nextProps.url !== this.props.url) {
+      console.log('object');
+      this.setState({ url: nextStates.url });
+      return false;
+    }
+    if (nextStates.url !== this.state.url) {
+      console.log('object1');
+      return false;
+    }
+
     // console.log(nextProps.url);
     if (nextStates.isLogin !== this.state.isLogin) {
-      console.log('update');
       return true;
     }
 
@@ -42,7 +53,11 @@ class MainContainer extends Component {
         {this.state.isLogin ? (
           <MainPresenter {...this.props} />
         ) : (
-          <LoginScreen handleOnLogin={this._handleOnLogin} />
+          <LoginScreen
+            handleOnLogin={this._handleOnLogin}
+            url={this.state.url}
+            rootTag={this.props.rootTag}
+          />
         )}
       </AppIntroSlide>
     );
