@@ -20,19 +20,11 @@ class MainContainer extends Component {
     setTimeout(() => {
       Platform.OS !== 'ios' && SplashScreen.hide();
     }, 1000);
-
-    console.log(this.props.url || 'nop');
   }
 
   shouldComponentUpdate(nextProps, nextStates) {
     if (nextProps.url !== this.props.url) {
-      console.log('object');
-      this.setState({ url: nextStates.url });
-      return false;
-    }
-    if (nextStates.url !== this.state.url) {
-      console.log('object1');
-      return false;
+      return true;
     }
 
     // console.log(nextProps.url);
@@ -55,7 +47,7 @@ class MainContainer extends Component {
         ) : (
           <LoginScreen
             handleOnLogin={this._handleOnLogin}
-            url={this.state.url}
+            url={this.props.url}
             rootTag={this.props.rootTag}
           />
         )}

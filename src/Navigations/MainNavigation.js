@@ -15,22 +15,22 @@ import HomeRoute from '../Routes/HomeRoute';
  * createStackNavigator사용시 라이브러리를 못찾는 에러 존재(react-native link ~ 사용불가)
  */
 const Routes = createStackNavigator(
-	{
-		/**
+  {
+    /**
      * Home - 메인화면
      */
-		Home: {
-			screen: HomeRoute,
-			navigationOptions: {
-				header: null
-			}
-		}
-	},
-	// initial
-	{
-		initialRouteName: 'Home',
-		cardStyle: { backgroundColor: 'none', transparent: true }
-	}
+    Home: {
+      screen: HomeRoute,
+      navigationOptions: {
+        header: null
+      }
+    }
+  },
+  // initial
+  {
+    initialRouteName: 'Home',
+    cardStyle: { backgroundColor: 'none', transparent: true }
+  }
 );
 
 export default createAppContainer(Routes);

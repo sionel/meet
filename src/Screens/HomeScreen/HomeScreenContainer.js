@@ -83,7 +83,6 @@ class HomeScreenContainer extends Component {
     // 딥링크에 처리
     Linking.getInitialURL().then(url => {
       if (url) {
-        console.log('url3 : ' + url);
         this._handleOpenURL({ url });
       }
     });

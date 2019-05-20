@@ -41,8 +41,8 @@ class LoginScreenContainer extends React.Component {
     waiting: true,
     autoLoginFlag: true,
     webView: false,
-    logging: false,
-    appState: AppState.currentState
+    logging: false
+    // appState: AppState.currentState
   };
 
   // constructor(props) {
@@ -54,46 +54,29 @@ class LoginScreenContainer extends React.Component {
   // }
 
   componentDidMount() {
-    // if (this.props.rootTag == '11') {
-    //   this._handleLoginForWehago();
-    // }
     // Linking.getInitialURL().then(url => {
     //   if (url) {
     //     this._handleGetWehagoToken({ url });
     //   }
     // });
-    // Linking.addEventListener('url', this._handleGetWehagoToken);
+    if (Platform.OS === 'ios') {
+      Linking.addEventListener('url', this._handleGetWehagoToken);
+    }
 
-    // AppState.addEventListener('change', this._handleAppStateChange);
     this._handleCheckUser();
   }
 
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   if (
-  //     this.state.appState.match(/inactive|background/) &&
-  //     nextState.appState === 'active'
-  //   )
-  //     return false;
-  //   return true;
-  // }
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.props.url !== nextProps.url) {
+      this._handleGetWehagoToken(nextProps.url);
+      return false;
+    }
 
-  // shouldComponentUpdate(p, s) {
-  //   console.log(this.props.url, this.props.rootTag);
-  //   console.log(p.url, p.rootTag);
-  //   if (this.props.url !== p.url || this.props.rootTag !== p.rootTag)
-  //     return false;
-  //   // if (this.props.rootTag == '11') {
-  //   //   console.log(this.props.url);
-  //   //   return false;
-  //   // }
-
-  //   return true;
-  // }
+    return true;
+  }
 
   componentWillUnmount() {
-    console.log('bye');
     Linking.removeEventListener('url', this._handleGetWehagoToken);
-    AppState.removeEventListener('change', this._handleAppStateChange);
   }
 
   /**
@@ -374,7 +357,7 @@ class LoginScreenContainer extends React.Component {
     // 화상대화 요청인지 판별
     if (result.is_creater || result.type) return;
 
-    alert('login: ' + JSON.stringify(event));
+    // alert('login: ' + JSON.stringify(event));
 
     // 로그인 진행
     this._handleSaveUserinfo(
@@ -389,25 +372,25 @@ class LoginScreenContainer extends React.Component {
    * _handleAppStateChange
    * 포그라운드 전환 시 상태변환
    */
-  _handleAppStateChange = nextAppState => {
-    console.log(this.state.appState, nextAppState);
-    if (
-      this.state.appState.match(/inactive|background/) &&
-      nextAppState === 'active'
-    ) {
-      // 포그라운드 전환시 아래 로직 실행
-      Linking.getInitialURL().then(url => {
-        if (url) {
-          alert('url4: ' + url);
-          // this._handleGetWehagoToken({ url });
-        }
-      });
-    }
-    //  else {
-    //   Linking.addEventListener('url', this._handleGetWehagoToken);
-    // }
-    this.setState({ appState: nextAppState });
-  };
+  // _handleAppStateChange = nextAppState => {
+  //   console.log(this.state.appState, nextAppState);
+  //   if (
+  //     this.state.appState.match(/inactive|background/) &&
+  //     nextAppState === 'active'
+  //   ) {
+  //     // 포그라운드 전환시 아래 로직 실행
+  //     Linking.getInitialURL().then(url => {
+  //       if (url) {
+  //         alert('url4: ' + url);
+  //         // this._handleGetWehagoToken({ url });
+  //       }
+  //     });
+  //   }
+  //   //  else {
+  //   //   Linking.addEventListener('url', this._handleGetWehagoToken);
+  //   // }
+  //   this.setState({ appState: nextAppState });
+  // };
 
   /**
    * _handleActivateModal
