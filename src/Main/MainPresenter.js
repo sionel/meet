@@ -10,10 +10,11 @@ import RootNavigation from '../Navigations/RootNavigation';
 
 const MainPresenter = props => {
   Orientation.unlockAllOrientations();
+
   return (
     <View style={styles.container}>
       <StatusBar hidden={false} />
-      <RootNavigation uriPrefix={'com.wehago.meet'} url={props.url} />
+      <RootNavigation uriPrefix={'com.wehago.meet'} screenProps={props.url} />
     </View>
   );
 };

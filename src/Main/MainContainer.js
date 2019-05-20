@@ -23,11 +23,12 @@ class MainContainer extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextStates) {
+    // deep link 에 의한 url 변동 사항 캐치
     if (nextProps.url !== this.props.url) {
       return true;
     }
 
-    // console.log(nextProps.url);
+    // 로그인 여부 변경 사항 캐치
     if (nextStates.isLogin !== this.state.isLogin) {
       return true;
     }
@@ -43,7 +44,7 @@ class MainContainer extends Component {
     return (
       <AppIntroSlide>
         {this.state.isLogin ? (
-          <MainPresenter {...this.props} />
+          <MainPresenter url={this.props.url} />
         ) : (
           <LoginScreen
             handleOnLogin={this._handleOnLogin}

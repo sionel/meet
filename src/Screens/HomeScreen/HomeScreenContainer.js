@@ -35,7 +35,7 @@ import { ConferenceApi } from '../../services';
 import { NavigationEvents } from 'react-navigation';
 import { querystringParser } from '../../utils';
 
-import DrawerContent from '../../components/DrawerContent';
+// import DrawerContent from '../../components/DrawerContent';
 const { height, width } = Dimensions.get('window');
 const hasNotch = DeviceInfo.hasNotch() && Platform.OS === 'ios';
 
@@ -80,13 +80,15 @@ class HomeScreenContainer extends Component {
     });
     Orientation.addOrientationListener(this._handleOrientation);
 
-    // 딥링크에 처리
     Linking.getInitialURL().then(url => {
       if (url) {
         this._handleOpenURL({ url });
       }
     });
-    Linking.addEventListener('url', this._handleOpenURL);
+    // ios 딥링크 처리
+    if (Platform.OS === 'ios') {
+      Linking.addEventListener('url', this._handleOpenURL);
+    }
 
     // 주기적으로 앱 업데이트
     AppState.addEventListener('change', this._handleAppStateChange);
@@ -100,6 +102,17 @@ class HomeScreenContainer extends Component {
     // 뒤로가기 버튼 동작
     BackHandler.addEventListener('hardwareBackPress', this._handleBackButton);
   }
+
+  shouldComponentUpdate = (nextProps, nextState) => {
+    // android 딥링크 처리
+    if (
+      Platform.OS === 'android' &&
+      this.props.screenProps !== nextProps.screenProps
+    ) {
+      this._handleOpenURL(nextProps.screenProps);
+    }
+    return true;
+  };
 
   /**
    * componentWillUnmount
@@ -214,10 +227,6 @@ class HomeScreenContainer extends Component {
   };
 
   _handleOpenURL = event => {
-    console.log('=============ㅁㄴㅇㄹ=============');
-    console.log(event);
-    console.log('===========ㅁㄴㅇㄹ===============');
-    alert('home: ' + JSON.stringify(event));
     // const result = querystringParser(url);
     // this._handleRedirect('Conference', { item: { videoRoomId: result.room_id } });
     this._handleOpenLink(event.url);
@@ -503,17 +512,7 @@ class HomeScreenContainer extends Component {
       this.state.appState.match(/inactive|background/) &&
       nextAppState === 'active'
     ) {
-      // 포그라운드 전환시 아래 로직 실행
       this._handleRefressAfterWhile();
-
-      // Linking.getInitialURL().then(async url => {
-      //   if (url) {
-      //     console.log('url4: ' + url);
-      //     this._handleOpenURL({ url });
-      //   } else {
-      //     console.log('no url');
-      //   }
-      // });
     }
     this.setState({ appState: nextAppState });
   };
