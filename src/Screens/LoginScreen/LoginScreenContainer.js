@@ -359,6 +359,10 @@ class LoginScreenContainer extends React.Component {
 
     // alert('login: ' + JSON.stringify(event));
 
+    if (!result.mAuth_a_token) {
+      Alert.alert('Login', '위하고 앱에서 먼저 로그인을 해주세요.');
+    }
+
     // 로그인 진행
     this._handleSaveUserinfo(
       result.mAuth_a_token,
