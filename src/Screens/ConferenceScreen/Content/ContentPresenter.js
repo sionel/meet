@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity, dimmen } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { RTCView } from 'react-native-webrtc';
 import DrawingSketch from './DrawingSketch';
 import MainVideo from './MainVideo';
@@ -9,77 +9,98 @@ import BottomArea from './BottomArea';
  * ContentPresenter
  */
 const ContentPresenter = props => {
-  const { mainUser, callType, isVideoReverse, speaker, drawingMode } = props;
+  const {
+    mainUser,
+    callType,
+    selectedRoomName,
+    isVideoReverse,
+    speaker,
+    drawingMode,
+    conferenceMode
+  } = props;
 
   return (
     <View style={styles.container} onLayout={props.onLayout}>
-      {drawingMode ? (
-        <DrawingSketch
+      {/* {drawingMode && ( */}
+      <DrawingSketch
+        // display={true}
+        display={drawingMode}
+        drawing={drawingMode}
+        onClear={props.onClear}
+        orientation={props.orientation}
+        onChangeDrawing={props.setDrawingMode}
+        onSetDrawingData={props.onSetDrawingData}
+        onChangeDrawingMode={props.onChangeDrawingMode}
+        hasNotch={props.hasNotch}
+      />
+      {/* )} */}
+
+      {/* START MAIN VIDEO 영역 */}
+      <TouchableOpacity
+        style={{ flex: 1 }}
+        onPress={props.toggleConferenceMode}
+        activeOpacity={1}
+      >
+        <MainVideo
+          mainUser={mainUser}
+          callType={callType}
+          selectedRoomName={selectedRoomName}
+          isVideoReverse={isVideoReverse}
+          // orientation={props.orientation}
+          // onPress={props.toggleConferenceMode}
+          orientation={props.orientation}
+          hasNotch={props.hasNotch}
+          objectFit={props.objectFit}
           drawing={drawingMode}
-          onChangeDrawing={props.setDrawingMode}
+          conferenceMode={conferenceMode}
         />
-      ) : (
-        // <TouchableOpacity
-        //   activeOpacity={0.7}
-        //   style={styles.container}
-        //   onPress={props.toggleConferenceMode}
-        // >
-        // 위에꺼로 좌우반전하면 ㅈ됨
-        // 아래 View 로 해야 잘됨
-        <View style={styles.container}>
-          <MainVideo
-            mainUser={mainUser}
-            callType={callType}
-            isVideoReverse={isVideoReverse}
-            // orientation={props.orientation}
-            onPress={props.toggleConferenceMode}
+      </TouchableOpacity>
+      {/* END MAIN VIDEO 영역 */}
+
+      {/* START 싱단 영역 */}
+      <View
+        style={[
+          styles.topArea,
+          props.orientation === 'vertical'
+            ? [styles.topAreaVertical, { top: props.hasNotch ? 40 : 20 }]
+            : [styles.topAreaHorizontal, { left: props.hasNotch ? 35 : 20 }]
+        ]}
+      >
+        {callType != 2 && !drawingMode && (
+          <TopArea
             orientation={props.orientation}
-            hasNotch={props.hasNotch}
+            drawing={props.drawingMode}
+            onReverseVideo={props.onReverseVideo}
+            onChangeState={props.onChangeState}
+            onChangeDrawing={props.setDrawingMode}
+            onChangeObjectFit={props.onChangeObjectFit}
             objectFit={props.objectFit}
-          >
-            <TouchableOpacity
-              style={
-                props.orientation === 'vertical'
-                  ? styles.contentVertical
-                  : styles.contentHorizontal
-              }
-              onPress={props.toggleConferenceMode}
-            >
-              <View style={styles.topArea}>
-                {callType != 2 && (
-                  <TopArea
-                    orientation={props.orientation}
-                    drawing={props.drawingMode}
-                    onReverseVideo={props.onReverseVideo}
-                    onChangeState={props.onChangeState}
-                    onChangeDrawing={props.setDrawingMode}
-                    onChangeObjectFit={props.onChangeObjectFit}
-                    objectFit={props.objectFit}
-                  />
-                )}
-              </View>
-              <View style={styles.middleArea} />
-              <View
-                style={
-                  props.orientation === 'vertical'
-                    ? styles.bottomAreaVertical
-                    : styles.bottomAreaHorizontal
-                }
-              >
-                {/* 하단 영역 */}
-                <BottomArea
-                  onClose={props.onClose}
-                  onChangeSpeaker={props.onChangeSpeaker}
-                  orientation={props.orientation}
-                  callType={callType}
-                  speaker={speaker}
-                />
-              </View>
-            </TouchableOpacity>
-          </MainVideo>
+            onChangeDrawingMode={props.onChangeDrawingMode}
+          />
+        )}
+      </View>
+      {/* END 싱단 영역 */}
+
+      {/* START 하단 영역 */}
+      {!drawingMode && (
+        <View
+          style={[
+            styles.bottomArea,
+            props.orientation === 'vertical'
+              ? styles.bottomAreaVertical
+              : styles.bottomAreaHorizontal
+          ]}
+        >
+          <BottomArea
+            onClose={props.onClose}
+            onChangeSpeaker={props.onChangeSpeaker}
+            orientation={props.orientation}
+            callType={callType}
+            speaker={speaker}
+          />
         </View>
-        // </TouchableOpacity>
       )}
+      {/* END 하단 영역 */}
     </View>
   );
 };
@@ -89,7 +110,9 @@ const ContentPresenter = props => {
  */
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    width: '100%',
+    height: '100%'
   },
   contentVertical: {
     flex: 1,
@@ -102,24 +125,41 @@ const styles = StyleSheet.create({
     // transform: [{ rotateY: '0deg' }] // 좌우반전
   },
   topArea: {
+    position: 'absolute',
+    display: 'flex',
     flex: 2
+  },
+  topAreaVertical: {
+    // top: 25,
+    right: 20,
+    flexDirection: 'column'
+  },
+  topAreaHorizontal: {
+    bottom: 15,
+    // left: 25,
+    flexDirection: 'row'
   },
   middleArea: {
     flex: 9
   },
-  bottomAreaVertical: {
-    flex: 3,
+  bottomArea: {
+    position: 'absolute',
     display: 'flex',
-    flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    zIndex: 9
+  },
+  bottomAreaVertical: {
+    bottom: '5%',
+    left: 0,
+    right: 0,
+    flexDirection: 'row'
   },
   bottomAreaHorizontal: {
-    flex: 3,
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center'
+    right: '5%',
+    top: 0,
+    bottom: 0,
+    flexDirection: 'column'
   }
 });
 

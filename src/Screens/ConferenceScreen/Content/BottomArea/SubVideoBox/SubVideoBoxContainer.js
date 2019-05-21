@@ -1,5 +1,5 @@
-import React from "react";
-import SubVideoBoxPresenter from "./SubVideoBoxPresenter";
+import React from 'react';
+import SubVideoBoxPresenter from './SubVideoBoxPresenter';
 
 class SubVideoBoxContainer extends React.Component {
   render() {

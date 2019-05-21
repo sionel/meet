@@ -5,12 +5,13 @@
  */
 
 import React from 'react';
+import { Platform } from 'react-native';
 import ConfigurationScreenPresenter from './ConfigurationScreenPresenter';
 
 import DeviceInfo from 'react-native-device-info';
 import Orientation from 'react-native-orientation-locker';
 
-const hasNotch = DeviceInfo.hasNotch();
+const hasNotch = DeviceInfo.hasNotch() && Platform.OS === 'ios';
 
 class ConfigurationScreenContainer extends React.Component {
   /**

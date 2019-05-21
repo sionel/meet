@@ -16,7 +16,9 @@ import {
   FlatList,
   Platform,
   StatusBar,
-  Dimensions
+  Dimensions,
+  Animated,
+  Easing
 } from 'react-native';
 import {
   FlatButton,
@@ -59,6 +61,26 @@ const LoginScreenPresenter = props => {
         onClickButton={() => props.onChangeValue('webView', false)}
       />
     );
+  }
+
+  const rotate = new Animated.Value(0);
+  const spin = rotate.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '360deg']
+  });
+  const spinning = Animated.loop(
+    Animated.timing(rotate, {
+      toValue: 1,
+      duration: 1000,
+      useNativeDriver: true,
+      easing: Easing.out(Easing.poly(1))
+    })
+  );
+
+  if (props.logging) {
+    spinning.start();
+  } else {
+    spinning.stop();
   }
 
   /**
@@ -130,7 +152,26 @@ const LoginScreenPresenter = props => {
               ? props.onLogin
               : () => props.onActivateModal('아이디와 패스워드를 확인해 주세요')
           }
-        />
+        >
+          {props.logging && (
+            <View
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
+              <Animated.View
+                style={{
+                  transform: [{ rotate: spin }],
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                <Icon name="spinner" size={20} color="#fff" />
+              </Animated.View>
+            </View>
+          )}
+        </FlatButton>
       </View>
 
       {/* Login with WEHAGO BUTTONS */}

@@ -1,7 +1,19 @@
-import React from "react";
-import { View, TouchableOpacity, Text, StyleSheet, Image } from "react-native";
-import { RTCView } from "react-native-webrtc";
-import ButtonCameraOff from "../../../../../../../assets/buttons/btn_vc_camera_off.png";
+import React from 'react';
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  Image,
+  Platform
+} from 'react-native';
+import { RTCView } from 'react-native-webrtc';
+import DeviceInfo from 'react-native-device-info';
+import ButtonCameraOff from '../../../../../../../assets/buttons/btn_vc_camera_off.png';
+
+const apiLevel = DeviceInfo.getAPILevel();
+const canUseStream =
+  (Platform.OS === 'android' && apiLevel >= 26) || Platform.OS === 'ios';
 
 /**
  * ContentPresenter
@@ -11,12 +23,18 @@ const ParticipantBoxPresenter = props => {
 
   const content =
     stream && !props.isMuteVideo ? (
-      <RTCView
-        style={styles.video}
-        mirror={false}
-        objectFit={"cover"}
-        streamURL={stream.toURL()}
-      />
+      canUseStream ? (
+        <RTCView
+          style={styles.video}
+          mirror={false}
+          objectFit={'contain'}
+          streamURL={stream.toURL()}
+        />
+      ) : (
+        <View style={styles.video}>
+          <Text style={styles.profile}>{props.user.name[0]}</Text>
+        </View>
+      )
     ) : (
       <View style={styles.video}>
         <Image source={ButtonCameraOff} style={styles.imageCameraOff} />
@@ -28,7 +46,7 @@ const ParticipantBoxPresenter = props => {
       onPressOut={() => props.setMainUser(props.user.id)}
     >
       <View
-        style={props.isSelect ? styles.videoAreaSelected : styles.videoArea}
+        style={[styles.videoArea, props.isSelect && styles.videoAreaSelected]}
       >
         {content}
       </View>
@@ -41,41 +59,48 @@ const ParticipantBoxPresenter = props => {
 
 const styles = StyleSheet.create({
   container: {
-    width: 100,
-    height: 120,
-    display: "flex",
+    // width: 100,
+    // height: 120,
+    display: 'flex',
     marginHorizontal: 2
   },
   videoArea: {
     flex: 1,
-    backgroundColor: "gray",
+    width: 100,
+    height: 100,
+    backgroundColor: '#1D1D1D',
     borderWidth: 1,
-    borderColor: "rgba(255, 255, 255, 0.5)"
+    borderColor: 'rgba(255, 255, 255, 0.5)'
   },
   videoAreaSelected: {
-    flex: 1,
-    backgroundColor: "gray",
     borderWidth: 5,
-    borderColor: "#039BE5"
+    borderColor: '#039BE5'
   },
   video: {
     flex: 1,
-    opacity: 1,
-    justifyContent: "center",
-    alignItems: "center"
+    // opacity: 1,
+    backgroundColor: '#1D1D1D',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    height: '100%'
+  },
+  profile: {
+    color: '#DDD',
+    fontSize: 32
   },
   nameArea: {
-    display: "flex",
+    display: 'flex',
     height: 20,
-    justifyContent: "flex-end",
-    alignItems: "center"
+    justifyContent: 'flex-end',
+    alignItems: 'center'
   },
   name: {
-    color: "#fff"
+    color: '#fff'
   },
   imageCameraOff: {
-    width: "50%",
-    height: "50%"
+    width: '50%',
+    height: '50%'
   }
 });
 

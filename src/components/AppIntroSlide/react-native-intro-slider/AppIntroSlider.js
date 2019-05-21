@@ -26,7 +26,7 @@ const { width, height } = Dimensions.get('window');
 //   Platform.OS === 'ios' &&
 //   Platform.isPad
 // );
-const hasNotch = DeviceInfo.hasNotch();
+const hasNotch = DeviceInfo.hasNotch() && Platform.OS === 'ios';
 const isTablet = DeviceInfo.isTablet();
 
 export default class AppIntroSlider extends React.Component {

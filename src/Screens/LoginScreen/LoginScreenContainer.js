@@ -5,7 +5,16 @@
  */
 
 import React from 'react';
-import { Linking, Platform, View, Alert, Dimensions } from 'react-native';
+import {
+  AppState,
+  Linking,
+  Platform,
+  View,
+  Alert,
+  Dimensions,
+  UIManager,
+  LayoutAnimation
+} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import Orientation from 'react-native-orientation-locker';
 
@@ -31,19 +40,39 @@ class LoginScreenContainer extends React.Component {
     modalText: '',
     waiting: true,
     autoLoginFlag: true,
-    webView: false
-    // height: deviceHeight
+    webView: false,
+    logging: false
+    // appState: AppState.currentState
   };
 
+  // constructor(props) {
+  //   super(props);
+  //   if (Platform.OS === 'android') {
+  //     UIManager.setLayoutAnimationEnabledExperimental(true);
+  //   }
+  //   LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+  // }
+
   componentDidMount() {
-    Linking.getInitialURL().then(url => {
-      if (url) {
-        this._handleGetWehagoToken({ url });
-      }
-    });
-    Linking.addEventListener('url', this._handleGetWehagoToken);
+    // Linking.getInitialURL().then(url => {
+    //   if (url) {
+    //     this._handleGetWehagoToken({ url });
+    //   }
+    // });
+    if (Platform.OS === 'ios') {
+      Linking.addEventListener('url', this._handleGetWehagoToken);
+    }
 
     this._handleCheckUser();
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.props.url !== nextProps.url) {
+      this._handleGetWehagoToken(nextProps.url);
+      return false;
+    }
+
+    return true;
   }
 
   componentWillUnmount() {
@@ -64,7 +93,8 @@ class LoginScreenContainer extends React.Component {
       nextInput,
       waiting,
       autoLoginFlag,
-      webView
+      webView,
+      logging
     } = this.state;
     if (waiting) {
       Orientation.unlockAllOrientations();
@@ -109,6 +139,7 @@ class LoginScreenContainer extends React.Component {
         height={isTablet ? height : Math.max(width, height)}
         hasNotch={DeviceInfo.hasNotch()}
         // onSubmitNext={this._submitNext}
+        logging={logging}
       />
     );
   } // render
@@ -181,11 +212,14 @@ class LoginScreenContainer extends React.Component {
     }
   };
 
-  /**
-   * _handleLogin
-   * 로그인함수
+  /** --------------------
+   *  _handleLogin
+   *  --------------------
+   *  로그인함수
    */
   _handleLogin = async (wehagoLogin = false) => {
+    this.setState({ logging: true });
+
     // const { navigation } = this.props;
     const { userId, userPwd } = this.state;
     const { loginRequest } = this.props;
@@ -213,6 +247,7 @@ class LoginScreenContainer extends React.Component {
 
     // result data
     const { resultCode, resultData } = await loginRequest(data);
+    // console.log('resultCoderesultCoderesultCoderesultCode :', resultData);
 
     if (resultCode === 200) {
       this._handleSaveUserinfo(
@@ -222,16 +257,23 @@ class LoginScreenContainer extends React.Component {
         resultData.last_access_company_no
       );
     } else {
+      this.setState({ logging: false });
       this._handleActivateModal('아이디와 패스워드를 확인해 주세요');
     }
   };
 
+  /** --------------------
+   *  _handleCancelTryLogin
+   *  --------------------
+   */
   _handleCancelTryLogin = () => {
     this.setState({ waiting: false, modal: false });
   };
 
-  /**
-   * _handleSaveUserinfo
+  /** --------------------
+   *  _handleSaveUserinfo
+   *  --------------------
+   * 유저정보 저장
    */
   _handleSaveUserinfo = async (AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno) => {
     /**
@@ -241,6 +283,8 @@ class LoginScreenContainer extends React.Component {
      * HASH_KEY
      */
 
+    if (!AUTH_A_TOKEN) return;
+
     const { navigation, loginCheckRequest } = this.props;
     const result = await loginCheckRequest(
       AUTH_A_TOKEN,
@@ -248,14 +292,20 @@ class LoginScreenContainer extends React.Component {
       cno,
       HASH_KEY
     );
+    this.setState({ logging: false });
     if (result.errors) {
+      // alert(JSON.stringify(result.errors));
       if (result.errors.code === 'E002') {
         // alert('result11 : ' + JSON.stringify(result));
         // await this.props.onLogout();
         // this.forceUpdate();
+        Alert.alert('Login', '토큰이 만료되었습니다.');
+      } else if (result.errors.code === '401') {
+        Alert.alert('Login', '권한이 없습니다.');
       } else {
-        alert('사소한 문제가 발생했습니다. 다시 시도해주세요.');
+        Alert.alert('Login', '사소한 문제가 발생했습니다. 다시 시도해주세요.');
       }
+      this.setState({ waiting: false });
     } else if (result.user_name || result.auth.user_name) {
       // navigation.navigate('Home');
       this.props.handleOnLogin();
@@ -266,35 +316,54 @@ class LoginScreenContainer extends React.Component {
    * _handleLoginForWehago
    */
   _handleLoginForWehago = () => {
-    const url = 'wehago://?wehagomeet=login';
+    const iosUrl = 'wehago://?wehagomeet=login';
+    const androidUrl = 'wehago://app?name=meet';
     const iosMarketURL =
       'http://itunes.apple.com/kr/app/wehago/id1363039300?mt=8';
     const androidMarketURL =
       'https://play.google.com/store/apps/details?id=com.duzon.android.lulubizpotal';
 
-    Linking.openURL(url).catch(err => {
-      if (Platform.OS === 'ios') {
-        Linking.openURL(iosMarketURL).catch(err => {
-          Alert.alert('스토어 정보가 없습니다.', '', [{ text: 'OK' }], {
-            cancelable: true
-          });
+    Linking.openURL(Platform.OS === 'ios' ? iosUrl : androidUrl).catch(err => {
+      Linking.openURL(
+        Platform.OS === 'ios' ? iosMarketURL : androidMarketURL
+      ).catch(err => {
+        Alert.alert('스토어 정보가 없습니다.', '', [{ text: 'OK' }], {
+          cancelable: true
         });
-      } else if (Platform.OS === 'android') {
-        Linking.openURL(androidMarketURL).catch(err => {
-          Alert.alert('스토어 정보가 없습니다.', '', [{ text: 'OK' }], {
-            cancelable: true
-          });
-        });
-      }
+      });
+
+      // if (Platform.OS === 'ios') {
+      //   Linking.openURL(iosMarketURL).catch(err => {
+      //     Alert.alert('스토어 정보가 없습니다.', '', [{ text: 'OK' }], {
+      //       cancelable: true
+      //     });
+      //   });
+      // } else if (Platform.OS === 'android') {
+      //   Linking.openURL(androidMarketURL).catch(err => {
+      //     Alert.alert('스토어 정보가 없습니다.', '', [{ text: 'OK' }], {
+      //       cancelable: true
+      //     });
+      //   });
+      // }
     });
   };
 
   /**
-   *
+   * DeepLink 로 접근한 경우
    */
   _handleGetWehagoToken = event => {
     const result = querystringParser(event.url);
-    // Linking.removeEventListener('url', this._handleGetWehagoToken);
+
+    // 화상대화 요청인지 판별
+    if (result.is_creater || result.type) return;
+
+    // alert('login: ' + JSON.stringify(event));
+
+    if (!result.mAuth_a_token) {
+      Alert.alert('Login', '위하고 앱에서 먼저 로그인을 해주세요.');
+    }
+
+    // 로그인 진행
     this._handleSaveUserinfo(
       result.mAuth_a_token,
       result.mAuth_r_token,
@@ -302,6 +371,30 @@ class LoginScreenContainer extends React.Component {
       result.cno
     );
   };
+
+  /**
+   * _handleAppStateChange
+   * 포그라운드 전환 시 상태변환
+   */
+  // _handleAppStateChange = nextAppState => {
+  //   console.log(this.state.appState, nextAppState);
+  //   if (
+  //     this.state.appState.match(/inactive|background/) &&
+  //     nextAppState === 'active'
+  //   ) {
+  //     // 포그라운드 전환시 아래 로직 실행
+  //     Linking.getInitialURL().then(url => {
+  //       if (url) {
+  //         alert('url4: ' + url);
+  //         // this._handleGetWehagoToken({ url });
+  //       }
+  //     });
+  //   }
+  //   //  else {
+  //   //   Linking.addEventListener('url', this._handleGetWehagoToken);
+  //   // }
+  //   this.setState({ appState: nextAppState });
+  // };
 
   /**
    * _handleActivateModal

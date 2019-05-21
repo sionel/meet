@@ -152,6 +152,7 @@ class ReactInstanceManagerHolder {
                 .addPackage(new com.airbnb.android.react.lottie.LottiePackage())
                 .addPackage(new org.devio.rn.splashscreen.SplashScreenReactPackage())
                 .addPackage(new com.learnium.RNDeviceInfo.RNDeviceInfo())
+                .addPackage(new com.terrylinla.rnsketchcanvas.SketchCanvasPackage())
                 .addPackage(new ReactPackageAdapter() {
                     @Override
                     public List<NativeModule> createNativeModules(

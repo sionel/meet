@@ -11,11 +11,23 @@ import {
   Platform,
   Dimensions,
   View,
-  NativeModules
+  Text,
+  NativeModules,
+  TouchableOpacity,
+  UIManager,
+  LayoutAnimation,
+  // DrawerLayoutAndroid
+  ToastAndroid,
+  BackHandler
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import Orientation from 'react-native-orientation-locker';
+// import GestureRecognizer, {
+//   swipeDirections
+// } from 'react-native-swipe-gestures';
+
 import HomeScreenPresenter from './HomeScreenPresenter';
+
 // service
 import { WetalkApi } from '../../services';
 import { UserApi } from '../../services';
@@ -23,7 +35,9 @@ import { ConferenceApi } from '../../services';
 import { NavigationEvents } from 'react-navigation';
 import { querystringParser } from '../../utils';
 
-const hasNotch = DeviceInfo.hasNotch();
+// import DrawerContent from '../../components/DrawerContent';
+const { height, width } = Dimensions.get('window');
+const hasNotch = DeviceInfo.hasNotch() && Platform.OS === 'ios';
 
 // #region
 
@@ -35,6 +49,11 @@ class HomeScreenContainer extends Component {
     super(props);
     this._isFocus = true;
     this._refreshTimeStamp = Date.now();
+
+    if (Platform.OS === 'android') {
+      UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
   }
 
   /**
@@ -45,6 +64,7 @@ class HomeScreenContainer extends Component {
     refreshing: false, // 리프레시 상태
     searchKeyword: '', // 검색인풋
     selectedRoomId: null,
+    selectedRoomName: null,
     modal: false,
     url: null,
     orientation: 'UNKNOWN'
@@ -54,6 +74,7 @@ class HomeScreenContainer extends Component {
    * componentDidMount
    */
   componentDidMount() {
+    // 화면 회전 처리
     Orientation.getOrientation(orientation => {
       this.setState({ orientation });
     });
@@ -64,8 +85,12 @@ class HomeScreenContainer extends Component {
         this._handleOpenURL({ url });
       }
     });
+    // ios 딥링크 처리
+    if (Platform.OS === 'ios') {
+      Linking.addEventListener('url', this._handleOpenURL);
+    }
 
-    Linking.addEventListener('url', this._handleOpenURL);
+    // 주기적으로 앱 업데이트
     AppState.addEventListener('change', this._handleAppStateChange);
     this._interval = setInterval(() => {
       if (Date.now() > this._refreshTimeStamp + 3000) {
@@ -73,7 +98,21 @@ class HomeScreenContainer extends Component {
         this._handleRefresh();
       }
     }, 15000);
+
+    // 뒤로가기 버튼 동작
+    BackHandler.addEventListener('hardwareBackPress', this._handleBackButton);
   }
+
+  shouldComponentUpdate = (nextProps, nextState) => {
+    // android 딥링크 처리
+    if (
+      Platform.OS === 'android' &&
+      this.props.screenProps !== nextProps.screenProps
+    ) {
+      this._handleOpenURL(nextProps.screenProps);
+    }
+    return true;
+  };
 
   /**
    * componentWillUnmount
@@ -83,7 +122,18 @@ class HomeScreenContainer extends Component {
     Orientation.removeOrientationListener(this._handleOrientation);
     Linking.removeEventListener('url', this._handleOpenURL);
     AppState.removeEventListener('change', this._handleAppStateChange);
+
+    // 앱 종료를 막음
+    this.exitApp = false;
+    BackHandler.removeEventListener(
+      'hardwareBackPress',
+      this._handleBackButton
+    );
   }
+
+  // onSwipeRight(gestureState) {
+  //   this.props.navigation.openDrawer();
+  // }
 
   // #region
   /**
@@ -113,6 +163,14 @@ class HomeScreenContainer extends Component {
           }}
           onDidBlur={() => (this._isFocus = false)}
         />
+        {/* <GestureRecognizer
+          onSwipeRight={state => this.onSwipeRight(state)}
+          style={{ flex: 1 }}
+        > */}
+        {/* <DrawerLayoutAndroid
+          drawerWidth={Math.min(height, width) * 0.75}
+          renderNavigationView={() => <DrawerContent navigation={navigation} />}
+        > */}
         <HomeScreenPresenter
           navigation={navigation}
           refreshing={refreshing}
@@ -129,10 +187,37 @@ class HomeScreenContainer extends Component {
           orientation={this.state.orientation}
           hasNotch={hasNotch}
         />
+        {/* </DrawerLayoutAndroid> */}
+        {/* </GestureRecognizer> */}
       </View>
     );
   }
   // #endregion
+
+  /**
+   * _handleBackButton
+   */
+  _handleBackButton = () => {
+    // if(this.props.navigation)
+    if (!this.props.navigation.isFocused()) return false;
+
+    this.props.navigation.closeDrawer();
+
+    // 1000(1초) 안에 back 버튼을 한번 더 클릭 할 경우 앱 종료
+    if (this.exitApp == undefined || !this.exitApp) {
+      ToastAndroid.show('한번 더 누르면 앱이 종료됩니다.', ToastAndroid.SHORT);
+      this.exitApp = true;
+
+      this.timeout = setTimeout(() => {
+        this.exitApp = false;
+      }, 1000);
+    } else {
+      clearTimeout(this.timeout);
+
+      BackHandler.exitApp(); // 앱 종료
+    }
+    return true;
+  };
 
   /**
    * _handleOrientation
@@ -158,12 +243,7 @@ class HomeScreenContainer extends Component {
           this._handleOpenLink(url);
         }
       })
-      .catch(
-        err =>
-          alert(
-            '다시 시도해 주세요'
-          ) /* console.error('An error occurred', err) */
-      );
+      .catch(err => alert('다시 시도해 주세요'));
   };
 
   /**
@@ -175,9 +255,14 @@ class HomeScreenContainer extends Component {
     // console.log('RESULT :: ', result);
     // if (result.type === '3') {
     if (typeof result === 'string') {
-      // 위하고 로그인일 경우
+      // 위하고 로그인일 경우 예외처리
+      return;
+    } else if (result.is_creater) {
+      // 화상대화 실행
+      console.log(result);
+      this._handleCheckConference(result.room_id, result);
     } else {
-      this._handleCheckConference(result.room_id, result); // 테스트
+      return;
     }
     // 화상대화 타입 (생성:0/참여:1)
     // if (result.type == '1') {
@@ -302,24 +387,33 @@ class HomeScreenContainer extends Component {
    * _handleActivateModal
    * 모달뷰 토글
    */
-  _handleActivateModal = async (selectedRoomId = null) => {
+  _handleActivateModal = async (
+    selectedRoomId = null,
+    selectedRoomName = null
+  ) => {
     this.setState(prev => ({
       modal: !prev.modal,
-      selectedRoomId
+      selectedRoomId,
+      selectedRoomName
     }));
   };
 
   /**
-   * _handleActivateModal
-   * 모달뷰 토글
+   * _handleCheckConference
+   * 화상대화 생성/확인
    */
-  _handleCheckConference = async (conferenceId, externalData = null) => {
+  _handleCheckConference = async (
+    conferenceId,
+    externalData = null,
+    selectedRoomName = null
+  ) => {
     let { auth } = this.props;
     let callType = 1;
     let isCreator;
     // 위하고(외부)에서 접속인지 아닌지 구분
     if (externalData !== null) {
       auth = {
+        ...auth,
         conferenceId,
         portal_id: externalData.owner_id,
         user_name: externalData.owner_name,
@@ -328,7 +422,7 @@ class HomeScreenContainer extends Component {
       };
 
       callType = externalData.call_type; // 1:화상 / 2:음성
-      isCreator = externalData.is_creater; // 1:생성자 / 2:참여자
+      isCreator = externalData.is_creater; // 0:생성자 / 1:참여자 / 9:비즈박스알파
     } else {
       // 생성여부 체크
       const result = await ConferenceApi.check(
@@ -347,7 +441,8 @@ class HomeScreenContainer extends Component {
       item: {
         videoRoomId: conferenceId,
         callType,
-        isCreator
+        isCreator,
+        selectedRoomName
       }
     });
   };
@@ -417,12 +512,9 @@ class HomeScreenContainer extends Component {
       this.state.appState.match(/inactive|background/) &&
       nextAppState === 'active'
     ) {
-      // 포그라운드 전환시 아래 로직 실행
       this._handleRefressAfterWhile();
-    } else {
-      // Linking.removeEventListener('url', this._handleOpenURL);
     }
-    this.setState({ appState: nextAppState, url: 111 });
+    this.setState({ appState: nextAppState });
   };
 }
 // #endregion
