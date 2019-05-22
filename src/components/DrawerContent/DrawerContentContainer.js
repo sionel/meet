@@ -24,7 +24,8 @@ class DrawerContentContainer extends Component {
         name: '회사변경',
         src: 'Company',
         action: () => {
-          this._handleChangeState('selectCompany', true);
+          // this._handleChangeState('selectCompany', true);
+          alert('준비중입니다.');
         }
       },
       {
