@@ -3,9 +3,14 @@
  */
 
 import React from 'react';
-import { Text, View, WebView, TouchableOpacity, Platform } from 'react-native';
+import { Text, View, TouchableOpacity, Platform } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DeviceInfo from 'react-native-device-info';
+// import WebView from 'react-native-yunpeng-webview';
+const WebView =
+  Platform.OS === 'ios'
+    ? require('react-native')
+    : require('react-native-yunpeng-webview').default;
 
 const hasNotch = DeviceInfo.hasNotch() && Platform.OS === 'ios';
 
@@ -20,6 +25,7 @@ const CustomWebView = props => {
     contentStyle,
     onClickButton
   } = props;
+  
   return (
     <View style={{ flex: 1 }}>
       <View
