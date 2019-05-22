@@ -65,67 +65,68 @@ const BackButton = ({ navigation, to }) => {
 const RightMenuImage = ({ navigation }) => {
   const { state } = navigation;
 
-  const opacity = new Animated.Value(1);
-  const rotate = new Animated.Value(0);
-  const spin = rotate.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0deg', '360deg']
-  });
+  // const opacity = new Animated.Value(1);
+  // const rotate = new Animated.Value(0);
+  // const spin = rotate.interpolate({
+  //   inputRange: [0, 1],
+  //   outputRange: ['0deg', '360deg']
+  // });
 
-  if (state.drawerMovementDirection) {
-    // Animated.timing(opacity, {
-    //   toValue: 0.3,
-    //   duration: 20
-    // }).start(() =>
-    //   Animated.timing(opacity, {
-    //     toValue: 1,
-    //     duration: 200
-    //   }).start()
-    // );
-    Animated.timing(rotate, {
-      toValue: 1,
-      duration: 400
-    }).start();
-  }
+  // if (
+  //   (state.drawerMovementDirection === 'opening') ||
+  //   (state.drawerMovementDirection === 'closing')
+  // ) {
+  // Animated.timing(opacity, {
+  //   toValue: 0.3,
+  //   // duration: 20
+  // }).start(() =>
+  //   Animated.timing(opacity, {
+  //     toValue: 1,
+  //     // duration: 200
+  //   }).start()
+  // );
+  // Animated.timing(rotate, {
+  //   toValue: 1,
+  //   // duration: 4000
+  // }).start();
+  // }
 
   return (
     <View
       style={{
         alignItems: 'center',
         justifyContent: 'center',
-        paddingLeft: 10
+        paddingLeft: 10,
+        margin: 10
       }}
     >
-      <Animated.View
+      {/* <Animated.View
         style={{
-          transform: [{ rotate: spin }],
-          opacity: opacity,
+          // transform: [{ rotate: spin }],
+          // opacity: opacity,
           alignItems: 'center',
           justifyContent: 'center',
           margin: 10
         }}
-      >
-        <Icon
-          // name="cog"
-          name={
-            state.drawerMovementDirection === 'opening'
-              ? 'close'
-              : state.drawerMovementDirection === 'closing'
-              ? 'bars'
-              : state.isDrawerOpen
-              ? 'close'
-              : 'bars'
-            // iconName
-          }
-          size={20}
-          color="#fff"
-          style={{
-            // marginLeft: 20,
-            // marginRight: 20,
-            zIndex: 10
-          }}
-        />
-      </Animated.View>
+      > */}
+      <Icon
+        name={
+          state.drawerMovementDirection === 'opening'
+            ? 'close'
+            : state.drawerMovementDirection === 'closing'
+            ? 'bars'
+            : state.isDrawerOpen
+            ? 'close'
+            : 'bars'
+          // iconName
+        }
+        size={20}
+        color="#fff"
+        style={{
+          zIndex: 10
+        }}
+      />
+      {/* </Animated.View> */}
     </View>
   );
 };
@@ -174,7 +175,7 @@ const HomeRoute = createStackNavigator(
               // navigation.navigate('Configuration');
               navigation.toggleDrawer();
             }}
-            activeOpacity={1}
+            activeOpacity={0.2}
           >
             <RightMenuImage navigation={navigation} />
           </TouchableOpacity>
