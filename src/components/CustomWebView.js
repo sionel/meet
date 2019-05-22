@@ -9,7 +9,7 @@ import DeviceInfo from 'react-native-device-info';
 // import WebView from 'react-native-yunpeng-webview';
 const WebView =
   Platform.OS === 'ios'
-    ? require('react-native')
+    ? require('react-native').WebView
     : require('react-native-yunpeng-webview').default;
 
 const hasNotch = DeviceInfo.hasNotch() && Platform.OS === 'ios';
@@ -25,7 +25,7 @@ const CustomWebView = props => {
     contentStyle,
     onClickButton
   } = props;
-  
+
   return (
     <View style={{ flex: 1 }}>
       <View
