@@ -59,6 +59,7 @@ const Placeholder = props => {
 			>
 				{props.subText}
 			</Text>
+			{props.other}
 		</View>
 	);
 };

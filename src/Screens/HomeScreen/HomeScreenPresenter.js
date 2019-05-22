@@ -33,6 +33,13 @@ const waitingImage = require(`${rootPath}/waiting.gif`);
  */
 const HomeScreenPresenter = props => {
   const activateList = props.list.filter(item => item.is_video_access === 'T');
+  const reloadButton = (
+    <View style={styles.reloadButtonWrap}>
+      <Text style={styles.reloadButton} onPress={props.onRefresh}>
+        새로고침
+      </Text>
+    </View>
+  );
 
   return (
     <View style={styles.container}>
@@ -43,6 +50,7 @@ const HomeScreenPresenter = props => {
         <Placeholder
           mainText={'진행중인 화상회의가 없습니다.'}
           subText={'대화를 시작하려면 +버튼을 누르세요.'}
+          other={reloadButton}
         />
       )}
 
@@ -164,6 +172,20 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     justifyContent: 'center',
     alignItems: 'center'
+  },
+
+  reloadButtonWrap: {
+    marginTop: 10,
+    borderWidth: 1,
+    borderRadius: 18,
+    borderColor: '#aaa'
+  },
+  reloadButton: {
+    marginTop: 3,
+    marginBottom: 3,
+    marginLeft: 12,
+    marginRight: 12,
+    textAlign: 'center'
   },
 
   listContainer: {
