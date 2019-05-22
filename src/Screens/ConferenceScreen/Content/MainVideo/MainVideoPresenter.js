@@ -1,5 +1,12 @@
 import React, { Fragment } from 'react';
-import { View, StyleSheet, Image, Text, Platform } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Image,
+  Text,
+  Platform,
+  Dimensions
+} from 'react-native';
 import { RTCView } from 'react-native-webrtc';
 import ButtonCameraOff from '../../../../../assets/buttons/btn_vc_camera_off.png';
 import ButtonCameraOff2 from '../../../../../assets/icons/icoCameraWhLargeOff_2x.png';
@@ -7,6 +14,8 @@ import ButtonCameraOff2 from '../../../../../assets/icons/icoCameraWhLargeOff_2x
 import ProfileImage from '../../../../../assets/icons/imgVcNophoto_2x.png';
 // import ProfileImage from '../../../../../assets/smapleImages/nnn2.png';
 import { CustomLottie } from '../../../../components';
+
+const { height, width } = Dimensions.get('window');
 
 /**
  * MainVideoPresenter
@@ -86,6 +95,7 @@ const MainVideoPresenter = props => {
 
   return (
     <View style={{ flex: 1, backgroundColor: '#1D1D1D' }}>
+      {/* 정상적인 화상대화 일 때 */}
       {!isMuteVideo && stream && callType == 1 && !props.drawing ? (
         <RTCView
           style={styles.RTCVideo}
@@ -98,6 +108,7 @@ const MainVideoPresenter = props => {
         />
       ) : callType == 2 ? (
         <View style={{ ...styles.imageContainer }}>
+          {/* 음성대화 일 때 */}
           <View style={{ display: 'flex' }}>
             <CustomLottie source="voiceBroadcast" width={280} height={280}>
               <View
@@ -135,7 +146,13 @@ const MainVideoPresenter = props => {
                 }}
               >
                 <Text
-                  style={{ fontSize: 25, fontWeight: 'bold', color: '#fff' }}
+                  style={{
+                    fontSize: 25,
+                    fontWeight: 'bold',
+                    color: '#fff',
+                    width: Math.min(height, width) * 0.8,
+                    textAlign: 'center'
+                  }}
                 >
                   {mainUser.name}
                 </Text>
@@ -158,9 +175,14 @@ const MainVideoPresenter = props => {
           )}
         </View>
       )}
+
+      {/* 화상대화 중 나오는 통화시간 */}
       {callType == 1 && displayTime}
+
+      {/* 네트워크 불안정 */}
       {mainUser.status === 'interrupted' && muteView}
 
+      {/* 서브 비디오 */}
       {props.children && (
         <View style={styles.videoContainer}>{props.children}</View>
       )}
