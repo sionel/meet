@@ -7,10 +7,11 @@ import { Text, View, TouchableOpacity, Platform } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DeviceInfo from 'react-native-device-info';
 // import WebView from 'react-native-yunpeng-webview';
-const WebView =
-  Platform.OS === 'ios'
-    ? require('react-native').WebView
-    : require('react-native-yunpeng-webview').default;
+// const WebView =
+//   Platform.OS === 'ios'
+//     ? require('react-native').WebView
+//     : require('react-native-yunpeng-webview').default;
+import { WebView } from 'react-native-webview';
 
 const hasNotch = DeviceInfo.hasNotch() && Platform.OS === 'ios';
 
