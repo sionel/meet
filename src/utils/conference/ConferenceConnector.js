@@ -10,7 +10,7 @@ export const UPDATE_DRAWING_DATA = 'UPDATE_DRAWING_DATA';
 // 드로잉 전체 지우기
 export const CLEAR_DRAWING_CANVAS = 'CLEAR_DRAWING_CANVAS';
 // 문서공유 모드 설정 커맨드 타입
-export const SET_DOCUMENT_IS_SHARE = 'SET_DOCUMENT_IS_SHARE';
+export const SET_DRAWING_IS_SHARE = 'SET_DRAWING_IS_SHARE';
 // 캔버스 뒤로가기 앞으로가기 커맨드 타입
 export const DRAWING_REDO_UNDO = 'DRAWING_REDO_UNDO';
 
@@ -179,15 +179,14 @@ class ConferenceConnector {
     /**
      * 문서 공유/드로잉 설정 감지
      */
-    this._room.addCommandListener(SET_DOCUMENT_IS_SHARE, value => {
+    this._room.addCommandListener(SET_DRAWING_IS_SHARE, value => {
       const {
         value: userId,
-        attributes: { isDocumentShare }
+        attributes: { isDrawingShare }
       } = value;
-      console.log('SET_DOCUMENT_IS_SHARE : ', value);
       if (userId !== this._room.myUserId()) {
         this._handlers.CHANGED_DOCUMENT_SHARE_MODE(
-          value.attributes.isDocumentShare
+          value.attributes.isDrawingShare
         );
       }
     });
@@ -277,18 +276,18 @@ class ConferenceConnector {
   /**
    * 드로잉 모드 전환 공유
    */
-  setToogleDocumentShare = isDocumentShare => {
+  setToogleDocumentShare = isDrawingShare => {
     // 공유모드 설정 참가자들에게 공유
-    // this._room.sendCommand(SET_DOCUMENT_IS_SHARE, {
-    this._room.sendCommandOnce(SET_DOCUMENT_IS_SHARE, {
+    // this._room.sendCommand(SET_DRAWING_IS_SHARE, {
+    this._room.sendCommandOnce(SET_DRAWING_IS_SHARE, {
       value: this._room.myUserId(),
       attributes: {
-        isDocumentShare
+        isDrawingShare
       }
     });
     this._handlers.CHANGED_DOCUMENT_SHARE_MODE(
-      // value.attributes.isDocumentShare
-      isDocumentShare
+      // value.attributes.isDrawingShare
+      isDrawingShare
     );
   };
 
