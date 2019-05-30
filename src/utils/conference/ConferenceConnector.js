@@ -11,6 +11,8 @@ export const UPDATE_DRAWING_DATA = 'UPDATE_DRAWING_DATA';
 export const CLEAR_DRAWING_CANVAS = 'CLEAR_DRAWING_CANVAS';
 // 문서공유 모드 설정 커맨드 타입
 export const SET_DOCUMENT_IS_SHARE = 'SET_DOCUMENT_IS_SHARE';
+// 캔버스 뒤로가기 앞으로가기 커맨드 타입
+export const DRAWING_REDO_UNDO = 'DRAWING_REDO_UNDO';
 
 /**
  * ConferenceConnector
@@ -52,7 +54,7 @@ class ConferenceConnector {
       this._room.setDisplayName(name);
       // wehago id를 커맨드로 전송한다.
       // this._room.sendCommand(WEHAGO_ID, {
-      this._room.sendCommandOnce(WEHAGO_ID, {
+      this._room.sendCommand(WEHAGO_ID, {
         value: this._room.myUserId(),
         attributes: {
           wehagoId: auth.portal_id,
@@ -168,6 +170,7 @@ class ConferenceConnector {
 
     // 위하고 접속 아이디 및 정보 가져오기
     this._room.addCommandListener(WEHAGO_ID, user => {
+      console.log('user : ', user);
       const id = user.value;
       this._handlers.SET_USER_INFO(id, user.attributes);
       //
@@ -225,6 +228,25 @@ class ConferenceConnector {
         this._drawingManager.get('canvas')
       ) {
         this._drawingManager.clearAll();
+      }
+    });
+
+    /**
+     * 드로잉 뒤로가기, 앞으로가기 감지
+     */
+    this._room.addCommandListener(DRAWING_REDO_UNDO, value => {
+      if (!this._drawingManager) {
+        this._drawingManager = getDrawingManager();
+      }
+
+      const { attributes, value: userId } = value;
+
+      if (userId !== this._room.myUserId() && this._drawingManager) {
+        // 아이디랑 타입 보내기
+        // redo
+        // if (attributes.type === "redo") this._drawingManager.redo();
+        // undo
+        // if (attributes.type === "undo") this._drawingManager.undo();
       }
     });
   };

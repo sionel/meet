@@ -44,7 +44,9 @@ class ConferenceScreenContainer extends React.Component {
     // 참가자/생성자 여부 확인 후 로딩딜레이
     const delayLoading = time =>
       setTimeout(() => {
-        this._joinConference(item.videoRoomId, user_name, auth);
+        const roomId = item.videoRoomId; // item.videoRoomId
+        // const roomId = `OGrTxmgBeAtpuzEuupv9_20190426092958yf656`; // item.videoRoomId
+        this._joinConference(roomId, user_name, auth);
         AppState.addEventListener('change', this._handleAppStateChange);
       }, time);
 

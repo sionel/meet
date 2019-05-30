@@ -50,7 +50,7 @@ class ConferenceManager {
     );
 
     // 외부 접속이 아닐 때만 API 전송
-    if ((auth.is_creater && auth.is_creater !== '9') || !auth.is_creater) {
+    if (auth.is_creater !== '9' || !auth.is_creater) {
       this._apiManager = new APIManager(
         this._conferenceConnector.room.myUserId(),
         {

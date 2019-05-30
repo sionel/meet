@@ -122,6 +122,7 @@ class CreateScreenContainer extends React.Component {
 
   /**
    * _handleCreateConference
+   * 화상대화 생성
    */
   _handleCreateConference = async (selectedRoomId, externalData = null) => {
     let auth;
@@ -142,6 +143,16 @@ class CreateScreenContainer extends React.Component {
         e => e.company_no == auth.last_access_company_no
       )[0].company_code;
     }
+
+    // 화상대화 체크
+    const checkResult = await ConferenceApi.check(
+      selectedRoomId,
+      auth.AUTH_A_TOKEN,
+      auth.AUTH_R_TOKEN,
+      auth.HASH_KEY
+    );
+    console.log('checkResult : ', checkResult);
+
     const bodyData = [
       selectedRoomId, // 방 id
       auth.portal_id, // 유저아이디
@@ -154,7 +165,11 @@ class CreateScreenContainer extends React.Component {
       // null
     ];
     const createResult = await ConferenceApi.create(...bodyData);
-    // 화상대화 생성가능여부
+    console.log('==================================');
+    console.log('Log : ', createResult);
+    console.log('==================================');
+
+    // 화상대화 생성가능여부 // 대화방 생성 or 참여 여부 결정
     if (createResult.resultCode === 200) {
       // 생성완료 메시지 보내기
       const sendWetalkResult = await ConferenceApi.sendWetalk(
@@ -173,6 +188,8 @@ class CreateScreenContainer extends React.Component {
       this._handleRedirect('Conference', {
         item: { videoRoomId, selectedRoom: this.state.selectedRoomName }
       });
+    } else if (createResult.resultCode === 400) {
+      alert('방에 참여시켜주세요');
     } else {
       alert('화상대화 생성에 실패하였습니다. 다시 시도해 주세요');
     }

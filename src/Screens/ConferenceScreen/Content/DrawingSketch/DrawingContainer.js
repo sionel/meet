@@ -153,7 +153,7 @@ class DrawingContainer extends Component {
    * _handleStrokeEnd
    */
   _handleStrokeEnd = rs => {
-    // console.log('onStrokeEnd : ', rs);
+    console.log('onStrokeEnd : ', rs);
   };
 
   /**

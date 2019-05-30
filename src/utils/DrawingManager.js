@@ -51,14 +51,14 @@ class DrawingManager {
   };
 
   /**
-   *
+   * 캔버스 바인딩
    */
   setRef = ref => {
     this.canvas = ref;
   };
 
   /**
-   *
+   * 전체지우기
    */
   clearAll = (send = false) => {
     this.canvas.clear();
@@ -117,8 +117,9 @@ class DrawingManager {
     drawDataToJson.paths.map(item => {
       newData.path.data.push(`${item.x},${item.y}`);
     });
-    this.history.push(newData);
-    console.log('Parse data : ', newData);
+    // this.history.push(newData);
+    // console.log('Parse data : ', newData);
+
     return newData;
   };
 
