@@ -19,7 +19,8 @@ class ConfigurationScreenContainer extends React.Component {
    */
   state = {
     webView: false,
-    orientation: 'UNKNOWN'
+    orientation: 'UNKNOWN',
+    subUrl: ''
   };
 
   /**
@@ -60,6 +61,7 @@ class ConfigurationScreenContainer extends React.Component {
         navigation={navigation}
         list={list}
         webView={webView}
+        subUrl={this.state.subUrl}
         onRedirect={this.handleRedirect}
         onLogout={this._handleLogout}
         onChangeValue={this._handleChangeValue}

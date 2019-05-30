@@ -10,7 +10,7 @@ import DeviceInfo from 'react-native-device-info';
 const WebView =
   Platform.OS === 'ios'
     ? require('react-native').WebView
-    : require('react-native-yunpeng-webview').default;
+    : require('react-native-webview').WebView;
 
 const hasNotch = DeviceInfo.hasNotch() && Platform.OS === 'ios';
 

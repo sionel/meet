@@ -25,15 +25,21 @@ const ConfigurationScreenPresenter = props => {
     // },
     {
       title: '이용약관',
-      action: () => props.onChangeValue('webView', true)
+      action: () => {
+        props.onChangeValue('subUrl', '?code=001')
+        props.onChangeValue('webView', true)
+      }
     },
     {
       title: '개인정보 처리방침',
-      action: () => props.onChangeValue('webView', true)
+      action: () => {
+        props.onChangeValue('subUrl', '?code=002')
+        props.onChangeValue('webView', true)
+      }
     },
     {
       title: '버전정보',
-      content: Platform.OS === 'ios' ? '1.1.4' : '0.1.4'
+      content: Platform.OS === 'ios' ? '1.1.4.2' : '0.1.4.2'
       // action: () =>
       //   Alert.alert(
       //     '버전정보',
@@ -104,7 +110,7 @@ const ConfigurationScreenPresenter = props => {
           view={webView}
           contentTitle="약관 및 정책"
           buttonTitle="확인"
-          url="https://www.wehago.com/#/common/policy"
+          url={"https://www.wehago.com/#/common/policy" + props.subUrl}
           onClickButton={() => props.onChangeValue('webView', false)}
         />
       </Modal>

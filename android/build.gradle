@@ -115,7 +115,7 @@ allprojects {
                 versionQualifier = '-jitsi-1' // 1.4.2 + react-native 0.57
             else if ('react-native-sketch-canvas' == project.name)
                 versionQualifier = '-jitsi-1' // 1.4.2 + react-native 0.57
-            else if ('react-native-yunpeng-webview' == project.name)
+            else if ('react-native-webview' == project.name)
                 versionQualifier = '-jitsi-1' // 1.4.2 + react-native 0.57
 
             project.version = "${json.version}${versionQualifier}"

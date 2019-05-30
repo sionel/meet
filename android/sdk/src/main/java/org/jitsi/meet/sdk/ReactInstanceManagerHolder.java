@@ -153,8 +153,7 @@ class ReactInstanceManagerHolder {
                 .addPackage(new org.devio.rn.splashscreen.SplashScreenReactPackage())
                 .addPackage(new com.learnium.RNDeviceInfo.RNDeviceInfo())
                 .addPackage(new com.terrylinla.rnsketchcanvas.SketchCanvasPackage())
-                .addPackage(new com.yunpeng.react.webview.YPWebViewPackage())
-                .addPackage(new ReactPackageAdapter() {
+                .addPackage(new com.reactnativecommunity.webview.RNCWebViewPackage() {
                     @Override
                     public List<NativeModule> createNativeModules(
                             ReactApplicationContext reactContext) {

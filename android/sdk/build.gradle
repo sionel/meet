@@ -53,7 +53,7 @@ dependencies {
     implementation project(':react-native-splash-screen')
     implementation project(':react-native-device-info')
     implementation project(':react-native-sketch-canvas')
-    implementation project(':react-native-yunpeng-webview')
+    implementation project(':react-native-webview')
 
     testImplementation 'junit:junit:4.12'
 }

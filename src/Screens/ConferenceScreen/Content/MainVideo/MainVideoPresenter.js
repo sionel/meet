@@ -177,7 +177,7 @@ const MainVideoPresenter = props => {
       )}
 
       {/* 화상대화 중 나오는 통화시간 */}
-      {callType == 1 && displayTime}
+      {callType != 2 && displayTime}
 
       {/* 네트워크 불안정 */}
       {mainUser.status === 'interrupted' && muteView}
