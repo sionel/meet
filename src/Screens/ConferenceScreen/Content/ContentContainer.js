@@ -149,8 +149,10 @@ class ContentContainer extends React.Component {
 		[ 1(수화기) | 2(스피커) ]
 		*/
     const { speaker } = this.state;
-    AudioMode.setMode(speaker);
-    this.setState(prev => ({ speaker: prev.speaker == 2 ? 1 : 2 }));
+
+    this.setState(prev => ({ speaker: prev.speaker == 2 ? 1 : 2 }), () => {
+      AudioMode.setMode(speaker);
+    });
   };
 }
 

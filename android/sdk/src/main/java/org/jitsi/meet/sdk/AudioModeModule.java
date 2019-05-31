@@ -597,7 +597,7 @@ class AudioModeModule
                 }
                 if (success) {
                     AudioModeModule.this.mode = mode;
-                    promise.resolve(null);
+                    promise.resolve(mode);
                 } else {
                     promise.reject(
                             "setMode",
@@ -688,6 +688,11 @@ class AudioModeModule
             userSelectedDevice = null;
 
             return true;
+        } else if (mode == VIDEO_CALL) {
+            // 스피커폰 선택
+            audioManager.setSpeakerphoneOn(true);
+        } else if (mode == AUDIO_CALL) {
+            audioManager.setSpeakerphoneOn(false);
         }
 
         if (!useConnectionService()) {

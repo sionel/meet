@@ -3,11 +3,13 @@ import PropTypes from "prop-types";
 import { TouchableOpacity, Image, StyleSheet } from "react-native";
 import ButtonMic from "../../../../../../../assets/buttons/btn_vc_mike_on.png";
 import ButtonCamera from "../../../../../../../assets/buttons/btn_vc_camera_on.png";
-import ButtonSpeaker from "../../../../../../../assets/buttons/btn_vc_speaker_on.png";
+import ButtonSpeakerOn1 from "../../../../../../../assets/buttons/btn_speaker_turnon.png";
+// import ButtonSpeaker from "../../../../../../../assets/buttons/btn_vc_speaker_on.png";
 import ButtonEndCall from "../../../../../../../assets/buttons/btn_vc_endcall_none.png";
 import ButtonMicOff from "../../../../../../../assets/buttons/btn_vc_mike_off.png";
 import ButtonCameraOff from "../../../../../../../assets/buttons/btn_vc_camera_off.png";
-import ButtonSpeakerOff from "../../../../../../../assets/buttons/btn_vc_speaker_off.png";
+import ButtonSpeakerOff2 from "../../../../../../../assets/buttons/btn_speaker_turnoff.png";
+// import ButtonSpeakerOff from "../../../../../../../assets/buttons/btn_vc_speaker_off.png";
 
 /**
  * ControlButtonPresenter
@@ -42,7 +44,7 @@ const getButtonSource = (name, on) => {
       case "camera":
         return ButtonCamera;
       case "speaker":
-        return ButtonSpeaker;
+        return ButtonSpeakerOn1;
       case "mic":
         return ButtonMic;
       case "endcall":
@@ -55,7 +57,7 @@ const getButtonSource = (name, on) => {
       case "camera":
         return ButtonCameraOff;
       case "speaker":
-        return ButtonSpeakerOff;
+        return ButtonSpeakerOff2;
       case "mic":
         return ButtonMicOff;
       case "endcall":

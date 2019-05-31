@@ -13,7 +13,8 @@ import {
   Alert,
   Dimensions,
   UIManager,
-  LayoutAnimation
+  LayoutAnimation,
+  ToastAndroid,
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import Orientation from 'react-native-orientation-locker';
@@ -360,7 +361,12 @@ class LoginScreenContainer extends React.Component {
     // alert('login: ' + JSON.stringify(event));
 
     if (!result.mAuth_a_token) {
-      Alert.alert('Login', '현재 위하고에 로그인되어 있지 않습니다.');
+      Platform.OS === 'ios'
+        ? Alert.alert('Login', '현재 위하고에 로그인되어 있지 않습니다.')
+        : ToastAndroid.show(
+            '현재 위하고에 로그인되어 있지 않습니다.',
+            ToastAndroid.SHORT
+          );
     }
 
     // 로그인 진행

@@ -52,7 +52,6 @@
     "react-native-vector-icons": "^6.1.0",
     "react-native-webrtc": "github:jitsi/react-native-webrtc#c1be0cb1c6e8a83dfd406e478082a5ff205a97ec",
     "react-native-webview": "^5.10.0",
-    "react-native-yunpeng-webview": "https://github.com/yptech/react-native-yunpeng-webview.git",
     "react-navigation": "^3.0.9",
     "react-redux": "^6.0.0",
     "redux": "^4.0.1",
