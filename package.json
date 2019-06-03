@@ -11,7 +11,7 @@
     "device": "~/Library/Android/sdk/emulator/emulator @Nexus_5X_API_28",
     "pod": "cd ios && pod cache clean --all && pod install && cd ..",
     "build-android": "cd ./android && rm -rf build && cd ./app && rm -rf build && cd .. && cd ./sdk && rm -rf build  && cd .. && ./gradlew assembleRelease && cd ..",
-    "set-android": "~/Library/Android/sdk/platform-tools/adb -s R39M3089D9N reverse tcp:8081 tcp:8081"
+    "set-android": "~/Library/Android/sdk/platform-tools/adb -s LMV500N9d671ef3 reverse tcp:8081 tcp:8081"
   },
   "dependencies": {
     "@terrylinla/react-native-sketch-canvas": "^0.8.0",
@@ -44,6 +44,7 @@
     "react-native-keep-awake": "4.0.0",
     "react-native-linear-gradient": "2.5.3",
     "react-native-orientation-locker": "^1.1.1",
+    "react-native-permissions": "^1.1.1",
     "react-native-picker-select": "^6.0.0",
     "react-native-sound": "github:jitsi/react-native-sound#e4260ed7f641eeb0377d76eac7987aba72e1cf08",
     "react-native-splash-screen": "^3.2.0",
