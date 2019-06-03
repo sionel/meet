@@ -23,6 +23,9 @@ const TOGGLE_MUTE_SPEAKER = 'TOGGLE_MUTE_SPEAKER';
 // TOGGLE_CAMERA_FACING_MODE
 const TOGGLE_CAMERA_FACING_MODE = 'TOGGLE_CAMERA_FACING_MODE';
 
+// SET_CONFERENCE_CREATED_TIME
+const SET_CONFERENCE_CREATED_TIME = 'SET_CONFERENCE_CREATED_TIME';
+
 //#endregion Action Types
 
 //#region Initial State
@@ -31,7 +34,8 @@ const initialState = {
   user: null,
   conferenceMode: ConferenceModes.NORMAL,
   facingMode: FacingModes.FRONT,
-  prevVolumn: null
+  prevVolumn: null,
+  createdTime: null,
 };
 
 //#endregion
@@ -56,6 +60,8 @@ function reducer(state = initialState, action) {
       return applyToggleMuteMic(state, action);
     case TOGGLE_MUTE_SPEAKER:
       return applyToggleMuteSpeaker(state, action);
+    case SET_CONFERENCE_CREATED_TIME:
+      return applySetConferenceCreatedTime(state, action);
     default:
       return state;
   }
@@ -261,6 +267,27 @@ function applyToggleMuteSpeaker(state, action) {
 
 //#endregion TOGGLE_MUTE_SPEAKER
 
+//#region SET_CONFERENCE_CREATED_TIME
+
+function setConferenceCreatedTime(createdTime) {
+  return async dispatch => {
+    dispatch({
+      type: SET_CONFERENCE_CREATED_TIME,
+      createdTime
+    });
+  };
+}
+
+function applySetConferenceCreatedTime(state, action) {
+  const { createdTime } = action;
+  return {
+    ...state,
+    createdTime: createdTime
+  };
+}
+
+//#endregion SET_CONFERENCE_CREATED_TIME
+
 export const actionCreators = {
   setConferenceMode,
   joinConference,
@@ -268,7 +295,8 @@ export const actionCreators = {
   toggleMuteVideo,
   toggleCameraFacingMode,
   toggleMuteMic,
-  toggleMuteSpeaker
+  toggleMuteSpeaker,
+  setConferenceCreatedTime,
 };
 
 export default reducer;

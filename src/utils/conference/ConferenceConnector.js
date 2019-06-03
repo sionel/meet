@@ -65,6 +65,8 @@ class ConferenceConnector {
 
       // 대화방 참가
       this._room.join();
+
+      return this._room;
     });
   };
 

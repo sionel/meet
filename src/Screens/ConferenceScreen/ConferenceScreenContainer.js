@@ -4,7 +4,7 @@
  */
 
 import React, { Fragment } from 'react';
-import { NativeModules } from 'react-native';
+import { NativeModules, NetInfo } from 'react-native';
 import ConferenceScreenPresenter from './ConferenceScreenPresenter';
 import ConferenceManager from '../../utils/conference/ConferenceManager';
 // import Orientation from 'react-native-orientation-locker';
@@ -17,7 +17,8 @@ class ConferenceScreenContainer extends React.Component {
     super();
     this._appState = 'active';
     this.state = {
-      callType: 1
+      callType: 1,
+      connection: false
     };
   }
 
@@ -55,6 +56,19 @@ class ConferenceScreenContainer extends React.Component {
     } else {
       delayLoading(0);
     }
+
+    NetInfo.getConnectionInfo().then(connectionInfo => {
+      this.setState({
+        connection:
+          connectionInfo.type !== 'wifi' || connectionInfo.type !== 'cellular'
+      });
+      console.log('Initial, type: ' + connectionInfo.type);
+    });
+
+    NetInfo.addEventListener(
+      'connectionChange',
+      this._handleConnectivityChange
+    );
   }
 
   /** */
@@ -77,6 +91,11 @@ class ConferenceScreenContainer extends React.Component {
     // Orientation.lockToPortrait();
     // 컴포넌트가 언마운트 되기전 화상회의 관련 리소스를 해제 한다.
     this._conferenceManager.dispose();
+
+    NetInfo.removeEventListener(
+      'connectionChange',
+      this._handleConnectivityChange
+    );
   }
 
   /**
@@ -89,6 +108,7 @@ class ConferenceScreenContainer extends React.Component {
         <StatusBar hidden={true} />
         <ConferenceScreenPresenter
           {...this.props}
+          connection={this.state.connection}
           callType={this.callType}
           selectedRoomName={this.selectedRoomName}
           onClose={this._handleClose}
@@ -99,6 +119,17 @@ class ConferenceScreenContainer extends React.Component {
       </Fragment>
     );
   }
+
+  _handleConnectivityChange = connectionInfo => {
+    console.log('Network change, type: ' + connectionInfo.type);
+
+    if (connectionInfo.type !== 'wifi' || connectionInfo.type !== 'cellular') {
+      this.setState({ connection: false });
+      this._conferenceManager.dispose();
+    }
+    // if (connectionInfo.type !== this.state.connection && connectionInfo.type) {
+    // }
+  };
 
   /** 대화방 참가 생성 */
   _joinConference = async (roomName, name, auth) => {

@@ -16,7 +16,8 @@ const ContentPresenter = props => {
     isVideoReverse,
     speaker,
     drawingMode,
-    conferenceMode
+    conferenceMode,
+    createdTime,
   } = props;
 
   return (
@@ -53,6 +54,7 @@ const ContentPresenter = props => {
           objectFit={props.objectFit}
           drawing={drawingMode}
           conferenceMode={conferenceMode}
+          createdTime={createdTime}
         />
       </TouchableOpacity>
       {/* END MAIN VIDEO 영역 */}

@@ -2,8 +2,10 @@
 
 import { connect } from "react-redux";
 import MainVideoContainer from "./MainVideoContainer";
+// import { actionCreators as localActions } from '../../../../redux/modules/local';
 
 const mapStateToProps = (state, ownProps) => {
+	const { local: { createdTime } } = state;
   const {
     mainUser,
     mainUser: { isMuteVideo },
@@ -14,7 +16,8 @@ const mapStateToProps = (state, ownProps) => {
     mainUser,
     stream: !isMuteVideo && videoTrack && videoTrack.getOriginalStream(),
     isMuteVideo,
-    videoType: videoTrack && videoTrack.videoType
+    videoType: videoTrack && videoTrack.videoType,
+    createdTime,
   };
 };
 

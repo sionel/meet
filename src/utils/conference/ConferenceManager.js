@@ -42,12 +42,16 @@ class ConferenceManager {
     // connection 연결
     await this._connection.connect(roomName.toLowerCase(), handleClose);
     // 대화방 참가
-    await this._conferenceConnector.connect(
+    this._room = await this._conferenceConnector.connect(
       this._connection,
       roomName.toLowerCase(),
       name,
       auth
     );
+
+    // 대화방 접속 시간 세팅
+    const createdTime = this._room.properties['created-ms'];
+    this._dispatch(localActionCreators.setConferenceCreatedTime(createdTime));
 
     // 외부 접속이 아닐 때만 API 전송
     if (auth.is_creater !== '9' || !auth.is_creater) {

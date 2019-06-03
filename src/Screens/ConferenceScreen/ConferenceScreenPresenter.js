@@ -10,7 +10,7 @@ import Content from './Content';
  * ConferenceScreenPresenter
  */
 const ConferenceScreenPresenter = props =>
-  props.mainUser ? (
+  props.mainUser && props.connection ? (
     <Content
       mainUser={props.mainUser}
       onClose={props.onClose}

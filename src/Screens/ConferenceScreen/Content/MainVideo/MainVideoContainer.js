@@ -9,13 +9,20 @@ class MainVideoContainer extends React.Component {
     time: 0
     // objectFit: 'contain'
   };
+
   componentDidMount() {
     this._timer = setInterval(() => {
       this.setState({
-        time: this.state.time + 1
+        time: Math.floor((Date.now() - this.props.createdTime) / 1000)
       });
-    }, 1000);
+    }, 100);
   }
+
+  shouldComponentUpdate = (nextProps, nextState) => {
+    if (nextProps !== this.props) return true;
+    if (nextState !== this.state) return true;
+    return false;
+  };
 
   componentWillUnmount() {
     if (this._timer) {

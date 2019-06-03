@@ -24,7 +24,7 @@ const mapStateToProps = state => {
 	return {
 		mainUser,
 		user_name: auth.user_name,
-		auth: auth
+		auth: auth,
 	};
 };
 

@@ -12,7 +12,7 @@ const mapStateToProps = (state, ownProps) => {
 		conferenceMode,
 		videoTrack: mainUser.videoTrack,
 		isMuteVideo: mainUser.isMuteVideo,
-		drawingMode: state.mainUser.drawingMode
+		drawingMode: state.mainUser.drawingMode,
 	};
 };
 
