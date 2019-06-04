@@ -101,7 +101,7 @@ class MainContainer extends Component {
       const result = await Permissions.request(permissions[len], {
         type: 'whenInUse'
       });
-      // 권한 미승인 시 앱 종료
+      // 권한 미승인 시 앱 종료 또는 환경설정으로 이동
       if (result !== 'authorized') {
         Alert.alert(
           '권한 요청',

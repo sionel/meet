@@ -305,13 +305,13 @@ const LoginScreenPresenter = props => {
                   <FlatList
                     data={[
                       {
-                        key: '1',
+                        key: '0',
                         title: '카메라',
                         description: '사진 및 동영상 촬영, QR코드 스캔',
                         icon: 'camera'
                       },
                       {
-                        key: '2',
+                        key: '1',
                         title: '마이크',
                         description: '화상대화 내 음성 전송',
                         icon: 'microphone'
