@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import SettingButton from './SettingButton';
 import { ConferenceModes } from '../../../../utils/ConstantsBackup';
+import _ from 'underscore';
 
 /**
  * TopAreaPresenter
@@ -57,7 +58,7 @@ const TopAreaPresenter = props => {
             areaWdith={25}
             areaHeight={28}
             // onPress={() => props.onChangeDrawing(!props.drawing)}
-            onPress={() => props.onChangeDrawingMode(!props.drawing)}
+            onPress={_.throttle(() => props.onChangeDrawingMode(!props.drawing), 500)}
           />
         </Fragment>
         {/* )} */}

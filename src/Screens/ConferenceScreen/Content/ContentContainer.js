@@ -10,6 +10,7 @@ import ContentPresenter from './ContentPresenter';
 import { ConferenceModes } from '../../../utils/Constants';
 // import Orientation from 'react-native-orientation-locker';
 import DeviceInfo from 'react-native-device-info';
+import _ from 'underscore';
 
 const { AudioMode } = NativeModules;
 const hasNotch = DeviceInfo.hasNotch() && Platform.OS === 'ios';
@@ -137,9 +138,9 @@ class ContentContainer extends React.Component {
   /**
    * 카메라 좌우반전
    */
-  _handleReverseVideo = () => {
+  _handleReverseVideo = _.throttle(() => {
     this.setState(prev => ({ isVideoReverse: !prev.isVideoReverse }));
-  };
+  }, 1000);
 
   /**
    * 스피커폰 활성화

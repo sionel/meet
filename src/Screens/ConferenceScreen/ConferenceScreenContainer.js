@@ -18,7 +18,7 @@ class ConferenceScreenContainer extends React.Component {
     this._appState = 'active';
     this.state = {
       callType: 1,
-      connection: false
+      connection: true
     };
   }
 
@@ -57,18 +57,18 @@ class ConferenceScreenContainer extends React.Component {
       delayLoading(0);
     }
 
-    NetInfo.getConnectionInfo().then(connectionInfo => {
-      this.setState({
-        connection:
-          connectionInfo.type !== 'wifi' || connectionInfo.type !== 'cellular'
-      });
-      console.log('Initial, type: ' + connectionInfo.type);
-    });
+    // NetInfo.getConnectionInfo().then(connectionInfo => {
+    //   this.setState({
+    //     connection:
+    //       connectionInfo.type !== 'wifi' || connectionInfo.type !== 'cellular'
+    //   });
+    //   console.log('Initial, type: ' + connectionInfo.type);
+    // });
 
-    NetInfo.addEventListener(
-      'connectionChange',
-      this._handleConnectivityChange
-    );
+    // NetInfo.addEventListener(
+    //   'connectionChange',
+    //   this._handleConnectivityChange
+    // );
   }
 
   /** */
@@ -92,10 +92,10 @@ class ConferenceScreenContainer extends React.Component {
     // 컴포넌트가 언마운트 되기전 화상회의 관련 리소스를 해제 한다.
     this._conferenceManager.dispose();
 
-    NetInfo.removeEventListener(
-      'connectionChange',
-      this._handleConnectivityChange
-    );
+    // NetInfo.removeEventListener(
+    //   'connectionChange',
+    //   this._handleConnectivityChange
+    // );
   }
 
   /**
@@ -120,16 +120,16 @@ class ConferenceScreenContainer extends React.Component {
     );
   }
 
-  _handleConnectivityChange = connectionInfo => {
-    console.log('Network change, type: ' + connectionInfo.type);
+  // _handleConnectivityChange = connectionInfo => {
+  //   console.log('Network change, type: ' + connectionInfo.type);
 
-    if (connectionInfo.type !== 'wifi' || connectionInfo.type !== 'cellular') {
-      this.setState({ connection: false });
-      this._conferenceManager.dispose();
-    }
-    // if (connectionInfo.type !== this.state.connection && connectionInfo.type) {
-    // }
-  };
+  //   if (connectionInfo.type !== 'wifi' || connectionInfo.type !== 'cellular') {
+  //     this.setState({ connection: false });
+  //     this._conferenceManager.dispose();
+  //   }
+  //   // if (connectionInfo.type !== this.state.connection && connectionInfo.type) {
+  //   // }
+  // };
 
   /** 대화방 참가 생성 */
   _joinConference = async (roomName, name, auth) => {
