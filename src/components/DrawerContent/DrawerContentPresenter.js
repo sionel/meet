@@ -25,7 +25,14 @@ const DrawerContentPresenter = props => {
         }}
       >
         <View style={styles.profile}>
-          <Image source={ProfileImage} style={styles.profile_img} />
+          <Image
+            source={
+              props.auth.profile_url
+                ? { uri: 'https://www.wehago.com' + props.auth.profile_url }
+                : ProfileImage
+            }
+            style={styles.profile_img}
+          />
         </View>
         {props.auth.user_name && (
           <View
@@ -98,7 +105,7 @@ const styles = StyleSheet.create({
   profile_img: {
     width: 80,
     height: 80,
-    resizeMode: 'contain',
+    resizeMode: 'cover',
     backgroundColor: '#00000030'
   },
   listItem: {
