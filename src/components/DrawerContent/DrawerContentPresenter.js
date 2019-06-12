@@ -4,6 +4,7 @@ import {
   Text,
   TouchableHighlight,
   Image,
+  ImageBackground,
   StyleSheet
 } from 'react-native';
 
@@ -25,14 +26,16 @@ const DrawerContentPresenter = props => {
         }}
       >
         <View style={styles.profile}>
-          <Image
-            source={
-              props.auth.profile_url
-                ? { uri: 'https://www.wehago.com' + props.auth.profile_url }
-                : ProfileImage
-            }
-            style={styles.profile_img}
-          />
+          <ImageBackground source={ProfileImage} style={styles.profile_img}>
+            <Image
+              source={
+                props.auth.profile_url
+                  ? { uri: 'https://www.wehago.com' + props.auth.profile_url }
+                  : ProfileImage
+              }
+              style={styles.profile_img}
+            />
+          </ImageBackground>
         </View>
         {props.auth.user_name && (
           <View
@@ -106,7 +109,7 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     resizeMode: 'cover',
-    backgroundColor: '#00000030'
+    backgroundColor: '#00000020'
   },
   listItem: {
     padding: 16
