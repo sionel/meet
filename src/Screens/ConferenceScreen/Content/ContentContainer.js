@@ -7,6 +7,7 @@ import {
   BackHandler
 } from 'react-native';
 import ContentPresenter from './ContentPresenter';
+import FileSharing from './FileSharing';
 import { ConferenceModes } from '../../../utils/Constants';
 // import Orientation from 'react-native-orientation-locker';
 import DeviceInfo from 'react-native-device-info';
@@ -58,7 +59,16 @@ class ContentContainer extends React.Component {
    * REDNER
    */
   render() {
-    return (
+    return this.props.sharingMode ? (
+      <FileSharing
+        display={this.props.sharingMode}
+        sharing={this.props.sharingMode}
+        onClear={this.props.onClear}
+        orientation={this.state.orientation}
+        onChangeSharingMode={this.props.setSharingMode}
+        hasNotch={hasNotch}
+      />
+    ) : (
       <ContentPresenter
         {...this.state}
         {...this.props}
@@ -151,9 +161,12 @@ class ContentContainer extends React.Component {
 		*/
     const { speaker } = this.state;
 
-    this.setState(prev => ({ speaker: prev.speaker == 2 ? 1 : 2 }), () => {
-      AudioMode.setMode(speaker);
-    });
+    this.setState(
+      prev => ({ speaker: prev.speaker == 2 ? 1 : 2 }),
+      () => {
+        AudioMode.setMode(speaker);
+      }
+    );
   };
 }
 

@@ -195,9 +195,12 @@ class ConferenceManager {
   // _changeDocumentShareMode = status => {
   changeDocumentShareMode = status => {
     this._dispatch(
-      mainUserActionCreators.setDrawingMode(
+      mainUserActionCreators.setSharingMode(
         status === 'true' || status === true ? true : false
       )
+      // mainUserActionCreators.setDrawingMode(
+      //   status === 'true' || status === true ? true : false
+      // )
     );
   };
 

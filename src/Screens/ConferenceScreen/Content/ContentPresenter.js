@@ -23,7 +23,7 @@ const ContentPresenter = props => {
   return (
     <View style={styles.container} onLayout={props.onLayout}>
       {/* {drawingMode && ( */}
-      <DrawingSketch
+      {/* <DrawingSketch
         // display={true}
         display={drawingMode}
         drawing={drawingMode}
@@ -33,7 +33,7 @@ const ContentPresenter = props => {
         onSetDrawingData={props.onSetDrawingData}
         onChangeDrawingMode={props.onChangeDrawingMode}
         hasNotch={props.hasNotch}
-      />
+      /> */}
       {/* )} */}
 
       {/* START MAIN VIDEO 영역 */}
@@ -74,7 +74,7 @@ const ContentPresenter = props => {
             drawing={props.drawingMode}
             onReverseVideo={props.onReverseVideo}
             onChangeState={props.onChangeState}
-            onChangeDrawing={props.setDrawingMode}
+            onChangeDrawing={props.setSharingMode}
             onChangeObjectFit={props.onChangeObjectFit}
             objectFit={props.objectFit}
             onChangeDrawingMode={props.onChangeDrawingMode}
@@ -84,7 +84,7 @@ const ContentPresenter = props => {
       {/* END 싱단 영역 */}
 
       {/* START 하단 영역 */}
-      {!drawingMode && (
+      {/* {!drawingMode && ( */}
         <View
           style={[
             styles.bottomArea,
@@ -101,7 +101,7 @@ const ContentPresenter = props => {
             speaker={speaker}
           />
         </View>
-      )}
+      {/* )} */}
       {/* END 하단 영역 */}
     </View>
   );

@@ -6,7 +6,7 @@ import MainVideoPresenter from './MainVideoPresenter';
  */
 class MainVideoContainer extends React.Component {
   state = {
-    time: 0
+    time: Math.floor((Date.now() - this.props.createdTime) / 1000)
     // objectFit: 'contain'
   };
 

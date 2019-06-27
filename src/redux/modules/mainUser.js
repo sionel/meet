@@ -9,13 +9,17 @@ const SET_MAIN_USER_NOTEXIST = 'SET_MAIN_USER_NOTEXIST';
 // 드로잉모드
 const SET_DRAWING_MODE = 'SET_DRAWING_MODE';
 
+// 문서공유 모드
+const SET_SHARING_MODE = 'SET_SHARING_MODE';
+
 //#endregion Action Types
 
 //#region Initial State
 
 const initialState = {
 	mainUserId: null,
-	drawingMode: false
+	drawingMode: false,
+	sharingMode: false,
 };
 
 //#endregion
@@ -30,6 +34,8 @@ function reducer(state = initialState, action) {
 			return applySetMainUserNotExist(state, action);
 		case SET_DRAWING_MODE:
 			return applySetDrawingMode(state, action);
+		case SET_SHARING_MODE:
+			return applySetSharingMode(state, action);
 		default:
 			return state;
 	}
@@ -97,7 +103,28 @@ function applySetDrawingMode(state, action) {
 	return {
 		...state,
 		// drawingMode: !state.drawingMode
-		drawingMode: action.drawingMode
+		drawingMode: drawingMode
+	};
+}
+
+//#endregion
+
+//#region SET_SHARING_MODE
+
+function setSharingMode(sharingMode) {
+	return dispatch => {
+		dispatch({
+			type: SET_SHARING_MODE,
+			sharingMode
+		});
+	};
+}
+
+function applySetSharingMode(state, action) {
+	const { sharingMode } = action;
+	return {
+		...state,
+		sharingMode: sharingMode
 	};
 }
 
@@ -106,7 +133,8 @@ function applySetDrawingMode(state, action) {
 export const actionCreators = {
 	setMainUser,
 	setMainUserNotExist,
-	setDrawingMode
+	setDrawingMode,
+	setSharingMode,
 };
 
 export default reducer;
