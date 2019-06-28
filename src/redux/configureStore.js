@@ -14,6 +14,7 @@ import participants from './modules/participants';
 import test from './modules/test';
 import user from './modules/user';
 import wetalk from './modules/wetalk';
+import wedrive from './modules/wedrive';
 
 /**
  * middleware list
@@ -31,7 +32,7 @@ if (env === 'development') {
 const persistConfig = {
   key: 'root',
   storage,
-  blacklist: ['local', 'mainUser', 'participants']
+  blacklist: ['local', 'mainUser', 'participants', 'wetalk', 'wedrive']
 };
 
 /**
@@ -43,7 +44,8 @@ const reducer = persistCombineReducers(persistConfig, {
   participants,
   test,
   user,
-  wetalk
+  wetalk,
+  wedrive
 });
 
 /**

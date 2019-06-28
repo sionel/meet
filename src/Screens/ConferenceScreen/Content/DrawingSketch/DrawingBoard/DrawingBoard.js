@@ -19,7 +19,8 @@ class DrawingBoard extends Component {
     const { user, stroke, color, onStrokeEnd } = this.props;
     const width = this._drawingManager.get('SCREEN_WIDTH');
     const height = this._drawingManager.get('SCREEN_HEIGHT');
-    const backgroundColor = '#fff';
+    // const backgroundColor = '#fff';
+    const backgroundColor = 'transparent';
 
     return (
       <Fragment>

@@ -6,6 +6,7 @@ import {
   ImageBackground,
   Dimensions
 } from 'react-native';
+import DrawingSketch from '../DrawingSketch'
 
 const { height, width } = Dimensions.get('window');
 
@@ -18,8 +19,9 @@ const FileSharingPresenter = props => {
         style={styles.imageBackground}
       >
         <Text onPress={() => props.onChangeSharingMode(!props.sharing)}>
-          textInComponent
+          Close Component
         </Text>
+        {/* <DrawingSketch/> */}
       </ImageBackground>
     </View>
   );

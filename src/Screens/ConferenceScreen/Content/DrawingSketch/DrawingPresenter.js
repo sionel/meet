@@ -47,7 +47,8 @@ const DrawingPresenter = props => {
           alignItems: 'center',
           zIndex: 5,
           padding: 15,
-          backgroundColor: '#f2f2f2',
+          // backgroundColor: '#f2f2f2',
+          backgroundColor: 'transparent',
           // backgroundColor: '#1D1D1D',
           // width: '100%',
           // height: '100%'
