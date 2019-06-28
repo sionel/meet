@@ -34,7 +34,7 @@ class ConferenceScreenContainer extends React.Component {
     const item = navigation.getParam('item');
     // 전화 타입 - 화상:1 / 음성:2
     this.callType = item.callType || this.state.callType;
-    this.selectedRoomName = item.selectedRoomName;
+    this.selectedRoomName = item.selectedRoom;
     // 컴포넌트가 마운트 되면 대화방 초기 설정 후 입장한다.
     this._conferenceManager = new ConferenceManager(this.props.dispatch, {
       token: auth.AUTH_A_TOKEN,
@@ -91,6 +91,7 @@ class ConferenceScreenContainer extends React.Component {
     // Orientation.lockToPortrait();
     // 컴포넌트가 언마운트 되기전 화상회의 관련 리소스를 해제 한다.
     this._conferenceManager.dispose();
+    // this.props.navigation.navigate('Home');
 
     // NetInfo.removeEventListener(
     //   'connectionChange',

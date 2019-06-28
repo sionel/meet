@@ -6,16 +6,15 @@ import MainVideoPresenter from './MainVideoPresenter';
  */
 class MainVideoContainer extends React.Component {
   state = {
-    time: Math.floor((Date.now() - this.props.createdTime) / 1000)
+    time: null
     // objectFit: 'contain'
   };
 
   componentDidMount() {
     this._timer = setInterval(() => {
-      this.setState({
-        time: Math.floor((Date.now() - this.props.createdTime) / 1000)
-      });
-    }, 100);
+      let time = Math.floor((Date.now() - this.props.createdTime) / 1000);
+      time > 0 && this.setState({ time });
+    }, 500);
   }
 
   shouldComponentUpdate = (nextProps, nextState) => {

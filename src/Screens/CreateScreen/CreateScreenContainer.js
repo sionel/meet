@@ -109,6 +109,7 @@ class CreateScreenContainer extends React.Component {
    */
   _handleRedirect = (url, param) => {
     const { navigation } = this.props;
+    navigation.navigate('Home');
     navigation.navigate(url, param);
   };
 
