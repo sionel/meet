@@ -18,7 +18,9 @@ const mapDispatchToProps = dispatch => {
     initInfoRequest: authData =>
       dispatch(WedriveActions.initInfoRequest(authData)),
     getFileListRequest: (authData, initInfo) =>
-      dispatch(WedriveActions.getFileListRequest(authData, initInfo))
+      dispatch(WedriveActions.getFileListRequest(authData, initInfo)),
+    getFileInfoRequest: (authData, fileInfo) =>
+      dispatch(WedriveActions.getFileInfoRequest(authData, fileInfo))
   };
 };
 

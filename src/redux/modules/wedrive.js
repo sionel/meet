@@ -5,6 +5,54 @@ import { WedriveApi } from '../../services';
 
 const SET_INIT_INFO = 'SET_INIT_INFO';
 const SET_FILE_LIST = 'SET_FILE_LIST';
+const SET_FILE_INFO = 'SET_FILE_INFO';
+
+//#region Action Creators
+
+const setInitInfo = initInfo => {
+  return {
+    type: SET_INIT_INFO,
+    initInfo
+  };
+};
+
+const setFileList = fileList => {
+  return {
+    type: SET_FILE_LIST,
+    fileList
+  };
+};
+
+const setFileInfo = fileInfo => {
+  return {
+    type: SET_FILE_INFO,
+    fileInfo
+  };
+};
+
+const applyInitInfo = (state, action) => {
+  const { initInfo } = action;
+  return {
+    ...state,
+    ...initInfo
+  };
+};
+
+const applyFileList = (state, action) => {
+  const { fileList } = action;
+  return {
+    ...state,
+    ...fileList
+  };
+};
+
+const applyFileInfo = (state, action) => {
+  const { fileInfo } = action;
+  return {
+    ...state,
+    fileInfo
+  };
+};
 
 //#region initialState
 
@@ -28,7 +76,9 @@ const initialState = {
   pathDepth: null,
   storageList: [],
   storageListCnt: 0,
-  totalPageCnt: 0
+  totalPageCnt: 0,
+  // fileInfoList
+  fileInfo: null
 };
 
 //#endregion initialState
@@ -41,44 +91,14 @@ reducer = (state = initialState, action) => {
       return applyInitInfo(state, action);
     case SET_FILE_LIST:
       return applyFileList(state, action);
+    case SET_FILE_INFO:
+      return applyFileInfo(state, action);
     default:
       return state;
   }
 };
 
 //#endregion Reducer
-
-//#region Action Creators
-
-const setInitInfo = initInfo => {
-  return {
-    type: SET_INIT_INFO,
-    initInfo
-  };
-};
-
-const applyInitInfo = (state, action) => {
-  const { initInfo } = action;
-  return {
-    ...state,
-    ...initInfo
-  };
-};
-
-const setFileList = fileList => {
-  return {
-    type: SET_FILE_LIST,
-    fileList
-  };
-};
-
-const applyFileList = (state, action) => {
-  const { fileList } = action;
-  return {
-    ...state,
-    ...fileList
-  };
-};
 
 /**
  * initInfoRequest
@@ -114,27 +134,59 @@ const initInfoRequest = authData => {
     }
   };
 };
-//#endregion
 
+/**
+ * getFileListRequest
+ */
 const getFileListRequest = (authData, initInfo) => {
   return async dispatch => {
     const fileListResult = await WedriveApi.getList(authData, initInfo);
 
     if (fileListResult.resultCode === 200) {
-      const fileListData = fileListResult.resultData;
+      const fileListData = {
+        accessTypeOpen: fileListResult.resultData.accessTypeOpen,
+        basePath: fileListResult.resultData.basePath,
+        cnoOpen: fileListResult.resultData.cnoOpen,
+        isSearchView: fileListResult.resultData.isSearchView,
+        pathDepth: fileListResult.resultData.pathDepth,
+        storageList: fileListResult.resultData.storageList,
+        storageListCnt: fileListResult.resultData.storageListCnt,
+        totalPageCnt: fileListResult.resultData.totalPageCnt
+      };
 
       return dispatch(setFileList(fileListData));
     } else {
-      return fileListData;
+      return fileListResult;
     }
   };
 };
+
+/**
+ * getFileInfoRequest
+ */
+const getFileInfoRequest = (authData, fileData) => {
+  return async dispatch => {
+    const fileListResult = await WedriveApi.getFileInfo(authData, fileData);
+    console.log('1', fileListResult);
+
+    if (fileListResult.resultCode === '0000') {
+      const fileInfo = fileListResult.resultData;
+
+      return dispatch(setFileInfo(fileInfo));
+    } else {
+      return fileListResult;
+    }
+  };
+};
+
+//#endregion
 
 //#region Export
 
 export const actionCreators = {
   initInfoRequest,
-  getFileListRequest
+  getFileListRequest,
+  getFileInfoRequest
 };
 
 export default reducer;

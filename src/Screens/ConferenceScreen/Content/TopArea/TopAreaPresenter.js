@@ -51,7 +51,7 @@ const TopAreaPresenter = props => {
             areaWdith={28}
             areaHeight={28}
           />
-          <SettingButton
+          {/* <SettingButton
             name="pen"
             width={25}
             height={25}
@@ -59,6 +59,16 @@ const TopAreaPresenter = props => {
             areaHeight={28}
             // onPress={() => props.onChangeDrawing(!props.drawing)}
             onPress={_.throttle(() => props.onChangeDrawingMode(!props.drawing), 500)}
+          /> */}
+          <SettingButton
+            name="docShare"
+            width={25}
+            height={25}
+            areaWdith={25}
+            areaHeight={28}
+            // onPress={() => props.onChangeDrawing(!props.drawing)}
+            // onPress={_.throttle(() => props.onChangeSharingMode(!props.sharing), 500)}
+            onPress={_.throttle(() => props.toggleDocumentListMode(!props.documentListMode), 500)}
           />
         </Fragment>
         {/* )} */}

@@ -5,6 +5,7 @@
 import {
   wehagoBaseURL,
   securityRequest,
+  serialize,
   _createSignature
 } from '../../utils';
 
@@ -33,6 +34,8 @@ const getToken = async (a_token, r_token, cno, ccode, HASH_KEY) => {
  */
 const getList = async (authData, initInfo) => {
   try {
+    console.log('authData', authData)
+    console.log('initInfo', initInfo)
     const url = `${wehagoBaseURL}/common/wedrive/get/file-list`;
     const headers = securityRequest(
       authData.AUTH_A_TOKEN,
@@ -43,15 +46,67 @@ const getList = async (authData, initInfo) => {
     const data = {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
         ...headers
       },
-      body: new URLSearchParams({
+      body: serialize({
         ...initInfo,
         cno: authData.cno,
-        ccode: authData.ccode
-      }).toString()
+        ccode: authData.ccode,
+      })
     };
+
+    console.log('data', url, data)
+
+    const response = await fetch(url, data);
+    const responseJson = await response.json();
+    console.log('responseJson',responseJson)
+    return responseJson;
+  } catch (err) {
+    return err;
+  }
+};
+
+/**
+ * wedrive file 상세정보
+ */
+const getFileInfo = async (authData, fileInfo) => {
+  try {
+    console.log('fileInfo', fileInfo)
+    const url = `${wehagoBaseURL}/ObjectStorageCommon/services/common`;
+    const headers = securityRequest(
+      authData.AUTH_A_TOKEN,
+      authData.AUTH_R_TOKEN,
+      url,
+      authData.HASH_KEY
+    );
+    const data = {
+      method: 'POST',
+      headers: {
+        ...headers,
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        // 'client-id': 'communication',
+        service: "ObjectStorageService",
+        method: fileInfo.method
+      },
+      body: serialize({
+        Ext: fileInfo.Ext,
+        FileName: fileInfo.FileName,
+        cno: authData.cno,
+        target_cno: authData.cno,
+        ServiceCode: 'wedrive',
+        ServiceKey: '',
+        BucketType: 'C',
+        BucketName: undefined,
+        isWedrive: true,
+        isFullPreview: false,
+        TokenID:'9xORMqokZilA5i4iHAbKrrXfvbJ34l'
+      })
+    };
+
+    console.log(data);
 
     const response = await fetch(url, data);
     const responseJson = await response.json();
@@ -63,5 +118,6 @@ const getList = async (authData, initInfo) => {
 
 export default {
   getToken,
-  getList
+  getList,
+  getFileInfo
 };

@@ -5,6 +5,8 @@ import DrawingSketch from './DrawingSketch';
 import MainVideo from './MainVideo';
 import TopArea from './TopArea';
 import BottomArea from './BottomArea';
+import FileList from './FileSharing/FileList';
+
 /**
  * ContentPresenter
  */
@@ -72,6 +74,7 @@ const ContentPresenter = props => {
           <TopArea
             orientation={props.orientation}
             drawing={props.drawingMode}
+            sharing={props.sharingMode}
             onReverseVideo={props.onReverseVideo}
             onChangeState={props.onChangeState}
             onChangeDrawing={props.setSharingMode}
@@ -85,24 +88,34 @@ const ContentPresenter = props => {
 
       {/* START 하단 영역 */}
       {/* {!drawingMode && ( */}
-        <View
-          style={[
-            styles.bottomArea,
-            props.orientation === 'vertical'
-              ? styles.bottomAreaVertical
-              : styles.bottomAreaHorizontal
-          ]}
-        >
-          <BottomArea
-            onClose={props.onClose}
-            onChangeSpeaker={props.onChangeSpeaker}
-            orientation={props.orientation}
-            callType={callType}
-            speaker={speaker}
-          />
-        </View>
+      <View
+        style={[
+          styles.bottomArea,
+          props.orientation === 'vertical'
+            ? styles.bottomAreaVertical
+            : styles.bottomAreaHorizontal
+        ]}
+      >
+        <BottomArea
+          onClose={props.onClose}
+          onChangeSpeaker={props.onChangeSpeaker}
+          orientation={props.orientation}
+          callType={callType}
+          speaker={speaker}
+        />
+      </View>
       {/* )} */}
       {/* END 하단 영역 */}
+
+      {/* FileList 영역 */}
+      {props.documentListMode && (
+        <FileList
+          hasNotch={props.hasNotch}
+          orientation={props.orientation}
+          sharingMode={props.sharingMode}
+          onChangeSharingMode={props.onChangeSharingMode}
+        />
+      )}
     </View>
   );
 };

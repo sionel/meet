@@ -5,11 +5,12 @@ import buttonTalk from '../../../../../../assets/buttons/btn_tnavi_talk_none.png
 import buttonSetting from '../../../../../../assets/buttons/btn_tnavi_setting_none.png';
 import buttonDocshare from '../../../../../../assets/buttons/btn_tnavi_docshare_none.png';
 // import buttonToggleScreen from '../../../../../../assets/buttons/btn_tnavi_swscreen_none.png';
-import buttonToggleScreen from '../../../../../../assets/buttons/btnTnaviSwscreenNone_2x.png';
+import buttonToggleScreen from '../../../../../../assets/buttons/btnTnaviSwscreenNone_3x.png';
 import buttonReverseVideo from '../../../../../../assets/buttons/btn_video_reverse.png';
 import buttonPen from '../../../../../../assets/buttons/btn_pen.png';
 import buttonZoomIn from '../../../../../../assets/buttons/zoom_in.png';
 import buttonZoomOut from '../../../../../../assets/buttons/zoom_out.png';
+import buttonDocShare from '../../../../../../assets/buttons/doc_share_3x.png';
 /**
  * SettingButtonPresenter
  */
@@ -24,6 +25,7 @@ const SettingButtonPresenter = props => (
   >
     <Image
       source={getButtonSource(props.name)}
+      resizeMode={'contain'}
       style={{
         ...styles.buttonImage,
         width: props.width,
@@ -46,7 +48,8 @@ SettingButtonPresenter.propTypes = {
     'reverse',
     'pen',
     'zoomIn',
-    'zoomOut'
+    'zoomOut',
+    'docShare',
   ]).isRequired,
   // 버튼이 클릭되면 발생하는 이벤트 입니다.
   onPress: PropTypes.func.isRequired
@@ -73,6 +76,8 @@ const getButtonSource = name => {
       return buttonZoomIn;
     case 'zoomOut':
       return buttonZoomOut;
+    case 'docShare':
+      return buttonDocShare;
     default:
       return null;
   }

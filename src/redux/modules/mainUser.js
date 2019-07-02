@@ -10,6 +10,7 @@ const SET_MAIN_USER_NOTEXIST = 'SET_MAIN_USER_NOTEXIST';
 const SET_DRAWING_MODE = 'SET_DRAWING_MODE';
 
 // 문서공유 모드
+const SET_DOCUMENT_LIST_MODE = 'SET_DOCUMENT_LIST_MODE';
 const SET_SHARING_MODE = 'SET_SHARING_MODE';
 
 //#endregion Action Types
@@ -19,6 +20,7 @@ const SET_SHARING_MODE = 'SET_SHARING_MODE';
 const initialState = {
 	mainUserId: null,
 	drawingMode: false,
+	documentListMode: false,
 	sharingMode: false,
 };
 
@@ -34,6 +36,8 @@ function reducer(state = initialState, action) {
 			return applySetMainUserNotExist(state, action);
 		case SET_DRAWING_MODE:
 			return applySetDrawingMode(state, action);
+		case SET_DOCUMENT_LIST_MODE:
+			return applySetDocumentListMode(state, action);
 		case SET_SHARING_MODE:
 			return applySetSharingMode(state, action);
 		default:
@@ -109,6 +113,27 @@ function applySetDrawingMode(state, action) {
 
 //#endregion
 
+//#region SET_DOCUMENT_LIST_MODE
+
+function setDocumentListMode(documentListMode) {
+	return dispatch => {
+		dispatch({
+			type: SET_DOCUMENT_LIST_MODE,
+			documentListMode
+		});
+	};
+}
+
+function applySetDocumentListMode(state, action) {
+	const { documentListMode } = action;
+	return {
+		...state,
+		documentListMode: documentListMode
+	};
+}
+
+//#endregion
+
 //#region SET_SHARING_MODE
 
 function setSharingMode(sharingMode) {
@@ -124,6 +149,7 @@ function applySetSharingMode(state, action) {
 	const { sharingMode } = action;
 	return {
 		...state,
+		documentListMode: false,
 		sharingMode: sharingMode
 	};
 }
@@ -134,6 +160,7 @@ export const actionCreators = {
 	setMainUser,
 	setMainUserNotExist,
 	setDrawingMode,
+	setDocumentListMode,
 	setSharingMode,
 };
 

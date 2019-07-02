@@ -40,10 +40,52 @@ class FileSharingContainer extends Component {
 
     // wedrive token 가져오기
     const initInfoResponse = await this.props.initInfoRequest(authData);
+    if (!initInfoResponse.initInfo) {
+      alert(
+        '사용자 정보를 불러오지 못했습니다.\nerror: ' +
+          initInfoResponse.resultCode +
+          initInfoResponse.resultMsg
+      );
+      return;
+    }
 
+    console.log('initInfoResponse', initInfoResponse)
     // wedrive file list 가져오기
-    const fileList = await this.props.getFileListRequest(authData, initInfoResponse.initInfo);
-    console.log('fileList', this.props.wedrive);
+    const fileListResponse = await this.props.getFileListRequest(
+      authData,
+      initInfoResponse.initInfo
+    );
+    if (!fileListResponse.fileList) {
+      alert(
+        '파일 리스트를 불러오지 못했습니다.\nerror: ' +
+          fileListResponse.resultCode +
+          fileListResponse.resultMsg
+      );
+      return;
+    }
+
+    // wedrive file 상세 정보
+    const fileInfo = {
+      Ext: 'jpeg',
+      FileName: "9c68f870-9971-11e9-b124-530e005e83db",
+      method: 'getImageURL'
+    };
+    // const fileInfo = {
+    //   Ext: initInfoResponse.initInfo.storageList[0].extentionType,
+    //   FileName: '6c11ed71-2cae-388e-9b0e-9a7b78b641e6_1554800260115'
+    // };
+    const fileInfoResponse = await this.props.getFileInfoRequest(authData, fileInfo);
+    console.log(fileInfoResponse)
+    if (!fileInfoResponse.fileInfo) {
+      alert(
+        '파일 정보를 불러오지 못했습니다.\nerror: ' +
+          fileInfo.resultCode +
+          fileInfo.resultMsg
+      );
+      return;
+    }
+    alert(JSON.stringify(fileInfoResponse));
+    console.log('fileInfo', this.props.wedrive.fileInfo);
   };
 }
 

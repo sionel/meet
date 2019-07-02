@@ -19,6 +19,7 @@ const ConferenceScreenPresenter = props =>
       onClear={props.onClear}
       onSetDrawingData={props.onSetDrawingData}
       onChangeDrawingMode={props.onChangeDrawingMode}
+      onChangeSharingMode={props.onChangeSharingMode}
     />
   ) : (
     <LoadingIndicator />

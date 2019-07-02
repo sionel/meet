@@ -13,6 +13,7 @@ const mapStateToProps = (state, ownProps) => {
 		videoTrack: mainUser.videoTrack,
 		isMuteVideo: mainUser.isMuteVideo,
 		drawingMode: state.mainUser.drawingMode,
+		documentListMode: state.mainUser.documentListMode,
 		sharingMode: state.mainUser.sharingMode,
 	};
 };

@@ -75,6 +75,17 @@ export const securityRequest = (a_token, r_token, url, HASH_KEY) => {
   return rs;
 };
 
+// serialize
+export const serialize = obj => {
+  let str = [];
+  for (let p in obj)
+    if (obj.hasOwnProperty(p)) {
+      // str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+      str.push(p + "=" + obj[p]);
+    }
+  return str.join("&");
+};
+
 _getTransactionId = () => {
   let chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz';
   let string_length = 10;
