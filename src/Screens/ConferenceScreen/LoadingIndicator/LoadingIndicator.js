@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 // import LottieView from "lottie-react-native";
-import { View, StyleSheet, Image } from "react-native";
+import { View, StyleSheet, Image, StatusBar } from "react-native";
 import CameraLoading from "./cameraLoading.gif";
 
 /**
@@ -14,6 +14,7 @@ class LoadingIndicator extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <StatusBar hidden={true} />
         <Image style={styles.indicator} source={CameraLoading} resizeMode="contain" />
         {/* <LottieView
           style={styles.indicator}

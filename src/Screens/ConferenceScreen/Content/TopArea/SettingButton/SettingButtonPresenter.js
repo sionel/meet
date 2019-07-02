@@ -11,6 +11,7 @@ import buttonPen from '../../../../../../assets/buttons/btn_pen.png';
 import buttonZoomIn from '../../../../../../assets/buttons/zoom_in.png';
 import buttonZoomOut from '../../../../../../assets/buttons/zoom_out.png';
 import buttonDocShare from '../../../../../../assets/buttons/doc_share_3x.png';
+import buttonClose from '../../../../../../assets/buttons/btnTnaviCloseNone_3x.png';
 /**
  * SettingButtonPresenter
  */
@@ -18,10 +19,11 @@ const SettingButtonPresenter = props => (
   <TouchableOpacity
     style={{
       ...styles.bottonTouch,
+      ...props.style,
       width: props.areaWidth,
       height: props.areaHeight
     }}
-    onPressOut={props.onPress}
+    onPress={props.onPress}
   >
     <Image
       source={getButtonSource(props.name)}
@@ -50,6 +52,7 @@ SettingButtonPresenter.propTypes = {
     'zoomIn',
     'zoomOut',
     'docShare',
+    'buttonClose',
   ]).isRequired,
   // 버튼이 클릭되면 발생하는 이벤트 입니다.
   onPress: PropTypes.func.isRequired
@@ -78,6 +81,8 @@ const getButtonSource = name => {
       return buttonZoomOut;
     case 'docShare':
       return buttonDocShare;
+    case 'buttonClose':
+      return buttonClose;
     default:
       return null;
   }

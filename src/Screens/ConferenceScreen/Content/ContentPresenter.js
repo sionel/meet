@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, StatusBar } from 'react-native';
 import { RTCView } from 'react-native-webrtc';
 import DrawingSketch from './DrawingSketch';
 import MainVideo from './MainVideo';
@@ -24,6 +24,7 @@ const ContentPresenter = props => {
 
   return (
     <View style={styles.container} onLayout={props.onLayout}>
+      <StatusBar barStyle="light-content" backgroundColor={'#000'} hidden={false} />
       {/* {drawingMode && ( */}
       {/* <DrawingSketch
         // display={true}
@@ -110,7 +111,6 @@ const ContentPresenter = props => {
       {/* FileList 영역 */}
       {props.documentListMode && (
         <FileList
-          hasNotch={props.hasNotch}
           orientation={props.orientation}
           sharingMode={props.sharingMode}
           onChangeSharingMode={props.onChangeSharingMode}

@@ -104,21 +104,17 @@ class ConferenceScreenContainer extends React.Component {
    */
   render() {
     return (
-      <Fragment>
-        {/* <StatusBar barStyle="light-content" /> */}
-        <StatusBar hidden={true} />
-        <ConferenceScreenPresenter
-          {...this.props}
-          connection={this.state.connection}
-          callType={this.callType}
-          selectedRoomName={this.selectedRoomName}
-          onClose={this._handleClose}
-          onClear={this._handleClear}
-          onSetDrawingData={this._handleSetDrawingData}
-          onChangeDrawingMode={this._handleChangeDrawingMode}
-          onChangeSharingMode={this._handleChangeSharingMode}
-        />
-      </Fragment>
+      <ConferenceScreenPresenter
+        {...this.props}
+        connection={this.state.connection}
+        callType={this.callType}
+        selectedRoomName={this.selectedRoomName}
+        onClose={this._handleClose}
+        onClear={this._handleClear}
+        onSetDrawingData={this._handleSetDrawingData}
+        onChangeDrawingMode={this._handleChangeDrawingMode}
+        onChangeSharingMode={this._handleChangeSharingMode}
+      />
     );
   }
 

@@ -11,6 +11,7 @@ import FileSharing from './FileSharing';
 import { ConferenceModes } from '../../../utils/Constants';
 // import Orientation from 'react-native-orientation-locker';
 import DeviceInfo from 'react-native-device-info';
+import Orientation from 'react-native-orientation-locker';
 import _ from 'underscore';
 
 const { AudioMode } = NativeModules;
@@ -45,6 +46,7 @@ class ContentContainer extends React.Component {
     // 스피커폰 설정
     this._handleChangeSpeaker(AudioMode.VIDEO_CALL);
     BackHandler.addEventListener('hardwareBackPress', this._handleBackButton);
+    Orientation.addOrientationListener(this._setOrientation);
   }
 
   componentWillUnmount() {
@@ -53,6 +55,7 @@ class ContentContainer extends React.Component {
       'hardwareBackPress',
       this._handleBackButton
     );
+    Orientation.removeOrientationListener(this._setOrientation);
   }
 
   /**
@@ -61,9 +64,9 @@ class ContentContainer extends React.Component {
   render() {
     return this.props.sharingMode ? (
       <FileSharing
-        display={this.props.sharingMode}
-        sharing={this.props.sharingMode}
-        onClear={this.props.onClear}
+        // display={this.props.sharingMode}
+        // sharing={this.props.sharingMode}
+        // onClear={this.props.onClear}
         orientation={this.state.orientation}
         onChangeSharingMode={this.props.setSharingMode}
         hasNotch={hasNotch}

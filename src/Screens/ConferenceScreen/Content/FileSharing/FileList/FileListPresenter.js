@@ -44,7 +44,16 @@ const FileListPresenter = props => {
             data={props.documentList}
             style={styles.documentList}
             renderItem={({ item }) => (
-              <View style={styles.itemBox}>
+              <TouchableOpacity
+                activeOpacity={0.3}
+                onPress={() => {
+                  props.setSharingMode({
+                    id: item.key,
+                    fileName: item.fileName
+                  });
+                }}
+                style={styles.itemBox}
+              >
                 <Image
                   source={{
                     uri:
@@ -54,14 +63,13 @@ const FileListPresenter = props => {
                   style={styles.thumbImg}
                 />
                 <Text
-                  onPress={props.onChangeSharingMode}
                   numberOfLines={1}
                   ellipsizeMode={'tail'}
                   style={styles.itemInfo}
                 >
                   {item.fileName}.{item.ext}
                 </Text>
-              </View>
+              </TouchableOpacity>
             )}
           />
         </ScrollView>
