@@ -23,21 +23,11 @@ const FileSharingPresenter = props => {
     orientation === 'vertical' ? 0 + (hasNotch ? 24 : 0) : 0;
   const containerPadding =
     orientation === 'vertical' ? 0 : 0 + (hasNotch ? 36 : 0);
-  const titleWidth = width - (containerPadding + 12) * 2 - 24 - 30 * 1;
+  const titleWidth = width - (containerPadding + 12) * 2 - 28 - 30 * 1;
 
   return (
     <View style={styles.container}>
-      {/* <StatusBar backgroundColor="#000" barStyle="light-content" /> */}
-      {/* <ImageBackground
-        source={{ uri: props.uri }}
-        resizeMode={'contain'}
-        style={styles.imageBackground}
-      >
-        <Text onPress={() => props.onChangeSharingMode(!props.sharing)}>
-          Close Component
-        </Text>
-        <DrawingSketch/>
-      </ImageBackground> */}
+      {/* topArea */}
       <View
         style={{
           ...styles.topArea,
@@ -68,7 +58,7 @@ const FileSharingPresenter = props => {
         <SettingButton
           name={'buttonClose'}
           onPress={() => props.onChangeSharingMode(false)}
-          style={{ paddingLeft: 12, paddingRight: 12, margin: 0 }}
+          style={{ paddingLeft: 12, margin: 0 }}
           width={24}
           height={24}
           areaWdith={24}
@@ -77,7 +67,7 @@ const FileSharingPresenter = props => {
         <SettingButton
           name={'buttonClose'}
           onPress={() => props.onChangeSharingMode(false)}
-          style={{ paddingLeft: 12, paddingRight: 12, margin: 0 }}
+          style={{ paddingLeft: 12, margin: 0 }}
           width={24}
           height={24}
           areaWdith={24}
@@ -86,13 +76,16 @@ const FileSharingPresenter = props => {
         <SettingButton
           name={'buttonClose'}
           onPress={() => props.onChangeSharingMode(false)}
-          style={{ paddingLeft: 12, paddingRight: 12, margin: 0 }}
+          style={{ paddingLeft: 12, margin: 0 }}
           width={24}
           height={24}
           areaWdith={24}
           areaHeight={24}
         />
       </View>
+      {/* end topArea */}
+
+      {/* mainArea */}
       <View
         style={[
           styles.mainArea,
@@ -100,10 +93,23 @@ const FileSharingPresenter = props => {
         ]}
       >
         <Text>mainArea</Text>
+        {/* <ImageBackground
+        source={{ uri: props.uri }}
+        resizeMode={'contain'}
+        style={styles.imageBackground}
+      >
+        <Text onPress={() => props.onChangeSharingMode(!props.sharing)}>
+          Close Component
+        </Text>
+        <DrawingSketch/>
+      </ImageBackground> */}
       </View>
+      {/* end mainArea */}
+
+      {/* BottomArea */}
       <View
         style={{
-          ...styles.BottomArea,
+          ...styles.bottomArea,
           height: 54 + bottomPadding,
           // 전체 기본 padding 12
           paddingTop: 12,
@@ -112,8 +118,9 @@ const FileSharingPresenter = props => {
           paddingRight: containerPadding
         }}
       >
-        <Text style={{ color: '#fff' }}>BottomArea</Text>
+        <Text style={{ color: '#fff' }}>bottomArea</Text>
       </View>
+      {/* end bottomArea */}
     </View>
   );
 };
@@ -140,7 +147,7 @@ const styles = StyleSheet.create({
   mainArea: {
     flex: 1
   },
-  BottomArea: {
+  bottomArea: {
     position: 'absolute',
     left: 0,
     right: 0,
