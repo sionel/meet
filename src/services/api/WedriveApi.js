@@ -34,8 +34,6 @@ const getToken = async (a_token, r_token, cno, ccode, HASH_KEY) => {
  */
 const getList = async (authData, initInfo) => {
   try {
-    console.log('authData', authData)
-    console.log('initInfo', initInfo)
     const url = `${wehagoBaseURL}/common/wedrive/get/file-list`;
     const headers = securityRequest(
       authData.AUTH_A_TOKEN,
@@ -46,22 +44,17 @@ const getList = async (authData, initInfo) => {
     const data = {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        ...headers
+        ...headers,
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
       },
-      body: serialize({
+      body: new URLSearchParams({
         ...initInfo,
         cno: authData.cno,
-        ccode: authData.ccode,
-      })
+        ccode: authData.ccode
+      }).toString()
     };
-
-    console.log('data', url, data)
-
     const response = await fetch(url, data);
     const responseJson = await response.json();
-    console.log('responseJson',responseJson)
     return responseJson;
   } catch (err) {
     return err;
@@ -73,7 +66,6 @@ const getList = async (authData, initInfo) => {
  */
 const getFileInfo = async (authData, fileInfo) => {
   try {
-    console.log('fileInfo', fileInfo)
     const url = `${wehagoBaseURL}/ObjectStorageCommon/services/common`;
     const headers = securityRequest(
       authData.AUTH_A_TOKEN,
@@ -87,23 +79,10 @@ const getFileInfo = async (authData, fileInfo) => {
         ...headers,
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        // 'client-id': 'communication',
-        service: "ObjectStorageService",
-        method: fileInfo.method
+        service: 'ObjectStorageService',
+        method: 'fileInfo.method'
       },
-      body: serialize({
-        Ext: fileInfo.Ext,
-        FileName: fileInfo.FileName,
-        cno: authData.cno,
-        target_cno: authData.cno,
-        ServiceCode: 'wedrive',
-        ServiceKey: '',
-        BucketType: 'C',
-        BucketName: undefined,
-        isWedrive: true,
-        isFullPreview: false,
-        TokenID:'9xORMqokZilA5i4iHAbKrrXfvbJ34l'
-      })
+      body: serialize(fileInfo)
     };
 
     console.log(data);

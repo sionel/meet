@@ -9,22 +9,12 @@ class FileListContainer extends Component {
   }
   render() {
     const { hasNotch, orientation } = this.props;
-
-    const tempList = [
-      { key: '1', fileName: 'file 1', ext: 'png', thumbImg: '', fileSize: '13kb' },
-      { key: '2', fileName: 'file 2', ext: 'jpg', thumbImg: '', fileSize: '130kb' },
-      { key: '3', fileName: 'file 3', ext: 'jpg', thumbImg: '', fileSize: '130kb' },
-      { key: '4', fileName: 'file 4', ext: 'jpg', thumbImg: '', fileSize: '130kb' },
-      { key: '5', fileName: 'file 5', ext: 'jpg', thumbImg: '', fileSize: '130kb' },
-      { key: '6', fileName: 'file 6', ext: 'jpg', thumbImg: '', fileSize: '130kb' },
-      { key: '999', fileName: 'filefilefilefilefilefilefilefilefilefilefilefilefilefilefilefilefilefile 3', ext: 'xls', thumbImg: '', fileSize: '1300kb' }
-    ];
-
     return (
       <FileListPresenter
         hasNotch={hasNotch}
         orientation={orientation}
-        documentList={tempList}
+        documentList={this.props.wedrive}
+        // documentList={tempList}
         setSharingMode={this._handleSharingMode}
         setDocumentListMode={this._handleDocumentListMode}
       />
@@ -35,7 +25,7 @@ class FileListContainer extends Component {
    * _handleDocumentListMode
    * 위드라이브 리스트 보기 모드
    */
-  _handleDocumentListMode = (mode) => {
+  _handleDocumentListMode = mode => {
     this.props.setDocumentListMode(mode);
   };
 
@@ -43,9 +33,9 @@ class FileListContainer extends Component {
    * _handleSharingMode
    * 위드라이브 문서공유 모드
    */
-  _handleSharingMode = (selected) => {
-    console.log(selected)
-    this.props.setSharingMode(true);
+  _handleSharingMode = async file => {
+    await this._handleGetFileInfo(file);
+    // this.props.setSharingMode(true);
   };
 
   /**
@@ -79,14 +69,12 @@ class FileListContainer extends Component {
       );
       return;
     }
-    console.log('initInfoResponse', initInfoResponse)
 
     // wedrive file list 가져오기
     const fileListResponse = await this.props.getFileListRequest(
       authData,
       initInfoResponse.initInfo
     );
-    console.log('fileListResponse', fileListResponse);
 
     if (!fileListResponse.fileList) {
       alert(
@@ -96,8 +84,89 @@ class FileListContainer extends Component {
       );
       return;
     }
+  };
 
-    console.log(fileListResponse.fileList);
+  /**
+   * _handleGetFileInfo
+   * 파일 정보 가져오기
+   */
+  _handleGetFileInfo = async file => {
+    const {
+      AUTH_A_TOKEN,
+      AUTH_R_TOKEN,
+      last_access_company_no,
+      last_company,
+      HASH_KEY
+    } = this.props.auth;
+
+    const authData = {
+      AUTH_A_TOKEN,
+      AUTH_R_TOKEN,
+      cno: last_access_company_no,
+      ccode: last_company.company_code,
+      HASH_KEY
+    };
+
+    let method = file.extentionType.toLowerCase();
+
+    switch (method) {
+      case 'txt':
+      case 'one':
+      case 'hwp':
+      case 'ppt':
+      case 'pptx':
+      case 'show':
+      case 'rtf':
+      case 'docx':
+      case 'xls':
+      case 'xlsx':
+        method = 'getOfficePreView';
+        break;
+      case 'bmg':
+      case 'jpg':
+      case 'jpeg':
+      case 'jif':
+      case 'png':
+        method = 'getImageURL';
+        break;
+      case 'pdf':
+        method = 'getAttachmentsPublicURL';
+        break;
+      default:
+        alert('지원하지 않는 파일 확장자입니다.');
+        return;
+    }
+
+    const fileInfo = {
+      Ext: file.extentionType,
+      FileName: file.fileUniqueKey,
+      cno: authData.cno,
+      target_cno: authData.cno,
+      ServiceCode: 'wedrive',
+      ServiceKey: '',
+      BucketType: 'C',
+      BucketName: undefined,
+      isWedrive: true,
+      isFullPreview: false,
+      TokenID: authData.AUTH_A_TOKEN,
+      method
+    };
+
+    // wedrive file 상세정보 가져오기
+    const fileInfoResponse = await this.props.getFileInfoRequest(
+      authData,
+      fileInfo
+    );
+    if (!fileInfoResponse.fileInfo) {
+      alert(
+        '파일 상세정보를 불러오지 못했습니다.\nerror: ' +
+          fileInfoResponse.resultCode +
+          fileInfoResponse.resultMsg
+      );
+      return;
+    }
+
+    console.log(fileInfoResponse);
   };
 }
 

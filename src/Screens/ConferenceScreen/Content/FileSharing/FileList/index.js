@@ -6,7 +6,7 @@ import { actionCreators as WedriveActions } from '../../../../../redux/modules/w
 // map state to props
 const mapStateToProps = state => ({
   auth: state.user.auth,
-  wedrive: state.wedrive,
+  wedrive: state.wedrive.storageList,
 });
 
 // map dispatch to props
@@ -22,6 +22,8 @@ const mapDispatchToProps = dispatch => {
       dispatch(WedriveActions.initInfoRequest(authData)),
     getFileListRequest: (authData, initInfo) =>
       dispatch(WedriveActions.getFileListRequest(authData, initInfo)),
+    getFileInfoRequest: (authData, fileInfo) =>
+      dispatch(WedriveActions.getFileInfoRequest(authData, fileInfo)),
   };
 };
 
