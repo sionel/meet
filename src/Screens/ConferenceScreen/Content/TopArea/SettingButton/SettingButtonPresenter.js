@@ -12,6 +12,8 @@ import buttonZoomIn from '../../../../../../assets/buttons/zoom_in.png';
 import buttonZoomOut from '../../../../../../assets/buttons/zoom_out.png';
 import buttonDocShare from '../../../../../../assets/buttons/doc_share_3x.png';
 import buttonClose from '../../../../../../assets/buttons/btnTnaviCloseNone_3x.png';
+import btnArrowUp from '../../../../../../assets/buttons/btnArrowUp.png';
+import btnArrowDown from '../../../../../../assets/buttons/btnArrowDown.png';
 /**
  * SettingButtonPresenter
  */
@@ -53,6 +55,8 @@ SettingButtonPresenter.propTypes = {
     'zoomOut',
     'docShare',
     'buttonClose',
+    'btnArrowUp',
+    'btnArrowDown',
   ]).isRequired,
   // 버튼이 클릭되면 발생하는 이벤트 입니다.
   onPress: PropTypes.func.isRequired
@@ -83,6 +87,10 @@ const getButtonSource = name => {
       return buttonDocShare;
     case 'buttonClose':
       return buttonClose;
+    case 'btnArrowUp':
+      return btnArrowUp;
+    case 'btnArrowDown':
+      return btnArrowDown;
     default:
       return null;
   }

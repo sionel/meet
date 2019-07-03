@@ -5,6 +5,8 @@ class FileSharingContainer extends Component {
   state = {
     uri:
       'https://www.google.co.kr/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png',
+    showTool: true,
+    showPreView: true
   };
 
   componentDidMount = () => {
@@ -16,11 +18,31 @@ class FileSharingContainer extends Component {
     //   });
     // }, 2000);
   };
-  
 
   render() {
-    return <FileSharingPresenter {...this.props} {...this.state} />;
+    return (
+      <FileSharingPresenter
+        {...this.props}
+        {...this.state}
+        onChangeState={this._handleChangeState}
+      />
+    );
   }
+
+  _handleChangeState = state => {
+    switch (state) {
+      case 'showTool':
+        this.state.showTool
+          ? this.setState({
+              showTool: false,
+              showPreView: false
+            })
+          : this.setState({ showTool: true });
+        break;
+      default:
+        this.setState({ [state]: !this.state[state] });
+    }
+  };
 
   // _handleCheckInitInfo = async () => {
   //   const {

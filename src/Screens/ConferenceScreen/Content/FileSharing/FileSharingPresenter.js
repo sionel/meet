@@ -5,7 +5,8 @@ import {
   View,
   ImageBackground,
   Dimensions,
-  Platform
+  Platform,
+  TouchableOpacity
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import DrawingSketch from '../DrawingSketch';
@@ -16,11 +17,14 @@ const hasNotch = DeviceInfo.hasNotch() && isIOS;
 
 const FileSharingPresenter = props => {
   const { height, width } = Dimensions.get('window');
-  const { orientation } = props;
+  const { orientation, showTool, showPreView, onChangeState } = props;
+
   const headerPadding =
     orientation === 'vertical' ? 0 + (isIOS ? 12 : 0) + (hasNotch ? 24 : 0) : 0;
   const bottomPadding =
-    orientation === 'vertical' ? 0 + (hasNotch ? 24 : 0) : 0;
+    orientation === 'vertical'
+      ? 0 + (hasNotch ? 12 : 0)
+      : 0 + (hasNotch ? 0 : 0);
   const containerPadding =
     orientation === 'vertical' ? 0 : 0 + (hasNotch ? 36 : 0);
   const titleWidth = width - (containerPadding + 12) * 2 - 28 - 30 * 1;
@@ -28,71 +32,113 @@ const FileSharingPresenter = props => {
   return (
     <View style={styles.container}>
       {/* topArea */}
-      <View
-        style={{
-          ...styles.topArea,
-          height: 46 + headerPadding,
-          // 전체 기본 padding 12
-          paddingTop: headerPadding + 12,
-          paddingBottom: 12,
-          paddingLeft: containerPadding + 12,
-          paddingRight: containerPadding + 12
-        }}
-      >
-        <SettingButton
-          name={'buttonClose'}
-          onPress={() => props.onChangeSharingMode(false)}
-          style={{ paddingRight: 12, margin: 0 }}
-          width={24}
-          height={24}
-          areaWdith={24}
-          areaHeight={24}
-        />
-        <Text
-          numberOfLines={1}
-          ellipsizeMode={'tail'}
-          style={[styles.headerText, { width: titleWidth }]}
+      {showTool ? (
+        <View
+          style={{
+            ...styles.topArea,
+            height: 46 + headerPadding,
+            // 전체 기본 padding 12
+            paddingTop: headerPadding + 12,
+            paddingBottom: 12,
+            paddingLeft: containerPadding + 12,
+            paddingRight: containerPadding + 12
+          }}
         >
-          topArea topArea topArea topArea topArea.pptx
-        </Text>
-        <SettingButton
-          name={'buttonClose'}
-          onPress={() => props.onChangeSharingMode(false)}
-          style={{ paddingLeft: 12, margin: 0 }}
-          width={24}
-          height={24}
-          areaWdith={24}
-          areaHeight={24}
-        />
-        <SettingButton
-          name={'buttonClose'}
-          onPress={() => props.onChangeSharingMode(false)}
-          style={{ paddingLeft: 12, margin: 0 }}
-          width={24}
-          height={24}
-          areaWdith={24}
-          areaHeight={24}
-        />
-        <SettingButton
-          name={'buttonClose'}
-          onPress={() => props.onChangeSharingMode(false)}
-          style={{ paddingLeft: 12, margin: 0 }}
-          width={24}
-          height={24}
-          areaWdith={24}
-          areaHeight={24}
-        />
-      </View>
+          <SettingButton
+            name={'buttonClose'}
+            onPress={() => props.onChangeSharingMode(false)}
+            style={{ paddingRight: 12, margin: 0 }}
+            width={24}
+            height={24}
+            areaWdith={24}
+            areaHeight={24}
+          />
+          <Text
+            numberOfLines={1}
+            ellipsizeMode={'tail'}
+            style={[styles.headerText, { width: titleWidth }]}
+          >
+            topArea topArea topArea topArea topArea.pptx
+          </Text>
+          <SettingButton
+            name={'buttonClose'}
+            onPress={() => props.onChangeSharingMode(false)}
+            style={{ paddingLeft: 12, margin: 0 }}
+            width={24}
+            height={24}
+            areaWdith={24}
+            areaHeight={24}
+          />
+          <SettingButton
+            name={'buttonClose'}
+            onPress={() => props.onChangeSharingMode(false)}
+            style={{ paddingLeft: 12, margin: 0 }}
+            width={24}
+            height={24}
+            areaWdith={24}
+            areaHeight={24}
+          />
+          <SettingButton
+            name={'buttonClose'}
+            onPress={() => props.onChangeSharingMode(false)}
+            style={{ paddingLeft: 12, margin: 0 }}
+            width={24}
+            height={24}
+            areaWdith={24}
+            areaHeight={24}
+          />
+        </View>
+      ) : (
+        <View style={{ ...styles.topArea, height: headerPadding }} />
+      )}
       {/* end topArea */}
 
       {/* mainArea */}
       <View
         style={[
           styles.mainArea,
-          { paddingLeft: containerPadding, paddingRight: containerPadding }
+          {
+            paddingLeft: containerPadding,
+            paddingRight: containerPadding,
+            paddingBottom: bottomPadding + (showTool ? 54 : 0) + 12
+          }
         ]}
       >
-        <Text>mainArea</Text>
+        {showPreView && (
+          <View
+            style={[
+              styles.preView,
+              orientation === 'vertical'
+                ? styles.preViewVertical
+                : styles.preViewHorizontal
+            ]}
+          />
+        )}
+        <SettingButton
+          name={showPreView ? 'btnArrowUp' : 'btnArrowDown'}
+          onPress={() => onChangeState('showPreView')}
+          style={{ padding: 0, margin: 0 }}
+          width={24}
+          height={24}
+          areaWdith={24}
+          areaHeight={24}
+        />
+        <View
+          style={[
+            styles.mainContainer,
+            orientation === 'vertical'
+              ? styles.mainContainerVertical
+              : styles.mainContainerHorizontal
+          ]}
+        >
+          <TouchableOpacity
+            activeOpacity={1}
+            onPress={() => onChangeState('showTool')}
+            style={{ flex: 1 }}
+          >
+            <Text>mainArea</Text>
+          </TouchableOpacity>
+        </View>
         {/* <ImageBackground
         source={{ uri: props.uri }}
         resizeMode={'contain'}
@@ -107,19 +153,21 @@ const FileSharingPresenter = props => {
       {/* end mainArea */}
 
       {/* BottomArea */}
-      <View
-        style={{
-          ...styles.bottomArea,
-          height: 54 + bottomPadding,
-          // 전체 기본 padding 12
-          paddingTop: 12,
-          paddingBottom: bottomPadding + 12,
-          paddingLeft: containerPadding,
-          paddingRight: containerPadding
-        }}
-      >
-        <Text style={{ color: '#fff' }}>bottomArea</Text>
-      </View>
+      {showTool && (
+        <View
+          style={{
+            ...styles.bottomArea,
+            height: 54 + bottomPadding,
+            // 전체 기본 padding 12
+            paddingTop: 12,
+            paddingBottom: bottomPadding + 12,
+            paddingLeft: containerPadding,
+            paddingRight: containerPadding
+          }}
+        >
+          <Text style={{ color: '#fff' }}>bottomArea</Text>
+        </View>
+      )}
       {/* end bottomArea */}
     </View>
   );
@@ -145,7 +193,24 @@ const styles = StyleSheet.create({
     backgroundColor: 'red'
   },
   mainArea: {
-    flex: 1
+    flex: 1,
+    alignItems: 'center'
+  },
+  mainContainer: {
+    flex: 1,
+    width: '100%',
+    backgroundColor: 'yellow',
+    borderWidth: 3,
+    borderColor: 'red'
+  },
+  mainContainerVertical: {},
+  mainContainerHorizontal: {},
+  preView: {
+    width: ' 100%',
+    height: 90,
+    // backgroundColor: 'blue',
+    borderBottomColor: 'rgb(210, 210, 210)',
+    borderBottomWidth: 1
   },
   bottomArea: {
     position: 'absolute',
