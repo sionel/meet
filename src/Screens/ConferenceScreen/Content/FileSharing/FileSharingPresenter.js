@@ -3,10 +3,13 @@ import {
   Text,
   StyleSheet,
   View,
+  Image,
   ImageBackground,
   Dimensions,
   Platform,
-  TouchableOpacity
+  TouchableOpacity,
+  ScrollView,
+  FlatList,
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import DrawingSketch from '../DrawingSketch';
@@ -37,7 +40,25 @@ const FileSharingPresenter = props => {
     orientation === 'vertical' ? 0 : 0 + (hasNotch ? 36 : 0);
   const titleWidth = width - (containerPadding + 12) * 2 - 28 - 30 * 1;
 
-  console.log(resources)
+  //미리보기
+  const preView = (
+    <View style={styles.preView}>
+      <ScrollView horizontal={true}>
+        <FlatList
+          data={resources}
+          horizontal={true}
+          renderItem={({ item }) => (
+            <TouchableOpacity onPress={() => {}}>
+              <Image
+                source={{ uri: item }}
+                style={styles.resourceItem}
+              />
+            </TouchableOpacity>
+          )}
+        />
+      </ScrollView>
+    </View>
+  );
   return (
     <View style={styles.container}>
       {/* topArea */}
@@ -111,21 +132,13 @@ const FileSharingPresenter = props => {
           {
             paddingLeft: containerPadding,
             paddingRight: containerPadding,
-            paddingBottom: bottomPadding + (showTool ? 54 : 0) + 12
+            paddingBottom: bottomPadding + (showTool && presenter ? 54 : 0) + 12,
           }
         ]}
       >
-        {showPreView && (
-          // 미리보기
-          <View
-            style={[
-              styles.preView,
-              orientation === 'vertical'
-                ? styles.preViewVertical
-                : styles.preViewHorizontal
-            ]}
-          />
-        )}
+        {/* 미리보기 */}
+        {showPreView && preView}
+
         {/* 미리보기 접기 버튼 */}
         <SettingButton
           name={showPreView ? 'btnArrowUp' : 'btnArrowDown'}
@@ -216,10 +229,19 @@ const styles = StyleSheet.create({
   mainContainerVertical: {},
   mainContainerHorizontal: {},
   preView: {
-    width: ' 100%',
+    width: '100%',
     height: 90,
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 0,
+    paddingRight: 10,
     borderBottomColor: 'rgb(210, 210, 210)',
-    borderBottomWidth: 1
+    borderBottomWidth: 1,
+  },
+  resourceItem: {
+    width: 70,
+    height: 70,
+    marginLeft: 10,
   },
   bottomArea: {
     position: 'absolute',

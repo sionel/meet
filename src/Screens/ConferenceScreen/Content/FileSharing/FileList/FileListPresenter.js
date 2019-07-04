@@ -11,7 +11,6 @@ import {
 import CustomIcon from '../../../../../components/CustomIcon';
 
 const FileListPresenter = props => {
-  console.log(props.documentList);
   return (
     <View style={styles.container}>
       <TouchableOpacity

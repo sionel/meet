@@ -66,7 +66,7 @@ class ConferenceManager {
           hash_key: auth.HASH_KEY
         }
       );
-      console.log('insert user');
+      // console.log('insert user');
       this._apiManager.insertUser();
     }
 

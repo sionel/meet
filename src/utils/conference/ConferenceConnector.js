@@ -184,7 +184,7 @@ class ConferenceConnector {
 
     // 위하고 접속 아이디 및 정보 가져오기
     this._room.addCommandListener(WEHAGO_ID, user => {
-      console.log('user : ', user);
+      // console.log('user : ', user);
       const id = user.value;
       this._handlers.SET_USER_INFO(id, user.attributes);
       //
@@ -194,14 +194,12 @@ class ConferenceConnector {
      * 문서 공유/드로잉 설정 감지
      */
     this._room.addCommandListener(SET_DOCUMENT_SHARE_IS_OPEN, value => {
-      console.log('왓다', value);
       const { value: userId, attributes } = value;
       if (userId !== this._room.myUserId()) {
         this._handlers.CHANGED_DOCUMENT_SHARE_MODE(attributes);
       }
     });
     this._room.addCommandListener(SET_DOCUMENT_SHARE_IS_CLOSE, value => {
-      console.log('꺼졋다', value);
       const { value: userId } = value;
       if (userId !== this._room.myUserId()) {
         this._handlers.CHANGED_DOCUMENT_SHARE_MODE(false, false);
