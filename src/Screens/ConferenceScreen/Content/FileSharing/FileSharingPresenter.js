@@ -46,12 +46,21 @@ const FileSharingPresenter = props => {
       <ScrollView horizontal={true}>
         <FlatList
           data={resources}
+          page={page}
           horizontal={true}
-          renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => {}}>
+          renderItem={({ item, index }) => (
+            <TouchableOpacity onPress={() => onChangeState('page', index)}>
               <Image
                 source={{ uri: item }}
-                style={styles.resourceItem}
+                style={[
+                  styles.resourceItem,
+                  {
+                    borderColor:
+                      index === page
+                        ? 'rgb(28, 144, 251)'
+                        : 'rgb(210, 210, 210)'
+                  }
+                ]}
               />
             </TouchableOpacity>
           )}
@@ -59,6 +68,7 @@ const FileSharingPresenter = props => {
       </ScrollView>
     </View>
   );
+
   return (
     <View style={styles.container}>
       {/* topArea */}
@@ -223,8 +233,6 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     width: '100%',
-    borderWidth: 3,
-    borderColor: 'red'
   },
   mainContainerVertical: {},
   mainContainerHorizontal: {},
@@ -239,9 +247,10 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   resourceItem: {
-    width: 70,
-    height: 70,
+    width: 68,
+    height: 68,
     marginLeft: 10,
+    borderWidth: 1,
   },
   bottomArea: {
     position: 'absolute',

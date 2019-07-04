@@ -183,7 +183,7 @@ class FileListContainer extends Component {
         fileName: '테스트.xlsx',
         owner: 'peacejung',
         resources:
-          '["https://api.wehago.com/hermes/resource/store/ab/3e/2ad2bcd6773e67f86e68f6b092082728e66f/document_0001.jpg"]'
+          '["https://api.wehago.com/hermes/resource/store/1e/c0/d6a8ebb79e382f974e6e405433862f452b56/document_0001.jpg","https://api.wehago.com/hermes/resource/store/1e/c0/d6a8ebb79e382f974e6e405433862f452b56/document_0002.jpg","https://api.wehago.com/hermes/resource/store/1e/c0/d6a8ebb79e382f974e6e405433862f452b56/document_0003.jpg","https://api.wehago.com/hermes/resource/store/1e/c0/d6a8ebb79e382f974e6e405433862f452b56/document_0004.jpg"]'
       },
       true
     );

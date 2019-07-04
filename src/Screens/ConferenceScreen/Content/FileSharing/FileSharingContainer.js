@@ -3,8 +3,6 @@ import FileSharingPresenter from './FileSharingPresenter';
 
 class FileSharingContainer extends Component {
   state = {
-    uri:
-      'https://www.google.co.kr/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png',
     showTool: true,
     showPreView: true,
     resources: JSON.parse(this.props.attributes.resources),
@@ -21,7 +19,7 @@ class FileSharingContainer extends Component {
     );
   }
 
-  _handleChangeState = state => {
+  _handleChangeState = (state, value) => {
     switch (state) {
       case 'showTool':
         this.state.showTool
@@ -30,6 +28,9 @@ class FileSharingContainer extends Component {
               showPreView: false
             })
           : this.setState({ showTool: true });
+        break;
+      case 'page':
+        this.setState({ page: value });
         break;
       default:
         this.setState({ [state]: !this.state[state] });
