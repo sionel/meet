@@ -1,7 +1,7 @@
 import FileListContainer from './FileListContainer';
 import { connect } from 'react-redux';
-import { actionCreators as mainUserActions } from '../../../../../redux/modules/mainUser';
 import { actionCreators as WedriveActions } from '../../../../../redux/modules/wedrive';
+import { actionCreators as DocumentShareActions } from '../../../../../redux/modules/documentShare';
 
 // map state to props
 const mapStateToProps = state => ({
@@ -13,10 +13,10 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => {
   return {
     setDocumentListMode: value => {
-      return dispatch(mainUserActions.setDocumentListMode(value));
+      return dispatch(DocumentShareActions.setDocumentListMode(value));
     },
     setSharingMode: value => {
-      return dispatch(mainUserActions.setSharingMode(value));
+      return dispatch(DocumentShareActions.setSharingMode(value));
     },
     initInfoRequest: authData =>
       dispatch(WedriveActions.initInfoRequest(authData)),

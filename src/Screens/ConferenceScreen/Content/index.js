@@ -13,8 +13,8 @@ const mapStateToProps = (state, ownProps) => {
 		videoTrack: mainUser.videoTrack,
 		isMuteVideo: mainUser.isMuteVideo,
 		drawingMode: state.mainUser.drawingMode,
-		documentListMode: state.mainUser.documentListMode,
-		sharingMode: state.mainUser.sharingMode,
+		documentListMode: state.documentShare.documentListMode,
+		attributes: state.documentShare.attributes,
 	};
 };
 
@@ -26,9 +26,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 		setDrawingMode: value => {
 			return dispatch(mainUserActions.setDrawingMode(value));
 		},
-		setSharingMode: value => {
-			return dispatch(mainUserActions.setSharingMode(value));
-		},
+		// setSharingMode: value => {
+		// 	return dispatch(mainUserActions.setSharingMode(value));
+		// },
 	};
 };
 

@@ -62,13 +62,13 @@ class ContentContainer extends React.Component {
    * REDNER
    */
   render() {
-    return this.props.sharingMode ? (
+    return this.props.attributes ? (
       <FileSharing
-        // display={this.props.sharingMode}
-        // sharing={this.props.sharingMode}
+        // display={this.props.attributes}
+        // sharing={this.props.attributes}
         // onClear={this.props.onClear}
         orientation={this.state.orientation}
-        onChangeSharingMode={this.props.setSharingMode}
+        onChangeSharingMode={this.props.onChangeSharingMode}
         hasNotch={hasNotch}
       />
     ) : (

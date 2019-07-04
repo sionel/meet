@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Alert } from 'react-native';
 import FileListPresenter from './FileListPresenter';
 
 class FileListContainer extends Component {
@@ -7,6 +8,7 @@ class FileListContainer extends Component {
 
     this._handleCheckInitInfo();
   }
+
   render() {
     const { hasNotch, orientation } = this.props;
     return (
@@ -62,10 +64,12 @@ class FileListContainer extends Component {
     // wedrive token 가져오기
     const initInfoResponse = await this.props.initInfoRequest(authData);
     if (!initInfoResponse.initInfo) {
-      alert(
+      Alert.alert(
+        'Error',
         '사용자 정보를 불러오지 못했습니다.\nerror: ' +
           initInfoResponse.resultCode +
-          initInfoResponse.resultMsg
+          initInfoResponse.resultMsg,
+        [{ text: 'OK' }]
       );
       return;
     }
@@ -77,10 +81,12 @@ class FileListContainer extends Component {
     );
 
     if (!fileListResponse.fileList) {
-      alert(
+      Alert.alert(
+        'Error',
         '파일 리스트를 불러오지 못했습니다.\nerror: ' +
           fileListResponse.resultCode +
-          fileListResponse.resultMsg
+          fileListResponse.resultMsg,
+        [{ text: 'OK' }]
       );
       return;
     }
@@ -133,7 +139,9 @@ class FileListContainer extends Component {
         method = 'getAttachmentsPublicURL';
         break;
       default:
-        alert('지원하지 않는 파일 확장자입니다.');
+        Alert.alert('경고', '지원하지 않는 파일 확장자입니다.', [
+          { text: 'OK' }
+        ]);
         return;
     }
 
@@ -158,15 +166,27 @@ class FileListContainer extends Component {
       fileInfo
     );
     if (!fileInfoResponse.fileInfo) {
-      alert(
+      Alert.alert(
+        'Error',
         '파일 상세정보를 불러오지 못했습니다.\nerror: ' +
           fileInfoResponse.resultCode +
-          fileInfoResponse.resultMsg
+          fileInfoResponse.resultMsg,
+        [{ text: 'OK' }]
       );
-      return;
+      // return;
     }
 
     console.log(fileInfoResponse);
+
+    this.props.onChangeSharingMode(
+      {
+        fileName: '테스트.xlsx',
+        owner: 'peacejung',
+        resources:
+          '["https://api.wehago.com/hermes/resource/store/ab/3e/2ad2bcd6773e67f86e68f6b092082728e66f/document_0001.jpg"]'
+      },
+      true
+    );
   };
 }
 

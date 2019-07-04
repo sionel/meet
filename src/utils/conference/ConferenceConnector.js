@@ -14,6 +14,18 @@ export const SET_DRAWING_IS_SHARE = 'SET_DRAWING_IS_SHARE';
 // 캔버스 뒤로가기 앞으로가기 커맨드 타입
 export const DRAWING_REDO_UNDO = 'DRAWING_REDO_UNDO';
 
+// 문서 공유모드 설정 커맨드 타입
+export const SET_DOCUMENT_SHARE_IS_OPEN = 'SET_DOCUMENT_SHARE_IS_OPEN';
+
+// 문서 공유모드 해제 커맨드 타입
+export const SET_DOCUMENT_SHARE_IS_CLOSE = 'SET_DOCUMENT_SHARE_IS_CLOSE';
+
+// 문서 공유 페이지 설정 커맨드 타입
+export const SET_DOCUMENT_PAGE = 'SET_DOCUMENT_PAGE';
+
+// 문서공유 데이터 전달 커멘드 타입
+export const UPDATE_DOCUMENT_DATA = 'UPDATE_DOCUMENT_DATA';
+
 /**
  * ConferenceConnector
  * 화상회의 방 생성/참가 및 디바이스 연결을 담당하는 클래스
@@ -181,15 +193,18 @@ class ConferenceConnector {
     /**
      * 문서 공유/드로잉 설정 감지
      */
-    this._room.addCommandListener(SET_DRAWING_IS_SHARE, value => {
-      const {
-        value: userId,
-        attributes: { isDrawingShare }
-      } = value;
+    this._room.addCommandListener(SET_DOCUMENT_SHARE_IS_OPEN, value => {
+      console.log('왓다', value);
+      const { value: userId, attributes } = value;
       if (userId !== this._room.myUserId()) {
-        this._handlers.CHANGED_DOCUMENT_SHARE_MODE(
-          value.attributes.isDrawingShare
-        );
+        this._handlers.CHANGED_DOCUMENT_SHARE_MODE(attributes);
+      }
+    });
+    this._room.addCommandListener(SET_DOCUMENT_SHARE_IS_CLOSE, value => {
+      console.log('꺼졋다', value);
+      const { value: userId } = value;
+      if (userId !== this._room.myUserId()) {
+        this._handlers.CHANGED_DOCUMENT_SHARE_MODE(false, false);
       }
     });
 
@@ -278,19 +293,17 @@ class ConferenceConnector {
   /**
    * 드로잉 모드 전환 공유
    */
-  setToogleDocumentShare = isDrawingShare => {
+  setToogleDocumentShare = (attributes, presenter) => {
+    const command = attributes
+      ? SET_DOCUMENT_SHARE_IS_OPEN
+      : SET_DOCUMENT_SHARE_IS_CLOSE;
     // 공유모드 설정 참가자들에게 공유
-    // this._room.sendCommand(SET_DRAWING_IS_SHARE, {
-    this._room.sendCommandOnce(SET_DRAWING_IS_SHARE, {
+    console.log('attributes', command, attributes, this._room.myUserId());
+    this._room.sendCommandOnce(command, {
       value: this._room.myUserId(),
-      attributes: {
-        isDrawingShare
-      }
+      attributes
     });
-    this._handlers.CHANGED_DOCUMENT_SHARE_MODE(
-      // value.attributes.isDrawingShare
-      isDrawingShare
-    );
+    this._handlers.CHANGED_DOCUMENT_SHARE_MODE(attributes, presenter);
   };
 
   /**

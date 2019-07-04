@@ -185,8 +185,8 @@ class ConferenceScreenContainer extends React.Component {
   /**
    * _handleChangeSharingMode
    */
-  _handleChangeSharingMode = value => {
-    this._conferenceManager.setToogleDocumentShare(value);
+  _handleChangeSharingMode = (status, presenter) => {
+    this._conferenceManager.setToogleDocumentShare(status, presenter);
   };
 }
 

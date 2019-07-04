@@ -22,6 +22,7 @@ const initialState = {
 	drawingMode: false,
 	documentListMode: false,
 	sharingMode: false,
+	presenter: false,
 };
 
 //#endregion
@@ -136,21 +137,23 @@ function applySetDocumentListMode(state, action) {
 
 //#region SET_SHARING_MODE
 
-function setSharingMode(sharingMode) {
+function setSharingMode(attributes, presenter) {
 	return dispatch => {
 		dispatch({
 			type: SET_SHARING_MODE,
-			sharingMode
+			attributes,
+			presenter,
 		});
 	};
 }
 
 function applySetSharingMode(state, action) {
-	const { sharingMode } = action;
+	const { attributes, presenter } = action;
 	return {
 		...state,
 		documentListMode: false,
-		sharingMode: sharingMode
+		sharingMode: attributes,
+		presenter: presenter,
 	};
 }
 

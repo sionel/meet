@@ -4,12 +4,12 @@ import { actionCreators as localActionCreators } from '../../../../redux/modules
 import { actionCreators as mainUserActionCreators } from '../../../../redux/modules/mainUser';
 
 const mapStateToProps = state => {
-  const { local, mainUser } = state;
+  const { local, documentShare } = state;
 
   return {
     conferenceMode: local.conferenceMode,
     isMuteVideo: local.user.isMuteVideo,
-    documentListMode: mainUser.documentListMode,
+    documentListMode: documentShare.documentListMode,
   };
 };
 

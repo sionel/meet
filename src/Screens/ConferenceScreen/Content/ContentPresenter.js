@@ -75,7 +75,7 @@ const ContentPresenter = props => {
           <TopArea
             orientation={props.orientation}
             drawing={props.drawingMode}
-            sharing={props.sharingMode}
+            sharing={props.attributes}
             onReverseVideo={props.onReverseVideo}
             onChangeState={props.onChangeState}
             onChangeDrawing={props.setSharingMode}
@@ -112,7 +112,6 @@ const ContentPresenter = props => {
       {props.documentListMode && (
         <FileList
           orientation={props.orientation}
-          sharingMode={props.sharingMode}
           onChangeSharingMode={props.onChangeSharingMode}
         />
       )}

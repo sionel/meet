@@ -8,6 +8,7 @@ import ConferenceConnector from './ConferenceConnector';
 import { actionCreators as localActionCreators } from '../../redux/modules/local';
 import { actionCreators as mainUserActionCreators } from '../../redux/modules/mainUser';
 import { actionCreators as participantsAcionCreators } from '../../redux/modules/participants';
+import { actionCreators as DocumentShareAcionCreators } from '../../redux/modules/documentShare';
 // import APIManager from '../../services/api/ApiManager_new';
 import APIManager from '../../services/api/ApiManager';
 
@@ -193,14 +194,9 @@ class ConferenceManager {
    * 문서공유/드로잉모드 전환
    */
   // _changeDocumentShareMode = status => {
-  changeDocumentShareMode = status => {
+  changeDocumentShareMode = (attributes = false, presenter = false) => {
     this._dispatch(
-      mainUserActionCreators.setSharingMode(
-        status === 'true' || status === true ? true : false
-      )
-      // mainUserActionCreators.setDrawingMode(
-      //   status === 'true' || status === true ? true : false
-      // )
+      DocumentShareAcionCreators.setSharingMode(attributes, presenter)
     );
   };
 
@@ -217,9 +213,9 @@ class ConferenceManager {
    * setToogleDocumentShare
    * 드로잉데이터 전송
    */
-  setToogleDocumentShare = data => {
+  setToogleDocumentShare = (attributes, presenter) => {
     // alert(JSON.stringify(data));
-    this._conferenceConnector.setToogleDocumentShare(data);
+    this._conferenceConnector.setToogleDocumentShare(attributes, presenter);
   };
 
   /**

@@ -7,10 +7,10 @@ import FileSharingContainer from './FileSharingContainer';
 import { actionCreators as WedriveActions } from '../../../../redux/modules/wedrive';
 
 // map state to props
-// const mapStateToProps = state => ({
-//   auth: state.user.auth,
-//   wedrive: state.wedrive
-// });
+const mapStateToProps = state => ({
+  attributes: state.documentShare.attributes,
+  presenter: state.documentShare.presenter,
+});
 
 // map dispatch to props
 // const mapDispatchToProps = dispatch => {
@@ -25,6 +25,6 @@ import { actionCreators as WedriveActions } from '../../../../redux/modules/wedr
 // };
 
 export default connect(
-  null,
+  mapStateToProps,
   null
 )(FileSharingContainer);

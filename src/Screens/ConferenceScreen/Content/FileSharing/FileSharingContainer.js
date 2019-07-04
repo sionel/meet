@@ -6,7 +6,9 @@ class FileSharingContainer extends Component {
     uri:
       'https://www.google.co.kr/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png',
     showTool: true,
-    showPreView: true
+    showPreView: true,
+    resources: JSON.parse(this.props.attributes.resources),
+    page: 0,
   };
 
   render() {

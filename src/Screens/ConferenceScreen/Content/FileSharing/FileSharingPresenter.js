@@ -17,7 +17,15 @@ const hasNotch = DeviceInfo.hasNotch() && isIOS;
 
 const FileSharingPresenter = props => {
   const { height, width } = Dimensions.get('window');
-  const { orientation, showTool, showPreView, onChangeState } = props;
+  const {
+    orientation,
+    showTool,
+    showPreView,
+    presenter,
+    resources,
+    page,
+    onChangeState
+  } = props;
 
   const headerPadding =
     orientation === 'vertical' ? 0 + (isIOS ? 12 : 0) + (hasNotch ? 24 : 0) : 0;
@@ -29,6 +37,7 @@ const FileSharingPresenter = props => {
     orientation === 'vertical' ? 0 : 0 + (hasNotch ? 36 : 0);
   const titleWidth = width - (containerPadding + 12) * 2 - 28 - 30 * 1;
 
+  console.log(resources)
   return (
     <View style={styles.container}>
       {/* topArea */}
@@ -44,23 +53,25 @@ const FileSharingPresenter = props => {
             paddingRight: containerPadding + 12
           }}
         >
-          <SettingButton
-            name={'buttonClose'}
-            onPress={() => props.onChangeSharingMode(false)}
-            style={{ paddingRight: 12, margin: 0 }}
-            width={24}
-            height={24}
-            areaWdith={24}
-            areaHeight={24}
-          />
+          {presenter && (
+            <SettingButton
+              name={'buttonClose'}
+              onPress={() => props.onChangeSharingMode(false, false)}
+              style={{ paddingRight: 12, margin: 0 }}
+              width={24}
+              height={24}
+              areaWdith={24}
+              areaHeight={24}
+            />
+          )}
           <Text
             numberOfLines={1}
             ellipsizeMode={'tail'}
             style={[styles.headerText, { width: titleWidth }]}
           >
-            topArea topArea topArea topArea topArea.pptx
+            {props.attributes.fileName}
           </Text>
-          <SettingButton
+          {/* <SettingButton
             name={'buttonClose'}
             onPress={() => props.onChangeSharingMode(false)}
             style={{ paddingLeft: 12, margin: 0 }}
@@ -86,7 +97,7 @@ const FileSharingPresenter = props => {
             height={24}
             areaWdith={24}
             areaHeight={24}
-          />
+          /> */}
         </View>
       ) : (
         <View style={{ ...styles.topArea, height: headerPadding }} />
@@ -105,6 +116,7 @@ const FileSharingPresenter = props => {
         ]}
       >
         {showPreView && (
+          // 미리보기
           <View
             style={[
               styles.preView,
@@ -114,6 +126,7 @@ const FileSharingPresenter = props => {
             ]}
           />
         )}
+        {/* 미리보기 접기 버튼 */}
         <SettingButton
           name={showPreView ? 'btnArrowUp' : 'btnArrowDown'}
           onPress={() => onChangeState('showPreView')}
@@ -123,6 +136,7 @@ const FileSharingPresenter = props => {
           areaWdith={24}
           areaHeight={24}
         />
+        {/* 문서공유 메인 화면 */}
         <View
           style={[
             styles.mainContainer,
@@ -136,24 +150,21 @@ const FileSharingPresenter = props => {
             onPress={() => onChangeState('showTool')}
             style={{ flex: 1 }}
           >
-            <Text>mainArea</Text>
+            <ImageBackground
+              source={{ uri: resources[page] }}
+              resizeMode={'contain'}
+              style={styles.imageBackground}
+            >
+              {/* <Text>Close Component</Text> */}
+              {/* <DrawingSketch /> */}
+            </ImageBackground>
           </TouchableOpacity>
         </View>
-        {/* <ImageBackground
-        source={{ uri: props.uri }}
-        resizeMode={'contain'}
-        style={styles.imageBackground}
-      >
-        <Text onPress={() => props.onChangeSharingMode(!props.sharing)}>
-          Close Component
-        </Text>
-        <DrawingSketch/>
-      </ImageBackground> */}
       </View>
       {/* end mainArea */}
 
       {/* BottomArea */}
-      {showTool && (
+      {showTool && presenter && (
         <View
           style={{
             ...styles.bottomArea,
@@ -165,6 +176,7 @@ const FileSharingPresenter = props => {
             paddingRight: containerPadding
           }}
         >
+          <View style={styles.drawingTool} />
           <Text style={{ color: '#fff' }}>bottomArea</Text>
         </View>
       )}
@@ -190,7 +202,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 20,
     height: 24,
-    backgroundColor: 'red'
   },
   mainArea: {
     flex: 1,
@@ -199,7 +210,6 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     width: '100%',
-    backgroundColor: 'yellow',
     borderWidth: 3,
     borderColor: 'red'
   },
@@ -208,7 +218,6 @@ const styles = StyleSheet.create({
   preView: {
     width: ' 100%',
     height: 90,
-    // backgroundColor: 'blue',
     borderBottomColor: 'rgb(210, 210, 210)',
     borderBottomWidth: 1
   },
@@ -218,13 +227,20 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     backgroundColor: '#000'
-  }
-  // imageBackground: {
-  //   width: width,
-  //   height: height,
-  //   justifyContent: 'center',
-  //   alignItems: 'center'
-  // }
+  },
+  drawingTool: {
+    position: 'absolute',
+    left: 0,
+    top: -40,
+    width: '100%',
+    height: 40,
+  },
+  imageBackground: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
 });
 
 export default FileSharingPresenter;
