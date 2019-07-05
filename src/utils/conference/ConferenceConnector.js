@@ -296,7 +296,7 @@ class ConferenceConnector {
       ? SET_DOCUMENT_SHARE_IS_OPEN
       : SET_DOCUMENT_SHARE_IS_CLOSE;
     // 공유모드 설정 참가자들에게 공유
-    console.log('attributes', command, attributes, this._room.myUserId());
+
     this._room.sendCommandOnce(command, {
       value: this._room.myUserId(),
       attributes

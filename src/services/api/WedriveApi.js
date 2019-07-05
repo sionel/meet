@@ -80,7 +80,7 @@ const getFileInfo = async (authData, fileInfo) => {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         service: 'ObjectStorageService',
-        method: 'fileInfo.method'
+        method: fileInfo.method
       },
       body: serialize(fileInfo)
     };

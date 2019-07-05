@@ -20,11 +20,18 @@ const ContentPresenter = props => {
     drawingMode,
     conferenceMode,
     createdTime,
+    orientation
   } = props;
+
+  const hideStatusbar = orientation === 'horizontal';
 
   return (
     <View style={styles.container} onLayout={props.onLayout}>
-      <StatusBar barStyle="light-content" backgroundColor={'#000'} hidden={false} />
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor={'#000'}
+        hidden={hideStatusbar}
+      />
       {/* {drawingMode && ( */}
       {/* <DrawingSketch
         // display={true}

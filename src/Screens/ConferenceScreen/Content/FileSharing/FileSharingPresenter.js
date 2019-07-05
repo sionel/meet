@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import DrawingSketch from '../DrawingSketch';
-import SettingButton from '../../Content/TopArea/SettingButton';
+import CustomButton from '../../../../components/CustomButton';
 
 const isIOS = Platform.OS === 'ios';
 const hasNotch = DeviceInfo.hasNotch() && isIOS;
@@ -31,7 +31,7 @@ const FileSharingPresenter = props => {
   } = props;
 
   const headerPadding =
-    orientation === 'vertical' ? 0 + (isIOS ? 12 : 0) + (hasNotch ? 24 : 0) : 0;
+    orientation === 'vertical' ? 0 + (isIOS ? 24 : 0) + (hasNotch ? 24 : 0) : 0;
   const bottomPadding =
     orientation === 'vertical'
       ? 0 + (hasNotch ? 12 : 0)
@@ -85,7 +85,7 @@ const FileSharingPresenter = props => {
           }}
         >
           {presenter && (
-            <SettingButton
+            <CustomButton
               name={'buttonClose'}
               onPress={() => props.onChangeSharingMode(false, false)}
               style={{ paddingRight: 12, margin: 0 }}
@@ -102,7 +102,7 @@ const FileSharingPresenter = props => {
           >
             {props.attributes.fileName}
           </Text>
-          {/* <SettingButton
+          {/* <CustomButton
             name={'buttonClose'}
             onPress={() => props.onChangeSharingMode(false)}
             style={{ paddingLeft: 12, margin: 0 }}
@@ -111,7 +111,7 @@ const FileSharingPresenter = props => {
             areaWdith={24}
             areaHeight={24}
           />
-          <SettingButton
+          <CustomButton
             name={'buttonClose'}
             onPress={() => props.onChangeSharingMode(false)}
             style={{ paddingLeft: 12, margin: 0 }}
@@ -120,7 +120,7 @@ const FileSharingPresenter = props => {
             areaWdith={24}
             areaHeight={24}
           />
-          <SettingButton
+          <CustomButton
             name={'buttonClose'}
             onPress={() => props.onChangeSharingMode(false)}
             style={{ paddingLeft: 12, margin: 0 }}
@@ -150,7 +150,7 @@ const FileSharingPresenter = props => {
         {showPreView && preView}
 
         {/* 미리보기 접기 버튼 */}
-        <SettingButton
+        <CustomButton
           name={showPreView ? 'btnArrowUp' : 'btnArrowDown'}
           onPress={() => onChangeState('showPreView')}
           style={{ padding: 0, margin: 0 }}

@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   Platform
 } from 'react-native';
-import SettingButton from './SettingButton';
+import CustomButton from '../../../../components/CustomButton';
 import { ConferenceModes } from '../../../../utils/ConstantsBackup';
 import _ from 'underscore';
 
@@ -34,24 +34,24 @@ const TopAreaPresenter = props => {
       >
         {/* {props.isMuteVideo ? null : ( */}
         <Fragment>
-          <SettingButton
+          <CustomButton
             name={props.objectFit === 'contain' ? 'zoomIn' : 'zoomOut'}
             onPress={props.onChangeObjectFit}
-            width={25}
-            height={25}
+            width={23}
+            height={23}
             areaWdith={28}
             areaHeight={28}
           />
-          <SettingButton name="switch" onPress={props.toggleCameraFacingMode} />
-          <SettingButton
+          <CustomButton name="switch" onPress={props.toggleCameraFacingMode} />
+          <CustomButton
             name="reverse"
             onPress={props.onReverseVideo}
-            width={25}
-            height={25}
+            width={24}
+            height={24}
             areaWdith={28}
             areaHeight={28}
           />
-          {/* <SettingButton
+          {/* <CustomButton
             name="pen"
             width={25}
             height={25}
@@ -60,11 +60,11 @@ const TopAreaPresenter = props => {
             // onPress={() => props.onChangeDrawing(!props.drawing)}
             onPress={_.throttle(() => props.onChangeDrawingMode(!props.drawing), 500)}
           /> */}
-          <SettingButton
+          <CustomButton
             name="docShare"
-            width={25}
-            height={25}
-            areaWdith={25}
+            width={28}
+            height={28}
+            areaWdith={28}
             areaHeight={28}
             // onPress={() => props.onChangeDrawing(!props.drawing)}
             // onPress={_.throttle(() => props.onChangeSharingMode(!props.sharing), 500)}

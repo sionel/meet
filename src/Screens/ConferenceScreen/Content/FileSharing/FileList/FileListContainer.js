@@ -73,6 +73,7 @@ class FileListContainer extends Component {
       );
       return;
     }
+    alert(JSON.stringify(initInfoResponse));
 
     // wedrive file list 가져오기
     const fileListResponse = await this.props.getFileListRequest(
@@ -90,6 +91,7 @@ class FileListContainer extends Component {
       );
       return;
     }
+    alert(JSON.stringify(fileListResponse));
   };
 
   /**
@@ -154,10 +156,10 @@ class FileListContainer extends Component {
       ServiceKey: '',
       BucketType: 'C',
       BucketName: undefined,
-      isWedrive: true,
+      isWedrive: false,
       isFullPreview: false,
       TokenID: authData.AUTH_A_TOKEN,
-      method
+      method: method,
     };
 
     // wedrive file 상세정보 가져오기
@@ -176,7 +178,7 @@ class FileListContainer extends Component {
       // return;
     }
 
-    console.log(fileInfoResponse);
+    alert(JSON.stringify(fileInfoResponse));
 
     this.props.onChangeSharingMode(
       {

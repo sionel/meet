@@ -141,7 +141,7 @@ class HomeScreenContainer extends Component {
    */
   render() {
     // console.log('Platform : ', Platform);
-    const { refreshing, searchKeyword, selectedRoomId, modal } = this.state;
+    const { refreshing, searchKeyword, selectedRoomId, modal, orientation } = this.state;
     const { navigation, auth } = this.props;
     let wetalk = []; // We talk list
 
@@ -153,9 +153,18 @@ class HomeScreenContainer extends Component {
       wetalk = this.props.wetalk;
     }
 
+    const hideStatusbar =
+      orientation === 'LANDSCAPE' ||
+      orientation === 'LANDSCAPE-LEFT' ||
+      orientation === 'LANDSCAPE-RIGHT';
+
     return (
       <View style={{ flex: 1 }}>
-        <StatusBar barStyle="light-content" backgroundColor={'#1C90FB'} />
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor={'#1C90FB'}
+          hidden={hideStatusbar}
+        />
         <NavigationEvents
           onDidFocus={() => {
             this._isFocus = true;
