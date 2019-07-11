@@ -69,8 +69,8 @@ class ContentContainer extends React.Component {
         // onClear={this.props.onClear}
         {...this.props}
         orientation={this.state.orientation}
-        onChangeSharingMode={this.props.onChangeSharingMode}
         hasNotch={hasNotch}
+        // onChangeSharingMode={this.props.onChangeSharingMode}
       />
     ) : (
       <ContentPresenter

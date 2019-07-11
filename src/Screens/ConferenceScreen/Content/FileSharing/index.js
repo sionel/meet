@@ -4,12 +4,13 @@
 
 import { connect } from 'react-redux';
 import FileSharingContainer from './FileSharingContainer';
-import { actionCreators as WedriveActions } from '../../../../redux/modules/wedrive';
+import { actionCreators as DocumentShareActions } from '../../../../redux/modules/documentShare';
 
 // map state to props
 const mapStateToProps = state => ({
   attributes: state.documentShare.attributes,
   presenter: state.documentShare.presenter,
+  page: state.documentShare.page,
 });
 
 // map dispatch to props

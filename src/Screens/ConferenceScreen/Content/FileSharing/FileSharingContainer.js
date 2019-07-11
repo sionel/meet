@@ -6,7 +6,6 @@ class FileSharingContainer extends Component {
     showTool: true,
     showPreView: true,
     resources: JSON.parse(this.props.attributes.resources),
-    page: 0,
   };
 
   render() {
@@ -15,9 +14,14 @@ class FileSharingContainer extends Component {
         {...this.props}
         {...this.state}
         onChangeState={this._handleChangeState}
+        onChangePage={this._handleChangePage}
       />
     );
   }
+
+  _handleChangePage = (page, presenter) => {
+    this.props.onChangeDocumentPage(page, presenter);
+  };
 
   _handleChangeState = (state, value) => {
     switch (state) {
@@ -28,9 +32,6 @@ class FileSharingContainer extends Component {
               showPreView: false
             })
           : this.setState({ showTool: true });
-        break;
-      case 'page':
-        this.setState({ page: value });
         break;
       default:
         this.setState({ [state]: !this.state[state] });

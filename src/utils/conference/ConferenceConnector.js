@@ -191,6 +191,19 @@ class ConferenceConnector {
     });
 
     /**
+     * 문서 공유 페이지 전환 감지
+     */
+    this._room.addCommandListener(SET_DOCUMENT_PAGE, value => {
+      const {
+        value: userId,
+        attributes: { page }
+      } = value;
+      if (userId !== this._room.myUserId()) {
+        this._handlers.CHANGED_DOCUMENT_PAGE(Number(page));
+      }
+    });
+
+    /**
      * 문서 공유/드로잉 설정 감지
      */
     this._room.addCommandListener(SET_DOCUMENT_SHARE_IS_OPEN, value => {
@@ -302,6 +315,19 @@ class ConferenceConnector {
       attributes
     });
     this._handlers.CHANGED_DOCUMENT_SHARE_MODE(attributes, presenter);
+  };
+
+  /**
+   * 페이지 전환 공유
+   */
+  setDocumentPage = (page, presenter) => {
+    console.log(presenter)
+    presenter &&
+      this._room.sendCommandOnce(SET_DOCUMENT_PAGE, {
+        value: this._room.myUserId(),
+        attributes: { page: page }
+      });
+    this._handlers.CHANGED_DOCUMENT_PAGE(page);
   };
 
   /**

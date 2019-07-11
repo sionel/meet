@@ -114,6 +114,7 @@ class ConferenceScreenContainer extends React.Component {
         onSetDrawingData={this._handleSetDrawingData}
         onChangeDrawingMode={this._handleChangeDrawingMode}
         onChangeSharingMode={this._handleChangeSharingMode}
+        onChangeDocumentPage={this._handleChangeDocumentPage}
       />
     );
   }
@@ -165,6 +166,14 @@ class ConferenceScreenContainer extends React.Component {
    */
   _handleSetDrawingData = data => {
     this._conferenceManager.setDrawingData(data);
+  };
+
+  /**
+   * _handleSetDocumentPage
+   * 페이지 전환 전송
+   */
+  _handleChangeDocumentPage = (page, presenter) => {
+    this._conferenceManager.setDocumentPage(page, presenter);
   };
 
   /**

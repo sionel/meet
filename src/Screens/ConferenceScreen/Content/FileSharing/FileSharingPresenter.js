@@ -27,7 +27,8 @@ const FileSharingPresenter = props => {
     presenter,
     resources,
     page,
-    onChangeState
+    onChangeState,
+    onChangePage
   } = props;
 
   const headerPadding =
@@ -110,7 +111,7 @@ const FileSharingPresenter = props => {
           page={page}
           horizontal={true}
           renderItem={({ item, index }) => (
-            <TouchableOpacity onPress={() => onChangeState('page', index)}>
+            <TouchableOpacity onPress={() => onChangePage(index, presenter)}>
               <Image
                 source={{ uri: item }}
                 style={[

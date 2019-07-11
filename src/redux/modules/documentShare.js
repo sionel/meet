@@ -3,6 +3,7 @@
 // 문서공유 모드
 const SET_DOCUMENT_LIST_MODE = 'SET_DOCUMENT_LIST_MODE';
 const SET_SHARING_MODE = 'SET_SHARING_MODE';
+const SET_DOCUMENT_PAGE = 'SET_DOCUMENT_PAGE';
 
 //#endregion Action Types
 
@@ -11,7 +12,8 @@ const SET_SHARING_MODE = 'SET_SHARING_MODE';
 const initialState = {
   documentListMode: false,
   attributes: false,
-  presenter: false
+  presenter: false,
+  page: 0,
 };
 
 //#endregion
@@ -24,6 +26,8 @@ function reducer(state = initialState, action) {
       return applySetDocumentListMode(state, action);
     case SET_SHARING_MODE:
       return applySetSharingMode(state, action);
+    case SET_DOCUMENT_PAGE:
+      return applysetDocumentPage(state, action);
     default:
       return state;
   }
@@ -76,9 +80,32 @@ function applySetSharingMode(state, action) {
 
 //#endregion
 
+
+//#region SET_DOCUMENT_PAGE
+
+function setDocumentPage(page) {
+  return dispatch => {
+    dispatch({
+      type: SET_DOCUMENT_PAGE,
+      page
+    });
+  };
+}
+
+function applysetDocumentPage(state, action) {
+  const { page } = action;
+  return {
+    ...state,
+    page: page
+  };
+}
+
+//#endregion
+
 export const actionCreators = {
   setDocumentListMode,
-  setSharingMode
+  setSharingMode,
+  setDocumentPage,
 };
 
 export default reducer;
