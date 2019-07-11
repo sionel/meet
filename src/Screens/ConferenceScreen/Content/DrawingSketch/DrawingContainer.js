@@ -27,12 +27,12 @@ class DrawingContainer extends Component {
    * State
    */
   state = {
-    selectedTab: 0,
+    selectedTab: -1,
     selectedColor: 'stroke', // 선택된 색
     // selectedColor: 'lightskyblue', // 선택된 색
     selectedStroke: 0, // 선택된 색
     selctedEraser: 0,
-    palette: true, // 탭 사용여부
+    palette: false, // 탭 사용여부
 
     stroke: 0,
     color: 0,
@@ -54,7 +54,13 @@ class DrawingContainer extends Component {
               borderRadius: 15
             }}
           />
-        )
+        ),
+        onPress: () => {
+          this.setState({
+            selectedTab: this.state.selectedTab === 0 ? -1 : 0,
+            palette: this.state.selectedTab !== 0
+          });
+        }
       },
       {
         id: 'color',
@@ -79,7 +85,13 @@ class DrawingContainer extends Component {
               backgroundColor
             }}
           />
-        )
+        ),
+        onPress: () => {
+          this.setState({
+            selectedTab: this.state.selectedTab === 1 ? -1 : 1,
+            palette: this.state.selectedTab !== 1
+          });
+        }
       },
       {
         id: 'eraser',
@@ -98,7 +110,13 @@ class DrawingContainer extends Component {
             />
           ) : (
             <Icon name={'trash'} size={15} color={'#e54840'} />
-          )
+          ),
+        onPress: () => {
+          this.setState({
+            selectedTab: this.state.selectedTab === 2 ? -1 : 2,
+            palette: this.state.selectedTab !== 2
+          });
+        }
       },
       {
         id: 'undo',

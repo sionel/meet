@@ -57,7 +57,6 @@ const DrawingPresenter = props => {
             source={{ uri: image }}
             resizeMode={'contain'}
             style={[
-              // styles.imageBackground,
               {
                 width: '75%',
                 height: '75%',
@@ -108,10 +107,9 @@ const DrawingPresenter = props => {
               style={{
                 ...styles.detailSettingWrapper,
                 ...styles[`detailSettingWrapper_${orientation}`]
-                // flexDirection: orientation === 'vertical' ? 'row' : 'column'
               }}
             >
-              {tabs[selectedTab].values.map((value, valueIndex) => (
+              {selectedTab >= 0 && tabs[selectedTab].values.map((value, valueIndex) => (
                 <TouchableOpacity
                   key={String(value)}
                   onPress={() =>
@@ -161,7 +159,6 @@ const DrawingPresenter = props => {
                   <View
                     style={{
                       ...styles.mainSettingItem,
-                      // borderColor: '#fff',
                       opacity: selectedTab === tabIndex ? 0.85 : 1,
                       backgroundColor:
                         selectedTab === tabIndex
@@ -213,6 +210,10 @@ const DrawingPresenter = props => {
   );
 };
 
+DrawingPresenter.defaultProps = {
+  display: true
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -246,7 +247,6 @@ const styles = StyleSheet.create({
   },
   bottomArea_vertical: {
     flexDirection: 'column',
-    // width: '100%',
     height: 110,
     bottom: 0,
     left: 0,
@@ -258,7 +258,6 @@ const styles = StyleSheet.create({
     top: 48,
     right: 0,
     bottom: 0
-    // height: '100%'
   },
 
   // 완료버튼
@@ -270,40 +269,14 @@ const styles = StyleSheet.create({
   },
   modeChangeButton_horizontal: {
     position: 'absolute',
-    // right: 25,
     top: 20,
-    // left: hasNotch ? 50 : 25,
     right: 16 + hasNotch ? 24 : 0 + isIOS ? 12 : 0,
     zIndex: 9
   },
 
-  // tabWrapper: {
-  //   display: 'flex',
-  //   // height: 200,
-  //   // bottom: 0,
-  //   backgroundColor: '#1f1f1f',
-  //   borderColor: '#c1c1c1',
-  //   zIndex: 7
-  // },
-  // tabWrapper_vertical: {
-  //   // position: 'absolute',
-  //   // justifyContent: 'space-between',
-  //   // alignItems: 'flex-start',
-  //   width: '100%'
-  // },
-  // tabWrapper_horizontal: {
-  //   // position: 'relative',
-  //   flexDirection: 'row',
-  //   height: '100%'
-  //   // justifyContent: 'flex-end',
-  //   // alignItems: 'center'
-  // },
-
   // 메인 팔레트
   mainSettingWrapper: {
     backgroundColor: '#000'
-    // display: 'flex'
-    // height: hasNotch ? 95 : 70,
   },
   mainSettingWrapper_vertical: {
     flexDirection: 'row',
@@ -311,54 +284,35 @@ const styles = StyleSheet.create({
     height: 55,
     paddingLeft: 7.5,
     paddingRight: 7.5,
-    // height: 70 + hasNotch ? 24 : 0 + isIOS ? 12 : 0,
     justifyContent: 'space-between',
     alignItems: 'center'
   },
   mainSettingWrapper_horizontal: {
-    // justifyContent: 'flex-end',
-    // alignItems: 'flex-start',
-    // width: 70 + hasNotch ? 24 : 0 + isIOS ? 12 : 0,
     flexDirection: 'column',
     width: 55,
     height: '100%',
     paddingTop: 7.5,
     paddingBottom: 7.5
-    // justifyContent: 'center',
-    // alignItems: 'center'
   },
 
   mainTabWrapper: {
     flex: 1,
-    // width: '100%',
-    // height: '100%',
-    // height: hasNotch ? 95 : 70,
     justifyContent: 'flex-start',
     alignItems: 'center'
   },
   mainTabWrapper_vertical: {
-    // width: '100%',
-    // height: 70 + hasNotch ? 24 : 0 + isIOS ? 12 : 0,
     flexDirection: 'row',
     paddingLeft: 7.5,
     paddingRight: 7.5
   },
   mainTabWrapper_horizontal: {
-    // justifyContent: 'flex-end',
-    // alignItems: 'flex-start',
-    // width: 70 + hasNotch ? 24 : 0 + isIOS ? 12 : 0,
-    // height: '100%',
     flexDirection: 'column'
-    // paddingTop: 7.5,
-    // paddingBottom: 7.5
   },
 
   mainSettingItem: {
     width: 39,
     height: 39,
     borderRadius: 25,
-    // marginTop: 7.5,
-    // marginBottom: 7.5,
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -374,8 +328,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#1f1f1f',
     justifyContent: 'flex-start',
     alignItems: 'center'
-    // padding: 5
-    // borderColor: '#c1c1c1'
   },
   // 세로
   detailSettingWrapper_vertical: {
@@ -384,18 +336,12 @@ const styles = StyleSheet.create({
     height: 55,
     paddingLeft: 7.5,
     paddingRight: 7.5
-    // paddingTop: 7.5
-    // borderBottomWidth: 1
   },
   detailSettingWrapper_horizontal: {
     flexDirection: 'column',
     width: 55,
     height: '100%',
     justifyContent: 'flex-start'
-    // alignItems: 'center',
-    // paddingTop: 7.5,
-    // paddingRight: 7.5,
-    // marginTop: -20
   },
 
   detailSettingItem: {
@@ -417,44 +363,6 @@ const styles = StyleSheet.create({
     marginTop: 7.5,
     marginBottom: 7.5
   }
-
-  // // 탭토글 컨테이너
-  // tabToggleWrapper: {
-  //   display: 'flex',
-  //   // height: 100,
-  //   alignContent: 'center',
-  //   justifyContent: 'center',
-  //   textAlign: 'center',
-  //   backgroundColor: '#f2f2f2'
-  // },
-  // // 탭토글 컨테이너
-  // tabToggleWrapper_vertical: {
-  //   width: '100%'
-  // },
-  // // 탭토글 컨테이너
-  // tabToggleWrapper_horizontal: {},
-
-  // // 접기 버튼
-  // tabToggleIcon: {
-  //   alignItems: 'center',
-  //   justifyContent: 'center',
-  //   textAlign: 'center'
-  // },
-  // tabToggleIcon_vertical: {},
-  // tabToggleIcon_horizontal: {
-  //   marginLeft: 10,
-  //   marginRight: 10
-  // },
-
-  // childrenWrapper: {
-  //   position: 'absolute',
-  //   bottom: 0,
-  //   width: '100%'
-  // }
 });
-
-DrawingPresenter.defaultProps = {
-  display: true
-};
 
 export default DrawingPresenter;

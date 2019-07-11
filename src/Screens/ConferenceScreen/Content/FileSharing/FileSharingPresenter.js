@@ -193,13 +193,13 @@ const FileSharingPresenter = props => {
             orientation={orientation}
             onChangeShowToolState={onChangeState}
             onClear={() => {}}
-            onChangeDrawing={() => {}}
-            onSetDrawingData={() => {}}
+            // onChangeDrawing={() => {}}
+            // onSetDrawingData={() => {}}
             onChangeDrawingMode={() => {}}
             // onClear={props.onClear}
             // orientation={props.orientation}
-            // onChangeDrawing={props.setDrawingMode}
-            // onSetDrawingData={props.onSetDrawingData}
+            onChangeDrawing={props.setDrawingMode}
+            onSetDrawingData={props.onSetDrawingData}
             // onChangeDrawingMode={props.onChangeDrawingMode}
             hasNotch={props.hasNotch}
           />
