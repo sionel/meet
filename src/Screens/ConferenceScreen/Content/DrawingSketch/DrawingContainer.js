@@ -3,7 +3,7 @@
  */
 
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Image } from 'react-native';
 import DrawingPresenter from './DrawingPresenter';
 import DrawingManager from '../../../../utils/DrawingManager';
 import Icon from 'react-native-vector-icons/FontAwesome5';

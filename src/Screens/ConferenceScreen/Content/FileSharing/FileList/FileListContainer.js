@@ -73,7 +73,7 @@ class FileListContainer extends Component {
       );
       return;
     }
-    alert(JSON.stringify(initInfoResponse));
+    // alert(JSON.stringify(initInfoResponse));
 
     // wedrive file list 가져오기
     const fileListResponse = await this.props.getFileListRequest(
@@ -91,7 +91,7 @@ class FileListContainer extends Component {
       );
       return;
     }
-    alert(JSON.stringify(fileListResponse));
+    // alert(JSON.stringify(fileListResponse));
   };
 
   /**

@@ -16,7 +16,7 @@ class DrawingManager {
       // 기본 화면비율
       this.BASE_WIDTH = 1024;
       this.BASE_HEIGHT = 768;
-      this.SCREEN_WIDTH = (width >= height ? height : width) - 30; // 화면 가로길이;
+      this.SCREEN_WIDTH = width >= height ? height : width; // 화면 가로길이;
       this.SCREEN_HEIGHT =
         this.SCREEN_WIDTH * ((this.BASE_HEIGHT * 100) / this.BASE_WIDTH / 100); // 화면 가로길이;
       this.CONTRAST_SCALE = (this.SCREEN_WIDTH * 100) / this.BASE_WIDTH;
@@ -45,6 +45,19 @@ class DrawingManager {
       case 'canvas':
         return this[target];
 
+      default:
+        return null;
+    }
+  };
+
+  /**
+   * setter
+   */
+  set = (target, value) => {
+    switch (target) {
+      case 'BASE_WIDTH':
+      case 'BASE_HEIGHT':
+        return this[target] = value;
       default:
         return null;
     }

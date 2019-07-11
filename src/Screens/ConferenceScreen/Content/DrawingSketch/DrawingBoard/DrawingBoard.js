@@ -17,6 +17,8 @@ class DrawingBoard extends Component {
 
   render() {
     const { user, stroke, color, onStrokeEnd } = this.props;
+    // this._drawingManager.set('BASE_WIDTH');
+    // this._drawingManager.set('BASE_WIDTH');
     const width = this._drawingManager.get('SCREEN_WIDTH');
     const height = this._drawingManager.get('SCREEN_HEIGHT');
     // const backgroundColor = '#fff';
@@ -27,8 +29,8 @@ class DrawingBoard extends Component {
         <SketchCanvas
           ref={ref => this._drawingManager.setRef(ref)}
           style={{
-            width,
-            height,
+            width: '100%',
+            height: '100%',
             backgroundColor,
             borderWidth: 2,
             borderColor: '#d1d1d1'

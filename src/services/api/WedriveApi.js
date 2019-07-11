@@ -66,6 +66,7 @@ const getList = async (authData, initInfo) => {
  */
 const getFileInfo = async (authData, fileInfo) => {
   try {
+    // const url = `http://10.51.115.24:8081/debugger-ui`;
     const url = `${wehagoBaseURL}/ObjectStorageCommon/services/common`;
     const headers = securityRequest(
       authData.AUTH_A_TOKEN,
