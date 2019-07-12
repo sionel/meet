@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert } from 'react-native';
+import { Alert, Image } from 'react-native';
 import FileListPresenter from './FileListPresenter';
 
 class FileListContainer extends Component {
@@ -178,17 +178,18 @@ class FileListContainer extends Component {
       // return;
     }
 
-    alert(JSON.stringify(fileInfoResponse));
-
-    this.props.onChangeSharingMode(
-      {
-        fileName: '테스트.xlsx',
-        owner: 'peacejung',
-        resources:
-          '["https://api.wehago.com/hermes/resource/store/1e/c0/d6a8ebb79e382f974e6e405433862f452b56/document_0001.jpg","https://api.wehago.com/hermes/resource/store/1e/c0/d6a8ebb79e382f974e6e405433862f452b56/document_0002.jpg","https://api.wehago.com/hermes/resource/store/1e/c0/d6a8ebb79e382f974e6e405433862f452b56/document_0003.jpg","https://api.wehago.com/hermes/resource/store/1e/c0/d6a8ebb79e382f974e6e405433862f452b56/document_0004.jpg"]'
-      },
-      true
-    );
+    await Image.getSize('https://api.wehago.com/hermes/resource/store/1e/c0/d6a8ebb79e382f974e6e405433862f452b56/document_0001.jpg', (w, h) => {
+      console.log(w,h);
+      this.props.onChangeSharingMode(
+        {
+          fileName: '테스트.xlsx',
+          owner: 'peacejung',
+          resources:
+            '["https://api.wehago.com/hermes/resource/store/1e/c0/d6a8ebb79e382f974e6e405433862f452b56/document_0001.jpg","https://api.wehago.com/hermes/resource/store/1e/c0/d6a8ebb79e382f974e6e405433862f452b56/document_0002.jpg","https://api.wehago.com/hermes/resource/store/1e/c0/d6a8ebb79e382f974e6e405433862f452b56/document_0003.jpg","https://api.wehago.com/hermes/resource/store/1e/c0/d6a8ebb79e382f974e6e405433862f452b56/document_0004.jpg"]'
+        },
+        true
+      );
+    })
   };
 }
 

@@ -11,7 +11,8 @@ import {
   Text,
   TouchableOpacity,
   Button,
-  Platform
+  Platform,
+  Dimensions
 } from 'react-native';
 import { SketchCanvas } from '@terrylinla/react-native-sketch-canvas';
 import DrawingBoard from './DrawingBoard';
@@ -24,6 +25,9 @@ const hasNotch = DeviceInfo.hasNotch() && isIOS;
 const DrawingPresenter = props => {
   const {
     image,
+    imageLoading,
+    imgWidth,
+    imgHeight,
     selectedTab,
     stroke,
     color,
@@ -37,7 +41,19 @@ const DrawingPresenter = props => {
     onChangeShowToolState
   } = props;
 
-  const vertical = orientation === 'vertical';
+  const { width, height } = Dimensions.get('window');
+  const vertical = orientation === 'vertical'; // 세로모드 인지
+  // 길이값 비율
+  const dividingWidth = (width * 0.8) / imgWidth;
+  // 높이값 비율
+  const dividingHeight = (height * 0.8) / imgHeight;
+  const calcScale =
+    dividingWidth < dividingHeight ? dividingWidth : dividingHeight;
+  const scale = calcScale < 1 ? calcScale : 1;
+  const resultSize = {
+    width: imgWidth * scale,
+    height: imgHeight * scale
+  };
 
   return (
     <View style={[styles.container, styles[`flexDirection_${orientation}`]]}>
@@ -53,33 +69,37 @@ const DrawingPresenter = props => {
             styles[`boardContainer_${orientation}`]
           ]}
         >
-          <ImageBackground
-            source={{ uri: image }}
-            resizeMode={'contain'}
-            style={[
-              {
-                width: '75%',
-                height: '75%',
-                borderColor: 'blue',
-                borderWidth: 1
-              }
-            ]}
-          >
-            <DrawingBoard
-              onStrokeEnd={props.onSetDrawingData}
-              color={selectedTab == 2 ? '#ffffff' : tabs[1].values[color]}
-              stroke={
-                selectedTab == 2
-                  ? tabs[2].values[eraser]
-                  : tabs[0].values[stroke]
-              }
-            />
-          </ImageBackground>
+          {imageLoading ? (
+            <Text>Loading</Text>
+          ) : (
+            <ImageBackground
+              source={{ uri: image }}
+              resizeMode={'contain'}
+              style={[
+                {
+                  width: resultSize.width,
+                  height: resultSize.height,
+                  // borderColor: 'blue',
+                  // borderWidth: 0
+                }
+              ]}
+            >
+              <DrawingBoard
+                onStrokeEnd={props.onSetDrawingData}
+                color={selectedTab == 2 ? '#ffffff' : tabs[1].values[color]}
+                stroke={
+                  selectedTab == 2
+                    ? tabs[2].values[eraser]
+                    : tabs[0].values[stroke]
+                }
+              />
+            </ImageBackground>
+          )}
         </View>
       </TouchableOpacity>
 
       {/* 하단 영역 */}
-      {showTool && presenter && (
+      {!imageLoading && showTool && presenter && (
         <View
           style={[
             styles.bottomArea,
@@ -109,27 +129,28 @@ const DrawingPresenter = props => {
                 ...styles[`detailSettingWrapper_${orientation}`]
               }}
             >
-              {selectedTab >= 0 && tabs[selectedTab].values.map((value, valueIndex) => (
-                <TouchableOpacity
-                  key={String(value)}
-                  onPress={() =>
-                    selectedTab === 2 && value === 0
-                      ? props.onClear()
-                      : props.onChangeState(tabs[selectedTab].id, valueIndex)
-                  }
-                >
-                  <View
-                    style={{
-                      ...styles.detailSettingItem,
-                      ...styles[`detailSettingItem_${orientation}`],
-                      opacity:
-                        props[tabs[selectedTab].id] === valueIndex ? 0.45 : 1
-                    }}
+              {selectedTab >= 0 &&
+                tabs[selectedTab].values.map((value, valueIndex) => (
+                  <TouchableOpacity
+                    key={String(value)}
+                    onPress={() =>
+                      selectedTab === 2 && value === 0
+                        ? props.onClear()
+                        : props.onChangeState(tabs[selectedTab].id, valueIndex)
+                    }
                   >
-                    {tabs[selectedTab].render(value)}
-                  </View>
-                </TouchableOpacity>
-              ))}
+                    <View
+                      style={{
+                        ...styles.detailSettingItem,
+                        ...styles[`detailSettingItem_${orientation}`],
+                        opacity:
+                          props[tabs[selectedTab].id] === valueIndex ? 0.45 : 1
+                      }}
+                    >
+                      {tabs[selectedTab].render(value)}
+                    </View>
+                  </TouchableOpacity>
+                ))}
             </View>
           )}
 

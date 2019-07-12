@@ -125,7 +125,6 @@ class ConferenceManager {
       SUSPEND_DETECTED: handleClose,
       SET_USER_INFO: this._setUserInfo,
       CHANGED_USER_STATUS: this._changedUserStatus,
-      // CHANGED_DOCUMENT_SHARE_MODE: this._changeDocumentShareMode
       CHANGED_DOCUMENT_PAGE: this.changeDocumentPage,
       CHANGED_DOCUMENT_SHARE_MODE: this.changeDocumentShareMode
     };

@@ -27,6 +27,10 @@ class DrawingContainer extends Component {
    * State
    */
   state = {
+    imageLoading: true, // 이미지 정보 로딩
+    imgWidth: 0,
+    imgHeight: 0,
+
     selectedTab: -1,
     selectedColor: 'stroke', // 선택된 색
     // selectedColor: 'lightskyblue', // 선택된 색
@@ -140,9 +144,19 @@ class DrawingContainer extends Component {
   };
 
   /**
-   *
+   * LifeCycle
    */
-  componentDidMount = () => {};
+  componentDidMount = () => {
+    this._handleGetImageSize(this.props.image);
+  };
+
+  shouldComponentUpdate = (nextProps, nextState) => {
+    if (nextProps.image !== this.props.image) {
+      this._handleGetImageSize(this.props.image);
+      return false;
+    }
+    return true;
+  };
 
   /**
    * Render
@@ -159,6 +173,12 @@ class DrawingContainer extends Component {
       />
     );
   }
+
+  _handleGetImageSize = image => {
+    Image.getSize(image, (w, h) => {
+      this.setState({ imageLoading: false, imgWidth: w, imgHeight: h });
+    });
+  };
 
   /**
    * onChangeColor

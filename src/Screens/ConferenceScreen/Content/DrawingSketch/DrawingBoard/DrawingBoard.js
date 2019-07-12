@@ -19,8 +19,8 @@ class DrawingBoard extends Component {
     const { user, stroke, color, onStrokeEnd } = this.props;
     // this._drawingManager.set('BASE_WIDTH');
     // this._drawingManager.set('BASE_WIDTH');
-    const width = this._drawingManager.get('SCREEN_WIDTH');
-    const height = this._drawingManager.get('SCREEN_HEIGHT');
+    // const width = this._drawingManager.get('SCREEN_WIDTH');
+    // const height = this._drawingManager.get('SCREEN_HEIGHT');
     // const backgroundColor = '#fff';
     const backgroundColor = 'transparent';
 
@@ -32,8 +32,8 @@ class DrawingBoard extends Component {
             width: '100%',
             height: '100%',
             backgroundColor,
-            borderWidth: 2,
-            borderColor: '#d1d1d1'
+            // borderWidth: 2,
+            // borderColor: '#d1d1d1'
           }}
           user={user}
           strokeWidth={stroke}

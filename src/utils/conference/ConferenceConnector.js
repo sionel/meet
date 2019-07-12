@@ -321,7 +321,6 @@ class ConferenceConnector {
    * 페이지 전환 공유
    */
   setDocumentPage = (page, presenter) => {
-    console.log(presenter)
     presenter &&
       this._room.sendCommandOnce(SET_DOCUMENT_PAGE, {
         value: this._room.myUserId(),

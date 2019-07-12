@@ -74,7 +74,8 @@ function applySetSharingMode(state, action) {
     ...state,
     documentListMode: false,
     attributes: attributes,
-    presenter: presenter
+    presenter: presenter,
+    page: 0
   };
 }
 
