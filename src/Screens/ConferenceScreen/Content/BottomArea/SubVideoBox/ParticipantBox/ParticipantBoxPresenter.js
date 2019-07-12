@@ -27,7 +27,7 @@ const ParticipantBoxPresenter = props => {
         <RTCView
           style={styles.video}
           mirror={false}
-          objectFit={'contain'}
+          objectFit={'cover'}
           streamURL={stream.toURL()}
         />
       ) : (
@@ -62,18 +62,21 @@ const styles = StyleSheet.create({
     // width: 100,
     // height: 120,
     display: 'flex',
-    marginHorizontal: 2
+    marginHorizontal: 2,
+    marginLeft: 10,
   },
   videoArea: {
     flex: 1,
-    width: 100,
-    height: 100,
+    width: 90,
+    height: 90,
     backgroundColor: '#1D1D1D',
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.5)'
+    borderWidth: 3,
+    borderColor: 'rgba(255, 255, 255, 0.5)',
+    borderRadius: 50,
+    overflow: 'hidden'
   },
   videoAreaSelected: {
-    borderWidth: 5,
+    borderWidth: 3,
     borderColor: '#039BE5'
   },
   video: {
