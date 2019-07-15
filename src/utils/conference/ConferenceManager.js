@@ -126,7 +126,8 @@ class ConferenceManager {
       SET_USER_INFO: this._setUserInfo,
       CHANGED_USER_STATUS: this._changedUserStatus,
       CHANGED_DOCUMENT_PAGE: this.changeDocumentPage,
-      CHANGED_DOCUMENT_SHARE_MODE: this.changeDocumentShareMode
+      CHANGED_DOCUMENT_SHARE_MODE: this.changeDocumentShareMode,
+      CHANGED_DRAW_DATA: this.changeDrawData,
     };
     return handler;
   };
@@ -188,6 +189,16 @@ class ConferenceManager {
    */
   _changedUserStatus = (userId, status) => {
     this._dispatch(participantsAcionCreators.changedStatus(userId, status));
+  };
+
+  /**
+   * 문서공유/드로잉모드 전환
+   */
+  // _changeDocumentShareMode = status => {
+  changeDrawData = (drawData) => {
+    this._dispatch(
+      DocumentShareAcionCreators.setDrawData(drawData)
+    );
   };
 
   /**

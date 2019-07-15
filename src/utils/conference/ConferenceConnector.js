@@ -235,7 +235,8 @@ class ConferenceConnector {
       // 데이터 변경자가 본인과 다를 경우 캔버스 그리기
       if (userId !== this._room.myUserId()) {
         // const _drawData = JSON.parse(drawData);
-        this._drawingManager.handleConvertFormat('mobile', value);
+        const newdata = this._drawingManager.handleConvertFormat('mobile', value);
+        this._handlers.CHANGED_DRAW_DATA(newdata);
       }
     });
 
@@ -328,21 +329,22 @@ class ConferenceConnector {
       });
     this._handlers.CHANGED_DOCUMENT_PAGE(page);
   };
-
+  
   /**
    *
    */
   setDrawingData = data => {
     const newdata = this._drawingManager.handleConvertFormat('pc', data);
-
+    
     // 로그 기록이 있을 경우 참여자들에게 기록 전송
     if (data) {
       // this._room.sendCommand(UPDATE_DRAWING_DATA, {
-      this._room.sendCommandOnce(UPDATE_DRAWING_DATA, {
-        value: this._room.myUserId(),
-        attributes: newdata.attributes
-      });
-    }
+        this._room.sendCommandOnce(UPDATE_DRAWING_DATA, {
+          value: this._room.myUserId(),
+          attributes: newdata.attributes
+        });
+        this._handlers.CHANGED_DRAW_DATA(JSON.parse(newdata.attributes.objects));
+      }
   };
 
   /**

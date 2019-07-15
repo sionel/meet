@@ -108,11 +108,11 @@ function applysetDocumentPage(state, action) {
 
 //#region SET_DRAW_DATA
 
-function setDrawData(page) {
+function setDrawData(drawData) {
   return dispatch => {
     dispatch({
       type: SET_DRAW_DATA,
-      page
+      drawData
     });
   };
 }

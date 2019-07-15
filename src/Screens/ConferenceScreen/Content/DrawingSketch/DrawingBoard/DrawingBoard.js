@@ -20,17 +20,11 @@ class DrawingBoard extends Component {
   state = {};
 
   shouldComponentUpdate = (nextProps, nextState) => {
-    // if (this.props.orientation !== nextProps.orientation) {
-    //   this._drawingManager.resetCanvas(true);
-    // }
-    return true;
-  };
-
-  componentDidUpdate(prevProps, prevState) {
-    if (this.props.orientation !== prevProps.orientation) {
+    if (this.props.orientation !== nextProps.orientation) {
       // this._drawingManager.resetCanvas(true);
     }
-  }
+    return true;
+  };
 
   render() {
     const { user, stroke, color, drawData, onStrokeEnd } = this.props;
@@ -42,6 +36,7 @@ class DrawingBoard extends Component {
     // const height = this._drawingManager.get('SCREEN_HEIGHT');
     // const backgroundColor = '#fff';
     const backgroundColor = 'transparent';
+    console.log('render')
 
     return (
       <Fragment>

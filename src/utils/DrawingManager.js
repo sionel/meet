@@ -73,38 +73,7 @@ class DrawingManager {
   };
 
   drawCanvas = data => {
-    let a = data;
-
-    let obj = a.attributes.data.objects;
-    let temp = [];
-    for (let i = 1; i < obj.length; i++) {
-      let xy = obj[i].coordsPath;
-      temp.push([]);
-      for (let j = 0; j < xy.length; j++) {
-        let xys = xy[j].split(',');
-        temp[i - 1].push(
-          `${Number(xys[0]) * this.BASE_WIDTH},${Number(xys[1]) * this.BASE_HEIGHT}`)
-      }
-    }
-
     this.canvas.clear();
-
-    let newData = {
-      drawer: 'wehago_meet_web',
-      size: {
-        width: this.BASE_WIDTH,
-        height: this.BASE_HEIGHT
-      },
-      path: {
-        id: Number(this.tempId++),
-        color: '#000',
-        width: 3,
-        data: temp[0]
-      }
-    }
-
-    this.canvas.addPath(newData);
-    // this.handleConvertFormat('mobile', a);
   };
 
   /**
@@ -130,10 +99,7 @@ class DrawingManager {
     to: mobile , pc
     */
     if (to === 'mobile') {
-      const newData = this._handleConvertPcToMobile(data);
-      if (this.canvas) {
-        this.canvas.addPath(newData);
-      }
+      return this._handleConvertPcToMobile(data);
     } else {
       return this._handleConvertMobileToPc(data);
     }
@@ -143,28 +109,34 @@ class DrawingManager {
    * PC데이터 -> Mobile데이터
    */
   _handleConvertPcToMobile = data => {
-    let drawDataToJson = JSON.parse(data.attributes.objects);
+    let objects = JSON.parse(data.attributes.objects);
 
-    let newData = {
-      drawer: 'wehago_meet_web',
-      size: {
-        width: this.BASE_WIDTH,
-        height: this.BASE_HEIGHT
-      },
-      path: {
-        id: Number(this.tempId++),
-        color: drawDataToJson.stroke,
-        width: drawDataToJson.strokeWidth,
-        data: []
-      }
-    };
+    this.canvas.clear();
 
-    drawDataToJson.coordsPath.map(item => {
-      const location = item.split(',');
-      newData.path.data.push(`${Number(location[0]) * this.BASE_WIDTH}, ${Number(location[1]) * this.BASE_HEIGHT}`);
+    objects.map(item => {
+      let newData = {
+        drawer: 'wehago_meet_web',
+        size: {
+          width: this.BASE_WIDTH,
+          height: this.BASE_HEIGHT
+        },
+        path: {
+          id: Number(this.tempId++),
+          color: item.stroke,
+          width: item.strokeWidth,
+          data: []
+        }
+      };
+
+      item.coordsPath.map(xy => {
+        const location = xy.split(',');
+        newData.path.data.push(`${Number(location[0]) * this.BASE_WIDTH}, ${Number(location[1]) * this.BASE_HEIGHT}`);
+      });
+
+      this.canvas.addPath(newData);
     });
 
-    return newData;
+    return objects;
   };
 
   /**
@@ -174,27 +146,37 @@ class DrawingManager {
     const { id, color, width: strokeWidth, data } = drawingData.path;
     const { width, height } = drawingData.size;
 
+    let object = {
+      coordsPath: [],
+      width: width,
+      height: height,
+      opacity: 1,
+      stroke: color,
+      strokeWidth: strokeWidth,
+    };
+    data.map(item => {
+      const location = item.split(',');
+      object.coordsPath.push(`${Number(location[0]) / this.BASE_WIDTH}, ${Number(location[1]) / this.BASE_HEIGHT}`);
+    });
+
     // to drawData
     let newData = {
       value: id,
       tagName: 'UPDATE_DRAWING_DATA',
       attributes: {
-        objects: {
-          coordsPath: [],
-          width: width,
-          height: height,
-          opacity: 1,
-          stroke: color,
-          strokeWidth: strokeWidth,
-        }
+        objects: this.DRAW_DATA
+        // objects: {
+        //   coordsPath: [],
+        //   width: width,
+        //   height: height,
+        //   opacity: 1,
+        //   stroke: color,
+        //   strokeWidth: strokeWidth,
+        // }
       }
     }
-
-    data.map(item => {
-      const location = item.split(',');
-      newData.attributes.objects.coordsPath.push(`${Number(location[0]) / this.BASE_WIDTH}, ${Number(location[1]) / this.BASE_HEIGHT}`);
-    });
-    newData.attributes.objects = JSON.stringify(newData.attributes.objects);
+    this.DRAW_DATA.push(object);
+    newData.attributes.objects = JSON.stringify(this.DRAW_DATA);
 
     return newData;
   };
