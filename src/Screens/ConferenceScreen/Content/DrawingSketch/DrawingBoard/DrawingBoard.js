@@ -11,14 +11,33 @@ class DrawingBoard extends Component {
   constructor(props) {
     super(props);
     this._drawingManager = new DrawingManager();
+    // this._drawingManager.set('BASE_WIDTH', props.width);
+    // this._drawingManager.set('BASE_HEIGHT', props.height);
+    // this._drawingManager.set('SCREEN_WIDTH', props.rWidth);
+    // this._drawingManager.set('SCREEN_HEIGHT', props.rHeight);
   }
 
   state = {};
 
+  shouldComponentUpdate = (nextProps, nextState) => {
+    // if (this.props.orientation !== nextProps.orientation) {
+    //   this._drawingManager.resetCanvas(true);
+    // }
+    return true;
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.orientation !== prevProps.orientation) {
+      // this._drawingManager.resetCanvas(true);
+    }
+  }
+
   render() {
-    const { user, stroke, color, onStrokeEnd } = this.props;
-    // this._drawingManager.set('BASE_WIDTH');
-    // this._drawingManager.set('BASE_WIDTH');
+    const { user, stroke, color, drawData, onStrokeEnd } = this.props;
+    this._drawingManager.set('DRAW_DATA', drawData);
+    this._drawingManager.set('BASE_WIDTH', this.props.rWidth);
+    this._drawingManager.set('BASE_HEIGHT', this.props.rHeight);
+    this._drawingManager.set('SCALE', this.props.scale);
     // const width = this._drawingManager.get('SCREEN_WIDTH');
     // const height = this._drawingManager.get('SCREEN_HEIGHT');
     // const backgroundColor = '#fff';
@@ -29,9 +48,9 @@ class DrawingBoard extends Component {
         <SketchCanvas
           ref={ref => this._drawingManager.setRef(ref)}
           style={{
-            width: '100%',
-            height: '100%',
-            backgroundColor,
+            width: this.props.rWidth,
+            height: this.props.rHeight,
+            backgroundColor
             // borderWidth: 2,
             // borderColor: '#d1d1d1'
           }}
@@ -47,12 +66,12 @@ class DrawingBoard extends Component {
   /**
    *
    */
-  _handleGetDrawingSize = type => {
-    return {
-      width: 100,
-      height: 100
-    };
-  };
+  // _handleGetDrawingSize = type => {
+  //   return {
+  //     width: 100,
+  //     height: 100
+  //   };
+  // };
 }
 
 DrawingBoard.defaultProps = {

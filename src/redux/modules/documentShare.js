@@ -4,6 +4,7 @@
 const SET_DOCUMENT_LIST_MODE = 'SET_DOCUMENT_LIST_MODE';
 const SET_SHARING_MODE = 'SET_SHARING_MODE';
 const SET_DOCUMENT_PAGE = 'SET_DOCUMENT_PAGE';
+const SET_DRAW_DATA = 'SET_DRAW_DATA';
 
 //#endregion Action Types
 
@@ -14,6 +15,7 @@ const initialState = {
   attributes: false,
   presenter: false,
   page: 0,
+  drawData: [],
 };
 
 //#endregion
@@ -28,6 +30,8 @@ function reducer(state = initialState, action) {
       return applySetSharingMode(state, action);
     case SET_DOCUMENT_PAGE:
       return applysetDocumentPage(state, action);
+    case SET_DRAW_DATA:
+      return applysetDrawData(state, action);
     default:
       return state;
   }
@@ -81,7 +85,6 @@ function applySetSharingMode(state, action) {
 
 //#endregion
 
-
 //#region SET_DOCUMENT_PAGE
 
 function setDocumentPage(page) {
@@ -103,10 +106,32 @@ function applysetDocumentPage(state, action) {
 
 //#endregion
 
+//#region SET_DRAW_DATA
+
+function setDrawData(page) {
+  return dispatch => {
+    dispatch({
+      type: SET_DRAW_DATA,
+      page
+    });
+  };
+}
+
+function applysetDrawData(state, action) {
+  const { drawData } = action;
+  return {
+    ...state,
+    drawData: drawData
+  };
+}
+
+//#endregion
+
 export const actionCreators = {
   setDocumentListMode,
   setSharingMode,
   setDocumentPage,
+  setDrawData,
 };
 
 export default reducer;

@@ -85,8 +85,14 @@ const DrawingPresenter = props => {
               ]}
             >
               <DrawingBoard
+                orientation={orientation}
+                width={imgWidth}
+                height={imgHeight}
+                rWidth={resultSize.width}
+                rHeight={resultSize.height}
+                scale={scale}
                 onStrokeEnd={props.onSetDrawingData}
-                color={selectedTab == 2 ? '#ffffff' : tabs[1].values[color]}
+                color={selectedTab == 2 ? 'transparent' : tabs[1].values[color]}
                 stroke={
                   selectedTab == 2
                     ? tabs[2].values[eraser]

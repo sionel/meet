@@ -159,7 +159,7 @@ class FileListContainer extends Component {
       isWedrive: false,
       isFullPreview: false,
       TokenID: authData.AUTH_A_TOKEN,
-      method: method,
+      method: method
     };
 
     // wedrive file 상세정보 가져오기
@@ -178,18 +178,15 @@ class FileListContainer extends Component {
       // return;
     }
 
-    await Image.getSize('https://api.wehago.com/hermes/resource/store/1e/c0/d6a8ebb79e382f974e6e405433862f452b56/document_0001.jpg', (w, h) => {
-      console.log(w,h);
-      this.props.onChangeSharingMode(
-        {
-          fileName: '테스트.xlsx',
-          owner: 'peacejung',
-          resources:
-            '["https://api.wehago.com/hermes/resource/store/1e/c0/d6a8ebb79e382f974e6e405433862f452b56/document_0001.jpg","https://api.wehago.com/hermes/resource/store/1e/c0/d6a8ebb79e382f974e6e405433862f452b56/document_0002.jpg","https://api.wehago.com/hermes/resource/store/1e/c0/d6a8ebb79e382f974e6e405433862f452b56/document_0003.jpg","https://api.wehago.com/hermes/resource/store/1e/c0/d6a8ebb79e382f974e6e405433862f452b56/document_0004.jpg"]'
-        },
-        true
-      );
-    })
+    this.props.onChangeSharingMode(
+      {
+        fileName: '테스트.xlsx',
+        owner: 'peacejung',
+        resources:
+          '["https://api.wehago.com/hermes/resource/store/1e/c0/d6a8ebb79e382f974e6e405433862f452b56/document_0001.jpg","https://api.wehago.com/hermes/resource/store/1e/c0/d6a8ebb79e382f974e6e405433862f452b56/document_0002.jpg","https://api.wehago.com/hermes/resource/store/1e/c0/d6a8ebb79e382f974e6e405433862f452b56/document_0003.jpg","https://api.wehago.com/hermes/resource/store/1e/c0/d6a8ebb79e382f974e6e405433862f452b56/document_0004.jpg"]'
+      },
+      true
+    );
   };
 }
 
