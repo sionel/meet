@@ -279,8 +279,9 @@ class DrawingContainer extends Component {
   /**
    *
    */
-  _handleClearAll = () => {
+  _handleClearAll = (a) => {
     // this.props.onClear();
+    console.log(a)
   };
 }
 

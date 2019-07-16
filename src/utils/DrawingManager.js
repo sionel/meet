@@ -66,14 +66,42 @@ class DrawingManager {
       case 'SCREEN_WIDTH':
       case 'SCREEN_HEIGHT':
       case 'SCALE':
-        return (this[target] = value);
+        this[target] = value;
+        break;
       default:
         return null;
     }
   };
 
   drawCanvas = data => {
-    this.canvas.clear();
+    if (!this.canvas) return;
+
+    setTimeout(() => {
+      this.canvas.clear();
+
+      data.map(item => {
+        let newData = {
+          drawer: 'wehago_meet_web',
+          size: {
+            width: this.BASE_WIDTH,
+            height: this.BASE_HEIGHT
+          },
+          path: {
+            id: Number(this.tempId++),
+            color: item.stroke,
+            width: item.strokeWidth,
+            data: []
+          }
+        };
+
+        item.coordsPath.map(xy => {
+          const location = xy.split(',');
+          newData.path.data.push(`${Number(location[0]) * this.BASE_WIDTH},${Number(location[1]) * this.BASE_HEIGHT}`);
+        });
+
+        this.canvas.addPath(newData);
+      });
+    }, 10)
   };
 
   /**
@@ -110,32 +138,6 @@ class DrawingManager {
    */
   _handleConvertPcToMobile = data => {
     let objects = JSON.parse(data.attributes.objects);
-
-    this.canvas.clear();
-
-    objects.map(item => {
-      let newData = {
-        drawer: 'wehago_meet_web',
-        size: {
-          width: this.BASE_WIDTH,
-          height: this.BASE_HEIGHT
-        },
-        path: {
-          id: Number(this.tempId++),
-          color: item.stroke,
-          width: item.strokeWidth,
-          data: []
-        }
-      };
-
-      item.coordsPath.map(xy => {
-        const location = xy.split(',');
-        newData.path.data.push(`${Number(location[0]) * this.BASE_WIDTH}, ${Number(location[1]) * this.BASE_HEIGHT}`);
-      });
-
-      this.canvas.addPath(newData);
-    });
-
     return objects;
   };
 
@@ -152,7 +154,7 @@ class DrawingManager {
       height: height,
       opacity: 1,
       stroke: color,
-      strokeWidth: strokeWidth,
+      strokeWidth: strokeWidth
     };
     data.map(item => {
       const location = item.split(',');
@@ -165,16 +167,8 @@ class DrawingManager {
       tagName: 'UPDATE_DRAWING_DATA',
       attributes: {
         objects: this.DRAW_DATA
-        // objects: {
-        //   coordsPath: [],
-        //   width: width,
-        //   height: height,
-        //   opacity: 1,
-        //   stroke: color,
-        //   strokeWidth: strokeWidth,
-        // }
       }
-    }
+    };
     this.DRAW_DATA.push(object);
     newData.attributes.objects = JSON.stringify(this.DRAW_DATA);
 

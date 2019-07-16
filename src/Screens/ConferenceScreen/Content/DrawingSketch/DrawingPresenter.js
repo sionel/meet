@@ -85,6 +85,7 @@ const DrawingPresenter = props => {
               ]}
             >
               <DrawingBoard
+                presenter={presenter}
                 orientation={orientation}
                 width={imgWidth}
                 height={imgHeight}
@@ -98,6 +99,7 @@ const DrawingPresenter = props => {
                     ? tabs[2].values[eraser]
                     : tabs[0].values[stroke]
                 }
+                onClearAll={props.onClearAll}
               />
             </ImageBackground>
           )}

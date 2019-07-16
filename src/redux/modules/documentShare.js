@@ -79,7 +79,8 @@ function applySetSharingMode(state, action) {
     documentListMode: false,
     attributes: attributes,
     presenter: presenter,
-    page: 0
+    page: 0,
+    drawData: []
   };
 }
 

@@ -224,7 +224,7 @@ class ConferenceConnector {
      */
     this._room.addCommandListener(UPDATE_DRAWING_DATA, value => {
       const {
-        attributes: { drawData },
+        attributes: { objects },
         value: userId
       } = value;
 
@@ -235,8 +235,8 @@ class ConferenceConnector {
       // 데이터 변경자가 본인과 다를 경우 캔버스 그리기
       if (userId !== this._room.myUserId()) {
         // const _drawData = JSON.parse(drawData);
-        const newdata = this._drawingManager.handleConvertFormat('mobile', value);
-        this._handlers.CHANGED_DRAW_DATA(newdata);
+        this._drawingManager.handleConvertFormat('mobile', value);
+        this._handlers.CHANGED_DRAW_DATA(JSON.parse(objects));
       }
     });
 
