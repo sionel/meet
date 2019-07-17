@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#1D1D1D',
     borderWidth: 3,
     borderColor: 'rgba(255, 255, 255, 0.5)',
-    borderRadius: 50,
+    // borderRadius: 50,
     overflow: 'hidden'
   },
   videoAreaSelected: {

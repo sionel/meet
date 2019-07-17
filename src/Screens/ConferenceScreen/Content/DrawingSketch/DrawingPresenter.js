@@ -218,7 +218,7 @@ const DrawingPresenter = props => {
                 // onPress={() => props.onChangeDrawing(!props.drawing)}
                 onPress={() => props.onSetDrawingData()}
               >
-                <Text style={{ fontSize: 18, color: '#fff' }}>모두 삭제</Text>
+                <Text style={{ fontSize: 18, color: '#fff', marginLeft: 10 }}>모두 삭제</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -287,7 +287,7 @@ const styles = StyleSheet.create({
     width: 134,
     top: 48,
     right: 0,
-    bottom: 0
+    bottom: 0,
   },
 
   // 완료버튼
