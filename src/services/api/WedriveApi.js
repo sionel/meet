@@ -14,23 +14,26 @@ import {
  */
 const getToken = async (a_token, r_token, cno, ccode, HASH_KEY, portalID) => {
   try {
-    // const url = `${wehagoBaseURL}/WeDriveStorage/services/login?TokenID=${a_token}&oAuthTokenId=${a_token}&portalID=${portalID}`;
+    // const url = `${wehagoBaseURL}/WeDriveStorage/services/login`;
+    // // const url = `${wehagoBaseURL}/WeDriveStorage/services/login?TokenID=${a_token}&oAuthTokenId=${a_token}&portalID=${portalID}`;
     // const headers = securityRequest(a_token, r_token, url, HASH_KEY);
 
     // const data = {
     //   method: 'POST',
     //   headers: {
     //     ...headers, // 위하고 사인
-    //     Accept: 'application/json',
+    //     // Accept: 'application/json',
     //     'Content-Type': 'application/json',
-    //     service: 'loginService',
+    //     'Accept-Language': 'ko-KR;q=1.0',
+    //     'Accept-Encoding': 'gzip;q=1.0, compress;q=0.5',
+    //     'User-Agent': 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 3_0 like Mac OS X; en-us)',
     //     method: 'login',
+    //     service: 'loginService',
     //   },
-    //   body: serialize({
-    //     TokenID: a_token,
-    //     oAuthTokenId: a_token,
-    //     portalID: portalID
-    //   })
+    //   // body: serialize({
+    //   //   TokenID: a_token,
+    //   //   FileUniqueKey: `${portalID}@`
+    //   // })
     // };
 
     const url = `${wehagoBaseURL}/common/wedrive/init-info?cno=${cno}&ccode=${ccode}`;
@@ -45,6 +48,7 @@ const getToken = async (a_token, r_token, cno, ccode, HASH_KEY, portalID) => {
     console.log(data)
     const response = await fetch(url, data);
     const responseJson = await response.json();
+    console.log('result', responseJson)
     return responseJson;
   } catch (err) {
     return err;

@@ -9,8 +9,7 @@ import {
   TouchableOpacity,
   ScrollView,
   FlatList,
-  StatusBar,
-  SafeAreaView
+  StatusBar
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import DrawingSketch from '../DrawingSketch';
@@ -32,15 +31,15 @@ const FileSharingPresenter = props => {
     onChangePage
   } = props;
 
-  // const headerPadding =
-  //   orientation === 'vertical' ? 0 + (isIOS ? 24 : 0) + (hasNotch ? 12 : 0) : 0;
-  // const bottomPadding =
-  //   orientation === 'vertical'
-  //     ? 0 + (hasNotch ? 12 : 0)
-  //     : 0 + (hasNotch ? 0 : 0);
-  // const containerPadding =
-  //   orientation === 'vertical' ? 0 : 0 + (hasNotch ? 0 : 0);
-  // const titleWidth = width;// - (containerPadding + 12) * 2 - 28 - 30 * 1;
+  const headerPadding =
+    orientation === 'vertical' ? 0 + (isIOS ? 24 : 0) + (hasNotch ? 12 : 0) : 0;
+  const bottomPadding =
+    orientation === 'vertical'
+      ? 0 + (hasNotch ? 12 : 0)
+      : 0 + (hasNotch ? 0 : 0);
+  const containerPadding =
+    orientation === 'vertical' ? 0 : 0 + (hasNotch ? 36 : 0);
+  const titleWidth = width - (containerPadding + 12) * 2 - 28 - 30 * 1;
 
   // 제목 표시줄
   const headerTitle = (
@@ -49,10 +48,10 @@ const FileSharingPresenter = props => {
         ...styles.topArea,
         // height: 46 + headerPadding,
         // 전체 기본 padding 12
-        paddingTop: 12,
+        paddingTop: headerPadding + 12,
         paddingBottom: 12,
-        paddingLeft: 12,
-        paddingRight: 12
+        paddingLeft: containerPadding + 12,
+        paddingRight: containerPadding + 12
       }}
     >
       {presenter && (
@@ -69,7 +68,7 @@ const FileSharingPresenter = props => {
       <Text
         numberOfLines={1}
         ellipsizeMode={'tail'}
-        style={[styles.headerText, { width: '100%' }]}
+        style={[styles.headerText, { width: titleWidth }]}
       >
         {props.attributes.fileName}
       </Text>
@@ -133,13 +132,12 @@ const FileSharingPresenter = props => {
   );
 
   return (
-    <SafeAreaView style={{flex: 1,  backgroundColor: '#000', position: 'relative'}}>
-      <View style={styles.container}>
-      {/* {!showTool && !showPreView && <StatusBar hidden={true} />} */}
+    <View style={styles.container}>
+      {!showTool && !showPreView && <StatusBar hidden={true} />}
 
       {/* topArea */}
       <View style={styles.headerTitle}>
-        {/* {!showTool && orientation === 'vertical' && (
+        {!showTool && orientation === 'vertical' && (
           <View
             style={[
               styles.hideTopArea,
@@ -149,7 +147,7 @@ const FileSharingPresenter = props => {
               }
             ]}
           />
-        )} */}
+        )}
         {showTool && headerTitle}
         {showPreView && preView}
         <CustomButton
@@ -168,8 +166,8 @@ const FileSharingPresenter = props => {
         style={[
           styles.mainArea,
           {
-            paddingLeft: 0,
-            paddingRight: 0
+            paddingLeft: containerPadding,
+            paddingRight: containerPadding
             // paddingBottom: bottomPadding + (showTool && presenter ? 54 : 0) + 12
           }
         ]}
@@ -230,7 +228,6 @@ const FileSharingPresenter = props => {
       )} */}
       {/* end bottomArea */}
     </View>
-      </SafeAreaView>
   );
 };
 

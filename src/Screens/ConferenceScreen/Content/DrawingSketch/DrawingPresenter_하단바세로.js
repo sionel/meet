@@ -56,7 +56,7 @@ const DrawingPresenter = props => {
   };
 
   return (
-    <View style={[styles.container, styles[`flexDirection_vertical`]]}>
+    <View style={[styles.container, styles[`flexDirection_${orientation}`]]}>
       {/* 드로잉 영역 */}
       <TouchableOpacity
         activeOpacity={1}
@@ -112,21 +112,15 @@ const DrawingPresenter = props => {
         <View
           style={[
             styles.bottomArea,
-            styles[`bottomArea_vertical`],
-            // {
-            //   width: vertical // 세로모드
-            //     ? '100%'
-            //     : hasNotch // 가로모드
-            //     ? 134 - (palette ? 0 : 55) // 노치 유무
-            //     : 110 - (palette ? 0 : 55) // 서브팔레트 유무
-            // },
-            // {
-            //   height: !vertical
-            //     ? 'auto'
-            //     : hasNotch
-            //     ? 134 - (palette ? 0 : 55)
-            //     : 110 - (palette ? 0 : 55)
-            // },
+            styles[`bottomArea_${orientation}`],
+            {
+              width: '100%'
+            },
+            {
+              height: hasNotch
+              ? 134 - (palette ? 0 : 55)
+              : 110 - (palette ? 0 : 55)
+            },
             // { right: hasNotch && !vertical ? -36 : 0 }
           ]}
         >
@@ -135,7 +129,7 @@ const DrawingPresenter = props => {
             <View
               style={{
                 ...styles.detailSettingWrapper,
-                ...styles[`detailSettingWrapper_vertical`]
+                ...styles[`detailSettingWrapper_${orientation}`]
               }}
             >
               {selectedTab >= 0 &&
@@ -151,7 +145,7 @@ const DrawingPresenter = props => {
                     <View
                       style={{
                         ...styles.detailSettingItem,
-                        ...styles[`detailSettingItem_vertical`],
+                        ...styles[`detailSettingItem_${orientation}`],
                         opacity:
                           props[tabs[selectedTab].id] === valueIndex ? 0.45 : 1
                       }}
@@ -167,14 +161,14 @@ const DrawingPresenter = props => {
           <View
             style={[
               styles.mainSettingWrapper,
-              styles[`mainSettingWrapper_vertical`]
+              styles[`mainSettingWrapper_${orientation}`]
             ]}
           >
             {/* === 메인탭 === */}
             <View
               style={[
                 styles.mainTabWrapper,
-                styles[`mainTabWrapper_vertical`]
+                styles[`mainTabWrapper_${orientation}`]
               ]}
             >
               {tabs.map((tab, tabIndex) => (
@@ -194,7 +188,7 @@ const DrawingPresenter = props => {
                         selectedTab === tabIndex
                           ? 'rgba(255,255,255, 0.45)'
                           : '#00000000',
-                      ...styles[`mainSettingItem_vertical`]
+                      ...styles[`mainSettingItem_${orientation}`]
                     }}
                   >
                     <Icon name={tab.icon} size={20} color={'#fff'} />
@@ -208,7 +202,7 @@ const DrawingPresenter = props => {
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: vertical ? 'flex-end' : 'center',
-                // marginRight: vertical ? 7.5 : 0,
+                marginRight: vertical ? 7.5 : 0,
                 marginTop: orientation === 'horizontal' ? 7.5 : 0
               }}
             >
@@ -225,7 +219,7 @@ const DrawingPresenter = props => {
           {/* ===== 메인선택 ===== */}
 
           {/* 노치영역 */}
-          {/* {hasNotch && (
+          {hasNotch && (
             <View
               style={{
                 width: vertical ? '100%' : 24,
@@ -233,7 +227,7 @@ const DrawingPresenter = props => {
                 backgroundColor: '#000'
               }}
             />
-          )} */}
+          )}
         </View>
       )}
     </View>
@@ -256,7 +250,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column'
   },
   flexDirection_horizontal: {
-    flexDirection: 'row'
+    flexDirection: 'column'
   },
 
   boardContainer: {
@@ -268,27 +262,26 @@ const styles = StyleSheet.create({
     width: '100%'
   },
   boardContainer_horizontal: {
-    height: '100%'
+    width: '100%'
   },
 
   bottomArea: {
     position: 'absolute',
-    backgroundColor: '#000',
+    backgroundColor: '#000'
   },
   bottomArea_vertical: {
     flexDirection: 'column',
-    // height: 110,
+    height: 110,
     bottom: 0,
     left: 0,
-    right: 0,
-    width: '100%'
+    right: 0
   },
   bottomArea_horizontal: {
-    flexDirection: 'row',
-    width: 134,
-    top: 48,
-    right: 0,
+    flexDirection: 'column',
+    height: 110,
     bottom: 0,
+    left: 0,
+    right: 0
   },
 
   // 완료버튼
@@ -319,11 +312,13 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   mainSettingWrapper_horizontal: {
-    flexDirection: 'column',
-    width: 55,
-    height: '100%',
-    paddingTop: 7.5,
-    paddingBottom: 7.5
+    flexDirection: 'row',
+    width: '100%',
+    height: 55,
+    paddingLeft: 7.5,
+    paddingRight: 7.5,
+    justifyContent: 'space-between',
+    alignItems: 'center'
   },
 
   mainTabWrapper: {
@@ -337,7 +332,7 @@ const styles = StyleSheet.create({
     paddingRight: 7.5
   },
   mainTabWrapper_horizontal: {
-    flexDirection: 'column'
+    flexDirection: 'row',
   },
 
   mainSettingItem: {
@@ -351,7 +346,7 @@ const styles = StyleSheet.create({
     marginRight: 7.5
   },
   mainSettingItem_horizontal: {
-    marginBottom: 7.5
+    marginRight: 7.5
   },
 
   // 서브 팔레트
@@ -369,10 +364,11 @@ const styles = StyleSheet.create({
     paddingRight: 7.5
   },
   detailSettingWrapper_horizontal: {
-    flexDirection: 'column',
-    width: 55,
-    height: '100%',
-    justifyContent: 'flex-start'
+    flexDirection: 'row',
+    width: '100%',
+    height: 55,
+    paddingLeft: 7.5,
+    paddingRight: 7.5
   },
 
   detailSettingItem: {
