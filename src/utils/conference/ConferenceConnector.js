@@ -222,21 +222,18 @@ class ConferenceConnector {
     /**
      * 드로잉 데이터 변경 감지
      */
-    this._room.addCommandListener(UPDATE_DRAWING_DATA, value => {
+    this._room.addCommandListener(UPDATE_DOCUMENT_DATA, value => {
       const {
-        attributes: { objects },
+        attributes: { documentData, from },
         value: userId
       } = value;
-
-      if (!this._drawingManager) {
-      } else {
-      }
 
       // 데이터 변경자가 본인과 다를 경우 캔버스 그리기
       if (userId !== this._room.myUserId()) {
         // const _drawData = JSON.parse(drawData);
-        this._drawingManager.handleConvertFormat('mobile', value);
-        this._handlers.CHANGED_DRAW_DATA(JSON.parse(objects));
+        // this._drawingManager.handleConvertFormat('web', value);
+        console.log('documentData', documentData);
+        this._handlers.CHANGED_DRAW_DATA(JSON.parse(documentData));
       }
     });
 
@@ -329,22 +326,26 @@ class ConferenceConnector {
       });
     this._handlers.CHANGED_DOCUMENT_PAGE(page);
   };
-  
+
   /**
    *
    */
   setDrawingData = data => {
-    const newdata = this._drawingManager.handleConvertFormat('pc', data);
-    
     // 로그 기록이 있을 경우 참여자들에게 기록 전송
-    if (data) {
-      // this._room.sendCommand(UPDATE_DRAWING_DATA, {
-        this._room.sendCommandOnce(UPDATE_DRAWING_DATA, {
-          value: this._room.myUserId(),
-          attributes: newdata.attributes
-        });
-        this._handlers.CHANGED_DRAW_DATA(JSON.parse(newdata.attributes.objects));
+    const newData = this._drawingManager.handleConvertFormat('mobile', data);
+    // this._room.sendCommand(UPDATE_DOCUMENT_DATA, {
+    this._room.sendCommandOnce(UPDATE_DOCUMENT_DATA, {
+      value: this._room.myUserId(),
+      attributes: {
+        documentData: newData.attributes.documentData,
+        width: newData.attributes.width,
+        height: newData.attributes.height,
+        from: 'mobile'
       }
+    });
+    this._handlers.CHANGED_DRAW_DATA(
+      JSON.parse(newData.attributes.documentData)
+    );
   };
 
   /**

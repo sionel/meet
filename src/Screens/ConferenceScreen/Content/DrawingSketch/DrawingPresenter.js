@@ -85,6 +85,7 @@ const DrawingPresenter = props => {
               ]}
             >
               <DrawingBoard
+                image={image}
                 presenter={presenter}
                 orientation={orientation}
                 width={imgWidth}
@@ -215,7 +216,7 @@ const DrawingPresenter = props => {
                 // style={styles[`modeChangeButton_${orientation}`]}
                 // onPress={() => alert(!props.drawing)}
                 // onPress={() => props.onChangeDrawing(!props.drawing)}
-                onPress={() => props.onChangeDrawingMode(false)}
+                onPress={() => props.onSetDrawingData()}
               >
                 <Text style={{ fontSize: 18, color: '#fff' }}>모두 삭제</Text>
               </TouchableOpacity>

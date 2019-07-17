@@ -6,7 +6,8 @@ import { actionCreators as DocumentShareActions } from '../../../../../redux/mod
 // map state to props
 const mapStateToProps = state => ({
   auth: state.user.auth,
-  wedrive: state.wedrive.storageList,
+  wedriveId: state.wedrive.tokenId,
+  wedriveList: state.wedrive.storageList,
 });
 
 // map dispatch to props

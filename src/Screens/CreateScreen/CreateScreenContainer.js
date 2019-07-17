@@ -190,7 +190,7 @@ class CreateScreenContainer extends React.Component {
         item: { videoRoomId, selectedRoom: this.state.selectedRoomName }
       });
     } else if (createResult.resultCode === 400) {
-      alert('방에 참여시켜주세요');
+      alert(createResult.resultMsg);
     } else {
       alert('화상대화 생성에 실패하였습니다. 다시 시도해 주세요');
     }
@@ -225,7 +225,7 @@ class CreateScreenContainer extends React.Component {
         auth.HASH_KEY
       );
       if (!result.resultData) {
-        alert('이미 종료된 대화방입니다.');
+        alert(result.resultMsg);
         return;
       }
     }

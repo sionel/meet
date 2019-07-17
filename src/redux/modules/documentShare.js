@@ -15,7 +15,7 @@ const initialState = {
   attributes: false,
   presenter: false,
   page: 0,
-  drawData: [],
+  documentData: [],
 };
 
 //#endregion
@@ -80,7 +80,7 @@ function applySetSharingMode(state, action) {
     attributes: attributes,
     presenter: presenter,
     page: 0,
-    drawData: []
+    documentData: []
   };
 }
 
@@ -109,20 +109,20 @@ function applysetDocumentPage(state, action) {
 
 //#region SET_DRAW_DATA
 
-function setDrawData(drawData) {
+function setDrawData(documentData) {
   return dispatch => {
     dispatch({
       type: SET_DRAW_DATA,
-      drawData
+      documentData
     });
   };
 }
 
 function applysetDrawData(state, action) {
-  const { drawData } = action;
+  const { documentData } = action;
   return {
     ...state,
-    drawData: drawData
+    documentData: documentData
   };
 }
 

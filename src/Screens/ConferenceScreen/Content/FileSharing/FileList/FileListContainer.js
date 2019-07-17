@@ -15,7 +15,7 @@ class FileListContainer extends Component {
       <FileListPresenter
         hasNotch={hasNotch}
         orientation={orientation}
-        documentList={this.props.wedrive}
+        documentList={this.props.wedriveList}
         // documentList={tempList}
         setSharingMode={this._handleSharingMode}
         setDocumentListMode={this._handleDocumentListMode}
@@ -50,7 +50,8 @@ class FileListContainer extends Component {
       AUTH_R_TOKEN,
       last_access_company_no,
       last_company,
-      HASH_KEY
+      HASH_KEY,
+      portal_id
     } = this.props.auth;
 
     const authData = {
@@ -58,11 +59,13 @@ class FileListContainer extends Component {
       AUTH_R_TOKEN,
       cno: last_access_company_no,
       ccode: last_company.company_code,
-      HASH_KEY
+      HASH_KEY,
+      portalID: `${portal_id}`
     };
 
     // wedrive token 가져오기
     const initInfoResponse = await this.props.initInfoRequest(authData);
+    console.log(initInfoResponse)
     if (!initInfoResponse.initInfo) {
       Alert.alert(
         'Error',
@@ -71,6 +74,7 @@ class FileListContainer extends Component {
           initInfoResponse.resultMsg,
         [{ text: 'OK' }]
       );
+      this._handleDocumentListMode(false);
       return;
     }
     // alert(JSON.stringify(initInfoResponse));
@@ -148,18 +152,20 @@ class FileListContainer extends Component {
     }
 
     const fileInfo = {
-      Ext: file.extentionType,
-      FileName: file.fileUniqueKey,
-      cno: authData.cno,
-      target_cno: authData.cno,
-      ServiceCode: 'wedrive',
-      ServiceKey: '',
-      BucketType: 'C',
-      BucketName: undefined,
-      isWedrive: false,
-      isFullPreview: false,
-      TokenID: authData.AUTH_A_TOKEN,
-      method: method
+      // Ext: file.extentionType,
+      FileUniqueKey: file.fileUniqueKey,
+      // cno: authData.cno,
+      // target_cno: authData.cno,
+      // ServiceCode: 'wedrive',
+      // ServiceKey: '',
+      // BucketType: 'C',
+      // BucketName: undefined,
+      // isWedrive: false,
+      // isFullPreview: false,
+      TokenID: this.props.wedriveId,
+      service: 'storageService',
+      method: 'getFileInfoObject',
+      locale: 'ko'
     };
 
     // wedrive file 상세정보 가져오기
@@ -167,12 +173,12 @@ class FileListContainer extends Component {
       authData,
       fileInfo
     );
-    if (!fileInfoResponse.fileInfo) {
+    if (fileInfoResponse.errors) {
       Alert.alert(
         'Error',
         '파일 상세정보를 불러오지 못했습니다.\nerror: ' +
-          fileInfoResponse.resultCode +
-          fileInfoResponse.resultMsg,
+          fileInfoResponse.errors.code +
+          fileInfoResponse.errors.message,
         [{ text: 'OK' }]
       );
       // return;

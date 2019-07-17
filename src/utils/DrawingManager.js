@@ -80,28 +80,30 @@ class DrawingManager {
       this.canvas.clear();
 
       data.map(item => {
-        let newData = {
-          drawer: 'wehago_meet_web',
-          size: {
-            width: this.BASE_WIDTH,
-            height: this.BASE_HEIGHT
-          },
-          path: {
-            id: Number(this.tempId++),
-            color: item.stroke,
-            width: item.strokeWidth,
-            data: []
-          }
-        };
-
-        item.coordsPath.map(xy => {
-          const location = xy.split(',');
-          newData.path.data.push(`${Number(location[0]) * this.BASE_WIDTH},${Number(location[1]) * this.BASE_HEIGHT}`);
-        });
-
-        this.canvas.addPath(newData);
+        if (item.type === 'path') {
+          let newData = {
+            drawer: 'wehago_meet_web',
+            size: {
+              width: this.BASE_WIDTH,
+              height: this.BASE_HEIGHT
+            },
+            path: {
+              id: Number(this.tempId++),
+              color: item.stroke,
+              width: item.strokeWidth * this.BASE_WIDTH,
+              data: []
+            }
+          };
+  
+          item.mobilePath.map(xy => {
+            const location = xy.split(',');
+            newData.path.data.push(`${Number(location[0]) * this.BASE_WIDTH},${Number(location[1]) * this.BASE_HEIGHT}`);
+          });
+  
+          this.canvas.addPath(newData);
+        }
       });
-    }, 10)
+    },10)
   };
 
   /**
@@ -122,11 +124,11 @@ class DrawingManager {
   /**
    * 데이터 컨버터
    */
-  handleConvertFormat = (to, data) => {
+  handleConvertFormat = (from, data) => {
     /*
-    to: mobile , pc
+    from: mobile , web
     */
-    if (to === 'mobile') {
+    if (from === 'web') {
       return this._handleConvertPcToMobile(data);
     } else {
       return this._handleConvertMobileToPc(data);
@@ -137,28 +139,39 @@ class DrawingManager {
    * PC데이터 -> Mobile데이터
    */
   _handleConvertPcToMobile = data => {
-    let objects = JSON.parse(data.attributes.objects);
-    return objects;
+    // let objects = JSON.parse(data.attributes.objects);
+    return data;
   };
 
   /**
    * Mobile데이터 -> PC데이터
    */
   _handleConvertMobileToPc = drawingData => {
+    if (!drawingData) {
+      return {
+        type: 'image',
+        tagName: 'UPDATE_DRAWING_DATA',
+        attributes: {
+          documentData: "[]",
+          width: this.BASE_WIDTH,
+          height: this.BASE_HEIGHT,
+        }
+      };
+    }
+    
     const { id, color, width: strokeWidth, data } = drawingData.path;
     const { width, height } = drawingData.size;
 
     let object = {
-      coordsPath: [],
-      width: width,
-      height: height,
+      type: 'path',
+      mobilePath: [],
       opacity: 1,
       stroke: color,
-      strokeWidth: strokeWidth
+      strokeWidth: strokeWidth / this.BASE_WIDTH
     };
     data.map(item => {
       const location = item.split(',');
-      object.coordsPath.push(`${Number(location[0]) / this.BASE_WIDTH}, ${Number(location[1]) / this.BASE_HEIGHT}`);
+      object.mobilePath.push(`${Number(location[0]) / this.BASE_WIDTH}, ${Number(location[1]) / this.BASE_HEIGHT}`);
     });
 
     // to drawData
@@ -166,11 +179,13 @@ class DrawingManager {
       value: id,
       tagName: 'UPDATE_DRAWING_DATA',
       attributes: {
-        objects: this.DRAW_DATA
+        documentData: this.DRAW_DATA,
+        width: width,
+        height: height,
       }
     };
     this.DRAW_DATA.push(object);
-    newData.attributes.objects = JSON.stringify(this.DRAW_DATA);
+    newData.attributes.documentData = JSON.stringify(this.DRAW_DATA);
 
     return newData;
   };

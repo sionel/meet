@@ -78,7 +78,7 @@ const initialState = {
   storageListCnt: 0,
   totalPageCnt: 0,
   // fileInfoList
-  fileInfo: null
+  fileInfo: []
 };
 
 //#endregion initialState
@@ -105,13 +105,14 @@ reducer = (state = initialState, action) => {
  */
 const initInfoRequest = authData => {
   return async dispatch => {
-    const { AUTH_A_TOKEN, AUTH_R_TOKEN, cno, ccode, HASH_KEY } = authData;
+    const { AUTH_A_TOKEN, AUTH_R_TOKEN, cno, ccode, HASH_KEY, portalID } = authData;
     const tokenResult = await WedriveApi.getToken(
       AUTH_A_TOKEN,
       AUTH_R_TOKEN,
       cno,
       ccode,
-      HASH_KEY
+      HASH_KEY,
+      portalID
     );
 
     if (tokenResult.resultCode === 200) {

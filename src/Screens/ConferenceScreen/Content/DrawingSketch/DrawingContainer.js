@@ -101,7 +101,8 @@ class DrawingContainer extends Component {
         id: 'eraser',
         icon: 'eraser',
         title: '지우개',
-        values: [7, 9, 12, 15, 0],
+        // values: [7, 9, 12, 15, 0],
+        values: [7, 9, 12, 15],
         render: size =>
           size !== 0 ? (
             <View
@@ -122,15 +123,15 @@ class DrawingContainer extends Component {
           });
         }
       },
-      {
-        id: 'undo',
-        icon: 'undo',
-        title: '이전',
-        // value: [1,2],
-        onPress: () => {
-          this._drawingManager.undo();
-        }
-      }
+      // {
+      //   id: 'undo',
+      //   icon: 'undo',
+      //   title: '이전',
+      //   // value: [1,2],
+      //   onPress: () => {
+      //     this._drawingManager.undo();
+      //   }
+      // }
       // {
       //   id: 'redo',
       //   icon: 'redo',

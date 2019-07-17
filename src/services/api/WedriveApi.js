@@ -12,15 +12,38 @@ import {
 /**
  * getWedriveToken
  */
-const getToken = async (a_token, r_token, cno, ccode, HASH_KEY) => {
+const getToken = async (a_token, r_token, cno, ccode, HASH_KEY, portalID) => {
   try {
+    // const url = `${wehagoBaseURL}/WeDriveStorage/services/login?TokenID=${a_token}&oAuthTokenId=${a_token}&portalID=${portalID}`;
+    // const headers = securityRequest(a_token, r_token, url, HASH_KEY);
+
+    // const data = {
+    //   method: 'POST',
+    //   headers: {
+    //     ...headers, // 위하고 사인
+    //     Accept: 'application/json',
+    //     'Content-Type': 'application/json',
+    //     service: 'loginService',
+    //     method: 'login',
+    //   },
+    //   body: serialize({
+    //     TokenID: a_token,
+    //     oAuthTokenId: a_token,
+    //     portalID: portalID
+    //   })
+    // };
+
     const url = `${wehagoBaseURL}/common/wedrive/init-info?cno=${cno}&ccode=${ccode}`;
     const headers = securityRequest(a_token, r_token, url, HASH_KEY);
 
-    const response = await fetch(url, {
+    const data = {
       method: 'GET',
-      headers
-    });
+      headers: {
+        ...headers, // 위하고 사인
+      },
+    };
+    console.log(data)
+    const response = await fetch(url, data);
     const responseJson = await response.json();
     return responseJson;
   } catch (err) {
@@ -34,6 +57,7 @@ const getToken = async (a_token, r_token, cno, ccode, HASH_KEY) => {
  */
 const getList = async (authData, initInfo) => {
   try {
+    // const url = `${wehagoBaseURL}/WeDriveStorage/services/csb`;
     const url = `${wehagoBaseURL}/common/wedrive/get/file-list`;
     const headers = securityRequest(
       authData.AUTH_A_TOKEN,
@@ -45,6 +69,8 @@ const getList = async (authData, initInfo) => {
       method: 'POST',
       headers: {
         ...headers,
+        // Accept: 'application/json',
+        // 'Content-Type': 'application/json',
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
       },
       body: new URLSearchParams({
@@ -80,8 +106,8 @@ const getFileInfo = async (authData, fileInfo) => {
         ...headers,
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        service: 'ObjectStorageService',
-        method: fileInfo.method
+        service: 'storageService',
+        method: 'getFileInfoObject'
       },
       body: serialize(fileInfo)
     };

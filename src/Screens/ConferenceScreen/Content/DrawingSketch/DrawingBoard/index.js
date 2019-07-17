@@ -8,7 +8,7 @@ import { actionCreators as DocumentShareActions } from '../../../../../redux/mod
 
 // map state to props
 const mapStateToProps = state => ({
-  drawData: state.documentShare.drawData,
+  documentData: state.documentShare.documentData,
 });
 
 // map dispatch to props
