@@ -12,43 +12,28 @@ import {
 /**
  * getWedriveToken
  */
-const getToken = async (a_token, r_token, cno, ccode, HASH_KEY, portalID) => {
+const getToken = async (a_token, r_token, HASH_KEY, portalID) => {
   try {
-    // const url = `${wehagoBaseURL}/WeDriveStorage/services/login`;
-    // // const url = `${wehagoBaseURL}/WeDriveStorage/services/login?TokenID=${a_token}&oAuthTokenId=${a_token}&portalID=${portalID}`;
-    // const headers = securityRequest(a_token, r_token, url, HASH_KEY);
-
-    // const data = {
-    //   method: 'POST',
-    //   headers: {
-    //     ...headers, // 위하고 사인
-    //     // Accept: 'application/json',
-    //     'Content-Type': 'application/json',
-    //     'Accept-Language': 'ko-KR;q=1.0',
-    //     'Accept-Encoding': 'gzip;q=1.0, compress;q=0.5',
-    //     'User-Agent': 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 3_0 like Mac OS X; en-us)',
-    //     method: 'login',
-    //     service: 'loginService',
-    //   },
-    //   // body: serialize({
-    //   //   TokenID: a_token,
-    //   //   FileUniqueKey: `${portalID}@`
-    //   // })
-    // };
-
-    const url = `${wehagoBaseURL}/common/wedrive/init-info?cno=${cno}&ccode=${ccode}`;
+    const url = `${wehagoBaseURL}/WeDriveStorage/services/login`;
     const headers = securityRequest(a_token, r_token, url, HASH_KEY);
 
     const data = {
-      method: 'GET',
+      method: 'POST',
       headers: {
         ...headers, // 위하고 사인
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        method: 'login',
+        service: 'loginService'
       },
+      body: JSON.stringify({
+        TokenID: a_token,
+        portalID: portalID
+      })
     };
-    console.log(data)
+
     const response = await fetch(url, data);
     const responseJson = await response.json();
-    console.log('result', responseJson)
     return responseJson;
   } catch (err) {
     return err;
@@ -59,10 +44,9 @@ const getToken = async (a_token, r_token, cno, ccode, HASH_KEY, portalID) => {
 /**
  * wedrive file list 조회
  */
-const getList = async (authData, initInfo) => {
+const getList = async (authData, TokenID) => {
   try {
-    // const url = `${wehagoBaseURL}/WeDriveStorage/services/csb`;
-    const url = `${wehagoBaseURL}/common/wedrive/get/file-list`;
+    const url = `${wehagoBaseURL}/WeDriveStorage/services/login`;
     const headers = securityRequest(
       authData.AUTH_A_TOKEN,
       authData.AUTH_R_TOKEN,
@@ -73,15 +57,15 @@ const getList = async (authData, initInfo) => {
       method: 'POST',
       headers: {
         ...headers,
-        // Accept: 'application/json',
-        // 'Content-Type': 'application/json',
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        method: 'getRootFileListObject',
+        service: 'wedriveShareService'
       },
-      body: new URLSearchParams({
-        ...initInfo,
-        cno: authData.cno,
-        ccode: authData.ccode
-      }).toString()
+      body: JSON.stringify({
+        TokenID: TokenID
+        // FileUniqueKey: `${authData.portalID}@`
+      })
     };
     const response = await fetch(url, data);
     const responseJson = await response.json();
@@ -96,7 +80,6 @@ const getList = async (authData, initInfo) => {
  */
 const getFileInfo = async (authData, fileInfo) => {
   try {
-    // const url = `http://10.51.115.24:8081/debugger-ui`;
     const url = `${wehagoBaseURL}/ObjectStorageCommon/services/common`;
     const headers = securityRequest(
       authData.AUTH_A_TOKEN,
@@ -110,13 +93,12 @@ const getFileInfo = async (authData, fileInfo) => {
         ...headers,
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        service: 'storageService',
-        method: 'getFileInfoObject'
+        TokenID: fileInfo.TokenID,
+        method: fileInfo.method,
+        service: 'objectStorageService'
       },
       body: serialize(fileInfo)
     };
-
-    console.log(data);
 
     const response = await fetch(url, data);
     const responseJson = await response.json();

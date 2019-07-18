@@ -173,6 +173,7 @@ class ConferenceScreenContainer extends React.Component {
    * 페이지 전환 전송
    */
   _handleChangeDocumentPage = (page, presenter) => {
+    this._handleSetDrawingData();
     this._conferenceManager.setDocumentPage(page, presenter);
   };
 

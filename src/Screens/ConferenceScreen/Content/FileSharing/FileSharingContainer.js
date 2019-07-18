@@ -20,7 +20,8 @@ class FileSharingContainer extends Component {
   }
 
   _handleChangePage = (page, presenter) => {
-    this.props.onChangeDocumentPage(page, presenter);
+    if (this.props.page !== page)
+      this.props.onChangeDocumentPage(page, presenter);
   };
 
   _handleChangeState = (state, value) => {

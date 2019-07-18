@@ -60,7 +60,7 @@ const FileListPresenter = props => {
                   {item.fileName}
                 </Text>
                 {!item.directory && (
-                  <Text style={styles.itemSize}>{item.size}</Text>
+                  <Text style={styles.itemSize}>{Math.round(item.size / 1024)}KB</Text>
                 )}
               </TouchableOpacity>
             )}

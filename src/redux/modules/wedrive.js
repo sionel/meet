@@ -16,10 +16,10 @@ const setInitInfo = initInfo => {
   };
 };
 
-const setFileList = fileList => {
+const setFileList = storageList => {
   return {
     type: SET_FILE_LIST,
-    fileList
+    storageList
   };
 };
 
@@ -39,10 +39,10 @@ const applyInitInfo = (state, action) => {
 };
 
 const applyFileList = (state, action) => {
-  const { fileList } = action;
+  const { storageList } = action;
   return {
     ...state,
-    ...fileList
+    storageList
   };
 };
 
@@ -58,25 +58,28 @@ const applyFileInfo = (state, action) => {
 
 const initialState = {
   // initInfo
-  indexUseMode: null,
-  tokenId: null,
-  userId: null,
-  directoryPath: null,
-  fileUniqueKey: null,
-  viewType: null,
-  sortName: null,
-  sortType: null,
-  parentFileUniqueKey: null,
-  currentPage: 0,
+  TokenID: null,
+  // indexUseMode: null,
+  // tokenId: null,
+  // userId: null,
+  // directoryPath: null,
+  // fileUniqueKey: null,
+  // viewType: null,
+  // sortName: null,
+  // sortType: null,
+  // parentFileUniqueKey: null,
+  // currentPage: 0,
+
   // storageList
-  accessTypeOpen: null,
-  basePath: null,
-  cnoOpen: null,
-  isSearchView: null,
-  pathDepth: null,
+  // directory: [],
+  // accessTypeOpen: null,
+  // basePath: null,
+  // cnoOpen: null,
+  // isSearchView: null,
+  // pathDepth: null,
   storageList: [],
-  storageListCnt: 0,
-  totalPageCnt: 0,
+  // storageListCnt: 0,
+  // totalPageCnt: 0,
   // fileInfoList
   fileInfo: []
 };
@@ -105,31 +108,20 @@ reducer = (state = initialState, action) => {
  */
 const initInfoRequest = authData => {
   return async dispatch => {
-    const { AUTH_A_TOKEN, AUTH_R_TOKEN, cno, ccode, HASH_KEY, portalID } = authData;
+    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, portalID } = authData;
     const tokenResult = await WedriveApi.getToken(
       AUTH_A_TOKEN,
       AUTH_R_TOKEN,
-      cno,
-      ccode,
       HASH_KEY,
       portalID
     );
 
-    if (tokenResult.resultCode === 200) {
-      const userData = {
-        indexUseMode: tokenResult.resultData.indexUseMode,
-        tokenId: tokenResult.resultData.weDriveTokenId,
-        userId: tokenResult.resultData.userId,
-        directoryPath: tokenResult.resultData.directoryPath,
-        fileUniqueKey: tokenResult.resultData.fileUniqueKey,
-        viewType: tokenResult.resultData.viewType,
-        sortName: tokenResult.resultData.sortName,
-        sortType: tokenResult.resultData.sortType,
-        parentFileUniqueKey: null,
-        currentPage: 1
+    if (tokenResult.resultList) {
+      const wedriveToken = {
+        TokenID: `${tokenResult.resultList[0][9].objectTokenId}@@${AUTH_A_TOKEN}`
       };
 
-      return dispatch(setInitInfo(userData));
+      return dispatch(setInitInfo(wedriveToken));
     } else {
       return tokenResult;
     }
@@ -139,23 +131,12 @@ const initInfoRequest = authData => {
 /**
  * getFileListRequest
  */
-const getFileListRequest = (authData, initInfo) => {
+const getFileListRequest = (authData, TokenID) => {
   return async dispatch => {
-    const fileListResult = await WedriveApi.getList(authData, initInfo);
+    const fileListResult = await WedriveApi.getList(authData, TokenID);
 
-    if (fileListResult.resultCode === 200) {
-      const fileListData = {
-        accessTypeOpen: fileListResult.resultData.accessTypeOpen,
-        basePath: fileListResult.resultData.basePath,
-        cnoOpen: fileListResult.resultData.cnoOpen,
-        isSearchView: fileListResult.resultData.isSearchView,
-        pathDepth: fileListResult.resultData.pathDepth,
-        storageList: fileListResult.resultData.storageList,
-        storageListCnt: fileListResult.resultData.storageListCnt,
-        totalPageCnt: fileListResult.resultData.totalPageCnt
-      };
-
-      return dispatch(setFileList(fileListData));
+    if (fileListResult.resultList) {
+      return dispatch(setFileList(fileListResult.resultList));
     } else {
       return fileListResult;
     }
@@ -168,12 +149,10 @@ const getFileListRequest = (authData, initInfo) => {
 const getFileInfoRequest = (authData, fileData) => {
   return async dispatch => {
     const fileListResult = await WedriveApi.getFileInfo(authData, fileData);
-    console.log('1', fileListResult);
 
-    if (fileListResult.resultCode === '0000') {
-      const fileInfo = fileListResult.resultData;
-
-      return dispatch(setFileInfo(fileInfo));
+    console.warn(fileListResult)
+    if (fileListResult.resultList) {
+      return dispatch(setFileInfo(fileListResult.resultList));
     } else {
       return fileListResult;
     }

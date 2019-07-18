@@ -6,7 +6,7 @@ class FileListContainer extends Component {
   constructor(props) {
     super(props);
 
-    this._handleCheckInitInfo();
+    this._handleGetWedriveToken();
   }
 
   render() {
@@ -41,61 +41,48 @@ class FileListContainer extends Component {
   };
 
   /**
-   * _handleCheckInitInfo
-   * 위드라이브 파일 리스트 가져오기
+   * _handleGetWedriveToken
+   * 위드라이브 토큰 가져오기
    */
-  _handleCheckInitInfo = async () => {
-    const {
-      AUTH_A_TOKEN,
-      AUTH_R_TOKEN,
-      last_access_company_no,
-      last_company,
-      HASH_KEY,
-      portal_id
-    } = this.props.auth;
+  _handleGetWedriveToken = async () => {
+    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, portal_id } = this.props.auth;
 
     const authData = {
       AUTH_A_TOKEN,
       AUTH_R_TOKEN,
-      cno: last_access_company_no,
-      ccode: last_company.company_code,
       HASH_KEY,
       portalID: `${portal_id}`
     };
 
     // wedrive token 가져오기
     const initInfoResponse = await this.props.initInfoRequest(authData);
-    console.log(initInfoResponse)
     if (!initInfoResponse.initInfo) {
-      Alert.alert(
-        'Error',
-        '사용자 정보를 불러오지 못했습니다.\nerror: ' +
-          initInfoResponse.resultCode +
-          initInfoResponse.resultMsg,
-        [{ text: 'OK' }]
-      );
+      Alert.alert('Error', '사용자 정보를 불러오지 못했습니다.', [
+        { text: 'OK' }
+      ]);
       this._handleDocumentListMode(false);
       return;
+    } else {
+      this._handleGetFileList(authData);
     }
+  };
+
+  _handleGetFileList = async authData => {
     // alert(JSON.stringify(initInfoResponse));
+    const { TokenID } = this.props;
 
     // wedrive file list 가져오기
     const fileListResponse = await this.props.getFileListRequest(
       authData,
-      initInfoResponse.initInfo
+      TokenID
     );
 
-    if (!fileListResponse.fileList) {
-      Alert.alert(
-        'Error',
-        '파일 리스트를 불러오지 못했습니다.\nerror: ' +
-          fileListResponse.resultCode +
-          fileListResponse.resultMsg,
-        [{ text: 'OK' }]
-      );
+    if (!fileListResponse.storageList) {
+      Alert.alert('Error', '파일 리스트를 불러오지 못했습니다.', [
+        { text: 'OK' }
+      ]);
       return;
     }
-    // alert(JSON.stringify(fileListResponse));
   };
 
   /**
@@ -103,25 +90,22 @@ class FileListContainer extends Component {
    * 파일 정보 가져오기
    */
   _handleGetFileInfo = async file => {
-    const {
-      AUTH_A_TOKEN,
-      AUTH_R_TOKEN,
-      last_access_company_no,
-      last_company,
-      HASH_KEY
-    } = this.props.auth;
+    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY } = this.props.auth;
+    const { TokenID } = this.props;
 
     const authData = {
       AUTH_A_TOKEN,
       AUTH_R_TOKEN,
-      cno: last_access_company_no,
-      ccode: last_company.company_code,
       HASH_KEY
     };
 
-    let method = file.extentionType.toLowerCase();
+    const extentionType = file.fileName
+      .split('.')
+      .pop()
+      .toLowerCase();
+    let method = '';
 
-    switch (method) {
+    switch (extentionType) {
       case 'txt':
       case 'one':
       case 'hwp':
@@ -137,7 +121,7 @@ class FileListContainer extends Component {
       case 'bmg':
       case 'jpg':
       case 'jpeg':
-      case 'jif':
+      case 'gif':
       case 'png':
         method = 'getImageURL';
         break;
@@ -152,20 +136,19 @@ class FileListContainer extends Component {
     }
 
     const fileInfo = {
-      // Ext: file.extentionType,
+      Ext: extentionType,
+      FileName: file.fileUniqueKey,
       FileUniqueKey: file.fileUniqueKey,
-      // cno: authData.cno,
-      // target_cno: authData.cno,
-      // ServiceCode: 'wedrive',
-      // ServiceKey: '',
-      // BucketType: 'C',
-      // BucketName: undefined,
-      // isWedrive: false,
-      // isFullPreview: false,
-      TokenID: this.props.wedriveId,
-      service: 'storageService',
-      method: 'getFileInfoObject',
-      locale: 'ko'
+      cno: 9,
+      target_cno: 9,
+      ServiceCode: 'undefined',
+      ServiceKey: '',
+      BucketType: 'C',
+      BucketName: 'undefined',
+      isWedrive: 'false',
+      isFullPreview: 'true',
+      TokenID: TokenID,
+      method: method
     };
 
     // wedrive file 상세정보 가져오기
@@ -173,23 +156,37 @@ class FileListContainer extends Component {
       authData,
       fileInfo
     );
-    if (fileInfoResponse.errors) {
-      Alert.alert(
-        'Error',
-        '파일 상세정보를 불러오지 못했습니다.\nerror: ' +
-          fileInfoResponse.errors.code +
-          fileInfoResponse.errors.message,
-        [{ text: 'OK' }]
-      );
-      // return;
+
+    if (fileInfoResponse.fileInfo) {
+      if (fileInfoResponse.fileInfo.length > 0) {
+        this._handleChangeSharingMode(file.fileName);
+        return;
+      }
     }
 
+    Alert.alert('Error', '파일 상세정보를 불러오지 못했습니다.', [
+      { text: 'OK' }
+    ]);
+    return;
+  };
+
+  _handleChangeSharingMode = fileName => {
+    const {
+      fileInfo,
+      auth: { portal_id }
+    } = this.props;
+
+    let resources = [];
+    if (typeof fileInfo[0] === 'string') {
+      resources = fileInfo;
+    } else {
+      resources = fileInfo[0].resources;
+    }
     this.props.onChangeSharingMode(
       {
-        fileName: '테스트.xlsx',
-        owner: 'peacejung',
-        resources:
-          '["https://api.wehago.com/hermes/resource/store/1e/c0/d6a8ebb79e382f974e6e405433862f452b56/document_0001.jpg","https://api.wehago.com/hermes/resource/store/1e/c0/d6a8ebb79e382f974e6e405433862f452b56/document_0002.jpg","https://api.wehago.com/hermes/resource/store/1e/c0/d6a8ebb79e382f974e6e405433862f452b56/document_0003.jpg","https://api.wehago.com/hermes/resource/store/1e/c0/d6a8ebb79e382f974e6e405433862f452b56/document_0004.jpg"]'
+        fileName: fileName,
+        owner: portal_id,
+        resources: JSON.stringify(resources)
       },
       true
     );
