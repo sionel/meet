@@ -16,6 +16,7 @@ import DeviceInfo from 'react-native-device-info';
 import DrawingSketch from '../DrawingSketch';
 import CustomButton from '../../../../components/CustomButton';
 
+const SafetyView = Platform.OS === 'ios' ? SafeAreaView : View;
 const isIOS = Platform.OS === 'ios';
 const hasNotch = DeviceInfo.hasNotch() && isIOS;
 
@@ -133,7 +134,7 @@ const FileSharingPresenter = props => {
   );
 
   return (
-    <SafeAreaView style={{flex: 1,  backgroundColor: '#000', position: 'relative'}}>
+    <SafetyView style={{ flex: 1, backgroundColor: '#000', position: 'relative' }}>
       <View style={styles.container}>
       {/* {!showTool && !showPreView && <StatusBar hidden={true} />} */}
 
@@ -230,7 +231,7 @@ const FileSharingPresenter = props => {
       )} */}
       {/* end bottomArea */}
     </View>
-      </SafeAreaView>
+      </SafetyView>
   );
 };
 

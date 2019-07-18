@@ -13,13 +13,13 @@ const Placeholder = props => {
 	return (
 		<View
 			style={{
-				// flex: 1,
-				position: 'absolute',
+				flex: 1,
+				// position: 'absolute',
 				width: '100%',
-				height: '100%',
-				paddingTop: '30%',
+				// height: '100%',
+				// paddingTop: '30%',
 				backgroundColor: '#eaeaea',
-				justifyContent: 'flex-start',
+				justifyContent: 'center',
 				alignItems: 'center',
 				zIndex: 1,
 				...props.layoutStyle
@@ -27,9 +27,11 @@ const Placeholder = props => {
 		>
 			<Image
 				style={{
-					width: 180,
+					// width: '40%',
 					height: 180,
-					marginBottom: 23
+					maxHeight: '40%',
+					marginBottom: 23,
+					resizeMode: 'contain'
 				}}
 				source={waitingImage}
 			/>

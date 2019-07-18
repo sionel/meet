@@ -34,11 +34,11 @@ const waitingImage = require(`${rootPath}/waiting.gif`);
 const HomeScreenPresenter = props => {
   const activateList = props.list.filter(item => item.is_video_access === 'T');
   const reloadButton = (
-    <View style={styles.reloadButtonWrap}>
-      <Text style={styles.reloadButton} onPress={props.onRefresh}>
-        새로고침
-      </Text>
-    </View>
+    <TouchableOpacity onPress={props.onRefresh}>
+      <View style={styles.reloadButtonWrap}>
+        <Text style={styles.reloadButton}>다시 로드</Text>
+      </View>
+    </TouchableOpacity>
   );
 
   return (
@@ -46,119 +46,128 @@ const HomeScreenPresenter = props => {
       {/* 검색바 */}
       <SearchForm onChange={props.onSearch} />
 
-      {(props.list.length < 1 || activateList.length < 1) && (
+      {props.list.length < 1 || activateList.length < 1 ? (
         <Placeholder
           mainText={'진행중인 화상회의가 없습니다.'}
           subText={'대화를 시작하려면 +버튼을 누르세요.'}
           other={reloadButton}
         />
-      )}
-
-      {/* 화상대화 히스토리 리스트 */}
-      <SectionList
-        keyExtractor={(item, index) => index.toString()}
-        refreshing={props.refreshing}
-        onRefresh={props.onRefresh}
-        style={[
-          styles.listContainer,
-          props.hasNotch && {
-            paddingLeft: props.orientation === 'LANDSCAPE-LEFT' ? 24 : 0,
-            paddingRight: props.orientation === 'LANDSCAPE-RIGHT' ? 24 : 0
-          }
-        ]}
-        sections={[
-          {
-            title: '진행중',
-            data: activateList,
-            length: activateList.length - 1
-          }
-        ]}
-        renderSectionHeader={({ section }) =>
-          section.data.length > 0 && <SectionListHeader title={section.title} />
-        }
-        renderItem={({ item, index, section }) => (
-          // 히스토리 아이템
-          <ListItemComp
-            key={item.room_id}
-            title={item.room_title}
-            personnel={item.receiver_user_count}
-            updated={item.update_timestamp}
-            lottie={true}
-            underline={index < section.length ? true : false}
-            active={item.is_video_access === 'T' ? true : false}
-            disable={
-              item.receiver_user_count === 1 && item.room_type === '1'
-                ? true
-                : false
+      ) : (
+        <Fragment>
+          {/* 화상대화 히스토리 리스트 */}
+          <SectionList
+            keyExtractor={(item, index) => index.toString()}
+            refreshing={props.refreshing}
+            onRefresh={props.onRefresh}
+            style={[
+              styles.listContainer,
+              props.hasNotch && {
+                paddingLeft: props.orientation === 'LANDSCAPE-LEFT' ? 24 : 0,
+                paddingRight: props.orientation === 'LANDSCAPE-RIGHT' ? 24 : 0
+              }
+            ]}
+            sections={[
+              {
+                title: '진행중',
+                data: activateList,
+                length: activateList.length - 1
+              }
+            ]}
+            renderSectionHeader={({ section }) =>
+              section.data.length > 0 && (
+                <SectionListHeader title={section.title} />
+              )
             }
-            onClick={() =>
-              item.is_video_access === 'T'
-                ? props.onCheckConference(
-                    item.video_chat_id,
-                    null,
-                    item.room_title
-                  )
-                : props.onActivateModal(item.room_id, item.room_title)
-            }
+            renderItem={({ item, index, section }) => (
+              // 히스토리 아이템
+              <ListItemComp
+                key={item.room_id}
+                title={item.room_title}
+                personnel={item.receiver_user_count}
+                updated={item.update_timestamp}
+                lottie={true}
+                underline={index < section.length ? true : false}
+                active={item.is_video_access === 'T' ? true : false}
+                disable={
+                  item.receiver_user_count === 1 && item.room_type === '1'
+                    ? true
+                    : false
+                }
+                onClick={() =>
+                  item.is_video_access === 'T'
+                    ? props.onCheckConference(
+                        item.video_chat_id,
+                        null,
+                        item.room_title
+                      )
+                    : props.onActivateModal(item.room_id, item.room_title)
+                }
+              />
+            )}
           />
-        )}
-      />
+
+          {/* 컨펌모달 */}
+          <Modal
+            animationType="fade"
+            transparent={true}
+            visible={props.modal}
+            blurRadius={1}
+            onRequestClose={() => props.onActivateModal(null)}
+          >
+            <View style={styles.modalWrap}>
+              <View style={styles.modalContentWrap}>
+                <TouchableOpacity
+                  style={{
+                    position: 'absolute',
+                    right: 10,
+                    top: 10,
+                    zIndex: 11
+                  }}
+                  onPress={() => props.onActivateModal(null)}
+                >
+                  <Icon
+                    name="times-circle"
+                    size={30}
+                    color="#CACACA"
+                    style={{
+                      zIndex: 10
+                    }}
+                  />
+                </TouchableOpacity>
+
+                <View style={styles.modalMessage}>
+                  <Text
+                    style={{
+                      fontSize: 22,
+                      color: '#1C90FB',
+                      marginBottom: 20
+                    }}
+                  >
+                    알림
+                  </Text>
+                  <Text>새로운 화상대화를 시작하시겠습니까?</Text>
+                </View>
+                <View style={styles.modalButtons}>
+                  <TouchableOpacity
+                    style={{
+                      ...styles.modalButton,
+                      ...styles.modalButtonConfirm
+                    }}
+                    onPress={() =>
+                      props.onCreateConference(props.selectedRoomId)
+                    }
+                  >
+                    <Text style={{ color: '#fff' }}>확인</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </Modal>
+        </Fragment>
+      )}
 
       {/* 방생성 버튼 */}
       <AddButton onClick={() => props.onRedirect('Create')} />
-
-      {/* 컨펌모달 */}
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={props.modal}
-        blurRadius={1}
-        onRequestClose={() => props.onActivateModal(null)}
-      >
-        <View style={styles.modalWrap}>
-          <View style={styles.modalContentWrap}>
-            <TouchableOpacity
-              style={{
-                position: 'absolute',
-                right: 10,
-                top: 10,
-                zIndex: 11
-              }}
-              onPress={() => props.onActivateModal(null)}
-            >
-              <Icon
-                name="times-circle"
-                size={30}
-                color="#CACACA"
-                style={{
-                  zIndex: 10
-                }}
-              />
-            </TouchableOpacity>
-
-            <View style={styles.modalMessage}>
-              <Text
-                style={{
-                  fontSize: 22,
-                  color: '#1C90FB',
-                  marginBottom: 20
-                }}
-              >
-                알림
-              </Text>
-              <Text>새로운 화상대화를 시작하시겠습니까?</Text>
-            </View>
-            <View style={styles.modalButtons}>
-              <TouchableOpacity
-                style={{ ...styles.modalButton, ...styles.modalButtonConfirm }}
-                onPress={() => props.onCreateConference(props.selectedRoomId)}
-              >
-                <Text style={{ color: '#fff' }}>확인</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
     </View>
   );
 };
