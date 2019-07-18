@@ -136,7 +136,14 @@ const getFileListRequest = (authData, TokenID) => {
     const fileListResult = await WedriveApi.getList(authData, TokenID);
 
     if (fileListResult.resultList) {
-      return dispatch(setFileList(fileListResult.resultList));
+      // 이름 순으로 정렬
+      const sortedList = await fileListResult.resultList.sort((a, b) => {
+        if (a.directory) return -1;
+        if (b.directory) return 1;
+        return a.fileName > b.fileName ? 1 : -1;
+      });
+
+      return dispatch(setFileList(sortedList));
     } else {
       return fileListResult;
     }
@@ -150,7 +157,6 @@ const getFileInfoRequest = (authData, fileData) => {
   return async dispatch => {
     const fileListResult = await WedriveApi.getFileInfo(authData, fileData);
 
-    console.warn(fileListResult)
     if (fileListResult.resultList) {
       return dispatch(setFileInfo(fileListResult.resultList));
     } else {

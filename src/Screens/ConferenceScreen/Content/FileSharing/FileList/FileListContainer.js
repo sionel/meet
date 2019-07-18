@@ -99,10 +99,12 @@ class FileListContainer extends Component {
       HASH_KEY
     };
 
-    const extentionType = file.fileName
-      .split('.')
-      .pop()
-      .toLowerCase();
+    const extentionType = file.directory
+      ? 'directory'
+      : file.fileName
+          .split('.')
+          .pop()
+          .toLowerCase();
     let method = '';
 
     switch (extentionType) {
@@ -128,6 +130,9 @@ class FileListContainer extends Component {
       case 'pdf':
         method = 'getAttachmentsPublicURL';
         break;
+      case 'directory':
+        alert('directory');
+        return;
       default:
         Alert.alert('경고', '지원하지 않는 파일 확장자입니다.', [
           { text: 'OK' }
@@ -180,6 +185,7 @@ class FileListContainer extends Component {
     if (typeof fileInfo[0] === 'string') {
       resources = fileInfo;
     } else {
+      console.log(fileInfo);
       resources = fileInfo[0].resources;
     }
     this.props.onChangeSharingMode(

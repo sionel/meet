@@ -102,6 +102,7 @@ const getFileInfo = async (authData, fileInfo) => {
 
     const response = await fetch(url, data);
     const responseJson = await response.json();
+    console.warn(responseJson)
     return responseJson;
   } catch (err) {
     return err;
