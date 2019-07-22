@@ -163,11 +163,11 @@ class FileListContainer extends Component {
       FileUniqueKey: file.fileUniqueKey,
       cno: 9,
       target_cno: 9,
-      ServiceCode: 'undefined',
+      ServiceCode: 'wedrive',
       ServiceKey: '',
       BucketType: 'C',
       BucketName: 'undefined',
-      isWedrive: 'false',
+      isWedrive: 'true',
       isFullPreview: 'true',
       TokenID: TokenID,
       method: method

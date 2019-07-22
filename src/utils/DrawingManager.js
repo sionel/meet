@@ -79,7 +79,9 @@ class DrawingManager {
     setTimeout(() => {
       this.canvas.clear();
 
-      data.map(item => {
+      const drawingData = data.objects || data;
+
+      drawingData.map(item => {
         if (item.type === 'path') {
           let newData = {
             drawer: 'wehago_meet_web',
@@ -90,12 +92,12 @@ class DrawingManager {
             path: {
               id: Number(this.tempId++),
               color: item.stroke,
-              width: item.strokeWidth * this.BASE_WIDTH,
+              width: item.strokeWidthScale * this.BASE_WIDTH,
               data: []
             }
           };
-  
-          item.mobilePath.map(xy => {
+          
+          item.coordsPath.map(xy => {
             const location = xy.split(',');
             newData.path.data.push(`${Number(location[0]) * this.BASE_WIDTH},${Number(location[1]) * this.BASE_HEIGHT}`);
           });
@@ -159,19 +161,19 @@ class DrawingManager {
       };
     }
     
-    const { id, color, width: strokeWidth, data } = drawingData.path;
+    const { id, color, width: strokeWidthScale, data } = drawingData.path;
     const { width, height } = drawingData.size;
 
     let object = {
       type: 'path',
-      mobilePath: [],
+      coordsPath: [],
       opacity: 1,
       stroke: color,
-      strokeWidth: strokeWidth / this.BASE_WIDTH
+      strokeWidthScale: strokeWidthScale / this.BASE_WIDTH
     };
     data.map(item => {
       const location = item.split(',');
-      object.mobilePath.push(`${Number(location[0]) / this.BASE_WIDTH}, ${Number(location[1]) / this.BASE_HEIGHT}`);
+      object.coordsPath.push(`${Number(location[0]) / this.BASE_WIDTH}, ${Number(location[1]) / this.BASE_HEIGHT}`);
     });
 
     // to drawData
