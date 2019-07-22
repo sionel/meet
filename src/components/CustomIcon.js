@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Image, StyleSheet } from 'react-native';
 
 import ico_folder from '../../assets/icons/wedrive/ico_folder_160.imageset/ico_folder_160.png';
+import ico_shareFolder from '../../assets/icons/wedrive/ico_folder_group_160-1.imageset/ico_folder_group_160.png';
 import ico_bmp from '../../assets/icons/wedrive/ico_fn_bmp_120.imageset/ico_fn_bmp_120.png';
 import ico_doc from '../../assets/icons/wedrive/ico_fn_doc_120.imageset/ico_fn_doc_120.png';
 import ico_docx from '../../assets/icons/wedrive/ico_fn_docx_120.imageset/ico_fn_docx_80_2x.png';
@@ -51,6 +52,8 @@ const getButtonSource = name => {
   switch (name) {
     case 'folder':
       return ico_folder;
+    case 'shareFolder':
+      return ico_shareFolder;
     case 'txt':
       return ico_txt;
     case 'one':

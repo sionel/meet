@@ -59,13 +59,21 @@ const FileListPresenter = props => {
                 }}
                 style={styles.itemBox}
               >
-                <CustomIcon name={item.directory ? 'folder' : getExtentionType(item.fileName)} />
+                <CustomIcon
+                  name={
+                    item.directory
+                      ? item.shareFolder
+                        ? 'shareFolder'
+                        : 'folder'
+                      : getExtentionType(item.fileName)
+                  }
+                />
                 <Text
                   numberOfLines={1}
                   ellipsizeMode={'tail'}
                   style={styles.itemInfo}
                 >
-                  {item.shareFolder && '[공유] '}
+                  {/* {item.shareFolder && '[공유] '} */}
                   {item.fileName}
                 </Text>
                 {!item.directory && (
