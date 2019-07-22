@@ -11,6 +11,14 @@ import {
 import CustomIcon from '../../../../../components/CustomIcon';
 
 const FileListPresenter = props => {
+  const getExtentionType = fileName => {
+    const ext = fileName
+      .split('.')
+      .pop()
+      .toLowerCase();
+    return ext;
+  };
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -51,16 +59,19 @@ const FileListPresenter = props => {
                 }}
                 style={styles.itemBox}
               >
-                <CustomIcon name={item.directory ? 'folder' : 'folder'} />
+                <CustomIcon name={item.directory ? 'folder' : getExtentionType(item.fileName)} />
                 <Text
                   numberOfLines={1}
                   ellipsizeMode={'tail'}
                   style={styles.itemInfo}
                 >
+                  {item.shareFolder && '[공유] '}
                   {item.fileName}
                 </Text>
                 {!item.directory && (
-                  <Text style={styles.itemSize}>{props.setConvertFileSize(item.size)}</Text>
+                  <Text style={styles.itemSize}>
+                    {props.setConvertFileSize(item.size)}
+                  </Text>
                 )}
               </TouchableOpacity>
             )}

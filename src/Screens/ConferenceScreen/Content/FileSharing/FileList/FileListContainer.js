@@ -132,12 +132,13 @@ class FileListContainer extends Component {
       case 'pptx':
       case 'show':
       case 'rtf':
+      case 'doc':
       case 'docx':
       case 'xls':
       case 'xlsx':
         method = 'getOfficePreView';
         break;
-      case 'bmg':
+      case 'bmp':
       case 'jpg':
       case 'jpeg':
       case 'gif':
