@@ -19,9 +19,26 @@ class FileListContainer extends Component {
         // documentList={tempList}
         setSharingMode={this._handleSharingMode}
         setDocumentListMode={this._handleDocumentListMode}
+        setConvertFileSize={this._handleConvertFileSize}
       />
     );
   }
+
+  /**
+   * 용량 표시 설정
+   */
+  _handleConvertFileSize = byte => {
+    if (byte > 1000) {
+      const kByte = byte / 1024;
+      if (kByte > 1000) {
+        const mByte = kByte / 1024;
+        if (mByte > 1000) {
+          const gByte = mByte / 1024;
+          return Math.round(gByte * 100) / 100 + ' GB';
+        } else return Math.round(mByte * 100) / 100 + ' MB';
+      } else return Math.round(kByte * 100) / 100 + ' KB';
+    } else return byte + ' byte';
+  };
 
   /**
    * _handleDocumentListMode
