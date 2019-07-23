@@ -55,7 +55,7 @@ class DrawingBoard extends Component {
         user={user}
         strokeWidth={stroke}
         strokeColor={color}
-        touchEnabled={presenter}
+        touchEnabled={presenter === 'localUser'}
         onStrokeEnd={onStrokeEnd}
       />
     );

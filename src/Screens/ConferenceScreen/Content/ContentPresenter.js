@@ -5,7 +5,7 @@ import DrawingSketch from './DrawingSketch';
 import MainVideo from './MainVideo';
 import TopArea from './TopArea';
 import BottomArea from './BottomArea';
-import FileList from './FileSharing/FileList';
+import OverView from './OverView';
 
 /**
  * ContentPresenter
@@ -115,9 +115,11 @@ const ContentPresenter = props => {
       {/* )} */}
       {/* END 하단 영역 */}
 
-      {/* FileList 영역 */}
+      {/* OverView 영역 */}
       {props.documentListMode && (
-        <FileList
+        <OverView
+          mode={['USERLIST', 'FILELIST']}
+          defaultMode={'FILELIST'}
           orientation={props.orientation}
           onChangeSharingMode={props.onChangeSharingMode}
         />

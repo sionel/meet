@@ -108,7 +108,7 @@ const DrawingPresenter = props => {
       </TouchableOpacity>
 
       {/* 하단 영역 */}
-      {!imageLoading && showTool && presenter && (
+      {!imageLoading && showTool && presenter === 'localUser' && (
         <View
           style={[
             styles.bottomArea,

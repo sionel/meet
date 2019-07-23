@@ -3,22 +3,32 @@ import { Alert, Image } from 'react-native';
 import FileListPresenter from './FileListPresenter';
 
 class FileListContainer extends Component {
+  state = { isLoading: false };
+
   constructor(props) {
     super(props);
-
-    this._handleGetWedriveToken();
   }
 
+  componentDidMount = () => {
+    this.getFileList();
+  };
+
+  getFileList = async () => {
+    await this.setState({ isLoading: true });
+    await this._handleGetWedriveToken();
+    this.setState({ isLoading: false });
+  };
+
   render() {
-    const { hasNotch, orientation } = this.props;
+    // const { orientation } = this.props;
+    const { isLoading } = this.state;
     return (
       <FileListPresenter
-        hasNotch={hasNotch}
-        orientation={orientation}
+        isLoading={isLoading}
+        // hasNotch={hasNotch}
+        // orientation={orientation}
         documentList={this.props.wedriveList}
-        // documentList={tempList}
         setSharingMode={this._handleSharingMode}
-        setDocumentListMode={this._handleDocumentListMode}
         setConvertFileSize={this._handleConvertFileSize}
       />
     );
@@ -80,7 +90,7 @@ class FileListContainer extends Component {
       this._handleDocumentListMode(false);
       return;
     } else {
-      this._handleGetFileList(authData);
+      await this._handleGetFileList(authData);
     }
   };
 

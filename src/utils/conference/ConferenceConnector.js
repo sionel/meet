@@ -154,11 +154,11 @@ class ConferenceConnector {
     });
 
     // JOIN_USER 이벤트 연결
-    this._room.on(conferenceEvents.USER_JOINED, (id, user) =>
+    this._room.on(conferenceEvents.USER_JOINED, (id, user) => {
       this._handlers.JOIN_USER(user)
-    );
+    });
 
-    // JOIN_USER 이벤트 연결
+    // LEFT_USER 이벤트 연결
     this._room.on(conferenceEvents.USER_LEFT, id =>
       this._handlers.LEFT_USER(id)
     );
@@ -209,7 +209,9 @@ class ConferenceConnector {
     this._room.addCommandListener(SET_DOCUMENT_SHARE_IS_OPEN, value => {
       const { value: userId, attributes } = value;
       if (userId !== this._room.myUserId()) {
-        this._handlers.CHANGED_DOCUMENT_SHARE_MODE(attributes);
+        this._handlers.CHANGED_DOCUMENT_SHARE_MODE(attributes, userId);
+      } else {
+        this._handlers.CHANGED_DOCUMENT_SHARE_MODE(attributes, 'localUser');
       }
     });
     this._room.addCommandListener(SET_DOCUMENT_SHARE_IS_CLOSE, value => {
@@ -312,7 +314,7 @@ class ConferenceConnector {
       value: this._room.myUserId(),
       attributes
     });
-    this._handlers.CHANGED_DOCUMENT_SHARE_MODE(attributes, presenter);
+    this._handlers.CHANGED_DOCUMENT_SHARE_MODE(attributes, this._room.myUserId());
   };
 
   /**

@@ -14,6 +14,7 @@ import buttonDocShare from '../../../assets/buttons/doc_share_3x.png';
 import buttonClose from '../../../assets/buttons/btnTnaviCloseNone_3x.png';
 import btnArrowUp from '../../../assets/buttons/btnArrowUp.png';
 import btnArrowDown from '../../../assets/buttons/btnArrowDown.png';
+import btnUserList from '../../../assets/buttons/btn_tnavi_person_none.png';
 /**
  * CustomButtonPresenter
  */
@@ -57,6 +58,7 @@ CustomButtonPresenter.propTypes = {
     'buttonClose',
     'btnArrowUp',
     'btnArrowDown',
+    'userList'
   ]).isRequired,
   // 버튼이 클릭되면 발생하는 이벤트 입니다.
   onPress: PropTypes.func.isRequired
@@ -91,6 +93,8 @@ const getButtonSource = name => {
       return btnArrowUp;
     case 'btnArrowDown':
       return btnArrowDown;
+    case 'userList':
+      return btnUserList;
     default:
       return null;
   }

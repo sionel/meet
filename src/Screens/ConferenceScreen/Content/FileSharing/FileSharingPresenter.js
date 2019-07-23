@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import {
   Text,
   StyleSheet,
@@ -15,6 +15,7 @@ import {
 import DeviceInfo from 'react-native-device-info';
 import DrawingSketch from '../DrawingSketch';
 import CustomButton from '../../../../components/CustomButton';
+import OverView from '../OverView';
 
 const SafetyView = Platform.OS === 'ios' ? SafeAreaView : View;
 const isIOS = Platform.OS === 'ios';
@@ -53,10 +54,10 @@ const FileSharingPresenter = props => {
         paddingTop: 12,
         paddingBottom: 12,
         paddingLeft: 12,
-        paddingRight: 12
+        paddingRight: 16
       }}
     >
-      {presenter && (
+      {presenter === 'localUser' && (
         <CustomButton
           name={'buttonClose'}
           onPress={() => props.onChangeSharingMode(false, false)}
@@ -70,10 +71,19 @@ const FileSharingPresenter = props => {
       <Text
         numberOfLines={1}
         ellipsizeMode={'tail'}
-        style={[styles.headerText, { width: '100%' }]}
+        style={[styles.headerText, { flex: 1 }]}
       >
         {props.attributes.fileName}
       </Text>
+      <CustomButton
+        name={'userList'}
+        onPress={() => props.setDocumentListMode(true)}
+        style={{ paddingLeft: 12, margin: 0 }}
+        width={28}
+        height={28}
+        areaWdith={28}
+        areaHeight={28}
+      />
       {/* <CustomButton
         name={'buttonClose'}
         onPress={() => props.onChangeSharingMode(false)}
@@ -134,13 +144,16 @@ const FileSharingPresenter = props => {
   );
 
   return (
-    <SafetyView style={{ flex: 1, backgroundColor: '#000', position: 'relative' }}>
-      <View style={styles.container}>
-      {/* {!showTool && !showPreView && <StatusBar hidden={true} />} */}
+    <Fragment>
+      <SafetyView
+        style={{ flex: 1, backgroundColor: '#000', position: 'relative' }}
+      >
+        <View style={styles.container}>
+          {/* {!showTool && !showPreView && <StatusBar hidden={true} />} */}
 
-      {/* topArea */}
-      <View style={styles.headerTitle}>
-        {/* {!showTool && orientation === 'vertical' && (
+          {/* topArea */}
+          <View style={styles.headerTitle}>
+            {/* {!showTool && orientation === 'vertical' && (
           <View
             style={[
               styles.hideTopArea,
@@ -151,69 +164,69 @@ const FileSharingPresenter = props => {
             ]}
           />
         )} */}
-        {showTool && headerTitle}
-        {showPreView && preView}
-        <CustomButton
-          name={showPreView ? 'btnArrowUp' : 'btnArrowDown'}
-          onPress={() => onChangeState('showPreView')}
-          style={{ padding: 0, margin: 0 }}
-          width={24}
-          height={24}
-          areaWdith={24}
-          areaHeight={24}
-        />
-      </View>
+            {showTool && headerTitle}
+            {showPreView && preView}
+            <CustomButton
+              name={showPreView ? 'btnArrowUp' : 'btnArrowDown'}
+              onPress={() => onChangeState('showPreView')}
+              style={{ padding: 0, margin: 0 }}
+              width={24}
+              height={24}
+              areaWdith={24}
+              areaHeight={24}
+            />
+          </View>
 
-      {/* mainArea */}
-      <View
-        style={[
-          styles.mainArea,
-          {
-            paddingLeft: 0,
-            paddingRight: 0
-            // paddingBottom: bottomPadding + (showTool && presenter ? 54 : 0) + 12
-          }
-        ]}
-      >
-        {/* 문서공유 메인 화면 */}
-        <View
-          style={[
-            styles.mainContainer,
-            orientation === 'vertical'
-              ? styles.mainContainerVertical
-              : styles.mainContainerHorizontal
-          ]}
-        >
-          {/* <TouchableOpacity
+          {/* mainArea */}
+          <View
+            style={[
+              styles.mainArea,
+              {
+                paddingLeft: 0,
+                paddingRight: 0
+                // paddingBottom: bottomPadding + (showTool && presenter ? 54 : 0) + 12
+              }
+            ]}
+          >
+            {/* 문서공유 메인 화면 */}
+            <View
+              style={[
+                styles.mainContainer,
+                orientation === 'vertical'
+                  ? styles.mainContainerVertical
+                  : styles.mainContainerHorizontal
+              ]}
+            >
+              {/* <TouchableOpacity
             activeOpacity={1}
             onPress={() => onChangeState('showTool')}
             style={{ flex: 1 }}
           > */}
-          <DrawingSketch
-            // drawing={true}
-            image={resources[page]}
-            showTool={showTool}
-            presenter={presenter}
-            orientation={orientation}
-            onChangeShowToolState={onChangeState}
-            onClear={() => {}}
-            // onChangeDrawing={() => {}}
-            // onSetDrawingData={() => {}}
-            onChangeDrawingMode={() => {}}
-            // onClear={props.onClear}
-            // orientation={props.orientation}
-            onChangeDrawing={props.setDrawingMode}
-            onSetDrawingData={props.onSetDrawingData}
-            // onChangeDrawingMode={props.onChangeDrawingMode}
-            hasNotch={props.hasNotch}
-          />
-          {/* </TouchableOpacity> */}
-        </View>
-      </View>
-      {/* end mainArea */}
+              <DrawingSketch
+                // drawing={true}
+                image={resources[page]}
+                showTool={showTool}
+                presenter={presenter}
+                orientation={orientation}
+                onChangeShowToolState={onChangeState}
+                onClear={() => {}}
+                // onChangeDrawing={() => {}}
+                // onSetDrawingData={() => {}}
+                onChangeDrawingMode={() => {}}
+                // onClear={props.onClear}
+                // orientation={props.orientation}
+                onChangeDrawing={props.setDrawingMode}
+                onSetDrawingData={props.onSetDrawingData}
+                // onChangeDrawingMode={props.onChangeDrawingMode}
+                hasNotch={props.hasNotch}
+              />
+              {/* </TouchableOpacity> */}
+            </View>
+          </View>
+          {/* end mainArea */}
 
-      {/* BottomArea */}
-      {/* {showTool && presenter && (
+          {/* BottomArea */}
+          {/* {showTool && presenter && (
         <View
           style={{
             ...styles.bottomArea,
@@ -229,9 +242,19 @@ const FileSharingPresenter = props => {
           <Text style={{ color: '#fff' }}>bottomArea</Text>
         </View>
       )} */}
-      {/* end bottomArea */}
-    </View>
+          {/* end bottomArea */}
+        </View>
       </SafetyView>
+
+      {/* OverView 영역 */}
+      {props.documentListMode && (
+        <OverView
+          mode={['USERLIST']}
+          defaultMode={'USERLIST'}
+          orientation={props.orientation}
+        />
+      )}
+    </Fragment>
   );
 };
 

@@ -11,21 +11,19 @@ const mapStateToProps = state => ({
   attributes: state.documentShare.attributes,
   presenter: state.documentShare.presenter,
   page: state.documentShare.page,
+  documentListMode: state.documentShare.documentListMode
 });
 
 // map dispatch to props
-// const mapDispatchToProps = dispatch => {
-//   return {
-//     initInfoRequest: authData =>
-//       dispatch(WedriveActions.initInfoRequest(authData)),
-//     getFileListRequest: (authData, initInfo) =>
-//       dispatch(WedriveActions.getFileListRequest(authData, initInfo)),
-//     getFileInfoRequest: (authData, fileInfo) =>
-//       dispatch(WedriveActions.getFileInfoRequest(authData, fileInfo))
-//   };
-// };
+const mapDispatchToProps = dispatch => {
+  return {
+    setDocumentListMode: value => {
+      return dispatch(DocumentShareActions.setDocumentListMode(value));
+    }
+  };
+};
 
 export default connect(
   mapStateToProps,
-  null
+  mapDispatchToProps
 )(FileSharingContainer);
