@@ -190,7 +190,7 @@ function applyUpdateMuteVideo(state, action) {
 	const { track } = action;
 	const list = state.list.slice(0);
 
-	if (track.getType() === 'vidio') {
+	if (track.getType() === 'video') {
 		const findUser = list.find(user => {
 			if (user.videoTrack && user.id === track.getParticipantId()) {
 				return true;

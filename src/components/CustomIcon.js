@@ -35,6 +35,7 @@ const CustomIcon = props => {
       resizeMode={'contain'}
       style={{
         ...styles.iconStyle,
+        ...props.style,
         width: props.width,
         height: props.height,
         borderRadius: props.borderRadius

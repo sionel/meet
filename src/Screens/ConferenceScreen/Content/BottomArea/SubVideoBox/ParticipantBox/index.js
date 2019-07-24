@@ -5,12 +5,12 @@ import { actionCreators as mainUserActionCreators } from "../../../../../../redu
 const mapStateToProps = (state, ownProps) => {
   const {
     user,
-    user: { isMuteVideo },
+    user: { isMuteVideo, isMuteAudio, isMuteMic },
     user: { videoTrack },
     isSelect
   } = ownProps;
 
-  return { user, isMuteVideo, videoTrack, isSelect };
+  return { user, isMuteVideo, isMuteAudio, isMuteMic, videoTrack, isSelect };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {

@@ -9,7 +9,9 @@ import {
 } from 'react-native';
 import { RTCView } from 'react-native-webrtc';
 import DeviceInfo from 'react-native-device-info';
-import ButtonCameraOff from '../../../../../../../assets/buttons/btn_vc_camera_off.png';
+// import ButtonCameraOff from '../../../../../../../assets/buttons/btn_vc_camera_off.png';
+import ButtonCameraOff from '../../../../../../../assets/icons/speaker/ico-camera-bl-off_2x.png';
+import CustomIcon from '../../../../../../components/CustomIcon';
 
 const apiLevel = DeviceInfo.getAPILevel();
 const canUseStream =
@@ -49,6 +51,18 @@ const ParticipantBoxPresenter = props => {
         style={[styles.videoArea, props.isSelect && styles.videoAreaSelected]}
       >
         {content}
+        {props.isMuteAudio || props.isMuteMic && (
+          <CustomIcon
+            name={'icoMikeOff'}
+            width={24}
+            height={24}
+            style={{
+              position: 'absolute',
+              bottom: 5,
+              right: 5
+            }}
+          />
+        )}
       </View>
       <View style={styles.nameArea}>
         <Text style={styles.name}>{props.user.name}</Text>
@@ -63,15 +77,16 @@ const styles = StyleSheet.create({
     // height: 120,
     display: 'flex',
     marginHorizontal: 2,
-    marginLeft: 10,
+    marginLeft: 10
   },
   videoArea: {
     flex: 1,
     width: 90,
     height: 90,
     backgroundColor: '#1D1D1D',
-    borderWidth: 3,
-    borderColor: 'rgba(255, 255, 255, 0.5)',
+    borderWidth: 0,
+    // borderWidth: 3,
+    // borderColor: 'rgba(255, 255, 255, 0.5)',
     // borderRadius: 50,
     overflow: 'hidden'
   },
@@ -82,7 +97,7 @@ const styles = StyleSheet.create({
   video: {
     flex: 1,
     // opacity: 1,
-    backgroundColor: '#1D1D1D',
+    backgroundColor: 'rgb(102, 104, 106)',
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
@@ -102,8 +117,8 @@ const styles = StyleSheet.create({
     color: '#fff'
   },
   imageCameraOff: {
-    width: '50%',
-    height: '50%'
+    width: '30%',
+    height: '30%'
   }
 });
 
