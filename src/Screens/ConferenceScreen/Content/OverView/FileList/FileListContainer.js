@@ -113,6 +113,31 @@ class FileListContainer extends Component {
   };
 
   /**
+   * _handleGetDirectoryInfo
+   * 폴더 정보 가져오기
+   */
+  _handleGetDirectoryInfo = async directory => {
+    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, portal_id } = this.props.auth;
+    const { TokenID } = this.props;
+
+    const authData = {
+      AUTH_A_TOKEN,
+      AUTH_R_TOKEN,
+      HASH_KEY
+    };
+
+    const directoryInfo = {
+      TokenID: TokenID,
+      FileUniqueKey: directory.fileUniqueKey,
+      fileUniqueKey: directory.fileUniqueKey,
+      parentFileUniqueKey: directory.parentFileUniqueKey,
+      path: portal_id + '@'
+    };
+
+    await this.props.getDirectoryInfoRequest(authData, directoryInfo);
+  };
+
+  /**
    * _handleGetFileInfo
    * 파일 정보 가져오기
    */
@@ -159,7 +184,7 @@ class FileListContainer extends Component {
         method = 'getAttachmentsPublicURL';
         break;
       case 'directory':
-        alert('directory');
+        this._handleGetDirectoryInfo(file);
         return;
       default:
         Alert.alert('경고', '지원하지 않는 파일 확장자입니다.', [

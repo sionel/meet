@@ -26,6 +26,8 @@ const mapDispatchToProps = dispatch => {
       dispatch(WedriveActions.getFileListRequest(authData, initInfo)),
     getFileInfoRequest: (authData, fileInfo) =>
       dispatch(WedriveActions.getFileInfoRequest(authData, fileInfo)),
+    getDirectoryInfoRequest: (authData, directory) =>
+      dispatch(WedriveActions.getDirectoryInfoRequest(authData, directory)),
   };
 };
 

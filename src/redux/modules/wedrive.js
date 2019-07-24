@@ -6,6 +6,7 @@ import { WedriveApi } from '../../services';
 const SET_INIT_INFO = 'SET_INIT_INFO';
 const SET_FILE_LIST = 'SET_FILE_LIST';
 const SET_FILE_INFO = 'SET_FILE_INFO';
+const UPDATE_FILE_LIST_UPDATE = 'UPDATE_FILE_LIST_UPDATE';
 
 //#region Action Creators
 
@@ -20,6 +21,14 @@ const setFileList = storageList => {
   return {
     type: SET_FILE_LIST,
     storageList
+  };
+};
+
+const updateFileList = (storageList, directory) => {
+  return {
+    type: UPDATE_FILE_LIST_UPDATE,
+    storageList,
+    directory
   };
 };
 
@@ -46,6 +55,29 @@ const applyFileList = (state, action) => {
   };
 };
 
+const applyUpdateFileList = (state, action) => {
+  const { storageList: list, directory } = action;
+
+  let newList = list.slice(0);
+
+  console.log(directory.fileUniqueKey, directory.path, directory.parentFileUniqueKey);
+  directory.fileUniqueKey !== directory.path &&
+    newList.unshift({
+      directory: true,
+      fileName: '이전폴더',
+      type: 'preFolder',
+      fileUniqueKey: directory.parentFileUniqueKey,
+      parentFileUniqueKey: directory.path,
+      path: directory.parentFileUniqueKey
+    });
+  console.log(newList);
+
+  return {
+    ...state,
+    storageList: newList
+  };
+};
+
 const applyFileInfo = (state, action) => {
   const { fileInfo } = action;
   return {
@@ -57,31 +89,10 @@ const applyFileInfo = (state, action) => {
 //#region initialState
 
 const initialState = {
-  // initInfo
   TokenID: null,
-  // indexUseMode: null,
-  // tokenId: null,
-  // userId: null,
-  // directoryPath: null,
-  // fileUniqueKey: null,
-  // viewType: null,
-  // sortName: null,
-  // sortType: null,
-  // parentFileUniqueKey: null,
-  // currentPage: 0,
-
-  // storageList
-  // directory: [],
-  // accessTypeOpen: null,
-  // basePath: null,
-  // cnoOpen: null,
-  // isSearchView: null,
-  // pathDepth: null,
   storageList: [],
-  // storageListCnt: 0,
-  // totalPageCnt: 0,
-  // fileInfoList
-  fileInfo: []
+  fileInfo: [],
+  temp: []
 };
 
 //#endregion initialState
@@ -94,6 +105,8 @@ reducer = (state = initialState, action) => {
       return applyInitInfo(state, action);
     case SET_FILE_LIST:
       return applyFileList(state, action);
+    case UPDATE_FILE_LIST_UPDATE:
+      return applyUpdateFileList(state, action);
     case SET_FILE_INFO:
       return applyFileInfo(state, action);
     default:
@@ -118,7 +131,9 @@ const initInfoRequest = authData => {
 
     if (tokenResult.resultList) {
       const wedriveToken = {
-        TokenID: `${tokenResult.resultList[0][9].objectTokenId}@@${AUTH_A_TOKEN}`
+        TokenID: `${
+          tokenResult.resultList[0][9].objectTokenId
+        }@@${AUTH_A_TOKEN}`
       };
 
       return dispatch(setInitInfo(wedriveToken));
@@ -165,6 +180,29 @@ const getFileInfoRequest = (authData, fileData) => {
   };
 };
 
+/**
+ * getDirectoryInfoRequest
+ */
+const getDirectoryInfoRequest = (authData, directory) => {
+  return async dispatch => {
+    const fileListResult = await WedriveApi.getDirectoryInfo(
+      authData,
+      directory
+    );
+
+    if (fileListResult.resultList) {
+      const sortedList = await fileListResult.resultList.sort((a, b) => {
+        if (a.directory) return -1;
+        if (b.directory) return 1;
+        return a.fileName > b.fileName ? 1 : -1;
+      });
+      return dispatch(updateFileList(sortedList, directory));
+    } else {
+      return fileListResult;
+    }
+  };
+};
+
 //#endregion
 
 //#region Export
@@ -172,7 +210,8 @@ const getFileInfoRequest = (authData, fileData) => {
 export const actionCreators = {
   initInfoRequest,
   getFileListRequest,
-  getFileInfoRequest
+  getFileInfoRequest,
+  getDirectoryInfoRequest
 };
 
 export default reducer;

@@ -59,12 +59,14 @@ const getList = async (authData, TokenID) => {
         ...headers,
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        method: 'getRootFileListObject',
-        service: 'wedriveShareService'
+        method: 'getFileListObject',
+        service: 'storageService'
+        // method: 'getRootFileListObject', // 공유폴더까지 조회
+        // service: 'wedriveShareService'
       },
       body: JSON.stringify({
-        TokenID: TokenID
-        // FileUniqueKey: `${authData.portalID}@`
+        TokenID: TokenID,
+        FileUniqueKey: `${authData.portalID}@` // 공유폴더까지 조회
       })
     };
     const response = await fetch(url, data);
@@ -104,7 +106,41 @@ const getFileInfo = async (authData, fileInfo) => {
     const responseJson = await response.json();
     return responseJson;
   } catch (err) {
-    console.warn(err)
+    console.warn(err);
+    return err;
+  }
+};
+
+/**
+ * wedrive directory 상세정보
+ */
+const getDirectoryInfo = async (authData, directory) => {
+  try {
+    const url = `${wehagoBaseURL}/WeDriveStorage/services/login`;
+    const headers = securityRequest(
+      authData.AUTH_A_TOKEN,
+      authData.AUTH_R_TOKEN,
+      url,
+      authData.HASH_KEY
+    );
+    const data = {
+      method: 'POST',
+      headers: {
+        ...headers,
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        // TokenID: directory.TokenID,
+        method: 'getFileListObject',
+        service: 'storageService'
+      },
+      body: JSON.stringify(directory)
+    };
+
+    const response = await fetch(url, data);
+    const responseJson = await response.json();
+    return responseJson;
+  } catch (err) {
+    console.warn(err);
     return err;
   }
 };
@@ -112,5 +148,6 @@ const getFileInfo = async (authData, fileInfo) => {
 export default {
   getToken,
   getList,
-  getFileInfo
+  getFileInfo,
+  getDirectoryInfo
 };
