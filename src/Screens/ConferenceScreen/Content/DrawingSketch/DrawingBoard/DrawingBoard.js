@@ -20,7 +20,9 @@ class DrawingBoard extends Component {
   state = {};
 
   componentDidUpdate = (prevProps, prevState) => {
-    this._drawingManager.drawCanvas(this.props.documentData);
+    let data = this.props.documentData[this.props.page];
+    if (!data) data = [];
+    this._drawingManager.drawCanvas(data);
   };
 
   render() {
@@ -30,13 +32,14 @@ class DrawingBoard extends Component {
       stroke,
       color,
       documentData,
+      page,
       rWidth,
       rHeight,
       presenter,
       onStrokeEnd
     } = this.props;
 
-    this._drawingManager.set('DRAW_DATA', documentData);
+    this._drawingManager.set('DRAW_DATA', documentData[page] || []);
     this._drawingManager.set('BASE_WIDTH', rWidth);
     this._drawingManager.set('BASE_HEIGHT', rHeight);
     this._drawingManager.set('SCALE', this.props.scale);

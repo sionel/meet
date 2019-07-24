@@ -119,10 +119,15 @@ function setDrawData(documentData) {
 }
 
 function applysetDrawData(state, action) {
-  const { documentData } = action;
+  const { documentData, page } = state;
+  const { documentData: newData } = action;
+
+  let newDocumentData = documentData.slice(0);
+  newDocumentData[page] = newData;
+  console.log(newDocumentData)
   return {
     ...state,
-    documentData: documentData
+    documentData: newDocumentData
   };
 }
 

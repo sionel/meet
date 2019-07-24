@@ -59,8 +59,6 @@ const applyUpdateFileList = (state, action) => {
   const { storageList: list, directory } = action;
 
   let newList = list.slice(0);
-
-  console.log(directory.fileUniqueKey, directory.path, directory.parentFileUniqueKey);
   directory.fileUniqueKey !== directory.path &&
     newList.unshift({
       directory: true,
@@ -70,7 +68,6 @@ const applyUpdateFileList = (state, action) => {
       parentFileUniqueKey: directory.path,
       path: directory.parentFileUniqueKey
     });
-  console.log(newList);
 
   return {
     ...state,

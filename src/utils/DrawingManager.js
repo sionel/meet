@@ -186,7 +186,9 @@ class DrawingManager {
         height: height,
       }
     };
+    console.log('asdf', this.DRAW_DATA)
     this.DRAW_DATA.push(object);
+    console.log('2')
     newData.attributes.documentData = JSON.stringify(this.DRAW_DATA);
 
     return newData;
