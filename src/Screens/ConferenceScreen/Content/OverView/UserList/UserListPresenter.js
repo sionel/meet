@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import { Text, View, StyleSheet, FlatList, Image } from 'react-native';
+import CustomIcon from '../../../../../components/CustomIcon';
 // import personIcon from '../../../../../../assets/icons/ico-sv-person-gray.png';
 
 const UserListPresenter = props => {
@@ -26,7 +27,8 @@ const UserListPresenter = props => {
               ellipsizeMode={'tail'}
               style={styles.nameField}
             >
-              {item.name} 길어져라이름이름
+              {item.name}
+              {console.log(item)}
               {/* ({item.userInfo.wehagoId || '외부참여자'}) */}
             </Text>
             {item.id === 'localUser' && (
@@ -49,7 +51,19 @@ const UserListPresenter = props => {
           >
             {/* <Text style={{ flex: 1 }}>icon</Text>
             <Text style={{ flex: 1 }}>icon</Text> */}
-            <Text>mic</Text>
+            <CustomIcon
+              name={
+                item.id === 'localUser'
+                  ? item.isMuteMic
+                    ? 'mikeOff'
+                    : 'mikeOn'
+                  : item.isMuteAudio
+                  ? 'mikeOff'
+                  : 'mikeOn'
+              }
+              width={24}
+              height={24}
+            />
           </View>
         </View>
       )}

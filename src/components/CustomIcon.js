@@ -22,6 +22,11 @@ import ico_txt from '../../assets/icons/wedrive/ico_fn_txt_120.imageset/ico_fn_t
 import ico_word from '../../assets/icons/wedrive/ico_fn_word_120.imageset/ico_fn_word_120.png';
 import ico_xls from '../../assets/icons/wedrive/ico_fn_xls_120.imageset/ico_fn_xls_120.png';
 import ico_xlsx from '../../assets/icons/wedrive/ico_fn_xlsx_120.imageset/ico_fn_xlsx_80_2x.png';
+import btn_mike_on from '../../assets/icons/speaker/btn-mike-on_2x.png';
+import btn_mike_on from '../../assets/icons/speaker/btn-mike-on_2x.png';
+import ico_mike_off from '../../assets/icons/speaker/ico-vc-mike-small-off_2x.png';
+import btn_camera_on from '../../assets/icons/speaker/btn-camera-on_2x.png';
+import btn_camera_off from '../../assets/icons/speaker/btn-camera-off_2x.png';
 
 const CustomIcon = props => {
   return (
@@ -90,6 +95,12 @@ const getButtonSource = name => {
       return ico_png;
     case 'pdf':
       return ico_pdf;
+    case 'mikeOn':
+      return btn_mike_on;
+    case 'mikeOff':
+      return btn_mike_off;
+    case 'icoMikeOff':
+      return ico_mike_off;
     default:
       return ico_etc;
   }

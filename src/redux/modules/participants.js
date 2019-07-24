@@ -189,14 +189,27 @@ function updateMuteVideo(track) {
 function applyUpdateMuteVideo(state, action) {
 	const { track } = action;
 	const list = state.list.slice(0);
-	const findUser = list.find(user => {
-		if (user.videoTrack && user.id === track.getParticipantId()) {
-			return true;
+
+	if (track.getType() === 'vidio') {
+		const findUser = list.find(user => {
+			if (user.videoTrack && user.id === track.getParticipantId()) {
+				return true;
+			}
+			return false;
+		});
+		if (findUser) {
+			findUser.isMuteVideo = track.isMuted();
 		}
-		return false;
-	});
-	if (findUser) {
-		findUser.isMuteVideo = track.isMuted();
+	} else if (track.getType() === 'audio') {
+		const findUser = list.find(user => {
+			if (user.audioTrack && user.id === track.getParticipantId()) {
+				return true;
+			}
+			return false;
+		});
+		if (findUser) {
+			findUser.isMuteAudio = track.isMuted();
+		}
 	}
 
 	return {

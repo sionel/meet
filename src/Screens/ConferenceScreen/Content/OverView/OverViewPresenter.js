@@ -110,7 +110,9 @@ const styles = StyleSheet.create({
   bottomArea: {
     // height: '50%',
     flex: 2,
-    backgroundColor: 'rgb(232, 235, 239)'
+    backgroundColor: 'rgb(232, 235, 239)',
+    borderTopColor: '#ddd',
+    borderTopWidth: 1
   },
   header: {
     flexDirection: 'row',

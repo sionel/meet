@@ -171,7 +171,7 @@ class ConferenceManager {
 
   /**
    * VIDEO_MUTE_CHANGED
-   * 카메라가 오프되면 발생한다.
+   * 카메라 또는 오디오(마이크)가 온/오프되면 발생한다.
    */
   _videoMutedChanged = track => {
     this._dispatch(participantsAcionCreators.updateMuteVideo(track));
