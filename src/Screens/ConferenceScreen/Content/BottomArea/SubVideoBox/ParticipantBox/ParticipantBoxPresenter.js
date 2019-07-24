@@ -42,6 +42,7 @@ const ParticipantBoxPresenter = props => {
         <Image source={ButtonCameraOff} style={styles.imageCameraOff} />
       </View>
     );
+
   return (
     <TouchableOpacity
       style={styles.container}
@@ -51,7 +52,7 @@ const ParticipantBoxPresenter = props => {
         style={[styles.videoArea, props.isSelect && styles.videoAreaSelected]}
       >
         {content}
-        {props.isMuteAudio || props.isMuteMic && (
+        {(props.isMuteAudio || props.isMuteMic) && (
           <CustomIcon
             name={'icoMikeOff'}
             width={24}
@@ -70,6 +71,15 @@ const ParticipantBoxPresenter = props => {
     </TouchableOpacity>
   );
 };
+
+ParticipantBoxPresenter.defaultProps = {
+  user: {
+    name: '',
+    isMuteAudio: false,
+    isMuteMic: false,
+    isMuteVideo: false,
+  }
+}
 
 const styles = StyleSheet.create({
   container: {

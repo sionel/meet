@@ -9,7 +9,6 @@ export default class UserListContainer extends Component {
       ...user,
       userInfo: { profile_url: auth.profile_url, wehagoId: auth.portal_id }
     });
-    console.log(userList)
 
     return <UserListPresenter userList={userList} presenter={presenter} />;
   }

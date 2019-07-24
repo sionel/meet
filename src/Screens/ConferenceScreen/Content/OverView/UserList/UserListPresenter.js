@@ -16,9 +16,13 @@ const UserListPresenter = props => {
             <View style={styles.profileCover}>
               <Image
                 style={styles.profileImg}
-                source={{
-                  uri: `https://www.wehago.com${item.userInfo.profile_url}`
-                }}
+                source={
+                  item.userInfo
+                    ? {
+                        uri: `https://www.wehago.com${item.userInfo.profile_url}`
+                      }
+                    : null
+                }
                 resizeMode={'center'}
               />
             </View>
@@ -28,7 +32,6 @@ const UserListPresenter = props => {
               style={styles.nameField}
             >
               {item.name}
-              {console.log(item)}
               {/* ({item.userInfo.wehagoId || '외부참여자'}) */}
             </Text>
             {item.id === 'localUser' && (
