@@ -29,9 +29,11 @@ class OverViewContainer extends Component {
         tabs={selectedTabs}
         // hasNotch={hasNotch}
         orientation={orientation}
+        speaker={this.props.speaker}
         setDocumentListMode={this._handleDocumentListMode}
         onChangeSharingMode={onChangeSharingMode}
         onChangeState={this._handleChangeState}
+        onChangeSpeaker={this.props.onChangeSpeaker}
       />
     );
   }

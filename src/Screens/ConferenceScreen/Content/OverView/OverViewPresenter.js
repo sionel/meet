@@ -14,21 +14,19 @@ const OverViewPresenter = props => {
     view,
     tabs,
     orientation,
+    speaker,
     setDocumentListMode,
     onChangeSharingMode,
-    onChangeState
+    onChangeState,
+    onChangeSpeaker
   } = props;
 
   const ViewComponent = () => {
     switch (view) {
       case 'USERLIST':
-        return <UserList />;
+        return <UserList speaker={speaker} onChangeSpeaker={onChangeSpeaker} />;
       case 'FILELIST':
-        return (
-          <FileList
-            onChangeSharingMode={onChangeSharingMode}
-          />
-        );
+        return <FileList onChangeSharingMode={onChangeSharingMode} />;
       default:
         return null;
     }

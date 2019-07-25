@@ -252,6 +252,8 @@ const FileSharingPresenter = props => {
           mode={['USERLIST']}
           defaultMode={'USERLIST'}
           orientation={props.orientation}
+          speaker={props.speaker}
+          onChangeSpeaker={props.onChangeSpeaker}
         />
       )}
     </Fragment>

@@ -3,13 +3,30 @@ import UserListPresenter from './UserListPresenter';
 
 export default class UserListContainer extends Component {
   render() {
-    const { auth, user, users, attributes, presenter } = this.props;
+    const {
+      auth,
+      user,
+      users,
+      attributes,
+      presenter,
+      speaker,
+      toggleMuteMic,
+      onChangeSpeaker
+    } = this.props;
     let userList = users.slice(0);
     userList.unshift({
       ...user,
       userInfo: { profile_url: auth.profile_url, wehagoId: auth.portal_id }
     });
 
-    return <UserListPresenter userList={userList} presenter={presenter} />;
+    return (
+      <UserListPresenter
+        userList={userList}
+        presenter={presenter}
+        speaker={speaker}
+        toggleMuteMic={toggleMuteMic}
+        onChangeSpeaker={onChangeSpeaker}
+      />
+    );
   }
 }

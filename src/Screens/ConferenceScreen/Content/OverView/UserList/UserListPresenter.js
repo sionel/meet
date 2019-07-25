@@ -1,10 +1,24 @@
 import React, { Fragment } from 'react';
-import { Text, View, StyleSheet, FlatList, Image } from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  FlatList,
+  Image,
+  TouchableOpacity
+} from 'react-native';
 import CustomIcon from '../../../../../components/CustomIcon';
 // import personIcon from '../../../../../../assets/icons/ico-sv-person-gray.png';
 
 const UserListPresenter = props => {
-  const { userList, presenter } = props;
+  const {
+    userList,
+    presenter,
+    speaker,
+    toggleMuteMic,
+    // toggleMuteSpeaker,
+    onChangeSpeaker // 스피커폰
+  } = props;
 
   return (
     <FlatList
@@ -19,7 +33,9 @@ const UserListPresenter = props => {
                 source={
                   item.userInfo
                     ? {
-                        uri: `https://www.wehago.com${item.userInfo.profile_url}`
+                        uri: `https://www.wehago.com${
+                          item.userInfo.profile_url
+                        }`
                       }
                     : null
                 }
@@ -52,21 +68,32 @@ const UserListPresenter = props => {
               justifyContent: 'flex-end'
             }}
           >
-            {/* <Text style={{ flex: 1 }}>icon</Text>
-            <Text style={{ flex: 1 }}>icon</Text> */}
-            <CustomIcon
-              name={
-                item.id === 'localUser'
-                  ? item.isMuteMic
-                    ? 'mikeOff'
-                    : 'mikeOn'
-                  : item.isMuteAudio
-                  ? 'mikeOff'
-                  : 'mikeOn'
-              }
-              width={24}
-              height={24}
-            />
+            {/* 스피커폰 컨트롤 */}
+            <TouchableOpacity onPress={onChangeSpeaker}>
+              {speaker === 1 && item.id === 'localUser' && (
+                <CustomIcon name={'speakerOn'} width={30} height={24} />
+              )}
+              {speaker === 2 && item.id === 'localUser' && (
+                <CustomIcon name={'speakerOff'} width={30} height={24} />
+              )}
+            </TouchableOpacity>
+
+            {/* 마이크 컨트롤 */}
+            {item.id === 'localUser' ? (
+              <TouchableOpacity onPress={toggleMuteMic}>
+                <CustomIcon
+                  name={item.isMuteMic ? 'mikeOff' : 'mikeOn'}
+                  width={30}
+                  height={24}
+                />
+              </TouchableOpacity>
+            ) : (
+              <CustomIcon
+                name={item.isMuteAudio ? 'mikeOff' : 'mikeOn'}
+                width={30}
+                height={24}
+              />
+            )}
           </View>
         </View>
       )}

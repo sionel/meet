@@ -30,6 +30,8 @@ import btn_mike_off from '../../assets/icons/speaker/btn-mike-off_2x.png';
 import ico_mike_off from '../../assets/icons/speaker/ico-vc-mike-small-off_2x.png';
 import btn_camera_on from '../../assets/icons/speaker/btn-camera-on_2x.png';
 import btn_camera_off from '../../assets/icons/speaker/btn-camera-off_2x.png';
+import btn_speaker_on from '../../assets/icons/speaker/btn-speaker-on_2x.png';
+import btn_speaker_off from '../../assets/icons/speaker/btn-speaker-off_2x.png';
 
 const CustomIcon = props => {
   return (
@@ -111,6 +113,10 @@ const getButtonSource = name => {
       return btn_mike_off;
     case 'icoMikeOff':
       return ico_mike_off;
+    case 'speakerOn':
+      return btn_speaker_on;
+    case 'speakerOff':
+      return btn_speaker_off;
     default:
       return ico_etc;
   }
