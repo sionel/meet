@@ -25,13 +25,17 @@ import ico_rtf from '../../assets/icons/wedrive/ico_fn_txt_120.imageset/ico_fn_t
 import ico_word from '../../assets/icons/wedrive/ico_fn_word_120.imageset/ico_fn_word_120.png';
 import ico_xls from '../../assets/icons/wedrive/ico_fn_xls_120.imageset/ico_fn_xls_120.png';
 import ico_xlsx from '../../assets/icons/wedrive/ico_fn_xlsx_120.imageset/ico_fn_xlsx_80_2x.png';
-import btn_mike_on from '../../assets/icons/speaker/btn-mike-on_2x.png';
-import btn_mike_off from '../../assets/icons/speaker/btn-mike-off_2x.png';
+// import btn_mike_on from '../../assets/icons/speaker/btn-mike-on_2x.png';
+// import btn_mike_off from '../../assets/icons/speaker/btn-mike-off_2x.png';
+import btn_mike_on from '../../assets/icons/speaker/btn-mike-on_2x_re.png';
+import btn_mike_off from '../../assets/icons/speaker/btn-mike-off_2x_re.png';
 import ico_mike_off from '../../assets/icons/speaker/ico-vc-mike-small-off_2x.png';
-import btn_camera_on from '../../assets/icons/speaker/btn-camera-on_2x.png';
-import btn_camera_off from '../../assets/icons/speaker/btn-camera-off_2x.png';
-import btn_speaker_on from '../../assets/icons/speaker/btn-speaker-on_2x.png';
-import btn_speaker_off from '../../assets/icons/speaker/btn-speaker-off_2x.png';
+// import btn_camera_on from '../../assets/icons/speaker/btn-camera-on_2x.png';
+// import btn_camera_off from '../../assets/icons/speaker/btn-camera-off_2x.png';
+// import btn_speaker_on from '../../assets/icons/speaker/btn-speaker-on_2x.png';
+// import btn_speaker_off from '../../assets/icons/speaker/btn-speaker-off_2x.png';
+import btn_speaker_on from '../../assets/icons/speaker/btn-speaker-on_2x_re.png';
+import btn_speaker_off from '../../assets/icons/speaker/btn-speaker-off_2x_re.png';
 
 const CustomIcon = props => {
   return (
