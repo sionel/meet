@@ -121,7 +121,9 @@ const ContentPresenter = props => {
           mode={['USERLIST', 'FILELIST']}
           defaultMode={'FILELIST'}
           orientation={props.orientation}
+          speaker={props.speaker}
           onChangeSharingMode={props.onChangeSharingMode}
+          onChangeSpeaker={props.onChangeSpeaker}
         />
       )}
     </View>
