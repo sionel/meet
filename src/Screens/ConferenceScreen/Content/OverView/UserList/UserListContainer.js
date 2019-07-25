@@ -11,7 +11,8 @@ export default class UserListContainer extends Component {
       presenter,
       speaker,
       toggleMuteMic,
-      onChangeSpeaker
+      onChangeSpeaker,
+      // updateMuteAudio
     } = this.props;
     let userList = users.slice(0);
     userList.unshift({
@@ -26,6 +27,7 @@ export default class UserListContainer extends Component {
         speaker={speaker}
         toggleMuteMic={toggleMuteMic}
         onChangeSpeaker={onChangeSpeaker}
+        // updateMuteAudio={updateMuteAudio}
       />
     );
   }

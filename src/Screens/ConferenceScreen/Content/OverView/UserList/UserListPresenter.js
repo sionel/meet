@@ -87,13 +87,12 @@ const UserListPresenter = props => {
                   height={24}
                 />
               </TouchableOpacity>
-            ) : (
-              <CustomIcon
-                name={item.isMuteAudio ? 'mikeOff' : 'mikeOn'}
-                width={30}
-                height={24}
-              />
-            )}
+            ) : // <CustomIcon
+            //   name={item.isMuteAudio ? 'mikeOff' : 'mikeOn'}
+            //   width={30}
+            //   height={24}
+            // />
+            null}
           </View>
         </View>
       )}

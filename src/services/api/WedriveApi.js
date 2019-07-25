@@ -137,6 +137,7 @@ const getDirectoryInfo = async (authData, directory) => {
     };
 
     const response = await fetch(url, data);
+    // console.log(response)
     const responseJson = await response.json();
     return responseJson;
   } catch (err) {
