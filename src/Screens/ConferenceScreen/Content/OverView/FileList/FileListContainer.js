@@ -161,12 +161,12 @@ class FileListContainer extends Component {
 
     switch (extentionType) {
       case 'txt':
-      case 'one':
-      case 'hwp':
+      case 'rtf':
       case 'ppt':
       case 'pptx':
       case 'show':
-      case 'rtf':
+      case 'one':
+      case 'hwp':
       case 'doc':
       case 'docx':
       case 'xls':
@@ -178,6 +178,8 @@ class FileListContainer extends Component {
       case 'jpeg':
       case 'gif':
       case 'png':
+      case 'tif':
+      case 'tiff':
         method = 'getImageURL';
         break;
       case 'pdf':

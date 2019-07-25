@@ -13,12 +13,15 @@ import ico_hwp from '../../assets/icons/wedrive/ico_fn_hwp_120.imageset/ico_fn_h
 import ico_jpeg from '../../assets/icons/wedrive/ico_fn_jpeg_120.imageset/ico_fn_jpeg_120.png';
 import ico_jpg from '../../assets/icons/wedrive/ico_fn_jpg_120.imageset/ico_fn_jpg_120.png';
 import ico_one from '../../assets/icons/wedrive/ico_fn_one_120.imageset/ico_fn_one_120.png';
+import ico_show from '../../assets/icons/wedrive/ico_fn_show_120.imageset/ico_fn_hanshow_120.png';
 import ico_pdf from '../../assets/icons/wedrive/ico_fn_pdf_120.imageset/ico_fn_pdf_120.png';
 import ico_png from '../../assets/icons/wedrive/ico_fn_png_120.imageset/ico_fn_png_120.png';
 import ico_ppt from '../../assets/icons/wedrive/ico_fn_ppt_120.imageset/ico_fn_ppt_120.png';
 import ico_pptx from '../../assets/icons/wedrive/ico_fn_pptx_120.imageset/ico_fn_pptx_80_2x.png';
 import ico_tif from '../../assets/icons/wedrive/ico_fn_tif_120.imageset/ico_fn_tif_120.png';
+import ico_tiff from '../../assets/icons/wedrive/ico_fn_tif_120.imageset/ico_fn_tif_120.png';
 import ico_txt from '../../assets/icons/wedrive/ico_fn_txt_120.imageset/ico_fn_txt_120.png';
+import ico_rtf from '../../assets/icons/wedrive/ico_fn_txt_120.imageset/ico_fn_txt_120.png';
 import ico_word from '../../assets/icons/wedrive/ico_fn_word_120.imageset/ico_fn_word_120.png';
 import ico_xls from '../../assets/icons/wedrive/ico_fn_xls_120.imageset/ico_fn_xls_120.png';
 import ico_xlsx from '../../assets/icons/wedrive/ico_fn_xlsx_120.imageset/ico_fn_xlsx_80_2x.png';
@@ -62,6 +65,8 @@ const getButtonSource = name => {
       return ico_shareFolder;
     case 'txt':
       return ico_txt;
+    // case 'rtf':
+    //   return ico_rtf;
     case 'one':
       return ico_one;
     case 'hwp':
@@ -72,8 +77,8 @@ const getButtonSource = name => {
       return ico_pptx;
     case 'show':
       return ico_show;
-    case 'rtf':
-      return ico_rtf;
+    // case 'rtf':
+    //   return ico_rtf;
     case 'word':
       return ico_word;
     case 'doc':
@@ -92,6 +97,10 @@ const getButtonSource = name => {
       return ico_jpeg;
     case 'gif':
       return ico_gif;
+    case 'tif':
+      return ico_tif;
+    case 'tiff':
+      return ico_tiff;
     case 'png':
       return ico_png;
     case 'pdf':
