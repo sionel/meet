@@ -5,6 +5,7 @@
 
 import React, { Fragment } from 'react';
 import { NativeModules, NetInfo } from 'react-native';
+import KeepAwake from 'react-native-keep-awake';
 import ConferenceScreenPresenter from './ConferenceScreenPresenter';
 import ConferenceManager from '../../utils/conference/ConferenceManager';
 // import Orientation from 'react-native-orientation-locker';
@@ -26,6 +27,7 @@ class ConferenceScreenContainer extends React.Component {
    * componentDidMount
    */
   componentDidMount() {
+    KeepAwake.activate();
     // if (PlatformConstants.interfaceIdiom === 'phone') Orientation.unlockAllOrientations();
     // else {
     // 	Orientation.lockToPortrait();
@@ -88,6 +90,7 @@ class ConferenceScreenContainer extends React.Component {
    * componentWillUnmount
    */
   componentWillUnmount() {
+    KeepAwake.deactivate();
     // Orientation.lockToPortrait();
     // 컴포넌트가 언마운트 되기전 화상회의 관련 리소스를 해제 한다.
     this._conferenceManager.dispose();
