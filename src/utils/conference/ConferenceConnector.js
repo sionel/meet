@@ -299,7 +299,6 @@ class ConferenceConnector {
      */
     this._room.addCommandListener(DOCUMENT_SHARE_TARGET, value => {
       if (this._room.myUserId() === value.attributes.target) {
-        console.warn(value);
         this._handlers.CHANGED_DOCUMENT_SHARE_MODE(
           {
             fileName: value.attributes.fileName,
@@ -404,8 +403,6 @@ class ConferenceConnector {
   };
 
   documentShareTarget = (user, documentData) => {
-    console.warn(user, documentData);
-
     if (documentData.presenter === 'localUser') {
       this._room.sendCommandOnce(DOCUMENT_SHARE_TARGET, {
         value: this._room.myUserId(),

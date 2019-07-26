@@ -201,7 +201,6 @@ class ConferenceManager {
    */
   // _changeDocumentShareMode = status => {
   changeDrawData = (drawData, selectResource) => {
-    console.log('selectResource',selectResource)
     this._dispatch(DocumentShareAcionCreators.setDrawData(drawData, selectResource));
   };
 

@@ -153,7 +153,7 @@ class DrawingContainer extends Component {
 
   shouldComponentUpdate = (nextProps, nextState) => {
     if (nextProps.image !== this.props.image) {
-      this._handleGetImageSize(this.props.image);
+      this._handleGetImageSize(nextProps.image);
       return false;
     }
     return true;

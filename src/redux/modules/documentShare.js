@@ -125,7 +125,6 @@ function applysetDrawData(state, action) {
   const { documentData, page } = state;
   const { documentData: newData, selectResource } = action;
 
-  console.log(selectResource)
   let newDocumentData = documentData.slice(0);
   newDocumentData[selectResource] = newData;
 
