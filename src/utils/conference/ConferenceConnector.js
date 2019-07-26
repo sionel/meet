@@ -240,17 +240,19 @@ class ConferenceConnector {
      */
     this._room.addCommandListener(UPDATE_DOCUMENT_DATA, value => {
       const {
-        attributes: { documentData, from },
+        attributes: { documentData, from, selectResource },
         value: userId
       } = value;
-      // console.log(documentData)
 
       // 데이터 변경자가 본인과 다를 경우 캔버스 그리기
       if (userId !== this._room.myUserId()) {
         // const _drawData = JSON.parse(drawData);
         // this._drawingManager.handleConvertFormat('web', value);
         // console.log('documentData', documentData);
-        this._handlers.CHANGED_DRAW_DATA(JSON.parse(documentData));
+        this._handlers.CHANGED_DRAW_DATA(
+          JSON.parse(documentData),
+          selectResource
+        );
       }
     });
 
@@ -369,7 +371,7 @@ class ConferenceConnector {
   /**
    *
    */
-  setDrawingData = data => {
+  setDrawingData = (data, page) => {
     // 로그 기록이 있을 경우 참여자들에게 기록 전송
     const newData = this._drawingManager.handleConvertFormat('mobile', data);
     // this._room.sendCommand(UPDATE_DOCUMENT_DATA, {
@@ -377,13 +379,15 @@ class ConferenceConnector {
       value: this._room.myUserId(),
       attributes: {
         documentData: newData.attributes.documentData,
+        selectResource: page,
         width: newData.attributes.width,
         height: newData.attributes.height,
         from: 'mobile'
       }
     });
     this._handlers.CHANGED_DRAW_DATA(
-      JSON.parse(newData.attributes.documentData)
+      JSON.parse(newData.attributes.documentData),
+      page
     );
   };
 

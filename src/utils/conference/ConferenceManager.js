@@ -200,8 +200,9 @@ class ConferenceManager {
    * 문서공유/드로잉모드 전환
    */
   // _changeDocumentShareMode = status => {
-  changeDrawData = drawData => {
-    this._dispatch(DocumentShareAcionCreators.setDrawData(drawData));
+  changeDrawData = (drawData, selectResource) => {
+    console.log('selectResource',selectResource)
+    this._dispatch(DocumentShareAcionCreators.setDrawData(drawData, selectResource));
   };
 
   /**
@@ -242,9 +243,8 @@ class ConferenceManager {
    * setDrawingData
    * 드로잉데이터 전송
    */
-  setDrawingData = data => {
-    // alert(JSON.stringify(data));
-    this._conferenceConnector.setDrawingData(data);
+  setDrawingData = (data, page) => {
+    this._conferenceConnector.setDrawingData(data, page);
   };
 
   /**

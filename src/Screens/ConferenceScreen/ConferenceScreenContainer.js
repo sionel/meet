@@ -179,7 +179,7 @@ class ConferenceScreenContainer extends React.Component {
    * 드로잉데이터 전송
    */
   _handleSetDrawingData = data => {
-    this._conferenceManager.setDrawingData(data);
+    this._conferenceManager.setDrawingData(data, this.props.documentShare.page);
   };
 
   /**

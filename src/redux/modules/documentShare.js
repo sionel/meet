@@ -111,21 +111,23 @@ function applysetDocumentPage(state, action) {
 
 //#region SET_DRAW_DATA
 
-function setDrawData(documentData) {
+function setDrawData(documentData, selectResource) {
   return dispatch => {
     dispatch({
       type: SET_DRAW_DATA,
-      documentData
+      documentData,
+      selectResource
     });
   };
 }
 
 function applysetDrawData(state, action) {
   const { documentData, page } = state;
-  const { documentData: newData } = action;
+  const { documentData: newData, selectResource } = action;
 
+  console.log(selectResource)
   let newDocumentData = documentData.slice(0);
-  newDocumentData[page] = newData;
+  newDocumentData[selectResource] = newData;
 
   return {
     ...state,
