@@ -15,7 +15,7 @@ const initialState = {
   attributes: false,
   presenter: false,
   page: 0,
-  documentData: [],
+  documentData: []
 };
 
 //#endregion
@@ -62,25 +62,27 @@ function applySetDocumentListMode(state, action) {
 
 //#region SET_SHARING_MODE
 
-function setSharingMode(attributes, presenter) {
+function setSharingMode(attributes, presenter, page, documentData) {
   return dispatch => {
     dispatch({
       type: SET_SHARING_MODE,
       attributes,
-      presenter
+      presenter,
+      page,
+      documentData
     });
   };
 }
 
 function applySetSharingMode(state, action) {
-  const { attributes, presenter } = action;
+  const { attributes, presenter, page, documentData } = action;
   return {
     ...state,
     documentListMode: false,
     attributes: attributes,
     presenter: presenter,
-    page: 0,
-    documentData: []
+    page: page,
+    documentData: documentData
   };
 }
 
@@ -124,7 +126,7 @@ function applysetDrawData(state, action) {
 
   let newDocumentData = documentData.slice(0);
   newDocumentData[page] = newData;
-  console.log(newDocumentData)
+
   return {
     ...state,
     documentData: newDocumentData
@@ -137,7 +139,7 @@ export const actionCreators = {
   setDocumentListMode,
   setSharingMode,
   setDocumentPage,
-  setDrawData,
+  setDrawData
 };
 
 export default reducer;

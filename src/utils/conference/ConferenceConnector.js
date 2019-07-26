@@ -26,6 +26,9 @@ export const SET_DOCUMENT_PAGE = 'SET_DOCUMENT_PAGE';
 // 문서공유 데이터 전달 커멘드 타입
 export const UPDATE_DOCUMENT_DATA = 'UPDATE_DOCUMENT_DATA';
 
+// 특정 타켓한데만 전달 커맨드 타입
+export const DOCUMENT_SHARE_TARGET = 'DOCUMENT_SHARE_TARGET';
+
 /**
  * ConferenceConnector
  * 화상회의 방 생성/참가 및 디바이스 연결을 담당하는 클래스
@@ -36,6 +39,11 @@ class ConferenceConnector {
     this._room = null;
     this._tracks = [];
     this._handlers = handlers;
+    // this.isShareMode = {
+    //   share: false,
+    //   attributes: false,
+    //   drawingData: []
+    // };
     // 드로잉 클래스
     this._drawingManager = new DrawingMananger();
   }
@@ -103,6 +111,10 @@ class ConferenceConnector {
   selectParticipant = id => {
     this._room.selectParticipant(id);
   };
+
+  setDocumentData = data => {
+    this._room.documentData = data;
+  };
   //#endregion
 
   //#region Private Functions
@@ -155,7 +167,7 @@ class ConferenceConnector {
 
     // JOIN_USER 이벤트 연결
     this._room.on(conferenceEvents.USER_JOINED, (id, user) => {
-      this._handlers.JOIN_USER(user)
+      this._handlers.JOIN_USER(user);
     });
 
     // LEFT_USER 이벤트 연결
@@ -209,6 +221,7 @@ class ConferenceConnector {
      */
     this._room.addCommandListener(SET_DOCUMENT_SHARE_IS_OPEN, value => {
       const { value: userId, attributes } = value;
+      // if (attributes.user === 'ALL' || attributes.user === this._room.myUserId())
       if (userId !== this._room.myUserId()) {
         this._handlers.CHANGED_DOCUMENT_SHARE_MODE(attributes, userId);
       } else {
@@ -216,10 +229,10 @@ class ConferenceConnector {
       }
     });
     this._room.addCommandListener(SET_DOCUMENT_SHARE_IS_CLOSE, value => {
-      const { value: userId } = value;
-      if (userId !== this._room.myUserId()) {
-        this._handlers.CHANGED_DOCUMENT_SHARE_MODE(false, false);
-      }
+      // const { value: userId } = value;
+      // if (userId !== this._room.myUserId()) {
+      this._handlers.CHANGED_DOCUMENT_SHARE_MODE(false, false);
+      // }
     });
 
     /**
@@ -230,12 +243,13 @@ class ConferenceConnector {
         attributes: { documentData, from },
         value: userId
       } = value;
+      // console.log(documentData)
 
       // 데이터 변경자가 본인과 다를 경우 캔버스 그리기
       if (userId !== this._room.myUserId()) {
         // const _drawData = JSON.parse(drawData);
         // this._drawingManager.handleConvertFormat('web', value);
-        console.log('documentData', documentData);
+        // console.log('documentData', documentData);
         this._handlers.CHANGED_DRAW_DATA(JSON.parse(documentData));
       }
     });
@@ -277,6 +291,25 @@ class ConferenceConnector {
         // if (attributes.type === "undo") this._drawingManager.undo();
       }
     });
+
+    /**
+     * 새로 참가한 사람만 받아라
+     */
+    this._room.addCommandListener(DOCUMENT_SHARE_TARGET, value => {
+      if (this._room.myUserId() === value.attributes.target) {
+        console.warn(value);
+        this._handlers.CHANGED_DOCUMENT_SHARE_MODE(
+          {
+            fileName: value.attributes.fileName,
+            owner: value.attributes.owner,
+            resources: value.attributes.resources
+          },
+          value.value,
+          Number(value.attributes.selectResource),
+          JSON.parse(value.attributes.objectData)
+        );
+      }
+    });
   };
 
   /**
@@ -305,7 +338,7 @@ class ConferenceConnector {
   /**
    * 드로잉 모드 전환 공유
    */
-  setToogleDocumentShare = (attributes, presenter) => {
+  setToogleDocumentShare = (attributes, user = 'ALL') => {
     const command = attributes
       ? SET_DOCUMENT_SHARE_IS_OPEN
       : SET_DOCUMENT_SHARE_IS_CLOSE;
@@ -315,14 +348,17 @@ class ConferenceConnector {
       value: this._room.myUserId(),
       attributes
     });
-    this._handlers.CHANGED_DOCUMENT_SHARE_MODE(attributes, this._room.myUserId());
+    this._handlers.CHANGED_DOCUMENT_SHARE_MODE(
+      attributes,
+      this._room.myUserId()
+    );
   };
 
   /**
    * 페이지 전환 공유
    */
   setDocumentPage = (page, presenter) => {
-    presenter &&
+    presenter === 'localUser' &&
       this._room.sendCommandOnce(SET_DOCUMENT_PAGE, {
         value: this._room.myUserId(),
         attributes: { page: page }
@@ -361,6 +397,23 @@ class ConferenceConnector {
     this._room.sendCommandOnce(CLEAR_DRAWING_CANVAS, {
       value: this._room.myUserId()
     });
+  };
+
+  documentShareTarget = (user, documentData) => {
+    console.warn(user, documentData);
+
+    if (documentData.presenter === 'localUser') {
+      this._room.sendCommandOnce(DOCUMENT_SHARE_TARGET, {
+        value: this._room.myUserId(),
+        attributes: {
+          ...documentData.attributes,
+          selectResource: documentData.page,
+          target: user.id,
+          objectData: JSON.stringify(documentData.documentData),
+          from: 'mobile'
+        }
+      });
+    }
   };
 
   //#endregion

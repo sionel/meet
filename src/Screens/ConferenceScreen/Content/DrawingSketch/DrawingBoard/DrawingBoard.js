@@ -19,6 +19,12 @@ class DrawingBoard extends Component {
 
   state = {};
 
+  componentDidMount = () => {
+    let data = this.props.documentData[this.props.page];
+    if (!data) data = [];
+    this._drawingManager.drawCanvas(data);
+  };
+
   componentDidUpdate = (prevProps, prevState) => {
     let data = this.props.documentData[this.props.page];
     if (!data) data = [];

@@ -248,8 +248,7 @@ class FileListContainer extends Component {
         fileName: fileName,
         owner: portal_id,
         resources: JSON.stringify(resources)
-      },
-      true
+      }
     );
   };
 }

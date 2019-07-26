@@ -111,6 +111,10 @@ class ConferenceManager {
     this._conferenceConnector.selectParticipant(id);
   };
 
+  setDocumentData = data => {
+    this._conferenceConnector.setDocumentData(data);
+  };
+
   // #endregion
 
   /**
@@ -128,6 +132,7 @@ class ConferenceManager {
       CHANGED_DOCUMENT_PAGE: this.changeDocumentPage,
       CHANGED_DOCUMENT_SHARE_MODE: this.changeDocumentShareMode,
       CHANGED_DRAW_DATA: this.changeDrawData,
+      DOCUMENT_SHARE_TARGET: this.documentShareTarget
     };
     return handler;
   };
@@ -195,19 +200,27 @@ class ConferenceManager {
    * 문서공유/드로잉모드 전환
    */
   // _changeDocumentShareMode = status => {
-  changeDrawData = (drawData) => {
-    this._dispatch(
-      DocumentShareAcionCreators.setDrawData(drawData)
-    );
+  changeDrawData = drawData => {
+    this._dispatch(DocumentShareAcionCreators.setDrawData(drawData));
   };
 
   /**
    * 문서공유/드로잉모드 전환
    */
   // _changeDocumentShareMode = status => {
-  changeDocumentShareMode = (attributes = false, presenter = false) => {
+  changeDocumentShareMode = (
+    attributes = false,
+    presenter = false,
+    page = 0,
+    documentData = []
+  ) => {
     this._dispatch(
-      DocumentShareAcionCreators.setSharingMode(attributes, presenter)
+      DocumentShareAcionCreators.setSharingMode(
+        attributes,
+        presenter,
+        page,
+        documentData
+      )
     );
   };
 
@@ -238,9 +251,9 @@ class ConferenceManager {
    * setToogleDocumentShare
    * 드로잉데이터 전송
    */
-  setToogleDocumentShare = (attributes, presenter) => {
+  setToogleDocumentShare = attributes => {
     // alert(JSON.stringify(data));
-    this._conferenceConnector.setToogleDocumentShare(attributes, presenter);
+    this._conferenceConnector.setToogleDocumentShare(attributes);
   };
 
   /**
@@ -249,6 +262,14 @@ class ConferenceManager {
    */
   setClear = () => {
     this._conferenceConnector.setClear();
+  };
+
+  /**
+   * documentShareTarget
+   * 특정 타겟에게만 데이터 전송
+   */
+  documentShareTarget = (user, drawData) => {
+    this._conferenceConnector.documentShareTarget(user, drawData);
   };
 }
 

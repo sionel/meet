@@ -75,7 +75,7 @@ class ConferenceScreenContainer extends React.Component {
 
   /** */
   componentDidUpdate(prevProps) {
-    const { mainUserId } = this.props;
+    const { mainUserId, documentShare, list } = this.props;
     if (
       this._conferenceManager &&
       mainUserId &&
@@ -83,6 +83,17 @@ class ConferenceScreenContainer extends React.Component {
     ) {
       const conferenceManager = new ConferenceManager();
       conferenceManager.selectParticipant(mainUserId);
+    }
+
+    // 드로잉 중에 유저 접속시 실행
+    if (
+      this._conferenceManager &&
+      list.length > 0 &&
+      list.length > prevProps.list.length &&
+      documentShare.attributes
+    ) {
+      const conferenceManager = new ConferenceManager();
+      conferenceManager.documentShareTarget(list[list.length - 1], documentShare);
     }
   }
 
@@ -198,8 +209,8 @@ class ConferenceScreenContainer extends React.Component {
   /**
    * _handleChangeSharingMode
    */
-  _handleChangeSharingMode = (status, presenter) => {
-    this._conferenceManager.setToogleDocumentShare(status, presenter);
+  _handleChangeSharingMode = status => {
+    this._conferenceManager.setToogleDocumentShare(status);
   };
 }
 

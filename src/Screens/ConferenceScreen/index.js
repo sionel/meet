@@ -16,7 +16,8 @@ const mapStateToProps = state => {
 		local: { user },
 		mainUser: { mainUserId },
 		participants: { list },
-		user: { auth }
+		user: { auth },
+		documentShare
 	} = state;
 	
 	const mainUser = getMainUser(mainUserId, user, list);
@@ -25,6 +26,8 @@ const mapStateToProps = state => {
 		mainUser,
 		user_name: auth.user_name,
 		auth: auth,
+		documentShare,
+		list
 	};
 };
 
