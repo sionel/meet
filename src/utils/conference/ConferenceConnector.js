@@ -359,7 +359,7 @@ class ConferenceConnector {
    * 페이지 전환 공유
    */
   setDocumentPage = (page, presenter) => {
-    if (presenter === 'localUser') {
+    if (presenter === 'localUser' || presenter === this._room.myUserId()) {
       this._room.sendCommandOnce(SET_DOCUMENT_PAGE, {
         value: this._room.myUserId(),
         attributes: { page: page }
