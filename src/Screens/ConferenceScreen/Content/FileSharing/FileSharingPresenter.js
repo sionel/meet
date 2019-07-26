@@ -13,6 +13,7 @@ import {
   SafeAreaView
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
+import RBSheet from 'react-native-raw-bottom-sheet';
 import DrawingSketch from '../DrawingSketch';
 import CustomButton from '../../../../components/CustomButton';
 import OverView from '../OverView';
@@ -247,7 +248,18 @@ const FileSharingPresenter = props => {
       </SafetyView>
 
       {/* OverView 영역 */}
-      {props.documentListMode && (
+      {/* {props.documentListMode && ( */}
+      <RBSheet
+        ref={ref => props.onSetRef(ref)}
+        height={props.height}
+        closeOnDragDown={true}
+        onClose={() => props.setDocumentListMode(false)}
+        customStyles={{
+          container: {
+            backgroundColor: 'transparent'
+          }
+        }}
+      >
         <OverView
           mode={['USERLIST']}
           defaultMode={'USERLIST'}
@@ -255,7 +267,8 @@ const FileSharingPresenter = props => {
           speaker={props.speaker}
           onChangeSpeaker={props.onChangeSpeaker}
         />
-      )}
+      </RBSheet>
+      {/* )} */}
     </Fragment>
   );
 };

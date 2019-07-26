@@ -6,8 +6,11 @@ import {
   ScrollView,
   TouchableOpacity
 } from 'react-native';
+import DeviceInfo from 'react-native-device-info';
 import FileList from './FileList';
 import UserList from './UserList';
+
+const isTablet = DeviceInfo.isTablet();
 
 const OverViewPresenter = props => {
   const {
@@ -63,12 +66,12 @@ const OverViewPresenter = props => {
   };
 
   return (
-    <View style={styles.container}>
-      <TouchableOpacity
+    <View style={[styles.container, { top: isTablet ? 200 : 100 }]}>
+      {/* <TouchableOpacity
         activeOpacity={1}
         style={styles.topArea}
         onPress={() => setDocumentListMode(false)}
-      />
+      /> */}
 
       <View style={styles.bottomArea}>
         <View style={styles.header}>
@@ -94,10 +97,11 @@ const styles = StyleSheet.create({
   container: {
     position: 'absolute',
     zIndex: 11,
+    top: 100,
     bottom: 0,
     left: 0,
     width: '100%',
-    height: '100%',
+    // height: '100%',
     backgroundColor: 'transparent'
   },
   topArea: {

@@ -1,6 +1,13 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity, StatusBar } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  StatusBar,
+  Dimensions
+} from 'react-native';
 import { RTCView } from 'react-native-webrtc';
+import RBSheet from 'react-native-raw-bottom-sheet';
 import DrawingSketch from './DrawingSketch';
 import MainVideo from './MainVideo';
 import TopArea from './TopArea';
@@ -116,7 +123,18 @@ const ContentPresenter = props => {
       {/* END 하단 영역 */}
 
       {/* OverView 영역 */}
-      {props.documentListMode && (
+      {/* {props.documentListMode && ( */}
+      <RBSheet
+        ref={ref => props.onSetRef(ref)}
+        height={props.height}
+        closeOnDragDown={true}
+        onClose={() => props.setDocumentListMode(false)}
+        customStyles={{
+          container: {
+            backgroundColor: 'transparent'
+          }
+        }}
+      >
         <OverView
           mode={['USERLIST', 'FILELIST']}
           defaultMode={'FILELIST'}
@@ -125,7 +143,8 @@ const ContentPresenter = props => {
           onChangeSharingMode={props.onChangeSharingMode}
           onChangeSpeaker={props.onChangeSpeaker}
         />
-      )}
+      </RBSheet>
+      {/* )} */}
     </View>
   );
 };

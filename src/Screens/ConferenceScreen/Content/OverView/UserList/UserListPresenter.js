@@ -25,7 +25,11 @@ const UserListPresenter = props => {
       data={userList}
       style={styles.userList}
       renderItem={({ item }) => (
-        <View style={styles.itemBox}>
+        <TouchableOpacity
+          style={styles.itemBox}
+          activeOpacity={1}
+          onPress={() => {}}
+        >
           <View style={{ flex: 5, flexDirection: 'row', alignItems: 'center' }}>
             <View style={styles.profileCover}>
               <Image
@@ -94,7 +98,7 @@ const UserListPresenter = props => {
             // />
             null}
           </View>
-        </View>
+        </TouchableOpacity>
       )}
     />
   );

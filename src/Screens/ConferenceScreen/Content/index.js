@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import ContentContainer from './ContentContainer';
 import { actionCreators as localActions } from '../../../redux/modules/local';
 import { actionCreators as mainUserActions } from '../../../redux/modules/mainUser';
+import { actionCreators as DocumentShareActions } from '../../../redux/modules/documentShare';
 
 const mapStateToProps = (state, ownProps) => {
 	const { local: { conferenceMode } } = state;
@@ -26,6 +27,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 		setDrawingMode: value => {
 			return dispatch(mainUserActions.setDrawingMode(value));
 		},
+		setDocumentListMode: value => {
+      return dispatch(DocumentShareActions.setDocumentListMode(value));
+    },
 		// setSharingMode: value => {
 		// 	return dispatch(mainUserActions.setSharingMode(value));
 		// },

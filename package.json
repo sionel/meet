@@ -46,6 +46,7 @@
     "react-native-orientation-locker": "^1.1.1",
     "react-native-permissions": "^1.1.1",
     "react-native-picker-select": "^6.0.0",
+    "react-native-raw-bottom-sheet": "^2.0.2",
     "react-native-sound": "github:jitsi/react-native-sound#e4260ed7f641eeb0377d76eac7987aba72e1cf08",
     "react-native-splash-screen": "^3.2.0",
     "react-native-svg": "^9.0.0",

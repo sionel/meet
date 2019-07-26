@@ -30,7 +30,8 @@ class ContentContainer extends React.Component {
         : 'horizontal',
     isVideoReverse: false,
     speaker: 2,
-    objectFit: 'contain'
+    objectFit: 'contain',
+    height: Dimensions.get('window').height
     // drawing: false
   };
 
@@ -47,6 +48,16 @@ class ContentContainer extends React.Component {
     this._handleChangeSpeaker(AudioMode.VIDEO_CALL);
     BackHandler.addEventListener('hardwareBackPress', this._handleBackButton);
     Orientation.addOrientationListener(this._setOrientation);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.documentListMode !== this.props.documentListMode) {
+      if (this.props.documentListMode) {
+        this.RNBS.open();
+      } else {
+        this.RNBS.close();
+      }
+    }
   }
 
   componentWillUnmount() {
@@ -68,11 +79,13 @@ class ContentContainer extends React.Component {
         // sharing={this.props.attributes}
         // onClear={this.props.onClear}
         {...this.props}
+        height={this.state.height}
         speaker={this.state.speaker}
         orientation={this.state.orientation}
         hasNotch={hasNotch}
         onChangeSpeaker={this._handleChangeSpeaker}
         // onChangeSharingMode={this.props.onChangeSharingMode}
+        onSetRef={this._handleSetRef}
       />
     ) : (
       <ContentPresenter
@@ -85,9 +98,14 @@ class ContentContainer extends React.Component {
         onChangeSpeaker={this._handleChangeSpeaker}
         onChangeState={this._handleChangeState}
         onChangeObjectFit={this._handleChangeObjectFit}
+        onSetRef={this._handleSetRef}
       />
     );
   }
+
+  _handleSetRef = ref => {
+    if (ref && this.RNBS !== ref) this.RNBS = ref;
+  };
 
   /**
    * _handleBackButton
@@ -142,12 +160,13 @@ class ContentContainer extends React.Component {
    */
   _setOrientation = () => {
     const { orientation } = this.state;
-    const currentOrientation =
-      Dimensions.get('window').height > Dimensions.get('window').width
-        ? 'vertical'
-        : 'horizontal';
+    const { width, height } = Dimensions.get('window');
+    const currentOrientation = height > width ? 'vertical' : 'horizontal';
     if (orientation !== currentOrientation) {
-      this.setState({ orientation: currentOrientation });
+      this.setState({
+        orientation: currentOrientation,
+        height: Math.max(width, height)
+      });
     }
   };
 
