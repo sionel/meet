@@ -142,6 +142,13 @@ class FileListContainer extends Component {
    * 파일 정보 가져오기
    */
   _handleGetFileInfo = async file => {
+    if (file.size > 1024 * 1024 * 10) {
+      Alert.alert('공유 파일 용량 초과', '공유 가능한 파일 용량을 초과하였습니다.\n10MB 이하의 파일을 선택해주세요.', [
+        { text: 'OK' }
+      ]);
+      return;
+    }
+
     const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY } = this.props.auth;
     const { TokenID } = this.props;
 
@@ -182,16 +189,18 @@ class FileListContainer extends Component {
       case 'tiff':
         method = 'getImageURL';
         break;
-      case 'pdf':
-        method = 'getAttachmentsPublicURL';
-        break;
+      // case 'pdf':
+      //   method = 'getAttachmentsPublicURL';
+      //   break;
       case 'directory':
         this._handleGetDirectoryInfo(file);
         return;
       default:
-        Alert.alert('경고', '지원하지 않는 파일 확장자입니다.', [
-          { text: 'OK' }
-        ]);
+        Alert.alert(
+          '지원하지 않는 확장자',
+          '해당 파일은 문서 공유를 지원하지 않습니다.',
+          [{ text: 'OK' }]
+        );
         return;
     }
 
@@ -224,7 +233,7 @@ class FileListContainer extends Component {
       }
     }
 
-    Alert.alert('Error', '파일 상세정보를 불러오지 못했습니다.', [
+    Alert.alert('문제 발생', '파일 상세정보를 불러오지 못했습니다.', [
       { text: 'OK' }
     ]);
     return;
@@ -240,16 +249,13 @@ class FileListContainer extends Component {
     if (typeof fileInfo[0] === 'string') {
       resources = fileInfo;
     } else {
-      console.log(fileInfo);
       resources = fileInfo[0].resources;
     }
-    this.props.onChangeSharingMode(
-      {
-        fileName: fileName,
-        owner: portal_id,
-        resources: JSON.stringify(resources)
-      }
-    );
+    this.props.onChangeSharingMode({
+      fileName: fileName,
+      owner: portal_id,
+      resources: JSON.stringify(resources)
+    });
   };
 }
 
