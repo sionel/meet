@@ -8,7 +8,8 @@ const WEHAGO_ID = 'wehagoid';
 // 드로잉 이미지 전달 커멘드 타입
 export const UPDATE_DRAWING_DATA = 'UPDATE_DRAWING_DATA';
 // 드로잉 전체 지우기
-export const CLEAR_DRAWING_CANVAS = 'CLEAR_DRAWING_CANVAS';
+// export const CLEAR_DRAWING_CANVAS = 'CLEAR_DRAWING_CANVAS';
+export const CLEAR_DOCUMENT_CANVAS = 'CLEAR_DOCUMENT_CANVAS';
 // 문서공유 모드 설정 커맨드 타입
 export const SET_DRAWING_IS_SHARE = 'SET_DRAWING_IS_SHARE';
 // 캔버스 뒤로가기 앞으로가기 커맨드 타입
@@ -259,7 +260,7 @@ class ConferenceConnector {
     /**
      * 드로잉 캔버스 클리어 감지
      */
-    this._room.addCommandListener(CLEAR_DRAWING_CANVAS, value => {
+    this._room.addCommandListener(CLEAR_DOCUMENT_CANVAS, value => {
       // if (!this._drawingManager) {
       //   this._drawingManager = getDrawingManager();
       // }
