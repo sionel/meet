@@ -21,6 +21,8 @@ class DrawingContainer extends Component {
     this._initialized = false;
     // 드로잉매니저
     this._drawingManager = new DrawingManager();
+
+    this.subPalette = null;
   }
 
   /**
@@ -96,7 +98,7 @@ class DrawingContainer extends Component {
             palette: this.state.selectedTab !== 1
           });
         }
-      },
+      }
       // {
       //   id: 'eraser',
       //   icon: 'eraser',
@@ -156,6 +158,11 @@ class DrawingContainer extends Component {
       this._handleGetImageSize(nextProps.image);
       return false;
     }
+    if (nextState.selectedTab !== this.state.selectedTab) {
+      if (this.subPalette) {
+        this.subPalette.scrollTo({ x: 0, y: 0, animated: false });
+      }
+    }
     return true;
   };
 
@@ -171,9 +178,14 @@ class DrawingContainer extends Component {
         onStrokeEnd={this._handleStrokeEnd}
         onCanvas={this._handleCanvas}
         onClearAll={this._handleClearAll}
+        onSetRef={this._handleSetRef}
       />
     );
   }
+
+  _handleSetRef = ref => {
+    this.subPalette = ref;
+  };
 
   _handleGetImageSize = image => {
     Image.getSize(image, (w, h) => {
@@ -280,9 +292,9 @@ class DrawingContainer extends Component {
   /**
    *
    */
-  _handleClearAll = (a) => {
+  _handleClearAll = a => {
     // this.props.onClear();
-    console.log(a)
+    console.log(a);
   };
 }
 

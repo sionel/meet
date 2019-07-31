@@ -12,7 +12,8 @@ import {
   TouchableOpacity,
   Button,
   Platform,
-  Dimensions
+  Dimensions,
+  ScrollView
 } from 'react-native';
 import { SketchCanvas } from '@terrylinla/react-native-sketch-canvas';
 import DrawingBoard from './DrawingBoard';
@@ -78,7 +79,7 @@ const DrawingPresenter = props => {
               style={[
                 {
                   width: resultSize.width,
-                  height: resultSize.height,
+                  height: resultSize.height
                   // borderColor: 'blue',
                   // borderWidth: 0
                 }
@@ -112,7 +113,7 @@ const DrawingPresenter = props => {
         <View
           style={[
             styles.bottomArea,
-            styles[`bottomArea_vertical`],
+            styles[`bottomArea_vertical`]
             // {
             //   width: vertical // 세로모드
             //     ? '100%'
@@ -138,28 +139,39 @@ const DrawingPresenter = props => {
                 ...styles[`detailSettingWrapper_vertical`]
               }}
             >
-              {selectedTab >= 0 &&
-                tabs[selectedTab].values.map((value, valueIndex) => (
-                  <TouchableOpacity
-                    key={String(value)}
-                    onPress={() =>
-                      selectedTab === 2 && value === 0
-                        ? props.onClear()
-                        : props.onChangeState(tabs[selectedTab].id, valueIndex)
-                    }
-                  >
-                    <View
-                      style={{
-                        ...styles.detailSettingItem,
-                        ...styles[`detailSettingItem_vertical`],
-                        opacity:
-                          props[tabs[selectedTab].id] === valueIndex ? 0.45 : 1
-                      }}
+              <ScrollView
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+                ref={ref => props.onSetRef(ref)}
+              >
+                {selectedTab >= 0 &&
+                  tabs[selectedTab].values.map((value, valueIndex) => (
+                    <TouchableOpacity
+                      key={String(value)}
+                      onPress={() =>
+                        selectedTab === 2 && value === 0
+                          ? props.onClear()
+                          : props.onChangeState(
+                              tabs[selectedTab].id,
+                              valueIndex
+                            )
+                      }
                     >
-                      {tabs[selectedTab].render(value)}
-                    </View>
-                  </TouchableOpacity>
-                ))}
+                      <View
+                        style={{
+                          ...styles.detailSettingItem,
+                          ...styles[`detailSettingItem_vertical`],
+                          opacity:
+                            props[tabs[selectedTab].id] === valueIndex
+                              ? 0.45
+                              : 1
+                        }}
+                      >
+                        {tabs[selectedTab].render(value)}
+                      </View>
+                    </TouchableOpacity>
+                  ))}
+              </ScrollView>
             </View>
           )}
 
@@ -172,10 +184,7 @@ const DrawingPresenter = props => {
           >
             {/* === 메인탭 === */}
             <View
-              style={[
-                styles.mainTabWrapper,
-                styles[`mainTabWrapper_vertical`]
-              ]}
+              style={[styles.mainTabWrapper, styles[`mainTabWrapper_vertical`]]}
             >
               {tabs.map((tab, tabIndex) => (
                 <TouchableOpacity
@@ -218,7 +227,9 @@ const DrawingPresenter = props => {
                 // onPress={() => props.onChangeDrawing(!props.drawing)}
                 onPress={() => props.onSetDrawingData()}
               >
-                <Text style={{ fontSize: 18, color: '#fff', marginLeft: 10 }}>모두 삭제</Text>
+                <Text style={{ fontSize: 18, color: '#fff', marginLeft: 10 }}>
+                  모두 삭제
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -273,7 +284,7 @@ const styles = StyleSheet.create({
 
   bottomArea: {
     position: 'absolute',
-    backgroundColor: '#000',
+    backgroundColor: '#000'
   },
   bottomArea_vertical: {
     flexDirection: 'column',
@@ -288,7 +299,7 @@ const styles = StyleSheet.create({
     width: 134,
     top: 48,
     right: 0,
-    bottom: 0,
+    bottom: 0
   },
 
   // 완료버튼

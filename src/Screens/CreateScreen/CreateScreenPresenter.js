@@ -37,68 +37,70 @@ const CreateScreenPresenter = props => {
       {/* 검색바 */}
       <SearchForm onChange={props.onSearch} />
 
-      {props.list.length < 1 && (
+      {props.list.length < 1 ? (
         <Placeholder
           mainText="검색 결과가 없습니다."
           subText={'위하고에서 위톡을 생성해 보세요'}
         />
+      ) : (
+        // {/* 화상대화 히스토리 리스트 */}
+        <SectionList
+          keyExtractor={(item, index) => index.toString()}
+          refreshing={props.refreshing}
+          onRefresh={props.onRefresh}
+          style={[
+            styles.listContainer,
+            props.hasNotch && {
+              paddingLeft: props.orientation === 'LANDSCAPE-LEFT' ? 24 : 0,
+              paddingRight: props.orientation === 'LANDSCAPE-RIGHT' ? 24 : 0
+            }
+          ]}
+          sections={[
+            {
+              title: `그룹대화(${groupList.length})`,
+              data: groupList,
+              length: groupList.length - 1
+            },
+            {
+              title: `1:1대화(${personnelList.length})`,
+              data: personnelList,
+              length: personnelList.length - 1
+            }
+          ]}
+          renderSectionHeader={({ section }) =>
+            section.data.length > 0 && (
+              <SectionListHeader title={section.title} />
+            )
+          }
+          renderItem={({ item, index, section }) => (
+            // 히스토리 아이템
+            <ListItemComp
+              key={item.room_id}
+              title={item.room_title}
+              personnel={item.receiver_user_count}
+              updated={item.update_timestamp}
+              lottie={false}
+              customLottie={true}
+              underline={index < section.length ? true : false}
+              active={item.is_video_access === 'T' ? true : false}
+              disable={
+                item.receiver_user_count === 1 && item.room_type === '1'
+                  ? true
+                  : false
+              }
+              onClick={() =>
+                item.is_video_access === 'T'
+                  ? props.onCheckConference(
+                      item.video_chat_id,
+                      null,
+                      item.room_title
+                    )
+                  : props.onActivateModal(item.room_id, item.room_title)
+              }
+            />
+          )}
+        />
       )}
-
-      {/* 화상대화 히스토리 리스트 */}
-      <SectionList
-        keyExtractor={(item, index) => index.toString()}
-        refreshing={props.refreshing}
-        onRefresh={props.onRefresh}
-        style={[
-          styles.listContainer,
-          props.hasNotch && {
-            paddingLeft: props.orientation === 'LANDSCAPE-LEFT' ? 24 : 0,
-            paddingRight: props.orientation === 'LANDSCAPE-RIGHT' ? 24 : 0
-          }
-        ]}
-        sections={[
-          {
-            title: `그룹대화(${groupList.length})`,
-            data: groupList,
-            length: groupList.length - 1
-          },
-          {
-            title: `1:1대화(${personnelList.length})`,
-            data: personnelList,
-            length: personnelList.length - 1
-          }
-        ]}
-        renderSectionHeader={({ section }) =>
-          section.data.length > 0 && <SectionListHeader title={section.title} />
-        }
-        renderItem={({ item, index, section }) => (
-          // 히스토리 아이템
-          <ListItemComp
-            key={item.room_id}
-            title={item.room_title}
-            personnel={item.receiver_user_count}
-            updated={item.update_timestamp}
-            lottie={false}
-            customLottie={true}
-            underline={index < section.length ? true : false}
-            active={item.is_video_access === 'T' ? true : false}
-            disable={
-              item.receiver_user_count === 1 && item.room_type === '1'
-                ? true
-                : false
-            }
-            onClick={() =>
-              item.is_video_access === 'T'
-                ? props.onCheckConference(
-                    item.video_chat_id,
-                    null,
-                    item.room_title
-                  )
-                : props.onActivateModal(item.room_id, item.room_title)
-            }
-          />
-        )}
-      />
 
       <CustomModal
         display={props.modal}
