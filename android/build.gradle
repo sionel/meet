@@ -79,44 +79,44 @@ allprojects {
             // complying with the full range of their npm peer dependency and,
             // consequently, we should qualify their version.
             def versionQualifier = '-jitsi-1'
-            if ('react-native-background-timer' == project.name)
-                versionQualifier = '-jitsi-3' // 2.0.0 + react-native 0.57
-            else if ('react-native-calendar-events' == project.name)
-                versionQualifier = '-jitsi-2' // 1.6.4 + react-native 0.57
-            else if ('react-native-fast-image' == project.name)
-                versionQualifier = '-jitsi-2' // 5.1.1 + react-native 0.57
-            // else if ('react-native-google-signin' == project.name)
-            //     versionQualifier = '-jitsi-2' // 1.0.2 + react-native 0.57
-            else if ('react-native-immersive' == project.name)
-                versionQualifier = '-jitsi-5' // 2.0.0 + react-native 0.57
-            else if ('react-native-keep-awake' == project.name)
-                versionQualifier = '-jitsi-4' // 4.0.0 + react-native 0.57
-            else if ('react-native-linear-gradient' == project.name)
-                versionQualifier = '-jitsi-1' // 2.4.0 + react-native 0.57
-            else if ('react-native-sound' == project.name)
-                versionQualifier = '-jitsi-2' // 0.10.9 + react-native 0.57
-            else if ('react-native-vector-icons' == project.name)
-                versionQualifier = '-jitsi-3' // 6.0.2 + react-native 0.57
-            else if ('react-native-webrtc' == project.name)
-                versionQualifier = '-jitsi-9' // 6322a9b5a38ce590cfaea4041072ea87c8dbf558 + react-native 0.57
-            else if ('react-native-gesture-handler' == project.name)
-                versionQualifier = '-jitsi-1' // 1.1.0 + react-native 0.57
-            else if ('react-native-orientation-locker' == project.name)
-                versionQualifier = '-jitsi-1' // 1.1.1 + react-native 0.57
-            else if ('react-native-system-setting' == project.name)
-                versionQualifier = '-jitsi-1' // 1.7.1 + react-native 0.57
-            else if ('react-native-svg' == project.name)
-                versionQualifier = '-jitsi-1' // 9/0/0 + react-native 0.57
-            else if ('lottie-react-native' == project.name)
-                versionQualifier = '-jitsi-1' // 2.5.11 + react-native 0.57
-            else if ('react-native-splash-screen' == project.name)
-                versionQualifier = '-jitsi-1' // x.x.x + react-native 0.57
-            else if ('react-native-device-info' == project.name)
-                versionQualifier = '-jitsi-1' // 1.4.2 + react-native 0.57
-            else if ('react-native-sketch-canvas' == project.name)
-                versionQualifier = '-jitsi-1' // 1.4.2 + react-native 0.57
-            else if ('react-native-webview' == project.name)
-                versionQualifier = '-jitsi-1' // 1.4.2 + react-native 0.57
+            // if ('react-native-background-timer' == project.name)
+            //     versionQualifier = '-jitsi-3' // 2.0.0 + react-native 0.57
+            // else if ('react-native-calendar-events' == project.name)
+            //     versionQualifier = '-jitsi-2' // 1.6.4 + react-native 0.57
+            // else if ('react-native-fast-image' == project.name)
+            //     versionQualifier = '-jitsi-2' // 5.1.1 + react-native 0.57
+            // // else if ('react-native-google-signin' == project.name)
+            // //     versionQualifier = '-jitsi-2' // 1.0.2 + react-native 0.57
+            // else if ('react-native-immersive' == project.name)
+            //     versionQualifier = '-jitsi-5' // 2.0.0 + react-native 0.57
+            // else if ('react-native-keep-awake' == project.name)
+            //     versionQualifier = '-jitsi-4' // 4.0.0 + react-native 0.57
+            // else if ('react-native-linear-gradient' == project.name)
+            //     versionQualifier = '-jitsi-1' // 2.4.0 + react-native 0.57
+            // else if ('react-native-sound' == project.name)
+            //     versionQualifier = '-jitsi-2' // 0.10.9 + react-native 0.57
+            // else if ('react-native-vector-icons' == project.name)
+            //     versionQualifier = '-jitsi-3' // 6.0.2 + react-native 0.57
+            // else if ('react-native-webrtc' == project.name)
+            //     versionQualifier = '-jitsi-9' // 6322a9b5a38ce590cfaea4041072ea87c8dbf558 + react-native 0.57
+            // else if ('react-native-gesture-handler' == project.name)
+            //     versionQualifier = '-jitsi-1' // 1.1.0 + react-native 0.57
+            // else if ('react-native-orientation-locker' == project.name)
+            //     versionQualifier = '-jitsi-1' // 1.1.1 + react-native 0.57
+            // else if ('react-native-system-setting' == project.name)
+            //     versionQualifier = '-jitsi-1' // 1.7.1 + react-native 0.57
+            // else if ('react-native-svg' == project.name)
+            //     versionQualifier = '-jitsi-1' // 9/0/0 + react-native 0.57
+            // else if ('lottie-react-native' == project.name)
+            //     versionQualifier = '-jitsi-1' // 2.5.11 + react-native 0.57
+            // else if ('react-native-splash-screen' == project.name)
+            //     versionQualifier = '-jitsi-1' // x.x.x + react-native 0.57
+            // else if ('react-native-device-info' == project.name)
+            //     versionQualifier = '-jitsi-1' // 1.4.2 + react-native 0.57
+            // else if ('react-native-sketch-canvas' == project.name)
+            //     versionQualifier = '-jitsi-1' // 1.4.2 + react-native 0.57
+            // else if ('react-native-webview' == project.name)
+            //     versionQualifier = '-jitsi-1' // 1.4.2 + react-native 0.57
 
             project.version = "${json.version}${versionQualifier}"
 

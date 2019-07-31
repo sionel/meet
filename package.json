@@ -54,7 +54,7 @@
     "react-native-svg": "^9.0.0",
     "react-native-system-setting": "^1.7.1",
     "react-native-vector-icons": "^6.1.0",
-    "react-native-webrtc": "github:jitsi/react-native-webrtc#c1be0cb1c6e8a83dfd406e478082a5ff205a97ec",
+    "react-native-webrtc": "^1.69.2",
     "react-native-webview": "^3.0.0",
     "react-navigation": "^3.0.9",
     "react-redux": "^6.0.0",

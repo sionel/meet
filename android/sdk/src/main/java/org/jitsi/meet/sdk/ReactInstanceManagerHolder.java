@@ -162,6 +162,7 @@ class ReactInstanceManagerHolder {
                                 reactContext);
                     }
                 })
+                .addPackage(new com.reactnativecommunity.asyncstorage.AsyncStoragePackage())
                 .setUseDeveloperSupport(BuildConfig.DEBUG)
                 .setInitialLifecycleState(LifecycleState.RESUMED)
                 .build();
