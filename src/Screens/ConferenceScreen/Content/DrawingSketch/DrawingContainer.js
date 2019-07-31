@@ -97,32 +97,32 @@ class DrawingContainer extends Component {
           });
         }
       },
-      {
-        id: 'eraser',
-        icon: 'eraser',
-        title: '지우개',
-        // values: [7, 9, 12, 15, 0],
-        values: [7, 9, 12, 15],
-        render: size =>
-          size !== 0 ? (
-            <View
-              style={{
-                width: '97%',
-                height: size,
-                backgroundColor: '#777777',
-                borderRadius: 15
-              }}
-            />
-          ) : (
-            <Icon name={'trash'} size={15} color={'#e54840'} />
-          ),
-        onPress: () => {
-          this.setState({
-            selectedTab: this.state.selectedTab === 2 ? -1 : 2,
-            palette: this.state.selectedTab !== 2
-          });
-        }
-      },
+      // {
+      //   id: 'eraser',
+      //   icon: 'eraser',
+      //   title: '지우개',
+      //   // values: [7, 9, 12, 15, 0],
+      //   values: [7, 9, 12, 15],
+      //   render: size =>
+      //     size !== 0 ? (
+      //       <View
+      //         style={{
+      //           width: '97%',
+      //           height: size,
+      //           backgroundColor: '#777777',
+      //           borderRadius: 15
+      //         }}
+      //       />
+      //     ) : (
+      //       <Icon name={'trash'} size={15} color={'#e54840'} />
+      //     ),
+      //   onPress: () => {
+      //     this.setState({
+      //       selectedTab: this.state.selectedTab === 2 ? -1 : 2,
+      //       palette: this.state.selectedTab !== 2
+      //     });
+      //   }
+      // },
       // {
       //   id: 'undo',
       //   icon: 'undo',

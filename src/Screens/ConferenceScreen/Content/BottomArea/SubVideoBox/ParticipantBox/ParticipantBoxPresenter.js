@@ -26,12 +26,14 @@ const ParticipantBoxPresenter = props => {
   const content =
     stream && !props.isMuteVideo ? (
       canUseStream ? (
-        <RTCView
-          style={styles.video}
-          mirror={false}
-          objectFit={'cover'}
-          streamURL={stream.toURL()}
-        />
+        <View style={styles.video}>
+          <RTCView
+            style={styles.video}
+            mirror={false}
+            objectFit={'cover'}
+            streamURL={stream.toURL()}
+          />
+        </View>
       ) : (
         <View style={styles.video}>
           <Text style={styles.profile}>{props.user.name[0]}</Text>
@@ -77,9 +79,9 @@ ParticipantBoxPresenter.defaultProps = {
     name: '',
     isMuteAudio: false,
     isMuteMic: false,
-    isMuteVideo: false,
+    isMuteVideo: false
   }
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -111,7 +113,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
-    height: '100%'
+    height: '100%',
+    borderWidth: 1,
+    borderColor: 'rgb(102, 104, 106)'
   },
   profile: {
     color: '#DDD',

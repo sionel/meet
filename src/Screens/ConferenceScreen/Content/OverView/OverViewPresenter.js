@@ -66,12 +66,12 @@ const OverViewPresenter = props => {
   };
 
   return (
-    <View style={[styles.container, { top: isTablet ? 200 : 100 }]}>
-      {/* <TouchableOpacity
+    <View style={[styles.container, { top: 0 }]}>
+      <TouchableOpacity
         activeOpacity={1}
         style={styles.topArea}
         onPress={() => setDocumentListMode(false)}
-      /> */}
+      />
 
       <View style={styles.bottomArea}>
         <View style={styles.header}>

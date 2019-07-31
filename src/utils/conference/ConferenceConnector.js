@@ -97,6 +97,12 @@ class ConferenceConnector {
   dispose = async () => {
     if (this._room) {
       try {
+        if (this._room.presenter === this._room.myUserId()) {
+          this._room.sendCommandOnce(SET_DOCUMENT_SHARE_IS_CLOSE, {
+            value: this._room.myUserId(),
+            attributes: null
+          });
+        }
         await this._room.leave();
         this._room = null;
       } catch (error) {
@@ -172,9 +178,12 @@ class ConferenceConnector {
     });
 
     // LEFT_USER 이벤트 연결
-    this._room.on(conferenceEvents.USER_LEFT, id =>
-      this._handlers.LEFT_USER(id)
-    );
+    this._room.on(conferenceEvents.USER_LEFT, id => {
+      if (this._room.presenter === id) {
+        this._handlers.CHANGED_DOCUMENT_SHARE_MODE(false, false);
+      }
+      this._handlers.LEFT_USER(id);
+    });
 
     // 트랙추가 이벤트 연결
     this._room.on(conferenceEvents.TRACK_ADDED, track => {
@@ -223,6 +232,7 @@ class ConferenceConnector {
     this._room.addCommandListener(SET_DOCUMENT_SHARE_IS_OPEN, value => {
       const { value: userId, attributes } = value;
       // if (attributes.user === 'ALL' || attributes.user === this._room.myUserId())
+      this._room.presenter = userId;
       if (userId !== this._room.myUserId()) {
         this._handlers.CHANGED_DOCUMENT_SHARE_MODE(attributes, userId);
       } else {

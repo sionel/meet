@@ -14,7 +14,7 @@ import _ from 'underscore';
  * TopAreaPresenter
  */
 const TopAreaPresenter = props => {
-  if (props.conferenceMode === ConferenceModes.NORMAL) {
+  if (props.conferenceMode !== ConferenceModes.NORMAL) {
     return (
       // <TouchableOpacity
       // <View

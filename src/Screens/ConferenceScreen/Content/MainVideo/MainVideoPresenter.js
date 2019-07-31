@@ -50,7 +50,7 @@ const MainVideoPresenter = props => {
           textAlign: 'center'
         }}
       >
-        {conferenceMode === 'control'
+        {conferenceMode !== 'control'
           ? selectedRoomName
           : second2String(props.time)}
       </Text>

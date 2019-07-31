@@ -13,7 +13,7 @@ class OverViewContainer extends Component {
     const { view } = this.state;
     const tabs = [
       { key: 'USERLIST', name: '참여자 목록' },
-      { key: 'FILELIST', name: 'WeDrive 목록' }
+      { key: 'FILELIST', name: 'WE드라이브 파일' }
     ];
 
     let selectedTabs = [];

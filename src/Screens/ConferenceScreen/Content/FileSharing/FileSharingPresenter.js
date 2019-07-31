@@ -16,6 +16,7 @@ import DeviceInfo from 'react-native-device-info';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import DrawingSketch from '../DrawingSketch';
 import CustomButton from '../../../../components/CustomButton';
+import CustomModal from '../../../../components/CustomModal';
 import OverView from '../OverView';
 
 const SafetyView = Platform.OS === 'ios' ? SafeAreaView : View;
@@ -61,7 +62,8 @@ const FileSharingPresenter = props => {
       {presenter === 'localUser' && (
         <CustomButton
           name={'buttonClose'}
-          onPress={() => props.onChangeSharingMode(false, false)}
+          onPress={() => props.onChangeState('modal')}
+          // onPress={() => props.onChangeSharingMode(false, false)}
           style={{ paddingRight: 12, margin: 0 }}
           width={24}
           height={24}
@@ -248,18 +250,18 @@ const FileSharingPresenter = props => {
       </SafetyView>
 
       {/* OverView 영역 */}
-      {/* {props.documentListMode && ( */}
-      <RBSheet
-        ref={ref => props.onSetRef(ref)}
-        height={props.height}
-        closeOnDragDown={true}
-        onClose={() => props.setDocumentListMode(false)}
-        customStyles={{
-          container: {
-            backgroundColor: 'transparent'
-          }
-        }}
-      >
+      {props.documentListMode && (
+        // <RBSheet
+        //   ref={ref => props.onSetRef(ref)}
+        //   height={props.height}
+        //   closeOnDragDown={true}
+        //   onClose={() => props.setDocumentListMode(false)}
+        //   customStyles={{
+        //     container: {
+        //       backgroundColor: 'transparent'
+        //     }
+        //   }}
+        // >
         <OverView
           mode={['USERLIST']}
           defaultMode={'USERLIST'}
@@ -267,8 +269,17 @@ const FileSharingPresenter = props => {
           speaker={props.speaker}
           onChangeSpeaker={props.onChangeSpeaker}
         />
-      </RBSheet>
-      {/* )} */}
+        // </RBSheet>
+      )}
+
+      <CustomModal
+        display={props.modal}
+        title={"문서공유 종료"}
+        text={"문서공유를 종료하시겠습니까?\n(종료할 경우, 모든 참여자에게 문서가 보이지 않으며 화상대화 화면으로 돌아갑니다.)"}
+        feedbackText="확인"
+        onClickClose={() => props.onChangeState('modal')}
+        onClickFeedback={() => props.onChangeSharingMode(false, false)}
+      />
     </Fragment>
   );
 };

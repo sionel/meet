@@ -10,7 +10,7 @@ const SubVideoBoxPresenter = props => (
     horizontal={props.orientation === 'vertical'}
     style={styles.scrollView}
   >
-    {props.user ? (
+    {props.user && props.mainUserId !== props.user.id ? (
       <ParticipantBox
         key={props.user.id}
         user={props.user}
@@ -18,13 +18,16 @@ const SubVideoBoxPresenter = props => (
         isSelect={props.mainUserId === props.user.id}
       />
     ) : null}
-    {props.participants.map(participant => (
-      <ParticipantBox
-        key={participant.id}
-        user={participant}
-        isSelect={props.mainUserId === participant.id}
-      />
-    ))}
+    {props.participants.map(
+      participant =>
+        props.mainUserId !== participant.id && (
+          <ParticipantBox
+            key={participant.id}
+            user={participant}
+            isSelect={props.mainUserId === participant.id}
+          />
+        )
+    )}
   </ScrollView>
 );
 

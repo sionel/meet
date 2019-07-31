@@ -6,6 +6,7 @@ class FileSharingContainer extends Component {
     showTool: true,
     showPreView: true,
     resources: JSON.parse(this.props.attributes.resources),
+    modal: false
   };
 
   render() {

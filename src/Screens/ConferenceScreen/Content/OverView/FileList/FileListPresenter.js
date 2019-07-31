@@ -31,43 +31,44 @@ const FileListPresenter = props => {
         >
           <Text>파일이 없습니다.</Text>
         </View>
-      ) : null}
-      <FlatList
-        data={props.documentList}
-        style={styles.documentList}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            activeOpacity={0.3}
-            onPress={() => {
-              props.setSharingMode(item);
-            }}
-            style={styles.itemBox}
-          >
-            <CustomIcon
-              name={
-                item.directory
-                  ? item.shareFolder
-                    ? 'shareFolder'
-                    : 'folder'
-                  : getExtentionType(item.fileName)
-              }
-            />
-            <Text
-              numberOfLines={1}
-              ellipsizeMode={'tail'}
-              style={styles.itemInfo}
+      ) : (
+        <FlatList
+          data={props.documentList}
+          style={styles.documentList}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              activeOpacity={0.3}
+              onPress={() => {
+                props.setSharingMode(item);
+              }}
+              style={styles.itemBox}
             >
-              {/* {item.shareFolder && '[공유] '} */}
-              {item.fileName}
-            </Text>
-            {!item.directory && (
-              <Text style={styles.itemSize}>
-                {props.setConvertFileSize(item.size)}
+              <CustomIcon
+                name={
+                  item.directory
+                    ? item.shareFolder
+                      ? 'shareFolder'
+                      : 'folder'
+                    : getExtentionType(item.fileName)
+                }
+              />
+              <Text
+                numberOfLines={1}
+                ellipsizeMode={'tail'}
+                style={styles.itemInfo}
+              >
+                {/* {item.shareFolder && '[공유] '} */}
+                {item.fileName}
               </Text>
-            )}
-          </TouchableOpacity>
-        )}
-      />
+              {!item.directory && (
+                <Text style={styles.itemSize}>
+                  {props.setConvertFileSize(item.size)}
+                </Text>
+              )}
+            </TouchableOpacity>
+          )}
+        />
+      )}
     </Fragment>
   );
 };

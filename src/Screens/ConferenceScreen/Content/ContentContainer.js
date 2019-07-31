@@ -50,15 +50,15 @@ class ContentContainer extends React.Component {
     Orientation.addOrientationListener(this._setOrientation);
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps.documentListMode !== this.props.documentListMode) {
-      if (this.props.documentListMode) {
-        this.RNBS.open();
-      } else {
-        this.RNBS.close();
-      }
-    }
-  }
+  // componentDidUpdate(prevProps, prevState) {
+  //   if (prevProps.documentListMode !== this.props.documentListMode) {
+  //     if (this.props.documentListMode) {
+  //       this.RNBS.open();
+  //     } else {
+  //       this.RNBS.close();
+  //     }
+  //   }
+  // }
 
   componentWillUnmount() {
     // 앱 종료를 막음

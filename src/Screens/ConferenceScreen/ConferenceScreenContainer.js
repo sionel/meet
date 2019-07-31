@@ -19,7 +19,8 @@ class ConferenceScreenContainer extends React.Component {
     this._appState = 'active';
     this.state = {
       callType: 1,
-      connection: true
+      connection: true,
+      selectedRoomName: ''
     };
   }
 
@@ -36,7 +37,7 @@ class ConferenceScreenContainer extends React.Component {
     const item = navigation.getParam('item');
     // 전화 타입 - 화상:1 / 음성:2
     this.callType = item.callType || this.state.callType;
-    this.selectedRoomName = item.selectedRoom;
+    this.selectedRoomName = item.selectedRoomName;
     // 컴포넌트가 마운트 되면 대화방 초기 설정 후 입장한다.
     this._conferenceManager = new ConferenceManager(this.props.dispatch, {
       token: auth.AUTH_A_TOKEN,
@@ -58,6 +59,8 @@ class ConferenceScreenContainer extends React.Component {
     } else {
       delayLoading(0);
     }
+
+    this.setState({ selectedRoomName: this.selectedRoomName });
 
     // NetInfo.getConnectionInfo().then(connectionInfo => {
     //   this.setState({
@@ -93,7 +96,10 @@ class ConferenceScreenContainer extends React.Component {
       documentShare.attributes
     ) {
       const conferenceManager = new ConferenceManager();
-      conferenceManager.documentShareTarget(list[list.length - 1], documentShare);
+      conferenceManager.documentShareTarget(
+        list[list.length - 1],
+        documentShare
+      );
     }
   }
 
