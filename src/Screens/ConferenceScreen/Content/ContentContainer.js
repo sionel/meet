@@ -46,7 +46,6 @@ class ContentContainer extends React.Component {
     // });
     // 스피커폰 설정
     this._handleChangeSpeaker(AudioMode.VIDEO_CALL);
-    BackHandler.addEventListener('hardwareBackPress', this._handleBackButton);
     Orientation.addOrientationListener(this._setOrientation);
   }
 
@@ -61,11 +60,6 @@ class ContentContainer extends React.Component {
   // }
 
   componentWillUnmount() {
-    // 앱 종료를 막음
-    BackHandler.removeEventListener(
-      'hardwareBackPress',
-      this._handleBackButton
-    );
     Orientation.removeOrientationListener(this._setOrientation);
   }
 
@@ -105,29 +99,6 @@ class ContentContainer extends React.Component {
 
   _handleSetRef = ref => {
     if (ref && this.RNBS !== ref) this.RNBS = ref;
-  };
-
-  /**
-   * _handleBackButton
-   */
-  _handleBackButton = () => {
-    // 1000(1초) 안에 back 버튼을 한번 더 클릭 할 경우 앱 종료
-    if (this.exitContent == undefined || !this.exitContent) {
-      ToastAndroid.show(
-        '한번 더 누르면 화상대화가 종료됩니다.',
-        ToastAndroid.SHORT
-      );
-      this.exitContent = true;
-
-      this.timeout = setTimeout(() => {
-        this.exitContent = false;
-      }, 1000);
-    } else {
-      clearTimeout(this.timeout);
-
-      this.props.onClose(); // 컴포넌트 종료
-    }
-    return true;
   };
 
   _handleChangeObjectFit = () => {

@@ -27,7 +27,8 @@ const ContentPresenter = props => {
     drawingMode,
     conferenceMode,
     createdTime,
-    orientation
+    orientation,
+    onClose
   } = props;
 
   const hideStatusbar = orientation === 'horizontal';
@@ -72,6 +73,7 @@ const ContentPresenter = props => {
           drawing={drawingMode}
           conferenceMode={conferenceMode}
           createdTime={createdTime}
+          onClose={onClose}
         />
       </TouchableOpacity>
       {/* END MAIN VIDEO 영역 */}
@@ -124,17 +126,17 @@ const ContentPresenter = props => {
 
       {/* OverView 영역 */}
       {props.documentListMode && (
-      // <RBSheet
-      //   ref={ref => props.onSetRef(ref)}
-      //   height={props.height}
-      //   closeOnDragDown={true}
-      //   onClose={() => props.setDocumentListMode(false)}
-      //   customStyles={{
-      //     container: {
-      //       backgroundColor: 'transparent'
-      //     }
-      //   }}
-      // >
+        // <RBSheet
+        //   ref={ref => props.onSetRef(ref)}
+        //   height={props.height}
+        //   closeOnDragDown={true}
+        //   onClose={() => props.setDocumentListMode(false)}
+        //   customStyles={{
+        //     container: {
+        //       backgroundColor: 'transparent'
+        //     }
+        //   }}
+        // >
         <OverView
           mode={['USERLIST', 'FILELIST']}
           defaultMode={'FILELIST'}
@@ -143,7 +145,7 @@ const ContentPresenter = props => {
           onChangeSharingMode={props.onChangeSharingMode}
           onChangeSpeaker={props.onChangeSpeaker}
         />
-      // </RBSheet>
+        // </RBSheet>
       )}
     </View>
   );

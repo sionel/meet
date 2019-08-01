@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
+import { BackHandler } from 'react-native';
 import FileSharingPresenter from './FileSharingPresenter';
-import ConferenceManager from '../../../../utils/conference/ConferenceManager';
 
 class FileSharingContainer extends Component {
   state = {
@@ -9,6 +9,17 @@ class FileSharingContainer extends Component {
     resources: JSON.parse(this.props.attributes.resources),
     modal: false
   };
+
+  componentDidMount() {
+    this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      this._handleChangeState('modal');
+      return true;
+    });
+  }
+
+  componentWillUnmount() {
+    this.backHandler.remove();
+  }
 
   render() {
     return (

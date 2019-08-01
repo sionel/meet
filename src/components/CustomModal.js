@@ -8,9 +8,7 @@ import {
   Text,
   StyleSheet,
   Modal,
-  TouchableOpacity,
-  SectionList,
-  Image
+  TouchableOpacity
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
