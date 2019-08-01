@@ -8,6 +8,7 @@ import ParticipantBox from './ParticipantBox';
 const SubVideoBoxPresenter = props => (
   <ScrollView
     horizontal={props.orientation === 'vertical'}
+    showsHorizontalScrollIndicator={false}
     style={styles.scrollView}
   >
     {props.user && props.mainUserId !== props.user.id ? (

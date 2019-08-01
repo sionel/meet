@@ -59,18 +59,16 @@ const FileSharingPresenter = props => {
         paddingRight: 16
       }}
     >
-      {presenter === 'localUser' && (
-        <CustomButton
-          name={'buttonClose'}
-          onPress={() => props.onChangeState('modal')}
-          // onPress={() => props.onChangeSharingMode(false, false)}
-          style={{ paddingRight: 12, margin: 0 }}
-          width={24}
-          height={24}
-          areaWdith={24}
-          areaHeight={24}
-        />
-      )}
+      <CustomButton
+        name={'buttonClose'}
+        onPress={() => props.onChangeState('modal')}
+        // onPress={() => props.onChangeSharingMode(false, false)}
+        style={{ paddingRight: 12, margin: 0 }}
+        width={24}
+        height={24}
+        areaWdith={24}
+        areaHeight={24}
+      />
       <Text
         numberOfLines={1}
         ellipsizeMode={'tail'}
@@ -120,7 +118,7 @@ const FileSharingPresenter = props => {
   //미리보기
   const preView = (
     <View style={styles.preView}>
-      <ScrollView horizontal={true}>
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         <FlatList
           data={resources}
           page={page}
@@ -145,6 +143,20 @@ const FileSharingPresenter = props => {
       </ScrollView>
     </View>
   );
+
+  const modalMessage =
+    presenter === 'localUser'
+      ? {
+          title: '문서공유 종료',
+          text:
+            '문서공유를 종료하시겠습니까?\n(종료할 경우, 모든 참여자에게 문서가 보이지 않으며 화상대화 화면으로 돌아갑니다.)',
+          onClickFeedback: () => props.onChangeSharingMode(false, false)
+        }
+      : {
+          title: '화상대화 종료',
+          text: '화상대화를 종료하시겠습니까?',
+          onClickFeedback: props.onDisposeConference
+        };
 
   return (
     <Fragment>
@@ -274,11 +286,11 @@ const FileSharingPresenter = props => {
 
       <CustomModal
         display={props.modal}
-        title={"문서공유 종료"}
-        text={"문서공유를 종료하시겠습니까?\n(종료할 경우, 모든 참여자에게 문서가 보이지 않으며 화상대화 화면으로 돌아갑니다.)"}
+        title={modalMessage.title}
+        text={modalMessage.text}
         feedbackText="확인"
         onClickClose={() => props.onChangeState('modal')}
-        onClickFeedback={() => props.onChangeSharingMode(false, false)}
+        onClickFeedback={modalMessage.onClickFeedback}
       />
     </Fragment>
   );

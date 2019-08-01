@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import FileSharingPresenter from './FileSharingPresenter';
+import ConferenceManager from '../../../../utils/conference/ConferenceManager';
 
 class FileSharingContainer extends Component {
   state = {
@@ -16,9 +17,14 @@ class FileSharingContainer extends Component {
         {...this.state}
         onChangeState={this._handleChangeState}
         onChangePage={this._handleChangePage}
+        onDisposeConference={this._handleDisposeConference}
       />
     );
   }
+
+  _handleDisposeConference = () => {
+    if (this.props.onClose) this.props.onClose();
+  };
 
   _handleChangePage = (page, presenter) => {
     if (this.props.page !== page)
