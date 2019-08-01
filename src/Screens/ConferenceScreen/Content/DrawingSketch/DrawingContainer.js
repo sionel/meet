@@ -183,8 +183,8 @@ class DrawingContainer extends Component {
     );
   }
 
-  _handleSetRef = ref => {
-    this.subPalette = ref;
+  _handleSetRef = (content, ref) => {
+    this[content] = ref;
   };
 
   _handleGetImageSize = image => {

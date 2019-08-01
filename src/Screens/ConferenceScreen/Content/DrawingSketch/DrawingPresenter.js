@@ -142,7 +142,7 @@ const DrawingPresenter = props => {
               <ScrollView
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
-                ref={ref => props.onSetRef(ref)}
+                ref={ref => props.onSetRef('subPalette', ref)}
               >
                 {selectedTab >= 0 &&
                   tabs[selectedTab].values.map((value, valueIndex) => (
