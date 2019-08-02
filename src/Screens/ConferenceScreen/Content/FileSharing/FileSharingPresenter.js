@@ -13,7 +13,8 @@ import {
   SafeAreaView
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import RBSheet from 'react-native-raw-bottom-sheet';
+// import RBSheet from 'react-native-raw-bottom-sheet';
+import FastImage from 'react-native-fast-image';
 import DrawingSketch from '../DrawingSketch';
 import CustomButton from '../../../../components/CustomButton';
 import CustomModal from '../../../../components/CustomModal';
@@ -125,8 +126,9 @@ const FileSharingPresenter = props => {
           horizontal={true}
           renderItem={({ item, index }) => (
             <TouchableOpacity onPress={() => onChangePage(index, presenter)}>
-              <Image
+              <FastImage
                 source={{ uri: item }}
+                resizeMode={FastImage.resizeMode.contain}
                 style={[
                   styles.resourceItem,
                   {

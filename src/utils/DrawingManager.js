@@ -73,9 +73,11 @@ class DrawingManager {
     }
   };
 
+  // 이미지 렌더링 > 드로잉 보드 렌더링 > 그리기 하도록 바꿔라!!!!
   drawCanvas = data => {
     if (!this.canvas) return;
 
+    console.log(3)
     setTimeout(() => {
       this.canvas.clear();
 

@@ -25,7 +25,17 @@ class DrawingBoard extends Component {
     this._drawingManager.drawCanvas(data);
   };
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if (
+      nextProps.documentData !== this.props.documentData ||
+      nextProps.page !== this.props.page
+    )
+      return true;
+    return false;
+  }
+
   componentDidUpdate = (prevProps, prevState) => {
+    console.log(2);
     let data = this.props.documentData[this.props.page];
     if (!data) data = [];
     this._drawingManager.drawCanvas(data);
@@ -44,6 +54,7 @@ class DrawingBoard extends Component {
       presenter,
       onStrokeEnd
     } = this.props;
+    console.log(1);
 
     this._drawingManager.set('DRAW_DATA', documentData[page] || []);
     this._drawingManager.set('BASE_WIDTH', rWidth);
@@ -55,8 +66,8 @@ class DrawingBoard extends Component {
       <SketchCanvas
         ref={ref => this._drawingManager.setRef(ref)}
         style={{
-          width: this.props.rWidth,
-          height: this.props.rHeight,
+          width: rWidth,
+          height: rHeight,
           backgroundColor
           // borderWidth: 2,
           // borderColor: '#d1d1d1'

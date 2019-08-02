@@ -1,8 +1,21 @@
 import React, { Component } from 'react';
 import { BackHandler } from 'react-native';
 import FileSharingPresenter from './FileSharingPresenter';
+import FastImage from 'react-native-fast-image';
 
 class FileSharingContainer extends Component {
+  constructor(props) {
+    super(props);
+
+    let imgList = JSON.parse(props.attributes.resources);
+    imgList = imgList.map(src => ({
+      uri: src,
+      priority: FastImage.priority.high,
+      cache: FastImage.cacheControl.cacheOnly
+    }));
+    FastImage.preload(imgList);
+  }
+
   state = {
     showTool: true,
     showPreView: true,

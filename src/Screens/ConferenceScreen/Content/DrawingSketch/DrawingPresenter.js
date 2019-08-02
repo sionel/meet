@@ -19,7 +19,8 @@ import { SketchCanvas } from '@terrylinla/react-native-sketch-canvas';
 import DrawingBoard from './DrawingBoard';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import DeviceInfo from 'react-native-device-info';
-// import FastImage from 'react-native-fast-image'
+import FastImage from 'react-native-fast-image';
+
 const isIOS = Platform.OS === 'ios';
 const hasNotch = DeviceInfo.hasNotch() && isIOS;
 
@@ -56,6 +57,8 @@ const DrawingPresenter = props => {
     height: imgHeight * scale
   };
 
+  console.log(4);
+
   return (
     <View style={[styles.container, styles[`flexDirection_vertical`]]}>
       {/* 드로잉 영역 */}
@@ -73,37 +76,44 @@ const DrawingPresenter = props => {
           {imageLoading ? (
             <Text>Loading</Text>
           ) : (
-            <ImageBackground
-              source={{ uri: image }}
-              resizeMode={'contain'}
-              style={[
-                {
-                  width: resultSize.width,
-                  height: resultSize.height
-                  // borderColor: 'blue',
-                  // borderWidth: 0
-                }
-              ]}
+            <View
+              style={{ width: resultSize.width, height: resultSize.height }}
             >
-              <DrawingBoard
-                image={image}
-                presenter={presenter}
-                orientation={orientation}
-                width={imgWidth}
-                height={imgHeight}
-                rWidth={resultSize.width}
-                rHeight={resultSize.height}
-                scale={scale}
-                onStrokeEnd={props.onSetDrawingData}
-                color={selectedTab == 2 ? 'transparent' : tabs[1].values[color]}
-                stroke={
-                  selectedTab == 2
-                    ? tabs[2].values[eraser]
-                    : tabs[0].values[stroke]
-                }
-                onClearAll={props.onClearAll}
-              />
-            </ImageBackground>
+              <FastImage
+                source={{ uri: image }}
+                resizeMode={FastImage.resizeMode.contain}
+                style={[
+                  {
+                    width: '100%',
+                    height: '100%'
+                    // borderColor: 'blue',
+                    // borderWidth: 0
+                  }
+                ]}
+              >
+                <DrawingBoard
+                  image={image}
+                  presenter={presenter}
+                  orientation={orientation}
+                  width={imgWidth}
+                  height={imgHeight}
+                  rWidth={resultSize.width}
+                  rHeight={resultSize.height}
+                  scale={scale}
+                  color={
+                    selectedTab == 2 ? 'transparent' : tabs[1].values[color]
+                  }
+                  stroke={
+                    selectedTab == 2
+                      ? tabs[2].values[eraser]
+                      : tabs[0].values[stroke]
+                  }
+                  page={props.page}
+                  onStrokeEnd={props.onSetDrawingData}
+                  onClearAll={props.onClearAll}
+                />
+              </FastImage>
+            </View>
           )}
         </View>
       </TouchableOpacity>
