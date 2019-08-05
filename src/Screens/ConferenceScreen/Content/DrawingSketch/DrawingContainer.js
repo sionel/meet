@@ -3,10 +3,11 @@
  */
 
 import React, { Component } from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, Dimensions } from 'react-native';
 import DrawingPresenter from './DrawingPresenter';
 import DrawingManager from '../../../../utils/DrawingManager';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import FastImage from 'react-native-fast-image';
 
 class DrawingContainer extends Component {
   constructor(props) {
@@ -30,8 +31,9 @@ class DrawingContainer extends Component {
    */
   state = {
     imageLoading: true, // 이미지 정보 로딩
-    imgWidth: 0,
-    imgHeight: 0,
+    imgWidth: Dimensions.get('window').width,
+    imgHeight: Dimensions.get('window').height,
+    // renderImage: null,
 
     selectedTab: -1,
     selectedColor: 'stroke', // 선택된 색
@@ -149,15 +151,29 @@ class DrawingContainer extends Component {
   /**
    * LifeCycle
    */
-  componentDidMount = () => {
-    this._handleGetImageSize(this.props.image);
-  };
+  // componentDidMount = () => {
+  // this._handleGetImageSize(this.props.image);
+  // console.log('cdm', this.props.image)
+  // };
 
   shouldComponentUpdate = (nextProps, nextState) => {
-    if (nextProps.image !== this.props.image) {
-      this._handleGetImageSize(nextProps.image);
+    if (nextState.imageLoading !== this.state.imageLoading) return true;
+    if (
+      nextState.imgWidth !== this.state.imgWidth ||
+      nextState.imgHeight !== this.state.imgHeight
+    ) {
       return false;
     }
+    // if (
+    //   nextState.imgWidth !== this.state.imgWidth ||
+    //   nextState.imgHeight !== this.state.imgHeight
+    // ) {
+    //   return true;
+    // }
+    // if (nextProps.image !== this.props.image) {
+    //   // this._handleGetImageSize(nextProps.image);
+    //   return true;
+    // }
     if (nextState.selectedTab !== this.state.selectedTab) {
       if (this.subPalette) {
         this.subPalette.scrollTo({ x: 0, y: 0, animated: false });
@@ -170,10 +186,37 @@ class DrawingContainer extends Component {
    * Render
    */
   render() {
+    const renderImage = (
+      <FastImage
+        source={{
+          uri: this.props.image,
+          priority: FastImage.priority.high
+        }}
+        resizeMode={FastImage.resizeMode.contain}
+        onLoadStart={() => this.setState({ imageLoading: true })}
+        onLoad={event => {
+          this.setState({
+            imgWidth: event.nativeEvent.width,
+            imgHeight: event.nativeEvent.height
+          });
+        }}
+        onLoadEnd={() => {
+          this.setState({ imageLoading: false });
+        }}
+        style={[
+          {
+            width: '100%',
+            height: '100%'
+          }
+        ]}
+      />
+    );
+
     return (
       <DrawingPresenter
         {...this.state}
         {...this.props}
+        renderImage={renderImage}
         onChangeState={this._handleChangeState}
         onStrokeEnd={this._handleStrokeEnd}
         onCanvas={this._handleCanvas}
@@ -187,11 +230,40 @@ class DrawingContainer extends Component {
     this[content] = ref;
   };
 
-  _handleGetImageSize = image => {
-    Image.getSize(image, (w, h) => {
-      this.setState({ imageLoading: false, imgWidth: w, imgHeight: h });
-    });
-  };
+  // _handleGetImageSize = image => {
+  //   const renderImage = (
+  //     <FastImage
+  //       source={{
+  //         uri: image,
+  //         priority: FastImage.priority.high
+  //       }}
+  //       resizeMode={FastImage.resizeMode.contain}
+  //       onLoad={event => {
+  //         this.setState({
+  //           imgWidth: event.nativeEvent.width,
+  //           imgHeight: event.nativeEvent.height
+  //         });
+  //       }}
+  //       onLoadEnd={() => {
+  //         this.setState({ imageLoading: false });
+  //       }}
+  //       style={[
+  //         {
+  //           width: '100%',
+  //           height: '100%'
+  //           // borderColor: 'blue',
+  //           // borderWidth: 0
+  //         }
+  //       ]}
+  //     />
+  //   );
+
+  //   this.setState({ renderImage });
+
+  //   // Image.getSize(image, (w, h) => {
+  //   //   this.setState({ imageLoading: false, imgWidth: w, imgHeight: h });
+  //   // });
+  // };
 
   /**
    * onChangeColor

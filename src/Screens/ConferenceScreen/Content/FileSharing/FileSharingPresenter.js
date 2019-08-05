@@ -94,51 +94,43 @@ const FileSharingPresenter = props => {
         height={24}
         areaWdith={24}
         areaHeight={24}
-      />
-      <CustomButton
-        name={'buttonClose'}
-        onPress={() => props.onChangeSharingMode(false)}
-        style={{ paddingLeft: 12, margin: 0 }}
-        width={24}
-        height={24}
-        areaWdith={24}
-        areaHeight={24}
-      />
-      <CustomButton
-        name={'buttonClose'}
-        onPress={() => props.onChangeSharingMode(false)}
-        style={{ paddingLeft: 12, margin: 0 }}
-        width={24}
-        height={24}
-        areaWdith={24}
-        areaHeight={24}
       /> */}
     </View>
   );
+
+  const imgList = resources.map(item => (
+    <FastImage
+      source={{
+        uri: item,
+        priority: FastImage.priority.high
+      }}
+      resizeMode={FastImage.resizeMode.contain}
+      style={{
+        width: '100%',
+        height: '100%'
+      }}
+    />
+  ));
 
   //미리보기
   const preView = (
     <View style={styles.preView}>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         <FlatList
-          data={resources}
-          page={page}
+          data={imgList}
           horizontal={true}
           renderItem={({ item, index }) => (
-            <TouchableOpacity onPress={() => onChangePage(index, presenter)}>
-              <FastImage
-                source={{ uri: item }}
-                resizeMode={FastImage.resizeMode.contain}
-                style={[
-                  styles.resourceItem,
-                  {
-                    borderColor:
-                      index === page
-                        ? 'rgb(28, 144, 251)'
-                        : 'rgb(210, 210, 210)'
-                  }
-                ]}
-              />
+            <TouchableOpacity
+              onPress={() => onChangePage(index, presenter)}
+              style={[
+                styles.resourceItem,
+                {
+                  borderColor:
+                    index === page ? 'rgb(28, 144, 251)' : 'rgb(210, 210, 210)'
+                }
+              ]}
+            >
+              {item}
             </TouchableOpacity>
           )}
         />
@@ -221,6 +213,7 @@ const FileSharingPresenter = props => {
           > */}
               <DrawingSketch
                 // drawing={true}
+                // image={resources[page]}
                 image={resources[page]}
                 showTool={showTool}
                 presenter={presenter}

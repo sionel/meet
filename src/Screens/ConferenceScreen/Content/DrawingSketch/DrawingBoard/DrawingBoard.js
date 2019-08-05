@@ -11,10 +11,10 @@ class DrawingBoard extends Component {
   constructor(props) {
     super(props);
     this._drawingManager = new DrawingManager();
-    // this._drawingManager.set('DRAW_DATA', props.documentData);
-    // this._drawingManager.set('BASE_WIDTH', props.rWidth);
-    // this._drawingManager.set('BASE_HEIGHT', props.rHeight);
-    // this._drawingManager.set('SCALE', props.scale);
+    this._drawingManager.set('DRAW_DATA', props.documentData);
+    this._drawingManager.set('BASE_WIDTH', props.rWidth);
+    this._drawingManager.set('BASE_HEIGHT', props.rHeight);
+    this._drawingManager.set('SCALE', props.scale);
   }
 
   state = {};
@@ -25,17 +25,38 @@ class DrawingBoard extends Component {
     this._drawingManager.drawCanvas(data);
   };
 
+  componentWillReceiveProps = nextProps => {
+    this._drawingManager.set(
+      'DRAW_DATA',
+      nextProps.documentData[nextProps.page] || []
+    );
+    this._drawingManager.set('BASE_WIDTH', nextProps.rWidth);
+    this._drawingManager.set('BASE_HEIGHT', nextProps.rHeight);
+    this._drawingManager.set('SCALE', nextProps.scale);
+  };
+
   shouldComponentUpdate(nextProps, nextState) {
-    if (
-      nextProps.documentData !== this.props.documentData ||
-      nextProps.page !== this.props.page
-    )
-      return true;
+    if (nextProps !== this.props) return true;
+    //   if (
+    //     nextProps.documentData !== this.props.documentData ||
+    //     nextProps.page !== this.props.page ||
+    //     nextProps.width !== this.props.width ||
+    //     nextProps.height!== this.props.height ||
+    //     nextProps.rWidth !== this.props.rWidth ||
+    //     nextProps.rHeight !== this.props.rHeight
+    //   ) {
+    //     this._drawingManager.set('DRAW_DATA', nextProps.documentData[nextProps.page] || []);
+    //     this._drawingManager.set('BASE_WIDTH', nextProps.rWidth);
+    //     this._drawingManager.set('BASE_HEIGHT', nextProps.rHeight);
+    //     this._drawingManager.set('SCALE', nextProps.scale);
+
+    //     this._drawingManager.drawCanvas(nextProps.documentData[nextProps.page]||[]);
+    //     // return true;
+    //   }
     return false;
   }
 
   componentDidUpdate = (prevProps, prevState) => {
-    console.log(2);
     let data = this.props.documentData[this.props.page];
     if (!data) data = [];
     this._drawingManager.drawCanvas(data);
@@ -44,22 +65,21 @@ class DrawingBoard extends Component {
   render() {
     const {
       user,
-      image,
       stroke,
       color,
       documentData,
       page,
+      width,
       rWidth,
       rHeight,
       presenter,
       onStrokeEnd
     } = this.props;
-    console.log(1);
 
-    this._drawingManager.set('DRAW_DATA', documentData[page] || []);
-    this._drawingManager.set('BASE_WIDTH', rWidth);
-    this._drawingManager.set('BASE_HEIGHT', rHeight);
-    this._drawingManager.set('SCALE', this.props.scale);
+    // this._drawingManager.set('DRAW_DATA', documentData[page] || []);
+    // this._drawingManager.set('BASE_WIDTH', rWidth);
+    // this._drawingManager.set('BASE_HEIGHT', rHeight);
+    // this._drawingManager.set('SCALE', this.props.scale);
     const backgroundColor = 'transparent';
 
     return (

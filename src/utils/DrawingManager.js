@@ -77,7 +77,6 @@ class DrawingManager {
   drawCanvas = data => {
     if (!this.canvas) return;
 
-    console.log(3)
     setTimeout(() => {
       this.canvas.clear();
 
@@ -98,16 +97,19 @@ class DrawingManager {
               data: []
             }
           };
-          
+
           item.coordsPath.map(xy => {
             const location = xy.split(',');
-            newData.path.data.push(`${Number(location[0]) * this.BASE_WIDTH},${Number(location[1]) * this.BASE_HEIGHT}`);
+            newData.path.data.push(
+              `${Number(location[0]) * this.BASE_WIDTH},${Number(location[1]) *
+                this.BASE_HEIGHT}`
+            );
           });
-  
+
           this.canvas.addPath(newData);
         }
       });
-    },10)
+    }, 100);
   };
 
   /**
@@ -121,7 +123,7 @@ class DrawingManager {
    * 전체지우기
    */
   clearAll = (send = false) => {
-    this.canvas.clear();
+    if (this.canvas) this.canvas.clear();
     return true;
   };
 
@@ -156,13 +158,13 @@ class DrawingManager {
         type: 'image',
         tagName: 'UPDATE_DRAWING_DATA',
         attributes: {
-          documentData: "[]",
+          documentData: '[]',
           width: this.BASE_WIDTH,
-          height: this.BASE_HEIGHT,
+          height: this.BASE_HEIGHT
         }
       };
     }
-    
+
     const { id, color, width: strokeWidthScale, data } = drawingData.path;
     const { width, height } = drawingData.size;
 
@@ -175,7 +177,10 @@ class DrawingManager {
     };
     data.map(item => {
       const location = item.split(',');
-      object.coordsPath.push(`${Number(location[0]) / this.BASE_WIDTH}, ${Number(location[1]) / this.BASE_HEIGHT}`);
+      object.coordsPath.push(
+        `${Number(location[0]) / this.BASE_WIDTH}, ${Number(location[1]) /
+          this.BASE_HEIGHT}`
+      );
     });
 
     // to drawData
@@ -185,7 +190,7 @@ class DrawingManager {
       attributes: {
         documentData: this.DRAW_DATA,
         width: width,
-        height: height,
+        height: height
       }
     };
     this.DRAW_DATA.push(object);

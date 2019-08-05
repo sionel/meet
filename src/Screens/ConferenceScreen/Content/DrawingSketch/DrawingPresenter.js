@@ -57,8 +57,6 @@ const DrawingPresenter = props => {
     height: imgHeight * scale
   };
 
-  console.log(4);
-
   return (
     <View style={[styles.container, styles[`flexDirection_vertical`]]}>
       {/* 드로잉 영역 */}
@@ -73,48 +71,51 @@ const DrawingPresenter = props => {
             styles[`boardContainer_${orientation}`]
           ]}
         >
-          {imageLoading ? (
+          {/* {imageLoading ? (
             <Text>Loading</Text>
-          ) : (
+          ) : ( */}
+          <View
+            style={{
+              width: resultSize.width,
+              height: resultSize.height,
+              position: 'relative'
+            }}
+          >
+            {props.renderImage}
             <View
-              style={{ width: resultSize.width, height: resultSize.height }}
+              style={{
+                position: 'absolute',
+                top: 0,
+                bottom: 0,
+                left: 0,
+                right: 0,
+                backgroundColor: 'transparent'
+              }}
             >
-              <FastImage
-                source={{ uri: image }}
-                resizeMode={FastImage.resizeMode.contain}
-                style={[
-                  {
-                    width: '100%',
-                    height: '100%'
-                    // borderColor: 'blue',
-                    // borderWidth: 0
-                  }
-                ]}
-              >
-                <DrawingBoard
-                  image={image}
-                  presenter={presenter}
-                  orientation={orientation}
-                  width={imgWidth}
-                  height={imgHeight}
-                  rWidth={resultSize.width}
-                  rHeight={resultSize.height}
-                  scale={scale}
-                  color={
-                    selectedTab == 2 ? 'transparent' : tabs[1].values[color]
-                  }
-                  stroke={
-                    selectedTab == 2
-                      ? tabs[2].values[eraser]
-                      : tabs[0].values[stroke]
-                  }
-                  page={props.page}
-                  onStrokeEnd={props.onSetDrawingData}
-                  onClearAll={props.onClearAll}
-                />
-              </FastImage>
+              {/* {imageLoading ? (
+                <Text>Loading</Text>
+              ) : ( */}
+              <DrawingBoard
+                presenter={presenter}
+                orientation={orientation}
+                width={imgWidth}
+                height={imgHeight}
+                rWidth={resultSize.width}
+                rHeight={resultSize.height}
+                scale={scale}
+                color={selectedTab == 2 ? 'transparent' : tabs[1].values[color]}
+                stroke={
+                  selectedTab == 2
+                    ? tabs[2].values[eraser]
+                    : tabs[0].values[stroke]
+                }
+                page={props.page}
+                onStrokeEnd={props.onSetDrawingData}
+                onClearAll={props.onClearAll}
+              />
+              {/* )} */}
             </View>
-          )}
+          </View>
         </View>
       </TouchableOpacity>
 
