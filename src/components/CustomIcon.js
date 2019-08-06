@@ -25,6 +25,7 @@ import ico_rtf from '../../assets/icons/wedrive/ico_fn_txt_120.imageset/ico_fn_t
 import ico_word from '../../assets/icons/wedrive/ico_fn_word_120.imageset/ico_fn_word_120.png';
 import ico_xls from '../../assets/icons/wedrive/ico_fn_xls_120.imageset/ico_fn_xls_120.png';
 import ico_xlsx from '../../assets/icons/wedrive/ico_fn_xlsx_120.imageset/ico_fn_xlsx_80_2x.png';
+
 // import btn_mike_on from '../../assets/icons/speaker/btn-mike-on_2x.png';
 // import btn_mike_off from '../../assets/icons/speaker/btn-mike-off_2x.png';
 import btn_mike_on from '../../assets/icons/speaker/btn-mike-on_2x_re.png';
@@ -36,6 +37,15 @@ import ico_mike_off from '../../assets/icons/speaker/ico-vc-mike-small-off_2x.pn
 // import btn_speaker_off from '../../assets/icons/speaker/btn-speaker-off_2x.png';
 import btn_speaker_on from '../../assets/icons/speaker/btn-speaker-on_2x_re.png';
 import btn_speaker_off from '../../assets/icons/speaker/btn-speaker-off_2x_re.png';
+
+import btn_edit_none from '../../assets/buttons/btn_docedit_edit_none.png';
+import btn_edit_sele from '../../assets/buttons/btn_docedit_edit_sele.png';
+import btn_eraser_none from '../../assets/buttons/btn_docedit_eraser_none.png';
+import btn_eraser_sele from '../../assets/buttons/btn_docedit_eraser_sele.png';
+import btn_laser_none from '../../assets/buttons/btn_docedit_laser_none.png';
+import btn_laser_sele from '../../assets/buttons/btn_docedit_laser_sele.png';
+import btn_back from '../../assets/buttons/btn_back_none.png';
+import btn_forward from '../../assets/buttons/btn_forward_none.png';
 
 const CustomIcon = props => {
   return (
@@ -121,6 +131,22 @@ const getButtonSource = name => {
       return btn_speaker_on;
     case 'speakerOff':
       return btn_speaker_off;
+    case 'btnEditNone':
+      return btn_edit_none;
+    case 'btnEditSele':
+      return btn_edit_sele;
+    case 'btnEraserNone':
+      return btn_eraser_none;
+    case 'btnEraserSele':
+      return btn_eraser_sele;
+    case 'btnLaserNone':
+      return btn_laser_none;
+    case 'btnLaserSele':
+      return btn_laser_sele;
+    case 'btnBack':
+      return btn_back;
+    case 'btnForward':
+      return btn_forward;
     default:
       return ico_etc;
   }

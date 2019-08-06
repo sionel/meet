@@ -35,7 +35,7 @@ class DrawingContainer extends Component {
     imgHeight: Dimensions.get('window').height,
     // renderImage: null,
 
-    selectedTab: -1,
+    selectedTab: 0,
     selectedColor: 'stroke', // 선택된 색
     // selectedColor: 'lightskyblue', // 선택된 색
     selectedStroke: 0, // 선택된 색
@@ -48,8 +48,21 @@ class DrawingContainer extends Component {
 
     tabs: [
       {
+        id: 'pointer',
+        icon: ['btnLaserNone', 'btnLaserSele'],
+        title: '레이저포인터',
+        values: [],
+        render: () => null,
+        onPress: () => {
+          this.setState({
+            selectedTab: 0,
+            palette: false
+          });
+        }
+      },
+      {
         id: 'stroke',
-        icon: 'pen',
+        icon: ['btnEditNone', 'btnEditSele'],
         title: '선굵기',
         values: [3, 5, 7, 9, 13],
         // render: size => <Text>{size}</Text>
@@ -65,14 +78,14 @@ class DrawingContainer extends Component {
         ),
         onPress: () => {
           this.setState({
-            selectedTab: this.state.selectedTab === 0 ? -1 : 0,
-            palette: this.state.selectedTab !== 0
+            selectedTab: this.state.selectedTab === 1 ? 0 : 1,
+            palette: this.state.selectedTab !== 1
           });
         }
       },
       {
         id: 'color',
-        icon: 'palette',
+        icon: ['palette', 'palette'],
         title: '색상',
         values: [
           '#000',
@@ -96,8 +109,8 @@ class DrawingContainer extends Component {
         ),
         onPress: () => {
           this.setState({
-            selectedTab: this.state.selectedTab === 1 ? -1 : 1,
-            palette: this.state.selectedTab !== 1
+            selectedTab: this.state.selectedTab === 2 ? 0 : 2,
+            palette: this.state.selectedTab !== 2
           });
         }
       }

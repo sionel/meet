@@ -20,6 +20,7 @@ import DrawingBoard from './DrawingBoard';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import DeviceInfo from 'react-native-device-info';
 import FastImage from 'react-native-fast-image';
+import CustomIcon from './../../../../components/CustomIcon';
 
 const isIOS = Platform.OS === 'ios';
 const hasNotch = DeviceInfo.hasNotch() && isIOS;
@@ -96,6 +97,7 @@ const DrawingPresenter = props => {
                 <Text>Loading</Text>
               ) : ( */}
               <DrawingBoard
+                mode={selectedTab !== 0}
                 presenter={presenter}
                 orientation={orientation}
                 width={imgWidth}
@@ -103,11 +105,11 @@ const DrawingPresenter = props => {
                 rWidth={resultSize.width}
                 rHeight={resultSize.height}
                 scale={scale}
-                color={selectedTab == 2 ? 'transparent' : tabs[1].values[color]}
+                color={selectedTab == 3 ? 'transparent' : tabs[2].values[color]}
                 stroke={
-                  selectedTab == 2
-                    ? tabs[2].values[eraser]
-                    : tabs[0].values[stroke]
+                  selectedTab == 3
+                    ? tabs[3].values[eraser]
+                    : tabs[1].values[stroke]
                 }
                 page={props.page}
                 onStrokeEnd={props.onSetDrawingData}
@@ -209,15 +211,22 @@ const DrawingPresenter = props => {
                   <View
                     style={{
                       ...styles.mainSettingItem,
-                      opacity: selectedTab === tabIndex ? 0.85 : 1,
-                      backgroundColor:
-                        selectedTab === tabIndex
-                          ? 'rgba(255,255,255, 0.45)'
-                          : '#00000000',
+                      // opacity: selectedTab === tabIndex ? 0.85 : 1,
+                      // backgroundColor:
+                      //   selectedTab === tabIndex
+                      //     ? 'rgba(255,255,255, 0.45)'
+                      //     : '#00000000',
                       ...styles[`mainSettingItem_vertical`]
                     }}
                   >
-                    <Icon name={tab.icon} size={20} color={'#fff'} />
+                    <CustomIcon
+                      name={
+                        selectedTab === tabIndex ? tab.icon[1] : tab.icon[0]
+                      }
+                      width={24}
+                      height={24}
+                    />
+                    {/* <Icon name={tab.icon} size={20} color={'#fff'} /> */}
                   </View>
                 </TouchableOpacity>
               ))}

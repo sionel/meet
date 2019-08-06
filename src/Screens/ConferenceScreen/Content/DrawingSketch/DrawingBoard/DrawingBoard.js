@@ -64,6 +64,7 @@ class DrawingBoard extends Component {
 
   render() {
     const {
+      mode,
       user,
       stroke,
       color,
@@ -95,7 +96,7 @@ class DrawingBoard extends Component {
         user={user}
         strokeWidth={stroke}
         strokeColor={color}
-        touchEnabled={presenter === 'localUser'}
+        touchEnabled={presenter === 'localUser' && mode}
         onStrokeEnd={onStrokeEnd}
       />
     );
