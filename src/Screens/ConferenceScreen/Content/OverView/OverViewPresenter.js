@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
   topArea: {
     // height: '50%',
     flex: 1,
-    backgroundColor: 'transparent'
+    backgroundColor: '#00000090'
   },
   bottomArea: {
     // height: '50%',

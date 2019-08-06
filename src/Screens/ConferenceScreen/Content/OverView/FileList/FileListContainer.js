@@ -143,9 +143,11 @@ class FileListContainer extends Component {
    */
   _handleGetFileInfo = async file => {
     if (file.size > 1024 * 1024 * 10) {
-      Alert.alert('공유 파일 용량 초과', '공유 가능한 파일 용량을 초과하였습니다.\n10MB 이하의 파일을 선택해주세요.', [
-        { text: 'OK' }
-      ]);
+      Alert.alert(
+        '공유 파일 용량 초과',
+        '공유 가능한 파일 용량을 초과하였습니다.\n10MB 이하의 파일을 선택해주세요.',
+        [{ text: 'OK' }]
+      );
       return;
     }
 
@@ -189,9 +191,9 @@ class FileListContainer extends Component {
       case 'tiff':
         method = 'getImageURL';
         break;
-      // case 'pdf':
-      //   method = 'getAttachmentsPublicURL';
-      //   break;
+      case 'pdf':
+        method = 'getOfficePreView';
+        break;
       case 'directory':
         this._handleGetDirectoryInfo(file);
         return;
