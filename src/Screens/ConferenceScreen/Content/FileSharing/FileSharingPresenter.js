@@ -122,15 +122,19 @@ const FileSharingPresenter = props => {
           renderItem={({ item, index }) => (
             <TouchableOpacity
               onPress={() => onChangePage(index, presenter)}
-              style={[
-                styles.resourceItem,
-                {
+              style={styles.resourceItem}
+            >
+              <Text style={styles.preViewPageNumber}>{index + 1}</Text>
+              <View
+                style={{
+                  flex: 1,
+                  borderWidth: 1,
                   borderColor:
                     index === page ? 'rgb(28, 144, 251)' : 'rgb(210, 210, 210)'
-                }
-              ]}
-            >
-              {item}
+                }}
+              >
+                {item}
+              </View>
             </TouchableOpacity>
           )}
         />
@@ -333,8 +337,8 @@ const styles = StyleSheet.create({
   mainContainerHorizontal: {},
   preView: {
     width: '100%',
-    height: 90,
-    paddingTop: 10,
+    height: 85,
+    paddingTop: 5,
     paddingBottom: 10,
     paddingLeft: 0,
     paddingRight: 10,
@@ -343,10 +347,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgb(242, 242, 242)'
   },
   resourceItem: {
+    position: 'relative',
     width: 68,
     height: 68,
-    marginLeft: 10,
-    borderWidth: 1
+    marginLeft: 10
+  },
+  preViewPageNumber: {
+    fontSize: 12,
+    marginBottom: 3
   },
   bottomArea: {
     position: 'absolute',
