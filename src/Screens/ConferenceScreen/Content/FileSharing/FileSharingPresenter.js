@@ -115,7 +115,11 @@ const FileSharingPresenter = props => {
   //미리보기
   const preView = (
     <View style={styles.preView}>
-      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+      <ScrollView
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}
+        ref={ref => props.onSetRef('preView', ref)}
+      >
         <FlatList
           data={imgList}
           horizontal={true}

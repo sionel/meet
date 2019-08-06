@@ -7,6 +7,8 @@ class FileSharingContainer extends Component {
   constructor(props) {
     super(props);
 
+    this.preView = null;
+
     let imgList = JSON.parse(props.attributes.resources);
     imgList = imgList.map(src => ({
       uri: src,
@@ -34,6 +36,18 @@ class FileSharingContainer extends Component {
     this.backHandler.remove();
   }
 
+  componentDidUpdate = (prevProps, prevState) => {
+    if (prevProps.page !== this.props.page) {
+      if (this.preView) {
+        this.preView.scrollTo({
+          x: this.props.page * 78,
+          y: 0,
+          animated: true
+        });
+      }
+    }
+  };
+
   render() {
     return (
       <FileSharingPresenter
@@ -42,9 +56,14 @@ class FileSharingContainer extends Component {
         onChangeState={this._handleChangeState}
         onChangePage={this._handleChangePage}
         onDisposeConference={this._handleDisposeConference}
+        onSetRef={this._handleSetRef}
       />
     );
   }
+
+  _handleSetRef = (content, ref) => {
+    this[content] = ref;
+  };
 
   _handleDisposeConference = () => {
     if (this.props.onClose) this.props.onClose();

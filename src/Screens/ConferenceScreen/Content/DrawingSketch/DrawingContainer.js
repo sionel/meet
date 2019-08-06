@@ -174,13 +174,21 @@ class DrawingContainer extends Component {
     //   // this._handleGetImageSize(nextProps.image);
     //   return true;
     // }
-    if (nextState.selectedTab !== this.state.selectedTab) {
+    // if (nextState.selectedTab !== this.state.selectedTab) {
+    //   if (this.subPalette) {
+    //     this.subPalette.scrollTo({ x: 0, y: 0, animated: false });
+    //   }
+    // }
+    return true;
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.selectedTab !== this.state.selectedTab) {
       if (this.subPalette) {
         this.subPalette.scrollTo({ x: 0, y: 0, animated: false });
       }
     }
-    return true;
-  };
+  }
 
   /**
    * Render
