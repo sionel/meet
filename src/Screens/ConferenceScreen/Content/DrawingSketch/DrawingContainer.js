@@ -35,7 +35,7 @@ class DrawingContainer extends Component {
     imgHeight: Dimensions.get('window').height,
     // renderImage: null,
 
-    selectedTab: 0,
+    selectedTab: -1,
     selectedColor: 'stroke', // 선택된 색
     // selectedColor: 'lightskyblue', // 선택된 색
     selectedStroke: 0, // 선택된 색
@@ -55,7 +55,7 @@ class DrawingContainer extends Component {
         render: () => null,
         onPress: () => {
           this.setState({
-            selectedTab: 0,
+            selectedTab: this.state.selectedTab === 0 ? -1 : 0,
             palette: false
           });
         }
@@ -78,7 +78,7 @@ class DrawingContainer extends Component {
         ),
         onPress: () => {
           this.setState({
-            selectedTab: this.state.selectedTab === 1 ? 0 : 1,
+            selectedTab: this.state.selectedTab === 1 ? -1 : 1,
             palette: this.state.selectedTab !== 1
           });
         }
@@ -109,7 +109,7 @@ class DrawingContainer extends Component {
         ),
         onPress: () => {
           this.setState({
-            selectedTab: this.state.selectedTab === 2 ? 0 : 2,
+            selectedTab: this.state.selectedTab === 2 ? -1 : 2,
             palette: this.state.selectedTab !== 2
           });
         }

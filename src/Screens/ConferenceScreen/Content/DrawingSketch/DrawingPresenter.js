@@ -84,20 +84,27 @@ const DrawingPresenter = props => {
           >
             {props.renderImage}
             <View
-              style={{
-                position: 'absolute',
-                top: 0,
-                bottom: 0,
-                left: 0,
-                right: 0,
-                backgroundColor: 'transparent'
-              }}
+              style={[
+                {
+                  position: 'absolute',
+                  top: 0,
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  backgroundColor: 'transparent'
+                },
+                selectedTab > 1
+                  ? { zIndex: 10 }
+                  : selectedTab === -1
+                  ? { zIndex: -10 }
+                  : null
+              ]}
             >
               {/* {imageLoading ? (
                 <Text>Loading</Text>
               ) : ( */}
               <DrawingBoard
-                mode={selectedTab !== 0}
+                mode={selectedTab >= 1}
                 presenter={presenter}
                 orientation={orientation}
                 width={imgWidth}
@@ -343,7 +350,7 @@ const styles = StyleSheet.create({
   mainSettingWrapper_vertical: {
     flexDirection: 'row',
     width: '100%',
-    height: 55,
+    height: 50,
     paddingLeft: 7.5,
     paddingRight: 7.5,
     justifyContent: 'space-between',
