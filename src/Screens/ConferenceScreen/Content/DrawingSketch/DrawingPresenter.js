@@ -206,37 +206,40 @@ const DrawingPresenter = props => {
             <View
               style={[styles.mainTabWrapper, styles[`mainTabWrapper_vertical`]]}
             >
-              {tabs.map((tab, tabIndex) => (
-                <TouchableOpacity
-                  key={tab.id}
-                  onPress={() =>
-                    tab.onPress
-                      ? tab.onPress()
-                      : props.onChangeState('selectedTab', tabIndex)
-                  }
-                >
-                  <View
-                    style={{
-                      ...styles.mainSettingItem,
-                      // opacity: selectedTab === tabIndex ? 0.85 : 1,
-                      // backgroundColor:
-                      //   selectedTab === tabIndex
-                      //     ? 'rgba(255,255,255, 0.45)'
-                      //     : '#00000000',
-                      ...styles[`mainSettingItem_vertical`]
-                    }}
-                  >
-                    <CustomIcon
-                      name={
-                        selectedTab === tabIndex ? tab.icon[1] : tab.icon[0]
+              {tabs.map(
+                (tab, tabIndex) =>
+                  tabIndex !== 0 && (
+                    <TouchableOpacity
+                      key={tab.id}
+                      onPress={() =>
+                        tab.onPress
+                          ? tab.onPress()
+                          : props.onChangeState('selectedTab', tabIndex)
                       }
-                      width={24}
-                      height={24}
-                    />
-                    {/* <Icon name={tab.icon} size={20} color={'#fff'} /> */}
-                  </View>
-                </TouchableOpacity>
-              ))}
+                    >
+                      <View
+                        style={{
+                          ...styles.mainSettingItem,
+                          // opacity: selectedTab === tabIndex ? 0.85 : 1,
+                          // backgroundColor:
+                          //   selectedTab === tabIndex
+                          //     ? 'rgba(255,255,255, 0.45)'
+                          //     : '#00000000',
+                          ...styles[`mainSettingItem_vertical`]
+                        }}
+                      >
+                        <CustomIcon
+                          name={
+                            selectedTab === tabIndex ? tab.icon[1] : tab.icon[0]
+                          }
+                          width={24}
+                          height={24}
+                        />
+                        {/* <Icon name={tab.icon} size={20} color={'#fff'} /> */}
+                      </View>
+                    </TouchableOpacity>
+                  )
+              )}
             </View>
 
             <View
