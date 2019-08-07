@@ -6,10 +6,9 @@ import { actionCreators as DocumentShareActions } from '../../../../../redux/mod
 // map state to props
 const mapStateToProps = state => ({
   auth: state.user.auth,
-  status: state.wedrive.status,
   TokenID: state.wedrive.TokenID,
   wedriveList: state.wedrive.storageList,
-  fileInfo: state.wedrive.fileInfo,
+  fileInfo: state.wedrive.fileInfo
 });
 
 // map dispatch to props
@@ -28,7 +27,7 @@ const mapDispatchToProps = dispatch => {
     getFileInfoRequest: (authData, fileInfo) =>
       dispatch(WedriveActions.getFileInfoRequest(authData, fileInfo)),
     getDirectoryInfoRequest: (authData, directory) =>
-      dispatch(WedriveActions.getDirectoryInfoRequest(authData, directory)),
+      dispatch(WedriveActions.getDirectoryInfoRequest(authData, directory))
   };
 };
 

@@ -11,17 +11,21 @@ class FileListContainer extends Component {
     this.getFileList();
   };
 
+  shouldComponentUpdate = (nextProps, nextState) => {
+    if (nextProps.isLoading === 'FILE_LOADING') return false;
+    return true;
+  };
+
   getFileList = async () => {
     await this._handleGetWedriveToken();
   };
 
   render() {
-    const { status } = this.props;
+    const { isLoading } = this.props;
 
     return (
       <FileListPresenter
-        isLoading={status}
-        status={this.props.status}
+        isLoading={isLoading}
         // hasNotch={hasNotch}
         // orientation={orientation}
         documentList={this.props.wedriveList}

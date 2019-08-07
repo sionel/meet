@@ -3,7 +3,8 @@ import {
   Text,
   View,
   StyleSheet,
-  TouchableOpacity
+  TouchableOpacity,
+  ActivityIndicator
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import FileList from './FileList';
@@ -13,6 +14,7 @@ const isTablet = DeviceInfo.isTablet();
 
 const OverViewPresenter = props => {
   const {
+    isLoading,
     view,
     tabs,
     orientation,
@@ -28,7 +30,12 @@ const OverViewPresenter = props => {
       case 'USERLIST':
         return <UserList speaker={speaker} onChangeSpeaker={onChangeSpeaker} />;
       case 'FILELIST':
-        return <FileList onChangeSharingMode={onChangeSharingMode} />;
+        return (
+          <FileList
+            isLoading={isLoading}
+            onChangeSharingMode={onChangeSharingMode}
+          />
+        );
       default:
         return null;
     }
@@ -64,6 +71,13 @@ const OverViewPresenter = props => {
     );
   };
 
+  const fileLoadingModal = (
+    <View style={styles.loadingModal}>
+      <ActivityIndicator size={100} color={'rgb(28, 144, 251)'} />
+      <Text style={styles.loadingModalText}>문서를 불러오고 있습니다.</Text>
+    </View>
+  );
+
   return (
     <View style={[styles.container, { top: 0 }]}>
       <TouchableOpacity
@@ -88,6 +102,8 @@ const OverViewPresenter = props => {
           {ViewComponent()}
         </View>
       </View>
+
+      {isLoading === 'FILE_LOADING' && fileLoadingModal}
     </View>
   );
 };
@@ -165,6 +181,22 @@ const styles = StyleSheet.create({
     flex: 2,
     fontSize: 12,
     textAlign: 'right'
+  },
+
+  loadingModal: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: '#00000080',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  loadingModalText: {
+    fontSize: 18,
+    color: '#fff',
+    marginTop: 20
   }
 });
 
