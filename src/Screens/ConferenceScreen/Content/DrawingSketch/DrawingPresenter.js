@@ -235,7 +235,7 @@ const DrawingPresenter = props => {
       </TouchableOpacity>
 
       {/* 하단 영역 */}
-      {!imageLoading && showTool && presenter === 'localUser' && (
+      {showTool && presenter === 'localUser' && (
         <View
           style={[
             styles.bottomArea,
@@ -313,16 +313,18 @@ const DrawingPresenter = props => {
                 justifyContent: 'center',
                 alignItems: vertical ? 'flex-end' : 'center',
                 // marginRight: vertical ? 7.5 : 0,
-                marginTop: orientation === 'horizontal' ? 7.5 : 0
+                marginTop: orientation === 'horizontal' ? 7.5 : 0,
+                marginRight: 10
               }}
             >
-              <TouchableOpacity
-                // style={styles[`modeChangeButton_${orientation}`]}
-                // onPress={() => alert(!props.drawing)}
-                // onPress={() => props.onChangeDrawing(!props.drawing)}
-                onPress={() => props.onSetDrawingData()}
-              >
-                <Text style={{ fontSize: 18, color: '#fff', marginLeft: 10 }}>
+              <TouchableOpacity onPress={() => props.onSetDrawingData()}>
+                <Text
+                  style={{
+                    fontSize: 18,
+                    color: '#fff',
+                    marginLeft: 10
+                  }}
+                >
                   모두 삭제
                 </Text>
               </TouchableOpacity>

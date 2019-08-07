@@ -35,6 +35,10 @@ class MainVideoContainer extends React.Component {
       'hardwareBackPress',
       this._handleBackButton
     );
+
+    if (this._timer) {
+      clearInterval(this._timer);
+    }
   }
 
   // shouldComponentUpdate(nextProps, nextState) {

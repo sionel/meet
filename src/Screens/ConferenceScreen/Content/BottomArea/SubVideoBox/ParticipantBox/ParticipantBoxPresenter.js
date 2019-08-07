@@ -23,27 +23,26 @@ const canUseStream =
 const ParticipantBoxPresenter = props => {
   const stream = props.videoTrack && props.videoTrack.getOriginalStream();
 
-  const content =
+  const content = canUseStream ? (
     stream && !props.isMuteVideo ? (
-      canUseStream ? (
-        <View style={styles.video}>
-          <RTCView
-            style={styles.video}
-            mirror={false}
-            objectFit={'cover'}
-            streamURL={stream.toURL()}
-          />
-        </View>
-      ) : (
-        <View style={styles.video}>
-          <Text style={styles.profile}>{props.user.name[0]}</Text>
-        </View>
-      )
+      <View style={styles.video}>
+        <RTCView
+          style={styles.video}
+          mirror={false}
+          objectFit={'cover'}
+          streamURL={stream.toURL()}
+        />
+      </View>
     ) : (
       <View style={styles.video}>
         <Image source={ButtonCameraOff} style={styles.imageCameraOff} />
       </View>
-    );
+    )
+  ) : (
+    <View style={[styles.video, { backgroundColor: '#00000030' }]}>
+      <CustomIcon name={'personIcon'} width={60} height={60} />
+    </View>
+  );
 
   return (
     <TouchableOpacity
@@ -54,7 +53,7 @@ const ParticipantBoxPresenter = props => {
         style={[styles.videoArea, props.isSelect && styles.videoAreaSelected]}
       >
         {content}
-        {(props.isMuteAudio || props.isMuteMic) && (
+        {/* {(props.isMuteAudio || props.isMuteMic) && (
           <CustomIcon
             name={'icoMikeOff'}
             width={24}
@@ -65,7 +64,7 @@ const ParticipantBoxPresenter = props => {
               right: 5
             }}
           />
-        )}
+        )} */}
       </View>
       <View style={styles.nameArea}>
         <Text style={styles.name}>{props.user.name}</Text>

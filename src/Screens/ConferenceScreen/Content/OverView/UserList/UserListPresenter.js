@@ -9,7 +9,6 @@ import {
   ScrollView
 } from 'react-native';
 import CustomIcon from '../../../../../components/CustomIcon';
-// import personIcon from '../../../../../../assets/icons/ico-sv-person-gray.png';
 
 const UserListPresenter = props => {
   const {

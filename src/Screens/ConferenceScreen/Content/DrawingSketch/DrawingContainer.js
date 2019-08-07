@@ -68,29 +68,6 @@ class DrawingContainer extends Component {
         });
       }
     },
-    // {
-    //   id: 'stroke',
-    //   icon: ['btnEditNone', 'btnEditSele'],
-    //   title: '선굵기',
-    //   values: [3, 5, 7, 9, 13],
-    //   // render: size => <Text>{size}</Text>
-    //   render: size => (
-    //     <View
-    //       style={{
-    //         width: '97%',
-    //         height: size,
-    //         backgroundColor: '#333',
-    //         borderRadius: 15
-    //       }}
-    //     />
-    //   ),
-    //   onPress: () => {
-    //     this.setState({
-    //       selectedTab: this.state.selectedTab === 1 ? -1 : 1,
-    //       palette: this.state.selectedTab !== 1
-    //     });
-    //   }
-    // },
     {
       id: 'stroke',
       icon: ['btnEditNone', 'btnEditSele'],

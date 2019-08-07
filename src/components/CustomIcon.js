@@ -52,6 +52,8 @@ import ico_check_blue from '../../assets/icons/palette/color-check_2x.png';
 import ico_decrease from '../../assets/icons/palette/btn_docedit_redu_none.png';
 import ico_increase from '../../assets/icons/palette/btn_docedit_incr_none.png';
 
+import person_icon from '../../assets/icons/img-vc-nophoto_2x.png';
+
 const CustomIcon = props => {
   return (
     <Image
@@ -160,6 +162,8 @@ const getButtonSource = name => {
       return ico_decrease;
     case 'icoIncrease':
       return ico_increase;
+    case 'personIcon':
+      return person_icon;
     default:
       return ico_etc;
   }

@@ -114,9 +114,10 @@ const FileSharingPresenter = props => {
 
   //미리보기
   const preView = (
-    <View style={styles.preView}>
+    <View style={[styles.preView, !showPreView && styles.preViewHidden]}>
       <ScrollView
         horizontal={true}
+        // pagingEnabled={true}
         showsHorizontalScrollIndicator={false}
         ref={ref => props.onSetRef('preView', ref)}
       >
@@ -182,7 +183,8 @@ const FileSharingPresenter = props => {
           />
         )} */}
             {showTool && headerTitle}
-            {showPreView && preView}
+            {preView}
+
             <CustomButton
               name={showPreView ? 'btnArrowUp' : 'btnArrowDown'}
               onPress={() => onChangeState('showPreView')}
@@ -349,6 +351,13 @@ const styles = StyleSheet.create({
     borderBottomColor: 'rgb(210, 210, 210)',
     borderBottomWidth: 1,
     backgroundColor: 'rgb(242, 242, 242)'
+  },
+  preViewHidden: {
+    height: 0,
+    overflow: 'hidden',
+    paddingTop: 0,
+    paddingBottom: 0,
+    borderBottomWidth: 0
   },
   resourceItem: {
     position: 'relative',

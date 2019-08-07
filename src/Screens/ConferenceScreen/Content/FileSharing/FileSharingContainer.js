@@ -42,7 +42,7 @@ class FileSharingContainer extends Component {
         this.preView.scrollTo({
           x: this.props.page * 78,
           y: 0,
-          animated: true
+          animated: false
         });
       }
     }
