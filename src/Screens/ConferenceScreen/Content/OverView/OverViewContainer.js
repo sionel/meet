@@ -35,6 +35,7 @@ class OverViewContainer extends Component {
         onChangeSharingMode={onChangeSharingMode}
         onChangeState={this._handleChangeState}
         onChangeSpeaker={this.props.onChangeSpeaker}
+        cancelLoadDocument={this.props.cancelLoadDocument}
       />
     );
   }

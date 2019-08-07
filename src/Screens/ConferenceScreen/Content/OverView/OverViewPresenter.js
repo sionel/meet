@@ -9,6 +9,7 @@ import {
 import DeviceInfo from 'react-native-device-info';
 import FileList from './FileList';
 import UserList from './UserList';
+import CustomButton from '../../../../components/CustomButton';
 
 const isTablet = DeviceInfo.isTablet();
 
@@ -73,6 +74,15 @@ const OverViewPresenter = props => {
 
   const fileLoadingModal = (
     <View style={styles.loadingModal}>
+      <CustomButton
+        name={'buttonClose'}
+        onPress={() => props.cancelLoadDocument('getFileInfo')}
+        style={{ position: 'absolute', top: 20, right: 20 }}
+        width={24}
+        height={24}
+        areaWdith={24}
+        areaHeight={24}
+      />
       <ActivityIndicator size={100} color={'rgb(28, 144, 251)'} />
       <Text style={styles.loadingModalText}>문서를 불러오고 있습니다.</Text>
     </View>
@@ -189,7 +199,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: '#00000080',
+    backgroundColor: '#000000AA',
     justifyContent: 'center',
     alignItems: 'center'
   },

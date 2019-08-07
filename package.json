@@ -37,6 +37,7 @@
     "react-native-background-timer": "2.1.1",
     "react-native-calendar-events": "1.6.4",
     "react-native-callstats": "3.53.4",
+    "react-native-cancelable-fetch": "^0.1.1",
     "react-native-canvas": "^0.1.30",
     "react-native-check-box": "^2.1.7",
     "react-native-device-info": "^1.4.2",

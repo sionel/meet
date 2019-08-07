@@ -9,6 +9,8 @@ import {
   _createSignature
 } from '../../utils';
 
+import FetchCancel from 'react-native-cancelable-fetch';
+
 /**
  * getWedriveToken
  */
@@ -102,9 +104,15 @@ const getFileInfo = async (authData, fileInfo) => {
       body: serialize(fileInfo)
     };
 
-    const response = await fetch(url, data);
-    const responseJson = await response.json();
-    return responseJson;
+    return FetchCancel(url, data, 'getFileInfo')
+      .then(response => response.json())
+      .then(responseJson => {
+        return responseJson;
+      });
+
+    // const response = await fetch(url, data);
+    // const responseJson = await response.json();
+    // return responseJson;
   } catch (err) {
     console.warn(err);
     return err;

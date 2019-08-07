@@ -64,8 +64,14 @@ class FileListContainer extends Component {
    * _handleSharingMode
    * 위드라이브 문서공유 모드
    */
-  _handleSharingMode = async file => {
-    await this._handleGetFileInfo(file);
+  _handleSharingMode = file => {
+    this._handleGetFileInfo(file)
+      .then(() => {
+        console.log('1111');
+      })
+      .catch(() => {
+        console.log('2222');
+      });
     // this.props.setSharingMode(true);
   };
 
@@ -223,6 +229,15 @@ class FileListContainer extends Component {
       TokenID: TokenID,
       method: method
     };
+
+    // const isCanceled = setInterval(() => {
+    //   if (
+    //     this.props.isLoading === 'CANCELED' ||
+    //     this.props.isLoading === 'FINISH'
+    //   ) {
+    //     clearInterval(isCanceled);
+    //   }
+    // }, 100);
 
     // wedrive file 상세정보 가져오기
     const fileInfoResponse = await this.props.getFileInfoRequest(

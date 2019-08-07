@@ -2,8 +2,9 @@
  * wedrive.js
  */
 import { WedriveApi } from '../../services';
+import FetchCancel from 'react-native-cancelable-fetch';
 
-const SET_STATUS_LOADING = 'SET_STATUS_LOADING';
+const SET_LOADING_STATUS = 'SET_LOADING_STATUS';
 
 const SET_INIT_INFO = 'SET_INIT_INFO';
 const SET_FILE_LIST = 'SET_FILE_LIST';
@@ -14,7 +15,7 @@ const UPDATE_FILE_LIST_UPDATE = 'UPDATE_FILE_LIST_UPDATE';
 
 const setStatusLoading = status => {
   return {
-    type: SET_STATUS_LOADING,
+    type: SET_LOADING_STATUS,
     status
   };
 };
@@ -48,6 +49,9 @@ const setFileInfo = fileInfo => {
   };
 };
 
+/**
+ * applys
+ */
 const applySetStatusLoading = (state, action) => {
   const { status } = action;
   return {
@@ -116,7 +120,7 @@ const initialState = {
 
 reducer = (state = initialState, action) => {
   switch (action.type) {
-    case SET_STATUS_LOADING:
+    case SET_LOADING_STATUS:
       return applySetStatusLoading(state, action);
     case SET_INIT_INFO:
       return applyInitInfo(state, action);
@@ -236,6 +240,14 @@ const getDirectoryInfoRequest = (authData, directory) => {
   };
 };
 
+const cancelLoadDocument = requestName => {
+  return async dispatch => {
+    FetchCancel.abort(requestName);
+    await dispatch(setStatusLoading('CANCELED'));
+    return true;
+  };
+};
+
 //#endregion
 
 //#region Export
@@ -244,7 +256,8 @@ export const actionCreators = {
   initInfoRequest,
   getFileListRequest,
   getFileInfoRequest,
-  getDirectoryInfoRequest
+  getDirectoryInfoRequest,
+  cancelLoadDocument
 };
 
 export default reducer;

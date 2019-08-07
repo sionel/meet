@@ -9,7 +9,7 @@ const mapStateToProps = state => ({
   isLoading: state.wedrive.status,
   TokenID: state.wedrive.TokenID,
   wedriveList: state.wedrive.storageList,
-  fileInfo: state.wedrive.fileInfo,
+  fileInfo: state.wedrive.fileInfo
 });
 
 // map dispatch to props
@@ -27,6 +27,8 @@ const mapDispatchToProps = dispatch => {
       dispatch(WedriveActions.getFileListRequest(authData, initInfo)),
     getFileInfoRequest: (authData, fileInfo) =>
       dispatch(WedriveActions.getFileInfoRequest(authData, fileInfo)),
+    cancelLoadDocument: requestName =>
+      dispatch(WedriveActions.cancelLoadDocument(requestName))
   };
 };
 
