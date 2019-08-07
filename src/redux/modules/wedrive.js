@@ -3,12 +3,21 @@
  */
 import { WedriveApi } from '../../services';
 
+const SET_STATUS_LOADING = 'SET_STATUS_LOADING';
+
 const SET_INIT_INFO = 'SET_INIT_INFO';
 const SET_FILE_LIST = 'SET_FILE_LIST';
 const SET_FILE_INFO = 'SET_FILE_INFO';
 const UPDATE_FILE_LIST_UPDATE = 'UPDATE_FILE_LIST_UPDATE';
 
 //#region Action Creators
+
+const setStatusLoading = status => {
+  return {
+    type: SET_STATUS_LOADING,
+    status
+  };
+};
 
 const setInitInfo = initInfo => {
   return {
@@ -36,6 +45,14 @@ const setFileInfo = fileInfo => {
   return {
     type: SET_FILE_INFO,
     fileInfo
+  };
+};
+
+const applySetStatusLoading = (state, action) => {
+  const { status } = action;
+  return {
+    ...state,
+    status
   };
 };
 
@@ -86,6 +103,7 @@ const applyFileInfo = (state, action) => {
 //#region initialState
 
 const initialState = {
+  status: 'INIT',
   TokenID: null,
   storageList: [],
   fileInfo: [],
@@ -98,6 +116,8 @@ const initialState = {
 
 reducer = (state = initialState, action) => {
   switch (action.type) {
+    case SET_STATUS_LOADING:
+      return applySetStatusLoading(state, action);
     case SET_INIT_INFO:
       return applyInitInfo(state, action);
     case SET_FILE_LIST:
@@ -118,6 +138,8 @@ reducer = (state = initialState, action) => {
  */
 const initInfoRequest = authData => {
   return async dispatch => {
+    await dispatch(setStatusLoading('LOADING'));
+
     const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, portalID } = authData;
     const tokenResult = await WedriveApi.getToken(
       AUTH_A_TOKEN,
@@ -125,6 +147,8 @@ const initInfoRequest = authData => {
       HASH_KEY,
       portalID
     );
+
+    await dispatch(setStatusLoading('FINISH'));
 
     if (tokenResult.resultList) {
       const wedriveToken = {
@@ -135,6 +159,7 @@ const initInfoRequest = authData => {
 
       return dispatch(setInitInfo(wedriveToken));
     } else {
+      await dispatch(setStatusLoading('FINISH'));
       return tokenResult;
     }
   };
@@ -145,7 +170,10 @@ const initInfoRequest = authData => {
  */
 const getFileListRequest = (authData, TokenID) => {
   return async dispatch => {
+    await dispatch(setStatusLoading('LOADING'));
     const fileListResult = await WedriveApi.getList(authData, TokenID);
+
+    dispatch(setStatusLoading('FINISH'));
 
     if (fileListResult.resultList) {
       // 이름 순으로 정렬
@@ -157,6 +185,7 @@ const getFileListRequest = (authData, TokenID) => {
 
       return dispatch(setFileList(sortedList));
     } else {
+      await dispatch(setStatusLoading('FINISH'));
       return fileListResult;
     }
   };
@@ -167,7 +196,10 @@ const getFileListRequest = (authData, TokenID) => {
  */
 const getFileInfoRequest = (authData, fileData) => {
   return async dispatch => {
+    await dispatch(setStatusLoading('FILE_LOADING'));
     const fileListResult = await WedriveApi.getFileInfo(authData, fileData);
+
+    dispatch(setStatusLoading('FINISH'));
 
     if (fileListResult.resultList) {
       return dispatch(setFileInfo(fileListResult.resultList));
@@ -182,10 +214,14 @@ const getFileInfoRequest = (authData, fileData) => {
  */
 const getDirectoryInfoRequest = (authData, directory) => {
   return async dispatch => {
+    await dispatch(setStatusLoading('LOADING'));
+
     const fileListResult = await WedriveApi.getDirectoryInfo(
       authData,
       directory
     );
+
+    await dispatch(setStatusLoading('FINISH'));
 
     if (fileListResult.resultList) {
       const sortedList = await fileListResult.resultList.sort((a, b) => {

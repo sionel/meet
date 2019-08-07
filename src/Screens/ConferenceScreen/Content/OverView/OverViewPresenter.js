@@ -3,7 +3,6 @@ import {
   Text,
   View,
   StyleSheet,
-  ScrollView,
   TouchableOpacity
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
@@ -78,7 +77,7 @@ const OverViewPresenter = props => {
           {tabs.map(item => TabComponent(item.key, item.name))}
         </View>
 
-        <ScrollView
+        <View
           style={[
             styles.listContainer,
             props.orientation !== 'vertical'
@@ -87,7 +86,7 @@ const OverViewPresenter = props => {
           ]}
         >
           {ViewComponent()}
-        </ScrollView>
+        </View>
       </View>
     </View>
   );
@@ -130,7 +129,8 @@ const styles = StyleSheet.create({
   headerText: {},
   iconDocShare: {},
   listContainer: {
-    height: '100%'
+    // height: '100%'
+    flex: 1
   },
   listContainerVertical: {
     paddingLeft: 36,

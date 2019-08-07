@@ -5,7 +5,8 @@ import {
   StyleSheet,
   FlatList,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  ScrollView
 } from 'react-native';
 import CustomIcon from '../../../../../components/CustomIcon';
 // import personIcon from '../../../../../../assets/icons/ico-sv-person-gray.png';
@@ -21,86 +22,93 @@ const UserListPresenter = props => {
   } = props;
 
   return (
-    <FlatList
-      data={userList}
-      style={styles.userList}
-      renderItem={({ item }) => (
-        <TouchableOpacity
-          style={styles.itemBox}
-          activeOpacity={1}
-          onPress={() => {}}
-        >
-          <View style={{ flex: 5, flexDirection: 'row', alignItems: 'center' }}>
-            <View style={styles.profileCover}>
-              <Image
-                style={styles.profileImg}
-                source={
-                  item.userInfo
-                    ? {
-                        uri: `https://www.wehago.com${
-                          item.userInfo.profile_url
-                        }`
-                      }
-                    : null
-                }
-                resizeMode={'center'}
-              />
-            </View>
-            <Text
-              numberOfLines={1}
-              ellipsizeMode={'tail'}
-              style={styles.nameField}
-            >
-              {item.name}
-              {/* ({item.userInfo.wehagoId || '외부참여자'}) */}
-            </Text>
-            {item.id === 'localUser' && (
-              <View style={[styles.presenter, { backgroundColor: '#fb0' }]}>
-                <Text style={styles.presenterText}>나</Text>
-              </View>
-            )}
-            {item.id === presenter && (
-              <View style={styles.presenter}>
-                <Text style={styles.presenterText}>발표자</Text>
-              </View>
-            )}
-          </View>
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              justifyContent: 'flex-end'
-            }}
+    <ScrollView
+      style={{ height: '100%' }}
+      showsVerticalScrollIndicator={false}
+    >
+      <FlatList
+        data={userList}
+        style={styles.userList}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            style={styles.itemBox}
+            activeOpacity={1}
+            onPress={() => {}}
           >
-            {/* 스피커폰 컨트롤 */}
-            <TouchableOpacity onPress={onChangeSpeaker}>
-              {speaker === 1 && item.id === 'localUser' && (
-                <CustomIcon name={'speakerOn'} width={30} height={24} />
-              )}
-              {speaker === 2 && item.id === 'localUser' && (
-                <CustomIcon name={'speakerOff'} width={30} height={24} />
-              )}
-            </TouchableOpacity>
-
-            {/* 마이크 컨트롤 */}
-            {item.id === 'localUser' ? (
-              <TouchableOpacity onPress={toggleMuteMic}>
-                <CustomIcon
-                  name={item.isMuteMic ? 'mikeOff' : 'mikeOn'}
-                  width={30}
-                  height={24}
+            <View
+              style={{ flex: 5, flexDirection: 'row', alignItems: 'center' }}
+            >
+              <View style={styles.profileCover}>
+                <Image
+                  style={styles.profileImg}
+                  source={
+                    item.userInfo
+                      ? {
+                          uri: `https://www.wehago.com${
+                            item.userInfo.profile_url
+                          }`
+                        }
+                      : null
+                  }
+                  resizeMode={'center'}
                 />
+              </View>
+              <Text
+                numberOfLines={1}
+                ellipsizeMode={'tail'}
+                style={styles.nameField}
+              >
+                {item.name}
+                {/* ({item.userInfo.wehagoId || '외부참여자'}) */}
+              </Text>
+              {item.id === 'localUser' && (
+                <View style={[styles.presenter, { backgroundColor: '#fb0' }]}>
+                  <Text style={styles.presenterText}>나</Text>
+                </View>
+              )}
+              {item.id === presenter && (
+                <View style={styles.presenter}>
+                  <Text style={styles.presenterText}>발표자</Text>
+                </View>
+              )}
+            </View>
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                justifyContent: 'flex-end'
+              }}
+            >
+              {/* 스피커폰 컨트롤 */}
+              <TouchableOpacity onPress={onChangeSpeaker}>
+                {speaker === 1 && item.id === 'localUser' && (
+                  <CustomIcon name={'speakerOn'} width={30} height={24} />
+                )}
+                {speaker === 2 && item.id === 'localUser' && (
+                  <CustomIcon name={'speakerOff'} width={30} height={24} />
+                )}
               </TouchableOpacity>
-            ) : // <CustomIcon
-            //   name={item.isMuteAudio ? 'mikeOff' : 'mikeOn'}
-            //   width={30}
-            //   height={24}
-            // />
-            null}
-          </View>
-        </TouchableOpacity>
-      )}
-    />
+
+              {/* 마이크 컨트롤 */}
+              {item.id === 'localUser' ? (
+                <TouchableOpacity onPress={toggleMuteMic}>
+                  <CustomIcon
+                    name={item.isMuteMic ? 'mikeOff' : 'mikeOn'}
+                    width={30}
+                    height={24}
+                  />
+                </TouchableOpacity>
+              ) : // <CustomIcon
+              //   name={item.isMuteAudio ? 'mikeOff' : 'mikeOn'}
+              //   width={30}
+              //   height={24}
+              // />
+              null}
+            </View>
+          </TouchableOpacity>
+        )}
+      />
+    </ScrollView>
   );
 };
 

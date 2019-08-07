@@ -4,11 +4,21 @@ import {
   View,
   StyleSheet,
   FlatList,
+  ScrollView,
+  RefreshControl,
   TouchableOpacity
 } from 'react-native';
 import CustomIcon from '../../../../../components/CustomIcon';
 
 const FileListPresenter = props => {
+  const {
+    isLoading,
+    documentList,
+    setSharingMode,
+    setConvertFileSize,
+    getWedriveToken
+  } = props;
+
   const getExtentionType = fileName => {
     const ext = fileName
       .split('.')
@@ -18,14 +28,17 @@ const FileListPresenter = props => {
   };
 
   return (
-    <Fragment>
-      {props.isLoading ? (
-        <View
-          style={{ paddingTop: 20, paddingBottom: 10, alignItems: 'center' }}
-        >
-          <Text>로딩 중입니다.</Text>
-        </View>
-      ) : props.documentList.length === 0 ? (
+    <ScrollView
+      refreshControl={
+        <RefreshControl
+          refreshing={isLoading === 'LOADING'}
+          onRefresh={getWedriveToken}
+        />
+      }
+      showsVerticalScrollIndicator={false}
+      style={styles.listContainer}
+    >
+      {documentList.length === 0 && isLoading !== 'LOADING' ? (
         <View
           style={{ paddingTop: 20, paddingBottom: 10, alignItems: 'center' }}
         >
@@ -33,13 +46,13 @@ const FileListPresenter = props => {
         </View>
       ) : (
         <FlatList
-          data={props.documentList}
+          data={documentList}
           style={styles.documentList}
           renderItem={({ item }) => (
             <TouchableOpacity
               activeOpacity={0.3}
               onPress={() => {
-                props.setSharingMode(item);
+                setSharingMode(item);
               }}
               style={styles.itemBox}
             >
@@ -62,14 +75,14 @@ const FileListPresenter = props => {
               </Text>
               {!item.directory && (
                 <Text style={styles.itemSize}>
-                  {props.setConvertFileSize(item.size)}
+                  {setConvertFileSize(item.size)}
                 </Text>
               )}
             </TouchableOpacity>
           )}
         />
       )}
-    </Fragment>
+    </ScrollView>
   );
 };
 
@@ -87,7 +100,7 @@ const styles = StyleSheet.create({
   },
   documentList: {
     paddingTop: 16,
-    paddingBottom: 16
+    paddingBottom: 9
   },
   itemBox: {
     flexDirection: 'row',

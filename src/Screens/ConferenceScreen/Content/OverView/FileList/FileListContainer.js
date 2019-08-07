@@ -3,8 +3,6 @@ import { Alert, Image } from 'react-native';
 import FileListPresenter from './FileListPresenter';
 
 class FileListContainer extends Component {
-  state = { isLoading: false };
-
   constructor(props) {
     super(props);
   }
@@ -14,22 +12,22 @@ class FileListContainer extends Component {
   };
 
   getFileList = async () => {
-    await this.setState({ isLoading: true });
     await this._handleGetWedriveToken();
-    this.setState({ isLoading: false });
   };
 
   render() {
-    // const { orientation } = this.props;
-    const { isLoading } = this.state;
+    const { status } = this.props;
+
     return (
       <FileListPresenter
-        isLoading={isLoading}
+        isLoading={status}
+        status={this.props.status}
         // hasNotch={hasNotch}
         // orientation={orientation}
         documentList={this.props.wedriveList}
         setSharingMode={this._handleSharingMode}
         setConvertFileSize={this._handleConvertFileSize}
+        getWedriveToken={this._handleGetWedriveToken}
       />
     );
   }
@@ -235,9 +233,18 @@ class FileListContainer extends Component {
       }
     }
 
-    Alert.alert('문제 발생', '파일 상세정보를 불러오지 못했습니다.', [
-      { text: 'OK' }
-    ]);
+    if (fileInfoResponse.resultCode === 'E2021') {
+      Alert.alert('파일 변환 중입니다.', '잠시후 다시 시도해주시기 바랍니다.', [
+        { text: 'OK' }
+      ]);
+      return;
+    }
+
+    Alert.alert(
+      '파일 상세정보를 불러오지 못했습니다.',
+      '다시 시도해주시기 바랍니다.',
+      [{ text: 'OK' }]
+    );
     return;
   };
 
