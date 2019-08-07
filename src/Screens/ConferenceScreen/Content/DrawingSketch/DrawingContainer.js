@@ -3,7 +3,14 @@
  */
 
 import React, { Component } from 'react';
-import { View, Text, Image, Dimensions } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  Dimensions,
+  ScrollView,
+  TouchableOpacity
+} from 'react-native';
 import DrawingPresenter from './DrawingPresenter';
 import DrawingManager from '../../../../utils/DrawingManager';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -42,124 +49,125 @@ class DrawingContainer extends Component {
     selctedEraser: 0,
     palette: false, // 탭 사용여부
 
-    stroke: 0,
-    color: 0,
-    eraser: 0,
-
-    tabs: [
-      {
-        id: 'pointer',
-        icon: ['btnLaserNone', 'btnLaserSele'],
-        title: '레이저포인터',
-        values: [],
-        render: () => null,
-        onPress: () => {
-          this.setState({
-            selectedTab: this.state.selectedTab === 0 ? -1 : 0,
-            palette: false
-          });
-        }
-      },
-      {
-        id: 'stroke',
-        icon: ['btnEditNone', 'btnEditSele'],
-        title: '선굵기',
-        values: [3, 5, 7, 9, 13],
-        // render: size => <Text>{size}</Text>
-        render: size => (
-          <View
-            style={{
-              width: '97%',
-              height: size,
-              backgroundColor: '#333',
-              borderRadius: 15
-            }}
-          />
-        ),
-        onPress: () => {
-          this.setState({
-            selectedTab: this.state.selectedTab === 1 ? -1 : 1,
-            palette: this.state.selectedTab !== 1
-          });
-        }
-      },
-      {
-        id: 'color',
-        icon: ['palette', 'palette'],
-        title: '색상',
-        values: [
-          '#000',
-          '#6a6aff',
-          '#258cff',
-          '#00c8cb',
-          '#ffc126',
-          '#ff6e26',
-          '#f04247',
-          '#fff'
-        ],
-        render: backgroundColor => (
-          <View
-            style={{
-              width: 25,
-              height: 25,
-              borderRadius: 25,
-              backgroundColor
-            }}
-          />
-        ),
-        onPress: () => {
-          this.setState({
-            selectedTab: this.state.selectedTab === 2 ? -1 : 2,
-            palette: this.state.selectedTab !== 2
-          });
-        }
-      }
-      // {
-      //   id: 'eraser',
-      //   icon: 'eraser',
-      //   title: '지우개',
-      //   // values: [7, 9, 12, 15, 0],
-      //   values: [7, 9, 12, 15],
-      //   render: size =>
-      //     size !== 0 ? (
-      //       <View
-      //         style={{
-      //           width: '97%',
-      //           height: size,
-      //           backgroundColor: '#777777',
-      //           borderRadius: 15
-      //         }}
-      //       />
-      //     ) : (
-      //       <Icon name={'trash'} size={15} color={'#e54840'} />
-      //     ),
-      //   onPress: () => {
-      //     this.setState({
-      //       selectedTab: this.state.selectedTab === 2 ? -1 : 2,
-      //       palette: this.state.selectedTab !== 2
-      //     });
-      //   }
-      // },
-      // {
-      //   id: 'undo',
-      //   icon: 'undo',
-      //   title: '이전',
-      //   // value: [1,2],
-      //   onPress: () => {
-      //     this._drawingManager.undo();
-      //   }
-      // }
-      // {
-      //   id: 'redo',
-      //   icon: 'redo',
-      //   title: '다시',
-      //   // value: [1,2],
-      //   onPress: () => {
-      //     this._drawingManager.redo();
-      //   }
-      // }
-    ]
+    stroke: 3,
+    color: 1,
+    eraser: 0
   };
+
+  tabs = [
+    {
+      id: 'pointer',
+      icon: ['btnLaserNone', 'btnLaserSele'],
+      title: '레이저포인터',
+      values: [],
+      render: () => null,
+      onPress: () => {
+        this.setState({
+          selectedTab: this.state.selectedTab === 0 ? -1 : 0,
+          palette: false
+        });
+      }
+    },
+    // {
+    //   id: 'stroke',
+    //   icon: ['btnEditNone', 'btnEditSele'],
+    //   title: '선굵기',
+    //   values: [3, 5, 7, 9, 13],
+    //   // render: size => <Text>{size}</Text>
+    //   render: size => (
+    //     <View
+    //       style={{
+    //         width: '97%',
+    //         height: size,
+    //         backgroundColor: '#333',
+    //         borderRadius: 15
+    //       }}
+    //     />
+    //   ),
+    //   onPress: () => {
+    //     this.setState({
+    //       selectedTab: this.state.selectedTab === 1 ? -1 : 1,
+    //       palette: this.state.selectedTab !== 1
+    //     });
+    //   }
+    // },
+    {
+      id: 'stroke',
+      icon: ['btnEditNone', 'btnEditSele'],
+      // icon: ['palette', 'palette'],
+      title: '필기툴',
+      values: [
+        '#fff',
+        '#000',
+        '#6a6aff',
+        '#258cff',
+        '#00c8cb',
+        '#ffc126',
+        '#ff6e26',
+        '#f04247'
+      ],
+      render: backgroundColor => (
+        <View
+          style={{
+            width: 25,
+            height: 25,
+            borderRadius: 25,
+            backgroundColor
+          }}
+        />
+      ),
+      onPress: () => {
+        this.setState({
+          selectedTab: this.state.selectedTab === 1 ? -1 : 1,
+          palette: this.state.selectedTab !== 1
+        });
+      }
+    }
+    // {
+    //   id: 'eraser',
+    //   icon: 'eraser',
+    //   title: '지우개',
+    //   // values: [7, 9, 12, 15, 0],
+    //   values: [7, 9, 12, 15],
+    //   render: size =>
+    //     size !== 0 ? (
+    //       <View
+    //         style={{
+    //           width: '97%',
+    //           height: size,
+    //           backgroundColor: '#777777',
+    //           borderRadius: 15
+    //         }}
+    //       />
+    //     ) : (
+    //       <Icon name={'trash'} size={15} color={'#e54840'} />
+    //     ),
+    //   onPress: () => {
+    //     this.setState({
+    //       selectedTab: this.state.selectedTab === 2 ? -1 : 2,
+    //       palette: this.state.selectedTab !== 2
+    //     });
+    //   }
+    // },
+    // {
+    //   id: 'undo',
+    //   icon: 'undo',
+    //   title: '이전',
+    //   // value: [1,2],
+    //   onPress: () => {
+    //     this._drawingManager.undo();
+    //   }
+    // }
+    // {
+    //   id: 'redo',
+    //   icon: 'redo',
+    //   title: '다시',
+    //   // value: [1,2],
+    //   onPress: () => {
+    //     this._drawingManager.redo();
+    //   }
+    // }
+  ];
 
   /**
    * LifeCycle
@@ -237,6 +245,7 @@ class DrawingContainer extends Component {
       <DrawingPresenter
         {...this.state}
         {...this.props}
+        tabs={this.tabs}
         renderImage={renderImage}
         onChangeState={this._handleChangeState}
         onStrokeEnd={this._handleStrokeEnd}

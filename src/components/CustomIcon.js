@@ -47,6 +47,11 @@ import btn_laser_sele from '../../assets/buttons/btn_docedit_laser_sele.png';
 import btn_back from '../../assets/buttons/btn_back_none.png';
 import btn_forward from '../../assets/buttons/btn_forward_none.png';
 
+import ico_check_white from '../../assets/icons/palette/color-check-wh_2x.png';
+import ico_check_blue from '../../assets/icons/palette/color-check_2x.png';
+import ico_decrease from '../../assets/icons/palette/btn_docedit_redu_none.png';
+import ico_increase from '../../assets/icons/palette/btn_docedit_incr_none.png';
+
 const CustomIcon = props => {
   return (
     <Image
@@ -147,6 +152,14 @@ const getButtonSource = name => {
       return btn_back;
     case 'btnForward':
       return btn_forward;
+    case 'checkWhite':
+      return ico_check_white;
+    case 'checkBlue':
+      return ico_check_blue;
+    case 'icoDecrease':
+      return ico_decrease;
+    case 'icoIncrease':
+      return ico_increase;
     default:
       return ico_etc;
   }

@@ -2,12 +2,10 @@
  * DrawingPresenter
  */
 
-import React, { Fragment } from 'react';
+import React from 'react';
 import {
   StyleSheet,
   View,
-  Image,
-  ImageBackground,
   Text,
   TouchableOpacity,
   Button,
@@ -15,11 +13,10 @@ import {
   Dimensions,
   ScrollView
 } from 'react-native';
-import { SketchCanvas } from '@terrylinla/react-native-sketch-canvas';
 import DrawingBoard from './DrawingBoard';
-import Icon from 'react-native-vector-icons/FontAwesome5';
 import DeviceInfo from 'react-native-device-info';
-import FastImage from 'react-native-fast-image';
+// import Slider from '@react-native-community/slider';
+import { Slider } from 'react-native';
 import CustomIcon from './../../../../components/CustomIcon';
 
 const isIOS = Platform.OS === 'ios';
@@ -58,6 +55,114 @@ const DrawingPresenter = props => {
     height: imgHeight * scale
   };
 
+  const subPaletteRender = id => {
+    switch (id) {
+      case 'pointer':
+        return null;
+      case 'stroke':
+        return (
+          <View
+            style={{
+              ...styles.detailSettingWrapper,
+              ...styles[`detailSettingWrapper_vertical`],
+              paddingTop: 10,
+              paddingBottom: 10
+            }}
+          >
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              ref={ref => props.onSetRef('subPalette', ref)}
+            >
+              {tabs[selectedTab].values.map((value, valueIndex) => (
+                <TouchableOpacity
+                  key={String(value)}
+                  activeOpacity={1}
+                  onPress={() =>
+                    selectedTab === 2 && value === 0
+                      ? props.onClear()
+                      : props.onChangeState('color', valueIndex)
+                  }
+                >
+                  <View
+                    style={{
+                      ...styles.detailSettingItem,
+                      ...styles[`detailSettingItem_vertical`]
+                      // opacity: color === valueIndex ? 0.45 : 1
+                    }}
+                  >
+                    {tabs[selectedTab].render(value)}
+                    {color === valueIndex && (
+                      <CustomIcon
+                        name={valueIndex === 0 ? 'checkBlue' : 'checkWhite'}
+                        width={14}
+                        height={14}
+                        style={{
+                          position: 'absolute',
+                          top: '50%',
+                          left: '50%',
+                          marginTop: -7,
+                          marginLeft: -7
+                        }}
+                      />
+                    )}
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+
+            <View
+              style={{
+                width: '100%',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginTop: 10
+              }}
+            >
+              <TouchableOpacity
+                disabled={props.stroke <= 3}
+                onPress={() => {
+                  props.onChangeState('stroke', props.stroke - 1);
+                }}
+                style={{ opacity: props.stroke <= 3 ? 0.2 : 1 }}
+              >
+                <CustomIcon name={'icoDecrease'} width={24} height={24} />
+              </TouchableOpacity>
+              <Slider
+                value={stroke}
+                minimumValue={3}
+                maximumValue={10}
+                minimumTrackTintColor={'rgb(28, 144, 251)'}
+                maximumTrackTintColor={'rgb(211, 228, 244)'}
+                thumbTintColor={'#ccc'}
+                step={1}
+                onSlidingComplete={value =>
+                  props.onChangeState('stroke', value)
+                }
+                style={{ display: 'flex', width: '80%', height: 30 }}
+              />
+              <TouchableOpacity
+                disabled={props.stroke >= 10}
+                onPress={() => {
+                  props.onChangeState('stroke', props.stroke + 1);
+                }}
+                style={{ opacity: props.stroke >= 10 ? 0.2 : 1 }}
+              >
+                <CustomIcon name={'icoIncrease'} width={24} height={24} />
+              </TouchableOpacity>
+            </View>
+          </View>
+        );
+      case 'color':
+        return null;
+      default:
+        return null;
+    }
+  };
+
+  const subPalette = selectedTab >= 0 && subPaletteRender(tabs[selectedTab].id);
+
   return (
     <View style={[styles.container, styles[`flexDirection_vertical`]]}>
       {/* 드로잉 영역 */}
@@ -92,12 +197,12 @@ const DrawingPresenter = props => {
                   left: 0,
                   right: 0,
                   backgroundColor: 'transparent'
-                },
-                selectedTab > 1
-                  ? { zIndex: 10 }
-                  : selectedTab === -1
-                  ? { zIndex: -10 }
-                  : null
+                }
+                // selectedTab > 1
+                //   ? { zIndex: 10 }
+                //   : selectedTab === -1
+                //   ? { zIndex: -10 }
+                //   : null
               ]}
             >
               {/* {imageLoading ? (
@@ -112,12 +217,13 @@ const DrawingPresenter = props => {
                 rWidth={resultSize.width}
                 rHeight={resultSize.height}
                 scale={scale}
-                color={selectedTab == 3 ? 'transparent' : tabs[2].values[color]}
-                stroke={
-                  selectedTab == 3
-                    ? tabs[3].values[eraser]
-                    : tabs[1].values[stroke]
-                }
+                color={selectedTab == 3 ? 'transparent' : tabs[1].values[color]}
+                // stroke={
+                //   selectedTab == 3
+                //     ? tabs[3].values[eraser]
+                //     : tabs[1].values[stroke]
+                // }
+                stroke={stroke}
                 page={props.page}
                 onStrokeEnd={props.onSetDrawingData}
                 onClearAll={props.onClearAll}
@@ -152,48 +258,7 @@ const DrawingPresenter = props => {
           ]}
         >
           {/* 팔레트 서브 */}
-          {palette && (
-            <View
-              style={{
-                ...styles.detailSettingWrapper,
-                ...styles[`detailSettingWrapper_vertical`]
-              }}
-            >
-              <ScrollView
-                horizontal={true}
-                showsHorizontalScrollIndicator={false}
-                ref={ref => props.onSetRef('subPalette', ref)}
-              >
-                {selectedTab >= 0 &&
-                  tabs[selectedTab].values.map((value, valueIndex) => (
-                    <TouchableOpacity
-                      key={String(value)}
-                      onPress={() =>
-                        selectedTab === 2 && value === 0
-                          ? props.onClear()
-                          : props.onChangeState(
-                              tabs[selectedTab].id,
-                              valueIndex
-                            )
-                      }
-                    >
-                      <View
-                        style={{
-                          ...styles.detailSettingItem,
-                          ...styles[`detailSettingItem_vertical`],
-                          opacity:
-                            props[tabs[selectedTab].id] === valueIndex
-                              ? 0.45
-                              : 1
-                        }}
-                      >
-                        {tabs[selectedTab].render(value)}
-                      </View>
-                    </TouchableOpacity>
-                  ))}
-              </ScrollView>
-            </View>
-          )}
+          {palette && subPalette}
 
           {/* ===== 메인 팔레드 ===== */}
           <View
@@ -321,8 +386,8 @@ const styles = StyleSheet.create({
     // height: 110,
     bottom: 0,
     left: 0,
-    right: 0,
-    width: '100%'
+    right: 0
+    // width: '100%'
   },
   bottomArea_horizontal: {
     flexDirection: 'row',
@@ -398,14 +463,14 @@ const styles = StyleSheet.create({
   // 서브 팔레트
   detailSettingWrapper: {
     backgroundColor: '#1f1f1f',
-    justifyContent: 'flex-start',
-    alignItems: 'center'
+    justifyContent: 'center',
+    alignItems: 'flex-start'
   },
   // 세로
   detailSettingWrapper_vertical: {
-    flexDirection: 'row',
+    // flexDirection: 'row',
     width: '100%',
-    height: 55,
+    // height: 55,
     paddingLeft: 7.5,
     paddingRight: 7.5
   },
@@ -417,11 +482,9 @@ const styles = StyleSheet.create({
   },
 
   detailSettingItem: {
-    width: 30,
-    height: 30,
+    width: 25,
+    height: 25,
     backgroundColor: '#f1f1f1',
-    borderWidth: 3,
-    borderColor: '#fff',
     borderRadius: 25,
     justifyContent: 'center',
     alignItems: 'center'
