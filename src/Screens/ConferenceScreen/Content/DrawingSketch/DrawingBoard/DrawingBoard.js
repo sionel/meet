@@ -37,22 +37,7 @@ class DrawingBoard extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     if (nextProps !== this.props) return true;
-    //   if (
-    //     nextProps.documentData !== this.props.documentData ||
-    //     nextProps.page !== this.props.page ||
-    //     nextProps.width !== this.props.width ||
-    //     nextProps.height!== this.props.height ||
-    //     nextProps.rWidth !== this.props.rWidth ||
-    //     nextProps.rHeight !== this.props.rHeight
-    //   ) {
-    //     this._drawingManager.set('DRAW_DATA', nextProps.documentData[nextProps.page] || []);
-    //     this._drawingManager.set('BASE_WIDTH', nextProps.rWidth);
-    //     this._drawingManager.set('BASE_HEIGHT', nextProps.rHeight);
-    //     this._drawingManager.set('SCALE', nextProps.scale);
-
-    //     this._drawingManager.drawCanvas(nextProps.documentData[nextProps.page]||[]);
-    //     // return true;
-    //   }
+    if (nextState !== this.state) return true;
     return false;
   }
 
@@ -77,10 +62,6 @@ class DrawingBoard extends Component {
       onStrokeEnd
     } = this.props;
 
-    // this._drawingManager.set('DRAW_DATA', documentData[page] || []);
-    // this._drawingManager.set('BASE_WIDTH', rWidth);
-    // this._drawingManager.set('BASE_HEIGHT', rHeight);
-    // this._drawingManager.set('SCALE', this.props.scale);
     const backgroundColor = 'transparent';
 
     return (
@@ -90,8 +71,6 @@ class DrawingBoard extends Component {
           width: rWidth,
           height: rHeight,
           backgroundColor
-          // borderWidth: 2,
-          // borderColor: '#d1d1d1'
         }}
         user={user}
         strokeWidth={stroke}

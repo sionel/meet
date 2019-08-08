@@ -85,13 +85,14 @@ class DrawingManager {
       drawingData.map(item => {
         if (item.type === 'path') {
           let newData = {
-            drawer: 'wehago_meet_web',
+            drawer: 'user',
             size: {
               width: this.BASE_WIDTH,
               height: this.BASE_HEIGHT
             },
             path: {
-              id: Number(this.tempId++),
+              id: item.drawId,
+              // id: Number(this.tempId++),
               color: item.stroke,
               width: item.strokeWidthScale * this.BASE_WIDTH,
               data: []
@@ -165,6 +166,20 @@ class DrawingManager {
       };
     }
 
+    // UNDO or REDO 의 경우 drawingData 가 배열로 옴
+    if (Array.isArray(drawingData)) {
+      return {
+        value: id,
+        tagName: 'UPDATE_DRAWING_DATA',
+        attributes: {
+          documentData: JSON.stringify(this.DRAW_DATA),
+          width: width,
+          height: height
+        }
+      };
+    }
+
+    // drawingData 가 추가 되었을 경우 (그냥 그렸을 때)
     const { id, color, width: strokeWidthScale, data } = drawingData.path;
     const { width, height } = drawingData.size;
 
@@ -173,7 +188,8 @@ class DrawingManager {
       coordsPath: [],
       opacity: 1,
       stroke: color,
-      strokeWidthScale: strokeWidthScale / this.BASE_WIDTH
+      strokeWidthScale: strokeWidthScale / this.BASE_WIDTH,
+      drawId: id
     };
     data.map(item => {
       const location = item.split(',');
@@ -201,16 +217,45 @@ class DrawingManager {
   /**
    * REDO
    */
-  redo = () => {};
+  redo = () => {
+    if (this.history.length > 0) {
+      const temp = this.history.pop();
+      this.DRAW_DATA.push(temp);
+
+      let newData = {
+        drawer: 'user',
+        size: {
+          width: this.BASE_WIDTH,
+          height: this.BASE_HEIGHT
+        },
+        path: {
+          id: Number(temp.drawId),
+          color: temp.stroke,
+          width: temp.strokeWidthScale * this.BASE_WIDTH,
+          data: []
+        }
+      };
+
+      temp.coordsPath.map(xy => {
+        const location = xy.split(',');
+        newData.path.data.push(
+          `${Number(location[0]) * this.BASE_WIDTH},${Number(location[1]) *
+            this.BASE_HEIGHT}`
+        );
+      });
+      this.canvas.addPath(newData);
+    }
+  };
 
   /**
    * UNDO
    */
   undo = () => {
-    if (this.history.length > 0) {
-      this.wastebasket.push(this.history.pop());
+    if (this.DRAW_DATA.length > 0) {
+      const temp = this.DRAW_DATA.pop();
+      this.history.push(temp);
+      this.canvas.deletePath(temp.drawId);
     }
-    this.canvas.undo();
   };
 }
 

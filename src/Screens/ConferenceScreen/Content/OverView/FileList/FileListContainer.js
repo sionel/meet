@@ -65,13 +65,7 @@ class FileListContainer extends Component {
    * 위드라이브 문서공유 모드
    */
   _handleSharingMode = file => {
-    this._handleGetFileInfo(file)
-      .then(() => {
-        console.log('1111');
-      })
-      .catch(() => {
-        console.log('2222');
-      });
+    this._handleGetFileInfo(file);
     // this.props.setSharingMode(true);
   };
 

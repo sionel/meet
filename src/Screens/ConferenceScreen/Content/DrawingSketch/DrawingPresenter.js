@@ -55,105 +55,145 @@ const DrawingPresenter = props => {
     height: imgHeight * scale
   };
 
+  const mainPaletteRender = () => {
+    const renderList = ['stroke', 'pointer'];
+    let rednerTab = [];
+    renderList.map(item => {
+      tabs.some(tab => {
+        if (item === tab.id) {
+          rednerTab.push(
+            <TouchableOpacity
+              key={tab.id}
+              onPress={() =>
+                tab.onPress
+                  ? tab.onPress()
+                  : props.onChangeState('selectedTab', tab.id)
+              }
+            >
+              <View
+                style={{
+                  ...styles.mainSettingItem,
+                  // opacity: selectedTab === tabIndex ? 0.85 : 1,
+                  // backgroundColor:
+                  //   selectedTab === tabIndex
+                  //     ? 'rgba(255,255,255, 0.45)'
+                  //     : '#00000000',
+                  ...styles[`mainSettingItem_vertical`]
+                }}
+              >
+                <CustomIcon
+                  name={selectedTab === tab.id ? tab.icon[1] : tab.icon[0]}
+                  width={24}
+                  height={24}
+                />
+              </View>
+            </TouchableOpacity>
+          );
+        }
+      });
+    });
+    return rednerTab;
+  };
+
+  const subPaletteStroke = (
+    <View
+      style={{
+        ...styles.detailSettingWrapper,
+        ...styles[`detailSettingWrapper_vertical`],
+        paddingTop: 10,
+        paddingBottom: 10
+      }}
+    >
+      <ScrollView
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}
+        ref={ref => props.onSetRef('subPalette', ref)}
+      >
+        {tabs.map(tab => {
+          if (tab.id === 'stroke') {
+            return tab.values.map((item, index) => (
+              <TouchableOpacity
+                key={String(item)}
+                activeOpacity={1}
+                onPress={() => props.onChangeState('color', index)}
+              >
+                <View
+                  style={{
+                    ...styles.detailSettingItem,
+                    ...styles[`detailSettingItem_vertical`]
+                    // opacity: color === index ? 0.45 : 1
+                  }}
+                >
+                  {tab.render(item)}
+                  {color === index && (
+                    <CustomIcon
+                      name={index === 0 ? 'checkBlue' : 'checkWhite'}
+                      width={14}
+                      height={14}
+                      style={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        marginTop: -7,
+                        marginLeft: -7
+                      }}
+                    />
+                  )}
+                </View>
+              </TouchableOpacity>
+            ));
+          }
+        })}
+      </ScrollView>
+
+      <View
+        style={{
+          width: '100%',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginTop: 10
+        }}
+      >
+        <TouchableOpacity
+          disabled={props.stroke <= 3}
+          onPress={() => {
+            props.onChangeState('stroke', props.stroke - 1);
+          }}
+          style={{ opacity: props.stroke <= 3 ? 0.2 : 1 }}
+        >
+          <CustomIcon name={'icoDecrease'} width={24} height={24} />
+        </TouchableOpacity>
+        <Slider
+          value={stroke}
+          minimumValue={3}
+          maximumValue={10}
+          minimumTrackTintColor={'rgb(28, 144, 251)'}
+          maximumTrackTintColor={'rgb(211, 228, 244)'}
+          thumbTintColor={'#ccc'}
+          step={1}
+          onSlidingComplete={value => props.onChangeState('stroke', value)}
+          style={{ display: 'flex', width: '80%', height: 30 }}
+        />
+        <TouchableOpacity
+          disabled={props.stroke >= 10}
+          onPress={() => {
+            props.onChangeState('stroke', props.stroke + 1);
+          }}
+          style={{ opacity: props.stroke >= 10 ? 0.2 : 1 }}
+        >
+          <CustomIcon name={'icoIncrease'} width={24} height={24} />
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+
   const subPaletteRender = id => {
     switch (id) {
       case 'pointer':
         return null;
       case 'stroke':
-        return (
-          <View
-            style={{
-              ...styles.detailSettingWrapper,
-              ...styles[`detailSettingWrapper_vertical`],
-              paddingTop: 10,
-              paddingBottom: 10
-            }}
-          >
-            <ScrollView
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              ref={ref => props.onSetRef('subPalette', ref)}
-            >
-              {tabs[selectedTab].values.map((value, valueIndex) => (
-                <TouchableOpacity
-                  key={String(value)}
-                  activeOpacity={1}
-                  onPress={() =>
-                    selectedTab === 2 && value === 0
-                      ? props.onClear()
-                      : props.onChangeState('color', valueIndex)
-                  }
-                >
-                  <View
-                    style={{
-                      ...styles.detailSettingItem,
-                      ...styles[`detailSettingItem_vertical`]
-                      // opacity: color === valueIndex ? 0.45 : 1
-                    }}
-                  >
-                    {tabs[selectedTab].render(value)}
-                    {color === valueIndex && (
-                      <CustomIcon
-                        name={valueIndex === 0 ? 'checkBlue' : 'checkWhite'}
-                        width={14}
-                        height={14}
-                        style={{
-                          position: 'absolute',
-                          top: '50%',
-                          left: '50%',
-                          marginTop: -7,
-                          marginLeft: -7
-                        }}
-                      />
-                    )}
-                  </View>
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
-
-            <View
-              style={{
-                width: '100%',
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginTop: 10
-              }}
-            >
-              <TouchableOpacity
-                disabled={props.stroke <= 3}
-                onPress={() => {
-                  props.onChangeState('stroke', props.stroke - 1);
-                }}
-                style={{ opacity: props.stroke <= 3 ? 0.2 : 1 }}
-              >
-                <CustomIcon name={'icoDecrease'} width={24} height={24} />
-              </TouchableOpacity>
-              <Slider
-                value={stroke}
-                minimumValue={3}
-                maximumValue={10}
-                minimumTrackTintColor={'rgb(28, 144, 251)'}
-                maximumTrackTintColor={'rgb(211, 228, 244)'}
-                thumbTintColor={'#ccc'}
-                step={1}
-                onSlidingComplete={value =>
-                  props.onChangeState('stroke', value)
-                }
-                style={{ display: 'flex', width: '80%', height: 30 }}
-              />
-              <TouchableOpacity
-                disabled={props.stroke >= 10}
-                onPress={() => {
-                  props.onChangeState('stroke', props.stroke + 1);
-                }}
-                style={{ opacity: props.stroke >= 10 ? 0.2 : 1 }}
-              >
-                <CustomIcon name={'icoIncrease'} width={24} height={24} />
-              </TouchableOpacity>
-            </View>
-          </View>
-        );
+        return subPaletteStroke;
       case 'color':
         return null;
       default:
@@ -161,7 +201,8 @@ const DrawingPresenter = props => {
     }
   };
 
-  const subPalette = selectedTab >= 0 && subPaletteRender(tabs[selectedTab].id);
+  const mainPalette = mainPaletteRender();
+  const subPalette = subPaletteRender(selectedTab);
 
   return (
     <View style={[styles.container, styles[`flexDirection_vertical`]]}>
@@ -209,7 +250,7 @@ const DrawingPresenter = props => {
                 <Text>Loading</Text>
               ) : ( */}
               <DrawingBoard
-                mode={selectedTab >= 1}
+                mode={['stroke'].some(val => val === selectedTab)}
                 presenter={presenter}
                 orientation={orientation}
                 width={imgWidth}
@@ -271,45 +312,13 @@ const DrawingPresenter = props => {
             <View
               style={[styles.mainTabWrapper, styles[`mainTabWrapper_vertical`]]}
             >
-              {tabs.map(
-                (tab, tabIndex) =>
-                  tabIndex !== 0 && (
-                    <TouchableOpacity
-                      key={tab.id}
-                      onPress={() =>
-                        tab.onPress
-                          ? tab.onPress()
-                          : props.onChangeState('selectedTab', tabIndex)
-                      }
-                    >
-                      <View
-                        style={{
-                          ...styles.mainSettingItem,
-                          // opacity: selectedTab === tabIndex ? 0.85 : 1,
-                          // backgroundColor:
-                          //   selectedTab === tabIndex
-                          //     ? 'rgba(255,255,255, 0.45)'
-                          //     : '#00000000',
-                          ...styles[`mainSettingItem_vertical`]
-                        }}
-                      >
-                        <CustomIcon
-                          name={
-                            selectedTab === tabIndex ? tab.icon[1] : tab.icon[0]
-                          }
-                          width={24}
-                          height={24}
-                        />
-                        {/* <Icon name={tab.icon} size={20} color={'#fff'} /> */}
-                      </View>
-                    </TouchableOpacity>
-                  )
-              )}
+              {mainPalette}
             </View>
 
             <View
               style={{
                 display: 'flex',
+                flexDirection: 'row',
                 justifyContent: 'center',
                 alignItems: vertical ? 'flex-end' : 'center',
                 // marginRight: vertical ? 7.5 : 0,
@@ -317,6 +326,12 @@ const DrawingPresenter = props => {
                 marginRight: 10
               }}
             >
+              <TouchableOpacity onPress={() => props.onDrawUndo()}>
+                <CustomIcon name={'btnBack'} width={30} height={24} />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => props.onDrawRedo()}>
+                <CustomIcon name={'btnForward'} width={30} height={24} />
+              </TouchableOpacity>
               <TouchableOpacity onPress={() => props.onSetDrawingData()}>
                 <Text
                   style={{

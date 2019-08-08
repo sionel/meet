@@ -19,7 +19,7 @@ import FastImage from 'react-native-fast-image';
 class DrawingContainer extends Component {
   constructor(props) {
     super(props);
-    this.canvas = null;
+    // this.canvas = null;
     this.ctx = null;
     this.pos = {
       drawable: false,
@@ -63,7 +63,7 @@ class DrawingContainer extends Component {
       render: () => null,
       onPress: () => {
         this.setState({
-          selectedTab: this.state.selectedTab === 0 ? -1 : 0,
+          selectedTab: this.state.selectedTab === 'pointer' ? -1 : 'pointer',
           palette: false
         });
       }
@@ -95,8 +95,8 @@ class DrawingContainer extends Component {
       ),
       onPress: () => {
         this.setState({
-          selectedTab: this.state.selectedTab === 1 ? -1 : 1,
-          palette: this.state.selectedTab !== 1
+          selectedTab: this.state.selectedTab === 'stroke' ? -1 : 'stroke',
+          palette: this.state.selectedTab !== 'stroke'
         });
       }
     }
@@ -126,24 +126,6 @@ class DrawingContainer extends Component {
     //     });
     //   }
     // },
-    // {
-    //   id: 'undo',
-    //   icon: 'undo',
-    //   title: '이전',
-    //   // value: [1,2],
-    //   onPress: () => {
-    //     this._drawingManager.undo();
-    //   }
-    // }
-    // {
-    //   id: 'redo',
-    //   icon: 'redo',
-    //   title: '다시',
-    //   // value: [1,2],
-    //   onPress: () => {
-    //     this._drawingManager.redo();
-    //   }
-    // }
   ];
 
   /**
@@ -226,51 +208,22 @@ class DrawingContainer extends Component {
         renderImage={renderImage}
         onChangeState={this._handleChangeState}
         onStrokeEnd={this._handleStrokeEnd}
-        onCanvas={this._handleCanvas}
+        // onCanvas={this._handleCanvas}
         onClearAll={this._handleClearAll}
         onSetRef={this._handleSetRef}
+        onDrawUndo={this._handleDrawUndo}
+        onDrawRedo={this._handleDrawRedo}
       />
     );
   }
 
+  _handleForceUpdate = () => {
+    this.forceUpdate();
+  };
+
   _handleSetRef = (content, ref) => {
     this[content] = ref;
   };
-
-  // _handleGetImageSize = image => {
-  //   const renderImage = (
-  //     <FastImage
-  //       source={{
-  //         uri: image,
-  //         priority: FastImage.priority.high
-  //       }}
-  //       resizeMode={FastImage.resizeMode.contain}
-  //       onLoad={event => {
-  //         this.setState({
-  //           imgWidth: event.nativeEvent.width,
-  //           imgHeight: event.nativeEvent.height
-  //         });
-  //       }}
-  //       onLoadEnd={() => {
-  //         this.setState({ imageLoading: false });
-  //       }}
-  //       style={[
-  //         {
-  //           width: '100%',
-  //           height: '100%'
-  //           // borderColor: 'blue',
-  //           // borderWidth: 0
-  //         }
-  //       ]}
-  //     />
-  //   );
-
-  //   this.setState({ renderImage });
-
-  //   // Image.getSize(image, (w, h) => {
-  //   //   this.setState({ imageLoading: false, imgWidth: w, imgHeight: h });
-  //   // });
-  // };
 
   /**
    * onChangeColor
@@ -374,6 +327,20 @@ class DrawingContainer extends Component {
   _handleClearAll = a => {
     // this.props.onClear();
     console.log(a);
+  };
+
+  /**
+   * Redo / Undo
+   */
+  _handleDrawRedo = () => {
+    this._drawingManager.redo();
+    const data = this._drawingManager.get('DRAW_DATA');
+    this.props.onSetDrawingData(data);
+  };
+  _handleDrawUndo = () => {
+    this._drawingManager.undo();
+    const data = this._drawingManager.get('DRAW_DATA');
+    this.props.onSetDrawingData(data);
   };
 }
 
