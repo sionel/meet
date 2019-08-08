@@ -76,7 +76,10 @@ class DrawingBoard extends Component {
         strokeWidth={stroke}
         strokeColor={color}
         touchEnabled={presenter === 'localUser' && mode}
-        onStrokeEnd={onStrokeEnd}
+        onStrokeEnd={data => {
+          onStrokeEnd(data);
+          this._drawingManager.set('history', []);
+        }}
       />
     );
   }

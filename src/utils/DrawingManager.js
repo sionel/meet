@@ -26,8 +26,7 @@ class DrawingManager {
 
       this.canvas = null; // canvas
       this.tempId = 0; // 드로잉 아이디
-      this.history = []; // 드로잉 기록
-      this.wastebasket = []; // 드로잉 휴지통
+      this.history = []; // redo undo 기록
 
       // 싱글톤 변수 할당
       DrawingManager.instance = this;
@@ -66,6 +65,7 @@ class DrawingManager {
       case 'SCREEN_WIDTH':
       case 'SCREEN_HEIGHT':
       case 'SCALE':
+      case 'history':
         this[target] = value;
         break;
       default:
