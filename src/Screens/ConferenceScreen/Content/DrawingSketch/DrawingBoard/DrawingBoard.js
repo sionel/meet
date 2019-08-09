@@ -17,23 +17,13 @@ class DrawingBoard extends Component {
     this._drawingManager.set('SCALE', props.scale);
   }
 
-  state = {};
-
   componentDidMount = () => {
     let data = this.props.documentData[this.props.page];
-    if (!data) data = [];
+    if (!data || data.length === 0) data = [];
     this._drawingManager.drawCanvas(data);
   };
 
-  componentWillReceiveProps = nextProps => {
-    this._drawingManager.set(
-      'DRAW_DATA',
-      nextProps.documentData[nextProps.page] || []
-    );
-    this._drawingManager.set('BASE_WIDTH', nextProps.rWidth);
-    this._drawingManager.set('BASE_HEIGHT', nextProps.rHeight);
-    this._drawingManager.set('SCALE', nextProps.scale);
-  };
+  componentWillReceiveProps = nextProps => {};
 
   shouldComponentUpdate(nextProps, nextState) {
     if (nextProps !== this.props) return true;
@@ -43,7 +33,17 @@ class DrawingBoard extends Component {
 
   componentDidUpdate = (prevProps, prevState) => {
     let data = this.props.documentData[this.props.page];
-    if (!data) data = [];
+    this._drawingManager.set(
+      'DRAW_DATA',
+      this.props.documentData[this.props.page] || []
+    );
+    this._drawingManager.set('BASE_WIDTH', this.props.rWidth);
+    this._drawingManager.set('BASE_HEIGHT', this.props.rHeight);
+    this._drawingManager.set('SCALE', this.props.scale);
+    if (!data || data.length === 0) {
+      data = [];
+      this._drawingManager.set('history', []);
+    }
     this._drawingManager.drawCanvas(data);
   };
 
