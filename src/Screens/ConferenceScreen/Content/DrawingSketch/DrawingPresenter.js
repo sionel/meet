@@ -56,7 +56,7 @@ const DrawingPresenter = props => {
   };
 
   const mainPaletteRender = () => {
-    const renderList = ['stroke', 'pointer'];
+    const renderList = ['stroke'];
     let rednerTab = [];
     renderList.map(item => {
       tabs.some(tab => {
