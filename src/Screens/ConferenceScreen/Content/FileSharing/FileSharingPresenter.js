@@ -81,11 +81,11 @@ const FileSharingPresenter = props => {
         }}
         resizeMode={FastImage.resizeMode.contain}
         onLoad={event => {
-          size.push({
+          size[index] = {
             imgWidth: event.nativeEvent.width,
             imgHeight: event.nativeEvent.height
-          });
-          if (resources.length - 1 === index) {
+          };
+          if (JSON.stringify(size).indexOf('null') === -1) {
             props.onChangeImageSize(size);
           }
         }}
