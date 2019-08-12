@@ -25,17 +25,12 @@ const hasNotch = DeviceInfo.hasNotch() && isIOS;
 
 const DrawingPresenter = props => {
   const {
-    image,
-    imageLoading,
-    imgWidth,
-    imgHeight,
     selectedTab,
     stroke,
     color,
     eraser,
     palette,
     tabs,
-    display,
     showTool,
     presenter,
     orientation,
@@ -43,7 +38,6 @@ const DrawingPresenter = props => {
     onChangeShowToolState
   } = props;
 
-  const { width, height } = Dimensions.get('window');
   const vertical = orientation === 'vertical'; // 세로모드 인지
   // 길이값 비율
   const dividingWidth =
@@ -289,50 +283,48 @@ const DrawingPresenter = props => {
             </View>
           )}
         />
-      </ScrollView>
 
-      {/* 드로잉 영역 */}
-      <View
-        style={[
-          {
-            position: 'absolute',
-            top: props.viewHeight / 2,
-            left: props.viewWidth / 2,
-            marginTop: (resultSize.height / 2) * -1,
-            marginLeft: (resultSize.width / 2) * -1,
-            backgroundColor: 'transparent',
-            justifyContent: 'center',
-            alignItems: 'center'
-          }
-          // selectedTab > 1
-          //   ? { zIndex: 10 }
-          //   : selectedTab === -1
-          //   ? { zIndex: -10 }
-          //   : null
-        ]}
-      >
-        {/* {imageLoading ? (
-                <Text>Loading</Text>
-              ) : ( */}
-        <DrawingBoard
-          mode={['stroke'].some(val => val === selectedTab)}
-          presenter={presenter}
-          orientation={orientation}
-          rWidth={resultSize.width}
-          rHeight={resultSize.height}
-          scale={scale}
-          color={selectedTab == 3 ? 'transparent' : tabs[1].values[color]}
-          // stroke={
-          //   selectedTab == 3
-          //     ? tabs[3].values[eraser]
-          //     : tabs[1].values[stroke]
-          // }
-          stroke={stroke}
-          page={props.page}
-          onStrokeEnd={props.onSetDrawingData}
-        />
-        {/* )} */}
-      </View>
+        {/* 드로잉 영역 */}
+        <View
+          style={[
+            {
+              position: 'absolute',
+              top: props.viewHeight / 2,
+              left: props.viewWidth * props.page + props.viewWidth / 2,
+              marginTop: (resultSize.height / 2) * -1,
+              marginLeft: (resultSize.width / 2) * -1,
+              backgroundColor: 'transparent',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }
+          ]}
+        >
+          <DrawingBoard
+            mode={['stroke'].some(val => val === selectedTab)}
+            presenter={presenter}
+            orientation={orientation}
+            rWidth={resultSize.width}
+            rHeight={resultSize.height}
+            scale={scale}
+            color={selectedTab == 3 ? 'transparent' : tabs[1].values[color]}
+            stroke={stroke}
+            page={props.page}
+            onStrokeEnd={props.onSetDrawingData}
+          />
+
+          {selectedTab < 0 && (
+            <View
+              style={{
+                position: 'absolute',
+                top: 0,
+                bottom: 0,
+                left: 0,
+                right: 0
+              }}
+            />
+          )}
+        </View>
+      </ScrollView>
 
       {/* 하단 영역 */}
       {showTool && presenter === 'localUser' && (
