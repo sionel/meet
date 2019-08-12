@@ -4,7 +4,8 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-  ActivityIndicator
+  ActivityIndicator,
+  Platform
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import FileList from './FileList';
@@ -83,7 +84,10 @@ const OverViewPresenter = props => {
         areaWdith={24}
         areaHeight={24}
       />
-      <ActivityIndicator size={100} color={'rgb(28, 144, 251)'} />
+      <ActivityIndicator
+        size={Platform.OS === 'ios' ? 'large' : 100}
+        color={'rgb(28, 144, 251)'}
+      />
       <Text style={styles.loadingModalText}>문서를 불러오고 있습니다.</Text>
     </View>
   );
