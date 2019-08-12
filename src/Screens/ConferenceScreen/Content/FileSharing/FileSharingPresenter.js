@@ -12,8 +12,6 @@ import {
   StatusBar,
   SafeAreaView
 } from 'react-native';
-import DeviceInfo from 'react-native-device-info';
-// import RBSheet from 'react-native-raw-bottom-sheet';
 import FastImage from 'react-native-fast-image';
 import DrawingSketch from '../DrawingSketch';
 import CustomButton from '../../../../components/CustomButton';
@@ -21,11 +19,8 @@ import CustomModal from '../../../../components/CustomModal';
 import OverView from '../OverView';
 
 const SafetyView = Platform.OS === 'ios' ? SafeAreaView : View;
-const isIOS = Platform.OS === 'ios';
-const hasNotch = DeviceInfo.hasNotch() && isIOS;
 
 const FileSharingPresenter = props => {
-  const { height, width } = Dimensions.get('window');
   const {
     orientation,
     showTool,
@@ -37,23 +32,11 @@ const FileSharingPresenter = props => {
     onChangePage
   } = props;
 
-  // const headerPadding =
-  //   orientation === 'vertical' ? 0 + (isIOS ? 24 : 0) + (hasNotch ? 12 : 0) : 0;
-  // const bottomPadding =
-  //   orientation === 'vertical'
-  //     ? 0 + (hasNotch ? 12 : 0)
-  //     : 0 + (hasNotch ? 0 : 0);
-  // const containerPadding =
-  //   orientation === 'vertical' ? 0 : 0 + (hasNotch ? 0 : 0);
-  // const titleWidth = width;// - (containerPadding + 12) * 2 - 28 - 30 * 1;
-
   // 제목 표시줄
   const headerTitle = (
     <View
       style={{
         ...styles.topArea,
-        // height: 46 + headerPadding,
-        // 전체 기본 padding 12
         paddingTop: 12,
         paddingBottom: 12,
         paddingLeft: 12,
@@ -63,7 +46,6 @@ const FileSharingPresenter = props => {
       <CustomButton
         name={'buttonClose'}
         onPress={() => props.onChangeState('modal')}
-        // onPress={() => props.onChangeSharingMode(false, false)}
         style={{ paddingRight: 12, margin: 0 }}
         width={24}
         height={24}
@@ -86,31 +68,35 @@ const FileSharingPresenter = props => {
         areaWdith={28}
         areaHeight={28}
       />
-      {/* <CustomButton
-        name={'buttonClose'}
-        onPress={() => props.onChangeSharingMode(false)}
-        style={{ paddingLeft: 12, margin: 0 }}
-        width={24}
-        height={24}
-        areaWdith={24}
-        areaHeight={24}
-      /> */}
     </View>
   );
 
-  const imgList = resources.map(item => (
-    <FastImage
-      source={{
-        uri: item,
-        priority: FastImage.priority.high
-      }}
-      resizeMode={FastImage.resizeMode.contain}
-      style={{
-        width: '100%',
-        height: '100%'
-      }}
-    />
-  ));
+  const imgList = () => {
+    let size = [];
+    const list = resources.map((item, index) => (
+      <FastImage
+        source={{
+          uri: item,
+          priority: FastImage.priority.high
+        }}
+        resizeMode={FastImage.resizeMode.contain}
+        onLoad={event => {
+          size.push({
+            imgWidth: event.nativeEvent.width,
+            imgHeight: event.nativeEvent.height
+          });
+          if (resources.length - 1 === index) {
+            props.onChangeImageSize(size);
+          }
+        }}
+        style={{
+          width: '100%',
+          height: '100%'
+        }}
+      />
+    ));
+    return list;
+  };
 
   //미리보기
   const preView = (
@@ -122,7 +108,7 @@ const FileSharingPresenter = props => {
         ref={ref => props.onSetRef('preView', ref)}
       >
         <FlatList
-          data={imgList}
+          data={imgList()}
           horizontal={true}
           renderItem={({ item, index }) => (
             <TouchableOpacity
@@ -167,21 +153,8 @@ const FileSharingPresenter = props => {
         style={{ flex: 1, backgroundColor: '#000', position: 'relative' }}
       >
         <View style={styles.container}>
-          {/* {!showTool && !showPreView && <StatusBar hidden={true} />} */}
-
           {/* topArea */}
           <View style={styles.headerTitle}>
-            {/* {!showTool && orientation === 'vertical' && (
-          <View
-            style={[
-              styles.hideTopArea,
-              {
-                backgroundColor: showPreView ? '#000' : 'transparent',
-                height: hasNotch ? 36 : showPreView ? 24 : 0
-              }
-            ]}
-          />
-        )} */}
             {showTool && headerTitle}
             {preView}
 
@@ -203,66 +176,54 @@ const FileSharingPresenter = props => {
               {
                 paddingLeft: 0,
                 paddingRight: 0
-                // paddingBottom: bottomPadding + (showTool && presenter ? 54 : 0) + 12
               }
             ]}
           >
             {/* 문서공유 메인 화면 */}
-            <View
-              style={[
-                styles.mainContainer,
-                orientation === 'vertical'
-                  ? styles.mainContainerVertical
-                  : styles.mainContainerHorizontal
-              ]}
-            >
-              {/* <TouchableOpacity
-            activeOpacity={1}
-            onPress={() => onChangeState('showTool')}
-            style={{ flex: 1 }}
-          > */}
-              <DrawingSketch
-                // drawing={true}
-                // image={resources[page]}
-                image={resources[page]}
-                showTool={showTool}
-                presenter={presenter}
-                orientation={orientation}
-                onChangeShowToolState={onChangeState}
-                onClear={() => {}}
-                // onChangeDrawing={() => {}}
-                // onSetDrawingData={() => {}}
-                onChangeDrawingMode={() => {}}
-                // onClear={props.onClear}
-                // orientation={props.orientation}
-                onChangeDrawing={props.setDrawingMode}
-                onSetDrawingData={props.onSetDrawingData}
-                // onChangeDrawingMode={props.onChangeDrawingMode}
-                hasNotch={props.hasNotch}
-              />
-              {/* </TouchableOpacity> */}
-            </View>
+            {props.isLoading ? (
+              <View
+                style={{
+                  flex: 1,
+                  alignContent: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                <Text>Loading</Text>
+              </View>
+            ) : (
+              <View
+                style={[
+                  styles.mainContainer,
+                  orientation === 'vertical'
+                    ? styles.mainContainerVertical
+                    : styles.mainContainerHorizontal
+                ]}
+                onLayout={event => {
+                  props.onChangeState('viewSize', {
+                    viewWidth: event.nativeEvent.layout.width,
+                    viewHeight: event.nativeEvent.layout.height
+                  });
+                }}
+              >
+                <DrawingSketch
+                  viewWidth={props.viewWidth}
+                  viewHeight={props.viewHeight}
+                  image={resources[page]}
+                  imgList={imgList()}
+                  imageSize={props.imageSize}
+                  showTool={showTool}
+                  presenter={presenter}
+                  orientation={orientation}
+                  onChangeShowToolState={onChangeState}
+                  onChangeDrawing={props.setDrawingMode}
+                  onSetDrawingData={props.onSetDrawingData}
+                  onChangePage={props.onChangePage}
+                  hasNotch={props.hasNotch}
+                />
+              </View>
+            )}
           </View>
           {/* end mainArea */}
-
-          {/* BottomArea */}
-          {/* {showTool && presenter && (
-        <View
-          style={{
-            ...styles.bottomArea,
-            height: 54 + bottomPadding,
-            // 전체 기본 padding 12
-            paddingTop: 12,
-            paddingBottom: bottomPadding + 12,
-            paddingLeft: containerPadding,
-            paddingRight: containerPadding
-          }}
-        >
-          <View style={styles.drawingTool} />
-          <Text style={{ color: '#fff' }}>bottomArea</Text>
-        </View>
-      )} */}
-          {/* end bottomArea */}
         </View>
       </SafetyView>
 

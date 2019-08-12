@@ -13,8 +13,6 @@ import {
 } from 'react-native';
 import DrawingPresenter from './DrawingPresenter';
 import DrawingManager from '../../../../utils/DrawingManager';
-import Icon from 'react-native-vector-icons/FontAwesome5';
-import FastImage from 'react-native-fast-image';
 
 class DrawingContainer extends Component {
   constructor(props) {
@@ -31,6 +29,8 @@ class DrawingContainer extends Component {
     this._drawingManager = new DrawingManager();
 
     this.subPalette = null;
+    this.documentList = null;
+    this.isSwipe = false;
   }
 
   /**
@@ -38,9 +38,6 @@ class DrawingContainer extends Component {
    */
   state = {
     imageLoading: true, // 이미지 정보 로딩
-    imgWidth: Dimensions.get('window').width,
-    imgHeight: Dimensions.get('window').height,
-    // renderImage: null,
 
     selectedTab: -1,
     selectedColor: 'stroke', // 선택된 색
@@ -131,95 +128,60 @@ class DrawingContainer extends Component {
   /**
    * LifeCycle
    */
-  // componentDidMount = () => {
-  // this._handleGetImageSize(this.props.image);
-  // console.log('cdm', this.props.image)
-  // };
-
-  shouldComponentUpdate = (nextProps, nextState) => {
-    if (nextState.imageLoading !== this.state.imageLoading) return true;
-    if (
-      nextState.imgWidth !== this.state.imgWidth ||
-      nextState.imgHeight !== this.state.imgHeight
-    ) {
-      return false;
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextProps.page !== this.props.page) {
+      if (this.documentList && nextProps.page) {
+        this.documentList.scrollTo({
+          x: nextProps.viewWidth * nextProps.page,
+          y: 0,
+          animated: this.isSwipe
+        });
+      }
+      this.isSwipe = false;
     }
-    // if (
-    //   nextState.imgWidth !== this.state.imgWidth ||
-    //   nextState.imgHeight !== this.state.imgHeight
-    // ) {
-    //   return true;
-    // }
-    // if (nextProps.image !== this.props.image) {
-    //   // this._handleGetImageSize(nextProps.image);
-    //   return true;
-    // }
-    // if (nextState.selectedTab !== this.state.selectedTab) {
-    //   if (this.subPalette) {
-    //     this.subPalette.scrollTo({ x: 0, y: 0, animated: false });
-    //   }
-    // }
-    return true;
-  };
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps.selectedTab !== this.state.selectedTab) {
+    if (nextProps.orientation !== this.props.orientation) {
+      if (this.documentList && nextProps.page) {
+        this.documentList.scrollTo({
+          x: nextProps.viewWidth * nextProps.page,
+          y: 0,
+          animated: false
+        });
+      }
+    }
+
+    if (nextProps.selectedTab !== nextState.selectedTab) {
       if (this.subPalette) {
         this.subPalette.scrollTo({ x: 0, y: 0, animated: false });
       }
     }
+
+    return true;
   }
 
   /**
    * Render
    */
   render() {
-    const renderImage = (
-      <FastImage
-        source={{
-          uri: this.props.image,
-          priority: FastImage.priority.high
-        }}
-        resizeMode={FastImage.resizeMode.contain}
-        onLoadStart={() => this.setState({ imageLoading: true })}
-        onLoad={event => {
-          this.setState({
-            imgWidth: event.nativeEvent.width,
-            imgHeight: event.nativeEvent.height
-          });
-        }}
-        onLoadEnd={() => {
-          this.setState({ imageLoading: false });
-        }}
-        style={[
-          {
-            width: '100%',
-            height: '100%'
-          }
-        ]}
-      />
-    );
-
     return (
       <DrawingPresenter
         {...this.state}
         {...this.props}
         tabs={this.tabs}
-        renderImage={renderImage}
+        // renderImage={renderImage}
         onChangeState={this._handleChangeState}
         onStrokeEnd={this._handleStrokeEnd}
         // onCanvas={this._handleCanvas}
         onClearAll={this._handleClearAll}
         onSetRef={this._handleSetRef}
-        onDrawUndo={this._handleDrawUndo}
-        onDrawRedo={this._handleDrawRedo}
+        onDrawAction={this._handleDrawAction}
       />
     );
   }
 
-  _handleForceUpdate = () => {
-    this.forceUpdate();
-  };
+  // _handleForceUpdate = () => {
+  //   this.forceUpdate();
+  // };
 
   _handleSetRef = (content, ref) => {
     this[content] = ref;
@@ -245,16 +207,12 @@ class DrawingContainer extends Component {
   _handleCanvas = canvas => {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
-    // console.log('this.canvas : ', this.canvas);
-    // console.log('this.canvas : ', this.ctx);
+
     // 마우스이벤트 등록
     this.canvas.addMessageListener('mousedown', this._handleDrawListener);
     this.canvas.addMessageListener('mousemove', this._handleDrawListener);
     this.canvas.addMessageListener('mouseup', this._handleDrawListener);
     this.canvas.addMessageListener('mouseout', this._handleDrawListener);
-
-    // this.ctx.fillStyle = '#000000';
-    // this.ctx.fillRect(0, 0, 100, 100);
   };
 
   /**
@@ -324,21 +282,25 @@ class DrawingContainer extends Component {
   /**
    *
    */
-  _handleClearAll = a => {
-    // this.props.onClear();
-    console.log(a);
+  _handleClearAll = () => {
+    this.props.onSetDrawingData();
+    this._drawingManager.set('history', []);
   };
 
   /**
    * Redo / Undo
    */
-  _handleDrawRedo = () => {
-    this._drawingManager.redo();
-    const data = this._drawingManager.get('DRAW_DATA');
-    this.props.onSetDrawingData(data);
-  };
-  _handleDrawUndo = () => {
-    this._drawingManager.undo();
+  _handleDrawAction = action => {
+    switch (action) {
+      case 'redo':
+        this._drawingManager.redo();
+        break;
+      case 'undo':
+        this._drawingManager.undo();
+        break;
+      default:
+        break;
+    }
     const data = this._drawingManager.get('DRAW_DATA');
     this.props.onSetDrawingData(data);
   };

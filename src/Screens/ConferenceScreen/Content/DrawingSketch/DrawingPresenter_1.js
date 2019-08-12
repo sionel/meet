@@ -11,8 +11,7 @@ import {
   Button,
   Platform,
   Dimensions,
-  ScrollView,
-  FlatList
+  ScrollView
 } from 'react-native';
 import DrawingBoard from './DrawingBoard';
 import DeviceInfo from 'react-native-device-info';
@@ -39,26 +38,21 @@ const DrawingPresenter = props => {
     showTool,
     presenter,
     orientation,
-    onClearAll,
     onChangeShowToolState
   } = props;
 
   const { width, height } = Dimensions.get('window');
   const vertical = orientation === 'vertical'; // 세로모드 인지
   // 길이값 비율
-  const dividingWidth =
-    (props.viewWidth * 0.8) / props.imageSize[props.page].imgWidth;
-  // const dividingWidth = (width * 0.8) / imgWidth;
+  const dividingWidth = (width * 0.8) / imgWidth;
   // 높이값 비율
-  const dividingHeight =
-    (props.viewHeight * 0.8) / props.imageSize[props.page].imgHeight;
-  // const dividingHeight = (height * 0.8) / imgHeight;
+  const dividingHeight = (height * 0.8) / imgHeight;
   const calcScale =
     dividingWidth < dividingHeight ? dividingWidth : dividingHeight;
   const scale = calcScale < 1 ? calcScale : 1;
   const resultSize = {
-    width: props.imageSize[props.page].imgWidth * scale,
-    height: props.imageSize[props.page].imgHeight * scale
+    width: imgWidth * scale,
+    height: imgHeight * scale
   };
 
   const mainPaletteRender = () => {
@@ -166,12 +160,7 @@ const DrawingPresenter = props => {
           onPress={() => {
             props.onChangeState('stroke', props.stroke - 1);
           }}
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-            opacity: props.stroke <= 3 ? 0.2 : 1
-          }}
+          style={{ opacity: props.stroke <= 3 ? 0.2 : 1 }}
         >
           <CustomIcon name={'icoDecrease'} width={24} height={24} />
         </TouchableOpacity>
@@ -184,19 +173,14 @@ const DrawingPresenter = props => {
           thumbTintColor={'#ccc'}
           step={1}
           onSlidingComplete={value => props.onChangeState('stroke', value)}
-          style={{ display: 'flex', flex: 8, height: 30 }}
+          style={{ display: 'flex', width: '80%', height: 30 }}
         />
         <TouchableOpacity
           disabled={props.stroke >= 10}
           onPress={() => {
             props.onChangeState('stroke', props.stroke + 1);
           }}
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-            opacity: props.stroke >= 10 ? 0.2 : 1
-          }}
+          style={{ opacity: props.stroke >= 10 ? 0.2 : 1 }}
         >
           <CustomIcon name={'icoIncrease'} width={24} height={24} />
         </TouchableOpacity>
@@ -221,118 +205,75 @@ const DrawingPresenter = props => {
   const subPalette = subPaletteRender(selectedTab);
 
   return (
-    <View
-      style={[
-        styles.container,
-        // styles[`flexDirection_vertical`],
-        { width: props.viewWidth, height: props.viewHeight }
-      ]}
-    >
-      <ScrollView
-        ref={ref => props.onSetRef('documentList', ref)}
-        horizontal={true}
-        pagingEnabled={true}
-        showsHorizontalScrollIndicator={false}
-        onScrollEndDrag={e => {
-          if (
-            e.nativeEvent.velocity.x > 0 &&
-            props.page < props.imgList.length - 1
-          ) {
-            props.onSetRef('isSwipe', true);
-            props.onChangePage(props.page + 1, props.presenter);
-          } else if (e.nativeEvent.velocity.x < 0 && props.page > 0) {
-            props.onSetRef('isSwipe', true);
-            props.onChangePage(props.page - 1, props.presenter);
-          }
-        }}
-        style={{
-          width: props.viewWidth,
-          height: props.viewHeight
-        }}
+    <View style={[styles.container, styles[`flexDirection_vertical`]]}>
+      {/* 드로잉 영역 */}
+      <TouchableOpacity
+        activeOpacity={1}
+        style={{ flex: 1, width: '100%' }}
+        onPress={() => onChangeShowToolState('showTool')}
       >
-        <FlatList
-          data={props.imgList}
-          horizontal={true}
-          renderItem={({ item }) => (
-            <View
-              style={{
-                flex: 1,
-                width: props.viewWidth,
-                height: props.viewHeightght
-              }}
-            >
-              <TouchableOpacity
-                activeOpacity={1}
-                style={{ flex: 1 }}
-                onPress={() => onChangeShowToolState('showTool')}
-              >
-                <View
-                  style={[
-                    styles.boardContainer,
-                    styles[`boardContainer_${orientation}`]
-                  ]}
-                >
-                  {/* {imageLoading ? (
+        <View
+          style={[
+            styles.boardContainer,
+            styles[`boardContainer_${orientation}`]
+          ]}
+        >
+          {/* {imageLoading ? (
             <Text>Loading</Text>
           ) : ( */}
-                  <View
-                    style={{
-                      width: resultSize.width,
-                      height: resultSize.height,
-                      position: 'relative'
-                    }}
-                  >
-                    {item}
-                  </View>
-                </View>
-              </TouchableOpacity>
-            </View>
-          )}
-        />
-      </ScrollView>
-
-      {/* 드로잉 영역 */}
-      <View
-        style={[
-          {
-            position: 'absolute',
-            top: props.viewHeight / 2,
-            left: props.viewWidth / 2,
-            marginTop: (resultSize.height / 2) * -1,
-            marginLeft: (resultSize.width / 2) * -1,
-            backgroundColor: 'transparent',
-            justifyContent: 'center',
-            alignItems: 'center'
-          }
-          // selectedTab > 1
-          //   ? { zIndex: 10 }
-          //   : selectedTab === -1
-          //   ? { zIndex: -10 }
-          //   : null
-        ]}
-      >
-        {/* {imageLoading ? (
+          <View
+            style={{
+              width: resultSize.width,
+              height: resultSize.height,
+              position: 'relative'
+            }}
+          >
+            {props.renderImage}
+            <View
+              style={[
+                {
+                  position: 'absolute',
+                  top: 0,
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  backgroundColor: 'transparent'
+                }
+                // selectedTab > 1
+                //   ? { zIndex: 10 }
+                //   : selectedTab === -1
+                //   ? { zIndex: -10 }
+                //   : null
+              ]}
+            >
+              {/* {imageLoading ? (
                 <Text>Loading</Text>
               ) : ( */}
-        <DrawingBoard
-          mode={['stroke'].some(val => val === selectedTab)}
-          presenter={presenter}
-          orientation={orientation}
-          rWidth={resultSize.width}
-          rHeight={resultSize.height}
-          scale={scale}
-          color={selectedTab == 3 ? 'transparent' : tabs[1].values[color]}
-          // stroke={
-          //   selectedTab == 3
-          //     ? tabs[3].values[eraser]
-          //     : tabs[1].values[stroke]
-          // }
-          stroke={stroke}
-          page={props.page}
-          onStrokeEnd={props.onSetDrawingData}
-        />
-        {/* )} */}
-      </View>
+              <DrawingBoard
+                mode={['stroke'].some(val => val === selectedTab)}
+                presenter={presenter}
+                orientation={orientation}
+                width={imgWidth}
+                height={imgHeight}
+                rWidth={resultSize.width}
+                rHeight={resultSize.height}
+                scale={scale}
+                color={selectedTab == 3 ? 'transparent' : tabs[1].values[color]}
+                // stroke={
+                //   selectedTab == 3
+                //     ? tabs[3].values[eraser]
+                //     : tabs[1].values[stroke]
+                // }
+                stroke={stroke}
+                page={props.page}
+                onStrokeEnd={props.onSetDrawingData}
+                onClearAll={props.onClearAll}
+              />
+              {/* )} */}
+            </View>
+          </View>
+        </View>
+      </TouchableOpacity>
 
       {/* 하단 영역 */}
       {showTool && presenter === 'localUser' && (
@@ -367,6 +308,7 @@ const DrawingPresenter = props => {
               styles[`mainSettingWrapper_vertical`]
             ]}
           >
+            {/* === 메인탭 === */}
             <View
               style={[styles.mainTabWrapper, styles[`mainTabWrapper_vertical`]]}
             >
@@ -384,13 +326,13 @@ const DrawingPresenter = props => {
                 marginRight: 10
               }}
             >
-              <TouchableOpacity onPress={() => props.onDrawAction('undo')}>
+              <TouchableOpacity onPress={() => props.onDrawUndo()}>
                 <CustomIcon name={'btnBack'} width={30} height={24} />
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => props.onDrawAction('redo')}>
+              <TouchableOpacity onPress={() => props.onDrawRedo()}>
                 <CustomIcon name={'btnForward'} width={30} height={24} />
               </TouchableOpacity>
-              <TouchableOpacity onPress={onClearAll}>
+              <TouchableOpacity onPress={() => props.onSetDrawingData()}>
                 <Text
                   style={{
                     fontSize: 18,
@@ -403,6 +345,18 @@ const DrawingPresenter = props => {
               </TouchableOpacity>
             </View>
           </View>
+          {/* ===== 메인선택 ===== */}
+
+          {/* 노치영역 */}
+          {/* {hasNotch && (
+            <View
+              style={{
+                width: vertical ? '100%' : 24,
+                height: vertical ? 24 : '100%',
+                backgroundColor: '#000'
+              }}
+            />
+          )} */}
         </View>
       )}
     </View>
@@ -434,11 +388,9 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   boardContainer_vertical: {
-    width: '100%',
-    height: '100%'
+    width: '100%'
   },
   boardContainer_horizontal: {
-    width: '100%',
     height: '100%'
   },
 
