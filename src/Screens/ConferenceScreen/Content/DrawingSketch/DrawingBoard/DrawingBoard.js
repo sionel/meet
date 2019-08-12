@@ -42,7 +42,6 @@ class DrawingBoard extends Component {
     this._drawingManager.set('SCALE', this.props.scale);
     if (!data || data.length === 0) {
       data = [];
-      this._drawingManager.set('history', []);
     }
     this._drawingManager.drawCanvas(data);
   };
@@ -55,7 +54,6 @@ class DrawingBoard extends Component {
       color,
       documentData,
       page,
-      width,
       rWidth,
       rHeight,
       presenter,

@@ -2,12 +2,15 @@ import React, { Component } from 'react';
 import { BackHandler } from 'react-native';
 import FileSharingPresenter from './FileSharingPresenter';
 import FastImage from 'react-native-fast-image';
+import _ from 'underscore';
 
 class FileSharingContainer extends Component {
   constructor(props) {
     super(props);
 
     this.preView = null;
+    this.imageSize = [];
+    this.scuTimer = null;
 
     let imgList = JSON.parse(props.attributes.resources);
     imgList = imgList.map(src => ({
@@ -22,7 +25,11 @@ class FileSharingContainer extends Component {
     showTool: true,
     showPreView: true,
     resources: JSON.parse(this.props.attributes.resources),
-    modal: false
+    modal: false,
+    isLoading: true,
+    imageSize: null,
+    viewWidth: 0,
+    viewHeight: 0
   };
 
   componentDidMount() {
@@ -32,21 +39,33 @@ class FileSharingContainer extends Component {
     });
   }
 
-  componentWillUnmount() {
-    this.backHandler.remove();
-  }
-
-  componentDidUpdate = (prevProps, prevState) => {
-    if (prevProps.page !== this.props.page) {
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextProps.page !== this.props.page) {
       if (this.preView) {
         this.preView.scrollTo({
-          x: this.props.page * 78,
+          x: nextProps.page * 78,
           y: 0,
           animated: false
         });
       }
     }
-  };
+
+    // debounce 설정
+    clearTimeout(this.scuTimer);
+    this.scuTimer = setTimeout(() => {
+      this._handleForceUpdate();
+    }, 1);
+    return false;
+
+    // if (nextProps !== this.props) return true;
+    // if (nextState !== this.state) return true;
+
+    // return false;
+  }
+
+  componentWillUnmount() {
+    this.backHandler.remove();
+  }
 
   render() {
     return (
@@ -57,9 +76,23 @@ class FileSharingContainer extends Component {
         onChangePage={this._handleChangePage}
         onDisposeConference={this._handleDisposeConference}
         onSetRef={this._handleSetRef}
+        onChangeImageSize={this._handleChangeImageSize}
       />
     );
   }
+
+  _handleForceUpdate = () => {
+    this.scuTimer = null;
+    this.forceUpdate();
+  };
+
+  _handleChangeImageSize = value => {
+    this.imageSize = value;
+    const imgLength = this.state.resources.length;
+    if (this.imageSize[imgLength - 1]) {
+      this.setState({ isLoading: false, imageSize: this.imageSize });
+    }
+  };
 
   _handleSetRef = (content, ref) => {
     this[content] = ref;
@@ -83,6 +116,9 @@ class FileSharingContainer extends Component {
               showPreView: false
             })
           : this.setState({ showTool: true });
+        break;
+      case 'viewSize':
+        this.setState(value);
         break;
       default:
         this.setState({ [state]: !this.state[state] });
