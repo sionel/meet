@@ -72,7 +72,6 @@ const FileSharingPresenter = props => {
   );
 
   const imgList = () => {
-    let size = [];
     const list = resources.map((item, index) => (
       <FastImage
         source={{
@@ -81,13 +80,12 @@ const FileSharingPresenter = props => {
         }}
         resizeMode={FastImage.resizeMode.contain}
         onLoad={event => {
-          size[index] = {
+          const size = {
             imgWidth: event.nativeEvent.width,
             imgHeight: event.nativeEvent.height
           };
-          if (JSON.stringify(size).indexOf('null') === -1) {
-            props.onChangeImageSize(size);
-          }
+          console.log(size)
+          props.onChangeImageSize(size, index);
         }}
         style={{
           width: '100%',
@@ -119,6 +117,7 @@ const FileSharingPresenter = props => {
               <View
                 style={{
                   flex: 1,
+                  overflow: 'hidden',
                   borderWidth: 1,
                   borderColor:
                     index === page ? 'rgb(28, 144, 251)' : 'rgb(210, 210, 210)'
