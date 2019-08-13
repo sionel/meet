@@ -227,18 +227,21 @@ const DrawingPresenter = props => {
         horizontal={true}
         pagingEnabled={true}
         showsHorizontalScrollIndicator={false}
-        onScrollEndDrag={e => {
+        onScrollEndDrag={event => {
           const {
-            layoutMeasurement: { width: width },
-            targetContentOffset: { x: offset }
-          } = e.nativeEvent;
+            layoutMeasurement: { width: width }
+          } = event.nativeEvent;
+          const offset = isIOS
+            ? event.nativeEvent.targetContentOffset.x
+            : event.nativeEvent.contentOffset.x;
+
           if (
             offset / width > props.page &&
             props.page < props.imgList.length - 1
           ) {
             props.onSetRef('isSwipe', true);
             props.onChangePage(props.page + 1, props.presenter);
-          } else if (offset / width < props.page && props.page > 0) {
+          } else if (offset / width < props.page - 0.01 && props.page > 0) {
             props.onSetRef('isSwipe', true);
             props.onChangePage(props.page - 1, props.presenter);
           } else {

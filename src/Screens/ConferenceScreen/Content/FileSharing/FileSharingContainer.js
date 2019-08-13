@@ -86,10 +86,13 @@ class FileSharingContainer extends Component {
     this.forceUpdate();
   };
 
-  _handleChangeImageSize = value => {
-    this.imageSize = value;
+  _handleChangeImageSize = (value, index) => {
     const imgLength = this.state.resources.length;
-    if (this.imageSize[imgLength - 1]) {
+    if (this.imageSize.length !== imgLength) {
+      this.imageSize = new Array(imgLength);
+    }
+    this.imageSize[index] = value;
+    if (JSON.stringify(this.imageSize).indexOf('null') < 0) {
       this.setState({ isLoading: false, imageSize: this.imageSize });
     }
   };
