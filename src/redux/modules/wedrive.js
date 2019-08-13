@@ -87,7 +87,8 @@ const applyUpdateFileList = (state, action) => {
       type: 'preFolder',
       fileUniqueKey: directory.parentFileUniqueKey,
       parentFileUniqueKey: directory.path,
-      path: directory.parentFileUniqueKey
+      path: directory.parentFileUniqueKey,
+      preFolder: true
     });
 
   return {

@@ -5,6 +5,7 @@ import FileListPresenter from './FileListPresenter';
 class FileListContainer extends Component {
   constructor(props) {
     super(props);
+    this.pk = []; // 폴더 depth 를 기록
   }
 
   componentDidMount = () => {
@@ -128,10 +129,17 @@ class FileListContainer extends Component {
       HASH_KEY
     };
 
+    let preFolder = '';
+    if (directory.preFolder) {
+      preFolder = this.pk.pop();
+    } else {
+      this.pk.push(directory.parentFileUniqueKey);
+    }
+
     const directoryInfo = {
       TokenID: TokenID,
-      FileUniqueKey: directory.fileUniqueKey,
-      fileUniqueKey: directory.fileUniqueKey,
+      FileUniqueKey: preFolder || directory.fileUniqueKey,
+      fileUniqueKey: preFolder || directory.fileUniqueKey,
       parentFileUniqueKey: directory.parentFileUniqueKey,
       path: portal_id + '@'
     };
