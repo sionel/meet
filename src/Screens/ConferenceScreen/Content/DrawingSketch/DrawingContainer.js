@@ -130,7 +130,7 @@ class DrawingContainer extends Component {
    */
   shouldComponentUpdate(nextProps, nextState) {
     if (nextProps.page !== this.props.page) {
-      if (this.documentList && nextProps.page) {
+      if (this.documentList) {
         this.documentList.scrollTo({
           x: nextProps.viewWidth * nextProps.page,
           y: 0,
@@ -141,7 +141,7 @@ class DrawingContainer extends Component {
     }
 
     if (nextProps.orientation !== this.props.orientation) {
-      if (this.documentList && nextProps.page) {
+      if (this.documentList) {
         this.documentList.scrollTo({
           x: nextProps.viewWidth * nextProps.page,
           y: 0,

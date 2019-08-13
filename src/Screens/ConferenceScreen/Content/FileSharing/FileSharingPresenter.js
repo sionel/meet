@@ -84,7 +84,6 @@ const FileSharingPresenter = props => {
             imgWidth: event.nativeEvent.width,
             imgHeight: event.nativeEvent.height
           };
-          console.log(size)
           props.onChangeImageSize(size, index);
         }}
         style={{
