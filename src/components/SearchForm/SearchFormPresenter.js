@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     // borderRadius: 5,
     borderRadius: 25.5,
     zIndex: 9,
-    fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal'
+    fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif'
   }
 });
 

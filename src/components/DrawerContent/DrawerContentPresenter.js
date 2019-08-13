@@ -5,7 +5,8 @@ import {
   TouchableHighlight,
   Image,
   ImageBackground,
-  StyleSheet
+  StyleSheet,
+  Platform
 } from 'react-native';
 
 import ChangeCompanyScreen from './ChangeCompanyScreen';
@@ -54,14 +55,14 @@ const DrawerContentPresenter = props => {
                 fontSize: 17.5,
                 color: '#515151',
                 fontWeight: 'bold',
-                fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal'
+                fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif'
               }}
             >
               {props.auth.user_name}{' '}
               {/* <Text style={{ fontSize: 13 }}>({props.auth.portal_id})</Text> */}
             </Text>
             <Text
-              style={{ textAlign: 'center', fontSize: 13, color: '#6d6d6d', fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal' }}
+              style={{ textAlign: 'center', fontSize: 13, color: '#6d6d6d', fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif' }}
             >
               {props.auth.last_company.company_name_kr}
             </Text>
@@ -114,7 +115,7 @@ const styles = StyleSheet.create({
   },
   listItem: {
     padding: 16,
-    fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal'
+    fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif'
   }
 });
 

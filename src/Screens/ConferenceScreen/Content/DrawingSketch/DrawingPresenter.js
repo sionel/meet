@@ -397,7 +397,7 @@ const DrawingPresenter = props => {
                     fontSize: 18,
                     color: '#fff',
                     marginLeft: 10,
-                    fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal'
+                    fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif'
                   }}
                 >
                   모두 삭제

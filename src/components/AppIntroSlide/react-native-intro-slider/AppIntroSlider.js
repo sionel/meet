@@ -324,6 +324,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 18,
     padding: 12,
-    fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal'
+    fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif'
   }
 });

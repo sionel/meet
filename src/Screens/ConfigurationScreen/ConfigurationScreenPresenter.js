@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 15,
     height: 44,
-    fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal'
+    fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif'
   },
   content: {
     color: '#999'

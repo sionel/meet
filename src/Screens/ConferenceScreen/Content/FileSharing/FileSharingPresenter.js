@@ -288,7 +288,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 20,
     height: 24,
-    fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal'
+    fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif'
   },
   mainArea: {
     flex: 1,
@@ -328,7 +328,7 @@ const styles = StyleSheet.create({
   preViewPageNumber: {
     fontSize: 12,
     marginBottom: 3,
-    fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal'
+    fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif'
   },
   bottomArea: {
     position: 'absolute',

@@ -41,7 +41,7 @@ const PalettePresenter = props => {
 											opacity: props[tabs[selectedTab].id] === valueIndex ? 0.35 : 1
 										}}
 									>
-										<Text style={{fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal'}}>{value}</Text>
+										<Text style={{fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif'}}>{value}</Text>
 									</View>
 								</TouchableOpacity>
 							))}

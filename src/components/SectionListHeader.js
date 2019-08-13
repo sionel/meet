@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
 		// height: 14,
 		fontWeight: 'bold',
 		color: 'rgb(140, 140, 140)',
-		fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal'
+		fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif'
 	}
 });
 

@@ -43,7 +43,7 @@ const Placeholder = props => {
 						fontWeight: '500',
 						color: '#1C90FB',
 						marginTop: -5,
-						fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal',
+						fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif',
 						...props.mainTextStyle
 					}}
 				>
@@ -57,7 +57,7 @@ const Placeholder = props => {
 					fontWeight: '500',
 					color: 'rgb(80,80,80)',
 					textAlign: 'center',
-					fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal',
+					fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif',
 					...props.subTextStyle
 				}}
 			>
