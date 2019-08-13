@@ -6,7 +6,8 @@ import {
   Modal,
   TouchableOpacity,
   ScrollView,
-  Dimensions
+  Dimensions,
+  Platform
 } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
@@ -61,7 +62,8 @@ const ChangeCompanyScreenPresenter = props => {
                 <Text
                   style={{
                     backgroundColor: '#fff',
-                    padding: 16
+                    padding: 16,
+                    fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal'
                   }}
                 >
                   {item.title}

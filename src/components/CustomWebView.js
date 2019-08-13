@@ -56,13 +56,14 @@ const CustomWebView = props => {
             fontSize: 17,
             textAlign: 'left',
             fontWeight: 'bold',
+            fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal',
             ...titleStyle
           }}
         >
           {contentTitle}
         </Text>
         <TouchableOpacity style={{ flex: 1 }} onPress={onClickButton}>
-          <Text style={{ color: '#fff', fontSize: 17, textAlign: 'right' }}>
+          <Text style={{ color: '#fff', fontSize: 17, textAlign: 'right', fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal' }}>
             {buttonTitle}
           </Text>
         </TouchableOpacity>

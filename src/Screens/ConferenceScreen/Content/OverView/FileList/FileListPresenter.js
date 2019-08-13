@@ -6,7 +6,8 @@ import {
   FlatList,
   ScrollView,
   RefreshControl,
-  TouchableOpacity
+  TouchableOpacity,
+  Platform
 } from 'react-native';
 import CustomIcon from '../../../../../components/CustomIcon';
 
@@ -42,7 +43,7 @@ const FileListPresenter = props => {
         <View
           style={{ paddingTop: 20, paddingBottom: 10, alignItems: 'center' }}
         >
-          <Text>파일이 없습니다.</Text>
+          <Text style={{fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal'}}>파일이 없습니다.</Text>
         </View>
       ) : (
         <FlatList
@@ -117,12 +118,14 @@ const styles = StyleSheet.create({
     flex: 5,
     color: 'rgb(51, 51, 51)',
     fontSize: 14,
-    marginLeft: 11
+    marginLeft: 11,
+    fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal'
   },
   itemSize: {
     flex: 2,
     fontSize: 12,
-    textAlign: 'right'
+    textAlign: 'right',
+    fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal'
   }
 });
 

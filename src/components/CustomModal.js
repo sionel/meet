@@ -8,7 +8,8 @@ import {
   Text,
   StyleSheet,
   Modal,
-  TouchableOpacity
+  TouchableOpacity,
+  Platform
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -61,12 +62,13 @@ const CustomModal = props => {
               style={{
                 fontSize: 22,
                 color: '#1C90FB',
-                marginBottom: 20
+                marginBottom: 20,
+                fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal'
               }}
             >
               {props.title}
             </Text>
-            <Text>{props.text}</Text>
+            <Text style={{fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal'}}>{props.text}</Text>
             {props.children}
           </View>
           {/* 본문 */}
@@ -77,7 +79,7 @@ const CustomModal = props => {
               style={{ ...styles.modalButton, ...styles.modalButtonConfirm }}
               onPress={props.onClickFeedback}
             >
-              <Text style={{ color: '#fff' }}>{props.feedbackText}</Text>
+              <Text style={{ color: '#fff', fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal' }}>{props.feedbackText}</Text>
             </TouchableOpacity>
           </View>
           {/*  */}

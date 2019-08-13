@@ -3,7 +3,7 @@
  */
 
 import React, { Component } from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, Platform } from 'react-native';
 import CustomLottie from '../CustomLottie';
 
 // const waitingImage = require(`./waiting.gif`);
@@ -43,6 +43,7 @@ const Placeholder = props => {
 						fontWeight: '500',
 						color: '#1C90FB',
 						marginTop: -5,
+						fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal',
 						...props.mainTextStyle
 					}}
 				>
@@ -56,6 +57,7 @@ const Placeholder = props => {
 					fontWeight: '500',
 					color: 'rgb(80,80,80)',
 					textAlign: 'center',
+					fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal',
 					...props.subTextStyle
 				}}
 			>

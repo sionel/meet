@@ -127,7 +127,8 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   name: {
-    color: '#fff'
+    color: '#fff',
+    fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal'
   },
   imageCameraOff: {
     width: '30%',

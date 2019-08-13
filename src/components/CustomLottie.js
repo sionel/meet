@@ -5,7 +5,7 @@
 
 import React, { Component } from 'react';
 import LottieView from 'lottie-react-native';
-import { View, Text, StyleSheet, AppState } from 'react-native';
+import { View, Text, StyleSheet, AppState, Platform } from 'react-native';
 
 class CustomLottie extends Component {
 	/**
@@ -63,7 +63,7 @@ class CustomLottie extends Component {
 						this.animation = animation;
 					}}
 				/>
-				{phrases !== '' && <Text style={{ marginTop: -72, color: '#1C90FB' }}>Loading</Text>}
+				{phrases !== '' && <Text style={{ marginTop: -72, color: '#1C90FB', fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal' }}>Loading</Text>}
 				{children && (
 					<View
 						style={{

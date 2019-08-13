@@ -137,7 +137,8 @@ const styles = StyleSheet.create({
   item: {
     padding: 10,
     fontSize: 15,
-    height: 44
+    height: 44,
+    fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal'
   },
   content: {
     color: '#999'

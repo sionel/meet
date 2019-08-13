@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Platform } from 'react-native';
 import LottieView from 'lottie-react-native';
 import CustomLottie from './CustomLottie';
 
@@ -124,7 +124,7 @@ const ListItemComp = props => {
 							borderColor: '#c1c1c1'
 						}}
 					>
-						<Text style={{ color: '#717171' }}>시작</Text>
+						<Text style={{ color: '#717171', fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal' }}>시작</Text>
 						{/* <Image
 							style={{
 								width: '100%',
@@ -175,13 +175,15 @@ const styles = StyleSheet.create({
 	// 아이콘 텍스트
 	iconText: {
 		fontSize: 10,
-		fontWeight: 'bold'
+		fontWeight: 'bold',
+		fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal'
 	},
 	// 방 제목
 	roomName: {
 		fontSize: 16,
 		fontWeight: '600',
-		color: 'rgb(80,80,80)'
+		color: 'rgb(80,80,80)',
+		fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal'
 	},
 	// 참가자
 	participant: {

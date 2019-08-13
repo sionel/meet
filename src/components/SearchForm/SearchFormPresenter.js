@@ -91,7 +91,8 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     // borderRadius: 5,
     borderRadius: 25.5,
-    zIndex: 9
+    zIndex: 9,
+    fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal'
   }
 });
 

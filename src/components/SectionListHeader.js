@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Platform } from 'react-native';
 
 const SectionListHeader = props => {
 	return (
@@ -34,7 +34,8 @@ const styles = StyleSheet.create({
 		lineHeight: 16,
 		// height: 14,
 		fontWeight: 'bold',
-		color: 'rgb(140, 140, 140)'
+		color: 'rgb(140, 140, 140)',
+		fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal'
 	}
 });
 

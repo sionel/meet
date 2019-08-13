@@ -47,7 +47,8 @@ const MainVideoPresenter = props => {
         style={{
           fontSize: Platform.OS === 'ios' ? 22 : 20,
           color: '#fff',
-          textAlign: 'center'
+          textAlign: 'center',
+          fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal'
         }}
       >
         {conferenceMode !== 'control'
@@ -83,7 +84,8 @@ const MainVideoPresenter = props => {
           color: '#fff',
           textAlign: 'center',
           fontWeight: '700',
-          fontSize: 14
+          fontSize: 14,
+          fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal'
         }}
       >
         네트워크가 불안정해요 :(
@@ -122,7 +124,8 @@ const MainVideoPresenter = props => {
                   style={{
                     fontSize: 20,
                     color: '#c0c0c0',
-                    textAlign: 'center'
+                    textAlign: 'center',
+                    fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal'
                   }}
                 >
                   통화중
@@ -131,7 +134,8 @@ const MainVideoPresenter = props => {
                   style={{
                     fontSize: 25,
                     color: '#c0c0c0',
-                    textAlign: 'center'
+                    textAlign: 'center',
+                    fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal'
                   }}
                 >
                   {second2String(props.time)}
@@ -151,12 +155,13 @@ const MainVideoPresenter = props => {
                     fontWeight: 'bold',
                     color: '#fff',
                     width: Math.min(height, width) * 0.8,
-                    textAlign: 'center'
+                    textAlign: 'center',
+                    fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal'
                   }}
                 >
                   {mainUser.name}
                 </Text>
-                <Text style={{ fontSize: 13, color: '#fff', paddingTop: 10 }}>
+                <Text style={{ fontSize: 13, color: '#fff', paddingTop: 10, fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal' }}>
                   {userInfo && userInfo.companyFullpath
                     ? userInfo.companyFullpath
                     : ''}

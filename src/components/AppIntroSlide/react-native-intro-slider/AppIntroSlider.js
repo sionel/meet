@@ -323,6 +323,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     color: 'white',
     fontSize: 18,
-    padding: 12
+    padding: 12,
+    fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal'
   }
 });

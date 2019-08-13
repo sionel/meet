@@ -12,7 +12,7 @@ const LoginFailAlert = props => {
     >
       <View style={styles.modalWrap}>
         <View style={styles.modalContents}>
-          <Text style={styles.modalMessage}>{props.modalText}</Text>
+          <Text style={[styles.modalMessage, {fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal'}]}>{props.modalText}</Text>
           <View style={styles.modalButtonView}>
             <Button
               style={styles.modalButton}

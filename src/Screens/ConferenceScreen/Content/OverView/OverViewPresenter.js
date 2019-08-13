@@ -63,7 +63,8 @@ const OverViewPresenter = props => {
       >
         <Text
           style={{
-            color: view === tab ? 'rgb(28, 144, 251)' : 'rgb(140, 140, 140)'
+            color: view === tab ? 'rgb(28, 144, 251)' : 'rgb(140, 140, 140)',
+            fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal'
           }}
         >
           {/* <Image source={iconDocShare} style={styles.iconDocShare} /> */}
@@ -210,7 +211,8 @@ const styles = StyleSheet.create({
   loadingModalText: {
     fontSize: 18,
     color: '#fff',
-    marginTop: 20
+    marginTop: 20,
+    fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal'
   }
 });
 

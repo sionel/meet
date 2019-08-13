@@ -18,7 +18,7 @@ const RouteTitlePresenter = props => {
     // 기본값
     placeholder = {};
     return (
-      <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 17 }}>-</Text>
+      <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 17, fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal' }}>-</Text>
     );
   }
 
@@ -28,7 +28,7 @@ const RouteTitlePresenter = props => {
       <StatusBar backgroundColor="#1C90FB" barStyle="light-content" />
       <Text
         style={[
-          { color: '#fff', fontWeight: 'bold', fontSize: 17 }
+          { color: '#fff', fontWeight: 'bold', fontSize: 17, fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal' }
           // Platform.OS !== 'ios' && { marginLeft: 20 }
         ]}
       >

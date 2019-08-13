@@ -11,7 +11,8 @@ import {
   Modal,
   TouchableOpacity,
   SectionList,
-  Image
+  Image,
+  Platform
 } from 'react-native';
 // common components
 import {
@@ -36,7 +37,7 @@ const HomeScreenPresenter = props => {
   const reloadButton = (
     <TouchableOpacity onPress={props.onRefresh}>
       <View style={styles.reloadButtonWrap}>
-        <Text style={styles.reloadButton}>다시 로드</Text>
+        <Text style={[styles.reloadButton, {fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal'}]}>다시 로드</Text>
       </View>
     </TouchableOpacity>
   );
@@ -140,12 +141,13 @@ const HomeScreenPresenter = props => {
                     style={{
                       fontSize: 22,
                       color: '#1C90FB',
-                      marginBottom: 20
+                      marginBottom: 20,
+                      fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal'
                     }}
                   >
                     알림
                   </Text>
-                  <Text>새로운 화상대화를 시작하시겠습니까?</Text>
+                  <Text style={{fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal'}}>새로운 화상대화를 시작하시겠습니까?</Text>
                 </View>
                 <View style={styles.modalButtons}>
                   <TouchableOpacity
@@ -157,7 +159,7 @@ const HomeScreenPresenter = props => {
                       props.onCreateConference(props.selectedRoomId)
                     }
                   >
-                    <Text style={{ color: '#fff' }}>확인</Text>
+                    <Text style={{ color: '#fff', fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal' }}>확인</Text>
                   </TouchableOpacity>
                 </View>
               </View>

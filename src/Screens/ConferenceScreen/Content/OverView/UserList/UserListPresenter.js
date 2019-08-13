@@ -6,7 +6,8 @@ import {
   FlatList,
   Image,
   TouchableOpacity,
-  ScrollView
+  ScrollView,
+  Platform
 } from 'react-native';
 import CustomIcon from '../../../../../components/CustomIcon';
 
@@ -142,7 +143,8 @@ const styles = StyleSheet.create({
   nameField: {
     maxWidth: '50%',
     marginLeft: 10,
-    fontSize: 18
+    fontSize: 18,
+    fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal'
   },
   presenter: {
     marginLeft: 5,
@@ -156,7 +158,8 @@ const styles = StyleSheet.create({
   },
   presenterText: {
     fontSize: 12,
-    color: '#fff'
+    color: '#fff',
+    fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal'
   }
 });
 

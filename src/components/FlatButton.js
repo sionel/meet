@@ -5,7 +5,7 @@
  */
 
 import React, { Fragment } from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, Image, TouchableOpacity, Platform } from 'react-native';
 
 const SvgButton = props => {
 	const {
@@ -40,7 +40,7 @@ const SvgButton = props => {
 			activeOpacity={0.8}
 		>
 			{/* {props.children ? props.children : <Text style={{ color }}>{props.title}</Text>} */}
-			{props.children ? <Fragment>{props.children}</Fragment> : <Text style={{ color }}>{props.title}</Text>}
+			{props.children ? <Fragment>{props.children}</Fragment> : <Text style={{ color, fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal' }}>{props.title}</Text>}
 		</TouchableOpacity>
 	);
 };

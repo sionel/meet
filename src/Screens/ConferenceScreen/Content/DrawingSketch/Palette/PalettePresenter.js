@@ -3,7 +3,7 @@
  */
 
 import React, { Fragment } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Platform } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const PalettePresenter = props => {
@@ -41,7 +41,7 @@ const PalettePresenter = props => {
 											opacity: props[tabs[selectedTab].id] === valueIndex ? 0.35 : 1
 										}}
 									>
-										<Text>{value}</Text>
+										<Text style={{fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal'}}>{value}</Text>
 									</View>
 								</TouchableOpacity>
 							))}

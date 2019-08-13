@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { View, Text, TextInput } from 'react-native';
+import { View, Text, TextInput, Platform } from 'react-native';
 
 let inputs = {};
 
@@ -38,7 +38,8 @@ const TextField = props => {
 				marginTop,
 				color,
 				borderBottomWidth,
-				borderBottomColor
+				borderBottomColor,
+				fontFamily: Platform.OS === 'ios' ? 'Arial' : 'normal'
 			}}
 			placeholder={placeholder}
 			placeholderTextColor={placeholderTextColor}
