@@ -138,10 +138,21 @@ function token(auth) {
 /**
  * CHANGE_COMPANY
  */
-function changeCompany(cno) {
+function changeCompany(company) {
   return {
     type: CHANGE_COMPANY,
-    payload: { cno }
+    company
+  };
+}
+
+function changeCompanyRequest(auth, company) {
+  return async dispatch => {
+    const checkResult = await UserApi.changeCompany(auth, company);
+    if (checkResult.resultData !== 1) {
+      // alert('회사변경 중 문제 발생');
+      return checkResult;
+    }
+    return dispatch(changeCompany(company));
   };
 }
 
@@ -210,13 +221,7 @@ function reducer(state = initialState, action) {
     case TOGGLE_VISIBLE_APPINTRO:
       return applyToggleVisibleAppIntro(state, action);
     case CHANGE_COMPANY:
-      let newAuth = state.auth;
-      // console.log('NEW CNO : ', action.payload.cno);
-      return {
-        ...state,
-        auth: { ...newAuth, last_access_company_no: action.payload.cno }
-      };
-    // return state;
+      return applyChangeCompany(state, action);
     case EVENT_LOG:
       return applyEventLog(state, action);
     default:
@@ -243,12 +248,16 @@ function reducer(state = initialState, action) {
  *
  */
 function applyChangeCompany(state, action) {
-  const { cno } = action.payload;
-  const newAuth = { ...state.auth, last_access_company_no: cno };
-  // console.log('newAuth : ', newAuth.last_access_company_no);
+  const { company } = action;
+
   return {
     ...state,
-    auth: newAuth
+    auth: {
+      ...state.auth,
+      last_company: company,
+      last_access_company_no: company.company_no
+    }
+    // auth: newAuth
   };
 }
 
@@ -285,6 +294,7 @@ const actionCreators = {
   // tokenLogin,
   agreement,
   changeCompany,
+  changeCompanyRequest,
   toggleVisibleAppIntro
 };
 

@@ -119,6 +119,7 @@ class HomeScreenContainer extends Component {
    */
   componentWillUnmount() {
     clearInterval(this._interval);
+    clearTimeout(this.refresh);
     Orientation.removeOrientationListener(this._handleOrientation);
     Linking.removeEventListener('url', this._handleOpenURL);
     AppState.removeEventListener('change', this._handleAppStateChange);
@@ -140,8 +141,13 @@ class HomeScreenContainer extends Component {
    * Rendering
    */
   render() {
-    // console.log('Platform : ', Platform);
-    const { refreshing, searchKeyword, selectedRoomId, modal, orientation } = this.state;
+    const {
+      refreshing,
+      searchKeyword,
+      selectedRoomId,
+      modal,
+      orientation
+    } = this.state;
     const { navigation, auth } = this.props;
     let wetalk = []; // We talk list
 
@@ -302,7 +308,7 @@ class HomeScreenContainer extends Component {
    *
    */
   _handleRefressAfterWhile = () => {
-    setTimeout(this._handleRefresh, 250);
+    this.refresh = setTimeout(this._handleRefresh, 250);
   };
 
   /**
@@ -380,11 +386,7 @@ class HomeScreenContainer extends Component {
       //   auth.last_access_company_no != checkResult.auth.last_access_company_no
       // ) {
       //   userData = {
-      //     ...auth,
-      //     last_access_company_no: checkResult.auth.last_access_company_no,
-      //     last_company: checkResult.auth.employee_list.filter(
-      //       e => e.company_no == checkResult.auth.last_access_company_no
-      //     )[0]
+      //     ...checkResult.auth
       //   };
       //   onLogin(userData);
       // }

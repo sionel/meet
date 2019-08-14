@@ -43,6 +43,14 @@ class MainContainer extends Component {
       this.setState({ isLogin: false });
     }
 
+    // 회사 변경시 재로그인
+    if (
+      nextProps.auth.last_access_company_no !==
+      this.props.auth.last_access_company_no
+    ) {
+      this.setState({ isLogin: false });
+    }
+
     return false;
   }
 

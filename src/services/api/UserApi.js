@@ -2,12 +2,14 @@
  * User API
  * 사용자 관련 API
  */
+import DeviceInfo from 'react-native-device-info';
 
 import {
   wehagoBaseURL,
   wehagoBaseURL0,
   securityRequest,
-  _createSignature
+  _createSignature,
+  serialize
 } from '../../utils';
 const tempBaseUrl = `https://jsonplaceholder.typicode.com`;
 // import { UserApi } from '../index';
@@ -131,11 +133,53 @@ const check = async (a_token, r_token, cno, HASH_KEY) => {
     return err;
   }
 };
+
+/**
+ * 회사 변경
+ */
+const changeCompany = async (auth, company) => {
+  const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, user_no } = auth;
+  const { company_no, company_code } = company;
+  const deviceIP = await DeviceInfo.getIPAddress();
+
+  try {
+    const url = `${wehagoBaseURL}/common/layout/company-change`;
+    const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
+    const data = {
+      user_no: user_no,
+      last_access_company_no: company_no,
+      login_browser: 'WEHAGO-APP',
+      login_device: DeviceInfo.getModel(),
+      login_os:
+        DeviceInfo.getSystemName() + ' ' + DeviceInfo.getSystemVersion(),
+      login_ip: deviceIP,
+      cno: auth.last_access_company_no,
+      ccode: company_code,
+      portal_member_no: ''
+    };
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        ...headers,
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      },
+      body: new URLSearchParams(data).toString()
+    });
+
+    const responseJson = await response.json();
+    return responseJson;
+  } catch (err) {
+    console.warn(err);
+    return err;
+  }
+};
+
 // #endregion
 
 export default {
   test,
   getToken,
   login,
-  check
+  check,
+  changeCompany
 };

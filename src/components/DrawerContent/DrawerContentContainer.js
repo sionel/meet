@@ -24,8 +24,8 @@ class DrawerContentContainer extends Component {
         name: '회사변경',
         src: 'Company',
         action: () => {
-          // this._handleChangeState('selectCompany', true);
-          alert('준비중입니다.');
+          this._handleChangeState('selectCompany', true);
+          // alert('준비중입니다.');
         }
       },
       {
@@ -45,7 +45,7 @@ class DrawerContentContainer extends Component {
           title: item.company_name_kr,
           key: item.company_no,
           action: () => {
-            this._handleCompanyChange(item.company_no);
+            this._handleCompanyChange(item.company_no, item);
             // alert(item.company_no);
           }
         };
@@ -67,11 +67,16 @@ class DrawerContentContainer extends Component {
     this.setState({ [target]: state });
   };
 
-  _handleCompanyChange = params => {
+  _handleCompanyChange = (cno, company) => {
     // API 호출
     // 띠리리삐리리뿅
+    const { auth } = this.props;
 
-    this._handleChangeState('selectCompany', false);
+    this.props.changeCompanyRequest(auth, company)
+    // if (auth.last_access_company_no !== cno) {
+    //   this.props.changeCompanyRequest(auth, company)
+    // }
+    // this._handleChangeState('selectCompany', false);
   };
 }
 
