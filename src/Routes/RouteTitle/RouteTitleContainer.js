@@ -65,6 +65,7 @@ class RouteTitleContainer extends React.Component {
 
   _handleChangeCompany = auth => {
     const { employee_list, last_access_company_no } = auth;
+    if (typeof employee_list === 'undefined') return;
     const selectedCompany = employee_list.find(
       company => company.company_no === last_access_company_no
     );
