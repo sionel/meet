@@ -11,39 +11,44 @@ class RouteTitleContainer extends React.Component {
   // 	employeeList: [],
   // 	selectedCompany: null
   // }
-  constructor(props) {
-    super(props);
-    this.state = {
-      employeeList: this.props.auth.employee_list.map(e => ({
-        label: e.company_name_kr,
-        value: e.company_no
-      })),
-      selectedCompany: this.props.auth.last_access_company_no
-        ? this.props.auth.last_access_company_no
-        : null
-    };
-  }
+  state = {
+    company_no: -1,
+    company_name: ''
+  };
+
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     employeeList: this.props.auth.employee_list.map(e => ({
+  //       label: e.company_name_kr,
+  //       value: e.company_no
+  //     })),
+  //     selectedCompany: this.props.auth.last_access_company_no
+  //       ? this.props.auth.last_access_company_no
+  //       : null
+  //   };
+  // }
 
   /**
    *
    */
   shouldComponentUpdate(nextProps, nextState) {
     if (nextProps !== this.props) {
+      this._handleChangeCompany(nextProps.auth);
       return false;
     }
-    try {
-      this.props.onChangeCompany(nextState.selectedCompany);
-      if (this.state.selectedCompany != nextState.selectedCompany) {
-        return true;
-      }
-      return false;
-    } catch (e) {
-      return false;
-    }
+    // try {
+    //   this.props.onChangeCompany(nextState.selectedCompany);
+    //   if (this.state.selectedCompany != nextState.selectedCompany) {
+    //     return true;
+    //   }
+    //   return false;
+    // } catch (e) {
+    //   return false;
+    // }
 
-    // return false;
+    return true;
   }
-  // componentWillUpdate(nextProps, nextState) {}
 
   /**
    *
@@ -52,11 +57,23 @@ class RouteTitleContainer extends React.Component {
     return (
       <RouteTitlePresenter
         {...this.state}
-        {...this.props}
+        // {...this.props}
         onChangeValue={this._handleChangeValue}
       />
     );
   }
+
+  _handleChangeCompany = auth => {
+    const { employee_list, last_access_company_no } = auth;
+    const selectedCompany = employee_list.find(
+      company => company.company_no === last_access_company_no
+    );
+
+    this.setState({
+      company_no: selectedCompany.company_no,
+      company_name: selectedCompany.company_name_kr
+    });
+  };
 
   /**
    *

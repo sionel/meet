@@ -376,18 +376,18 @@ class HomeScreenContainer extends Component {
       // alert('Home: 인증실패\nError: ' + JSON.stringify(checkResult.errors) + '\nToken: ' + copyAuth);
     } else {
       // 최종선택 회사가 달라진 경우
-      if (
-        auth.last_access_company_no != checkResult.auth.last_access_company_no
-      ) {
-        userData = {
-          ...auth,
-          last_access_company_no: checkResult.auth.last_access_company_no,
-          last_company: checkResult.auth.employee_list.filter(
-            e => e.company_no == checkResult.auth.last_access_company_no
-          )[0]
-        };
-        onLogin(userData);
-      }
+      // if (
+      //   auth.last_access_company_no != checkResult.auth.last_access_company_no
+      // ) {
+      //   userData = {
+      //     ...auth,
+      //     last_access_company_no: checkResult.auth.last_access_company_no,
+      //     last_company: checkResult.auth.employee_list.filter(
+      //       e => e.company_no == checkResult.auth.last_access_company_no
+      //     )[0]
+      //   };
+      //   onLogin(userData);
+      // }
       this._handleGetWetalkList();
     }
   };

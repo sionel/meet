@@ -8,19 +8,19 @@ import RNPickerSelect from 'react-native-picker-select';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const RouteTitlePresenter = props => {
-  let placeholder = {
-    label: 'Select a Company',
-    value: null,
-    color: '#f1f1f1'
-  };
+  // let placeholder = {
+  //   label: 'Select a Company',
+  //   value: null,
+  //   color: '#f1f1f1'
+  // };
 
-  if (!props.auth) {
-    // 기본값
-    placeholder = {};
-    return (
-      <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 17, fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif' }}>-</Text>
-    );
-  }
+  // if (!props.auth) {
+  //   // 기본값
+  //   placeholder = {};
+  //   return (
+  //     <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 17, fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif' }}>-</Text>
+  //   );
+  // }
 
   // 임시 사용
   return (
@@ -32,47 +32,48 @@ const RouteTitlePresenter = props => {
           // Platform.OS !== 'ios' && { marginLeft: 20 }
         ]}
       >
-        {
+        {/* {
           props.auth.employee_list.filter(
             e => e.company_no == props.auth.last_access_company_no
           )[0].company_name_kr
-        }
+        } */}
+        {props.company_name}
       </Text>
     </Fragment>
   );
 
   // 접속회사 변경 시 사용
-  return (
-    <View>
-      <RNPickerSelect
-        placeholder={placeholder}
-        items={props.auth.employee_list.map(e => ({
-          label: e.company_name_kr,
-          value: e.company_no
-        }))}
-        onValueChange={value => {
-          props.onChangeValue(value);
-        }}
-        style={{ ...pickerSelectStyles }}
-        value={props.auth.last_access_company_no}
-        useNativeAndroidPickerStyle={true}
-        textInputProps={{ underlineColorAndroid: 'cyan' }}
-        Icon={() => {
-          return (
-            <Icon
-              name="caret-down"
-              // name="link"
-              size={22}
-              color="#fff"
-              style={{
-                marginTop: 12
-              }}
-            />
-          );
-        }}
-      />
-    </View>
-  );
+  // return (
+  //   <View>
+  //     <RNPickerSelect
+  //       placeholder={placeholder}
+  //       items={props.auth.employee_list.map(e => ({
+  //         label: e.company_name_kr,
+  //         value: e.company_no
+  //       }))}
+  //       onValueChange={value => {
+  //         props.onChangeValue(value);
+  //       }}
+  //       style={{ ...pickerSelectStyles }}
+  //       value={props.auth.last_access_company_no}
+  //       useNativeAndroidPickerStyle={true}
+  //       textInputProps={{ underlineColorAndroid: 'cyan' }}
+  //       Icon={() => {
+  //         return (
+  //           <Icon
+  //             name="caret-down"
+  //             // name="link"
+  //             size={22}
+  //             color="#fff"
+  //             style={{
+  //               marginTop: 12
+  //             }}
+  //           />
+  //         );
+  //       }}
+  //     />
+  //   </View>
+  // );
 };
 
 const pickerSelectStyles = StyleSheet.create({
