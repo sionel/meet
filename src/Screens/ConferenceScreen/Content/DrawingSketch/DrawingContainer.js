@@ -140,7 +140,7 @@ class DrawingContainer extends Component {
       this.isSwipe = false;
     }
 
-    if (nextProps.orientation !== this.props.orientation) {
+    if (nextProps.viewWidth !== this.props.viewWidth) {
       if (this.documentList) {
         this.documentList.scrollTo({
           x: nextProps.viewWidth * nextProps.page,

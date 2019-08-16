@@ -13,7 +13,6 @@ const SubVideoBoxPresenter = props => (
       styles.scrollView,
       props.participants.length === 0 && { margin: 0, padding: 0 }
     ]}
-    style={}
   >
     {props.user && props.mainUserId !== props.user.id ? (
       <ParticipantBox

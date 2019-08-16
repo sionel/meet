@@ -19,6 +19,7 @@ import CustomModal from '../../../../components/CustomModal';
 import OverView from '../OverView';
 
 const SafetyView = Platform.OS === 'ios' ? SafeAreaView : View;
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const FileSharingPresenter = props => {
   const {
@@ -84,6 +85,17 @@ const FileSharingPresenter = props => {
             imgWidth: event.nativeEvent.width,
             imgHeight: event.nativeEvent.height
           };
+          const scale = Math.max(
+            screenWidth / size.imgWidth,
+            screenHeight / size.imgHeight
+          );
+          if (scale > 1) {
+            size.imgWidth = size.imgWidth * scale * 1.5;
+            size.imgHeight = size.imgHeight * scale * 1.5;
+          } else {
+            size.imgWidth = size.imgWidth * 1.5;
+            size.imgHeight = size.imgHeight * 1.5;
+          }
           props.onChangeImageSize(size, index);
         }}
         style={{
@@ -186,7 +198,7 @@ const FileSharingPresenter = props => {
                   justifyContent: 'center'
                 }}
               >
-                <Text>Loading</Text>
+                <Text>문서를 불러오는 중입니다.</Text>
               </View>
             ) : (
               <View
