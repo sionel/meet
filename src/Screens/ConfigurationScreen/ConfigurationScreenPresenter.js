@@ -39,7 +39,7 @@ const ConfigurationScreenPresenter = props => {
     },
     {
       title: '버전정보',
-      content: Platform.OS === 'ios' ? '1.24.3' : '0.1.5.4'
+      content: Platform.OS === 'ios' ? '1.24.3' : '0.1.5.5'
       // action: () =>
       //   Alert.alert(
       //     '버전정보',
