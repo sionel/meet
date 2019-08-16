@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    zIndex: 9
+    // zIndex: 9
   },
   bottomAreaVertical: {
     bottom: '5%',
