@@ -83,7 +83,7 @@ const ContentPresenter = props => {
         style={[
           styles.topArea,
           props.orientation === 'vertical'
-            ? [styles.topAreaVertical, { top: props.hasNotch ? 40 : 20 }]
+            ? [styles.topAreaVertical, { top: props.hasNotch ? 47 : 27 }]
             : [styles.topAreaHorizontal, { left: props.hasNotch ? 35 : 20 }]
         ]}
       >

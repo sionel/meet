@@ -46,11 +46,11 @@ const FileSharingPresenter = props => {
       <CustomButton
         name={'buttonClose'}
         onPress={() => props.onChangeState('modal')}
-        style={{ paddingRight: 12, margin: 0 }}
+        style={{ margin: 0, marginRight: 10 }}
         width={24}
         height={24}
-        areaWdith={24}
-        areaHeight={24}
+        areaWidth={32}
+        areaHeight={32}
       />
       <Text
         numberOfLines={1}
@@ -65,7 +65,7 @@ const FileSharingPresenter = props => {
         style={{ paddingLeft: 12, margin: 0 }}
         width={28}
         height={28}
-        areaWdith={28}
+        areaWidth={28}
         areaHeight={28}
       />
     </View>
@@ -162,7 +162,7 @@ const FileSharingPresenter = props => {
               style={{ padding: 0, margin: 0 }}
               width={24}
               height={24}
-              areaWdith={24}
+              areaWidth={24}
               areaHeight={24}
             />
           </View>
@@ -287,7 +287,7 @@ const styles = StyleSheet.create({
   headerText: {
     color: '#fff',
     fontSize: 20,
-    height: 24,
+    height: 32,
     fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif'
   },
   mainArea: {

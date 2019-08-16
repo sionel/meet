@@ -22,10 +22,7 @@ const UserListPresenter = props => {
   } = props;
 
   return (
-    <ScrollView
-      style={{ height: '100%' }}
-      showsVerticalScrollIndicator={false}
-    >
+    <ScrollView style={{ height: '100%' }} showsVerticalScrollIndicator={false}>
       <FlatList
         data={userList}
         style={styles.userList}
@@ -80,21 +77,27 @@ const UserListPresenter = props => {
               }}
             >
               {/* 스피커폰 컨트롤 */}
-              <TouchableOpacity onPress={onChangeSpeaker}>
+              <TouchableOpacity
+                onPress={onChangeSpeaker}
+                style={{ padding: 6 }}
+              >
                 {speaker === 1 && item.id === 'localUser' && (
-                  <CustomIcon name={'speakerOn'} width={30} height={24} />
+                  <CustomIcon name={'speakerOn'} width={24} height={24} />
                 )}
                 {speaker === 2 && item.id === 'localUser' && (
-                  <CustomIcon name={'speakerOff'} width={30} height={24} />
+                  <CustomIcon name={'speakerOff'} width={24} height={24} />
                 )}
               </TouchableOpacity>
 
               {/* 마이크 컨트롤 */}
               {item.id === 'localUser' ? (
-                <TouchableOpacity onPress={toggleMuteMic}>
+                <TouchableOpacity
+                  onPress={toggleMuteMic}
+                  style={{ padding: 6 }}
+                >
                   <CustomIcon
                     name={item.isMuteMic ? 'mikeOff' : 'mikeOn'}
-                    width={30}
+                    width={24}
                     height={24}
                   />
                 </TouchableOpacity>

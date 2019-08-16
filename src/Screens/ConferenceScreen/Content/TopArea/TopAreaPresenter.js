@@ -39,23 +39,30 @@ const TopAreaPresenter = props => {
             onPress={props.onChangeObjectFit}
             width={23}
             height={23}
-            areaWdith={28}
-            areaHeight={28}
+            areaWidth={42}
+            areaHeight={36}
           />
-          <CustomButton name="switch" onPress={props.toggleCameraFacingMode} />
+          <CustomButton
+            name="switch"
+            width={30}
+            height={30}
+            areaWidth={42}
+            areaHeight={36}
+            onPress={props.toggleCameraFacingMode}
+          />
           <CustomButton
             name="reverse"
             onPress={props.onReverseVideo}
             width={24}
             height={24}
-            areaWdith={28}
-            areaHeight={28}
+            areaWidth={42}
+            areaHeight={36}
           />
           {/* <CustomButton
             name="pen"
             width={25}
             height={25}
-            areaWdith={25}
+            areaWidth={25}
             areaHeight={28}
             // onPress={() => props.onChangeDrawing(!props.drawing)}
             onPress={_.throttle(() => props.onChangeDrawingMode(!props.drawing), 500)}
@@ -64,11 +71,14 @@ const TopAreaPresenter = props => {
             name="docShare"
             width={28}
             height={28}
-            areaWdith={28}
-            areaHeight={28}
+            areaWidth={42}
+            areaHeight={36}
             // onPress={() => props.onChangeDrawing(!props.drawing)}
             // onPress={_.throttle(() => props.onChangeSharingMode(!props.sharing), 500)}
-            onPress={_.throttle(() => props.toggleDocumentListMode(!props.documentListMode), 500)}
+            onPress={_.throttle(
+              () => props.toggleDocumentListMode(!props.documentListMode),
+              500
+            )}
           />
         </Fragment>
         {/* )} */}

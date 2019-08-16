@@ -379,17 +379,18 @@ const DrawingPresenter = props => {
                 display: 'flex',
                 flexDirection: 'row',
                 justifyContent: 'center',
-                alignItems: vertical ? 'flex-end' : 'center',
+                alignItems: 'center',
+                // alignItems: vertical ? 'center' : 'center',
                 // marginRight: vertical ? 7.5 : 0,
                 marginTop: orientation === 'horizontal' ? 7.5 : 0,
                 marginRight: 10
               }}
             >
               <TouchableOpacity onPress={() => props.onDrawAction('undo')}>
-                <CustomIcon name={'btnBack'} width={30} height={24} />
+                <CustomIcon name={'btnBack'} width={36} height={24} />
               </TouchableOpacity>
               <TouchableOpacity onPress={() => props.onDrawAction('redo')}>
-                <CustomIcon name={'btnForward'} width={30} height={24} />
+                <CustomIcon name={'btnForward'} width={36} height={24} />
               </TouchableOpacity>
               <TouchableOpacity onPress={onClearAll}>
                 <Text

@@ -82,7 +82,7 @@ const OverViewPresenter = props => {
         style={{ position: 'absolute', top: 20, right: 20 }}
         width={24}
         height={24}
-        areaWdith={24}
+        areaWidth={24}
         areaHeight={24}
       />
       <ActivityIndicator
