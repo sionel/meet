@@ -4,6 +4,7 @@
  */
 
 import { UserApi } from '../../services';
+import { actionCreators as wetalkActionCreators } from './wetalk';
 
 const AGREEMENT = 'AGREEMENT';
 const LOGIN = 'LOGIN';
@@ -152,6 +153,8 @@ function changeCompanyRequest(auth, company) {
       // alert('회사변경 중 문제 발생');
       return checkResult;
     }
+
+    dispatch(wetalkActionCreators.setInitialList());
     return dispatch(changeCompany(company));
   };
 }
