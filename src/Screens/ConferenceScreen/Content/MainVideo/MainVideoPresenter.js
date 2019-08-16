@@ -107,6 +107,7 @@ const MainVideoPresenter = props => {
             videoType && videoType === 'desktop' ? 'contain' : props.objectFit
           }
           streamURL={stream.toURL()}
+          zOrder={0} // zOrder 는 [0, 1] 만 사용가능 (아마?)
         />
       ) : callType == 2 ? (
         <View style={{ ...styles.imageContainer }}>

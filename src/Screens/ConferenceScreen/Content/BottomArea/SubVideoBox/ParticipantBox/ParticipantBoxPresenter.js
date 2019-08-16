@@ -31,6 +31,7 @@ const ParticipantBoxPresenter = props => {
           mirror={false}
           objectFit={'cover'}
           streamURL={stream.toURL()}
+          zOrder={1} // zOrder 는 [0, 1] 만 사용가능 (아마?)
         />
       </View>
     ) : (
