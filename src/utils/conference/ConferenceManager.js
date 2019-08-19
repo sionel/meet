@@ -77,6 +77,7 @@ class ConferenceManager {
     await this._dispatch(
       localActionCreators.joinConference({
         id,
+        cid: this._room.myUserId(),
         name,
         videoTrack,
         audioTrack

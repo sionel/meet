@@ -90,6 +90,7 @@ function applyJoinConference(state, action) {
   const { conferenceInfo } = action;
   const user = {
     id: conferenceInfo.id,
+    cid: conferenceInfo.cid,
     name: conferenceInfo.name,
     isLocal: true,
     videoTrack: conferenceInfo.videoTrack,

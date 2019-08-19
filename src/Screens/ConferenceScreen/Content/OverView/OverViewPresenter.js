@@ -34,7 +34,7 @@ const OverViewPresenter = props => {
   const ViewComponent = () => {
     switch (view) {
       case 'CHATTING':
-        return <Chatting orientation={orientation} hasNotch={hasNotch} />;
+        return <Chatting />;
       case 'USERLIST':
         return <UserList speaker={speaker} onChangeSpeaker={onChangeSpeaker} />;
       case 'FILELIST':
@@ -114,7 +114,7 @@ const OverViewPresenter = props => {
 
         <View
           style={[
-            styles.listContainer,
+            styles.listContainer
             // props.orientation === 'vertical'
             //   ? styles.listContainerVertical
             //   : styles.listContainerHorizontal

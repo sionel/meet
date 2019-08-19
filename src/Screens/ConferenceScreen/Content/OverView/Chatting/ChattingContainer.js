@@ -10,7 +10,7 @@ class ChattingContainer extends Component {
   }
 
   render() {
-    // props => messages, hasNotch, orientation
+    console.log(this.props.user)
     return <ChattingPresenter {...this.props} />;
   }
 }

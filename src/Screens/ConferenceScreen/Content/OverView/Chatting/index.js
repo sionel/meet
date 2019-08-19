@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 
 // map state to props
 const mapStateToProps = state => ({
-  messages: state.local.message
+  messages: state.local.message,
+  user: state.local.user,
 });
 
 // map dispatch to props
