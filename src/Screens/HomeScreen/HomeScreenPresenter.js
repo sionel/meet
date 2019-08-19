@@ -36,25 +36,25 @@ const waitingImage = require(`${rootPath}/waiting.gif`);
  */
 const HomeScreenPresenter = props => {
   const activateList = props.list.filter(item => item.is_video_access === 'T');
-  const reloadButton = (
-    <TouchableOpacity onPress={props.onRefresh}>
-      <View style={styles.reloadButtonWrap}>
-        <Text
-          style={[
-            styles.reloadButton,
-            { fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif' }
-          ]}
-        >
-          다시 로드
-        </Text>
-      </View>
-    </TouchableOpacity>
-  );
+  // const reloadButton = (
+  //   <TouchableOpacity onPress={props.onRefresh}>
+  //     <View style={styles.reloadButtonWrap}>
+  //       <Text
+  //         style={[
+  //           styles.reloadButton,
+  //           { fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif' }
+  //         ]}
+  //       >
+  //         다시 로드
+  //       </Text>
+  //     </View>
+  //   </TouchableOpacity>
+  // );
 
   return (
     <View style={styles.container}>
       {/* 검색바 */}
-      <SearchForm onChange={props.onSearch} />
+      {/* <SearchForm onChange={props.onSearch} /> */}
 
       {props.list.length < 1 || activateList.length < 1 ? (
         <ScrollView

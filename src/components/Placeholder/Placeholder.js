@@ -13,7 +13,7 @@ const Placeholder = props => {
   return (
     <View
       style={{
-        flex: 1,
+        flex: 2,
         // position: 'absolute',
         width: '100%',
         height: '100%',
@@ -30,7 +30,7 @@ const Placeholder = props => {
           width: 300,
           maxWidth: '50%',
           height: 300,
-          maxHeight: '50%',
+          maxHeight: '40%',
           marginBottom: 23,
           marginTop: -50,
           resizeMode: 'contain'
