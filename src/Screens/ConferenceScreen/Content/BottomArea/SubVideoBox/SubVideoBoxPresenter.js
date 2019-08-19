@@ -9,10 +9,11 @@ const SubVideoBoxPresenter = props => (
   <ScrollView
     horizontal={props.orientation === 'vertical'}
     showsHorizontalScrollIndicator={false}
-    contentContainerStyle={[
+    contentContainerStyle={Object.assign(
+      {},
       styles.scrollView,
-      props.participants.length === 0 && { margin: 0, padding: 0 }
-    ]}
+      props.participants.length === 0 ? { margin: 0, padding: 0 } : {}
+    )}
   >
     {props.user && props.mainUserId !== props.user.id ? (
       <ParticipantBox
@@ -40,7 +41,7 @@ const styles = StyleSheet.create({
     // padding: 10,
     margin: 10,
     flexGrow: 1,
-    justifyContent : 'center'
+    justifyContent: 'center'
     // zIndex: 15
   }
 });

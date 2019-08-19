@@ -48,10 +48,11 @@ const ParticipantBoxPresenter = props => {
   return (
     <TouchableOpacity
       style={styles.container}
-      onPressOut={() => props.setMainUser(props.user.id)}
+      onPress={() => props.setMainUser(props.user.id)}
     >
       <View
-        style={[styles.videoArea, props.isSelect && styles.videoAreaSelected]}
+        style={styles.videoArea}
+        // style={[styles.videoArea, props.isSelect && styles.videoAreaSelected]}
       >
         {content}
         {/* {(props.isMuteAudio || props.isMuteMic) && (
@@ -89,7 +90,7 @@ const styles = StyleSheet.create({
     // height: 120,
     display: 'flex',
     marginHorizontal: 2,
-    marginLeft: 10
+    // marginLeft: 10
   },
   videoArea: {
     flex: 1,
@@ -114,8 +115,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     height: '100%',
-    borderWidth: 1,
-    borderColor: 'rgb(102, 104, 106)'
+    // borderWidth: 1,
+    // borderColor: 'rgb(102, 104, 106)'
   },
   profile: {
     color: '#DDD',

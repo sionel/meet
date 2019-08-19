@@ -11,6 +11,8 @@ import {
   Modal,
   TouchableOpacity,
   SectionList,
+  ScrollView,
+  RefreshControl,
   Image,
   Platform
 } from 'react-native';
@@ -37,7 +39,14 @@ const HomeScreenPresenter = props => {
   const reloadButton = (
     <TouchableOpacity onPress={props.onRefresh}>
       <View style={styles.reloadButtonWrap}>
-        <Text style={[styles.reloadButton, {fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif'}]}>다시 로드</Text>
+        <Text
+          style={[
+            styles.reloadButton,
+            { fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif' }
+          ]}
+        >
+          다시 로드
+        </Text>
       </View>
     </TouchableOpacity>
   );
@@ -48,11 +57,33 @@ const HomeScreenPresenter = props => {
       <SearchForm onChange={props.onSearch} />
 
       {props.list.length < 1 || activateList.length < 1 ? (
-        <Placeholder
-          mainText={'진행중인 화상회의가 없습니다.'}
-          subText={'대화를 시작하려면 +버튼을 누르세요.'}
-          other={reloadButton}
-        />
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={props.refreshing}
+              onRefresh={props.onRefresh}
+            />
+          }
+          style={{
+            flex: 1,
+            width: '100%',
+            height: '100%',
+            backgroundColor: '#f1f2f5'
+          }}
+          contentContainerStyle={{
+            justifyContent: 'center',
+            alignContent: 'center',
+            flexGrow: 1
+          }}
+        >
+          <Placeholder
+            mainText={'진행중인 화상회의가 없습니다.'}
+            subText={'대화를 시작하려면 +버튼을 누르세요.'}
+            // other={reloadButton}
+          />
+          <View style={{ flex: 1 }} />
+        </ScrollView>
       ) : (
         <Fragment>
           {/* 화상대화 히스토리 리스트 */}
@@ -147,7 +178,13 @@ const HomeScreenPresenter = props => {
                   >
                     알림
                   </Text>
-                  <Text style={{fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif'}}>새로운 화상대화를 시작하시겠습니까?</Text>
+                  <Text
+                    style={{
+                      fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif'
+                    }}
+                  >
+                    새로운 화상대화를 시작하시겠습니까?
+                  </Text>
                 </View>
                 <View style={styles.modalButtons}>
                   <TouchableOpacity
@@ -159,7 +196,15 @@ const HomeScreenPresenter = props => {
                       props.onCreateConference(props.selectedRoomId)
                     }
                   >
-                    <Text style={{ color: '#fff', fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif' }}>확인</Text>
+                    <Text
+                      style={{
+                        color: '#fff',
+                        fontFamily:
+                          Platform.OS === 'ios' ? 'Arial' : 'sans-serif'
+                      }}
+                    >
+                      확인
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </View>
