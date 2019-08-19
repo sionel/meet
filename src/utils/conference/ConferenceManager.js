@@ -132,7 +132,8 @@ class ConferenceManager {
       CHANGED_DOCUMENT_PAGE: this.changeDocumentPage,
       CHANGED_DOCUMENT_SHARE_MODE: this.changeDocumentShareMode,
       CHANGED_DRAW_DATA: this.changeDrawData,
-      DOCUMENT_SHARE_TARGET: this.documentShareTarget
+      DOCUMENT_SHARE_TARGET: this.documentShareTarget,
+      MESSAGE_RECEIVED: this.messageReceived
     };
     return handler;
   };
@@ -201,7 +202,9 @@ class ConferenceManager {
    */
   // _changeDocumentShareMode = status => {
   changeDrawData = (drawData, selectResource) => {
-    this._dispatch(DocumentShareAcionCreators.setDrawData(drawData, selectResource));
+    this._dispatch(
+      DocumentShareAcionCreators.setDrawData(drawData, selectResource)
+    );
   };
 
   /**
@@ -269,6 +272,24 @@ class ConferenceManager {
    */
   documentShareTarget = (user, drawData) => {
     this._conferenceConnector.documentShareTarget(user, drawData);
+  };
+
+  /**
+   * messageReceived
+   * 참가자로부터 메시지를 받았을 경우 (전체 메세지)
+   */
+  messageReceived = (user, text, date) => {
+    const message = {
+      user,
+      text,
+      date: date || new Date()
+    };
+    this._dispatch(localActionCreators.receiceConferenceMessage(message));
+  };
+
+  sendTextMessage = text => {
+    if (text && text === '') return;
+    this._room.sendTextMessage(text);
   };
 }
 

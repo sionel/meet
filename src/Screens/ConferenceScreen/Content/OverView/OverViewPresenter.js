@@ -5,14 +5,17 @@ import {
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
-  Platform
+  Platform,
+  SafeAreaView
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
+import Chatting from './Chatting';
 import FileList from './FileList';
 import UserList from './UserList';
 import CustomButton from '../../../../components/CustomButton';
 
 const isTablet = DeviceInfo.isTablet();
+const hasNotch = DeviceInfo.hasNotch();
 
 const OverViewPresenter = props => {
   const {
@@ -20,6 +23,7 @@ const OverViewPresenter = props => {
     view,
     tabs,
     orientation,
+    // hasNotch,
     speaker,
     setDocumentListMode,
     onChangeSharingMode,
@@ -29,6 +33,8 @@ const OverViewPresenter = props => {
 
   const ViewComponent = () => {
     switch (view) {
+      case 'CHATTING':
+        return <Chatting orientation={orientation} hasNotch={hasNotch} />;
       case 'USERLIST':
         return <UserList speaker={speaker} onChangeSpeaker={onChangeSpeaker} />;
       case 'FILELIST':
@@ -94,7 +100,7 @@ const OverViewPresenter = props => {
   );
 
   return (
-    <View style={[styles.container, { top: 0 }]}>
+    <SafeAreaView style={[styles.container, { top: 0 }]}>
       <TouchableOpacity
         activeOpacity={1}
         style={styles.topArea}
@@ -109,9 +115,9 @@ const OverViewPresenter = props => {
         <View
           style={[
             styles.listContainer,
-            props.orientation !== 'vertical'
-              ? styles.listContainerVertical
-              : styles.listContainerHorizontal
+            // props.orientation === 'vertical'
+            //   ? styles.listContainerVertical
+            //   : styles.listContainerHorizontal
           ]}
         >
           {ViewComponent()}
@@ -119,7 +125,7 @@ const OverViewPresenter = props => {
       </View>
 
       {isLoading === 'FILE_LOADING' && fileLoadingModal}
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -164,12 +170,12 @@ const styles = StyleSheet.create({
     flex: 1
   },
   listContainerVertical: {
-    paddingLeft: 36,
-    paddingRight: 36
-  },
-  listContainerHorizontal: {
     paddingLeft: 16,
     paddingRight: 16
+  },
+  listContainerHorizontal: {
+    paddingLeft: 36,
+    paddingRight: 36
   },
   documentList: {
     paddingTop: 16,

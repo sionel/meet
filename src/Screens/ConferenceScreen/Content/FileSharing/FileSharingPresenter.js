@@ -60,14 +60,23 @@ const FileSharingPresenter = props => {
       >
         {props.attributes.fileName}
       </Text>
-      <CustomButton
+      {/* <CustomButton
         name={'userList'}
         onPress={() => props.setDocumentListMode(true)}
-        style={{ paddingLeft: 12, margin: 0 }}
+        style={{ margin: 0 }}
         width={28}
         height={28}
-        areaWidth={28}
-        areaHeight={28}
+        areaWidth={42}
+        areaHeight={32}
+      /> */}
+      <CustomButton
+        name={'talk'}
+        onPress={() => props.setDocumentListMode(true)}
+        style={{ margin: 0 }}
+        width={28}
+        height={28}
+        areaWidth={42}
+        areaHeight={32}
       />
     </View>
   );
@@ -251,7 +260,7 @@ const FileSharingPresenter = props => {
         //   }}
         // >
         <OverView
-          mode={['USERLIST']}
+          mode={['CHATTING', 'USERLIST']}
           defaultMode={'USERLIST'}
           orientation={props.orientation}
           speaker={props.speaker}

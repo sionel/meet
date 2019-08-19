@@ -43,7 +43,13 @@ const FileListPresenter = props => {
         <View
           style={{ paddingTop: 20, paddingBottom: 10, alignItems: 'center' }}
         >
-          <Text style={{fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif'}}>파일이 없습니다.</Text>
+          <Text
+            style={{
+              fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif'
+            }}
+          >
+            파일이 없습니다.
+          </Text>
         </View>
       ) : (
         <FlatList
@@ -89,7 +95,9 @@ const FileListPresenter = props => {
 
 const styles = StyleSheet.create({
   listContainer: {
-    height: '100%'
+    height: '100%',
+    paddingLeft: 16,
+    paddingRight: 16
   },
   listContainerVertical: {
     paddingLeft: 36,

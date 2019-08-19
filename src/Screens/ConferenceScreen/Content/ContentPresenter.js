@@ -138,7 +138,7 @@ const ContentPresenter = props => {
         //   }}
         // >
         <OverView
-          mode={['USERLIST', 'FILELIST']}
+          mode={['CHATTING', 'USERLIST', 'FILELIST']}
           defaultMode={'FILELIST'}
           orientation={props.orientation}
           speaker={props.speaker}
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
     // zIndex: 9
   },
   bottomAreaVertical: {
