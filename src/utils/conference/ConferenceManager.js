@@ -281,7 +281,7 @@ class ConferenceManager {
    */
   messageReceived = (user, text, date) => {
     if (date) return;
-    if (date < new Date().toISOString()) return;
+    // if (date < new Date().toISOString()) return;
     const message = {
       user,
       text,

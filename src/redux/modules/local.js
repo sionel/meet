@@ -126,7 +126,8 @@ function applyLeaveConference(state) {
   return {
     ...state,
     user,
-    conferenceMode: ConferenceModes.NORMAL
+    conferenceMode: ConferenceModes.NORMAL,
+    message: []
   };
 }
 
