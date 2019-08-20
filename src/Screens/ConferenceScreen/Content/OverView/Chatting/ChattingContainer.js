@@ -9,6 +9,7 @@ class ChattingContainer extends Component {
     this.conferenceManager = new ConferenceManager();
     this.scrollView = null;
     this.timeout = null;
+    this.isEndScroll = true;
   }
 
   state = { message: '' };
@@ -30,11 +31,17 @@ class ChattingContainer extends Component {
         messages[messages.length - 1].user === this.props.user.cid ||
         prevProps.messages.length === 0
       ) {
-        if (this.scrollView && this.scrollView.scrollToEnd && this.timeout) {
+        if (this.scrollView && this.scrollView.scrollToEnd) {
+          if (this.timeout) clearTimeout(this.timeout);
           this.timeout = setTimeout(() => {
             this.scrollView.scrollToEnd();
           }, 0);
         }
+      } else if (this.isEndScroll) {
+        if (this.timeout) clearTimeout(this.timeout);
+        this.timeout = setTimeout(() => {
+          this.scrollView.scrollToEnd();
+        }, 0);
       }
     }
   }
@@ -49,6 +56,7 @@ class ChattingContainer extends Component {
         {...this.props}
         {...this.state}
         onSetRef={this._handleSetRef}
+        onChangeValue={this._handleChangeValue}
         onChangeState={this._handleChangeState}
         onSendTextMessage={this._handleSendTextMessage}
       />
@@ -57,6 +65,10 @@ class ChattingContainer extends Component {
 
   _handleSetRef = (target, ref) => {
     this[target] = ref;
+  };
+
+  _handleChangeValue = (target, value) => {
+    this[target] = value;
   };
 
   _handleChangeState = (target, value) => {

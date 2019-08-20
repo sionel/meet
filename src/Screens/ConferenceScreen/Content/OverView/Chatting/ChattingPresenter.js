@@ -15,13 +15,25 @@ const ChattingPresenter = props => {
     messages,
     message,
     onSetRef,
+    onChangeValue,
     onChangeState,
     onSendTextMessage
   } = props;
 
   return (
     <View style={styles.container}>
-      <ScrollView ref={ref => onSetRef('scrollView', ref)}>
+      <ScrollView
+        ref={ref => onSetRef('scrollView', ref)}
+        onMomentumScrollEnd={({ nativeEvent }) => {
+          const contentOffsetY = nativeEvent.contentOffset.y; // 좌표
+          const layoutMeasurementHeight = nativeEvent.layoutMeasurement.height; // 자식의 단일 component 높이
+          const contentSizeHeight = nativeEvent.contentSize.height; // 전체 component 높이
+          const isOverScroll =
+            contentOffsetY + layoutMeasurementHeight + 2 > contentSizeHeight; // + 2 은 오차계산
+          console.log('isOverScroll', isOverScroll);
+          onChangeValue('isEndScroll', isOverScroll);
+        }}
+      >
         <FlatList
           data={messages}
           renderItem={({ item, index }) => {
