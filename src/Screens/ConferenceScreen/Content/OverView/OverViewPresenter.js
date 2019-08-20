@@ -103,32 +103,29 @@ const OverViewPresenter = props => {
 
   return (
     <SafeAreaView style={[styles.container, { top: 0 }]}>
+      <TouchableOpacity
+        activeOpacity={1}
+        style={styles.topArea}
+        onPress={() => setDocumentListMode(false)}
+      />
       <KeyboardAvoidingView
-        style={{ flex: 1, width: '100%', height: '100%' }}
+        style={styles.bottomArea}
         behavior="padding"
         enabled={isIOS}
       >
-        <TouchableOpacity
-          activeOpacity={1}
-          style={styles.topArea}
-          onPress={() => setDocumentListMode(false)}
-        />
+        <View style={styles.header}>
+          {tabs.map(item => TabComponent(item.key, item.name))}
+        </View>
 
-        <View style={styles.bottomArea}>
-          <View style={styles.header}>
-            {tabs.map(item => TabComponent(item.key, item.name))}
-          </View>
-
-          <View
-            style={[
-              styles.listContainer
-              // props.orientation === 'vertical'
-              //   ? styles.listContainerVertical
-              //   : styles.listContainerHorizontal
-            ]}
-          >
-            {ViewComponent()}
-          </View>
+        <View
+          style={[
+            styles.listContainer
+            // props.orientation === 'vertical'
+            //   ? styles.listContainerVertical
+            //   : styles.listContainerHorizontal
+          ]}
+        >
+          {ViewComponent()}
         </View>
 
         {isLoading === 'FILE_LOADING' && fileLoadingModal}
@@ -154,8 +151,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#00000090'
   },
   bottomArea: {
-    // height: '50%',
     flex: 3,
+    width: '100%',
+    height: '100%',
     backgroundColor: 'rgb(232, 235, 239)',
     borderTopColor: '#ddd',
     borderTopWidth: 1
