@@ -36,8 +36,9 @@ const FileListPresenter = props => {
           onRefresh={getWedriveToken}
         />
       }
-      showsVerticalScrollIndicator={false}
-      style={styles.listContainer}
+      showsVerticalScrollIndicator={true}
+      contentContainerStyle={styles.listContainer}
+      style={{ height: '100%' }}
     >
       {documentList.length === 0 && isLoading !== 'LOADING' ? (
         <View
@@ -95,7 +96,6 @@ const FileListPresenter = props => {
 
 const styles = StyleSheet.create({
   listContainer: {
-    height: '100%',
     paddingLeft: 16,
     paddingRight: 16
   },

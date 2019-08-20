@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     // width: 100,
     // height: 120,
     display: 'flex',
-    marginHorizontal: 2,
+    marginHorizontal: 5,
     // marginLeft: 10
   },
   videoArea: {

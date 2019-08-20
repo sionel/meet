@@ -10,46 +10,91 @@ import {
 } from 'react-native';
 
 const ChattingPresenter = props => {
-  const { messages } = props;
+  const {
+    user,
+    messages,
+    message,
+    onSetRef,
+    onChangeState,
+    onSendTextMessage
+  } = props;
 
   return (
-    <View style={[styles.container, { paddingBottom: 64 }]}>
-      <ScrollView>
+    <View style={styles.container}>
+      <ScrollView ref={ref => onSetRef('scrollView', ref)}>
         <FlatList
           data={messages}
-          renderItem={({ item }) => (
-            <View style={styles.messageItem}>
-              <View style={styles.profileField}>
-                <Text>img</Text>
-              </View>
-              <View style={styles.messageData}>
-                <Text
-                  numberOfLines={1}
-                  ellipsizeMode="tail"
-                  style={styles.nameField}
-                >
-                  {item.user}
-                </Text>
-                <View style={styles.messageView}>
-                  <View style={styles.messageField}>
-                    <Text>{item.text}</Text>
+          renderItem={({ item, index }) => {
+            const localUser = user.cid === item.user;
+            return (
+              <View
+                style={[
+                  styles.messageItem,
+                  {
+                    justifyContent: !localUser ? 'flex-start' : 'flex-end'
+                  },
+                  index === 0 && { paddingTop: 10 }
+                ]}
+              >
+                {/* {!localUser && (
+                  <View style={styles.profileField}>
+                    <Text>img</Text>
                   </View>
-                  <View style={styles.dateField}>
-                    {/* {Date.parse(String(item.date)).getHours()} */}
-                    {(() => {
-                      const date = Date.parse(String(item.date));
-                      console.log(date);
-                      return (
-                        <Text numberOfLines={1} ellipsizeMode="tail">
-                          date
-                        </Text>
-                      );
-                    })()}
+                )} */}
+                <View
+                  style={[
+                    styles.messageData,
+                    localUser && { alignItems: 'flex-end' }
+                  ]}
+                >
+                  {!localUser && (
+                    <Text
+                      numberOfLines={1}
+                      ellipsizeMode="tail"
+                      style={styles.nameField}
+                    >
+                      {item.name}
+                    </Text>
+                  )}
+                  <View
+                    style={[
+                      styles.messageView,
+                      {
+                        flexDirection: localUser ? 'row-reverse' : 'row'
+                      }
+                    ]}
+                  >
+                    <View
+                      style={[
+                        styles.messageField,
+                        {
+                          backgroundColor: localUser ? '#aaf2ff' : '#fff',
+                          marginLeft: localUser ? 10 : 0
+                        }
+                      ]}
+                    >
+                      <Text>{item.text}</Text>
+                    </View>
+                    <View style={styles.dateField}>
+                      <Text
+                        numberOfLines={1}
+                        ellipsizeMode="tail"
+                        style={{ color: '#939598', fontSize: 10 }}
+                      >
+                        {/* {item.date} */}
+                        {(() => {
+                          const date = new Date(item.date);
+                          const renderDate =
+                            date.getHours() + ':' + date.getMinutes();
+                          return renderDate;
+                        })()}
+                      </Text>
+                    </View>
                   </View>
                 </View>
               </View>
-            </View>
-          )}
+            );
+          }}
         />
       </ScrollView>
 
@@ -59,7 +104,8 @@ const ChattingPresenter = props => {
             multiline={true}
             numberOfLines={2}
             ellipsizeMode="tail"
-            // value={''}
+            value={message}
+            onChangeText={text => onChangeState('message', text)}
             style={{
               flex: 1,
               padding: 4,
@@ -67,16 +113,15 @@ const ChattingPresenter = props => {
             }}
           />
           <TouchableOpacity
-            onPress={() => {}}
+            onPress={onSendTextMessage}
             style={{
-              width: 72,
+              width: 60,
               height: '100%',
-              backgroundColor: 'yellow',
               justifyContent: 'center',
               alignItems: 'center'
             }}
           >
-            <Text>전송</Text>
+            <Text style={{ color: '#1c90fb' }}>전송</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -86,12 +131,15 @@ const ChattingPresenter = props => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    paddingBottom: 50
   },
   messageItem: {
     flexDirection: 'row',
     width: '100%',
-    padding: 10
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingBottom: 10
   },
   inputArea: {
     position: 'absolute',
@@ -112,16 +160,19 @@ const styles = StyleSheet.create({
     backgroundColor: 'red',
     borderRadius: 25
   },
-  messageData: { maxWidth: '90%' },
-  nameField: { marginLeft: 2 },
+  messageData: { maxWidth: '100%', alignItems: 'flex-start' },
+  nameField: { marginLeft: 2, color: '#58595a' },
   messageView: { flexDirection: 'row', maxWidth: '90%' },
   messageField: {
-    marginLeft: 10,
-    backgroundColor: 'skyblue',
-    borderRadius: 8,
+    borderRadius: 4,
     padding: 8
   },
-  dateField: { width: 80, justifyContent: 'flex-end' }
+  dateField: {
+    // width: 80,
+    justifyContent: 'flex-end',
+    paddingLeft: 4,
+    paddingBottom: 2
+  }
 });
 
 export default ChattingPresenter;

@@ -296,19 +296,31 @@ function applySetConferenceCreatedTime(state, action) {
 //#endregion SET_CONFERENCE_CREATED_TIME
 
 // CONFERENCE_MESSAGE_RECEIVED
-function receiceConferenceMessage(newMessage) {
-  return async dispatch => {
+function receiceConferenceMessage(newMessage = null) {
+  return async (dispatch, getState) => {
     dispatch({
       type: CONFERENCE_MESSAGE_RECEIVED,
-      newMessage
+      newMessage,
+      participants: getState().participants.list
     });
   };
 }
 
 function applySetConferenceMessage(state, action) {
-  const { newMessage } = action;
+  const { newMessage, participants } = action;
+
+  if (newMessage === null) {
+    return {
+      ...state,
+      message: []
+    };
+  }
+
   const list = state.message.slice(0);
-  list.push(newMessage);
+  const user = participants.find(participant => {
+    return participant.id === newMessage.user;
+  }) || { name: '(알수없음)' };
+  list.push({ ...newMessage, name: user.name });
 
   return {
     ...state,

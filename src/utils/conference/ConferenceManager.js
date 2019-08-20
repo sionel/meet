@@ -280,10 +280,11 @@ class ConferenceManager {
    * 참가자로부터 메시지를 받았을 경우 (전체 메세지)
    */
   messageReceived = (user, text, date) => {
+    if (date) return;
     const message = {
       user,
       text,
-      date: date || new Date()
+      date: new Date().toISOString()
     };
     this._dispatch(localActionCreators.receiceConferenceMessage(message));
   };
