@@ -6,7 +6,8 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Platform,
-  SafeAreaView
+  SafeAreaView,
+  KeyboardAvoidingView
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import Chatting from './Chatting';
@@ -16,6 +17,7 @@ import CustomButton from '../../../../components/CustomButton';
 
 const isTablet = DeviceInfo.isTablet();
 const hasNotch = DeviceInfo.hasNotch();
+const isIOS = Platform.OS === 'ios';
 
 const OverViewPresenter = props => {
   const {
@@ -70,7 +72,7 @@ const OverViewPresenter = props => {
         <Text
           style={{
             color: view === tab ? 'rgb(28, 144, 251)' : 'rgb(140, 140, 140)',
-            fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif'
+            fontFamily: isIOS ? 'Arial' : 'sans-serif'
           }}
         >
           {/* <Image source={iconDocShare} style={styles.iconDocShare} /> */}
@@ -92,7 +94,7 @@ const OverViewPresenter = props => {
         areaHeight={24}
       />
       <ActivityIndicator
-        size={Platform.OS === 'ios' ? 'large' : 100}
+        size={isIOS ? 'large' : 100}
         color={'rgb(28, 144, 251)'}
       />
       <Text style={styles.loadingModalText}>문서를 불러오고 있습니다.</Text>
@@ -101,30 +103,36 @@ const OverViewPresenter = props => {
 
   return (
     <SafeAreaView style={[styles.container, { top: 0 }]}>
-      <TouchableOpacity
-        activeOpacity={1}
-        style={styles.topArea}
-        onPress={() => setDocumentListMode(false)}
-      />
+      <KeyboardAvoidingView
+        style={{ flex: 1, width: '100%', height: '100%' }}
+        behavior="padding"
+        enabled={isIOS}
+      >
+        <TouchableOpacity
+          activeOpacity={1}
+          style={styles.topArea}
+          onPress={() => setDocumentListMode(false)}
+        />
 
-      <View style={styles.bottomArea}>
-        <View style={styles.header}>
-          {tabs.map(item => TabComponent(item.key, item.name))}
+        <View style={styles.bottomArea}>
+          <View style={styles.header}>
+            {tabs.map(item => TabComponent(item.key, item.name))}
+          </View>
+
+          <View
+            style={[
+              styles.listContainer
+              // props.orientation === 'vertical'
+              //   ? styles.listContainerVertical
+              //   : styles.listContainerHorizontal
+            ]}
+          >
+            {ViewComponent()}
+          </View>
         </View>
 
-        <View
-          style={[
-            styles.listContainer
-            // props.orientation === 'vertical'
-            //   ? styles.listContainerVertical
-            //   : styles.listContainerHorizontal
-          ]}
-        >
-          {ViewComponent()}
-        </View>
-      </View>
-
-      {isLoading === 'FILE_LOADING' && fileLoadingModal}
+        {isLoading === 'FILE_LOADING' && fileLoadingModal}
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
@@ -218,7 +226,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#fff',
     marginTop: 20,
-    fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif'
+    fontFamily: isIOS ? 'Arial' : 'sans-serif'
   }
 });
 

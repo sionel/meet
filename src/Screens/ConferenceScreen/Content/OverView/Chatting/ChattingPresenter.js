@@ -13,6 +13,7 @@ const isIOS = Platform.OS === 'ios';
 
 const ChattingPresenter = props => {
   const {
+    cdm,
     user,
     messages,
     message,
@@ -29,7 +30,7 @@ const ChattingPresenter = props => {
         onScrollBeginDrag={() => {
           onChangeValue('isEndScroll', false);
         }}
-        onMomentumScrollEnd={({ nativeEvent }) => {
+        onScrollEndDrag={({ nativeEvent }) => {
           const contentOffsetY = isIOS
             ? nativeEvent.targetContentOffset.y
             : nativeEvent.contentOffset.y; // 현재 스크롤 좌표
@@ -43,6 +44,10 @@ const ChattingPresenter = props => {
         <FlatList
           data={messages}
           renderItem={({ item, index }) => {
+            if (!cdm && index === messages.length - 1) {
+              // item 갯수가 많을 경우, 여기가 componentDidMount 보다 더 늦게 실행되기 때문에 state 를 변경해서 알려준다.
+              onChangeState('cdm', true);
+            }
             const localUser = user.cid === item.user;
             return (
               <View
@@ -103,7 +108,11 @@ const ChattingPresenter = props => {
                         {(() => {
                           const date = new Date(item.date);
                           const renderDate =
-                            date.getHours() + ':' + date.getMinutes();
+                            (date.getHours() < 10 ? '0' : '') +
+                            date.getHours() +
+                            ':' +
+                            (date.getMinutes() < 10 ? '0' : '') +
+                            date.getMinutes();
                           return renderDate;
                         })()}
                       </Text>
@@ -130,17 +139,21 @@ const ChattingPresenter = props => {
               height: '100%'
             }}
           />
-          <TouchableOpacity
-            onPress={onSendTextMessage}
-            style={{
-              width: 60,
-              height: '100%',
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}
-          >
-            <Text style={{ color: '#1c90fb' }}>전송</Text>
-          </TouchableOpacity>
+          {message && message !== '' ? (
+            <TouchableOpacity
+              onPress={onSendTextMessage}
+              style={{
+                width: 60,
+                height: '100%',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+            >
+              <Text style={{ color: '#1c90fb' }}>전송</Text>
+            </TouchableOpacity>
+          ) : (
+            <></>
+          )}
         </View>
       </View>
     </View>
@@ -149,8 +162,8 @@ const ChattingPresenter = props => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    paddingBottom: 50
+    flex: 1
+    // paddingBottom: 50
   },
   messageItem: {
     flexDirection: 'row',
@@ -160,10 +173,10 @@ const styles = StyleSheet.create({
     paddingBottom: 10
   },
   inputArea: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0
+    // position: 'absolute',
+    // bottom: 0,
+    // left: 0,
+    // right: 0
   },
   textArea: {
     height: 50,
@@ -179,7 +192,7 @@ const styles = StyleSheet.create({
     borderRadius: 25
   },
   messageData: { maxWidth: '100%', alignItems: 'flex-start' },
-  nameField: { marginLeft: 2, color: '#58595a' },
+  nameField: { marginLeft: 2, marginBottom: 3, color: '#58595a' },
   messageView: { flexDirection: 'row', maxWidth: '90%' },
   messageField: {
     borderRadius: 4,
