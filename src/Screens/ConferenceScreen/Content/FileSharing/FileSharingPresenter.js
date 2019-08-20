@@ -40,8 +40,8 @@ const FileSharingPresenter = props => {
         ...styles.topArea,
         paddingTop: 12,
         paddingBottom: 12,
-        paddingLeft: 12,
-        paddingRight: 16
+        paddingLeft: 6,
+        paddingRight: 6
       }}
     >
       <CustomButton
@@ -71,7 +71,7 @@ const FileSharingPresenter = props => {
       /> */}
       <CustomButton
         name={'talk'}
-        onPress={() => props.setDocumentListMode(true)}
+        onPress={() => props.setDocumentListMode(['CHATTING', 'USERLIST'])}
         style={{ margin: 0 }}
         width={28}
         height={28}
@@ -260,8 +260,8 @@ const FileSharingPresenter = props => {
         //   }}
         // >
         <OverView
-          mode={['CHATTING', 'USERLIST']}
-          defaultMode={'USERLIST'}
+          mode={props.documentListMode}
+          defaultMode={props.documentListMode[0]}
           orientation={props.orientation}
           speaker={props.speaker}
           onChangeSpeaker={props.onChangeSpeaker}

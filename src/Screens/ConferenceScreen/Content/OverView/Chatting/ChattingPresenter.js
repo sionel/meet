@@ -41,6 +41,13 @@ const ChattingPresenter = props => {
           onChangeValue('isEndScroll', isOverScroll);
         }}
       >
+        {messages.length === 0 && (
+          <View style={{ flex: 1, alignItems: 'center', paddingTop: 50 }}>
+            <Text style={{ color: '#999' }}>
+              이전 대화가 없습니다. 대화를 시작해보세요.
+            </Text>
+          </View>
+        )}
         <FlatList
           data={messages}
           renderItem={({ item, index }) => {

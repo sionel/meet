@@ -138,8 +138,8 @@ const ContentPresenter = props => {
         //   }}
         // >
         <OverView
-          mode={['CHATTING', 'USERLIST', 'FILELIST']}
-          defaultMode={'FILELIST'}
+          mode={props.documentListMode}
+          defaultMode={props.documentListMode[0]}
           orientation={props.orientation}
           speaker={props.speaker}
           onChangeSharingMode={props.onChangeSharingMode}

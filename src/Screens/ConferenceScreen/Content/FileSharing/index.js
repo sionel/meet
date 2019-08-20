@@ -4,7 +4,8 @@
 
 import { connect } from 'react-redux';
 import FileSharingContainer from './FileSharingContainer';
-import { actionCreators as DocumentShareActions } from '../../../../redux/modules/documentShare';
+import { actionCreators as mainUserActions } from '../../../../redux/modules/mainUser';
+// import { actionCreators as DocumentShareActions } from '../../../../redux/modules/documentShare';
 
 // map state to props
 const mapStateToProps = state => ({
@@ -18,7 +19,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => {
   return {
     setDocumentListMode: value => {
-      return dispatch(DocumentShareActions.setDocumentListMode(value));
+      return dispatch(mainUserActions.setDocumentListMode(value));
     }
   };
 };
