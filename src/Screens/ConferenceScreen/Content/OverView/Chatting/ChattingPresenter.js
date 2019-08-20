@@ -6,8 +6,10 @@ import {
   TextInput,
   View,
   TouchableOpacity,
-  StyleSheet
+  StyleSheet,
+  Platform
 } from 'react-native';
+const isIOS = Platform.OS === 'ios';
 
 const ChattingPresenter = props => {
   const {
@@ -24,13 +26,17 @@ const ChattingPresenter = props => {
     <View style={styles.container}>
       <ScrollView
         ref={ref => onSetRef('scrollView', ref)}
+        onScrollBeginDrag={() => {
+          onChangeValue('isEndScroll', false);
+        }}
         onMomentumScrollEnd={({ nativeEvent }) => {
-          const contentOffsetY = nativeEvent.contentOffset.y; // 좌표
+          const contentOffsetY = isIOS
+            ? nativeEvent.targetContentOffset.y
+            : nativeEvent.contentOffset.y; // 현재 스크롤 좌표
           const layoutMeasurementHeight = nativeEvent.layoutMeasurement.height; // 자식의 단일 component 높이
           const contentSizeHeight = nativeEvent.contentSize.height; // 전체 component 높이
           const isOverScroll =
             contentOffsetY + layoutMeasurementHeight + 2 > contentSizeHeight; // + 2 은 오차계산
-          console.log('isOverScroll', isOverScroll);
           onChangeValue('isEndScroll', isOverScroll);
         }}
       >
