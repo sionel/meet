@@ -9,7 +9,8 @@ import {
   Text,
   StyleSheet,
   SectionList,
-  SafeAreaView
+  SafeAreaView,
+  Platform
 } from 'react-native';
 // common components
 import {
@@ -126,7 +127,8 @@ const styles = StyleSheet.create({
   },
 
   listContainer: {
-    width: '100%'
+    width: '100%',
+    fontFamily: 'NanumSquareB'
     // padding: '4% 3%'
   },
 

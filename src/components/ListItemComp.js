@@ -124,7 +124,7 @@ const ListItemComp = props => {
 							borderColor: '#c1c1c1'
 						}}
 					>
-						<Text style={{ color: '#717171', fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif' }}>시작</Text>
+						<Text style={{ color: '#717171', fontSize: 12, fontFamily: 'NanumSquareB' }}>시작</Text>
 						{/* <Image
 							style={{
 								width: '100%',
@@ -175,20 +175,21 @@ const styles = StyleSheet.create({
 	// 아이콘 텍스트
 	iconText: {
 		fontSize: 10,
-		fontWeight: 'bold',
-		fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif'
+		// fontWeight: 'bold',
+		fontFamily: 'NanumSquareEB'
 	},
 	// 방 제목
 	roomName: {
 		fontSize: 16,
-		fontWeight: '600',
+		// fontWeight: 'bold',
 		color: 'rgb(80,80,80)',
-		fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif'
+		fontFamily: 'NanumSquareB'
 	},
 	// 참가자
 	participant: {
 		fontSize: 13.5,
-		fontWeight: '400',
+		// fontWeight: '400',
+		fontFamily: 'NanumSquareB',
 		color: '#3f3f3f'
 	},
 

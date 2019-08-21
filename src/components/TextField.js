@@ -39,7 +39,7 @@ const TextField = props => {
 				color,
 				borderBottomWidth,
 				borderBottomColor,
-				fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif'
+				fontFamily: 'NanumSquareB'
 			}}
 			placeholder={placeholder}
 			placeholderTextColor={placeholderTextColor}

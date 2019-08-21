@@ -196,7 +196,7 @@ const LoginScreenPresenter = props => {
             }}
             source={wehago_favicon}
           />
-          <Text style={{ color: '#fff', fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif' }}>WEHAGO 앱으로 로그인</Text>
+          <Text style={{ color: '#fff', fontFamily: 'NanumSquareB' }}>WEHAGO 앱으로 로그인</Text>
         </FlatButton>
         <Text
           style={{
@@ -204,7 +204,7 @@ const LoginScreenPresenter = props => {
             paddingBottom: 15,
             textAlign: 'center',
             color: 'rgb(51,51,51)',
-            fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif'
+            fontFamily: 'NanumSquareB'
           }}
         >
           WEHAGO 앱이 설치되어 있다면 바로 시작하세요.
@@ -247,7 +247,7 @@ const LoginScreenPresenter = props => {
         >
           <View style={{ flexDirection: 'row' }}>
             <View style={styles.modalContents}>
-              <Text style={[styles.modalMessage, {fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif'}]}>{props.modalText}</Text>
+              <Text style={[styles.modalMessage, {fontFamily: 'NanumSquareB'}]}>{props.modalText}</Text>
             </View>
             <TouchableOpacity
               style={styles.modalCloseButton}
@@ -277,7 +277,7 @@ const LoginScreenPresenter = props => {
                   // color: '#1C90FB',
                   color: 'rgb(51,51,51)',
                   marginBottom: 10,
-                  fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif'
+                  fontFamily: 'NanumSquareB'
                 }}
               >
                 {'WEHAGO Meet\n앱 이용을 위한 권한 안내'}
@@ -292,7 +292,7 @@ const LoginScreenPresenter = props => {
                 }}
               >
                 <Text
-                  style={{ fontSize: 15, color: '#1C90FB', fontWeight: '800', fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif' }}
+                  style={{ fontSize: 15, color: '#1C90FB', fontFamily: 'NanumSquareEB' }}
                 >
                   필수적 접근권한
                 </Text>
@@ -362,11 +362,11 @@ const LoginScreenPresenter = props => {
                             justifyContent: 'center'
                           }}
                         >
-                          <Text style={{ fontSize: 15, marginBottom: 3.5, fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif' }}>
+                          <Text style={{ fontSize: 15, marginBottom: 3.5, fontFamily: 'NanumSquareB' }}>
                             {item.title}
                           </Text>
                           <Text
-                            style={{ fontSize: 12, color: 'rgb(114,125,134)', fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif' }}
+                            style={{ fontSize: 12, color: 'rgb(114,125,134)', fontFamily: 'NanumSquareB' }}
                           >
                             {item.description}
                           </Text>
@@ -376,7 +376,7 @@ const LoginScreenPresenter = props => {
                   />
                 </View>
                 <Text
-                  style={{ fontSize: 15, color: '#1C90FB', fontWeight: '800', fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif' }}
+                  style={{ fontSize: 15, color: '#1C90FB', fontFamily: 'NanumSquareEB' }}
                 >
                   선택적 접근권한
                 </Text>
@@ -434,11 +434,11 @@ const LoginScreenPresenter = props => {
                             justifyContent: 'center'
                           }}
                         >
-                          <Text style={{ fontSize: 15, marginBottom: 3.5, fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif' }}>
+                          <Text style={{ fontSize: 15, marginBottom: 3.5, fontFamily: 'NanumSquareB' }}>
                             {item.title}
                           </Text>
                           <Text
-                            style={{ fontSize: 12, color: 'rgb(114,125,134)', fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif' }}
+                            style={{ fontSize: 12, color: 'rgb(114,125,134)', fontFamily: 'NanumSquareB' }}
                           >
                             {item.description}
                           </Text>
@@ -453,7 +453,7 @@ const LoginScreenPresenter = props => {
                     fontSize: 13,
                     textAlign: 'center',
                     color: 'rgb(114,125,134)',
-                    fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif'
+                    fontFamily: 'NanumSquareB'
                   }}
                 >
                   선택적 접근권한은 해당 기능 사용 시 동의가 필요하며 미동의

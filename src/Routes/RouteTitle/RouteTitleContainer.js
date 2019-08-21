@@ -58,6 +58,7 @@ class RouteTitleContainer extends React.Component {
       <RouteTitlePresenter
         {...this.state}
         // {...this.props}
+        title={this.props.title}
         onChangeValue={this._handleChangeValue}
       />
     );

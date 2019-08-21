@@ -30,12 +30,12 @@ const styles = StyleSheet.create({
 		borderBottomWidth: 1
 	},
 	textStyle: {
-		fontSize: 14,
-		lineHeight: 16,
+		fontSize: 12,
+		lineHeight: 14,
 		// height: 14,
-		fontWeight: 'bold',
+		// fontWeight: 'bold',
 		color: 'rgb(140, 140, 140)',
-		fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif'
+		fontFamily: 'NanumSquareB'
 	}
 });
 

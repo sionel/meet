@@ -18,7 +18,7 @@ const RouteTitlePresenter = props => {
   //   // 기본값
   //   placeholder = {};
   //   return (
-  //     <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 17, fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif' }}>-</Text>
+  //     <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 17, fontFamily: 'NanumSquareB' }}>-</Text>
   //   );
   // }
 
@@ -26,18 +26,13 @@ const RouteTitlePresenter = props => {
   return (
     <Fragment>
       <StatusBar backgroundColor="#1C90FB" barStyle="light-content" />
-      <Text
-        style={[
-          { color: '#fff', fontWeight: 'bold', fontSize: 17, fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif' }
-          // Platform.OS !== 'ios' && { marginLeft: 20 }
-        ]}
-      >
+      <Text style={{ color: '#fff', fontSize: 17, fontFamily: 'NanumSquareEB' }}>
         {/* {
           props.auth.employee_list.filter(
             e => e.company_no == props.auth.last_access_company_no
           )[0].company_name_kr
         } */}
-        {props.company_name}
+        {props.title || props.company_name}
       </Text>
     </Fragment>
   );

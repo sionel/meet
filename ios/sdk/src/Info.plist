@@ -24,7 +24,7 @@
 		<string>dbapi-8-emm</string>
 	</array>
 	<key>NSPrincipalClass</key>
-	<string></string>
+	<string/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
@@ -42,6 +42,9 @@
 		<string>Octicons.ttf</string>
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
+		<string>NanumSquareR.ttf</string>
+		<string>NanumSquareB.ttf</string>
+		<string>NanumSquareEB.ttf</string>
 	</array>
 </dict>
 </plist>

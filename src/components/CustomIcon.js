@@ -46,6 +46,8 @@ import btn_laser_none from '../../assets/buttons/btn_docedit_laser_none.png';
 import btn_laser_sele from '../../assets/buttons/btn_docedit_laser_sele.png';
 import btn_back from '../../assets/buttons/btn_back_none.png';
 import btn_forward from '../../assets/buttons/btn_forward_none.png';
+import buttonClose from '../../assets/buttons/btnTnaviCloseNone_3x.png';
+import buttonMenu from '../../assets/buttons/btn-tnavi-menu-none_3x.png';
 
 import ico_check_white from '../../assets/icons/palette/color-check-wh_2x.png';
 import ico_check_blue from '../../assets/icons/palette/color-check_2x.png';
@@ -164,6 +166,10 @@ const getButtonSource = name => {
       return ico_increase;
     case 'personIcon':
       return person_icon;
+    case 'buttonClose':
+      return buttonClose;
+    case 'buttonMenu':
+      return buttonMenu;
     default:
       return ico_etc;
   }

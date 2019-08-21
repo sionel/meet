@@ -11,7 +11,7 @@
     "device": "~/Library/Android/sdk/emulator/emulator @Nexus_5X_API_28",
     "pod": "cd ios && pod cache clean --all && pod install && cd ..",
     "build-android": "cd ./android && rm -rf build && cd ./app && rm -rf build && cd .. && cd ./sdk && rm -rf build  && cd .. && ./gradlew assembleRelease && cd ..",
-    "set-android": "~/Library/Android/sdk/platform-tools/adb -s R39M303PYYF reverse tcp:8081 tcp:8081"
+    "set-android": "~/Library/Android/sdk/platform-tools/adb -s 25e180cc641c7ece reverse tcp:8081 tcp:8081"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.6.1",

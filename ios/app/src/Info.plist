@@ -93,6 +93,9 @@
 		<string>Entypo.ttf</string>
 		<string>Feather.ttf</string>
 		<string>Octicons.ttf</string>
+		<string>NanumSquareR.ttf</string>
+		<string>NanumSquareB.ttf</string>
+		<string>NanumSquareEB.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>

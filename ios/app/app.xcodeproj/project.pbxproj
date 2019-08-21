@@ -33,6 +33,9 @@
 		AC7CC02921F808CE00D5371A /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AC7CC01A21F808CD00D5371A /* MaterialIcons.ttf */; };
 		AC7CC02A21F808CE00D5371A /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AC7CC01B21F808CD00D5371A /* Feather.ttf */; };
 		AC7CC02B21F808CE00D5371A /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AC7CC01C21F808CD00D5371A /* AntDesign.ttf */; };
+		B7CAF43B230D035800B160CC /* NanumSquareR.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B7CAF438230D035700B160CC /* NanumSquareR.ttf */; };
+		B7CAF43C230D035800B160CC /* NanumSquareEB.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B7CAF439230D035700B160CC /* NanumSquareEB.ttf */; };
+		B7CAF43D230D035800B160CC /* NanumSquareB.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B7CAF43A230D035700B160CC /* NanumSquareB.ttf */; };
 		DE4C455E21DE1E4300EA0709 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DE4C455D21DE1E4300EA0709 /* GoogleService-Info.plist */; };
 		DE4C456121DE1E4E00EA0709 /* FIRUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = DE4C455F21DE1E4E00EA0709 /* FIRUtilities.m */; };
 /* End PBXBuildFile section */
@@ -103,6 +106,9 @@
 		AC7CC01C21F808CD00D5371A /* AntDesign.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = AntDesign.ttf; sourceTree = "<group>"; };
 		ACA0EFE4221583DA00A97DB8 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../../../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		B3B083EB1D4955FF0069CEE7 /* app.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = app.entitlements; sourceTree = "<group>"; };
+		B7CAF438230D035700B160CC /* NanumSquareR.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = NanumSquareR.ttf; path = ../../../assets/Fonts/NanumSquareR.ttf; sourceTree = "<group>"; };
+		B7CAF439230D035700B160CC /* NanumSquareEB.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = NanumSquareEB.ttf; path = ../../../assets/Fonts/NanumSquareEB.ttf; sourceTree = "<group>"; };
+		B7CAF43A230D035700B160CC /* NanumSquareB.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = NanumSquareB.ttf; path = ../../../assets/Fonts/NanumSquareB.ttf; sourceTree = "<group>"; };
 		DE4C455D21DE1E4300EA0709 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		DE4C455F21DE1E4E00EA0709 /* FIRUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FIRUtilities.m; sourceTree = "<group>"; };
 		DE4C456021DE1E4E00EA0709 /* FIRUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FIRUtilities.h; sourceTree = "<group>"; };
@@ -196,6 +202,9 @@
 				AC7CC01C21F808CD00D5371A /* AntDesign.ttf */,
 				AC7CC01321F808CD00D5371A /* Foundation.ttf */,
 				AC7CC01821F808CD00D5371A /* Ionicons.ttf */,
+				B7CAF43A230D035700B160CC /* NanumSquareB.ttf */,
+				B7CAF439230D035700B160CC /* NanumSquareEB.ttf */,
+				B7CAF438230D035700B160CC /* NanumSquareR.ttf */,
 				AC7CC01121F808CD00D5371A /* FontAwesome5_Solid.ttf */,
 				AC7CC01621F808CD00D5371A /* FontAwesome5_Regular.ttf */,
 				AC7CC01021F808CD00D5371A /* FontAwesome.ttf */,
@@ -330,6 +339,7 @@
 			files = (
 				AC7CC02321F808CE00D5371A /* Octicons.ttf in Resources */,
 				0B412F211EDEE95300B1A0A6 /* Main.storyboard in Resources */,
+				B7CAF43B230D035800B160CC /* NanumSquareR.ttf in Resources */,
 				AC7CC02521F808CE00D5371A /* FontAwesome5_Regular.ttf in Resources */,
 				AC7CC02B21F808CE00D5371A /* AntDesign.ttf in Resources */,
 				AC7CC02221F808CE00D5371A /* Foundation.ttf in Resources */,
@@ -339,6 +349,7 @@
 				AC7CC01F21F808CE00D5371A /* FontAwesome.ttf in Resources */,
 				AC7CC02A21F808CE00D5371A /* Feather.ttf in Resources */,
 				AC7CC01E21F808CE00D5371A /* Entypo.ttf in Resources */,
+				B7CAF43C230D035800B160CC /* NanumSquareEB.ttf in Resources */,
 				AC7CC02621F808CE00D5371A /* MaterialCommunityIcons.ttf in Resources */,
 				DE4C455E21DE1E4300EA0709 /* GoogleService-Info.plist in Resources */,
 				AC7CC02921F808CE00D5371A /* MaterialIcons.ttf in Resources */,
@@ -346,6 +357,7 @@
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				AC7CC02821F808CE00D5371A /* SimpleLineIcons.ttf in Resources */,
 				AC7CC02121F808CE00D5371A /* EvilIcons.ttf in Resources */,
+				B7CAF43D230D035800B160CC /* NanumSquareB.ttf in Resources */,
 				AC7CC01D21F808CE00D5371A /* FontAwesome5_Brands.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

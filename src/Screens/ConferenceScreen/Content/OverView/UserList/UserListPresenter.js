@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
     maxWidth: '50%',
     marginLeft: 10,
     fontSize: 18,
-    fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif'
+    fontFamily: 'NanumSquareB'
   },
   presenter: {
     marginLeft: 5,
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
   presenterText: {
     fontSize: 12,
     color: '#fff',
-    fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif'
+    fontFamily: 'NanumSquareB'
   }
 });
 

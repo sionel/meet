@@ -64,6 +64,7 @@ const DrawingPresenter = props => {
           rednerTab.push(
             <TouchableOpacity
               key={tab.id}
+              activeOpacity={0.5}
               onPress={() =>
                 tab.onPress
                   ? tab.onPress()
@@ -392,13 +393,13 @@ const DrawingPresenter = props => {
               <TouchableOpacity onPress={() => props.onDrawAction('redo')}>
                 <CustomIcon name={'btnForward'} width={36} height={24} />
               </TouchableOpacity>
-              <TouchableOpacity onPress={onClearAll}>
+              <TouchableOpacity onPress={onClearAll} activeOpacity={0.5}>
                 <Text
                   style={{
-                    fontSize: 18,
+                    fontSize: 14,
                     color: '#fff',
                     marginLeft: 10,
-                    fontFamily: Platform.OS === 'ios' ? 'Arial' : 'sans-serif'
+                    fontFamily: 'NanumSquareEB'
                   }}
                 >
                   모두 삭제
@@ -487,8 +488,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '100%',
     height: 50,
-    paddingLeft: 7.5,
-    paddingRight: 7.5,
+    // paddingLeft: 7.5,
+    // paddingRight: 7.5,
     justifyContent: 'space-between',
     alignItems: 'center'
   },

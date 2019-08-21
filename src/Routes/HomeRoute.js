@@ -10,7 +10,8 @@ import {
   Dimensions,
   Platform,
   View,
-  Animated
+  Animated,
+  Text
 } from 'react-native';
 
 import {
@@ -19,7 +20,8 @@ import {
   createDrawerNavigator
 } from 'react-navigation';
 
-import Icon from 'react-native-vector-icons/FontAwesome';
+// import Icon from 'react-native-vector-icons/FontAwesome';
+import CustomIcon from './../components/CustomIcon';
 
 /** Screens */
 import HomeScreen from '../Screens/HomeScreen';
@@ -33,7 +35,7 @@ import DrawerContent from '../components/DrawerContent';
 
 const commonStyle = {
   height: 53,
-  color: 'white',
+  color: '#fff',
   backgroundColor: '#1C90FB'
 };
 const backBtn = require('../../assets/buttons/back_btn.png');
@@ -109,22 +111,19 @@ const RightMenuImage = ({ navigation }) => {
           margin: 10
         }}
       > */}
-      <Icon
+      <CustomIcon
         name={
           state.drawerMovementDirection === 'opening'
-            ? 'close'
+            ? 'buttonClose'
             : state.drawerMovementDirection === 'closing'
-            ? 'bars'
+            ? 'buttonMenu'
             : state.isDrawerOpen
-            ? 'close'
-            : 'bars'
+            ? 'buttonClose'
+            : 'buttonMenu'
           // iconName
         }
-        size={20}
-        color="#fff"
-        style={{
-          zIndex: 10
-        }}
+        width={26}
+        height={26}
       />
       {/* </Animated.View> */}
     </View>
@@ -175,7 +174,7 @@ const HomeRoute = createStackNavigator(
               // navigation.navigate('Configuration');
               navigation.toggleDrawer();
             }}
-            activeOpacity={0.2}
+            activeOpacity={0.5}
           >
             <RightMenuImage navigation={navigation} />
           </TouchableOpacity>
@@ -199,12 +198,8 @@ const HomeRoute = createStackNavigator(
      */
     Configuration: {
       screen: ConfigurationScreen,
-      headerStyle: {
-        color: '#fff'
-      },
-
       navigationOptions: ({ navigation }) => ({
-        title: '환경설정',
+        headerTitle: <RouteTitle title={'환경설정'} />,
         headerLeft: <BackButton navigation={navigation} to={'Home'} />,
         headerTintColor: '#fff',
         headerStyle: commonStyle
@@ -213,21 +208,21 @@ const HomeRoute = createStackNavigator(
 
     /**
      * UserInfo
-     * 환경설정
+     * 사용자 정보
      */
-    UserInfo: {
-      screen: UserInfoScreen,
-      headerStyle: {
-        color: '#fff'
-      },
+    // UserInfo: {
+    //   screen: UserInfoScreen,
+    //   headerStyle: {
+    //     color: '#fff'
+    //   },
 
-      navigationOptions: ({ navigation }) => ({
-        title: '내정보',
-        headerLeft: <BackButton navigation={navigation} to={'Home'} />,
-        headerTintColor: '#fff',
-        headerStyle: commonStyle
-      })
-    },
+    //   navigationOptions: ({ navigation }) => ({
+    //     title: '내정보',
+    //     headerLeft: <BackButton navigation={navigation} to={'Home'} />,
+    //     headerTintColor: '#fff',
+    //     headerStyle: commonStyle
+    //   })
+    // },
 
     /**
      * Create
@@ -235,11 +230,8 @@ const HomeRoute = createStackNavigator(
      */
     Create: {
       screen: CreateScreen,
-      headerStyle: {
-        color: '#fff'
-      },
       navigationOptions: ({ navigation }) => ({
-        title: '새 화상대화',
+        headerTitle: <RouteTitle title={'화상회의'} />,
         headerLeft: <BackButton navigation={navigation} to={'Home'} />,
         headerTintColor: '#fff',
         headerStyle: commonStyle
