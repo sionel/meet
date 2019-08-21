@@ -35,7 +35,7 @@ const initialState = {
   conferenceMode: ConferenceModes.NORMAL,
   facingMode: FacingModes.FRONT,
   prevVolumn: null,
-  createdTime: null,
+  createdTime: null
 };
 
 //#endregion
@@ -148,18 +148,21 @@ function applySetConferenceMode(state, action) {
 
 //#region TOGGLE_MUTE_VIDEO
 
-function toggleMuteVideo() {
+function toggleMuteVideo(muteState) {
   return dispatch => {
     dispatch({
-      type: TOGGLE_MUTE_VIDEO
+      type: TOGGLE_MUTE_VIDEO,
+      muteState
     });
   };
 }
 
 function applyToggleMuteVideo(state, action) {
   const { user } = state;
+  const { muteState } = action;
+
   if (user && user.videoTrack) {
-    const currentMute = user.isMuteVideo;
+    const currentMute = !muteState || user.isMuteVideo;
     if (currentMute) {
       user.videoTrack.unmute();
     } else {
@@ -296,7 +299,7 @@ export const actionCreators = {
   toggleCameraFacingMode,
   toggleMuteMic,
   toggleMuteSpeaker,
-  setConferenceCreatedTime,
+  setConferenceCreatedTime
 };
 
 export default reducer;

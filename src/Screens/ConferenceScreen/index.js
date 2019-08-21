@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import ConferenceScreenContainer from './ConferenceScreenContainer';
+import { actionCreators as localActions } from '../../redux/modules/local';
 
 const getMainUser = (mainUserId, localUser, participants) => {
 	if (!localUser) {
@@ -33,7 +34,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		dispatch: dispatch
+		dispatch: dispatch,
+		toggleMuteVideo: muteState => dispatch(localActions.toggleMuteVideo(muteState))
 	};
 };
 

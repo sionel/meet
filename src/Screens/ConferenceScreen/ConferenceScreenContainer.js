@@ -108,6 +108,7 @@ class ConferenceScreenContainer extends React.Component {
    */
   componentWillUnmount() {
     KeepAwake.deactivate();
+    AppState.removeEventListener('change', this._handleAppStateChange);
     // Orientation.lockToPortrait();
     // 컴포넌트가 언마운트 되기전 화상회의 관련 리소스를 해제 한다.
     this._conferenceManager.dispose();
@@ -166,9 +167,14 @@ class ConferenceScreenContainer extends React.Component {
    */
   _handleAppStateChange = nextAppState => {
     this._appState = nextAppState;
-    setTimeout(() => {
-      this._handleCheckKeepRoom(nextAppState);
-    }, 10000);
+    if (nextAppState === 'active') {
+      this.props.toggleMuteVideo(false);
+    } else {
+      this.props.toggleMuteVideo(true);
+    }
+    // setTimeout(() => {
+    //   this._handleCheckKeepRoom(nextAppState);
+    // }, 10000);
   };
 
   /**
