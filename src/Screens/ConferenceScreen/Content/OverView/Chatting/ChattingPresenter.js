@@ -146,21 +146,31 @@ const ChattingPresenter = props => {
               height: '100%'
             }}
           />
-          {message && message !== '' ? (
-            <TouchableOpacity
-              onPress={onSendTextMessage}
+          <TouchableOpacity
+            onPress={onSendTextMessage}
+            style={{
+              width: 60,
+              height: '100%',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}
+          >
+            <Text
               style={{
-                width: 60,
-                height: '100%',
-                justifyContent: 'center',
-                alignItems: 'center'
+                color: message && message !== '' ? '#1c90fb' : '#ccc',
+                paddingLeft: 10,
+                paddingRight: 10,
+                paddingTop: 7,
+                paddingBottom: 7,
+                borderColor: message && message !== '' ? '#1c90fb' : '#ccc',
+                borderWidth: 1,
+                borderRadius: 10,
+                textAlign: 'center'
               }}
             >
-              <Text style={{ color: '#1c90fb' }}>전송</Text>
-            </TouchableOpacity>
-          ) : (
-            <></>
-          )}
+              전송
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
