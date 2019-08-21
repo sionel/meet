@@ -28,14 +28,17 @@ const mapStateToProps = state => {
 		user_name: auth.user_name,
 		auth: auth,
 		documentShare,
-		list
+		list,
+		user
 	};
 };
 
 const mapDispatchToProps = dispatch => {
 	return {
 		dispatch: dispatch,
-		toggleMuteVideo: muteState => dispatch(localActions.toggleMuteVideo(muteState))
+		toggleMuteVideo: muteState => dispatch(localActions.toggleMuteVideo(muteState)),
+		toggleMuteMic: muteState => dispatch(localActions.toggleMuteMic(muteState)),
+		// toggleMuteSpeaker: muteState => dispatch(localActions.toggleMuteSpeaker(muteState))
 	};
 };
 

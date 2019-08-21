@@ -4,19 +4,28 @@
  */
 
 import React, { Fragment } from 'react';
-import { NativeModules, NetInfo } from 'react-native';
+import { NativeModules, NetInfo, ToastAndroid, Platform } from 'react-native';
 import KeepAwake from 'react-native-keep-awake';
 import ConferenceScreenPresenter from './ConferenceScreenPresenter';
 import ConferenceManager from '../../utils/conference/ConferenceManager';
 // import Orientation from 'react-native-orientation-locker';
 import { AppState, StatusBar } from 'react-native';
+import SystemSetting from 'react-native-system-setting';
 
 const { PlatformConstants } = NativeModules;
+const isIOS = Platform.OS === 'ios';
 
 class ConferenceScreenContainer extends React.Component {
   constructor() {
     super();
     this._appState = 'active';
+    this._backTimeout = null;
+    this._conferenceState = {
+      isMuteVideo: false,
+      isMuteMic: false,
+      isMuteSpeaker: false,
+      volume: 0
+    };
     this.state = {
       callType: 1,
       connection: true,
@@ -163,18 +172,62 @@ class ConferenceScreenContainer extends React.Component {
   };
 
   /**
-   * 앱 슬립모드를 감지한다.
+   * 앱 백그라운드 모드를 감지한다.
    */
   _handleAppStateChange = nextAppState => {
     this._appState = nextAppState;
     if (nextAppState === 'active') {
-      this.props.toggleMuteVideo(false);
+      // active 시 video 설정 원래대로
+      this.props.toggleMuteVideo(this._conferenceState.isMuteVideo);
+
+      if (!isIOS) {
+        // mic 설정 원래대로
+        this.props.toggleMuteMic(this._conferenceState.isMuteMic);
+
+        if (this._backTimeout) {
+          clearTimeout(this._backTimeout);
+        }
+      }
     } else {
+      // backgroiund 시 video, mic, 설정 기억
+      if (this.props.user) {
+        const { isMuteVideo, isMuteMic } = this.props.user;
+        this._conferenceState = {
+          isMuteVideo,
+          isMuteMic
+        };
+      }
+
+      // 비디오 off
       this.props.toggleMuteVideo(true);
+
+      // SystemSetting.getVolume().then(volume => {
+      //   this._conferenceState.volume = volume;
+      // });
+
+      if (!isIOS) {
+        this._handleBackgroundWarning();
+      }
     }
-    // setTimeout(() => {
-    //   this._handleCheckKeepRoom(nextAppState);
-    // }, 10000);
+  };
+
+  /**
+   * 백그라운드로 가면 화상대화 Mute 알림을 띄운다. (Android)
+   */
+  _handleBackgroundWarning = () => {
+    if (this._backTimeout) {
+      clearTimeout(this._backTimeout);
+    }
+
+    ToastAndroid.show(
+      '앱으로 돌아가지 않으면 잠시후 마이크가 꺼집니다.',
+      ToastAndroid.LONG
+    );
+
+    this._backTimeout = setTimeout(() => {
+      this.props.toggleMuteMic(true); // mic mute
+      ToastAndroid.show('마이크가 꺼졌습니다.', ToastAndroid.SHORT);
+    }, 7500);
   };
 
   /**
