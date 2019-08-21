@@ -32,15 +32,19 @@ const TextField = props => {
 
 	return (
 		<TextInput
-			style={{
-				width,
-				height,
-				marginTop,
-				color,
-				borderBottomWidth,
-				borderBottomColor,
-				fontFamily: 'NanumSquareB'
-			}}
+			style={[
+				{
+					width,
+					height,
+					marginTop,
+					color,
+					borderBottomWidth,
+					borderBottomColor
+				},
+				!secret && {
+					fontFamily: 'NanumSquareB'
+				}
+			]}
 			placeholder={placeholder}
 			placeholderTextColor={placeholderTextColor}
 			value={value}
