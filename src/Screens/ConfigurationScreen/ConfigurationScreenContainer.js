@@ -20,7 +20,8 @@ class ConfigurationScreenContainer extends React.Component {
   state = {
     webView: false,
     orientation: 'UNKNOWN',
-    subUrl: ''
+    subUrl: '',
+    alert: false
   };
 
   /**
@@ -54,7 +55,7 @@ class ConfigurationScreenContainer extends React.Component {
    */
   render() {
     const { navigation, onDestroyToken, onToggleVisibleAppIntro } = this.props;
-    const { list, webView } = this.state;
+    const { list, webView, alert } = this.state;
 
     return (
       <ConfigurationScreenPresenter
@@ -62,6 +63,7 @@ class ConfigurationScreenContainer extends React.Component {
         list={list}
         webView={webView}
         subUrl={this.state.subUrl}
+        alert={alert}
         onRedirect={this.handleRedirect}
         onLogout={this._handleLogout}
         onChangeValue={this._handleChangeValue}
