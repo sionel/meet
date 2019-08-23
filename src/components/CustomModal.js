@@ -63,12 +63,12 @@ const CustomModal = props => {
                 fontSize: 22,
                 color: '#1C90FB',
                 marginBottom: 20,
-                fontFamily: 'NanumSquareB'
+                fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal'
               }}
             >
               {props.title}
             </Text>
-            <Text style={{fontFamily: 'NanumSquareB'}}>{props.text}</Text>
+            <Text style={{fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal'}}>{props.text}</Text>
             {props.children}
           </View>
           {/* 본문 */}
@@ -79,7 +79,7 @@ const CustomModal = props => {
               style={{ ...styles.modalButton, ...styles.modalButtonConfirm }}
               onPress={props.onClickFeedback}
             >
-              <Text style={{ color: '#fff', fontFamily: 'NanumSquareB' }}>{props.feedbackText}</Text>
+              <Text style={{ color: '#fff', fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal' }}>{props.feedbackText}</Text>
             </TouchableOpacity>
           </View>
           {/*  */}

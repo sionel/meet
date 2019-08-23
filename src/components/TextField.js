@@ -42,7 +42,7 @@ const TextField = props => {
 					borderBottomColor
 				},
 				!secret && {
-					fontFamily: 'NanumSquareB'
+					fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal'
 				}
 			]}
 			placeholder={placeholder}

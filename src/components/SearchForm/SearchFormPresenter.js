@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     // borderRadius: 5,
     borderRadius: 25.5,
     zIndex: 9,
-    fontFamily: 'NanumSquareB'
+    fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal'
   }
 });
 

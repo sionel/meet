@@ -42,10 +42,10 @@ const Placeholder = props => {
         <Text
           style={{
             fontSize: 20,
-            // fontWeight: '400',
+            fontWeight: '400',
             color: '#1C90FB',
             marginTop: -5,
-            fontFamily: 'NanumSquareB',
+            fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal',
             ...props.mainTextStyle
           }}
         >
@@ -56,10 +56,10 @@ const Placeholder = props => {
       <Text
         style={{
           fontSize: 18,
-          // fontWeight: '400',
+          fontWeight: '400',
           color: 'rgb(80,80,80)',
           textAlign: 'center',
-          fontFamily: 'NanumSquareB',
+          fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal',
           ...props.subTextStyle
         }}
       >

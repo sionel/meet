@@ -52,9 +52,9 @@ class AppIntroSlide extends React.Component {
               marginTop: 70.5,
               color: '#FFF',
               fontSize: 25,
-              // fontWeight: '700',
+              fontWeight: '700',
               textAlign: 'center',
-              fontFamily: 'NanumSquareEB'
+              fontFamily: Platform.OS === 'ios' ? 'NanumSquareEB' : 'normal'
             }}
           >
             {'언제 어디서나\nWEHAGO Meet'}
@@ -64,7 +64,7 @@ class AppIntroSlide extends React.Component {
               marginTop: 24.5,
               color: 'rgb(193, 219, 246)',
               fontSize: 16,
-              fontFamily: 'NanumSquareB'
+              fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal'
             }}
           >
             시간과 장소의 제약 없는 효율적인 화상회의
@@ -253,14 +253,14 @@ const styles = StyleSheet.create({
   nextButtonText: {
     color: '#FFF',
     fontSize: 16,
-    fontFamily: 'NanumSquareB'
+    fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal'
   },
   textTitle: {
     marginTop: height * 0.1,
     color: 'rgb(50, 56, 74)',
     fontSize: 27,
-    // fontWeight: '700',
-    fontFamily: 'NanumSquareEB'
+    fontWeight: '700',
+    fontFamily: Platform.OS === 'ios' ? 'NanumSquareEB' : 'normal'
   },
   textContent: {
     marginTop: 14.5,
@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: 'center',
     height: 50,
-    fontFamily: 'NanumSquareB'
+    fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal'
   },
   dotStyle: {
     width: 4,

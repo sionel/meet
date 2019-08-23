@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
 
   listContainer: {
     width: '100%',
-    fontFamily: 'NanumSquareB'
+    fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal'
     // padding: '4% 3%'
   },
 

@@ -42,7 +42,7 @@ const HomeScreenPresenter = props => {
   //       <Text
   //         style={[
   //           styles.reloadButton,
-  //           { fontFamily: 'NanumSquareB' }
+  //           { fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal' }
   //         ]}
   //       >
   //         다시 로드
@@ -173,14 +173,14 @@ const HomeScreenPresenter = props => {
                       fontSize: 22,
                       color: '#1C90FB',
                       marginBottom: 20,
-                      fontFamily: 'NanumSquareB'
+                      fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal'
                     }}
                   >
                     알림
                   </Text>
                   <Text
                     style={{
-                      fontFamily: 'NanumSquareB'
+                      fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal'
                     }}
                   >
                     새로운 화상대화를 시작하시겠습니까?

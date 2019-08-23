@@ -63,7 +63,7 @@ class CustomLottie extends Component {
 						this.animation = animation;
 					}}
 				/>
-				{phrases !== '' && <Text style={{ marginTop: -72, color: '#1C90FB', fontFamily: 'NanumSquareB' }}>Loading</Text>}
+				{phrases !== '' && <Text style={{ marginTop: -72, color: '#1C90FB', fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal' }}>Loading</Text>}
 				{children && (
 					<View
 						style={{

@@ -63,7 +63,7 @@ const ChangeCompanyScreenPresenter = props => {
                   style={{
                     backgroundColor: '#fff',
                     padding: 16,
-                    fontFamily: 'NanumSquareB'
+                    fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal'
                   }}
                 >
                   {item.title}

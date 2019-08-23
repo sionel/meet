@@ -33,9 +33,9 @@ const styles = StyleSheet.create({
 		fontSize: 12,
 		lineHeight: 14,
 		// height: 14,
-		// fontWeight: 'bold',
+		fontWeight: 'bold',
 		color: 'rgb(140, 140, 140)',
-		fontFamily: 'NanumSquareB'
+		fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal'
 	}
 });
 

@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
   },
   name: {
     color: '#fff',
-    fontFamily: 'NanumSquareB'
+    fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal'
   },
   imageCameraOff: {
     width: '30%',

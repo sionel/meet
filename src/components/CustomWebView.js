@@ -55,15 +55,15 @@ const CustomWebView = props => {
             flex: 2,
             fontSize: 17,
             textAlign: 'left',
-            // fontWeight: 'bold',
-            fontFamily: 'NanumSquareEB',
+            fontWeight: 'bold',
+            fontFamily: Platform.OS === 'ios' ? 'NanumSquareEB' : 'normal',
             ...titleStyle
           }}
         >
           {contentTitle}
         </Text>
         <TouchableOpacity style={{ flex: 1 }} onPress={onClickButton}>
-          <Text style={{ color: '#fff', fontSize: 17, textAlign: 'right', fontFamily: 'NanumSquareB' }}>
+          <Text style={{ color: '#fff', fontSize: 17, textAlign: 'right', fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal' }}>
             {buttonTitle}
           </Text>
         </TouchableOpacity>

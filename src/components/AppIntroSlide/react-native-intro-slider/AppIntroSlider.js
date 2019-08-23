@@ -324,6 +324,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 18,
     padding: 12,
-    fontFamily: 'NanumSquareB'
+    fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal'
   }
 });

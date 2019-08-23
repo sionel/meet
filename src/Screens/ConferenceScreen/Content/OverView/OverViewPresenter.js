@@ -64,7 +64,7 @@ const OverViewPresenter = props => {
         <Text
           style={{
             color: view === tab ? 'rgb(28, 144, 251)' : 'rgb(140, 140, 140)',
-            fontFamily: 'NanumSquareB'
+            fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal'
           }}
         >
           {/* <Image source={iconDocShare} style={styles.iconDocShare} /> */}
@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#fff',
     marginTop: 20,
-    fontFamily: 'NanumSquareB'
+    fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal'
   }
 });
 
