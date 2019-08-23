@@ -28,6 +28,13 @@ const CustomAlert = props => {
       animationType={'fade'}
       transparent={true}
       visible={visible}
+      supportedOrientations={[
+        'portrait',
+        'portrait-upside-down',
+        'landscape',
+        'landscape-left',
+        'landscape-right'
+      ]}
       onRequestClose={onClose}
     >
       <StatusBar

@@ -99,6 +99,13 @@ const ConfigurationScreenPresenter = props => {
         transparent={true}
         visible={webView}
         blurRadius={1}
+        supportedOrientations={[
+          'portrait',
+          'portrait-upside-down',
+          'landscape',
+          'landscape-left',
+          'landscape-right'
+        ]}
         onRequestClose={() => props.onChangeValue('webView', false)}
       >
         <CustomWebView

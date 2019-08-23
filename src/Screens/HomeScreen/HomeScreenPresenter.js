@@ -144,6 +144,13 @@ const HomeScreenPresenter = props => {
             transparent={true}
             visible={props.modal}
             blurRadius={1}
+            supportedOrientations={[
+              'portrait',
+              'portrait-upside-down',
+              'landscape',
+              'landscape-left',
+              'landscape-right'
+            ]}
             onRequestClose={() => props.onActivateModal(null)}
           >
             <View style={styles.modalWrap}>
