@@ -17,9 +17,9 @@ const mapDispatchToProps = dispatch => {
     setDocumentListMode: value => {
       return dispatch(DocumentShareActions.setDocumentListMode(value));
     },
-    setSharingMode: value => {
-      return dispatch(DocumentShareActions.setSharingMode(value));
-    },
+    // setSharingMode: value => {
+    //   return dispatch(DocumentShareActions.setSharingMode(value));
+    // },
     initInfoRequest: authData =>
       dispatch(WedriveActions.initInfoRequest(authData)),
     getFileListRequest: (authData, initInfo) =>

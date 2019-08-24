@@ -5,7 +5,7 @@
 
 import { connect } from "react-redux";
 import MainContainer from "./MainContainer";
-// import { actionCreators as UserActions } from '../redux/modules/user';
+import { actionCreators as DocumentShareActions } from '../redux/modules/documentShare';
 
 // map state to props
 const mapStateToProps = state => ({
@@ -14,13 +14,16 @@ const mapStateToProps = state => ({
 });
 
 // map dispatch to props
-// const mapDispatchToProps = dispatch => {
-//   return {
-// 		loginCheckRequest: (AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY) => 
-// 			dispatch(UserActions.loginCheckRequest(
-// 				AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY
-// 			))
-//   };
-// };
+const mapDispatchToProps = dispatch => {
+  return {
+		// loginCheckRequest: (AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY) => 
+		// 	dispatch(UserActions.loginCheckRequest(
+		// 		AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY
+    // 	))
+    setSharingMode: () => {
+      return dispatch(DocumentShareActions.setSharingMode());
+    },
+  };
+};
 
-export default connect(mapStateToProps)(MainContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(MainContainer);

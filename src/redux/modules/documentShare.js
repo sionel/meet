@@ -62,7 +62,12 @@ function applySetDocumentListMode(state, action) {
 
 //#region SET_SHARING_MODE
 
-function setSharingMode(attributes, presenter, page, documentData) {
+function setSharingMode(
+  attributes = false,
+  presenter = false,
+  page = 0,
+  documentData = []
+) {
   return dispatch => {
     dispatch({
       type: SET_SHARING_MODE,
