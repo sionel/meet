@@ -39,11 +39,12 @@ const TextField = props => {
 					marginTop,
 					color,
 					borderBottomWidth,
-					borderBottomColor
-				},
-				!secret && {
+					borderBottomColor,
 					fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal'
-				}
+				},
+				// !secret && {
+				// 	fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal'
+				// }
 			]}
 			placeholder={placeholder}
 			placeholderTextColor={placeholderTextColor}
