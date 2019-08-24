@@ -78,6 +78,7 @@ class DrawingManager {
     if (!this.canvas) return;
 
     setTimeout(() => {
+      if (!this.canvas) return;
       this.canvas.clear();
 
       const drawingData = data.objects || data;
