@@ -81,7 +81,8 @@ class DrawingManager {
       if (!this.canvas) return;
       this.canvas.clear();
 
-      const drawingData = data.objects || data;
+      const drawingData = Array.isArray(data) ? data : data.objects;
+      if (!Array.isArray(drawingData)) return;
 
       drawingData.map(item => {
         if (item.type === 'path') {
@@ -92,7 +93,7 @@ class DrawingManager {
               height: this.BASE_HEIGHT
             },
             path: {
-              id: item.drawId,
+              id: item.drawId || Number(this.tempId++),
               // id: Number(this.tempId++),
               color: item.stroke,
               width: item.strokeWidthScale * this.BASE_WIDTH,
