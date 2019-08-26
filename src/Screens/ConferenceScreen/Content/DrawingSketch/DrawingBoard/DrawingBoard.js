@@ -43,7 +43,14 @@ class DrawingBoard extends Component {
     if (!data || data.length === 0) {
       data = [];
     }
-    this._drawingManager.drawCanvas(data);
+
+    if (this.props.presenter === 'localUser') {
+      if (this.props.page !== prevProps.page) {
+        this._drawingManager.drawCanvas(data);
+      }
+    } else {
+      this._drawingManager.drawCanvas(data);
+    }
   };
 
   render() {
