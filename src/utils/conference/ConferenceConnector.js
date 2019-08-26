@@ -97,6 +97,7 @@ class ConferenceConnector {
   dispose = async () => {
     if (this._room) {
       try {
+        this._removeEvents();
         if (this._room.presenter === this._room.myUserId()) {
           this._room.sendCommandOnce(SET_DOCUMENT_SHARE_IS_CLOSE, {
             value: this._room.myUserId(),
@@ -322,6 +323,17 @@ class ConferenceConnector {
         );
       }
     });
+  };
+
+  _removeEvents = () => {
+    this._room.removeCommandListener(WEHAGO_ID);
+    this._room.removeCommandListener(SET_DOCUMENT_PAGE);
+    this._room.removeCommandListener(SET_DOCUMENT_SHARE_IS_OPEN);
+    this._room.removeCommandListener(SET_DOCUMENT_SHARE_IS_CLOSE);
+    this._room.removeCommandListener(UPDATE_DOCUMENT_DATA);
+    this._room.removeCommandListener(CLEAR_DOCUMENT_CANVAS);
+    this._room.removeCommandListener(DRAWING_REDO_UNDO);
+    this._room.removeCommandListener(DOCUMENT_SHARE_TARGET);
   };
 
   /**

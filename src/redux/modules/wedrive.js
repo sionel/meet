@@ -21,9 +21,16 @@ const setStatusLoading = status => {
 };
 
 const setInitInfo = initInfo => {
+  const data = initInfo || {
+    status: 'INIT',
+    TokenID: null,
+    storageList: [],
+    fileInfo: [],
+    temp: []
+  };
   return {
     type: SET_INIT_INFO,
-    initInfo
+    initInfo: data
   };
 };
 
@@ -157,9 +164,7 @@ const initInfoRequest = authData => {
 
     if (tokenResult.resultList) {
       const wedriveToken = {
-        TokenID: `${
-          tokenResult.resultList[0][9].objectTokenId
-        }@@${AUTH_A_TOKEN}`
+        TokenID: `${tokenResult.resultList[0][9].objectTokenId}@@${AUTH_A_TOKEN}`
       };
 
       return dispatch(setInitInfo(wedriveToken));
@@ -254,6 +259,7 @@ const cancelLoadDocument = requestName => {
 //#region Export
 
 export const actionCreators = {
+  setInitInfo,
   initInfoRequest,
   getFileListRequest,
   getFileInfoRequest,

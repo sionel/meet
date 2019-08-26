@@ -26,6 +26,7 @@ class MainContainer extends Component {
     }, 1000);
 
     this._handleCheckPermissions();
+    this.props.setInitInfo();
     this.props.setSharingMode();
   }
 

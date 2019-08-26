@@ -9,6 +9,7 @@ import { actionCreators as localActionCreators } from '../../redux/modules/local
 import { actionCreators as mainUserActionCreators } from '../../redux/modules/mainUser';
 import { actionCreators as participantsAcionCreators } from '../../redux/modules/participants';
 import { actionCreators as DocumentShareAcionCreators } from '../../redux/modules/documentShare';
+import { actionCreators as WedriveAcionCreators } from '../../redux/modules/wedrive';
 // import APIManager from '../../services/api/ApiManager_new';
 import APIManager from '../../services/api/ApiManager';
 
@@ -100,6 +101,7 @@ class ConferenceManager {
     if (this._connection) {
       this._connection.dispose();
     }
+    this._dispatch(WedriveAcionCreators.setInitInfo());
     this._dispatch(localActionCreators.leaveConference());
   };
 
@@ -201,7 +203,9 @@ class ConferenceManager {
    */
   // _changeDocumentShareMode = status => {
   changeDrawData = (drawData, selectResource) => {
-    this._dispatch(DocumentShareAcionCreators.setDrawData(drawData, selectResource));
+    this._dispatch(
+      DocumentShareAcionCreators.setDrawData(drawData, selectResource)
+    );
   };
 
   /**

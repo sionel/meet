@@ -111,6 +111,7 @@ class ConferenceScreenContainer extends React.Component {
     // Orientation.lockToPortrait();
     // 컴포넌트가 언마운트 되기전 화상회의 관련 리소스를 해제 한다.
     this._conferenceManager.dispose();
+    this.props.setSharingMode();
     // this.props.navigation.navigate('Home');
 
     // NetInfo.removeEventListener(

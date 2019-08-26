@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import ConferenceScreenContainer from './ConferenceScreenContainer';
+import { actionCreators as DocumentShareActions } from '../../redux/modules/documentShare';
 
 const getMainUser = (mainUserId, localUser, participants) => {
 	if (!localUser) {
@@ -33,7 +34,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		dispatch: dispatch
+		dispatch: dispatch,
+		setSharingMode: () => DocumentShareActions.setSharingMode()
 	};
 };
 

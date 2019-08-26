@@ -47,7 +47,7 @@ class ContentContainer extends React.Component {
     // 스피커폰 설정
     this._handleChangeSpeaker(AudioMode.VIDEO_CALL);
     Orientation.addOrientationListener(this._setOrientation);
-  }
+  }  
 
   // componentDidUpdate(prevProps, prevState) {
   //   if (prevProps.documentListMode !== this.props.documentListMode) {
