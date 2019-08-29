@@ -4,9 +4,8 @@
 
 import React from 'react';
 import { Text, View, TouchableOpacity, Platform } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import DeviceInfo from 'react-native-device-info';
-// import WebView from 'react-native-yunpeng-webview';
+
 const WebView =
   Platform.OS === 'ios'
     ? require('react-native').WebView
@@ -43,27 +42,27 @@ const CustomWebView = props => {
           ...headerStyle
         }}
       >
-        <Icon
+        {/* <Icon
           name={icon}
           size={17}
           color="#fff"
           style={{ marginRight: 5, opacity: 0.85 }}
-        />
+        /> */}
         <Text
           style={{
             color: '#fff',
             flex: 2,
             fontSize: 17,
             textAlign: 'left',
-            fontWeight: 'bold',
-            fontFamily: Platform.OS === 'ios' ? 'NanumSquareEB' : 'normal',
+            // fontWeight: 'bold',
+            fontFamily: 'DOUZONEText50',
             ...titleStyle
           }}
         >
           {contentTitle}
         </Text>
         <TouchableOpacity style={{ flex: 1 }} onPress={onClickButton}>
-          <Text style={{ color: '#fff', fontSize: 17, textAlign: 'right', fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal' }}>
+          <Text style={{ color: '#fff', fontSize: 17, textAlign: 'right', fontFamily: 'DOUZONEText30' }}>
             {buttonTitle}
           </Text>
         </TouchableOpacity>

@@ -198,7 +198,7 @@ const FileSharingPresenter = props => {
                   justifyContent: 'center'
                 }}
               >
-                <Text style={{ fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal' }}>
+                <Text style={{ fontFamily: 'DOUZONEText30' }}>
                   문서를 불러오는 중입니다.
                 </Text>
               </View>
@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 20,
     height: 32,
-    fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal'
+    fontFamily: 'DOUZONEText30'
   },
   mainArea: {
     flex: 1,
@@ -342,7 +342,7 @@ const styles = StyleSheet.create({
   preViewPageNumber: {
     fontSize: 12,
     marginBottom: 3,
-    fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal'
+    fontFamily: 'DOUZONEText30'
   },
   bottomArea: {
     position: 'absolute',

@@ -3,7 +3,7 @@
  * user 스토어
  */
 
-import { UserApi } from '../../services';
+// import { UserApi } from '../../services';
 
 const SET_LIST = 'SET_LIST';
 const SET_INITIAL_LIST = 'SET_INITIAL_LIST';

@@ -54,14 +54,14 @@ const DrawerContentPresenter = props => {
                 marginTop: 10,
                 fontSize: 17.5,
                 color: '#515151',
-                fontFamily: Platform.OS === 'ios' ? 'NanumSquareEB' : 'normal'
+                fontFamily: 'DOUZONEText50'
               }}
             >
               {props.auth.user_name}{' '}
               {/* <Text style={{ fontSize: 13 }}>({props.auth.portal_id})</Text> */}
             </Text>
             <Text
-              style={{ textAlign: 'center', fontSize: 13, color: '#6d6d6d', fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal' }}
+              style={{ textAlign: 'center', fontSize: 13, color: '#6d6d6d', fontFamily: 'DOUZONEText30' }}
             >
               {props.auth.last_company.company_name_kr}
             </Text>
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
   },
   listItem: {
     padding: 16,
-    fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal'
+    fontFamily: 'DOUZONEText30'
   }
 });
 

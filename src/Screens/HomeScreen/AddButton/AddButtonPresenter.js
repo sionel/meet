@@ -11,7 +11,6 @@ import {
   Platform,
   Image
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
 const plusIcon = require('./plus.png');
 
 const AddButtonPresenter = props => {

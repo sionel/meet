@@ -3,8 +3,8 @@
  * 사용자 관련 API
  */
 
-import { wehagoBaseURL, securityRequest } from '../../utils';
-import 'url-search-params-polyfill';
+import { wehagoBaseURL, securityRequest, serialize } from '../../utils';
+// import 'url-search-params-polyfill';
 // #region
 export default {
 	/**
@@ -81,7 +81,7 @@ export default {
 					...headers
 				},
 				// body
-				body: new URLSearchParams(bodyData).toString()
+				body: serialize(bodyData)
 			};
 			const response = await fetch(url, requestData);
 			return response.json();

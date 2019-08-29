@@ -19,8 +19,8 @@ const slides = props => {
               style={{ width: 144, height: 144 }}
               resizeMode="contain"
             />
-            <Text style={{ marginTop: 107.5, color: '#FFF', fontSize: 17, fontFamily: Platform.OS === 'ios' ? 'NanumSquareEB' : 'normal', }}>언제 어디서나 WEHAGO Meet</Text>
-            <Text style={{ marginTop: 24.5, color: 'rgb(193, 219, 246)', fontSize: 12, fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal' }}>시간과 장소의 제약 없는 효율적인 화상회의</Text>
+            <Text style={{ marginTop: 107.5, color: '#FFF', fontSize: 17, fontFamily: 'DOUZONEText50', }}>언제 어디서나 WEHAGO Meet</Text>
+            <Text style={{ marginTop: 24.5, color: 'rgb(193, 219, 246)', fontSize: 12, fontFamily: 'DOUZONEText30' }}>시간과 장소의 제약 없는 효율적인 화상회의</Text>
           </View>
         )
       },

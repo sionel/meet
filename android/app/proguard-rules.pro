@@ -60,18 +60,8 @@
 -keep class sun.misc.Unsafe { *; }
 -dontwarn java.nio.file.*
 -dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
+-keep class okio.** { *; }
 -dontwarn okio.**
-
-# FastImage + Glide
-
--keep public class com.dylanvann.fastimage.* {*;}
--keep public class com.dylanvann.fastimage.** {*;}
--keep public class * implements com.bumptech.glide.module.GlideModule
--keep public class * extends com.bumptech.glide.module.AppGlideModule
--keep public enum com.bumptech.glide.load.ImageHeaderParser$** {
-  **[] $VALUES;
-  public *;
-}
 
 # WebRTC
 
@@ -80,6 +70,7 @@
 
 # Jisti Meet SDK
 
+-keep class com.wehago.meet.** { *; }
 -keep class com.wehago.meet.sdk.** { *; }
 
 # We added the following when we switched minifyEnabled on. Probably because we

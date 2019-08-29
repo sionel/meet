@@ -8,10 +8,7 @@ import {
   Image,
   TouchableOpacity,
   Dimensions,
-  Platform,
   View,
-  Animated,
-  Text
 } from 'react-native';
 
 import {
@@ -20,13 +17,11 @@ import {
   createDrawerNavigator
 } from 'react-navigation';
 
-// import Icon from 'react-native-vector-icons/FontAwesome';
 import CustomIcon from './../components/CustomIcon';
 
 /** Screens */
 import HomeScreen from '../Screens/HomeScreen';
 import ConfigurationScreen from '../Screens/ConfigurationScreen';
-import UserInfoScreen from '../Screens/UserInfoScreen';
 import CreateScreen from '../Screens/CreateScreen';
 
 /** Components */

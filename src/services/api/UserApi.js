@@ -85,7 +85,7 @@ const login = async user => {
         signature: aaa
         // signature: aaa
       },
-      body: new URLSearchParams({
+      body: serialize({
         // portal_id: 'seongh7800',
         // portal_password: 'kseongh0080',
         // login_ip: 'localhost',
@@ -98,12 +98,11 @@ const login = async user => {
         login_os: user.login_os,
         login_device: user.login_device,
         login_browser: user.login_browser
-      }).toString()
+      })
     };
 
     const response = await fetch(`${wehagoBaseURL0}${url}`, data);
     const responseJson = await response.json();
-    // console.log('responseJson : ', responseJson);
 
     return responseJson;
   } catch (err) {
@@ -163,7 +162,7 @@ const changeCompany = async (auth, company) => {
         ...headers,
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
       },
-      body: new URLSearchParams(data).toString()
+      body: serialize(data)
     });
 
     const responseJson = await response.json();

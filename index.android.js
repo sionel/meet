@@ -1,1 +1,2 @@
-import "./App";
+// import './react/index.native';
+import './App';

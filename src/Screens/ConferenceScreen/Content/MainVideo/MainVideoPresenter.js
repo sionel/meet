@@ -48,7 +48,7 @@ const MainVideoPresenter = props => {
           fontSize: Platform.OS === 'ios' ? 22 : 20,
           color: '#fff',
           textAlign: 'center',
-          fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal'
+          fontFamily: 'DOUZONEText30'
         }}
       >
         {conferenceMode !== 'control'
@@ -83,9 +83,9 @@ const MainVideoPresenter = props => {
           padding: 10,
           color: '#fff',
           textAlign: 'center',
-          fontWeight: '700',
+          // fontWeight: '700',
           fontSize: 14,
-          fontFamily: Platform.OS === 'ios' ? 'NanumSquareEB' : 'normal'
+          fontFamily: 'DOUZONEText50'
         }}
       >
         네트워크가 불안정해요 :(
@@ -126,7 +126,7 @@ const MainVideoPresenter = props => {
                     fontSize: 20,
                     color: '#c0c0c0',
                     textAlign: 'center',
-                    fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal'
+                    fontFamily: 'DOUZONEText30'
                   }}
                 >
                   통화중
@@ -136,7 +136,7 @@ const MainVideoPresenter = props => {
                     fontSize: 25,
                     color: '#c0c0c0',
                     textAlign: 'center',
-                    fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal'
+                    fontFamily: 'DOUZONEText30'
                   }}
                 >
                   {second2String(props.time)}
@@ -153,16 +153,16 @@ const MainVideoPresenter = props => {
                 <Text
                   style={{
                     fontSize: 25,
-                    fontWeight: 'bold',
+                    // fontWeight: 'bold',
                     color: '#fff',
                     width: Math.min(height, width) * 0.8,
                     textAlign: 'center',
-                    fontFamily: Platform.OS === 'ios' ? 'NanumSquareEB' : 'normal'
+                    fontFamily: 'DOUZONEText50'
                   }}
                 >
                   {mainUser.name}
                 </Text>
-                <Text style={{ fontSize: 13, color: '#fff', paddingTop: 10, fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal' }}>
+                <Text style={{ fontSize: 13, color: '#fff', paddingTop: 10, fontFamily: 'DOUZONEText30' }}>
                   {userInfo && userInfo.companyFullpath
                     ? userInfo.companyFullpath
                     : ''}

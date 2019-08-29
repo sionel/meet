@@ -42,7 +42,7 @@ const HomeScreenPresenter = props => {
   //       <Text
   //         style={[
   //           styles.reloadButton,
-  //           { fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal' }
+  //           { fontFamily: 'DOUZONEText30' }
   //         ]}
   //       >
   //         다시 로드
@@ -173,17 +173,18 @@ const HomeScreenPresenter = props => {
                       fontSize: 22,
                       color: '#1C90FB',
                       marginBottom: 20,
-                      fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal'
+                      fontFamily: 'DOUZONEText30'
                     }}
                   >
-                    알림
+                    화상대화 종료
                   </Text>
                   <Text
                     style={{
-                      fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal'
+                      fontFamily: 'DOUZONEText30'
                     }}
                   >
-                    새로운 화상대화를 시작하시겠습니까?
+                    {/* 새로운 화상대화를 시작하시겠습니까? */}
+                    이미 종료된 화상대화 입니다.
                   </Text>
                 </View>
                 <View style={styles.modalButtons}>
@@ -193,7 +194,8 @@ const HomeScreenPresenter = props => {
                       ...styles.modalButtonConfirm
                     }}
                     onPress={() =>
-                      props.onCreateConference(props.selectedRoomId)
+                      // props.onCreateConference(props.selectedRoomId)
+                      props.onActivateModal(null)
                     }
                   >
                     <Text

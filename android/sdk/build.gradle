@@ -1,6 +1,5 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
-// apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -11,11 +10,25 @@ android {
     }
 
     buildTypes {
-        debug {}
+        debug {
+            buildConfigField "boolean", "LIBRE_BUILD", "${rootProject.ext.libreBuild}"
+        }
         release {
-            zipAlignEnabled true
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "boolean", "LIBRE_BUILD", "${rootProject.ext.libreBuild}"
+        }
+    }
+
+    sourceSets {
+        main {
+            java {
+                if (rootProject.ext.libreBuild) {
+                    srcDir "src"
+                    exclude "**/AmplitudeModule.java"
+                }
+                exclude "test/"
+            }
         }
     }
 }
@@ -23,48 +36,41 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation "com.android.support:support-v4:${rootProject.ext.supportLibVersion}"
-    implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
+    // implementation "com.android.support:support-v4:${rootProject.ext.supportLibVersion}"
+    // implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
 
-    // implementation 'com.google.android.gms:play-services-auth:16.0.1'
-    // implementation "com.google.android.gms:play-services-basement:16.0.1"
-    // implementation "com.google.android.gms:play-services-tasks:16.0.1"
-    // implementation "com.google.android.gms:play-services-base:16.0.1"
-
-    implementation 'org.webkit:android-jsc:+'
-    implementation 'com.dropbox.core:dropbox-core-sdk:3.0.8'
     api 'com.facebook.react:react-native:+'
 
-    implementation project(':react-native-background-timer')
-    implementation project(':react-native-calendar-events')
-    implementation(project(':react-native-fast-image')) {
-        exclude group: 'com.android.support'
+    implementation 'com.dropbox.core:dropbox-core-sdk:3.0.8'
+
+    if (!rootProject.ext.libreBuild) {
+        implementation 'com.amplitude:android-sdk:2.14.1'
+        // implementation(project(":react-native-google-signin")) {
+        //     exclude group: 'com.google.android.gms'
+        //     exclude group: 'com.android.support'
+        // }
     }
-    // implementation(project(":react-native-google-signin")) {
-    //     exclude group: 'com.google.android.gms'
-    //     exclude group: 'com.android.support'
-    // }
+
+    implementation project(':react-native-background-timer')
+    // implementation project(':react-native-calendar-events')
+    implementation project(':react-native-community-async-storage')
     implementation project(':react-native-immersive')
     implementation project(':react-native-keep-awake')
     implementation project(':react-native-linear-gradient')
     implementation project(':react-native-sound')
     implementation project(':react-native-vector-icons')
-    implementation project(':WebRTCModule')
-    implementation project(':react-native-gesture-handler')
-    implementation project(':react-native-orientation-locker')
-    implementation project(':react-native-system-setting')
-    implementation project(':react-native-svg')
+    implementation project(':react-native-webrtc')
+    implementation project(':react-native-webview')
+
+    // 추가한 라이브러리
     implementation project(':lottie-react-native')
+    implementation project(':react-native-svg')
+    implementation project(':react-native-orientation-locker')
+    implementation project(':react-native-gesture-handler')
+    implementation project(':react-native-fast-image')
     implementation project(':react-native-splash-screen')
-    // implementation project(':react-native-device-info')
-    implementation(project(':react-native-device-info')) {
-        exclude group: "com.google.android.gms"
-    }
+    implementation project(':react-native-device-info')
     implementation project(':react-native-sketch-canvas')
-    implementation(project(':react-native-webview')) {
-        exclude group: "com.google.android.gms"
-    }
-    implementation project(':react-native-community_async-storage')
 
     testImplementation 'junit:junit:4.12'
 }
@@ -129,13 +135,17 @@ android.libraryVariants.all { def variant ->
 
     currentBundleTask.ext.generatedResFolders = files(resourcesDir).builtBy(currentBundleTask)
     currentBundleTask.ext.generatedAssetsFolders = files(jsBundleDir).builtBy(currentBundleTask)
-
     variant.registerGeneratedResFolders(currentBundleTask.generatedResFolders)
-    variant.mergeResources.dependsOn(currentBundleTask)
 
-    def assetsDir = variant.mergeAssets.outputDir
+    def mergeAssetsTask = variant.mergeAssetsProvider.get()
+    def mergeResourcesTask = variant.mergeResourcesProvider.get()
 
-    variant.mergeAssets.doLast {
+    mergeAssetsTask.dependsOn(currentBundleTask)
+    mergeResourcesTask.dependsOn(currentBundleTask)
+
+    mergeAssetsTask.doLast {
+        def assetsDir = mergeAssetsTask.outputDir
+
         // Bundle fonts
         //
         copy {
@@ -149,6 +159,8 @@ android.libraryVariants.all { def variant ->
             from("${projectDir}/../../sounds/incomingMessage.wav")
             from("${projectDir}/../../sounds/joined.wav")
             from("${projectDir}/../../sounds/left.wav")
+            from("${projectDir}/../../sounds/liveStreamingOn.mp3")
+            from("${projectDir}/../../sounds/liveStreamingOff.mp3")
             from("${projectDir}/../../sounds/outgoingRinging.wav")
             from("${projectDir}/../../sounds/outgoingStart.wav")
             from("${projectDir}/../../sounds/recordingOn.mp3")
@@ -161,19 +173,19 @@ android.libraryVariants.all { def variant ->
         //
         if (currentBundleTask.enabled) {
             copy {
-                from(jsBundleDir)
+                from(jsBundleFile)
                 into(assetsDir)
             }
         }
     }
 
-    variant.mergeResources.doLast {
+    mergeResourcesTask.doLast {
         // Copy React resources
         //
         if (currentBundleTask.enabled) {
             copy {
                 from(resourcesDir)
-                into(variant.mergeResources.outputDir)
+                into(mergeResourcesTask.outputDir)
             }
         }
     }
@@ -185,7 +197,7 @@ publishing {
         aarArchive(MavenPublication) {
             groupId 'org.jitsi.react'
             artifactId 'jitsi-meet-sdk'
-            version project.sdkVersion
+            version System.env.OVERRIDE_SDK_VERSION ?: project.sdkVersion
 
             artifact("${project.buildDir}/outputs/aar/${project.name}-release.aar") {
                 extension "aar"
@@ -204,8 +216,7 @@ publishing {
                     def groupId = it.moduleGroup
                     def artifactId = it.moduleName
 
-                    if (artifactId.startsWith('react-native-')
-                            && groupId.equals('jitsi-meet')) {
+                    if (artifactId.startsWith('react-native-') && groupId.equals('jitsi-meet')) {
                         groupId = rootProject.ext.moduleGroupId
                     }
 
@@ -219,6 +230,14 @@ publishing {
 
     }
     repositories {
-        maven { url "file:${rootProject.projectDir}/../../jitsi-maven-repository/releases" }
+        maven {
+            url rootProject.ext.mavenRepo
+            if (!rootProject.ext.mavenRepo.startsWith("file")) {
+                credentials {
+                    username rootProject.ext.mavenUser
+                    password rootProject.ext.mavenPassword
+                }
+            }
+        }
     }
 }

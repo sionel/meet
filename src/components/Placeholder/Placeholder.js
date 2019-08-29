@@ -4,7 +4,7 @@
 
 import React, { Component } from 'react';
 import { View, Text, Image, Platform } from 'react-native';
-import CustomLottie from '../CustomLottie';
+// import CustomLottie from '../CustomLottie';
 
 // const waitingImage = require(`./waiting.gif`);
 const waitingImage = require(`./imgEmptyMeet.png`);
@@ -42,10 +42,10 @@ const Placeholder = props => {
         <Text
           style={{
             fontSize: 20,
-            fontWeight: '400',
+            // fontWeight: '400',
             color: '#1C90FB',
             marginTop: -5,
-            fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal',
+            fontFamily: 'DOUZONEText30',
             ...props.mainTextStyle
           }}
         >
@@ -56,10 +56,10 @@ const Placeholder = props => {
       <Text
         style={{
           fontSize: 18,
-          fontWeight: '400',
+          // fontWeight: '400',
           color: 'rgb(80,80,80)',
           textAlign: 'center',
-          fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal',
+          fontFamily: 'DOUZONEText30',
           ...props.subTextStyle
         }}
       >

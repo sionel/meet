@@ -2,8 +2,13 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>UIAppFonts</key>
+	<array>
+		<string>DOUZONEText30.ttf</string>
+		<string>DOUZONEText50.ttf</string>
+	</array>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>en</string>
+	<string>ko</string>
 	<key>CFBundleDisplayName</key>
 	<string>WEHAGO Meet</string>
 	<key>CFBundleExecutable</key>
@@ -23,9 +28,23 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>CFBundleURLName</key>
+			<string>wehago.meet</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>wehago.meet</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.googleusercontent.apps</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.your-id-here</string>
 			</array>
 		</dict>
 	</array>
@@ -35,10 +54,6 @@
 	<false/>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
-	<key>LSApplicationCategoryType</key>
-	<string>LSApplicationQueriesSchemes</string>
-	<key>LSApplicationQueriesSchemes</key>
-	<string>Something need</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -59,15 +74,15 @@
 	<key>NSCalendarsUsageDescription</key>
 	<string>See your scheduled meetings in the app.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Participate in meetings with video.</string>
+	<string>화상대화를 위한 카메라 접근권한이 필요합니다.</string>
 	<key>NSContactsUsageDescription</key>
 	<string>Contacts Usage Description</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Location Always Usage Description </string>
+	<string>항상 위치정보를 허용하시겠습니까?</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Location When In Use Usage Description</string>
+	<string>앱을 사용할 때 위치정보를 허용하시겠습니까?</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Participate in meetings with voice.</string>
+	<string>화상대화를 위한 마이크 접근권한이 필요합니다.</string>
 	<key>NSMotionUsageDescription</key>
 	<string>Motion Usage Description</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
@@ -75,27 +90,6 @@
 	<key>NSUserActivityTypes</key>
 	<array>
 		<string>org.jitsi.JitsiMeet.ios.conference</string>
-	</array>
-	<key>UIAppFonts</key>
-	<array>
-		<string>MaterialIcons.ttf</string>
-		<string>SimpleLineIcons.ttf</string>
-		<string>EvilIcons.ttf</string>
-		<string>Zocial.ttf</string>
-		<string>FontAwesome.ttf</string>
-		<string>FontAwesome5_Ragular.ttf</string>
-		<string>FontAwesome5_Solid.ttf</string>
-		<string>Ionicons.ttf</string>
-		<string>Foundation.ttf</string>
-		<string>AntDesign.ttf</string>
-		<string>MaterialCommunityIcons.ttf</string>
-		<string>FontAwesome5_Brands.ttf</string>
-		<string>Entypo.ttf</string>
-		<string>Feather.ttf</string>
-		<string>Octicons.ttf</string>
-		<string>NanumSquareR.ttf</string>
-		<string>NanumSquareB.ttf</string>
-		<string>NanumSquareEB.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>

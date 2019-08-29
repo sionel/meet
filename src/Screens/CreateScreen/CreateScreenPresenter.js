@@ -20,7 +20,6 @@ import {
   CustomModal,
   SectionListHeader
 } from '../../components';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 /**
  * CreateScreenPresenter
@@ -128,7 +127,7 @@ const styles = StyleSheet.create({
 
   listContainer: {
     width: '100%',
-    fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal'
+    fontFamily: 'DOUZONEText30'
     // padding: '4% 3%'
   },
 

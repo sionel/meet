@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 15,
     height: 44,
-    fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal'
+    fontFamily: 'DOUZONEText30'
   },
   content: {
     color: '#999'

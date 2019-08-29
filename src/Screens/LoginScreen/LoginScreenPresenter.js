@@ -23,7 +23,6 @@ import {
 import {
   FlatButton,
   TextField,
-  ListItemComp,
   CustomWebView
 } from '../../components';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -196,7 +195,7 @@ const LoginScreenPresenter = props => {
             }}
             source={wehago_favicon}
           />
-          <Text style={{ color: '#fff', fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal' }}>WEHAGO 앱으로 로그인</Text>
+          <Text style={{ color: '#fff', fontFamily: 'DOUZONEText30' }}>WEHAGO 앱으로 로그인</Text>
         </FlatButton>
         <Text
           style={{
@@ -204,7 +203,7 @@ const LoginScreenPresenter = props => {
             paddingBottom: 15,
             textAlign: 'center',
             color: 'rgb(51,51,51)',
-            fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal'
+            fontFamily: 'DOUZONEText30'
           }}
         >
           WEHAGO 앱이 설치되어 있다면 바로 시작하세요.
@@ -216,7 +215,7 @@ const LoginScreenPresenter = props => {
     <View style={styles.container}>
       <StatusBar
         barStyle={'dark-content'}
-        backgroundColor={'transparent'}
+        backgroundColor={'#fff'}
         hidden={false}
       />
 
@@ -247,7 +246,7 @@ const LoginScreenPresenter = props => {
         >
           <View style={{ flexDirection: 'row' }}>
             <View style={styles.modalContents}>
-              <Text style={[styles.modalMessage, {fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal'}]}>{props.modalText}</Text>
+              <Text style={[styles.modalMessage, {fontFamily: 'DOUZONEText30'}]}>{props.modalText}</Text>
             </View>
             <TouchableOpacity
               style={styles.modalCloseButton}
@@ -277,7 +276,7 @@ const LoginScreenPresenter = props => {
                   // color: '#1C90FB',
                   color: 'rgb(51,51,51)',
                   marginBottom: 10,
-                  fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal'
+                  fontFamily: 'DOUZONEText30'
                 }}
               >
                 {'WEHAGO Meet\n앱 이용을 위한 권한 안내'}
@@ -292,7 +291,7 @@ const LoginScreenPresenter = props => {
                 }}
               >
                 <Text
-                  style={{ fontSize: 15, color: '#1C90FB', fontFamily: Platform.OS === 'ios' ? 'NanumSquareEB' : 'normal' }}
+                  style={{ fontSize: 15, color: '#1C90FB', fontFamily: 'DOUZONEText50' }}
                 >
                   필수적 접근권한
                 </Text>
@@ -362,11 +361,11 @@ const LoginScreenPresenter = props => {
                             justifyContent: 'center'
                           }}
                         >
-                          <Text style={{ fontSize: 15, marginBottom: 3.5, fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal' }}>
+                          <Text style={{ fontSize: 15, marginBottom: 3.5, fontFamily: 'DOUZONEText30' }}>
                             {item.title}
                           </Text>
                           <Text
-                            style={{ fontSize: 12, color: 'rgb(114,125,134)', fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal' }}
+                            style={{ fontSize: 12, color: 'rgb(114,125,134)', fontFamily: 'DOUZONEText30' }}
                           >
                             {item.description}
                           </Text>
@@ -376,7 +375,7 @@ const LoginScreenPresenter = props => {
                   />
                 </View>
                 <Text
-                  style={{ fontSize: 15, color: '#1C90FB', fontFamily: Platform.OS === 'ios' ? 'NanumSquareEB' : 'normal' }}
+                  style={{ fontSize: 15, color: '#1C90FB', fontFamily: 'DOUZONEText50' }}
                 >
                   선택적 접근권한
                 </Text>
@@ -434,11 +433,11 @@ const LoginScreenPresenter = props => {
                             justifyContent: 'center'
                           }}
                         >
-                          <Text style={{ fontSize: 15, marginBottom: 3.5, fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal' }}>
+                          <Text style={{ fontSize: 15, marginBottom: 3.5, fontFamily: 'DOUZONEText30' }}>
                             {item.title}
                           </Text>
                           <Text
-                            style={{ fontSize: 12, color: 'rgb(114,125,134)', fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal' }}
+                            style={{ fontSize: 12, color: 'rgb(114,125,134)', fontFamily: 'DOUZONEText30' }}
                           >
                             {item.description}
                           </Text>
@@ -453,13 +452,13 @@ const LoginScreenPresenter = props => {
                     fontSize: 13,
                     textAlign: 'center',
                     color: 'rgb(114,125,134)',
-                    fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal'
+                    fontFamily: 'DOUZONEText30'
                   }}
                 >
                   선택적 접근권한은 해당 기능 사용 시 동의가 필요하며 미동의
                   시에도 서비스 이용가능합니다.
                 </Text>
-                {/* <Text style={{ fontSize: 16, fontWeight: '500' }}>이용약관 및 법률고지</Text>
+                {/* <Text style={{ fontSize: 16, // fontWeight: '500' }}>이용약관 및 법률고지</Text>
 								<View
 									style={{
 										// backgroundColor: '#f1f1f1',
@@ -526,7 +525,7 @@ const LoginScreenPresenter = props => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'transparent',
+    backgroundColor: '#fff',
     // alignItems: 'center',
     width: '100%'
   },

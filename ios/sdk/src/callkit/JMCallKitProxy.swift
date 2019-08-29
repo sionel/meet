@@ -1,5 +1,6 @@
 /*
- * Copyright @ 2018-present Atlassian Pty Ltd
+ * Copyright @ 2019-present 8x8, Inc.
+ * Copyright @ 2018-2019 Atlassian Pty Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +27,7 @@ import Foundation
 
     // MARK: - CallKit proxy
 
-    private static let provider: CXProvider = {
+    private static var provider: CXProvider = {
         let configuration = CXProviderConfiguration(localizedName: "")
         return CXProvider(configuration: configuration)
     }()
@@ -51,7 +52,12 @@ import Foundation
     /// Defaults to enabled, set to false when you don't want to use CallKit.
     @objc public static var enabled: Bool = true {
         didSet {
-            if enabled == false {
+            provider.invalidate()
+            if enabled {
+                guard isProviderConfigured() else  { return; }
+                provider = CXProvider(configuration: providerConfiguration!)
+                provider.setDelegate(emitter, queue: nil)
+            } else {
                 provider.setDelegate(nil, queue: nil)
             }
         }
@@ -60,6 +66,8 @@ import Foundation
     @objc public static func configureProvider(localizedName: String,
                                                ringtoneSound: String?,
                                                iconTemplateImageData: Data?) {
+        guard enabled else { return }
+
         let configuration = CXProviderConfiguration(localizedName: localizedName)
         configuration.iconTemplateImageData = iconTemplateImageData
         configuration.maximumCallGroups = 1
@@ -187,3 +195,4 @@ import Foundation
         return update
     }
 }
+

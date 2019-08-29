@@ -1,7 +1,7 @@
 import JitsiMeetJS from '../../../jitsi/features/base/lib-jitsi-meet';
 import config from './config';
-import { getDrawingManager } from '../../utils';
-import DrawingMananger from '../../utils/DrawingManager';
+// import { getDrawingManager } from '../../utils';
+// import DrawingMananger from '../../utils/DrawingManager';
 
 // 위하고 아이디 커멘드 이름 정의
 const WEHAGO_ID = 'wehagoid';
@@ -46,7 +46,7 @@ class ConferenceConnector {
     //   drawingData: []
     // };
     // 드로잉 클래스
-    this._drawingManager = new DrawingMananger();
+    // this._drawingManager = new DrawingMananger();
   }
 
   get tracks() {
@@ -278,32 +278,32 @@ class ConferenceConnector {
 
       const { value: userId } = value;
 
-      if (
-        userId !== this._room.myUserId() &&
-        this._drawingManager &&
-        this._drawingManager.get('canvas')
-      ) {
-        this._drawingManager.clearAll();
-      }
+      // if (
+      //   userId !== this._room.myUserId() &&
+        // this._drawingManager &&
+        // this._drawingManager.get('canvas')
+      // ) {
+        // this._drawingManager.clearAll();
+      // }
     });
 
     /**
      * 드로잉 뒤로가기, 앞으로가기 감지
      */
     this._room.addCommandListener(DRAWING_REDO_UNDO, value => {
-      if (!this._drawingManager) {
-        this._drawingManager = getDrawingManager();
-      }
+      // if (!this._drawingManager) {
+        // this._drawingManager = getDrawingManager();
+      // }
 
       const { attributes, value: userId } = value;
 
-      if (userId !== this._room.myUserId() && this._drawingManager) {
+      // if (userId !== this._room.myUserId() && this._drawingManager) {
         // 아이디랑 타입 보내기
         // redo
         // if (attributes.type === "redo") this._drawingManager.redo();
         // undo
         // if (attributes.type === "undo") this._drawingManager.undo();
-      }
+      // }
     });
 
     /**

@@ -5,12 +5,7 @@
 
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Platform } from 'react-native';
-import LottieView from 'lottie-react-native';
 import CustomLottie from './CustomLottie';
-
-const rootPath = `../../assets/smapleImages/`;
-const playImage = require(`${rootPath}/play.png`);
-// const playImage = require(`../../assets/smapleImages/play.png`);
 
 function getFirtsChar(str) {
 	split = str.split(/([\uD800-\uDBFF][\uDC00-\uDFFF])/);
@@ -124,7 +119,7 @@ const ListItemComp = props => {
 							borderColor: '#c1c1c1'
 						}}
 					>
-						<Text style={{ color: '#717171', fontSize: 12, fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal' }}>시작</Text>
+						<Text style={{ color: '#717171', fontSize: 12, fontFamily: 'DOUZONEText30' }}>시작</Text>
 						{/* <Image
 							style={{
 								width: '100%',
@@ -175,21 +170,21 @@ const styles = StyleSheet.create({
 	// 아이콘 텍스트
 	iconText: {
 		fontSize: 10,
-		fontWeight: 'bold',
-		fontFamily: Platform.OS === 'ios' ? 'NanumSquareEB' : 'normal'
+		// fontWeight: 'bold',
+		fontFamily: 'DOUZONEText50'
 	},
 	// 방 제목
 	roomName: {
 		fontSize: 16,
-		fontWeight: 'bold',
+		// fontWeight: 'bold',
 		color: 'rgb(80,80,80)',
-		fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal'
+		fontFamily: 'DOUZONEText30'
 	},
 	// 참가자
 	participant: {
 		fontSize: 13.5,
-		fontWeight: '400',
-		fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal',
+		// fontWeight: '400',
+		fontFamily: 'DOUZONEText30',
 		color: '#3f3f3f'
 	},
 

@@ -18,58 +18,19 @@ package com.wehago.meet;
 
 import android.app.Application;
 
-// import com.facebook.react.ReactApplication;
-// import com.airbnb.android.react.lottie.LottiePackage;
-// import com.facebook.react.ReactNativeHost;
-// import com.facebook.react.ReactPackage;
-// import com.facebook.react.shell.MainReactPackage;
-// import com.facebook.soloader.SoLoader;
-
-// import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.squareup.leakcanary.LeakCanary;
-
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Simple {@link Application} for hooking up LeakCanary:
  * https://github.com/square/leakcanary
  */
-public class MainApplication extends Application { // implements ReactApplication {
-
-    // private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
-    //     @Override
-    //     public boolean getUseDeveloperSupport() {
-    //         return BuildConfig.DEBUG;
-    //     }
-
-    //     @Override
-    //     protected List<ReactPackage> getPackages() {
-    //         return Arrays.<ReactPackage>asList(
-    //             new MainReactPackage(),
-            // new LottiePackage(),
-    //             new RNGestureHandlerPackage()
-    //         );
-    //     }
-
-    //     @Override
-    //     protected String getJSMainModuleName() {
-    //         return "index";
-    //     }
-    // };
-    
-    // @Override
-    // public ReactNativeHost getReactNativeHost() {
-    // return mReactNativeHost;
-    // }
-
+public class MainApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        // SoLoader.init(this, false);
 
-        // if (!LeakCanary.isInAnalyzerProcess(this)) {
-        //     LeakCanary.install(this);
-        // }
+        if (!LeakCanary.isInAnalyzerProcess(this)) {
+            LeakCanary.install(this);
+        }
     }
 }

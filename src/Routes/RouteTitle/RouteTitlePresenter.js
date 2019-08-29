@@ -4,8 +4,6 @@
 
 import React, { Fragment } from 'react';
 import { View, Text, StyleSheet, Platform, StatusBar } from 'react-native';
-import RNPickerSelect from 'react-native-picker-select';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 const RouteTitlePresenter = props => {
   // let placeholder = {
@@ -18,7 +16,7 @@ const RouteTitlePresenter = props => {
   //   // 기본값
   //   placeholder = {};
   //   return (
-  //     <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 17, fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal' }}>-</Text>
+  //     <Text style={{ color: '#fff', // fontWeight: 'bold', fontSize: 17, fontFamily: 'DOUZONEText30' }}>-</Text>
   //   );
   // }
 
@@ -30,8 +28,8 @@ const RouteTitlePresenter = props => {
         style={{
           color: '#fff',
           fontSize: 17,
-          fontFamily: Platform.OS === 'ios' ? 'NanumSquareEB' : 'normal',
-          fontWeight: '700'
+          fontFamily: 'DOUZONEText50',
+          // fontWeight: '700'
         }}
       >
         {/* {

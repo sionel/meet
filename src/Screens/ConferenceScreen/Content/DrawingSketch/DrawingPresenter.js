@@ -399,7 +399,7 @@ const DrawingPresenter = props => {
                     fontSize: 14,
                     color: '#fff',
                     marginLeft: 10,
-                    fontFamily: Platform.OS === 'ios' ? 'NanumSquareEB' : 'normal'
+                    fontFamily: 'DOUZONEText50'
                   }}
                 >
                   모두 삭제

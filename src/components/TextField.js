@@ -40,10 +40,10 @@ const TextField = props => {
 					color,
 					borderBottomWidth,
 					borderBottomColor,
-					fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal'
+					fontFamily: 'DOUZONEText30'
 				},
 				// !secret && {
-				// 	fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal'
+				// 	fontFamily: 'DOUZONEText30'
 				// }
 			]}
 			placeholder={placeholder}

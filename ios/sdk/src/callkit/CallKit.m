@@ -26,6 +26,7 @@
 #import <React/RCTBridge.h>
 #import <React/RCTEventEmitter.h>
 #import <React/RCTUtils.h>
+#import <WebRTC/WebRTC.h>
 
 #import <JitsiMeet/JitsiMeet-Swift.h>
 
@@ -73,6 +74,12 @@ RCT_EXPORT_METHOD(endCall:(NSString *)callUUID
 #endif
 
     NSUUID *callUUID_ = [[NSUUID alloc] initWithUUIDString:callUUID];
+
+    if (!callUUID_) {
+        reject(nil, [NSString stringWithFormat:@"Invalid UUID: %@", callUUID], nil);
+        return;
+    }
+
     CXEndCallAction *action
         = [[CXEndCallAction alloc] initWithCallUUID:callUUID_];
     [self requestTransaction:[[CXTransaction alloc] initWithAction:action]
@@ -90,6 +97,12 @@ RCT_EXPORT_METHOD(setMuted:(NSString *)callUUID
 #endif
 
     NSUUID *callUUID_ = [[NSUUID alloc] initWithUUIDString:callUUID];
+
+    if (!callUUID_) {
+        reject(nil, [NSString stringWithFormat:@"Invalid UUID: %@", callUUID], nil);
+        return;
+    }
+
     CXSetMutedCallAction *action
         = [[CXSetMutedCallAction alloc] initWithCallUUID:callUUID_ muted:muted];
     [self requestTransaction:[[CXTransaction alloc] initWithAction:action]
@@ -122,6 +135,13 @@ RCT_EXPORT_METHOD(startCall:(NSString *)callUUID
     NSLog(@"[RNCallKit][startCall] callUUID = %@", callUUID);
 #endif
 
+    NSUUID *callUUID_ = [[NSUUID alloc] initWithUUIDString:callUUID];
+
+    if (!callUUID_) {
+        reject(nil, [NSString stringWithFormat:@"Invalid UUID: %@", callUUID], nil);
+        return;
+    }
+
     // Don't start a new call if there's an active call for the specified
     // callUUID. JitsiMeetView was configured for an incoming call.
     if ([JMCallKitProxy hasActiveCallForUUID:callUUID]) {
@@ -131,7 +151,6 @@ RCT_EXPORT_METHOD(startCall:(NSString *)callUUID
 
     CXHandle *handle_
         = [[CXHandle alloc] initWithType:CXHandleTypeGeneric value:handle];
-    NSUUID *callUUID_ = [[NSUUID alloc] initWithUUIDString:callUUID];
     CXStartCallAction *action
         = [[CXStartCallAction alloc] initWithCallUUID:callUUID_
                                                handle:handle_];
@@ -145,6 +164,12 @@ RCT_EXPORT_METHOD(reportCallFailed:(NSString *)callUUID
                            resolve:(RCTPromiseResolveBlock)resolve
                             reject:(RCTPromiseRejectBlock)reject) {
     NSUUID *callUUID_ = [[NSUUID alloc] initWithUUIDString:callUUID];
+
+    if (!callUUID_) {
+        reject(nil, [NSString stringWithFormat:@"Invalid UUID: %@", callUUID], nil);
+        return;
+    }
+
     [JMCallKitProxy reportCallWith:callUUID_
                            endedAt:nil
                             reason:CXCallEndedReasonFailed];
@@ -156,6 +181,12 @@ RCT_EXPORT_METHOD(reportConnectedOutgoingCall:(NSString *)callUUID
                                       resolve:(RCTPromiseResolveBlock)resolve
                                        reject:(RCTPromiseRejectBlock)reject) {
     NSUUID *callUUID_ = [[NSUUID alloc] initWithUUIDString:callUUID];
+
+    if (!callUUID_) {
+        reject(nil, [NSString stringWithFormat:@"Invalid UUID: %@", callUUID], nil);
+        return;
+    }
+
     [JMCallKitProxy reportOutgoingCallWith:callUUID_
                                connectedAt:nil];
     resolve(nil);
@@ -174,6 +205,12 @@ RCT_EXPORT_METHOD(updateCall:(NSString *)callUUID
 #endif
 
     NSUUID *callUUID_ = [[NSUUID alloc] initWithUUIDString:callUUID];
+
+    if (!callUUID_) {
+        reject(nil, [NSString stringWithFormat:@"Invalid UUID: %@", callUUID], nil);
+        return;
+    }
+
     NSString *displayName = options[@"displayName"];
     BOOL hasVideo = [(NSNumber*)options[@"hasVideo"] boolValue];
 
@@ -206,14 +243,20 @@ RCT_EXPORT_METHOD(updateCall:(NSString *)callUUID
     // iconTemplateImageData
     NSString *iconTemplateImageName = dictionary[@"iconTemplateImageName"];
     NSData *iconTemplateImageData;
+    UIImage *iconTemplateImage;
     if (iconTemplateImageName) {
-        UIImage *iconTemplateImage
-            = [UIImage imageNamed:iconTemplateImageName
-                         inBundle:[NSBundle bundleForClass:self.class]
-    compatibleWithTraitCollection:nil];
+        // First try to load the resource from the main bundle.
+        iconTemplateImage = [UIImage imageNamed:iconTemplateImageName];
+
+        // If that didn't work, use the one built-in.
+        if (!iconTemplateImage) {
+            iconTemplateImage = [UIImage imageNamed:iconTemplateImageName
+                                           inBundle:[NSBundle bundleForClass:self.class]
+                      compatibleWithTraitCollection:nil];
+        }
+
         if (iconTemplateImage) {
-            iconTemplateImageData
-                = UIImagePNGRepresentation(iconTemplateImage);
+            iconTemplateImageData = UIImagePNGRepresentation(iconTemplateImage);
         }
     }
 
@@ -301,21 +344,35 @@ RCT_EXPORT_METHOD(updateCall:(NSString *)callUUID
                        startedConnectingAt:nil];
 }
 
-// The following just help with debugging:
-#ifdef DEBUG
-
 - (void) providerDidActivateAudioSessionWithSession:(AVAudioSession *)session {
+#ifdef DEBUG
     NSLog(@"[RNCallKit][CXProviderDelegate][provider:didActivateAudioSession:]");
+#endif
+    [[RTCAudioSession sharedInstance] audioSessionDidActivate:session];
 }
 
 - (void) providerDidDeactivateAudioSessionWithSession:(AVAudioSession *)session {
+#ifdef DEBUG
     NSLog(@"[RNCallKit][CXProviderDelegate][provider:didDeactivateAudioSession:]");
+#endif
+    [[RTCAudioSession sharedInstance] audioSessionDidDeactivate:session];
 }
 
 - (void) providerTimedOutPerformingActionWithAction:(CXAction *)action {
+#ifdef DEBUG
     NSLog(@"[RNCallKit][CXProviderDelegate][provider:timedOutPerformingAction:]");
+#endif
 }
 
-#endif
+
+// The bridge might already be invalidated by the time a CallKit event is processed,
+// just ignore it and don't emit it.
+- (void)sendEventWithName:(NSString *)name body:(id)body {
+    if (!self.bridge) {
+        return;
+    }
+
+    [super sendEventWithName:name body:body];
+}
 
 @end

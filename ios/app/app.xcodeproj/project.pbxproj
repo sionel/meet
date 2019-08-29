@@ -18,44 +18,20 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		695AF3ED6F686F9C5EE40F9A /* libPods-jitsi-meet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 489E8EFE2C720D10F5961AEF /* libPods-jitsi-meet.a */; };
-		AC7CC01D21F808CE00D5371A /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AC7CC00E21F808CD00D5371A /* FontAwesome5_Brands.ttf */; };
-		AC7CC01E21F808CE00D5371A /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AC7CC00F21F808CD00D5371A /* Entypo.ttf */; };
-		AC7CC01F21F808CE00D5371A /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AC7CC01021F808CD00D5371A /* FontAwesome.ttf */; };
-		AC7CC02021F808CE00D5371A /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AC7CC01121F808CD00D5371A /* FontAwesome5_Solid.ttf */; };
-		AC7CC02121F808CE00D5371A /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AC7CC01221F808CD00D5371A /* EvilIcons.ttf */; };
-		AC7CC02221F808CE00D5371A /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AC7CC01321F808CD00D5371A /* Foundation.ttf */; };
-		AC7CC02321F808CE00D5371A /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AC7CC01421F808CD00D5371A /* Octicons.ttf */; };
-		AC7CC02421F808CE00D5371A /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AC7CC01521F808CD00D5371A /* Zocial.ttf */; };
-		AC7CC02521F808CE00D5371A /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AC7CC01621F808CD00D5371A /* FontAwesome5_Regular.ttf */; };
-		AC7CC02621F808CE00D5371A /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AC7CC01721F808CD00D5371A /* MaterialCommunityIcons.ttf */; };
-		AC7CC02721F808CE00D5371A /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AC7CC01821F808CD00D5371A /* Ionicons.ttf */; };
-		AC7CC02821F808CE00D5371A /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AC7CC01921F808CD00D5371A /* SimpleLineIcons.ttf */; };
-		AC7CC02921F808CE00D5371A /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AC7CC01A21F808CD00D5371A /* MaterialIcons.ttf */; };
-		AC7CC02A21F808CE00D5371A /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AC7CC01B21F808CD00D5371A /* Feather.ttf */; };
-		AC7CC02B21F808CE00D5371A /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AC7CC01C21F808CD00D5371A /* AntDesign.ttf */; };
-		B7CAF43B230D035800B160CC /* NanumSquareR.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B7CAF438230D035700B160CC /* NanumSquareR.ttf */; };
-		B7CAF43C230D035800B160CC /* NanumSquareEB.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B7CAF439230D035700B160CC /* NanumSquareEB.ttf */; };
-		B7CAF43D230D035800B160CC /* NanumSquareB.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B7CAF43A230D035700B160CC /* NanumSquareB.ttf */; };
-		DE4C455E21DE1E4300EA0709 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DE4C455D21DE1E4300EA0709 /* GoogleService-Info.plist */; };
+		B79E101F23164C910020C27C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B412F1E1EDEE6E800B1A0A6 /* ViewController.m */; };
+		B79E102023164C910020C27C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
+		B79E102123164C910020C27C /* FIRUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = DE4C455F21DE1E4E00EA0709 /* FIRUtilities.m */; };
+		B79E102223164C910020C27C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		B79E102423164C910020C27C /* JitsiMeet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B26BE6D1EC5BC3C00EEFB41 /* JitsiMeet.framework */; };
+		B79E102523164C910020C27C /* WebRTC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BD6B4361EF82A6B00D1F4CD /* WebRTC.framework */; };
+		B79E102623164C910020C27C /* libPods-jitsi-meet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 489E8EFE2C720D10F5961AEF /* libPods-jitsi-meet.a */; };
+		B79E102823164C910020C27C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0B412F201EDEE95300B1A0A6 /* Main.storyboard */; };
+		B79E102923164C910020C27C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		B79E102A23164C910020C27C /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
+		B79E102C23164C910020C27C /* JitsiMeet.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0B26BE6D1EC5BC3C00EEFB41 /* JitsiMeet.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B79E102D23164C910020C27C /* WebRTC.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0BD6B4361EF82A6B00D1F4CD /* WebRTC.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		DE4C456121DE1E4E00EA0709 /* FIRUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = DE4C455F21DE1E4E00EA0709 /* FIRUtilities.m */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		ACA0EFFA221583E800A97DB8 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = ACA0EFE4221583DA00A97DB8 /* RCTLinking.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 134814201AA4EA6300B7C361;
-			remoteInfo = RCTLinking;
-		};
-		ACA0EFFC221583E800A97DB8 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = ACA0EFE4221583DA00A97DB8 /* RCTLinking.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 2D2A28471D9B043800D4039D;
-			remoteInfo = "RCTLinking-tvOS";
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		0B26BE701EC5BC3C00EEFB41 /* Embed Frameworks */ = {
@@ -70,6 +46,38 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		0BEA5C491F7B8F73000D0AB4 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B79E102B23164C910020C27C /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				B79E102C23164C910020C27C /* JitsiMeet.framework in Embed Frameworks */,
+				B79E102D23164C910020C27C /* WebRTC.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B79E103423164C910020C27C /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -78,8 +86,18 @@
 		0B412F1D1EDEE6E800B1A0A6 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		0B412F1E1EDEE6E800B1A0A6 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		0B412F201EDEE95300B1A0A6 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		0B5418461F7C5D8C00A2DD86 /* MeetingRowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingRowController.swift; sourceTree = "<group>"; };
+		0B70016F1F7C51CC005944F4 /* InCallController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InCallController.swift; sourceTree = "<group>"; };
 		0BBD021F212EB69D00CCB19F /* Types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Types.h; sourceTree = "<group>"; };
 		0BD6B4361EF82A6B00D1F4CD /* WebRTC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebRTC.framework; path = "../../node_modules/react-native-webrtc/ios/WebRTC.framework"; sourceTree = "<group>"; };
+		0BEA5C281F7B8F73000D0AB4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
+		0BEA5C2A1F7B8F73000D0AB4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		0BEA5C2C1F7B8F73000D0AB4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0BEA5C361F7B8F73000D0AB4 /* InterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceController.swift; sourceTree = "<group>"; };
+		0BEA5C381F7B8F73000D0AB4 /* ExtensionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
+		0BEA5C3A1F7B8F73000D0AB4 /* ComplicationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplicationController.swift; sourceTree = "<group>"; };
+		0BEA5C3C1F7B8F73000D0AB4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		0BEA5C3E1F7B8F73000D0AB4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* jitsi-meet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "jitsi-meet.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -89,29 +107,14 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4670A512A688E2DC34528282 /* Pods-jitsi-meet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-jitsi-meet.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-jitsi-meet/Pods-jitsi-meet.debug.xcconfig"; sourceTree = "<group>"; };
 		489E8EFE2C720D10F5961AEF /* libPods-jitsi-meet.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-jitsi-meet.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		AC7CC00E21F808CD00D5371A /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome5_Brands.ttf; sourceTree = "<group>"; };
-		AC7CC00F21F808CD00D5371A /* Entypo.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Entypo.ttf; sourceTree = "<group>"; };
-		AC7CC01021F808CD00D5371A /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome.ttf; sourceTree = "<group>"; };
-		AC7CC01121F808CD00D5371A /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome5_Solid.ttf; sourceTree = "<group>"; };
-		AC7CC01221F808CD00D5371A /* EvilIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = EvilIcons.ttf; sourceTree = "<group>"; };
-		AC7CC01321F808CD00D5371A /* Foundation.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Foundation.ttf; sourceTree = "<group>"; };
-		AC7CC01421F808CD00D5371A /* Octicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Octicons.ttf; sourceTree = "<group>"; };
-		AC7CC01521F808CD00D5371A /* Zocial.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Zocial.ttf; sourceTree = "<group>"; };
-		AC7CC01621F808CD00D5371A /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome5_Regular.ttf; sourceTree = "<group>"; };
-		AC7CC01721F808CD00D5371A /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialCommunityIcons.ttf; sourceTree = "<group>"; };
-		AC7CC01821F808CD00D5371A /* Ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Ionicons.ttf; sourceTree = "<group>"; };
-		AC7CC01921F808CD00D5371A /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SimpleLineIcons.ttf; sourceTree = "<group>"; };
-		AC7CC01A21F808CD00D5371A /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialIcons.ttf; sourceTree = "<group>"; };
-		AC7CC01B21F808CD00D5371A /* Feather.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Feather.ttf; sourceTree = "<group>"; };
-		AC7CC01C21F808CD00D5371A /* AntDesign.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = AntDesign.ttf; sourceTree = "<group>"; };
-		ACA0EFE4221583DA00A97DB8 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../../../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
-		B3B083EB1D4955FF0069CEE7 /* app.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = app.entitlements; sourceTree = "<group>"; };
-		B7CAF438230D035700B160CC /* NanumSquareR.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = NanumSquareR.ttf; path = ../../../assets/Fonts/NanumSquareR.ttf; sourceTree = "<group>"; };
-		B7CAF439230D035700B160CC /* NanumSquareEB.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = NanumSquareEB.ttf; path = ../../../assets/Fonts/NanumSquareEB.ttf; sourceTree = "<group>"; };
-		B7CAF43A230D035700B160CC /* NanumSquareB.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = NanumSquareB.ttf; path = ../../../assets/Fonts/NanumSquareB.ttf; sourceTree = "<group>"; };
-		DE4C455D21DE1E4300EA0709 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
+		B79E0FF92316497C0020C27C /* app.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = app.entitlements; sourceTree = "<group>"; };
+		B79E101823164C0A0020C27C /* jitsi-meet copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "jitsi-meet copy-Info.plist"; path = "/Users/peacejung/Desktop/peace/Projects/jitsi-meet-stable-jitsi-meet_3936/ios/app/jitsi-meet copy-Info.plist"; sourceTree = "<absolute>"; };
+		B79E103823164C910020C27C /* jitsi-meet-inhouse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "jitsi-meet-inhouse.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B79E103923164C910020C27C /* jitsi-meet copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "jitsi-meet copy-Info.plist"; path = "/Users/peacejung/Desktop/peace/Projects/jitsi-meet-stable-jitsi-meet_3936/ios/app/jitsi-meet copy-Info.plist"; sourceTree = "<absolute>"; };
 		DE4C455F21DE1E4E00EA0709 /* FIRUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FIRUtilities.m; sourceTree = "<group>"; };
 		DE4C456021DE1E4E00EA0709 /* FIRUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FIRUtilities.h; sourceTree = "<group>"; };
+		E58801132278944E008B0561 /* JitsiMeetContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JitsiMeetContext.swift; sourceTree = "<group>"; };
+		E5C97B62227A1EB400199214 /* JitsiMeetCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JitsiMeetCommands.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +125,16 @@
 				0B26BE6E1EC5BC3C00EEFB41 /* JitsiMeet.framework in Frameworks */,
 				0BD6B4371EF82A6B00D1F4CD /* WebRTC.framework in Frameworks */,
 				695AF3ED6F686F9C5EE40F9A /* libPods-jitsi-meet.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B79E102323164C910020C27C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B79E102423164C910020C27C /* JitsiMeet.framework in Frameworks */,
+				B79E102523164C910020C27C /* WebRTC.framework in Frameworks */,
+				B79E102623164C910020C27C /* libPods-jitsi-meet.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -138,6 +151,34 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		0BEA5C261F7B8F73000D0AB4 /* Watch app */ = {
+			isa = PBXGroup;
+			children = (
+				0BEA5C271F7B8F73000D0AB4 /* Interface.storyboard */,
+				0BEA5C2A1F7B8F73000D0AB4 /* Assets.xcassets */,
+				0BEA5C2C1F7B8F73000D0AB4 /* Info.plist */,
+			);
+			name = "Watch app";
+			path = watchos/app;
+			sourceTree = "<group>";
+		};
+		0BEA5C351F7B8F73000D0AB4 /* WatchKit extension */ = {
+			isa = PBXGroup;
+			children = (
+				0BEA5C361F7B8F73000D0AB4 /* InterfaceController.swift */,
+				0BEA5C381F7B8F73000D0AB4 /* ExtensionDelegate.swift */,
+				0BEA5C3A1F7B8F73000D0AB4 /* ComplicationController.swift */,
+				0BEA5C3C1F7B8F73000D0AB4 /* Assets.xcassets */,
+				0BEA5C3E1F7B8F73000D0AB4 /* Info.plist */,
+				0B70016F1F7C51CC005944F4 /* InCallController.swift */,
+				0B5418461F7C5D8C00A2DD86 /* MeetingRowController.swift */,
+				E58801132278944E008B0561 /* JitsiMeetContext.swift */,
+				E5C97B62227A1EB400199214 /* JitsiMeetCommands.swift */,
+			);
+			name = "WatchKit extension";
+			path = watchos/extension;
+			sourceTree = "<group>";
+		};
 		13B07FAE1A68108700A75B9A /* src */ = {
 			isa = PBXGroup;
 			children = (
@@ -145,7 +186,6 @@
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				DE4C456021DE1E4E00EA0709 /* FIRUtilities.h */,
 				DE4C455F21DE1E4E00EA0709 /* FIRUtilities.m */,
-				DE4C455D21DE1E4300EA0709 /* GoogleService-Info.plist */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
@@ -170,14 +210,15 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				ACA0EFF5221583E500A97DB8 /* Libraries */,
-				AC7CC00D21F8088C00D5371A /* Fonts */,
-				B3B083EB1D4955FF0069CEE7 /* app.entitlements */,
+				B79E0FF92316497C0020C27C /* app.entitlements */,
 				0B26BE711EC5BC4D00EEFB41 /* Frameworks */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				13B07FAE1A68108700A75B9A /* src */,
 				5E96ADD5E49F3B3822EF9A52 /* Pods */,
-				ACBA424422422D8A00712CED /* Recovered References */,
+				0BEA5C261F7B8F73000D0AB4 /* Watch app */,
+				0BEA5C351F7B8F73000D0AB4 /* WatchKit extension */,
+				B79E101823164C0A0020C27C /* jitsi-meet copy-Info.plist */,
+				B79E103923164C910020C27C /* jitsi-meet copy-Info.plist */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -187,59 +228,9 @@
 			isa = PBXGroup;
 			children = (
 				13B07F961A680F5B00A75B9A /* jitsi-meet.app */,
+				B79E103823164C910020C27C /* jitsi-meet-inhouse.app */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		AC7CC00D21F8088C00D5371A /* Fonts */ = {
-			isa = PBXGroup;
-			children = (
-				AC7CC01421F808CD00D5371A /* Octicons.ttf */,
-				AC7CC01B21F808CD00D5371A /* Feather.ttf */,
-				AC7CC00F21F808CD00D5371A /* Entypo.ttf */,
-				AC7CC00E21F808CD00D5371A /* FontAwesome5_Brands.ttf */,
-				AC7CC01721F808CD00D5371A /* MaterialCommunityIcons.ttf */,
-				AC7CC01C21F808CD00D5371A /* AntDesign.ttf */,
-				AC7CC01321F808CD00D5371A /* Foundation.ttf */,
-				AC7CC01821F808CD00D5371A /* Ionicons.ttf */,
-				B7CAF43A230D035700B160CC /* NanumSquareB.ttf */,
-				B7CAF439230D035700B160CC /* NanumSquareEB.ttf */,
-				B7CAF438230D035700B160CC /* NanumSquareR.ttf */,
-				AC7CC01121F808CD00D5371A /* FontAwesome5_Solid.ttf */,
-				AC7CC01621F808CD00D5371A /* FontAwesome5_Regular.ttf */,
-				AC7CC01021F808CD00D5371A /* FontAwesome.ttf */,
-				AC7CC01521F808CD00D5371A /* Zocial.ttf */,
-				AC7CC01221F808CD00D5371A /* EvilIcons.ttf */,
-				AC7CC01921F808CD00D5371A /* SimpleLineIcons.ttf */,
-				AC7CC01A21F808CD00D5371A /* MaterialIcons.ttf */,
-			);
-			name = Fonts;
-			path = "../../node_modules/react-native-vector-icons/Fonts";
-			sourceTree = "<group>";
-		};
-		ACA0EFF5221583E500A97DB8 /* Libraries */ = {
-			isa = PBXGroup;
-			children = (
-				ACA0EFE4221583DA00A97DB8 /* RCTLinking.xcodeproj */,
-			);
-			name = Libraries;
-			path = "New Group1";
-			sourceTree = "<group>";
-		};
-		ACA0EFF6221583E800A97DB8 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				ACA0EFFB221583E800A97DB8 /* libRCTLinking.a */,
-				ACA0EFFD221583E800A97DB8 /* libRCTLinking-tvOS.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		ACBA424422422D8A00712CED /* Recovered References */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -257,7 +248,11 @@
 				0B26BE701EC5BC3C00EEFB41 /* Embed Frameworks */,
 				B35383AD1DDA0083008F406A /* Adjust embedded framework architectures */,
 				0BB7DA181EC9E695007AAE98 /* Adjust ATS */,
+				DEF4813D224925A2002AD03A /* Copy Google Plist file */,
 				DEC2069321CBBD6900072F03 /* Setup Fabric */,
+				DE11877A21EE09640078D059 /* Setup Google reverse URL handler */,
+				DE4F6D6E22005C0400DE699E /* Setup Dropbox */,
+				0BEA5C491F7B8F73000D0AB4 /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
@@ -268,17 +263,45 @@
 			productReference = 13B07F961A680F5B00A75B9A /* jitsi-meet.app */;
 			productType = "com.apple.product-type.application";
 		};
+		B79E101B23164C910020C27C /* jitsi-meet-inhouse */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B79E103523164C910020C27C /* Build configuration list for PBXNativeTarget "jitsi-meet-inhouse" */;
+			buildPhases = (
+				B79E101C23164C910020C27C /* [CP] Check Pods Manifest.lock */,
+				B79E101D23164C910020C27C /* Run React packager */,
+				B79E101E23164C910020C27C /* Sources */,
+				B79E102323164C910020C27C /* Frameworks */,
+				B79E102723164C910020C27C /* Resources */,
+				B79E102B23164C910020C27C /* Embed Frameworks */,
+				B79E102E23164C910020C27C /* Adjust embedded framework architectures */,
+				B79E102F23164C910020C27C /* Adjust ATS */,
+				B79E103023164C910020C27C /* Copy Google Plist file */,
+				B79E103123164C910020C27C /* Setup Fabric */,
+				B79E103223164C910020C27C /* Setup Google reverse URL handler */,
+				B79E103323164C910020C27C /* Setup Dropbox */,
+				B79E103423164C910020C27C /* Embed Watch Content */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "jitsi-meet-inhouse";
+			productName = "Jitsi Meet";
+			productReference = B79E103823164C910020C27C /* jitsi-meet-inhouse.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1000;
+				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = Facebook;
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = BR6U9G47ZR;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.SafariKeychain = {
 								enabled = 1;
@@ -288,77 +311,49 @@
 							};
 						};
 					};
+					B79E101B23164C910020C27C = {
+						DevelopmentTeam = QRHHV6YR2R;
+						ProvisioningStyle = Automatic;
+					};
 				};
 			};
 			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "app" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
 				en,
 				Base,
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = ACA0EFF6221583E800A97DB8 /* Products */;
-					ProjectRef = ACA0EFE4221583DA00A97DB8 /* RCTLinking.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* jitsi-meet */,
+				B79E101B23164C910020C27C /* jitsi-meet-inhouse */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		ACA0EFFB221583E800A97DB8 /* libRCTLinking.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRCTLinking.a;
-			remoteRef = ACA0EFFA221583E800A97DB8 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		ACA0EFFD221583E800A97DB8 /* libRCTLinking-tvOS.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libRCTLinking-tvOS.a";
-			remoteRef = ACA0EFFC221583E800A97DB8 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		13B07F8E1A680F5B00A75B9A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AC7CC02321F808CE00D5371A /* Octicons.ttf in Resources */,
 				0B412F211EDEE95300B1A0A6 /* Main.storyboard in Resources */,
-				B7CAF43B230D035800B160CC /* NanumSquareR.ttf in Resources */,
-				AC7CC02521F808CE00D5371A /* FontAwesome5_Regular.ttf in Resources */,
-				AC7CC02B21F808CE00D5371A /* AntDesign.ttf in Resources */,
-				AC7CC02221F808CE00D5371A /* Foundation.ttf in Resources */,
-				AC7CC02021F808CE00D5371A /* FontAwesome5_Solid.ttf in Resources */,
-				AC7CC02721F808CE00D5371A /* Ionicons.ttf in Resources */,
-				AC7CC02421F808CE00D5371A /* Zocial.ttf in Resources */,
-				AC7CC01F21F808CE00D5371A /* FontAwesome.ttf in Resources */,
-				AC7CC02A21F808CE00D5371A /* Feather.ttf in Resources */,
-				AC7CC01E21F808CE00D5371A /* Entypo.ttf in Resources */,
-				B7CAF43C230D035800B160CC /* NanumSquareEB.ttf in Resources */,
-				AC7CC02621F808CE00D5371A /* MaterialCommunityIcons.ttf in Resources */,
-				DE4C455E21DE1E4300EA0709 /* GoogleService-Info.plist in Resources */,
-				AC7CC02921F808CE00D5371A /* MaterialIcons.ttf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
-				AC7CC02821F808CE00D5371A /* SimpleLineIcons.ttf in Resources */,
-				AC7CC02121F808CE00D5371A /* EvilIcons.ttf in Resources */,
-				B7CAF43D230D035800B160CC /* NanumSquareB.ttf in Resources */,
-				AC7CC01D21F808CE00D5371A /* FontAwesome5_Brands.ttf in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B79E102723164C910020C27C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B79E102823164C910020C27C /* Main.storyboard in Resources */,
+				B79E102923164C910020C27C /* Images.xcassets in Resources */,
+				B79E102A23164C910020C27C /* LaunchScreen.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -391,7 +386,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "../scripts/run-packager.sh";
+			shellScript = "../scripts/run-packager.sh\n";
 		};
 		B35383AD1DDA0083008F406A /* Adjust embedded framework architectures */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -429,6 +424,178 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		B79E101C23164C910020C27C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-jitsi-meet-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B79E101D23164C910020C27C /* Run React packager */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run React packager";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "../scripts/run-packager.sh\n";
+		};
+		B79E102E23164C910020C27C /* Adjust embedded framework architectures */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Adjust embedded framework architectures";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "../scripts/fixup-frameworks.sh\n";
+		};
+		B79E102F23164C910020C27C /* Adjust ATS */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Adjust ATS";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "../scripts/fixup-ats.sh\n";
+		};
+		B79E103023164C910020C27C /* Copy Google Plist file */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Google Plist file";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "GOOGLE_PLIST_NAME=\"GoogleService-Info.plist\"\nGOOGLE_PLIST=\"$PROJECT_DIR/$GOOGLE_PLIST_NAME\"\nBUILD_APP_DIR=\"$BUILT_PRODUCTS_DIR/$PRODUCT_NAME.app\"\n\nif [[ -f $GOOGLE_PLIST ]]; then\n    cp $GOOGLE_PLIST \"$BUILD_APP_DIR/$GOOGLE_PLIST_NAME\"\nfi\n";
+		};
+		B79E103123164C910020C27C /* Setup Fabric */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Setup Fabric";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${PODS_ROOT}/Fabric/run\n";
+		};
+		B79E103223164C910020C27C /* Setup Google reverse URL handler */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Setup Google reverse URL handler";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "INFO_PLIST=\"$BUILT_PRODUCTS_DIR/$INFOPLIST_PATH\"\nGOOGLE_PLIST=\"$PROJECT_DIR/GoogleService-Info.plist\"\n\nif [[ -f $GOOGLE_PLIST ]]; then\n    REVERSED_CLIENT_ID=$(/usr/libexec/PlistBuddy -c \"Print :REVERSED_CLIENT_ID:\" $GOOGLE_PLIST)\n    /usr/libexec/PlistBuddy -c \"Set :CFBundleURLTypes:1:CFBundleURLSchemes:0 $REVERSED_CLIENT_ID\" $INFO_PLIST\nfi\n";
+		};
+		B79E103323164C910020C27C /* Setup Dropbox */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Setup Dropbox";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "INFO_PLIST=\"$BUILT_PRODUCTS_DIR/$INFOPLIST_PATH\"\nDROPBOX_KEY_FILE=\"$PROJECT_DIR/dropbox.key\"\n\nif [[ -f $DROPBOX_KEY_FILE ]]; then\n    /usr/libexec/PlistBuddy -c \"Delete :LSApplicationQueriesSchemes\" $INFO_PLIST\n    /usr/libexec/PlistBuddy -c \"Add :LSApplicationQueriesSchemes array\" $INFO_PLIST\n    /usr/libexec/PlistBuddy -c \"Add :LSApplicationQueriesSchemes:0 string 'dbapi-2'\" $INFO_PLIST\n    /usr/libexec/PlistBuddy -c \"Add :LSApplicationQueriesSchemes:1 string 'dbapi-8-emm'\" $INFO_PLIST\n\n    DROPBOX_KEY=$(head -n 1 $DROPBOX_KEY_FILE)\n    /usr/libexec/PlistBuddy -c \"Add :CFBundleURLTypes:2:CFBundleURLName string dropbox\" $INFO_PLIST\n    /usr/libexec/PlistBuddy -c \"Add :CFBundleURLTypes:2:CFBundleURLSchemes array\" $INFO_PLIST\n    /usr/libexec/PlistBuddy -c \"Add :CFBundleURLTypes:2:CFBundleURLSchemes:0 string $DROPBOX_KEY\" $INFO_PLIST\nfi\n";
+		};
+		DE11877A21EE09640078D059 /* Setup Google reverse URL handler */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Setup Google reverse URL handler";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "INFO_PLIST=\"$BUILT_PRODUCTS_DIR/$INFOPLIST_PATH\"\nGOOGLE_PLIST=\"$PROJECT_DIR/GoogleService-Info.plist\"\n\nif [[ -f $GOOGLE_PLIST ]]; then\n    REVERSED_CLIENT_ID=$(/usr/libexec/PlistBuddy -c \"Print :REVERSED_CLIENT_ID:\" $GOOGLE_PLIST)\n    /usr/libexec/PlistBuddy -c \"Set :CFBundleURLTypes:1:CFBundleURLSchemes:0 $REVERSED_CLIENT_ID\" $INFO_PLIST\nfi\n";
+		};
+		DE4F6D6E22005C0400DE699E /* Setup Dropbox */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Setup Dropbox";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "INFO_PLIST=\"$BUILT_PRODUCTS_DIR/$INFOPLIST_PATH\"\nDROPBOX_KEY_FILE=\"$PROJECT_DIR/dropbox.key\"\n\nif [[ -f $DROPBOX_KEY_FILE ]]; then\n    /usr/libexec/PlistBuddy -c \"Delete :LSApplicationQueriesSchemes\" $INFO_PLIST\n    /usr/libexec/PlistBuddy -c \"Add :LSApplicationQueriesSchemes array\" $INFO_PLIST\n    /usr/libexec/PlistBuddy -c \"Add :LSApplicationQueriesSchemes:0 string 'dbapi-2'\" $INFO_PLIST\n    /usr/libexec/PlistBuddy -c \"Add :LSApplicationQueriesSchemes:1 string 'dbapi-8-emm'\" $INFO_PLIST\n\n    DROPBOX_KEY=$(head -n 1 $DROPBOX_KEY_FILE)\n    /usr/libexec/PlistBuddy -c \"Add :CFBundleURLTypes:2:CFBundleURLName string dropbox\" $INFO_PLIST\n    /usr/libexec/PlistBuddy -c \"Add :CFBundleURLTypes:2:CFBundleURLSchemes array\" $INFO_PLIST\n    /usr/libexec/PlistBuddy -c \"Add :CFBundleURLTypes:2:CFBundleURLSchemes:0 string $DROPBOX_KEY\" $INFO_PLIST\nfi\n";
+		};
 		DEC2069321CBBD6900072F03 /* Setup Fabric */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -447,6 +614,24 @@
 			shellPath = /bin/sh;
 			shellScript = "${PODS_ROOT}/Fabric/run\n";
 		};
+		DEF4813D224925A2002AD03A /* Copy Google Plist file */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Google Plist file";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "GOOGLE_PLIST_NAME=\"GoogleService-Info.plist\"\nGOOGLE_PLIST=\"$PROJECT_DIR/$GOOGLE_PLIST_NAME\"\nBUILD_APP_DIR=\"$BUILT_PRODUCTS_DIR/$PRODUCT_NAME.app\"\n\nif [[ -f $GOOGLE_PLIST ]]; then\n    cp $GOOGLE_PLIST \"$BUILD_APP_DIR/$GOOGLE_PLIST_NAME\"\nfi\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -461,9 +646,28 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B79E101E23164C910020C27C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B79E101F23164C910020C27C /* ViewController.m in Sources */,
+				B79E102023164C910020C27C /* AppDelegate.m in Sources */,
+				B79E102123164C910020C27C /* FIRUtilities.m in Sources */,
+				B79E102223164C910020C27C /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		0BEA5C271F7B8F73000D0AB4 /* Interface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0BEA5C281F7B8F73000D0AB4 /* Base */,
+			);
+			name = Interface.storyboard;
+			sourceTree = "<group>";
+		};
 		13B07FB11A68108700A75B9A /* LaunchScreen.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -480,8 +684,10 @@
 			baseConfigurationReference = 4670A512A688E2DC34528282 /* Pods-jitsi-meet.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconDebug;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconRelease;
 				CODE_SIGN_ENTITLEMENTS = app.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = BR6U9G47ZR;
@@ -505,6 +711,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.douzone.wehagomeet;
 				PRODUCT_NAME = "jitsi-meet";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -516,9 +723,11 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconRelease;
 				CODE_SIGN_ENTITLEMENTS = app.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = BR6U9G47ZR;
-				ENABLE_BITCODE = NO;
+				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"../../node_modules/react-native-webrtc/ios",
@@ -538,6 +747,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.douzone.wehagomeet;
 				PRODUCT_NAME = "jitsi-meet";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -546,6 +756,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -571,7 +782,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				ENABLE_BITCODE = NO;
+				ENABLE_BITCODE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -593,7 +804,7 @@
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -604,6 +815,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -629,7 +841,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
-				ENABLE_BITCODE = NO;
+				ENABLE_BITCODE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -644,10 +856,84 @@
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		B79E103623164C910020C27C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4670A512A688E2DC34528282 /* Pods-jitsi-meet.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconRelease;
+				CODE_SIGN_ENTITLEMENTS = app.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = NO;
+				DEVELOPMENT_TEAM = QRHHV6YR2R;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"../../node_modules/react-native-webrtc/ios",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
+				INFOPLIST_FILE = "jitsi-meet copy-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.douzone.wehagomeet-inhouse";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B79E103723164C910020C27C /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 09AA3B93E4CC62D84B424690 /* Pods-jitsi-meet.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconRelease;
+				CODE_SIGN_ENTITLEMENTS = app.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = QRHHV6YR2R;
+				ENABLE_BITCODE = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"../../node_modules/react-native-webrtc/ios",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
+				INFOPLIST_FILE = "jitsi-meet copy-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.douzone.wehagomeet-inhouse";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -668,6 +954,15 @@
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
 				83CBBA211A601CBA00E9B192 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B79E103523164C910020C27C /* Build configuration list for PBXNativeTarget "jitsi-meet-inhouse" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B79E103623164C910020C27C /* Debug */,
+				B79E103723164C910020C27C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

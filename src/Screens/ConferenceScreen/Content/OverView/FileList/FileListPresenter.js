@@ -43,7 +43,7 @@ const FileListPresenter = props => {
         <View
           style={{ paddingTop: 20, paddingBottom: 10, alignItems: 'center' }}
         >
-          <Text style={{fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal'}}>파일이 없습니다.</Text>
+          <Text style={{fontFamily: 'DOUZONEText30'}}>파일이 없습니다.</Text>
         </View>
       ) : (
         <FlatList
@@ -119,13 +119,13 @@ const styles = StyleSheet.create({
     color: 'rgb(51, 51, 51)',
     fontSize: 14,
     marginLeft: 11,
-    fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal'
+    fontFamily: 'DOUZONEText30'
   },
   itemSize: {
     flex: 2,
     fontSize: 12,
     textAlign: 'right',
-    fontFamily: Platform.OS === 'ios' ? 'NanumSquareB' : 'normal'
+    fontFamily: 'DOUZONEText30'
   }
 });
 

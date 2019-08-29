@@ -4,12 +4,12 @@
  */
 import React, { Component } from 'react';
 import { Alert, BackHandler, NativeModules, Platform } from 'react-native';
-// import Orientation from 'react-native-orientation-locker';
-// import DeviceInfo from 'react-native-device-info';
+
 import SplashScreen from 'react-native-splash-screen';
 import Permissions from 'react-native-permissions';
 
-import MainPresenter from './MainPresenter';
+// import MainPresenter from './MainPresenter';
+import HomeRoute from '../Routes/HomeRoute';
 import LoginScreen from '../Screens/LoginScreen';
 import AppIntroSlide from '../components/AppIntroSlide';
 
@@ -19,8 +19,6 @@ class MainContainer extends Component {
   state = { isLogin: false, url: null };
 
   componentDidMount() {
-    // isTablet ? Orientation.unlockAllOrientations() : Orientation.lockToPortrait();
-    // Orientation.unlockAllOrientations();
     setTimeout(() => {
       Platform.OS !== 'ios' && SplashScreen.hide();
     }, 1000);
@@ -60,7 +58,8 @@ class MainContainer extends Component {
     return (
       <AppIntroSlide>
         {this.state.isLogin ? (
-          <MainPresenter url={this.props.url} />
+          // <MainPresenter url={this.props.url} />
+          <HomeRoute />
         ) : (
           <LoginScreen
             handleOnLogin={this._handleOnLogin}

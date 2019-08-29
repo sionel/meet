@@ -6,9 +6,7 @@ import {
   StatusBar,
   Dimensions
 } from 'react-native';
-import { RTCView } from 'react-native-webrtc';
-import RBSheet from 'react-native-raw-bottom-sheet';
-import DrawingSketch from './DrawingSketch';
+
 import MainVideo from './MainVideo';
 import TopArea from './TopArea';
 import BottomArea from './BottomArea';

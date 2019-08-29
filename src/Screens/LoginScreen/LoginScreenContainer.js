@@ -6,15 +6,13 @@
 
 import React from 'react';
 import {
-  AppState,
   Linking,
   Platform,
   View,
+  Text,
   Alert,
   Dimensions,
-  UIManager,
-  LayoutAnimation,
-  ToastAndroid,
+  ToastAndroid
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import Orientation from 'react-native-orientation-locker';
@@ -97,10 +95,11 @@ class LoginScreenContainer extends React.Component {
       webView,
       logging
     } = this.state;
+
     if (waiting) {
       Orientation.unlockAllOrientations();
       return (
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, backgroundColor: '#fff' }}>
           <CustomLottie
             source={'waiting'}
             containerStyle={{ backgroundColor: 'transparent' }}
@@ -207,8 +206,8 @@ class LoginScreenContainer extends React.Component {
         }
       }, 1000);
     } else {
-      setTimeout(() => {
-        return this.setState({ waiting: false });
+      return setTimeout(() => {
+        this.setState({ waiting: false });
       }, 1000);
     }
   };

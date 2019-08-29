@@ -3,7 +3,7 @@
  **/
 import JitsiMeetJS, {
   JitsiConnectionEvents
-} from "../../../jitsi/features/base/lib-jitsi-meet";
+} from '../../../jitsi/features/base/lib-jitsi-meet';
 import config from "./config";
 
 class Connection {
@@ -73,14 +73,6 @@ class Connection {
     jitsiConnection.addEventListener(
       JitsiConnectionEvents.CONNECTION_ESTABLISHED,
       resolve
-    );
-
-    // 커넥션 연결 실패시 발생하는 이벤트 바인딩
-    jitsiConnection.addEventListener(
-      JitsiConnectionEvents.CONNECTION_FAILED,
-      () => {
-        reject();
-      }
     );
 
     // 연결 실패 이벤트 바인딩
