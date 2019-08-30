@@ -33,4 +33,5 @@ const Routes = createStackNavigator(
   }
 );
 
-export default createAppContainer(Routes);
+export default Routes;
+// export default createAppContainer(Routes);

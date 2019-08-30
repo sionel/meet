@@ -93,6 +93,8 @@ PODS:
     - React
   - react-native-orientation-locker (1.1.6):
     - React
+  - react-native-slider (1.1.4):
+    - React
   - react-native-webrtc (1.69.2):
     - React
   - react-native-webview (5.8.1):
@@ -150,6 +152,8 @@ PODS:
     - React
   - RNDeviceInfo (2.3.2):
     - React
+  - RNGestureHandler (1.4.1):
+    - React
   - RNGoogleSignin (2.0.0):
     - GoogleSignIn (~> 4.4.0)
     - React
@@ -162,7 +166,7 @@ PODS:
     - React/Core
   - RNSVG (9.7.0):
     - React
-  - RNVectorIcons (6.0.2):
+  - RNVectorIcons (6.6.0):
     - React
   - RNWatch (0.2.0):
     - React
@@ -183,6 +187,7 @@ DEPENDENCIES:
   - react-native-calendar-events (from `../node_modules/react-native-calendar-events`)
   - react-native-keep-awake (from `../node_modules/react-native-keep-awake`)
   - react-native-orientation-locker (from `../node_modules/react-native-orientation-locker/react-native-orientation-locker.podspec`)
+  - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - react-native-webrtc (from `../node_modules/react-native-webrtc`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React/Core (from `../node_modules/react-native`)
@@ -198,6 +203,7 @@ DEPENDENCIES:
   - ReactNativePermissions (from `../node_modules/react-native-permissions`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
+  - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNGoogleSignin (from `../node_modules/react-native-google-signin`)
   - "RNSketchCanvas (from `../node_modules/@terrylinla/react-native-sketch-canvas`)"
   - RNSound (from `../node_modules/react-native-sound`)
@@ -245,6 +251,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-keep-awake"
   react-native-orientation-locker:
     :path: "../node_modules/react-native-orientation-locker/react-native-orientation-locker.podspec"
+  react-native-slider:
+    :path: "../node_modules/@react-native-community/slider"
   react-native-webrtc:
     :path: "../node_modules/react-native-webrtc"
   react-native-webview:
@@ -255,6 +263,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/async-storage"
   RNDeviceInfo:
     :path: "../node_modules/react-native-device-info"
+  RNGestureHandler:
+    :path: "../node_modules/react-native-gesture-handler"
   RNGoogleSignin:
     :path: "../node_modules/react-native-google-signin"
   RNSketchCanvas:
@@ -297,19 +307,21 @@ SPEC CHECKSUMS:
   react-native-calendar-events: ee9573e355711ac679e071be70789542431f4ce3
   react-native-keep-awake: eba3137546b10003361b37c761f6c429b59814ae
   react-native-orientation-locker: 23918c400376a7043e752c639c122fcf6bce8f1c
+  react-native-slider: 9fb33ac32cb788360adb5c38685aa3642bebd93c
   react-native-webrtc: 1415d2a54b2246dd85ba95eb3e4bf2b66533f951
   react-native-webview: a95842e3f351a6d2c8bc8bcc9eab689c7e7e5ad4
   ReactNativePermissions: f0aec11433d43d45953c678b6982921d83ad94c8
   RNCAsyncStorage: 8e31405a9f12fbf42c2bb330e4560bfd79c18323
   RNDeviceInfo: bdc3e922b2ed0f086e9d9ab534e61bc316f08576
+  RNGestureHandler: 4cb47a93019c1a201df2644413a0a1569a51c8aa
   RNGoogleSignin: d030c6c6591db24c3cee649f64c7babf0a1699a0
   RNSketchCanvas: 6939b18677cd1794151cc3d8eb5a0a2158a4a05b
   RNSound: e157320f503bdd4f4ee6d8542e948d54f90c3c3a
   RNSVG: 9e444e5236161d3574ac834d683f83c845d02525
-  RNVectorIcons: d819334932bcda3332deb3d2c8ea4d069e0b98f9
+  RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   RNWatch: 09738b339eceb66e4d80a2371633ca5fb380fa42
   yoga: 92b2102c3d373d1a790db4ab761d2b0ffc634f64
 
-PODFILE CHECKSUM: b6c0dfed5538933d028d1dd4144ba2ae101defe2
+PODFILE CHECKSUM: 8fb3cd3fe3cb0833e43c4a45641354740f349e07
 
 COCOAPODS: 1.6.1

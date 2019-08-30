@@ -8,8 +8,7 @@ import { Alert, BackHandler, NativeModules, Platform } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import Permissions from 'react-native-permissions';
 
-// import MainPresenter from './MainPresenter';
-import HomeRoute from '../Routes/HomeRoute';
+import MainPresenter from './MainPresenter';
 import LoginScreen from '../Screens/LoginScreen';
 import AppIntroSlide from '../components/AppIntroSlide';
 
@@ -58,8 +57,7 @@ class MainContainer extends Component {
     return (
       <AppIntroSlide>
         {this.state.isLogin ? (
-          // <MainPresenter url={this.props.url} />
-          <HomeRoute />
+          <MainPresenter url={this.props.url} />
         ) : (
           <LoginScreen
             handleOnLogin={this._handleOnLogin}
@@ -87,7 +85,7 @@ class MainContainer extends Component {
     const permissions =
       Platform.OS === 'ios'
         ? ['microphone', 'camera']
-        : ['microphone', 'camera', 'storage'];
+        : ['microphone', 'camera'];
     // 현재 권한 체크
     const response = await Permissions.checkMultiple(permissions);
     // 권한 설정 요청

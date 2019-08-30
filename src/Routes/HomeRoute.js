@@ -4,12 +4,7 @@
  */
 
 import React from 'react';
-import {
-  Image,
-  TouchableOpacity,
-  Dimensions,
-  View,
-} from 'react-native';
+import { Image, TouchableOpacity, Dimensions, View } from 'react-native';
 
 import {
   createStackNavigator,
@@ -238,4 +233,5 @@ const HomeRoute = createStackNavigator(
   }
 );
 
-export default createAppContainer(HomeRoute);
+export default HomeRoute;
+// export default createAppContainer(HomeRoute);

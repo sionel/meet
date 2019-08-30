@@ -5,11 +5,11 @@ import JitsiMeetJS from '../../../jitsi/features/base/lib-jitsi-meet';
 import config from './config';
 import Connection from './Connection';
 import ConferenceConnector from './ConferenceConnector';
-// import { actionCreators as localActionCreators } from '../../redux/modules/local';
-// import { actionCreators as mainUserActionCreators } from '../../redux/modules/mainUser';
-// import { actionCreators as participantsAcionCreators } from '../../redux/modules/participants';
-// import { actionCreators as DocumentShareAcionCreators } from '../../redux/modules/documentShare';
-// import { actionCreators as WedriveAcionCreators } from '../../redux/modules/wedrive';
+import { actionCreators as localActionCreators } from '../../redux/modules/local';
+import { actionCreators as mainUserActionCreators } from '../../redux/modules/mainUser';
+import { actionCreators as participantsAcionCreators } from '../../redux/modules/participants';
+import { actionCreators as DocumentShareAcionCreators } from '../../redux/modules/documentShare';
+import { actionCreators as WedriveAcionCreators } from '../../redux/modules/wedrive';
 // import APIManager from '../../services/api/ApiManager_new';
 import APIManager from '../../services/api/ApiManager';
 
@@ -22,7 +22,7 @@ class ConferenceManager {
     if (!ConferenceManager.instance) {
       // 싱글톤 변수 할당
       ConferenceManager.instance = this;
-      // this._dispatch = dispatch;
+      this._dispatch = dispatch;
     }
     return ConferenceManager.instance;
   }
@@ -42,7 +42,6 @@ class ConferenceManager {
       this._createHandlers(handleClose)
     );
     // connection 연결
-    console.log('roomName', roomName.toLowerCase())
     await this._connection.connect(roomName.toLowerCase(), handleClose);
     // 대화방 참가
     this._room = await this._conferenceConnector.connect(
@@ -53,44 +52,38 @@ class ConferenceManager {
     );
 
     // 대화방 접속 시간 세팅
-    // const createdTime = this._room.properties['created-ms'];
-    // this._dispatch(localActionCreators.setConferenceCreatedTime(createdTime));
+    const createdTime = this._room.properties['created-ms'];
+    this._dispatch(localActionCreators.setConferenceCreatedTime(createdTime));
 
     // 외부 접속이 아닐 때만 API 전송
-    // if (auth.is_creater !== '9' || !auth.is_creater) {
-    //   this._apiManager = new APIManager(
-    //     this._conferenceConnector.room.myUserId(),
-    //     {
-    //       roomId: roomName,
-    //       name: name,
-    //       a_token: auth.AUTH_A_TOKEN,
-    //       r_token: auth.AUTH_R_TOKEN,
-    //       hash_key: auth.HASH_KEY
-    //     }
-    //   );
-    //   // console.log('insert user');
-    //   this._apiManager.insertUser();
-    // }
+    if (auth.is_creater !== '9' || !auth.is_creater) {
+      this._apiManager = new APIManager(
+        this._conferenceConnector.room.myUserId(),
+        {
+          roomId: roomName,
+          name: name,
+          a_token: auth.AUTH_A_TOKEN,
+          r_token: auth.AUTH_R_TOKEN,
+          hash_key: auth.HASH_KEY
+        }
+      );
+      // console.log('insert user');
+      this._apiManager.insertUser();
+    }
 
     const id = 'localUser';
     const tracks = this._conferenceConnector.tracks;
     const videoTrack = tracks.find(track => track.getType() === 'video');
     const audioTrack = tracks.find(track => track.getType() === 'audio');
-    // await this._dispatch(
-    //   localActionCreators.joinConference({
-    //     id,
-    //     name,
-    //     videoTrack,
-    //     audioTrack
-    //   })
-    // );
-    // this._dispatch(mainUserActionCreators.setMainUserNotExist(id));
-    return {
-      id,
-      name,
-      videoTrack,
-      audioTrack
-    }
+    await this._dispatch(
+      localActionCreators.joinConference({
+        id,
+        name,
+        videoTrack,
+        audioTrack
+      })
+    );
+    this._dispatch(mainUserActionCreators.setMainUserNotExist(id));
   };
 
   /**
@@ -108,8 +101,8 @@ class ConferenceManager {
     if (this._connection) {
       this._connection.dispose();
     }
-    // this._dispatch(WedriveAcionCreators.setInitInfo());
-    // this._dispatch(localActionCreators.leaveConference());
+    this._dispatch(WedriveAcionCreators.setInitInfo());
+    this._dispatch(localActionCreators.leaveConference());
   };
 
   /**
@@ -154,7 +147,6 @@ class ConferenceManager {
     JitsiMeetJS.init({
       ...config
     });
-    console.log(config)
 
     // JitsiMeetJS Log Level을 설정한다.
     JitsiMeetJS.setLogLevel(JitsiMeetJS.logLevels.ERROR);
@@ -165,8 +157,7 @@ class ConferenceManager {
    * 대화방에 참여자가 접속하면 호출된다.
    */
   _joinUser = user => {
-    console.log('_joinUser')
-    // this._dispatch(participantsAcionCreators.joinUser(user));
+    this._dispatch(participantsAcionCreators.joinUser(user));
   };
 
   /**
@@ -174,8 +165,7 @@ class ConferenceManager {
    * 대화방에 참여자가 나가면 호출된다.
    */
   _leftUser = id => {
-    console.log('_leftUser')
-    // this._dispatch(participantsAcionCreators.leftUser(id));
+    this._dispatch(participantsAcionCreators.leftUser(id));
   };
 
   /**
@@ -183,8 +173,7 @@ class ConferenceManager {
    * 대화방에 참여자의 트랙이 추가되면 호출된다.
    */
   _addRemoteTrack = track => {
-    console.log('_addRemoteTrack')
-    // this._dispatch(participantsAcionCreators.setRemoteTrack(track));
+    this._dispatch(participantsAcionCreators.setRemoteTrack(track));
   };
 
   /**
@@ -192,21 +181,21 @@ class ConferenceManager {
    * 카메라 또는 오디오(마이크)가 온/오프되면 발생한다.
    */
   _videoMutedChanged = track => {
-    // this._dispatch(participantsAcionCreators.updateMuteVideo(track));
+    this._dispatch(participantsAcionCreators.updateMuteVideo(track));
   };
 
   /**
    * 위하고 아이디등 유저 정보를 설정한다.
    */
   _setUserInfo = (id, info) => {
-    // this._dispatch(participantsAcionCreators.setUserInfo(id, info));
+    this._dispatch(participantsAcionCreators.setUserInfo(id, info));
   };
 
   /**
    *
    */
   _changedUserStatus = (userId, status) => {
-    // this._dispatch(participantsAcionCreators.changedStatus(userId, status));
+    this._dispatch(participantsAcionCreators.changedStatus(userId, status));
   };
 
   /**
@@ -214,9 +203,9 @@ class ConferenceManager {
    */
   // _changeDocumentShareMode = status => {
   changeDrawData = (drawData, selectResource) => {
-    // this._dispatch(
-    //   DocumentShareAcionCreators.setDrawData(drawData, selectResource)
-    // );
+    this._dispatch(
+      DocumentShareAcionCreators.setDrawData(drawData, selectResource)
+    );
   };
 
   /**
@@ -229,21 +218,21 @@ class ConferenceManager {
     page = 0,
     documentData = []
   ) => {
-    // this._dispatch(
-    //   DocumentShareAcionCreators.setSharingMode(
-    //     attributes,
-    //     presenter,
-    //     page,
-    //     documentData
-    //   )
-    // );
+    this._dispatch(
+      DocumentShareAcionCreators.setSharingMode(
+        attributes,
+        presenter,
+        page,
+        documentData
+      )
+    );
   };
 
   /**
    * 문서공유 페이지 전환
    */
   changeDocumentPage = page => {
-    // this._dispatch(DocumentShareAcionCreators.setDocumentPage(page));
+    this._dispatch(DocumentShareAcionCreators.setDocumentPage(page));
   };
 
   /**

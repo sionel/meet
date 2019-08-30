@@ -30,7 +30,7 @@ import HomeScreenPresenter from './HomeScreenPresenter';
 
 // service
 import { WetalkApi } from '../../services';
-import { UserApi } from '../../services';
+// import { UserApi } from '../../services';
 import { ConferenceApi } from '../../services';
 import { NavigationEvents } from 'react-navigation';
 import { querystringParser } from '../../utils';
@@ -50,10 +50,10 @@ class HomeScreenContainer extends Component {
     this._isFocus = true;
     this._refreshTimeStamp = Date.now();
 
-    if (Platform.OS === 'android') {
-      UIManager.setLayoutAnimationEnabledExperimental(true);
-    }
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    // if (Platform.OS === 'android') {
+    //   UIManager.setLayoutAnimationEnabledExperimental(true);
+    // }
+    // LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
   }
 
   /**

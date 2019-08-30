@@ -203,6 +203,7 @@ class ReactInstanceManagerHolder {
                 new com.learnium.RNDeviceInfo.RNDeviceInfo(),
                 new com.terrylinla.rnsketchcanvas.SketchCanvasPackage(),
                 new com.swmansion.gesturehandler.react.RNGestureHandlerPackage(),
+                new com.reactnativecommunity.slider.ReactSliderPackage(),
                 // end
                 new ReactPackageAdapter() {
                     @Override

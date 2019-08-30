@@ -16,8 +16,8 @@ import {
 } from 'react-native';
 import DrawingBoard from './DrawingBoard';
 import DeviceInfo from 'react-native-device-info';
-// import Slider from '@react-native-community/slider';
-import { Slider } from 'react-native';
+import Slider from '@react-native-community/slider';
+// import { Slider } from 'react-native';
 import CustomIcon from './../../../../components/CustomIcon';
 
 const isIOS = Platform.OS === 'ios';
