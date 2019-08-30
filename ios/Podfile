@@ -61,7 +61,7 @@ target 'JitsiMeet' do
   pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
 
   # 로컬 라이브러리
-  pod 'react-native-fast-image', :path => './node_modules/react-native-fast-image'
+  pod 'react-native-fast-image', :path => './modules/react-native-fast-image'
 
   # Native pod dependencies
   #

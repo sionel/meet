@@ -162,10 +162,7 @@
     "node": ">=8.0.0",
     "npm": ">=6.0.0"
   },
-  "license": "Apache-2.0",
-  "pre-commit": [
-    "lint"
-  ],
+  "license": "가져가지마",
   "browser": {
     "jQuery-Impromptu": "jQuery-Impromptu/src/jquery-impromptu.js"
   }
