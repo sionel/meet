@@ -50,13 +50,18 @@ target 'JitsiMeet' do
   pod 'RNWatch', :path => '../node_modules/react-native-watch-connectivity'
   
   # 추가 외부 라이브러리
-  pod 'RNSVG', :path => '../node_modules/react-native-svg'
+  # pod 'lottie-ios', '~> 3.0.3'
+  pod 'lottie-react-native', :path => '../node_modules/lottie-react-native'
+  # pod 'RNSVG', :path => '../node_modules/react-native-svg'
   pod 'react-native-orientation-locker', :path => '../node_modules/react-native-orientation-locker/react-native-orientation-locker.podspec'
   pod 'RNDeviceInfo', :path => '../node_modules/react-native-device-info'
   pod 'RNSketchCanvas', :path => '../node_modules/@terrylinla/react-native-sketch-canvas'
   pod 'ReactNativePermissions', :path => '../node_modules/react-native-permissions'
   pod 'react-native-slider', :path => '../node_modules/@react-native-community/slider'
   pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
+
+  # 로컬 라이브러리
+  pod 'react-native-fast-image', :path => './node_modules/react-native-fast-image'
 
   # Native pod dependencies
   #
