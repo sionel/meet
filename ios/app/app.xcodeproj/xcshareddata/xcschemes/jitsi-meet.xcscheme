@@ -100,6 +100,7 @@
    </AnalyzeAction>
    <ArchiveAction
       buildConfiguration = "Release"
+      customArchiveName = "WEHAGO-Meet"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>

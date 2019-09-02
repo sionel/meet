@@ -267,7 +267,7 @@ class HomeScreenContainer extends Component {
    */
   _handleOpenLink = url => {
     if (!url) return;
-
+console.warn('url', url)
     const result = querystringParser(url);
     // console.log('RESULT :: ', result);
     // if (result.type === '3') {

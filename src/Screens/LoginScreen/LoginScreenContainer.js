@@ -352,6 +352,7 @@ class LoginScreenContainer extends React.Component {
    * DeepLink 로 접근한 경우
    */
   _handleGetWehagoToken = event => {
+    if (!event.url) return;
     const result = querystringParser(event.url);
 
     // 화상대화 요청인지 판별
