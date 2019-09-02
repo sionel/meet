@@ -198,7 +198,7 @@ DEPENDENCIES:
   - ObjectiveDropboxOfficial (~> 3.9.4)
   - react-native-background-timer (from `../node_modules/react-native-background-timer`)
   - react-native-calendar-events (from `../node_modules/react-native-calendar-events`)
-  - react-native-fast-image (from `./node_modules/react-native-fast-image`)
+  - react-native-fast-image (from `./modules/react-native-fast-image`)
   - react-native-keep-awake (from `../node_modules/react-native-keep-awake`)
   - react-native-orientation-locker (from `../node_modules/react-native-orientation-locker/react-native-orientation-locker.podspec`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
@@ -266,7 +266,7 @@ EXTERNAL SOURCES:
   react-native-calendar-events:
     :path: "../node_modules/react-native-calendar-events"
   react-native-fast-image:
-    :path: "./node_modules/react-native-fast-image"
+    :path: "./modules/react-native-fast-image"
   react-native-keep-awake:
     :path: "../node_modules/react-native-keep-awake"
   react-native-orientation-locker:
@@ -344,6 +344,6 @@ SPEC CHECKSUMS:
   SDWebImage: 3f3f0c02f09798048c47a5ed0a13f17b063572d8
   yoga: 92b2102c3d373d1a790db4ab761d2b0ffc634f64
 
-PODFILE CHECKSUM: 08a8866fe442086404046d38f38ca882b9db70ee
+PODFILE CHECKSUM: 786fa59cb5a04f4e27469f4d7625951e1ba0bff4
 
 COCOAPODS: 1.6.1

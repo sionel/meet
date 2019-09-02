@@ -32,7 +32,6 @@
 		75635B0A20751D6D00F29C9F /* joined.wav in Resources */ = {isa = PBXBuildFile; fileRef = 75635B0820751D6D00F29C9F /* joined.wav */; };
 		75635B0B20751D6D00F29C9F /* left.wav in Resources */ = {isa = PBXBuildFile; fileRef = 75635B0920751D6D00F29C9F /* left.wav */; };
 		87FE6F3321E52437004A5DC7 /* incomingMessage.wav in Resources */ = {isa = PBXBuildFile; fileRef = 87FE6F3221E52437004A5DC7 /* incomingMessage.wav */; };
-		A2102156F915483EB3FE5F55 /* libFastImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C2CF4BF34FDE4A679C752CB2 /* libFastImage.a */; };
 		A4414AE020B37F1A003546E6 /* rejected.wav in Resources */ = {isa = PBXBuildFile; fileRef = A4414ADF20B37F1A003546E6 /* rejected.wav */; };
 		A480429C21EE335600289B73 /* AmplitudeModule.m in Sources */ = {isa = PBXBuildFile; fileRef = A480429B21EE335600289B73 /* AmplitudeModule.m */; };
 		A4A934E9212F3ADB001E9388 /* Dropbox.m in Sources */ = {isa = PBXBuildFile; fileRef = A4A934E8212F3ADB001E9388 /* Dropbox.m */; };
@@ -65,13 +64,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 9D23B34F1C767B80008B4819;
 			remoteInfo = ReactNativePermissions;
-		};
-		B7CB721C23191743004DB32A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E76BCB602F154D7486883FC9 /* FastImage.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = A287971D1DE0C0A60081BDFA;
-			remoteInfo = FastImage;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -119,7 +111,6 @@
 		B73D9FE82318E3E600759603 /* liblottie-react-native.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "liblottie-react-native.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B79E0FE623163E380020C27C /* ReactNativePermissions.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ReactNativePermissions.xcodeproj; path = "../../../node_modules/react-native-permissions/ios/ReactNativePermissions.xcodeproj"; sourceTree = "<group>"; };
 		B79E0FEC23163E5C0020C27C /* libReactNativePermissions.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReactNativePermissions.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		C2CF4BF34FDE4A679C752CB2 /* libFastImage.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libFastImage.a; sourceTree = "<group>"; };
 		C30F88D1CB0F4F5593216D24 /* liveStreamingOff.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = liveStreamingOff.mp3; path = ../../sounds/liveStreamingOff.mp3; sourceTree = "<group>"; };
 		C30F88D3CB0F4F5593216D24 /* liveStreamingOn.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = liveStreamingOn.mp3; path = ../../sounds/liveStreamingOn.mp3; sourceTree = "<group>"; };
 		C6245F5B2053091D0040BE68 /* image-resize@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "image-resize@2x.png"; path = "src/picture-in-picture/image-resize@2x.png"; sourceTree = "<group>"; };
@@ -143,7 +134,6 @@
 		DEFE535521FB2E8300011A3A /* ReactUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ReactUtils.m; sourceTree = "<group>"; };
 		DEFE535721FB2E9E00011A3A /* ReactUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReactUtils.h; sourceTree = "<group>"; };
 		DEFE535821FB311F00011A3A /* JitsiMeet+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JitsiMeet+Private.h"; sourceTree = "<group>"; };
-		E76BCB602F154D7486883FC9 /* FastImage.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = FastImage.xcodeproj; path = "../../node_modules/react-native-fast-image/ios/FastImage.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -154,10 +144,9 @@
 				B73D9FE72318E3E600759603 /* liblottie-ios.a in Frameworks */,
 				B73D9FE92318E3E600759603 /* liblottie-react-native.a in Frameworks */,
 				B79E0FED23163E5C0020C27C /* libReactNativePermissions.a in Frameworks */,
+				0F65EECE1D95DA94561BB47E /* libPods-JitsiMeet.a in Frameworks */,
 				0BB9AD791F5EC6D7001C08DB /* Intents.framework in Frameworks */,
 				0BB9AD771F5EC6CE001C08DB /* CallKit.framework in Frameworks */,
-				0F65EECE1D95DA94561BB47E /* libPods-JitsiMeet.a in Frameworks */,
-				A2102156F915483EB3FE5F55 /* libFastImage.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -281,7 +270,6 @@
 			isa = PBXGroup;
 			children = (
 				B79E0FE623163E380020C27C /* ReactNativePermissions.xcodeproj */,
-				E76BCB602F154D7486883FC9 /* FastImage.xcodeproj */,
 			);
 			path = Libraries;
 			sourceTree = "<group>";
@@ -294,14 +282,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		B7CB721923191743004DB32A /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				B7CB721D23191743004DB32A /* libFastImage.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		B7FE447D2318BDC500F6CCF0 /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
@@ -309,7 +289,6 @@
 				5EF2294FBFF74E019B8FB118 /* Lottie.framework */,
 				5A17E3A34E9440B7A22C71AE /* libLottie.a */,
 				78A0C1422EE943F08AD73A44 /* libLottieReactNative.a */,
-				C2CF4BF34FDE4A679C752CB2 /* libFastImage.a */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -415,10 +394,6 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = B7CB721923191743004DB32A /* Products */;
-					ProjectRef = E76BCB602F154D7486883FC9 /* FastImage.xcodeproj */;
-				},
-				{
 					ProductGroup = B79E0FE723163E380020C27C /* Products */;
 					ProjectRef = B79E0FE623163E380020C27C /* ReactNativePermissions.xcodeproj */;
 				},
@@ -436,13 +411,6 @@
 			fileType = archive.ar;
 			path = libReactNativePermissions.a;
 			remoteRef = B79E0FEA23163E380020C27C /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		B7CB721D23191743004DB32A /* libFastImage.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libFastImage.a;
-			remoteRef = B7CB721C23191743004DB32A /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
