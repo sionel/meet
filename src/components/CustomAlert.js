@@ -108,32 +108,32 @@ const styles = StyleSheet.create({
   title: {
     width: '100%',
     fontSize: 20,
-    paddingLeft: 14,
-    paddingRight: 14,
+    paddingLeft: 10,
+    paddingRight: 10,
     paddingTop: 10,
     paddingBottom: 10,
-    borderBottomColor: '#00000010',
-    borderBottomWidth: 1,
+    // borderBottomColor: '#00000010',
+    // borderBottomWidth: 1,
     fontFamily: 'DOUZONEText30',
     color: '#1c90fb'
   },
   description: {
-    paddingLeft: 12,
-    paddingRight: 12,
+    paddingLeft: 10,
+    paddingRight: 10,
     paddingTop: 16,
     paddingBottom: 16,
-    fontSize: 14,
+    fontSize: 16,
     lineHeight: 20,
     fontFamily: 'DOUZONEText30',
-    borderBottomColor: '#00000010',
-    borderBottomWidth: 1
+    // borderBottomColor: '#00000010',
+    // borderBottomWidth: 1
   },
   actions: {
     width: '100%',
     paddingTop: 10,
     paddingBottom: 10,
-    paddingLeft: 12,
-    paddingRight: 12,
+    paddingLeft: 6,
+    paddingRight: 6,
     flexDirection: 'row',
     justifyContent: 'flex-end',
     overflow: 'hidden'
