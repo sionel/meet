@@ -14,7 +14,11 @@ import {
   SafeAreaView,
   Platform
 } from 'react-native';
-import { CustomWebView, SectionListHeader } from '../../components';
+import {
+  CustomWebView,
+  CustomAlert,
+  SectionListHeader
+} from '../../components';
 
 const ConfigurationScreenPresenter = props => {
   const { webView } = props;
@@ -26,15 +30,15 @@ const ConfigurationScreenPresenter = props => {
     {
       title: '이용약관',
       action: () => {
-        props.onChangeValue('subUrl', '?code=001')
-        props.onChangeValue('webView', true)
+        props.onChangeValue('subUrl', '?code=001');
+        props.onChangeValue('webView', true);
       }
     },
     {
       title: '개인정보 처리방침',
       action: () => {
-        props.onChangeValue('subUrl', '?code=002')
-        props.onChangeValue('webView', true)
+        props.onChangeValue('subUrl', '?code=002');
+        props.onChangeValue('webView', true);
       }
     },
     {
@@ -58,16 +62,7 @@ const ConfigurationScreenPresenter = props => {
     // },
     {
       title: '로그아웃',
-      action: () =>
-        Alert.alert(
-          '로그아웃 하시겠습니까?',
-          '',
-          [
-            { text: '예', onPress: () => props.onLogout() },
-            { text: '아니오', style: 'cancel' }
-          ],
-          { cancelable: false }
-        )
+      action: () => props.onChangeValue('alert', true)
     }
   ];
 
@@ -104,16 +99,36 @@ const ConfigurationScreenPresenter = props => {
         transparent={true}
         visible={webView}
         blurRadius={1}
+        supportedOrientations={[
+          'portrait',
+          'portrait-upside-down',
+          'landscape',
+          'landscape-left',
+          'landscape-right'
+        ]}
         onRequestClose={() => props.onChangeValue('webView', false)}
       >
         <CustomWebView
           view={webView}
           contentTitle="약관 및 정책"
           buttonTitle="확인"
-          url={"https://www.wehago.com/#/common/policy" + props.subUrl}
+          url={'https://www.wehago.com/#/common/policy' + props.subUrl}
           onClickButton={() => props.onChangeValue('webView', false)}
         />
       </Modal>
+
+      <CustomAlert
+        visible={props.alert}
+        title={'로그아웃'}
+        description={'로그아웃 하시겠습니까?'}
+        actions={[
+          { name: '확인', action: () => props.onLogout() },
+          { name: '취소', action: () => props.onChangeValue('alert', false) }
+        ]}
+        onClose={() => {
+          props.onChangeValue('alert', false);
+        }}
+      />
     </View>
   );
 };
