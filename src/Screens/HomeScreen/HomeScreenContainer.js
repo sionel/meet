@@ -266,6 +266,8 @@ class HomeScreenContainer extends Component {
    * 딥링크로 전달받은 화상대화 접속
    */
   _handleOpenLink = url => {
+    if (!url) return;
+
     const result = querystringParser(url);
     // console.log('RESULT :: ', result);
     // if (result.type === '3') {

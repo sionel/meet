@@ -4,13 +4,15 @@
   "description": "A sample app for the Jitsi Videobridge",
   "repository": {
     "type": "git",
-    "url": "git://github.com/jitsi/jitsi-meet"
+    "url": "https://www.wehago.com"
   },
   "keywords": [
     "jingle",
     "webrtc",
     "xmpp",
-    "browser"
+    "browser",
+    "wehago",
+    "wehago meet"
   ],
   "author": "",
   "readmeFilename": "README.md",
@@ -162,8 +164,5 @@
     "node": ">=8.0.0",
     "npm": ">=6.0.0"
   },
-  "license": "가져가지마",
-  "browser": {
-    "jQuery-Impromptu": "jQuery-Impromptu/src/jquery-impromptu.js"
-  }
+  "license": "가져가지마"
 }

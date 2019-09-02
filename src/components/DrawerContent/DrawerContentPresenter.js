@@ -61,7 +61,12 @@ const DrawerContentPresenter = props => {
               {/* <Text style={{ fontSize: 13 }}>({props.auth.portal_id})</Text> */}
             </Text>
             <Text
-              style={{ textAlign: 'center', fontSize: 13, color: '#6d6d6d', fontFamily: 'DOUZONEText30' }}
+              style={{
+                textAlign: 'center',
+                fontSize: 13,
+                color: '#6d6d6d',
+                fontFamily: 'DOUZONEText30'
+              }}
             >
               {props.auth.last_company.company_name_kr}
             </Text>

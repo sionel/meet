@@ -135,6 +135,7 @@ const HomeDrwawer = createDrawerNavigator(
   {
     initialRouteName: 'Home',
     drawerWidth: Math.min(height, width) * 0.75,
+    overlayColor : '#00000090',
     contentComponent: ({ navigation }) => (
       <DrawerContent navigation={navigation} />
     )
