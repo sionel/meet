@@ -18,6 +18,7 @@ const CustomAlert = props => {
     width,
     height,
     title,
+    titleStyle,
     description,
     actions,
     onClose
@@ -37,11 +38,11 @@ const CustomAlert = props => {
       ]}
       onRequestClose={onClose}
     >
-      <StatusBar
+      {/* <StatusBar
         barStyle={'light-content'}
         backgroundColor={'#000'}
         hidden={false}
-      />
+      /> */}
       <TouchableOpacity
         activeOpacity={1}
         onPress={onClose}
@@ -49,15 +50,16 @@ const CustomAlert = props => {
       >
         <View style={[styles.alertContainer, { width }]}>
           <TouchableOpacity activeOpacity={1} onPress={() => {}}>
-            <Text style={styles.title}>{title}</Text>
+            <Text style={[styles.title, titleStyle]}>{title}</Text>
             <Text style={styles.description}>{description}</Text>
 
             {actions.length > 0 && (
               <View style={styles.actions}>
-                {actions.map(item => {
+                {actions.map((item, index) => {
                   if (!item.name || !item.action) return;
                   return (
                     <TouchableOpacity
+                      key={index}
                       onPress={item.action}
                       style={styles.action}
                     >
@@ -79,6 +81,7 @@ CustomAlert.defaultProps = {
   width: '80%',
   height: 100,
   title: null,
+  titleStyle: {},
   description: null,
   actions: [],
   onClose: () => {}
@@ -94,12 +97,13 @@ const styles = StyleSheet.create({
     height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#00000070'
+    backgroundColor: '#00000099'
   },
   alertContainer: {
     backgroundColor: '#fff',
     maxWidth: '80%',
-    minHeight: 30
+    minHeight: 30,
+    padding: 12
   },
   title: {
     width: '100%',
@@ -110,7 +114,8 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     borderBottomColor: '#00000010',
     borderBottomWidth: 1,
-    fontFamily: 'NanumSquareR'
+    fontFamily: 'DOUZONEText30',
+    color: '#1c90fb'
   },
   description: {
     paddingLeft: 12,
@@ -119,7 +124,7 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
     fontSize: 14,
     lineHeight: 20,
-    fontFamily: 'NanumSquareR',
+    fontFamily: 'DOUZONEText30',
     borderBottomColor: '#00000010',
     borderBottomWidth: 1
   },
@@ -138,7 +143,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#00000010',
     fontSize: 16,
     lineHeight: 20,
-    fontFamily: 'NanumSquareR',
+    fontFamily: 'DOUZONEText30',
     color: '#1c90fb'
   }
 });

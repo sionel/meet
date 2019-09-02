@@ -14,8 +14,9 @@ import {
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import DrawingSketch from '../DrawingSketch';
+// import { CustomButton, CustomModal, CustomAlert } from '../../../../components';
 import CustomButton from '../../../../components/CustomButton';
-import CustomModal from '../../../../components/CustomModal';
+import CustomAlert from '../../../../components/CustomAlert';
 import OverView from '../OverView';
 
 const SafetyView = Platform.OS === 'ios' ? SafeAreaView : View;
@@ -262,13 +263,30 @@ const FileSharingPresenter = props => {
         // </RBSheet>
       )}
 
-      <CustomModal
+      {/* <CustomModal
         display={props.modal}
         title={modalMessage.title}
         text={modalMessage.text}
         feedbackText="확인"
         onClickClose={() => props.onChangeState('modal')}
         onClickFeedback={modalMessage.onClickFeedback}
+      /> */}
+      <CustomAlert
+        visible={props.modal}
+        title={modalMessage.title}
+        width={320}
+        description={modalMessage.text}
+        actions={[
+          {
+            name: '취소',
+            action: () => props.onChangeState('modal')
+          },
+          {
+            name: '확인',
+            action: modalMessage.onClickFeedback
+          }
+        ]}
+        onClose={() => props.onChangeState('modal')}
       />
     </Fragment>
   );

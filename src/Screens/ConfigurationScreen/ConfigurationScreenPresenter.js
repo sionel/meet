@@ -120,10 +120,11 @@ const ConfigurationScreenPresenter = props => {
       <CustomAlert
         visible={props.alert}
         title={'로그아웃'}
+        width={320}
         description={'로그아웃 하시겠습니까?'}
         actions={[
-          { name: '확인', action: () => props.onLogout() },
-          { name: '취소', action: () => props.onChangeValue('alert', false) }
+          { name: '취소', action: () => props.onChangeValue('alert', false) },
+          { name: '확인', action: () => props.onLogout() }
         ]}
         onClose={() => {
           props.onChangeValue('alert', false);

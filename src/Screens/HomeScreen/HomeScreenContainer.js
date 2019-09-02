@@ -267,7 +267,6 @@ class HomeScreenContainer extends Component {
    */
   _handleOpenLink = url => {
     if (!url) return;
-console.warn('url', url)
     const result = querystringParser(url);
     // console.log('RESULT :: ', result);
     // if (result.type === '3') {
@@ -276,7 +275,7 @@ console.warn('url', url)
       return;
     } else if (result.is_creater) {
       // 화상대화 실행
-      console.log(result);
+      // console.log(result);
       this._handleCheckConference(result.room_id, result);
     } else {
       return;

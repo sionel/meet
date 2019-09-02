@@ -18,6 +18,7 @@ import {
   SearchForm,
   Placeholder,
   CustomModal,
+  CustomAlert,
   SectionListHeader
 } from '../../components';
 
@@ -102,13 +103,30 @@ const CreateScreenPresenter = props => {
         />
       )}
 
-      <CustomModal
+      {/* <CustomModal
         display={props.modal}
         title="화상대화 생성"
         text="화상대화를 생성하시겠습니까?"
         feedbackText="시작하기"
         onClickClose={() => props.onActivateModal(null)}
         onClickFeedback={() => props.onCreateConference(props.selectedRoomId)}
+      /> */}
+      <CustomAlert
+        visible={props.modal}
+        title={'화상대화 생성'}
+        width={320}
+        description={'화상대화를 생성하시겠습니까?'}
+        actions={[
+          {
+            name: '취소',
+            action: () => props.onActivateModal(null)
+          },
+          {
+            name: '시작하기',
+            action: () => props.onCreateConference(props.selectedRoomId)
+          }
+        ]}
+        onClose={() => props.onActivateModal(null)}
       />
     </View>
   );
