@@ -500,7 +500,7 @@ const LoginScreenPresenter = props => {
                 // onPress={() => props.onChangeValue('permissionModal', false)}
                 onPress={props.onAgreement}
               >
-                <Text style={{ color: '#fff' }}>확인</Text>
+                <Text style={{ color: '#fff', fontFamily: 'DOUZONEText50' }}>확인</Text>
               </TouchableOpacity>
             </View>
           </View>
