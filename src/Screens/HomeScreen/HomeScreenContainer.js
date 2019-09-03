@@ -452,14 +452,12 @@ class HomeScreenContainer extends Component {
       )).resultData;
 
       if (participantList.length >= 15) {
-        this.setState({
-          alert: {
-            visible: true,
-            title: '화상대화',
-            message: '최대 참여인원을 초과했습니다.',
-            onClose: this._handleModalClose
-          }
-        });
+        this._handleModalChange(
+          true,
+          '화상대화',
+          '최대 참여인원을 초과했습니다.',
+          this._handleModalChange
+        );
         return;
       }
 
@@ -468,26 +466,22 @@ class HomeScreenContainer extends Component {
       });
 
       if (isJoin) {
-        this.setState({
-          alert: {
-            visible: true,
-            title: '화상대화',
-            message: '이미 대화방에 접속한 사용자 입니다.',
-            onClose: this._handleModalClose
-          }
-        });
+        this._handleModalChange(
+          true,
+          '화상대화',
+          '이미 대화방에 접속한 사용자 입니다.',
+          this._handleModalChange
+        );
         return;
       }
 
       if (!result.resultData) {
-        this.setState({
-          alert: {
-            visible: true,
-            title: '화상대화',
-            message: '이미 종료된 대화방입니다.',
-            onClose: this._handleModalClose
-          }
-        });
+        this._handleModalChange(
+          true,
+          '화상대화',
+          '이미 종료된 대화방입니다.',
+          this._handleModalChange
+        );
         return;
       }
     }
@@ -503,15 +497,20 @@ class HomeScreenContainer extends Component {
   };
 
   /**
-   * _handleModalClose
+   * _handleModalChange
    */
-  _handleModalClose = () => {
+  _handleModalChange = (
+    visible = false,
+    title = '',
+    message = '',
+    onClose = () => {}
+  ) => {
     this.setState({
       alert: {
-        visible: false,
-        title: '',
-        message: '',
-        onClose: () => {}
+        visible,
+        title,
+        message,
+        onClose
       }
     });
   };
