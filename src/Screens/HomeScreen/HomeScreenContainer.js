@@ -444,6 +444,17 @@ class HomeScreenContainer extends Component {
         auth.HASH_KEY
       );
 
+      // 대화방 정보를 얻어서 생성되어 있는 방인지 확인
+      if (!result.resultData) {
+        this._handleModalChange(
+          true,
+          '화상대화',
+          '이미 종료된 대화방입니다.',
+          this._handleModalChange
+        );
+        return;
+      }
+
       const participantList = (await ConferenceApi.getParticipant(
         result.resultData.video_chat_id,
         auth.AUTH_A_TOKEN,
@@ -451,6 +462,7 @@ class HomeScreenContainer extends Component {
         auth.HASH_KEY
       )).resultData;
 
+      // 최대 참여인원 제한 (15명)
       if (participantList.length >= 15) {
         this._handleModalChange(
           true,
@@ -461,6 +473,7 @@ class HomeScreenContainer extends Component {
         return;
       }
 
+      // 이미 대화방에 참여 중인지 확인
       const isJoin = await participantList.find(participant => {
         return participant.user_id === auth.portal_id;
       });
@@ -470,16 +483,6 @@ class HomeScreenContainer extends Component {
           true,
           '화상대화',
           '이미 대화방에 접속한 사용자 입니다.',
-          this._handleModalChange
-        );
-        return;
-      }
-
-      if (!result.resultData) {
-        this._handleModalChange(
-          true,
-          '화상대화',
-          '이미 종료된 대화방입니다.',
           this._handleModalChange
         );
         return;

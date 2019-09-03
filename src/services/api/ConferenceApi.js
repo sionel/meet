@@ -114,8 +114,14 @@ export default {
 	 * getParticipant
 	 * 화상대화 방에 참가자 정보 조회 API
 	 */
-	getParticipant: async (videoRoomId, a_token, r_token, HASH_KEY) => {
+	getParticipant: async (videoRoomId=null, a_token=null, r_token=null, HASH_KEY=null) => {
     try {
+			if (!videoRoomId || !a_token || !r_token || !HASH_KEY) {
+				return {
+					resultCode: 404,
+					resultData: []
+				};
+			}
       const url = `${wehagoBaseURL}/communication/rtc/videoChatMember?video_chat_id=${videoRoomId}`;
 			const headers = securityRequest(a_token, r_token, url, HASH_KEY);
       const requestData = {
