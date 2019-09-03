@@ -16,11 +16,11 @@ import {
 
 import CreateScreenPresenter from './CreateScreenPresenter';
 // service
-import { WetalkApi } from '../../services';
-import { UserApi } from '../../services';
+// import { WetalkApi } from '../../services';
+// import { UserApi } from '../../services';
 import { ConferenceApi } from '../../services';
 import { NavigationEvents } from 'react-navigation';
-import { querystringParser } from '../../utils';
+// import { querystringParser } from '../../utils';
 
 import DeviceInfo from 'react-native-device-info';
 import Orientation from 'react-native-orientation-locker';

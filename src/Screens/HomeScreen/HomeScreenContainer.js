@@ -3,7 +3,7 @@
  * 화상대화 히스토리 컨테이너
  */
 
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import {
   AppState,
   StatusBar,
@@ -11,17 +11,12 @@ import {
   Platform,
   Dimensions,
   View,
-  Text,
-  NativeModules,
-  TouchableOpacity,
-  UIManager,
-  LayoutAnimation,
-  // DrawerLayoutAndroid
   ToastAndroid,
   BackHandler
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import Orientation from 'react-native-orientation-locker';
+import { NavigationEvents } from 'react-navigation';
 // import GestureRecognizer, {
 //   swipeDirections
 // } from 'react-native-swipe-gestures';
@@ -29,10 +24,7 @@ import Orientation from 'react-native-orientation-locker';
 import HomeScreenPresenter from './HomeScreenPresenter';
 
 // service
-import { WetalkApi } from '../../services';
-// import { UserApi } from '../../services';
-import { ConferenceApi } from '../../services';
-import { NavigationEvents } from 'react-navigation';
+import { ConferenceApi, WetalkApi } from '../../services';
 import { querystringParser } from '../../utils';
 
 // import DrawerContent from '../../components/DrawerContent';
@@ -67,7 +59,13 @@ class HomeScreenContainer extends Component {
     selectedRoomName: null,
     modal: false,
     url: null,
-    orientation: 'UNKNOWN'
+    orientation: 'UNKNOWN',
+    alert: {
+      visible: false,
+      title: '',
+      message: '',
+      onClose: () => {}
+    }
   };
 
   /**
@@ -146,11 +144,12 @@ class HomeScreenContainer extends Component {
       searchKeyword,
       selectedRoomId,
       modal,
-      orientation
+      orientation,
+      alert
     } = this.state;
     const { navigation, auth } = this.props;
-    let wetalk = []; // We talk list
 
+    let wetalk = []; // We talk list
     if (searchKeyword) {
       wetalk = this.props.wetalk.filter(item =>
         item.room_title.match(searchKeyword)
@@ -193,6 +192,7 @@ class HomeScreenContainer extends Component {
           list={wetalk}
           auth={auth}
           selectedRoomId={selectedRoomId}
+          alert={alert}
           onActivateModal={this._handleActivateModal}
           onRedirect={this._handleRedirect}
           onRefresh={this._handleRefresh}
@@ -443,8 +443,51 @@ class HomeScreenContainer extends Component {
         auth.AUTH_R_TOKEN,
         auth.HASH_KEY
       );
+
+      const participantList = (await ConferenceApi.getParticipant(
+        result.resultData.video_chat_id,
+        auth.AUTH_A_TOKEN,
+        auth.AUTH_R_TOKEN,
+        auth.HASH_KEY
+      )).resultData;
+
+      if (participantList.length >= 15) {
+        this.setState({
+          alert: {
+            visible: true,
+            title: '화상대화',
+            message: '최대 참여인원을 초과했습니다.',
+            onClose: this._handleModalClose
+          }
+        });
+        return;
+      }
+
+      const isJoin = await participantList.find(participant => {
+        return participant.user_id === auth.portal_id;
+      });
+
+      if (isJoin) {
+        this.setState({
+          alert: {
+            visible: true,
+            title: '화상대화',
+            message: '이미 대화방에 접속한 사용자 입니다.',
+            onClose: this._handleModalClose
+          }
+        });
+        return;
+      }
+
       if (!result.resultData) {
-        alert('이미 종료된 대화방입니다.');
+        this.setState({
+          alert: {
+            visible: true,
+            title: '화상대화',
+            message: '이미 종료된 대화방입니다.',
+            onClose: this._handleModalClose
+          }
+        });
         return;
       }
     }
@@ -455,6 +498,20 @@ class HomeScreenContainer extends Component {
         callType,
         isCreator,
         selectedRoomName
+      }
+    });
+  };
+
+  /**
+   * _handleModalClose
+   */
+  _handleModalClose = () => {
+    this.setState({
+      alert: {
+        visible: false,
+        title: '',
+        message: '',
+        onClose: () => {}
       }
     });
   };

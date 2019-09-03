@@ -108,6 +108,27 @@ export default {
 		} catch (err) {
 			return err;
 		}
-	}
+	},
+
+	/**
+	 * getParticipant
+	 * 화상대화 방에 참가자 정보 조회 API
+	 */
+	getParticipant: async (videoRoomId, a_token, r_token, HASH_KEY) => {
+    try {
+      const url = `${wehagoBaseURL}/communication/rtc/videoChatMember?video_chat_id=${videoRoomId}`;
+			const headers = securityRequest(a_token, r_token, url, HASH_KEY);
+      const requestData = {
+				method: 'GET',
+				headers
+			};
+			const response = await fetch(url, requestData);
+			const result = await response.json();
+			return result;
+    } catch (e) {
+      alert('사소한 문제가 발생했습니다. 다시 시도해 주세요');
+      return participant;
+    }
+  }
 };
 // #endregion

@@ -16,40 +16,24 @@ import {
   Image,
   Platform
 } from 'react-native';
-// common components
+
 import {
   ListItemComp,
-  SearchForm,
-  CustomModal,
+  CustomAlert,
   Placeholder,
-  CustomLottie,
   SectionListHeader
 } from '../../components';
 import AddButton from './AddButton';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-const rootPath = `../../../assets`;
-const waitingImage = require(`${rootPath}/waiting.gif`);
+// const rootPath = `../../../assets`;
+// const waitingImage = require(`${rootPath}/waiting.gif`);
 
 /**
  * HomeScreenPresenter
  */
 const HomeScreenPresenter = props => {
   const activateList = props.list.filter(item => item.is_video_access === 'T');
-  // const reloadButton = (
-  //   <TouchableOpacity onPress={props.onRefresh}>
-  //     <View style={styles.reloadButtonWrap}>
-  //       <Text
-  //         style={[
-  //           styles.reloadButton,
-  //           { fontFamily: 'DOUZONEText30' }
-  //         ]}
-  //       >
-  //         다시 로드
-  //       </Text>
-  //     </View>
-  //   </TouchableOpacity>
-  // );
 
   return (
     <View style={styles.container}>
@@ -224,6 +208,20 @@ const HomeScreenPresenter = props => {
 
       {/* 방생성 버튼 */}
       <AddButton onClick={() => props.onRedirect('Create')} />
+
+      <CustomAlert
+        visible={props.alert.visible}
+        title={props.alert.title}
+        width={320}
+        description={props.alert.message}
+        actions={[
+          {
+            name: '확인',
+            action: props.alert.onClose
+          }
+        ]}
+        onClose={props.alert.onClose}
+      />
     </View>
   );
 };
