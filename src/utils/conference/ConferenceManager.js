@@ -32,7 +32,7 @@ class ConferenceManager {
   /**
    * connect : 화상대화 참가
    */
-  join = async (roomName, name, handleClose, auth, iscreator) => {
+  join = async (roomName, name, handleClose, auth, callType) => {
     // 초기화
     this._init();
     // 대화방 연결을 위한 Connection
@@ -50,6 +50,7 @@ class ConferenceManager {
       name,
       auth
     );
+    this.callType = callType;
 
     // 대화방 접속 시간 세팅
     const createdTime = this._room.properties['created-ms'];
@@ -80,7 +81,8 @@ class ConferenceManager {
         id,
         name,
         videoTrack,
-        audioTrack
+        audioTrack,
+        callType
       })
     );
     this._dispatch(mainUserActionCreators.setMainUserNotExist(id));

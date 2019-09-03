@@ -36,6 +36,7 @@ const initialState = {
   facingMode: FacingModes.FRONT,
   prevVolumn: null,
   createdTime: null,
+  callType: null
 };
 
 //#endregion
@@ -94,7 +95,8 @@ function applyJoinConference(state, action) {
   };
   return {
     ...state,
-    user
+    user,
+    callType: conferenceInfo.callType
   };
 }
 
@@ -119,7 +121,9 @@ function applyLeaveConference(state) {
   return {
     ...state,
     user,
-    conferenceMode: ConferenceModes.NORMAL
+    conferenceMode: ConferenceModes.NORMAL,
+    createdTime: null,
+    callType: null
   };
 }
 
@@ -296,7 +300,7 @@ export const actionCreators = {
   toggleCameraFacingMode,
   toggleMuteMic,
   toggleMuteSpeaker,
-  setConferenceCreatedTime,
+  setConferenceCreatedTime
 };
 
 export default reducer;

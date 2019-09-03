@@ -420,7 +420,7 @@ class HomeScreenContainer extends Component {
     selectedRoomName = null
   ) => {
     let { auth } = this.props;
-    let callType = 1;
+    let callType = 3;
     let isCreator;
     // 위하고(외부)에서 접속인지 아닌지 구분
     if (externalData !== null) {

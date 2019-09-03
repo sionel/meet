@@ -98,7 +98,7 @@ const MainVideoPresenter = props => {
   return (
     <View style={{ flex: 1, backgroundColor: '#1D1D1D' }}>
       {/* 정상적인 화상대화 일 때 */}
-      {!isMuteVideo && stream && callType == 1 && !props.drawing ? (
+      {!isMuteVideo && stream && (callType == 1 || callType == 3) && !props.drawing ? (
         <RTCView
           style={styles.RTCVideo}
           // mirror={true}

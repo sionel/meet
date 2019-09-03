@@ -7,6 +7,7 @@ import React, { Fragment } from 'react';
 import { NativeModules, NetInfo } from 'react-native';
 import KeepAwake from 'react-native-keep-awake';
 import ConferenceScreenPresenter from './ConferenceScreenPresenter';
+import EndCallMessage from './EndCallMessage';
 import ConferenceManager from '../../utils/conference/ConferenceManager';
 // import Orientation from 'react-native-orientation-locker';
 import { AppState, StatusBar } from 'react-native';
@@ -18,9 +19,10 @@ class ConferenceScreenContainer extends React.Component {
     super();
     this._appState = 'active';
     this.state = {
-      callType: 1,
+      callType: 3,
       connection: true,
-      selectedRoomName: ''
+      selectedRoomName: '',
+      endCall: false
     };
   }
 
@@ -33,34 +35,9 @@ class ConferenceScreenContainer extends React.Component {
     // else {
     // 	Orientation.lockToPortrait();
     // }
-    const { navigation, user_name, auth } = this.props;
-    const item = navigation.getParam('item');
-    // 전화 타입 - 화상:1 / 음성:2
-    this.callType = item.callType || this.state.callType;
-    this.selectedRoomName = item.selectedRoomName;
-    // 컴포넌트가 마운트 되면 대화방 초기 설정 후 입장한다.
-    this._conferenceManager = new ConferenceManager(this.props.dispatch, {
-      token: auth.AUTH_A_TOKEN,
-      r_token: auth.AUTH_R_TOKEN,
-      HASH_KEY: auth.HASH_KEY
-    });
 
-    // 참가자/생성자 여부 확인 후 로딩딜레이
-    const delayLoading = time =>
-      setTimeout(() => {
-        const roomId = item.videoRoomId; // item.videoRoomId
-        // const roomId = `OGrTxmgBeAtpuzEuupv9_20190426092958yf656`; // item.videoRoomId
-        this._joinConference(roomId, user_name, auth);
-        AppState.addEventListener('change', this._handleAppStateChange);
-      }, time);
-
-    if (item.isCreator == 2) {
-      delayLoading(4500);
-    } else {
-      delayLoading(0);
-    }
-
-    this.setState({ selectedRoomName: this.selectedRoomName });
+    const { navigation, user_name, auth, dispatch } = this.props;
+    this._handleCreateConnection(navigation, user_name, auth, dispatch);
 
     // NetInfo.getConnectionInfo().then(connectionInfo => {
     //   this.setState({
@@ -74,6 +51,31 @@ class ConferenceScreenContainer extends React.Component {
     //   'connectionChange',
     //   this._handleConnectivityChange
     // );
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    // if (!this.state.endCall === nextState.endCall) return false;
+    if (
+      this.callType != 3 &&
+      this.props.list.length > 0 &&
+      nextProps.list.length === 0
+    ) {
+      this._conferenceManager && this._conferenceManager.dispose();
+      this.setState({ endCall: true });
+      return false;
+    }
+
+    const { navigation: nav1 } = this.props;
+    const { navigation: nav2 } = nextProps;
+    const item1 = nav1.getParam('item');
+    const item2 = nav2.getParam('item');
+    if (item1 !== item2) {
+      this.setState({ endCall: false });
+      const { navigation, user_name, auth, dispatch } = nextProps;
+      this._handleCreateConnection(navigation, user_name, auth, dispatch);
+    }
+
+    return true;
   }
 
   /** */
@@ -107,6 +109,7 @@ class ConferenceScreenContainer extends React.Component {
    * componentWillUnmount
    */
   componentWillUnmount() {
+    // clearTimeout(this._end);
     KeepAwake.deactivate();
     // Orientation.lockToPortrait();
     // 컴포넌트가 언마운트 되기전 화상회의 관련 리소스를 해제 한다.
@@ -124,19 +127,22 @@ class ConferenceScreenContainer extends React.Component {
    * render
    */
   render() {
-    return (
+    return !this.state.endCall ? (
       <ConferenceScreenPresenter
         {...this.props}
         connection={this.state.connection}
         callType={this.callType}
         selectedRoomName={this.selectedRoomName}
-        onClose={this._handleClose}
+        // onClose={this._handleConferenceClose}
+        onClose={this._handleEndCall}
         onClear={this._handleClear}
         onSetDrawingData={this._handleSetDrawingData}
         onChangeDrawingMode={this._handleChangeDrawingMode}
         onChangeSharingMode={this._handleChangeSharingMode}
         onChangeDocumentPage={this._handleChangeDocumentPage}
       />
+    ) : (
+      <EndCallMessage onClose={this._handleConferenceClose} />
     );
   }
 
@@ -151,13 +157,59 @@ class ConferenceScreenContainer extends React.Component {
   //   // }
   // };
 
+  _handleCreateConnection = (navigation, user_name, auth, dispatch) => {
+    // const { navigation, user_name, auth, dispatch } = this.props;
+    const item = navigation.getParam('item');
+    // 전화 타입 - 화상:1 / 음성:2 / 위톡:3
+    this.callType = item.callType || this.state.callType;
+    this.selectedRoomName = item.selectedRoomName;
+    // 컴포넌트가 마운트 되면 대화방 초기 설정 후 입장한다.
+    this._conferenceManager = new ConferenceManager(dispatch, {
+      token: auth.AUTH_A_TOKEN,
+      r_token: auth.AUTH_R_TOKEN,
+      HASH_KEY: auth.HASH_KEY
+    });
+
+    // 참가자/생성자 여부 확인 후 로딩딜레이
+    const delayLoading = time =>
+      setTimeout(() => {
+        const roomId = item.videoRoomId; // item.videoRoomId
+        // const roomId = `OGrTxmgBeAtpuzEuupv9_20190426092958yf656`; // item.videoRoomId
+        this._joinConference(roomId, user_name, auth);
+        // AppState.addEventListener('change', this._handleAppStateChange);
+      }, time);
+
+    if (item.isCreator == 2) {
+      delayLoading(4500);
+    } else {
+      delayLoading(0);
+    }
+
+    this.setState({ selectedRoomName: this.selectedRoomName });
+  };
+
   /** 대화방 참가 생성 */
   _joinConference = async (roomName, name, auth) => {
-    await this._conferenceManager.join(roomName, name, this._handleClose, auth);
+    await this._conferenceManager.join(
+      roomName,
+      name,
+      // this._handleEndCall,
+      () => {},
+      auth,
+      this.callType
+    );
+  };
+
+  /** 전화/대화 종료 */
+  _handleEndCall = () => {
+    if (this.callType === 3) this._handleConferenceClose();
+    else {
+      this._conferenceManager && this._conferenceManager.dispose();
+    }
   };
 
   /** 화상대화방 닫기 */
-  _handleClose = () => {
+  _handleConferenceClose = () => {
     const { goBack } = this.props.navigation;
     goBack();
   };
@@ -177,7 +229,7 @@ class ConferenceScreenContainer extends React.Component {
    */
   _handleCheckKeepRoom = nextAppState => {
     if (this._appState !== 'active' && nextAppState !== 'active') {
-      this._handleClose();
+      this._handleEndCall();
     }
   };
 
