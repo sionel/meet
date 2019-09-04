@@ -3,16 +3,11 @@
  * 화상대화 화면 컨테이너
  */
 
-import React, { Fragment } from 'react';
-import { NativeModules, NetInfo } from 'react-native';
+import React from 'react';
 import KeepAwake from 'react-native-keep-awake';
 import ConferenceScreenPresenter from './ConferenceScreenPresenter';
 import EndCallMessage from './EndCallMessage';
 import ConferenceManager from '../../utils/conference/ConferenceManager';
-// import Orientation from 'react-native-orientation-locker';
-import { AppState, StatusBar } from 'react-native';
-
-const { PlatformConstants } = NativeModules;
 
 class ConferenceScreenContainer extends React.Component {
   constructor() {
@@ -20,9 +15,11 @@ class ConferenceScreenContainer extends React.Component {
     this._appState = 'active';
     this.state = {
       callType: 3,
-      connection: true,
+      connection: false,
       selectedRoomName: '',
-      endCall: false
+      endCall: false,
+      endUser: null,
+      createdTime: null
     };
   }
 
@@ -30,47 +27,51 @@ class ConferenceScreenContainer extends React.Component {
    * componentDidMount
    */
   componentDidMount() {
-    KeepAwake.activate();
-    // if (PlatformConstants.interfaceIdiom === 'phone') Orientation.unlockAllOrientations();
-    // else {
-    // 	Orientation.lockToPortrait();
-    // }
-
     const { navigation, user_name, auth, dispatch } = this.props;
     this._handleCreateConnection(navigation, user_name, auth, dispatch);
-
-    // NetInfo.getConnectionInfo().then(connectionInfo => {
-    //   this.setState({
-    //     connection:
-    //       connectionInfo.type !== 'wifi' || connectionInfo.type !== 'cellular'
-    //   });
-    //   console.log('Initial, type: ' + connectionInfo.type);
-    // });
-
-    // NetInfo.addEventListener(
-    //   'connectionChange',
-    //   this._handleConnectivityChange
-    // );
+    KeepAwake.activate();
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    // if (!this.state.endCall === nextState.endCall) return false;
-    if (
-      this.callType != 3 &&
-      this.props.list.length > 0 &&
-      nextProps.list.length === 0
-    ) {
-      this._conferenceManager && this._conferenceManager.dispose();
-      this.setState({ endCall: true });
-      return false;
+    // 상대방이 통화를 종료했는지 확인
+    if (nextState.connection && !this.state.connection) {
+      this.connectFailCheck && clearInterval(this.connectFailCheck);
+      setTimeout(() => {
+        this.connectFailCheck = setInterval(() => {
+          const endUser = this.props.list;
+          // 대기하고 있는데 사용자가 들어온 경우
+          if (endUser.length > 0 && !this.state.endUser) {
+            console.log('this.props.createdTime', this.props.createdTime);
+            this.setState({
+              endUser: endUser[0],
+              createdTime: this.props.createdTime
+            });
+          }
+          // 대기하고 있는데 사용자가 안들어올 경우
+          if (endUser.length === 0 && !this.state.endUser) {
+            clearInterval(this.connectFailCheck);
+            this._conferenceManager && this._conferenceManager.dispose();
+            // this._handleConferenceClose();
+            this.setState({ endCall: true });
+          }
+          // 통화 중에 사용자가 종료했을 경우
+          if (endUser.length === 0 && this.state.endUser) {
+            clearInterval(this.connectFailCheck);
+            this._conferenceManager && this._conferenceManager.dispose();
+            this.setState({ endCall: true });
+          }
+        }, 100);
+      }, 3000);
     }
 
+    // 통화종료 안내화면에서 전화를 받았을 때
+    // Connection 을 새로 생성하고 연결한다.
     const { navigation: nav1 } = this.props;
     const { navigation: nav2 } = nextProps;
     const item1 = nav1.getParam('item');
     const item2 = nav2.getParam('item');
     if (item1 !== item2) {
-      this.setState({ endCall: false });
+      this.setState({ endCall: false, endUser: null, connection: false });
       const { navigation, user_name, auth, dispatch } = nextProps;
       this._handleCreateConnection(navigation, user_name, auth, dispatch);
     }
@@ -109,18 +110,11 @@ class ConferenceScreenContainer extends React.Component {
    * componentWillUnmount
    */
   componentWillUnmount() {
-    // clearTimeout(this._end);
     KeepAwake.deactivate();
-    // Orientation.lockToPortrait();
     // 컴포넌트가 언마운트 되기전 화상회의 관련 리소스를 해제 한다.
     this._conferenceManager.dispose();
     this.props.setSharingMode();
-    // this.props.navigation.navigate('Home');
-
-    // NetInfo.removeEventListener(
-    //   'connectionChange',
-    //   this._handleConnectivityChange
-    // );
+    clearInterval(this.connectFailCheck);
   }
 
   /**
@@ -142,20 +136,13 @@ class ConferenceScreenContainer extends React.Component {
         onChangeDocumentPage={this._handleChangeDocumentPage}
       />
     ) : (
-      <EndCallMessage onClose={this._handleConferenceClose} />
+      <EndCallMessage
+        user={this.state.endUser}
+        createdTime={this.state.createdTime}
+        onClose={this._handleConferenceClose}
+      />
     );
   }
-
-  // _handleConnectivityChange = connectionInfo => {
-  //   console.log('Network change, type: ' + connectionInfo.type);
-
-  //   if (connectionInfo.type !== 'wifi' || connectionInfo.type !== 'cellular') {
-  //     this.setState({ connection: false });
-  //     this._conferenceManager.dispose();
-  //   }
-  //   // if (connectionInfo.type !== this.state.connection && connectionInfo.type) {
-  //   // }
-  // };
 
   _handleCreateConnection = (navigation, user_name, auth, dispatch) => {
     // const { navigation, user_name, auth, dispatch } = this.props;
@@ -171,13 +158,13 @@ class ConferenceScreenContainer extends React.Component {
     });
 
     // 참가자/생성자 여부 확인 후 로딩딜레이
-    const delayLoading = time =>
-      setTimeout(() => {
+    const delayLoading = time => {
+      this.delayLoading && clearTimeout(this.delayLoading);
+      this.delayLoading = setTimeout(() => {
         const roomId = item.videoRoomId; // item.videoRoomId
-        // const roomId = `OGrTxmgBeAtpuzEuupv9_20190426092958yf656`; // item.videoRoomId
         this._joinConference(roomId, user_name, auth);
-        // AppState.addEventListener('change', this._handleAppStateChange);
       }, time);
+    };
 
     if (item.isCreator == 2) {
       delayLoading(4500);
@@ -198,10 +185,12 @@ class ConferenceScreenContainer extends React.Component {
       auth,
       this.callType
     );
+    this.setState({ connection: true });
   };
 
   /** 전화/대화 종료 */
   _handleEndCall = () => {
+    this.setState({ connection: false, endCall: true });
     if (this.callType === 3) this._handleConferenceClose();
     else {
       this._conferenceManager && this._conferenceManager.dispose();

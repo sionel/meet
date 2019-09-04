@@ -13,9 +13,9 @@ const ConferenceScreenPresenter = props =>
   props.mainUser && props.connection ? (
     <Content
       mainUser={props.mainUser}
-      onClose={props.onClose}
       callType={props.callType}
       selectedRoomName={props.selectedRoomName}
+      onClose={props.onClose}
       onClear={props.onClear}
       onSetDrawingData={props.onSetDrawingData}
       onChangeDrawingMode={props.onChangeDrawingMode}

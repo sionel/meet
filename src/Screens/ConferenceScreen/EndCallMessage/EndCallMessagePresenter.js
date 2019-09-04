@@ -1,11 +1,30 @@
 import React from 'react';
 import { View, Image, Text, Dimensions, TouchableOpacity } from 'react-native';
-import { CustomLottie } from '../../../components';
+import { CustomLottie, CustomIcon } from '../../../components';
 import ProfileImage from '../../../../assets/icons/imgVcNophoto_2x.png';
 
 const { height, width } = Dimensions.get('window');
 
-const MainVideoPresenter = props => {
+const EndCallMessagePresenter = props => {
+  const second2String = second => {
+    let hours = Math.floor(second / 3600);
+    let minutes = Math.floor((second - hours * 3600) / 60);
+    let seconds = Math.floor(second - hours * 3600 - minutes * 60);
+
+    if (hours < 10) {
+      hours = '0' + hours;
+    }
+    if (minutes < 10) {
+      minutes = '0' + minutes;
+    }
+    if (seconds < 10) {
+      seconds = '0' + seconds;
+    }
+    return hours + ':' + minutes + ':' + seconds;
+  };
+  const time =
+    props.createdTime && second2String((Date.now() - props.createdTime) / 1000);
+
   return (
     <View
       style={{
@@ -20,7 +39,7 @@ const MainVideoPresenter = props => {
       }}
     >
       <View style={{ display: 'flex' }}>
-        <CustomLottie source="voiceBroadcast" width={280} height={280}>
+        <CustomLottie source="cc" width={280} height={280}>
           <View
             style={{
               position: 'absolute',
@@ -30,8 +49,8 @@ const MainVideoPresenter = props => {
           >
             <Text
               style={{
-                fontSize: 20,
-                color: '#c0c0c0',
+                fontSize: 24,
+                color: '#fff',
                 textAlign: 'center',
                 fontFamily: 'DOUZONEText30'
               }}
@@ -40,14 +59,13 @@ const MainVideoPresenter = props => {
             </Text>
             <Text
               style={{
-                fontSize: 25,
-                color: '#c0c0c0',
+                fontSize: 24,
+                color: '#fff',
                 textAlign: 'center',
                 fontFamily: 'DOUZONEText30'
               }}
             >
-              {/* {second2String(props.time)} */}
-              10초간
+              {props.createdTime ? time : '00:00:00'}
             </Text>
           </View>
           <Image
@@ -62,7 +80,14 @@ const MainVideoPresenter = props => {
               backgroundColor: '#1D1D1D',
               borderColor: '#d1d1d1'
             }}
-            source={ProfileImage}
+            source={
+              props.user
+                ? {
+                    uri:
+                      'https://www.wehago.com' + props.user.userInfo.profile_url
+                  }
+                : ProfileImage
+            }
           />
           <View
             style={{
@@ -78,11 +103,10 @@ const MainVideoPresenter = props => {
                 color: '#fff',
                 width: Math.min(height, width) * 0.8,
                 textAlign: 'center',
-                fontFamily: 'DOUZONEText50'
+                fontFamily: 'DOUZONEText30'
               }}
             >
-              {/* {mainUser.name} */}
-              김씨
+              {props.user ? props.user.name : '연결에 실패했습니다.'}
             </Text>
             <Text
               style={{
@@ -92,23 +116,40 @@ const MainVideoPresenter = props => {
                 fontFamily: 'DOUZONEText30'
               }}
             >
-              {/* {userInfo && userInfo.companyFullpath
-                ? userInfo.companyFullpath
-                : ''} */}
-              어디부서
+              {props.user
+                ? props.user.userInfo.companyFullpath
+                : '상대방이 접속하지 않았습니다.'}
             </Text>
           </View>
         </CustomLottie>
       </View>
 
-      <TouchableOpacity
-        onPress={props.onClose}
-        style={{ position: 'absolute', bottom: '10%', left: '50%' }}
+      <View
+        style={{
+          position: 'absolute',
+          bottom: '10%',
+          left: 0,
+          right: 0,
+          alignItems: 'center'
+        }}
       >
-        <Text style={{ color: '#fff', fontSize: 30 }}>닫기</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          onPress={props.onClose}
+          activeOpacity={0.5}
+          style={{
+            width: 55,
+            height: 55,
+            borderRadius: 55 / 2,
+            backgroundColor: '#f4484c',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          <CustomIcon width={24} height={24} name={'buttonClose'} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
 
-export default MainVideoPresenter;
+export default EndCallMessagePresenter;
