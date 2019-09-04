@@ -152,7 +152,7 @@ class CreateScreenContainer extends React.Component {
       auth.AUTH_R_TOKEN,
       auth.HASH_KEY
     );
-    console.log('checkResult : ', checkResult);
+    // console.log('checkResult : ', checkResult);
 
     const bodyData = [
       selectedRoomId, // 방 id
@@ -166,9 +166,9 @@ class CreateScreenContainer extends React.Component {
       // null
     ];
     const createResult = await ConferenceApi.create(...bodyData);
-    console.log('==================================');
-    console.log('Log : ', createResult);
-    console.log('==================================');
+    // console.log('==================================');
+    // console.log('Log : ', createResult);
+    // console.log('==================================');
 
     // 화상대화 생성가능여부 // 대화방 생성 or 참여 여부 결정
     if (createResult.resultCode === 200) {

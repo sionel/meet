@@ -12,6 +12,7 @@ class OverViewContainer extends Component {
     const { isLoading, mode, hasNotch, orientation, onChangeSharingMode } = this.props;
     const { view } = this.state;
     const tabs = [
+      { key: 'CHATTING', name: '대화방' },
       { key: 'USERLIST', name: '참여자 목록' },
       { key: 'FILELIST', name: 'WE드라이브 파일' }
     ];
@@ -28,7 +29,7 @@ class OverViewContainer extends Component {
         isLoading={isLoading}
         view={view}
         tabs={selectedTabs}
-        // hasNotch={hasNotch}
+        hasNotch={hasNotch}
         orientation={orientation}
         speaker={this.props.speaker}
         setDocumentListMode={this._handleDocumentListMode}

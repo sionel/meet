@@ -136,8 +136,8 @@ const ContentPresenter = props => {
         //   }}
         // >
         <OverView
-          mode={['USERLIST', 'FILELIST']}
-          defaultMode={'FILELIST'}
+          mode={props.documentListMode}
+          defaultMode={props.documentListMode[0]}
           orientation={props.orientation}
           speaker={props.speaker}
           onChangeSharingMode={props.onChangeSharingMode}
@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
     // zIndex: 9
   },
   bottomAreaVertical: {

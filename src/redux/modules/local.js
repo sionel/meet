@@ -26,6 +26,9 @@ const TOGGLE_CAMERA_FACING_MODE = 'TOGGLE_CAMERA_FACING_MODE';
 // SET_CONFERENCE_CREATED_TIME
 const SET_CONFERENCE_CREATED_TIME = 'SET_CONFERENCE_CREATED_TIME';
 
+// CONFERENCE_MESSAGE_RECEIVED
+const CONFERENCE_MESSAGE_RECEIVED = 'CONFERENCE_MESSAGE_RECEIVED';
+
 //#endregion Action Types
 
 //#region Initial State
@@ -36,7 +39,8 @@ const initialState = {
   facingMode: FacingModes.FRONT,
   prevVolumn: null,
   createdTime: null,
-  callType: null
+  callType: null,
+  message: []
 };
 
 //#endregion
@@ -63,6 +67,8 @@ function reducer(state = initialState, action) {
       return applyToggleMuteSpeaker(state, action);
     case SET_CONFERENCE_CREATED_TIME:
       return applySetConferenceCreatedTime(state, action);
+    case CONFERENCE_MESSAGE_RECEIVED:
+      return applySetConferenceMessage(state, action);
     default:
       return state;
   }
@@ -85,6 +91,7 @@ function applyJoinConference(state, action) {
   const { conferenceInfo } = action;
   const user = {
     id: conferenceInfo.id,
+    cid: conferenceInfo.cid,
     name: conferenceInfo.name,
     isLocal: true,
     videoTrack: conferenceInfo.videoTrack,
@@ -123,7 +130,8 @@ function applyLeaveConference(state) {
     user,
     conferenceMode: ConferenceModes.NORMAL,
     createdTime: null,
-    callType: null
+    callType: null,
+    message: []
   };
 }
 
@@ -292,6 +300,40 @@ function applySetConferenceCreatedTime(state, action) {
 
 //#endregion SET_CONFERENCE_CREATED_TIME
 
+// CONFERENCE_MESSAGE_RECEIVED
+function receiceConferenceMessage(newMessage = null) {
+  return async (dispatch, getState) => {
+    dispatch({
+      type: CONFERENCE_MESSAGE_RECEIVED,
+      newMessage,
+      participants: getState().participants.list
+    });
+  };
+}
+
+function applySetConferenceMessage(state, action) {
+  const { newMessage, participants } = action;
+
+  if (newMessage === null) {
+    return {
+      ...state,
+      message: []
+    };
+  }
+
+  const list = state.message.slice(0);
+  const user = participants.find(participant => {
+    return participant.id === newMessage.user;
+  }) || { name: '(알수없음)' };
+  list.push({ ...newMessage, name: user.name });
+
+  return {
+    ...state,
+    message: list
+  };
+}
+// #end
+
 export const actionCreators = {
   setConferenceMode,
   joinConference,
@@ -300,7 +342,8 @@ export const actionCreators = {
   toggleCameraFacingMode,
   toggleMuteMic,
   toggleMuteSpeaker,
-  setConferenceCreatedTime
+  setConferenceCreatedTime,
+  receiceConferenceMessage
 };
 
 export default reducer;

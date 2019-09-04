@@ -34,34 +34,35 @@ class ConferenceScreenContainer extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     // 상대방이 통화를 종료했는지 확인
-    if (nextState.connection && !this.state.connection) {
-      this.connectFailCheck && clearInterval(this.connectFailCheck);
-      setTimeout(() => {
-        this.connectFailCheck = setInterval(() => {
-          const endUser = this.props.list;
-          // 대기하고 있는데 사용자가 들어온 경우
-          if (endUser.length > 0 && !this.state.endUser) {
-            console.log('this.props.createdTime', this.props.createdTime);
-            this.setState({
-              endUser: endUser[0],
-              createdTime: this.props.createdTime
-            });
-          }
-          // 대기하고 있는데 사용자가 안들어올 경우
-          if (endUser.length === 0 && !this.state.endUser) {
-            clearInterval(this.connectFailCheck);
-            this._conferenceManager && this._conferenceManager.dispose();
-            // this._handleConferenceClose();
-            this.setState({ endCall: true });
-          }
-          // 통화 중에 사용자가 종료했을 경우
-          if (endUser.length === 0 && this.state.endUser) {
-            clearInterval(this.connectFailCheck);
-            this._conferenceManager && this._conferenceManager.dispose();
-            this.setState({ endCall: true });
-          }
-        }, 100);
-      }, 3000);
+    if (this.callType !== 3) {
+      if (nextState.connection && !this.state.connection) {
+        this.connectFailCheck && clearInterval(this.connectFailCheck);
+        setTimeout(() => {
+          this.connectFailCheck = setInterval(() => {
+            const endUser = this.props.list;
+            // 대기하고 있는데 사용자가 들어온 경우
+            if (endUser.length > 0 && !this.state.endUser) {
+              this.setState({
+                endUser: endUser[0],
+                createdTime: this.props.createdTime
+              });
+            }
+            // 대기하고 있는데 사용자가 안들어올 경우
+            if (endUser.length === 0 && !this.state.endUser) {
+              clearInterval(this.connectFailCheck);
+              this._conferenceManager && this._conferenceManager.dispose();
+              // this._handleConferenceClose();
+              this.setState({ endCall: true });
+            }
+            // 통화 중에 사용자가 종료했을 경우
+            if (endUser.length === 0 && this.state.endUser) {
+              clearInterval(this.connectFailCheck);
+              this._conferenceManager && this._conferenceManager.dispose();
+              this.setState({ endCall: true });
+            }
+          }, 100);
+        }, 3000);
+      }
     }
 
     // 통화종료 안내화면에서 전화를 받았을 때

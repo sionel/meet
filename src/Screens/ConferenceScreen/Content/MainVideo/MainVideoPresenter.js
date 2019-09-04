@@ -98,7 +98,10 @@ const MainVideoPresenter = props => {
   return (
     <View style={{ flex: 1, backgroundColor: '#1D1D1D' }}>
       {/* 정상적인 화상대화 일 때 */}
-      {!isMuteVideo && stream && (callType == 1 || callType == 3) && !props.drawing ? (
+      {!isMuteVideo &&
+      stream &&
+      (callType == 1 || callType == 3) &&
+      !props.drawing ? (
         <RTCView
           style={styles.RTCVideo}
           // mirror={true}
@@ -123,8 +126,8 @@ const MainVideoPresenter = props => {
               >
                 <Text
                   style={{
-                    fontSize: 20,
-                    color: '#c0c0c0',
+                    fontSize: 24,
+                    color: '#fff',
                     textAlign: 'center',
                     fontFamily: 'DOUZONEText30'
                   }}
@@ -133,8 +136,8 @@ const MainVideoPresenter = props => {
                 </Text>
                 <Text
                   style={{
-                    fontSize: 25,
-                    color: '#c0c0c0',
+                    fontSize: 24,
+                    color: '#fff',
                     textAlign: 'center',
                     fontFamily: 'DOUZONEText30'
                   }}
@@ -142,7 +145,16 @@ const MainVideoPresenter = props => {
                   {second2String(props.time)}
                 </Text>
               </View>
-              <Image style={styles.profileImage} source={ProfileImage} />
+              <Image
+                style={styles.profileImage}
+                source={
+                  userInfo
+                    ? {
+                        uri: 'https://www.wehago.com' + userInfo.profile_url
+                      }
+                    : ProfileImage
+                }
+              />
               <View
                 style={{
                   position: 'absolute',
@@ -160,9 +172,16 @@ const MainVideoPresenter = props => {
                     fontFamily: 'DOUZONEText50'
                   }}
                 >
-                  {mainUser.name}
+                  {mainUser.id !== 'localUser' && mainUser.name}
                 </Text>
-                <Text style={{ fontSize: 13, color: '#fff', paddingTop: 10, fontFamily: 'DOUZONEText30' }}>
+                <Text
+                  style={{
+                    fontSize: 13,
+                    color: '#fff',
+                    paddingTop: 10,
+                    fontFamily: 'DOUZONEText30'
+                  }}
+                >
                   {userInfo && userInfo.companyFullpath
                     ? userInfo.companyFullpath
                     : ''}
@@ -250,9 +269,9 @@ const styles = StyleSheet.create({
 });
 
 function second2String(second) {
-  var hours = Math.floor(second / 3600);
-  var minutes = Math.floor((second - hours * 3600) / 60);
-  var seconds = second - hours * 3600 - minutes * 60;
+  let hours = Math.floor(second / 3600);
+  let minutes = Math.floor((second - hours * 3600) / 60);
+  let seconds = Math.floor(second - hours * 3600 - minutes * 60);
 
   if (hours < 10) {
     hours = '0' + hours;

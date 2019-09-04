@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import ContentContainer from './ContentContainer';
 import { actionCreators as localActions } from '../../../redux/modules/local';
 import { actionCreators as mainUserActions } from '../../../redux/modules/mainUser';
-import { actionCreators as DocumentShareActions } from '../../../redux/modules/documentShare';
+// import { actionCreators as DocumentShareActions } from '../../../redux/modules/documentShare';
 
 const mapStateToProps = (state, ownProps) => {
 	const { local: { conferenceMode } } = state;
@@ -14,7 +14,7 @@ const mapStateToProps = (state, ownProps) => {
 		videoTrack: mainUser.videoTrack,
 		isMuteVideo: mainUser.isMuteVideo,
 		drawingMode: state.mainUser.drawingMode,
-		documentListMode: state.documentShare.documentListMode,
+		documentListMode: state.mainUser.documentListMode,
 		attributes: state.documentShare.attributes,
 	};
 };
@@ -28,7 +28,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 			return dispatch(mainUserActions.setDrawingMode(value));
 		},
 		setDocumentListMode: value => {
-      return dispatch(DocumentShareActions.setDocumentListMode(value));
+      return dispatch(mainUserActions.setDocumentListMode(value));
     },
 		// setSharingMode: value => {
 		// 	return dispatch(mainUserActions.setSharingMode(value));

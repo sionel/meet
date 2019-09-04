@@ -47,7 +47,7 @@ class APIManager {
       const { roomId } = this.info;
       // 유저리스트를 가지고 온다.
       const userList = await this._getUserList();
-      console.log('유저목록 : ', userList);
+      // console.log('유저목록 : ', userList);
       // 비인증일때
       const isExist = userList.resultData.find(
         data => data.user_id === this.dummyWehagoId
