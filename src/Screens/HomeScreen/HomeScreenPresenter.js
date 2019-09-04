@@ -6,15 +6,10 @@
 import React, { Fragment } from 'react';
 import {
   View,
-  Text,
   StyleSheet,
-  Modal,
-  TouchableOpacity,
   SectionList,
   ScrollView,
   RefreshControl,
-  Image,
-  Platform
 } from 'react-native';
 
 import {
@@ -110,99 +105,15 @@ const HomeScreenPresenter = props => {
                     : false
                 }
                 onClick={() =>
-                  item.is_video_access === 'T'
-                    ? props.onCheckConference(
-                        item.video_chat_id,
-                        null,
-                        item.room_title
-                      )
-                    : props.onActivateModal(item.room_id, item.room_title)
+                  props.onCheckConference(
+                    item.video_chat_id,
+                    null,
+                    item.room_title
+                  )
                 }
               />
             )}
           />
-
-          {/* 컨펌모달 */}
-          <Modal
-            animationType="fade"
-            transparent={true}
-            visible={props.modal}
-            blurRadius={1}
-            supportedOrientations={[
-              'portrait',
-              'portrait-upside-down',
-              'landscape',
-              'landscape-left',
-              'landscape-right'
-            ]}
-            onRequestClose={() => props.onActivateModal(null)}
-          >
-            <View style={styles.modalWrap}>
-              <View style={styles.modalContentWrap}>
-                <TouchableOpacity
-                  style={{
-                    position: 'absolute',
-                    right: 10,
-                    top: 10,
-                    zIndex: 11
-                  }}
-                  onPress={() => props.onActivateModal(null)}
-                >
-                  <Icon
-                    name="times-circle"
-                    size={30}
-                    color="#CACACA"
-                    style={{
-                      zIndex: 10
-                    }}
-                  />
-                </TouchableOpacity>
-
-                <View style={styles.modalMessage}>
-                  <Text
-                    style={{
-                      fontSize: 22,
-                      color: '#1C90FB',
-                      marginBottom: 20,
-                      fontFamily: 'DOUZONEText30'
-                    }}
-                  >
-                    화상대화 종료
-                  </Text>
-                  <Text
-                    style={{
-                      fontFamily: 'DOUZONEText30'
-                    }}
-                  >
-                    {/* 새로운 화상대화를 시작하시겠습니까? */}
-                    이미 종료된 화상대화 입니다.
-                  </Text>
-                </View>
-                <View style={styles.modalButtons}>
-                  <TouchableOpacity
-                    style={{
-                      ...styles.modalButton,
-                      ...styles.modalButtonConfirm
-                    }}
-                    onPress={() =>
-                      // props.onCreateConference(props.selectedRoomId)
-                      props.onActivateModal(null)
-                    }
-                  >
-                    <Text
-                      style={{
-                        color: '#fff',
-                        fontFamily:
-                          Platform.OS === 'ios' ? 'Arial' : 'sans-serif'
-                      }}
-                    >
-                      확인
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-          </Modal>
         </Fragment>
       )}
 

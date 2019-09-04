@@ -28,7 +28,7 @@ import { ConferenceApi, WetalkApi } from '../../services';
 import { querystringParser } from '../../utils';
 
 // import DrawerContent from '../../components/DrawerContent';
-const { height, width } = Dimensions.get('window');
+// const { height, width } = Dimensions.get('window');
 const hasNotch = DeviceInfo.hasNotch() && Platform.OS === 'ios';
 
 // #region
@@ -41,11 +41,6 @@ class HomeScreenContainer extends Component {
     super(props);
     this._isFocus = true;
     this._refreshTimeStamp = Date.now();
-
-    // if (Platform.OS === 'android') {
-    //   UIManager.setLayoutAnimationEnabledExperimental(true);
-    // }
-    // LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
   }
 
   /**
@@ -57,7 +52,7 @@ class HomeScreenContainer extends Component {
     searchKeyword: '', // 검색인풋
     selectedRoomId: null,
     selectedRoomName: null,
-    modal: false,
+    // modal: false,
     url: null,
     orientation: 'UNKNOWN',
     alert: {
@@ -143,7 +138,7 @@ class HomeScreenContainer extends Component {
       refreshing,
       searchKeyword,
       selectedRoomId,
-      modal,
+      // modal,
       orientation,
       alert
     } = this.state;
@@ -188,12 +183,12 @@ class HomeScreenContainer extends Component {
         <HomeScreenPresenter
           navigation={navigation}
           refreshing={refreshing}
-          modal={modal}
+          // modal={modal}
           list={wetalk}
           auth={auth}
           selectedRoomId={selectedRoomId}
           alert={alert}
-          onActivateModal={this._handleActivateModal}
+          // onActivateModal={this._handleActivateModal}
           onRedirect={this._handleRedirect}
           onRefresh={this._handleRefresh}
           onSearch={this._handleSearch}
@@ -399,16 +394,16 @@ class HomeScreenContainer extends Component {
    * _handleActivateModal
    * 모달뷰 토글
    */
-  _handleActivateModal = async (
-    selectedRoomId = null,
-    selectedRoomName = null
-  ) => {
-    this.setState(prev => ({
-      modal: !prev.modal,
-      selectedRoomId,
-      selectedRoomName
-    }));
-  };
+  // _handleActivateModal = async (
+  //   selectedRoomId = null,
+  //   selectedRoomName = null
+  // ) => {
+  //   this.setState(prev => ({
+  //     modal: !prev.modal,
+  //     selectedRoomId,
+  //     selectedRoomName
+  //   }));
+  // };
 
   /**
    * _handleCheckConference
@@ -564,7 +559,7 @@ class HomeScreenContainer extends Component {
         auth.AUTH_R_TOKEN,
         auth.HASH_KEY
       );
-      this.setState({ modal: false });
+      // this.setState({ modal: false });
 
       // 대화방에 참여한다.
       const videoRoomId = sendWetalkResult.resultData.chatList[0].mobile_key;
