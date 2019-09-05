@@ -8,6 +8,7 @@ import KeepAwake from 'react-native-keep-awake';
 import ConferenceScreenPresenter from './ConferenceScreenPresenter';
 import EndCallMessage from './EndCallMessage';
 import ConferenceManager from '../../utils/conference/ConferenceManager';
+// import { AppState } from 'react-native';
 
 class ConferenceScreenContainer extends React.Component {
   constructor() {
@@ -115,6 +116,7 @@ class ConferenceScreenContainer extends React.Component {
     // 컴포넌트가 언마운트 되기전 화상회의 관련 리소스를 해제 한다.
     this._conferenceManager.dispose();
     this.props.setSharingMode();
+    // AppState.removeEventListener(this._handleAppStateChange);
     clearInterval(this.connectFailCheck);
   }
 
@@ -164,6 +166,7 @@ class ConferenceScreenContainer extends React.Component {
       this.delayLoading = setTimeout(() => {
         const roomId = item.videoRoomId; // item.videoRoomId
         this._joinConference(roomId, user_name, auth);
+        // AppState.addEventListener('change', this._handleAppStateChange);
       }, time);
     };
 
@@ -207,21 +210,21 @@ class ConferenceScreenContainer extends React.Component {
   /**
    * 앱 슬립모드를 감지한다.
    */
-  _handleAppStateChange = nextAppState => {
-    this._appState = nextAppState;
-    setTimeout(() => {
-      this._handleCheckKeepRoom(nextAppState);
-    }, 10000);
-  };
+  // _handleAppStateChange = nextAppState => {
+  //   this._appState = nextAppState;
+  //   setTimeout(() => {
+  //     this._handleCheckKeepRoom(nextAppState);
+  //   }, 10000);
+  // };
 
   /**
    * 액티브 모드가 되지 않으면 대화방을 종료한다.
    */
-  _handleCheckKeepRoom = nextAppState => {
-    if (this._appState !== 'active' && nextAppState !== 'active') {
-      this._handleEndCall();
-    }
-  };
+  // _handleCheckKeepRoom = nextAppState => {
+  //   if (this._appState !== 'active' && nextAppState !== 'active') {
+  //     this._handleEndCall();
+  //   }
+  // };
 
   /**
    * _handleSetDrawingData

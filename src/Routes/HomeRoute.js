@@ -222,7 +222,7 @@ const HomeRoute = createStackNavigator(
     Create: {
       screen: CreateScreen,
       navigationOptions: ({ navigation }) => ({
-        headerTitle: <RouteTitle title={'WEHAGO Meet'} />,
+        headerTitle: <RouteTitle title={'화상회의'} />,
         headerLeft: <BackButton navigation={navigation} to={'Home'} />,
         headerTintColor: '#fff',
         headerStyle: commonStyle

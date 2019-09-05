@@ -1,7 +1,7 @@
 import React from 'react';
-import { ToastAndroid, BackHandler } from 'react-native';
+import { BackHandler, NativeModules, DeviceEventEmitter } from 'react-native';
 import MainVideoPresenter from './MainVideoPresenter';
-
+const { PictureInPicture } = NativeModules;
 /**
  * MainVideoContainer : 화상대화 화면
  */
@@ -20,6 +20,10 @@ class MainVideoContainer extends React.Component {
       time > 0 && this.setState({ time });
     }, 500);
 
+    DeviceEventEmitter.addListener(
+      'ON_HOME_BUTTON_PRESSED',
+      this._handleEnterPIPMode
+    );
     BackHandler.addEventListener('hardwareBackPress', this._handleBackButton);
   }
 
@@ -30,7 +34,10 @@ class MainVideoContainer extends React.Component {
   };
 
   componentWillUnmount() {
-    // 앱 종료를 막음
+    DeviceEventEmitter.removeListener(
+      'ON_HOME_BUTTON_PRESSED',
+      this._handleEnterPIPMode
+    );
     BackHandler.removeEventListener(
       'hardwareBackPress',
       this._handleBackButton
@@ -76,25 +83,32 @@ class MainVideoContainer extends React.Component {
    */
   _handleBackButton = () => {
     // 1000(1초) 안에 back 버튼을 한번 더 클릭 할 경우 앱 종료
-    if (this.exitContent == undefined || !this.exitContent) {
-      ToastAndroid.show(
-        '한번 더 누르면 화상대화가 종료됩니다.',
-        ToastAndroid.SHORT
-      );
-      this.exitContent = true;
+    // if (this.exitContent == undefined || !this.exitContent) {
+    //   ToastAndroid.show(
+    //     '한번 더 누르면 화상대화가 종료됩니다.',
+    //     ToastAndroid.SHORT
+    //   );
+    //   this.exitContent = true;
 
-      this.timeout = setTimeout(() => {
-        this.exitContent = false;
-      }, 1000);
-    } else {
-      clearTimeout(this.timeout);
-      if (this._timer) {
-        clearInterval(this._timer);
-      }
+    //   this.timeout = setTimeout(() => {
+    //     this.exitContent = false;
+    //   }, 1000);
+    // } else {
+    //   clearTimeout(this.timeout);
+    //   if (this._timer) {
+    //     clearInterval(this._timer);
+    //   }
 
-      this.props.onClose(); // 컴포넌트 종료
-    }
+    //   this.props.onClose(); // 컴포넌트 종료
+    // }
+    this._handleEnterPIPMode();
+
+    // 앱 종료를 막는다. true: 대기 / false: 뒤로가기
     return true;
+  };
+
+  _handleEnterPIPMode = () => {
+    PictureInPicture && PictureInPicture.enterPictureInPicture();
   };
 
   // _handleChangeObjectFit = () => {

@@ -204,6 +204,7 @@ class ReactInstanceManagerHolder {
                 new com.terrylinla.rnsketchcanvas.SketchCanvasPackage(),
                 new com.swmansion.gesturehandler.react.RNGestureHandlerPackage(),
                 new com.reactnativecommunity.slider.ReactSliderPackage(),
+                new com.evanjmg.RNHomePressedPackage(),
                 // end
                 new ReactPackageAdapter() {
                     @Override
