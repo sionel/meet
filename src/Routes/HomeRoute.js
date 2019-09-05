@@ -153,7 +153,7 @@ const HomeRoute = createStackNavigator(
         color: '#ffffff'
       },
       navigationOptions: ({ navigation }) => ({
-        headerTitle: <RouteTitle />,
+        headerTitle: <RouteTitle title={'WEHAGO Meet'} />,
         headerTintColor: '#fff',
         gesturesEnabled: false,
         headerStyle: commonStyle,
@@ -190,7 +190,7 @@ const HomeRoute = createStackNavigator(
     Configuration: {
       screen: ConfigurationScreen,
       navigationOptions: ({ navigation }) => ({
-        headerTitle: <RouteTitle title={'환경설정'} />,
+        headerTitle: <RouteTitle title={'설정'} />,
         headerLeft: <BackButton navigation={navigation} to={'Home'} />,
         headerTintColor: '#fff',
         headerStyle: commonStyle
@@ -222,7 +222,7 @@ const HomeRoute = createStackNavigator(
     Create: {
       screen: CreateScreen,
       navigationOptions: ({ navigation }) => ({
-        headerTitle: <RouteTitle title={'화상회의'} />,
+        headerTitle: <RouteTitle title={'WEHAGO Meet'} />,
         headerLeft: <BackButton navigation={navigation} to={'Home'} />,
         headerTintColor: '#fff',
         headerStyle: commonStyle

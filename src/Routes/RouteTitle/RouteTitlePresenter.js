@@ -37,7 +37,7 @@ const RouteTitlePresenter = props => {
             e => e.company_no == props.auth.last_access_company_no
           )[0].company_name_kr
         } */}
-        {props.title || props.company_name}
+        {props.title}
       </Text>
     </Fragment>
   );

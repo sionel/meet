@@ -85,7 +85,7 @@ class MainContainer extends Component {
     const permissions =
       Platform.OS === 'ios'
         ? ['microphone', 'camera']
-        : ['microphone', 'camera'];
+        : ['microphone', 'camera', 'storage'];
     // 현재 권한 체크
     const response = await Permissions.checkMultiple(permissions);
     // 권한 설정 요청
@@ -112,7 +112,7 @@ class MainContainer extends Component {
       if (result !== 'authorized') {
         Alert.alert(
           '권한 요청',
-          '화상대화 기능을 사용하시려면 권한이 필요합니다.',
+          '화상대화 기능을 사용하시려면 해당 권한을 부여하세요.',
           [
             {
               text: 'OK',
