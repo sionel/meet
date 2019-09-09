@@ -60,7 +60,7 @@ const MainVideoPresenter = props => {
         }}
       >
         {conferenceMode !== 'control'
-          ? selectedRoomName
+          ? selectedRoomName || (mainUser.id !== 'localUser' && mainUser.name)
           : second2String(props.time)}
       </Text>
     </View>
@@ -125,83 +125,120 @@ const MainVideoPresenter = props => {
           zOrder={0} // zOrder 는 [0, 1] 만 사용가능 (아마?)
         />
       ) : callType == 2 ? (
-        <View style={{ ...styles.imageContainer }}>
-          {/* 음성대화 일 때 */}
-          <View style={{ display: 'flex' }}>
-            <CustomLottie source="voiceBroadcast" width={280} height={280}>
-              <View
-                style={{
-                  position: 'absolute',
-                  top: -205,
-                  justifyContent: 'center'
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 24,
-                    color: '#fff',
-                    textAlign: 'center',
-                    fontFamily: 'DOUZONEText30'
-                  }}
-                >
-                  통화중
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 24,
-                    color: '#fff',
-                    textAlign: 'center',
-                    fontFamily: 'DOUZONEText30'
-                  }}
-                >
-                  {second2String(props.time)}
-                </Text>
-              </View>
-              <Image
-                style={styles.profileImage}
-                source={
-                  userInfo
-                    ? {
-                        uri: 'https://www.wehago.com' + userInfo.profile_url
-                      }
-                    : ProfileImage
-                }
-              />
-              <View
-                style={{
-                  position: 'absolute',
-                  top: 180,
-                  alignItems: 'center'
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 25,
-                    // fontWeight: 'bold',
-                    color: '#fff',
-                    width: Math.min(height, width) * 0.8,
-                    textAlign: 'center',
-                    fontFamily: 'DOUZONEText50'
-                  }}
-                >
-                  {mainUser.id !== 'localUser' && mainUser.name}
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 13,
-                    color: '#fff',
-                    paddingTop: 10,
-                    fontFamily: 'DOUZONEText30'
-                  }}
-                >
-                  {userInfo && userInfo.companyFullpath
-                    ? userInfo.companyFullpath
-                    : ''}
-                </Text>
-              </View>
-            </CustomLottie>
+        pipMode ? (
+          <View
+            style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+          >
+            <Text
+              style={{
+                fontSize: 14,
+                color: '#fff',
+                textAlign: 'center',
+                fontFamily: 'DOUZONEText30'
+              }}
+            >
+              통화중
+            </Text>
+            <Text
+              style={{
+                fontSize: 14,
+                color: '#fff',
+                textAlign: 'center',
+                fontFamily: 'DOUZONEText30'
+              }}
+            >
+              {mainUser.id !== 'localUser' && mainUser.name}
+            </Text>
+            <Text
+              style={{
+                fontSize: 14,
+                color: '#fff',
+                textAlign: 'center',
+                fontFamily: 'DOUZONEText30'
+              }}
+            >
+              {second2String(props.time)}
+            </Text>
           </View>
-        </View>
+        ) : (
+          <View style={{ ...styles.imageContainer }}>
+            {/* 음성대화 일 때 */}
+            <View style={{ display: 'flex' }}>
+              <CustomLottie source="voiceBroadcast" width={280} height={280}>
+                <View
+                  style={{
+                    position: 'absolute',
+                    top: -205,
+                    justifyContent: 'center'
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 24,
+                      color: '#fff',
+                      textAlign: 'center',
+                      fontFamily: 'DOUZONEText30'
+                    }}
+                  >
+                    통화중
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 24,
+                      color: '#fff',
+                      textAlign: 'center',
+                      fontFamily: 'DOUZONEText30'
+                    }}
+                  >
+                    {second2String(props.time)}
+                  </Text>
+                </View>
+                <Image
+                  style={styles.profileImage}
+                  source={
+                    userInfo
+                      ? {
+                          uri: 'https://www.wehago.com' + userInfo.profile_url
+                        }
+                      : ProfileImage
+                  }
+                />
+                <View
+                  style={{
+                    position: 'absolute',
+                    top: 180,
+                    alignItems: 'center'
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 25,
+                      // fontWeight: 'bold',
+                      color: '#fff',
+                      width: Math.min(height, width) * 0.8,
+                      textAlign: 'center',
+                      fontFamily: 'DOUZONEText50'
+                    }}
+                  >
+                    {mainUser.id !== 'localUser' && mainUser.name}
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 13,
+                      color: '#fff',
+                      paddingTop: 10,
+                      fontFamily: 'DOUZONEText30'
+                    }}
+                  >
+                    {userInfo && userInfo.companyFullpath
+                      ? userInfo.companyFullpath
+                      : ''}
+                  </Text>
+                </View>
+              </CustomLottie>
+            </View>
+          </View>
+        )
       ) : (
         <View style={styles.imageContainer}>
           {!props.drawing && (
