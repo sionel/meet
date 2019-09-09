@@ -7,6 +7,7 @@ import {
   Platform,
   Dimensions
 } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
 import { RTCView } from 'react-native-webrtc';
 import ButtonCameraOff from '../../../../../assets/buttons/btn_vc_camera_off.png';
 import ButtonCameraOff2 from '../../../../../assets/icons/icoCameraWhLargeOff_2x.png';
@@ -29,8 +30,15 @@ const MainVideoPresenter = props => {
     callType,
     selectedRoomName,
     conferenceMode,
-    isVideoReverse
+    isVideoReverse,
+    pipMode
   } = props;
+
+  const dispatch = useDispatch();
+  const localPipMode = useSelector(state => state.local.pipMode);
+  if (localPipMode !== pipMode) {
+    dispatch({ type: 'CONFERENCE_PIP_MODE', pipMode });
+  }
 
   const displayTime = (
     <View
@@ -202,13 +210,13 @@ const MainVideoPresenter = props => {
       )}
 
       {/* 화상대화 중 나오는 통화시간 */}
-      {callType != 2 && displayTime}
+      {callType != 2 && !pipMode && displayTime}
 
       {/* 네트워크 불안정 */}
       {mainUser.status === 'interrupted' && muteView}
 
       {/* 서브 비디오 */}
-      {props.children && (
+      {props.children && !pipMode && (
         <View style={styles.videoContainer}>{props.children}</View>
       )}
     </View>

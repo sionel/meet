@@ -6,6 +6,7 @@ import {
   StatusBar,
   Dimensions
 } from 'react-native';
+import { useSelector } from 'react-redux';
 
 import MainVideo from './MainVideo';
 import TopArea from './TopArea';
@@ -29,6 +30,7 @@ const ContentPresenter = props => {
     onClose
   } = props;
 
+  const localPipMode = useSelector(state => state.local.pipMode);
   const hideStatusbar = orientation === 'horizontal';
 
   return (
@@ -77,64 +79,57 @@ const ContentPresenter = props => {
       {/* END MAIN VIDEO 영역 */}
 
       {/* START 싱단 영역 */}
-      <View
-        style={[
-          styles.topArea,
-          props.orientation === 'vertical'
-            ? [styles.topAreaVertical, { top: props.hasNotch ? 47 : 27 }]
-            : [styles.topAreaHorizontal, { left: props.hasNotch ? 35 : 20 }]
-        ]}
-      >
-        {callType != 2 && !drawingMode && (
-          <TopArea
-            orientation={props.orientation}
-            drawing={props.drawingMode}
-            sharing={props.attributes}
-            onReverseVideo={props.onReverseVideo}
-            onChangeState={props.onChangeState}
-            onChangeDrawing={props.setSharingMode}
-            onChangeObjectFit={props.onChangeObjectFit}
-            objectFit={props.objectFit}
-            onChangeDrawingMode={props.onChangeDrawingMode}
-          />
-        )}
-      </View>
+      {!localPipMode && (
+        <View
+          style={[
+            styles.topArea,
+            props.orientation === 'vertical'
+              ? [styles.topAreaVertical, { top: props.hasNotch ? 47 : 27 }]
+              : [styles.topAreaHorizontal, { left: props.hasNotch ? 35 : 20 }]
+          ]}
+        >
+          {callType != 2 && !drawingMode && (
+            <TopArea
+              orientation={props.orientation}
+              drawing={props.drawingMode}
+              sharing={props.attributes}
+              onReverseVideo={props.onReverseVideo}
+              onChangeState={props.onChangeState}
+              onChangeDrawing={props.setSharingMode}
+              onChangeObjectFit={props.onChangeObjectFit}
+              objectFit={props.objectFit}
+              onChangeDrawingMode={props.onChangeDrawingMode}
+            />
+          )}
+        </View>
+      )}
       {/* END 싱단 영역 */}
 
       {/* START 하단 영역 */}
       {/* {!drawingMode && ( */}
-      <View
-        style={[
-          styles.bottomArea,
-          props.orientation === 'vertical'
-            ? styles.bottomAreaVertical
-            : styles.bottomAreaHorizontal
-        ]}
-      >
-        <BottomArea
-          onClose={props.onClose}
-          onChangeSpeaker={props.onChangeSpeaker}
-          orientation={props.orientation}
-          callType={callType}
-          speaker={speaker}
-        />
-      </View>
+      {!localPipMode && (
+        <View
+          style={[
+            styles.bottomArea,
+            props.orientation === 'vertical'
+              ? styles.bottomAreaVertical
+              : styles.bottomAreaHorizontal
+          ]}
+        >
+          <BottomArea
+            onClose={props.onClose}
+            onChangeSpeaker={props.onChangeSpeaker}
+            orientation={props.orientation}
+            callType={callType}
+            speaker={speaker}
+          />
+        </View>
+      )}
       {/* )} */}
       {/* END 하단 영역 */}
 
       {/* OverView 영역 */}
-      {props.documentListMode && (
-        // <RBSheet
-        //   ref={ref => props.onSetRef(ref)}
-        //   height={props.height}
-        //   closeOnDragDown={true}
-        //   onClose={() => props.setDocumentListMode(false)}
-        //   customStyles={{
-        //     container: {
-        //       backgroundColor: 'transparent'
-        //     }
-        //   }}
-        // >
+      {props.documentListMode && !localPipMode && (
         <OverView
           mode={props.documentListMode}
           defaultMode={props.documentListMode[0]}
@@ -143,7 +138,6 @@ const ContentPresenter = props => {
           onChangeSharingMode={props.onChangeSharingMode}
           onChangeSpeaker={props.onChangeSpeaker}
         />
-        // </RBSheet>
       )}
     </View>
   );

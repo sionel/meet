@@ -1,7 +1,13 @@
 import React from 'react';
-import { BackHandler, NativeModules, DeviceEventEmitter } from 'react-native';
+import {
+  BackHandler,
+  NativeModules,
+  DeviceEventEmitter,
+  Dimensions
+} from 'react-native';
 import MainVideoPresenter from './MainVideoPresenter';
 const { PictureInPicture } = NativeModules;
+const { width, height } = Dimensions.get('window');
 /**
  * MainVideoContainer : 화상대화 화면
  */
@@ -10,7 +16,8 @@ class MainVideoContainer extends React.Component {
     time:
       Date.now() - this.props.createdTime > 0
         ? Math.floor((Date.now() - this.props.createdTime) / 1000)
-        : 0
+        : 0,
+    pipMode: false
     // objectFit: 'contain'
   };
 
@@ -18,6 +25,7 @@ class MainVideoContainer extends React.Component {
     this._timer = setInterval(() => {
       let time = Math.floor((Date.now() - this.props.createdTime) / 1000);
       time > 0 && this.setState({ time });
+      PictureInPicture && this._handleAppStateChange();
     }, 500);
 
     DeviceEventEmitter.addListener(
@@ -107,8 +115,22 @@ class MainVideoContainer extends React.Component {
     return true;
   };
 
+  /**
+   * _handleEnterPIPMode
+   */
   _handleEnterPIPMode = () => {
+    this.setState({ pipMode: true });
     PictureInPicture && PictureInPicture.enterPictureInPicture();
+  };
+
+  /**
+   * _handleAppStateChange
+   */
+  _handleAppStateChange = () => {
+    // 기존의 기기 가로,세로와 현재의 가로,세로를 비교하여 PIP MODE 구분
+    const { width: pWidth, height: pHeight } = Dimensions.get('window');
+    const pipMode = Math.min(width, height) > Math.min(pWidth, pHeight);
+    this.setState({ pipMode });
   };
 
   // _handleChangeObjectFit = () => {

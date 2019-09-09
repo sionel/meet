@@ -29,6 +29,9 @@ const SET_CONFERENCE_CREATED_TIME = 'SET_CONFERENCE_CREATED_TIME';
 // CONFERENCE_MESSAGE_RECEIVED
 const CONFERENCE_MESSAGE_RECEIVED = 'CONFERENCE_MESSAGE_RECEIVED';
 
+// CONFERENCE_PIP_MODE
+const CONFERENCE_PIP_MODE = 'CONFERENCE_PIP_MODE';
+
 //#endregion Action Types
 
 //#region Initial State
@@ -40,7 +43,8 @@ const initialState = {
   prevVolumn: null,
   createdTime: null,
   callType: null,
-  message: []
+  message: [],
+  pipMode: false
 };
 
 //#endregion
@@ -69,6 +73,8 @@ function reducer(state = initialState, action) {
       return applySetConferenceCreatedTime(state, action);
     case CONFERENCE_MESSAGE_RECEIVED:
       return applySetConferenceMessage(state, action);
+    case CONFERENCE_PIP_MODE:
+      return applySetConferencePIPMode(state, action);
     default:
       return state;
   }
@@ -131,7 +137,8 @@ function applyLeaveConference(state) {
     conferenceMode: ConferenceModes.NORMAL,
     createdTime: null,
     callType: null,
-    message: []
+    message: [],
+    pipMode: false
   };
 }
 
@@ -333,6 +340,14 @@ function applySetConferenceMessage(state, action) {
   };
 }
 // #end
+
+function applySetConferencePIPMode(state, action) {
+  const { pipMode } = action;
+  return {
+    ...state,
+    pipMode
+  };
+}
 
 export const actionCreators = {
   setConferenceMode,
