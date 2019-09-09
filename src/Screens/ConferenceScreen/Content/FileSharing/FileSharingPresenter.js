@@ -12,7 +12,9 @@ import {
   StatusBar,
   SafeAreaView
 } from 'react-native';
+import { useSelector } from 'react-redux';
 import FastImage from 'react-native-fast-image';
+
 import DrawingSketch from '../DrawingSketch';
 // import { CustomButton, CustomModal, CustomAlert } from '../../../../components';
 import CustomButton from '../../../../components/CustomButton';
@@ -33,6 +35,8 @@ const FileSharingPresenter = props => {
     onChangeState,
     onChangePage
   } = props;
+
+  const localPipMode = useSelector(state => state.local.pipMode);
 
   // 제목 표시줄
   const headerTitle = (
@@ -174,20 +178,22 @@ const FileSharingPresenter = props => {
       >
         <View style={styles.container}>
           {/* topArea */}
-          <View style={styles.headerTitle}>
-            {showTool && headerTitle}
-            {preView}
+          {!localPipMode && (
+            <View style={styles.headerTitle}>
+              {showTool && headerTitle}
+              {preView}
 
-            <CustomButton
-              name={showPreView ? 'btnArrowUp' : 'btnArrowDown'}
-              onPress={() => onChangeState('showPreView')}
-              style={{ padding: 0, margin: 0 }}
-              width={24}
-              height={24}
-              areaWidth={24}
-              areaHeight={24}
-            />
-          </View>
+              <CustomButton
+                name={showPreView ? 'btnArrowUp' : 'btnArrowDown'}
+                onPress={() => onChangeState('showPreView')}
+                style={{ padding: 0, margin: 0 }}
+                width={24}
+                height={24}
+                areaWidth={24}
+                areaHeight={24}
+              />
+            </View>
+          )}
 
           {/* mainArea */}
           <View
@@ -208,8 +214,12 @@ const FileSharingPresenter = props => {
                   justifyContent: 'center'
                 }}
               >
-                <Text style={{ fontFamily: 'DOUZONEText30' }}>
-                  문서를 불러오는 중입니다.
+                <Text
+                  style={{ fontFamily: 'DOUZONEText30', textAlign: 'center' }}
+                >
+                  {localPipMode
+                    ? '문서 로딩을 위해\n앱으로 돌아가세요.'
+                    : '문서를 불러오는 중입니다.'}
                 </Text>
               </View>
             ) : (
@@ -250,7 +260,7 @@ const FileSharingPresenter = props => {
       </SafetyView>
 
       {/* OverView 영역 */}
-      {props.documentListMode && (
+      {props.documentListMode && !localPipMode && (
         // <RBSheet
         //   ref={ref => props.onSetRef(ref)}
         //   height={props.height}
@@ -280,23 +290,25 @@ const FileSharingPresenter = props => {
         onClickClose={() => props.onChangeState('modal')}
         onClickFeedback={modalMessage.onClickFeedback}
       /> */}
-      <CustomAlert
-        visible={props.modal}
-        title={modalMessage.title}
-        width={320}
-        description={modalMessage.text}
-        actions={[
-          {
-            name: '취소',
-            action: () => props.onChangeState('modal')
-          },
-          {
-            name: '확인',
-            action: modalMessage.onClickFeedback
-          }
-        ]}
-        onClose={() => props.onChangeState('modal')}
-      />
+      {!localPipMode && (
+        <CustomAlert
+          visible={props.modal}
+          title={modalMessage.title}
+          width={320}
+          description={modalMessage.text}
+          actions={[
+            {
+              name: '취소',
+              action: () => props.onChangeState('modal')
+            },
+            {
+              name: '확인',
+              action: modalMessage.onClickFeedback
+            }
+          ]}
+          onClose={() => props.onChangeState('modal')}
+        />
+      )}
     </Fragment>
   );
 };
