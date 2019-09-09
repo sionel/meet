@@ -115,7 +115,11 @@ const MainVideoPresenter = props => {
           // mirror={true}
           mirror={isVideoReverse}
           objectFit={
-            videoType && videoType === 'desktop' ? 'contain' : props.objectFit
+            pipMode
+              ? 'cover'
+              : videoType && videoType === 'desktop'
+              ? 'contain'
+              : props.objectFit
           }
           streamURL={stream.toURL()}
           zOrder={0} // zOrder 는 [0, 1] 만 사용가능 (아마?)
