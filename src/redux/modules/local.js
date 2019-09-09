@@ -167,18 +167,22 @@ function applySetConferenceMode(state, action) {
 
 //#region TOGGLE_MUTE_VIDEO
 
-function toggleMuteVideo() {
+function toggleMuteVideo(videoMute) {
   return dispatch => {
     dispatch({
-      type: TOGGLE_MUTE_VIDEO
+      type: TOGGLE_MUTE_VIDEO,
+      videoMute
     });
   };
 }
 
 function applyToggleMuteVideo(state, action) {
   const { user } = state;
+  const { videoMute } = action;
+
   if (user && user.videoTrack) {
-    const currentMute = user.isMuteVideo;
+    const currentMute =
+      typeof videoMute === 'undefined' ? user.isMuteVideo : !videoMute;
     if (currentMute) {
       user.videoTrack.unmute();
     } else {

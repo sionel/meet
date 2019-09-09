@@ -4,23 +4,37 @@
  */
 
 import React from 'react';
+import {
+  AppState,
+  DeviceEventEmitter,
+  NativeModules,
+  Platform,
+  Dimensions,
+  ToastAndroid
+} from 'react-native';
 import KeepAwake from 'react-native-keep-awake';
 import ConferenceScreenPresenter from './ConferenceScreenPresenter';
 import EndCallMessage from './EndCallMessage';
 import ConferenceManager from '../../utils/conference/ConferenceManager';
 // import { AppState } from 'react-native';
+const { PictureInPicture } = NativeModules;
+const { width, height } = Dimensions.get('window');
 
 class ConferenceScreenContainer extends React.Component {
   constructor() {
     super();
     this._appState = 'active';
+    this._conferenceState = {
+      isMuteVideo: false
+    };
     this.state = {
       callType: 3,
       connection: false,
       selectedRoomName: '',
       endCall: false,
       endUser: null,
-      createdTime: null
+      createdTime: null,
+      pipMode: false
     };
   }
 
@@ -30,7 +44,17 @@ class ConferenceScreenContainer extends React.Component {
   componentDidMount() {
     const { navigation, user_name, auth, dispatch } = this.props;
     this._handleCreateConnection(navigation, user_name, auth, dispatch);
+
     KeepAwake.activate();
+    DeviceEventEmitter.addListener(
+      'ON_HOME_BUTTON_PRESSED',
+      this._handleEnterPIPMode
+    );
+    this._timer =
+      Platform.OS === 'android' &&
+      setInterval(() => {
+        this._handleAppSizeChange();
+      }, 500);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -113,11 +137,17 @@ class ConferenceScreenContainer extends React.Component {
    */
   componentWillUnmount() {
     KeepAwake.deactivate();
+    DeviceEventEmitter.removeListener(
+      'ON_HOME_BUTTON_PRESSED',
+      this._handleEnterPIPMode
+    );
+    AppState.removeEventListener('change', this._handleAppStateChange);
+    this._timer && clearInterval(this._timer);
+
     // 컴포넌트가 언마운트 되기전 화상회의 관련 리소스를 해제 한다.
     this._conferenceManager.dispose();
     this.props.setSharingMode();
-    // AppState.removeEventListener(this._handleAppStateChange);
-    clearInterval(this.connectFailCheck);
+    this.connectFailCheck && clearInterval(this.connectFailCheck);
   }
 
   /**
@@ -130,6 +160,7 @@ class ConferenceScreenContainer extends React.Component {
         connection={this.state.connection}
         callType={this.callType}
         selectedRoomName={this.selectedRoomName}
+        pipMode={this.state.pipMode}
         // onClose={this._handleConferenceClose}
         onClose={this._handleEndCall}
         onClear={this._handleClear}
@@ -166,7 +197,9 @@ class ConferenceScreenContainer extends React.Component {
       this.delayLoading = setTimeout(() => {
         const roomId = item.videoRoomId; // item.videoRoomId
         this._joinConference(roomId, user_name, auth);
-        // AppState.addEventListener('change', this._handleAppStateChange);
+
+        Platform.OS === 'android' &&
+          AppState.addEventListener('change', this._handleAppStateChange);
       }, time);
     };
 
@@ -208,14 +241,42 @@ class ConferenceScreenContainer extends React.Component {
   };
 
   /**
+   * _handleAppStateChange
    * 앱 슬립모드를 감지한다.
    */
-  // _handleAppStateChange = nextAppState => {
-  //   this._appState = nextAppState;
-  //   setTimeout(() => {
-  //     this._handleCheckKeepRoom(nextAppState);
-  //   }, 10000);
-  // };
+  _handleAppStateChange = nextAppState => {
+    // PIP 모드에서는 appState가 변경되지 않는다.
+    // 따라서 아래 로직은 PIP 모드를 지원하지 않을 때 동작한다.
+    if (this._appState === 'active' && nextAppState !== 'active') {
+      // this.setState({ pipMode: false });
+      ToastAndroid.show('백그라운드에서 실행됩니다.', ToastAndroid.SHORT);
+      // backgroiund 시 video 설정 기억
+      if (this.props.user) {
+        const { isMuteVideo } = this.props.user;
+        this._conferenceState = {
+          isMuteVideo
+        };
+      }
+      // 비디오 off
+      this.props.toggleMuteVideo(true);
+    } else if (this._appState !== 'active' && nextAppState === 'active') {
+      // active 시 video 설정 원래대로
+      this.props.toggleMuteVideo(this._conferenceState.isMuteVideo);
+    }
+    this._appState = nextAppState;
+    // setTimeout(() => {
+    //   this._handleCheckKeepRoom(nextAppState);
+    // }, 10000);
+  };
+  /**
+   * _handleAppSizeChange
+   */
+  _handleAppSizeChange = () => {
+    // 기존의 기기 가로,세로와 현재의 가로,세로를 비교하여 PIP MODE 구분
+    const { width: pWidth, height: pHeight } = Dimensions.get('window');
+    const pipMode = Math.min(width, height) > Math.min(pWidth, pHeight);
+    this.setState({ pipMode });
+  };
 
   /**
    * 액티브 모드가 되지 않으면 대화방을 종료한다.
@@ -263,6 +324,14 @@ class ConferenceScreenContainer extends React.Component {
    */
   _handleChangeSharingMode = status => {
     this._conferenceManager.setToogleDocumentShare(status);
+  };
+
+  _handleEnterPIPMode = () => {
+    PictureInPicture.enterPictureInPicture()
+      .then(() => this.setState({ pipMode: true }))
+      .catch(() => {
+        // Picture-in-Picture not supported
+      });
   };
 }
 

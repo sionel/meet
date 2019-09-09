@@ -34,11 +34,11 @@ const MainVideoPresenter = props => {
     pipMode
   } = props;
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const localPipMode = useSelector(state => state.local.pipMode);
-  if (localPipMode !== pipMode) {
-    dispatch({ type: 'CONFERENCE_PIP_MODE', pipMode });
-  }
+  // if (localPipMode !== pipMode) {
+  //   dispatch({ type: 'CONFERENCE_PIP_MODE', pipMode });
+  // }
 
   const displayTime = (
     <View
@@ -115,7 +115,7 @@ const MainVideoPresenter = props => {
           // mirror={true}
           mirror={isVideoReverse}
           objectFit={
-            pipMode
+            localPipMode
               ? 'cover'
               : videoType && videoType === 'desktop'
               ? 'contain'
@@ -125,7 +125,7 @@ const MainVideoPresenter = props => {
           zOrder={0} // zOrder 는 [0, 1] 만 사용가능 (아마?)
         />
       ) : callType == 2 ? (
-        pipMode ? (
+        localPipMode ? (
           <View
             style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
           >
@@ -251,13 +251,13 @@ const MainVideoPresenter = props => {
       )}
 
       {/* 화상대화 중 나오는 통화시간 */}
-      {callType != 2 && !pipMode && displayTime}
+      {callType != 2 && !localPipMode && displayTime}
 
       {/* 네트워크 불안정 */}
       {mainUser.status === 'interrupted' && muteView}
 
       {/* 서브 비디오 */}
-      {props.children && !pipMode && (
+      {props.children && !localPipMode && (
         <View style={styles.videoContainer}>{props.children}</View>
       )}
     </View>
