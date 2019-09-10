@@ -285,6 +285,7 @@ class DrawingContainer extends Component {
   _handleClearAll = () => {
     this.props.onSetDrawingData();
     this._drawingManager.set('history', []);
+    this._drawingManager.clearAll()
   };
 
   /**

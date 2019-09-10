@@ -19,7 +19,6 @@ import {
   SectionListHeader
 } from '../../components';
 import AddButton from './AddButton';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 // const rootPath = `../../../assets`;
 // const waitingImage = require(`${rootPath}/waiting.gif`);

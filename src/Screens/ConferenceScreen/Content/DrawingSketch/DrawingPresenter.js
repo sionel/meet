@@ -45,12 +45,12 @@ const DrawingPresenter = props => {
   const vertical = orientation === 'vertical'; // 세로모드 인지
   // 길이값 비율
   const dividingWidth =
-    (props.viewWidth * (localPipMode ? 1 : 0.8)) /
+    (props.viewWidth * (localPipMode ? 1 : 0.9)) /
     props.imageSize[props.page].imgWidth;
   // const dividingWidth = (width * 0.8) / imgWidth;
   // 높이값 비율
   const dividingHeight =
-    (props.viewHeight * (localPipMode ? 1 : 0.8)) /
+    (props.viewHeight * (localPipMode ? 1 : 0.9)) /
     props.imageSize[props.page].imgHeight;
   // const dividingHeight = (height * 0.8) / imgHeight;
   const calcScale =

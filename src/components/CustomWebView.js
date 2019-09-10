@@ -5,11 +5,12 @@
 import React from 'react';
 import { Text, View, TouchableOpacity, Platform } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
+import { WebView } from 'react-native-webview';
 
-const WebView =
-  Platform.OS === 'ios'
-    ? require('react-native').WebView
-    : require('react-native-webview').WebView;
+// const WebView =
+//   Platform.OS === 'ios'
+//     ? require('react-native').WebView
+//     : require('react-native-webview').WebView;
 
 const hasNotch = DeviceInfo.hasNotch() && Platform.OS === 'ios';
 
@@ -62,7 +63,14 @@ const CustomWebView = props => {
           {contentTitle}
         </Text>
         <TouchableOpacity style={{ flex: 1 }} onPress={onClickButton}>
-          <Text style={{ color: '#fff', fontSize: 17, textAlign: 'right', fontFamily: 'DOUZONEText30' }}>
+          <Text
+            style={{
+              color: '#fff',
+              fontSize: 17,
+              textAlign: 'right',
+              fontFamily: 'DOUZONEText30'
+            }}
+          >
             {buttonTitle}
           </Text>
         </TouchableOpacity>

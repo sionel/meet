@@ -38,7 +38,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     dispatch: dispatch,
-    setSharingMode: () => DocumentShareActions.setSharingMode(),
+    setSharingMode: () => dispatch(DocumentShareActions.setSharingMode()),
     toggleMuteVideo: muteState =>
       dispatch(localActions.toggleMuteVideo(muteState))
   };
