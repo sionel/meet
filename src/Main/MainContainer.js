@@ -112,7 +112,7 @@ class MainContainer extends Component {
       if (result !== 'authorized') {
         Alert.alert(
           '권한 요청',
-          '화상대화 기능을 사용하시려면 권한이 필요합니다.',
+          '화상대화 기능을 사용하시려면 해당 권한을 부여하세요.',
           [
             {
               text: 'OK',

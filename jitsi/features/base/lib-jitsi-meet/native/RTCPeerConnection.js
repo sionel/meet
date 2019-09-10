@@ -115,7 +115,7 @@ _RTCPeerConnection.prototype.setRemoteDescription = function(description) {
  * @returns {void}
  */
 function _LOGE(...args) {
-  logger.error(...args);
+  // logger.error(...args);
 }
 
 /**

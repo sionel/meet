@@ -22,7 +22,11 @@ const UserListPresenter = props => {
   } = props;
 
   return (
-    <ScrollView style={{ height: '100%' }} showsVerticalScrollIndicator={false}>
+    <ScrollView
+      contentContainerStyle={{ paddingLeft: 16, paddingRight: 16 }}
+      style={{ height: '100%' }}
+      showsVerticalScrollIndicator={false}
+    >
       <FlatList
         data={userList}
         style={styles.userList}

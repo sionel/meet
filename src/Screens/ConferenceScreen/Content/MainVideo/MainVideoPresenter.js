@@ -7,6 +7,7 @@ import {
   Platform,
   Dimensions
 } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
 import { RTCView } from 'react-native-webrtc';
 import ButtonCameraOff from '../../../../../assets/buttons/btn_vc_camera_off.png';
 import ButtonCameraOff2 from '../../../../../assets/icons/icoCameraWhLargeOff_2x.png';
@@ -29,8 +30,15 @@ const MainVideoPresenter = props => {
     callType,
     selectedRoomName,
     conferenceMode,
-    isVideoReverse
+    isVideoReverse,
+    pipMode
   } = props;
+
+  // const dispatch = useDispatch();
+  const localPipMode = useSelector(state => state.local.pipMode);
+  // if (localPipMode !== pipMode) {
+  //   dispatch({ type: 'CONFERENCE_PIP_MODE', pipMode });
+  // }
 
   const displayTime = (
     <View
@@ -52,7 +60,7 @@ const MainVideoPresenter = props => {
         }}
       >
         {conferenceMode !== 'control'
-          ? selectedRoomName
+          ? selectedRoomName || (mainUser.id !== 'localUser' && mainUser.name)
           : second2String(props.time)}
       </Text>
     </View>
@@ -98,79 +106,139 @@ const MainVideoPresenter = props => {
   return (
     <View style={{ flex: 1, backgroundColor: '#1D1D1D' }}>
       {/* 정상적인 화상대화 일 때 */}
-      {!isMuteVideo && stream && callType == 1 && !props.drawing ? (
+      {!isMuteVideo &&
+      stream &&
+      (callType == 1 || callType == 3) &&
+      !props.drawing ? (
         <RTCView
           style={styles.RTCVideo}
           // mirror={true}
           mirror={isVideoReverse}
           objectFit={
-            videoType && videoType === 'desktop' ? 'contain' : props.objectFit
+            localPipMode
+              ? 'cover'
+              : videoType && videoType === 'desktop'
+              ? 'contain'
+              : props.objectFit
           }
           streamURL={stream.toURL()}
           zOrder={0} // zOrder 는 [0, 1] 만 사용가능 (아마?)
         />
       ) : callType == 2 ? (
-        <View style={{ ...styles.imageContainer }}>
-          {/* 음성대화 일 때 */}
-          <View style={{ display: 'flex' }}>
-            <CustomLottie source="voiceBroadcast" width={280} height={280}>
-              <View
-                style={{
-                  position: 'absolute',
-                  top: -205,
-                  justifyContent: 'center'
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 20,
-                    color: '#c0c0c0',
-                    textAlign: 'center',
-                    fontFamily: 'DOUZONEText30'
-                  }}
-                >
-                  통화중
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 25,
-                    color: '#c0c0c0',
-                    textAlign: 'center',
-                    fontFamily: 'DOUZONEText30'
-                  }}
-                >
-                  {second2String(props.time)}
-                </Text>
-              </View>
-              <Image style={styles.profileImage} source={ProfileImage} />
-              <View
-                style={{
-                  position: 'absolute',
-                  top: 180,
-                  alignItems: 'center'
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 25,
-                    // fontWeight: 'bold',
-                    color: '#fff',
-                    width: Math.min(height, width) * 0.8,
-                    textAlign: 'center',
-                    fontFamily: 'DOUZONEText50'
-                  }}
-                >
-                  {mainUser.name}
-                </Text>
-                <Text style={{ fontSize: 13, color: '#fff', paddingTop: 10, fontFamily: 'DOUZONEText30' }}>
-                  {userInfo && userInfo.companyFullpath
-                    ? userInfo.companyFullpath
-                    : ''}
-                </Text>
-              </View>
-            </CustomLottie>
+        localPipMode ? (
+          <View
+            style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+          >
+            <Text
+              style={{
+                fontSize: 14,
+                color: '#fff',
+                textAlign: 'center',
+                fontFamily: 'DOUZONEText30'
+              }}
+            >
+              통화중
+            </Text>
+            <Text
+              style={{
+                fontSize: 14,
+                color: '#fff',
+                textAlign: 'center',
+                fontFamily: 'DOUZONEText30'
+              }}
+            >
+              {mainUser.id !== 'localUser' && mainUser.name}
+            </Text>
+            <Text
+              style={{
+                fontSize: 14,
+                color: '#fff',
+                textAlign: 'center',
+                fontFamily: 'DOUZONEText30'
+              }}
+            >
+              {second2String(props.time)}
+            </Text>
           </View>
-        </View>
+        ) : (
+          <View style={{ ...styles.imageContainer }}>
+            {/* 음성대화 일 때 */}
+            <View style={{ display: 'flex' }}>
+              <CustomLottie source="voiceBroadcast" width={280} height={280}>
+                <View
+                  style={{
+                    position: 'absolute',
+                    top: -205,
+                    justifyContent: 'center'
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 24,
+                      color: '#fff',
+                      textAlign: 'center',
+                      fontFamily: 'DOUZONEText30'
+                    }}
+                  >
+                    통화중
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 24,
+                      color: '#fff',
+                      textAlign: 'center',
+                      fontFamily: 'DOUZONEText30'
+                    }}
+                  >
+                    {second2String(props.time)}
+                  </Text>
+                </View>
+                <Image
+                  style={styles.profileImage}
+                  source={
+                    userInfo
+                      ? {
+                          uri: 'https://www.wehago.com' + userInfo.profile_url
+                        }
+                      : ProfileImage
+                  }
+                />
+                <View
+                  style={{
+                    position: 'absolute',
+                    top: 180,
+                    alignItems: 'center'
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 25,
+                      // fontWeight: 'bold',
+                      color: '#fff',
+                      width: Math.min(height, width) * 0.8,
+                      textAlign: 'center',
+                      fontFamily: 'DOUZONEText50'
+                    }}
+                  >
+                    {mainUser.id !== 'localUser' && mainUser.name}
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 13,
+                      color: '#fff',
+                      paddingTop: 10,
+                      fontFamily: 'DOUZONEText30'
+                    }}
+                  >
+                    {userInfo && userInfo.companyFullpath
+                      ? userInfo.companyFullpath
+                      : ''}
+                  </Text>
+                </View>
+              </CustomLottie>
+            </View>
+          </View>
+        )
       ) : (
         <View style={styles.imageContainer}>
           {!props.drawing && (
@@ -183,13 +251,13 @@ const MainVideoPresenter = props => {
       )}
 
       {/* 화상대화 중 나오는 통화시간 */}
-      {callType != 2 && displayTime}
+      {callType != 2 && !localPipMode && displayTime}
 
       {/* 네트워크 불안정 */}
       {mainUser.status === 'interrupted' && muteView}
 
       {/* 서브 비디오 */}
-      {props.children && (
+      {props.children && !localPipMode && (
         <View style={styles.videoContainer}>{props.children}</View>
       )}
     </View>
@@ -250,9 +318,9 @@ const styles = StyleSheet.create({
 });
 
 function second2String(second) {
-  var hours = Math.floor(second / 3600);
-  var minutes = Math.floor((second - hours * 3600) / 60);
-  var seconds = second - hours * 3600 - minutes * 60;
+  let hours = Math.floor(second / 3600);
+  let minutes = Math.floor((second - hours * 3600) / 60);
+  let seconds = Math.floor(second - hours * 3600 - minutes * 60);
 
   if (hours < 10) {
     hours = '0' + hours;

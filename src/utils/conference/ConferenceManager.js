@@ -32,7 +32,7 @@ class ConferenceManager {
   /**
    * connect : 화상대화 참가
    */
-  join = async (roomName, name, handleClose, auth, iscreator) => {
+  join = async (roomName, name, handleClose, auth, callType) => {
     // 초기화
     this._init();
     // 대화방 연결을 위한 Connection
@@ -50,6 +50,7 @@ class ConferenceManager {
       name,
       auth
     );
+    this.callType = callType;
 
     // 대화방 접속 시간 세팅
     const createdTime = this._room.properties['created-ms'];
@@ -78,9 +79,11 @@ class ConferenceManager {
     await this._dispatch(
       localActionCreators.joinConference({
         id,
+        cid: this._room.myUserId(),
         name,
         videoTrack,
-        audioTrack
+        audioTrack,
+        callType
       })
     );
     this._dispatch(mainUserActionCreators.setMainUserNotExist(id));
@@ -134,7 +137,8 @@ class ConferenceManager {
       CHANGED_DOCUMENT_PAGE: this.changeDocumentPage,
       CHANGED_DOCUMENT_SHARE_MODE: this.changeDocumentShareMode,
       CHANGED_DRAW_DATA: this.changeDrawData,
-      DOCUMENT_SHARE_TARGET: this.documentShareTarget
+      DOCUMENT_SHARE_TARGET: this.documentShareTarget,
+      MESSAGE_RECEIVED: this.messageReceived
     };
     return handler;
   };
@@ -273,6 +277,26 @@ class ConferenceManager {
    */
   documentShareTarget = (user, drawData) => {
     this._conferenceConnector.documentShareTarget(user, drawData);
+  };
+
+  /**
+   * messageReceived
+   * 참가자로부터 메시지를 받았을 경우 (전체 메세지)
+   */
+  messageReceived = (user, text, date) => {
+    if (date) return;
+    // if (date < new Date().toISOString()) return;
+    const message = {
+      user,
+      text,
+      date: new Date().toISOString()
+    };
+    this._dispatch(localActionCreators.receiceConferenceMessage(message));
+  };
+
+  sendTextMessage = text => {
+    if (text && text === '') return;
+    this._room.sendTextMessage(text);
   };
 }
 

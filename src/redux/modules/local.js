@@ -26,6 +26,12 @@ const TOGGLE_CAMERA_FACING_MODE = 'TOGGLE_CAMERA_FACING_MODE';
 // SET_CONFERENCE_CREATED_TIME
 const SET_CONFERENCE_CREATED_TIME = 'SET_CONFERENCE_CREATED_TIME';
 
+// CONFERENCE_MESSAGE_RECEIVED
+const CONFERENCE_MESSAGE_RECEIVED = 'CONFERENCE_MESSAGE_RECEIVED';
+
+// CONFERENCE_PIP_MODE
+const CONFERENCE_PIP_MODE = 'CONFERENCE_PIP_MODE';
+
 //#endregion Action Types
 
 //#region Initial State
@@ -36,6 +42,9 @@ const initialState = {
   facingMode: FacingModes.FRONT,
   prevVolumn: null,
   createdTime: null,
+  callType: null,
+  message: [],
+  pipMode: false
 };
 
 //#endregion
@@ -62,6 +71,10 @@ function reducer(state = initialState, action) {
       return applyToggleMuteSpeaker(state, action);
     case SET_CONFERENCE_CREATED_TIME:
       return applySetConferenceCreatedTime(state, action);
+    case CONFERENCE_MESSAGE_RECEIVED:
+      return applySetConferenceMessage(state, action);
+    case CONFERENCE_PIP_MODE:
+      return applySetConferencePIPMode(state, action);
     default:
       return state;
   }
@@ -84,6 +97,7 @@ function applyJoinConference(state, action) {
   const { conferenceInfo } = action;
   const user = {
     id: conferenceInfo.id,
+    cid: conferenceInfo.cid,
     name: conferenceInfo.name,
     isLocal: true,
     videoTrack: conferenceInfo.videoTrack,
@@ -94,7 +108,8 @@ function applyJoinConference(state, action) {
   };
   return {
     ...state,
-    user
+    user,
+    callType: conferenceInfo.callType
   };
 }
 
@@ -119,7 +134,11 @@ function applyLeaveConference(state) {
   return {
     ...state,
     user,
-    conferenceMode: ConferenceModes.NORMAL
+    conferenceMode: ConferenceModes.NORMAL,
+    createdTime: null,
+    callType: null,
+    message: [],
+    pipMode: false
   };
 }
 
@@ -148,18 +167,22 @@ function applySetConferenceMode(state, action) {
 
 //#region TOGGLE_MUTE_VIDEO
 
-function toggleMuteVideo() {
+function toggleMuteVideo(videoMute) {
   return dispatch => {
     dispatch({
-      type: TOGGLE_MUTE_VIDEO
+      type: TOGGLE_MUTE_VIDEO,
+      videoMute
     });
   };
 }
 
 function applyToggleMuteVideo(state, action) {
   const { user } = state;
+  const { videoMute } = action;
+
   if (user && user.videoTrack) {
-    const currentMute = user.isMuteVideo;
+    const currentMute =
+      typeof videoMute === 'undefined' ? user.isMuteVideo : !videoMute;
     if (currentMute) {
       user.videoTrack.unmute();
     } else {
@@ -288,6 +311,48 @@ function applySetConferenceCreatedTime(state, action) {
 
 //#endregion SET_CONFERENCE_CREATED_TIME
 
+// CONFERENCE_MESSAGE_RECEIVED
+function receiceConferenceMessage(newMessage = null) {
+  return async (dispatch, getState) => {
+    dispatch({
+      type: CONFERENCE_MESSAGE_RECEIVED,
+      newMessage,
+      participants: getState().participants.list
+    });
+  };
+}
+
+function applySetConferenceMessage(state, action) {
+  const { newMessage, participants } = action;
+
+  if (newMessage === null) {
+    return {
+      ...state,
+      message: []
+    };
+  }
+
+  const list = state.message.slice(0);
+  const user = participants.find(participant => {
+    return participant.id === newMessage.user;
+  }) || { name: '(알수없음)' };
+  list.push({ ...newMessage, name: user.name });
+
+  return {
+    ...state,
+    message: list
+  };
+}
+// #end
+
+function applySetConferencePIPMode(state, action) {
+  const { pipMode } = action;
+  return {
+    ...state,
+    pipMode
+  };
+}
+
 export const actionCreators = {
   setConferenceMode,
   joinConference,
@@ -297,6 +362,7 @@ export const actionCreators = {
   toggleMuteMic,
   toggleMuteSpeaker,
   setConferenceCreatedTime,
+  receiceConferenceMessage
 };
 
 export default reducer;

@@ -206,6 +206,12 @@ class ConferenceConnector {
       this._handlers.SUSPEND_DETECTED()
     );
 
+    this._room.on(conferenceEvents.MESSAGE_RECEIVED, (user, text, date) => {
+      this._handlers.MESSAGE_RECEIVED(user, text, date);
+    });
+
+    // ======== addEventListener ========== //
+
     // 위하고 접속 아이디 및 정보 가져오기
     this._room.addCommandListener(WEHAGO_ID, user => {
       // console.log('user : ', user);

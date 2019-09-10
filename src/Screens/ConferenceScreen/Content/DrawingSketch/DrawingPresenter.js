@@ -14,6 +14,8 @@ import {
   ScrollView,
   FlatList
 } from 'react-native';
+import { useSelector } from 'react-redux';
+
 import DrawingBoard from './DrawingBoard';
 import DeviceInfo from 'react-native-device-info';
 import Slider from '@react-native-community/slider';
@@ -38,14 +40,18 @@ const DrawingPresenter = props => {
     onChangeShowToolState
   } = props;
 
+  const localPipMode = useSelector(state => state.local.pipMode);
+
   const vertical = orientation === 'vertical'; // 세로모드 인지
   // 길이값 비율
   const dividingWidth =
-    (props.viewWidth * 0.8) / props.imageSize[props.page].imgWidth;
+    (props.viewWidth * (localPipMode ? 1 : 0.8)) /
+    props.imageSize[props.page].imgWidth;
   // const dividingWidth = (width * 0.8) / imgWidth;
   // 높이값 비율
   const dividingHeight =
-    (props.viewHeight * 0.8) / props.imageSize[props.page].imgHeight;
+    (props.viewHeight * (localPipMode ? 1 : 0.8)) /
+    props.imageSize[props.page].imgHeight;
   // const dividingHeight = (height * 0.8) / imgHeight;
   const calcScale =
     dividingWidth < dividingHeight ? dividingWidth : dividingHeight;
@@ -337,7 +343,7 @@ const DrawingPresenter = props => {
       </ScrollView>
 
       {/* 하단 영역 */}
-      {showTool && presenter === 'localUser' && (
+      {showTool && presenter === 'localUser' && !localPipMode && (
         <View
           style={[
             styles.bottomArea,

@@ -25,7 +25,7 @@ const ChangeCompanyScreenPresenter = props => {
         'landscape-left',
         'landscape-right'
       ]}
-      onRequestClose={() => {}}
+      onRequestClose={props.onDisibleModal}
     >
       <TouchableOpacity
         onPress={props.onDisibleModal}
@@ -51,7 +51,10 @@ const ChangeCompanyScreenPresenter = props => {
           <ScrollView style={styles.container}>
             {props.items.map(item => (
               <TouchableOpacity
-                onPress={item.action}
+                onPress={() => {
+                  item.action();
+                  props.onDisibleModal();
+                }}
                 style={{
                   height: 50,
                   borderBottomWidth: 1,

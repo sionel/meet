@@ -35,6 +35,29 @@ const TopAreaPresenter = props => {
         {/* {props.isMuteVideo ? null : ( */}
         <Fragment>
           <CustomButton
+            name="talk"
+            onPress={() =>
+              props.toggleDocumentListMode(['CHATTING', 'USERLIST'])
+            }
+            width={30}
+            height={30}
+            areaWidth={42}
+            areaHeight={36}
+          />
+          <CustomButton
+            name="docShare"
+            width={28}
+            height={28}
+            areaWidth={42}
+            areaHeight={36}
+            // onPress={() => props.onChangeDrawing(!props.drawing)}
+            // onPress={_.throttle(() => props.onChangeSharingMode(!props.sharing), 500)}
+            onPress={_.throttle(
+              () => props.toggleDocumentListMode(['FILELIST']),
+              500
+            )}
+          />
+          <CustomButton
             name={props.objectFit === 'contain' ? 'zoomIn' : 'zoomOut'}
             onPress={props.onChangeObjectFit}
             width={23}
@@ -67,19 +90,6 @@ const TopAreaPresenter = props => {
             // onPress={() => props.onChangeDrawing(!props.drawing)}
             onPress={_.throttle(() => props.onChangeDrawingMode(!props.drawing), 500)}
           /> */}
-          <CustomButton
-            name="docShare"
-            width={28}
-            height={28}
-            areaWidth={42}
-            areaHeight={36}
-            // onPress={() => props.onChangeDrawing(!props.drawing)}
-            // onPress={_.throttle(() => props.onChangeSharingMode(!props.sharing), 500)}
-            onPress={_.throttle(
-              () => props.toggleDocumentListMode(!props.documentListMode),
-              500
-            )}
-          />
         </Fragment>
         {/* )} */}
         {/* </View> */}

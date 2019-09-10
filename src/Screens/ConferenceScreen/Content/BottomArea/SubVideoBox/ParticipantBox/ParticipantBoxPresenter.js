@@ -8,14 +8,14 @@ import {
   Platform
 } from 'react-native';
 import { RTCView } from 'react-native-webrtc';
-import DeviceInfo from 'react-native-device-info';
+// import DeviceInfo from 'react-native-device-info';
 // import ButtonCameraOff from '../../../../../../../assets/buttons/btn_vc_camera_off.png';
 import ButtonCameraOff from '../../../../../../../assets/icons/speaker/ico-camera-bl-off_2x.png';
 import CustomIcon from '../../../../../../components/CustomIcon';
 
-const apiLevel = DeviceInfo.getAPILevel();
-const canUseStream =
-  (Platform.OS === 'android' && apiLevel >= 26) || Platform.OS === 'ios';
+// const apiLevel = DeviceInfo.getAPILevel();
+const canUseStream = true;
+// (Platform.OS === 'android' && apiLevel >= 26) || Platform.OS === 'ios';
 
 /**
  * ContentPresenter
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     // width: 100,
     // height: 120,
     display: 'flex',
-    marginHorizontal: 2,
+    marginHorizontal: 5,
     // marginLeft: 10
   },
   videoArea: {

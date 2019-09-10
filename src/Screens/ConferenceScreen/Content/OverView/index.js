@@ -1,6 +1,7 @@
 import OverViewContainer from './OverViewContainer';
 import { connect } from 'react-redux';
 import { actionCreators as WedriveActions } from '../../../../redux/modules/wedrive';
+import { actionCreators as mainUserActions } from '../../../../redux/modules/mainUser';
 import { actionCreators as DocumentShareActions } from '../../../../redux/modules/documentShare';
 
 // map state to props
@@ -16,7 +17,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => {
   return {
     setDocumentListMode: value => {
-      return dispatch(DocumentShareActions.setDocumentListMode(value));
+      return dispatch(mainUserActions.setDocumentListMode(value));
     },
     setSharingMode: value => {
       return dispatch(DocumentShareActions.setSharingMode(value));

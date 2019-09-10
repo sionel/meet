@@ -5,14 +5,19 @@ import {
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
-  Platform
+  Platform,
+  SafeAreaView,
+  KeyboardAvoidingView
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
+import Chatting from './Chatting';
 import FileList from './FileList';
 import UserList from './UserList';
 import CustomButton from '../../../../components/CustomButton';
 
 const isTablet = DeviceInfo.isTablet();
+const hasNotch = DeviceInfo.hasNotch();
+const isIOS = Platform.OS === 'ios';
 
 const OverViewPresenter = props => {
   const {
@@ -20,6 +25,7 @@ const OverViewPresenter = props => {
     view,
     tabs,
     orientation,
+    // hasNotch,
     speaker,
     setDocumentListMode,
     onChangeSharingMode,
@@ -29,6 +35,8 @@ const OverViewPresenter = props => {
 
   const ViewComponent = () => {
     switch (view) {
+      case 'CHATTING':
+        return <Chatting />;
       case 'USERLIST':
         return <UserList speaker={speaker} onChangeSpeaker={onChangeSpeaker} />;
       case 'FILELIST':
@@ -86,7 +94,7 @@ const OverViewPresenter = props => {
         areaHeight={24}
       />
       <ActivityIndicator
-        size={Platform.OS === 'ios' ? 'large' : 100}
+        size={isIOS ? 'large' : 100}
         color={'rgb(28, 144, 251)'}
       />
       <Text style={styles.loadingModalText}>문서를 불러오고 있습니다.</Text>
@@ -94,32 +102,35 @@ const OverViewPresenter = props => {
   );
 
   return (
-    <View style={[styles.container, { top: 0 }]}>
+    <SafeAreaView style={[styles.container, { top: 0 }]}>
       <TouchableOpacity
         activeOpacity={1}
         style={styles.topArea}
         onPress={() => setDocumentListMode(false)}
       />
-
-      <View style={styles.bottomArea}>
+      <KeyboardAvoidingView
+        style={styles.bottomArea}
+        behavior="padding"
+        enabled={isIOS}
+      >
         <View style={styles.header}>
           {tabs.map(item => TabComponent(item.key, item.name))}
         </View>
 
         <View
           style={[
-            styles.listContainer,
-            props.orientation !== 'vertical'
-              ? styles.listContainerVertical
-              : styles.listContainerHorizontal
+            styles.listContainer
+            // props.orientation === 'vertical'
+            //   ? styles.listContainerVertical
+            //   : styles.listContainerHorizontal
           ]}
         >
           {ViewComponent()}
         </View>
-      </View>
 
-      {isLoading === 'FILE_LOADING' && fileLoadingModal}
-    </View>
+        {isLoading === 'FILE_LOADING' && fileLoadingModal}
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 
@@ -140,11 +151,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#00000090'
   },
   bottomArea: {
-    // height: '50%',
-    flex: 2,
+    flex: 3,
+    width: '100%',
+    height: '100%',
     backgroundColor: 'rgb(232, 235, 239)',
-    borderTopColor: '#ddd',
-    borderTopWidth: 1
+    // borderTopColor: '#ddd',
+    // borderTopWidth: 1
   },
   header: {
     flexDirection: 'row',
@@ -164,12 +176,12 @@ const styles = StyleSheet.create({
     flex: 1
   },
   listContainerVertical: {
-    paddingLeft: 36,
-    paddingRight: 36
-  },
-  listContainerHorizontal: {
     paddingLeft: 16,
     paddingRight: 16
+  },
+  listContainerHorizontal: {
+    paddingLeft: 36,
+    paddingRight: 36
   },
   documentList: {
     paddingTop: 16,

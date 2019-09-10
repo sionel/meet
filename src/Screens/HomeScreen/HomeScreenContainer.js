@@ -3,7 +3,7 @@
  * 화상대화 히스토리 컨테이너
  */
 
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import {
   AppState,
   StatusBar,
@@ -11,17 +11,12 @@ import {
   Platform,
   Dimensions,
   View,
-  Text,
-  NativeModules,
-  TouchableOpacity,
-  UIManager,
-  LayoutAnimation,
-  // DrawerLayoutAndroid
   ToastAndroid,
   BackHandler
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import Orientation from 'react-native-orientation-locker';
+import { NavigationEvents } from 'react-navigation';
 // import GestureRecognizer, {
 //   swipeDirections
 // } from 'react-native-swipe-gestures';
@@ -29,14 +24,11 @@ import Orientation from 'react-native-orientation-locker';
 import HomeScreenPresenter from './HomeScreenPresenter';
 
 // service
-import { WetalkApi } from '../../services';
-// import { UserApi } from '../../services';
-import { ConferenceApi } from '../../services';
-import { NavigationEvents } from 'react-navigation';
+import { ConferenceApi, WetalkApi } from '../../services';
 import { querystringParser } from '../../utils';
 
 // import DrawerContent from '../../components/DrawerContent';
-const { height, width } = Dimensions.get('window');
+// const { height, width } = Dimensions.get('window');
 const hasNotch = DeviceInfo.hasNotch() && Platform.OS === 'ios';
 
 // #region
@@ -49,11 +41,6 @@ class HomeScreenContainer extends Component {
     super(props);
     this._isFocus = true;
     this._refreshTimeStamp = Date.now();
-
-    // if (Platform.OS === 'android') {
-    //   UIManager.setLayoutAnimationEnabledExperimental(true);
-    // }
-    // LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
   }
 
   /**
@@ -65,9 +52,15 @@ class HomeScreenContainer extends Component {
     searchKeyword: '', // 검색인풋
     selectedRoomId: null,
     selectedRoomName: null,
-    modal: false,
+    // modal: false,
     url: null,
-    orientation: 'UNKNOWN'
+    orientation: 'UNKNOWN',
+    alert: {
+      visible: false,
+      title: '',
+      message: '',
+      onClose: () => {}
+    }
   };
 
   /**
@@ -145,12 +138,13 @@ class HomeScreenContainer extends Component {
       refreshing,
       searchKeyword,
       selectedRoomId,
-      modal,
-      orientation
+      // modal,
+      orientation,
+      alert
     } = this.state;
     const { navigation, auth } = this.props;
-    let wetalk = []; // We talk list
 
+    let wetalk = []; // We talk list
     if (searchKeyword) {
       wetalk = this.props.wetalk.filter(item =>
         item.room_title.match(searchKeyword)
@@ -189,11 +183,12 @@ class HomeScreenContainer extends Component {
         <HomeScreenPresenter
           navigation={navigation}
           refreshing={refreshing}
-          modal={modal}
+          // modal={modal}
           list={wetalk}
           auth={auth}
           selectedRoomId={selectedRoomId}
-          onActivateModal={this._handleActivateModal}
+          alert={alert}
+          // onActivateModal={this._handleActivateModal}
           onRedirect={this._handleRedirect}
           onRefresh={this._handleRefresh}
           onSearch={this._handleSearch}
@@ -399,16 +394,16 @@ class HomeScreenContainer extends Component {
    * _handleActivateModal
    * 모달뷰 토글
    */
-  _handleActivateModal = async (
-    selectedRoomId = null,
-    selectedRoomName = null
-  ) => {
-    this.setState(prev => ({
-      modal: !prev.modal,
-      selectedRoomId,
-      selectedRoomName
-    }));
-  };
+  // _handleActivateModal = async (
+  //   selectedRoomId = null,
+  //   selectedRoomName = null
+  // ) => {
+  //   this.setState(prev => ({
+  //     modal: !prev.modal,
+  //     selectedRoomId,
+  //     selectedRoomName
+  //   }));
+  // };
 
   /**
    * _handleCheckConference
@@ -420,7 +415,7 @@ class HomeScreenContainer extends Component {
     selectedRoomName = null
   ) => {
     let { auth } = this.props;
-    let callType = 1;
+    let callType = 3;
     let isCreator;
     // 위하고(외부)에서 접속인지 아닌지 구분
     if (externalData !== null) {
@@ -443,8 +438,48 @@ class HomeScreenContainer extends Component {
         auth.AUTH_R_TOKEN,
         auth.HASH_KEY
       );
+
+      // 대화방 정보를 얻어서 생성되어 있는 방인지 확인
       if (!result.resultData) {
-        alert('이미 종료된 대화방입니다.');
+        this._handleModalChange(
+          true,
+          '화상대화',
+          '이미 종료된 대화방입니다.',
+          this._handleModalChange
+        );
+        return;
+      }
+
+      const participantList = (await ConferenceApi.getParticipant(
+        result.resultData.video_chat_id,
+        auth.AUTH_A_TOKEN,
+        auth.AUTH_R_TOKEN,
+        auth.HASH_KEY
+      )).resultData;
+
+      // 최대 참여인원 제한 (15명)
+      if (participantList.length >= 15) {
+        this._handleModalChange(
+          true,
+          '화상대화',
+          '최대 참여인원을 초과했습니다.',
+          this._handleModalChange
+        );
+        return;
+      }
+
+      // 이미 대화방에 참여 중인지 확인
+      const isJoin = await participantList.find(participant => {
+        return participant.user_id === auth.portal_id;
+      });
+
+      if (isJoin) {
+        this._handleModalChange(
+          true,
+          '화상대화',
+          '이미 대화방에 접속한 사용자 입니다.',
+          this._handleModalChange
+        );
         return;
       }
     }
@@ -455,6 +490,25 @@ class HomeScreenContainer extends Component {
         callType,
         isCreator,
         selectedRoomName
+      }
+    });
+  };
+
+  /**
+   * _handleModalChange
+   */
+  _handleModalChange = (
+    visible = false,
+    title = '',
+    message = '',
+    onClose = () => {}
+  ) => {
+    this.setState({
+      alert: {
+        visible,
+        title,
+        message,
+        onClose
       }
     });
   };
@@ -505,7 +559,7 @@ class HomeScreenContainer extends Component {
         auth.AUTH_R_TOKEN,
         auth.HASH_KEY
       );
-      this.setState({ modal: false });
+      // this.setState({ modal: false });
 
       // 대화방에 참여한다.
       const videoRoomId = sendWetalkResult.resultData.chatList[0].mobile_key;
