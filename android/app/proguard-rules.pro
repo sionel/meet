@@ -90,3 +90,12 @@
 -dontwarn javax.servlet.**
 
 # ^^^ We added the above when we switched minifyEnabled on.
+-dontnote com.ninty.system.setting.**
+-dontnote com.horcrux.svg.**
+-dontnote org.wonday.orientation.**
+-dontnote org.devio.rn.splashscreen.**
+-dontnote com.learnium.RNDeviceInfo.**
+-dontnote com.terrylinla.rnsketchcanvas.**
+-dontnote com.swmansion.gesturehandler.**
+-dontnote com.reactnativecommunity.**
+-dontnote com.evanjmg.**
