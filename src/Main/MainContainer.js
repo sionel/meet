@@ -85,7 +85,7 @@ class MainContainer extends Component {
     const permissions =
       Platform.OS === 'ios'
         ? ['microphone', 'camera']
-        : ['microphone', 'camera', 'storage'];
+        : ['microphone', 'camera'];
     // 현재 권한 체크
     const response = await Permissions.checkMultiple(permissions);
     // 권한 설정 요청
