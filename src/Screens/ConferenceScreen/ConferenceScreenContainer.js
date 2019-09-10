@@ -71,6 +71,7 @@ class ConferenceScreenContainer extends React.Component {
                 endUser: endUser[0],
                 createdTime: this.props.createdTime
               });
+              return false;
             }
             // 대기하고 있는데 사용자가 안들어올 경우
             if (endUser.length === 0 && !this.state.endUser) {
@@ -78,12 +79,14 @@ class ConferenceScreenContainer extends React.Component {
               this._conferenceManager && this._conferenceManager.dispose();
               // this._handleConferenceClose();
               this.setState({ endCall: true });
+              return false;
             }
             // 통화 중에 사용자가 종료했을 경우
             if (endUser.length === 0 && this.state.endUser) {
               clearInterval(this.connectFailCheck);
               this._conferenceManager && this._conferenceManager.dispose();
               this.setState({ endCall: true });
+              return false;
             }
           }, 100);
         }, 3000);
@@ -100,9 +103,13 @@ class ConferenceScreenContainer extends React.Component {
       this.setState({ endCall: false, endUser: null, connection: false });
       const { navigation, user_name, auth, dispatch } = nextProps;
       this._handleCreateConnection(navigation, user_name, auth, dispatch);
+      return false;
     }
 
-    return true;
+    if (this.state.endCall) return false;
+    if (this.props !== nextProps) return true;
+    if (this.state !== nextState) return true;
+    return false;
   }
 
   /** */
@@ -229,9 +236,9 @@ class ConferenceScreenContainer extends React.Component {
   _handleEndCall = () => {
     if (this.callType === 3) this._handleConferenceClose();
     else {
-      this.setState({ connection: false, endCall: true });
       this._conferenceManager && this._conferenceManager.dispose();
     }
+    this.setState({ connection: false, endCall: true });
   };
 
   /** 화상대화방 닫기 */

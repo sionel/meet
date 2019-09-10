@@ -6,6 +6,7 @@ import ProfileImage from '../../../../assets/icons/imgVcNophoto_2x.png';
 const { height, width } = Dimensions.get('window');
 
 const EndCallMessagePresenter = props => {
+  console.log('props')
   const second2String = second => {
     let hours = Math.floor(second / 3600);
     let minutes = Math.floor((second - hours * 3600) / 60);
