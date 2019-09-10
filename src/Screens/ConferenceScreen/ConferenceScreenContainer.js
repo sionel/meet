@@ -227,9 +227,9 @@ class ConferenceScreenContainer extends React.Component {
 
   /** 전화/대화 종료 */
   _handleEndCall = () => {
-    this.setState({ connection: false, endCall: true });
     if (this.callType === 3) this._handleConferenceClose();
     else {
+      this.setState({ connection: false, endCall: true });
       this._conferenceManager && this._conferenceManager.dispose();
     }
   };

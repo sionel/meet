@@ -155,8 +155,8 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     backgroundColor: 'rgb(232, 235, 239)',
-    borderTopColor: '#ddd',
-    borderTopWidth: 1
+    // borderTopColor: '#ddd',
+    // borderTopWidth: 1
   },
   header: {
     flexDirection: 'row',

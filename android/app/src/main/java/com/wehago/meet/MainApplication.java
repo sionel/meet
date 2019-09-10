@@ -18,7 +18,7 @@ package com.wehago.meet;
 
 import android.app.Application;
 
-import com.squareup.leakcanary.LeakCanary;
+// import com.squareup.leakcanary.LeakCanary;
 
 /**
  * Simple {@link Application} for hooking up LeakCanary:
@@ -29,8 +29,8 @@ public class MainApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        if (!LeakCanary.isInAnalyzerProcess(this)) {
-            LeakCanary.install(this);
-        }
+        // if (!LeakCanary.isInAnalyzerProcess(this)) {
+        //     LeakCanary.install(this);
+        // }
     }
 }
