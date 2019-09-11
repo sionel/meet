@@ -61,7 +61,6 @@ function applySetDocumentListMode(state, action) {
 //#endregion
 
 //#region SET_SHARING_MODE
-
 function setSharingMode(
   attributes = false,
   presenter = false,

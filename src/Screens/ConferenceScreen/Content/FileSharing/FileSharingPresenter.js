@@ -86,7 +86,7 @@ const FileSharingPresenter = props => {
     </View>
   );
 
-  const imgList = () => {
+  const imgList = (() => {
     const list = resources.map((item, index) => (
       <FastImage
         source={{
@@ -119,7 +119,7 @@ const FileSharingPresenter = props => {
       />
     ));
     return list;
-  };
+  })();
 
   //미리보기
   const preView = (
@@ -131,12 +131,15 @@ const FileSharingPresenter = props => {
         ref={ref => props.onSetRef('preView', ref)}
       >
         <FlatList
-          data={imgList()}
+          data={imgList}
           horizontal={true}
           renderItem={({ item, index }) => (
             <TouchableOpacity
               onPress={() => onChangePage(index, presenter)}
-              style={styles.resourceItem}
+              style={[
+                styles.resourceItem,
+                index === imgList.length - 1 && { marginRight: 10 }
+              ]}
             >
               <Text style={styles.preViewPageNumber}>{index + 1}</Text>
               <View
@@ -241,7 +244,7 @@ const FileSharingPresenter = props => {
                   viewWidth={props.viewWidth}
                   viewHeight={props.viewHeight}
                   image={resources[page]}
-                  imgList={imgList()}
+                  imgList={imgList}
                   imageSize={props.imageSize}
                   showTool={showTool}
                   presenter={presenter}
@@ -360,7 +363,7 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     paddingBottom: 10,
     paddingLeft: 0,
-    paddingRight: 10,
+    paddingRight: 0,
     borderBottomColor: 'rgb(210, 210, 210)',
     borderBottomWidth: 1,
     backgroundColor: 'rgb(242, 242, 242)'

@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { BackHandler } from 'react-native';
+import { BackHandler, Dimensions } from 'react-native';
 import FileSharingPresenter from './FileSharingPresenter';
 import FastImage from 'react-native-fast-image';
 import _ from 'underscore';
+
+const previewWidth = 78;
 
 class FileSharingContainer extends Component {
   constructor(props) {
@@ -11,6 +13,10 @@ class FileSharingContainer extends Component {
     this.preView = null;
     this.imageSize = [];
     this.scuTimer = null;
+    this.scrollX = {
+      start: 0, // 화면에 보이기 시작하는 지점
+      here: previewWidth // 여기까지는 보여야 하는 지점
+    };
 
     let imgList = JSON.parse(props.attributes.resources);
     imgList = imgList.map(src => ({
@@ -42,11 +48,36 @@ class FileSharingContainer extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     if (nextProps.page !== this.props.page) {
       if (this.preView) {
-        this.preView.scrollTo({
-          x: nextProps.page * 78,
-          y: 0,
-          animated: false
-        });
+        const { width } = Dimensions.get('window');
+        const raise = nextProps.page > this.props.page;
+        this.scrollX.here = (nextProps.page + 1) * previewWidth;
+
+        if (raise) {
+          // 페이지가 증가했을 경우
+          // 현재 커서 위치 + 화면 크기 < 보여야하는 지점
+          // => 보여야하는 지점이 화면 이후로 넘어갈 때 스크롤(커서) 이동
+          if (this.scrollX.start + width < this.scrollX.here) {
+            const gap = this.scrollX.here - (this.scrollX.start + width);
+            this.scrollX.start += gap + 10;
+            this.preView.scrollTo({
+              x: this.scrollX.start,
+              y: 0,
+              animated: false
+            });
+          }
+        } else {
+          // 페이지가 감소했을 경우
+          // 현재 커서 위치 > 보여야하는 지점
+          // => 보여야하는 지점이 화면 이전으로 넘어갈 때 스크롤(커서) 이동
+          if (this.scrollX.start > this.scrollX.here - previewWidth) {
+            this.scrollX.start = nextProps.page * previewWidth;
+            this.preView.scrollTo({
+              x: this.scrollX.start,
+              y: 0,
+              animated: false
+            });
+          }
+        }
       }
     }
 
