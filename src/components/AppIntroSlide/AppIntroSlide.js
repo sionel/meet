@@ -87,7 +87,7 @@ class AppIntroSlide extends React.Component {
           <View
             style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
           >
-            <Text style={styles.textTitle}>WAHAGO 연동</Text>
+            <Text style={styles.textTitle}>WEHAGO 연동</Text>
             <Text style={styles.textContent}>
               {'새로운 회의를 만들거나 진행중인\nWE톡 화상회의에 바로 참여'}
             </Text>

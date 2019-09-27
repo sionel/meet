@@ -36,7 +36,7 @@ const slides = props => {
               alignItems: "center"
             }}
           >
-            <Text style={props.styles.textTitle}>WAHAGO 연동</Text>
+            <Text style={props.styles.textTitle}>WEHAGO 연동</Text>
             <Text style={props.styles.textContent}>{"새로운 회의를 만들거나 진행중인\nWE톡 화상회의에 바로 참여"}</Text>
             <Image
               source={props.introImages[1]}
