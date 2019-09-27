@@ -73,14 +73,19 @@ class HomeScreenContainer extends Component {
     });
     Orientation.addOrientationListener(this._handleOrientation);
 
-    Linking.getInitialURL().then(url => {
-      if (url) {
-        this._handleOpenURL({ url });
-      }
-    });
-    // ios 딥링크 처리
+    // Linking.getInitialURL().then(url => {
+    //   if (url) {
+    //     this._handleOpenURL({ url });
+    //   }
+    // });
+    // [ios] 앱이 실행중에 딥링크에 의한 화상대화 연결방법
     if (Platform.OS === 'ios') {
       Linking.addEventListener('url', this._handleOpenURL);
+    }
+
+    // [android, ios] 앱이 실행중이 아닐 때 화상대화 연결방법
+    if (this.props.screenProps && this.props.screenProps.url) {
+      this._handleOpenURL(this.props.screenProps);
     }
 
     // 주기적으로 앱 업데이트
@@ -97,7 +102,7 @@ class HomeScreenContainer extends Component {
   }
 
   shouldComponentUpdate = (nextProps, nextState) => {
-    // android 딥링크 처리
+    // [android] 앱이 실행중에 딥링크에 의한 화상대화 연결방법
     if (
       Platform.OS === 'android' &&
       this.props.screenProps !== nextProps.screenProps
