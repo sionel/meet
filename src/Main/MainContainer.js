@@ -6,13 +6,13 @@ import React, { Component } from 'react';
 import { Alert, BackHandler, NativeModules, Platform } from 'react-native';
 
 import SplashScreen from 'react-native-splash-screen';
-import Permissions from 'react-native-permissions';
+// import Permissions from 'react-native-permissions';
 
 import MainPresenter from './MainPresenter';
 import LoginScreen from '../Screens/LoginScreen';
 import AppIntroSlide from '../components/AppIntroSlide';
 
-const { AndroidSettings } = NativeModules;
+// const { AndroidSettings } = NativeModules;
 
 class MainContainer extends Component {
   state = { isLogin: false, url: null };
@@ -22,7 +22,7 @@ class MainContainer extends Component {
       Platform.OS !== 'ios' && SplashScreen.hide();
     }, 1000);
 
-    this._handleCheckPermissions();
+    // this._handleCheckPermissions();
     this.props.setInitInfo();
     this.props.setSharingMode();
   }
@@ -77,63 +77,63 @@ class MainContainer extends Component {
     this.setState({ isLogin: true });
   };
 
-  /**
-   * _handleCheckPermissions
-   */
-  _handleCheckPermissions = async () => {
-    // 권한 목록 설정
-    const permissions =
-      Platform.OS === 'ios'
-        ? ['microphone', 'camera']
-        : ['microphone', 'camera'];
-    // 현재 권한 체크
-    const response = await Permissions.checkMultiple(permissions);
-    // 권한 설정 요청
-    this._handleSetPermissions(response, permissions);
-  };
+  // /**
+  //  * _handleCheckPermissions
+  //  */
+  // _handleCheckPermissions = async () => {
+  //   // 권한 목록 설정
+  //   const permissions =
+  //     Platform.OS === 'ios'
+  //       ? [{ key: 'microphone', name: '마이크' }, { key: 'camera', name: '카메라' }]
+  //       : [{ key: 'microphone', name: '마이크' }, { key: 'camera', name: '카메라' }];
+  //   // 현재 권한 체크
+  //   const response = await Permissions.checkMultiple(permissions.map(p => p.key));
+  //   // 권한 설정 요청
+  //   this._handleSetPermissions(response, permissions);
+  // };
 
-  /**
-   * _handleSetPermissions
-   */
-  _handleSetPermissions = async (response, permissions, length = 0) => {
-    // 재귀
-    let len = length;
-    if (length >= permissions.length) return;
+  // /**
+  //  * _handleSetPermissions
+  //  */
+  // _handleSetPermissions = async (response, permissions, length = 0) => {
+  //   // 재귀
+  //   let len = length;
+  //   if (length >= permissions.length) return;
 
-    if (response[permissions[len]] === 'authorized') {
-      // 권한 승인 상태이면 다음 권한 설정
-      return this._handleSetPermissions(response, permissions, ++len);
-    } else {
-      // 권한이 없으므로 권한 요청
-      const result = await Permissions.request(permissions[len], {
-        type: 'whenInUse'
-      });
-      // 권한 미승인 시 앱 종료 또는 환경설정으로 이동
-      if (result !== 'authorized') {
-        Alert.alert(
-          '권한 요청',
-          '화상대화 기능을 사용하시려면 해당 권한을 부여하세요.',
-          [
-            {
-              text: 'OK',
-              // 권한 다시 알리지 않음 설정 시 환경설정으로 이동
-              onPress: () => {
-                Platform.OS === 'ios'
-                  ? this._handleCheckPermissions()
-                  : BackHandler.exitApp();
-                Platform.OS === 'ios'
-                  ? Permissions.openSettings()
-                  : AndroidSettings.open();
-              }
-            }
-          ]
-        );
+  //   if (response[permissions[len].key] === 'authorized') {
+  //     // 권한 승인 상태이면 다음 권한 설정
+  //     return this._handleSetPermissions(response, permissions, ++len);
+  //   } else {
+  //     // 권한이 없으므로 권한 요청
+  //     const result = await Permissions.request(permissions[len].key, {
+  //       type: 'whenInUse'
+  //     });
+  //     // 권한 미승인 시 앱 종료 또는 환경설정으로 이동
+  //     if (result !== 'authorized') {
+  //       Alert.alert(
+  //         permissions[len].name + ' 권한 요청',
+  //         '화상대화 기능을 사용하시려면 해당 권한을 부여하세요.',
+  //         [
+  //           {
+  //             text: 'OK',
+  //             // 권한 다시 알리지 않음 설정 시 환경설정으로 이동
+  //             onPress: () => {
+  //               Platform.OS === 'ios'
+  //                 ? this._handleCheckPermissions()
+  //                 : BackHandler.exitApp();
+  //               Platform.OS === 'ios'
+  //                 ? Permissions.openSettings()
+  //                 : AndroidSettings.open();
+  //             }
+  //           }
+  //         ]
+  //       );
 
-        return;
-      }
-      // 권한 승인 시 다음 권한 설정
-      return this._handleSetPermissions(response, permissions, ++len);
-    }
-  };
+  //       return;
+  //     }
+  //     // 권한 승인 시 다음 권한 설정
+  //     return this._handleSetPermissions(response, permissions, ++len);
+  //   }
+  // };
 }
 export default MainContainer;

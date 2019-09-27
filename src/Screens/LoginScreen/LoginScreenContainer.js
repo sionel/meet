@@ -22,6 +22,7 @@ import LoginFailAlert from './Content/LoginFailAlert';
 import { CustomLottie } from '../../components';
 // service
 import { querystringParser } from '../../utils';
+import { checkPermissions } from '../../utils/permission';
 
 // const deviceHeight = Dimensions.get('window').height;
 const isTablet = DeviceInfo.isTablet();
@@ -83,6 +84,8 @@ class LoginScreenContainer extends React.Component {
    */
   render() {
     const { permission } = this.props;
+    permission && checkPermissions();
+
     const {
       list,
       userId,
