@@ -469,19 +469,19 @@ class HomeScreenContainer extends Component {
       }
 
       // 이미 대화방에 참여 중인지 확인
-      const isJoin = await participantList.find(participant => {
-        return participant.user_id === auth.portal_id;
-      });
+      // const isJoin = await participantList.find(participant => {
+      //   return participant.user_id === auth.portal_id;
+      // });
 
-      if (isJoin) {
-        this._handleModalChange(
-          true,
-          '화상대화',
-          '이미 대화방에 접속한 사용자 입니다.',
-          this._handleModalChange
-        );
-        return;
-      }
+      // if (isJoin) {
+      //   this._handleModalChange(
+      //     true,
+      //     '화상대화',
+      //     '이미 대화방에 접속한 사용자 입니다.',
+      //     this._handleModalChange
+      //   );
+      //   return;
+      // }
     }
     // 화상대화로 진입
     this._handleRedirect('Conference', {
