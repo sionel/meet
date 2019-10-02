@@ -87,9 +87,16 @@ const ListItemComp = props => {
 		>
 			{/* 아이콘 */}
 			<View style={styles.iconWrapper}>
-				<View style={{ ...styles.roomIcon, width: iconWidth, borderColor: activeColor }}>
+				<View style={{ ...styles.roomIcon, width: iconWidth, borderColor: activeColor, borderWidth: props.active ? 3 : 0 }}>
 					{/* 아이콘 텍스트 */}
-					{iconText}
+          {props.room_profile_url === '' ? (
+            iconText
+          ) : (
+            <Image
+							source={{ uri: 'http://www.wehago.com' + props.room_profile_url }}
+							style={{ width: '100%', height:'100%', resizeMode: 'cover' }}
+            />
+          )}
 				</View>
 			</View>
 			{/* 내용 */}
@@ -165,7 +172,8 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		borderRadius: 100,
 		backgroundColor: '#eaeaea',
-		borderWidth: 3
+		// borderWidth: 3,
+		overflow: 'hidden'
 	},
 	// 아이콘 텍스트
 	iconText: {

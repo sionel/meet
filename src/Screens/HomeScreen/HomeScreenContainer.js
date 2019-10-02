@@ -346,7 +346,8 @@ class HomeScreenContainer extends Component {
       return this._handleAutoLogin();
     }
     this.setState({ refreshing: false });
-    onSetWetalkList(wetalkList.resultData.video_room_list);
+    onSetWetalkList(wetalkList.resultData.video_room_list.sort((a, b) => a.send_timestamp < b.send_timestamp ? 1 : -1 ));
+    // onSetWetalkList(wetalkList.resultData.video_room_list);
   };
 
   /**

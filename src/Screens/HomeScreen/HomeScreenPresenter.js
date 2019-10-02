@@ -95,6 +95,7 @@ const HomeScreenPresenter = props => {
                 title={item.room_title}
                 personnel={item.receiver_user_count}
                 updated={item.update_timestamp}
+                room_profile_url={item.room_profile_url}
                 lottie={true}
                 underline={index < section.length ? true : false}
                 active={item.is_video_access === 'T' ? true : false}
