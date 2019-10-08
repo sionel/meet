@@ -88,7 +88,7 @@ const ContentPresenter = props => {
               : [styles.topAreaHorizontal, { left: props.hasNotch ? 35 : 20 }]
           ]}
         >
-          {callType != 2 && !drawingMode && (
+          {Number(callType) !== 2 && !drawingMode && (
             <TopArea
               orientation={props.orientation}
               drawing={props.drawingMode}

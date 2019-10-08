@@ -59,7 +59,7 @@ class ConferenceScreenContainer extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     // 상대방이 통화를 종료했는지 확인
-    if (this.callType !== 3) {
+    if (Number(this.callType) !== 3) {
       if (nextState.connection && !this.state.connection) {
         this.connectFailCheck && clearInterval(this.connectFailCheck);
         setTimeout(() => {
@@ -234,7 +234,7 @@ class ConferenceScreenContainer extends React.Component {
 
   /** 전화/대화 종료 */
   _handleEndCall = () => {
-    if (this.callType === 3) this._handleConferenceClose();
+    if (Number(this.callType) === 3) this._handleConferenceClose();
     else {
       this._conferenceManager && this._conferenceManager.dispose();
     }

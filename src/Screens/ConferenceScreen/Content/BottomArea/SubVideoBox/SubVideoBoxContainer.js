@@ -3,7 +3,7 @@ import SubVideoBoxPresenter from './SubVideoBoxPresenter';
 
 class SubVideoBoxContainer extends React.Component {
   render() {
-    if (this.props.callType == 2) {
+    if (Number(this.props.callType) === 2) {
       return null;
     } else {
       return <SubVideoBoxPresenter {...this.props} />;

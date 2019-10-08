@@ -108,7 +108,7 @@ const MainVideoPresenter = props => {
       {/* 정상적인 화상대화 일 때 */}
       {!isMuteVideo &&
       stream &&
-      (callType == 1 || callType == 3) &&
+      (Number(callType) === 1 || Number(callType) === 3) &&
       !props.drawing ? (
         <RTCView
           style={styles.RTCVideo}
@@ -124,7 +124,7 @@ const MainVideoPresenter = props => {
           streamURL={stream.toURL()}
           zOrder={0} // zOrder 는 [0, 1] 만 사용가능 (아마?)
         />
-      ) : callType == 2 ? (
+      ) : Number(callType) === 2 ? (
         localPipMode ? (
           <View
             style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
@@ -251,7 +251,7 @@ const MainVideoPresenter = props => {
       )}
 
       {/* 화상대화 중 나오는 통화시간 */}
-      {callType != 2 && !localPipMode && displayTime}
+      {Number(callType) !== 2 && !localPipMode && displayTime}
 
       {/* 네트워크 불안정 */}
       {mainUser.status === 'interrupted' && muteView}
