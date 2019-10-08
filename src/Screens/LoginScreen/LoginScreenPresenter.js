@@ -4,7 +4,7 @@
  * 로그인페이지 프레젠터
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import {
   ScrollView,
   View,
@@ -18,13 +18,10 @@ import {
   StatusBar,
   Dimensions,
   Animated,
-  Easing
+  Easing,
+  Keyboard
 } from 'react-native';
-import {
-  FlatButton,
-  TextField,
-  CustomWebView
-} from '../../components';
+import { FlatButton, TextField, CustomWebView } from '../../components';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Orientation from 'react-native-orientation-locker';
 import DeviceInfo from 'react-native-device-info';
@@ -45,6 +42,7 @@ const wehago_favicon = require(`${rootPath}/wehago_favicon.png`);
  * LoginScreenPresenter
  */
 const LoginScreenPresenter = props => {
+  const [isFocused, setIsFocused] = useState(false);
   const { userId, userPwd, autoLoginFlag, webView } = props;
   DeviceInfo.isTablet()
     ? Orientation.unlockAllOrientations()
@@ -94,121 +92,141 @@ const LoginScreenPresenter = props => {
         width: '100%',
         height: props.height - (StatusBar.currentHeight || 0)
       }}
+      // onTouchStart={() => {
+      //   console.log(isFocused)
+      //   isFocused && Keyboard.dismiss()
+      // }}
     >
-      {/* TITLE */}
-      <View style={styles.topArea}>
-        {/* <Text style={styles.logo}>WEHAGO</Text> */}
-        <Image
-          style={{
-            width: 200,
-            height: 64
-          }}
-          source={logo_login}
-          resizeMode="contain"
-        />
-      </View>
+      <TouchableOpacity
+        activeOpacity={1}
+        style={{ flex: 1, width: '100%', alignItems: 'center' }}
+        onPress={() => Keyboard.dismiss()}
+      >
+        {/* TITLE */}
+        <View style={styles.topArea}>
+          {/* <Text style={styles.logo}>WEHAGO</Text> */}
+          <Image
+            style={{
+              width: 200,
+              height: 64
+            }}
+            source={logo_login}
+            resizeMode="contain"
+          />
+        </View>
 
-      {/* INPUTS */}
-      <View style={styles.middleArea}>
-        <TextField
-          placeholder={'아이디'}
-          width={285}
-          height={40}
-          onChange={text => props.onChangeValue('userId', text)}
-          value={userId}
-          onSubmit={'inputPwd'}
-          refs={'inputId'}
-        />
-        <TextField
-          placeholder={'패스워드'}
-          width={285}
-          height={40}
-          secret={true}
-          onChange={text => props.onChangeValue('userPwd', text)}
-          onSubmit={props.onEnterKeyDown}
-          value={userPwd}
-          refs={'inputPwd'}
-        />
-      </View>
+        {/* INPUTS */}
+        <View style={styles.middleArea}>
+          <TextField
+            placeholder={'아이디'}
+            width={285}
+            height={40}
+            onChange={text => props.onChangeValue('userId', text)}
+            value={userId}
+            onSubmit={'inputPwd'}
+            onFocus={() => {
+              console.log('object', isFocused);
+              setIsFocused(true);
+            }}
+            refs={'inputId'}
+          />
+          <TextField
+            placeholder={'패스워드'}
+            width={285}
+            height={40}
+            secret={true}
+            onChange={text => props.onChangeValue('userPwd', text)}
+            onSubmit={props.onEnterKeyDown}
+            onFocus={() => setIsFocused(true)}
+            value={userPwd}
+            refs={'inputPwd'}
+          />
+        </View>
 
-      {/* Login BUTTONS */}
-      <View style={styles.bottomArea}>
-        <FlatButton
-          title={'로그인'}
-          color={props.userId && props.userPwd.length > 7 ? '#fff' : '#818181'}
-          backgroundColor={
-            props.userId && props.userPwd.length > 7 ? '#1C90FB' : '#E1E1E1'
-          }
-          borderColor={
-            props.userId && props.userPwd.length > 7 ? '#1C90FB' : '#E1E1E1'
-          }
-          borderWidth={1}
-          width={295}
-          height={52}
-          borderRadius={30}
-          onClick={
-            props.userPwd.length > 7
-              ? props.onLogin
-              : () => props.onActivateModal('아이디와 패스워드를 확인해 주세요')
-          }
-        >
-          {props.logging && (
-            <View
-              style={{
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}
-            >
-              <Animated.View
+        {/* Login BUTTONS */}
+        <View style={styles.bottomArea}>
+          <FlatButton
+            title={'로그인'}
+            color={
+              props.userId && props.userPwd.length > 7 ? '#fff' : '#818181'
+            }
+            backgroundColor={
+              props.userId && props.userPwd.length > 7 ? '#1C90FB' : '#E1E1E1'
+            }
+            borderColor={
+              props.userId && props.userPwd.length > 7 ? '#1C90FB' : '#E1E1E1'
+            }
+            borderWidth={1}
+            width={295}
+            height={52}
+            borderRadius={30}
+            onClick={
+              props.userPwd.length > 7
+                ? props.onLogin
+                : () =>
+                    props.onActivateModal('아이디와 패스워드를 확인해 주세요')
+            }
+          >
+            {props.logging && (
+              <View
                 style={{
-                  transform: [{ rotate: spin }],
                   alignItems: 'center',
                   justifyContent: 'center'
                 }}
               >
-                <Icon name="spinner" size={20} color="#fff" />
-              </Animated.View>
-            </View>
-          )}
-        </FlatButton>
-      </View>
+                <Animated.View
+                  style={{
+                    transform: [{ rotate: spin }],
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                >
+                  <Icon name="spinner" size={20} color="#fff" />
+                </Animated.View>
+              </View>
+            )}
+          </FlatButton>
+        </View>
 
-      {/* Login with WEHAGO BUTTONS */}
-      <View style={styles.bottomArea2}>
-        <FlatButton
-          title={'WEHAGO 앱으로 로그인'}
-          width={295}
-          height={52}
-          borderRadius={5}
-          color={'#fff'}
-          backgroundColor={'#1C90FB'}
-          borderColor={'#1C90FB'}
-          borderWidth={1}
-          customStyle={{ flexDirection: 'row' }}
-          onClick={props.onLoginForWehago}
-        >
-          <Image
+        {/* Login with WEHAGO BUTTONS */}
+        <View style={styles.bottomArea2}>
+          <FlatButton
+            title={'WEHAGO 앱으로 로그인'}
+            width={295}
+            height={52}
+            borderRadius={5}
+            color={'#fff'}
+            backgroundColor={'#1C90FB'}
+            borderColor={'#1C90FB'}
+            borderWidth={1}
+            customStyle={{ flexDirection: 'row' }}
+            onClick={props.onLoginForWehago}
+          >
+            <Image
+              style={{
+                width: 24,
+                height: 24,
+                marginRight: 5
+              }}
+              source={wehago_favicon}
+            />
+            <Text style={{ color: '#fff', fontFamily: 'DOUZONEText30' }}>
+              WEHAGO 앱으로 로그인
+            </Text>
+          </FlatButton>
+          <Text
             style={{
-              width: 24,
-              height: 24,
-              marginRight: 5
+              paddingTop: 12,
+              paddingBottom: 15,
+              textAlign: 'center',
+              color: 'rgb(51,51,51)',
+              fontFamily: 'DOUZONEText30'
             }}
-            source={wehago_favicon}
-          />
-          <Text style={{ color: '#fff', fontFamily: 'DOUZONEText30' }}>WEHAGO 앱으로 로그인</Text>
-        </FlatButton>
-        <Text
-          style={{
-            paddingTop: 12,
-            paddingBottom: 15,
-            textAlign: 'center',
-            color: 'rgb(51,51,51)',
-            fontFamily: 'DOUZONEText30'
-          }}
-        >
-          WEHAGO 앱이 설치되어 있다면 바로 시작하세요.
-        </Text>
-      </View>
+          >
+            WEHAGO 앱이 설치되어 있다면 바로 시작하세요.
+          </Text>
+        </View>
+      </TouchableOpacity>
     </View>
   );
   return (
@@ -246,7 +264,11 @@ const LoginScreenPresenter = props => {
         >
           <View style={{ flexDirection: 'row' }}>
             <View style={styles.modalContents}>
-              <Text style={[styles.modalMessage, {fontFamily: 'DOUZONEText30'}]}>{props.modalText}</Text>
+              <Text
+                style={[styles.modalMessage, { fontFamily: 'DOUZONEText30' }]}
+              >
+                {props.modalText}
+              </Text>
             </View>
             <TouchableOpacity
               style={styles.modalCloseButton}
@@ -291,7 +313,11 @@ const LoginScreenPresenter = props => {
                 }}
               >
                 <Text
-                  style={{ fontSize: 15, color: '#1C90FB', fontFamily: 'DOUZONEText50' }}
+                  style={{
+                    fontSize: 15,
+                    color: '#1C90FB',
+                    fontFamily: 'DOUZONEText50'
+                  }}
                 >
                   필수적 접근권한
                 </Text>
@@ -361,11 +387,21 @@ const LoginScreenPresenter = props => {
                             justifyContent: 'center'
                           }}
                         >
-                          <Text style={{ fontSize: 15, marginBottom: 3.5, fontFamily: 'DOUZONEText30' }}>
+                          <Text
+                            style={{
+                              fontSize: 15,
+                              marginBottom: 3.5,
+                              fontFamily: 'DOUZONEText30'
+                            }}
+                          >
                             {item.title}
                           </Text>
                           <Text
-                            style={{ fontSize: 12, color: 'rgb(114,125,134)', fontFamily: 'DOUZONEText30' }}
+                            style={{
+                              fontSize: 12,
+                              color: 'rgb(114,125,134)',
+                              fontFamily: 'DOUZONEText30'
+                            }}
                           >
                             {item.description}
                           </Text>
@@ -375,7 +411,11 @@ const LoginScreenPresenter = props => {
                   />
                 </View>
                 <Text
-                  style={{ fontSize: 15, color: '#1C90FB', fontFamily: 'DOUZONEText50' }}
+                  style={{
+                    fontSize: 15,
+                    color: '#1C90FB',
+                    fontFamily: 'DOUZONEText50'
+                  }}
                 >
                   선택적 접근권한
                 </Text>
@@ -433,11 +473,21 @@ const LoginScreenPresenter = props => {
                             justifyContent: 'center'
                           }}
                         >
-                          <Text style={{ fontSize: 15, marginBottom: 3.5, fontFamily: 'DOUZONEText30' }}>
+                          <Text
+                            style={{
+                              fontSize: 15,
+                              marginBottom: 3.5,
+                              fontFamily: 'DOUZONEText30'
+                            }}
+                          >
                             {item.title}
                           </Text>
                           <Text
-                            style={{ fontSize: 12, color: 'rgb(114,125,134)', fontFamily: 'DOUZONEText30' }}
+                            style={{
+                              fontSize: 12,
+                              color: 'rgb(114,125,134)',
+                              fontFamily: 'DOUZONEText30'
+                            }}
                           >
                             {item.description}
                           </Text>
@@ -500,7 +550,9 @@ const LoginScreenPresenter = props => {
                 // onPress={() => props.onChangeValue('permissionModal', false)}
                 onPress={props.onAgreement}
               >
-                <Text style={{ color: '#fff', fontFamily: 'DOUZONEText50' }}>확인</Text>
+                <Text style={{ color: '#fff', fontFamily: 'DOUZONEText50' }}>
+                  확인
+                </Text>
               </TouchableOpacity>
             </View>
           </View>

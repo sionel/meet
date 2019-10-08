@@ -25,6 +25,7 @@ const TextField = props => {
 		secret,
 		autoCapitalize,
 		onSubmit,
+		onFocus,
 		refs
 	} = props;
 
@@ -56,6 +57,7 @@ const TextField = props => {
 			returnKeyType={typeof onSubmit === 'string' ? 'next' : 'go'}
 			// autoFocus={refs === 'inputId'}
 			ref={ref => inputs[refs] = ref}
+			onFocus={onFocus}
 		/>
 	);
 };
