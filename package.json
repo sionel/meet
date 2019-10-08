@@ -24,7 +24,8 @@
     "android": "sudo npx react-native run-android",
     "device": "~/Library/Android/sdk/emulator/emulator @Nexus_5X_API_28",
     "pod": "cd ios && pod cache clean --all && pod install && cd ..",
-    "build-android": "cd ./android && sudo rm -rf build ./app/build ./sdk/build && sudo ./gradlew bundleRelease && cd ..",
+    "build-inhouse": "cd ./android && sudo rm -rf build ./app/build ./sdk/build && sudo ./gradlew assembleRelease && cd ..",
+    "build-aab": "cd ./android && sudo rm -rf build ./app/build ./sdk/build && sudo ./gradlew bundleRelease && cd ..",
     "set-android": "~/Library/Android/sdk/platform-tools/adb -s 1c88b5c4630d7ece reverse tcp:8081 tcp:8081"
   },
   "dependencies": {
