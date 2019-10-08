@@ -164,12 +164,18 @@ const ChattingPresenter = props => {
           >
             <Text
               style={{
-                color: message && message !== '' ? '#1c90fb' : '#ccc',
+                color:
+                  message && message.slice().replace(/(\s*)/g, '') !== ''
+                    ? '#1c90fb'
+                    : '#ccc',
                 paddingLeft: 10,
                 paddingRight: 10,
                 paddingTop: 7,
                 paddingBottom: 5,
-                borderColor: message && message !== '' ? '#1c90fb' : '#ccc',
+                borderColor:
+                  message && message.slice().replace(/(\s*)/g, '') !== ''
+                    ? '#1c90fb'
+                    : '#ccc',
                 borderWidth: 1,
                 borderRadius: 7,
                 textAlign: 'center',

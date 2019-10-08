@@ -67,7 +67,7 @@ class ChattingContainer extends Component {
 
   _handleSendTextMessage = () => {
     const { message } = this.state;
-    if (message && message !== '') {
+    if (message && message.slice().replace(/(\s*)/g, '') !== '') {
       this.setState({ message: '' }, () => {
         this.conferenceManager.sendTextMessage(message);
       });
