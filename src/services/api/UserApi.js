@@ -76,14 +76,13 @@ const login = async user => {
     const getTokenResult = await getToken(`${url}`);
     const encText = url + getTokenResult.cur_date + getTokenResult.token;
     const hashText = CryptoJS.SHA256(encText);
-    const aaa = CryptoJS.enc.Base64.stringify(hashText);
+    const signature = CryptoJS.enc.Base64.stringify(hashText);
 
     const data = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        signature: aaa
-        // signature: aaa
+        signature: signature
       },
       body: serialize({
         // portal_id: 'seongh7800',
