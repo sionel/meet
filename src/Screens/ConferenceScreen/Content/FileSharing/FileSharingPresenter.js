@@ -174,6 +174,16 @@ const FileSharingPresenter = props => {
           onClickFeedback: props.onDisposeConference
         };
 
+  if (props.imageSize === null) {
+    props.onChangeImageSize(
+      {
+        imgWidth: 4000,
+        imgHeight: 3000
+      },
+      0
+    );
+  }
+
   return (
     <Fragment>
       <SafetyView
@@ -184,17 +194,19 @@ const FileSharingPresenter = props => {
           {!localPipMode && (
             <View style={styles.headerTitle}>
               {showTool && headerTitle}
-              {preView}
+              {resources.length > 0 && preView}
 
-              <CustomButton
-                name={showPreView ? 'btnArrowUp' : 'btnArrowDown'}
-                onPress={() => onChangeState('showPreView')}
-                style={{ padding: 0, margin: 0 }}
-                width={24}
-                height={24}
-                areaWidth={24}
-                areaHeight={24}
-              />
+              {resources.length > 0 && (
+                <CustomButton
+                  name={showPreView ? 'btnArrowUp' : 'btnArrowDown'}
+                  onPress={() => onChangeState('showPreView')}
+                  style={{ padding: 0, margin: 0 }}
+                  width={24}
+                  height={24}
+                  areaWidth={24}
+                  areaHeight={24}
+                />
+              )}
             </View>
           )}
 

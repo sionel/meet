@@ -229,7 +229,31 @@ const DrawingPresenter = props => {
         { width: props.viewWidth, height: props.viewHeight }
       ]}
     >
-      <ScrollView
+      <TouchableOpacity
+        activeOpacity={1}
+        style={{
+          flex: 1,
+          width: '100%',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}
+        onPress={() => onChangeShowToolState('showTool')}
+      >
+        <DrawingBoard
+          mode={['stroke'].some(val => val === selectedTab)}
+          presenter={presenter}
+          orientation={orientation}
+          rWidth={resultSize.width}
+          rHeight={resultSize.height}
+          scale={scale}
+          color={selectedTab == 3 ? 'transparent' : tabs[1].values[color]}
+          stroke={stroke}
+          page={props.page}
+          onStrokeEnd={props.onSetDrawingData}
+        />
+      </TouchableOpacity>
+
+      {/* <ScrollView
         ref={ref => props.onSetRef('documentList', ref)}
         horizontal={true}
         pagingEnabled={true}
@@ -282,9 +306,6 @@ const DrawingPresenter = props => {
                     styles[`boardContainer_${orientation}`]
                   ]}
                 >
-                  {/* {imageLoading ? (
-            <Text>Loading</Text>
-          ) : ( */}
                   <View
                     style={{
                       width: resultSize.width,
@@ -298,10 +319,10 @@ const DrawingPresenter = props => {
               </TouchableOpacity>
             </View>
           )}
-        />
+        /> */}
 
-        {/* 드로잉 영역 */}
-        <View
+      {/* 드로잉 영역 */}
+      {/* <View
           style={[
             {
               position: 'absolute',
@@ -340,7 +361,7 @@ const DrawingPresenter = props => {
             />
           )}
         </View>
-      </ScrollView>
+      </ScrollView> */}
 
       {/* 하단 영역 */}
       {showTool && presenter === 'localUser' && !localPipMode && (

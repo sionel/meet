@@ -323,7 +323,12 @@ class ConferenceScreenContainer extends React.Component {
    * _handleChangeDrawingMode
    */
   _handleChangeDrawingMode = value => {
-    this._conferenceManager.setDrawingData(value);
+    // this._conferenceManager.setDrawingData(value);
+    this._handleChangeSharingMode({
+      fileName: null,
+      owner: this.props.user.portal_id,
+      resources: JSON.stringify([])
+    });
   };
 
   /**

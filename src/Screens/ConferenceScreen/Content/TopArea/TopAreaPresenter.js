@@ -81,15 +81,15 @@ const TopAreaPresenter = props => {
             areaWidth={42}
             areaHeight={36}
           />
-          {/* <CustomButton
+          <CustomButton
             name="pen"
-            width={25}
-            height={25}
-            areaWidth={25}
-            areaHeight={28}
+            width={24}
+            height={24}
+            areaWidth={42}
+            areaHeight={36}
             // onPress={() => props.onChangeDrawing(!props.drawing)}
-            onPress={_.throttle(() => props.onChangeDrawingMode(!props.drawing), 500)}
-          /> */}
+            onPress={_.throttle(() => props.onChangeDrawingMode(true), 500)}
+          />
         </Fragment>
         {/* )} */}
         {/* </View> */}
