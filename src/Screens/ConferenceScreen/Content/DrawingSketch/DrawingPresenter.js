@@ -222,8 +222,6 @@ const DrawingPresenter = props => {
   const mainPalette = mainPaletteRender();
   const subPalette = subPaletteRender(selectedTab);
 
-  console.log(props.page, typeof props.page)
-
   return (
     <View
       style={[
@@ -253,6 +251,21 @@ const DrawingPresenter = props => {
             color={selectedTab == 3 ? 'transparent' : tabs[1].values[color]}
             stroke={stroke}
             page={props.page}
+            customStyle={{
+              borderWidth: 1,
+              borderColor: '#ccc',
+              backgroundColor: '#fff',
+              ...Platform.select({
+                ios: {
+                  shadowColor: '#999',
+                  shadowOffset: { width: 2, height: 2 },
+                  shadowOpacity: 0.7
+                },
+                android: {
+                  elevation: 2
+                }
+              })
+            }}
             onStrokeEnd={props.onSetDrawingData}
           />
         </TouchableOpacity>
@@ -264,6 +277,10 @@ const DrawingPresenter = props => {
           horizontal={true}
           pagingEnabled={true}
           showsHorizontalScrollIndicator={false}
+          onLayout={e => {
+            console.log('onLayout', props.page);
+            props.onScrollViewIsOnLayout();
+          }}
           onScrollEndDrag={event => {
             const {
               layoutMeasurement: { width: width }
@@ -284,6 +301,7 @@ const DrawingPresenter = props => {
             } else {
               props.onChangePage(props.page, props.presenter);
             }
+            console.log('onScrollEndDrag');
           }}
           style={{
             width: props.viewWidth,

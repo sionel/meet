@@ -175,9 +175,20 @@ class DrawingContainer extends Component {
         onClearAll={this._handleClearAll}
         onSetRef={this._handleSetRef}
         onDrawAction={this._handleDrawAction}
+        onScrollViewIsOnLayout={this._handleScrollViewIsOnLayout}
       />
     );
   }
+
+  _handleScrollViewIsOnLayout = () => {
+    if (this.documentList) {
+      this.documentList.scrollTo({
+        x: this.props.viewWidth * this.props.page,
+        y: 0,
+        animated: false
+      });
+    }
+  };
 
   // _handleForceUpdate = () => {
   //   this.forceUpdate();
@@ -285,7 +296,7 @@ class DrawingContainer extends Component {
   _handleClearAll = () => {
     this.props.onSetDrawingData();
     this._drawingManager.set('history', []);
-    this._drawingManager.clearAll()
+    this._drawingManager.clearAll();
   };
 
   /**

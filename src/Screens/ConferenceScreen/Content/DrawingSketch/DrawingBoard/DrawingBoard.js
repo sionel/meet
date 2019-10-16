@@ -61,6 +61,7 @@ class DrawingBoard extends Component {
 
   render() {
     const {
+      customStyle,
       mode,
       user,
       stroke,
@@ -82,7 +83,7 @@ class DrawingBoard extends Component {
           width: rWidth,
           height: rHeight,
           backgroundColor,
-          borderWidth: 1
+          ...customStyle
         }}
         user={user}
         strokeWidth={stroke}
@@ -98,6 +99,7 @@ class DrawingBoard extends Component {
 }
 
 DrawingBoard.defaultProps = {
+  customStyle: {},
   user: 'user',
   stroke: 1,
   color: '#333',
