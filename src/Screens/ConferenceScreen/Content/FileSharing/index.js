@@ -12,7 +12,8 @@ const mapStateToProps = state => ({
   attributes: state.documentShare.attributes,
   presenter: state.documentShare.presenter,
   page: state.documentShare.page,
-  documentListMode: state.documentShare.documentListMode
+  documentListMode: state.documentShare.documentListMode,
+  mode: state.documentShare.mode,
 });
 
 // map dispatch to props

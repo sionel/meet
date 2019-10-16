@@ -45,6 +45,15 @@ const TopAreaPresenter = props => {
             areaHeight={36}
           />
           <CustomButton
+            name="pen"
+            width={24}
+            height={24}
+            areaWidth={42}
+            areaHeight={36}
+            // onPress={() => props.onChangeDrawing(!props.drawing)}
+            onPress={_.throttle(() => props.onChangeDrawingMode(true), 500)}
+          />
+          <CustomButton
             name="docShare"
             width={28}
             height={28}
@@ -80,15 +89,6 @@ const TopAreaPresenter = props => {
             height={24}
             areaWidth={42}
             areaHeight={36}
-          />
-          <CustomButton
-            name="pen"
-            width={24}
-            height={24}
-            areaWidth={42}
-            areaHeight={36}
-            // onPress={() => props.onChangeDrawing(!props.drawing)}
-            onPress={_.throttle(() => props.onChangeDrawingMode(true), 500)}
           />
         </Fragment>
         {/* )} */}

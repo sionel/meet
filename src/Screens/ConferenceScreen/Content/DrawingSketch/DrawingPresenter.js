@@ -35,6 +35,7 @@ const DrawingPresenter = props => {
     tabs,
     showTool,
     presenter,
+    mode,
     orientation,
     onClearAll,
     onChangeShowToolState
@@ -221,6 +222,8 @@ const DrawingPresenter = props => {
   const mainPalette = mainPaletteRender();
   const subPalette = subPaletteRender(selectedTab);
 
+  console.log(props.page, typeof props.page)
+
   return (
     <View
       style={[
@@ -229,112 +232,16 @@ const DrawingPresenter = props => {
         { width: props.viewWidth, height: props.viewHeight }
       ]}
     >
-      <TouchableOpacity
-        activeOpacity={1}
-        style={{
-          flex: 1,
-          width: '100%',
-          justifyContent: 'center',
-          alignItems: 'center'
-        }}
-        onPress={() => onChangeShowToolState('showTool')}
-      >
-        <DrawingBoard
-          mode={['stroke'].some(val => val === selectedTab)}
-          presenter={presenter}
-          orientation={orientation}
-          rWidth={resultSize.width}
-          rHeight={resultSize.height}
-          scale={scale}
-          color={selectedTab == 3 ? 'transparent' : tabs[1].values[color]}
-          stroke={stroke}
-          page={props.page}
-          onStrokeEnd={props.onSetDrawingData}
-        />
-      </TouchableOpacity>
-
-      {/* <ScrollView
-        ref={ref => props.onSetRef('documentList', ref)}
-        horizontal={true}
-        pagingEnabled={true}
-        showsHorizontalScrollIndicator={false}
-        onScrollEndDrag={event => {
-          const {
-            layoutMeasurement: { width: width }
-          } = event.nativeEvent;
-          const offset = isIOS
-            ? event.nativeEvent.targetContentOffset.x
-            : event.nativeEvent.contentOffset.x;
-
-          if (
-            offset / width > props.page &&
-            props.page < props.imgList.length - 1
-          ) {
-            props.onSetRef('isSwipe', true);
-            props.onChangePage(props.page + 1, props.presenter);
-          } else if (offset / width < props.page - 0.01 && props.page > 0) {
-            props.onSetRef('isSwipe', true);
-            props.onChangePage(props.page - 1, props.presenter);
-          } else {
-            props.onChangePage(props.page, props.presenter);
-          }
-        }}
-        style={{
-          width: props.viewWidth,
-          height: props.viewHeight
-        }}
-      >
-        <FlatList
-          data={props.imgList}
-          horizontal={true}
-          renderItem={({ item }) => (
-            <View
-              style={{
-                flex: 1,
-                width: props.viewWidth,
-                height: props.viewHeightght
-              }}
-            >
-              <TouchableOpacity
-                activeOpacity={1}
-                style={{ flex: 1 }}
-                onPress={() => onChangeShowToolState('showTool')}
-              >
-                <View
-                  style={[
-                    styles.boardContainer,
-                    styles[`boardContainer_${orientation}`]
-                  ]}
-                >
-                  <View
-                    style={{
-                      width: resultSize.width,
-                      height: resultSize.height,
-                      position: 'relative'
-                    }}
-                  >
-                    {item}
-                  </View>
-                </View>
-              </TouchableOpacity>
-            </View>
-          )}
-        /> */}
-
-      {/* 드로잉 영역 */}
-      {/* <View
-          style={[
-            {
-              position: 'absolute',
-              top: props.viewHeight / 2,
-              left: props.viewWidth * props.page + props.viewWidth / 2,
-              marginTop: (resultSize.height / 2) * -1,
-              marginLeft: (resultSize.width / 2) * -1,
-              backgroundColor: 'transparent',
-              justifyContent: 'center',
-              alignItems: 'center'
-            }
-          ]}
+      {mode === 'drawing' && (
+        <TouchableOpacity
+          activeOpacity={1}
+          style={{
+            flex: 1,
+            width: '100%',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}
+          onPress={() => onChangeShowToolState('showTool')}
         >
           <DrawingBoard
             mode={['stroke'].some(val => val === selectedTab)}
@@ -348,20 +255,120 @@ const DrawingPresenter = props => {
             page={props.page}
             onStrokeEnd={props.onSetDrawingData}
           />
+        </TouchableOpacity>
+      )}
 
-          {selectedTab < 0 && (
-            <View
-              style={{
+      {mode === 'document' && (
+        <ScrollView
+          ref={ref => props.onSetRef('documentList', ref)}
+          horizontal={true}
+          pagingEnabled={true}
+          showsHorizontalScrollIndicator={false}
+          onScrollEndDrag={event => {
+            const {
+              layoutMeasurement: { width: width }
+            } = event.nativeEvent;
+            const offset = isIOS
+              ? event.nativeEvent.targetContentOffset.x
+              : event.nativeEvent.contentOffset.x;
+
+            if (
+              offset / width > props.page &&
+              props.page < props.imgList.length - 1
+            ) {
+              props.onSetRef('isSwipe', true);
+              props.onChangePage(props.page + 1, props.presenter);
+            } else if (offset / width < props.page - 0.01 && props.page > 0) {
+              props.onSetRef('isSwipe', true);
+              props.onChangePage(props.page - 1, props.presenter);
+            } else {
+              props.onChangePage(props.page, props.presenter);
+            }
+          }}
+          style={{
+            width: props.viewWidth,
+            height: props.viewHeight
+          }}
+        >
+          <FlatList
+            data={props.imgList}
+            horizontal={true}
+            renderItem={({ item }) => (
+              <View
+                style={{
+                  flex: 1,
+                  width: props.viewWidth,
+                  height: props.viewHeightght
+                }}
+              >
+                <TouchableOpacity
+                  activeOpacity={1}
+                  style={{ flex: 1 }}
+                  onPress={() => onChangeShowToolState('showTool')}
+                >
+                  <View
+                    style={[
+                      styles.boardContainer,
+                      styles[`boardContainer_${orientation}`]
+                    ]}
+                  >
+                    <View
+                      style={{
+                        width: resultSize.width,
+                        height: resultSize.height,
+                        position: 'relative'
+                      }}
+                    >
+                      {item}
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            )}
+          />
+
+          {/* 드로잉 영역 */}
+          <View
+            style={[
+              {
                 position: 'absolute',
-                top: 0,
-                bottom: 0,
-                left: 0,
-                right: 0
-              }}
+                top: props.viewHeight / 2,
+                left: props.viewWidth * props.page + props.viewWidth / 2,
+                marginTop: (resultSize.height / 2) * -1,
+                marginLeft: (resultSize.width / 2) * -1,
+                backgroundColor: 'transparent',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }
+            ]}
+          >
+            <DrawingBoard
+              mode={['stroke'].some(val => val === selectedTab)}
+              presenter={presenter}
+              orientation={orientation}
+              rWidth={resultSize.width}
+              rHeight={resultSize.height}
+              scale={scale}
+              color={selectedTab == 3 ? 'transparent' : tabs[1].values[color]}
+              stroke={stroke}
+              page={props.page}
+              onStrokeEnd={props.onSetDrawingData}
             />
-          )}
-        </View>
-      </ScrollView> */}
+
+            {selectedTab < 0 && (
+              <View
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  bottom: 0,
+                  left: 0,
+                  right: 0
+                }}
+              />
+            )}
+          </View>
+        </ScrollView>
+      )}
 
       {/* 하단 영역 */}
       {showTool && presenter === 'localUser' && !localPipMode && (

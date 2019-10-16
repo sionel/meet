@@ -15,7 +15,8 @@ const initialState = {
   attributes: false,
   presenter: false,
   page: 0,
-  documentData: []
+  documentData: [],
+  mode: null
 };
 
 //#endregion
@@ -65,7 +66,8 @@ function setSharingMode(
   attributes = false,
   presenter = false,
   page = 0,
-  documentData = []
+  documentData = [],
+  mode = null
 ) {
   return dispatch => {
     dispatch({
@@ -73,20 +75,22 @@ function setSharingMode(
       attributes,
       presenter,
       page,
-      documentData
+      documentData,
+      mode
     });
   };
 }
 
 function applySetSharingMode(state, action) {
-  const { attributes, presenter, page, documentData } = action;
+  const { attributes, presenter, page, documentData, mode } = action;
   return {
     ...state,
     documentListMode: false,
     attributes: attributes,
     presenter: presenter,
     page: page,
-    documentData: documentData
+    documentData: documentData,
+    mode: mode
   };
 }
 

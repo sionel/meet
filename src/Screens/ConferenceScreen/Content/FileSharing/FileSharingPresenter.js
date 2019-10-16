@@ -32,6 +32,7 @@ const FileSharingPresenter = props => {
     presenter,
     resources,
     page,
+    mode,
     onChangeState,
     onChangePage
   } = props;
@@ -63,7 +64,9 @@ const FileSharingPresenter = props => {
         ellipsizeMode={'tail'}
         style={[styles.headerText, { flex: 1 }]}
       >
-        {props.attributes.fileName}
+        {mode === 'document'
+          ? props.attributes.fileName
+          : props.selectedRoomName}
       </Text>
       {/* <CustomButton
         name={'userList'}
@@ -166,7 +169,10 @@ const FileSharingPresenter = props => {
           title: '문서공유 종료',
           text:
             '문서공유를 종료하시겠습니까?\n(종료할 경우, 모든 참여자에게 문서가 보이지 않으며 화상대화 화면으로 돌아갑니다.)',
-          onClickFeedback: () => props.onChangeSharingMode(false, false)
+          onClickFeedback: () => {
+            props.onChangeSharingMode(false, false);
+            props.onChangeDrawingMode(false);
+          }
         }
       : {
           title: '화상대화 종료',
@@ -261,6 +267,7 @@ const FileSharingPresenter = props => {
                   showTool={showTool}
                   presenter={presenter}
                   orientation={orientation}
+                  mode={mode}
                   onChangeShowToolState={onChangeState}
                   onChangeDrawing={props.setDrawingMode}
                   onSetDrawingData={props.onSetDrawingData}

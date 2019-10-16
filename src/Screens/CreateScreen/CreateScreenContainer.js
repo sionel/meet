@@ -187,7 +187,7 @@ class CreateScreenContainer extends React.Component {
       // 대화방에 참여한다.
       const videoRoomId = sendWetalkResult.resultData.chatList[0].mobile_key;
       this._handleRedirect('Conference', {
-        item: { videoRoomId, selectedRoom: this.state.selectedRoomName }
+        item: { videoRoomId, selectedRoomName: this.state.selectedRoomName }
       });
     } else if (createResult.resultCode === 400) {
       alert(createResult.resultMsg);

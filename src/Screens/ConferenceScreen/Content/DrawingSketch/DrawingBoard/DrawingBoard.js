@@ -44,6 +44,9 @@ class DrawingBoard extends Component {
       data = [];
     }
 
+    // FIXME This code is dog pan. Thank you.
+    data.object && (data = data.object);
+
     if (this.props.presenter === 'localUser') {
       if (
         this.props.page !== prevProps.page ||

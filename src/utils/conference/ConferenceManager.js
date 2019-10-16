@@ -136,6 +136,7 @@ class ConferenceManager {
       CHANGED_USER_STATUS: this._changedUserStatus,
       CHANGED_DOCUMENT_PAGE: this.changeDocumentPage,
       CHANGED_DOCUMENT_SHARE_MODE: this.changeDocumentShareMode,
+      CHANGED_DRAWING_SHARE_MODE: this.changeDrawingShareMode,
       CHANGED_DRAW_DATA: this.changeDrawData,
       DOCUMENT_SHARE_TARGET: this.documentShareTarget,
       MESSAGE_RECEIVED: this.messageReceived
@@ -213,7 +214,7 @@ class ConferenceManager {
   };
 
   /**
-   * 문서공유/드로잉모드 전환
+   * 문서공유 모드 전환
    */
   // _changeDocumentShareMode = status => {
   changeDocumentShareMode = (
@@ -227,7 +228,23 @@ class ConferenceManager {
         attributes,
         presenter,
         page,
-        documentData
+        documentData,
+        'document'
+      )
+    );
+  };
+
+  /**
+   * @description 드로잉 모드 전환
+   */
+  changeDrawingShareMode = (isDrawingShare, presenter, page, documentData) => {
+    this._dispatch(
+      DocumentShareAcionCreators.setSharingMode(
+        isDrawingShare ? { resources: '[]' } : false,
+        presenter,
+        0, // page
+        documentData, //documentData
+        'drawing'
       )
     );
   };
@@ -244,6 +261,14 @@ class ConferenceManager {
    */
   setDocumentPage = (page, presenter) => {
     this._conferenceConnector.setDocumentPage(page, presenter);
+  };
+
+  /**
+   * @description setDrawingShareMode
+   * 드로잉 모드 전환
+   */
+  setDrawingShareMode = isDrawingShare => {
+    this._conferenceConnector.setDrawingShareMode(isDrawingShare);
   };
 
   /**
