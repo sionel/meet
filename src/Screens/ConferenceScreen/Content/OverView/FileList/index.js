@@ -21,8 +21,8 @@ const mapDispatchToProps = dispatch => {
     // setSharingMode: value => {
     //   return dispatch(DocumentShareActions.setSharingMode(value));
     // },
-    initInfoRequest: authData =>
-      dispatch(WedriveActions.initInfoRequest(authData)),
+    initInfoRequest: (authData, last_company) =>
+      dispatch(WedriveActions.initInfoRequest(authData, last_company)),
     getFileListRequest: (authData, initInfo) =>
       dispatch(WedriveActions.getFileListRequest(authData, initInfo)),
     getFileInfoRequest: (authData, fileInfo) =>

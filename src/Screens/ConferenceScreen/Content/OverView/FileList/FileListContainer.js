@@ -75,17 +75,24 @@ class FileListContainer extends Component {
    * 위드라이브 토큰 가져오기
    */
   _handleGetWedriveToken = async () => {
-    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, portal_id } = this.props.auth;
+    const {
+      AUTH_A_TOKEN,
+      AUTH_R_TOKEN,
+      HASH_KEY,
+      portal_id,
+      last_access_company_no
+    } = this.props.auth;
 
     const authData = {
       AUTH_A_TOKEN,
       AUTH_R_TOKEN,
       HASH_KEY,
-      portalID: `${portal_id}`
+      portalID: `${portal_id}`,
+      last_access_company_no
     };
 
     // wedrive token 가져오기
-    const initInfoResponse = await this.props.initInfoRequest(authData);
+    const initInfoResponse = await this.props.initInfoRequest(authData, last_access_company_no);
     if (!initInfoResponse.initInfo) {
       Alert.alert('Error', '사용자 정보를 불러오지 못했습니다.', [
         { text: 'OK' }

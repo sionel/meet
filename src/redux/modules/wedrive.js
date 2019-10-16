@@ -148,7 +148,7 @@ reducer = (state = initialState, action) => {
 /**
  * initInfoRequest
  */
-const initInfoRequest = authData => {
+const initInfoRequest = (authData, last_access_company_no) => {
   return async dispatch => {
     await dispatch(setStatusLoading('LOADING'));
 
@@ -164,7 +164,7 @@ const initInfoRequest = authData => {
 
     if (tokenResult.resultList) {
       const wedriveToken = {
-        TokenID: `${tokenResult.resultList[0][9].objectTokenId}@@${AUTH_A_TOKEN}`
+        TokenID: `${tokenResult.resultList[0][last_access_company_no].objectTokenId}@@${AUTH_A_TOKEN}`
       };
 
       return dispatch(setInitInfo(wedriveToken));
