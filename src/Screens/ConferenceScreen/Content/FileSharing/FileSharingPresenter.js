@@ -163,12 +163,12 @@ const FileSharingPresenter = props => {
     </View>
   );
 
+  const MODE = mode === 'skectch' ? '스케치' : '문서공유';
   const modalMessage =
     presenter === 'localUser'
       ? {
-          title: '문서공유 종료',
-          text:
-            '문서공유를 종료하시겠습니까?\n(종료할 경우, 모든 참여자에게 문서가 보이지 않으며 화상대화 화면으로 돌아갑니다.)',
+          title: `${MODE} 종료`,
+          text: `${MODE}를 종료하시겠습니까?\n(종료할 경우, 모든 참여자에게 ${MODE}가 보이지 않으며 화상대화 화면으로 돌아갑니다.)`,
           onClickFeedback: () => {
             props.onSetDrawingData();
             props.onChangeSharingMode(false, false);

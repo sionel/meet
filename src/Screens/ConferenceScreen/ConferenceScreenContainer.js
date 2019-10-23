@@ -50,48 +50,56 @@ class ConferenceScreenContainer extends React.Component {
       'ON_HOME_BUTTON_PRESSED',
       this._handleEnterPIPMode
     );
+
     this._timer =
       Platform.OS === 'android' &&
       setInterval(() => {
         this._handleAppSizeChange();
       }, 500);
+
+    if (Number(this.callType) !== 3) {
+      this.connectDisposeCheck = setInterval(() => {
+        if (this.state.connection) {
+          // console.log('length', this.props.list.length);
+          // 대기하고 있는데 사용자가 들어온 경우
+          if (this.props.list.length > 0 && !this.state.endUser) {
+            // console.log('누가 들어옴');
+            this.setState({
+              endUser: this.props.list[0],
+              createdTime: this.props.createdTime
+            });
+          }
+          // 통화 중에 상대 접속자가 종료했는지 체크
+          if (this.props.list.length === 0 && this.state.endUser) {
+            // console.log('다 나갔음');
+            clearInterval(this.connectDisposeCheck);
+            this._conferenceManager && this._conferenceManager.dispose();
+            this.setState({ endCall: true });
+          }
+        }
+      }, 1000);
+    }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
     // 상대방이 통화를 종료했는지 확인
-    if (Number(this.callType) !== 3) {
-      if (nextState.connection && !this.state.connection) {
-        this.connectFailCheck && clearInterval(this.connectFailCheck);
-        setTimeout(() => {
-          this.connectFailCheck = setInterval(() => {
-            const endUser = this.props.list;
-            // 대기하고 있는데 사용자가 들어온 경우
-            if (endUser.length > 0 && !this.state.endUser) {
-              this.setState({
-                endUser: endUser[0],
-                createdTime: this.props.createdTime
-              });
-              return false;
-            }
-            // 대기하고 있는데 사용자가 안들어올 경우
-            if (endUser.length === 0 && !this.state.endUser) {
-              clearInterval(this.connectFailCheck);
-              this._conferenceManager && this._conferenceManager.dispose();
-              // this._handleConferenceClose();
-              this.setState({ endCall: true });
-              return false;
-            }
-            // 통화 중에 사용자가 종료했을 경우
-            if (endUser.length === 0 && this.state.endUser) {
-              clearInterval(this.connectFailCheck);
-              this._conferenceManager && this._conferenceManager.dispose();
-              this.setState({ endCall: true });
-              return false;
-            }
-          }, 100);
-        }, 3000);
-      }
-    }
+    // if (Number(this.callType) !== 3) {
+    //   if (nextState.connection && !this.state.connection) {
+    //     if (nextProps.mainUser) {
+    //       const endUser = this.props.list;
+    //       // 대기하고 있는데 사용자가 들어온 경우
+    //       if (endUser.length > 0 && !this.state.endUser) {
+    //         this.setState({
+    //           endUser: endUser[0],
+    //           createdTime: this.props.createdTime
+    //         });
+    //         return false;
+    //       }
+    //       this.connectFailCheck && clearInterval(this.connectFailCheck);
+    //       this.connectDisposeCheck && clearInterval(this.connectDisposeCheck);
+    //     }
+    //   }
+    // }
 
     // 통화종료 안내화면에서 전화를 받았을 때
     // Connection 을 새로 생성하고 연결한다.
@@ -210,9 +218,13 @@ class ConferenceScreenContainer extends React.Component {
       }, time);
     };
 
+    // is_creator
+    // 0 : 화상회의 생성 / 1 : 화상회의 참여 / 9 : 비즈박스알파(외부서비스)
     if (item.isCreator == 2) {
-      delayLoading(4500);
+      // console.warn('delayLoading', '4500');
+      delayLoading(0);
     } else {
+      // console.warn('delayLoading', '0');
       delayLoading(0);
     }
 
@@ -229,7 +241,21 @@ class ConferenceScreenContainer extends React.Component {
       auth,
       this.callType
     );
-    this.setState({ connection: true });
+    this.setState({ connection: true }, () => {
+      if (Number(this.callType) !== 3) {
+        setTimeout(() => {
+          // console.log('15초가 지났다');
+          // n초 이상 대기하고 있는데 사용자가 안들어올 경우
+          if (this.props.list.length === 0 && !this.state.endUser) {
+            // console.log('아무도 안들어옴 ㅠㅠ');
+            this.connectDisposeCheck && clearInterval(this.connectDisposeCheck);
+            this._conferenceManager && this._conferenceManager.dispose();
+            this.setState({ endCall: true });
+            return false;
+          }
+        }, 15000);
+      }
+    });
   };
 
   /** 전화/대화 종료 */

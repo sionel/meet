@@ -84,7 +84,11 @@ const EndCallMessagePresenter = props => {
               props.user
                 ? {
                     uri:
-                      'https://www.wehago.com' + props.user.userInfo.profile_url
+                      props.user.userInfo.profile_url &&
+                      props.user.userInfo.profile_url !== ''
+                        ? 'https://www.wehago.com' +
+                          props.user.userInfo.profile_url
+                        : 'https://static.wehago.com/imgs/dummy/@dummy_02.jpg' // 더미 프로필
                   }
                 : ProfileImage
             }

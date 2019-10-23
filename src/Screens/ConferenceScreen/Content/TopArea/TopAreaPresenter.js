@@ -66,14 +66,14 @@ const TopAreaPresenter = props => {
               500
             )}
           />
-          <CustomButton
+          {/* <CustomButton
             name={props.objectFit === 'contain' ? 'zoomIn' : 'zoomOut'}
             onPress={props.onChangeObjectFit}
             width={23}
             height={23}
             areaWidth={42}
             areaHeight={36}
-          />
+          /> */}
           <CustomButton
             name="switch"
             width={30}
