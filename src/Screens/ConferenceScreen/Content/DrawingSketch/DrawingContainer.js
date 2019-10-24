@@ -38,8 +38,8 @@ class DrawingContainer extends Component {
    */
   state = {
     imageLoading: true, // 이미지 정보 로딩
-
-    selectedTab: -1,
+    selectedTab:
+      this.props.mode && this.props.mode === 'drawing' ? 'stroke' : -1,
     selectedColor: 'stroke', // 선택된 색
     // selectedColor: 'lightskyblue', // 선택된 색
     selectedStroke: 0, // 선택된 색

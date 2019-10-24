@@ -163,7 +163,7 @@ const FileSharingPresenter = props => {
     </View>
   );
 
-  const MODE = mode === 'skectch' ? '스케치' : '문서공유';
+  const MODE = mode === 'drawing' ? '스케치' : '문서공유';
   const modalMessage =
     presenter === 'localUser'
       ? {

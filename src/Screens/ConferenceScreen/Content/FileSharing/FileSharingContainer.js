@@ -46,6 +46,11 @@ class FileSharingContainer extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
+    if (nextProps.attributes.resources !== this.props.attributes.resources) {
+      this.setState({ resources: JSON.parse(nextProps.attributes.resources) });
+      return false;
+    }
+
     if (nextProps.page !== this.props.page) {
       if (this.preView) {
         const { width } = Dimensions.get('window');

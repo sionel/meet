@@ -278,7 +278,7 @@ const DrawingPresenter = props => {
           pagingEnabled={true}
           showsHorizontalScrollIndicator={false}
           onLayout={e => {
-            console.log('onLayout', props.page);
+            // console.log('onLayout', props.page);
             props.onScrollViewIsOnLayout();
           }}
           onScrollEndDrag={event => {
@@ -301,7 +301,7 @@ const DrawingPresenter = props => {
             } else {
               props.onChangePage(props.page, props.presenter);
             }
-            console.log('onScrollEndDrag');
+            // console.log('onScrollEndDrag');
           }}
           style={{
             width: props.viewWidth,
