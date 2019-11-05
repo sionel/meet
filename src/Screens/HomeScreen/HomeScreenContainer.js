@@ -60,7 +60,8 @@ class HomeScreenContainer extends Component {
       title: '',
       message: '',
       onClose: () => {}
-    }
+    },
+    room_id: null
   };
 
   /**
@@ -275,8 +276,11 @@ class HomeScreenContainer extends Component {
       return;
     } else if (result.is_creater) {
       // 화상대화 실행
-      // console.log(result);
-      this._handleCheckConference(result.room_id, result);
+      if (this.state.room_id === result.room_id) return;
+      // console.warn(url);
+      this.setState({ room_id: result.room_id }, () => {
+        this._handleCheckConference(result.room_id, result);
+      });
     } else {
       return;
     }
@@ -346,7 +350,11 @@ class HomeScreenContainer extends Component {
       return this._handleAutoLogin();
     }
     this.setState({ refreshing: false });
-    onSetWetalkList(wetalkList.resultData.video_room_list.sort((a, b) => a.send_timestamp < b.send_timestamp ? 1 : -1 ));
+    onSetWetalkList(
+      wetalkList.resultData.video_room_list.sort((a, b) =>
+        a.send_timestamp < b.send_timestamp ? 1 : -1
+      )
+    );
     // onSetWetalkList(wetalkList.resultData.video_room_list);
   };
 

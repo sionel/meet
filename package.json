@@ -22,7 +22,7 @@
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "ios": "sudo react-native run-ios",
     "android": "sudo npx react-native run-android",
-    "device": "~/Library/Android/sdk/emulator/emulator @Nexus_5X_API_28",
+    "device": "~/Library/Android/sdk/emulator/emulator @Nexus_5X_API_29",
     "pod": "cd ios && pod cache clean --all && pod install && cd ..",
     "build-inhouse": "cd ./android && sudo rm -rf build ./app/build ./sdk/build && sudo ./gradlew assembleRelease && cd ..",
     "build-aab": "cd ./android && sudo rm -rf build ./app/build ./sdk/build && sudo ./gradlew bundleRelease && cd ..",

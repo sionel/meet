@@ -222,7 +222,10 @@ class ConferenceScreenContainer extends React.Component {
     // 0 : 화상회의 생성 / 1 : 화상회의 참여 / 9 : 비즈박스알파(외부서비스)
     if (item.isCreator == 2) {
       // console.warn('delayLoading', '4500');
-      delayLoading(0);
+      // FIXME mobile 의 경우만 발생하는 이슈 (아래)
+      // 모바일-모바일 or 모바일-웹에서화상대화를 동시에 접속하면 모바일이 화면을 송출/수신 못하는 이슈 발생
+      // 최소 딜레이 2-3초 정도
+      delayLoading(4500);
     } else {
       // console.warn('delayLoading', '0');
       delayLoading(0);
