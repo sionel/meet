@@ -113,7 +113,7 @@ const MainVideoPresenter = props => {
         <RTCView
           style={styles.RTCVideo}
           // mirror={true}
-          mirror={isVideoReverse}
+          mirror={!isVideoReverse}
           objectFit={
             localPipMode
               ? 'cover'

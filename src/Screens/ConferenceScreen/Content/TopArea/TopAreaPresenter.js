@@ -80,7 +80,10 @@ const TopAreaPresenter = props => {
             height={30}
             areaWidth={42}
             areaHeight={36}
-            onPress={props.toggleCameraFacingMode}
+            onPress={() => {
+              props.toggleCameraFacingMode();
+              props.onReverseVideo();
+            }}
           />
           <CustomButton
             name="reverse"
