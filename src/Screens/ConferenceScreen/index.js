@@ -26,6 +26,7 @@ const mapStateToProps = state => {
 
   return {
     mainUser,
+    mainUserId,
     user_name: auth.user_name,
     createdTime,
     auth: auth,
@@ -40,7 +41,8 @@ const mapDispatchToProps = dispatch => {
     dispatch: dispatch,
     setSharingMode: () => dispatch(DocumentShareActions.setSharingMode()),
     toggleMuteVideo: muteState =>
-      dispatch(localActions.toggleMuteVideo(muteState))
+      dispatch(localActions.toggleMuteVideo(muteState)),
+    toggleMuteMic: muteState => dispatch(localActions.toggleMuteMic(muteState))
   };
 };
 

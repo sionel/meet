@@ -234,18 +234,21 @@ function applyToggleCameraFacingMode(state) {
 
 //#region TOGGLE_MUTE_MIC
 
-function toggleMuteMic() {
+function toggleMuteMic(micMute) {
   return dispatch => {
     dispatch({
-      type: TOGGLE_MUTE_MIC
+      type: TOGGLE_MUTE_MIC,
+      micMute
     });
   };
 }
 
-function applyToggleMuteMic(state) {
+function applyToggleMuteMic(state, action) {
   const { user } = state;
+  const { micMute } = action;
   if (user && user.audioTrack) {
-    const currentMute = user.isMuteMic;
+    const currentMute =
+      typeof micMute === 'undefined' ? user.isMuteMic : !micMute;
     if (currentMute) {
       user.audioTrack.unmute();
     } else {
@@ -269,21 +272,25 @@ function applyToggleMuteMic(state) {
 
 //#region TOGGLE_MUTE_SPEAKER
 
-function toggleMuteSpeaker() {
+function toggleMuteSpeaker(speakerMute) {
   return async dispatch => {
     dispatch({
-      type: TOGGLE_MUTE_SPEAKER
+      type: TOGGLE_MUTE_SPEAKER,
+      speakerMute
     });
   };
 }
 
 function applyToggleMuteSpeaker(state, action) {
   const { user } = state;
+  const { speakerMute } = action;
+  const currentMute =
+    typeof speakerMute === 'undefined' ? !user.isMuteSpeaker : !speakerMute;
   return {
     ...state,
     user: {
       ...user,
-      isMuteSpeaker: !user.isMuteSpeaker
+      isMuteSpeaker: currentMute
     }
   };
 }
