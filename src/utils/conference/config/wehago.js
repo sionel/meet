@@ -14,17 +14,22 @@ const config = {
   constraints: {
     video: {
       aspectRatio: 1.3,
-      height: { ideal: 720, min: 240, max: 720 },
+      height: {
+        ideal: 720,
+        max: 720,
+        min: 240
+      },
       width: { min: 640, max: 1280 }
     }
   },
   disableSuspendVideo: true,
+  disableSimulcast: true,
   minHDHeight: 240,
   p2p: {
-    enabled: false
+    enabled: true
   },
   stereo: true,
-  e2eping: { pingInterval: 10000, analyticsInterval: 60000 },
-  disableSimulcast: true
+  e2eping: { pingInterval: 10000, analyticsInterval: 60000 }
 };
+
 export default config;

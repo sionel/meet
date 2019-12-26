@@ -58,6 +58,7 @@ const MainVideoPresenter = props => {
           textAlign: 'center',
           fontFamily: 'DOUZONEText30'
         }}
+        onPress={() => console.warn(mainUser)}
       >
         {conferenceMode !== 'control'
           ? selectedRoomName || (mainUser.id !== 'localUser' && mainUser.name)
