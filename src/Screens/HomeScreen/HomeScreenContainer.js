@@ -269,12 +269,8 @@ class HomeScreenContainer extends Component {
   _handleOpenLink = url => {
     if (!url) return;
     const result = querystringParser(url);
-    // console.log('RESULT :: ', result);
-    // if (result.type === '3') {
-    if (typeof result === 'string') {
-      // 위하고 로그인일 경우 예외처리
-      return;
-    } else if (result.is_creater) {
+    console.warn('RESULT :: ', result);
+    if (result.is_creater) {
       // 화상대화 실행
       if (this.state.room_id === result.room_id) return;
       // console.warn(url);
@@ -464,12 +460,14 @@ class HomeScreenContainer extends Component {
         return;
       }
 
-      const participantList = (await ConferenceApi.getParticipant(
-        result.resultData.video_chat_id,
-        auth.AUTH_A_TOKEN,
-        auth.AUTH_R_TOKEN,
-        auth.HASH_KEY
-      )).resultData;
+      const participantList = (
+        await ConferenceApi.getParticipant(
+          result.resultData.video_chat_id,
+          auth.AUTH_A_TOKEN,
+          auth.AUTH_R_TOKEN,
+          auth.HASH_KEY
+        )
+      ).resultData;
 
       // 최대 참여인원 제한 (15명)
       if (participantList.length >= 15) {

@@ -5,6 +5,7 @@
 
 import { connect } from 'react-redux';
 import MainContainer from './MainContainer';
+import { actionCreators as UserActions } from '../redux/modules/user';
 import { actionCreators as DocumentShareActions } from '../redux/modules/documentShare';
 import { actionCreators as WedriveAcionCreators } from '../redux/modules/wedrive';
 
@@ -17,21 +18,13 @@ const mapStateToProps = state => ({
 // map dispatch to props
 const mapDispatchToProps = dispatch => {
   return {
-    // loginCheckRequest: (AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY) =>
-    // 	dispatch(UserActions.loginCheckRequest(
-    // 		AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY
-    // 	))
-    setSharingMode: () => {
-      return dispatch(DocumentShareActions.setSharingMode());
-    },
-    setInitInfo: () => {
-      return dispatch(WedriveAcionCreators.setInitInfo());
-    }
+    loginCheckRequest: (AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY) =>
+      dispatch(
+        UserActions.loginCheckRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY)
+      ),
+    setSharingMode: () => dispatch(DocumentShareActions.setSharingMode()),
+    setInitInfo: () => dispatch(WedriveAcionCreators.setInitInfo())
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(MainContainer);
-
+export default connect(mapStateToProps, mapDispatchToProps)(MainContainer);

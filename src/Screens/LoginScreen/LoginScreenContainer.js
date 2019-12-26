@@ -21,7 +21,7 @@ import LoginScreenPresenter from './LoginScreenPresenter';
 import LoginFailAlert from './Content/LoginFailAlert';
 import { CustomLottie } from '../../components';
 // service
-import { querystringParser } from '../../utils';
+// import { querystringParser } from '../../utils';
 import { checkPermissions } from '../../utils/permission';
 
 // const deviceHeight = Dimensions.get('window').height;
@@ -59,25 +59,25 @@ class LoginScreenContainer extends React.Component {
     //     this._handleGetWehagoToken({ url });
     //   }
     // });
-    if (Platform.OS === 'ios') {
-      Linking.addEventListener('url', this._handleGetWehagoToken);
-    }
+    // if (Platform.OS === 'ios') {
+    //   Linking.addEventListener('url', this._handleGetWehagoToken);
+    // }
 
     this._handleCheckUser();
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    if (this.props.url !== nextProps.url) {
-      this._handleGetWehagoToken(nextProps.url);
-      return false;
-    }
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   if (this.props.url !== nextProps.url) {
+  //     this._handleGetWehagoToken(nextProps.url);
+  //     return false;
+  //   }
 
-    return true;
-  }
+  //   return true;
+  // }
 
-  componentWillUnmount() {
-    Linking.removeEventListener('url', this._handleGetWehagoToken);
-  }
+  // componentWillUnmount() {
+  //   Linking.removeEventListener('url', this._handleGetWehagoToken);
+  // }
 
   /**
    * Rendering
@@ -253,7 +253,7 @@ class LoginScreenContainer extends React.Component {
     // console.log('resultCoderesultCoderesultCoderesultCode :', resultData);
 
     if (resultCode === 200) {
-      this._handleSaveUserinfo(
+      this.props.handleSaveUserinfo(
         resultData.AUTH_A_TOKEN,
         resultData.AUTH_R_TOKEN,
         resultData.HASH_KEY,
@@ -273,47 +273,47 @@ class LoginScreenContainer extends React.Component {
     this.setState({ waiting: false, modal: false });
   };
 
-  /** --------------------
-   *  _handleSaveUserinfo
-   *  --------------------
-   * 유저정보 저장
-   */
-  _handleSaveUserinfo = async (AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno) => {
-    /**
-     * cno
-     * AUTH_A_TOKEN
-     * AUTH_R_TOKEN
-     * HASH_KEY
-     */
+  // /** --------------------
+  //  *  _handleSaveUserinfo
+  //  *  --------------------
+  //  * 유저정보 저장
+  //  */
+  // _handleSaveUserinfo = async (AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno) => {
+  //   /**
+  //    * cno
+  //    * AUTH_A_TOKEN
+  //    * AUTH_R_TOKEN
+  //    * HASH_KEY
+  //    */
 
-    if (!AUTH_A_TOKEN) return;
+  //   if (!AUTH_A_TOKEN) return;
 
-    const { navigation, loginCheckRequest } = this.props;
-    const result = await loginCheckRequest(
-      AUTH_A_TOKEN,
-      AUTH_R_TOKEN,
-      cno,
-      HASH_KEY
-    );
-    this.setState({ logging: false });
-    if (result.errors) {
-      // alert(JSON.stringify(result.errors));
-      if (result.errors.code === 'E002') {
-        // alert('result11 : ' + JSON.stringify(result));
-        // await this.props.onLogout();
-        // this.forceUpdate();
-        Alert.alert('Login', '토큰이 만료되었습니다.');
-      } else if (result.errors.code === '401') {
-        Alert.alert('Login', '권한이 없습니다.');
-      } else {
-        Alert.alert('Login', '사소한 문제가 발생했습니다. 다시 시도해주세요.');
-      }
-      this.setState({ waiting: false });
-    } else if (result.user_name || result.auth.user_name) {
-      // navigation.navigate('Home');
-      this.props.handleOnLogin();
-    }
-  };
+  //   const { navigation, loginCheckRequest } = this.props;
+  //   const result = await loginCheckRequest(
+  //     AUTH_A_TOKEN,
+  //     AUTH_R_TOKEN,
+  //     cno,
+  //     HASH_KEY
+  //   );
+  //   this.setState({ logging: false });
+  //   if (result.errors) {
+  //     // alert(JSON.stringify(result.errors));
+  //     if (result.errors.code === 'E002') {
+  //       // alert('result11 : ' + JSON.stringify(result));
+  //       // await this.props.onLogout();
+  //       // this.forceUpdate();
+  //       Alert.alert('Login', '토큰이 만료되었습니다.');
+  //     } else if (result.errors.code === '401') {
+  //       Alert.alert('Login', '권한이 없습니다.');
+  //     } else {
+  //       Alert.alert('Login', '사소한 문제가 발생했습니다. 다시 시도해주세요.');
+  //     }
+  //     this.setState({ waiting: false });
+  //   } else if (result.user_name || result.auth.user_name) {
+  //     // navigation.navigate('Home');
+  //     this.props.handleOnLogin();
+  //   }
+  // };
 
   /**
    * _handleLoginForWehago
@@ -354,32 +354,32 @@ class LoginScreenContainer extends React.Component {
   /**
    * DeepLink 로 접근한 경우
    */
-  _handleGetWehagoToken = event => {
-    if (!event.url) return;
-    const result = querystringParser(event.url);
+  // _handleGetWehagoToken = event => {
+  //   if (!event.url) return;
+  //   const result = querystringParser(event.url);
 
-    // 화상대화 요청인지 판별
-    if (result.is_creater || result.type) return;
+  //   // 화상대화 요청인지 판별
+  //   if (result.is_creater || result.type) return;
 
-    // alert('login: ' + JSON.stringify(event));
+  //   // alert('login: ' + JSON.stringify(event));
 
-    if (!result.mAuth_a_token) {
-      Platform.OS === 'ios'
-        ? Alert.alert('Login', '현재 위하고에 로그인되어 있지 않습니다.')
-        : ToastAndroid.show(
-            '현재 위하고에 로그인되어 있지 않습니다.',
-            ToastAndroid.SHORT
-          );
-    }
+  //   if (!result.mAuth_a_token) {
+  //     Platform.OS === 'ios'
+  //       ? Alert.alert('Login', '현재 위하고에 로그인되어 있지 않습니다.')
+  //       : ToastAndroid.show(
+  //           '현재 위하고에 로그인되어 있지 않습니다.',
+  //           ToastAndroid.SHORT
+  //         );
+  //   }
 
-    // 로그인 진행
-    this._handleSaveUserinfo(
-      result.mAuth_a_token,
-      result.mAuth_r_token,
-      result.mHASH_KEY,
-      result.cno
-    );
-  };
+  //   // 로그인 진행
+  //   this._handleSaveUserinfo(
+  //     result.mAuth_a_token,
+  //     result.mAuth_r_token,
+  //     result.mHASH_KEY,
+  //     result.cno
+  //   );
+  // };
 
   /**
    * _handleAppStateChange

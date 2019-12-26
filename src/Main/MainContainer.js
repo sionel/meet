@@ -3,16 +3,16 @@
  * 최상위화면 컨테이너
  */
 import React, { Component } from 'react';
-import { Alert, BackHandler, NativeModules, Platform } from 'react-native';
+import { Alert, Linking, Platform } from 'react-native';
 
 import SplashScreen from 'react-native-splash-screen';
-// import Permissions from 'react-native-permissions';
 
 import MainPresenter from './MainPresenter';
 import LoginScreen from '../Screens/LoginScreen';
 import AppIntroSlide from '../components/AppIntroSlide';
 
-// const { AndroidSettings } = NativeModules;
+// service
+import { querystringParser } from '../utils';
 
 class MainContainer extends Component {
   state = { isLogin: false, url: null };
@@ -22,15 +22,23 @@ class MainContainer extends Component {
       Platform.OS !== 'ios' && SplashScreen.hide();
     }, 1000);
 
-    // this._handleCheckPermissions();
     this.props.setInitInfo();
     this.props.setSharingMode();
+
+    if (this.props.url.url) {
+      this._handleGetWehagoToken(this.props.url);
+    }
+
+    if (Platform.OS === 'ios') {
+      Linking.addEventListener('url', this._handleGetWehagoToken);
+    }
   }
 
   shouldComponentUpdate(nextProps, nextStates) {
     // deep link 에 의한 url 변동 사항 캐치
     if (nextProps.url !== this.props.url) {
-      return true;
+      this._handleGetWehagoToken(nextProps.url);
+      return false;
     }
 
     // 로그인 여부 변경 사항 캐치
@@ -53,6 +61,10 @@ class MainContainer extends Component {
     return false;
   }
 
+  componentWillUnmount() {
+    Linking.removeEventListener('url', this._handleGetWehagoToken);
+  }
+
   render() {
     return (
       <AppIntroSlide>
@@ -61,6 +73,7 @@ class MainContainer extends Component {
         ) : (
           <LoginScreen
             handleOnLogin={this._handleOnLogin}
+            handleSaveUserinfo={this._handleSaveUserinfo}
             url={this.props.url}
             rootTag={this.props.rootTag}
           />
@@ -75,6 +88,63 @@ class MainContainer extends Component {
    */
   _handleOnLogin = () => {
     this.setState({ isLogin: true });
+  };
+
+  /**
+   * DeepLink 로 접근한 경우
+   */
+  _handleGetWehagoToken = event => {
+    if (!event.url) return;
+    const result = querystringParser(event.url);
+
+    // 화상대화 요청인지 판별
+    if (result.is_creater || result.type) return;
+
+    if (!result.mAuth_a_token) {
+      Platform.OS === 'ios'
+        ? Alert.alert('Login', '현재 위하고에 로그인되어 있지 않습니다.')
+        : ToastAndroid.show(
+            '현재 위하고에 로그인되어 있지 않습니다.',
+            ToastAndroid.SHORT
+          );
+    }
+
+    // 로그인 진행
+    this._handleSaveUserinfo(
+      result.mAuth_a_token,
+      result.mAuth_r_token,
+      result.mHASH_KEY,
+      result.cno
+    );
+  };
+
+  /**
+   *  _handleSaveUserinfo
+   * 유저정보 저장
+   */
+  _handleSaveUserinfo = async (AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno) => {
+    if (!AUTH_A_TOKEN) return;
+
+    const { loginCheckRequest } = this.props;
+    const result = await loginCheckRequest(
+      AUTH_A_TOKEN,
+      AUTH_R_TOKEN,
+      cno,
+      HASH_KEY
+    );
+    this.setState({ logging: false });
+    if (result.errors) {
+      if (result.errors.code === 'E002') {
+        Alert.alert('Login', '토큰이 만료되었습니다.');
+      } else if (result.errors.code === '401') {
+        Alert.alert('Login', '권한이 없습니다.');
+      } else {
+        Alert.alert('Login', '사소한 문제가 발생했습니다. 다시 시도해주세요.');
+      }
+      this.setState({ waiting: false });
+    } else if (result.user_name || result.auth.user_name) {
+      this._handleOnLogin();
+    }
   };
 
   // /**
