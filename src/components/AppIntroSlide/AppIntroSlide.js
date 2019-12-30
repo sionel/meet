@@ -49,21 +49,21 @@ class AppIntroSlide extends React.Component {
           />
           <Text
             style={{
-              marginTop: 70.5,
+              marginTop: 150,
               color: '#FFF',
-              fontSize: 25,
+              fontSize: 17,
               // fontWeight: '700',
               textAlign: 'center',
               fontFamily: 'DOUZONEText50'
             }}
           >
-            {'언제 어디서나\nWEHAGO Meet'}
+            {'언제 어디서나 WEHAGO Meet'}
           </Text>
           <Text
             style={{
               marginTop: 24.5,
               color: 'rgb(193, 219, 246)',
-              fontSize: 16,
+              fontSize: 12,
               fontFamily: 'DOUZONEText30'
             }}
           >
@@ -258,14 +258,14 @@ const styles = StyleSheet.create({
   textTitle: {
     marginTop: height * 0.1,
     color: 'rgb(50, 56, 74)',
-    fontSize: 27,
+    fontSize: 21,
     // fontWeight: '700',
     fontFamily: 'DOUZONEText50'
   },
   textContent: {
     marginTop: 14.5,
     color: 'rgb(100, 113, 133)',
-    fontSize: 18,
+    fontSize: 14,
     textAlign: 'center',
     height: 50,
     fontFamily: 'DOUZONEText30'

@@ -3,7 +3,7 @@
  * 최상위화면 컨테이너
  */
 import React, { Component } from 'react';
-import { Alert, Linking, Platform } from 'react-native';
+import { Alert, Linking, Platform, ToastAndroid } from 'react-native';
 
 import SplashScreen from 'react-native-splash-screen';
 

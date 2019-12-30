@@ -28,8 +28,8 @@ const ListItemComp = props => {
 	const updated = new Date(props.updated);
 	let disableStyle = { opacity: 1 };
 	let onClickEvent = props.onClick;
-	const iconWidth = 54 * (props.iconSize / 100);
-	const iconTextWidth = 17 * (props.iconSize / 100);
+	const iconWidth = 40 * (props.iconSize / 100);
+	const iconTextWidth = 15 * (props.iconSize / 100);
 	let iconText = (
 		<Text
 			style={{
@@ -80,8 +80,9 @@ const ListItemComp = props => {
 				...styles.container,
 				height: iconWidth + 7,
 				disableStyle,
-				borderBottomWidth: 1
+				borderBottomWidth: 1,
 				// borderBottomWidth: props.underline ? 1 : 0
+				...props.customStyle
 			}}
 			onPress={onClickEvent}
 		>
@@ -89,13 +90,18 @@ const ListItemComp = props => {
 			<View style={styles.iconWrapper}>
 				<View style={{ ...styles.roomIcon, width: iconWidth, borderColor: activeColor, borderWidth: props.active ? 3 : 0 }}>
 					{/* 아이콘 텍스트 */}
-          {props.room_profile_url === '' ? (
-            iconText
-          ) : (
+          {props.room_profile_url ? (
             <Image
-							source={{ uri: 'http://www.wehago.com' + props.room_profile_url }}
-							style={{ width: '100%', height:'100%', resizeMode: 'cover' }}
+							source={
+								props.room_profile_url
+									? { uri: 'https://www.wehago.com' + props.room_profile_url }
+									: require('./../../assets/icons/imgNophoto.png')
+							}
+							loadingIndicatorSource={require('./../../assets/icons/imgNophoto.png')}
+							style={{ width: 40, height: 40, resizeMode: 'cover' }}
             />
+          ) : (
+            iconText
           )}
 				</View>
 			</View>
@@ -115,9 +121,9 @@ const ListItemComp = props => {
 					<View
 						style={{
 							...styles.activeLight,
-							top: 12,
+							top: 6,
 							width: 57,
-							height: 32,
+							height: 28,
 							borderRadius: 7,
 							justifyContent: 'center',
 							alignItems: 'center',
@@ -142,6 +148,10 @@ const ListItemComp = props => {
 	);
 };
 
+ListItemComp.defaultProps = {
+	customStyle: {}
+}
+
 /**
  * styles
  */
@@ -149,7 +159,8 @@ const styles = StyleSheet.create({
 	// wrapper
 	container: {
 		width: '100%',
-		height: 54,
+		height: 40,
+		alignItems: 'center',
 		display: 'flex',
 		flexDirection: 'row',
 		marginBottom: 7,
@@ -166,8 +177,8 @@ const styles = StyleSheet.create({
 	// 룸아이콘
 	roomIcon: {
 		flex: 1,
-		width: 54,
-		height: 54,
+		width: 40,
+		height: 40,
 		justifyContent: 'center',
 		alignItems: 'center',
 		borderRadius: 100,
@@ -183,7 +194,7 @@ const styles = StyleSheet.create({
 	},
 	// 방 제목
 	roomName: {
-		fontSize: 16,
+		fontSize: 14,
 		// fontWeight: 'bold',
 		color: 'rgb(80,80,80)',
 		fontFamily: 'DOUZONEText30'
@@ -212,7 +223,7 @@ const styles = StyleSheet.create({
 		width: 12,
 		height: 12,
 		right: 3,
-		top: 20,
+		top: 13,
 		borderRadius: 100
 	}
 });

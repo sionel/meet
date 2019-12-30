@@ -54,10 +54,10 @@ const FileSharingPresenter = props => {
         name={'buttonClose'}
         onPress={() => props.onChangeState('modal')}
         style={{ margin: 0, marginRight: 10 }}
-        width={24}
-        height={24}
-        areaWidth={32}
-        areaHeight={32}
+        width={22}
+        height={22}
+        areaWidth={28}
+        areaHeight={28}
       />
       <Text
         numberOfLines={1}
@@ -362,8 +362,9 @@ const styles = StyleSheet.create({
   },
   headerText: {
     color: '#fff',
-    fontSize: 20,
-    height: 32,
+    fontSize: 18,
+    height: 28,
+    lineHeight: 28,
     fontFamily: 'DOUZONEText30'
   },
   mainArea: {

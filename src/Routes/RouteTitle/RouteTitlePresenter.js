@@ -27,7 +27,7 @@ const RouteTitlePresenter = props => {
       <Text
         style={{
           color: '#fff',
-          fontSize: 17,
+          fontSize: 18,
           fontFamily: 'DOUZONEText50',
           // fontWeight: '700'
         }}

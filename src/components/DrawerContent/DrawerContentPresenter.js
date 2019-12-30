@@ -23,7 +23,7 @@ const DrawerContentPresenter = props => {
           paddingBottom: 10,
           alignItems: 'center',
           borderBottomWidth: 1,
-          borderColor: '#cccccc'
+          borderColor: '#ececec'
         }}
       >
         <View style={styles.profile}>
@@ -52,18 +52,18 @@ const DrawerContentPresenter = props => {
               style={{
                 textAlign: 'center',
                 marginTop: 10,
-                fontSize: 17.5,
+                fontSize: 15,
                 color: '#515151',
                 fontFamily: 'DOUZONEText50'
               }}
             >
-              {props.auth.user_name}{' '}
+              {props.auth.user_name}&nbsp;
               {/* <Text style={{ fontSize: 13 }}>({props.auth.portal_id})</Text> */}
             </Text>
             <Text
               style={{
                 textAlign: 'center',
-                fontSize: 13,
+                fontSize: 11,
                 color: '#6d6d6d',
                 fontFamily: 'DOUZONEText30'
               }}
@@ -119,6 +119,7 @@ const styles = StyleSheet.create({
   },
   listItem: {
     padding: 16,
+    fontSize: 12,
     fontFamily: 'DOUZONEText30'
   }
 });

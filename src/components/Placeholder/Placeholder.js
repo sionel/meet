@@ -41,7 +41,7 @@ const Placeholder = props => {
       {props.mainText !== '' && (
         <Text
           style={{
-            fontSize: 20,
+            fontSize: 15,
             // fontWeight: '400',
             color: '#1C90FB',
             marginTop: -5,
@@ -55,7 +55,7 @@ const Placeholder = props => {
 
       <Text
         style={{
-          fontSize: 18,
+          fontSize: 15,
           // fontWeight: '400',
           color: 'rgb(80,80,80)',
           textAlign: 'center',

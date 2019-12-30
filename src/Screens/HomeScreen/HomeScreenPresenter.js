@@ -9,7 +9,7 @@ import {
   StyleSheet,
   SectionList,
   ScrollView,
-  RefreshControl,
+  RefreshControl
 } from 'react-native';
 
 import {
@@ -111,6 +111,12 @@ const HomeScreenPresenter = props => {
                     item.room_title
                   )
                 }
+                customStyle={{
+                  // height: 0,
+                  // overflow: 'hidden',
+                  // paddingBottom: 0,
+                  // marginBottom: 0
+                }}
               />
             )}
           />

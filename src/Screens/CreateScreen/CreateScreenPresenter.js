@@ -90,15 +90,16 @@ const CreateScreenPresenter = props => {
                   ? true
                   : false
               }
-              onClick={() =>
+              onClick={() => {
                 item.is_video_access === 'T'
                   ? props.onCheckConference(
                       item.video_chat_id,
                       null,
                       item.room_title
                     )
-                  : props.onActivateModal(item.room_id, item.room_title)
-              }
+                  : props.onActivateModal(item.room_id, item.room_title);
+                console.warn(item);
+              }}
             />
           )}
         />

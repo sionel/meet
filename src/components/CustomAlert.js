@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
   },
   title: {
     width: '100%',
-    fontSize: 20,
+    fontSize: 18,
     paddingLeft: 10,
     paddingRight: 10,
     paddingTop: 10,
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
   action: { marginLeft: 5, height: '100%', paddingLeft: 5, paddingRight: 5 },
   actionName: {
     borderBottomColor: '#00000010',
-    fontSize: 16,
+    fontSize: 15,
     lineHeight: 20,
     fontFamily: 'DOUZONEText30',
     color: '#1c90fb'

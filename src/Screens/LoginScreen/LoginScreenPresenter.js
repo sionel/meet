@@ -210,7 +210,13 @@ const LoginScreenPresenter = props => {
               }}
               source={wehago_favicon}
             />
-            <Text style={{ color: '#fff', fontFamily: 'DOUZONEText30' }}>
+            <Text
+              style={{
+                color: '#fff',
+                fontFamily: 'DOUZONEText30',
+                fontSize: 14
+              }}
+            >
               WEHAGO 앱으로 로그인
             </Text>
           </FlatButton>
@@ -220,7 +226,8 @@ const LoginScreenPresenter = props => {
               paddingBottom: 15,
               textAlign: 'center',
               color: 'rgb(51,51,51)',
-              fontFamily: 'DOUZONEText30'
+              fontFamily: 'DOUZONEText30',
+              fontSize: 11.5
             }}
           >
             WEHAGO 앱이 설치되어 있다면 바로 시작하세요.
@@ -294,7 +301,7 @@ const LoginScreenPresenter = props => {
             <View style={styles.permission_modalMessage}>
               <Text
                 style={{
-                  fontSize: 16,
+                  fontSize: 15,
                   // color: '#1C90FB',
                   color: 'rgb(51,51,51)',
                   marginBottom: 10,
@@ -314,7 +321,7 @@ const LoginScreenPresenter = props => {
               >
                 <Text
                   style={{
-                    fontSize: 15,
+                    fontSize: 12,
                     color: '#1C90FB',
                     fontFamily: 'DOUZONEText50'
                   }}
@@ -323,7 +330,7 @@ const LoginScreenPresenter = props => {
                 </Text>
                 <View
                   style={{
-                    backgroundColor: '#f1f1f1',
+                    // backgroundColor: '#f1f1f1',
                     marginTop: 8,
                     marginBottom: 12,
                     paddingTop: 5
@@ -389,7 +396,7 @@ const LoginScreenPresenter = props => {
                         >
                           <Text
                             style={{
-                              fontSize: 15,
+                              fontSize: 12,
                               marginBottom: 3.5,
                               fontFamily: 'DOUZONEText30'
                             }}
@@ -398,7 +405,7 @@ const LoginScreenPresenter = props => {
                           </Text>
                           <Text
                             style={{
-                              fontSize: 12,
+                              fontSize: 11,
                               color: 'rgb(114,125,134)',
                               fontFamily: 'DOUZONEText30'
                             }}
@@ -412,7 +419,7 @@ const LoginScreenPresenter = props => {
                 </View>
                 <Text
                   style={{
-                    fontSize: 15,
+                    fontSize: 12,
                     color: '#1C90FB',
                     fontFamily: 'DOUZONEText50'
                   }}
@@ -421,9 +428,9 @@ const LoginScreenPresenter = props => {
                 </Text>
                 <View
                   style={{
-                    backgroundColor: '#f1f1f1',
+                    // backgroundColor: '#f1f1f1',
                     marginTop: 8,
-                    marginBottom: 12,
+                    // marginBottom: 12,
                     paddingTop: 5
                   }}
                 >
@@ -475,7 +482,7 @@ const LoginScreenPresenter = props => {
                         >
                           <Text
                             style={{
-                              fontSize: 15,
+                              fontSize: 12,
                               marginBottom: 3.5,
                               fontFamily: 'DOUZONEText30'
                             }}
@@ -484,7 +491,7 @@ const LoginScreenPresenter = props => {
                           </Text>
                           <Text
                             style={{
-                              fontSize: 12,
+                              fontSize: 11,
                               color: 'rgb(114,125,134)',
                               fontFamily: 'DOUZONEText30'
                             }}
@@ -499,15 +506,37 @@ const LoginScreenPresenter = props => {
 
                 <Text
                   style={{
-                    fontSize: 13,
-                    textAlign: 'center',
-                    color: 'rgb(114,125,134)',
+                    fontSize: 11,
+                    textAlign: 'left',
+                    color: 'rgb(129, 168, 200)',
                     fontFamily: 'DOUZONEText30'
                   }}
                 >
                   선택적 접근권한은 해당 기능 사용 시 동의가 필요하며 미동의
                   시에도 서비스 이용가능합니다.
                 </Text>
+
+                <View
+                  style={{
+                    marginTop: 15,
+                    borderTopWidth: 1,
+                    borderColor: 'rgba(0,0,0,0.12)'
+                  }}
+                >
+                  <Text
+                    style={{
+                      paddingTop: 12,
+                      fontSize: 12,
+                      textAlign: 'left',
+                      fontFamily: 'DOUZONEText30'
+                    }}
+                  >
+                    접근권한 변경 방법:&nbsp;
+                    <Text style={{ color: 'rgb(114, 125, 134)' }}>
+                      휴대폰 설정 > WEHAGO Meet
+                    </Text>
+                  </Text>
+                </View>
                 {/* <Text style={{ fontSize: 16, // fontWeight: '500' }}>이용약관 및 법률고지</Text>
 								<View
 									style={{

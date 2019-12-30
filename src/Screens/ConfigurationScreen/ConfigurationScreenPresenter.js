@@ -152,12 +152,13 @@ const styles = StyleSheet.create({
 
   item: {
     padding: 10,
-    fontSize: 15,
+    fontSize: 14,
     height: 44,
     fontFamily: 'DOUZONEText30'
   },
   content: {
-    color: '#999'
+    color: '#999',
+    fontSize: 12
   }
 });
 

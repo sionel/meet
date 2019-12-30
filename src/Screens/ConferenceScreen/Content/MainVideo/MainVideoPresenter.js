@@ -53,7 +53,7 @@ const MainVideoPresenter = props => {
     >
       <Text
         style={{
-          fontSize: Platform.OS === 'ios' ? 22 : 20,
+          fontSize: 18,
           color: '#fff',
           textAlign: 'center',
           fontFamily: 'DOUZONEText30'
