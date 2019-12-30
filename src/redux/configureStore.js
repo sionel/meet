@@ -33,7 +33,15 @@ if (env === 'development') {
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  blacklist: ['local', 'mainUser', 'participants', 'wetalk', 'wedrive', 'documentShare']
+  whitelist: ['user'],
+  blacklist: [
+    'local',
+    'mainUser',
+    'participants',
+    'wetalk',
+    'wedrive',
+    'documentShare'
+  ]
 };
 
 /**

@@ -123,7 +123,7 @@ class LoginScreenContainer extends React.Component {
       <LoginScreenPresenter
         onChangeValue={this._handleChangeValue}
         onLogin={this._handleLogin}
-        onLoginForWehago={this._handleLoginForWehago}
+        onLoginisWehagoLogin={this._handleLoginisWehagoLogin}
         onActivateModal={this._handleActivateModal}
         onEnterKeyDown={this._handleEnterKeyDown}
         // onTokenLogin={this.props.onTokenLogin}
@@ -181,7 +181,8 @@ class LoginScreenContainer extends React.Component {
         auth.AUTH_A_TOKEN,
         auth.AUTH_R_TOKEN,
         auth.last_access_company_no,
-        auth.HASH_KEY
+        auth.HASH_KEY,
+        this.props.isWehagoLogin
       );
 
       setTimeout(() => {
@@ -257,7 +258,8 @@ class LoginScreenContainer extends React.Component {
         resultData.AUTH_A_TOKEN,
         resultData.AUTH_R_TOKEN,
         resultData.HASH_KEY,
-        resultData.last_access_company_no
+        resultData.last_access_company_no,
+        false // 위하고앱으로 로그인인지 구분
       );
     } else {
       this.setState({ logging: false });
@@ -316,9 +318,9 @@ class LoginScreenContainer extends React.Component {
   // };
 
   /**
-   * _handleLoginForWehago
+   * _handleLoginisWehagoLogin
    */
-  _handleLoginForWehago = () => {
+  _handleLoginisWehagoLogin = () => {
     const iosUrl = 'wehago://?wehagomeet=login';
     const androidUrl = 'wehago://app?name=meet';
     const iosMarketURL =

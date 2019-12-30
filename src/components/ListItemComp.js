@@ -97,7 +97,7 @@ const ListItemComp = props => {
 									? { uri: 'https://www.wehago.com' + props.room_profile_url }
 									: require('./../../assets/icons/imgNophoto.png')
 							}
-							loadingIndicatorSource={require('./../../assets/icons/imgNophoto.png')}
+							defaultSource={require('./../../assets/icons/imgNophoto.png')}
 							style={{ width: 40, height: 40, resizeMode: 'cover' }}
             />
           ) : (

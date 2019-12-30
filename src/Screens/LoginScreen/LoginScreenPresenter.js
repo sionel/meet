@@ -200,7 +200,7 @@ const LoginScreenPresenter = props => {
             borderColor={'#1C90FB'}
             borderWidth={1}
             customStyle={{ flexDirection: 'row' }}
-            onClick={props.onLoginForWehago}
+            onClick={props.onLoginisWehagoLogin}
           >
             <Image
               style={{

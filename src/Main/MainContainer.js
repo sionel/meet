@@ -114,7 +114,8 @@ class MainContainer extends Component {
       result.mAuth_a_token,
       result.mAuth_r_token,
       result.mHASH_KEY,
-      result.cno
+      result.cno,
+      true // 위하고앱으로 로그인인지 구분
     );
   };
 
@@ -122,7 +123,13 @@ class MainContainer extends Component {
    *  _handleSaveUserinfo
    * 유저정보 저장
    */
-  _handleSaveUserinfo = async (AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno) => {
+  _handleSaveUserinfo = async (
+    AUTH_A_TOKEN,
+    AUTH_R_TOKEN,
+    HASH_KEY,
+    cno,
+    isWehagoLogin
+  ) => {
     if (!AUTH_A_TOKEN) return;
 
     const { loginCheckRequest } = this.props;
@@ -130,7 +137,8 @@ class MainContainer extends Component {
       AUTH_A_TOKEN,
       AUTH_R_TOKEN,
       cno,
-      HASH_KEY
+      HASH_KEY,
+      isWehagoLogin
     );
     this.setState({ logging: false });
     if (result.errors) {

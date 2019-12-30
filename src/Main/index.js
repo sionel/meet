@@ -18,9 +18,21 @@ const mapStateToProps = state => ({
 // map dispatch to props
 const mapDispatchToProps = dispatch => {
   return {
-    loginCheckRequest: (AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY) =>
+    loginCheckRequest: (
+      AUTH_A_TOKEN,
+      AUTH_R_TOKEN,
+      cno,
+      HASH_KEY,
+      isWehagoLogin
+    ) =>
       dispatch(
-        UserActions.loginCheckRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY)
+        UserActions.loginCheckRequest(
+          AUTH_A_TOKEN,
+          AUTH_R_TOKEN,
+          cno,
+          HASH_KEY,
+          isWehagoLogin
+        )
       ),
     setSharingMode: () => dispatch(DocumentShareActions.setSharingMode()),
     setInitInfo: () => dispatch(WedriveAcionCreators.setInitInfo())

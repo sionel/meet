@@ -110,6 +110,7 @@ class HomeScreenContainer extends Component {
     ) {
       this._handleOpenURL(nextProps.screenProps);
     }
+
     return true;
   };
 
@@ -375,7 +376,8 @@ class HomeScreenContainer extends Component {
       auth.AUTH_A_TOKEN,
       auth.AUTH_R_TOKEN,
       auth.last_access_company_no,
-      auth.HASH_KEY
+      auth.HASH_KEY,
+      this.props.isWehagoLogin
     );
 
     // 재 로그인

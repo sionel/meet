@@ -59,6 +59,7 @@ class ConfigurationScreenContainer extends React.Component {
 
     return (
       <ConfigurationScreenPresenter
+        isWehagoLogin={this.props.isWehagoLogin}
         navigation={navigation}
         list={list}
         webView={webView}

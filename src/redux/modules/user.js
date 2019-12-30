@@ -54,10 +54,11 @@ function agreement() {
 /**
  * login
  */
-function login(auth) {
+function login(auth, isWehagoLogin) {
   return {
     type: LOGIN,
-    auth
+    auth,
+    isWehagoLogin
   };
 }
 
@@ -67,7 +68,13 @@ function loginRequest(data) {
   };
 }
 
-function loginCheckRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY) {
+function loginCheckRequest(
+  AUTH_A_TOKEN,
+  AUTH_R_TOKEN,
+  cno,
+  HASH_KEY,
+  isWehagoLogin
+) {
   return async dispatch => {
     const checkResult = await UserApi.check(
       AUTH_A_TOKEN,
@@ -95,7 +102,7 @@ function loginCheckRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY) {
           e => e.company_no == checkResult.resultData.last_access_company_no
         )[0]
       };
-      return dispatch(login(userData));
+      return dispatch(login(userData, isWehagoLogin));
     } else {
       const result = checkResult.errors ? checkResult : { errors: checkResult };
       dispatch(eventLog(result));
@@ -194,6 +201,7 @@ const initialState = {
   auth: {},
   permission: false,
   appIntro: false,
+  isWehagoLogin: false,
   log: {}
 };
 
@@ -206,7 +214,12 @@ function reducer(state = initialState, action) {
     case AGREEMENT:
       return { ...state, permission: !state.permission };
     case LOGIN:
-      return { ...state, auth: action.auth, isLogin: true };
+      return {
+        ...state,
+        auth: action.auth,
+        isLogin: true,
+        isWehagoLogin: action.isWehagoLogin
+      };
     // return applyTest(state, action);
     case LOGOUT:
       return { ...state, auth: {}, isLogin: false };
