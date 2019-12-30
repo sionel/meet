@@ -14,6 +14,7 @@ import {
 const tempBaseUrl = `https://jsonplaceholder.typicode.com`;
 // import { UserApi } from '../index';
 import CryptoJS from 'crypto-js';
+import fetch from './Fetch';
 
 // #region
 /**
