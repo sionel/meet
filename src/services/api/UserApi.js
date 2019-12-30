@@ -2,6 +2,7 @@
  * User API
  * 사용자 관련 API
  */
+import { Alert } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 
 import {
@@ -44,10 +45,13 @@ const getToken = async accessUrl => {
     };
     const response = await fetch(url, data);
     const responseJson = await response.json();
-    // console.log('responseJson : ', responseJson);
+    console.warn('getToken : ', responseJson);
 
     return responseJson;
   } catch (err) {
+    if (err.message === 'timeout') {
+      Alert.alert('네트워크가 불안정합니다.', '잠시후 다시 시도해주세요.');
+    }
     return false;
   }
 };
@@ -106,7 +110,9 @@ const login = async user => {
 
     return responseJson;
   } catch (err) {
-    console.log('err : ', err);
+    if (err.message === 'timeout') {
+      Alert.alert('네트워크가 불안정합니다.', '잠시후 다시 시도해주세요.');
+    }
 
     return false;
   }
@@ -128,8 +134,11 @@ const check = async (a_token, r_token, cno, HASH_KEY) => {
     // console.log('CHECK API : ', responseJson);
 
     return responseJson;
-  } catch (err) {
-    return err;
+  } catch (errors) {
+    if (errors.message === 'timeout') {
+      Alert.alert('네트워크가 불안정합니다.', '잠시후 다시 시도해주세요.');
+    }
+    return { message: errors.message };
   }
 };
 

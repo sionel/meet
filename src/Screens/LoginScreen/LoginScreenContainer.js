@@ -191,19 +191,20 @@ class LoginScreenContainer extends React.Component {
             case 'E002':
               this.setState({ waiting: false });
               return this._handleActivateModal(
-                '토큰이 만료되었습니다. 다시 로그인 해주세요.'
+                '세션이 만료되었습니다. 다시 로그인 해주세요.'
               );
             default:
-              if (count < 6 && this.state.waiting) {
-                this._handleActivateModal(
-                  '로그인 실패\n재시도중 (' + count + '/5)'
-                );
-                return setTimeout(() => {
-                  this._handleCheckUser(++count);
-                }, 1000);
-              } else {
-                return this.setState({ waiting: false });
-              }
+              // if (count < 6 && this.state.waiting) {
+              //   this._handleActivateModal(
+              //     '로그인 실패\n재시도중 (' + count + '/5)'
+              //   );
+              //   return setTimeout(() => {
+              //     this._handleCheckUser(++count);
+              //   }, 1000);
+              // } else {
+              //   return this.setState({ waiting: false });
+              // }
+              return this.setState({ waiting: false });
           }
         } else {
           return this.props.handleOnLogin();
