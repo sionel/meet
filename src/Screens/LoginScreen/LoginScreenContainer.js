@@ -250,6 +250,10 @@ class LoginScreenContainer extends React.Component {
       ...osData
     };
 
+    // 로그인 알림창
+    // const resultAlert = await this.props.onAlert(1);
+    // if (!resultAlert) return this.setState({ logging: false });
+
     // result data
     const { resultCode, resultData } = await loginRequest(data);
     // console.log('resultCoderesultCoderesultCoderesultCode :', resultData);

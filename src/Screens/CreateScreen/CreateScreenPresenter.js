@@ -81,10 +81,10 @@ const CreateScreenPresenter = props => {
   useEffect(() => {
     const _redirect = setInterval(() => {
       setRefreshing(true);
-      props.onRefresh();
-      setTimeout(() => {
-        setRefreshing(false);
-      }, 1000);
+      // props.onRefresh();
+      // setTimeout(() => {
+      //   setRefreshing(false);
+      // }, 1000);
     }, 10000);
     return () => {
       clearInterval(_redirect);
@@ -104,7 +104,8 @@ const CreateScreenPresenter = props => {
       ) : (
         <SectionList
           keyExtractor={(item, index) => index.toString()}
-          refreshing={refreshing}
+          refreshing={false}
+          // refreshing={refreshing}
           onRefresh={props.onRefresh}
           style={[
             styles.listContainer,

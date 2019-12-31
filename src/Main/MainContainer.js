@@ -10,12 +10,23 @@ import SplashScreen from 'react-native-splash-screen';
 import MainPresenter from './MainPresenter';
 import LoginScreen from '../Screens/LoginScreen';
 import AppIntroSlide from '../components/AppIntroSlide';
+import { CustomAlert } from '../components';
 
 // service
 import { querystringParser } from '../utils';
 
 class MainContainer extends Component {
-  state = { isLogin: false, url: null };
+  state = {
+    isLogin: false,
+    url: null,
+    alert: {
+      visible: false,
+      type: 0,
+      description: '',
+      actions: [],
+      onClose: () => {}
+    }
+  };
 
   componentDidMount() {
     setTimeout(() => {
@@ -42,7 +53,10 @@ class MainContainer extends Component {
     }
 
     // 로그인 여부 변경 사항 캐치
-    if (nextStates.isLogin !== this.state.isLogin) {
+    if (
+      nextStates.isLogin !== this.state.isLogin ||
+      nextStates.alert !== this.state.alert
+    ) {
       return true;
     }
 
@@ -69,18 +83,103 @@ class MainContainer extends Component {
     return (
       <AppIntroSlide>
         {this.state.isLogin ? (
-          <MainPresenter url={this.props.url} />
+          <MainPresenter
+            url={this.props.url}
+            alert={this.state.alert}
+            onAlert={this._handleOnAlert}
+          />
         ) : (
           <LoginScreen
             handleOnLogin={this._handleOnLogin}
             handleSaveUserinfo={this._handleSaveUserinfo}
             url={this.props.url}
             rootTag={this.props.rootTag}
+            alert={this.state.alert}
+            onAlert={this._handleOnAlert}
           />
         )}
+
+        <CustomAlert
+          visible={this.state.alert.visible}
+          title={'알림'}
+          width={320}
+          description={this.state.alert.description}
+          actions={this.state.alert.actions}
+          onClose={this.state.alert.onClose}
+        />
       </AppIntroSlide>
     );
   }
+
+  _handleOnAlert = type => {
+    return new Promise((resolve, reject) => {
+      let description = '';
+      let actions = [];
+      let onClose = this._handleOnCloseAlert;
+
+      switch (type) {
+        case 1:
+          description =
+            '고객님의 다른 기기에서 WEHAGO를 사용하고 있습니다. 기존 접속을 종료하시고 새로 접속하시겠습니까?';
+          actions = [
+            {
+              name: '취소',
+              action: () => {
+                onClose();
+                resolve(false);
+              }
+            },
+            {
+              name: '확인',
+              action: () => {
+                console.warn('로그인');
+                onClose();
+                resolve(true);
+              }
+            }
+          ];
+          break;
+        case 2:
+          description =
+            '고객님의 다른 기기에서 WEHAGO 접속정보가 확인되어 로그아웃 됩니다.';
+          onClose = () => {
+            console.warn('로그아웃');
+            this._handleOnCloseAlert;
+            resolve(false);
+          };
+          actions = [
+            {
+              name: '확인',
+              action: () => {
+                onClose();
+                resolve(false);
+              }
+            }
+          ];
+          break;
+        default:
+          this.setState({
+            alert: {
+              visible: false,
+              type,
+              description,
+              onClose
+            }
+          });
+          resolve(false);
+          return;
+      }
+
+      this.setState({
+        alert: { visible: true, type, description, actions, onClose }
+      });
+    });
+  };
+  _handleOnCloseAlert = () => {
+    this.setState({
+      alert: { visible: false, type: 0, description: '' }
+    });
+  };
 
   /**
    * 로그인 권한은 LoginScreen 이 가지고 있음
@@ -143,7 +242,8 @@ class MainContainer extends Component {
     this.setState({ logging: false });
     if (result.errors) {
       if (result.errors.code === 'E002') {
-        Alert.alert('Login', '토큰이 만료되었습니다.');
+        // Alert.alert('Login', '토큰이 만료되었습니다.');
+        this._handleOnAlert(2);
       } else if (result.errors.code === '401') {
         Alert.alert('Login', '권한이 없습니다.');
       } else {

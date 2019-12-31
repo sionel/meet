@@ -90,6 +90,7 @@
 	</array>
 	<key>UIAppFonts</key>
 	<array>
+		<string>Fonts/AntDesign.ttf</string>
 		<string>Fonts/FontAwesome.ttf</string>
 		<string>Fonts/DOUZONEText30.ttf</string>
 		<string>Fonts/DOUZONEText50.ttf</string>

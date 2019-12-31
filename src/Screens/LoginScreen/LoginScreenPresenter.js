@@ -124,10 +124,7 @@ const LoginScreenPresenter = props => {
             onChange={text => props.onChangeValue('userId', text)}
             value={userId}
             onSubmit={'inputPwd'}
-            onFocus={() => {
-              console.log('object', isFocused);
-              setIsFocused(true);
-            }}
+            onFocus={() => setIsFocused(true)}
             refs={'inputId'}
           />
           <TextField

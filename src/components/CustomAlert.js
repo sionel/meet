@@ -9,7 +9,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Modal,
-  StatusBar
+  Platform
 } from 'react-native';
 
 const CustomAlert = props => {
@@ -103,11 +103,23 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     maxWidth: '80%',
     minHeight: 30,
-    padding: 12
+    padding: 12,
+    borderRadius: 4,
+    ...Platform.select({
+      ios: {
+        shadowColor: 'black',
+        shadowOffset: { width: 3, height: 6 },
+        shadowOpacity: 0.4,
+        shadowRadius: 9
+      },
+      android: {
+        elevation: 10
+      }
+    })
   },
   title: {
     width: '100%',
-    fontSize: 18,
+    fontSize: 17,
     paddingLeft: 10,
     paddingRight: 10,
     paddingTop: 10,
@@ -120,11 +132,11 @@ const styles = StyleSheet.create({
   description: {
     paddingLeft: 10,
     paddingRight: 10,
-    paddingTop: 16,
+    paddingTop: 10,
     paddingBottom: 16,
-    fontSize: 16,
+    fontSize: 14,
     lineHeight: 20,
-    fontFamily: 'DOUZONEText30',
+    fontFamily: 'DOUZONEText30'
     // borderBottomColor: '#00000010',
     // borderBottomWidth: 1
   },
@@ -138,10 +150,10 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     overflow: 'hidden'
   },
-  action: { marginLeft: 5, height: '100%', paddingLeft: 5, paddingRight: 5 },
+  action: { marginLeft: 5, height: '100%', paddingLeft: 15, paddingRight: 15 },
   actionName: {
     borderBottomColor: '#00000010',
-    fontSize: 15,
+    fontSize: 14,
     lineHeight: 20,
     fontFamily: 'DOUZONEText30',
     color: '#1c90fb'
