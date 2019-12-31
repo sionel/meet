@@ -13,7 +13,7 @@ import {
   SafeAreaView,
   Platform
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/AntDesign';
 
 const SafetyView = Platform.OS === 'ios' ? SafeAreaView : View;
 
@@ -24,7 +24,7 @@ const SearchFormPresenter = props => {
       <SafetyView style={{ width: '100%' }}>
         <View style={{ position: 'relative' }}>
           <Icon
-            name="search"
+            name="search1"
             size={18}
             color="#c8c8c8"
             style={styles.searchIcon}
@@ -32,6 +32,7 @@ const SearchFormPresenter = props => {
           <TextInput
             placeholder="검색"
             style={styles.input}
+            disableFullscreenUI={true}
             onChangeText={newText => props.onChange(newText)}
             value={value}
           />
@@ -40,7 +41,7 @@ const SearchFormPresenter = props => {
               onPress={() => props.onChange('')}
               style={styles.closeIcon}
             >
-              <Icon name="times-circle" size={25} color="#c8c8c8" />
+              <Icon name="closecircle" size={20} color="#c8c8c8" />
             </TouchableOpacity>
           )}
         </View>
@@ -76,22 +77,25 @@ const styles = StyleSheet.create({
 
   closeIcon: {
     position: 'absolute',
-    right: 23,
+    right: 15,
     top: '50%',
-    marginTop: -12,
+    marginTop: -10,
     zIndex: 10
   },
 
   input: {
-    height: 28,
+    height: 32,
     borderColor: '#dadada',
     borderWidth: 1,
     backgroundColor: '#fff',
     paddingLeft: 41,
     paddingRight: 10,
-    borderRadius: 14,
+    paddingTop: 0,
+    paddingBottom: 0,
+    borderRadius: 16,
     zIndex: 9,
-    fontFamily: 'DOUZONEText30'
+    fontFamily: 'DOUZONEText30',
+    fontSize: 13
   }
 });
 
