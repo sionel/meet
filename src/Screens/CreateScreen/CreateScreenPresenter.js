@@ -10,7 +10,9 @@ import {
   StyleSheet,
   SectionList,
   SafeAreaView,
-  Platform
+  Platform,
+  Animated,
+  Easing
 } from 'react-native';
 // common components
 import {
@@ -29,9 +31,50 @@ const CreateScreenPresenter = props => {
   const groupList = props.list.filter(
     item => item.room_type === '2' && item.is_video_access === 'F'
   );
-  const personnelList = props.list.filter(
+  const personalList = props.list.filter(
     item => item.room_type === '1' && item.is_video_access === 'F'
   );
+
+  const groupHeight = new Animated.Value(54 * groupList.length);
+  const personalHeight = new Animated.Value(54 * personalList.length);
+
+  const SectionFooter = ({ section }) => {
+    const items = section.data.map((item, index) => (
+      <ListItemComp
+        key={item.room_id}
+        title={item.room_title}
+        personnel={item.receiver_user_count}
+        updated={item.update_timestamp}
+        room_profile_url={item.room_profile_url}
+        lottie={false}
+        customLottie={true}
+        underline={index < section.length ? true : false}
+        active={item.is_video_access === 'T' ? true : false}
+        disable={
+          item.receiver_user_count === 1 && item.room_type === '1'
+            ? true
+            : false
+        }
+        onClick={() =>
+          item.is_video_access === 'T'
+            ? props.onCheckConference(item.video_chat_id, null, item.room_title)
+            : props.onActivateModal(item.room_id, item.room_title)
+        }
+      />
+    ));
+
+    return (
+      <Animated.View
+        style={{
+          overflow: 'hidden',
+          height: section.type === 'group' ? groupHeight : personalHeight,
+          justifyContent: 'flex-start'
+        }}
+      >
+        {items}
+      </Animated.View>
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -44,7 +87,6 @@ const CreateScreenPresenter = props => {
           subText={'위하고에서 위톡을 생성해 보세요'}
         />
       ) : (
-        // {/* 화상대화 히스토리 리스트 */}
         <SectionList
           keyExtractor={(item, index) => index.toString()}
           refreshing={props.refreshing}
@@ -60,48 +102,75 @@ const CreateScreenPresenter = props => {
             {
               title: `그룹대화(${groupList.length})`,
               data: groupList,
-              length: groupList.length - 1
+              length: groupList.length - 1,
+              type: 'group'
             },
             {
-              title: `1:1대화(${personnelList.length})`,
-              data: personnelList,
-              length: personnelList.length - 1
+              title: `1:1대화(${personalList.length})`,
+              data: personalList,
+              length: personalList.length - 1,
+              type: 'personal'
             }
           ]}
           renderSectionHeader={({ section }) =>
             section.data.length > 0 && (
-              <SectionListHeader title={section.title} />
+              <SectionListHeader
+                title={section.title}
+                section={section}
+                collapse={true}
+                onPress={() => {
+                  section.type === 'group'
+                    ? Animated.timing(groupHeight, {
+                        toValue:
+                          groupHeight._value === 0
+                            ? 54 * section.data.length
+                            : 0,
+                        duration: 400
+                        // easing: Easing.bounce
+                      }).start()
+                    : Animated.timing(personalHeight, {
+                        toValue:
+                          personalHeight._value === 0
+                            ? 54 * section.data.length
+                            : 0,
+                        duration: 400
+                        // easing: Easing.bounce
+                      }).start();
+                }}
+              />
             )
           }
-          renderItem={({ item, index, section }) => (
+          renderSectionFooter={SectionFooter}
+          renderItem={({ item, index, section }) =>
             // 히스토리 아이템
-            <ListItemComp
-              key={item.room_id}
-              title={item.room_title}
-              personnel={item.receiver_user_count}
-              updated={item.update_timestamp}
-              room_profile_url={item.room_profile_url}
-              lottie={false}
-              customLottie={true}
-              underline={index < section.length ? true : false}
-              active={item.is_video_access === 'T' ? true : false}
-              disable={
-                item.receiver_user_count === 1 && item.room_type === '1'
-                  ? true
-                  : false
-              }
-              onClick={() => {
-                item.is_video_access === 'T'
-                  ? props.onCheckConference(
-                      item.video_chat_id,
-                      null,
-                      item.room_title
-                    )
-                  : props.onActivateModal(item.room_id, item.room_title);
-                console.warn(item);
-              }}
-            />
-          )}
+            // <ListItemComp
+            //   key={item.room_id}
+            //   title={item.room_title}
+            //   personnel={item.receiver_user_count}
+            //   updated={item.update_timestamp}
+            //   room_profile_url={item.room_profile_url}
+            //   lottie={false}
+            //   customLottie={true}
+            //   underline={index < section.length ? true : false}
+            //   active={item.is_video_access === 'T' ? true : false}
+            //   disable={
+            //     item.receiver_user_count === 1 && item.room_type === '1'
+            //       ? true
+            //       : false
+            //   }
+            //   onClick={() => {
+            //     item.is_video_access === 'T'
+            //       ? props.onCheckConference(
+            //           item.video_chat_id,
+            //           null,
+            //           item.room_title
+            //         )
+            //       : props.onActivateModal(item.room_id, item.room_title);
+            //     console.warn(item);
+            //   }}
+            // />
+            null
+          }
         />
       )}
 

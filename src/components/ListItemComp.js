@@ -78,7 +78,7 @@ const ListItemComp = props => {
 		<TouchableOpacity
 			style={{
 				...styles.container,
-				height: iconWidth + 7,
+				height: iconWidth + 14,
 				disableStyle,
 				borderBottomWidth: 1,
 				// borderBottomWidth: props.underline ? 1 : 0
@@ -88,7 +88,16 @@ const ListItemComp = props => {
 		>
 			{/* 아이콘 */}
 			<View style={styles.iconWrapper}>
-				<View style={{ ...styles.roomIcon, width: iconWidth, borderColor: activeColor, borderWidth: props.active ? 3 : 0 }}>
+				<View
+					style={{
+						...styles.roomIcon,
+						width: iconWidth,
+						height: iconWidth,
+						borderRadius: iconWidth / 2,
+						borderColor: activeColor,
+						borderWidth: props.active ? 3 : 0
+					}}
+				>
 					{/* 아이콘 텍스트 */}
           {props.room_profile_url ? (
             <Image
@@ -159,11 +168,11 @@ const styles = StyleSheet.create({
 	// wrapper
 	container: {
 		width: '100%',
-		height: 40,
+		height: 47,
 		alignItems: 'center',
 		display: 'flex',
 		flexDirection: 'row',
-		marginBottom: 7,
+		paddingTop: 7,
 		paddingBottom: 7,
 		paddingLeft: 13,
 		paddingRight: 13,
@@ -176,7 +185,7 @@ const styles = StyleSheet.create({
 	},
 	// 룸아이콘
 	roomIcon: {
-		flex: 1,
+		// flex: 1,
 		width: 40,
 		height: 40,
 		justifyContent: 'center',
