@@ -111,12 +111,6 @@ const HomeScreenPresenter = props => {
                     item.room_title
                   )
                 }
-                customStyle={{
-                  // height: 0,
-                  // overflow: 'hidden',
-                  // paddingBottom: 0,
-                  // marginBottom: 0
-                }}
               />
             )}
           />
@@ -124,7 +118,11 @@ const HomeScreenPresenter = props => {
       )}
 
       {/* 방생성 버튼 */}
-      <AddButton onClick={() => props.onRedirect('Create')} />
+      <AddButton
+        onClick={() =>
+          props.onRedirect('Create', { onGetWetalkList: props.onGetWetalkList })
+        }
+      />
 
       <CustomAlert
         visible={props.alert.visible}

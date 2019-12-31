@@ -89,12 +89,17 @@ class CreateScreenContainer extends React.Component {
           onActivateModal={this._handleActivateModal}
           onCheckConference={this._handleCheckConference}
           onCreateConference={this._handleCreateConference}
+          onRefresh={this._handleRefresh}
           orientation={this.state.orientation}
           hasNotch={hasNotch}
         />
       </View>
     );
   } // render
+
+  _handleRefresh = () => {
+    this.props.navigation.state.params.onGetWetalkList();
+  };
 
   /**
    * _handleOrientation

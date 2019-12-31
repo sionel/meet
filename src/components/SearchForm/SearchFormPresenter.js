@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 15,
     top: '50%',
-    marginTop: -11,
+    marginTop: -10,
     zIndex: 10
   },
 
@@ -83,14 +83,13 @@ const styles = StyleSheet.create({
   },
 
   input: {
-    height: 40,
+    height: 28,
     borderColor: '#dadada',
     borderWidth: 1,
     backgroundColor: '#fff',
     paddingLeft: 41,
     paddingRight: 10,
-    // borderRadius: 5,
-    borderRadius: 25.5,
+    borderRadius: 14,
     zIndex: 9,
     fontFamily: 'DOUZONEText30'
   }

@@ -3,7 +3,7 @@
  * 화상대화 히스토리 프레젠터
  */
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -76,6 +76,21 @@ const CreateScreenPresenter = props => {
     );
   };
 
+  const [refreshing, setRefreshing] = useState(false);
+
+  useEffect(() => {
+    const _redirect = setInterval(() => {
+      setRefreshing(true);
+      props.onRefresh();
+      setTimeout(() => {
+        setRefreshing(false);
+      }, 1000);
+    }, 10000);
+    return () => {
+      clearInterval(_redirect);
+    };
+  }, []);
+
   return (
     <View style={styles.container}>
       {/* 검색바 */}
@@ -89,7 +104,7 @@ const CreateScreenPresenter = props => {
       ) : (
         <SectionList
           keyExtractor={(item, index) => index.toString()}
-          refreshing={props.refreshing}
+          refreshing={refreshing}
           onRefresh={props.onRefresh}
           style={[
             styles.listContainer,

@@ -199,6 +199,7 @@ class HomeScreenContainer extends Component {
           onRedirect={this._handleRedirect}
           onRefresh={this._handleRefresh}
           onSearch={this._handleSearch}
+          onGetWetalkList={this._handleGetWetalkList}
           onCreateConference={this._handleCreateConference}
           onCheckConference={this._handleCheckConference}
           orientation={this.state.orientation}
