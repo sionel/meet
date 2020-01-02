@@ -10,6 +10,14 @@ import Main from './src/Main';
 
 const { persistor, store } = configureStore();
 
+if (process.env.NODE_ENV !== 'development') {
+  console.log = () => {};
+  console.warn = () => {};
+  console.error = () => {};
+  console.info = () => {};
+  console.time = () => {};
+}
+
 export default class App extends Component {
   render() {
     return (

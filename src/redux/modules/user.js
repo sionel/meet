@@ -62,9 +62,9 @@ function login(auth, isWehagoLogin) {
   };
 }
 
-function loginRequest(data) {
+function loginRequest(data, access_pass) {
   return async () => {
-    return await UserApi.login(data);
+    return await UserApi.login(data, access_pass);
   };
 }
 

@@ -222,7 +222,7 @@ class LoginScreenContainer extends React.Component {
    *  --------------------
    *  로그인함수
    */
-  _handleLogin = async (wehagoLogin = false) => {
+  _handleLogin = async (access_pass = 'F') => {
     this.setState({ logging: true });
 
     // const { navigation } = this.props;
@@ -250,15 +250,17 @@ class LoginScreenContainer extends React.Component {
       ...osData
     };
 
-    // 로그인 알림창
-    // const resultAlert = await this.props.onAlert(1);
-    // if (!resultAlert) return this.setState({ logging: false });
-
     // result data
-    const { resultCode, resultData } = await loginRequest(data);
-    // console.log('resultCoderesultCoderesultCoderesultCode :', resultData);
+    const { resultCode, resultData } = await loginRequest(data, access_pass);
 
-    if (resultCode === 200) {
+    if (resultCode === 200 || resultCode === 207) {
+      if (resultCode === 207 && access_pass === 'F') {
+        // 중복 로그인 시 알림창
+        const resultAlert = await this.props.onAlert(1);
+        if (!resultAlert) return this.setState({ logging: false });
+        else return this._handleLogin('T');
+      }
+
       this.props.handleSaveUserinfo(
         resultData.AUTH_A_TOKEN,
         resultData.AUTH_R_TOKEN,

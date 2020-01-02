@@ -11,6 +11,8 @@ const OSID = OS === 'ios' ? 'mobile-ios' : 'mobile-android';
 /**
  * Back-end URL
  */
+// export const wehagoBaseURL0 = `http://dev.api0.wehago.com`;
+// export const wehagoBaseURL = `https://dev.api.wehago.com`;
 export const wehagoBaseURL0 = `https://api0.wehago.com`;
 export const wehagoBaseURL = `https://api.wehago.com`;
 

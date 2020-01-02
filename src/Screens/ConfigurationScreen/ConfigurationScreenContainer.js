@@ -11,6 +11,8 @@ import ConfigurationScreenPresenter from './ConfigurationScreenPresenter';
 import DeviceInfo from 'react-native-device-info';
 import Orientation from 'react-native-orientation-locker';
 
+import UserApi from '../../services/api/UserApi';
+
 const hasNotch = DeviceInfo.hasNotch() && Platform.OS === 'ios';
 
 class ConfigurationScreenContainer extends React.Component {
@@ -96,8 +98,9 @@ class ConfigurationScreenContainer extends React.Component {
    * _handleLogout
    * 로그아웃
    */
-  _handleLogout = () => {
+  _handleLogout = async () => {
     // const { onLogout, navigation } = this.props;
+    await UserApi.logoutRequest(this.props.user);
     this.props.onLogout();
     this.props.onSetInitialList();
     // navigation.navigate('Main');

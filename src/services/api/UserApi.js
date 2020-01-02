@@ -61,21 +61,8 @@ const getToken = async accessUrl => {
  * --
  * JSON형태로 데이터를 전송할수없음 => urlencoded방식으로 전달
  */
-const login = async user => {
-  // console.log('DATA : ', user);
-
-  // alert(data.portal_id);
-  // const url = `${wehagoBaseURL}/auth/login/mobile?timestamp=`;
+const login = async (user, access_pass) => {
   try {
-    // const body = {
-    //   portal_id: data.portal_id,
-    //   portal_password: data.portal_password,
-    //   // 기기정보
-    //   login_ip: data.login_ip,
-    //   login_device: data.login_device,
-    //   login_os: data.login_os,
-    //   login_browser: data.login_browser
-    // };
     const date = new Date().getTime();
     const url = `/auth/login/mobile?timestamp=${date}`;
     const getTokenResult = await getToken(`${url}`);
@@ -90,12 +77,8 @@ const login = async user => {
         signature: signature
       },
       body: serialize({
-        // portal_id: 'seongh7800',
-        // portal_password: 'kseongh0080',
-        // login_ip: 'localhost',
-        // login_device: 'iPhone',
-        // login_os: '12.1',
-        // login_browser: 'WEHAGO-APP'
+        access_type: 'wehagomeet',
+        access_pass: access_pass,
         portal_id: user.portal_id,
         portal_password: user.portal_password,
         login_ip: user.login_ip,
@@ -107,13 +90,43 @@ const login = async user => {
 
     const response = await fetch(`${wehagoBaseURL0}${url}`, data);
     const responseJson = await response.json();
-
+console.warn('success', responseJson)
     return responseJson;
   } catch (err) {
+  console.warn('er', err)
     if (err.message === 'timeout') {
       Alert.alert('네트워크가 불안정합니다.', '잠시후 다시 시도해주세요.');
     }
 
+    return false;
+  }
+};
+
+/**
+ * logoutRequest
+ * 로그아웃
+ * @param auth
+ */
+const logoutRequest = async auth => {
+  const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY } = auth;
+
+  try {
+    const url = `${wehagoBaseURL0}/auth/logout`;
+    const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
+    const data = {
+      method: 'GET',
+      headers: {
+        ...headers,
+        'content-type': 'application/x-www-form-urlencoded'
+      }
+    };
+
+    const response = await fetch(url, data);
+    const responseJson = await response.json();
+    console.warn('success', responseJson);
+    return responseJson.resultData;
+  } catch (err) {
+    console.warn('err', err);
     return false;
   }
 };
@@ -188,6 +201,7 @@ export default {
   test,
   getToken,
   login,
+  logoutRequest,
   check,
   changeCompany
 };
