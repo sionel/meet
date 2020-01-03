@@ -11,10 +11,12 @@ const OSID = OS === 'ios' ? 'mobile-ios' : 'mobile-android';
 /**
  * Back-end URL
  */
-// export const wehagoBaseURL0 = `http://dev.api0.wehago.com`;
-// export const wehagoBaseURL = `https://dev.api.wehago.com`;
-export const wehagoBaseURL0 = `https://api0.wehago.com`;
-export const wehagoBaseURL = `https://api.wehago.com`;
+export const wehagoBaseURL0 = `http://dev.api0.wehago.com`; // 비인증
+export const wehagoBaseURL = `http://dev.api.wehago.com`; // 인증
+export const wehagoMainURL = `http://dev.wehago.com`; // 메인 URL
+// export const wehagoBaseURL0 = `https://api0.wehago.com`;
+// export const wehagoBaseURL = `https://api.wehago.com`;
+// export const wehagoMainURL = `https://www.wehago.com`;
 
 /**
  * Querystring parser
@@ -83,9 +85,9 @@ export const serialize = obj => {
   for (let p in obj)
     if (obj.hasOwnProperty(p)) {
       // str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
-      str.push(p + "=" + obj[p]);
+      str.push(p + '=' + obj[p]);
     }
-  return str.join("&");
+  return str.join('&');
 };
 
 _getTransactionId = () => {

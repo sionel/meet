@@ -250,18 +250,21 @@ class MainContainer extends Component {
       HASH_KEY,
       isWehagoLogin
     );
-    this.setState({ logging: false });
+
     if (result.errors) {
       if (result.errors.code === 'E002') {
-        // Alert.alert('Login', '토큰이 만료되었습니다.');
-        this._handleOnAlert(2);
+        if (isWehagoLogin) Alert.alert('Login', '토큰이 만료되었습니다.');
+        else this._handleOnAlert(2);
       } else if (result.errors.code === '401') {
         Alert.alert('Login', '권한이 없습니다.');
       } else {
         Alert.alert('Login', '사소한 문제가 발생했습니다. 다시 시도해주세요.');
       }
-      this.setState({ waiting: false });
-    } else if (result.user_name || result.auth.user_name) {
+      return;
+    } else if (
+      result.resultData.user_name ||
+      result.resultData.auth.user_name
+    ) {
       this._handleOnLogin();
     }
   };

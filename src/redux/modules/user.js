@@ -104,7 +104,8 @@ function loginCheckRequest(
           e => e.company_no == checkResult.resultData.last_access_company_no
         )[0]
       };
-      return dispatch(login(userData, isWehagoLogin));
+      dispatch(login(userData, isWehagoLogin));
+      return checkResult;
     } else {
       const result = checkResult.errors ? checkResult : { errors: checkResult };
       dispatch(eventLog(result));

@@ -159,7 +159,7 @@ const LoginScreenPresenter = props => {
             borderRadius={30}
             onClick={
               props.userPwd.length > 7
-                ? props.onLogin
+                ? () => props.onLogin()
                 : () =>
                     props.onActivateModal('아이디와 패스워드를 확인해 주세요')
             }
