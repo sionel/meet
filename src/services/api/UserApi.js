@@ -90,10 +90,10 @@ const login = async (user, access_pass) => {
 
     const response = await fetch(`${wehagoBaseURL0}${url}`, data);
     const responseJson = await response.json();
-console.warn('success', responseJson)
+    console.warn('success', responseJson);
     return responseJson;
   } catch (err) {
-  console.warn('er', err)
+    console.warn('er', err);
     if (err.message === 'timeout') {
       Alert.alert('네트워크가 불안정합니다.', '잠시후 다시 시도해주세요.');
     }
@@ -111,14 +111,11 @@ const logoutRequest = async auth => {
   const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY } = auth;
 
   try {
-    const url = `${wehagoBaseURL0}/auth/logout`;
+    const url = `${wehagoBaseURL}/auth/logout`;
     const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
     const data = {
       method: 'GET',
-      headers: {
-        ...headers,
-        'content-type': 'application/x-www-form-urlencoded'
-      }
+      headers
     };
 
     const response = await fetch(url, data);
@@ -144,10 +141,11 @@ const check = async (a_token, r_token, cno, HASH_KEY) => {
       headers
     });
     const responseJson = await response.json();
-    // console.log('CHECK API : ', responseJson);
+    console.warn('CHECK API : ', responseJson);
 
     return responseJson;
   } catch (errors) {
+    console.warn('errors', errors);
     if (errors.message === 'timeout') {
       Alert.alert('네트워크가 불안정합니다.', '잠시후 다시 시도해주세요.');
     }

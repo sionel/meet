@@ -60,6 +60,10 @@ class MainContainer extends Component {
       return true;
     }
 
+    if (nextProps.session !== this.props.session && !nextProps.session) {
+      this._handleOnAlert(2);
+    }
+
     if (!nextProps.isLogin) {
       this.setState({ isLogin: false });
     }
@@ -120,20 +124,26 @@ class MainContainer extends Component {
       switch (type) {
         case 1:
           description =
-            '고객님의 다른 기기에서 WEHAGO를 사용하고 있습니다. 기존 접속을 종료하시고 새로 접속하시겠습니까?';
+            '고객님의 다른 기기에서 WEHAGO Meet을 사용하고 있습니다. 기존 접속을 종료하시고 새로 접속하시겠습니까?';
+          onClose = () => {
+            console.warn('취소1');
+            this._handleOnCloseAlert();
+            resolve(false);
+          };
           actions = [
             {
               name: '취소',
               action: () => {
-                onClose();
+                console.warn('취소');
+                this._handleOnCloseAlert();
                 resolve(false);
               }
             },
             {
               name: '확인',
               action: () => {
-                console.warn('로그인');
-                onClose();
+                console.warn('확인');
+                this._handleOnCloseAlert();
                 resolve(true);
               }
             }
@@ -141,17 +151,18 @@ class MainContainer extends Component {
           break;
         case 2:
           description =
-            '고객님의 다른 기기에서 WEHAGO 접속정보가 확인되어 로그아웃 됩니다.';
+            '고객님의 다른 기기에서 WEHAGO Meet 접속정보가 확인되어 로그아웃 됩니다.';
           onClose = () => {
-            console.warn('로그아웃');
-            this._handleOnCloseAlert;
+            console.warn('취소2');
+            this._handleOnCloseAlert();
             resolve(false);
           };
           actions = [
             {
               name: '확인',
               action: () => {
-                onClose();
+                console.warn('확인');
+                this._handleOnCloseAlert();
                 resolve(false);
               }
             }

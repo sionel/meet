@@ -17,6 +17,7 @@ const mapStateToProps = state => ({
  * Connect - Dispatch to Props
  */
 const mapDispatchToProps = dispatch => ({
+  sessionCheck: session => dispatch(UserActions.sessionCheck(session)),
   onLogin: user => dispatch(UserActions.login(user)),
   onLogout: () => dispatch(UserActions.logout()),
   onDisconnect: () => dispatch(UserActions.disconnect()),

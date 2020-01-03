@@ -16,6 +16,8 @@ const TOGGLE_VISIBLE_APPINTRO = 'TOGGLE_VISIBLE_APPINTRO';
 
 const EVENT_LOG = 'EVENT_LOG';
 const NETWORK_DISCONNECT = 'NETWORK_DISCONNECT';
+
+const SESSION_CHECK = 'SESSION_CHECK';
 //#region Action Creators
 
 /**
@@ -114,6 +116,16 @@ function loginCheckRequest(
 /**
  * logout
  */
+function sessionCheck(session = true) {
+  return {
+    type: SESSION_CHECK,
+    session
+  };
+}
+
+/**
+ * logout
+ */
 function logout() {
   return {
     type: LOGOUT
@@ -202,7 +214,8 @@ const initialState = {
   permission: false,
   appIntro: false,
   isWehagoLogin: false,
-  log: {}
+  log: {},
+  session: true
 };
 
 //#endregion initialState
@@ -218,7 +231,8 @@ function reducer(state = initialState, action) {
         ...state,
         auth: action.auth,
         isLogin: true,
-        isWehagoLogin: action.isWehagoLogin
+        isWehagoLogin: action.isWehagoLogin,
+        session: true
       };
     // return applyTest(state, action);
     case LOGOUT:
@@ -240,6 +254,8 @@ function reducer(state = initialState, action) {
       return applyChangeCompany(state, action);
     case EVENT_LOG:
       return applyEventLog(state, action);
+    case SESSION_CHECK:
+      return { ...state, session: action.session };
     default:
       return state;
   }
@@ -311,7 +327,8 @@ const actionCreators = {
   agreement,
   changeCompany,
   changeCompanyRequest,
-  toggleVisibleAppIntro
+  toggleVisibleAppIntro,
+  sessionCheck
 };
 
 export { actionCreators };

@@ -12,7 +12,8 @@ import { actionCreators as WedriveAcionCreators } from '../redux/modules/wedrive
 // map state to props
 const mapStateToProps = state => ({
   auth: state.user.auth,
-  isLogin: state.user.isLogin
+  isLogin: state.user.isLogin,
+  session: state.user.session
 });
 
 // map dispatch to props
