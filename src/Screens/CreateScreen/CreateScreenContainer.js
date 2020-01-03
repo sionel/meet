@@ -196,6 +196,8 @@ class CreateScreenContainer extends React.Component {
       });
     } else if (createResult.resultCode === 400) {
       alert(createResult.resultMsg);
+    } else if (createResult.errors && createResult.errors.code === 'E002') {
+      this._handleRefresh();
     } else {
       alert('화상대화 생성에 실패하였습니다. 다시 시도해 주세요');
     }
@@ -230,7 +232,7 @@ class CreateScreenContainer extends React.Component {
         auth.HASH_KEY
       );
       if (!result.resultData) {
-        alert(result.resultMsg);
+        // alert(result.resultMsg);
         return;
       }
     }

@@ -8,6 +8,8 @@ import {
   View,
   Text,
   StyleSheet,
+  ScrollView,
+  RefreshControl,
   SectionList,
   SafeAreaView,
   Platform,
@@ -97,10 +99,16 @@ const CreateScreenPresenter = props => {
       <SearchForm onChange={props.onSearch} />
 
       {props.list.length < 1 ? (
-        <Placeholder
-          mainText="검색 결과가 없습니다."
-          subText={'위하고에서 위톡을 생성해 보세요'}
-        />
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={false} onRefresh={props.onRefresh} />
+          }
+        >
+          <Placeholder
+            mainText="검색 결과가 없습니다."
+            subText={'위하고에서 위톡을 생성해 보세요'}
+          />
+        </ScrollView>
       ) : (
         <SectionList
           keyExtractor={(item, index) => index.toString()}

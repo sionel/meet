@@ -580,6 +580,8 @@ class HomeScreenContainer extends Component {
       // 대화방에 참여한다.
       const videoRoomId = sendWetalkResult.resultData.chatList[0].mobile_key;
       this._handleRedirect('Conference', { item: { videoRoomId } });
+    } else if (createResult.errors && createResult.errors.code === 'E002') {
+      this._handleRefresh();
     } else {
       alert('화상대화 생성에 실패하였습니다. 다시 시도해 주세요');
     }
