@@ -56,6 +56,17 @@ import ico_increase from '../../assets/icons/palette/btn_docedit_incr_none.png';
 
 import person_icon from '../../assets/icons/img-vc-nophoto_2x.png';
 
+import btn_login_delete_none from '../../assets/icons/loginIcon/btn_login_delete_none.png';
+import btn_login_delete_press from '../../assets/icons/loginIcon/btn_login_delete_press.png';
+import btn_reload_none from '../../assets/icons/loginIcon/btn_reload_none.png';
+import btn_reload_press from '../../assets/icons/loginIcon/btn_reload_press.png';
+import checkbox_login_off from '../../assets/icons/loginIcon/checkbox_login_off.png';
+import checkbox_login_on from '../../assets/icons/loginIcon/checkbox_login_on.png';
+import img_login from '../../assets/icons/loginIcon/img_login.png';
+import loadIcon from '../../assets/icons/loginIcon/loadIcon.png';
+import logo_login from '../../assets/icons/loginIcon/logo_login.png';
+import btnTnaviHomeNone from '../../assets/icons/loginIcon/btnTnaviHomeNone.png';
+
 const CustomIcon = props => {
   return (
     <Image
@@ -170,6 +181,28 @@ const getButtonSource = name => {
       return buttonClose;
     case 'buttonMenu':
       return buttonMenu;
+    case 'buttonMenu':
+      return buttonMenu;
+    case 'btn_login_delete_none':
+      return btn_login_delete_none;
+    case 'btn_login_delete_press':
+      return btn_login_delete_press;
+    case 'btn_reload_none':
+      return btn_reload_none;
+    case 'btn_reload_press':
+      return btn_reload_press;
+    case 'checkbox_login_off':
+      return checkbox_login_off;
+    case 'checkbox_login_on':
+      return checkbox_login_on;
+    case 'img_login':
+      return img_login;
+    case 'loadIcon':
+      return loadIcon;
+    case 'logo_login':
+      return logo_login;
+    case 'btnTnaviHomeNone':
+      return btnTnaviHomeNone;
     default:
       return ico_etc;
   }

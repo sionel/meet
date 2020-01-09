@@ -1,705 +1,241 @@
-/**
- * LoginScreenPresenter
- *
- * 로그인페이지 프레젠터
- */
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-  ScrollView,
+  Platform,
+  Linking,
+  Alert,
+  Image,
+  StyleSheet,
   View,
   Text,
-  StyleSheet,
-  Image,
+  TouchableHighlight,
   TouchableOpacity,
-  Modal,
-  FlatList,
-  Platform,
-  StatusBar,
-  Dimensions,
-  Animated,
-  Easing,
-  Keyboard
+  ImageBackground
 } from 'react-native';
-import { FlatButton, TextField, CustomWebView } from '../../components';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import Orientation from 'react-native-orientation-locker';
-import DeviceInfo from 'react-native-device-info';
 
-const rootPath = `../../../assets`;
-const logo_login = require(`${rootPath}/logo_login.png`);
-const wehago_favicon = require(`${rootPath}/wehago_favicon.png`);
+import { CustomIcon, CustomLottie } from '../../components';
+// import { Text } from '../../components/StyledText';
+// import { NavigationEvents } from 'react-navigation';
 
-// const { width, height } = Dimensions.get('window');
-// const hasNotch = (
-//   Platform.OS === 'ios' &&
-//   !Platform.isPad &&
-//   !Platform.isTVOS &&
-//   (height === 812 || width === 812 || height === 896 || width === 896)
-// );
+export default function LoginScreenPresenter(props) {
+  const [waiting, setWaiting] = useState(true);
 
-/**
- * LoginScreenPresenter
- */
-const LoginScreenPresenter = props => {
-  const [isFocused, setIsFocused] = useState(false);
-  const { userId, userPwd, autoLoginFlag, webView } = props;
-  DeviceInfo.isTablet()
-    ? Orientation.unlockAllOrientations()
-    : Orientation.lockToPortrait();
+  const _handleLoginForWehago = () => {
+    const iosUrl = 'wehago://?wehagomeet=login';
+    const androidUrl = 'wehago://app?name=wehagomeet';
+    const iosMarketURL =
+      'http://itunes.apple.com/kr/app/wehago/id1363039300?mt=8';
+    const androidMarketURL =
+      'https://play.google.com/store/apps/details?id=com.duzon.android.lulubizpotal';
 
-  if (webView) {
+    Linking.openURL(Platform.OS === 'ios' ? iosUrl : androidUrl).catch(err => {
+      Linking.openURL(
+        Platform.OS === 'ios' ? iosMarketURL : androidMarketURL
+      ).catch(err => {
+        Alert.alert(
+          '스토어에서 해당 앱을 찾을 수 없습니다.',
+          '',
+          [{ text: 'OK' }],
+          {
+            cancelable: true
+          }
+        );
+      });
+    });
+  };
+
+  const _handleCheckUser = async () => {
+    const { auth, loginCheckRequest } = props;
+    if (auth.AUTH_A_TOKEN) {
+      const result = await loginCheckRequest(
+        auth.AUTH_A_TOKEN,
+        auth.AUTH_R_TOKEN,
+        auth.last_access_company_no,
+        auth.HASH_KEY,
+        props.isWehagoLogin
+      );
+
+      setTimeout(() => {
+        if (result.errors) {
+          switch (result.errors.code) {
+            case 'E002':
+              setWaiting(false);
+              return Alert.alert(
+                '로그아웃',
+                '고객님의 다른 기기에서 전자결재앱 접속정보가 확인되어 로그아웃 됩니다.'
+              );
+            default:
+              return setWaiting(false);
+          }
+        } else {
+          return props.screenProps.handleOnLogin();
+        }
+      }, 1000);
+    } else {
+      return setTimeout(() => {
+        setWaiting(false);
+      }, 1000);
+    }
+  };
+
+  useEffect(() => {
+    _handleCheckUser();
+  }, []);
+
+  if (waiting) {
+    Orientation.unlockAllOrientations();
     return (
-      <CustomWebView
-        view={webView}
-        contentTitle="약관 및 정책"
-        buttonTitle="확인"
-        url="https://www.wehago.com/#/common/policy"
-        onClickButton={() => props.onChangeValue('webView', false)}
-      />
+      <View style={{ flex: 1, backgroundColor: '#fff' }}>
+        <CustomLottie
+          source={'waiting'}
+          containerStyle={{ backgroundColor: 'transparent' }}
+          width={225}
+          height={225}
+        >
+          {/* <LoginFailAlert
+            modal={modal}
+            modalText={modalText}
+            onCancelTryLogin={this._handleCancelTryLogin}
+          /> */}
+        </CustomLottie>
+      </View>
     );
   }
 
-  const rotate = new Animated.Value(0);
-  const spin = rotate.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0deg', '360deg']
-  });
-  const spinning = Animated.loop(
-    Animated.timing(rotate, {
-      toValue: 1,
-      duration: 1000,
-      useNativeDriver: true,
-      easing: Easing.out(Easing.poly(1))
-    })
-  );
-
-  if (props.logging) {
-    spinning.start();
-  } else {
-    spinning.stop();
-  }
-
-  /**
-   * RETURN
-   */
-
-  const mainView = (
-    <View
+  return (
+    <ImageBackground
+      source={require('../../../assets/bgIntroWehagoIphoneX_3x.png')}
       style={{
         flex: 1,
-        alignItems: 'center',
         width: '100%',
-        height: props.height - (StatusBar.currentHeight || 0)
+        height: '100%',
+        backgroundColor: 'transparent',
+        alignItems: 'center'
       }}
-      // onTouchStart={() => {
-      //   console.log(isFocused)
-      //   isFocused && Keyboard.dismiss()
-      // }}
     >
-      <TouchableOpacity
-        activeOpacity={1}
-        style={{ flex: 1, width: '100%', alignItems: 'center' }}
-        onPress={() => Keyboard.dismiss()}
-      >
-        {/* TITLE */}
-        <View style={styles.topArea}>
-          {/* <Text style={styles.logo}>WEHAGO</Text> */}
-          <Image
-            style={{
-              width: 200,
-              height: 64
-            }}
-            source={logo_login}
-            resizeMode="contain"
-          />
-        </View>
+      {/* <NavigationEvents
+        onWillFocus={payload => {
+          setFocus(true);
+        }}
+        onWillBlur={() => setFocus(false)}
+      /> */}
 
-        {/* INPUTS */}
-        <View style={styles.middleArea}>
-          <TextField
-            placeholder={'아이디'}
-            width={285}
-            height={40}
-            onChange={text => props.onChangeValue('userId', text)}
-            value={userId}
-            onSubmit={'inputPwd'}
-            onFocus={() => setIsFocused(true)}
-            refs={'inputId'}
-          />
-          <TextField
-            placeholder={'패스워드'}
-            width={285}
-            height={40}
-            secret={true}
-            onChange={text => props.onChangeValue('userPwd', text)}
-            onSubmit={props.onEnterKeyDown}
-            onFocus={() => setIsFocused(true)}
-            value={userPwd}
-            refs={'inputPwd'}
-          />
-        </View>
-
-        {/* Login BUTTONS */}
-        <View style={styles.bottomArea}>
-          <FlatButton
-            title={'로그인'}
-            color={
-              props.userId && props.userPwd.length > 7 ? '#fff' : '#818181'
-            }
-            backgroundColor={
-              props.userId && props.userPwd.length > 7 ? '#1C90FB' : '#E1E1E1'
-            }
-            borderColor={
-              props.userId && props.userPwd.length > 7 ? '#1C90FB' : '#E1E1E1'
-            }
-            borderWidth={1}
-            width={295}
-            height={52}
-            borderRadius={30}
-            onClick={
-              props.userPwd.length > 7
-                ? () => props.onLogin()
-                : () =>
-                    props.onActivateModal('아이디와 패스워드를 확인해 주세요')
-            }
-          >
-            {props.logging && (
-              <View
-                style={{
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}
-              >
-                <Animated.View
-                  style={{
-                    transform: [{ rotate: spin }],
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}
-                >
-                  <Icon name="spinner" size={20} color="#fff" />
-                </Animated.View>
-              </View>
-            )}
-          </FlatButton>
-        </View>
-
-        {/* Login with WEHAGO BUTTONS */}
-        <View style={styles.bottomArea2}>
-          <FlatButton
-            title={'WEHAGO 앱으로 로그인'}
-            width={295}
-            height={52}
-            borderRadius={5}
-            color={'#fff'}
-            backgroundColor={'#1C90FB'}
-            borderColor={'#1C90FB'}
-            borderWidth={1}
-            customStyle={{ flexDirection: 'row' }}
-            onClick={props.onLoginisWehagoLogin}
-          >
-            <Image
-              style={{
-                width: 24,
-                height: 24,
-                marginRight: 5
-              }}
-              source={wehago_favicon}
-            />
-            <Text
-              style={{
-                color: '#fff',
-                fontFamily: 'DOUZONEText30',
-                fontSize: 14
-              }}
-            >
-              WEHAGO 앱으로 로그인
+      <View style={styles.container}>
+        <View style={styles.topContainer}>
+          <Text style={{ color: '#fff', fontSize: 24, fontWeight: '100' }}>
+            {`언제 어디서나\n편리한 결재관리 경험\n`}
+            <Text style={{ fontSize: 24, fontWeight: 'bold' }}>
+              WEHAGO 전자결재
             </Text>
-          </FlatButton>
-          <Text
-            style={{
-              paddingTop: 12,
-              paddingBottom: 15,
-              textAlign: 'center',
-              color: 'rgb(51,51,51)',
-              fontFamily: 'DOUZONEText30',
-              fontSize: 11.5
-            }}
-          >
-            WEHAGO 앱이 설치되어 있다면 바로 시작하세요.
           </Text>
         </View>
-      </TouchableOpacity>
-    </View>
-  );
-  return (
-    <View style={styles.container}>
-      <StatusBar
-        barStyle={'dark-content'}
-        backgroundColor={'#fff'}
-        hidden={false}
-      />
 
-      {Platform.OS === 'ios' ? (
-        mainView
-      ) : (
-        <ScrollView style={{ width: '100%', height: props.height }}>
-          {mainView}
-        </ScrollView>
-      )}
+        <View style={styles.middleContainer}>
+          {/* <Image
+            source={require('../../assets/icons/imgElectronicapp.png')}
+            style={{ width: 180, height: 180 }}
+          /> */}
+        </View>
 
-      {/* 모달 */}
-      <Modal
-        animationType="slide"
-        visible={props.modal}
-        transparent={true}
-        animationType="fade"
-        onRequestClose={() => props.onActivateModal('', false)}
-      >
+        <View style={styles.bottomContainer}>
+          <TouchableHighlight
+            activeOpacity={0.6}
+            underlayColor={'#197cdc88'}
+            onPress={() => {
+              _handleLoginForWehago();
+            }}
+            style={styles.loginButton}
+          >
+            <>
+              <CustomIcon
+                name={'btnTnaviHomeNone'}
+                width={24}
+                height={24}
+                style={{ marginRight: 5.5 }}
+              />
+              <Text style={styles.loginButtonText}>WEHAGO 앱으로 로그인</Text>
+            </>
+          </TouchableHighlight>
+
+          <TouchableOpacity
+            activeOpacity={1}
+            onPress={() => {
+              props.navigation.navigate({
+                routeName: 'LoginInput',
+                params: {
+                  ...props.screenProps
+                }
+              });
+            }}
+          >
+            <Text style={styles.loginNavigation}>직접 입력해서 로그인</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      {/* {!focus && (
         <View
-          style={[
-            styles.modalWrap,
-            {
-              paddingTop:
-                0 + (props.hasNotch ? 24 : 0) + (Platform.OS === 'ios' ? 12 : 0)
-            }
-          ]}
-        >
-          <View style={{ flexDirection: 'row' }}>
-            <View style={styles.modalContents}>
-              <Text
-                style={[styles.modalMessage, { fontFamily: 'DOUZONEText30' }]}
-              >
-                {props.modalText}
-              </Text>
-            </View>
-            <TouchableOpacity
-              style={styles.modalCloseButton}
-              onPress={() => props.onActivateModal('', false)}
-            >
-              <Icon name="times" size={20} color="#fff" />
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
-
-      {/* 권한 컨펌모달 */}
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={!props.permissionModal}
-        blurRadius={1}
-        onRequestClose={props.onAgreement}
-      >
-        {/* <Modal animationType="fade" transparent={true} visible={!props.permissionModal} blurRadius={1}> */}
-        <View style={styles.permission_modalWrap}>
-          <View style={styles.permission_modalContentWrap}>
-            <View style={styles.permission_modalMessage}>
-              <Text
-                style={{
-                  fontSize: 15,
-                  // color: '#1C90FB',
-                  color: 'rgb(51,51,51)',
-                  marginBottom: 10,
-                  fontFamily: 'DOUZONEText30'
-                }}
-              >
-                {'WEHAGO Meet\n앱 이용을 위한 권한 안내'}
-              </Text>
-              <View
-                style={{
-                  borderTopWidth: 1,
-                  // borderBottomWidth: 1,
-                  borderColor: 'rgb(200,200,200)',
-                  paddingTop: 18,
-                  paddingBottom: 15
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 12,
-                    color: '#1C90FB',
-                    fontFamily: 'DOUZONEText50'
-                  }}
-                >
-                  필수적 접근권한
-                </Text>
-                <View
-                  style={{
-                    // backgroundColor: '#f1f1f1',
-                    marginTop: 8,
-                    marginBottom: 12,
-                    paddingTop: 5
-                  }}
-                >
-                  <FlatList
-                    data={[
-                      {
-                        key: '0',
-                        title: '카메라',
-                        description: '사진 및 동영상 촬영, QR코드 스캔',
-                        icon: 'camera'
-                      },
-                      {
-                        key: '1',
-                        title: '마이크',
-                        description: '화상대화 내 음성 전송',
-                        icon: 'microphone'
-                      },
-                      {
-                        key: '2',
-                        title: '기기 및 앱기록',
-                        description: '앱서비스 최적화 및 기기오류',
-                        icon: 'cogs'
-                      }
-                    ]}
-                    renderItem={({ item }) => (
-                      <View
-                        style={{
-                          width: '100%',
-                          flexDirection: 'row'
-                        }}
-                      >
-                        <View
-                          style={{
-                            flex: 2,
-                            marginBottom: 10,
-                            justifyContent: 'center',
-                            alignItems: 'center'
-                          }}
-                        >
-                          <View
-                            style={{
-                              padding: 10,
-                              width: 40,
-                              height: 40,
-                              borderRadius: 50,
-                              backgroundColor: 'rgb(28,144,251)',
-                              justifyContent: 'center',
-                              alignItems: 'center'
-                            }}
-                          >
-                            <Icon name={item.icon} size={17} color="#fff" />
-                          </View>
-                        </View>
-                        <View
-                          style={{
-                            flex: 8,
-                            height: 40,
-                            paddingLeft: 8,
-                            justifyContent: 'center'
-                          }}
-                        >
-                          <Text
-                            style={{
-                              fontSize: 12,
-                              marginBottom: 3.5,
-                              fontFamily: 'DOUZONEText30'
-                            }}
-                          >
-                            {item.title}
-                          </Text>
-                          <Text
-                            style={{
-                              fontSize: 11,
-                              color: 'rgb(114,125,134)',
-                              fontFamily: 'DOUZONEText30'
-                            }}
-                          >
-                            {item.description}
-                          </Text>
-                        </View>
-                      </View>
-                    )}
-                  />
-                </View>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    color: '#1C90FB',
-                    fontFamily: 'DOUZONEText50'
-                  }}
-                >
-                  선택적 접근권한
-                </Text>
-                <View
-                  style={{
-                    // backgroundColor: '#f1f1f1',
-                    marginTop: 8,
-                    // marginBottom: 12,
-                    paddingTop: 5
-                  }}
-                >
-                  <FlatList
-                    data={[
-                      {
-                        key: '1',
-                        title: '알림',
-                        description: '푸시 알림 등록 및 수신',
-                        icon: 'bell'
-                      }
-                    ]}
-                    renderItem={({ item }) => (
-                      <View
-                        style={{
-                          width: '100%',
-                          flexDirection: 'row'
-                        }}
-                      >
-                        <View
-                          style={{
-                            flex: 2,
-                            marginBottom: 10,
-                            justifyContent: 'center',
-                            alignItems: 'center'
-                          }}
-                        >
-                          <View
-                            style={{
-                              padding: 10,
-                              width: 40,
-                              height: 40,
-                              borderRadius: 50,
-                              backgroundColor: 'rgb(28,144,251)',
-                              justifyContent: 'center',
-                              alignItems: 'center'
-                            }}
-                          >
-                            <Icon name={item.icon} size={17} color="#fff" />
-                          </View>
-                        </View>
-                        <View
-                          style={{
-                            flex: 8,
-                            height: 40,
-                            paddingLeft: 8,
-                            justifyContent: 'center'
-                          }}
-                        >
-                          <Text
-                            style={{
-                              fontSize: 12,
-                              marginBottom: 3.5,
-                              fontFamily: 'DOUZONEText30'
-                            }}
-                          >
-                            {item.title}
-                          </Text>
-                          <Text
-                            style={{
-                              fontSize: 11,
-                              color: 'rgb(114,125,134)',
-                              fontFamily: 'DOUZONEText30'
-                            }}
-                          >
-                            {item.description}
-                          </Text>
-                        </View>
-                      </View>
-                    )}
-                  />
-                </View>
-
-                <Text
-                  style={{
-                    fontSize: 11,
-                    textAlign: 'left',
-                    color: 'rgb(129, 168, 200)',
-                    fontFamily: 'DOUZONEText30'
-                  }}
-                >
-                  선택적 접근권한은 해당 기능 사용 시 동의가 필요하며 미동의
-                  시에도 서비스 이용가능합니다.
-                </Text>
-
-                <View
-                  style={{
-                    marginTop: 15,
-                    borderTopWidth: 1,
-                    borderColor: 'rgba(0,0,0,0.12)'
-                  }}
-                >
-                  <Text
-                    style={{
-                      paddingTop: 12,
-                      fontSize: 12,
-                      textAlign: 'left',
-                      fontFamily: 'DOUZONEText30'
-                    }}
-                  >
-                    접근권한 변경 방법:&nbsp;
-                    <Text style={{ color: 'rgb(114, 125, 134)' }}>
-                      휴대폰 설정 > WEHAGO Meet
-                    </Text>
-                  </Text>
-                </View>
-                {/* <Text style={{ fontSize: 16, // fontWeight: '500' }}>이용약관 및 법률고지</Text>
-								<View
-									style={{
-										// backgroundColor: '#f1f1f1',
-										marginTop: 8,
-										marginBottom: 12
-										// padding: 10
-									}}
-								>
-									<FlatButton
-										height={40}
-										borderRadius={0}
-										color={'#333'}
-										borderWidth={1}
-										borderColor={'#c8c8c8'}
-										backgroundColor={'none'}
-										onClick={() => props.onChangeValue('webView', true)}
-										title="이용약관 보기"
-									/>
-									<FlatButton
-										height={40}
-										borderRadius={0}
-										color={'#333'}
-										borderWidth={1}
-										borderColor={'#c8c8c8'}
-										backgroundColor={'none'}
-										customStyle={{ borderTopWidth: 0 }}
-										onClick={() => props.onChangeValue('webView', true)}
-										title="법률고지 보기"
-									/>
-								</View> */}
-              </View>
-            </View>
-            <View style={styles.permission_modalButtons}>
-              <TouchableOpacity
-                style={{
-                  ...styles.permission_modalButton,
-                  ...styles.permission_modalButtonConfirm
-                }}
-                // onPress={() => props.onChangeValue('permissionModal', false)}
-                onPress={props.onAgreement}
-              >
-                <Text style={{ color: '#fff', fontFamily: 'DOUZONEText50' }}>
-                  확인
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
-
-      {/* 웹뷰모달 */}
-
-      {/* <CustomWebView
-				view={webView}
-				contentTitle="약관 및 정책"
-				buttonTitle="확인"
-				url="https://www.wehago.com/#/common/policy"
-			/> */}
-    </View>
+          style={[StyleSheet.absoluteFill, { backgroundColor: '#00000060' }]}
+        />
+      )} */}
+    </ImageBackground>
   );
-};
+}
 
-/**
- * styles
- */
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    // alignItems: 'center',
-    width: '100%'
-  },
-
-  topArea: {
-    flex: 0.75,
-    paddingTop: 100,
-    justifyContent: 'flex-start'
-  },
-  logo: { fontSize: 33, color: '#333' },
-
-  middleArea: {
-    flex: 3,
-    justifyContent: 'center'
-  },
-
-  bottomArea: {
-    flex: 4,
-    justifyContent: 'flex-start'
-  },
-  bottomArea2: {
-    flex: 2,
-    justifyContent: 'center'
-  },
-
-  listContainer: {
     width: '100%',
-    padding: '3%'
+    height: '100%',
+    alignItems: 'center'
   },
-
-  modalWrap: {
-    // paddingTop: props.hasNotch ? 32 : 0,
-    backgroundColor: '#F15F5F',
-    justifyContent: 'space-between'
+  topContainer: {
+    flex: 1,
+    width: 290,
+    paddingTop: 112
+    // paddingLeft: 40
   },
-  modalContents: {
-    // flex: 5,
+  middleContainer: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center'
+  },
+  bottomContainer: {
     flex: 1,
     justifyContent: 'center',
-    paddingTop: 17,
-    paddingBottom: 17,
-    paddingLeft: 17
+    alignItems: 'center'
   },
-  modalMessage: { color: '#fff', fontSize: 15 },
-  modalCloseButton: {
-    // flex: 1,
-    width: 40,
-    justifyContent: 'center',
-    // alignItems: 'flex-end',
-    paddingRight: 17
-    // backgroundColor: '#FF8383'
-  },
-
-  permission_modalWrap: {
-    // marginTop: 22,
-    flex: 1,
+  loginButton: {
+    flexDirection: 'row',
+    // width: '100%',
+    width: 290,
+    height: 50,
+    // paddingHorizontal: 59,
+    borderRadius: 25,
+    backgroundColor: '#197cdc',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0, .75)'
+    marginVertical: 10,
+    ...Platform.select({
+      ios: {
+        shadowColor: 'black',
+        shadowOffset: { width: 3, height: 6 },
+        shadowOpacity: 0.1,
+        shadowRadius: 9
+      },
+      android: {
+        elevation: 5
+      }
+    })
   },
-
-  permission_modalContentWrap: {
-    backgroundColor: '#fff',
-    width: '100%',
-    maxWidth: 300,
-    padding: 0,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5
+  loginButtonText: {
+    color: '#fff',
+    fontSize: 14
   },
-
-  permission_modalMessage: {
-    paddingTop: 15,
-    paddingBottom: 10,
-    paddingLeft: 20,
-    paddingRight: 20
-    // borderWidth: 1,
-    // borderColor: '#1C90FB'
-  },
-
-  permission_modalButtons: { flexDirection: 'row' },
-  permission_modalButton: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingTop: 15,
-    paddingBottom: 15,
-    marginBottom: -1
-  },
-  permission_modalButtonCancel: { backgroundColor: '#f1f1f1' },
-  permission_modalButtonConfirm: { backgroundColor: '#1C90FB' }
+  loginNavigation: {
+    marginTop: 40,
+    color: '#fff',
+    fontSize: 13,
+    textDecorationLine: 'underline'
+  }
 });
-
-export default LoginScreenPresenter;

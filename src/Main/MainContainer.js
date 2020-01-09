@@ -8,7 +8,8 @@ import { Alert, Linking, Platform, ToastAndroid } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 
 import MainPresenter from './MainPresenter';
-import LoginScreen from '../Screens/LoginScreen';
+import LoginNavigation from '../Navigations/LoginNavigation';
+// import LoginRoute from '../Routes/LoginRoute';
 import AppIntroSlide from '../components/AppIntroSlide';
 import { CustomAlert } from '../components';
 
@@ -93,13 +94,15 @@ class MainContainer extends Component {
             onAlert={this._handleOnAlert}
           />
         ) : (
-          <LoginScreen
-            handleOnLogin={this._handleOnLogin}
-            handleSaveUserinfo={this._handleSaveUserinfo}
-            url={this.props.url}
-            rootTag={this.props.rootTag}
-            alert={this.state.alert}
-            onAlert={this._handleOnAlert}
+          <LoginNavigation
+            screenProps={{
+              handleOnLogin: this._handleOnLogin,
+              handleSaveUserinfo: this._handleSaveUserinfo,
+              url: this.props.url,
+              rootTag: this.props.rootTag,
+              alert: this.state.alert,
+              onAlert: this._handleOnAlert
+            }}
           />
         )}
 

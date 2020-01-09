@@ -61,10 +61,12 @@ const getToken = async accessUrl => {
  * --
  * JSON형태로 데이터를 전송할수없음 => urlencoded방식으로 전달
  */
-const login = async (user, access_pass) => {
+const login = async (user, captcha, access_pass) => {
   try {
     const date = new Date().getTime();
-    const url = `/auth/login/mobile?timestamp=${date}`;
+    const url = captcha
+      ? '/auth/login/exceed'
+      : `/auth/login/mobile?timestamp=${date}`;
     const getTokenResult = await getToken(`${url}`);
     const encText = url + getTokenResult.cur_date + getTokenResult.token;
     const hashText = CryptoJS.SHA256(encText);
@@ -84,7 +86,8 @@ const login = async (user, access_pass) => {
         login_ip: user.login_ip,
         login_os: user.login_os,
         login_device: user.login_device,
-        login_browser: user.login_browser
+        login_browser: user.login_browser,
+        login_type: 'MOBILE'
       })
     };
 
@@ -141,7 +144,7 @@ const check = async (a_token, r_token, cno, HASH_KEY) => {
       headers
     });
     const responseJson = await response.json();
-    console.warn('CHECK API : ', responseJson);
+    // console.warn('CHECK API : ', responseJson);
 
     return responseJson;
   } catch (errors) {
