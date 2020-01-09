@@ -411,7 +411,8 @@ const styles = StyleSheet.create({
     // fontWeight: 'bold',
     fontSize: 16,
     fontFamily: 'DOUZONEText50',
-    textAlign: 'center'
+    textAlign: 'center',
+    fontStyle: 'italic'
   },
   refresh: {
     marginLeft: 6,
@@ -484,6 +485,6 @@ const styles = StyleSheet.create({
     marginRight: 8,
     color: '#fff',
     fontSize: 15,
-    fontStyle: 'italic'
+    fontFamily: 'DOUZONEText50'
   }
 });

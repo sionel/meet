@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   ImageBackground
 } from 'react-native';
+import DeviceInfo from 'react-native-device-info';
 import Orientation from 'react-native-orientation-locker';
 
 import { CustomIcon, CustomLottie } from '../../components';
@@ -22,7 +23,7 @@ export default function LoginScreenPresenter(props) {
 
   const _handleLoginForWehago = () => {
     const iosUrl = 'wehago://?wehagomeet=login';
-    const androidUrl = 'wehago://app?name=wehagomeet';
+    const androidUrl = 'wehago://app?name=meet';
     const iosMarketURL =
       'http://itunes.apple.com/kr/app/wehago/id1363039300?mt=8';
     const androidMarketURL =
@@ -79,11 +80,15 @@ export default function LoginScreenPresenter(props) {
   };
 
   useEffect(() => {
+    const isTablet = DeviceInfo.isTablet();
+    isTablet
+      ? Orientation.unlockAllOrientations()
+      : Orientation.lockToPortrait();
+
     _handleCheckUser();
   }, []);
 
   if (waiting) {
-    Orientation.unlockAllOrientations();
     return (
       <View style={{ flex: 1, backgroundColor: '#fff' }}>
         <CustomLottie
@@ -126,7 +131,7 @@ export default function LoginScreenPresenter(props) {
             style={{
               color: '#fff',
               fontSize: 24,
-              fontWeight: '100',
+              // fontWeight: '100',
               fontFamily: 'DOUZONEText30'
             }}
           >
@@ -134,7 +139,7 @@ export default function LoginScreenPresenter(props) {
             <Text
               style={{
                 fontSize: 24,
-                fontWeight: 'bold',
+                // fontWeight: 'bold',
                 fontFamily: 'DOUZONEText50'
               }}
             >
@@ -146,7 +151,7 @@ export default function LoginScreenPresenter(props) {
         <View style={styles.middleContainer}>
           <Image
             source={require('../../../assets/imgMeet.png')}
-            style={{ width: 200, height: 200 }}
+            style={{ width: 180, height: 180 }}
           />
         </View>
 
