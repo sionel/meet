@@ -398,6 +398,7 @@ const styles = StyleSheet.create({
   },
   captchaMessageText: {
     fontSize: 10,
+    fontFamily: 'DOUZONEText30',
     color: '#505050'
   },
   captchaArea: {
@@ -407,8 +408,9 @@ const styles = StyleSheet.create({
   },
   captchaText: {
     color: '#000',
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     fontSize: 16,
+    fontFamily: 'DOUZONEText50',
     textAlign: 'center'
   },
   refresh: {
@@ -433,11 +435,13 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     width: 285,
     color: '#333',
-    fontSize: 15
+    fontSize: 15,
+    fontFamily: 'DOUZONEText30'
   },
   loginFailedText: {
     color: 'red',
-    fontSize: 10
+    fontSize: 10,
+    fontFamily: 'DOUZONEText30'
   },
   buttonContainer: {
     // position: 'absolute',
@@ -480,6 +484,6 @@ const styles = StyleSheet.create({
     marginRight: 8,
     color: '#fff',
     fontSize: 15,
-    fontStyle: 'italic',
+    fontStyle: 'italic'
   }
 });

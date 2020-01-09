@@ -122,19 +122,32 @@ export default function LoginScreenPresenter(props) {
 
       <View style={styles.container}>
         <View style={styles.topContainer}>
-          <Text style={{ color: '#fff', fontSize: 24, fontWeight: '100' }}>
-            {`언제 어디서나\n편리한 결재관리 경험\n`}
-            <Text style={{ fontSize: 24, fontWeight: 'bold' }}>
-              WEHAGO 전자결재
+          <Text
+            style={{
+              color: '#fff',
+              fontSize: 24,
+              fontWeight: '100',
+              fontFamily: 'DOUZONEText30'
+            }}
+          >
+            {`시간과 장소의 제약 없는\n효율적인 화상회의\n`}
+            <Text
+              style={{
+                fontSize: 24,
+                fontWeight: 'bold',
+                fontFamily: 'DOUZONEText50'
+              }}
+            >
+              WEHAGO Meet
             </Text>
           </Text>
         </View>
 
         <View style={styles.middleContainer}>
-          {/* <Image
-            source={require('../../assets/icons/imgElectronicapp.png')}
-            style={{ width: 180, height: 180 }}
-          /> */}
+          <Image
+            source={require('../../../assets/imgMeet.png')}
+            style={{ width: 200, height: 200 }}
+          />
         </View>
 
         <View style={styles.bottomContainer}>
@@ -230,12 +243,14 @@ const styles = StyleSheet.create({
   },
   loginButtonText: {
     color: '#fff',
-    fontSize: 14
+    fontSize: 14,
+    fontFamily: 'DOUZONEText30'
   },
   loginNavigation: {
     marginTop: 40,
     color: '#fff',
     fontSize: 13,
+    fontFamily: 'DOUZONEText30',
     textDecorationLine: 'underline'
   }
 });
