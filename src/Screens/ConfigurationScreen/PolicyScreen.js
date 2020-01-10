@@ -12,7 +12,7 @@ import { CustomIcon } from '../../components';
 import { useSelector } from 'react-redux';
 
 export default function PolicyScreen(props) {
-  // const { navigation } = props;
+  const { navigation } = props;
   const auth = useSelector(state => state.user['auth']);
   const membership = auth.last_company.membership_code;
 
@@ -34,6 +34,13 @@ export default function PolicyScreen(props) {
           ? Linking.openURL('https://www.wehagot.com/#/common/policy?code=002')
           : Linking.openURL('https://www.wehago.com/#/common/policy?code=002');
       }
+    },
+    openSource: {
+      title: '오픈소스 라이선스',
+      rightSide: <CustomIcon name={'btn_next'} width={24} height={24} />,
+      action: () => {
+        navigation.navigate('OpenSource');
+      }
     }
   };
 
@@ -48,7 +55,13 @@ export default function PolicyScreen(props) {
             onPress={config[item].action}
             style={styles.columnContainer}
           >
-            <Text style={{ flex: 1, marginHorizontal: 5 }}>
+            <Text
+              style={{
+                flex: 1,
+                fontFamily: 'DOUZONEText30',
+                marginHorizontal: 5
+              }}
+            >
               {config[item].title}
             </Text>
             {config[item].rightSide}

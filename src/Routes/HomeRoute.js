@@ -19,6 +19,7 @@ import HomeScreen from '../Screens/HomeScreen';
 import ConfigurationScreen from '../Screens/ConfigurationScreen';
 import PolicyScreen from '../Screens/ConfigurationScreen/PolicyScreen';
 import AwardsScreen from '../Screens/ConfigurationScreen/AwardsScreen';
+import OpenSourceScreen from '../Screens/ConfigurationScreen/OpenSourceScreen';
 import CreateScreen from '../Screens/CreateScreen';
 
 /** Components */
@@ -200,7 +201,7 @@ const HomeRoute = createStackNavigator(
     },
     /**
      * Policy
-     * 수상 및 인증내역
+     * 이용약관
      */
     Policy: {
       screen: PolicyScreen,
@@ -220,6 +221,19 @@ const HomeRoute = createStackNavigator(
       navigationOptions: ({ navigation }) => ({
         headerTitle: <RouteTitle title={'수상 및 인증내역'} />,
         headerLeft: <BackButton navigation={navigation} to={'Configuration'} />,
+        headerTintColor: '#fff',
+        headerStyle: commonStyle
+      })
+    },
+    /**
+     * Awards
+     * 수상 및 인증내역
+     */
+    OpenSource: {
+      screen: OpenSourceScreen,
+      navigationOptions: ({ navigation }) => ({
+        headerTitle: <RouteTitle title={'오픈소스 라이선스'} />,
+        headerLeft: <BackButton navigation={navigation} to={'Policy'} />,
         headerTintColor: '#fff',
         headerStyle: commonStyle
       })
