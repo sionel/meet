@@ -17,6 +17,7 @@ import CustomIcon from './../components/CustomIcon';
 /** Screens */
 import HomeScreen from '../Screens/HomeScreen';
 import ConfigurationScreen from '../Screens/ConfigurationScreen';
+import PolicyScreen from '../Screens/ConfigurationScreen/PolicyScreen';
 import AwardsScreen from '../Screens/ConfigurationScreen/AwardsScreen';
 import CreateScreen from '../Screens/CreateScreen';
 
@@ -193,6 +194,19 @@ const HomeRoute = createStackNavigator(
       navigationOptions: ({ navigation }) => ({
         headerTitle: <RouteTitle title={'설정'} />,
         headerLeft: <BackButton navigation={navigation} to={'Home'} />,
+        headerTintColor: '#fff',
+        headerStyle: commonStyle
+      })
+    },
+    /**
+     * Policy
+     * 수상 및 인증내역
+     */
+    Policy: {
+      screen: PolicyScreen,
+      navigationOptions: ({ navigation }) => ({
+        headerTitle: <RouteTitle title={'이용약관 및 법률정보'} />,
+        headerLeft: <BackButton navigation={navigation} to={'Configuration'} />,
         headerTintColor: '#fff',
         headerStyle: commonStyle
       })

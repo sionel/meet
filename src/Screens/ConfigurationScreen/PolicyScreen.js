@@ -1,0 +1,75 @@
+import React from 'react';
+import {
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  FlatList,
+  Linking,
+  Text
+} from 'react-native';
+
+import { CustomIcon } from '../../components';
+import { useSelector } from 'react-redux';
+
+export default function PolicyScreen(props) {
+  // const { navigation } = props;
+  const auth = useSelector(state => state.user['auth']);
+  const membership = auth.last_company.membership_code;
+
+  const config = {
+    terms: {
+      title: 'WEHAGO 이용약관',
+      rightSide: <CustomIcon name={'btn_next'} width={24} height={24} />,
+      action: () => {
+        membership === 'WT1'
+          ? Linking.openURL('https://www.wehagot.com/#/common/policy')
+          : Linking.openURL('https://www.wehago.com/#/common/policy');
+      }
+    },
+    policy: {
+      title: '개인정보 보호정책',
+      rightSide: <CustomIcon name={'btn_next'} width={24} height={24} />,
+      action: () => {
+        membership === 'WT1'
+          ? Linking.openURL('https://www.wehagot.com/#/common/policy?code=002')
+          : Linking.openURL('https://www.wehago.com/#/common/policy?code=002');
+      }
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <FlatList
+        data={Object.keys(config)}
+        keyExtractor={item => item}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            activeOpacity={0.6}
+            onPress={config[item].action}
+            style={styles.columnContainer}
+          >
+            <Text style={{ flex: 1, marginHorizontal: 5 }}>
+              {config[item].title}
+            </Text>
+            {config[item].rightSide}
+          </TouchableOpacity>
+        )}
+      />
+    </View>
+  );
+}
+
+PolicyScreen.defaultProps = {};
+
+const styles = StyleSheet.create({
+  container: { flex: 1 },
+  columnContainer: {
+    flexDirection: 'row',
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: '#ececec',
+    paddingHorizontal: 10
+  }
+});

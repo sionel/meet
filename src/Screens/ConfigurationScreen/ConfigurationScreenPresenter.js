@@ -28,28 +28,36 @@ const ConfigurationScreenPresenter = props => {
     //   title: "onDestroyToken",
     //   action: () => props.onDestroyToken()
     // },
-    {
-      title: '이용약관',
-      action: () => {
-        props.onChangeValue('subUrl', '?code=001');
-        props.onChangeValue('webView', true);
-      },
-      nextPage: true
-    },
-    {
-      title: '개인정보 처리방침',
-      action: () => {
-        props.onChangeValue('subUrl', '?code=002');
-        props.onChangeValue('webView', true);
-      },
-      nextPage: true
-    },
+    // {
+    //   title: '이용약관',
+    //   action: () => {
+    //     props.onChangeValue('subUrl', '?code=001');
+    //     props.onChangeValue('webView', true);
+    //   },
+    //   nextPage: true
+    // },
+    // {
+    //   title: '개인정보 처리방침',
+    //   action: () => {
+    //     props.onChangeValue('subUrl', '?code=002');
+    //     props.onChangeValue('webView', true);
+    //   },
+    //   nextPage: true
+    // },
     {
       title: '버전정보',
+      icon: 'ico_menu_info',
       content: Platform.OS === 'ios' ? '1.24.10' : '1.2.1'
     },
     {
+      title: '이용약관 및 법률정보',
+      icon: 'ico_menu_info_law',
+      action: () => props.navigation.navigate('Policy'),
+      nextPage: true
+    },
+    {
       title: '수상 및 인증내역',
+      icon: 'icoMenuTrophy',
       action: () => props.navigation.navigate('Awards'),
       nextPage: true
     },
@@ -63,6 +71,7 @@ const ConfigurationScreenPresenter = props => {
     // },
     {
       title: '로그아웃',
+      icon: 'ico_menu_login',
       action: () => props.onChangeValue('alert', true)
     }
   ];
@@ -72,16 +81,22 @@ const ConfigurationScreenPresenter = props => {
       <View style={{ flex: 1, width: '100%' }}>
         <SectionList
           sections={[{ title: '시스템', data: userConfig }]}
-          renderSectionHeader={({ section }) => (
-            <SectionListHeader title={section.title} />
-          )}
+          renderSectionHeader={({ section }) =>
+            // <SectionListHeader title={section.title} />
+            null
+          }
           renderItem={({ item }, index) => (
             <TouchableOpacity
               key={index}
               onPress={item.action}
+              activeOpacity={0.6}
               style={styles.listItem}
             >
-              <Text style={styles.item}>{item.title}</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <CustomIcon name={item.icon} width={24} height={24} />
+                <Text style={styles.item}>{item.title}</Text>
+              </View>
+
               {item.content ? (
                 <Text style={[styles.item, styles.content]}>
                   {item.content}
@@ -101,7 +116,7 @@ const ConfigurationScreenPresenter = props => {
         />
       </View>
 
-      <Modal
+      {/* <Modal
         animationType="slide"
         transparent={true}
         visible={webView}
@@ -122,7 +137,7 @@ const ConfigurationScreenPresenter = props => {
           url={'https://www.wehago.com/#/common/policy' + props.subUrl}
           onClickButton={() => props.onChangeValue('webView', false)}
         />
-      </Modal>
+      </Modal> */}
 
       <CustomAlert
         visible={props.alert}
@@ -159,7 +174,7 @@ const styles = StyleSheet.create({
 
   listItem: {
     flexDirection: 'row',
-    height: 44,
+    height: 50,
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 10,
@@ -167,6 +182,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#ececec'
   },
   item: {
+    marginLeft: 6,
     fontSize: 14,
     fontFamily: 'DOUZONEText30'
   },

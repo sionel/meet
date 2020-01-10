@@ -68,6 +68,18 @@ import loadIcon from '../../assets/icons/loginIcon/loadIcon.png';
 import logo_login from '../../assets/icons/loginIcon/logo_login.png';
 import btnTnaviHomeNone from '../../assets/icons/loginIcon/btnTnaviHomeNone.png';
 
+import ico_menu_alert from '../../assets/icons/settingIcon/ico_menu_alert.png';
+import ico_menu_auto_login from '../../assets/icons/settingIcon/ico_menu_auto_login.png';
+import ico_menu_info_law from '../../assets/icons/settingIcon/ico_menu_info_law.png';
+import ico_menu_info from '../../assets/icons/settingIcon/ico_menu_info.png';
+import ico_menu_login from '../../assets/icons/settingIcon/ico_menu_login.png';
+import ico_menu_passw_lock from '../../assets/icons/settingIcon/ico_menu_passw_lock.png';
+import ico_menu_passw from '../../assets/icons/settingIcon/ico_menu_passw.png';
+import ico_menu_person_info from '../../assets/icons/settingIcon/ico_menu_person_info.png';
+import ico_menu_rsakey from '../../assets/icons/settingIcon/ico_menu_rsakey.png';
+import ico_menu_wifi from '../../assets/icons/settingIcon/ico_menu_wifi.png';
+import icoMenuTrophy from '../../assets/icons/settingIcon/icoMenuTrophy.png';
+
 const CustomIcon = props => {
   return (
     <Image
@@ -206,6 +218,29 @@ const getButtonSource = name => {
       return logo_login;
     case 'btnTnaviHomeNone':
       return btnTnaviHomeNone;
+    // settingIcon
+    case 'ico_menu_alert':
+      return ico_menu_alert;
+    case 'ico_menu_auto_login':
+      return ico_menu_auto_login;
+    case 'ico_menu_info_law':
+      return ico_menu_info_law;
+    case 'ico_menu_info':
+      return ico_menu_info;
+    case 'ico_menu_login':
+      return ico_menu_login;
+    case 'ico_menu_passw_lock':
+      return ico_menu_passw_lock;
+    case 'ico_menu_passw':
+      return ico_menu_passw;
+    case 'ico_menu_person_info':
+      return ico_menu_person_info;
+    case 'ico_menu_rsakey':
+      return ico_menu_rsakey;
+    case 'ico_menu_wifi':
+      return ico_menu_wifi;
+    case 'icoMenuTrophy':
+      return icoMenuTrophy;
     default:
       return ico_etc;
   }
