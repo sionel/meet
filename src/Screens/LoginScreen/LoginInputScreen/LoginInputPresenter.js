@@ -14,12 +14,24 @@ import {
   Animated,
   Easing,
   Text,
-  TextInput
+  TextInput,
+  Dimensions
 } from 'react-native';
 // import { LinearGradient } from 'expo-linear-gradient';
 
 // import { Text, TextInput } from '../../../components/StyledText';
 import { CustomIcon } from '../../../components';
+
+// 동글동글한 하단 이미지
+const { width, height } = Dimensions.get('screen');
+const bottomImage = require('../../../../assets/img_login.png');
+const bottomImageWidth = 750;
+const bottomImageHeight = 450;
+let scale = 1; // 이미지 크기 비율
+if (bottomImageWidth > width) scale = width / bottomImageWidth;
+if (bottomImageHeight > height) scale = height / bottomImageWidth;
+else if (width < height) scale = width / bottomImageWidth;
+else if (width > height) scale = height / bottomImageWidth;
 
 export default function LoginInputPresenter(props) {
   const {
@@ -79,12 +91,12 @@ export default function LoginInputPresenter(props) {
           }}
           style={styles.mainContainer}
         >
-          <View style={styles.topContainer}>
+          <>
             <CustomIcon
               name="logo_login"
               width={224}
               height={42}
-              style={{ marginTop: 150 }}
+              // style={{ marginTop: 150 }}
             />
 
             <View style={{ marginTop: captcha ? 35 : 116 }}>
@@ -282,8 +294,7 @@ export default function LoginInputPresenter(props) {
                   }}
                 >
                   <>
-                    <Text style={styles.loginButtonText}>로그인</Text>
-                    {logging && (
+                    {logging ? (
                       <Animated.View
                         style={{
                           transform: [{ rotate: spin }],
@@ -293,6 +304,8 @@ export default function LoginInputPresenter(props) {
                       >
                         <CustomIcon name={'loadIcon'} width={20} height={20} />
                       </Animated.View>
+                    ) : (
+                      <Text style={styles.loginButtonText}>로그인</Text>
                     )}
                   </>
                 </TouchableHighlight>
@@ -330,9 +343,28 @@ export default function LoginInputPresenter(props) {
                 </TouchableHighlight>
               </LinearGradient> */}
             </View>
-          </View>
+          </>
         </TouchableOpacity>
       </KeyboardAvoidingView>
+
+      <View
+        style={{
+          position: 'absolute',
+          zIndex: -1,
+          bottom: 0,
+          left: 0,
+          right: 0,
+          alignItems: 'center'
+        }}
+      >
+        <Image
+          source={bottomImage}
+          style={{
+            width: bottomImageWidth * scale,
+            height: bottomImageHeight * scale
+          }}
+        />
+      </View>
       {/* </ImageBackground> */}
     </View>
   );
@@ -387,11 +419,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  topContainer: {
-    flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center'
-  },
+  // topContainer: {
+  //   flex: 1,
+  //   justifyContent: 'flex-start',
+  //   alignItems: 'center'
+  // },
   captchaMessageView: {
     width: 320,
     marginVertical: 20
