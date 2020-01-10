@@ -17,6 +17,7 @@ import CustomIcon from './../components/CustomIcon';
 /** Screens */
 import HomeScreen from '../Screens/HomeScreen';
 import ConfigurationScreen from '../Screens/ConfigurationScreen';
+import AwardsScreen from '../Screens/ConfigurationScreen/AwardsScreen';
 import CreateScreen from '../Screens/CreateScreen';
 
 /** Components */
@@ -135,7 +136,7 @@ const HomeDrwawer = createDrawerNavigator(
   {
     initialRouteName: 'Home',
     drawerWidth: Math.min(height, width) * 0.75,
-    overlayColor : '#00000090',
+    overlayColor: '#00000090',
     contentComponent: ({ navigation }) => (
       <DrawerContent navigation={navigation} />
     )
@@ -192,6 +193,19 @@ const HomeRoute = createStackNavigator(
       navigationOptions: ({ navigation }) => ({
         headerTitle: <RouteTitle title={'설정'} />,
         headerLeft: <BackButton navigation={navigation} to={'Home'} />,
+        headerTintColor: '#fff',
+        headerStyle: commonStyle
+      })
+    },
+    /**
+     * Awards
+     * 수상 및 인증내역
+     */
+    Awards: {
+      screen: AwardsScreen,
+      navigationOptions: ({ navigation }) => ({
+        headerTitle: <RouteTitle title={'수상 및 인증내역'} />,
+        headerLeft: <BackButton navigation={navigation} to={'Configuration'} />,
         headerTintColor: '#fff',
         headerStyle: commonStyle
       })

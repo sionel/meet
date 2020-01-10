@@ -55,6 +55,7 @@ import ico_decrease from '../../assets/icons/palette/btn_docedit_redu_none.png';
 import ico_increase from '../../assets/icons/palette/btn_docedit_incr_none.png';
 
 import person_icon from '../../assets/icons/img-vc-nophoto_2x.png';
+import btn_next from '../../assets/icons/btn_next.png';
 
 import btn_login_delete_none from '../../assets/icons/loginIcon/btn_login_delete_none.png';
 import btn_login_delete_press from '../../assets/icons/loginIcon/btn_login_delete_press.png';
@@ -177,6 +178,8 @@ const getButtonSource = name => {
       return ico_increase;
     case 'personIcon':
       return person_icon;
+    case 'btn_next':
+      return btn_next;
     case 'buttonClose':
       return buttonClose;
     case 'buttonMenu':

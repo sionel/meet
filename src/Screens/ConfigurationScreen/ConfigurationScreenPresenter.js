@@ -17,7 +17,8 @@ import {
 import {
   CustomWebView,
   CustomAlert,
-  SectionListHeader
+  SectionListHeader,
+  CustomIcon
 } from '../../components';
 
 const ConfigurationScreenPresenter = props => {
@@ -32,25 +33,25 @@ const ConfigurationScreenPresenter = props => {
       action: () => {
         props.onChangeValue('subUrl', '?code=001');
         props.onChangeValue('webView', true);
-      }
+      },
+      nextPage: true
     },
     {
       title: '개인정보 처리방침',
       action: () => {
         props.onChangeValue('subUrl', '?code=002');
         props.onChangeValue('webView', true);
-      }
+      },
+      nextPage: true
     },
     {
       title: '버전정보',
       content: Platform.OS === 'ios' ? '1.24.10' : '1.2.1'
-      // action: () =>
-      //   Alert.alert(
-      //     '버전정보',
-      //     Platform.OS === 'ios' ? '1.0.2' : '0.1.0',
-      //     [{ text: 'OK' }],
-      //     { cancelable: true }
-      //   )
+    },
+    {
+      title: '수상 및 인증내역',
+      action: () => props.navigation.navigate('Awards'),
+      nextPage: true
     },
     // {
     // 	title: '앱인트로 보기',
@@ -78,10 +79,16 @@ const ConfigurationScreenPresenter = props => {
             <TouchableOpacity
               key={index}
               onPress={item.action}
-              style={{ flexDirection: 'row', justifyContent: 'space-between' }}
+              style={styles.listItem}
             >
               <Text style={styles.item}>{item.title}</Text>
-              <Text style={[styles.item, styles.content]}>{item.content}</Text>
+              {item.content ? (
+                <Text style={[styles.item, styles.content]}>
+                  {item.content}
+                </Text>
+              ) : item.nextPage ? (
+                <CustomIcon name={'btn_next'} width={24} height={24} />
+              ) : null}
             </TouchableOpacity>
           )}
           keyExtractor={(item, index) => index}
@@ -150,10 +157,17 @@ const styles = StyleSheet.create({
     padding: '3%'
   },
 
-  item: {
-    padding: 10,
-    fontSize: 14,
+  listItem: {
+    flexDirection: 'row',
     height: 44,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ececec'
+  },
+  item: {
+    fontSize: 14,
     fontFamily: 'DOUZONEText30'
   },
   content: {
