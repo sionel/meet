@@ -19,7 +19,7 @@ export default function AwardsScreen(props) {
       <ScrollView style={styles.list}>
         <View style={[styles.card, { marginTop: 15 }]}>
           <Image
-            source={require('../../../assets/logoCsap.png')}
+            source={require('../../../../assets/logoCsap.png')}
             style={styles.img}
           />
           <Text
@@ -73,7 +73,7 @@ export default function AwardsScreen(props) {
         </View>
         <View style={styles.card}>
           <Image
-            source={require('../../../assets/logoAppqward2019.png')}
+            source={require('../../../../assets/logoAppqward2019.png')}
             style={styles.img}
           />
           <Text

@@ -8,7 +8,7 @@ import {
   Text
 } from 'react-native';
 
-import { CustomIcon } from '../../components';
+import { CustomIcon } from '../../../components';
 import { useSelector } from 'react-redux';
 
 export default function PolicyScreen(props) {

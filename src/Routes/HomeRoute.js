@@ -17,9 +17,10 @@ import CustomIcon from './../components/CustomIcon';
 /** Screens */
 import HomeScreen from '../Screens/HomeScreen';
 import ConfigurationScreen from '../Screens/ConfigurationScreen';
-import PolicyScreen from '../Screens/ConfigurationScreen/PolicyScreen';
-import AwardsScreen from '../Screens/ConfigurationScreen/AwardsScreen';
-import OpenSourceScreen from '../Screens/ConfigurationScreen/OpenSourceScreen';
+import PolicyScreen from '../Screens/ConfigurationScreen/subScreens/PolicyScreen';
+import AwardsScreen from '../Screens/ConfigurationScreen/subScreens/AwardsScreen';
+import OpenSourceScreen from '../Screens/ConfigurationScreen/subScreens/OpenSourceScreen';
+import OpenSourceDetailScreen from '../Screens/ConfigurationScreen/subScreens/OpenSourceDetailScreen';
 import CreateScreen from '../Screens/CreateScreen';
 
 /** Components */
@@ -226,14 +227,27 @@ const HomeRoute = createStackNavigator(
       })
     },
     /**
-     * Awards
-     * 수상 및 인증내역
+     * OpenSource
+     * 오픈소스 라이선스
      */
     OpenSource: {
       screen: OpenSourceScreen,
       navigationOptions: ({ navigation }) => ({
         headerTitle: <RouteTitle title={'오픈소스 라이선스'} />,
         headerLeft: <BackButton navigation={navigation} to={'Policy'} />,
+        headerTintColor: '#fff',
+        headerStyle: commonStyle
+      })
+    },
+    /**
+     * OpenSourceDetail
+     * 오픈소스 라이선스 웹뷰
+     */
+    OpenSourceDetail: {
+      screen: OpenSourceDetailScreen,
+      navigationOptions: ({ navigation }) => ({
+        headerTitle: <RouteTitle title={'오픈소스 라이선스'} />,
+        headerLeft: <BackButton navigation={navigation} to={'OpenSource'} />,
         headerTintColor: '#fff',
         headerStyle: commonStyle
       })
