@@ -64,7 +64,7 @@ public class JitsiMeetActivity extends FragmentActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        SplashScreen.show(this, R.style.SplashScreenTheme);
+        // SplashScreen.show(this, R.style.SplashScreenTheme);
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_jitsi_meet);

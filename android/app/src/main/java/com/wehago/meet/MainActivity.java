@@ -90,7 +90,7 @@ public class MainActivity extends JitsiMeetActivity {
         // Set default options
         JitsiMeetConferenceOptions defaultOptions
             = new JitsiMeetConferenceOptions.Builder()
-                .setWelcomePageEnabled(true)
+                .setWelcomePageEnabled(false)
                 // .setServerURL(buildURL("https://meet.jit.si"))
                 .build();
         JitsiMeet.setDefaultConferenceOptions(defaultOptions);

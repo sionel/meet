@@ -30,9 +30,9 @@ class MainContainer extends Component {
   };
 
   componentDidMount() {
-    setTimeout(() => {
-      Platform.OS !== 'ios' && SplashScreen.hide();
-    }, 1000);
+    // setTimeout(() => {
+    //   Platform.OS !== 'ios' && SplashScreen.hide();
+    // }, 1000);
 
     this.props.setInitInfo();
     this.props.setSharingMode();

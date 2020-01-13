@@ -31,6 +31,7 @@
 
 -             (BOOL)application:(UIApplication *)application
   didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    // [NSThread sleepForTimeInterval:3.0]; // LaunchScreen 딜레이
 
     // Initialize Crashlytics and Firebase if a valid GoogleService-Info.plist file was provided.
     if ([FIRUtilities appContainsRealServiceInfoPlist]) {

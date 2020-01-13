@@ -1,44 +1,100 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES">
-    <device id="retina5_9" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina5_5" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="DOUZONEText30.ttf">
+            <string>DOUZONEText30</string>
+        </array>
+        <array key="DOUZONEText50.ttf">
+            <string>DOUZONEText50</string>
+        </array>
+    </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="iN0-l3-epB">
-            <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+        <view contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="716"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="fill" text="WEHAGO Meet" textAlignment="center" adjustsFontForContentSizeCategory="YES" minimumFontSize="25" translatesAutoresizingMaskIntoConstraints="NO" id="xl3-LK-P5h">
-                    <rect key="frame" x="0.0" y="720" width="375" height="33"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
-                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <fontDescription key="fontDescription" name="Arial-BoldMT" family="Arial" pointSize="17"/>
-                    <textInputTraits key="textInputTraits"/>
-                </textField>
-                <imageView opaque="NO" userInteractionEnabled="NO" contentMode="center" image="LaunchScreen" translatesAutoresizingMaskIntoConstraints="NO" id="4B8-Xf-NDE">
-                    <rect key="frame" x="0.0" y="0.0" width="375" height="662"/>
+                <imageView autoresizesSubviews="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" insetsLayoutMarginsFromSafeArea="NO" image="IntroWehago" translatesAutoresizingMaskIntoConstraints="NO" id="C6b-hO-TS2">
+                    <rect key="frame" x="-15" y="-35" width="443" height="751"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                 </imageView>
+                <imageView opaque="NO" userInteractionEnabled="NO" contentMode="center" image="LaunchScreen" translatesAutoresizingMaskIntoConstraints="NO" id="4B8-Xf-NDE">
+                    <rect key="frame" x="135" y="276" width="144" height="142"/>
+                </imageView>
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="시간과 장소에 제약 없는" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XdE-CI-AcA">
+                    <rect key="frame" x="66" y="112" width="280" height="31"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <fontDescription key="fontDescription" name="DOUZONEText30" family="DOUZONE Text" pointSize="21"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                </textView>
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="효율적인 화상회의" translatesAutoresizingMaskIntoConstraints="NO" id="syr-LB-l9h">
+                    <rect key="frame" x="66" y="140" width="280" height="31"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <fontDescription key="fontDescription" name="DOUZONEText30" family="DOUZONE Text" pointSize="21"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                </textView>
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="WEHAGO Meet" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xj3-WG-1GO">
+                    <rect key="frame" x="66" y="170" width="280" height="31"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <fontDescription key="fontDescription" name="DOUZONEText50" family="DOUZONE Text" pointSize="21"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                </textView>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="logoAppqward2019" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZYs-Ty-U5b">
+                    <rect key="frame" x="135" y="593" width="37" height="60"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                </imageView>
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" usesAttributedText="YES" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5hp-pV-Wcv">
+                    <rect key="frame" x="180" y="602" width="126" height="42"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <attributedString key="attributedText">
+                        <fragment content="스마트앱어워드2019">
+                            <attributes>
+                                <color key="NSColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <font key="NSFont" size="10.5" name="DOUZONEText30"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                            </attributes>
+                        </fragment>
+                        <fragment content="     ">
+                            <attributes>
+                                <color key="NSColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <font key="NSFont" size="11" name="DOUZONEText30"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                            </attributes>
+                        </fragment>
+                        <fragment content="기능서비스부분 통합대상">
+                            <attributes>
+                                <color key="NSColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <font key="NSFont" size="10.5" name="DOUZONEText30"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                            </attributes>
+                        </fragment>
+                    </attributedString>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                </textView>
             </subviews>
             <color key="backgroundColor" red="0.07843137" green="0.46666667000000001" blue="0.86666666999999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="4B8-Xf-NDE" secondAttribute="bottom" constant="150" id="aFF-BR-glX"/>
-                <constraint firstItem="4B8-Xf-NDE" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="glR-YN-1GF"/>
-                <constraint firstAttribute="trailing" secondItem="4B8-Xf-NDE" secondAttribute="trailing" id="tva-gl-jRX"/>
-                <constraint firstItem="4B8-Xf-NDE" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="yaV-1V-oEh"/>
+                <constraint firstItem="4B8-Xf-NDE" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="08Y-Ov-hqq"/>
+                <constraint firstItem="4B8-Xf-NDE" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="8qg-82-ct6"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <modalPageSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="544.79999999999995" y="452.95566502463055"/>
+            <point key="canvasLocation" x="543.47826086956525" y="452.44565217391306"/>
         </view>
     </objects>
     <resources>
+        <image name="IntroWehago" width="375" height="812.66668701171875"/>
         <image name="LaunchScreen" width="144" height="144"/>
+        <image name="logoAppqward2019" width="58.666667938232422" height="80.333335876464844"/>
     </resources>
 </document>

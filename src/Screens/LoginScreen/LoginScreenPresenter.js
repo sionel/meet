@@ -15,6 +15,8 @@ import DeviceInfo from 'react-native-device-info';
 import Orientation from 'react-native-orientation-locker';
 
 import { CustomIcon, CustomLottie } from '../../components';
+import LaunchScreen from '../LaunchScreen';
+const bg = require('../../../assets/bgIntroWehagoIphoneX_3x.png');
 // import { Text } from '../../components/StyledText';
 // import { NavigationEvents } from 'react-navigation';
 
@@ -90,31 +92,32 @@ export default function LoginScreenPresenter(props) {
 
   if (waiting) {
     return (
-      <View style={{ flex: 1, backgroundColor: '#fff' }}>
-        <CustomLottie
+      <View style={{ flex: 1, backgroundColor: '#379bd8' }}>
+        {/* <CustomLottie
           source={'waiting'}
           containerStyle={{ backgroundColor: 'transparent' }}
           width={225}
           height={225}
-        >
-          {/* <LoginFailAlert
+        > */}
+        {/* <LoginFailAlert
             modal={modal}
             modalText={modalText}
             onCancelTryLogin={this._handleCancelTryLogin}
           /> */}
-        </CustomLottie>
+        {/* </CustomLottie> */}
+        <LaunchScreen bg={bg} />
       </View>
     );
   }
 
   return (
     <ImageBackground
-      source={require('../../../assets/bgIntroWehagoIphoneX_3x.png')}
+      source={bg}
       style={{
         flex: 1,
         width: '100%',
         height: '100%',
-        backgroundColor: 'transparent',
+        backgroundColor: '#379bd8',
         alignItems: 'center'
       }}
     >

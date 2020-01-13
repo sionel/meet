@@ -20,6 +20,7 @@
 		695AF3ED6F686F9C5EE40F9A /* libPods-jitsi-meet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 489E8EFE2C720D10F5961AEF /* libPods-jitsi-meet.a */; };
 		A0931BAD48C8E5662885DDC6 /* libPods-jitsi-meet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 489E8EFE2C720D10F5961AEF /* libPods-jitsi-meet.a */; };
 		B753A84E2318DB4B003F9592 /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = B753A84D2318DB4B003F9592 /* Fonts */; };
+		B773AA0E23CC60EC00047498 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B773AA0D23CC60EC00047498 /* Launch Screen.storyboard */; };
 		DE4C456121DE1E4E00EA0709 /* FIRUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = DE4C455F21DE1E4E00EA0709 /* FIRUtilities.m */; };
 /* End PBXBuildFile section */
 
@@ -75,6 +76,7 @@
 		1A8AAD3E332248076EAFF455 /* Pods-jitsi-meet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-jitsi-meet.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-jitsi-meet/Pods-jitsi-meet.debug.xcconfig"; sourceTree = "<group>"; };
 		489E8EFE2C720D10F5961AEF /* libPods-jitsi-meet.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-jitsi-meet.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B753A84D2318DB4B003F9592 /* Fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Fonts; path = ../Fonts; sourceTree = "<group>"; };
+		B773AA0D23CC60EC00047498 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = "Launch Screen.storyboard"; path = "../../Launch Screen.storyboard"; sourceTree = "<group>"; };
 		B79E0FF92316497C0020C27C /* app.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = app.entitlements; sourceTree = "<group>"; };
 		B7D753BE231CCB1B00342182 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		B7D753BF231CCB1B00342182 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Interface.strings; sourceTree = "<group>"; };
@@ -141,6 +143,7 @@
 		13B07FAE1A68108700A75B9A /* src */ = {
 			isa = PBXGroup;
 			children = (
+				B773AA0D23CC60EC00047498 /* Launch Screen.storyboard */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				DE4C456021DE1E4E00EA0709 /* FIRUtilities.h */,
@@ -270,6 +273,7 @@
 				0B412F211EDEE95300B1A0A6 /* Main.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				B773AA0E23CC60EC00047498 /* Launch Screen.storyboard in Resources */,
 				B753A84E2318DB4B003F9592 /* Fonts in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
