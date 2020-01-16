@@ -119,6 +119,7 @@
     "redux-logger": "^3.0.6",
     "redux-persist": "^5.10.0",
     "redux-thunk": "2.2.0",
+    "rn-component": "git+http://git.duzon.com/peacejung/rn-component.git",
     "styled-components": "3.4.9",
     "underscore": "^1.9.1",
     "url-search-params-polyfill": "^7.0.0",
