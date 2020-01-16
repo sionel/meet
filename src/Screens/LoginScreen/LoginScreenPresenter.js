@@ -6,7 +6,6 @@ import {
   Image,
   StyleSheet,
   View,
-  Text,
   TouchableHighlight,
   TouchableOpacity,
   ImageBackground
@@ -16,6 +15,8 @@ import Orientation from 'react-native-orientation-locker';
 
 import { CustomIcon, CustomLottie } from '../../components';
 import LaunchScreen from '../LaunchScreen';
+import { StyledText } from 'rn-component';
+const { Text } = StyledText;
 const bg = require('../../../assets/bgIntroWehagoIphoneX_3x.png');
 // import { Text } from '../../components/StyledText';
 // import { NavigationEvents } from 'react-navigation';
@@ -134,16 +135,16 @@ export default function LoginScreenPresenter(props) {
             style={{
               color: '#fff',
               fontSize: 24,
-              // fontWeight: '100',
-              fontFamily: 'DOUZONEText30'
+              fontWeight: 'normal'
+              // fontFamily: 'DOUZONEText30'
             }}
           >
             {`시간과 장소의 제약 없는\n효율적인 화상회의\n`}
             <Text
               style={{
                 fontSize: 24,
-                // fontWeight: 'bold',
-                fontFamily: 'DOUZONEText50'
+                fontWeight: 'bold'
+                // fontFamily: 'DOUZONEText50'
               }}
             >
               WEHAGO Meet

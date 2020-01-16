@@ -94,6 +94,7 @@
 	<array>
 		<string>Fonts/AntDesign.ttf</string>
 		<string>Fonts/FontAwesome.ttf</string>
+		<string>Fonts/DOUZONEText10.ttf</string>
 		<string>Fonts/DOUZONEText30.ttf</string>
 		<string>Fonts/DOUZONEText50.ttf</string>
 	</array>
@@ -112,7 +113,7 @@
 		<string>armv7</string>
 	</array>
 	<key>UIStatusBarStyle</key>
-	<string>UIStatusBarStyleLightContent</string>
+	<string>UIStatusBarStyleDefault</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
