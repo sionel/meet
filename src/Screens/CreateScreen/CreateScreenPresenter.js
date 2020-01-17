@@ -6,7 +6,6 @@
 import React, { useState, useEffect } from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   ScrollView,
   RefreshControl,
@@ -22,9 +21,10 @@ import {
   SearchForm,
   Placeholder,
   CustomModal,
-  CustomAlert,
+  // CustomAlert,
   SectionListHeader
 } from '../../components';
+import { CustomAlert } from 'rn-component';
 
 /**
  * CreateScreenPresenter
@@ -210,18 +210,19 @@ const CreateScreenPresenter = props => {
         visible={props.modal}
         title={'화상대화 생성'}
         width={320}
-        description={'화상대화를 생성하시겠습니까?'}
-        actions={[
-          {
-            name: '취소',
-            action: () => props.onActivateModal(null)
-          },
-          {
-            name: '시작하기',
-            action: () => props.onCreateConference(props.selectedRoomId)
-          }
-        ]}
+        content={'화상대화를 생성하시겠습니까?'}
+        onConfirm={() => props.onCreateConference(props.selectedRoomId)}
         onClose={() => props.onActivateModal(null)}
+        // actions={[
+        //   {
+        //     name: '취소',
+        //     action: () => props.onActivateModal(null)
+        //   },
+        //   {
+        //     name: '시작하기',
+        //     action: () => props.onCreateConference(props.selectedRoomId)
+        //   }
+        // ]}
       />
     </View>
   );

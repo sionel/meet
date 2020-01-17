@@ -4,9 +4,10 @@ import {
   Image,
   StyleSheet,
   View,
-  Text,
   ImageBackground
 } from 'react-native';
+import { StyledText } from 'rn-component';
+const { Text } = StyledText;
 
 export default function LoginScreenPresenter(props) {
   return (
@@ -25,17 +26,14 @@ export default function LoginScreenPresenter(props) {
           <Text
             style={{
               color: '#fff',
-              fontSize: 24,
-              // fontWeight: '100',
-              fontFamily: 'DOUZONEText30'
+              fontSize: 24
             }}
           >
             {`시간과 장소의 제약 없는\n효율적인 화상회의\n`}
             <Text
               style={{
                 fontSize: 24,
-                // fontWeight: 'bold',
-                fontFamily: 'DOUZONEText50'
+                fontWeight: 'bold'
               }}
             >
               WEHAGO Meet
@@ -65,7 +63,6 @@ export default function LoginScreenPresenter(props) {
             <View style={{ justifyContent: 'center' }}>
               <Text
                 style={{
-                  fontFamily: 'DOUZONEText30',
                   fontSize: 10,
                   color: '#fff'
                 }}
@@ -74,7 +71,6 @@ export default function LoginScreenPresenter(props) {
               </Text>
               <Text
                 style={{
-                  fontFamily: 'DOUZONEText30',
                   fontSize: 11,
                   color: '#fff'
                 }}
