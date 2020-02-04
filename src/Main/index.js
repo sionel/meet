@@ -35,6 +35,7 @@ const mapDispatchToProps = dispatch => {
           isWehagoLogin
         )
       ),
+    onLogout: () => dispatch(UserActions.logout()),
     setSharingMode: () => dispatch(DocumentShareActions.setSharingMode()),
     setInitInfo: () => dispatch(WedriveAcionCreators.setInitInfo())
   };

@@ -384,8 +384,8 @@ class HomeScreenContainer extends Component {
     // 재 로그인
     if (checkResult.errors) {
       if (checkResult.errors.code === 'E002') {
-        this.props.sessionCheck(false);
-        return this.props.onLogout();
+        return this.props.sessionCheck(false);
+        // return this.props.onLogout();
       } else {
         return this.props.onDisconnect();
       }
