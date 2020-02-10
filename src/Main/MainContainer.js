@@ -10,15 +10,18 @@ import SplashScreen from 'react-native-splash-screen';
 import MainPresenter from './MainPresenter';
 import LoginNavigation from '../Navigations/LoginNavigation';
 // import LoginRoute from '../Routes/LoginRoute';
+import CompanySelect from '../components/CompanySelect';
 import AppIntroSlide from '../components/AppIntroSlide';
 import { CustomAlert } from '../components';
 
 // service
 import { querystringParser } from '../utils';
+import ServiceCheckApi from '../services/api/ServiceCheckApi';
 
 class MainContainer extends Component {
   state = {
     isLogin: false,
+    hasService: false,
     url: null,
     alert: {
       visible: false,
@@ -88,11 +91,15 @@ class MainContainer extends Component {
     return (
       <AppIntroSlide>
         {this.state.isLogin ? (
-          <MainPresenter
-            url={this.props.url}
-            alert={this.state.alert}
-            onAlert={this._handleOnAlert}
-          />
+          this.state.hasService ? (
+            <MainPresenter
+              url={this.props.url}
+              alert={this.state.alert}
+              onAlert={this._handleOnAlert}
+            />
+          ) : (
+            <CompanySelect />
+          )
         ) : (
           <LoginNavigation
             screenProps={{
@@ -204,8 +211,14 @@ class MainContainer extends Component {
    * 로그인 권한은 LoginScreen 이 가지고 있음
    * LoginScreen 에서 _handleOnLogin을 통해서 로그인 상태를 관리함
    */
-  _handleOnLogin = () => {
-    this.setState({ isLogin: true });
+  _handleOnLogin = async () => {
+    const resultService = await ServiceCheckApi.serviceCheck(
+      this.props.auth,
+      this.props.auth.last_company
+    );
+    console.warn(resultService);
+
+    this.setState({ isLogin: true, hasService: resultService });
   };
 
   /**

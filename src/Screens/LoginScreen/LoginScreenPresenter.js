@@ -64,10 +64,11 @@ export default function LoginScreenPresenter(props) {
           switch (result.errors.code) {
             case 'E002':
               setWaiting(false);
-              return Alert.alert(
-                '로그아웃',
-                '고객님의 다른 기기에서 전자결재앱 접속정보가 확인되어 로그아웃 됩니다.'
-              );
+              // return Alert.alert(
+              //   '로그아웃',
+              //   '고객님의 다른 기기에서 저 접속정보가 확인되어 로그아웃 됩니다.'
+              // );
+              return;
             default:
               return setWaiting(false);
           }
