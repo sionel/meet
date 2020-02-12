@@ -21,8 +21,9 @@ const serviceCheck = async (auth, company) => {
     const responseJson = await response.json();
     if (responseJson.resultCode === 200) {
       const hasService = responseJson.resultData.find(
-        service => service.service_code === 'communication'
+        service => service.service_code === 'webrtc'
       );
+      console.warn('hasService : webrtc', hasService);
       return true;
       return hasService ? true : false;
     } else {

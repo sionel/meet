@@ -139,6 +139,7 @@ const HomeDrwawer = createDrawerNavigator(
   {
     initialRouteName: 'Home',
     // drawerWidth: Math.min(height, width) * 0.75,
+    drawerPosition: 'right',
     overlayColor: '#00000090',
     contentComponent: ({ navigation }) => (
       <DrawerContent navigation={navigation} />
@@ -162,7 +163,7 @@ const HomeRoute = createStackNavigator(
         gesturesEnabled: false,
         headerStyle: commonStyle,
         // headerRight: (
-        headerLeft: (
+        headerRight: (
           // Platform.OS === 'ios' &&
           <TouchableOpacity
             onPress={() => {
