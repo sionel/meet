@@ -6,8 +6,6 @@
 	<array>
 		<string>applinks:beta.meet.jit.si</string>
 		<string>applinks:meet.jit.si</string>
-		<string>webcredentials:wehago.com</string>
-		<string>applinks:wehago.com</string>
 	</array>
 	<key>com.apple.developer.siri</key>
 	<true/>
