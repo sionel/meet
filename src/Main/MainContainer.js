@@ -216,7 +216,6 @@ class MainContainer extends Component {
       this.props.auth,
       this.props.auth.last_company
     );
-    console.warn(resultService);
 
     this.setState({ isLogin: true, hasService: resultService });
   };
