@@ -3,11 +3,14 @@ import fetch from './Fetch';
 
 const serviceCheck = async (auth, company) => {
   try {
+    const service_code = 'webrtc';
     const params = serialize({
+      service_code,
       cno: company.company_no,
       ccode: company.company_code
     });
     const url = `${wehagoBaseURL}/common/layout/service/deployed/to-company-user?${params}`;
+    // const url = `${wehagoBaseURL}/common/company/deploy/whether/employee?${params}`;
     const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY } = auth;
 
     // 두번째 url 에서 mu 값을 string->json 처리 후 pageurl 에서 마지막 파라미터 추출
@@ -20,12 +23,13 @@ const serviceCheck = async (auth, company) => {
 
     const responseJson = await response.json();
     if (responseJson.resultCode === 200) {
-      const hasService = responseJson.resultData.find(
-        service => service.service_code === 'webrtc'
-      );
-      console.warn('hasService : webrtc', hasService);
+      // const hasService = responseJson.resultData.isServiceDeploy === 'T';
+      // responseJson.resultData.find(
+      //   service => service.service_code === 'webrtc'
+      // );
+      console.warn('hasService : webrtc', responseJson.resultData);
       return true;
-      return hasService ? true : false;
+      // return hasService;
     } else {
       return false;
     }

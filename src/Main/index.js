@@ -13,6 +13,7 @@ import { actionCreators as WedriveAcionCreators } from '../redux/modules/wedrive
 const mapStateToProps = state => ({
   auth: state.user.auth,
   isLogin: state.user.isLogin,
+  isWehagoLogin: state.user.isWehagoLogin,
   session: state.user.session
 });
 

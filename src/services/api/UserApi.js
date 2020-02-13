@@ -143,10 +143,14 @@ const check = async (a_token, r_token, cno, HASH_KEY) => {
       method: 'GET',
       headers
     });
+
     const responseJson = await response.json();
     // console.warn('CHECK API : ', responseJson);
 
-    return responseJson;
+    return {
+      status: response.status,
+      ...responseJson
+    };
   } catch (errors) {
     console.warn('errors', errors);
     if (errors.message === 'timeout') {

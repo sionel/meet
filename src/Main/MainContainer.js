@@ -65,7 +65,9 @@ class MainContainer extends Component {
     }
 
     if (nextProps.session !== this.props.session && !nextProps.session) {
-      this._handleOnAlert(2);
+      this.props.isWehagoLogin
+        ? this._handleOnAlert(3)
+        : this._handleOnAlert(2);
     }
 
     if (!nextProps.isLogin) {
@@ -136,7 +138,6 @@ class MainContainer extends Component {
           description =
             '고객님의 다른 기기에서 WEHAGO를 사용하고 있습니다. 기존 접속을 종료하시고 새로 접속하시겠습니까?';
           onClose = () => {
-            console.warn('취소1');
             this._handleOnCloseAlert();
             resolve(false);
           };
@@ -152,7 +153,6 @@ class MainContainer extends Component {
             {
               name: '확인',
               action: () => {
-                console.warn('확인');
                 this._handleOnCloseAlert();
                 resolve(true);
               }
@@ -163,16 +163,46 @@ class MainContainer extends Component {
           description =
             '고객님의 다른 기기에서 WEHAGO 접속정보가 확인되어 로그아웃 됩니다.';
           onClose = async () => {
-            console.warn('취소2');
-            this._handleOnCloseAlert(() => this.props.onLogout());
+            this._handleOnCloseAlert(
+              () =>
+                JSON.stringify(this.props.auth) !== '{}' &&
+                this.props.onLogout()
+            );
             resolve(false);
           };
           actions = [
             {
               name: '확인',
               action: () => {
-                console.warn('확인');
-                this._handleOnCloseAlert(() => this.props.onLogout());
+                this._handleOnCloseAlert(
+                  () =>
+                    JSON.stringify(this.props.auth) !== '{}' &&
+                    this.props.onLogout()
+                );
+                resolve(false);
+              }
+            }
+          ];
+          break;
+        case 3:
+          description = 'WEHAGO 에서 로그아웃 하였습니다.';
+          onClose = async () => {
+            this._handleOnCloseAlert(
+              () =>
+                JSON.stringify(this.props.auth) !== '{}' &&
+                this.props.onLogout()
+            );
+            resolve(false);
+          };
+          actions = [
+            {
+              name: '확인',
+              action: () => {
+                this._handleOnCloseAlert(
+                  () =>
+                    JSON.stringify(this.props.auth) !== '{}' &&
+                    this.props.onLogout()
+                );
                 resolve(false);
               }
             }
@@ -274,9 +304,11 @@ class MainContainer extends Component {
 
     if (result.errors) {
       if (result.errors.code === 'E002') {
-        if (isWehagoLogin) Alert.alert('Login', '토큰이 만료되었습니다.');
+        if (isWehagoLogin) this._handleOnAlert(3);
         else this._handleOnAlert(2);
-      } else if (result.errors.code === '401') {
+      } else if (result.errors.status === '400') {
+        Alert.alert('Login', '로그인 정보가 잘못되었습니다.');
+      } else if (result.errors.status === '401') {
         Alert.alert('Login', '권한이 없습니다.');
       } else {
         Alert.alert('Login', '사소한 문제가 발생했습니다. 다시 시도해주세요.');
