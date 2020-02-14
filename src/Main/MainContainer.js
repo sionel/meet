@@ -310,8 +310,10 @@ class MainContainer extends Component {
         Alert.alert('Login', '로그인 정보가 잘못되었습니다.');
       } else if (result.errors.status === '401') {
         Alert.alert('Login', '권한이 없습니다.');
+      } else if (result.errors.message === 'timeout') {
+        Alert.alert('Login', `요청 시간을 초과했습니다. 다시 시도해주세요.`);
       } else {
-        Alert.alert('Login', '사소한 문제가 발생했습니다. 다시 시도해주세요.');
+        Alert.alert('Login', `사소한 문제가 발생했습니다. 다시 시도해주세요.`);
       }
       return;
     } else if (

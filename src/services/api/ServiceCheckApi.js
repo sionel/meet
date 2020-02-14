@@ -3,17 +3,19 @@ import fetch from './Fetch';
 
 const serviceCheck = async (auth, company) => {
   try {
+    const isSP = auth.last_company.membership_code === 'SP';
+    if (!isSP) return true;
+
     const service_code = 'webrtc';
     const params = serialize({
       service_code,
       cno: company.company_no,
       ccode: company.company_code
     });
-    const url = `${wehagoBaseURL}/common/layout/service/deployed/to-company-user?${params}`;
-    // const url = `${wehagoBaseURL}/common/company/deploy/whether/employee?${params}`;
+    // const url = `${wehagoBaseURL}/common/layout/service/deployed/to-company-user?${params}`;
+    const url = `${wehagoBaseURL}/common/company/deploy/whether/employee?${params}`;
     const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY } = auth;
 
-    // 두번째 url 에서 mu 값을 string->json 처리 후 pageurl 에서 마지막 파라미터 추출
     const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
 
     const response = await fetch(url, {
@@ -22,14 +24,10 @@ const serviceCheck = async (auth, company) => {
     });
 
     const responseJson = await response.json();
+
     if (responseJson.resultCode === 200) {
-      // const hasService = responseJson.resultData.isServiceDeploy === 'T';
-      // responseJson.resultData.find(
-      //   service => service.service_code === 'webrtc'
-      // );
-      console.warn('hasService : webrtc', responseJson.resultData);
-      return true;
-      // return hasService;
+      const hasService = responseJson.resultData.isServiceDeploy === 'T';
+      return hasService;
     } else {
       return false;
     }
