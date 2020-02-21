@@ -96,6 +96,7 @@ function loginCheckRequest(
         portal_id: checkResult.resultData.portal_id, // 아이디
         user_name: checkResult.resultData.user_name,
         user_default_email: checkResult.resultData.user_default_email,
+        user_email: checkResult.resultData.user_email,
         profile_url: checkResult.resultData.profile_url,
         user_contact: checkResult.resultData.user_contact,
         employee_list: checkResult.resultData.employee_list, // 회사정보
