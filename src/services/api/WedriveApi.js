@@ -82,7 +82,7 @@ const getList = async (authData, TokenID) => {
 /**
  * wedrive file 상세정보
  */
-const getFileInfo = async (authData, fileInfo) => {
+const getFileInfo = async (authData, fileInfo, isFullPreview = 'false') => {
   try {
     const url = `${wehagoBaseURL}/ObjectStorageCommon/services/common`;
     const headers = securityRequest(
@@ -101,13 +101,21 @@ const getFileInfo = async (authData, fileInfo) => {
         method: fileInfo.method,
         service: 'objectStorageService'
       },
-      body: serialize(fileInfo)
+      body: serialize({
+        ...fileInfo,
+        isFullPreview
+      })
     };
 
     return FetchCancel(url, data, 'getFileInfo')
       .then(response => response.json())
       .then(responseJson => {
-        return responseJson;
+        if (
+          responseJson.resultList &&
+          responseJson.resultList[0].isFullPreview === false
+        ) {
+          return getFileInfo(authData, fileInfo, 'true');
+        } else return responseJson;
       });
 
     // const response = await fetch(url, data);

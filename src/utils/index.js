@@ -70,7 +70,7 @@ export const securityRequest = (a_token, r_token, url, HASH_KEY) => {
     'wehago-sign': wehagoSign,
     'client-id': clientId,
     'Wehago-S': HASH_KEY,
-    timestamp: timestamp,
+    timestamp: String(timestamp),
     signature: signature,
     service: service,
     Cookie: `AUTH_A_TOKEN=${a_token}; AUTH_R_TOKEN=${r_token}`

@@ -92,7 +92,10 @@ class FileListContainer extends Component {
     };
 
     // wedrive token 가져오기
-    const initInfoResponse = await this.props.initInfoRequest(authData, last_access_company_no);
+    const initInfoResponse = await this.props.initInfoRequest(
+      authData,
+      last_access_company_no
+    );
     if (!initInfoResponse.initInfo) {
       Alert.alert('Error', '사용자 정보를 불러오지 못했습니다.', [
         { text: 'OK' }
@@ -168,7 +171,12 @@ class FileListContainer extends Component {
       return;
     }
 
-    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY } = this.props.auth;
+    const {
+      AUTH_A_TOKEN,
+      AUTH_R_TOKEN,
+      HASH_KEY,
+      last_access_company_no
+    } = this.props.auth;
     const { TokenID } = this.props;
 
     const authData = {
@@ -227,14 +235,14 @@ class FileListContainer extends Component {
       Ext: extentionType,
       FileName: file.fileUniqueKey,
       FileUniqueKey: file.fileUniqueKey,
-      cno: 9,
-      target_cno: 9,
+      cno: last_access_company_no,
+      target_cno: last_access_company_no,
       ServiceCode: 'wedrive',
       ServiceKey: '',
       BucketType: 'C',
       BucketName: 'undefined',
       isWedrive: 'true',
-      isFullPreview: 'true',
+      isFullPreview: 'false',
       TokenID: TokenID,
       method: method
     };
@@ -284,8 +292,18 @@ class FileListContainer extends Component {
 
     let resources = [];
     if (typeof fileInfo[0] === 'string') {
+      // 이미지 리소스가 1개 일 때는 배열로 안줌
       resources = fileInfo;
+    } else if (!fileInfo[0].resources) {
+      // 이미지 리소스가 없을 시
+      Alert.alert(
+        '파일 상세정보를 불러오지 못했습니다.',
+        '다시 시도해주시기 바랍니다.',
+        [{ text: 'OK' }]
+      );
+      return;
     } else {
+      // 이미지 리소스가 여러개일 경우
       resources = fileInfo[0].resources;
     }
     this.props.onChangeSharingMode({
