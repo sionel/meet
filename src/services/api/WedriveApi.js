@@ -97,7 +97,7 @@ const getFileInfo = async (authData, fileInfo, isFullPreview = 'false') => {
         ...headers,
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        TokenID: fileInfo.TokenID,
+        TokenID: fileInfo.TokenID, // wedrive token
         method: fileInfo.method,
         service: 'objectStorageService'
       },
@@ -114,13 +114,15 @@ const getFileInfo = async (authData, fileInfo, isFullPreview = 'false') => {
           responseJson.resultList &&
           responseJson.resultList[0].isFullPreview === false
         ) {
+          // 썸네일이 없을 경우 생성 (2MB 이상일 경우)
           return getFileInfo(authData, fileInfo, 'true');
-        } else if (
-          responseJson.resultList &&
-          responseJson.resultList[0].isFullPreview === true &&
-          !responseJson.resultList[0].resources
-        ) {
-          return setRemakeThumbNail(authData, fileInfo);
+          // } else if (
+          //   // 썸네일 생성이 실패한 경우 재생성 요청 (현재 API 미개발 상태)
+          //   responseJson.resultList &&
+          //   responseJson.resultList[0].isFullPreview === true &&
+          //   !responseJson.resultList[0].resources
+          // ) {
+          //   return setRemakeThumbNail(authData, fileInfo);
         } else return responseJson;
       });
 
@@ -133,6 +135,7 @@ const getFileInfo = async (authData, fileInfo, isFullPreview = 'false') => {
   }
 };
 
+// (현재 API 미개발 상태)
 const setRemakeThumbNail = async (authData, fileInfo) => {
   try {
     const url = `${wehagoBaseURL}/ObjectStorageCommon/services/common`;
@@ -142,6 +145,20 @@ const setRemakeThumbNail = async (authData, fileInfo) => {
       url,
       authData.HASH_KEY
     );
+    const bodyData = {
+      // ...fileInfo,
+      BucketType: 'C',
+      BucketName: 'undefined',
+      ServiceKey: '',
+      ServiceCode: 'wedrive',
+      cno: fileInfo.cno,
+      target_cno: fileInfo.cno,
+      FileName: fileInfo.FileName,
+      Ext: fileInfo.Ext,
+      TokenID: fileInfo.TokenID, // wedrive token
+      isWedrive: true,
+      MakeThumbNailType: 'ml'
+    };
     const data = {
       method: 'POST',
       headers: {
@@ -151,23 +168,14 @@ const setRemakeThumbNail = async (authData, fileInfo) => {
         method: 'setRemakeThumbNail',
         service: 'objectStorageService'
       },
-      body: serialize({
-        BucketType: 'C',
-        ServiceKey: '',
-        ServiceCode: 'wedrive',
-        cno: fileInfo.cno,
-        FileName: fileInfo.FileName,
-        Ext: fileInfo.Ext,
-        // ...fileInfo,
-        TokenID: authData.AUTH_A_TOKEN,
-        MakeThumbNailType: 'ml'
-      })
+      body: serialize(bodyData)
     };
+    console.log('bodyData', bodyData, data);
 
     return FetchCancel(url, data, 'getFileInfo')
       .then(response => response.json())
       .then(responseJson => {
-        console.log('responseJson11', responseJson, fileInfo);
+        console.log('responseJson11', responseJson);
         alert(responseJson.serverMsg);
         return responseJson;
       });
