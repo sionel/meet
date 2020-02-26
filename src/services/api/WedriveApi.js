@@ -115,12 +115,62 @@ const getFileInfo = async (authData, fileInfo, isFullPreview = 'false') => {
           responseJson.resultList[0].isFullPreview === false
         ) {
           return getFileInfo(authData, fileInfo, 'true');
+        } else if (
+          responseJson.resultList &&
+          responseJson.resultList[0].isFullPreview === true &&
+          !responseJson.resultList[0].resources
+        ) {
+          return setRemakeThumbNail(authData, fileInfo);
         } else return responseJson;
       });
 
     // const response = await fetch(url, data);
     // const responseJson = await response.json();
     // return responseJson;
+  } catch (err) {
+    console.warn(err);
+    return err;
+  }
+};
+
+const setRemakeThumbNail = async (authData, fileInfo) => {
+  try {
+    const url = `${wehagoBaseURL}/ObjectStorageCommon/services/common`;
+    const headers = securityRequest(
+      authData.AUTH_A_TOKEN,
+      authData.AUTH_R_TOKEN,
+      url,
+      authData.HASH_KEY
+    );
+    const data = {
+      method: 'POST',
+      headers: {
+        ...headers,
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        method: 'setRemakeThumbNail',
+        service: 'objectStorageService'
+      },
+      body: serialize({
+        BucketType: 'C',
+        ServiceKey: '',
+        ServiceCode: 'wedrive',
+        cno: fileInfo.cno,
+        FileName: fileInfo.FileName,
+        Ext: fileInfo.Ext,
+        // ...fileInfo,
+        TokenID: authData.AUTH_A_TOKEN,
+        MakeThumbNailType: 'ml'
+      })
+    };
+
+    return FetchCancel(url, data, 'getFileInfo')
+      .then(response => response.json())
+      .then(responseJson => {
+        console.log('responseJson11', responseJson, fileInfo);
+        alert(responseJson.serverMsg);
+        return responseJson;
+      });
   } catch (err) {
     console.warn(err);
     return err;
