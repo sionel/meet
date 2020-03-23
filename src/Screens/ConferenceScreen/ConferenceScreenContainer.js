@@ -20,6 +20,7 @@ import ConferenceManager from '../../utils/conference/ConferenceManager';
 
 const { PictureInPicture } = NativeModules;
 const { width, height } = Dimensions.get('window');
+const isIOS = Platform.OS === 'ios';
 
 class ConferenceScreenContainer extends React.Component {
   constructor() {

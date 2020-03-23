@@ -117,12 +117,14 @@ const getFileInfo = async (authData, fileInfo, isFullPreview = 'false') => {
           // 썸네일이 없을 경우 생성 (2MB 이상일 경우)
           return getFileInfo(authData, fileInfo, 'true');
           // } else if (
-          //   // 썸네일 생성이 실패한 경우 재생성 요청 (현재 API 미개발 상태)
           //   responseJson.resultList &&
           //   responseJson.resultList[0].isFullPreview === true &&
           //   !responseJson.resultList[0].resources
           // ) {
+          //   // 썸네일 생성이 실패한 경우 재생성 요청 (현재 API 미개발 상태)
+          //   console.log(2, fileInfo, responseJson);
           //   return setRemakeThumbNail(authData, fileInfo);
+          // return responseJson;
         } else return responseJson;
       });
 
@@ -138,7 +140,7 @@ const getFileInfo = async (authData, fileInfo, isFullPreview = 'false') => {
 // (현재 API 미개발 상태)
 const setRemakeThumbNail = async (authData, fileInfo) => {
   try {
-    const url = `${wehagoBaseURL}/ObjectStorageCommon/services/common`;
+    const url = `${wehagoBaseURL}/ObjectStorageCommon/services/login`;
     const headers = securityRequest(
       authData.AUTH_A_TOKEN,
       authData.AUTH_R_TOKEN,
@@ -146,27 +148,34 @@ const setRemakeThumbNail = async (authData, fileInfo) => {
       authData.HASH_KEY
     );
     const bodyData = {
-      // ...fileInfo,
-      BucketType: 'C',
-      BucketName: 'undefined',
-      ServiceKey: '',
-      ServiceCode: 'wedrive',
+      fileName: fileInfo.FileName,
+      bucketName: 'undefined',
+      ext: fileInfo.Ext,
       cno: fileInfo.cno,
-      target_cno: fileInfo.cno,
-      FileName: fileInfo.FileName,
-      Ext: fileInfo.Ext,
-      TokenID: fileInfo.TokenID, // wedrive token
+      thumbNailPath: '',
       isWedrive: true,
-      MakeThumbNailType: 'ml'
+      isConvert: true
+      // ...fileInfo,
+      // BucketType: 'C',
+      // BucketName: 'undefined',
+      // ServiceKey: '',
+      // ServiceCode: 'wedrive',
+      // cno: fileInfo.cno,
+      // target_cno: fileInfo.cno,
+      // FileName: fileInfo.FileName,
+      // Ext: fileInfo.Ext,
+      // TokenID: fileInfo.TokenID, // wedrive token
+      // isWedrive: true,
+      // MakeThumbNailType: 'ml'
     };
     const data = {
       method: 'POST',
       headers: {
         ...headers,
-        Accept: 'application/json',
+        // Accept: 'application/json',
         'Content-Type': 'application/json',
         method: 'setRemakeThumbNail',
-        service: 'objectStorageService'
+        service: 'thumbImageService'
       },
       body: serialize(bodyData)
     };
