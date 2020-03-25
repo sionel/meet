@@ -97,6 +97,7 @@
     "react-native-home-indicator": "^0.2.5",
     "react-native-home-pressed": "^1.1.4",
     "react-native-immersive": "2.0.0",
+    "react-native-incall-manager": "^3.2.7",
     "react-native-keep-awake": "4.0.0",
     "react-native-linear-gradient": "2.5.3",
     "react-native-orientation-locker": "^1.1.6",

@@ -13,9 +13,15 @@ import { ConferenceModes } from '../../../utils/Constants';
 import DeviceInfo from 'react-native-device-info';
 import Orientation from 'react-native-orientation-locker';
 import _ from 'underscore';
+// import InCallManager from 'react-native-incall-manager';
+
+const isIOS = Platform.OS === 'ios';
+const InCallManager = isIOS
+  ? null
+  : require('react-native-incall-manager').default;
 
 const { AudioMode } = NativeModules;
-const hasNotch = DeviceInfo.hasNotch() && Platform.OS === 'ios';
+const hasNotch = DeviceInfo.hasNotch() && isIOS;
 /**
  * ContentContainer : 화상대화 화면
  */
@@ -47,7 +53,7 @@ class ContentContainer extends React.Component {
     // 스피커폰 설정
     this._handleChangeSpeaker(AudioMode.VIDEO_CALL);
     Orientation.addOrientationListener(this._setOrientation);
-  }  
+  }
 
   // componentDidUpdate(prevProps, prevState) {
   //   if (prevProps.documentListMode !== this.props.documentListMode) {
@@ -160,7 +166,15 @@ class ContentContainer extends React.Component {
     this.setState(
       prev => ({ speaker: prev.speaker == 2 ? 1 : 2 }),
       () => {
-        AudioMode.setMode(speaker);
+        if (isIOS) {
+          AudioMode.setMode(speaker);
+        } else {
+          InCallManager &&
+            InCallManager.setSpeakerphoneOn &&
+            InCallManager.setSpeakerphoneOn(speaker == 2);
+        }
+        // InCallManager.setForceSpeakerphoneOn(false);
+        // InCallManager.setMicrophoneMute(false);
       }
     );
   };
