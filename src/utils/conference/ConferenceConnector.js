@@ -389,7 +389,7 @@ class ConferenceConnector {
     const devices = ['video', 'audio'];
     const tracks = await JitsiMeetJS.createLocalTracks({
       devices,
-      resolution: 720
+      resolution: 320
     });
     return tracks;
   };
