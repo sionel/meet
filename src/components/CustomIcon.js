@@ -80,6 +80,9 @@ import ico_menu_rsakey from '../../assets/icons/settingIcon/ico_menu_rsakey.png'
 import ico_menu_wifi from '../../assets/icons/settingIcon/ico_menu_wifi.png';
 import icoMenuTrophy from '../../assets/icons/settingIcon/icoMenuTrophy.png';
 
+// etc
+import ico_setting_160 from '../../assets/icons/etc/ico_setting_160.png';
+
 const CustomIcon = props => {
   return (
     <Image
@@ -241,6 +244,8 @@ const getButtonSource = name => {
       return ico_menu_wifi;
     case 'icoMenuTrophy':
       return icoMenuTrophy;
+    case 'ico_setting_160':
+      return ico_setting_160;
     default:
       return ico_etc;
   }

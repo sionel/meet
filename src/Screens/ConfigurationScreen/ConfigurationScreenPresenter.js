@@ -47,7 +47,7 @@ const ConfigurationScreenPresenter = props => {
     {
       title: '버전정보',
       icon: 'ico_menu_info',
-      content: Platform.OS === 'ios' ? '1.24.13' : '1.4.0'
+      content: Platform.OS === 'ios' ? '1.24.14' : '1.4.1'
     },
     {
       title: '이용약관 및 법률정보',

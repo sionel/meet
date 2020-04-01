@@ -162,10 +162,10 @@ class FileListContainer extends Component {
    * 파일 정보 가져오기
    */
   _handleGetFileInfo = async file => {
-    if (file.size > 1024 * 1024 * 10) {
+    if (file.size > 1024 * 1024 * 20) {
       Alert.alert(
         '공유 파일 용량 초과',
-        '공유 가능한 파일 용량을 초과하였습니다.\n10MB 이하의 파일을 선택해주세요.',
+        '공유 가능한 파일 용량을 초과하였습니다.\n20MB 이하의 파일을 선택해주세요.',
         [{ text: 'OK' }]
       );
       return;
