@@ -74,6 +74,7 @@ dependencies {
     implementation project(':react-native-community-slider')
     implementation project(':react-native-home-pressed')
     implementation project(':react-native-incall-manager')
+    implementation project(':react-native-restart')
 
     testImplementation 'junit:junit:4.12'
 }

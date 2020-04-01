@@ -4,10 +4,13 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/es/integration/react';
 import configureStore from './src/redux/configureStore';
 import Main from './src/Main';
+import LaunchScreen from './src/Screens/LaunchScreen';
 import ServerNotiveCheck from './src/components/ServerNotiveCheck';
 // CallKit
 // import { IncomingCallApp } from './jitsi/features/mobile/incoming-call';
 // import { AudioRouteButton } from './jitsi/features/mobile/audio-mode';
+
+const bg = require('./assets/bgIntroWehagoIphoneX_3x.png');
 
 const { persistor, store } = configureStore();
 
@@ -32,7 +35,9 @@ export default class App extends Component {
         'https://raw.githubusercontent.com/GiDuck/check-service/master/check.json';
       const response = await fetch(url);
       const message = await response.json();
-      this.setState({ loading: false, message });
+      setTimeout(() => {
+        this.setState({ loading: false, message });
+      }, 2000);
     } catch (error) {
       this.setState({ loading: false });
     }
@@ -41,8 +46,8 @@ export default class App extends Component {
   render() {
     if (this.state.loading) {
       return (
-        <View>
-          <Text>로딩중</Text>
+        <View style={{ flex: 1, backgroundColor: '#379bd8' }}>
+          <LaunchScreen bg={bg} />
         </View>
       );
     } else if (this.state.message.code === '503') {

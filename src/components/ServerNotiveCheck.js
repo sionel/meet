@@ -6,6 +6,7 @@ import {
   View,
   TouchableOpacity
 } from 'react-native';
+import RNRestart from 'react-native-restart';
 
 import { StyledText } from 'rn-component';
 import CustomIcon from './CustomIcon';
@@ -32,7 +33,7 @@ export default function ServerNotiveCheck({ message }) {
 
         <View style={styles.bottom}>
           <TouchableOpacity
-            // onPress={Updates.reload}
+            onPress={() => RNRestart.Restart()}
             style={styles.bottomButton}
           >
             <Text style={styles.bottomButtonText}>확인</Text>

@@ -206,6 +206,7 @@ class ReactInstanceManagerHolder {
                 new com.reactnativecommunity.slider.ReactSliderPackage(),
                 new com.evanjmg.RNHomePressedPackage(),
                 new com.zxcpoiu.incallmanager.InCallManagerPackage(),
+                new com.avishayil.rnrestart.ReactNativeRestartPackage(),
                 // end
                 new ReactPackageAdapter() {
                     @Override
