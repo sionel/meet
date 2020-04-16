@@ -82,6 +82,8 @@ import icoMenuTrophy from '../../assets/icons/settingIcon/icoMenuTrophy.png';
 
 // etc
 import ico_setting_160 from '../../assets/icons/etc/ico_setting_160.png';
+import btn_navi_search_press from '../../assets/icons/etc/btn_navi_search_press.png';
+import btnUserCancelNone from '../../assets/icons/etc/btnUserCancelNone.png';
 
 const CustomIcon = props => {
   return (
@@ -246,6 +248,10 @@ const getButtonSource = name => {
       return icoMenuTrophy;
     case 'ico_setting_160':
       return ico_setting_160;
+    case 'btn_navi_search_press':
+      return btn_navi_search_press;
+    case 'btnUserCancelNone':
+      return btnUserCancelNone;
     default:
       return ico_etc;
   }

@@ -16,7 +16,9 @@ import Orientation from 'react-native-orientation-locker';
 import { CustomIcon, CustomLottie } from '../../components';
 import LaunchScreen from '../LaunchScreen';
 import { StyledText } from 'rn-component';
-import { WEHAGO_TYPE } from '../../../config';
+import { WEHAGO_ENV, WEHAGO_TYPE } from '../../../config';
+
+const isWehagoV = WEHAGO_ENV === 'WEHAGOV';
 const { Text } = StyledText;
 const bg = require('../../../assets/bgIntroWehagoIphoneX_3x.png');
 // import { Text } from '../../components/StyledText';
@@ -26,8 +28,13 @@ export default function LoginScreenPresenter(props) {
   const [waiting, setWaiting] = useState(true);
 
   const _handleLoginForWehago = () => {
-    const iosUrl = 'wehago://?wehagomeet=login';
-    const androidUrl = 'wehago://app?name=meet';
+    const iosUrl = `wehago${isWehagoV ? 'v' : ''}://?wehago${
+      isWehagoV ? 'v' : ''
+    }meet=login`;
+    const androidUrl = `wehago${isWehagoV ? 'v' : ''}://app?name=meet${
+      isWehagoV ? 'v' : ''
+    }`;
+
     const iosMarketURL =
       'http://itunes.apple.com/kr/app/wehago/id1363039300?mt=8';
     const androidMarketURL =
