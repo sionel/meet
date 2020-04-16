@@ -190,6 +190,7 @@ export default function LoginScreenPresenter(props) {
                 }
               });
             }}
+            style={{ padding: 5 }}
           >
             <Text style={styles.loginNavigation}>직접 입력해서 로그인</Text>
           </TouchableOpacity>
