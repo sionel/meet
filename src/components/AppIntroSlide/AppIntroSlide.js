@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import AppIntroSlider from './react-native-intro-slider/AppIntroSlider';
+import { WEHAGO_ENV, WEHAGO_TYPE } from '../../../config';
 
 const { width, height } = Dimensions.get('window');
 const ratio = 375 / 449;
@@ -57,7 +58,7 @@ class AppIntroSlide extends React.Component {
               fontFamily: 'DOUZONEText50'
             }}
           >
-            {'언제 어디서나 WEHAGO Meet'}
+            {'언제 어디서나 ' + WEHAGO_TYPE + ' Meet'}
           </Text>
           <Text
             style={{
@@ -87,7 +88,7 @@ class AppIntroSlide extends React.Component {
           <View
             style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
           >
-            <Text style={styles.textTitle}>WEHAGO 연동</Text>
+            <Text style={styles.textTitle}>{WEHAGO_TYPE} 연동</Text>
             <Text style={styles.textContent}>
               {'새로운 회의를 만들거나 진행중인\nWE톡 화상회의에 바로 참여'}
             </Text>

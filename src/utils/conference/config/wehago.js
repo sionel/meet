@@ -1,12 +1,16 @@
+import { WEHAGO_ENV } from '../../../../config';
+
+const isWehagoV = WEHAGO_ENV === 'WEHAGOV';
+
 /**
  * wehago 기본 config
  */
 const config = {
   hosts: {
-    domain: 'video.wehago.com',
-    muc: 'conference.video.wehago.com'
+    domain: `video.wehago${isWehagoV ? 'v' : ''}.com`,
+    muc: `conference.video.wehago${isWehagoV ? 'v' : ''}.com`
   },
-  bosh: '//video.wehago.com/http-bind',
+  bosh: `//video.wehago${isWehagoV ? 'v' : ''}.com/http-bind`,
   openBridgeChannel: 'datachannel',
   channelLastN: -1,
   resolution: 720,

@@ -7,6 +7,7 @@ import {
   ImageBackground
 } from 'react-native';
 import { StyledText } from 'rn-component';
+import { WEHAGO_TYPE } from '../../config';
 const { Text } = StyledText;
 
 export default function LoginScreenPresenter(props) {
@@ -36,7 +37,7 @@ export default function LoginScreenPresenter(props) {
                 fontWeight: 'bold'
               }}
             >
-              WEHAGO Meet
+              {WEHAGO_TYPE} Meet
             </Text>
           </Text>
         </View>

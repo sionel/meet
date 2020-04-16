@@ -15,6 +15,7 @@ import ButtonCameraOff2 from '../../../../../assets/icons/icoCameraWhLargeOff_2x
 import ProfileImage from '../../../../../assets/icons/imgVcNophoto_2x.png';
 // import ProfileImage from '../../../../../assets/smapleImages/nnn2.png';
 import { CustomLottie } from '../../../../components';
+import { wehagoMainURL } from '../../../../utils';
 
 const { height, width } = Dimensions.get('window');
 
@@ -199,7 +200,7 @@ const MainVideoPresenter = props => {
                   source={
                     userInfo
                       ? {
-                          uri: 'https://www.wehago.com' + userInfo.profile_url
+                          uri: wehagoMainURL + userInfo.profile_url
                         }
                       : ProfileImage
                   }

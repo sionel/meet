@@ -16,6 +16,7 @@ import Orientation from 'react-native-orientation-locker';
 import { CustomIcon, CustomLottie } from '../../components';
 import LaunchScreen from '../LaunchScreen';
 import { StyledText } from 'rn-component';
+import { WEHAGO_TYPE } from '../../../config';
 const { Text } = StyledText;
 const bg = require('../../../assets/bgIntroWehagoIphoneX_3x.png');
 // import { Text } from '../../components/StyledText';
@@ -148,7 +149,7 @@ export default function LoginScreenPresenter(props) {
                 // fontFamily: 'DOUZONEText50'
               }}
             >
-              WEHAGO Meet
+              {WEHAGO_TYPE} Meet
             </Text>
           </Text>
         </View>
@@ -176,7 +177,9 @@ export default function LoginScreenPresenter(props) {
                 height={24}
                 style={{ marginRight: 5.5 }}
               />
-              <Text style={styles.loginButtonText}>WEHAGO 앱으로 로그인</Text>
+              <Text style={styles.loginButtonText}>
+                {WEHAGO_TYPE} 앱으로 로그인
+              </Text>
             </>
           </TouchableHighlight>
 
@@ -190,7 +193,6 @@ export default function LoginScreenPresenter(props) {
                 }
               });
             }}
-            style={{ padding: 5 }}
           >
             <Text style={styles.loginNavigation}>직접 입력해서 로그인</Text>
           </TouchableOpacity>

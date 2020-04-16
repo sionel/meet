@@ -8,8 +8,10 @@ import {
   Text
 } from 'react-native';
 
-import { CustomIcon } from '../../../components';
 import { useSelector } from 'react-redux';
+import { CustomIcon } from '../../../components';
+import { wehagoMainURL } from '../../../utils';
+import { WEHAGO_TYPE } from '../../../../config';
 
 export default function PolicyScreen(props) {
   const { navigation } = props;
@@ -18,12 +20,12 @@ export default function PolicyScreen(props) {
 
   const config = {
     terms: {
-      title: 'WEHAGO 이용약관',
+      title: WEHAGO_TYPE + ' 이용약관',
       rightSide: <CustomIcon name={'btn_next'} width={24} height={24} />,
       action: () => {
         membership === 'WT1'
           ? Linking.openURL('https://www.wehagot.com/#/common/policy')
-          : Linking.openURL('https://www.wehago.com/#/common/policy');
+          : Linking.openURL(wehagoMainURL + '/#/common/policy');
       }
     },
     policy: {
@@ -32,7 +34,7 @@ export default function PolicyScreen(props) {
       action: () => {
         membership === 'WT1'
           ? Linking.openURL('https://www.wehagot.com/#/common/policy?code=002')
-          : Linking.openURL('https://www.wehago.com/#/common/policy?code=002');
+          : Linking.openURL(wehagoMainURL + '/#/common/policy?code=002');
       }
     },
     openSource: {

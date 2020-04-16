@@ -10,6 +10,7 @@ import {
   Platform
 } from 'react-native';
 import CustomIcon from '../../../../../components/CustomIcon';
+import { wehagoMainURL } from '../../../../../utils';
 
 const UserListPresenter = props => {
   const {
@@ -45,9 +46,7 @@ const UserListPresenter = props => {
                   source={
                     item.userInfo
                       ? {
-                          uri: `https://www.wehago.com${
-                            item.userInfo.profile_url
-                          }`
+                          uri: wehagoMainURL + item.userInfo.profile_url
                         }
                       : null
                   }
