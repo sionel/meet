@@ -110,7 +110,7 @@ android.libraryVariants.all { def variant ->
         }
 
         // Set up inputs and outputs so gradle can cache the result
-        def reactRoot = file("${projectDir}/../../")
+        def reactRoot = file("${projectDir}/../../../")
         inputs.files fileTree(dir: reactRoot, excludes: ["android/**", "ios/**"])
         outputs.dir jsBundleDir
         outputs.dir resourcesDir
@@ -124,12 +124,12 @@ android.libraryVariants.all { def variant ->
         // Run the bundler
         commandLine(
                 "node",
-                "node_modules/react-native/local-cli/cli.js",
+                "${projectDir}/../../../node_modules/react-native/local-cli/cli.js",
                 "bundle",
                 "--platform", "android",
                 "--dev", "${devEnabled}",
                 "--reset-cache",
-                "--entry-file", "index.android.js",
+                "--entry-file", "${projectDir}/../../../index.android.js",
                 "--bundle-output", jsBundleFile,
                 "--assets-dest", resourcesDir)
 
