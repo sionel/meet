@@ -3,6 +3,7 @@ import { TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
 
 import { Drawer, CustomIcon } from 'rn-component';
+import { WEHAGO_ENV } from '../../../config';
 
 export default function DrawerContent(props) {
   const { navigation } = props;
@@ -23,6 +24,7 @@ export default function DrawerContent(props) {
 
   return (
     <Drawer
+      wehagoType={WEHAGO_ENV}
       navigation={props.navigation}
       user={auth}
       logoComponent={
