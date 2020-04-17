@@ -26,6 +26,7 @@ export default function DrawerContent(props) {
     <Drawer
       wehagoType={WEHAGO_ENV}
       navigation={props.navigation}
+      auth={auth}
       user={auth}
       logoComponent={
         <TouchableOpacity onPress={() => navigation.navigate('Home')}>
