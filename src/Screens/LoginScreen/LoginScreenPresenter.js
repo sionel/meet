@@ -62,5 +62,5 @@ export default function LoginScreenPresenter(props) {
     );
   }
 
-  return props.chiledren;
+  return props.children;
 }
