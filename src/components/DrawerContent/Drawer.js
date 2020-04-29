@@ -29,8 +29,15 @@ export default function DrawerContent(props) {
       auth={auth}
       user={auth}
       logoComponent={
-        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-          <CustomIcon name={'logo64'} width={85} height={16} />
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Home')}
+          style={{ justifyContent: 'center' }}
+        >
+          <CustomIcon
+            name={WEHAGO_ENV === 'WEHAGOV' ? 'WEHAGO_V_BI' : 'logo64'}
+            width={85}
+            height={16}
+          />
         </TouchableOpacity>
       }
       // subActions={[
