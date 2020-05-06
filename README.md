@@ -1,139 +1,56 @@
-# Jitsi Meet - Secure, Simple and Scalable Video Conferences
+## 기본 설치 리스트
 
-Jitsi Meet is an open-source (Apache) WebRTC JavaScript application that uses [Jitsi Videobridge](https://jitsi.org/videobridge) to provide high quality, [secure](#security) and scalable video conferences. Jitsi Meet in action can be seen at [here at the session #482 of the VoIP Users Conference](http://youtu.be/7vFUVClsNh0).
+1. watchman
+2. npm / npx
+3. Android Studio
+4. Xcode
 
-The Jitsi Meet client runs in your browser, without installing anything on your computer. You can try it out at https://meet.jit.si .
+## 초기 설정
 
-Jitsi Meet allows very efficient collaboration. Users can stream their desktop or only some windows. It also supports shared document editing with Etherpad.
+1. npm install<br/>(특이사항 : dependencies 에 "rn-component": "git+http://git.duzon.com/peacejung/rn-component.git#0.1.0" 가 있음)
+2. 안드로이드 sdk 설정<br/>
+   /android/local.properties 에 android sdk 경로 설정
+3. 안드로이드 기기 설정<br/>
+   빌드할 기기에 대한 설정이 필요함<br/>
+   package.json > scripts<br/>
+       "set-android": "~/Library/Android/sdk/platform-tools/adb -s R59M905GC8X reverse tcp:8081 tcp:8081"<br/>
+   <u>**R59M905GC8X = 기기모델명**</u> 이므로 기기변경시 변경 후 실행이 필요함.<br/>
+   모델명 확인방법 : ~/Library/Android/sdk/platform-tools/adb devices<br/>
+   *<u>**주의 : Android Studio 설치 경로에 따라 adb 의 경로가 다를 수 있음**</u>*
+4. 안드로이드 디버깅 script<br/>
+   "android": "sudo npx react-native run-android" 
 
-## Installation
+## 안드로이드 배포용 빌드 설정
 
-On the client side, no installation is necessary. You just point your browser to the URL of your deployment. This section is about installing a Jitsi Meet suite on your server and hosting your own conferencing service.
+/android/gradle.properties
 
-Installing Jitsi Meet is a simple experience. For Debian-based system, following the [quick-install](https://github.com/jitsi/jitsi-meet/blob/master/doc/quick-install.md) document, which uses the package system. You can also see a demonstration of the process in [this tutorial video](https://jitsi.org/tutorial).
+여기서 앱 버전 및 키스토어 설정을 해줘야함
 
-For other systems, or if you wish to install all components manually, see the [detailed manual installation instructions](https://github.com/jitsi/jitsi-meet/blob/master/doc/manual-install.md).
+/android/app
 
-## Download
+여기에 키스토어 파일을 두면 됨
 
-| Latest stable release | [![release](https://img.shields.io/badge/release-latest-green.svg)](https://github.com/jitsi/jitsi-meet/releases/latest) |
-|---|---|
+1. apk 파일 추출 (인하우스 배포용)<br/>
+   npm run build-inhouse<br/>
+       "build-inhouse": "cd ./android && sudo rm -rf build ./app/build ./sdk/build && sudo ./gradlew assembleRelease && cd .."
+2. aab 파일 추출 (마켓 배포용)<br/>
+   npm run build-aab<br/>
+       "build-aab": "cd ./android && sudo rm -rf build ./app/build ./sdk/build && sudo ./gradlew bundleRelease && cd .."
 
-You can download Debian/Ubuntu binaries:
-* [stable](https://download.jitsi.org/stable/) ([instructions](https://jitsi.org/downloads/ubuntu-debian-installations-instructions/))
-* [testing](https://download.jitsi.org/testing/) ([instructions](https://jitsi.org/downloads/ubuntu-debian-installations-instructions-for-testing/))
-* [nightly](https://download.jitsi.org/unstable/) ([instructions](https://jitsi.org/downloads/ubuntu-debian-installations-instructions-nightly/))
+## 라이브러리 추가 방법
 
-You can download source archives (produced by ```make source-package```):
-* [source builds](https://download.jitsi.org/jitsi-meet/src/)
+안드로이드X 대응을 위해 자바 코드 변환이 필요함
 
-You can get our mobile versions from here:
-* [Android](https://play.google.com/store/apps/details?id=com.wehago.meet)
-* [iOS](https://itunes.apple.com/us/app/jitsi-meet/id1165103905)
+npm 을 통해 RN라이브러리를 받았다면 최초 1회에 한해서 jetifier 를 사용한 코드 변환이 필요 (라이브러리 받을 때 마다)
 
-## Building the sources
+npx jetify
 
-Node.js >= 10 and npm >= 6 are required.
+## 버전 정보
 
-On Debian/Ubuntu systems, the required packages can be installed with:
-```
-sudo apt-get install npm nodejs
-cd jitsi-meet
-npm install
-```
+react-native : 0.59.8
 
-To build the Jitsi Meet application, just type
-```
-make
-```
+react : 16.8.3
 
-### Working with the library sources (lib-jitsi-meet)
+jitsi : ?
 
-By default the library is build from its git repository sources. The default dependency path in package.json is :
-```json
-"lib-jitsi-meet": "jitsi/lib-jitsi-meet",
-```
-
-To work with local copy you must change the path to:
-```json
-"lib-jitsi-meet": "file:///Users/name/local-lib-jitsi-meet-copy",
-```
-
-To make the project you must force it to take the sources as 'npm update':
-```
-npm install lib-jitsi-meet --force && make
-```
-
-Or if you are making only changes to the library:
-```
-npm install lib-jitsi-meet --force && make deploy-lib-jitsi-meet
-```
-
-Alternative way is to use [npm link](https://docs.npmjs.com/cli/link).
-It allows to link `lib-jitsi-meet` dependency to local source in few steps:
-
-```bash
-cd lib-jitsi-meet
-
-#### create global symlink for lib-jitsi-meet package
-npm link
-
-cd ../jitsi-meet
-
-#### create symlink from the local node_modules folder to the global lib-jitsi-meet symlink
-npm link lib-jitsi-meet
-```
-
- After changes in local `lib-jitsi-meet` repository, you can rebuild it with `npm run install` and your `jitsi-meet` repository will use that modified library.
-Note: when using node version 4.x, the make file of jitsi-meet do npm update which will delete the link. It is no longer the case with version 6.x.
-
-If you do not want to use local repository anymore you should run
-```bash
-cd jitsi-meet
-npm unlink lib-jitsi-meet
-npm install
-```
-### Running with webpack-dev-server for development
-
-Use it at the CLI, type
-```
-make dev
-```
-
-By default the backend deployment used is `beta.meet.jit.si`. You can point the Jitsi-Meet app at a different backend by using a proxy server. To do this, set the WEBPACK_DEV_SERVER_PROXY_TARGET variable:
-```
-export WEBPACK_DEV_SERVER_PROXY_TARGET=https://your-example-server.com
-make dev
-```
-
-The app should be running at https://localhost:8080/
-
-## Contributing
-
-If you are looking to contribute to Jitsi Meet, first of all, thank you! Please
-see our [guidelines for contributing](CONTRIBUTING.md).
-
-## Embedding in external applications
-
-Jitsi Meet provides a very flexible way of embedding in external applications by using the [Jitsi Meet API](doc/api.md).
-
-## Security
-WebRTC does not provide a way of conducting multi-party conversations with end-to-end encryption. 
-Unless you consistently compare DTLS fingerprints with your peers vocally, the same goes for one-to-one calls.
-As a result, your stream is encrypted on the network but decrypted on the machine that hosts the bridge when using Jitsi Meet.
-
-The Jitsi Meet architecture allows you to deploy your own version, including
-all server components. In that case, your security guarantees will be roughly
-equivalent to a direct one-to-one WebRTC call. This is the uniqueness of
-Jitsi Meet in terms of security.
-
-The [meet.jit.si](https://meet.jit.si) service is maintained by the Jitsi team
-at [8x8](https://8x8.com).
-
-## Mobile app
-Jitsi Meet is also available as a React Native app for Android and iOS.
-Instructions on how to build it can be found [here](doc/mobile.md).
-
-## Acknowledgements
-
-Jitsi Meet started out as a sample conferencing application using Jitsi Videobridge. It was originally developed by ESTOS' developer Philipp Hancke who then contributed it to the community where development continues with joint forces!
+react-native 만 버전을 업그레이드 하면 jitsi 에서 오류가 날 가능성이 매우 크므로 주의
