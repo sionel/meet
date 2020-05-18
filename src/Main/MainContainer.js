@@ -53,7 +53,7 @@ class MainContainer extends Component {
     // deep link 에 의한 url 변동 사항 캐치
     if (nextProps.url !== this.props.url) {
       this._handleGetWehagoToken(nextProps.url);
-      return false;
+      return true;
     }
 
     // 로그인 여부 변경 사항 캐치
@@ -246,7 +246,6 @@ class MainContainer extends Component {
       this.props.auth,
       this.props.auth.last_company
     );
-    console.warn(resultService);
 
     this.setState({ isLogin: true, hasService: resultService });
   };

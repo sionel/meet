@@ -5,18 +5,22 @@
 
 import { Platform } from 'react-native';
 import CryptoJS from 'crypto-js';
+import { WEHAGO_ENV } from '../../config';
+
+const isWehagoV = WEHAGO_ENV === 'WEHAGOV';
 
 const OS = Platform.OS;
 const OSID = OS === 'ios' ? 'mobile-ios' : 'mobile-android';
 /**
  * Back-end URL
  */
-// export const wehagoBaseURL0 = `http://dev.api0.wehago.com`; // 비인증
-// export const wehagoBaseURL = `http://dev.api.wehago.com`; // 인증
-// export const wehagoMainURL = `http://dev.wehago.com`; // 메인 URL
-export const wehagoBaseURL0 = `https://api0.wehago.com`;
-export const wehagoBaseURL = `https://api.wehago.com`;
-export const wehagoMainURL = `https://www.wehago.com`;
+// export const wehagoBaseURL0 = `http://dev.api0.wehagov.com`; // 비인증
+// export const wehagoBaseURL = `http://dev.api.wehagov.com`; // 인증
+// export const wehagoMainURL = `http://dev.wehagov.com`; // 메인 URL
+export const wehagoBaseURL0 = `https://api0.wehago${isWehagoV ? 'v' : ''}.com`;
+export const wehagoBaseURL = `https://api.wehago${isWehagoV ? 'v' : ''}.com`;
+export const wehagoMainURL = `https://www.wehago${isWehagoV ? 'v' : ''}.com`;
+export const wehagoStaticURL = `https://static.wehago${isWehagoV ? 'v' : ''}.com`;
 
 /**
  * Querystring parser

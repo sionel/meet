@@ -6,6 +6,7 @@ import React from 'react';
 import { Text, View, TouchableOpacity, Platform } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import { WebView } from 'react-native-webview';
+import { wehagoMainURL } from '../utils';
 
 // const WebView =
 //   Platform.OS === 'ios'
@@ -84,7 +85,7 @@ CustomWebView.defaultProps = {
   icon: 'globe',
   contentTitle: '웹페이지',
   buttonTitle: '확인',
-  url: 'https://www.wehago.com/#/',
+  url: wehagoMainURL + '/#/',
   headerStyle: {},
   titleStyle: {},
   contentStyle: {},

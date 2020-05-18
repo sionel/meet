@@ -1,3 +1,6 @@
+import { WEHAGO_ENV } from '../../../../config';
+const isWehagoV = WEHAGO_ENV === 'WEHAGOV';
+
 // @flow
 
 // const logger = require('jitsi-meet-logger').getLogger(__filename);
@@ -6,7 +9,7 @@
  * The app linking scheme.
  * TODO: This should be read from the manifest files later.
  */
-export const APP_LINK_SCHEME = "com.wehago.meet:";
+export const APP_LINK_SCHEME = isWehagoV ? 'wehagov.meet' : 'com.wehago.meet:';
 
 /**
  * A list of characters to be excluded/removed from the room component/segment

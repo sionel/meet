@@ -26,6 +26,7 @@ import CreateScreen from '../Screens/CreateScreen';
 /** Components */
 import RouteTitle from './RouteTitle';
 import DrawerContent from '../components/DrawerContent';
+import { WEHAGO_TYPE } from '../../config';
 
 const commonStyle = {
   height: 53,
@@ -158,7 +159,7 @@ const HomeRoute = createStackNavigator(
         color: '#ffffff'
       },
       navigationOptions: ({ navigation }) => ({
-        headerTitle: <RouteTitle title={'WEHAGO Meet'} />,
+        headerTitle: <RouteTitle title={WEHAGO_TYPE + ' Meet'} />,
         headerTintColor: '#fff',
         gesturesEnabled: false,
         headerStyle: commonStyle,

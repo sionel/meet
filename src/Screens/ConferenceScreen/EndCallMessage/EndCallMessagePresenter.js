@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Image, Text, Dimensions, TouchableOpacity } from 'react-native';
 import { CustomLottie, CustomIcon } from '../../../components';
 import ProfileImage from '../../../../assets/icons/imgVcNophoto_2x.png';
+import { wehagoMainURL, wehagoStaticURL } from '../../../utils';
 
 const { height, width } = Dimensions.get('window');
 
@@ -86,9 +87,8 @@ const EndCallMessagePresenter = props => {
                     uri:
                       props.user.userInfo.profile_url &&
                       props.user.userInfo.profile_url !== ''
-                        ? 'https://www.wehago.com' +
-                          props.user.userInfo.profile_url
-                        : 'https://static.wehago.com/imgs/dummy/@dummy_02.jpg' // 더미 프로필
+                        ? wehagoMainURL + props.user.userInfo.profile_url
+                        : wehagoStaticURL + '/imgs/dummy/@dummy_02.jpg' // 더미 프로필
                   }
                 : ProfileImage
             }

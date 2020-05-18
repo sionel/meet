@@ -11,6 +11,7 @@ import {
 
 import ChangeCompanyScreen from './ChangeCompanyScreen';
 import ProfileImage from '../../../assets/icons/imgVcNophoto_2x.png';
+import { wehagoMainURL } from '../../utils';
 
 const DrawerContentPresenter = props => {
   return (
@@ -31,7 +32,7 @@ const DrawerContentPresenter = props => {
             <Image
               source={
                 props.auth.profile_url
-                  ? { uri: 'https://www.wehago.com' + props.auth.profile_url }
+                  ? { uri: wehagoMainURL + props.auth.profile_url }
                   : ProfileImage
               }
               style={styles.profile_img}

@@ -14,6 +14,7 @@ import {
   Platform
 } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
+import CustomIcon from '../CustomIcon';
 
 const SafetyView = Platform.OS === 'ios' ? SafeAreaView : View;
 
@@ -23,10 +24,16 @@ const SearchFormPresenter = props => {
     <View style={styles.wrap}>
       <SafetyView style={{ width: '100%' }}>
         <View style={{ position: 'relative' }}>
-          <Icon
+          {/* <Icon
             name="search1"
             size={18}
             color="#c8c8c8"
+            style={styles.searchIcon}
+          /> */}
+          <CustomIcon
+            width={18}
+            height={18}
+            name={'btn_navi_search_press'}
             style={styles.searchIcon}
           />
           <TextInput
@@ -41,7 +48,8 @@ const SearchFormPresenter = props => {
               onPress={() => props.onChange('')}
               style={styles.closeIcon}
             >
-              <Icon name="closecircle" size={20} color="#c8c8c8" />
+              {/* <Icon name="closecircle" size={20} color="#c8c8c8" /> */}
+              <CustomIcon width={20} height={20} name={'btnUserCancelNone'} />
             </TouchableOpacity>
           )}
         </View>
