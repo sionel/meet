@@ -13,7 +13,10 @@ const MainPresenter = props => {
   return (
     <View style={styles.container}>
       <StatusBar hidden={false} />
-      <RootNavigation uriPrefix={'com.wehago.meet'} screenProps={props.url} />
+      <RootNavigation
+        uriPrefix={'com.wehago.meet'}
+        screenProps={{ ...props.url, conferenceCall: props.conferenceCall }}
+      />
     </View>
   );
 };

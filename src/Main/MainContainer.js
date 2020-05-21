@@ -3,7 +3,7 @@
  * 최상위화면 컨테이너
  */
 import React, { Component } from 'react';
-import { Alert, Linking, Platform, ToastAndroid } from 'react-native';
+import { View, Alert, Linking, Platform, ToastAndroid } from 'react-native';
 
 import SplashScreen from 'react-native-splash-screen';
 
@@ -31,6 +31,8 @@ class MainContainer extends Component {
       onClose: () => {}
     }
   };
+
+  conferenceCall = null;
 
   componentDidMount() {
     // setTimeout(() => {
@@ -91,14 +93,17 @@ class MainContainer extends Component {
 
   render() {
     return (
-      <AppIntroSlide>
+      <View style={{ flex: 1, width: '100%', hight: '100%' }}>
         {this.state.isLogin ? (
           this.state.hasService ? (
-            <MainPresenter
-              url={this.props.url}
-              alert={this.state.alert}
-              onAlert={this._handleOnAlert}
-            />
+            <AppIntroSlide>
+              <MainPresenter
+                url={this.props.url}
+                alert={this.state.alert}
+                conferenceCall={this.conferenceCall}
+                onAlert={this._handleOnAlert}
+              />
+            </AppIntroSlide>
           ) : (
             <CompanySelect />
           )
@@ -123,7 +128,7 @@ class MainContainer extends Component {
           actions={this.state.alert.actions}
           onClose={this.state.alert.onClose}
         />
-      </AppIntroSlide>
+      </View>
     );
   }
 
@@ -258,7 +263,11 @@ class MainContainer extends Component {
     const result = querystringParser(event.url);
 
     // 화상대화 요청인지 판별
-    if (result.is_creater || result.type) return;
+    if (result.is_creater || result.type) {
+      // timestamp : 로그인 시간 체크
+      this.conferenceCall = { ...result, timestamp: Date.now() };
+      return;
+    }
 
     if (!result.mAuth_a_token) {
       Platform.OS === 'ios'

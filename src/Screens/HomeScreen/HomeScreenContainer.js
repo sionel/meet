@@ -85,7 +85,10 @@ class HomeScreenContainer extends Component {
     }
 
     // [android, ios] 앱이 실행중이 아닐 때 화상대화 연결방법
-    if (this.props.screenProps && this.props.screenProps.url) {
+    if (
+      this.props.screenProps &&
+      (this.props.screenProps.url || this.props.screenProps.conferenceCall)
+    ) {
       this._handleOpenURL(this.props.screenProps);
     }
 
@@ -109,7 +112,7 @@ class HomeScreenContainer extends Component {
   shouldComponentUpdate = (nextProps, nextState) => {
     // [android] 앱이 실행중에 딥링크에 의한 화상대화 연결방법
     if (
-      Platform.OS === 'android' &&
+      // Platform.OS === 'android' &&
       this.props.screenProps !== nextProps.screenProps
     ) {
       this._handleOpenURL(nextProps.screenProps);
@@ -252,7 +255,7 @@ class HomeScreenContainer extends Component {
   _handleOpenURL = event => {
     // const result = querystringParser(url);
     // this._handleRedirect('Conference', { item: { videoRoomId: result.room_id } });
-    this._handleOpenLink(event.url);
+    this._handleOpenLink(event.conferenceCall || event.url);
   };
 
   /**
@@ -275,7 +278,20 @@ class HomeScreenContainer extends Component {
    */
   _handleOpenLink = url => {
     if (!url) return;
-    const result = querystringParser(url);
+
+    let result;
+    // 로그인이 되어있을 때 연결 요청이 왔을 시 result: string
+    // 비로그인상태에서 연결 요청후 위하고 앱으로 로그인을 진행하면 result: object
+    if (typeof result === 'string') result = querystringParser(url);
+    else result = url;
+
+    // 로그인 요청 시간 체크
+    if (result.timestamp) {
+      const timestamp_now = Date.now();
+      // 오래된(5초 이상) 연결요청의 경우 무시
+      if (timestamp_now - result.timestamp > 5000) return;
+    }
+
     console.warn('RESULT :: ', result);
     if (result.is_creater) {
       // 화상대화 실행
