@@ -58,7 +58,7 @@ const HomeScreenPresenter = props => {
           }}
         >
           <Placeholder
-            mainText={'진행중인 화상회의가 없습니다.'}
+            mainText={'진행중인 화상대화가 없습니다.'}
             subText={
               props.memberType === 1
                 ? 'WEHAGO앱에서 화상대화 및 통화를 시작해보세요.'

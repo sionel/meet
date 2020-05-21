@@ -289,7 +289,7 @@ class HomeScreenContainer extends Component {
     if (result.timestamp) {
       const timestamp_now = Date.now();
       // 오래된(5초 이상) 연결요청의 경우 무시
-      if (timestamp_now - result.timestamp > 5000) return;
+      if (timestamp_now - result.timestamp > 15000) return;
     }
 
     console.warn('RESULT :: ', result);
