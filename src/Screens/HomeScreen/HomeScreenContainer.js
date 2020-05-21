@@ -89,14 +89,18 @@ class HomeScreenContainer extends Component {
       this._handleOpenURL(this.props.screenProps);
     }
 
-    // 주기적으로 앱 업데이트
-    AppState.addEventListener('change', this._handleAppStateChange);
-    this._interval = setInterval(() => {
-      if (Date.now() > this._refreshTimeStamp + 3000) {
-        // 리프레쉬 할 시간이 지났으면 리프레쉬 한다.
-        this._handleRefresh();
-      }
-    }, 15000);
+    // 개인 회원 여부 체크
+    // 0: 일반, 1: 개인
+    if (this.props.auth.member_type !== 1) {
+      // 주기적으로 앱 업데이트
+      AppState.addEventListener('change', this._handleAppStateChange);
+      this._interval = setInterval(() => {
+        if (Date.now() > this._refreshTimeStamp + 3000) {
+          // 리프레쉬 할 시간이 지났으면 리프레쉬 한다.
+          this._handleRefresh();
+        }
+      }, 15000);
+    }
 
     // 뒤로가기 버튼 동작
     BackHandler.addEventListener('hardwareBackPress', this._handleBackButton);
@@ -195,6 +199,7 @@ class HomeScreenContainer extends Component {
           auth={auth}
           selectedRoomId={selectedRoomId}
           alert={alert}
+          memberType={this.props.auth.member_type}
           // onActivateModal={this._handleActivateModal}
           onRedirect={this._handleRedirect}
           onRefresh={this._handleRefresh}

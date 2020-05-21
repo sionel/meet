@@ -38,10 +38,12 @@ const HomeScreenPresenter = props => {
         <ScrollView
           showsVerticalScrollIndicator={false}
           refreshControl={
-            <RefreshControl
-              refreshing={props.refreshing}
-              onRefresh={props.onRefresh}
-            />
+            props.memberType !== 1 && (
+              <RefreshControl
+                refreshing={props.refreshing}
+                onRefresh={props.onRefresh}
+              />
+            )
           }
           style={{
             flex: 1,
@@ -57,7 +59,11 @@ const HomeScreenPresenter = props => {
         >
           <Placeholder
             mainText={'진행중인 화상회의가 없습니다.'}
-            subText={'대화를 시작하려면 +버튼을 누르세요.'}
+            subText={
+              props.memberType === 1
+                ? 'WEHAGO앱에서 화상대화 및 통화를 시작해보세요.'
+                : '대화를 시작하려면 +버튼을 누르세요.'
+            }
             // other={reloadButton}
           />
           <View style={{ flex: 1 }} />
@@ -118,11 +124,15 @@ const HomeScreenPresenter = props => {
       )}
 
       {/* 방생성 버튼 */}
-      <AddButton
-        onClick={() =>
-          props.onRedirect('Create', { onGetWetalkList: props.onGetWetalkList })
-        }
-      />
+      {props.memberType !== 1 && (
+        <AddButton
+          onClick={() =>
+            props.onRedirect('Create', {
+              onGetWetalkList: props.onGetWetalkList
+            })
+          }
+        />
+      )}
 
       <CustomAlert
         visible={props.alert.visible}

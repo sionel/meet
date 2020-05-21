@@ -103,7 +103,8 @@ function loginCheckRequest(
         last_access_company_no: checkResult.resultData.last_access_company_no,
         last_company: checkResult.resultData.employee_list.filter(
           e => e.company_no == checkResult.resultData.last_access_company_no
-        )[0]
+        )[0],
+        member_type: checkResult.resultData.member_type // 0: 일반회원, 1: 개인회원
       };
       dispatch(login(userData, isWehagoLogin));
       return checkResult;
