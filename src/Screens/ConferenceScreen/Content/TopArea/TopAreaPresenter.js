@@ -34,38 +34,50 @@ const TopAreaPresenter = props => {
       >
         {/* {props.isMuteVideo ? null : ( */}
         <Fragment>
-          <CustomButton
-            name="talk"
-            onPress={() =>
-              props.toggleDocumentListMode(['CHATTING', 'USERLIST'])
-            }
-            width={30}
-            height={30}
-            areaWidth={42}
-            areaHeight={36}
-          />
-          <CustomButton
-            name="pen"
-            width={24}
-            height={24}
-            areaWidth={42}
-            areaHeight={36}
-            // onPress={() => props.onChangeDrawing(!props.drawing)}
-            onPress={_.throttle(() => props.onChangeDrawingMode(true), 500)}
-          />
-          <CustomButton
-            name="docShare"
-            width={28}
-            height={28}
-            areaWidth={42}
-            areaHeight={36}
-            // onPress={() => props.onChangeDrawing(!props.drawing)}
-            // onPress={_.throttle(() => props.onChangeSharingMode(!props.sharing), 500)}
-            onPress={_.throttle(
-              () => props.toggleDocumentListMode(['FILELIST']),
-              500
-            )}
-          />
+          {/* 채팅 / 참여 유저 */}
+          {props.callType === 3 && (
+            <CustomButton
+              name="talk"
+              onPress={() =>
+                props.toggleDocumentListMode(['CHATTING', 'USERLIST'])
+              }
+              width={30}
+              height={30}
+              areaWidth={42}
+              areaHeight={36}
+            />
+          )}
+
+          {/* 스케치 모드 */}
+          {props.callType === 3 && (
+            <CustomButton
+              name="pen"
+              width={24}
+              height={24}
+              areaWidth={42}
+              areaHeight={36}
+              // onPress={() => props.onChangeDrawing(!props.drawing)}
+              onPress={_.throttle(() => props.onChangeDrawingMode(true), 500)}
+            />
+          )}
+
+          {/* 문서 공유 모드 */}
+          {props.memberType !== 1 && props.callType === 3 && (
+            <CustomButton
+              name="docShare"
+              width={28}
+              height={28}
+              areaWidth={42}
+              areaHeight={36}
+              // onPress={() => props.onChangeDrawing(!props.drawing)}
+              // onPress={_.throttle(() => props.onChangeSharingMode(!props.sharing), 500)}
+              onPress={_.throttle(
+                () => props.toggleDocumentListMode(['FILELIST']),
+                500
+              )}
+            />
+          )}
+
           {/* <CustomButton
             name={props.objectFit === 'contain' ? 'zoomIn' : 'zoomOut'}
             onPress={props.onChangeObjectFit}
@@ -74,6 +86,8 @@ const TopAreaPresenter = props => {
             areaWidth={42}
             areaHeight={36}
           /> */}
+
+          {/* 카메라 전후 토글 */}
           <CustomButton
             name="switch"
             width={30}
@@ -85,6 +99,8 @@ const TopAreaPresenter = props => {
               // props.onReverseVideo();
             }}
           />
+
+          {/* 화면 좌우 반전 */}
           <CustomButton
             name="reverse"
             onPress={props.onReverseVideo}

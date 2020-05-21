@@ -90,6 +90,7 @@ const ContentPresenter = props => {
         >
           {Number(callType) !== 2 && !drawingMode && (
             <TopArea
+              callType={Number(callType)}
               orientation={props.orientation}
               drawing={props.drawingMode}
               sharing={props.attributes}
