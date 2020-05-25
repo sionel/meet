@@ -280,19 +280,19 @@ class HomeScreenContainer extends Component {
     if (!url) return;
 
     let result;
-    // 로그인이 되어있을 때 연결 요청이 왔을 시 result: string
-    // 비로그인상태에서 연결 요청후 위하고 앱으로 로그인을 진행하면 result: object
-    if (typeof result === 'string') result = querystringParser(url);
+    // 로그인이 되어있을 때 연결 요청이 왔을 시 url: string
+    // 비로그인상태에서 연결 요청후 위하고 앱으로 로그인을 진행하면 url: object
+    if (typeof url === 'string') result = querystringParser(url);
     else result = url;
 
     // 로그인 요청 시간 체크
     if (result.timestamp) {
       const timestamp_now = Date.now();
-      // 오래된(5초 이상) 연결요청의 경우 무시
+      // 오래된(15초 이상) 연결요청의 경우 무시
       if (timestamp_now - result.timestamp > 15000) return;
     }
 
-    console.warn('RESULT :: ', result);
+    // console.warn('RESULT :: ', result);
     if (result.is_creater) {
       // 화상대화 실행
       if (this.state.room_id === result.room_id) return;
