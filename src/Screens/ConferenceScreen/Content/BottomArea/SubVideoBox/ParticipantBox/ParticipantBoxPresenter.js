@@ -45,6 +45,16 @@ const ParticipantBoxPresenter = props => {
     </View>
   );
 
+  console.log(props.user);
+
+  const getUserName = user => {
+    if (user.userInfo) {
+      if (user.userInfo.nickname) {
+        return user.userInfo.nickname + '(' + user.userInfo.userName + ')';
+      } else return user.userInfo.userName;
+    } else return user.name;
+  };
+
   return (
     <TouchableOpacity
       style={styles.container}
@@ -69,7 +79,9 @@ const ParticipantBoxPresenter = props => {
         )} */}
       </View>
       <View style={styles.nameArea}>
-        <Text style={styles.name}>{props.user.name}</Text>
+        <Text ellipsizeMode="tail" numberOfLines={1} style={styles.name}>
+          {getUserName(props.user)}
+        </Text>
       </View>
     </TouchableOpacity>
   );
@@ -89,7 +101,7 @@ const styles = StyleSheet.create({
     // width: 100,
     // height: 120,
     display: 'flex',
-    marginHorizontal: 5,
+    marginHorizontal: 5
     // marginLeft: 10
   },
   videoArea: {
@@ -114,7 +126,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
-    height: '100%',
+    height: '100%'
     // borderWidth: 1,
     // borderColor: 'rgb(102, 104, 106)'
   },
@@ -129,6 +141,8 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   name: {
+    width: 90,
+    textAlign: 'center',
     color: '#fff',
     fontFamily: 'DOUZONEText30'
   },

@@ -77,13 +77,15 @@ class ConferenceConnector {
       // display Name 설정
       this._room.setDisplayName(name);
       // wehago id를 커맨드로 전송한다.
-      // this._room.sendCommand(WEHAGO_ID, {
+
       this._room.sendCommand(WEHAGO_ID, {
         value: this._room.myUserId(),
         attributes: {
           wehagoId: auth.portal_id,
           companyFullpath: auth.last_company.full_path,
-          profile_url: auth.profile_url ? auth.profile_url : ''
+          profile_url: auth.profile_url ? auth.profile_url : '',
+          userName: name,
+          nickname: auth.nickname
         }
       });
 
@@ -221,7 +223,6 @@ class ConferenceConnector {
 
     // 위하고 접속 아이디 및 정보 가져오기
     this._room.addCommandListener(WEHAGO_ID, user => {
-      // console.log('user : ', user);
       const id = user.value;
       this._handlers.SET_USER_INFO(id, user.attributes);
       //

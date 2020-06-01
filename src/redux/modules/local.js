@@ -104,7 +104,12 @@ function applyJoinConference(state, action) {
     audioTrack: conferenceInfo.audioTrack,
     isMuteMic: false,
     isMuteVideo: false,
-    isMuteSpeaker: false
+    isMuteSpeaker: false,
+    userInfo: {
+      isLocal: true,
+      userName: conferenceInfo.name,
+      nickname: conferenceInfo.nickname
+    }
   };
   return {
     ...state,

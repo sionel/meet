@@ -81,6 +81,7 @@ class ConferenceManager {
         id,
         cid: this._room.myUserId(),
         name,
+        nickname: auth.nickname,
         videoTrack,
         audioTrack,
         callType

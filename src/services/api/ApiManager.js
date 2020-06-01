@@ -49,9 +49,9 @@ class APIManager {
       const userList = await this._getUserList();
       // console.log('유저목록 : ', userList);
       // 비인증일때
-      const isExist = userList.resultData.find(
-        data => data.user_id === this.dummyWehagoId
-      );
+      const isExist =
+        userList.resultData &&
+        userList.resultData.find(data => data.user_id === this.dummyWehagoId);
 
       if (!isExist) {
         // insert api 호출(게스트)
@@ -252,10 +252,7 @@ class APIManager {
    * 10자의의 랜덤 스트링을 생성한다.
    */
   _createRandomString = () => {
-    return Math.random()
-      .toString(36)
-      .replace('0.', '')
-      .substring(0, 10);
+    return Math.random().toString(36).replace('0.', '').substring(0, 10);
   };
 
   /**

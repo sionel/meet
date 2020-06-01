@@ -104,7 +104,8 @@ function loginCheckRequest(
         last_company: checkResult.resultData.employee_list.filter(
           e => e.company_no == checkResult.resultData.last_access_company_no
         )[0],
-        member_type: checkResult.resultData.member_type // 0: 일반회원, 1: 개인회원
+        member_type: checkResult.resultData.member_type, // 0: 일반회원, 1: 개인회원
+        nickname: checkResult.nickname
       };
       dispatch(login(userData, isWehagoLogin));
       return checkResult;

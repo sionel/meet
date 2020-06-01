@@ -137,19 +137,31 @@ const logoutRequest = async auth => {
  */
 const check = async (a_token, r_token, cno, HASH_KEY) => {
   try {
-    const url = `${wehagoBaseURL}/common/user/userinfo/detail?cno=${cno}`;
+    const url = `${wehagoBaseURL}/common/user/userinfo/detail?cno=${cno}`; // 유저 전체 상세 정보
     const headers = securityRequest(a_token, r_token, url, HASH_KEY);
     const response = await fetch(url, {
       method: 'GET',
       headers
     });
-
     const responseJson = await response.json();
-    // console.warn('CHECK API : ', responseJson);
+
+    const url2 = `${wehagoBaseURL}/common/user/userinfo?cno=${cno}&selected_company_no=${cno}`; // 유저 정보 (닉네임 가져오려고 굳이 이걸 불러야하나...)
+    const headers2 = securityRequest(a_token, r_token, url2, HASH_KEY);
+    const response2 = await fetch(url2, {
+      method: 'GET',
+      headers: headers2
+    });
+    const responseJson2 = await response2.json();
+    const nickname =
+      responseJson2 &&
+      responseJson2.resultData &&
+      responseJson2.resultData[0] &&
+      responseJson2.resultData[0].nickname;
 
     return {
       status: response.status,
-      ...responseJson
+      ...responseJson,
+      nickname
     };
   } catch (errors) {
     console.warn('errors', errors);
