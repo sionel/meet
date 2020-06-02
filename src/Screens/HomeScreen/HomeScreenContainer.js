@@ -495,7 +495,7 @@ class HomeScreenContainer extends Component {
       ).resultData;
 
       // 최대 참여인원 제한 (15명)
-      if (participantList.length >= 15) {
+      if (participantList.length >= 50) {
         this._handleModalChange(
           true,
           '화상대화',
