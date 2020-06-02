@@ -22,6 +22,19 @@ const UserListPresenter = props => {
     onChangeSpeaker // 스피커폰
   } = props;
 
+  /**
+   * 닉네임 표기 방법
+   * 닉네임(이름) > 이름
+   * @param {*} user
+   */
+  const getUserName = user => {
+    if (user.userInfo) {
+      if (user.userInfo.nickname) {
+        return user.userInfo.nickname + '(' + user.userInfo.userName + ')';
+      } else return user.userInfo.userName;
+    } else return user.name;
+  };
+
   return (
     <ScrollView
       contentContainerStyle={{ paddingLeft: 16, paddingRight: 16 }}
@@ -58,7 +71,7 @@ const UserListPresenter = props => {
                 ellipsizeMode={'tail'}
                 style={styles.nameField}
               >
-                {item.name}
+                {getUserName(item)}
                 {/* ({item.userInfo.wehagoId || '외부참여자'}) */}
               </Text>
               {item.id === 'localUser' && (

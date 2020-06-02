@@ -11,13 +11,18 @@ export default class UserListContainer extends Component {
       presenter,
       speaker,
       toggleMuteMic,
-      onChangeSpeaker,
+      onChangeSpeaker
       // updateMuteAudio
     } = this.props;
     let userList = users.slice(0);
     userList.unshift({
       ...user,
-      userInfo: { profile_url: auth.profile_url, wehagoId: auth.portal_id }
+      userInfo: {
+        profile_url: auth.profile_url,
+        wehagoId: auth.portal_id,
+        userName: auth.user_name,
+        nickname: auth.nickname
+      }
     });
 
     return (

@@ -88,8 +88,8 @@ class APIManager {
           xhr.setRequestHeader('service', headers['service']);
         });
 
-        if (response.resultData === 1) console.log('response', response);
-        else console.log('또안돼');
+        // if (response.resultData === 1) console.log('response', response);
+        // else console.log('또안돼');
       } else {
         // 외부접속(비인증) 일 때
       }

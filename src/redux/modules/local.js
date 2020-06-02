@@ -336,6 +336,7 @@ function receiceConferenceMessage(newMessage = null) {
 
 function applySetConferenceMessage(state, action) {
   const { newMessage, participants } = action;
+  const { user } = state;
 
   if (newMessage === null) {
     return {
@@ -345,10 +346,18 @@ function applySetConferenceMessage(state, action) {
   }
 
   const list = state.message.slice(0);
-  const user = participants.find(participant => {
-    return participant.id === newMessage.user;
-  }) || { name: '(알수없음)' };
-  list.push({ ...newMessage, name: user.name });
+  let message_user =
+    newMessage.user === user.cid
+      ? user
+      : participants.find(participant => {
+          return participant.id === newMessage.user;
+        }) || { name: '(알수없음)' };
+
+  list.push({
+    ...newMessage,
+    name: message_user.name,
+    userInfo: message_user.userInfo
+  });
 
   return {
     ...state,

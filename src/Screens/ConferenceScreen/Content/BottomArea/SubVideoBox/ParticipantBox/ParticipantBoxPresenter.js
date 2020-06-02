@@ -45,8 +45,11 @@ const ParticipantBoxPresenter = props => {
     </View>
   );
 
-  console.log(props.user);
-
+  /**
+   * 닉네임 표기 방법
+   * 닉네임(이름) > 이름
+   * @param {*} user
+   */
   const getUserName = user => {
     if (user.userInfo) {
       if (user.userInfo.nickname) {

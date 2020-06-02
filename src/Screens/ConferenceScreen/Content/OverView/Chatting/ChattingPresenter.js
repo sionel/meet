@@ -23,6 +23,19 @@ const ChattingPresenter = props => {
     onSendTextMessage
   } = props;
 
+  /**
+   * 닉네임 표기 방법
+   * 닉네임(이름) > 이름
+   * @param {*} user
+   */
+  const getUserName = user => {
+    if (user.userInfo) {
+      if (user.userInfo.nickname) {
+        return user.userInfo.nickname + '(' + user.userInfo.userName + ')';
+      } else return user.userInfo.userName;
+    } else return user.name;
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -56,6 +69,7 @@ const ChattingPresenter = props => {
               onChangeState('cdm', true);
             }
             const localUser = user.cid === item.user;
+
             return (
               <View
                 style={[
@@ -83,7 +97,7 @@ const ChattingPresenter = props => {
                       ellipsizeMode="tail"
                       style={styles.nameField}
                     >
-                      {item.name}
+                      {getUserName(item)}
                     </Text>
                   )}
                   <View

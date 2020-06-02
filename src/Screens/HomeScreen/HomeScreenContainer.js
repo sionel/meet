@@ -494,7 +494,7 @@ class HomeScreenContainer extends Component {
         )
       ).resultData;
 
-      // 최대 참여인원 제한 (15명)
+      // 최대 참여인원 제한 (50명)
       if (participantList.length >= 50) {
         this._handleModalChange(
           true,
