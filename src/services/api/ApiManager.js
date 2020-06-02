@@ -1,11 +1,15 @@
 // import $ from 'jquery';
 import CryptoJS from 'crypto-js';
 import config from './config';
-import { securityRequest } from '../../utils';
+import { securityRequest, serialize } from '../../utils';
+import { Platform } from 'react-native';
+
+const os = Platform.OS;
 
 const baseApiUrl = config.baseApiUrl;
 const baseGuestUrl = config.baseGuestUrl;
 const baseGuestApiUrl = config.baseGuestApiUrl;
+const wehagoBaseURL = config.wehagoBaseURL;
 
 class APIManager {
   /**
@@ -15,7 +19,7 @@ class APIManager {
     // 초기 설정
     this.connectionId = connectionId;
     this.info = info;
-    this.dummyWehagoId = this._createRandomString();
+    this.dummyWehagoId = this._createRandomString(); // FIXME - 비회원일 때 아이디 만들어야하는데 비회원은 아이디가 없어서 만들어준다. 나중에 고쳐라
   }
 
   /**
@@ -40,53 +44,54 @@ class APIManager {
   };
 
   /**
-   * 방에 유저가 참여하면 Wehago에 알림
+   * 방에 유저가 참여하면 Wehago에 알림
+   *
+   * 파라미터
+   * video_chat_id: 화상채팅방 id,
+   * user_id: 참여자 id,
+   * user_name: 참여자 이름,
+   * video_seq: 비디오 시퀀스,
+   * user_device: 디바이스 구분 (1. WEB 2.IOS 3.Android),
+   * user_type: 사용자 타입 (1. 위하고 회원 2 외부 사용자)
    */
   insertUser = async () => {
     try {
       const { roomId } = this.info;
-      // 유저리스트를 가지고 온다.
-      const userList = await this._getUserList();
-      // console.log('유저목록 : ', userList);
-      // 비인증일때
-      const isExist =
-        userList.resultData &&
-        userList.resultData.find(data => data.user_id === this.dummyWehagoId);
+      let data = {
+        video_chat_id: roomId,
+        video_seq: this.connectionId,
+        user_id: this.info.userId,
+        user_name: this.info.userName,
+        user_device: os === 'ios' ? 2 : 3,
+        user_type: 1
+      };
 
-      if (!isExist) {
-        // insert api 호출(게스트)
-        const url = `${baseGuestApiUrl}videoChatMember`;
-        const data = {
-          video_chat_id: roomId,
-          user_id: this.dummyWehagoId,
-          user_name: this.info.name,
-          video_seq: this.connectionId
-        };
-
-        const token = await this._getToken(
-          '/communication/rtc/videoChatMember'
-        );
-        const signature = this._createSignature(
-          `/communication/rtc/videoChatMember${token}`
+      const isLogin = false; // 외부접속인지
+      // 로그인한 사용자 일 때
+      if (!isLogin) {
+        // insert api 호출 (참가)
+        const endPoint = 'videoChatMember';
+        const url = `${wehagoBaseURL}${endPoint}`;
+        const headers = securityRequest(
+          this.info.a_token,
+          this.info.r_token,
+          url,
+          this.info.hash_key
         );
 
-        await this._callApi(url, data, 'POST', xhr => {
-          const headers = this._makeHeaders(url, token, signature);
-          // const headers = this._makeHeaders(url);
-          // return {
-          // 	signature,
-          // 	...headers
-          // };
+        const response = await this._callApi(url, data, 'POST', xhr => {
           xhr.setRequestHeader('transaction-id', headers['transaction-id']);
           xhr.setRequestHeader('Authorization', headers['Authorization']);
           xhr.setRequestHeader('wehago-sign', headers['wehago-sign']);
           xhr.setRequestHeader('client-id', headers['client-id']);
           xhr.setRequestHeader('timestamp', headers['timestamp']);
           xhr.setRequestHeader('service', headers['service']);
-          xhr.setRequestHeader('signature', signature);
-          xhr.setRequestHeader('Wehago-S', headers['Wehago-S']);
-          xhr.setRequestHeader('Cookie', headers['Cookie']);
         });
+
+        if (response.resultData === 1) console.log('response', response);
+        else console.log('또안돼');
+      } else {
+        // 외부접속(비인증) 일 때
       }
     } catch (error) {
       console.log('insertUser ERROR : ', error);
@@ -95,6 +100,7 @@ class APIManager {
 
   /**
    * Delete User
+   * 사용 안함
    */
   deleteUser = async () => {
     try {
@@ -146,6 +152,7 @@ class APIManager {
 
   /**
    * 사용자가 다 나간상태라면 방을 지운다.
+   * 사용 안함
    */
   _deleteRoom = async () => {
     const { roomId } = this.info;
@@ -220,6 +227,7 @@ class APIManager {
   _getUserList = async () => {
     const { roomId } = this.info;
     const url = `${baseGuestApiUrl}videoChatMember`;
+
     const token = await this._getToken(
       `/communication/rtc/videoChatMember?video_chat_id=${roomId}`
     );

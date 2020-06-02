@@ -59,7 +59,7 @@ const DrawerContentPresenter = props => {
               }}
             >
               {props.auth.user_name}&nbsp;
-              {/* <Text style={{ fontSize: 13 }}>({props.auth.portal_id})</Text> */}
+              {/* <Text style={{ fontSize: 13 }}>({props.portal_id})</Text> */}
             </Text>
             <Text
               style={{

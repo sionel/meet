@@ -113,6 +113,7 @@ export default {
 	/**
 	 * getParticipant
 	 * 화상대화 방에 참가자 정보 조회 API
+	 * 유저리스트를 가지고 온다.
 	 */
 	getParticipant: async (videoRoomId=null, a_token=null, r_token=null, HASH_KEY=null) => {
     try {

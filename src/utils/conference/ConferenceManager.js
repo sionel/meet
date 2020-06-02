@@ -65,7 +65,9 @@ class ConferenceManager {
           name: name,
           a_token: auth.AUTH_A_TOKEN,
           r_token: auth.AUTH_R_TOKEN,
-          hash_key: auth.HASH_KEY
+          hash_key: auth.HASH_KEY,
+          userId: auth.portal_id,
+          userName: auth.user_name,
         }
       );
       // console.log('insert user');
