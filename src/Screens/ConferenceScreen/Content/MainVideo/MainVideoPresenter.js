@@ -41,15 +41,29 @@ const MainVideoPresenter = props => {
   //   dispatch({ type: 'CONFERENCE_PIP_MODE', pipMode });
   // }
 
+  /**
+   * 닉네임 표기 방법
+   * 닉네임(이름) > 이름
+   * @param {*} user
+   */
+  const getUserName = user => {
+    if (user.userInfo) {
+      if (user.userInfo.nickname) {
+        return user.userInfo.nickname + '(' + user.userInfo.userName + ')';
+      } else return user.userInfo.userName;
+    } else return user.name;
+  };
+
   const displayTime = (
     <View
       // onTouchEnd={props.onChangeObjectFit}
       style={{
+        position: 'absolute',
         top: props.hasNotch && props.orientation === 'vertical' ? 50 : 25,
         left: props.hasNotch && props.orientation !== 'vertical' ? 45 : 25,
-        // left: 25,
-        position: 'absolute',
-        zIndex: 5
+        height: 36,
+        zIndex: 5,
+        justifyContent: 'center'
       }}
     >
       <Text
@@ -251,6 +265,25 @@ const MainVideoPresenter = props => {
           )}
         </View>
       )}
+
+      {/* 닉네임 (이름) */}
+      <View
+        style={{
+          position: 'absolute',
+          zIndex: 6,
+          top: props.hasNotch && props.orientation === 'vertical' ? 100 : 75,
+          // left: props.hasNotch && props.orientation !== 'vertical' ? 45 : 25
+          left: 0,
+          right: 0,
+          alignItems: 'center'
+        }}
+      >
+        <Text
+          style={{ color: '#fff', fontSize: 18, fontFamily: 'DOUZONEText30' }}
+        >
+          {getUserName(mainUser)}
+        </Text>
+      </View>
 
       {/* 화상대화 중 나오는 통화시간 */}
       {Number(callType) !== 2 && !localPipMode && displayTime}
