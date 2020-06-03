@@ -270,11 +270,17 @@ const MainVideoPresenter = props => {
       <View
         style={{
           position: 'absolute',
-          zIndex: 6,
-          top: props.hasNotch && props.orientation === 'vertical' ? 100 : 75,
+          // zIndex: 5,
+          top:
+            props.orientation === 'vertical'
+              ? 75 + (props.hasNotch ? 25 : 0) // 세로모드
+              : 25, // 가로모드
           // left: props.hasNotch && props.orientation !== 'vertical' ? 45 : 25
           left: 0,
           right: 0,
+          height: 36,
+          zIndex: 5,
+          justifyContent: 'center',
           alignItems: 'center'
         }}
       >

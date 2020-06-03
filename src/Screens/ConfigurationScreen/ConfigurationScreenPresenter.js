@@ -53,7 +53,7 @@ const ConfigurationScreenPresenter = props => {
           ? '1.0.0'
           : Platform.OS === 'ios'
           ? '1.24.17'
-          : '1.5.2'
+          : '1.5.3'
     },
     {
       title: '이용약관 및 법률정보',
