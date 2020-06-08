@@ -10,7 +10,7 @@ const mapStateToProps = state => {
     conferenceMode: local.conferenceMode,
     isMuteVideo: local.user.isMuteVideo,
     documentListMode: mainUser.documentListMode,
-    memberType: user.auth.member_type
+    memberType: user.auth.member_type // wehago one 사용자
   };
 };
 

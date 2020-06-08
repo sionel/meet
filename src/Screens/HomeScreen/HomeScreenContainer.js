@@ -198,6 +198,7 @@ class HomeScreenContainer extends Component {
           navigation={navigation}
           refreshing={refreshing}
           // modal={modal}
+          permission={this.props.permission}
           list={wetalk}
           auth={auth}
           selectedRoomId={selectedRoomId}

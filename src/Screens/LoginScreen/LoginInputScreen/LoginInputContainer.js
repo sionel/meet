@@ -13,9 +13,7 @@ const _getTransactionId = () => {
     let rnum = Math.floor(Math.random() * chars.length);
     randomstring += chars.substring(rnum, rnum + 1);
   }
-  return String(randomstring)
-    .split('')
-    .join(' ');
+  return String(randomstring).split('').join(' ');
 };
 
 export default function LoginScreen(props) {
@@ -130,6 +128,11 @@ export default function LoginScreen(props) {
         Alert.alert(
           '로그인 실패',
           '로그인에 5번 실패해 자동입력 방지 문자 입력으로 이동합니다.'
+        );
+      } else if (loginResult.resultCode === 406) {
+        Alert.alert(
+          '사용제한안내',
+          '소속된 회사가 존재하지 않거나 가입단계가 완료되지 않아 로그인할 수 없습니다.'
         );
       } else Alert.alert('로그인 실패', '로그인에 실패했습니다.');
     }

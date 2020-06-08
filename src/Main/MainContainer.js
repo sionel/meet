@@ -247,41 +247,48 @@ class MainContainer extends Component {
    * LoginScreen 에서 _handleOnLogin을 통해서 로그인 상태를 관리함
    */
   _handleOnLogin = async () => {
-    const resultService = await ServiceCheckApi.serviceCheck(
-      this.props.auth,
-      this.props.auth.last_company,
-      'D'
-    );
+    // const resultService = await ServiceCheckApi.serviceCheck(
+    //   this.props.auth,
+    //   this.props.auth.last_company,
+    //   'D'
+    // );
 
-    this.setState({ isLogin: true, hasService: resultService });
+    // this.setState({ isLogin: true, hasService: resultService });
 
-    return;
+    // return;
 
     // TODO - 개발 중
     // 회사 상태 조회 후 진행
-    // const statusCheck = await ServiceCheckApi.companyStatusCheck(
-    //   this.props.auth,
-    //   this.props.auth.last_company
-    // );
+    const statusCheck = await ServiceCheckApi.companyStatusCheck(
+      this.props.auth,
+      this.props.auth.last_company
+    );
 
-    // // 이상이 없는 회사일 경우 로그인 정상 진행
-    // if (statusCheck && statusCheck.code === 200) {
-    //   // 서비스 배포 여부 확인 후 진행
-    //   const resultService = await ServiceCheckApi.serviceCheck(
-    //     this.props.auth,
-    //     this.props.auth.last_company,
-    //     'D' // 배포여부 확인
-    //   );
+    // 이상이 없는 회사일 경우 로그인 정상 진행
+    if (statusCheck && statusCheck.code === 200) {
+      // 서비스 구매여부 조회
+      const isPurchase = await ServiceCheckApi.serviceCheck(
+        this.props.auth,
+        this.props.auth.last_company,
+        'P' // 구매여부 확인
+      );
+      // 서비스 배포여부 조회
+      const isDeploy = await ServiceCheckApi.serviceCheck(
+        this.props.auth,
+        this.props.auth.last_company,
+        'D' // 배포여부 확인
+      );
+      this.props.setPermission(isDeploy);
 
-    //   this.setState({ isLogin: true, hasService: resultService });
-    // } else if (statusCheck && statusCheck.code === 400) {
-    //   // 회사에 이상이 있을 경우, 회사 선택 화면으로 이동
-    //   Alert.alert('알림', statusCheck.message);
-    //   this.setState({ isLogin: true, hasService: false });
-    // } else {
-    //   // 중간에 알 수 없는 오류 발생 시
-    //   this.setState({ isLogin: true, hasService: false });
-    // }
+      this.setState({ isLogin: true, hasService: isPurchase });
+    } else if (statusCheck && statusCheck.code === 400) {
+      // 회사에 이상이 있을 경우, 회사 선택 화면으로 이동
+      Alert.alert('알림', statusCheck.message);
+      this.setState({ isLogin: true, hasService: false });
+    } else {
+      // 중간에 알 수 없는 오류 발생 시
+      this.setState({ isLogin: true, hasService: false });
+    }
   };
 
   /**

@@ -18,6 +18,7 @@ const EVENT_LOG = 'EVENT_LOG';
 const NETWORK_DISCONNECT = 'NETWORK_DISCONNECT';
 
 const SESSION_CHECK = 'SESSION_CHECK';
+const SET_PERMISSION = 'SET_PERMISSION'; // 화상대화 생성 권한
 //#region Action Creators
 
 /**
@@ -153,6 +154,16 @@ function token(auth) {
 }
 
 /**
+ * 권한 설정
+ */
+function setPermission(permission) {
+  return {
+    type: SET_PERMISSION,
+    permission
+  };
+}
+
+/**
  * intro skip
  */
 // function intro() {
@@ -219,7 +230,8 @@ const initialState = {
   appIntro: false,
   isWehagoLogin: false,
   log: {},
-  session: true
+  session: true,
+  permission: false
 };
 
 //#endregion initialState
@@ -260,6 +272,8 @@ function reducer(state = initialState, action) {
       return applyEventLog(state, action);
     case SESSION_CHECK:
       return { ...state, session: action.session };
+    case SET_PERMISSION:
+      return { ...state, permission: action.permission };
     default:
       return state;
   }
@@ -332,7 +346,8 @@ const actionCreators = {
   changeCompany,
   changeCompanyRequest,
   toggleVisibleAppIntro,
-  sessionCheck
+  sessionCheck,
+  setPermission
 };
 
 export { actionCreators };

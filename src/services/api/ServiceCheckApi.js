@@ -23,17 +23,23 @@ const checkStatusType = ({ company_state, employee_status, step }) => {
               case 3:
                 return {
                   code: 400,
-                  message: '사용중지'
+                  message:
+                    'WEHAGO 이용이 제한되었습니다. 이용제한에 문의가 있을 경우 고객센터로 문의해주세요.'
+                  // message: '사용중지'
                 };
               case 4:
                 return {
                   code: 400,
-                  message: '퇴사'
+                  message:
+                    'WEHAGO 이용이 제한되었습니다. 이용제한에 문의가 있을 경우 고객센터로 문의해주세요.'
+                  // message: '퇴사'
                 };
               case 5:
                 return {
                   code: 400,
-                  message: '탈퇴'
+                  message:
+                    'WEHAGO 이용이 제한되었습니다. 이용제한에 문의가 있을 경우 고객센터로 문의해주세요.'
+                  // message: '탈퇴'
                 };
               default:
                 return {
@@ -49,7 +55,9 @@ const checkStatusType = ({ company_state, employee_status, step }) => {
           // 미납된 케이스
           return {
             code: 400,
-            message: '미납'
+            message:
+              'WEHAGO 이용이 제한되었습니다. 이용제한에 문의가 있을 경우 고객센터로 문의해주세요.'
+            // message: '미납'
           };
         }
       } else {
@@ -163,8 +171,8 @@ const serviceCheck = async (auth, company, type) => {
 
     const urlType =
       type === 'P'
-        ? '/common/company/service/purchase/check'
-        : '/common/company/deploy/whether/employee';
+        ? '/common/company/service/purchase/check' // 구매여부
+        : '/common/company/deploy/whether/employee'; // 배포여부
     const url = `${wehagoBaseURL}${urlType}?${params}`;
 
     const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);

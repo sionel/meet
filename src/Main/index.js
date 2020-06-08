@@ -37,6 +37,8 @@ const mapDispatchToProps = dispatch => {
         )
       ),
     onLogout: () => dispatch(UserActions.logout()),
+    setPermission: permission =>
+      dispatch(UserActions.setPermission(permission)),
     setSharingMode: () => dispatch(DocumentShareActions.setSharingMode()),
     setInitInfo: () => dispatch(WedriveAcionCreators.setInitInfo())
   };

@@ -10,6 +10,7 @@ import { actionCreators as WetalkActions } from '../../redux/modules/wetalk';
 const mapStateToProps = state => ({
   auth: state.user.auth,
   isWehagoLogin: state.user.isWehagoLogin,
+  permission: state.user.permission,
   wetalk: state.wetalk.list
 });
 

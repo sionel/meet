@@ -32,6 +32,7 @@ const LoginInput = props => {
   return (
     <LoginInputScreen
       // devServer={true}
+      // navigation={props.navigation}
       wehagoType={WEHAGO_ENV}
       serviceCode={'wehagomeet'}
       onLoginSuccess={res => {
