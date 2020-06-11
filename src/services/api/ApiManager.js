@@ -63,7 +63,8 @@ class APIManager {
         user_id: this.info.userId,
         user_name: this.info.userName,
         user_device: os === 'ios' ? 2 : 3,
-        user_type: 1
+        user_type: 1,
+        IS_MOBILE: 'T'
       };
 
       const isLogin = false; // 외부접속인지

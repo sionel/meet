@@ -60,8 +60,10 @@ const HomeScreenPresenter = props => {
           <Placeholder
             mainText={'진행중인 화상대화가 없습니다.'}
             subText={
-              props.memberType === 1
+              props.memberType === 1 || props.plan === 'WE'
                 ? 'WEHAGO앱에서 화상대화 및 통화를 시작해보세요.'
+                : props.plan === 'SP'
+                ? '화상대화방 생성 후 참여가 가능합니다.'
                 : '대화를 시작하려면 +버튼을 누르세요.'
             }
             // other={reloadButton}
@@ -126,7 +128,7 @@ const HomeScreenPresenter = props => {
       {/* 방생성 버튼 */}
       {/* wehago one 회원은 불가 */}
       {/* 미구매 회원은 불가 */}
-      {props.memberType !== 1 && props.permission && (
+      {props.memberType !== 1 && props.permission && props.plan !== 'WE' && (
         <AddButton
           onClick={() =>
             props.onRedirect('Create', {

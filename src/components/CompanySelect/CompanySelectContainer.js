@@ -13,6 +13,8 @@ export default function CompanySelect(props) {
   const employee_list = auth.employee_list;
   const isWehagoLogin = useSelector(state => state.user['isWehagoLogin']);
 
+  const isSP = auth.last_company.membership_code === 'SP';
+
   const handleChangeCompany = async cno => {
     const companyInfo = employee_list.find(emp => emp.company_no === cno);
     const company = {
@@ -28,10 +30,15 @@ export default function CompanySelect(props) {
     props.onLogout();
     props.onSetInitialList();
   };
-
   return (
     <CompanySelectPresenter
-      {...{ employee_list, selectedCompany, handleChangeCompany, onLogout }}
+      {...{
+        isSP,
+        employee_list,
+        selectedCompany,
+        handleChangeCompany,
+        onLogout
+      }}
     />
   );
 }

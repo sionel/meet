@@ -157,6 +157,7 @@ class HomeScreenContainer extends Component {
       alert
     } = this.state;
     const { navigation, auth } = this.props;
+    const plan = auth.last_company.membership_code; // 요금제 [WE: 엣지, SP: 싱글팩, ...]
 
     let wetalk = []; // We talk list
     if (searchKeyword) {
@@ -195,6 +196,7 @@ class HomeScreenContainer extends Component {
           renderNavigationView={() => <DrawerContent navigation={navigation} />}
         > */}
         <HomeScreenPresenter
+          plan={plan}
           navigation={navigation}
           refreshing={refreshing}
           // modal={modal}

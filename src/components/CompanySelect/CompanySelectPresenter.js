@@ -11,6 +11,7 @@ const { Text } = StyledText;
 
 export default function CompanySelectPresenter(props) {
   const {
+    isSP,
     employee_list,
     selectedCompany,
     handleChangeCompany,
@@ -23,7 +24,9 @@ export default function CompanySelectPresenter(props) {
     <View style={styles.container}>
       <View style={styles.companyList}>
         <View style={styles.title}>
-          <Text style={styles.titleText}>화상대화 미구매 회사</Text>
+          <Text style={styles.titleText}>
+            {isSP ? '화상대화팩 미구매 회사' : '화상대화 미구매 회사'}
+          </Text>
           <TouchableOpacity
             activeOpacity={0.5}
             onPress={() => setVisible(true)}
