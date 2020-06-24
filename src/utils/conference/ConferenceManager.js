@@ -71,7 +71,7 @@ class ConferenceManager {
         }
       );
       // console.log('insert user');
-      // this._apiManager.insertUser();
+      this._apiManager.insertUser();
     }
 
     const id = 'localUser';

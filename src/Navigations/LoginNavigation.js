@@ -9,6 +9,7 @@ const Login = props => {
   return (
     <LoginCheckScreen {...props}>
       <LoginScreen
+        // devServer={true}
         wehagoType={WEHAGO_ENV}
         serviceCode={'wehagomeet'}
         text1={'시간과 장소의 제약 없는\n효율적인 화상회의'}

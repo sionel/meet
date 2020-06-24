@@ -24,6 +24,7 @@ export default function DrawerContent(props) {
 
   return (
     <Drawer
+      // devServer={true}
       wehagoType={WEHAGO_ENV}
       navigation={props.navigation}
       auth={auth}
