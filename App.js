@@ -1,14 +1,21 @@
 import React, { Component } from 'react';
-import { AppRegistry, View, Text } from 'react-native';
+import { AppRegistry, View, Platform } from 'react-native';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/es/integration/react';
 import configureStore from './src/redux/configureStore';
 import Main from './src/Main';
 import LaunchScreen from './src/Screens/LaunchScreen';
 import ServerNotiveCheck from './src/components/ServerNotiveCheck';
+import { WEHAGO_ENV } from './config';
 // CallKit
 // import { IncomingCallApp } from './jitsi/features/mobile/incoming-call';
 // import { AudioRouteButton } from './jitsi/features/mobile/audio-mode';
+
+// 스크린샷 막기 및 백그라운드시 정보 보호 정책
+const FlagSecure =
+  Platform.OS === 'android' && WEHAGO_ENV === 'WEHAGOV'
+    ? require('react-native-flag-secure-android')
+    : null;
 
 const bg = require('./assets/bgIntroWehagoIphoneX_3x.png');
 
@@ -26,6 +33,7 @@ export default class App extends Component {
   state = { loading: true, message: {} };
 
   componentDidMount = () => {
+    FlagSecure && FlagSecure.activate(); // 스크린샷 막기 및 백그라운드 정보 보호 정책
     this.handleCheckNotice();
   };
 

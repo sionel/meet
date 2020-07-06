@@ -75,6 +75,7 @@ dependencies {
     implementation project(':react-native-home-pressed')
     implementation project(':react-native-incall-manager')
     implementation project(':react-native-restart')
+    implementation project(':react-native-flag-secure-android')
 
     testImplementation 'junit:junit:4.12'
 }

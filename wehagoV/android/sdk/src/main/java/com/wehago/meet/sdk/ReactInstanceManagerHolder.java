@@ -207,6 +207,7 @@ class ReactInstanceManagerHolder {
                 new com.evanjmg.RNHomePressedPackage(),
                 new com.zxcpoiu.incallmanager.InCallManagerPackage(),
                 new com.avishayil.rnrestart.ReactNativeRestartPackage(),
+                new com.staltz.flagsecure.FlagSecurePackage(),
                 // end
                 new ReactPackageAdapter() {
                     @Override

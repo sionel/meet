@@ -95,6 +95,7 @@
     "react-native-cancelable-fetch": "^0.1.1",
     "react-native-device-info": "^2.3.2",
     "react-native-fast-image": "^7.0.2",
+    "react-native-flag-secure-android": "^1.0.2",
     "react-native-gesture-handler": "^1.4.1",
     "react-native-google-signin": "2.0.0",
     "react-native-home-indicator": "^0.2.5",
