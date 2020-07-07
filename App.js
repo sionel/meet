@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AppRegistry, View, Platform } from 'react-native';
+import { AppRegistry, View, Platform, Alert, BackHandler } from 'react-native';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/es/integration/react';
 import configureStore from './src/redux/configureStore';
@@ -14,7 +14,11 @@ import { WEHAGO_ENV } from './config';
 // 스크린샷 막기 및 백그라운드시 정보 보호 정책
 const FlagSecure =
   Platform.OS === 'android' && WEHAGO_ENV === 'WEHAGOV'
-    ? require('react-native-flag-secure-android')
+    ? require('react-native-flag-secure-android').default
+    : null;
+const JailMonkey =
+  Platform.OS === 'android' && WEHAGO_ENV === 'WEHAGOV'
+    ? require('jail-monkey').default
     : null;
 
 const bg = require('./assets/bgIntroWehagoIphoneX_3x.png');
@@ -32,9 +36,24 @@ if (process.env.NODE_ENV !== 'development') {
 export default class App extends Component {
   state = { loading: true, message: {} };
 
-  componentDidMount = () => {
+  componentDidMount = async () => {
     FlagSecure && FlagSecure.activate(); // 스크린샷 막기 및 백그라운드 정보 보호 정책
-    this.handleCheckNotice();
+    const isJailBroken = JailMonkey.isJailBroken();
+    const isDebuggedMode = await JailMonkey.isDebuggedMode();
+    if (
+      Platform.OS === 'android' &&
+      WEHAGO_ENV === 'WEHAGOV' &&
+      (isJailBroken || isDebuggedMode)
+    ) {
+      Alert.alert(
+        '알림',
+        '루팅된 단말에서는 WEHAGO모바일 서비스 이용이 제한됩니다. 보안을 위해 앱을 종료합니다.',
+        [{ text: '확인', onPress: () => BackHandler.exitApp() }],
+        { cancelable: false }
+      );
+    } else {
+      this.handleCheckNotice();
+    }
   };
 
   handleCheckNotice = async () => {

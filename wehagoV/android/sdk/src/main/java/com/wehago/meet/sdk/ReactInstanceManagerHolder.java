@@ -208,6 +208,7 @@ class ReactInstanceManagerHolder {
                 new com.zxcpoiu.incallmanager.InCallManagerPackage(),
                 new com.avishayil.rnrestart.ReactNativeRestartPackage(),
                 new com.staltz.flagsecure.FlagSecurePackage(),
+                new com.gantix.JailMonkey.JailMonkeyPackage(),
                 // end
                 new ReactPackageAdapter() {
                     @Override
