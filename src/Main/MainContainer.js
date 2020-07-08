@@ -18,6 +18,9 @@ import { CustomAlert } from '../components';
 import { querystringParser } from '../utils';
 import ServiceCheckApi from '../services/api/ServiceCheckApi';
 
+import { WEHAGO_ENV } from './../../config';
+
+
 class MainContainer extends Component {
   state = {
     isLogin: false,
@@ -166,7 +169,7 @@ class MainContainer extends Component {
           break;
         case 2:
           description =
-            '고객님의 다른 기기에서 WEHAGO 접속정보가 확인되어 로그아웃 됩니다.';
+          WEHAGO_ENV === 'WEHAGOV' ? '세션이 만료되었습니다. 다시 로그인 해주세요.' : '고객님의 다른 기기에서 WEHAGO 접속정보가 확인되어 로그아웃 됩니다.';
           onClose = async () => {
             this._handleOnCloseAlert(
               () =>
