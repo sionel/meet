@@ -37,9 +37,9 @@ export default class App extends Component {
   state = { loading: true, message: {} };
 
   componentDidMount = async () => {
-    FlagSecure && FlagSecure.activate(); // 스크린샷 막기 및 백그라운드 정보 보호 정책
-    const isJailBroken = JailMonkey.isJailBroken();
-    const isDebuggedMode = await JailMonkey.isDebuggedMode();
+    // FlagSecure && FlagSecure.activate(); // 스크린샷 막기 및 백그라운드 정보 보호 정책
+    const isJailBroken = JailMonkey?.isJailBroken();
+    const isDebuggedMode = await JailMonkey?.isDebuggedMode();
     if (
       Platform.OS === 'android' &&
       WEHAGO_ENV === 'WEHAGOV' &&

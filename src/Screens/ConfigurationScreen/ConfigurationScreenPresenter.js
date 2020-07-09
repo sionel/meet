@@ -50,7 +50,7 @@ const ConfigurationScreenPresenter = props => {
       icon: 'ico_menu_info',
       content:
         WEHAGO_ENV === 'WEHAGOV'
-          ? '1.0.0'
+          ? '1.0.1'
           : Platform.OS === 'ios'
           ? '1.24.19'
           : '1.6.1'
