@@ -35,7 +35,6 @@ PODS:
     - FirebaseCore (~> 5.2)
     - GoogleUtilities/Environment (~> 5.2)
     - GoogleUtilities/UserDefaults (~> 5.2)
-  - FLAnimatedImage (1.0.12)
   - Folly (2018.10.22.00):
     - boost-for-react-native
     - DoubleConversion
@@ -78,6 +77,15 @@ PODS:
   - GoogleUtilities/UserDefaults (5.7.0):
     - GoogleUtilities/Logger
   - GTMSessionFetcher/Core (1.2.1)
+  - libwebp (1.1.0):
+    - libwebp/demux (= 1.1.0)
+    - libwebp/mux (= 1.1.0)
+    - libwebp/webp (= 1.1.0)
+  - libwebp/demux (1.1.0):
+    - libwebp/webp
+  - libwebp/mux (1.1.0):
+    - libwebp/demux
+  - libwebp/webp (1.1.0)
   - lottie-ios (2.5.3)
   - lottie-react-native (2.6.1):
     - lottie-ios (~> 2.5.0)
@@ -96,11 +104,6 @@ PODS:
     - React
   - react-native-calendar-events (1.6.4):
     - React
-  - react-native-fast-image (5.1.1):
-    - FLAnimatedImage
-    - React
-    - SDWebImage/Core
-    - SDWebImage/GIF
   - react-native-keep-awake (4.0.0):
     - React
   - react-native-orientation-locker (1.1.6):
@@ -164,6 +167,10 @@ PODS:
     - React
   - RNDeviceInfo (2.3.2):
     - React
+  - RNFastImage (7.0.2):
+    - React
+    - SDWebImage (~> 5.0)
+    - SDWebImageWebPCoder (~> 0.2.3)
   - RNGestureHandler (1.4.1):
     - React
   - RNGoogleSignin (2.0.0):
@@ -180,10 +187,12 @@ PODS:
     - React
   - RNWatch (0.2.0):
     - React
-  - SDWebImage/Core (4.4.6)
-  - SDWebImage/GIF (4.4.6):
-    - FLAnimatedImage (~> 1.0)
-    - SDWebImage/Core
+  - SDWebImage (5.8.3):
+    - SDWebImage/Core (= 5.8.3)
+  - SDWebImage/Core (5.8.3)
+  - SDWebImageWebPCoder (0.2.5):
+    - libwebp (~> 1.0)
+    - SDWebImage/Core (~> 5.0)
   - yoga (0.59.8.React)
 
 DEPENDENCIES:
@@ -201,7 +210,6 @@ DEPENDENCIES:
   - RCTRestart (from `../node_modules/react-native-restart`)
   - react-native-background-timer (from `../node_modules/react-native-background-timer`)
   - react-native-calendar-events (from `../node_modules/react-native-calendar-events`)
-  - react-native-fast-image (from `./modules/react-native-fast-image`)
   - react-native-keep-awake (from `../node_modules/react-native-keep-awake`)
   - react-native-orientation-locker (from `../node_modules/react-native-orientation-locker/react-native-orientation-locker.podspec`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
@@ -220,6 +228,7 @@ DEPENDENCIES:
   - ReactNativePermissions (from `../node_modules/react-native-permissions`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
+  - RNFastImage (from `../node_modules/react-native-fast-image`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNGoogleSignin (from `../node_modules/react-native-google-signin`)
   - "RNSketchCanvas (from `../node_modules/@terrylinla/react-native-sketch-canvas`)"
@@ -229,7 +238,7 @@ DEPENDENCIES:
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  trunk:
     - Amplitude-iOS
     - boost-for-react-native
     - Crashlytics
@@ -240,16 +249,17 @@ SPEC REPOS:
     - FirebaseCore
     - FirebaseDynamicLinks
     - FirebaseInstanceID
-    - FLAnimatedImage
     - GoogleAppMeasurement
     - GoogleSignIn
     - GoogleToolboxForMac
     - GoogleUtilities
     - GTMSessionFetcher
+    - libwebp
     - lottie-ios
     - nanopb
     - ObjectiveDropboxOfficial
     - SDWebImage
+    - SDWebImageWebPCoder
 
 EXTERNAL SOURCES:
   BVLinearGradient:
@@ -270,8 +280,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-background-timer"
   react-native-calendar-events:
     :path: "../node_modules/react-native-calendar-events"
-  react-native-fast-image:
-    :path: "./modules/react-native-fast-image"
   react-native-keep-awake:
     :path: "../node_modules/react-native-keep-awake"
   react-native-orientation-locker:
@@ -288,6 +296,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/async-storage"
   RNDeviceInfo:
     :path: "../node_modules/react-native-device-info"
+  RNFastImage:
+    :path: "../node_modules/react-native-fast-image"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNGoogleSignin:
@@ -316,7 +326,6 @@ SPEC CHECKSUMS:
   FirebaseCore: 52f851b30e11360f1e67cf04b1edfebf0a47a2d3
   FirebaseDynamicLinks: f209c3caccd82102caa0e91d393e3ccc593501fd
   FirebaseInstanceID: a122b0c258720cf250551bb2bedf48c699f80d90
-  FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   Folly: de497beb10f102453a1afa9edbf8cf8a251890de
   glog: aefd1eb5dda2ab95ba0938556f34b98e2da3a60d
   GoogleAppMeasurement: 6cf307834da065863f9faf4c0de0a936d81dd832
@@ -324,6 +333,7 @@ SPEC CHECKSUMS:
   GoogleToolboxForMac: ff31605b7d66400dcec09bed5861689aebadda4d
   GoogleUtilities: 273e67030e0de313e7304f6dcfa96fc5214f6c23
   GTMSessionFetcher: 32aeca0aa144acea523e1c8e053089dec2cb98ca
+  libwebp: 946cb3063cea9236285f7e9a8505d806d30e07f3
   lottie-ios: a50d5c0160425cd4b01b852bb9578963e6d92d31
   lottie-react-native: 3d8181d43619b1fe804c828bd5a09d20fe8bdea7
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
@@ -332,7 +342,6 @@ SPEC CHECKSUMS:
   React: 76e6aa2b87d05eb6cccb6926d72685c9a07df152
   react-native-background-timer: 0d34748e53a972507c66963490c775321a88f6f2
   react-native-calendar-events: ee9573e355711ac679e071be70789542431f4ce3
-  react-native-fast-image: 47487b71169aea34868e7b38bf870b6b3f2157c5
   react-native-keep-awake: eba3137546b10003361b37c761f6c429b59814ae
   react-native-orientation-locker: 23918c400376a7043e752c639c122fcf6bce8f1c
   react-native-slider: 9fb33ac32cb788360adb5c38685aa3642bebd93c
@@ -341,15 +350,17 @@ SPEC CHECKSUMS:
   ReactNativePermissions: f0aec11433d43d45953c678b6982921d83ad94c8
   RNCAsyncStorage: 8e31405a9f12fbf42c2bb330e4560bfd79c18323
   RNDeviceInfo: bdc3e922b2ed0f086e9d9ab534e61bc316f08576
+  RNFastImage: 9b0c22643872bb7494c8d87bbbb66cc4c0d9e7a2
   RNGestureHandler: 4cb47a93019c1a201df2644413a0a1569a51c8aa
   RNGoogleSignin: d030c6c6591db24c3cee649f64c7babf0a1699a0
   RNSketchCanvas: 6939b18677cd1794151cc3d8eb5a0a2158a4a05b
   RNSound: e157320f503bdd4f4ee6d8542e948d54f90c3c3a
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   RNWatch: 09738b339eceb66e4d80a2371633ca5fb380fa42
-  SDWebImage: 3f3f0c02f09798048c47a5ed0a13f17b063572d8
+  SDWebImage: 112503ec94a5a2a41869503844a15e8d8f1ead5c
+  SDWebImageWebPCoder: 947093edd1349d820c40afbd9f42acb6cdecd987
   yoga: 92b2102c3d373d1a790db4ab761d2b0ffc634f64
 
-PODFILE CHECKSUM: fa58710298151c4d3e911db37ea1d29085e39056
+PODFILE CHECKSUM: 8e7ae04385f7cb77f6dd49d96193ff1cabb8dc73
 
-COCOAPODS: 1.9.0.beta.1
+COCOAPODS: 1.9.3
