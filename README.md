@@ -54,3 +54,22 @@ react : 16.8.3
 jitsi : ?
 
 react-native 만 버전을 업그레이드 하면 jitsi 에서 오류가 날 가능성이 매우 크므로 주의
+
+## 에러 대응
+
+1. '__attribute__' 에러 :
+
+node_modules/react-native/React/Base/RCTModuleMethod.mm 에서 91번째줄 수정
+
+https://github.com/facebook/react-native/issues/25138 참고
+
+
+```
+static BOOL RCTParseUnused(const char **input) {
+   return RCTReadString(input, "__unused") ||
+   RCTReadString(input, "__attribute__((__unused__))") || //solve by add   this line
+   RCTReadString(input, "__attribute__((unused))");
+}
+```
+
+
