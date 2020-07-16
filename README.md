@@ -73,3 +73,6 @@ static BOOL RCTParseUnused(const char **input) {
 ```
 
 
+2. 키체인 문제 :
+
+https://zeddios.tistory.com/327
