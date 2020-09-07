@@ -101,10 +101,12 @@ function loginCheckRequest(
         profile_url: checkResult.resultData.profile_url,
         user_contact: checkResult.resultData.user_contact,
         employee_list: checkResult.resultData.employee_list, // 회사정보
-        last_access_company_no: checkResult.resultData.last_access_company_no,
-        last_company: checkResult.resultData.employee_list.filter(
-          e => e.company_no == checkResult.resultData.last_access_company_no
-        )[0],
+        last_access_company_no: checkResult.resultData.last_access_company_no ?checkResult.resultData.last_access_company_no : cno,
+        last_company: checkResult.resultData.last_access_company_no
+          ? checkResult.resultData.employee_list.filter(
+              e => e.company_no == checkResult.resultData.last_access_company_no
+            )[0]
+          : checkResult.resultData.employee_list[0], // last_access_company_no가 비어있는 상태로 올 수 있어서 null이 뜬다면 리스트중 첫번째 인덱스로 처리
         member_type: checkResult.resultData.member_type, // 0: 일반회원, 1: 개인회원
         nickname: checkResult.nickname
       };
