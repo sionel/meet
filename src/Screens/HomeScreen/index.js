@@ -6,12 +6,14 @@ import HomeScreenContainer from './HomeScreenContainer';
 import { connect } from 'react-redux';
 import { actionCreators as UserActions } from '../../redux/modules/user';
 import { actionCreators as WetalkActions } from '../../redux/modules/wetalk';
+import { actionCreators as ConferenceActions } from '../../redux/modules/conference';
 
 const mapStateToProps = state => ({
   auth: state.user.auth,
   isWehagoLogin: state.user.isWehagoLogin,
   permission: state.user.permission,
-  wetalk: state.wetalk.list
+  wetalk: state.wetalk.list,
+  conference: state.conference.list
 });
 
 /**
@@ -32,7 +34,8 @@ const mapDispatchToProps = dispatch => ({
         isWehagoLogin
       )
     ),
-  onSetWetalkList: list => dispatch(WetalkActions.setList(list))
+  onSetWetalkList: list => dispatch(WetalkActions.setList(list)),
+  onSetConferenceList : list => dispatch(ConferenceActions.setList2(list))
   // onCreateConference: bodyData => dispatch(ConferenceActions.createConference(...bodyData))
 });
 

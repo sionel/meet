@@ -3,7 +3,7 @@
  * 사용자 관련 API
  */
 
-import { wehagoBaseURL, securityRequest } from '../../utils';
+import { meetURL, wehagoBaseURL, securityRequest } from '../../utils';
 
 // #region
 export default {
@@ -34,28 +34,6 @@ export default {
 			alert('사소한 문제가 발생했습니다. 다시 시도해 주세요');
 			return false;
 		}
-	}
-
-	// /**
-	//  * 진행중인 화상대화 목록
-	//  */
-	// getOnairList: async (portal_id, cno) => {
-	// 	/*
-	// 	portal_id: 찾을아이디
-	// 	cno: 회사코드
-	// 	*/
-	// 	try {
-	// 		const url = `${wehagoBaseURL}/communication/rtc/rtc-room-list?user_id=${portal_id}&cno=${cno}`;
-	// 		const headers = securityRequest(a_token, url, HASH_KEY);
-	// 		const response = await fetch(url, {
-	// 			method: 'GET',
-	// 			headers
-	// 		});
-	// 		const responseJson = await response.json();
-	// 		return responseJson;
-	// 	} catch (err) {
-	// 		return err;
-	// 	}
-	// }
+	},
 };
 // #endregion

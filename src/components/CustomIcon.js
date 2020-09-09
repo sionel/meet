@@ -68,6 +68,8 @@ import loadIcon from '../../assets/icons/loginIcon/loadIcon.png';
 import logo_login from '../../assets/icons/loginIcon/logo_login.png';
 import btnTnaviHomeNone from '../../assets/icons/loginIcon/btnTnaviHomeNone.png';
 
+import loading from '../../assets/loading.gif';
+
 import ico_menu_alert from '../../assets/icons/settingIcon/ico_menu_alert.png';
 import ico_menu_auto_login from '../../assets/icons/settingIcon/ico_menu_auto_login.png';
 import ico_menu_info_law from '../../assets/icons/settingIcon/ico_menu_info_law.png';
@@ -252,6 +254,8 @@ const getButtonSource = name => {
       return btn_navi_search_press;
     case 'btnUserCancelNone':
       return btnUserCancelNone;
+    case 'loading':
+      return loading;
     default:
       return ico_etc;
   }

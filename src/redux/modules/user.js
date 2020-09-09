@@ -92,6 +92,7 @@ function loginCheckRequest(
         AUTH_A_TOKEN,
         AUTH_R_TOKEN,
         HASH_KEY,
+        cno,
         // check api data
         user_no: checkResult.resultData.user_no,
         portal_id: checkResult.resultData.portal_id, // 아이디
@@ -101,7 +102,9 @@ function loginCheckRequest(
         profile_url: checkResult.resultData.profile_url,
         user_contact: checkResult.resultData.user_contact,
         employee_list: checkResult.resultData.employee_list, // 회사정보
-        last_access_company_no: checkResult.resultData.last_access_company_no ?checkResult.resultData.last_access_company_no : cno,
+        last_access_company_no: checkResult.resultData.last_access_company_no
+          ? checkResult.resultData.last_access_company_no
+          : cno,
         last_company: checkResult.resultData.last_access_company_no
           ? checkResult.resultData.employee_list.filter(
               e => e.company_no == checkResult.resultData.last_access_company_no

@@ -12,17 +12,20 @@ import { actionCreators as DocumentShareAcionCreators } from '../../redux/module
 import { actionCreators as WedriveAcionCreators } from '../../redux/modules/wedrive';
 // import APIManager from '../../services/api/ApiManager_new';
 import APIManager from '../../services/api/ApiManager';
+import { MeetApi } from '../../services';
 
 /**
  * ConferenceManager 화상대화 접속을 총괄하는 매니저
  */
 class ConferenceManager {
-  constructor(dispatch) {
+  constructor(dispatch, auth, item) {
     // Singleton
     if (!ConferenceManager.instance) {
       // 싱글톤 변수 할당
       ConferenceManager.instance = this;
       this._dispatch = dispatch;
+      this._item = { ...item };
+      this._auth = { ...auth };
     }
     return ConferenceManager.instance;
   }
@@ -32,7 +35,15 @@ class ConferenceManager {
   /**
    * connect : 화상대화 참가
    */
-  join = async (roomName, name, handleClose, auth, callType) => {
+  join = async (
+    roomName,
+    name,
+    handleClose,
+    auth,
+    callType,
+    roomType,
+    token
+  ) => {
     // 초기화
     this._init();
     // 대화방 연결을 위한 Connection
@@ -41,8 +52,9 @@ class ConferenceManager {
     this._conferenceConnector = new ConferenceConnector(
       this._createHandlers(handleClose)
     );
+
     // connection 연결
-    await this._connection.connect(roomName.toLowerCase(), handleClose);
+    await this._connection.connect(roomName.toLowerCase(), handleClose, token);
     // 대화방 참가
     this._room = await this._conferenceConnector.connect(
       this._connection,
@@ -51,7 +63,15 @@ class ConferenceManager {
       auth
     );
     this.callType = callType;
-
+    if (this._item.roomType === 'meet') {
+      MeetApi.enterMeetRoom(
+        this._auth.AUTH_A_TOKEN,
+        this._auth.AUTH_R_TOKEN,
+        this._auth.HASH_KEY,
+        this._item.roomToken,
+        this._room.myUserId()
+      );
+    } 
     // 대화방 접속 시간 세팅
     const createdTime = this._room.properties['created-ms'];
     this._dispatch(localActionCreators.setConferenceCreatedTime(createdTime));
@@ -67,11 +87,11 @@ class ConferenceManager {
           r_token: auth.AUTH_R_TOKEN,
           hash_key: auth.HASH_KEY,
           userId: auth.portal_id,
-          userName: auth.user_name,
+          userName: auth.user_name
         }
       );
-      // console.log('insert user');
-      this._apiManager.insertUser();
+      if (this._item.roomType === 'meet') {
+      } else this._apiManager.insertUser(); // FIX: 난중에 뺍시다
     }
 
     const id = 'localUser';

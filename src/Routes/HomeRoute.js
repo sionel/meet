@@ -22,6 +22,7 @@ import AwardsScreen from '../Screens/ConfigurationScreen/subScreens/AwardsScreen
 import OpenSourceScreen from '../Screens/ConfigurationScreen/subScreens/OpenSourceScreen';
 import OpenSourceDetailScreen from '../Screens/ConfigurationScreen/subScreens/OpenSourceDetailScreen';
 import CreateScreen from '../Screens/CreateScreen';
+import ConferenceStateScreen from '../Screens/ConferenceStateScreen';
 
 /** Components */
 import RouteTitle from './RouteTitle';
@@ -279,6 +280,16 @@ const HomeRoute = createStackNavigator(
      */
     Create: {
       screen: CreateScreen,
+      navigationOptions: ({ navigation }) => ({
+        headerTitle: <RouteTitle title={'화상회의'} />,
+        headerLeft: <BackButton navigation={navigation} to={'Home'} />,
+        headerTintColor: '#fff',
+        headerStyle: commonStyle
+      })
+    },
+
+    ConferenceState:{
+      screen : ConferenceStateScreen,
       navigationOptions: ({ navigation }) => ({
         headerTitle: <RouteTitle title={'화상회의'} />,
         headerLeft: <BackButton navigation={navigation} to={'Home'} />,

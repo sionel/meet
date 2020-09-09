@@ -11,6 +11,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RTCView } from 'react-native-webrtc';
 import ButtonCameraOff from '../../../../../assets/buttons/btn_vc_camera_off.png';
 import ButtonCameraOff2 from '../../../../../assets/icons/icoCameraWhLargeOff_2x.png';
+import imgCharacter01 from '../../../../../assets/icons/imgCharacter01_2x.png';
+import imgCharacter02 from '../../../../../assets/icons/imgCharacter02_2x.png';
+import imgCharacter03 from '../../../../../assets/icons/imgCharacter03_2x.png';
 // import ProfileImage from '../../../../../assets/smapleImages/nnn.jpg';
 import ProfileImage from '../../../../../assets/icons/imgVcNophoto_2x.png';
 // import ProfileImage from '../../../../../assets/smapleImages/nnn2.png';
@@ -34,7 +37,6 @@ const MainVideoPresenter = props => {
     isVideoReverse,
     pipMode
   } = props;
-
   // const dispatch = useDispatch();
   const localPipMode = useSelector(state => state.local.pipMode);
   // if (localPipMode !== pipMode) {
@@ -116,8 +118,14 @@ const MainVideoPresenter = props => {
       </Text>
     </View>
   );
-
+  const maxSize = Math.min(width, height);
+  const pictureSize = maxSize < 680 ? maxSize / 3 : maxSize / 4;
   const userInfo = mainUser.userInfo;
+  let character = '';
+  if (props?.mainUser?.userInfo?.avatar) {
+    character = JSON.parse(props?.mainUser?.userInfo?.avatar)?.value;
+  } 
+  character = props.isMuteVideo ? 'jangok' : character;
 
   return (
     <View style={{ flex: 1, backgroundColor: '#1D1D1D' }}>
@@ -259,8 +267,14 @@ const MainVideoPresenter = props => {
         <View style={styles.imageContainer}>
           {!props.drawing && (
             <Image
-              source={ButtonCameraOff2}
-              style={{ width: 60, height: 55 }}
+              source={
+                character === 'jessie'
+                  ? imgCharacter03
+                  : character === 'suzy'
+                  ? imgCharacter02
+                  : imgCharacter01
+              }
+              style={{ width: pictureSize, height: pictureSize }}
             />
           )}
         </View>

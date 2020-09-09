@@ -9,7 +9,9 @@ import {
   StyleSheet,
   SectionList,
   ScrollView,
-  RefreshControl
+  RefreshControl,
+  TouchableOpacity,
+  Text
 } from 'react-native';
 
 import {
@@ -28,13 +30,18 @@ import AddButton from './AddButton';
  */
 const HomeScreenPresenter = props => {
   const activateList = props.list.filter(item => item.is_video_access === 'T');
+  const activateList2 = props.list2;
 
   return (
     <View style={styles.container}>
+      {/* <TouchableOpacity style={{ position: 'absolute', top: 500, left: 200, backgroundColor:'#0a0', zIndex:99}} onPress={()=>{props.onMakeRoom()}}>
+        <Text> ccghcghcghfgh</Text>
+      </TouchableOpacity> */}
       {/* 검색바 */}
       {/* <SearchForm onChange={props.onSearch} /> */}
 
-      {props.list.length < 1 || activateList.length < 1 ? (
+      {(props.list.length < 1 || activateList.length < 1) &&
+      (props.list2.length < 1 || activateList2.length < 1) ? (
         <ScrollView
           showsVerticalScrollIndicator={false}
           refreshControl={
@@ -84,43 +91,101 @@ const HomeScreenPresenter = props => {
                 paddingRight: props.orientation === 'LANDSCAPE-RIGHT' ? 24 : 0
               }
             ]}
-            sections={[
-              {
-                title: '진행중',
-                data: activateList,
-                length: activateList.length - 1
-              }
-            ]}
+            sections={
+              activateList.length > 0
+                ? [
+                    {
+                      title: 'we talk',
+                      data: activateList,
+                      length: activateList.length - 1
+                    },
+                    {
+                      title: 'we meet',
+                      data: activateList2,
+                      length: activateList2.length - 1
+                    }
+                  ]
+                : [
+                    {
+                      title: '진행중',
+                      data: activateList2,
+                      length: activateList2.length - 1
+                    }
+                  ]
+            }
             renderSectionHeader={({ section }) =>
               section.data.length > 0 && (
                 <SectionListHeader title={section.title} />
               )
             }
-            renderItem={({ item, index, section }) => (
+            renderItem={({ item, index, section }) => {
               // 히스토리 아이템
-              <ListItemComp
-                key={item.room_id}
-                title={item.room_title}
-                personnel={item.receiver_user_count}
-                updated={item.update_timestamp}
-                room_profile_url={item.room_profile_url}
-                lottie={true}
-                underline={index < section.length ? true : false}
-                active={item.is_video_access === 'T' ? true : false}
-                disable={
-                  item.receiver_user_count === 1 && item.room_type === '1'
-                    ? true
-                    : false
-                }
-                onClick={() =>
-                  props.onCheckConference(
-                    item.video_chat_id,
-                    null,
-                    item.room_title
-                  )
-                }
-              />
-            )}
+              return section.title === 'we talk' ? (
+                <ListItemComp
+                  key={item.room_id}
+                  title={item.room_title}
+                  personnel={item.receiver_user_count}
+                  updated={item.update_timestamp}
+                  room_profile_url={item.room_profile_url}
+                  lottie={true}
+                  underline={index < section.length ? true : false}
+                  active={item.is_video_access === 'T' ? true : false}
+                  disable={
+                    item.receiver_user_count === 1 && item.room_type === '1'
+                      ? true
+                      : false
+                  }
+                  onClick={() =>
+                    props.onCheckConference(
+                      item.video_chat_id,
+                      null,
+                      item.room_title,
+                      'wetalk'
+                    )
+                  }
+                  // onClick={() =>
+                  //   props.onRedirect('ConferenceState', {
+                  //     item: {
+                  //       roomId: item.video_chat_id,
+                  //       externalData: null,
+                  //       roomName: item.room_title,
+                  //       from: 'wetalk'
+                  //     }
+                  //   })
+                  // }
+                />
+              ) : (
+                <ListItemComp
+                  key={item.room_id}
+                  title={item.name}
+                  personnel={item.receiver_user_count}
+                  updated={item.start_date_time}
+                  room_profile_url={''}
+                  lottie={true}
+                  underline={index < section.length ? true : false}
+                  active={true}
+                  disable={false}
+                  // onClick={() =>
+                  //   props.onCheckConference(
+                  //     item.room_id,
+                  //     null,
+                  //     item.name,
+                  //     'meet'
+                  //   )
+                  // }
+                  onClick={() =>
+                    props.onRedirect('ConferenceState', {
+                      item: {
+                        roomId: item.room_id,
+                        externalData: null,
+                        roomName: item.name,
+                        from: 'meet'
+                      }
+                    })
+                  }
+                ></ListItemComp>
+              );
+            }}
           />
         </Fragment>
       )}

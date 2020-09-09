@@ -52,8 +52,8 @@ const ConfigurationScreenPresenter = props => {
         WEHAGO_ENV === 'WEHAGOV'
           ? '1.0.1'
           : Platform.OS === 'ios'
-          ? '1.24.21'
-          : '1.7.0'
+          ? '1.24.22'
+          : '1.7.1'
     },
     {
       title: '이용약관 및 법률정보',

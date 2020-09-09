@@ -11,6 +11,10 @@ import { RTCView } from 'react-native-webrtc';
 // import DeviceInfo from 'react-native-device-info';
 // import ButtonCameraOff from '../../../../../../../assets/buttons/btn_vc_camera_off.png';
 import ButtonCameraOff from '../../../../../../../assets/icons/speaker/ico-camera-bl-off_2x.png';
+// import imgCharacter01 from '../../../../assets/icons/imgCharacter01_2x.png';
+import imgCharacter01 from '../../../../../../../assets/icons/imgCharacter01_2x.png';
+import imgCharacter02 from '../../../../../../../assets/icons/imgCharacter02_2x.png';
+import imgCharacter03 from '../../../../../../../assets/icons/imgCharacter03_2x.png';
 import CustomIcon from '../../../../../../components/CustomIcon';
 
 // const apiLevel = DeviceInfo.getAPILevel();
@@ -22,7 +26,11 @@ const canUseStream = true;
  */
 const ParticipantBoxPresenter = props => {
   const stream = props.videoTrack && props.videoTrack.getOriginalStream();
-
+  let character = '';
+  if (props?.user?.userInfo?.avatar) {
+    character = JSON.parse(props?.user?.userInfo?.avatar)?.value;
+  }
+  character = props.isMuteVideo ? 'jangok' : character;
   const content = canUseStream ? (
     stream && !props.isMuteVideo ? (
       <View style={styles.video}>
@@ -36,7 +44,16 @@ const ParticipantBoxPresenter = props => {
       </View>
     ) : (
       <View style={styles.video}>
-        <Image source={ButtonCameraOff} style={styles.imageCameraOff} />
+        <Image
+          source={
+            character === 'jessie'
+              ? imgCharacter03
+              : character === 'suzy'
+              ? imgCharacter02
+              : imgCharacter01
+          }
+          style={styles.imageCameraOff}
+        />
       </View>
     )
   ) : (
@@ -150,8 +167,8 @@ const styles = StyleSheet.create({
     fontFamily: 'DOUZONEText30'
   },
   imageCameraOff: {
-    width: '30%',
-    height: '30%'
+    width: '100%',
+    height: '100%'
   }
 });
 

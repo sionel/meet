@@ -50,7 +50,6 @@ class ConferenceScreenContainer extends React.Component {
   componentDidMount() {
     const { navigation, user_name, auth, dispatch } = this.props;
     this._handleCreateConnection(navigation, user_name, auth, dispatch);
-
     KeepAwake.activate();
     DeviceEventEmitter.addListener(
       'ON_HOME_BUTTON_PRESSED',
@@ -204,20 +203,25 @@ class ConferenceScreenContainer extends React.Component {
     const item = navigation.getParam('item');
     // 전화 타입 - 화상:1 / 음성:2 / 위톡:3
     this.callType = item.callType || this.state.callType;
+    this.roomType = item.roomType;
+    this.roomId = item.videoRoomId;
+    this.roomToken = item.token;
     this.selectedRoomName = item.selectedRoomName;
+
     // 컴포넌트가 마운트 되면 대화방 초기 설정 후 입장한다.
-    this._conferenceManager = new ConferenceManager(dispatch, {
-      token: auth.AUTH_A_TOKEN,
-      r_token: auth.AUTH_R_TOKEN,
-      HASH_KEY: auth.HASH_KEY
-    });
+    this._conferenceManager =
+      item.roomType === 'meet'
+        ? new ConferenceManager(dispatch, auth, item)
+        : new ConferenceManager(dispatch);
 
     // 참가자/생성자 여부 확인 후 로딩딜레이
     const delayLoading = time => {
       this.delayLoading && clearTimeout(this.delayLoading);
       this.delayLoading = setTimeout(() => {
         const roomId = item.videoRoomId; // item.videoRoomId
-        this._joinConference(roomId, user_name, auth);
+        const roomType = item.roomType;
+        const token = item.token;
+        this._joinConference(roomId, user_name, auth, roomType, token);
 
         Platform.OS === 'android' &&
           AppState.addEventListener('change', this._handleAppStateChange);
@@ -227,6 +231,7 @@ class ConferenceScreenContainer extends React.Component {
     // is_creator
     // 0 : 화상회의 생성 / 1 : 화상회의 참여 / 9 : 비즈박스알파(외부서비스)
     if (item.isCreator == 2) {
+      // 받은사람
       // console.warn('delayLoading', '4500');
       // FIXME mobile 의 경우만 발생하는 이슈 (아래)
       // 모바일-모바일 or 모바일-웹에서화상대화를 동시에 접속하면 모바일이 화면을 송출/수신 못하는 이슈 발생
@@ -241,14 +246,16 @@ class ConferenceScreenContainer extends React.Component {
   };
 
   /** 대화방 참가 생성 */
-  _joinConference = async (roomName, name, auth) => {
+  _joinConference = async (roomName, name, auth, roomType, token) => {
     await this._conferenceManager.join(
       roomName,
       name,
       // this._handleEndCall,
       () => {},
       auth,
-      this.callType
+      this.callType,
+      roomType,
+      token
     );
     this.setState({ connection: true }, () => {
       if (Number(this.callType) !== 3) {
@@ -269,8 +276,9 @@ class ConferenceScreenContainer extends React.Component {
 
   /** 전화/대화 종료 */
   _handleEndCall = () => {
-    if (Number(this.callType) === 3) this._handleConferenceClose();
-    else {
+    if (Number(this.callType) === 3) {
+      this._handleConferenceClose();
+    } else {
       this._conferenceManager && this._conferenceManager.dispose();
     }
     this.setState({ connection: false, endCall: true });

@@ -1,4 +1,5 @@
 // import $ from 'jquery';
+// 이 파일은 곧 삭제 될 파일임미다
 import CryptoJS from 'crypto-js';
 import config from './config';
 import { securityRequest, serialize } from '../../utils';
@@ -19,7 +20,7 @@ class APIManager {
     // 초기 설정
     this.connectionId = connectionId;
     this.info = info;
-    this.dummyWehagoId = this._createRandomString(); // FIXME - 비회원일 때 아이디 만들어야하는데 비회원은 아이디가 없어서 만들어준다. 나중에 고쳐라
+    this.dummyWehagoId = this._createRandomString(); // FIXME - 비회원일 때 아이디 만들어야하는데 비회원은 아이디가 없어서 만들어준다. 나중에 고쳐라 
   }
 
   /**

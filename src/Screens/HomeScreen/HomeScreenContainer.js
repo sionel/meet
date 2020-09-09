@@ -24,7 +24,7 @@ import { NavigationEvents } from 'react-navigation';
 import HomeScreenPresenter from './HomeScreenPresenter';
 
 // service
-import { ConferenceApi, WetalkApi } from '../../services';
+import { ConferenceApi, WetalkApi, MeetApi } from '../../services';
 import { querystringParser } from '../../utils';
 
 // import DrawerContent from '../../components/DrawerContent';
@@ -160,6 +160,8 @@ class HomeScreenContainer extends Component {
     const plan = auth.last_company.membership_code; // 요금제 [WE: 엣지, SP: 싱글팩, ...]
 
     let wetalk = []; // We talk list
+    let conferenceList = this.props.conference;
+
     if (searchKeyword) {
       wetalk = this.props.wetalk.filter(item =>
         item.room_title.match(searchKeyword)
@@ -202,6 +204,7 @@ class HomeScreenContainer extends Component {
           // modal={modal}
           permission={this.props.permission}
           list={wetalk}
+          list2={conferenceList}
           auth={auth}
           selectedRoomId={selectedRoomId}
           alert={alert}
@@ -211,6 +214,7 @@ class HomeScreenContainer extends Component {
           onRefresh={this._handleRefresh}
           onSearch={this._handleSearch}
           onGetWetalkList={this._handleGetWetalkList}
+          onMakeRoom={this._handlesetMeetRoom}
           onCreateConference={this._handleCreateConference}
           onCheckConference={this._handleCheckConference}
           orientation={this.state.orientation}
@@ -355,7 +359,7 @@ class HomeScreenContainer extends Component {
    * 위톡 조회
    */
   _handleGetWetalkList = async () => {
-    const { auth, onSetWetalkList } = this.props;
+    const { auth, onSetWetalkList, onSetConferenceList } = this.props;
     // console.log('CNO : ', auth.last_access_company_no);
     // 위톡조회 API
     const wetalkList = await WetalkApi.getWetalkList(
@@ -365,8 +369,16 @@ class HomeScreenContainer extends Component {
       auth.portal_id,
       auth.HASH_KEY
     );
-
+    //   return
+    const cl = await MeetApi.getMeetRoomsList(
+      auth.AUTH_A_TOKEN,
+      auth.AUTH_R_TOKEN,
+      auth.last_access_company_no,
+      auth.portal_id,
+      auth.HASH_KEY
+    );
     // 토큰만료시
+
     if (wetalkList.errors) {
       // alert('wetalkList.error: ' + JSON.stringify(wetalkList.errors));
       return this._handleAutoLogin();
@@ -377,9 +389,43 @@ class HomeScreenContainer extends Component {
         a.send_timestamp < b.send_timestamp ? 1 : -1
       )
     );
+    onSetConferenceList(
+      cl.resultData.sort((a, b) =>
+        a.start_date_time < b.start_date_time ? 1 : -1
+      )
+    );
     // onSetWetalkList(wetalkList.resultData.video_room_list);
   };
 
+  _handlesetMeetRoom = async () => {
+    const { auth, onSetWetalkList } = this.props;
+
+    const result = await MeetApi.setMeetRoom(
+      auth.AUTH_A_TOKEN,
+      auth.AUTH_R_TOKEN,
+      auth.last_access_company_no,
+      auth.portal_id,
+      auth.HASH_KEY
+    );
+
+    const cl = await MeetApi.getMeetRoomsList(
+      auth.AUTH_A_TOKEN,
+      auth.AUTH_R_TOKEN,
+      auth.last_access_company_no,
+      auth.portal_id,
+      auth.HASH_KEY
+    );
+    if (wetalkList.errors) {
+      // alert('wetalkList.error: ' + JSON.stringify(wetalkList.errors));
+      return this._handleAutoLogin();
+    }
+    this.setState({ refreshing: false });
+    onSetWetalkList(
+      wetalkList.resultData.video_room_list.sort((a, b) =>
+        a.send_timestamp < b.send_timestamp ? 1 : -1
+      )
+    );
+  };
   /**
    * _handleAutoLogin
    * 접속자확인 및 자동로그인
@@ -450,7 +496,8 @@ class HomeScreenContainer extends Component {
   _handleCheckConference = async (
     conferenceId,
     externalData = null,
-    selectedRoomName = null
+    selectedRoomName = null,
+    from
   ) => {
     let { auth } = this.props;
     let callType = 3;
@@ -468,8 +515,26 @@ class HomeScreenContainer extends Component {
 
       callType = externalData.call_type; // 1:화상 / 2:음성
       isCreator = externalData.is_creater; // 0:생성자 / 1:참여자 / 9:비즈박스알파
+
+      this._handleRedirect('Conference', {
+        item: {
+          videoRoomId: conferenceId,
+          callType,
+          isCreator,
+          selectedRoomName
+        }
+      });
+      // this._handleRedirect('ConferenceState', {
+      //   item: {
+      //     roomId: conferenceId,
+      //     externalData,
+      //     roomName: item.name,
+      //     from: 'outside'
+      //   }
+      // });
     } else {
       // 생성여부 체크
+
       const result = await ConferenceApi.check(
         conferenceId,
         auth.AUTH_A_TOKEN,
@@ -507,31 +572,18 @@ class HomeScreenContainer extends Component {
         );
         return;
       }
-
-      // 이미 대화방에 참여 중인지 확인
-      // const isJoin = await participantList.find(participant => {
-      //   return participant.user_id === auth.portal_id;
-      // });
-
-      // if (isJoin) {
-      //   this._handleModalChange(
-      //     true,
-      //     '화상대화',
-      //     '이미 대화방에 접속한 사용자 입니다.',
-      //     this._handleModalChange
-      //   );
-      //   return;
-      // }
+      this._handleRedirect('Conference', {
+        item: {
+          roomType: 'talk',
+          roomToken: null,
+          videoRoomId: conferenceId,
+          callType,
+          isCreator,
+          selectedRoomName
+        }
+      });
     }
     // 화상대화로 진입
-    this._handleRedirect('Conference', {
-      item: {
-        videoRoomId: conferenceId,
-        callType,
-        isCreator,
-        selectedRoomName
-      }
-    });
   };
 
   /**

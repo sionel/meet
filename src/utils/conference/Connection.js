@@ -27,10 +27,10 @@ class Connection {
   /**
    * Connection을 연결한다.
    */
-  connect = async (roomName, handleClose) => {
+  connect = async (roomName, handleClose, token) => {
     return new Promise((resolve, reject) => {
       // jitsi connection 을 생성한다.
-      this._jitsiConnection = this._creaeteJitsiConnection(roomName);
+      this._jitsiConnection = this._creaeteJitsiConnection(roomName, token);
       // 이벤트를 바인딩한다. -> 바인딩된 이벤트가 호출되어야지 프라미스가 종료된다.
       this._bindEvents(this.jitsiConnection, resolve, reject, handleClose);
       // 커넥션을 연결한다.
@@ -54,12 +54,12 @@ class Connection {
   /**
    * creaeteJitsiConnection : jitsiConnection 을 생성한다.
    */
-  _creaeteJitsiConnection = roomName => {
+  _creaeteJitsiConnection = (roomName, token) => {
     const options = Object.assign({}, config);
     options.bosh = `https:${options.bosh}?room=${roomName}`;
     const jitsiConnection = new JitsiMeetJS.JitsiConnection(
       null,
-      null,
+      token ? token : null,
       options
     );
     return jitsiConnection;
