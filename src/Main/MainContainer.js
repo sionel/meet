@@ -44,7 +44,7 @@ class MainContainer extends Component {
 
     this.props.setInitInfo();
     this.props.setSharingMode();
-
+    
     if (this.props.url.url) {
       this._handleGetWehagoToken(this.props.url);
     }
@@ -266,7 +266,6 @@ class MainContainer extends Component {
       this.props.auth,
       this.props.auth.last_company
     );
-
     // 이상이 없는 회사일 경우 로그인 정상 진행
     if (statusCheck && statusCheck.code === 200) {
       // 서비스 구매여부 조회
@@ -282,7 +281,6 @@ class MainContainer extends Component {
         'D' // 배포여부 확인
       );
       this.props.setPermission(isDeploy);
-
       this.setState({ isLogin: true, hasService: isPurchase });
     } else if (statusCheck && statusCheck.code === 400) {
       // 회사에 이상이 있을 경우, 회사 선택 화면으로 이동
@@ -298,9 +296,21 @@ class MainContainer extends Component {
    * DeepLink 로 접근한 경우
    */
   _handleGetWehagoToken = event => {
-    if (!event.url) return;
-    const result = querystringParser(event.url);
+    
+    /* 모바일 웹에서 화상대화로 들어올 때 (위톡, meet 둘다 공통)    
+      ?portal_id=sadb0101 // 아이디
+      &mHASH_KEY=4737240669613779471317246605417595221 // wehago_s
+      &mAuth_r_token=1jKg3vXzvd5yR6kxKUGgJUYDaMhKcF // r토큰
+      &mAuth_a_token=Rxhh9pCzoLpB5I1M6m36aqoDe5Ivxu // a토큰
+      &cno=9 // h_selected_company_no
+      &video_id=a25f15cb-01d9-44cf-bafa-4b7122022cb3 // video chat id
+      &room_name=123 // talk방 이름
+      &flag=T // string 형식의 대문자 'T' 고정값 기존 코드를 건들지 않고 새로 대화방으로 바로 갈 수 있도록 짜야할 필요성이 있었음
+    */
 
+    if (!event.url) return;
+    
+    const result = querystringParser(event.url);
     // 화상대화 요청인지 판별
     if (result.is_creater || result.type) {
       // timestamp : 로그인 시간 체크
@@ -348,7 +358,6 @@ class MainContainer extends Component {
       HASH_KEY,
       isWehagoLogin
     );
-
     if (result.errors) {
       if (result.errors.code === 'E002') {
         if (isWehagoLogin) this._handleOnAlert(3);

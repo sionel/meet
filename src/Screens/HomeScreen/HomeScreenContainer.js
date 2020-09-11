@@ -67,7 +67,7 @@ class HomeScreenContainer extends Component {
   /**
    * componentDidMount
    */
-  componentDidMount() {
+  async componentDidMount() {
     // 화면 회전 처리
     Orientation.getOrientation(orientation => {
       this.setState({ orientation });
@@ -107,6 +107,15 @@ class HomeScreenContainer extends Component {
 
     // 뒤로가기 버튼 동작
     BackHandler.addEventListener('hardwareBackPress', this._handleBackButton);
+
+    // 위톡 업데이트 여부(meet 바라보기)
+    const { auth } = this.props;
+    const didupdate = await WetalkApi.didUpdate(
+      auth.AUTH_A_TOKEN,
+      auth.AUTH_R_TOKEN,
+      auth.HASH_KEY
+    );
+    this.props.checkWetalkUpdate(didupdate?.resultData?.DBPWHGWEB19435);
   }
 
   shouldComponentUpdate = (nextProps, nextState) => {
@@ -156,7 +165,7 @@ class HomeScreenContainer extends Component {
       orientation,
       alert
     } = this.state;
-    const { navigation, auth } = this.props;
+    const { navigation, auth, didupdate } = this.props;
     const plan = auth.last_company.membership_code; // 요금제 [WE: 엣지, SP: 싱글팩, ...]
 
     let wetalk = []; // We talk list
@@ -214,11 +223,12 @@ class HomeScreenContainer extends Component {
           onRefresh={this._handleRefresh}
           onSearch={this._handleSearch}
           onGetWetalkList={this._handleGetWetalkList}
-          onMakeRoom={this._handlesetMeetRoom}
+          onCreateMeetRoom={this._handleCreateMeetRoom}
           onCreateConference={this._handleCreateConference}
           onCheckConference={this._handleCheckConference}
           orientation={this.state.orientation}
           hasNotch={hasNotch}
+          didupdate={didupdate}
         />
         {/* </DrawerLayoutAndroid> */}
         {/* </GestureRecognizer> */}
@@ -285,7 +295,6 @@ class HomeScreenContainer extends Component {
    */
   _handleOpenLink = url => {
     if (!url) return;
-
     let result;
     // 로그인이 되어있을 때 연결 요청이 왔을 시 url: string
     // 비로그인상태에서 연결 요청후 위하고 앱으로 로그인을 진행하면 url: object
@@ -307,7 +316,17 @@ class HomeScreenContainer extends Component {
       this.setState({ room_id: result.room_id }, () => {
         this._handleCheckConference(result.room_id, result);
       });
+    } else if (result.flag === 'T') {
+      this._handleRedirect('ConferenceState', {
+        item: {
+          roomId: result.video_id,
+          externalData: null,
+          roomName: result.room_name,
+          from: 'meet'
+        }
+      });
     } else {
+      if (result.message) alert(result.message);
       return;
     }
     // 화상대화 타입 (생성:0/참여:1)
@@ -362,6 +381,8 @@ class HomeScreenContainer extends Component {
     const { auth, onSetWetalkList, onSetConferenceList } = this.props;
     // console.log('CNO : ', auth.last_access_company_no);
     // 위톡조회 API
+
+    //FIXME: 수정해야함 분기 태우는거
     const wetalkList = await WetalkApi.getWetalkList(
       auth.AUTH_A_TOKEN,
       auth.AUTH_R_TOKEN,
@@ -369,7 +390,6 @@ class HomeScreenContainer extends Component {
       auth.portal_id,
       auth.HASH_KEY
     );
-    //   return
     const cl = await MeetApi.getMeetRoomsList(
       auth.AUTH_A_TOKEN,
       auth.AUTH_R_TOKEN,
@@ -397,10 +417,10 @@ class HomeScreenContainer extends Component {
     // onSetWetalkList(wetalkList.resultData.video_room_list);
   };
 
-  _handlesetMeetRoom = async () => {
+  _handleCreateMeetRoom = async () => {
     const { auth, onSetWetalkList } = this.props;
 
-    const result = await MeetApi.setMeetRoom(
+    const result = await MeetApi.createMeetRoom(
       auth.AUTH_A_TOKEN,
       auth.AUTH_R_TOKEN,
       auth.last_access_company_no,

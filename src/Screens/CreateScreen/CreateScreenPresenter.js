@@ -92,7 +92,6 @@ const CreateScreenPresenter = props => {
       clearInterval(_redirect);
     };
   }, []);
-
   return (
     <View style={styles.container}>
       {/* 검색바 */}
@@ -211,7 +210,7 @@ const CreateScreenPresenter = props => {
         title={'화상대화 생성'}
         width={320}
         content={'화상대화를 생성하시겠습니까?'}
-        onConfirm={() => props.onCreateConference(props.selectedRoomId)}
+        onConfirm={() => props.onCreateConference()}
         onClose={() => props.onActivateModal(null)}
         // actions={[
         //   {

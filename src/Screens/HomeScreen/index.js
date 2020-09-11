@@ -13,7 +13,8 @@ const mapStateToProps = state => ({
   isWehagoLogin: state.user.isWehagoLogin,
   permission: state.user.permission,
   wetalk: state.wetalk.list,
-  conference: state.conference.list
+  conference: state.conference.list,
+  didupdate: state.user.didupdate
 });
 
 /**
@@ -35,7 +36,9 @@ const mapDispatchToProps = dispatch => ({
       )
     ),
   onSetWetalkList: list => dispatch(WetalkActions.setList(list)),
-  onSetConferenceList : list => dispatch(ConferenceActions.setList2(list))
+  onSetConferenceList : list => dispatch(ConferenceActions.setList2(list)),
+
+  checkWetalkUpdate: flag => dispatch(UserActions.checkWetalkUpdate(flag))
   // onCreateConference: bodyData => dispatch(ConferenceActions.createConference(...bodyData))
 });
 

@@ -13,7 +13,8 @@ import { actionCreators as WetalkActions } from '../../redux/modules/wetalk';
  */
 let mapStateToProps = state => ({
 	auth: state.user.auth,
-	wetalk: state.wetalk.list
+	wetalk: state.wetalk.list,
+	didupdate: state.user.didupdate
 });
 
 /**

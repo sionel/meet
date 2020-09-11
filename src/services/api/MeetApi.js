@@ -9,9 +9,10 @@ import { meetURL, securityRequest } from '../../utils';
 // #region
 export default {
   // 3-1 화상대화방 생성
-  setMeetRoom: async (a_token, r_token, HASH_KEY, cno) => {
+  createMeetRoom: async (a_token, r_token, HASH_KEY, cno, param) => {
     const url = `${meetURL}/room?cno=${cno}`;
     const headers = securityRequest(a_token, r_token, url, HASH_KEY);
+    //service_code = videoconference || communication || schedule
     try {
       const data = {
         method: 'POST',
@@ -20,19 +21,18 @@ export default {
           ...headers
         },
         body: JSON.stringify({
-          service_code: 'videoconference', // communication || schedule
-          name: `test${Math.floor(Math.random() * 100)}`
-          // is_public : boolean,
+          ...param
         })
       };
 
       const response = await fetch(url, data);
-      if (response.status !== 200) {
+      
+      if (response.status !== 201) {
         throw response.resultCode;
       }
       return response.json();
     } catch (err) {
-      console.warn('1.setMeetRoom : ', err);
+      console.warn('1.createMeetRoom : ', err);
       return false;
     }
   },
@@ -208,8 +208,7 @@ export default {
       };
 
       const response = await fetch(url, data);
-      const a = await response.json();
-        if (response.status !== 200) {
+      if (response.status !== 200) {
         throw response.resultCode;
       }
       return response.json();

@@ -64,7 +64,7 @@ class ConferenceManager {
     );
     this.callType = callType;
     if (this._item.roomType === 'meet') {
-      MeetApi.enterMeetRoom(
+      await MeetApi.enterMeetRoom(
         this._auth.AUTH_A_TOKEN,
         this._auth.AUTH_R_TOKEN,
         this._auth.HASH_KEY,

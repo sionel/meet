@@ -19,6 +19,7 @@ import CreateScreenPresenter from './CreateScreenPresenter';
 // import { WetalkApi } from '../../services';
 // import { UserApi } from '../../services';
 import { ConferenceApi } from '../../services';
+import { MeetApi } from '../../services';
 import { NavigationEvents } from 'react-navigation';
 // import { querystringParser } from '../../utils';
 
@@ -130,50 +131,50 @@ class CreateScreenContainer extends React.Component {
    * _handleCreateConference
    * 화상대화 생성
    */
-  _handleCreateConference = async (selectedRoomId, externalData = null) => {
+  _handleCreateConference = async (externalData = null) => {
     let auth;
     let company_code;
     // 위하고에서 접속인지 아닌지 구분
-    if (externalData !== null) {
-      auth = {
-        selectedRoomId,
-        portal_id: externalData.owner_id,
-        user_name: externalData.owner_name,
-        last_access_company_no: externalData.cno,
-        AUTH_A_TOKEN: externalData.access
-      };
-      company_code = externalData.cno;
-    } else {
-      auth = this.props.auth;
-      company_code = auth.employee_list.filter(
-        e => e.company_no == auth.last_access_company_no
-      )[0].company_code;
-    }
 
-    // 화상대화 체크
-    const checkResult = await ConferenceApi.check(
-      selectedRoomId,
-      auth.AUTH_A_TOKEN,
-      auth.AUTH_R_TOKEN,
-      auth.HASH_KEY
-    );
-    // console.log('checkResult : ', checkResult);
+    const { selectedRoomId, selectedRoomName } = this.state;
+    console.log(this.props);
 
-    const bodyData = [
-      selectedRoomId, // 방 id
-      auth.portal_id, // 유저아이디
-      auth.user_name, // 유저이름
-      auth.last_access_company_no, // 회사번호
-      company_code, // 회사코드
-      auth.AUTH_A_TOKEN, // 토큰
-      auth.AUTH_R_TOKEN, // 토큰
-      auth.HASH_KEY
-      // null
-    ];
-    const createResult = await ConferenceApi.create(...bodyData);
-    // console.log('==================================');
-    // console.log('Log : ', createResult);
-    // console.log('==================================');
+    auth = this.props.auth;
+    company_code = auth.employee_list.filter(
+      e => e.company_no == auth.last_access_company_no
+    )[0].company_code;
+    let createResult;
+
+    // FIXME: 업데이트 여부에 따라 보낼 api 수정 해야하는데 당장은 wetalk쪽에서 기존 api를 살릴 수 있도록 처리를 해줌 느긋하게 해도 됨
+    // let flag = this.props.didupdate // 디버깅 할려고 강제로 넣은 플레그 if 문 수정해야함
+    // if (flag) { 
+    //   const param = {
+    //     service_code: 'communication',
+    //     is_public: true,
+    //     name: selectedRoomName, 
+    //     communication_id: selectedRoomId 
+    //   };
+    //   createResult = await MeetApi.createMeetRoom(
+    //     auth.AUTH_A_TOKEN,
+    //     auth.AUTH_R_TOKEN,
+    //     auth.HASH_KEY,
+    //     auth.last_access_company_no,
+    //     param
+    //   );
+    // } else {
+      const bodyData = [
+        selectedRoomId, // 방 id
+        auth.portal_id, // 유저아이디
+        auth.user_name, // 유저이름
+        auth.last_access_company_no, // 회사번호
+        company_code, // 회사코드
+        auth.AUTH_A_TOKEN, // 토큰
+        auth.AUTH_R_TOKEN, // 토큰
+        auth.HASH_KEY
+        // null
+      ];
+      createResult = await ConferenceApi.create(...bodyData);
+    // }
 
     // 화상대화 생성가능여부 // 대화방 생성 or 참여 여부 결정
     if (createResult.resultCode === 200) {
@@ -196,6 +197,7 @@ class CreateScreenContainer extends React.Component {
       });
     } else if (createResult.resultCode === 400) {
       alert(createResult.resultMsg);
+      // 이미 화상채팅방이 생성되어 있습니다. 대화방당 1개의 화상챝ㅇ방을 제공합니다
     } else if (createResult.errors && createResult.errors.code === 'E002') {
       this._handleRefresh();
     } else {

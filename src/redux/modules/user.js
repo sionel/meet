@@ -19,6 +19,8 @@ const NETWORK_DISCONNECT = 'NETWORK_DISCONNECT';
 
 const SESSION_CHECK = 'SESSION_CHECK';
 const SET_PERMISSION = 'SET_PERMISSION'; // 화상대화 생성 권한
+
+const DIDUPDATE = 'DIDUPDATE'; // 위톡 업데이트 여부 체크(meet 바라보기)
 //#region Action Creators
 
 /**
@@ -198,6 +200,13 @@ function changeCompanyRequest(auth, company) {
   };
 }
 
+function checkWetalkUpdate(flag = false) {
+  return {
+    type: DIDUPDATE,
+    didupdate:flag
+  };
+}
+
 /**
  * tokenLogin : ACTION
  */
@@ -236,7 +245,9 @@ const initialState = {
   isWehagoLogin: false,
   log: {},
   session: true,
-  permission: false
+  permission: false,
+  didupdate: false //20200910 위톡 업데이트 여부를 모름
+  // FIXME: 나중에 위톡이 meet을 바라보게 업데이트 된다면 그게 맞춰서 코드를 정리 할 것!
 };
 
 //#endregion initialState
@@ -279,6 +290,8 @@ function reducer(state = initialState, action) {
       return { ...state, session: action.session };
     case SET_PERMISSION:
       return { ...state, permission: action.permission };
+    case DIDUPDATE:
+      return { ...state, didupdate: action.didupdate };
     default:
       return state;
   }
@@ -352,7 +365,8 @@ const actionCreators = {
   changeCompanyRequest,
   toggleVisibleAppIntro,
   sessionCheck,
-  setPermission
+  setPermission,
+  checkWetalkUpdate
 };
 
 export { actionCreators };
