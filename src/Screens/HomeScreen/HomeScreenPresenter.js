@@ -30,8 +30,8 @@ import AddButton from './AddButton';
  */
 const HomeScreenPresenter = props => {
   const activateList = props.list.filter(item => item.is_video_access === 'T');
-  const activateList2 = props.list2;
-
+  const started = props.started
+  const reservation= props.reservation
   return (
     <View style={styles.container}>
       {/* <TouchableOpacity style={{ position: 'absolute', top: 500, left: 200, backgroundColor:'#0a0', zIndex:99}} onPress={()=>{props.onMakeRoom()}}>
@@ -40,8 +40,9 @@ const HomeScreenPresenter = props => {
       {/* 검색바 */}
       {/* <SearchForm onChange={props.onSearch} /> */}
 
-      {(props.list.length < 1 || activateList.length < 1) &&
-      (props.list2.length < 1 || activateList2.length < 1) ? (
+      {(props.list.length < 1 || activateList.length < 1)&&
+      (props.started.length < 1 || started.length < 1) &&
+      (props.reservation.length < 1 || reservation.length < 1) ? (
         <ScrollView
           showsVerticalScrollIndicator={false}
           refreshControl={
@@ -95,21 +96,31 @@ const HomeScreenPresenter = props => {
               activateList.length > 0
                 ? [
                     {
-                      title: 'we talk',
+                      title: '진행중 - talk',
                       data: activateList,
                       length: activateList.length - 1
                     },
                     {
-                      title: 'we meet',
-                      data: activateList2,
-                      length: activateList2.length - 1
+                      title: '진행중 - meet',
+                      data: started,
+                      length: started.length - 1
+                    },
+                    {
+                      title: '예정',
+                      data: reservation,
+                      length: reservation.length - 1
                     }
                   ]
                 : [
                     {
                       title: '진행중',
-                      data: activateList2,
-                      length: activateList2.length - 1
+                      data: started,
+                      length: started.length - 1
+                    },
+                    {
+                      title: '예정',
+                      data: reservation,
+                      length: reservation.length - 1
                     }
                   ]
             }
@@ -120,7 +131,7 @@ const HomeScreenPresenter = props => {
             }
             renderItem={({ item, index, section }) => {
               // 히스토리 아이템
-              return section.title === 'we talk' ? (
+              return section.title === '진행중 - talk' ? (
                 <ListItemComp
                   key={item.room_id}
                   title={item.room_title}

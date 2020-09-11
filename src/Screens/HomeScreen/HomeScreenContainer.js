@@ -171,6 +171,14 @@ class HomeScreenContainer extends Component {
     let wetalk = []; // We talk list
     let conferenceList = this.props.conference;
 
+    let started = []
+    let reservation = []
+
+    if(conferenceList.length > 0) {
+      started = conferenceList.filter(i => i.is_started)
+      reservation = conferenceList.filter(i => !i.is_started)
+    }
+
     if (searchKeyword) {
       wetalk = this.props.wetalk.filter(item =>
         item.room_title.match(searchKeyword)
@@ -213,7 +221,8 @@ class HomeScreenContainer extends Component {
           // modal={modal}
           permission={this.props.permission}
           list={wetalk}
-          list2={conferenceList}
+          started={started}
+          reservation={reservation}
           auth={auth}
           selectedRoomId={selectedRoomId}
           alert={alert}
@@ -378,18 +387,36 @@ class HomeScreenContainer extends Component {
    * 위톡 조회
    */
   _handleGetWetalkList = async () => {
-    const { auth, onSetWetalkList, onSetConferenceList } = this.props;
+    const {
+      auth,
+      onSetWetalkList,
+      onSetConferenceList,
+      didupdate
+    } = this.props;
     // console.log('CNO : ', auth.last_access_company_no);
     // 위톡조회 API
 
     //FIXME: 수정해야함 분기 태우는거
-    const wetalkList = await WetalkApi.getWetalkList(
-      auth.AUTH_A_TOKEN,
-      auth.AUTH_R_TOKEN,
-      auth.last_access_company_no,
-      auth.portal_id,
-      auth.HASH_KEY
-    );
+    // let wetalkList;
+    if (didupdate === 'N') {
+      const wetalkList = await WetalkApi.getWetalkList(
+        auth.AUTH_A_TOKEN,
+        auth.AUTH_R_TOKEN,
+        auth.last_access_company_no,
+        auth.portal_id,
+        auth.HASH_KEY
+      );
+
+      onSetWetalkList(
+        wetalkList.resultData.video_room_list.sort((a, b) =>
+          a.send_timestamp < b.send_timestamp ? 1 : -1
+        )
+      );
+
+      if (wetalkList.errors) {
+        return this._handleAutoLogin();
+      }
+    }
     const cl = await MeetApi.getMeetRoomsList(
       auth.AUTH_A_TOKEN,
       auth.AUTH_R_TOKEN,
@@ -398,23 +425,15 @@ class HomeScreenContainer extends Component {
       auth.HASH_KEY
     );
     // 토큰만료시
-
-    if (wetalkList.errors) {
-      // alert('wetalkList.error: ' + JSON.stringify(wetalkList.errors));
-      return this._handleAutoLogin();
-    }
     this.setState({ refreshing: false });
-    onSetWetalkList(
-      wetalkList.resultData.video_room_list.sort((a, b) =>
-        a.send_timestamp < b.send_timestamp ? 1 : -1
-      )
-    );
-    onSetConferenceList(
-      cl.resultData.sort((a, b) =>
-        a.start_date_time < b.start_date_time ? 1 : -1
-      )
-    );
-    // onSetWetalkList(wetalkList.resultData.video_room_list);
+
+    if (cl) {
+      onSetConferenceList(
+        cl.resultData.sort((a, b) =>
+          a.start_date_time < b.start_date_time ? 1 : -1
+        )
+      );
+    }
   };
 
   _handleCreateMeetRoom = async () => {
