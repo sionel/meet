@@ -135,13 +135,13 @@ const ListItemComp = props => {
         {/* 참가자 */}
         {/* <Text style={{ ...styles.participant }}>{displayUpdated}</Text> */}
         {/* 활성화 라이트 */}
-        {props.lottie && (
+        {/* {props.lottie && (
           <View style={{ ...styles.activeLight, backgroundColor: activeColor }}>
             {props.active && (
               <CustomLottie source="broadcast" width={35} height={35} />
             )}
           </View>
-        )}
+        )} */}
         {props.customLottie && (
           <View
             style={{
