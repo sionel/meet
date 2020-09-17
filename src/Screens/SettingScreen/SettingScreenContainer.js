@@ -1,9 +1,8 @@
 import React from 'react';
 import SettingScreenPresenter from './SettingScreenPresenter';
-import JitsiMeetJS from '../../../../jitsi/features/base/lib-jitsi-meet';
-import config from '../../../utils/conference/config';
+import JitsiMeetJS from '../../../jitsi/features/base/lib-jitsi-meet';
+import config from '../../utils/conference/config';
 import Orientation from 'react-native-orientation-locker';
-import { createStackNavigator } from 'react-navigation';
 
 const commonStyle = {
   height: 53,
@@ -14,6 +13,7 @@ const commonStyle = {
 class SettingScreenContainer extends React.Component {
   constructor() {
     super();
+    debugger
     this.state = {
       name: '',
       tracks: [],
@@ -22,11 +22,7 @@ class SettingScreenContainer extends React.Component {
   }
 
   async componentDidMount() {
-    debugger
-    this.props.navigation.setOptions({ title: '1234ghj123bhj123bj12bhj' });
-
     this._init();
-    
     let tracks = await this._getTrack();
     Orientation.getOrientation(orientation => {
       const status =
@@ -98,15 +94,7 @@ class SettingScreenContainer extends React.Component {
   };
 }
 
-// SettingScreenContainer.navigationOptions = ({navigation}) => {
-  
-//   return {
-//     headerTitle: <RouteTitle title={'xopxpxpxpxpdfabshjfghsdjk'} />,
-//     headerLeft: <BackButton navigation={navigation} to={'Home'} />,
-//     headerTintColor: '#fff',
-//     headerStyle: commonStyle
-//   }
-// }
+
 
 
 export default SettingScreenContainer

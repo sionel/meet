@@ -49,6 +49,7 @@ class ConferenceScreenContainer extends React.Component {
    */
   componentDidMount() {
     const { navigation, user_name, auth, dispatch } = this.props;
+    debugger
     // this._handleCreateConnection(navigation, user_name, auth, dispatch);
     KeepAwake.activate();
     DeviceEventEmitter.addListener(

@@ -13,12 +13,12 @@ import {
   Dimensions
 } from 'react-native';
 // 이건 좀 많이 추후에
-import test from '../../../../assets/ttttest.png';
-import test1 from '../../../../assets/Basic.png';
-import ButtonCamera from '../../../../assets/buttons/btn_vc_camera_on.png';
-import ButtonCameraOff from '../../../../assets/buttons/btn_vc_camera_off.png';
-import ButtonMic from '../../../../assets/buttons/btn_vc_mike_on.png';
-import ButtonMicOff from '../../../../assets/buttons/btn_vc_mike_off.png';
+import test from '../../../assets/ttttest.png';
+import test1 from '../../../assets/Basic.png';
+import ButtonCamera from '../../../assets/buttons/btn_vc_camera_on.png';
+import ButtonCameraOff from '../../../assets/buttons/btn_vc_camera_off.png';
+import ButtonMic from '../../../assets/buttons/btn_vc_mike_on.png';
+import ButtonMicOff from '../../../assets/buttons/btn_vc_mike_off.png';
 import { RTCView } from 'react-native-webrtc';
 
 export default function SettingScreenPresenter(props) {
