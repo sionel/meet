@@ -207,7 +207,8 @@ class ConferenceStateContainer extends React.Component {
         )
       ).resultData;
       // return
-      this._handleRedirect('Conference', {
+      this._handleRedirect('Setting', {
+      // this._handleRedirect('Conference', {
         item: {
           roomType: 'meet',
           roomToken,

@@ -35,11 +35,11 @@ const ConferenceScreenPresenter = props => {
       onChangeDocumentPage={props.onChangeDocumentPage}
     />
   ) : (
-    // <LoadingIndicator/>
-    <SettingScreen
-      onBack={props.onBack}
-      onSetConnection={props.onSetConnection}
-    />
+    <LoadingIndicator/>
+    // <SettingScreen
+    //   onBack={props.onBack}
+    //   onSetConnection={props.onSetConnection}
+    // />
   );
 };
 

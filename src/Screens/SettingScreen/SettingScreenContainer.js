@@ -1,4 +1,5 @@
 import React from 'react';
+import { Platform } from 'react-native';
 import SettingScreenPresenter from './SettingScreenPresenter';
 import JitsiMeetJS from '../../../jitsi/features/base/lib-jitsi-meet';
 import config from '../../utils/conference/config';
@@ -13,7 +14,6 @@ const commonStyle = {
 class SettingScreenContainer extends React.Component {
   constructor() {
     super();
-    debugger
     this.state = {
       name: '',
       tracks: [],
@@ -24,6 +24,12 @@ class SettingScreenContainer extends React.Component {
   async componentDidMount() {
     this._init();
     let tracks = await this._getTrack();
+
+    if (Platform.OS !== 'ios') {
+      Orientation.lockToPortrait();
+    }
+    let a = this.props;
+    debugger;
     Orientation.getOrientation(orientation => {
       const status =
         orientation === 'LANDSCAPE' ||
@@ -31,6 +37,7 @@ class SettingScreenContainer extends React.Component {
         orientation === 'LANDSCAPE-RIGHT';
       this.setState({ orientation: status ? 'horizontal' : 'vertical' });
     });
+
     Orientation.addOrientationListener(this._handleOrientation);
 
     this.setState({
@@ -49,7 +56,7 @@ class SettingScreenContainer extends React.Component {
         onToggleAudio={this._handleToggleAudio}
         onToggleVideo={this._handleToggleVideo}
         onSetName={this._handleSetName}
-        onBack={this.props.onBack}
+        onBack={this._handleRedirect}
       />
     );
   }
@@ -70,16 +77,46 @@ class SettingScreenContainer extends React.Component {
       devices,
       resolution: 320
     });
-    debugger;
     const videoTrack = tracks.find(track => track.getType() === 'video');
     const audioTrack = tracks.find(track => track.getType() === 'audio');
-    debugger;
     return [videoTrack, audioTrack];
   };
+  _handleRedirect = () => {
+    this.props.navigation.navigate('Home');
+  };
+  _handleConferenceEnter = () => {
+    const item = this.navigation.state.params.item;
+    const { tracks, name } = this.state;
+    this.props.navigation.navigate('Conference', {
+      item: { tracks, name, ...item }
+    });
+  };
+  _handleToggleVideo = async () => {
+    const { tracks } = this.state;
+    const video = tracks[0];
+    if (video.isMuted()) {
+      await video.unmute();
+    } else {
+      await video.mute();
+    }
 
-  _handleConferenceEnter = () => {};
-  _handleToggleAudio = () => {};
-  _handleToggleVideo = () => {};
+    this.setState({
+      tracks: tracks
+    });
+  };
+  _handleToggleAudio = async () => {
+    const { tracks } = this.state;
+    const audio = tracks[1];
+    if (audio.isMuted()) {
+      await audio.unmute();
+    } else {
+      await audio.mute();
+    }
+
+    this.setState({
+      tracks: tracks
+    });
+  };
   _handleSetName = name => {
     this.setState({
       name
@@ -94,7 +131,4 @@ class SettingScreenContainer extends React.Component {
   };
 }
 
-
-
-
-export default SettingScreenContainer
+export default SettingScreenContainer;

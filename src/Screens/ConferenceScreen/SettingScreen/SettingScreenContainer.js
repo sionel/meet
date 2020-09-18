@@ -22,8 +22,8 @@ class SettingScreenContainer extends React.Component {
   }
 
   async componentDidMount() {
-    debugger
-    this.props.navigation.setOptions({ title: '1234ghj123bhj123bj12bhj' });
+    
+    // this.props.navigation.setOptions({ title: '1234ghj123bhj123bj12bhj' });
 
     this._init();
     
@@ -74,10 +74,10 @@ class SettingScreenContainer extends React.Component {
       devices,
       resolution: 320
     });
-    debugger;
+    ;
     const videoTrack = tracks.find(track => track.getType() === 'video');
     const audioTrack = tracks.find(track => track.getType() === 'audio');
-    debugger;
+    ;
     return [videoTrack, audioTrack];
   };
 

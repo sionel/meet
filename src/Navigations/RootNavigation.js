@@ -1,3 +1,4 @@
+import React from 'react';
 import { createAppContainer, createStackNavigator } from 'react-navigation';
 import MainNavigation from './MainNavigation';
 import ConferenceScreen from '../Screens/ConferenceScreen';
@@ -71,7 +72,7 @@ const RootNavigation = createStackNavigator(
       navigationOptions: ({ navigation }) => ({
         headerTitle: <RouteTitle title={'기본 설정'} />,
         // headerTitle:  null,
-        // headerLeft: <BackButton navigation={navigation} to={'Main'} />,
+        headerLeft: <BackButton navigation={navigation} to={'Main'} />,
         headerTintColor: '#fff',
         headerStyle: commonStyle
       })
@@ -105,7 +106,7 @@ const RootNavigation = createStackNavigator(
   {
     initialRouteName: 'Main',
     mode: 'modal',
-    headerMode: 'none',
+    headerMode: 'screen',
     cardStyle: { backgroundColor: '#FFF', transparent: true }
   }
 );

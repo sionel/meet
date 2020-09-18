@@ -64,8 +64,8 @@ export default function DeletedScreen(props) {
             <Text style={styles.linedot}>{'\u2B24'}</Text>
             <Text style={{ fontSize: 12 }}>
               {props.isTablet
-                ? '지속적으로 화면전황이 일어나지 않는 경우, 고객센터에 접수해주세요.'
-                : '지속적으로 화면전황이 일어나지 않는 경우,\n고객센터에 접수해주세요.'}
+                ? '지속적으로 화면전환이 일어나지 않는 경우, 고객센터에 접수해주세요.'
+                : '지속적으로 화면전환이 일어나지 않는 경우,\n고객센터에 접수해주세요.'}
             </Text>
           </View>
         </View>
