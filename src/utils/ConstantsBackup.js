@@ -1,5 +1,5 @@
 /**
- * 화상대화의 모드이다.
+ * 화상회의의 모드이다.
  */
 export const ConferenceModes = {
 	// Control : 마이크 / 스피커 / 카메라 온오프가 가능하다.

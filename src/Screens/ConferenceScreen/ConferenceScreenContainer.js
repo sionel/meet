@@ -1,6 +1,6 @@
 /**
  * ConferenceScreenContainer
- * 화상대화 화면 컨테이너
+ * 화상회의 화면 컨테이너
  */
 
 import React from 'react';
@@ -201,7 +201,7 @@ class ConferenceScreenContainer extends React.Component {
   _handleCreateConnection = (navigation, user_name, auth, dispatch) => {
     // const { navigation, user_name, auth, dispatch } = this.props;
     const item = navigation.getParam('item');
-    // 전화 타입 - 화상:1 / 음성:2 / 위톡:3
+    // 전화 타입 - 화상:1 / 음성:2 / 메신저:3
     this.callType = item.callType || this.state.callType;
     this.roomType = item.roomType;
     this.roomId = item.videoRoomId;
@@ -234,7 +234,7 @@ class ConferenceScreenContainer extends React.Component {
       // 받은사람
       // console.warn('delayLoading', '4500');
       // FIXME mobile 의 경우만 발생하는 이슈 (아래)
-      // 모바일-모바일 or 모바일-웹에서화상대화를 동시에 접속하면 모바일이 화면을 송출/수신 못하는 이슈 발생
+      // 모바일-모바일 or 모바일-웹에서화상회의를 동시에 접속하면 모바일이 화면을 송출/수신 못하는 이슈 발생
       // 최소 딜레이 2-3초 정도
       delayLoading(4500);
     } else {
@@ -284,7 +284,7 @@ class ConferenceScreenContainer extends React.Component {
     this.setState({ connection: false, endCall: true });
   };
 
-  /** 화상대화방 닫기 */
+  /** 화상회의방 닫기 */
   _handleConferenceClose = () => {
     const { goBack } = this.props.navigation;
     goBack();
@@ -353,7 +353,7 @@ class ConferenceScreenContainer extends React.Component {
   };
 
   /**
-   * 백그라운드로 가면 화상대화 Mute 알림을 띄운다. (Android)
+   * 백그라운드로 가면 화상회의 Mute 알림을 띄운다. (Android)
    */
   _handleBackgroundWarning = () => {
     if (this._backTimeout) {

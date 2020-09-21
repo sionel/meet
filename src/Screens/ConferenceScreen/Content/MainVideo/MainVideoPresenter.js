@@ -129,7 +129,7 @@ const MainVideoPresenter = props => {
 
   return (
     <View style={{ flex: 1, backgroundColor: '#1D1D1D' }}>
-      {/* 정상적인 화상대화 일 때 */}
+      {/* 정상적인 화상회의 일 때 */}
       {!isMuteVideo &&
       stream &&
       (Number(callType) === 1 || Number(callType) === 3) &&
@@ -305,7 +305,7 @@ const MainVideoPresenter = props => {
         </Text>
       </View>
 
-      {/* 화상대화 중 나오는 통화시간 */}
+      {/* 화상회의 중 나오는 통화시간 */}
       {Number(callType) !== 2 && !localPipMode && displayTime}
 
       {/* 네트워크 불안정 */}

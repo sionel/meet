@@ -276,7 +276,7 @@ const HomeRoute = createStackNavigator(
 
     /**
      * Create
-     * 화상대화 생성
+     * 화상회의 생성
      */
     Create: {
       screen: CreateScreen,

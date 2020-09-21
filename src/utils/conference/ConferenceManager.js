@@ -1,5 +1,5 @@
 /**
- * 화상대화
+ * 화상회의
  **/
 import JitsiMeetJS from '../../../jitsi/features/base/lib-jitsi-meet';
 import config from './config';
@@ -15,25 +15,30 @@ import APIManager from '../../services/api/ApiManager';
 import { MeetApi } from '../../services';
 
 /**
- * ConferenceManager 화상대화 접속을 총괄하는 매니저
+ * ConferenceManager 화상회의 접속을 총괄하는 매니저
  */
 class ConferenceManager {
   constructor(dispatch, auth, item) {
     // Singleton
+    this._dispatch = dispatch;
+    this._item = { ...item };
+    this._auth = { ...auth };
     if (!ConferenceManager.instance) {
       // 싱글톤 변수 할당
       ConferenceManager.instance = this;
-      this._dispatch = dispatch;
-      this._item = { ...item };
-      this._auth = { ...auth };
+    }else if(dispatch && auth && item) {
+      ConferenceManager.instance._dispatch = dispatch
+      ConferenceManager.instance._item = item
+      ConferenceManager.instance._auth = auth
     }
+    debugger
     return ConferenceManager.instance;
   }
 
   // #region Public Functions
 
   /**
-   * connect : 화상대화 참가
+   * connect : 화상회의 참가
    */
   join = async (
     roomName,
@@ -64,6 +69,7 @@ class ConferenceManager {
     );
     this.callType = callType;
     if (this._item.roomType === 'meet') {
+      console.log('@@@ ---' , this._item.roomToken);
       await MeetApi.enterMeetRoom(
         this._auth.AUTH_A_TOKEN,
         this._auth.AUTH_R_TOKEN,
@@ -71,7 +77,7 @@ class ConferenceManager {
         this._item.roomToken,
         this._room.myUserId()
       );
-    } 
+    }
     // 대화방 접속 시간 세팅
     const createdTime = this._room.properties['created-ms'];
     this._dispatch(localActionCreators.setConferenceCreatedTime(createdTime));
@@ -146,7 +152,7 @@ class ConferenceManager {
   // #endregion
 
   /**
-   * init: 화상대화 연결을 위한 초기화
+   * init: 화상회의 연결을 위한 초기화
    */
   _createHandlers = handleClose => {
     const handler = {
@@ -168,7 +174,7 @@ class ConferenceManager {
   };
 
   /**
-   * init: 화상대화 연결을 위한 초기화
+   * init: 화상회의 연결을 위한 초기화
    */
   _init = () => {
     // JitsiMeetJS 를 초기화 한다.

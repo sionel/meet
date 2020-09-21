@@ -36,10 +36,10 @@ export default function SettingScreen(props) {
         }}
       >
         <Text style={{ fontSize: 17, color: '#000', paddingBottom: 10 }}>
-          {'화상대화 전 기본 설정을 진행해주세요.'}
+          {'화상회의 전 기본 설정을 진행해주세요.'}
         </Text>
         <Text style={{ fontSize: 12, color: 'rgb(140,140,140)' }}>
-          {'원치 않을 경우, 바로 화상대화 참여 버튼클릭 후 진입가능합니다.'}
+          {'원치 않을 경우, 바로 화상회의 참여 버튼클릭 후 진입가능합니다.'}
         </Text>
       </View>
       <View
@@ -116,7 +116,7 @@ export default function SettingScreen(props) {
             alignItems: 'center'
           }}
         >
-          <Text style={{ fontSize: 15, color: '#fff' }}>{'화상대화 참여'}</Text>
+          <Text style={{ fontSize: 15, color: '#fff' }}>{'화상회의 참여'}</Text>
         </TouchableOpacity>
       </View>
     </View>

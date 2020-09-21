@@ -52,7 +52,7 @@ const ConfigurationScreenPresenter = props => {
         WEHAGO_ENV === 'WEHAGOV'
           ? '1.0.1'
           : Platform.OS === 'ios'
-          ? '1.24.22'
+          ? '1.24.23'
           : '1.7.1'
     },
     {

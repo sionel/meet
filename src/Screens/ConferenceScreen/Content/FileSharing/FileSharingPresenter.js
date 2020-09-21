@@ -168,7 +168,7 @@ const FileSharingPresenter = props => {
     presenter === 'localUser'
       ? {
           title: `${MODE} 종료`,
-          text: `${MODE}를 종료하시겠습니까?\n(종료할 경우, 모든 참여자에게 ${MODE}가 보이지 않으며 화상대화 화면으로 돌아갑니다.)`,
+          text: `${MODE}를 종료하시겠습니까?\n(종료할 경우, 모든 참여자에게 ${MODE}가 보이지 않으며 화상회의 화면으로 돌아갑니다.)`,
           onClickFeedback: () => {
             props.onSetDrawingData();
             props.onChangeSharingMode(false, false);
@@ -176,8 +176,8 @@ const FileSharingPresenter = props => {
           }
         }
       : {
-          title: '화상대화 종료',
-          text: '화상대화를 종료하시겠습니까?',
+          title: '화상회의 종료',
+          text: '화상회의를 종료하시겠습니까?',
           onClickFeedback: props.onDisposeConference
         };
 

@@ -1,6 +1,6 @@
 /**
  * CreateScreenPresenter
- * 화상대화 히스토리 프레젠터
+ * 화상회의 히스토리 프레젠터
  */
 
 import React, { useState, useEffect } from 'react';
@@ -105,7 +105,7 @@ const CreateScreenPresenter = props => {
         >
           <Placeholder
             mainText="검색 결과가 없습니다."
-            subText={'위하고에서 위톡을 생성해 보세요'}
+            subText={'위하고에서 메신저를 생성해 보세요'}
           />
         </ScrollView>
       ) : (
@@ -199,17 +199,17 @@ const CreateScreenPresenter = props => {
 
       {/* <CustomModal
         display={props.modal}
-        title="화상대화 생성"
-        text="화상대화를 생성하시겠습니까?"
+        title="화상회의 생성"
+        text="화상회의를 생성하시겠습니까?"
         feedbackText="시작하기"
         onClickClose={() => props.onActivateModal(null)}
         onClickFeedback={() => props.onCreateConference(props.selectedRoomId)}
       /> */}
       <CustomAlert
         visible={props.modal}
-        title={'화상대화 생성'}
+        title={'화상회의 생성'}
         width={320}
-        content={'화상대화를 생성하시겠습니까?'}
+        content={'화상회의를 생성하시겠습니까?'}
         onConfirm={() => props.onCreateConference()}
         onClose={() => props.onActivateModal(null)}
         // actions={[

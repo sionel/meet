@@ -39,7 +39,7 @@ export const DRAWING_SHARE_TARGET = 'DRAWING_SHARE_TARGET';
  */
 class ConferenceConnector {
   constructor(handlers) {
-    // room : 화상대화방
+    // room : 화상회의방
     this._room = null;
     this._tracks = [];
     this._handlers = handlers;
@@ -149,7 +149,7 @@ class ConferenceConnector {
   };
 
   /**
-   * 화상대화방 관련 이벤트를 바인딩한다.
+   * 화상회의방 관련 이벤트를 바인딩한다.
    */
   _bindEvents = (resolve, reject) => {
     const conferenceEvents = JitsiMeetJS.events.conference;

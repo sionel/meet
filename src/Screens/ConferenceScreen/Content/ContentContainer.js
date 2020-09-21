@@ -23,7 +23,7 @@ const InCallManager = isIOS
 const { AudioMode } = NativeModules;
 const hasNotch = DeviceInfo.hasNotch() && isIOS;
 /**
- * ContentContainer : 화상대화 화면
+ * ContentContainer : 화상회의 화면
  */
 class ContentContainer extends React.Component {
   /**

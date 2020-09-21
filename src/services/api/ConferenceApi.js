@@ -13,7 +13,7 @@ import {
 // #region
 export default {
   /**
-   * 화상대화 생성
+   * 화상회의 생성
    */
   create: async (
     room_id,
@@ -134,7 +134,7 @@ export default {
 
   /**
    * getParticipant
-   * 화상대화 방에 참가자 정보 조회 API
+   * 화상회의 방에 참가자 정보 조회 API
    * 유저리스트를 가지고 온다.
    */
   getParticipant: async (

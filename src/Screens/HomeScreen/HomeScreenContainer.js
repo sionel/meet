@@ -1,6 +1,6 @@
 /**
  * HomeScreenContainer
- * 화상대화 히스토리 컨테이너
+ * 화상회의 히스토리 컨테이너
  */
 
 import React, { Component } from 'react';
@@ -79,12 +79,12 @@ class HomeScreenContainer extends Component {
     //     this._handleOpenURL({ url });
     //   }
     // });
-    // [ios] 앱이 실행중에 딥링크에 의한 화상대화 연결방법
+    // [ios] 앱이 실행중에 딥링크에 의한 화상회의 연결방법
     if (Platform.OS === 'ios') {
       Linking.addEventListener('url', this._handleOpenURL);
     }
 
-    // [android, ios] 앱이 실행중이 아닐 때 화상대화 연결방법
+    // [android, ios] 앱이 실행중이 아닐 때 화상회의 연결방법
     if (
       this.props.screenProps &&
       (this.props.screenProps.url || this.props.screenProps.conferenceCall)
@@ -108,7 +108,7 @@ class HomeScreenContainer extends Component {
     // 뒤로가기 버튼 동작
     BackHandler.addEventListener('hardwareBackPress', this._handleBackButton);
 
-    // 위톡 업데이트 여부(meet 바라보기)
+    // 메신저 업데이트 여부(meet 바라보기)
     const { auth } = this.props;
     const didupdate = await WetalkApi.didUpdate(
       auth.AUTH_A_TOKEN,
@@ -119,7 +119,7 @@ class HomeScreenContainer extends Component {
   }
 
   shouldComponentUpdate = (nextProps, nextState) => {
-    // [android] 앱이 실행중에 딥링크에 의한 화상대화 연결방법
+    // [android] 앱이 실행중에 딥링크에 의한 화상회의 연결방법
     if (
       // Platform.OS === 'android' &&
       this.props.screenProps !== nextProps.screenProps
@@ -300,7 +300,7 @@ class HomeScreenContainer extends Component {
 
   /**
    * _handleOpenURL
-   * 딥링크로 전달받은 화상대화 접속
+   * 딥링크로 전달받은 화상회의 접속
    */
   _handleOpenLink = url => {
     if (!url) return;
@@ -319,7 +319,7 @@ class HomeScreenContainer extends Component {
 
     // console.warn('RESULT :: ', result);
     if (result.is_creater) {
-      // 화상대화 실행
+      // 화상회의 실행
       if (this.state.room_id === result.room_id) return;
       // console.warn(url);
       this.setState({ room_id: result.room_id }, () => {
@@ -338,7 +338,7 @@ class HomeScreenContainer extends Component {
       if (result.message) alert(result.message);
       return;
     }
-    // 화상대화 타입 (생성:0/참여:1)
+    // 화상회의 타입 (생성:0/참여:1)
     // if (result.type == '1') {
     // 	this._handleCheckConference(result.room_id, result);
     // } else {
@@ -384,7 +384,7 @@ class HomeScreenContainer extends Component {
 
   /**
    * _handleGetWetalkList
-   * 위톡 조회
+   * 메신저 조회
    */
   _handleGetWetalkList = async () => {
     const {
@@ -394,7 +394,7 @@ class HomeScreenContainer extends Component {
       didupdate
     } = this.props;
     // console.log('CNO : ', auth.last_access_company_no);
-    // 위톡조회 API
+    // 메신저조회 API
 
     //FIXME: 수정해야함 분기 태우는거
     // let wetalkList;
@@ -530,7 +530,7 @@ class HomeScreenContainer extends Component {
 
   /**
    * _handleCheckConference
-   * 화상대화 생성/확인
+   * 화상회의 생성/확인
    */
   _handleCheckConference = async (
     conferenceId,
@@ -585,7 +585,7 @@ class HomeScreenContainer extends Component {
       if (!result.resultData) {
         this._handleModalChange(
           true,
-          '화상대화',
+          '화상회의',
           '이미 종료된 대화방입니다.',
           this._handleModalChange
         );
@@ -605,7 +605,7 @@ class HomeScreenContainer extends Component {
       if (participantList.length >= 50) {
         this._handleModalChange(
           true,
-          '화상대화',
+          '화상회의',
           '최대 참여인원을 초과했습니다.',
           this._handleModalChange
         );
@@ -622,7 +622,7 @@ class HomeScreenContainer extends Component {
         }
       });
     }
-    // 화상대화로 진입
+    // 화상회의로 진입
   };
 
   /**
@@ -678,7 +678,7 @@ class HomeScreenContainer extends Component {
       // null
     ];
     const createResult = await ConferenceApi.create(...bodyData);
-    // 화상대화 생성가능여부
+    // 화상회의 생성가능여부
     if (createResult.resultCode === 200) {
       // 생성완료 메시지 보내기
       const sendWetalkResult = await ConferenceApi.sendWetalk(
@@ -698,7 +698,7 @@ class HomeScreenContainer extends Component {
     } else if (createResult.errors && createResult.errors.code === 'E002') {
       this._handleRefresh();
     } else {
-      alert('화상대화 생성에 실패하였습니다. 다시 시도해 주세요');
+      alert('화상회의 생성에 실패하였습니다. 다시 시도해 주세요');
     }
   };
 

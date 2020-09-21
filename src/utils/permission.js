@@ -44,7 +44,7 @@ const setPermissions = async (response, permissions, length = 0) => {
     if (result !== 'authorized') {
       Alert.alert(
         permissions[len].name + ' 권한 요청',
-        '화상대화 기능을 사용하시려면 해당 권한을 부여하세요.',
+        '화상회의 기능을 사용하시려면 해당 권한을 부여하세요.',
         [
           {
             text: 'OK',

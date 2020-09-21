@@ -1,6 +1,6 @@
 /**
  * ConferenceStateContainer
- * 화상대화 전 화면들
+ * 화상회의 전 화면들
  *
  */
 
@@ -207,6 +207,7 @@ class ConferenceStateContainer extends React.Component {
         )
       ).resultData;
       // return
+
       this._handleRedirect('Conference', {
         item: {
           roomType: 'meet',
@@ -214,7 +215,7 @@ class ConferenceStateContainer extends React.Component {
           videoRoomId: roomId,
           callType,
           isCreator,
-          roomName
+          selectedRoomName:roomName
         }
       });
     }

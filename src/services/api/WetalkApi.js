@@ -9,7 +9,7 @@ import { meetURL, wehagoBaseURL, securityRequest } from '../../utils';
 export default {
   /**
    * We talk list
-   * 위톡 리스트
+   * 메신저 리스트
    */
   getWetalkList: async (a_token, r_token, cno, user_id, HASH_KEY) => {
     /*
@@ -64,7 +64,7 @@ export default {
   },
 
   didUpdate: async (a_token, r_token, HASH_KEY) => {
-    // 위톡이 meet을 바라보는 업데이트가 되었는지 체크
+    // 메신저이 meet을 바라보는 업데이트가 되었는지 체크
     const url = `${wehagoBaseURL}/communication/we-talk/testUserList`;
     const headers = securityRequest(a_token, r_token, url, HASH_KEY);
     try {

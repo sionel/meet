@@ -8,7 +8,7 @@ import { meetURL, securityRequest } from '../../utils';
 
 // #region
 export default {
-  // 3-1 화상대화방 생성
+  // 3-1 화상회의방 생성
   createMeetRoom: async (a_token, r_token, HASH_KEY, cno, param) => {
     const url = `${meetURL}/room?cno=${cno}`;
     const headers = securityRequest(a_token, r_token, url, HASH_KEY);
@@ -37,7 +37,7 @@ export default {
     }
   },
 
-  // 3-2 화상대화방 상세 조회
+  // 3-2 화상회의방 상세 조회
   getMeetRoom: async (a_token, r_token, HASH_KEY, roomId) => {
     const url = `${meetURL}/room?room=${roomId}`;
     const headers = securityRequest(a_token, r_token, url, HASH_KEY);
@@ -61,7 +61,7 @@ export default {
     }
   },
 
-  // 3-3 화상대화방 수정
+  // 3-3 화상회의방 수정
   updateMeetRoom: async (a_token, r_token, HASH_KEY, cno, roomId) => {
     const url = `${meetURL}/room?cno=${cno}&room=${roomId}`;
     const headers = securityRequest(a_token, r_token, url, HASH_KEY);
@@ -85,7 +85,7 @@ export default {
     }
   },
 
-  // 3-4 화상대화방 리스트 조회
+  // 3-4 화상회의방 리스트 조회
   getMeetRoomsList: async (a_token, r_token, cno, user_id, HASH_KEY) => {
     const url = `${meetURL}/room/list?cno=${cno}`;
     const headers = securityRequest(a_token, r_token, url, HASH_KEY);
@@ -111,9 +111,9 @@ export default {
 
   // 3-5 마스터 설정
   // 3-6 참가자 설정
-  // 3-7 화상대화방 삭제
-  // 3-8 화상대화방 종료 리스트 조회
-  // 3-9 화상대화방 참가자 허용 리스트 조회
+  // 3-7 화상회의방 삭제
+  // 3-8 화상회의방 종료 리스트 조회
+  // 3-9 화상회의방 참가자 허용 리스트 조회
   getAccessUsers: async (a_token, r_token, HASH_KEY, cno, roomId) => {
     const url = `${meetURL}/room/access-user?cno=${cno}&room=${roomId}`;
     const headers = securityRequest(a_token, r_token, url, HASH_KEY);
@@ -137,7 +137,7 @@ export default {
     }
   },
 
-  // 3-10 화상대화방 접속중인 사용자 리스트 조회
+  // 3-10 화상회의방 접속중인 사용자 리스트 조회
   getParticipant: async (a_token, r_token, HASH_KEY, cno, roomId) => {
     const url = `${meetURL}/room/connecting-user?cno=${cno}&room=${roomId}`;
     const headers = securityRequest(a_token, r_token, url, HASH_KEY);
@@ -161,7 +161,7 @@ export default {
     }
   },
 
-  // 3-11 화상대화방 접속했던 사용자 리스트 조회
+  // 3-11 화상회의방 접속했던 사용자 리스트 조회
 
   // 3-12 화상회의 토큰 생성
   getMeetRoomToken: async (a_token, r_token, HASH_KEY, cno, roomId) => {
@@ -209,7 +209,7 @@ export default {
 
       const response = await fetch(url, data);
       if (response.status !== 200) {
-        throw response.resultCode;
+        throw response.json();
       }
       return response.json();
     } catch (err) {

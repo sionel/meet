@@ -1,6 +1,6 @@
 /**
  * ConferenceScreenPresenter
- * 화상대화 화면 프레젠터
+ * 화상회의 화면 프레젠터
  */
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';

@@ -1,6 +1,6 @@
 /**
  * ListItemCopm
- * 화상대화 히스토리 항목
+ * 화상회의 히스토리 항목
  */
 
 import React from 'react';

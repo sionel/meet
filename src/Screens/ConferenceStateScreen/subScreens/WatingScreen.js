@@ -33,14 +33,14 @@ export default function DeletedScreen(props) {
         >
           <Image source={waiting} resizeMode="contain" />
           <Text style={{ fontSize: 14, color: 'rgb(80,80,80)' }}>
-            {'화상대화 시작전입니다.'}
+            {'화상회의 시작전입니다.'}
           </Text>
           <View style={{ fontSize: 12, paddingTop: 25 }}>
             <Text style={{ textAlign: 'center', color: 'rgb(171,171,171)' }}>
-              {'해당 화상대화방은 '}
+              {'해당 화상회의방은 '}
               <Text style={{color:'rgb(28,144,251)'}}>{start}</Text>
               {
-                ' 시간 예정입니다.\n화상대화에 진입되지 않는 경우, 앱 종료 후 재실행 해주세요'
+                ' 시간 예정입니다.\n화상회의에 진입되지 않는 경우, 앱 종료 후 재실행 해주세요'
               }
             </Text>
           </View>
@@ -50,8 +50,8 @@ export default function DeletedScreen(props) {
             <Text style={styles.linedot}>{'\u2B24'}</Text>
             <Text style={{ fontSize: 12 }}>
               {props.isTablet
-                ? '화상대화 일정이 변경되거나 방이 삭제 될 경우, 이용하실수 없습니다.'
-                : '화상대화 일정이 변경되거나 방이 삭제 될 경우,\n이용하실수 없습니다.'}
+                ? '화상회의 일정이 변경되거나 방이 삭제 될 경우, 이용하실수 없습니다.'
+                : '화상회의 일정이 변경되거나 방이 삭제 될 경우,\n이용하실수 없습니다.'}
             </Text>
           </View>
           <View style={styles.line}>
@@ -64,8 +64,8 @@ export default function DeletedScreen(props) {
             <Text style={styles.linedot}>{'\u2B24'}</Text>
             <Text style={{ fontSize: 12 }}>
               {props.isTablet
-                ? '지속적으로 화면전황이 일어나지 않는 경우, 고객센터에 접수해주세요.'
-                : '지속적으로 화면전황이 일어나지 않는 경우,\n고객센터에 접수해주세요.'}
+                ? '지속적으로 화면전환이 일어나지 않는 경우, 고객센터에 접수해주세요.'
+                : '지속적으로 화면전환이 일어나지 않는 경우,\n고객센터에 접수해주세요.'}
             </Text>
           </View>
         </View>

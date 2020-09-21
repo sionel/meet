@@ -297,7 +297,7 @@ class MainContainer extends Component {
    */
   _handleGetWehagoToken = event => {
     
-    /* 모바일 웹에서 화상대화로 들어올 때 (위톡, meet 둘다 공통)    
+    /* 모바일 웹에서 화상회의로 들어올 때 (메신저, meet 둘다 공통)    
       ?portal_id=sadb0101 // 아이디
       &mHASH_KEY=4737240669613779471317246605417595221 // wehago_s
       &mAuth_r_token=1jKg3vXzvd5yR6kxKUGgJUYDaMhKcF // r토큰
@@ -311,7 +311,7 @@ class MainContainer extends Component {
     if (!event.url) return;
     
     const result = querystringParser(event.url);
-    // 화상대화 요청인지 판별
+    // 화상회의 요청인지 판별
     if (result.is_creater || result.type) {
       // timestamp : 로그인 시간 체크
       this.conferenceCall = { ...result, timestamp: Date.now() };
@@ -415,7 +415,7 @@ class MainContainer extends Component {
   //     if (result !== 'authorized') {
   //       Alert.alert(
   //         permissions[len].name + ' 권한 요청',
-  //         '화상대화 기능을 사용하시려면 해당 권한을 부여하세요.',
+  //         '화상회의 기능을 사용하시려면 해당 권한을 부여하세요.',
   //         [
   //           {
   //             text: 'OK',

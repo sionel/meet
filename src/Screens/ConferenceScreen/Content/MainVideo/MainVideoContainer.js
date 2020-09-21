@@ -12,7 +12,7 @@ const { PictureInPicture } = NativeModules;
 const { width, height } = Dimensions.get('window');
 
 /**
- * MainVideoContainer : 화상대화 화면
+ * MainVideoContainer : 화상회의 화면
  */
 class MainVideoContainer extends React.Component {
   state = {
@@ -112,7 +112,7 @@ class MainVideoContainer extends React.Component {
         if (type === 'BACK') {
           if (this.exitContent == undefined || !this.exitContent) {
             ToastAndroid.show(
-              '한번 더 누르면 화상대화가 종료됩니다.',
+              '한번 더 누르면 화상회의가 종료됩니다.',
               ToastAndroid.SHORT
             );
             this.exitContent = true;

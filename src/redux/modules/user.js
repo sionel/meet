@@ -18,9 +18,9 @@ const EVENT_LOG = 'EVENT_LOG';
 const NETWORK_DISCONNECT = 'NETWORK_DISCONNECT';
 
 const SESSION_CHECK = 'SESSION_CHECK';
-const SET_PERMISSION = 'SET_PERMISSION'; // 화상대화 생성 권한
+const SET_PERMISSION = 'SET_PERMISSION'; // 화상회의 생성 권한
 
-const DIDUPDATE = 'DIDUPDATE'; // 위톡 업데이트 여부 체크(meet 바라보기)
+const DIDUPDATE = 'DIDUPDATE'; // 메신저 업데이트 여부 체크(meet 바라보기)
 //#region Action Creators
 
 /**
@@ -246,8 +246,8 @@ const initialState = {
   log: {},
   session: true,
   permission: false,
-  didupdate: false //20200910 위톡 업데이트 여부를 모름
-  // FIXME: 나중에 위톡이 meet을 바라보게 업데이트 된다면 그게 맞춰서 코드를 정리 할 것!
+  didupdate: false //20200910 메신저 업데이트 여부를 모름
+  // FIXME: 나중에 메신저이 meet을 바라보게 업데이트 된다면 그게 맞춰서 코드를 정리 할 것!
 };
 
 //#endregion initialState

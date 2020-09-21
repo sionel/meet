@@ -25,7 +25,7 @@ export default function CompanySelectPresenter(props) {
       <View style={styles.companyList}>
         <View style={styles.title}>
           <Text style={styles.titleText}>
-            {isSP ? '화상대화팩 미구매 회사' : '화상대화 미구매 회사'}
+            {isSP ? '화상회의팩 미구매 회사' : '화상회의 미구매 회사'}
           </Text>
           <TouchableOpacity
             activeOpacity={0.5}
@@ -36,7 +36,7 @@ export default function CompanySelectPresenter(props) {
         </View>
         <Text style={styles.message}>
           {
-            '화상대화 서비스를 구매하지 않은 회사입니다.\n서비스 구매 후 이용하세요.'
+            '화상회의 서비스를 구매하지 않은 회사입니다.\n서비스 구매 후 이용하세요.'
           }
         </Text>
 
