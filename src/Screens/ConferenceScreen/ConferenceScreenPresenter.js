@@ -6,6 +6,8 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import LoadingIndicator from './LoadingIndicator';
+import SettingScreen from './SettingScreen';
+
 import Content from './Content';
 
 /**
@@ -33,7 +35,11 @@ const ConferenceScreenPresenter = props => {
       onChangeDocumentPage={props.onChangeDocumentPage}
     />
   ) : (
-    <LoadingIndicator />
+    <LoadingIndicator/>
+    // <SettingScreen
+    //   onBack={props.onBack}
+    //   onSetConnection={props.onSetConnection}
+    // />
   );
 };
 
