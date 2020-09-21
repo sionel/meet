@@ -46,13 +46,13 @@ const ConfigurationScreenPresenter = props => {
     //   nextPage: true
     // },
     {
-      title: '버전정보',
+      title: '버전정보', 
       icon: 'ico_menu_info',
       content:
         WEHAGO_ENV === 'WEHAGOV'
           ? '1.0.1'
           : Platform.OS === 'ios'
-          ? '1.24.23'
+          ? '1.25.1'
           : '1.7.1'
     },
     {

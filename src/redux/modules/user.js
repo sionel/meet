@@ -19,8 +19,6 @@ const NETWORK_DISCONNECT = 'NETWORK_DISCONNECT';
 
 const SESSION_CHECK = 'SESSION_CHECK';
 const SET_PERMISSION = 'SET_PERMISSION'; // 화상회의 생성 권한
-
-const DIDUPDATE = 'DIDUPDATE'; // 메신저 업데이트 여부 체크(meet 바라보기)
 //#region Action Creators
 
 /**
@@ -200,12 +198,6 @@ function changeCompanyRequest(auth, company) {
   };
 }
 
-function checkWetalkUpdate(flag = false) {
-  return {
-    type: DIDUPDATE,
-    didupdate:flag
-  };
-}
 
 /**
  * tokenLogin : ACTION
@@ -246,8 +238,6 @@ const initialState = {
   log: {},
   session: true,
   permission: false,
-  didupdate: false //20200910 메신저 업데이트 여부를 모름
-  // FIXME: 나중에 메신저이 meet을 바라보게 업데이트 된다면 그게 맞춰서 코드를 정리 할 것!
 };
 
 //#endregion initialState
@@ -290,8 +280,6 @@ function reducer(state = initialState, action) {
       return { ...state, session: action.session };
     case SET_PERMISSION:
       return { ...state, permission: action.permission };
-    case DIDUPDATE:
-      return { ...state, didupdate: action.didupdate };
     default:
       return state;
   }
@@ -366,7 +354,6 @@ const actionCreators = {
   toggleVisibleAppIntro,
   sessionCheck,
   setPermission,
-  checkWetalkUpdate
 };
 
 export { actionCreators };

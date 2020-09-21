@@ -30,8 +30,8 @@ import AddButton from './AddButton';
  */
 const HomeScreenPresenter = props => {
   const activateList = props.list.filter(item => item.is_video_access === 'T');
-  const started = props.started
-  const reservation= props.reservation
+  const started = props.started;
+  const reservation = props.reservation;
   return (
     <View style={styles.container}>
       {/* <TouchableOpacity style={{ position: 'absolute', top: 500, left: 200, backgroundColor:'#0a0', zIndex:99}} onPress={()=>{props.onMakeRoom()}}>
@@ -40,7 +40,7 @@ const HomeScreenPresenter = props => {
       {/* 검색바 */}
       {/* <SearchForm onChange={props.onSearch} /> */}
 
-      {(props.list.length < 1 || activateList.length < 1)&&
+      {(props.list.length < 1 || activateList.length < 1) &&
       (props.started.length < 1 || started.length < 1) &&
       (props.reservation.length < 1 || reservation.length < 1) ? (
         <ScrollView
@@ -92,38 +92,18 @@ const HomeScreenPresenter = props => {
                 paddingRight: props.orientation === 'LANDSCAPE-RIGHT' ? 24 : 0
               }
             ]}
-            sections={
-              activateList.length > 0
-                ? [
-                    {
-                      title: '진행중 - talk',
-                      data: activateList,
-                      length: activateList.length - 1
-                    },
-                    {
-                      title: '진행중 - meet',
-                      data: started,
-                      length: started.length - 1
-                    },
-                    {
-                      title: '예정',
-                      data: reservation,
-                      length: reservation.length - 1
-                    }
-                  ]
-                : [
-                    {
-                      title: '진행중',
-                      data: started,
-                      length: started.length - 1
-                    },
-                    {
-                      title: '예정',
-                      data: reservation,
-                      length: reservation.length - 1
-                    }
-                  ]
-            }
+            sections={[
+              {
+                title: '진행중',
+                data: started,
+                length: started.length - 1
+              },
+              {
+                title: '예정',
+                data: reservation,
+                length: reservation.length - 1
+              }
+            ]}
             renderSectionHeader={({ section }) =>
               section.data.length > 0 && (
                 <SectionListHeader title={section.title} />

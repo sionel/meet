@@ -108,14 +108,6 @@ class HomeScreenContainer extends Component {
     // 뒤로가기 버튼 동작
     BackHandler.addEventListener('hardwareBackPress', this._handleBackButton);
 
-    // 메신저 업데이트 여부(meet 바라보기)
-    const { auth } = this.props;
-    const didupdate = await WetalkApi.didUpdate(
-      auth.AUTH_A_TOKEN,
-      auth.AUTH_R_TOKEN,
-      auth.HASH_KEY
-    );
-    this.props.checkWetalkUpdate(didupdate?.resultData?.DBPWHGWEB19435);
   }
 
   shouldComponentUpdate = (nextProps, nextState) => {
@@ -165,18 +157,18 @@ class HomeScreenContainer extends Component {
       orientation,
       alert
     } = this.state;
-    const { navigation, auth, didupdate } = this.props;
+    const { navigation, auth } = this.props;
     const plan = auth.last_company.membership_code; // 요금제 [WE: 엣지, SP: 싱글팩, ...]
 
     let wetalk = []; // We talk list
     let conferenceList = this.props.conference;
 
-    let started = []
-    let reservation = []
+    let started = [];
+    let reservation = [];
 
-    if(conferenceList.length > 0) {
-      started = conferenceList.filter(i => i.is_started)
-      reservation = conferenceList.filter(i => !i.is_started)
+    if (conferenceList.length > 0) {
+      started = conferenceList.filter(i => i.is_started);
+      reservation = conferenceList.filter(i => !i.is_started);
     }
 
     if (searchKeyword) {
@@ -237,7 +229,6 @@ class HomeScreenContainer extends Component {
           onCheckConference={this._handleCheckConference}
           orientation={this.state.orientation}
           hasNotch={hasNotch}
-          didupdate={didupdate}
         />
         {/* </DrawerLayoutAndroid> */}
         {/* </GestureRecognizer> */}
@@ -391,32 +382,30 @@ class HomeScreenContainer extends Component {
       auth,
       onSetWetalkList,
       onSetConferenceList,
-      didupdate
+      
     } = this.props;
     // console.log('CNO : ', auth.last_access_company_no);
     // 메신저조회 API
 
     //FIXME: 수정해야함 분기 태우는거
     // let wetalkList;
-    if (didupdate === 'N') {
-      const wetalkList = await WetalkApi.getWetalkList(
-        auth.AUTH_A_TOKEN,
-        auth.AUTH_R_TOKEN,
-        auth.last_access_company_no,
-        auth.portal_id,
-        auth.HASH_KEY
-      );
-
-      onSetWetalkList(
-        wetalkList.resultData.video_room_list.sort((a, b) =>
-          a.send_timestamp < b.send_timestamp ? 1 : -1
-        )
-      );
-
-      if (wetalkList.errors) {
-        return this._handleAutoLogin();
-      }
+    const wetalkList = await WetalkApi.getWetalkList(
+      auth.AUTH_A_TOKEN,
+      auth.AUTH_R_TOKEN,
+      auth.last_access_company_no,
+      auth.portal_id,
+      auth.HASH_KEY
+    );
+    onSetWetalkList(
+      wetalkList.resultData.video_room_list.sort((a, b) =>
+        a.send_timestamp < b.send_timestamp ? 1 : -1
+      )
+    );
+      
+    if (wetalkList.errors) {
+      return this._handleAutoLogin();
     }
+
     const cl = await MeetApi.getMeetRoomsList(
       auth.AUTH_A_TOKEN,
       auth.AUTH_R_TOKEN,
