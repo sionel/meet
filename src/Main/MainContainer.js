@@ -349,7 +349,7 @@ class MainContainer extends Component {
     isWehagoLogin
   ) => {
     if (!AUTH_A_TOKEN) return;
-
+    
     const { loginCheckRequest } = this.props;
     const result = await loginCheckRequest(
       AUTH_A_TOKEN,

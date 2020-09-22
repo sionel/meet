@@ -63,7 +63,6 @@ class CreateScreenContainer extends React.Component {
     const { refreshing, searchKeyword, selectedRoomId, modal } = this.state;
     const { navigation, auth } = this.props;
     let wetalk = []; // We talk list
-    debugger
     if (searchKeyword) {
       wetalk = this.props.wetalk.filter(item =>
         item.room_title.toLowerCase().match(searchKeyword.toLowerCase())

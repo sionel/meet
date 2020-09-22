@@ -94,7 +94,7 @@ function joinConference(conferenceInfo) {
 }
 
 function applyJoinConference(state, action) {
-  const { conferenceInfo } = action;
+  const { conferenceInfo } = action; 
   const user = {
     id: conferenceInfo.id,
     cid: conferenceInfo.cid,
@@ -102,8 +102,8 @@ function applyJoinConference(state, action) {
     isLocal: true,
     videoTrack: conferenceInfo.videoTrack,
     audioTrack: conferenceInfo.audioTrack,
-    isMuteMic: false,
-    isMuteVideo: false,
+    isMuteMic: conferenceInfo.audioTrack.isMuted(),
+    isMuteVideo: conferenceInfo.videoTrack.isMuted(),
     isMuteSpeaker: false,
     userInfo: {
       isLocal: true,

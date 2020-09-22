@@ -111,41 +111,7 @@ const HomeScreenPresenter = props => {
             }
             renderItem={({ item, index, section }) => {
               // 히스토리 아이템
-              return section.title === '진행중 - talk' ? (
-                <ListItemComp
-                  key={item.room_id}
-                  title={item.room_title}
-                  personnel={item.receiver_user_count}
-                  updated={item.update_timestamp}
-                  room_profile_url={item.room_profile_url}
-                  lottie={true}
-                  underline={index < section.length ? true : false}
-                  active={item.is_video_access === 'T' ? true : false}
-                  disable={
-                    item.receiver_user_count === 1 && item.room_type === '1'
-                      ? true
-                      : false
-                  }
-                  onClick={() =>
-                    props.onCheckConference(
-                      item.video_chat_id,
-                      null,
-                      item.room_title,
-                      'wetalk'
-                    )
-                  }
-                  // onClick={() =>
-                  //   props.onRedirect('ConferenceState', {
-                  //     item: {
-                  //       roomId: item.video_chat_id,
-                  //       externalData: null,
-                  //       roomName: item.room_title,
-                  //       from: 'wetalk'
-                  //     }
-                  //   })
-                  // }
-                />
-              ) : (
+              return (
                 <ListItemComp
                   key={item.room_id}
                   title={item.name}
@@ -156,14 +122,6 @@ const HomeScreenPresenter = props => {
                   underline={index < section.length ? true : false}
                   active={true}
                   disable={false}
-                  // onClick={() =>
-                  //   props.onCheckConference(
-                  //     item.room_id,
-                  //     null,
-                  //     item.name,
-                  //     'meet'
-                  //   )
-                  // }
                   onClick={() =>
                     props.onRedirect('ConferenceState', {
                       item: {

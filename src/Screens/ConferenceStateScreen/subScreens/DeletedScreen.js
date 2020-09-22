@@ -30,7 +30,11 @@ export default function DeletedScreen(props) {
             alignItems: 'center'
           }}
         >
-          <Image source={waiting} resizeMode="contain" />
+          <Image
+            source={waiting}
+            resizeMode="contain"
+            style={{ width: 200, height: 200 }}
+          />{' '}
           <Text style={{ fontSize: 14, color: 'rgb(80,80,80)' }}>
             {'화상회의방이 존재하지 않습니다.'}
           </Text>

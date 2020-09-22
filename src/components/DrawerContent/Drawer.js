@@ -114,7 +114,7 @@ export default function DrawerContent(props) {
         >
           <>
             <Image source={btnWehago} style={styles.shortcutImage} />
-            <Text style={styles.shortcutText}>{'wehago'}</Text>
+            <Text style={styles.shortcutText}>{'WEHAGO'}</Text>
           </>
         </TouchableHighlight>
         <TouchableHighlight
@@ -125,7 +125,7 @@ export default function DrawerContent(props) {
         >
           <>
             <Image source={btnWedrive} style={styles.shortcutImage} />
-            <Text style={styles.shortcutText}>{'we드라이브'}</Text>
+            <Text style={styles.shortcutText}>{'웹오피스'}</Text>
           </>
         </TouchableHighlight>
 
@@ -230,7 +230,8 @@ const styles = StyleSheet.create({
   shortcutImage: {
     alignItems: 'center',
     width: 40,
-    height: 40
+    height: 40,
+    marginBottom:10
   },
   shortcutText: {
     fontSize: 11,

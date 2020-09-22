@@ -36,10 +36,6 @@ const ConferenceScreenPresenter = props => {
     />
   ) : (
     <LoadingIndicator/>
-    // <SettingScreen
-    //   onBack={props.onBack}
-    //   onSetConnection={props.onSetConnection}
-    // />
   );
 };
 

@@ -26,7 +26,7 @@ export default {
       };
 
       const response = await fetch(url, data);
-      
+
       if (response.status !== 201) {
         throw response.resultCode;
       }
@@ -185,7 +185,7 @@ export default {
       }
       return response.json();
     } catch (err) {
-      alert('12.getMeetRoomToken : ', err);
+      console.warn('12.getMeetRoomToken : ', err);
       return false;
     }
   },
@@ -213,7 +213,31 @@ export default {
       }
       return response.json();
     } catch (err) {
-      alert('13.enterMeetRoom : ', err);
+      console.warn('13.enterMeetRoom : ', err);
+      return false;
+    }
+  },
+
+  // 3-20 화상회의 모바일 버전 체크
+  checkVersion: async (a_token, r_token, HASH_KEY) => {
+    const url = `${meetURL}/mobile/version/check`;
+    const headers = securityRequest(a_token, r_token, url, HASH_KEY);
+    try {
+      const data = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          ...headers
+        }
+      };
+
+      const response = await fetch(url, data);
+      if (response.status !== 200) {
+        throw response.json();
+      }
+      return response.json();
+    } catch (err) {
+      console.warn('20.enterMeetRoom : ', err);
       return false;
     }
   }

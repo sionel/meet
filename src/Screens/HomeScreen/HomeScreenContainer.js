@@ -12,7 +12,8 @@ import {
   Dimensions,
   View,
   ToastAndroid,
-  BackHandler
+  BackHandler,
+  Alert
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import Orientation from 'react-native-orientation-locker';
@@ -68,6 +69,8 @@ class HomeScreenContainer extends Component {
    * componentDidMount
    */
   async componentDidMount() {
+
+
     // 화면 회전 처리
     Orientation.getOrientation(orientation => {
       this.setState({ orientation });
@@ -224,9 +227,7 @@ class HomeScreenContainer extends Component {
           onRefresh={this._handleRefresh}
           onSearch={this._handleSearch}
           onGetWetalkList={this._handleGetWetalkList}
-          onCreateMeetRoom={this._handleCreateMeetRoom}
           onCreateConference={this._handleCreateConference}
-          onCheckConference={this._handleCheckConference}
           orientation={this.state.orientation}
           hasNotch={hasNotch}
         />
@@ -300,7 +301,7 @@ class HomeScreenContainer extends Component {
     // 비로그인상태에서 연결 요청후 위하고 앱으로 로그인을 진행하면 url: object
     if (typeof url === 'string') result = querystringParser(url);
     else result = url;
-
+    
     // 로그인 요청 시간 체크
     if (result.timestamp) {
       const timestamp_now = Date.now();
@@ -317,6 +318,7 @@ class HomeScreenContainer extends Component {
         this._handleCheckConference(result.room_id, result);
       });
     } else if (result.flag === 'T') {
+      // 모바일 웹 메신저에서 접근하게 되면 여기로 옴
       this._handleRedirect('ConferenceState', {
         item: {
           roomId: result.video_id,
@@ -329,12 +331,6 @@ class HomeScreenContainer extends Component {
       if (result.message) alert(result.message);
       return;
     }
-    // 화상회의 타입 (생성:0/참여:1)
-    // if (result.type == '1') {
-    // 	this._handleCheckConference(result.room_id, result);
-    // } else {
-    // 	this._handleCreateConference(result.room_id, result);
-    // }
   };
 
   /**
@@ -378,12 +374,7 @@ class HomeScreenContainer extends Component {
    * 메신저 조회
    */
   _handleGetWetalkList = async () => {
-    const {
-      auth,
-      onSetWetalkList,
-      onSetConferenceList,
-      
-    } = this.props;
+    const { auth, onSetWetalkList, onSetConferenceList } = this.props;
     // console.log('CNO : ', auth.last_access_company_no);
     // 메신저조회 API
 
@@ -401,7 +392,7 @@ class HomeScreenContainer extends Component {
         a.send_timestamp < b.send_timestamp ? 1 : -1
       )
     );
-      
+
     if (wetalkList.errors) {
       return this._handleAutoLogin();
     }
@@ -425,35 +416,6 @@ class HomeScreenContainer extends Component {
     }
   };
 
-  _handleCreateMeetRoom = async () => {
-    const { auth, onSetWetalkList } = this.props;
-
-    const result = await MeetApi.createMeetRoom(
-      auth.AUTH_A_TOKEN,
-      auth.AUTH_R_TOKEN,
-      auth.last_access_company_no,
-      auth.portal_id,
-      auth.HASH_KEY
-    );
-
-    const cl = await MeetApi.getMeetRoomsList(
-      auth.AUTH_A_TOKEN,
-      auth.AUTH_R_TOKEN,
-      auth.last_access_company_no,
-      auth.portal_id,
-      auth.HASH_KEY
-    );
-    if (wetalkList.errors) {
-      // alert('wetalkList.error: ' + JSON.stringify(wetalkList.errors));
-      return this._handleAutoLogin();
-    }
-    this.setState({ refreshing: false });
-    onSetWetalkList(
-      wetalkList.resultData.video_room_list.sort((a, b) =>
-        a.send_timestamp < b.send_timestamp ? 1 : -1
-      )
-    );
-  };
   /**
    * _handleAutoLogin
    * 접속자확인 및 자동로그인
@@ -522,6 +484,7 @@ class HomeScreenContainer extends Component {
    * 화상회의 생성/확인
    */
   _handleCheckConference = async (
+    // 외부 (위하고 앱) 에서 접근할때 만 여기로 오게 됨
     conferenceId,
     externalData = null,
     selectedRoomName = null,
@@ -531,87 +494,34 @@ class HomeScreenContainer extends Component {
     let callType = 3;
     let isCreator;
     // 위하고(외부)에서 접속인지 아닌지 구분
-    if (externalData !== null) {
-      auth = {
-        ...auth,
-        conferenceId,
-        portal_id: externalData.owner_id,
-        user_name: externalData.owner_name,
-        last_access_company_no: externalData.cno,
-        AUTH_A_TOKEN: externalData.access
-      };
+    auth = {
+      ...auth,
+      conferenceId,
+      portal_id: externalData.owner_id,
+      user_name: externalData.owner_name,
+      last_access_company_no: externalData.cno,
+      AUTH_A_TOKEN: externalData.access
+    };
 
-      callType = externalData.call_type; // 1:화상 / 2:음성
-      isCreator = externalData.is_creater; // 0:생성자 / 1:참여자 / 9:비즈박스알파
+    callType = externalData.call_type; // 1:화상 / 2:음성
+    isCreator = externalData.is_creater; // 0:생성자 / 1:참여자 / 9:비즈박스알파
 
-      this._handleRedirect('Conference', {
-        item: {
-          videoRoomId: conferenceId,
-          callType,
-          isCreator,
-          selectedRoomName
-        }
-      });
-      // this._handleRedirect('ConferenceState', {
-      //   item: {
-      //     roomId: conferenceId,
-      //     externalData,
-      //     roomName: item.name,
-      //     from: 'outside'
-      //   }
-      // });
-    } else {
-      // 생성여부 체크
-
-      const result = await ConferenceApi.check(
-        conferenceId,
-        auth.AUTH_A_TOKEN,
-        auth.AUTH_R_TOKEN,
-        auth.HASH_KEY
-      );
-
-      // 대화방 정보를 얻어서 생성되어 있는 방인지 확인
-      if (!result.resultData) {
-        this._handleModalChange(
-          true,
-          '화상회의',
-          '이미 종료된 대화방입니다.',
-          this._handleModalChange
-        );
-        return;
+    this._handleRedirect('Conference', {
+      item: {
+        videoRoomId: conferenceId,
+        callType,
+        isCreator,
+        selectedRoomName
       }
-
-      const participantList = (
-        await ConferenceApi.getParticipant(
-          result.resultData.video_chat_id,
-          auth.AUTH_A_TOKEN,
-          auth.AUTH_R_TOKEN,
-          auth.HASH_KEY
-        )
-      ).resultData;
-
-      // 최대 참여인원 제한 (50명)
-      if (participantList.length >= 50) {
-        this._handleModalChange(
-          true,
-          '화상회의',
-          '최대 참여인원을 초과했습니다.',
-          this._handleModalChange
-        );
-        return;
-      }
-      this._handleRedirect('Conference', {
-        item: {
-          roomType: 'talk',
-          roomToken: null,
-          videoRoomId: conferenceId,
-          callType,
-          isCreator,
-          selectedRoomName
-        }
-      });
-    }
-    // 화상회의로 진입
+    });
+    // this._handleRedirect('ConferenceState', {
+    //   item: {
+    //     roomId: conferenceId,
+    //     externalData,
+    //     roomName: item.name,
+    //     from: 'outside'
+    //   }
+    // });
   };
 
   /**
@@ -703,6 +613,60 @@ class HomeScreenContainer extends Component {
       this._handleRefressAfterWhile();
     }
     this.setState({ appState: nextAppState });
+  };
+
+  _checkUpdateVersion = async auth => {
+    // 버전정보를 확인학 업데이트 다이얼로그를 띄우는 곳
+    // 버전정보를 현명하게 보관하고 있지 않으므로 어쩔수없이 강제로 바꿔주도록 한다...
+    const ios = '1.25.1';
+    const android = '1.7.1';
+    const ios_m = '0';
+    const android_m = '0';
+
+    const result = await MeetApi.checkVersion(
+      auth.AUTH_A_TOKEN,
+      auth.AUTH_R_TOKEN,
+      auth.HASH_KEY
+    );
+
+    const {
+      ios_version,
+      android_version,
+      ios_m_version,
+      android_m_version
+    } = result.resultData;
+    if (ios_m_version !== ios_m || android_m_version !== android_m) {
+      return await Alert.alert('업데이트', '해당 버전은 더이상 지원하지 않습니다.', [
+        {
+          text: '업데이트',
+          onPress: () => {
+            const os = Platform.OS;
+            Linking.openURL(
+              os === 'ios'
+                ? 'https://itunes.apple.com/app/id1455726925?mt=8'
+                : 'https://play.google.com/store/apps/details?id=com.wehago.meet'
+            );
+          }
+        }
+      ]);
+    } else if (ios_version !== ios || android_version !== android) {
+      return await Alert.alert('업데이트', '최신 버전 업데이트가 존재합니다.', [
+        {
+          text: '업데이트',
+          onPress: () => {
+            const os = Platform.OS;
+            Linking.openURL(
+              os === 'ios'
+                ? 'https://itunes.apple.com/app/id1455726925?mt=8'
+                : 'https://play.google.com/store/apps/details?id=com.wehago.meet'
+            );
+          }
+        },
+        {
+          text: '취소'
+        }
+      ]);
+    }
   };
 }
 // #endregion

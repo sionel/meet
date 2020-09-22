@@ -219,7 +219,7 @@ export default function SettingScreenPresenter({
                 justifyContent: 'center',
                 alignItems: 'center'
               }}
-              onPressOut={onBack}
+              onPressOut={onConferenceEnter}
             >
               <Text
                 style={{

@@ -28,8 +28,6 @@ class SettingScreenContainer extends React.Component {
     if (Platform.OS !== 'ios') {
       Orientation.lockToPortrait();
     }
-    let a = this.props;
-    debugger;
     Orientation.getOrientation(orientation => {
       const status =
         orientation === 'LANDSCAPE' ||
@@ -85,8 +83,12 @@ class SettingScreenContainer extends React.Component {
     this.props.navigation.navigate('Home');
   };
   _handleConferenceEnter = () => {
-    const item = this.navigation.state.params.item;
-    const { tracks, name } = this.state;
+    const item = this.props.navigation.state.params.item;
+    let { tracks, name } = this.state;
+    if (!name) {
+      name = this.props.auth.user_name;
+    }
+    this.props.navigation.navigate('Home');
     this.props.navigation.navigate('Conference', {
       item: { tracks, name, ...item }
     });

@@ -125,8 +125,8 @@ const MainVideoPresenter = props => {
   if (props?.mainUser?.userInfo?.avatar) {
     character = JSON.parse(props?.mainUser?.userInfo?.avatar)?.value;
   } 
-  character = props.isMuteVideo ? 'jangok' : character;
-
+  character = props?.mainUser?.videoTrack?.isMuted() ? 'jangok' : character;
+  
   return (
     <View style={{ flex: 1, backgroundColor: '#1D1D1D' }}>
       {/* 정상적인 화상회의 일 때 */}

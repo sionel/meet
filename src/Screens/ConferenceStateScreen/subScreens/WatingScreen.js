@@ -31,16 +31,20 @@ export default function DeletedScreen(props) {
             alignItems: 'center'
           }}
         >
-          <Image source={waiting} resizeMode="contain" />
+          <Image
+            source={waiting}
+            resizeMode="contain"
+            style={{ width: 200, height: 200 }}
+          />
           <Text style={{ fontSize: 14, color: 'rgb(80,80,80)' }}>
             {'화상회의 시작전입니다.'}
           </Text>
           <View style={{ fontSize: 12, paddingTop: 25 }}>
             <Text style={{ textAlign: 'center', color: 'rgb(171,171,171)' }}>
               {'해당 화상회의방은 '}
-              <Text style={{color:'rgb(28,144,251)'}}>{start}</Text>
+              <Text style={{ color: 'rgb(28,144,251)' }}>{start}</Text>
               {
-                ' 시간 예정입니다.\n화상회의에 진입되지 않는 경우, 앱 종료 후 재실행 해주세요'
+                ' 시작 예정입니다.\n화상회의에 진입되지 않는 경우, 앱 종료 후 재실행 해주세요'
               }
             </Text>
           </View>

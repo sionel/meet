@@ -67,37 +67,43 @@ export default function ReservationInfoScreen(props) {
       </View>
       <FlatList
         data={accessUser}
-        renderItem={({ item }) => (
-          <TouchableOpacity activeOpacity={1} style={styles.peopleComponent}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <View style={styles.profileCover}>
-                <Image
-                  style={styles.profileImg}
-                  source={
-                    item
-                      ? {
-                          uri: wehagoMainURL + item.profile_url
-                        }
-                      : null
-                  }
-                  resizeMode={'center'}
-                />
-              </View>
-              <Text
-                numberOfLines={1}
-                ellipsizeMode={'tail'}
-                style={styles.nameField}
-              >
-                {item.user_name}
-              </Text>
-              {/* {item.id === 'localUser' && (
+        renderItem={({ item }) => {
+          const { user, user_name, user_type, profile_url } = item;
+          return (
+            <TouchableOpacity activeOpacity={1} style={styles.peopleComponent}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <View style={styles.profileCover}>
+                  <Image
+                    style={styles.profileImg}
+                    source={
+                      user_type === 1
+                        ? {
+                            uri: wehagoMainURL + profile_url
+                          }
+                        : {
+                            uri:
+                              'https://static.wehago.com/imgs/common/no_profile.png'
+                          }
+                    }
+                    resizeMode={'center'}
+                  />
+                </View>
+                <Text
+                  numberOfLines={1}
+                  ellipsizeMode={'tail'}
+                  style={styles.nameField}
+                >
+                  {user_type === 1 ? user_name : user}
+                </Text>
+                {/* {item.id === 'localUser' && (
                 <View style={[styles.presenter, { backgroundColor: '#fb0' }]}>
                   <Text style={styles.presenterText}>나</Text>
                 </View>
               )} */}
-            </View>
-          </TouchableOpacity>
-        )}
+              </View>
+            </TouchableOpacity>
+          );
+        }}
       ></FlatList>
     </ScrollView>
     // </View>

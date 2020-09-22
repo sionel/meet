@@ -26,12 +26,11 @@ class ConferenceManager {
     if (!ConferenceManager.instance) {
       // 싱글톤 변수 할당
       ConferenceManager.instance = this;
-    }else if(dispatch && auth && item) {
-      ConferenceManager.instance._dispatch = dispatch
-      ConferenceManager.instance._item = item
-      ConferenceManager.instance._auth = auth
+    } else if (dispatch && auth && item) {
+      ConferenceManager.instance._dispatch = dispatch;
+      ConferenceManager.instance._item = item;
+      ConferenceManager.instance._auth = auth;
     }
-    debugger
     return ConferenceManager.instance;
   }
 
@@ -47,7 +46,8 @@ class ConferenceManager {
     auth,
     callType,
     roomType,
-    token
+    token,
+    tracks
   ) => {
     // 초기화
     this._init();
@@ -65,11 +65,11 @@ class ConferenceManager {
       this._connection,
       roomName.toLowerCase(),
       name,
-      auth
+      auth,
+      tracks
     );
     this.callType = callType;
     if (this._item.roomType === 'meet') {
-      console.log('@@@ ---' , this._item.roomToken);
       await MeetApi.enterMeetRoom(
         this._auth.AUTH_A_TOKEN,
         this._auth.AUTH_R_TOKEN,
@@ -78,6 +78,7 @@ class ConferenceManager {
         this._room.myUserId()
       );
     }
+
     // 대화방 접속 시간 세팅
     const createdTime = this._room.properties['created-ms'];
     this._dispatch(localActionCreators.setConferenceCreatedTime(createdTime));
@@ -101,7 +102,7 @@ class ConferenceManager {
     }
 
     const id = 'localUser';
-    const tracks = this._conferenceConnector.tracks;
+    if (!tracks) tracks = this._conferenceConnector.tracks;
     const videoTrack = tracks.find(track => track.getType() === 'video');
     const audioTrack = tracks.find(track => track.getType() === 'audio');
     await this._dispatch(
@@ -147,6 +148,11 @@ class ConferenceManager {
 
   setDocumentData = data => {
     this._conferenceConnector.setDocumentData(data);
+  };
+
+  set = (item, auth) => {
+    this._item = item;
+    this._auth = auth;
   };
 
   // #endregion
