@@ -34,7 +34,7 @@ export default function DeletedScreen(props) {
             source={waiting}
             resizeMode="contain"
             style={{ width: 200, height: 200 }}
-          />{' '}
+          />
           <Text style={{ fontSize: 14, color: 'rgb(80,80,80)' }}>
             {'화상회의방이 존재하지 않습니다.'}
           </Text>
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
   },
   infoBox: {
     height: 150,
-    justifyContent: 'space-around',
+    justifyContent: 'space-evenly',
     backgroundColor: '#f8f8fa'
   },
   line: {
