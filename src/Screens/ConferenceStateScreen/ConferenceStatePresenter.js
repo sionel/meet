@@ -24,7 +24,7 @@ const ConferenceStatePresenter = props => {
     inputRange: [0, 1],
     outputRange: ['0deg', '360deg']
   });
-  // conferenceState = 'setting'
+
   Animated.loop(
     Animated.timing(rotate, {
       toValue: 1,
@@ -57,7 +57,7 @@ const ConferenceStatePresenter = props => {
         <FullroomScreen {...props}></FullroomScreen>
       </View>
     );
-  } else if(conferenceState === 'setting'){
+  } else if (conferenceState === 'setting') {
     return (
       <View style={{ flex: 1 }}>
         <SettingScreen {...props}></SettingScreen>
@@ -83,7 +83,6 @@ const ConferenceStatePresenter = props => {
       </View>
     );
   }
-
 };
 
 const styles = StyleSheet.create({});

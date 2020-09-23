@@ -25,7 +25,7 @@ class ConferenceStateContainer extends React.Component {
   }
 
   async componentDidMount() {
-    const { navigation } = this.props;
+    
     const { roomId, roomName, from } = this.props.navigation.state.params.item;
     let { conferenceState } = this.state;
     this.roomId = roomId;
@@ -33,7 +33,6 @@ class ConferenceStateContainer extends React.Component {
     this.from = from;
 
     let { auth } = this.props;
-    // if (from === 'meet') {
     const accsess = await MeetApi.getMeetRoom(
       auth.AUTH_A_TOKEN,
       auth.AUTH_R_TOKEN,

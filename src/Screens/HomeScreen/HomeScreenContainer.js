@@ -301,7 +301,6 @@ class HomeScreenContainer extends Component {
     // 비로그인상태에서 연결 요청후 위하고 앱으로 로그인을 진행하면 url: object
     if (typeof url === 'string') result = querystringParser(url);
     else result = url;
-    
     // 로그인 요청 시간 체크
     if (result.timestamp) {
       const timestamp_now = Date.now();
@@ -378,8 +377,6 @@ class HomeScreenContainer extends Component {
     // console.log('CNO : ', auth.last_access_company_no);
     // 메신저조회 API
 
-    //FIXME: 수정해야함 분기 태우는거
-    // let wetalkList;
     const wetalkList = await WetalkApi.getWetalkList(
       auth.AUTH_A_TOKEN,
       auth.AUTH_R_TOKEN,

@@ -30,7 +30,11 @@ export default function FullroomScreen(props) {
             alignItems: 'center'
           }}
         >
-          <Image source={waiting} resizeMode="contain" />
+          <Image
+            source={waiting}
+            resizeMode="contain"
+            style={{ width: 200, height: 200 }}
+          />
           <Text style={{ fontSize: 14, color: 'rgb(80,80,80)' }}>
             {'접속가능한 인원을 초과했습니다.'}
           </Text>
@@ -70,16 +74,18 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around'
   },
   infoBox: {
-    height: 150,
-    justifyContent: 'space-around',
-    backgroundColor: '#f8f8fa'
+    height: 100,
+    justifyContent: 'center',
+    backgroundColor: '#f8f8fa',
+    marginVertical: 20
   },
   line: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    padding: 10
   },
   linedot: {
-    marginLeft: 15,
+    marginLeft: 5,
     marginRight: 5,
     fontSize: 5,
     color: '#8c8c8c'

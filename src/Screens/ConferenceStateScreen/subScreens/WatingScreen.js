@@ -90,15 +90,17 @@ const styles = StyleSheet.create({
   },
   infoBox: {
     height: 150,
-    justifyContent: 'space-evenly',
-    backgroundColor: '#f8f8fa'
+    justifyContent: 'center',
+    backgroundColor: '#f8f8fa',
+    marginVertical: 20
   },
   line: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    padding: 10
   },
   linedot: {
-    marginLeft: 15,
+    marginLeft: 5,
     marginRight: 5,
     fontSize: 5,
     color: '#8c8c8c'
