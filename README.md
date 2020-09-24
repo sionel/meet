@@ -76,3 +76,16 @@ static BOOL RCTParseUnused(const char **input) {
 2. 키체인 문제 :
 
 https://zeddios.tistory.com/327
+
+
+## 작업목록
+
+1. 화면공유
+2. 하울링
+3. 방 생성
+4. 조직도
+5. 프로필
+6. 참가인원 리스트
+7. 마스터 권한
+8. 업데이트 안내
+9. 딥링크
