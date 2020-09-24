@@ -39,7 +39,6 @@ const CreateScreenPresenter = props => {
 
   const groupHeight = new Animated.Value(54 * groupList.length);
   const personalHeight = new Animated.Value(54 * personalList.length);
-
   const SectionFooter = ({ section }) => {
     const items = section.data.map((item, index) => (
       <ListItemComp
@@ -164,47 +163,10 @@ const CreateScreenPresenter = props => {
             )
           }
           renderSectionFooter={SectionFooter}
-          renderItem={({ item, index, section }) =>
-            // 히스토리 아이템
-            // <ListItemComp
-            //   key={item.room_id}
-            //   title={item.room_title}
-            //   personnel={item.receiver_user_count}
-            //   updated={item.update_timestamp}
-            //   room_profile_url={item.room_profile_url}
-            //   lottie={false}
-            //   customLottie={true}
-            //   underline={index < section.length ? true : false}
-            //   active={item.is_video_access === 'T' ? true : false}
-            //   disable={
-            //     item.receiver_user_count === 1 && item.room_type === '1'
-            //       ? true
-            //       : false
-            //   }
-            //   onClick={() => {
-            //     item.is_video_access === 'T'
-            //       ? props.onCheckConference(
-            //           item.video_chat_id,
-            //           null,
-            //           item.room_title
-            //         )
-            //       : props.onActivateModal(item.room_id, item.room_title);
-            //     console.warn(item);
-            //   }}
-            // />
-            null
-          }
+          renderItem={({ item, index, section }) => null}
         />
       )}
 
-      {/* <CustomModal
-        display={props.modal}
-        title="화상회의 생성"
-        text="화상회의를 생성하시겠습니까?"
-        feedbackText="시작하기"
-        onClickClose={() => props.onActivateModal(null)}
-        onClickFeedback={() => props.onCreateConference(props.selectedRoomId)}
-      /> */}
       <CustomAlert
         visible={props.modal}
         title={'화상회의 생성'}
@@ -212,16 +174,6 @@ const CreateScreenPresenter = props => {
         content={'화상회의를 생성하시겠습니까?'}
         onConfirm={() => props.onCreateConference()}
         onClose={() => props.onActivateModal(null)}
-        // actions={[
-        //   {
-        //     name: '취소',
-        //     action: () => props.onActivateModal(null)
-        //   },
-        //   {
-        //     name: '시작하기',
-        //     action: () => props.onCreateConference(props.selectedRoomId)
-        //   }
-        // ]}
       />
     </View>
   );

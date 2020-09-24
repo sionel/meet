@@ -26,10 +26,9 @@ class ConferenceStateContainer extends React.Component {
 
   async componentDidMount() {
     
-    const { roomId, roomName, from } = this.props.navigation.state.params.item;
+    const { roomId, from } = this.props.navigation.state.params.item;
     let { conferenceState } = this.state;
     this.roomId = roomId;
-    this.roomName = roomName;
     this.from = from;
 
     let { auth } = this.props;
@@ -39,6 +38,7 @@ class ConferenceStateContainer extends React.Component {
       auth.HASH_KEY,
       roomId
     );
+    this.roomName = accsess.resultData.name
     if (!accsess) {
       // 종료된 방 또는 문제가 있을때
       conferenceState = 'deleted';
@@ -84,7 +84,7 @@ class ConferenceStateContainer extends React.Component {
       // 토큰받고
       // 접속
 
-      this._handleEnterConference(auth, roomId, roomName);
+      this._handleEnterConference(auth, roomId);
     } else if (conferenceState === 'reservationInfo') {
       // 참석자 정보 받고
       // 시작시간 종료시간 컨버팅 하고
@@ -120,7 +120,7 @@ class ConferenceStateContainer extends React.Component {
       const start = accsess.resultData.r_start_datetime;
 
       this.enterTimer = setTimeout(() => {
-        this._handleEnterConference(auth, roomId, roomName);
+        this._handleEnterConference(auth, roomId);
       }, start - now);
 
       this.setState({
@@ -173,7 +173,7 @@ class ConferenceStateContainer extends React.Component {
     navigation.navigate('Home');
     navigation.navigate(url, param);
   };
-  _handleEnterConference = async (auth, roomId, roomName) => {
+  _handleEnterConference = async (auth, roomId) => {
     let callType = 3;
     let isCreator;
     const participantList = (
@@ -185,7 +185,7 @@ class ConferenceStateContainer extends React.Component {
         roomId
       )
     ).resultData;
-
+        
     // 최대 참여인원 제한 (50명)
     if (participantList.length >= 50) {
       // 50명 초과 방 ㄱ
@@ -207,14 +207,13 @@ class ConferenceStateContainer extends React.Component {
       ).resultData;
       // return
       this._handleRedirect('Setting', {
-      // this._handleRedirect('Conference', {
         item: {
           roomType: 'meet',
           roomToken,
           videoRoomId: roomId,
           callType,
           isCreator,
-          selectedRoomName:roomName
+          selectedRoomName:this.roomName
         }
       });
     }

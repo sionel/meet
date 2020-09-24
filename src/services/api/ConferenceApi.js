@@ -25,12 +25,7 @@ export default {
     r_token,
     HASH_KEY
   ) => {
-    /*
-	"room_id":"_Gj2EWgBeAtpuzEuPdzI",
-	"owner_id":"seongh7800",
-	"owner_name":"김성훈",
-	"cno":"9",
-	*/
+    
     try {
       const url = `${wehagoBaseURL}/communication/rtc/videoChat`;
       const headers = securityRequest(a_token, r_token, url, HASH_KEY);
@@ -48,7 +43,6 @@ export default {
           ccode
         })
       });
-
       return response.json();
     } catch (err) {
       return err;

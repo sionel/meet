@@ -127,7 +127,6 @@ const HomeScreenPresenter = props => {
                       item: {
                         roomId: item.room_id,
                         externalData: null,
-                        roomName: item.name,
                         from: 'meet'
                       }
                     })

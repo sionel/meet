@@ -70,8 +70,7 @@ class CreateScreenContainer extends React.Component {
     } else {
       wetalk = this.props.wetalk;
     }
-
-    return (
+    return (  
       <View style={{ flex: 1 }}>
         <StatusBar barStyle="light-content" backgroundColor={'#1C90FB'} />
         <NavigationEvents
@@ -85,7 +84,6 @@ class CreateScreenContainer extends React.Component {
           {...this.state}
           list={wetalk}
           onSearch={this._handleSearch}
-          onRedirect={this._handleRedirect}
           onActivateModal={this._handleActivateModal}
           onCheckConference={this._handleCheckConference}
           onCreateConference={this._handleCreateConference}
@@ -136,7 +134,6 @@ class CreateScreenContainer extends React.Component {
     // 위하고에서 접속인지 아닌지 구분
 
     const { selectedRoomId, selectedRoomName } = this.state;
-    console.log(this.props);
 
     auth = this.props.auth;
     company_code = auth.employee_list.filter(
@@ -144,37 +141,19 @@ class CreateScreenContainer extends React.Component {
     )[0].company_code;
     let createResult;
 
-    // FIXME: 업데이트 여부에 따라 보낼 api 수정 해야하는데 당장은 wetalk쪽에서 기존 api를 살릴 수 있도록 처리를 해줌 느긋하게 해도 됨
-    // let flag = this.props.didupdate // 디버깅 할려고 강제로 넣은 플레그 if 문 수정해야함
-    // if (flag) { 
-    //   const param = {
-    //     service_code: 'communication',
-    //     is_public: true,
-    //     name: selectedRoomName, 
-    //     communication_id: selectedRoomId 
-    //   };
-    //   createResult = await MeetApi.createMeetRoom(
-    //     auth.AUTH_A_TOKEN,
-    //     auth.AUTH_R_TOKEN,
-    //     auth.HASH_KEY,
-    //     auth.last_access_company_no,
-    //     param
-    //   );
-    // } else {
-      const bodyData = [
-        selectedRoomId, // 방 id
-        auth.portal_id, // 유저아이디
-        auth.user_name, // 유저이름
-        auth.last_access_company_no, // 회사번호
-        company_code, // 회사코드
-        auth.AUTH_A_TOKEN, // 토큰
-        auth.AUTH_R_TOKEN, // 토큰
-        auth.HASH_KEY
-        // null
-      ];
-      createResult = await ConferenceApi.create(...bodyData);
-    // }
+    const bodyData = [
+      selectedRoomId, // 방 id
+      auth.portal_id, // 유저아이디
+      auth.user_name, // 유저이름
+      auth.last_access_company_no, // 회사번호
+      company_code, // 회사코드
+      auth.AUTH_A_TOKEN, // 토큰
+      auth.AUTH_R_TOKEN, // 토큰
+      auth.HASH_KEY
+      // null
+    ];
 
+    createResult = await ConferenceApi.create(...bodyData);
     // 화상회의 생성가능여부 // 대화방 생성 or 참여 여부 결정
     if (createResult.resultCode === 200) {
       // 생성완료 메시지 보내기
@@ -189,14 +168,36 @@ class CreateScreenContainer extends React.Component {
       );
       this.setState({ modal: false });
 
-      // 대화방에 참여한다.
       const videoRoomId = sendWetalkResult.resultData.chatList[0].mobile_key;
-      this._handleRedirect('Conference', {
-        item: { videoRoomId, selectedRoomName: this.state.selectedRoomName }
+
+      // 토큰받고
+      const roomToken = (
+        await MeetApi.getMeetRoomToken(
+          auth.AUTH_A_TOKEN,
+          auth.AUTH_R_TOKEN,
+          auth.HASH_KEY,
+          auth.last_access_company_no,
+          videoRoomId
+        )
+      ).resultData;
+
+      let callType = 3;
+      let isCreator;
+
+      // 대화방에 참여한다.
+      this._handleRedirect('Setting', {
+        item: {
+          videoRoomId,
+          selectedRoomName,
+          roomType: 'meet',
+          roomToken,
+          callType,
+          isCreator
+        }
       });
     } else if (createResult.resultCode === 400) {
       alert(createResult.resultMsg);
-      // 이미 화상채팅방이 생성되어 있습니다. 대화방당 1개의 화상챝ㅇ방을 제공합니다
+      // 이미 화상채팅방이 생성되어 있습니다. 대화방당 1개의 화상채팅방을 제공합니다
     } else if (createResult.errors && createResult.errors.code === 'E002') {
       this._handleRefresh();
     } else {
@@ -209,6 +210,10 @@ class CreateScreenContainer extends React.Component {
    * 모달뷰 토글
    */
   _handleCheckConference = async (conferenceId, externalData = null) => {
+    // 이거 안씀
+    // 이거 안씀
+    // 이거 안씀
+    // 이거 안씀
     let { auth } = this.props;
     let callType = 3;
     let isCreator;
@@ -237,8 +242,12 @@ class CreateScreenContainer extends React.Component {
         return;
       }
     }
+    // 이거 안씀
     // 화상회의로 진입
-    this._handleRedirect('Conference', {
+    this._handleRedirect('Setting', {// 이거 안씀
+    // 이거 안씀
+    // 이거 안씀
+
       item: {
         videoRoomId: conferenceId,
         callType,

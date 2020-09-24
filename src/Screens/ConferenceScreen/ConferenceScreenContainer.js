@@ -53,7 +53,7 @@ class ConferenceScreenContainer extends React.Component {
     // conferenceState로 오는경우와
     // 모바일 위하고를 통해 HomeScreen에서 바로 오는경우
     const { navigation, user_name, auth, dispatch } = this.props;
-
+    
     this._handleCreateConnection(navigation, user_name, auth, dispatch);
     KeepAwake.activate();
     DeviceEventEmitter.addListener(
@@ -204,7 +204,6 @@ class ConferenceScreenContainer extends React.Component {
   }
 
   _handleCreateConnection = (navigation, user_name, auth, dispatch) => {
-    // const { navigation, user_name, auth, dispatch } = this.props;
     const item = navigation.getParam('item');
     // 전화 타입 - 화상:1 / 음성:2 / 메신저:3
     this.callType = item.callType || this.state.callType;
@@ -226,7 +225,7 @@ class ConferenceScreenContainer extends React.Component {
         const token = item.token;
         this._joinConference(
           roomId,
-          item ? item.name : user_name,
+          user_name,
           auth,
           roomType,
           token,
