@@ -146,6 +146,7 @@ class ConferenceStateContainer extends React.Component {
 
   componentWillUnmount() {
     clearTimeout(this.enterTimer);
+    Orientation.removeOrientationListener(this._handleOrientation);
   }
 
   render() {

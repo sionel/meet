@@ -9,7 +9,7 @@ import {
 import ContentPresenter from './ContentPresenter';
 import FileSharing from './FileSharing';
 import { ConferenceModes } from '../../../utils/Constants';
-// import Orientation from 'react-native-orientation-locker';
+// import Orientation from 'react-native--locker';
 import DeviceInfo from 'react-native-device-info';
 import Orientation from 'react-native-orientation-locker';
 import _ from 'underscore';

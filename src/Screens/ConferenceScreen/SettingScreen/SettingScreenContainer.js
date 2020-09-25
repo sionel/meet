@@ -42,6 +42,10 @@ class SettingScreenContainer extends React.Component {
     });
   }
 
+  componentWillUnmount(){
+    Orientation.removeOrientationListener(this._handleOrientation);
+
+  }
   render() {
     const { tracks, name, orientation } = this.state;
     return (

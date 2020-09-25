@@ -30,15 +30,23 @@ import { CustomAlert } from 'rn-component';
  * CreateScreenPresenter
  */
 const CreateScreenPresenter = props => {
+  const personalList = props.list.filter(
+    item => item.room_type === '1' && item.is_video_access === 'F'
+  );
   const groupList = props.list.filter(
     item => item.room_type === '2' && item.is_video_access === 'F'
   );
-  const personalList = props.list.filter(
-    item => item.room_type === '1' && item.is_video_access === 'F'
+  const semuList = props.list.filter(
+    item => item.room_type === '4' && item.is_video_access === 'F'
+  );
+  const suimList = props.list.filter(
+    item => item.room_type === '5' && item.is_video_access === 'F'
   );
 
   const groupHeight = new Animated.Value(54 * groupList.length);
   const personalHeight = new Animated.Value(54 * personalList.length);
+  const semuHeight = new Animated.Value(54 * semuList.length);
+  const suimHeight = new Animated.Value(54 * suimList.length);
   const SectionFooter = ({ section }) => {
     const items = section.data.map((item, index) => (
       <ListItemComp
@@ -68,7 +76,14 @@ const CreateScreenPresenter = props => {
       <Animated.View
         style={{
           overflow: 'hidden',
-          height: section.type === 'group' ? groupHeight : personalHeight,
+          height:
+            section.type === 'group'
+              ? groupHeight
+              : section.type === 'personal'
+              ? personalHeight
+              : section.type === 'semu'
+              ? semuHeight
+              : suimHeight,
           justifyContent: 'flex-start'
         }}
       >
@@ -132,6 +147,18 @@ const CreateScreenPresenter = props => {
               data: personalList,
               length: personalList.length - 1,
               type: 'personal'
+            },
+            {
+              title: `세무사와의 대화(${semuList.length})`,
+              data: semuList,
+              length: semuList.length - 1,
+              type: 'semu'
+            },
+            {
+              title: `수임처와의 대화(${suimList.length})`,
+              data: suimList,
+              length: suimList.length - 1,
+              type: 'suim'
             }
           ]}
           renderSectionHeader={({ section }) =>
@@ -150,9 +177,27 @@ const CreateScreenPresenter = props => {
                         duration: 400
                         // easing: Easing.bounce
                       }).start()
-                    : Animated.timing(personalHeight, {
+                    : section.type === 'group'
+                    ? Animated.timing(personalList, {
                         toValue:
-                          personalHeight._value === 0
+                          groupHeight._value === 0
+                            ? 54 * section.data.length
+                            : 0,
+                        duration: 400
+                        // easing: Easing.bounce
+                      }).start()
+                    : section.type === 'group'
+                    ? Animated.timing(semuList, {
+                        toValue:
+                          groupHeight._value === 0
+                            ? 54 * section.data.length
+                            : 0,
+                        duration: 400
+                        // easing: Easing.bounce
+                      }).start()
+                    : Animated.timing(suimList, {
+                        toValue:
+                          groupHeight._value === 0
                             ? 54 * section.data.length
                             : 0,
                         duration: 400
