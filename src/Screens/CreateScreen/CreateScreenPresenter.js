@@ -43,8 +43,8 @@ const CreateScreenPresenter = props => {
     item => item.room_type === '5' && item.is_video_access === 'F'
   );
 
-  const groupHeight = new Animated.Value(54 * groupList.length);
   const personalHeight = new Animated.Value(54 * personalList.length);
+  const groupHeight = new Animated.Value(54 * groupList.length);
   const semuHeight = new Animated.Value(54 * semuList.length);
   const suimHeight = new Animated.Value(54 * suimList.length);
   const SectionFooter = ({ section }) => {
@@ -177,27 +177,27 @@ const CreateScreenPresenter = props => {
                         duration: 400
                         // easing: Easing.bounce
                       }).start()
-                    : section.type === 'group'
-                    ? Animated.timing(personalList, {
+                    : section.type === 'personal'
+                    ? Animated.timing(personalHeight, {
                         toValue:
-                          groupHeight._value === 0
+                          personalHeight._value === 0
                             ? 54 * section.data.length
                             : 0,
                         duration: 400
                         // easing: Easing.bounce
                       }).start()
-                    : section.type === 'group'
-                    ? Animated.timing(semuList, {
+                    : section.type === 'semu'
+                    ? Animated.timing(semuHeight, {
                         toValue:
-                          groupHeight._value === 0
+                          semuHeight._value === 0
                             ? 54 * section.data.length
                             : 0,
                         duration: 400
                         // easing: Easing.bounce
                       }).start()
-                    : Animated.timing(suimList, {
+                    : Animated.timing(suimHeight, {
                         toValue:
-                          groupHeight._value === 0
+                          suimHeight._value === 0
                             ? 54 * section.data.length
                             : 0,
                         duration: 400
