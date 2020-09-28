@@ -387,7 +387,7 @@ class ConferenceScreenContainer extends React.Component {
   _handleAppSizeChange = () => {
     // 기존의 기기 가로,세로와 현재의 가로,세로를 비교하여 PIP MODE 구분
     const { width: pWidth, height: pHeight } = Dimensions.get('window');
-    const pipMode = Math.min(width, height) > Math.min(pWidth, pHeight);
+    const pipMode = Math.min(width, height) * 0.8 > Math.min(pWidth, pHeight);
     this.setState({ pipMode });
   };
 
