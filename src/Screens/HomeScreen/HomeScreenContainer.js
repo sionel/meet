@@ -543,8 +543,8 @@ class HomeScreenContainer extends Component {
   _checkUpdateVersion = async auth => {
     // 버전정보를 확인학 업데이트 다이얼로그를 띄우는 곳
     // 버전정보를 현명하게 보관하고 있지 않으므로 어쩔수없이 강제로 바꿔주도록 한다...
-    const ios = '1.25.1';
-    const android = '1.7.1';
+    const ios = '1.25.2';
+    const android = '1.7.2';
     const ios_m = '0';
     const android_m = '0';
 
