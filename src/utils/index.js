@@ -17,13 +17,18 @@ const OSID = OS === 'ios' ? 'mobile-ios' : 'mobile-android';
 // export const wehagoBaseURL0 = `http://dev.api0.wehago.com`; // 비인증
 // export const wehagoBaseURL = `http://dev.api.wehago.com`; // 인증
 // export const wehagoMainURL = `http://dev.wehago.com`; // 메인 URL
+
+
+
 export const wehagoBaseURL0 = `https://api0.wehago${isWehagoV ? 'v' : ''}.com`;
 export const wehagoBaseURL = `https://api.wehago${isWehagoV ? 'v' : ''}.com`;
 export const wehagoMainURL = `https://www.wehago${isWehagoV ? 'v' : ''}.com`;
 export const wehagoStaticURL = `https://static.wehago${isWehagoV ? 'v' : ''}.com`;
 // export const wehagoBaseURL = `https://api.wehago${isWehagoV ? 'v' : ''}.com`;
 // export const testURL = `https://rtctest.wehago.com/api-bind`;
+
 export const meetURL = `https://api.wehago.com/video`;
+// export const meetURL = `http://localhost:8080/video`;
 
 
 /**
