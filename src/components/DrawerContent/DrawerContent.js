@@ -17,8 +17,9 @@ import btnFax from '../../../assets/icons/shortcut/ico_service_fax.png'; // 팩�
 import btnElecapproval from '../../../assets/icons/shortcut/ico_service_elecapproval.png'; // 전자결재
 import btnAtr from '../../../assets/icons/shortcut/ico_service_atr.png'; // 근태관리
 
-import { Drawer } from 'rn-component';
-import { CustomIcon } from '../CustomIcon';
+// import { DrawerContentContainer } from 'rn-component';
+import DrawerContentContainer from './DrawerContentContainer';
+import CustomIcon from '../CustomIcon';
 import { WEHAGO_ENV } from '../../../config';
 
 export default function DrawerContent(props) {
@@ -183,7 +184,7 @@ export default function DrawerContent(props) {
   );
 
   return (
-    <Drawer
+    <DrawerContentContainer
       wehagoType={WEHAGO_ENV}
       navigation={props.navigation}
       auth={auth}
@@ -213,7 +214,7 @@ export default function DrawerContent(props) {
       onChangeCompany={handleChangeCompany}
     >
       <DrawerChild />
-    </Drawer>
+    </DrawerContentContainer>
   );
 }
 

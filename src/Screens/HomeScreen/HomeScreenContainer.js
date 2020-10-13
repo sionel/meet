@@ -18,9 +18,6 @@ import {
 import DeviceInfo from 'react-native-device-info';
 import Orientation from 'react-native-orientation-locker';
 import { NavigationEvents } from 'react-navigation';
-// import GestureRecognizer, {
-//   swipeDirections
-// } from 'react-native-swipe-gestures';
 
 import HomeScreenPresenter from './HomeScreenPresenter';
 
@@ -28,8 +25,6 @@ import HomeScreenPresenter from './HomeScreenPresenter';
 import { ConferenceApi, WetalkApi, MeetApi } from '../../services';
 import { querystringParser } from '../../utils';
 
-// import DrawerContent from '../../components/DrawerContent';
-// const { height, width } = Dimensions.get('window');
 const hasNotch = DeviceInfo.hasNotch() && Platform.OS === 'ios';
 
 // #region
@@ -201,14 +196,6 @@ class HomeScreenContainer extends Component {
           }}
           onDidBlur={() => (this._isFocus = false)}
         />
-        {/* <GestureRecognizer
-          onSwipeRight={state => this.onSwipeRight(state)}
-          style={{ flex: 1 }}
-        > */}
-        {/* <DrawerLayoutAndroid
-          drawerWidth={Math.min(height, width) * 0.75}
-          renderNavigationView={() => <DrawerContent navigation={navigation} />}
-        > */}
         <HomeScreenPresenter
           plan={plan}
           navigation={navigation}

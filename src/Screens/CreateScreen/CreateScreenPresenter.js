@@ -10,21 +10,15 @@ import {
   ScrollView,
   RefreshControl,
   SectionList,
-  SafeAreaView,
-  Platform,
-  Animated,
-  Easing
+  Animated
 } from 'react-native';
-// common components
 import {
   ListItemComp,
   SearchForm,
   Placeholder,
-  CustomModal,
-  // CustomAlert,
+  CustomAlert,
   SectionListHeader
 } from '../../components';
-import { CustomAlert } from '../../components/CustomAlert';
 
 /**
  * CreateScreenPresenter

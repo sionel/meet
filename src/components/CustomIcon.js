@@ -2,6 +2,23 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Image, StyleSheet } from 'react-native';
 
+import logo64 from '../../assets/icons/public/logo64.png';
+import WEHAGO_BI from '../../assets/icons/public/logo64.png';
+import WEHAGO_V_BI from '../../assets/icons/public/WEHAGO_V_BI.png';
+import WEHAGO_V_BI_W from '../../assets/icons/public/WEHAGO_V_BI_W.png';
+
+import btnDrawSettingNone from '../../assets/icons/btnDrawSettingNone.png';
+import btnDrawCloseNone from '../../assets/icons/btnDrawCloseNone.png';
+import btnExpandSmallNone from '../../assets/icons/btnExpandSmallNone.png';
+
+import ico_space from '../../assets/icons/ico_space.png';
+
+import bannerDrawT from '../../assets/icons/bannerDrawT.png';
+import bannerDraw from '../../assets/icons/bannerDraw.png';
+
+import icoDrawCenter72 from '../../assets/icons/icoDrawCenter72.png';
+import icoDrawNotice72 from '../../assets/icons/icoDrawNotice72.png';
+
 import ico_folder from '../../assets/icons/wedrive/ico_folder_160.imageset/ico_folder_160.png';
 import ico_shareFolder from '../../assets/icons/wedrive/ico_folder_group_160-1.imageset/ico_folder_group_160.png';
 import ico_bmp from '../../assets/icons/wedrive/ico_fn_bmp_120.imageset/ico_fn_bmp_120.png';
@@ -88,16 +105,17 @@ import btn_navi_search_press from '../../assets/icons/etc/btn_navi_search_press.
 import btnUserCancelNone from '../../assets/icons/etc/btnUserCancelNone.png';
 
 const CustomIcon = props => {
+  const { name, size, width, height, style, defaultIcon } = props;
   return (
     <Image
-      source={getButtonSource(props.name)}
+      source={getButtonSource(name)}
       resizeMode={'contain'}
       style={{
         ...styles.iconStyle,
-        ...props.style,
-        width: props.width,
-        height: props.height,
-        borderRadius: props.borderRadius
+        borderRadius: props.borderRadius,
+        width : size ? size : width,
+        height : size ? size : height,
+        ...style,
       }}
     />
   );
@@ -256,6 +274,30 @@ const getButtonSource = name => {
       return btnUserCancelNone;
     case 'loading':
       return loading;
+    case 'logo64':
+      return logo64;
+    case 'WEHAGO_BI':
+      return WEHAGO_BI;
+    case 'WEHAGO_V_BI':
+      return WEHAGO_V_BI;
+    case 'WEHAGO_V_BI_W':
+      return WEHAGO_V_BI_W;
+    case 'btnDrawSettingNone':
+      return btnDrawSettingNone;
+    case 'btnDrawCloseNone':
+      return btnDrawCloseNone;
+    case 'btnExpandSmallNone':
+      return btnExpandSmallNone;
+    case 'ico_space':
+      return ico_space;
+    case 'bannerDrawT':
+      return bannerDrawT;
+    case 'bannerDraw':
+      return bannerDraw;
+    case 'icoDrawCenter72':
+      return icoDrawCenter72;
+    case 'icoDrawNotice72':
+      return icoDrawNotice72;
     default:
       return ico_etc;
   }

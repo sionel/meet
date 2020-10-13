@@ -127,7 +127,7 @@ const RightMenuImage = ({ navigation }) => {
 };
 
 /**
- * Drawer 메뉴
+ * DrawerContent 메뉴
  */
 const HomeDrwawer = createDrawerNavigator(
   {

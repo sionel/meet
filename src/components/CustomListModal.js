@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   TouchableHighlight
 } from 'react-native';
-import { Text } from '../StyledText';
+import { Text } from './StyledText';
 
 export default function CustomListModal(props) {
   const {

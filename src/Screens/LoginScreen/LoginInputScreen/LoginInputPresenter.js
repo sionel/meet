@@ -62,7 +62,7 @@ export default function LoginInputPresenter(props) {
       easing: Easing.out(Easing.poly(1))
     })
   ).start();
-
+    debugger
   return (
     <View style={styles.container}>
       <KeyboardAvoidingView

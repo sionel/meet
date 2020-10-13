@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import DrawerPresenter from './DrawerPresenter';
+import DrawerContentPresenter from './DrawerContentPresenter';
 import CustomIcon from '../CustomIcon';
 import UserApi from '../../services/api/LoginApi/UserApi';
 
@@ -57,7 +57,7 @@ export default function DrawerContainer(props) {
   }, []);
 
   return (
-    <DrawerPresenter
+    <DrawerContentPresenter
       {...{
         wehagoType,
         navigation,
@@ -76,7 +76,7 @@ export default function DrawerContainer(props) {
       }}
     >
       {props.children}
-    </DrawerPresenter>
+    </DrawerContentPresenter>
   );
 }
 

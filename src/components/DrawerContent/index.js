@@ -1,5 +1,5 @@
-// import DrawerContentContainer from './DrawerContentContainer';
-import DrawerContentContainer from './Drawer';
+// import DrawerContent from './DrawerContent';
+import DrawerContent from './DrawerContent';
 import { connect } from 'react-redux';
 import { actionCreators as UserActions } from '../../redux/modules/user';
 
@@ -16,6 +16,6 @@ const mapDispatchToProps = dispatch => {
 };
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
-)(DrawerContentContainer);
+)(DrawerContent);
