@@ -1,26 +1,21 @@
-import React, { useState, useRef } from 'react';
+import * as React from 'react';
 import {
-  Platform,
-  Linking,
-  Alert,
   Image,
   StyleSheet,
   View,
   TouchableHighlight,
   TouchableOpacity,
   KeyboardAvoidingView,
-  ActivityIndicator,
-  ImageBackground,
   Animated,
   Easing,
-  Text,
-  TextInput,
   Dimensions
 } from 'react-native';
-// import { LinearGradient } from 'expo-linear-gradient';
 
-// import { Text, TextInput } from '../../../components/StyledText';
-import { CustomIcon } from '../../../components';
+import { Text, TextInput } from '../../../components/StyledText';
+import CustomIcon from '../../../components/CustomIcon';
+import CustomAlert from '../../../components/CustomAlert';
+
+let LinearGradient = View;
 
 // 동글동글한 하단 이미지
 const { width, height } = Dimensions.get('screen');
@@ -35,6 +30,7 @@ else if (width > height) scale = height / bottomImageWidth;
 
 export default function LoginInputPresenter(props) {
   const {
+    wehagoType,
     usernameRef,
     passwordRef,
     captchaRef,
@@ -49,7 +45,8 @@ export default function LoginInputPresenter(props) {
     captchaInput,
     setCaptchaInput,
     errorMsg,
-    logging
+    logging,
+    alertVisible
   } = props;
 
   const rotate = new Animated.Value(0);
@@ -68,15 +65,9 @@ export default function LoginInputPresenter(props) {
 
   return (
     <View style={styles.container}>
-      {/* <ImageBackground
-        source={require('../../../assets/images/bgIntroWehagoIphoneX_3x.png')}
-        style={styles.imageBackground}
-      > */}
-      {/* {Platform.OS === 'ios' && <View style={styles.dragIndicator} />} */}
-
       <KeyboardAvoidingView
         style={styles.keyboardAvoidingView}
-        behavior="padding"
+        behavior="height"
       >
         <TouchableOpacity
           activeOpacity={1}
@@ -93,10 +84,10 @@ export default function LoginInputPresenter(props) {
         >
           <>
             <CustomIcon
-              name="logo_login"
+              name={wehagoType === 'WEHAGOV' ? 'WEHAGO_V_BI' : 'WEHAGO_BI'}
               width={224}
               height={42}
-              // style={{ marginTop: 150 }}
+              style={{ marginTop: 0 }}
             />
 
             <View style={{ marginTop: captcha ? 35 : 116 }}>
@@ -134,8 +125,9 @@ export default function LoginInputPresenter(props) {
                 )}
               >
                 <TextInput
-                  ref={usernameRef}
+                  customRef={usernameRef}
                   value={userId}
+                  textContentType={'username'}
                   placeholder={'아이디'}
                   placeholderTextColor={'#ccc'}
                   selectionColor={'#505050'}
@@ -156,8 +148,7 @@ export default function LoginInputPresenter(props) {
                           ? 'btn_login_delete_none'
                           : 'btn_login_delete_press'
                       }
-                      width={24}
-                      height={24}
+                      size={24}
                     />
                   </TouchableOpacity>
                 )}
@@ -171,9 +162,10 @@ export default function LoginInputPresenter(props) {
                 )}
               >
                 <TextInput
-                  ref={passwordRef}
+                  customRef={passwordRef}
                   secureTextEntry={true}
                   value={userPw}
+                  textContentType={'password'}
                   placeholder={'비밀번호'}
                   placeholderTextColor={'#ccc'}
                   selectionColor={'#505050'}
@@ -193,8 +185,7 @@ export default function LoginInputPresenter(props) {
                           ? 'btn_login_delete_none'
                           : 'btn_login_delete_press'
                       }
-                      width={24}
-                      height={24}
+                      size={24}
                     />
                   </TouchableOpacity>
                 )}
@@ -219,13 +210,18 @@ export default function LoginInputPresenter(props) {
                       marginTop: 6
                     }}
                   >
-                    <View style={styles.captchaArea}>
+                    <LinearGradient
+                      // start={{ x: 0, y: 0 }}
+                      // end={{ x: 1, y: 1 }}
+                      // colors={['#000', '#eee']}
+                      style={styles.captchaArea}
+                    >
                       <Text
                         style={[styles.captchaMessageText, styles.captchaText]}
                       >
                         {captcha}
                       </Text>
-                    </View>
+                    </LinearGradient>
                     <View style={styles.refresh}>
                       <TouchableOpacity
                         activeOpacity={0.8}
@@ -236,18 +232,14 @@ export default function LoginInputPresenter(props) {
                           alignItems: 'center'
                         }}
                       >
-                        <CustomIcon
-                          name={'btn_reload_none'}
-                          width={15}
-                          height={15}
-                        />
+                        <CustomIcon name={'btn_reload_none'} size={15} />
                         <Text style={{ color: '#ababab' }}>새로고침</Text>
                       </TouchableOpacity>
                     </View>
                   </View>
 
                   <TextInput
-                    ref={captchaRef}
+                    customRef={captchaRef}
                     value={captchaInput}
                     placeholder={'자동입력 방지문자'}
                     placeholderTextColor={'#ccc'}
@@ -255,8 +247,6 @@ export default function LoginInputPresenter(props) {
                     returnKeyType={'next'}
                     keyboardType="default"
                     autoCapitalize="none"
-                    // onFocus={() => inputFocus(true)}
-                    // onBlur={() => inputFocus(false)}
                     onChangeText={text => setCaptchaInput(text)}
                     onSubmitEditing={() =>
                       _handleLogin(userId, userPw, captcha)
@@ -282,12 +272,16 @@ export default function LoginInputPresenter(props) {
             </View>
 
             <View style={styles.buttonContainer}>
-              <View style={styles.loginButtonGradient}>
+              <LinearGradient
+                style={[
+                  styles.loginButtonGradient,
+                  { marginBottom: captcha ? 70 : 150 }
+                ]}
+              >
                 <TouchableHighlight
                   activeOpacity={0.6}
                   disabled={logging}
                   style={styles.loginButton}
-                  // underlayColor={'#09b2f8'}
                   underlayColor={'#197cdc66'}
                   onPress={() => {
                     _handleLogin(userId, userPw, captcha);
@@ -302,46 +296,14 @@ export default function LoginInputPresenter(props) {
                           justifyContent: 'center'
                         }}
                       >
-                        <CustomIcon name={'loadIcon'} width={20} height={20} />
+                        <CustomIcon name={'loadIcon'} size={20} />
                       </Animated.View>
                     ) : (
                       <Text style={styles.loginButtonText}>로그인</Text>
                     )}
                   </>
                 </TouchableHighlight>
-              </View>
-              {/* <LinearGradient
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                colors={['#36d3fa', '#1d94fc']}
-                style={styles.loginButtonGradient}
-              >
-                <TouchableHighlight
-                  activeOpacity={0.6}
-                  disabled={logging}
-                  style={styles.loginButton}
-                  // underlayColor={'#09b2f8'}
-                  underlayColor={'#197cdc66'}
-                  // onPress={() => {
-                  //   _handleLogin(userId, userPw, captcha);
-                  // }}
-                >
-                  <>
-                    <Text style={styles.loginButtonText}>로그인</Text>
-                    {logging && (
-                      <Animated.View
-                        style={{
-                          transform: [{ rotate: spin }],
-                          alignItems: 'center',
-                          justifyContent: 'center'
-                        }}
-                      >
-                        <CustomIcon name={'loadIcon'} size={20} />
-                      </Animated.View>
-                    )}
-                  </>
-                </TouchableHighlight>
-              </LinearGradient> */}
+              </LinearGradient>
             </View>
           </>
         </TouchableOpacity>
@@ -365,7 +327,17 @@ export default function LoginInputPresenter(props) {
           }}
         />
       </View>
-      {/* </ImageBackground> */}
+
+      <CustomAlert
+        visible={alertVisible.visible}
+        title={'알림'}
+        content={
+          '고객님의 다른 기기에서 WEHAGO를 사용하고 있습니다. 기존 접속을 종료하시고 새로 접속하시겠습니까?'
+        }
+        hideCloseButton={false}
+        onClose={alertVisible.onClose}
+        onConfirm={alertVisible.onConfirm}
+      />
     </View>
   );
 }
@@ -430,21 +402,18 @@ const styles = StyleSheet.create({
   },
   captchaMessageText: {
     fontSize: 10,
-    fontFamily: 'DOUZONEText30',
     color: '#505050'
   },
   captchaArea: {
     flex: 1,
     padding: 10,
-    backgroundColor: '#00000066'
+    backgroundColor: '#ccc'
   },
   captchaText: {
     color: '#000',
-    // fontWeight: 'bold',
+    fontWeight: 'bold',
     fontSize: 16,
-    fontFamily: 'DOUZONEText50',
-    textAlign: 'center',
-    fontStyle: 'italic'
+    textAlign: 'center'
   },
   refresh: {
     marginLeft: 6,
@@ -468,13 +437,11 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     width: 285,
     color: '#333',
-    fontSize: 15,
-    fontFamily: 'DOUZONEText30'
+    fontSize: 15
   },
   loginFailedText: {
     color: 'red',
-    fontSize: 10,
-    fontFamily: 'DOUZONEText30'
+    fontSize: 10
   },
   buttonContainer: {
     // position: 'absolute',
@@ -491,8 +458,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: 10,
-    backgroundColor: '#1C90FC'
+    marginVertical: 10
   },
   loginButton: {
     flexDirection: 'row',
@@ -500,7 +466,8 @@ const styles = StyleSheet.create({
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 25
+    borderRadius: 25,
+    backgroundColor: '#1d94fc'
     // ...Platform.select({
     //   ios: {
     //     shadowColor: 'black',
@@ -516,7 +483,6 @@ const styles = StyleSheet.create({
   loginButtonText: {
     marginRight: 8,
     color: '#fff',
-    fontSize: 15,
-    fontFamily: 'DOUZONEText50'
+    fontSize: 15
   }
 });

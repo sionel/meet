@@ -1,15 +1,14 @@
 import React from 'react';
 import { createAppContainer, createStackNavigator } from 'react-navigation';
 import LoginCheckScreen from '../Screens/LoginScreen';
-// import LoginInputScreen from '../Screens/LoginScreen/LoginInputScreen';
-import { LoginScreen, LoginInputScreen } from 'rn-component';
+import LoginInputScreen from '../Screens/LoginScreen/LoginInputScreen';
+import LoginScreen from '../Screens/LoginScreen/LoginScreenPresenter';
 import { WEHAGO_TYPE, WEHAGO_ENV } from '../../config';
 
 const Login = props => {
   return (
     <LoginCheckScreen {...props}>
       <LoginScreen
-        // devServer={true}
         wehagoType={WEHAGO_ENV}
         serviceCode={'wehagomeet'}
         text1={'시간과 장소의 제약 없는\n효율적인 화상회의'}
@@ -32,7 +31,6 @@ const LoginInput = props => {
 
   return (
     <LoginInputScreen
-      // devServer={true}
       // navigation={props.navigation}
       wehagoType={WEHAGO_ENV}
       serviceCode={'wehagomeet'}

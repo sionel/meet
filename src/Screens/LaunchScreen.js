@@ -6,9 +6,8 @@ import {
   View,
   ImageBackground
 } from 'react-native';
-import { StyledText } from 'rn-component';
+import { Text } from '../components/StyledText';
 import { WEHAGO_TYPE } from '../../config';
-const { Text } = StyledText;
 
 export default function LoginScreenPresenter(props) {
   return (

@@ -6,8 +6,10 @@ import {
   TouchableHighlight,
   TouchableOpacity
 } from 'react-native';
-import { CustomIcon, StyledText, CustomAlert } from 'rn-component';
-const { Text } = StyledText;
+import { CustomAlert } from '../CustomAlert';
+import { CustomIcon } from '../CustomIcon';
+
+import { Text } from '../StyledText';
 
 export default function CompanySelectPresenter(props) {
   const {

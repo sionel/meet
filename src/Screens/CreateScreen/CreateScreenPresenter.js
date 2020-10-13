@@ -24,7 +24,7 @@ import {
   // CustomAlert,
   SectionListHeader
 } from '../../components';
-import { CustomAlert } from 'rn-component';
+import { CustomAlert } from '../../components/CustomAlert';
 
 /**
  * CreateScreenPresenter

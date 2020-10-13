@@ -6,6 +6,7 @@
 import { Platform } from 'react-native';
 import CryptoJS from 'crypto-js';
 import { WEHAGO_ENV } from '../../config';
+import { v4 as uuidv4 } from 'uuid';
 
 const isWehagoV = WEHAGO_ENV === 'WEHAGOV';
 
@@ -14,22 +15,27 @@ const OSID = OS === 'ios' ? 'mobile-ios' : 'mobile-android';
 /**
  * Back-end URL
  */
+// 개발기
 // export const wehagoBaseURL0 = `http://dev.api0.wehago.com`; // 비인증
 // export const wehagoBaseURL = `http://dev.api.wehago.com`; // 인증
 // export const wehagoMainURL = `http://dev.wehago.com`; // 메인 URL
 
-
-
 export const wehagoBaseURL0 = `https://api0.wehago${isWehagoV ? 'v' : ''}.com`;
 export const wehagoBaseURL = `https://api.wehago${isWehagoV ? 'v' : ''}.com`;
 export const wehagoMainURL = `https://www.wehago${isWehagoV ? 'v' : ''}.com`;
-export const wehagoStaticURL = `https://static.wehago${isWehagoV ? 'v' : ''}.com`;
+export const wehagoDummyImageURL = `https://static.wehago${
+  isWehagoV ? 'v' : ''
+}.com/imgs/dummy/@dummy_02.jpg`; // 더미 프로필
+
+export const wehagoStaticURL = `https://static.wehago${
+  isWehagoV ? 'v' : ''
+}.com`;
 // export const wehagoBaseURL = `https://api.wehago${isWehagoV ? 'v' : ''}.com`;
+
 // export const testURL = `https://rtctest.wehago.com/api-bind`;
 
 export const meetURL = `https://api.wehago.com/video`;
 // export const meetURL = `http://localhost:8080/video`;
-
 
 /**
  * Querystring parser
@@ -103,20 +109,16 @@ export const serialize = obj => {
   return str.join('&');
 };
 
-_getTransactionId = () => {
-  let chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz';
-  let string_length = 10;
-  let randomstring = '';
-  for (let i = 0; i < string_length; i++) {
-    let rnum = Math.floor(Math.random() * chars.length);
-    randomstring += chars.substring(rnum, rnum + 1);
-  }
+const _getTransactionId = () => {
+  const randomstring = uuidv4()
+    .split('-')
+    .reduce((str, value) => str + value, '')
+    .substr(0, 10);
+
   return randomstring;
 };
 
-_getServiceCode = () => {
-  //let serviceCodeList ="contacts,mail,humanresource,schedule,account,company,wedrive,communication,10mbook,invoice,cloudfax,accounts,smartsquare";
-  //let authCodeList="landing,login"
+const _getServiceCode = () => {
   if (process.env.cell && process.env.CHECK_TYPE !== 'local') {
     let serviceCode = document.location.pathname.replace(/\//gi, '');
     return serviceCode;
@@ -144,7 +146,7 @@ _getServiceCode = () => {
   }
 };
 
-_getService = url => {
+const _getService = url => {
   // console.log('_getService : ' + url);
   let service = '';
   if (url.split('/').length > 2) {
@@ -153,7 +155,7 @@ _getService = url => {
   return service;
 };
 
-_getWehagoSign = (url, timestamp, transactionId, HASH_KEY) => {
+const _getWehagoSign = (url, timestamp, transactionId, HASH_KEY) => {
   let hash_key = HASH_KEY;
   // alert(hash_key);
   hash_key = CryptoJS.SHA256(
@@ -216,4 +218,27 @@ export const setDrawingManager = drawing => {
  */
 export const getDrawingManager = () => {
   return drawingManager;
+};
+
+export const createHeader = ({ AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY }) => {
+  const transactionId = _getTransactionId();
+  const clientId = OSID;
+  const service = _getService(url);
+  const timestamp = Math.floor(Date.now() / 1000);
+  const wehagoSign = _getWehagoSign(url, timestamp, transactionId, HASH_KEY);
+  const signature = _createSignature(String(url) + String(AUTH_A_TOKEN));
+
+  const header = {
+    Authorization: `Bearer ${AUTH_A_TOKEN}`,
+    'transaction-id': transactionId,
+    'wehago-sign': wehagoSign,
+    'client-id': clientId,
+    'Wehago-S': HASH_KEY,
+    timestamp: timestamp,
+    signature: signature,
+    service: service,
+    Cookie: `AUTH_A_TOKEN=${AUTH_A_TOKEN}; AUTH_R_TOKEN=${AUTH_R_TOKEN}`
+  };
+
+  return header;
 };

@@ -3,7 +3,7 @@
  */
 
 import { connect } from 'react-redux';
-import LoginScreenPresenter from './LoginScreenPresenter';
+import LoginCheckScreenPresenter from './LoginCheckScreenPresenter';
 import { actionCreators as UserActions } from '../../redux/modules/user';
 
 // map state to props
@@ -43,4 +43,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(LoginScreenPresenter);
+)(LoginCheckScreenPresenter);

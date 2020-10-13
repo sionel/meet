@@ -8,9 +8,8 @@ import {
 } from 'react-native';
 import RNRestart from 'react-native-restart';
 
-import { StyledText } from 'rn-component';
+import { Text } from '../components/StyledText';
 import CustomIcon from './CustomIcon';
-const { Text } = StyledText;
 
 export default function ServerNotiveCheck({ message }) {
   return (

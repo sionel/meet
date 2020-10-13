@@ -1,83 +1,106 @@
-import React, { Component } from 'react';
-import DrawerContentPresenter from './DrawerContentPresenter';
+import * as React from 'react';
 
-class DrawerContentContainer extends Component {
-  static defaultProps = {
-    auth: {
-      employee_list: [
-        {
-          title: '',
-          key: '',
-          action: () => {}
-        }
-      ]
-    }
-  };
+import DrawerPresenter from './DrawerPresenter';
+import CustomIcon from '../CustomIcon';
+import UserApi from '../../services/api/LoginApi/UserApi';
 
-  state = { selectCompany: false };
+export default function DrawerContainer(props) {
+  const {
+    wehagoType,
+    navigation,
+    auth,
+    user,
+    logoComponent,
+    subActions,
+    statusBarHeight,
+    selectedCompany,
+    onTouchSetting,
+    onTouchNotice,
+    onShowProfile,
+    onChangeCompany
+  } = props;
 
-  render() {
-    const { navigation, auth } = this.props;
-    const drawerList = [
-      // { name: '내정보', src: 'UserInfo' },
-      {
-        name: '회사변경',
-        src: 'Company',
-        action: () => {
-          this._handleChangeState('selectCompany', true);
-          // alert('준비중입니다.');
-        }
-      },
-      {
-        name: '환경설정',
-        src: 'Configuration',
-        action: () => {
-          navigation.closeDrawer();
-          navigation.navigate('Configuration');
-        }
-      }
-    ];
+  // state
+  const [companyChange, setCompanyChange] = React.useState(false);
+  const [serviceDeploy, setServiceDeploy] = React.useState({});
 
-    const companyList =
-      auth.employee_list &&
-      auth.employee_list.map(item => {
-        return {
-          title: item.company_name_kr,
-          key: item.company_no,
-          action: () => {
-            this._handleCompanyChange(item.company_no, item);
-            // alert(item.company_no);
-          }
-        };
-      });
-
-    return (
-      <DrawerContentPresenter
-        auth={auth}
-        navigation={navigation}
-        drawerList={drawerList}
-        companyList={companyList}
-        selectCompany={this.state.selectCompany}
-        onChangeState={this._handleChangeState}
-      />
+  const getServiceDeploy = async () => {
+    const UserApiRequest = UserApi;
+    const deploys = await UserApiRequest.serviceDeployCheck(
+      auth,
+      auth.last_access_company_no
     );
-  }
-
-  _handleChangeState = (target, state) => {
-    this.setState({ [target]: state });
+    return deploys;
   };
 
-  _handleCompanyChange = (cno, company) => {
-    // API 호출
-    // 띠리리삐리리뿅
-    const { auth } = this.props;
+  navigation &&
+    React.useEffect(() => {
+      if (!navigation.state.isDrawerIdle) {
+        setCompanyChange(false);
+      }
+    }, [navigation.state]);
 
-    this.props.changeCompanyRequest(auth, company)
-    // if (auth.last_access_company_no !== cno) {
-    //   this.props.changeCompanyRequest(auth, company)
-    // }
-    // this._handleChangeState('selectCompany', false);
-  };
+  React.useEffect(() => {
+    const isServiceDeploy = (async () => {
+      const deploys = await getServiceDeploy();
+      if (deploys) {
+        const newDeploys = {};
+        deploys.map(deploy => (newDeploys[deploy.service_code] = 'T'));
+
+        // 가입자가 Edge 일 경우 메일 미사용
+        newDeploys['mail'] =
+          selectedCompany.membership_code === 'WE' ? 'F' : 'T';
+
+        setServiceDeploy(newDeploys);
+      } else return;
+    })();
+  }, []);
+
+  return (
+    <DrawerPresenter
+      {...{
+        wehagoType,
+        navigation,
+        user,
+        serviceDeploy,
+        logoComponent,
+        subActions,
+        selectedCompany,
+        statusBarHeight,
+        companyChange,
+        setCompanyChange,
+        onTouchSetting,
+        onTouchNotice,
+        onShowProfile,
+        onChangeCompany
+      }}
+    >
+      {props.children}
+    </DrawerPresenter>
+  );
 }
 
-export default DrawerContentContainer;
+DrawerContainer.defaultProps = {
+  wehagoType: 'WEHAGO',
+  navigation: null,
+  auth: {
+    AUTH_A_TOKEN: '',
+    AUTH_R_TOKEN: '',
+    HASH_KEY: '',
+    last_access_company_no: ''
+  },
+  user: {
+    profile_url: null,
+    user_name: '',
+    user_default_email: '',
+    user_email: '',
+    employee_list: null
+  },
+  logoComponent: <CustomIcon name={'logo64'} width={85} height={16} />,
+  subActions: null,
+  selectedCompany: {},
+  statusBarHeight: 0,
+  onTouchSetting: () => {},
+  onShowProfile: () => {},
+  onChangeCompany: () => {}
+};

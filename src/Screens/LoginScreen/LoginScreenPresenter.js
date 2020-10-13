@@ -1,66 +1,181 @@
-import React, { useState, useEffect } from 'react';
-import { View } from 'react-native';
-import DeviceInfo from 'react-native-device-info';
-import Orientation from 'react-native-orientation-locker';
+import * as React from 'react';
+import {
+  Platform,
+  Linking,
+  Alert,
+  Image,
+  StyleSheet,
+  View,
+  TouchableHighlight,
+  TouchableOpacity,
+  ImageBackground
+} from 'react-native';
 
-import LaunchScreen from '../LaunchScreen';
+import CustomIcon from '../../components/CustomIcon';
+import { Text } from '../../components/StyledText';
+import { getLoginType } from './ServiceCodeConverter';
 
-const bg = require('../../../assets/bgIntroWehagoIphoneX_3x.png');
+export default function LoginScreen(props) {
+  const { wehagoType, serviceCode, text1, text2, onManualLogin } = props;
 
-export default function LoginScreenPresenter(props) {
-  const [waiting, setWaiting] = useState(true);
+  let _serviceCode = getLoginType(serviceCode, wehagoType);
 
-  const _handleCheckUser = async () => {
-    const { auth, loginCheckRequest } = props;
-    if (auth.AUTH_A_TOKEN) {
-      const result = await loginCheckRequest(
-        auth.AUTH_A_TOKEN,
-        auth.AUTH_R_TOKEN,
-        auth.last_access_company_no,
-        auth.HASH_KEY,
-        props.isWehagoLogin
-      );
+  const _handleLoginForWehago = () => {
+    const iosUrl = `wehago${wehagoType === 'WEHAGOV' ? 'v' : ''}://?${_serviceCode}=login`;
+    const androidUrl = `wehago${wehagoType === 'WEHAGOV' ? 'v' : ''}://app?name=${_serviceCode}&login=true`;
+    const iosMarketURL =
+      wehagoType === 'WEHAGOV'
+        ? 'https://www.wehagov.com/#/mobile'
+        : 'http://itunes.apple.com/kr/app/wehago/id1363039300?mt=8';
+    const androidMarketURL =
+      wehagoType === 'WEHAGOV'
+        ? 'https://www.wehagov.com/#/mobile'
+        : 'https://play.google.com/store/apps/details?id=com.duzon.android.lulubizpotal';
 
-      setTimeout(() => {
-        if (result.errors) {
-          switch (result.errors.code) {
-            case 'E002':
-              setWaiting(false);
-              // return Alert.alert(
-              //   '로그아웃',
-              //   '고객님의 다른 기기에서 저 접속정보가 확인되어 로그아웃 됩니다.'
-              // );
-              return;
-            default:
-              return setWaiting(false);
+    Linking.openURL(Platform.OS === 'ios' ? iosUrl : androidUrl).catch(err => {
+      Linking.openURL(
+        Platform.OS === 'ios' ? iosMarketURL : androidMarketURL
+      ).catch(err => {
+        Alert.alert(
+          '스토어에서 해당 앱을 찾을 수 없습니다.',
+          '',
+          [{ text: 'OK' }],
+          {
+            cancelable: true
           }
-        } else {
-          return props.screenProps.handleOnLogin();
-        }
-      }, 1000);
-    } else {
-      return setTimeout(() => {
-        setWaiting(false);
-      }, 1000);
-    }
+        );
+      });
+    });
   };
 
-  useEffect(() => {
-    const isTablet = DeviceInfo.isTablet();
-    isTablet
-      ? Orientation.unlockAllOrientations()
-      : Orientation.lockToPortrait();
+  let appIcon = require('../../../assets/imgMeet.png');
 
-    _handleCheckUser();
-  }, []);
+  return (
+    <ImageBackground
+      source={require('../../../assets/bgIntroWehagoIphoneX_3x.png')}
+      style={{
+        flex: 1,
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'transparent',
+        alignItems: 'center'
+      }}
+    >
+      <View style={styles.container}>
+        <View style={styles.topContainer}>
+          <Text style={{ color: '#fff', fontSize: 24, fontWeight: '100' }}>
+            {text1}
+          </Text>
+          <Text style={{ color: '#fff', fontSize: 24, fontWeight: 'bold' }}>
+            {text2}
+          </Text>
+        </View>
 
-  if (waiting) {
-    return (
-      <View style={{ flex: 1, backgroundColor: '#379bd8' }}>
-        <LaunchScreen bg={bg} />
+        <View style={styles.middleContainer}>
+          <Image source={appIcon} style={{ width: 180, height: 180 }} />
+        </View>
+
+        <View style={styles.bottomContainer}>
+          <TouchableHighlight
+            activeOpacity={0.6}
+            underlayColor={'#197cdc88'}
+            onPress={() => {
+              _handleLoginForWehago();
+            }}
+            style={styles.loginButton}
+          >
+            <>
+              <CustomIcon
+                name={'btnTnaviHomeNone'}
+                size={24}
+                style={{ marginRight: 5.5 }}
+              />
+              <Text style={styles.loginButtonText}>WEHAGO 앱으로 로그인</Text>
+            </>
+          </TouchableHighlight>
+
+          <TouchableOpacity
+            activeOpacity={1}
+            onPress={() => onManualLogin()}
+            // onPress={() =>
+            //   props.navigation.navigate({
+            //     routeName: 'LoginInput',
+            //     params: {
+            //       onSetAlert: props.screenProps.onSetAlert
+            //     }
+            //   })
+            // }
+          >
+            <Text style={styles.loginNavigation}>직접 입력해서 로그인</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    );
-  }
-
-  return props.children;
+    </ImageBackground>
+  );
 }
+
+LoginScreen.defaultProps = {
+  wehagoType: 'WEHAGO',
+  serviceCode: '',
+  text1: '',
+  text2: '',
+  onManualLogin: () => {}
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    alignItems: 'center'
+  },
+  topContainer: {
+    flex: 1,
+    width: 290,
+    paddingTop: 112
+    // paddingLeft: 40
+  },
+  middleContainer: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center'
+  },
+  bottomContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  loginButton: {
+    flexDirection: 'row',
+    // width: '100%',
+    width: 290,
+    height: 50,
+    // paddingHorizontal: 59,
+    borderRadius: 25,
+    backgroundColor: '#197cdc',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 10,
+    ...Platform.select({
+      ios: {
+        shadowColor: 'black',
+        shadowOffset: { width: 3, height: 6 },
+        shadowOpacity: 0.1,
+        shadowRadius: 9
+      },
+      android: {
+        elevation: 5
+      }
+    })
+  },
+  loginButtonText: {
+    color: '#fff',
+    fontSize: 14
+  },
+  loginNavigation: {
+    marginTop: 40,
+    color: '#fff',
+    fontSize: 13,
+    textDecorationLine: 'underline'
+  }
+});
