@@ -4,7 +4,33 @@
  * 참조 : http://wiki.duzon.com:8080/display/sky/3.+API
  */
 
-import { meetURL, securityRequest } from '../../utils';
+import { meetURL, securityRequest, wehagoBaseURL0 } from '../../utils';
+import CryptoJS from 'crypto-js';
+
+const getSignature = async accessUrl => {
+  try {
+    const url = `${wehagoBaseURL0}/get_token/?url=${accessUrl}`;
+    const data = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      }
+    };
+    const response = await fetch(url, data);
+    const responseJson = await response.json();
+
+    const encText = url + responseJson.cur_date + responseJson.token;
+    const hashText = CryptoJS.SHA256(encText);
+    const signature = CryptoJS.enc.Base64.stringify(hashText);
+
+    return signature;
+  } catch (err) {
+    if (err.message === 'timeout') {
+      Alert.alert('네트워크가 불안정합니다.', '잠시후 다시 시도해주세요.');
+    }
+    return false;
+  }
+};
 
 // #region
 export default {
@@ -232,6 +258,34 @@ export default {
       };
 
       const response = await fetch(url, data);
+      if (response.status !== 200) {
+        throw response.json();
+      }
+      return response.json();
+    } catch (err) {
+      console.warn('20.enterMeetRoom : ', err);
+      return false;
+    }
+  },
+  
+  // 3-20 화상회의 모바일 버전 체크
+  checkVersion1: async () => {
+    const accsessUrl ='/mobile/version' 
+    const signature = await getSignature(accsessUrl)
+    const url = `${meetURL}${accsessUrl}`;
+
+    // const headers = securityRequest(a_token, r_token, url, HASH_KEY);
+    try {
+      const data = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          signature,
+        }
+      };
+
+      const response = await fetch(url, data);
+      debugger
       if (response.status !== 200) {
         throw response.json();
       }

@@ -18,29 +18,27 @@ import { WEHAGO_ENV } from './config';
 const { persistor, store } = configureStore();
 
 export default class App extends Component {
-  state = { loaded: true };
+  state = { loaded: false };
 
   render() {
-    if (this.state.loaded) {
-      return (
-          <SplashScreen didLoaded={this._changeloaded} />
-      );
-    }
     // else if (this.state.message.code === '503') {
     //   return <ServerNotiveCheck message={this.state.message} />;
     // }
-    else {
-      return (
-        <Provider store={store}>
-          <PersistGate persistor={persistor}>
+    // debugger
+    return (
+      <Provider store={store}>
+        <PersistGate persistor={persistor}>
+          {this.state.loaded ? (
             <Main url={this.props.url} />
-          </PersistGate>
-        </Provider>
-      );
-    }
+          ) : (
+            <SplashScreen onChangeState={this._handleCheckState} />
+          )}
+        </PersistGate>
+      </Provider>
+    );
   }
 
-  _changeloaded = loaded => {
+  _handleCheckState = loaded => {
     this.setState({ loaded });
   };
 }

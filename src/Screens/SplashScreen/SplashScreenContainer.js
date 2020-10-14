@@ -17,12 +17,14 @@ class SplashScreenContainer extends Component {
 
   componentDidMount = async () => {
     // 루팅 확인 및 디버깅 모드 확인
+    debugger
     let result = false
     result = this.handleCheckSecurity()
     if(!result) return
     
     // 노티 확인
     this.handleCheckNotice();
+    return 
   };
 
   handleCheckSecurity = async () => {
@@ -45,17 +47,9 @@ class SplashScreenContainer extends Component {
   };
 
   handleCheckNotice = async () => {
-    try {
-      const url =
-        'https://raw.githubusercontent.com/GiDuck/check-service/master/check.json';
-      const response = await fetch(url);
-      const message = await response.json();
-      setTimeout(() => {
-        this.setState({ loading: false, message });
-      }, 2000);
-    } catch (error) {
-      this.setState({ loading: false });
-    }
+    
+      const result = await MeetApi.checkVersion1()
+    debugger
   };
 
   handleCheckNotice1 = async () => {
