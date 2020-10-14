@@ -104,6 +104,8 @@ import ico_setting_160 from '../../assets/icons/etc/ico_setting_160.png';
 import btn_navi_search_press from '../../assets/icons/etc/btn_navi_search_press.png';
 import btnUserCancelNone from '../../assets/icons/etc/btnUserCancelNone.png';
 
+import img_intro_verification_code from '../../assets/icons/img_intro_verification_code.png';
+
 const CustomIcon = props => {
   const { name, size, width, height, style, defaultIcon } = props;
   return (
@@ -113,9 +115,9 @@ const CustomIcon = props => {
       style={{
         ...styles.iconStyle,
         borderRadius: props.borderRadius,
-        width : size ? size : width,
-        height : size ? size : height,
-        ...style,
+        width: size ? size : width,
+        height: size ? size : height,
+        ...style
       }}
     />
   );
@@ -298,6 +300,8 @@ const getButtonSource = name => {
       return icoDrawCenter72;
     case 'icoDrawNotice72':
       return icoDrawNotice72;
+    case 'verification':
+      return img_intro_verification_code;
     default:
       return ico_etc;
   }

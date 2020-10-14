@@ -45,7 +45,7 @@ export default function LoginCheckScreenPresenter(props) {
     }
   };
 
-  useEffect(() => {
+  useEffect(() => { 
     const isTablet = DeviceInfo.isTablet();
     isTablet
       ? Orientation.unlockAllOrientations()
@@ -56,7 +56,10 @@ export default function LoginCheckScreenPresenter(props) {
 
   if (waiting) {
     return (
-      <View style={{ flex: 1, backgroundColor: '#379bd8' }}>
+      <View style={{ flex: 1, backgroundColor: '#f79bd8' }}>
+        <View
+        style={{ backgroundColor: '#f79bd8'}}
+        ></View>
         <LaunchScreen bg={bg} />
       </View>
     );

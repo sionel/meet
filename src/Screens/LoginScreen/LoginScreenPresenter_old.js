@@ -8,9 +8,7 @@ import {
   View,
   TouchableHighlight,
   TouchableOpacity,
-  ImageBackground,
-  TextInput,
-  Button
+  ImageBackground
 } from 'react-native';
 
 import CustomIcon from '../../components/CustomIcon';
@@ -19,18 +17,12 @@ import { getLoginType } from './ServiceCodeConverter';
 
 export default function LoginScreen(props) {
   const { wehagoType, serviceCode, text1, text2, onManualLogin } = props;
-  let ref1, ref2, ref3, ref4, ref5, ref6;
 
-  const _inputCode = code => {};
   let _serviceCode = getLoginType(serviceCode, wehagoType);
 
   const _handleLoginForWehago = () => {
-    const iosUrl = `wehago${
-      wehagoType === 'WEHAGOV' ? 'v' : ''
-    }://?${_serviceCode}=login`;
-    const androidUrl = `wehago${
-      wehagoType === 'WEHAGOV' ? 'v' : ''
-    }://app?name=${_serviceCode}&login=true`;
+    const iosUrl = `wehago${wehagoType === 'WEHAGOV' ? 'v' : ''}://?${_serviceCode}=login`;
+    const androidUrl = `wehago${wehagoType === 'WEHAGOV' ? 'v' : ''}://app?name=${_serviceCode}&login=true`;
     const iosMarketURL =
       wehagoType === 'WEHAGOV'
         ? 'https://www.wehagov.com/#/mobile'
@@ -71,79 +63,17 @@ export default function LoginScreen(props) {
     >
       <View style={styles.container}>
         <View style={styles.topContainer}>
-          <View style={{ left: 0 }}>
-            <CustomIcon name={'verification'} size={70} />
-          </View>
-
           <Text style={{ color: '#fff', fontSize: 24, fontWeight: '100' }}>
-            {'참여코드 입력'}
+            {text1}
           </Text>
-          <Text style={{ color: '#fff', fontSize: 14, fontWeight: 'bold' }}>
-            {'공유받은 참여코드 입력 후 바로 참여해보세요.'}
+          <Text style={{ color: '#fff', fontSize: 24, fontWeight: 'bold' }}>
+            {text2}
           </Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              paddingTop: 32
-            }}
-          >
-            <TextInput
-              style={styles.inputNumber}
-              maxLength={1}
-              ref={ref1}
-              onChangeText={_inputCode}
-            />
-            <TextInput
-              style={styles.inputNumber}
-              maxLength={1}
-              ref={ref2}
-              onChangeText={_inputCode}
-            />
-            <TextInput
-              style={styles.inputNumber}
-              maxLength={1}
-              ref={ref3}
-              onChangeText={_inputCode}
-            />
-            <TextInput
-              style={styles.inputNumber}
-              maxLength={1}
-              ref={ref4}
-              onChangeText={_inputCode}
-            />
-            <TextInput
-              style={styles.inputNumber}
-              maxLength={1}
-              ref={ref5}
-              onChangeText={_inputCode}
-            />
-            <TextInput
-              style={styles.inputNumber}
-              maxLength={1}
-              ref={ref6}
-              onChangeText={_inputCode}
-            />
-          </View>
-          <View
-            style={{
-              right: 0,
-              marginTop: 20,
-              height: 32,
-              flexDirection: 'row-reverse'
-            }}
-          >
-            {/* <View
-              style={{ width: 58, backgroundColor: 'rgba(255,255,255,0.7)', borderRadius: 8, fontSize:14  }}
-            > */}
-              {/* <Button title="확인" onPress={() => {}} /> */}
-            {/* </View> */}
-          </View>
         </View>
 
-        {/* <View style={styles.middleContainer}>
+        <View style={styles.middleContainer}>
           <Image source={appIcon} style={{ width: 180, height: 180 }} />
-        </View> */}
+        </View>
 
         <View style={styles.bottomContainer}>
           <TouchableHighlight
@@ -201,7 +131,7 @@ const styles = StyleSheet.create({
   },
   topContainer: {
     flex: 1,
-    width: 335,
+    width: 290,
     paddingTop: 112
     // paddingLeft: 40
   },
@@ -247,14 +177,5 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 13,
     textDecorationLine: 'underline'
-  },
-  inputNumber: {
-    backgroundColor: 'rgba(245,248,252,0.3)',
-    width: 50,
-    height: 55,
-    fontSize: 40,
-    textAlign: 'center',
-    borderRadius: 10,
-    color:'#fff'
   }
 });
