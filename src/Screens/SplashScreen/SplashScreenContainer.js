@@ -31,12 +31,18 @@ class SplashScreenContainer extends Component {
   }
 
   componentDidMount = async () => {
+    debugger;
+    // 강제종료 했을때를 위한 강제 초기화
+    this.props.setInitInfo();
+    this.props.setSharingMode();
+
     // 루팅 확인 및 디버깅 모드 확인
     let result = false;
     result = await this._handleCheckSecurity();
     if (!result) return;
 
     // 로그인 확인
+    debugger;
 
     // 딥링크 확인
     if (this.props.url.url) {
@@ -45,11 +51,13 @@ class SplashScreenContainer extends Component {
       // 작업을 해야 빈틈이 없음
       await this._handleGetWehagoToken(this.props.url);
     } else {
+      debugger;
       let servernoti = [];
       // 버전 확인
       servernoti = await this._handleCheckVersion(servernoti);
       // // 노티 확인
       servernoti = await this._handleCheckNotice(servernoti);
+      debugger;
       if (servernoti.length > 0) {
         this.setState({ servernoti, index: 0 });
       } else {
@@ -212,14 +220,15 @@ class SplashScreenContainer extends Component {
   };
 
   _handleCheckAutoLogin = async () => {
-    const { auth, loginCheckRequest } = this.props;
+    const { auth, loginCheckRequest, isWehagoLogin } = this.props;
+    debugger;
     if (auth.AUTH_A_TOKEN) {
       const result = await loginCheckRequest(
         auth.AUTH_A_TOKEN,
         auth.AUTH_R_TOKEN,
         auth.last_access_company_no,
         auth.HASH_KEY,
-        props.isWehagoLogin
+        isWehagoLogin
       );
       if (result.errors) {
         this.props.onChangeState({
@@ -450,7 +459,7 @@ class SplashScreenContainer extends Component {
     });
 
     // this._handleRedirect('Conference', {
-      /* 
+    /* 
       여기서 막힘
       여기는 네비게이션으로 묶여있지 않기때문에 navigation을 쓸수가 없음
       여기서 모든 걸 처리 한 뒤 main으로 넘겨서 각각 네비게이션을 이용하던가 해야함

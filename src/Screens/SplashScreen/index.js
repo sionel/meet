@@ -9,6 +9,8 @@
 import { connect } from 'react-redux';
 import SplashScreenContainer from './SplashScreenContainer';
 import { actionCreators as UserActions } from '../../redux/modules/user';
+import { actionCreators as DocumentShareActions } from '../../redux/modules/documentShare';
+import { actionCreators as WedriveAcionCreators } from '../../redux/modules/wedrive';
 
 // map state to props
 const mapStateToProps = state => ({
@@ -42,6 +44,8 @@ const mapDispatchToProps = dispatch => {
     onLogout: () => dispatch(UserActions.logout()),
     setPermission: permission =>
       dispatch(UserActions.setPermission(permission)),
+    setSharingMode: () => dispatch(DocumentShareActions.setSharingMode()),
+    setInitInfo: () => dispatch(WedriveAcionCreators.setInitInfo())
   };
 };
 
