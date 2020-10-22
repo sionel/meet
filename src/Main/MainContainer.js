@@ -20,20 +20,28 @@ import ServiceCheckApi from '../services/api/ServiceCheckApi';
 
 import { WEHAGO_ENV } from './../../config';
 
+// 로그인 했을때 정보를 저장
+// 딥링크 타고 들어오면 정보를 저장?
+// 로그인, 딥링크, 위하고 로그인 3개를 비교해봐야함
 
 class MainContainer extends Component {
-  state = {
-    isLogin: false,
-    hasService: false,
-    url: null,
-    alert: {
-      visible: false,
-      type: 0,
-      description: '',
-      actions: [],
-      onClose: () => {}
-    }
-  };
+  constructor(props) {
+    debugger;
+    this.state = {
+      isLogin: false,
+      hasService: false,
+      url: null,
+      alert: {
+        visible: false,
+        type: 0,
+        description: '',
+        actions: [],
+        onClose: () => {}
+      },
+
+      destination: props.destination
+    };
+  }
 
   conferenceCall = null;
 
@@ -44,10 +52,9 @@ class MainContainer extends Component {
 
     this.props.setInitInfo();
     this.props.setSharingMode();
-    
-    if (this.props.url.url) {
-      this._handleGetWehagoToken(this.props.url);
-    }
+    // if (this.props.url.url) {
+    //   this._handleGetWehagoToken(this.props.url);
+    // }
 
     if (Platform.OS === 'ios') {
       Linking.addEventListener('url', this._handleGetWehagoToken);
@@ -169,7 +176,9 @@ class MainContainer extends Component {
           break;
         case 2:
           description =
-          WEHAGO_ENV === 'WEHAGOV' ? '세션이 만료되었습니다. 다시 로그인 해주세요.' : '고객님의 다른 기기에서 WEHAGO 접속정보가 확인되어 로그아웃 됩니다.';
+            WEHAGO_ENV === 'WEHAGOV'
+              ? '세션이 만료되었습니다. 다시 로그인 해주세요.'
+              : '고객님의 다른 기기에서 WEHAGO 접속정보가 확인되어 로그아웃 됩니다.';
           onClose = async () => {
             this._handleOnCloseAlert(
               () =>
@@ -296,7 +305,6 @@ class MainContainer extends Component {
    * DeepLink 로 접근한 경우
    */
   _handleGetWehagoToken = event => {
-    
     /* 모바일 웹에서 화상회의로 들어올 때 (메신저, meet 둘다 공통)    
       ?portal_id=sadb0101 // 아이디
       &mHASH_KEY=4737240669613779471317246605417595221 // wehago_s
@@ -309,7 +317,7 @@ class MainContainer extends Component {
     */
 
     if (!event.url) return;
-    
+
     const result = querystringParser(event.url);
     // 화상회의 요청인지 판별
     if (result.is_creater || result.type) {
@@ -349,7 +357,7 @@ class MainContainer extends Component {
     isWehagoLogin
   ) => {
     if (!AUTH_A_TOKEN) return;
-    
+
     const { loginCheckRequest } = this.props;
     const result = await loginCheckRequest(
       AUTH_A_TOKEN,
@@ -358,6 +366,7 @@ class MainContainer extends Component {
       HASH_KEY,
       isWehagoLogin
     );
+
     if (result.errors) {
       if (result.errors.code === 'E002') {
         if (isWehagoLogin) this._handleOnAlert(3);

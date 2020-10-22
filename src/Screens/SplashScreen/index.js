@@ -2,6 +2,8 @@
  * SplashScreen index
  * 1. 업데이트 체크
  * 2. 노티 확인
+ * 3. 로그인 확인
+ * 4. 딥링크 확인
  */
 
 import { connect } from 'react-redux';
@@ -18,7 +20,6 @@ const mapStateToProps = state => ({
 // map dispatch to props
 const mapDispatchToProps = dispatch => {
   return {
-    // onTokenLogin: (token, cno) => dispatch(UserActions.tokenLogin(token, cno)),
     loginRequest: (data, access_pass) =>
       dispatch(UserActions.loginRequest(data, access_pass)),
     loginCheckRequest: (
@@ -38,7 +39,9 @@ const mapDispatchToProps = dispatch => {
         )
       ),
     onAgreement: () => dispatch(UserActions.agreement()),
-    onLogout: () => dispatch(UserActions.logout())
+    onLogout: () => dispatch(UserActions.logout()),
+    setPermission: permission =>
+      dispatch(UserActions.setPermission(permission)),
   };
 };
 

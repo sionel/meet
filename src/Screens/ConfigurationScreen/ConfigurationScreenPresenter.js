@@ -25,27 +25,8 @@ import { WEHAGO_ENV } from '../../../config';
 const ConfigurationScreenPresenter = props => {
   const { webView } = props;
   const userConfig = [
-    // {
-    //   title: "onDestroyToken",
-    //   action: () => props.onDestroyToken()
-    // },
-    // {
-    //   title: '이용약관',
-    //   action: () => {
-    //     props.onChangeValue('subUrl', '?code=001');
-    //     props.onChangeValue('webView', true);
-    //   },
-    //   nextPage: true
-    // },
-    // {
-    //   title: '개인정보 처리방침',
-    //   action: () => {
-    //     props.onChangeValue('subUrl', '?code=002');
-    //     props.onChangeValue('webView', true);
-    //   },
-    //   nextPage: true
-    // },
     {
+      // 버전 수정
       title: '버전정보', 
       icon: 'ico_menu_info',
       content:
@@ -67,14 +48,6 @@ const ConfigurationScreenPresenter = props => {
       action: () => props.navigation.navigate('Awards'),
       nextPage: true
     },
-    // {
-    // 	title: '앱인트로 보기',
-    // 	action: () => props.onToggleVisibleAppIntro()
-    // },
-    // {
-    // 	title: '로그 보기',
-    // 	action: () => alert(JSON.stringify(props.log).replace(/,/gi, /,\n/))
-    // },
     {
       title: '로그아웃',
       icon: 'ico_menu_login',

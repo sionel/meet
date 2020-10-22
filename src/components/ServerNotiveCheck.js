@@ -11,32 +11,45 @@ import RNRestart from 'react-native-restart';
 import { Text } from '../components/StyledText';
 import CustomIcon from './CustomIcon';
 
-export default function ServerNotiveCheck({ message }) {
+export default function ServerNotiveCheck({ servernoti }) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.modalContainer}>
         <View style={styles.title}>
           <CustomIcon name={'ico_setting_160'} size={32} />
-          <Text style={styles.titleText}>{message.title}</Text>
+          <Text style={styles.titleText}>{servernoti.title}</Text>
         </View>
 
         <View style={styles.divider} />
 
         <ScrollView bounces={false}>
           <View style={styles.body}>
-            <Text style={{ lineHeight: 24, fontSize: 14 }}>{message.body}</Text>
+            <Text style={{ lineHeight: 24, fontSize: 14 }}>
+              {servernoti.message}
+            </Text>
           </View>
         </ScrollView>
 
         <View style={styles.divider} />
 
         <View style={styles.bottom}>
-          <TouchableOpacity
+          {servernoti.buttons.map(e => (
+            <TouchableOpacity onPress={e.onclick} style={styles.bottomButton}>
+              <Text style={styles.bottomButtonText}>{e.text}</Text>
+            </TouchableOpacity>
+          ))}
+          {/* <TouchableOpacity
             onPress={() => RNRestart.Restart()}
             style={styles.bottomButton}
           >
             <Text style={styles.bottomButtonText}>확인</Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => RNRestart.Restart()}
+            style={styles.bottomButton}
+          >
+            <Text style={styles.bottomButtonText}>확인</Text>
+          </TouchableOpacity> */}
         </View>
       </View>
     </SafeAreaView>
@@ -78,7 +91,10 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 24
   },
-  bottom: {},
+  bottom: {
+    flexDirection: 'row',
+    justifyContent: 'space-around'
+  },
   bottomButton: {
     paddingVertical: 24
   },

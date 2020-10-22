@@ -34,8 +34,8 @@ export const wehagoStaticURL = `https://static.wehago${
 
 // export const testURL = `https://rtctest.wehago.com/api-bind`;
 
-export const meetURL = `https://api.wehago.com/video`;
-// export const meetURL = `http://localhost:8080/video`;
+// export const meetURL = `https://api.wehago.com/video`;
+export const meetURL = `http://localhost:8080/video`;
 
 /**
  * Querystring parser

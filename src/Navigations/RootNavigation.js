@@ -14,12 +14,6 @@ const commonStyle = {
 };
 const backBtn = require('../../assets/buttons/back_btn.png');
 
-// import LoginScreen from '../Screens/LoginScreen';
-// import LoadingScreen from '../Screens/LoadingScreen';
-
-/**
- * RootNavigation
- */
 
 const BackButton = ({ navigation, to }) => {
   return (
@@ -50,9 +44,6 @@ const RootNavigation = createStackNavigator(
       }
     },
 
-    /**
-     * Conference Navigation
-     */
     Conference: {
       screen: ConferenceScreen,
       navigationOptions: {
@@ -64,11 +55,6 @@ const RootNavigation = createStackNavigator(
 
     Setting: {
       screen: SettingScreen,
-      // navigationOptions:  {
-      //   header: null,
-      //   headerLeft: null,
-      //   gesturesEnabled: false
-      // }
       navigationOptions: ({ navigation }) => ({
         headerTitle: <RouteTitle title={'기본 설정'} />,
         // headerTitle:  null,
@@ -78,29 +64,6 @@ const RootNavigation = createStackNavigator(
       })
     }
 
-    /**
-     * Login Navigation
-     */
-    // Login: {
-    // 	screen: LoginScreen,
-    // 	navigationOptions: {
-    // 		header: null,
-    // 		headerLeft: null,
-    // 		gesturesEnabled: false
-    // 	}
-    // },
-
-    /**
-     * Loding Navigation
-     */
-    // Loading: {
-    // 	screen: LoadingScreen,
-    // 	navigationOptions: {
-    // 		header: null,
-    // 		headerLeft: null,
-    // 		gesturesEnabled: false
-    // 	}
-    // }
   },
   // initial
   {

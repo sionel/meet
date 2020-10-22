@@ -65,7 +65,8 @@ https://github.com/facebook/react-native/issues/25138 참고
 
 
 ```
-static BOOL RCTParseUnused(const char **input) {
+static BOOL RCTParseUnused(const char **input)
+{
    return RCTReadString(input, "__unused") ||
    RCTReadString(input, "__attribute__((__unused__))") || //solve by add   this line
    RCTReadString(input, "__attribute__((unused))");

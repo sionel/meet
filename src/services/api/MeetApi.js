@@ -235,7 +235,7 @@ export default {
 
       const response = await fetch(url, data);
       if (response.status !== 200) {
-        throw response.json();
+        throw await response.json();
       }
       return response.json();
     } catch (err) {
@@ -245,55 +245,79 @@ export default {
   },
 
   // 3-20 화상회의 모바일 버전 체크
-  checkVersion: async (a_token, r_token, HASH_KEY) => {
-    const url = `${meetURL}/mobile/version/check`;
-    const headers = securityRequest(a_token, r_token, url, HASH_KEY);
+  checkVersion: async () => {
+    const accsessUrl = '/mobile/version';
+    const signature = await getSignature(accsessUrl);
+    const url = `${meetURL}${accsessUrl}`;
+
     try {
       const data = {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          ...headers
+          signature
         }
       };
 
       const response = await fetch(url, data);
       if (response.status !== 200) {
-        throw response.json();
+        throw await response.json();
       }
       return response.json();
     } catch (err) {
-      console.warn('20.enterMeetRoom : ', err);
+      console.warn('20.checkVersion : ', err);
       return false;
     }
   },
-  
-  // 3-20 화상회의 모바일 버전 체크
-  checkVersion1: async () => {
-    const accsessUrl ='/mobile/version' 
-    const signature = await getSignature(accsessUrl)
+
+  checkNotice: async () => {
+    const accsessUrl = '/mobile/noti';
+    const signature = await getSignature(accsessUrl);
     const url = `${meetURL}${accsessUrl}`;
 
-    // const headers = securityRequest(a_token, r_token, url, HASH_KEY);
     try {
       const data = {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          signature,
+          signature
         }
       };
 
       const response = await fetch(url, data);
-      debugger
       if (response.status !== 200) {
-        throw response.json();
+        throw await response.json();
       }
       return response.json();
     } catch (err) {
-      console.warn('20.enterMeetRoom : ', err);
+      console.warn('21.checkNotice : ', err);
+      return false;
+    }
+  },
+
+  checkTest: async () => {
+    const accsessUrl = '/test';
+    // const signature = await getSignature(accsessUrl);
+    const url = `${meetURL}${accsessUrl}`;
+    try {
+      const data = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          // signature
+        }
+      };
+
+      const response = await fetch(url, data);
+      if (response.status !== 200) {
+        throw await response.json();
+      }
+      return response.json();
+    } catch (err) {
+      console.warn('22.checkTest : ', err);
       return false;
     }
   }
+
 };
 // #endregion
