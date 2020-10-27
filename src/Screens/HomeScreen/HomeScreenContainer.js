@@ -65,7 +65,6 @@ class HomeScreenContainer extends Component {
    */
   async componentDidMount() {
 
-
     // 화면 회전 처리
     Orientation.getOrientation(orientation => {
       this.setState({ orientation });
@@ -78,17 +77,17 @@ class HomeScreenContainer extends Component {
     //   }
     // });
     // [ios] 앱이 실행중에 딥링크에 의한 화상회의 연결방법
-    if (Platform.OS === 'ios') {
-      Linking.addEventListener('url', this._handleOpenURL);
-    }
+    // if (Platform.OS === 'ios') {
+    //   Linking.addEventListener('url', this._handleOpenURL);
+    // }
 
     // [android, ios] 앱이 실행중이 아닐 때 화상회의 연결방법
-    if (
-      this.props.screenProps &&
-      (this.props.screenProps.url || this.props.screenProps.conferenceCall)
-    ) {
-      this._handleOpenURL(this.props.screenProps);
-    }
+    // if (
+    //   this.props.screenProps &&
+    //   (this.props.screenProps.url || this.props.screenProps.conferenceCall)
+    // ) {
+    //   this._handleOpenURL(this.props.screenProps);
+    // }
 
     // 개인 회원 여부 체크
     // 0: 일반, 1: 개인

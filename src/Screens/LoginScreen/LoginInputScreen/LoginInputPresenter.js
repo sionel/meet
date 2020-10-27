@@ -29,8 +29,9 @@ else if (width < height) scale = width / bottomImageWidth;
 else if (width > height) scale = height / bottomImageWidth;
 
 export default function LoginInputPresenter(props) {
+  
   const {
-    wehagoType,
+    iswehagov,
     usernameRef,
     passwordRef,
     captchaRef,
@@ -83,7 +84,7 @@ export default function LoginInputPresenter(props) {
         >
           <>
             <CustomIcon
-              name={wehagoType === 'WEHAGOV' ? 'WEHAGO_V_BI' : 'WEHAGO_BI'}
+              name={iswehagov ? 'WEHAGO_V_BI' : 'WEHAGO_BI'}
               width={224}
               height={42}
               style={{ marginTop: 0 }}

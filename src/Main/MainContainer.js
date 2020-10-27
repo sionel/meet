@@ -26,7 +26,7 @@ import { WEHAGO_ENV } from './../../config';
 
 class MainContainer extends Component {
   constructor(props) {
-    debugger;
+    super();
     this.state = {
       isLogin: false,
       hasService: false,
@@ -38,24 +38,20 @@ class MainContainer extends Component {
         actions: [],
         onClose: () => {}
       },
-
-      destination: props.destination
     };
   }
 
-  conferenceCall = null;
+  // conferenceCall = null;
 
   componentDidMount() {
     // setTimeout(() => {
     //   Platform.OS !== 'ios' && SplashScreen.hide();
     // }, 1000);
-
     // this.props.setInitInfo();
     // this.props.setSharingMode();
     // if (this.props.url.url) {
     //   this._handleGetWehagoToken(this.props.url);
     // }
-
     // if (Platform.OS === 'ios') {
     //   Linking.addEventListener('url', this._handleGetWehagoToken);
     // }
@@ -104,7 +100,12 @@ class MainContainer extends Component {
   render() {
     return (
       <View style={{ flex: 1, width: '100%', hight: '100%' }}>
-        {this.state.isLogin ? (
+        <MainPresenter
+          destination={this.props.destination}
+          onChangeRootState={this.props.onChangeRootState}
+          onChangeMainState={this._handleChangeMainState}
+        />
+        {/* {this.state.isLogin ? (
           this.state.hasService ? (
             <AppIntroSlide>
               <MainPresenter
@@ -137,7 +138,7 @@ class MainContainer extends Component {
           description={this.state.alert.description}
           actions={this.state.alert.actions}
           onClose={this.state.alert.onClose}
-        />
+        /> */}
       </View>
     );
   }
@@ -305,7 +306,7 @@ class MainContainer extends Component {
    * DeepLink 로 접근한 경우
    */
   // _handleGetWehagoToken = event => {
-  //   /* 모바일 웹에서 화상회의로 들어올 때 (메신저, meet 둘다 공통)    
+  //   /* 모바일 웹에서 화상회의로 들어올 때 (메신저, meet 둘다 공통)
   //     ?portal_id=sadb0101 // 아이디
   //     &mHASH_KEY=4737240669613779471317246605417595221 // wehago_s
   //     &mAuth_r_token=1jKg3vXzvd5yR6kxKUGgJUYDaMhKcF // r토큰
@@ -447,5 +448,11 @@ class MainContainer extends Component {
   //     return this._handleSetPermissions(response, permissions, ++len);
   //   }
   // };
+  _handleChangeMainState = state => {
+    this.setState({
+      ...this.state,
+      ...state
+    });
+  };
 }
 export default MainContainer;

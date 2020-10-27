@@ -31,7 +31,6 @@ class SplashScreenContainer extends Component {
   }
 
   componentDidMount = async () => {
-    debugger;
     // 강제종료 했을때를 위한 강제 초기화
     this.props.setInitInfo();
     this.props.setSharingMode();
@@ -40,29 +39,26 @@ class SplashScreenContainer extends Component {
     let result = false;
     result = await this._handleCheckSecurity();
     if (!result) return;
-
-    // 로그인 확인
     debugger;
-
     // 딥링크 확인
     if (this.props.url.url) {
       // url이 있으면 이 함수 안에서
-      // this.props.onChangeState(true);
+      // this.props.onChangeRootState(true);
       // 작업을 해야 빈틈이 없음
       await this._handleGetWehagoToken(this.props.url);
     } else {
-      debugger;
-      let servernoti = [];
-      // 버전 확인
-      servernoti = await this._handleCheckVersion(servernoti);
-      // // 노티 확인
-      servernoti = await this._handleCheckNotice(servernoti);
-      debugger;
-      if (servernoti.length > 0) {
-        this.setState({ servernoti, index: 0 });
-      } else {
-        this._handleCheckAutoLogin();
-      }
+      this._handleInit();
+      // let servernoti = [];
+      // // // 버전 확인
+      // servernoti = await this._handleCheckVersion(servernoti);
+
+      // // // // 노티 확인
+      // servernoti = await this._handleCheckNotice(servernoti);
+      // if (servernoti.length > 0) {
+      //   this.setState({ servernoti, index: 0 });
+      // } else {
+      //   this._handleCheckAutoLogin();
+      // }
     }
   };
 
@@ -72,7 +68,18 @@ class SplashScreenContainer extends Component {
       <SplashScreenPresenter alert={alert} servernoti={servernoti[index]} />
     );
   }
-
+  _handleInit = async () => {
+    let servernoti = [];
+    // 버전 확인
+    servernoti = await this._handleCheckVersion(servernoti);
+    // 노티 확인
+    servernoti = await this._handleCheckNotice(servernoti);
+    if (servernoti.length > 0) {
+      this.setState({ servernoti, index: 0 });
+    } else {
+      this._handleCheckAutoLogin();
+    }
+  };
   _handleCheckSecurity = async () => {
     const isJailBroken = JailMonkey?.isJailBroken();
     const isDebuggedMode = await JailMonkey?.isDebuggedMode();
@@ -95,6 +102,8 @@ class SplashScreenContainer extends Component {
   _handleCheckVersion = async noti => {
     const result = await MeetApi.checkVersion();
     // 버전 수정
+    if (!result) return [];
+
     const android_major_version = '1';
     const ios_major_version = '1';
     const android_version = '1.7.1';
@@ -106,7 +115,6 @@ class SplashScreenContainer extends Component {
     let message;
     let button;
     let onclick;
-
     if (platform === 'android') {
       if (android_major_version !== result.resultData.android_major_version) {
         message =
@@ -178,7 +186,7 @@ class SplashScreenContainer extends Component {
       noti.push({
         title,
         message,
-        button,
+        buttons,
         onclick
       });
     }
@@ -188,7 +196,7 @@ class SplashScreenContainer extends Component {
 
   _handleCheckNotice = async noti => {
     const result = await MeetApi.checkNotice();
-
+    if (!result) return [];
     // 확인코드 :101
     // 강제종료 코드 : 102
 
@@ -221,7 +229,6 @@ class SplashScreenContainer extends Component {
 
   _handleCheckAutoLogin = async () => {
     const { auth, loginCheckRequest, isWehagoLogin } = this.props;
-    debugger;
     if (auth.AUTH_A_TOKEN) {
       const result = await loginCheckRequest(
         auth.AUTH_A_TOKEN,
@@ -231,7 +238,7 @@ class SplashScreenContainer extends Component {
         isWehagoLogin
       );
       if (result.errors) {
-        this.props.onChangeState({
+        this.props.onChangeRootState({
           loaded: true,
           destination: 'login'
         });
@@ -239,7 +246,7 @@ class SplashScreenContainer extends Component {
         return this._handleOnLogin();
       }
     } else {
-      this.props.onChangeState({
+      this.props.onChangeRootState({
         loaded: true,
         destination: 'login'
       });
@@ -261,27 +268,41 @@ class SplashScreenContainer extends Component {
    */
   _handleGetWehagoToken = async event => {
     /* 모바일 웹에서 화상회의로 들어올 때 (메신저, meet 둘다 공통)    
-      ?portal_id=sadb0101 // 아이디
-      &mHASH_KEY=4737240669613779471317246605417595221 // wehago_s
-      &mAuth_r_token=1jKg3vXzvd5yR6kxKUGgJUYDaMhKcF // r토큰
-      &mAuth_a_token=Rxhh9pCzoLpB5I1M6m36aqoDe5Ivxu // a토큰
-      &cno=9 // h_selected_company_no
+      login_info= mobile || web || unknown (모바일은 세션시간 8시간 웹은 3개월 unknown는 비회원)
+      type= 'login' || 'conference' || 'screen'
 
-      &video_id=a25f15cb-01d9-44cf-bafa-4b7122022cb3 // video chat id
-      &room_name=123 // talk방 이름
-      &flag=T // string 형식의 대문자 'T' 고정값 기존 코드를 건들지 않고 새로 대화방으로 바로 갈 수 있도록 짜야할 필요성이 있었음
+      mPORTAL_ID=sadb0101 // 아이디
+      mHASH_KEY=4737240669613779471317246605417595221 // wehago_s
+      mAuth_r_token=1jKg3vXzvd5yR6kxKUGgJUYDaMhKcF // r토큰
+      mAuth_a_token=Rxhh9pCzoLpB5I1M6m36aqoDe5Ivxu // a토큰
+      cno=9 // h_selected_company_no
+      
+      video_id=a25f15cb-01d9-44cf-bafa-4b7122022cb3 // video chat id
+      room_name=123 // talk방 이름
     */
     if (!event.url) return;
     let result = querystringParser(event.url);
     // 화상회의 요청인지 판별
-    if (result.is_creater || result.type) {
+    if (result.call_type === 1) {
+      Alert.alert(
+        '알림',
+        '현재 해당 기능이 지원되지 않습니다.\n원활한 서비스 이용을 위해 WEHAGO앱을 최신버전로 업데이트 해주세요.\n보다 나은 서비스로 찾아뵙겠습니다.',
+        [
+          {
+            text: '확인',
+            onPress: this._handleInit
+          }
+        ]
+      );
+      return;
+    } else if (result.is_creater || result.type) {
       // 로그인 체크 없이 바로 화상대화로 넘어가야하는 경우가 있음
       // timestamp : 로그인 시간 체크
       this._handleCheckConference({ ...result, timestamp: Date.now() });
       // this.conferenceCall = { ...result };
       return;
     }
-
+    debugger;
     let proceed = true;
     // 존재하는 로그인 정보와 받은 로그인 정보를 비교
     if (Object.keys(this.props.auth).length !== 0) {
@@ -310,12 +331,17 @@ class SplashScreenContainer extends Component {
           );
         });
       }
-      result = { ...result, onetime: false };
-    } else {
-      // 1회용 접근인지 아닌지 판단
+      debugger;
+
       result = { ...result, onetime: true };
+    } else {
+      debugger;
+
+      // 1회용 접근인지 아닌지 판단
+      result = { ...result, onetime: false };
     }
     if (!proceed) return;
+    debugger
 
     if (!result.mAuth_a_token) {
       // FIXME: 없어도 될것만 같은 코드 각을 재보자
@@ -326,6 +352,8 @@ class SplashScreenContainer extends Component {
             ToastAndroid.SHORT
           );
     }
+    debugger
+
     // 로그인 진행
     this._handleSaveUserinfo(
       result.mAuth_a_token,
@@ -398,8 +426,7 @@ class SplashScreenContainer extends Component {
       this.props.setPermission(isDeploy);
 
       // this.setState({ isLogin: true, hasService: isPurchase });
-
-      this.props.onChangeState({
+      this.props.onChangeRootState({
         loaded: true,
         destination: 'list'
       });
@@ -407,13 +434,13 @@ class SplashScreenContainer extends Component {
       // 회사에 이상이 있을 경우, 회사 선택 화면으로 이동
       Alert.alert('알림', statusCheck.message);
       // this.setState({ isLogin: true, hasService: false });
-      this.props.onChangeState({
+      this.props.onChangeRootState({
         loaded: true,
         destination: 'selectCompany'
       });
     } else {
       // 중간에 알 수 없는 오류 발생 시
-      this.props.onChangeState({
+      this.props.onChangeRootState({
         loaded: true,
         destination: 'selectCompany'
       });
@@ -438,9 +465,9 @@ class SplashScreenContainer extends Component {
     let callType = params.call_type; // 1:화상 / 2:음성
     let isCreator = params.is_creater; // 0:생성자 / 1:참여자 / 9:비즈박스알파
     let timestamp = params.timestamp;
-    this.props.onChangeState({
+    this.props.onChangeRootState({
       loaded: true,
-      destination: 'Conference',
+      destination: 'Setting',
       params: {
         item: {
           videoRoomId,

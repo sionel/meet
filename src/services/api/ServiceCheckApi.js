@@ -161,7 +161,6 @@ const serviceCheck = async (auth, company, type) => {
     if (!isSP) return true;
 
     const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY } = auth;
-
     const service_code = 'webrtc'; // 화상회의팩
     const params = serialize({
       service_code,

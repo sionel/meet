@@ -33,8 +33,8 @@ export default function ServerNotiveCheck({ servernoti }) {
         <View style={styles.divider} />
 
         <View style={styles.bottom}>
-          {servernoti.buttons.map(e => (
-            <TouchableOpacity onPress={e.onclick} style={styles.bottomButton}>
+          {servernoti.buttons.map((e,idx) => (
+            <TouchableOpacity onPress={e.onclick} style={styles.bottomButton} key={idx}>
               <Text style={styles.bottomButtonText}>{e.text}</Text>
             </TouchableOpacity>
           ))}

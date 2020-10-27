@@ -4,11 +4,33 @@
  * 참조 : http://wiki.duzon.com:8080/display/sky/3.+API
  */
 
-import { meetURL, securityRequest, wehagoBaseURL0 } from '../../utils';
-import CryptoJS from 'crypto-js';
+import {
+  meetURL,
+  securityRequest,
+  wehagoBaseURL0
+} from '../../utils';
+import * as CryptoJS from 'crypto-js';
+
+const getToken = async accessUrl => {
+  try {
+    const url = `${wehagoBaseURL0}/get_token/?url=${accessUrl}`;
+    const data = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      }
+    };
+    const response = await fetch(url, data);
+    return response.json();
+  } catch (err) {
+    return false;
+  }
+};
 
 const getSignature = async accessUrl => {
   try {
+    const date = new Date().getTime();
+    accessUrl = `/video${accessUrl}?timestamp=${date}`;
     const url = `${wehagoBaseURL0}/get_token/?url=${accessUrl}`;
     const data = {
       method: 'GET',
@@ -19,10 +41,9 @@ const getSignature = async accessUrl => {
     const response = await fetch(url, data);
     const responseJson = await response.json();
 
-    const encText = url + responseJson.cur_date + responseJson.token;
+    const encText = accessUrl + responseJson.cur_date + responseJson.token;
     const hashText = CryptoJS.SHA256(encText);
     const signature = CryptoJS.enc.Base64.stringify(hashText);
-
     return signature;
   } catch (err) {
     if (err.message === 'timeout') {
@@ -38,7 +59,6 @@ export default {
   createMeetRoom: async (a_token, r_token, HASH_KEY, cno, param) => {
     const url = `${meetURL}/room?cno=${cno}`;
     const headers = securityRequest(a_token, r_token, url, HASH_KEY);
-    //service_code = videoconference || communication || schedule
     try {
       const data = {
         method: 'POST',
@@ -246,16 +266,21 @@ export default {
 
   // 3-20 화상회의 모바일 버전 체크
   checkVersion: async () => {
-    const accsessUrl = '/mobile/version';
-    const signature = await getSignature(accsessUrl);
-    const url = `${meetURL}${accsessUrl}`;
+    const date = new Date().getTime();
+
+    const accsessUrl = `/video/mobile/version?timestamp=${date}`;
+    const token = await getToken(accsessUrl);
+    const encText = accsessUrl + token.cur_date + token.token;
+    const hashText = CryptoJS.SHA256(encText);
+    const signature = CryptoJS.enc.Base64.stringify(hashText);
+    const url = `${wehagoBaseURL0}${accsessUrl}`;
 
     try {
       const data = {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json',
-          signature
+          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          signature: signature
         }
       };
 
@@ -271,9 +296,14 @@ export default {
   },
 
   checkNotice: async () => {
-    const accsessUrl = '/mobile/noti';
-    const signature = await getSignature(accsessUrl);
-    const url = `${meetURL}${accsessUrl}`;
+    const date = new Date().getTime();
+
+    const accsessUrl = `/video/mobile/noti?timestamp=${date}`;
+    const token = await getToken(accsessUrl);
+    const encText = accsessUrl + token.cur_date + token.token;
+    const hashText = CryptoJS.SHA256(encText);
+    const signature = CryptoJS.enc.Base64.stringify(hashText);
+    const url = `${wehagoBaseURL0}${accsessUrl}`;
 
     try {
       const data = {
@@ -303,7 +333,7 @@ export default {
       const data = {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
           // signature
         }
       };
@@ -318,6 +348,5 @@ export default {
       return false;
     }
   }
-
 };
 // #endregion

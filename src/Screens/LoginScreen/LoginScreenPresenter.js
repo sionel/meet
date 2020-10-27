@@ -17,28 +17,33 @@ import CustomIcon from '../../components/CustomIcon';
 import { Text } from '../../components/StyledText';
 import { getLoginType } from './ServiceCodeConverter';
 
-export default function LoginScreen(props) {
-  const { wehagoType, serviceCode, text1, text2, onManualLogin } = props;
-  let ref1, ref2, ref3, ref4, ref5, ref6;
+import { WEHAGO_TYPE, WEHAGO_ENV } from '../../../config';
 
+const iswehagov = WEHAGO_ENV === 'WEHAGOV';
+
+export default function LoginScreen(props) {
+  let ref1, ref2, ref3, ref4, ref5, ref6;
+  
   const _inputCode = code => {};
-  let _serviceCode = getLoginType(serviceCode, wehagoType);
+  let _serviceCode;
+
+  if (iswehagov) {
+    _serviceCode = Platform.OS === 'ios' ? 'wehagovmeet' : 'meetv';
+  } else {
+    _serviceCode = Platform.OS === 'ios' ? 'wehagomeet' : 'meet';
+  }
 
   const _handleLoginForWehago = () => {
-    const iosUrl = `wehago${
-      wehagoType === 'WEHAGOV' ? 'v' : ''
-    }://?${_serviceCode}=login`;
+    const iosUrl = `wehago${iswehagov ? 'v' : ''}://?${_serviceCode}=login`;
     const androidUrl = `wehago${
-      wehagoType === 'WEHAGOV' ? 'v' : ''
+      iswehagov ? 'v' : ''
     }://app?name=${_serviceCode}&login=true`;
-    const iosMarketURL =
-      wehagoType === 'WEHAGOV'
-        ? 'https://www.wehagov.com/#/mobile'
-        : 'http://itunes.apple.com/kr/app/wehago/id1363039300?mt=8';
-    const androidMarketURL =
-      wehagoType === 'WEHAGOV'
-        ? 'https://www.wehagov.com/#/mobile'
-        : 'https://play.google.com/store/apps/details?id=com.duzon.android.lulubizpotal';
+    const iosMarketURL = iswehagov
+      ? 'https://www.wehagov.com/#/mobile'
+      : 'http://itunes.apple.com/kr/app/wehago/id1363039300?mt=8';
+    const androidMarketURL = iswehagov
+      ? 'https://www.wehagov.com/#/mobile'
+      : 'https://play.google.com/store/apps/details?id=com.duzon.android.lulubizpotal';
 
     Linking.openURL(Platform.OS === 'ios' ? iosUrl : androidUrl).catch(err => {
       Linking.openURL(
@@ -55,8 +60,6 @@ export default function LoginScreen(props) {
       });
     });
   };
-
-  let appIcon = require('../../../assets/imgMeet.png');
 
   return (
     <ImageBackground
@@ -136,7 +139,7 @@ export default function LoginScreen(props) {
             {/* <View
               style={{ width: 58, backgroundColor: 'rgba(255,255,255,0.7)', borderRadius: 8, fontSize:14  }}
             > */}
-              {/* <Button title="확인" onPress={() => {}} /> */}
+            {/* <Button title="확인" onPress={() => {}} /> */}
             {/* </View> */}
           </View>
         </View>
@@ -166,7 +169,14 @@ export default function LoginScreen(props) {
 
           <TouchableOpacity
             activeOpacity={1}
-            onPress={() => onManualLogin()}
+            onPress={() =>
+              props.navigation.navigate({
+                routeName: 'LoginInput',
+                params: {
+                  ...props.screenProps
+                }
+              })
+            }
             // onPress={() =>
             //   props.navigation.navigate({
             //     routeName: 'LoginInput',
@@ -255,6 +265,6 @@ const styles = StyleSheet.create({
     fontSize: 40,
     textAlign: 'center',
     borderRadius: 10,
-    color:'#fff'
+    color: '#fff'
   }
 });

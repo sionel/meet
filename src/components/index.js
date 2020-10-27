@@ -12,3 +12,5 @@ export { default as CustomAlert } from './CustomAlert';
 export { default as CustomIcon } from './CustomIcon';
 export { default as CustomButton } from './CustomButton';
 export { default as SectionListHeader } from './SectionListHeader';
+export { default as ServerNotiveCheck } from './ServerNotiveCheck';
+export { default as Splash } from './Splash';

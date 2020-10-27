@@ -114,7 +114,7 @@ function applyJoinConference(state, action) {
   return {
     ...state,
     user,
-    callType: conferenceInfo.callType
+    callType: conferenceInfo.callType // 삭제?
   };
 }
 

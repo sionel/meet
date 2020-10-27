@@ -93,8 +93,8 @@ class SettingScreenContainer extends React.Component {
     if (!name) {
       name = this.props.auth.user_name;
     }
-    this.props.navigation.navigate('Home');
-    this.props.navigation.navigate('Conference', {
+    // this.props.navigation.navigate('Home'); replace가 문제 없으면 삭제
+    this.props.navigation.replace('Conference', {
       item: { tracks, name, ...item }
     });
   };

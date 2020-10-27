@@ -259,11 +259,8 @@ class ConferenceScreenContainer extends React.Component {
     await this._conferenceManager.join(
       roomName,
       name,
-      // this._handleEndCall,
-      () => {},
       auth,
       this.callType,
-      roomType,
       token,
       tracks
     );
@@ -297,6 +294,7 @@ class ConferenceScreenContainer extends React.Component {
   /** 화상회의방 닫기 */
   _handleConferenceClose = () => {
     const { goBack } = this.props.navigation;
+    // 로그인 정보가 없으면 로그인 창으로 보내버려야함
     goBack();
   };
 

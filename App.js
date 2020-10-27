@@ -11,8 +11,9 @@ const { persistor, store } = configureStore();
 
 export default class App extends Component {
   state = { loaded: false };
-
   render() {
+    let url = this.state.url ? this.state.url : this.props.url;
+    debugger
     return (
       <Provider store={store}>
         <PersistGate persistor={persistor}>
@@ -20,10 +21,11 @@ export default class App extends Component {
             <Main
               destination={this.state.destination}
               params={this.state.params}
+              onChangeRootState={this._handleChangeRootState}
             />
           ) : (
             <SplashScreen
-              onChangeState={this._handleChangeState}
+              onChangeRootState={this._handleChangeRootState}
               url={this.props.url}
             />
           )}
@@ -32,8 +34,11 @@ export default class App extends Component {
     );
   }
 
-  _handleChangeState = param => {
-    this.setState(param);
+  _handleChangeRootState = param => {
+    this.setState({
+      ...this.state,
+      ...param
+    });
   };
 }
 
