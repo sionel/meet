@@ -17,6 +17,7 @@ import wetalk from './modules/wetalk';
 import wedrive from './modules/wedrive';
 import documentShare from './modules/documentShare';
 import conference from './modules/conference';
+import webUser from './modules/webUser';
 
 /**
  * middleware list
@@ -42,7 +43,8 @@ const persistConfig = {
     'wetalk',
     'wedrive',
     'documentShare',
-    'conference'
+    'conference',
+    'webUser'
   ]
 };
 
@@ -57,7 +59,8 @@ const reducer = persistCombineReducers(persistConfig, {
   wetalk,
   wedrive,
   documentShare,
-  conference
+  conference,
+  webUser
 });
 
 /**

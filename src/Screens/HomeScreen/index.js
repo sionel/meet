@@ -10,7 +10,7 @@ import { actionCreators as ConferenceActions } from '../../redux/modules/confere
 
 const mapStateToProps = state => ({
   auth: state.user.auth,
-  isWehagoLogin: state.user.isWehagoLogin,
+  from: state.user.from,
   permission: state.user.permission,
   wetalk: state.wetalk.list,
   conference: state.conference.list,
@@ -24,14 +24,14 @@ const mapDispatchToProps = dispatch => ({
   onLogin: user => dispatch(UserActions.login(user)),
   onLogout: () => dispatch(UserActions.logout()),
   onDisconnect: () => dispatch(UserActions.disconnect()),
-  loginCheckRequest: (AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY, isWehagoLogin) =>
+  loginCheckRequest: (AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY, from) =>
     dispatch(
       UserActions.loginCheckRequest(
         AUTH_A_TOKEN,
         AUTH_R_TOKEN,
         cno,
         HASH_KEY,
-        isWehagoLogin
+        from
       )
     ),
   onSetWetalkList: list => dispatch(WetalkActions.setList(list)),

@@ -44,7 +44,6 @@ class ConferenceManager {
     this._connection = new Connection();
     // 대화방 연결을 위한 ConferenceConnector
     this._conferenceConnector = new ConferenceConnector(this._createHandlers());
-
     // connection 연결
     await this._connection.connect(roomName.toLowerCase(), token);
     // 대화방 참가
@@ -56,17 +55,18 @@ class ConferenceManager {
       tracks
     );
 
-    this.callType = callType; // x 
+    this.callType = callType; // x
 
     // 입장시 토큰 제출(디비에 인원 파악용)
-    await MeetApi.enterMeetRoom(
-      this._auth.AUTH_A_TOKEN,
-      this._auth.AUTH_R_TOKEN,
-      this._auth.HASH_KEY,
-      this._item.roomToken,
-      this._room.myUserId()
-    );
-
+    if (Object.keys(this._auth).length > 0) {
+      await MeetApi.enterMeetRoom(
+        this._auth.AUTH_A_TOKEN,
+        this._auth.AUTH_R_TOKEN,
+        this._auth.HASH_KEY,
+        this._item.roomToken,
+        this._room.myUserId()
+      );
+    }
     // 대화방 접속 시간 세팅
     const createdTime = this._room.properties['created-ms'];
     this._dispatch(localActionCreators.setConferenceCreatedTime(createdTime));
@@ -75,7 +75,6 @@ class ConferenceManager {
     if (!tracks) tracks = this._conferenceConnector.tracks;
     const videoTrack = tracks.find(track => track.getType() === 'video');
     const audioTrack = tracks.find(track => track.getType() === 'audio');
-
     await this._dispatch(
       localActionCreators.joinConference({
         id,

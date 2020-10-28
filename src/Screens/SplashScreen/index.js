@@ -10,12 +10,13 @@ import { connect } from 'react-redux';
 import SplashScreenContainer from './SplashScreenContainer';
 import { actionCreators as UserActions } from '../../redux/modules/user';
 import { actionCreators as DocumentShareActions } from '../../redux/modules/documentShare';
-import { actionCreators as WedriveAcionCreators } from '../../redux/modules/wedrive';
+import { actionCreators as WedriveAcions } from '../../redux/modules/wedrive';
+import { actionCreators as WebUserAcions } from '../../redux/modules/webUser';
 
 // map state to props
 const mapStateToProps = state => ({
   auth: state.user.auth,
-  isWehagoLogin: state.user.isWehagoLogin,
+  from: state.user.from,
   permission: state.user.permission
 });
 
@@ -24,20 +25,14 @@ const mapDispatchToProps = dispatch => {
   return {
     loginRequest: (data, access_pass) =>
       dispatch(UserActions.loginRequest(data, access_pass)),
-    loginCheckRequest: (
-      AUTH_A_TOKEN,
-      AUTH_R_TOKEN,
-      cno,
-      HASH_KEY,
-      isWehagoLogin
-    ) =>
+    loginCheckRequest: (AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY, from) =>
       dispatch(
         UserActions.loginCheckRequest(
           AUTH_A_TOKEN,
           AUTH_R_TOKEN,
           cno,
           HASH_KEY,
-          isWehagoLogin
+          from
         )
       ),
     onAgreement: () => dispatch(UserActions.agreement()),
@@ -45,7 +40,7 @@ const mapDispatchToProps = dispatch => {
     setPermission: permission =>
       dispatch(UserActions.setPermission(permission)),
     setSharingMode: () => dispatch(DocumentShareActions.setSharingMode()),
-    setInitInfo: () => dispatch(WedriveAcionCreators.setInitInfo())
+    setInitInfo: () => dispatch(WedriveAcions.setInitInfo())
   };
 };
 

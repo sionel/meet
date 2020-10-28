@@ -169,7 +169,7 @@ export default function LoginInputContainer(props) {
         auth.AUTH_R_TOKEN,
         auth.last_access_company_no,
         auth.HASH_KEY,
-        false
+        'this'
       );
 
       if (result.errors) {
@@ -198,7 +198,7 @@ export default function LoginInputContainer(props) {
         } else {
           Alert.alert(
             'Login',
-            `사소한 문제가 발생했습니다. 다시 시도해주세요.`
+            `요청된 작업을 처리하던중 문제가 발생했습니다. 다시 시도해주세요.`
           );
         }
         return;

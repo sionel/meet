@@ -1,6 +1,6 @@
-
 import React from 'react';
 import { createAppContainer, createStackNavigator } from 'react-navigation';
+import ConferenceStateScreen from '../Screens/ConferenceStateScreen';
 import ConferenceScreen from '../Screens/ConferenceScreen';
 import SettingScreen from '../Screens/SettingScreen';
 import { Image, TouchableOpacity } from 'react-native';
@@ -13,13 +13,15 @@ const commonStyle = {
 };
 const backBtn = require('../../assets/buttons/back_btn.png');
 
+const BackButton = ({ navigation }) => {
+  const { onChangeRootState, from } = navigation.getScreenProps();
 
-const BackButton = ({ navigation, to }) => {
   return (
     <TouchableOpacity
       onPress={() => {
-          // TODO: 로그인으로 가야하는데 그걸 메인 컨테이너에서 처리 할거니깐 거기로 컴바인!
-        navigation.navigate(to);
+        onChangeRootState({
+          destination: from === 'this' || from === 'mobile' ? 'List' : 'Login'
+        });
       }}
     >
       <Image
@@ -32,11 +34,20 @@ const BackButton = ({ navigation, to }) => {
 
 const Deeplink1Navigation = createStackNavigator(
   {
+    ConferenceState: {
+      screen: ConferenceStateScreen,
+      navigationOptions: ({ navigation }) => ({
+        headerTitle: <RouteTitle title={'화상 회의'} />,
+        headerLeft: <BackButton navigation={navigation} />,
+        headerTintColor: '#fff',
+        headerStyle: commonStyle
+      })
+    },
     Setting: {
       screen: SettingScreen,
       navigationOptions: ({ navigation }) => ({
         headerTitle: <RouteTitle title={'기본 설정'} />,
-        headerLeft: <BackButton navigation={navigation} to={'Main'} />,
+        headerLeft: <BackButton navigation={navigation} />,
         headerTintColor: '#fff',
         headerStyle: commonStyle
       })
@@ -49,10 +60,10 @@ const Deeplink1Navigation = createStackNavigator(
         headerLeft: null,
         gesturesEnabled: false
       }
-    },
+    }
   },
   {
-    initialRouteName: 'Setting',
+    initialRouteName: 'ConferenceState',
     mode: 'modal',
     headerMode: 'screen',
     cardStyle: { backgroundColor: '#FFF', transparent: true }

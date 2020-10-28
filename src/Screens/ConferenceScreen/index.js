@@ -32,7 +32,9 @@ const mapStateToProps = state => {
     auth: auth,
     documentShare,
     list,
-    user
+    user,
+    from: state.user.from,
+
   };
 };
 

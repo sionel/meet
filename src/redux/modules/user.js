@@ -57,11 +57,11 @@ function agreement() {
 /**
  * login
  */
-function login(auth, isWehagoLogin) {
+function login(auth, from) {
   return {
     type: LOGIN,
     auth,
-    isWehagoLogin
+    from
   };
 }
 
@@ -71,13 +71,7 @@ function loginRequest(data, access_pass) {
   };
 }
 
-function loginCheckRequest(
-  AUTH_A_TOKEN,
-  AUTH_R_TOKEN,
-  cno,
-  HASH_KEY,
-  isWehagoLogin
-) {
+function loginCheckRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY, from) {
   return async dispatch => {
     const checkResult = await UserApi.check(
       AUTH_A_TOKEN,
@@ -113,7 +107,7 @@ function loginCheckRequest(
         member_type: checkResult.resultData.member_type, // 0: 일반회원, 1: 개인회원
         nickname: checkResult.nickname
       };
-      dispatch(login(userData, isWehagoLogin));
+      dispatch(login(userData, from));
       return checkResult;
     } else {
       const result = checkResult.errors ? checkResult : { errors: checkResult };
@@ -198,7 +192,6 @@ function changeCompanyRequest(auth, company) {
   };
 }
 
-
 /**
  * tokenLogin : ACTION
  */
@@ -234,10 +227,10 @@ const initialState = {
   auth: {},
   permission: false,
   appIntro: false,
-  isWehagoLogin: false,
+  from: '',
   log: {},
   session: true,
-  permission: false,
+  permission: false
 };
 
 //#endregion initialState
@@ -253,7 +246,7 @@ function reducer(state = initialState, action) {
         ...state,
         auth: action.auth,
         isLogin: true,
-        isWehagoLogin: action.isWehagoLogin,
+        from: action.from,
         session: true
       };
     // return applyTest(state, action);
@@ -353,7 +346,7 @@ const actionCreators = {
   changeCompanyRequest,
   toggleVisibleAppIntro,
   sessionCheck,
-  setPermission,
+  setPermission
 };
 
 export { actionCreators };

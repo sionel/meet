@@ -9,34 +9,49 @@ import CompanySelect from '../components/CompanySelect';
 
 const MainPresenter = props => {
   Orientation.unlockAllOrientations();
-  const { destination, onChangeRootState, onChangeMainState } = props;
+  const {
+    destination,
+    onChangeRootState,
+    onChangeMainState,
+    params,
+    from
+  } = props;
   switch (destination) {
-    case 'login':
+    case 'Login':
       return (
         <LoginNavigation
           screenProps={{
-            onChangeRootState: onChangeRootState,
-            onChangeMainState: onChangeMainState
+            onChangeRootState,
+            onChangeMainState,
+            params,
+            destination,
+            from
           }}
         />
       );
 
-    case 'list':
+    case 'List':
       return (
         <RootNavigation
           screenProps={{
-            onChangeRootState: onChangeRootState,
-            onChangeMainState: onChangeMainState
+            onChangeRootState,
+            onChangeMainState,
+            params,
+            destination,
+            from
           }}
         />
       );
 
-    case 'selectCompany':
+    case 'SelectCompany':
       return (
         <CompanySelect
           screenProps={{
-            onChangeRootState: onChangeRootState,
-            onChangeMainState: onChangeMainState
+            onChangeRootState,
+            onChangeMainState,
+            params,
+            destination,
+            from
           }}
         />
       );
@@ -45,8 +60,11 @@ const MainPresenter = props => {
       return (
         <Deeplink1Navigation
           screenProps={{
-            onChangeRootState: onChangeRootState,
-            onChangeMainState: onChangeMainState
+            onChangeRootState,
+            onChangeMainState,
+            params,
+            destination,
+            from
           }}
         />
       );
@@ -55,8 +73,11 @@ const MainPresenter = props => {
       return (
         <Deeplink2Navigation
           screenProps={{
-            onChangeRootState: onChangeRootState,
-            onChangeMainState: onChangeMainState
+            onChangeRootState,
+            onChangeMainState,
+            params,
+            destination,
+            from
           }}
         />
       );

@@ -37,7 +37,7 @@ class MainContainer extends Component {
         description: '',
         actions: [],
         onClose: () => {}
-      },
+      }
     };
   }
 
@@ -98,11 +98,14 @@ class MainContainer extends Component {
   // }
 
   render() {
+    const { params, destination, onChangeRootState, from } = this.props;
     return (
       <View style={{ flex: 1, width: '100%', hight: '100%' }}>
         <MainPresenter
-          destination={this.props.destination}
-          onChangeRootState={this.props.onChangeRootState}
+          params={params}
+          from={from}
+          destination={destination}
+          onChangeRootState={onChangeRootState}
           onChangeMainState={this._handleChangeMainState}
         />
         {/* {this.state.isLogin ? (
@@ -379,7 +382,7 @@ class MainContainer extends Component {
   //     } else if (result.errors.message === 'timeout') {
   //       Alert.alert('Login', `요청 시간을 초과했습니다. 다시 시도해주세요.`);
   //     } else {
-  //       Alert.alert('Login', `사소한 문제가 발생했습니다. 다시 시도해주세요.`);
+  //       Alert.alert('Login', `요청된 작업을 처리하던중 문제가 발생했습니다. 다시 시도해주세요.`);
   //     }
   //     return;
   //   } else if (

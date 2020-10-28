@@ -13,7 +13,6 @@ export default class App extends Component {
   state = { loaded: false };
   render() {
     let url = this.state.url ? this.state.url : this.props.url;
-    debugger
     return (
       <Provider store={store}>
         <PersistGate persistor={persistor}>

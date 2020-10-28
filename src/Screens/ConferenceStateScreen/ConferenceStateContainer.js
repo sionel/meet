@@ -25,11 +25,17 @@ class ConferenceStateContainer extends React.Component {
   }
 
   async componentDidMount() {
-    
-    const { roomId, from } = this.props.navigation.state.params.item;
+    debugger;
+
+    let roomId;
+    if (this.props.from === 'list') {
+      roomId = this.props.navigation.state.params.item.roomId;
+    } else {
+      roomId = this.props.screenProps.params.roomId;
+    }
+
     let { conferenceState } = this.state;
     this.roomId = roomId;
-    this.from = from;
 
     let { auth } = this.props;
     const accsess = await MeetApi.getMeetRoom(
@@ -38,7 +44,7 @@ class ConferenceStateContainer extends React.Component {
       auth.HASH_KEY,
       roomId
     );
-    this.roomName = accsess.resultData.name
+    this.roomName = accsess.resultData.name;
     if (!accsess) {
       // 종료된 방 또는 문제가 있을때
       conferenceState = 'deleted';
@@ -186,7 +192,7 @@ class ConferenceStateContainer extends React.Component {
         roomId
       )
     ).resultData;
-        
+
     // 최대 참여인원 제한 (50명)
     if (participantList.length >= 50) {
       // 50명 초과 방 ㄱ
@@ -214,7 +220,7 @@ class ConferenceStateContainer extends React.Component {
           videoRoomId: roomId,
           callType,
           isCreator,
-          selectedRoomName:this.roomName
+          selectedRoomName: this.roomName
         }
       });
     }

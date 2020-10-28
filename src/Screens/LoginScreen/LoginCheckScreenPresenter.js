@@ -18,7 +18,7 @@ export default function LoginCheckScreenPresenter(props) {
         auth.AUTH_R_TOKEN,
         auth.last_access_company_no,
         auth.HASH_KEY,
-        props.isWehagoLogin
+        props.from
       );
 
       setTimeout(() => {

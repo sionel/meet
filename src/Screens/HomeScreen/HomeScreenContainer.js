@@ -415,7 +415,7 @@ class HomeScreenContainer extends Component {
       auth.AUTH_R_TOKEN,
       auth.last_access_company_no,
       auth.HASH_KEY,
-      this.props.isWehagoLogin
+      this.props.from
     );
 
     // 재 로그인

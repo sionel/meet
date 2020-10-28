@@ -12,8 +12,8 @@ const commonStyle = {
 };
 
 class SettingScreenContainer extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       name: '',
       tracks: [],
@@ -44,8 +44,8 @@ class SettingScreenContainer extends React.Component {
   }
 
   componentWillUnmount() {
-      Orientation.unlockAllOrientations();
-      Orientation.removeOrientationListener(this._handleOrientation);
+    Orientation.unlockAllOrientations();
+    Orientation.removeOrientationListener(this._handleOrientation);
   }
 
   render() {
@@ -59,7 +59,6 @@ class SettingScreenContainer extends React.Component {
         onToggleAudio={this._handleToggleAudio}
         onToggleVideo={this._handleToggleVideo}
         onSetName={this._handleSetName}
-        onBack={this._handleRedirect}
       />
     );
   }
@@ -84,17 +83,17 @@ class SettingScreenContainer extends React.Component {
     const audioTrack = tracks.find(track => track.getType() === 'audio');
     return [videoTrack, audioTrack];
   };
-  _handleRedirect = () => {
-    this.props.navigation.navigate('Home');
-  };
+
   _handleConferenceEnter = () => {
-    const item = this.props.navigation.state.params.item;
+    const { navigation, auth, webAuth } = this.props;
+    const item = navigation.state.params.item;
+
     let { tracks, name } = this.state;
     if (!name) {
-      name = this.props.auth.user_name;
+      name = webAuth?.user_name ? webAuth?.user_name : auth.user_name;
     }
     // this.props.navigation.navigate('Home'); replace가 문제 없으면 삭제
-    this.props.navigation.replace('Conference', {
+    navigation.replace('Conference', {
       item: { tracks, name, ...item }
     });
   };

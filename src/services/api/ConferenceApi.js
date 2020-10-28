@@ -154,7 +154,7 @@ export default {
       const result = await response.json();
       return result;
     } catch (e) {
-      alert('사소한 문제가 발생했습니다. 다시 시도해 주세요');
+      alert('요청된 작업을 처리하던중 문제가 발생했습니다. 다시 시도해 주세요');
       return participant;
     }
   }

@@ -5,7 +5,7 @@ import { actionCreators as WetalkActions } from '../../redux/modules/wetalk';
 
 const mapStateToProps = state => ({
   user: state.user.auth,
-  isWehagoLogin: state.user.isWehagoLogin
+  from: state.user.from
   // log: state.user.log
 });
 

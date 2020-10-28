@@ -11,36 +11,37 @@ import { actionCreators as WedriveAcionCreators } from '../redux/modules/wedrive
 
 // map state to props
 const mapStateToProps = state => ({
-  auth: state.user.auth,
-  isLogin: state.user.isLogin,
-  isWehagoLogin: state.user.isWehagoLogin,
-  session: state.user.session
+  // auth: state.user.auth,
+  // isLogin: state.user.isLogin,
+  // isWehagoLogin: state.user.isWehagoLogin,
+  from: state.user.from,
+  // session: state.user.session
 });
 
 // map dispatch to props
 const mapDispatchToProps = dispatch => {
   return {
-    loginCheckRequest: (
-      AUTH_A_TOKEN,
-      AUTH_R_TOKEN,
-      cno,
-      HASH_KEY,
-      isWehagoLogin
-    ) =>
-      dispatch(
-        UserActions.loginCheckRequest(
-          AUTH_A_TOKEN,
-          AUTH_R_TOKEN,
-          cno,
-          HASH_KEY,
-          isWehagoLogin
-        )
-      ),
-    onLogout: () => dispatch(UserActions.logout()),
-    setPermission: permission =>
-      dispatch(UserActions.setPermission(permission)),
-    setSharingMode: () => dispatch(DocumentShareActions.setSharingMode()),
-    setInitInfo: () => dispatch(WedriveAcionCreators.setInitInfo())
+    // loginCheckRequest: (
+    //   AUTH_A_TOKEN,
+    //   AUTH_R_TOKEN,
+    //   cno,
+    //   HASH_KEY,
+    //   isWehagoLogin
+    // ) =>
+    //   dispatch(
+    //     UserActions.loginCheckRequest(
+    //       AUTH_A_TOKEN,
+    //       AUTH_R_TOKEN,
+    //       cno,
+    //       HASH_KEY,
+    //       isWehagoLogin
+    //     )
+    //   ),
+    // onLogout: () => dispatch(UserActions.logout()),
+    // setPermission: permission =>
+    //   dispatch(UserActions.setPermission(permission)),
+    // setSharingMode: () => dispatch(DocumentShareActions.setSharingMode()),
+    // setInitInfo: () => dispatch(WedriveAcionCreators.setInitInfo())
   };
 };
 

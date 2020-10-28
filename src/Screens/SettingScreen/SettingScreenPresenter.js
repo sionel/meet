@@ -3,20 +3,12 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
-  SafeAreaView,
   Image,
   KeyboardAvoidingView,
-  FlatList,
   Text,
   TextInput,
-  Button,
-  ImageBackground,
-  Dimensions,
-  Keyboard
 } from 'react-native';
-// 이건 좀 많이 추후에
-import test from '../../../assets/ttttest.png';
-import test1 from '../../../assets/Basic.png';
+
 import ButtonCamera from '../../../assets/buttons/btn_vc_camera_on.png';
 import ButtonCameraOff from '../../../assets/buttons/btn_vc_camera_off.png';
 import ButtonMic from '../../../assets/buttons/btn_vc_mike_on.png';
@@ -31,7 +23,6 @@ export default function SettingScreenPresenter({
   onToggleAudio,
   onToggleVideo,
   onSetName,
-  onBack
 }) {
   return (
     <KeyboardAvoidingView
@@ -161,47 +152,49 @@ export default function SettingScreenPresenter({
             <TouchableOpacity style={{ flex: 1 }}></TouchableOpacity>
           </View>
         </View>
-        {/* <View
-          style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '100%',
-            flex: 1
-          }}
-        >
-          <Text style={{ width: '100%', paddingLeft: 5 }}>{'이름 설정'}</Text>
-          <TextInput
-            ref={aaa => {
-              this.textInput = aaa;
-            }}
-            placeholder={'대화방에서 사용할 이름을 설정해주세요.'}
-            placeholderTextColor={'#999'}
+        {!true && (
+          <View
             style={{
-              borderColor: 'rgb(201,205,213)',
-              borderWidth: 1,
-              width: '100%',
-              height: 52,
-              marginVertical: 10,
-              paddingHorizontal: 5
-            }}
-            maxLength={20}
-            onChangeText={onSetName}
-            onBlur={() => {
-              console.log('@@@ehla');
-            }}
-            blurOnSubmit={true}
-          ></TextInput>
-          <Text
-            style={{
-              width: '100%',
-              paddingLeft: 5,
-              color: 'rgb(140,140,140)',
-              fontSize: 11
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '100%',
+              flex: 1
             }}
           >
-            {'입력하지 않을 경우, 기본값이 적용됩니다.(최대 20자 설정가능)'},
-          </Text>
-        </View> */}
+            <Text style={{ width: '100%', paddingLeft: 5 }}>{'이름 설정'}</Text>
+            <TextInput
+              ref={aaa => {
+                this.textInput = aaa;
+              }}
+              placeholder={'대화방에서 사용할 이름을 설정해주세요.'}
+              placeholderTextColor={'#999'}
+              style={{
+                borderColor: 'rgb(201,205,213)',
+                borderWidth: 1,
+                width: '100%',
+                height: 52,
+                marginVertical: 10,
+                paddingHorizontal: 5
+              }}
+              maxLength={20}
+              onChangeText={onSetName}
+              onBlur={() => {
+                console.log('@@@ehla');
+              }}
+              blurOnSubmit={true}
+            ></TextInput>
+            <Text
+              style={{
+                width: '100%',
+                paddingLeft: 5,
+                color: 'rgb(140,140,140)',
+                fontSize: 11
+              }}
+            >
+              {'입력하지 않을 경우, 기본값이 적용됩니다.(최대 20자 설정가능)'},
+            </Text>
+          </View>
+        )}
         <View
           style={{
             justifyContent: 'center',

@@ -61,7 +61,6 @@ class ConfigurationScreenContainer extends React.Component {
 
     return (
       <ConfigurationScreenPresenter
-        isWehagoLogin={this.props.isWehagoLogin}
         navigation={navigation}
         list={list}
         webView={webView}
@@ -100,9 +99,9 @@ class ConfigurationScreenContainer extends React.Component {
    */
   _handleLogout = async () => {
     // const { onLogout, navigation } = this.props;
-    const isWehagoLogin = this.props.isWehagoLogin;
+    const from = this.props.from;
     this.props.screenProps.onChangeRootState({destination: 'login'})
-    !isWehagoLogin && (await UserApi.logoutRequest(this.props.user));
+    from !== 'this' && (await UserApi.logoutRequest(this.props.user));
     this.props.onLogout();
     this.props.onSetInitialList();
     // navigation.navigate('Main');

@@ -11,7 +11,7 @@ export default function CompanySelect(props) {
 
   const selectedCompany = auth.last_company;
   const employee_list = auth.employee_list;
-  const isWehagoLogin = useSelector(state => state.user['isWehagoLogin']);
+  const from = useSelector(state => state.user['from']);
 
   const isSP = auth.last_company.membership_code === 'SP';
 
@@ -26,7 +26,7 @@ export default function CompanySelect(props) {
   };
 
   const onLogout = async () => {
-    !isWehagoLogin && (await UserApi.logoutRequest(auth));
+    from !== 'this' && (await UserApi.logoutRequest(auth));
     props.onLogout();
     props.onSetInitialList();
   };

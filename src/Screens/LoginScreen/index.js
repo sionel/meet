@@ -9,7 +9,7 @@ import { actionCreators as UserActions } from '../../redux/modules/user';
 // map state to props
 const mapStateToProps = state => ({
   auth: state.user.auth,
-  isWehagoLogin: state.user.isWehagoLogin,
+  from: state.user.from,
   permission: state.user.permission
 });
 
@@ -24,7 +24,7 @@ const mapDispatchToProps = dispatch => {
       AUTH_R_TOKEN,
       cno,
       HASH_KEY,
-      isWehagoLogin
+      from
     ) =>
       dispatch(
         UserActions.loginCheckRequest(
@@ -32,7 +32,7 @@ const mapDispatchToProps = dispatch => {
           AUTH_R_TOKEN,
           cno,
           HASH_KEY,
-          isWehagoLogin
+          from
         )
       ),
     onAgreement: () => dispatch(UserActions.agreement()),
