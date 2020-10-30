@@ -1,9 +1,9 @@
 import React from 'react';
 
 import { createAppContainer, createStackNavigator } from 'react-navigation';
-import LoginCheckScreen from '../Screens/LoginScreen';
+// import LoginCheckScreen from '../Screens/LoginScreen';
 import LoginInputScreen from '../Screens/LoginScreen/LoginInputScreen';
-import LoginScreen from '../Screens/LoginScreen/LoginScreenPresenter';
+import LoginScreen from '../Screens/LoginScreen';
 
 // const Login = props => {
 //   return (
@@ -48,8 +48,7 @@ const LoginNavigation = createStackNavigator(
      * Main Navigation
      */
     Login: {
-      screen: (props) => {
-
+      screen: props => {
         return (
           <LoginScreen
             onChangeRootState={props.screenProps.onChangeRootState}
@@ -64,7 +63,7 @@ const LoginNavigation = createStackNavigator(
       }
     },
     LoginInput: {
-      screen: (props) => {
+      screen: props => {
         return (
           <LoginInputScreen
             onChangeRootState={props.screenProps.onChangeRootState}

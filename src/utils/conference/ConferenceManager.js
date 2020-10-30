@@ -93,10 +93,6 @@ class ConferenceManager {
    * 연결을 해제한다.
    */
   dispose = async () => {
-    // 대화방 삭제 및 나오기
-    // if (this._apiManager) {
-    //   await this._apiManager.deleteUser();
-    // }
 
     if (this._conferenceConnector) {
       await this._conferenceConnector.dispose();

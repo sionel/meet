@@ -26,7 +26,7 @@ export default function CompanySelect(props) {
   };
 
   const onLogout = async () => {
-    from !== 'this' && (await UserApi.logoutRequest(auth));
+    from === 'this' && (await UserApi.logoutRequest(auth));
     props.onLogout();
     props.onSetInitialList();
   };

@@ -10,6 +10,7 @@ import ConferenceStatePresenter from './ConferenceStatePresenter';
 import { MeetApi } from '../../services';
 import Orientation from 'react-native-orientation-locker';
 import DeviceInfo from 'react-native-device-info';
+import { v4 as uuidv4 } from 'uuid';
 
 const { width, height } = Dimensions.get('window'); // TODO: 꼭 해야함
 const isTablet = DeviceInfo.isTablet();
@@ -25,34 +26,37 @@ class ConferenceStateContainer extends React.Component {
   }
 
   async componentDidMount() {
-    debugger;
-
+    // 로그인 된 상태서 접근
+    // 딥링크 모바일 접근
+    // 딥링크 웹 접근
+    // 딥링크 이메일 접근
+    // 참여코드 접근
+    const { params } = this.props.screenProps;
     let roomId;
     if (this.props.from === 'list') {
       roomId = this.props.navigation.state.params.item.roomId;
     } else {
-      roomId = this.props.screenProps.params.roomId;
+      roomId = params.roomId;
     }
+
+    const iscret =
+      params.accesstype !== 'email' && params.accesstype !== 'joincode';
 
     let { conferenceState } = this.state;
     this.roomId = roomId;
 
     let { auth } = this.props;
-    const accsess = await MeetApi.getMeetRoom(
-      auth.AUTH_A_TOKEN,
-      auth.AUTH_R_TOKEN,
-      auth.HASH_KEY,
-      roomId
-    );
-    this.roomName = accsess.resultData.name;
-    if (!accsess) {
+    const access = await MeetApi.getMeetRoomNoCert(roomId);
+    this.roomName = access.resultData.name;
+
+    if (!access) {
       // 종료된 방 또는 문제가 있을때
       conferenceState = 'deleted';
     } else {
-      if (accsess.resultData.r_start_datetime) {
+      if (access.resultData.r_start_datetime) {
         // 예약방
         const now = new Date().getTime();
-        const start = accsess.resultData.r_start_datetime;
+        const start = access.resultData.r_start_datetime;
         if (start - now >= 1800000) {
           // 30분 이상 남음
           // 180만 밀리세컨 = 30분
@@ -90,7 +94,7 @@ class ConferenceStateContainer extends React.Component {
       // 토큰받고
       // 접속
 
-      this._handleEnterConference(auth, roomId);
+      this._handleEnterConference(auth, roomId, iscret, params);
     } else if (conferenceState === 'reservationInfo') {
       // 참석자 정보 받고
       // 시작시간 종료시간 컨버팅 하고
@@ -100,18 +104,21 @@ class ConferenceStateContainer extends React.Component {
         r_start_datetime,
         r_end_datetime,
         is_public
-      } = accsess.resultData;
-
-      const accessUser = (
-        await MeetApi.getAccessUsers(
-          auth.AUTH_A_TOKEN,
-          auth.AUTH_R_TOKEN,
-          auth.HASH_KEY,
-          auth.last_access_company_no,
-          roomId
-        )
-      ).resultData;
+      } = access.resultData;
+      let accessUser = [];
+      if (Object.keys(auth).length > 0) {
+        accessUser = (
+          await MeetApi.getAccessUsers(
+            auth.AUTH_A_TOKEN,
+            auth.AUTH_R_TOKEN,
+            auth.HASH_KEY,
+            auth.last_access_company_no,
+            roomId
+          )
+        ).resultData;
+      }
       this.setState({
+        iscret,
         conferenceState,
         name,
         accessUser,
@@ -123,19 +130,21 @@ class ConferenceStateContainer extends React.Component {
       // 날짜 변환하고
       // setTimeout 걸어줌
       const now = new Date().getTime();
-      const start = accsess.resultData.r_start_datetime;
+      const start = access.resultData.r_start_datetime;
 
       this.enterTimer = setTimeout(() => {
         this._handleEnterConference(auth, roomId);
       }, start - now);
 
       this.setState({
+        iscret,
         conferenceState,
         start: dateFormat(start)
       });
     } else if (conferenceState === 'deleted') {
       // 그냥 던져
       this.setState({
+        iscret,
         conferenceState: conferenceState
       });
     }
@@ -145,7 +154,10 @@ class ConferenceStateContainer extends React.Component {
         orientation === 'LANDSCAPE' ||
         orientation === 'LANDSCAPE-LEFT' ||
         orientation === 'LANDSCAPE-RIGHT';
-      this.setState({ orientation: status ? 'horizontal' : 'vertical' });
+      this.setState({
+        iscret,
+        orientation: status ? 'horizontal' : 'vertical'
+      });
     });
     Orientation.addOrientationListener(this._handleOrientation);
   }
@@ -180,18 +192,25 @@ class ConferenceStateContainer extends React.Component {
     navigation.navigate('Home');
     navigation.navigate(url, param);
   };
-  _handleEnterConference = async (auth, roomId) => {
+  _handleEnterConference = async (auth, roomId, iscret, params) => {
     let callType = 3;
     let isCreator;
-    const participantList = (
-      await MeetApi.getParticipant(
-        auth.AUTH_A_TOKEN,
-        auth.AUTH_R_TOKEN,
-        auth.HASH_KEY,
-        auth.last_access_company_no,
-        roomId
-      )
-    ).resultData;
+
+    let participantList = [];
+    // 50명 체크는 여기서 하되 토큰받는 작업은 setting 페이지에서 함
+    if (iscret) {
+      participantList = (
+        await MeetApi.getParticipant(
+          auth.AUTH_A_TOKEN,
+          auth.AUTH_R_TOKEN,
+          auth.HASH_KEY,
+          auth.last_access_company_no,
+          roomId
+        )
+      ).resultData;
+    } else {
+      // 비인증 인원수
+    }
 
     // 최대 참여인원 제한 (50명)
     if (participantList.length >= 50) {
@@ -202,25 +221,14 @@ class ConferenceStateContainer extends React.Component {
         conferenceState: conferenceState
       });
     } else {
-      // 토큰받고
-      const roomToken = (
-        await MeetApi.getMeetRoomToken(
-          auth.AUTH_A_TOKEN,
-          auth.AUTH_R_TOKEN,
-          auth.HASH_KEY,
-          auth.last_access_company_no,
-          roomId
-        )
-      ).resultData;
-      // return
       this._handleRedirect('Setting', {
         item: {
           roomType: 'meet',
-          roomToken,
           videoRoomId: roomId,
           callType,
           isCreator,
-          selectedRoomName: this.roomName
+          selectedRoomName: this.roomName,
+          params
         }
       });
     }

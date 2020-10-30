@@ -13,7 +13,7 @@ import DeviceInfo from 'react-native-device-info';
 import { wehagoMainURL } from '../../../utils';
 
 export default function ReservationInfoScreen(props) {
-  const { name, accessUser, isPublic, start, end } = props;
+  const { name, accessUser, isPublic, start, end, iscret } = props;
   return (
     // <View style={styles.container}>
     <ScrollView
@@ -61,50 +61,65 @@ export default function ReservationInfoScreen(props) {
           <Text style={styles.text1}>{end}</Text>
         </View>
       </View>
-
-      <View style={styles.Participant}>
-        <Text style={styles.text4}>{`참여자정보 (${accessUser.length})`}</Text>
-      </View>
-      <FlatList
-        data={accessUser}
-        renderItem={({ item }) => {
-          const { user, user_name, user_type, profile_url } = item;
-          return (
-            <TouchableOpacity activeOpacity={1} style={styles.peopleComponent}>
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <View style={styles.profileCover}>
-                  <Image
-                    style={styles.profileImg}
-                    source={
-                      user_type === 1
-                        ? {
-                            uri: wehagoMainURL + profile_url
-                          }
-                        : {
-                            uri:
-                              'https://static.wehago.com/imgs/common/no_profile.png'
-                          }
-                    }
-                    resizeMode={'center'}
-                  />
-                </View>
-                <Text
-                  numberOfLines={1}
-                  ellipsizeMode={'tail'}
-                  style={styles.nameField}
+      {iscret ? (
+        <>
+          <View style={styles.Participant}>
+            <Text
+              style={styles.text4}
+            >{`참여자정보 (${accessUser.length})`}</Text>
+          </View>
+          <FlatList
+            data={accessUser}
+            renderItem={({ item }) => {
+              const { user, user_name, user_type, profile_url } = item;
+              return (
+                <TouchableOpacity
+                  activeOpacity={1}
+                  style={styles.peopleComponent}
                 >
-                  {user_type === 1 ? user_name : user}
-                </Text>
-                {/* {item.id === 'localUser' && (
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <View style={styles.profileCover}>
+                      <Image
+                        style={styles.profileImg}
+                        source={
+                          user_type === 1
+                            ? {
+                                uri: wehagoMainURL + profile_url
+                              }
+                            : {
+                                uri:
+                                  'https://static.wehago.com/imgs/common/no_profile.png'
+                              }
+                        }
+                        resizeMode={'center'}
+                      />
+                    </View>
+                    <Text
+                      numberOfLines={1}
+                      ellipsizeMode={'tail'}
+                      style={styles.nameField}
+                    >
+                      {user_type === 1 ? user_name : user}
+                    </Text>
+                    {/* {item.id === 'localUser' && (
                 <View style={[styles.presenter, { backgroundColor: '#fb0' }]}>
                   <Text style={styles.presenterText}>나</Text>
                 </View>
               )} */}
-              </View>
-            </TouchableOpacity>
-          );
-        }}
-      ></FlatList>
+                  </View>
+                </TouchableOpacity>
+              );
+            }}
+          ></FlatList>
+        </>
+      ):(
+      // <View style={styles.Participant}>
+      //   <Text
+      //     style={styles.text4}
+      //   >{'비회원은 참여자 정보를 볼 수 없습니다'}</Text>
+      // </View>
+      <></>
+      )}
     </ScrollView>
     // </View>
   );

@@ -48,7 +48,10 @@ class ConferenceScreenContainer extends React.Component {
    * componentDidMount
    */
   componentDidMount() {
-    const { navigation, user_name, auth, dispatch, screenProps } = this.props;
+    const { navigation, auth, dispatch, screenProps } = this.props;
+    
+    let user_name = this.props.navigation.state.params.item.name
+
     if (screenProps.destination === 'Conference') {
       this.callType = screenProps.params.call_type;
       this._handleCreateConnection(
@@ -166,7 +169,6 @@ class ConferenceScreenContainer extends React.Component {
    * componentWillUnmount
    */
   componentWillUnmount() {
-    debugger
     KeepAwake.deactivate();
     DeviceEventEmitter.removeListener(
       'ON_HOME_BUTTON_PRESSED',
@@ -238,7 +240,6 @@ class ConferenceScreenContainer extends React.Component {
         } else {
           roomId = this.props.screenProps.params.room_id
         }
-        debugger
         this._joinConference(
           roomId,
           user_name,
@@ -316,7 +317,8 @@ class ConferenceScreenContainer extends React.Component {
       screenProps.destination === 'Setting'
     ) {
       screenProps.onChangeRootState({
-        destination: 'login'
+        destination: 'Login',
+        params:{}
       });
     } else {
       navigation.goBack();
@@ -327,7 +329,6 @@ class ConferenceScreenContainer extends React.Component {
   _handleAppStateChange = nextAppState => {
     // PIP 모드에서는 appState가 변경되지 않는다.
     // 따라서 아래 로직은 PIP 모드를 지원하지 않을 때 동작한다.
-    debugger
     if (this._appState === 'active' && nextAppState !== 'active') {
       // this.setState({ pipMode: false });
       ToastAndroid.show('백그라운드에서 실행됩니다.', ToastAndroid.SHORT);

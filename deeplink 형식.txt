@@ -1,0 +1,47 @@
+// 위하고 앱
+"wehago.meet://
+?   is_creater  =   1
+&   call_type   =   1
+&   type        =   0
+&   room_id     =   ad_XHCIaBtF67rOsiHi_202010271513226vkdv
+&   owner_id    =   sadb0101
+&   owner_name  =   %EC%B5%9C%EC%9D%80%EC%9A%B0
+&   cno         =   9
+&   access      =   7l8MA4WpQHfeQXy3uEzMnUupqty5tZ"
+
+
+wehago.meet://
+? mPORTAL_ID    = sadb0101
+& mHASH_KEY     = 85202202888888818054225077194314727084
+& mAuth_r_token = atbjsjL1m7tgHCBHls0kMs5DpgriCU
+& mAuth_a_token = KGoOta3CosenXnSwP6T5J4I0ExfT35
+& cno           = 9
+
+// 비즈박스
+"wehago.meet://
+?   is_creater  =   9
+&   call_type   =   1
+&   room_id     =   pmlCKnEB_iwvyBQHtfl__1603081115619
+&   owner_name  =   %EC%B5%9C%EC%9D%80%EC%9A%B0"
+
+    auth = {
+      ...auth,
+      conferenceId,
+      user_name: externalData.owner_name,
+    };
+
+
+
+com.wehago.meet://
+?login_info=web
+&type=conference
+&mPORTAL_ID=sadb0101
+&mHASH_KEY=60183042527577616866728669482958770213
+&mAuth_r_token=rkw9pfvCIm1Rd1WVBQOXlNHfZBIitM
+&mAuth_a_token=pzMTavd7ZBDIwSc6Yh10wKxdZnBxP2
+&cno=9
+&video_id=111
+
+com.wehago.meet://?login_info=web&type=conference&mPORTAL_ID=sadb0101&mHASH_KEY=250225457919518237896475074429028380236&mAuth_r_token=nXW4yLhDwJ3SPYwcekCyUDpUdhZlXR&mAuth_a_token=mVROYYM4M23GHrjfDOC3sJHZ80da48&cno=9&video_id=111
+
+wehago.meet://?login_info=email&type=conference&token=Gj2EWgBeA3tpu4zEu8PdzIynaha

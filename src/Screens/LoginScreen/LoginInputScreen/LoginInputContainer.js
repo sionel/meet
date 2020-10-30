@@ -73,18 +73,18 @@ export default function LoginInputContainer(props) {
       UserActions.setPermission(isDeploy);
 
       props.onChangeRootState({
-        destination: isPurchase ? 'list' : 'company'
+        destination: isPurchase ? 'List' : 'SelectCompany'
       });
     } else if (statusCheck && statusCheck.code === 400) {
       // 회사에 이상이 있을 경우, 회사 선택 화면으로 이동
       Alert.alert('알림', statusCheck.message);
       props.onChangeRootState({
-        destination: 'company'
+        destination: 'SelectCompany'
       });
     } else {
       // 중간에 알 수 없는 오류 발생 시
       props.onChangeRootState({
-        destination: 'company'
+        destination: 'SelectCompany'
       });
     }
   };

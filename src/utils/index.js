@@ -73,7 +73,6 @@ export const querystringParser = url => {
  * @param {*} HASH_KEY
  */
 export const securityRequest = (a_token, r_token, url, HASH_KEY) => {
-  // a_token, r_token, url, HASH_KEY 모두 값이 안들어옴 >> ApiManager.js/_makeHeaders()
 
   const transactionId = _getTransactionId();
   const clientId = OSID;

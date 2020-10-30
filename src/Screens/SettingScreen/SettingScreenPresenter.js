@@ -23,6 +23,7 @@ export default function SettingScreenPresenter({
   onToggleAudio,
   onToggleVideo,
   onSetName,
+  nameField
 }) {
   return (
     <KeyboardAvoidingView
@@ -152,7 +153,7 @@ export default function SettingScreenPresenter({
             <TouchableOpacity style={{ flex: 1 }}></TouchableOpacity>
           </View>
         </View>
-        {!true && (
+        {nameField && (
           <View
             style={{
               justifyContent: 'center',

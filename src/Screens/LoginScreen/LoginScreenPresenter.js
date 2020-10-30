@@ -15,52 +15,45 @@ import {
 
 import CustomIcon from '../../components/CustomIcon';
 import { Text } from '../../components/StyledText';
-import { getLoginType } from './ServiceCodeConverter';
 
-import { WEHAGO_TYPE, WEHAGO_ENV } from '../../../config';
+export default function LoginScreenPresenter(props) {
+  const { onWehagoLogin, onInputCode } = props;
+  let refs = [];
+  // let _serviceCode;
 
-const iswehagov = WEHAGO_ENV === 'WEHAGOV';
+  // if (iswehagov) {
+  //   _serviceCode = Platform.OS === 'ios' ? 'wehagovmeet' : 'meetv';
+  // } else {
+  //   _serviceCode = Platform.OS === 'ios' ? 'wehagomeet' : 'meet';
+  // }
 
-export default function LoginScreen(props) {
-  let ref1, ref2, ref3, ref4, ref5, ref6;
-  
-  const _inputCode = code => {};
-  let _serviceCode;
+  // const _handleLoginForWehago = () => {
+  //   const iosUrl = `wehago${iswehagov ? 'v' : ''}://?${_serviceCode}=login`;
+  //   const androidUrl = `wehago${
+  //     iswehagov ? 'v' : ''
+  //   }://app?name=${_serviceCode}&login=true`;
+  //   const iosMarketURL = iswehagov
+  //     ? 'https://www.wehagov.com/#/mobile'
+  //     : 'http://itunes.apple.com/kr/app/wehago/id1363039300?mt=8';
+  //   const androidMarketURL = iswehagov
+  //     ? 'https://www.wehagov.com/#/mobile'
+  //     : 'https://play.google.com/store/apps/details?id=com.duzon.android.lulubizpotal';
 
-  if (iswehagov) {
-    _serviceCode = Platform.OS === 'ios' ? 'wehagovmeet' : 'meetv';
-  } else {
-    _serviceCode = Platform.OS === 'ios' ? 'wehagomeet' : 'meet';
-  }
-
-  const _handleLoginForWehago = () => {
-    const iosUrl = `wehago${iswehagov ? 'v' : ''}://?${_serviceCode}=login`;
-    const androidUrl = `wehago${
-      iswehagov ? 'v' : ''
-    }://app?name=${_serviceCode}&login=true`;
-    const iosMarketURL = iswehagov
-      ? 'https://www.wehagov.com/#/mobile'
-      : 'http://itunes.apple.com/kr/app/wehago/id1363039300?mt=8';
-    const androidMarketURL = iswehagov
-      ? 'https://www.wehagov.com/#/mobile'
-      : 'https://play.google.com/store/apps/details?id=com.duzon.android.lulubizpotal';
-
-    Linking.openURL(Platform.OS === 'ios' ? iosUrl : androidUrl).catch(err => {
-      Linking.openURL(
-        Platform.OS === 'ios' ? iosMarketURL : androidMarketURL
-      ).catch(err => {
-        Alert.alert(
-          '스토어에서 해당 앱을 찾을 수 없습니다.',
-          '',
-          [{ text: 'OK' }],
-          {
-            cancelable: true
-          }
-        );
-      });
-    });
-  };
-
+  //   Linking.openURL(Platform.OS === 'ios' ? iosUrl : androidUrl).catch(err => {
+  //     Linking.openURL(
+  //       Platform.OS === 'ios' ? iosMarketURL : androidMarketURL
+  //     ).catch(err => {
+  //       Alert.alert(
+  //         '스토어에서 해당 앱을 찾을 수 없습니다.',
+  //         '',
+  //         [{ text: 'OK' }],
+  //         {
+  //           cancelable: true
+  //         }
+  //       );
+  //     });
+  //   });
+  // };
   return (
     <ImageBackground
       source={require('../../../assets/bgIntroWehagoIphoneX_3x.png')}
@@ -92,40 +85,81 @@ export default function LoginScreen(props) {
             }}
           >
             <TextInput
+              onFocus={() => {
+                onInputCode('*', 0);
+                refs[0].clear();
+              }}
               style={styles.inputNumber}
               maxLength={1}
-              ref={ref1}
-              onChangeText={_inputCode}
+              ref={ref => (refs[0] = ref)}
+              onChangeText={code => {
+                onInputCode(code, 0);
+                refs[1].focus();
+              }}
             />
             <TextInput
+              onFocus={() => {
+                onInputCode('*', 1);
+                refs[1].clear();
+              }}
               style={styles.inputNumber}
               maxLength={1}
-              ref={ref2}
-              onChangeText={_inputCode}
+              ref={ref => (refs[1] = ref)}
+              onChangeText={code => {
+                onInputCode(code, 1);
+                refs[2].focus();
+              }}
             />
             <TextInput
+              onFocus={() => {
+                onInputCode('*', 2);
+                refs[2].clear();
+              }}
               style={styles.inputNumber}
               maxLength={1}
-              ref={ref3}
-              onChangeText={_inputCode}
+              ref={ref => (refs[2] = ref)}
+              onChangeText={code => {
+                onInputCode(code, 2);
+                refs[3].focus();
+              }}
             />
             <TextInput
+              onFocus={() => {
+                onInputCode('*', 3);
+                refs[3].clear();
+              }}
               style={styles.inputNumber}
               maxLength={1}
-              ref={ref4}
-              onChangeText={_inputCode}
+              ref={ref => (refs[3] = ref)}
+              onChangeText={code => {
+                onInputCode(code, 3);
+                refs[4].focus();
+              }}
             />
             <TextInput
+              onFocus={() => {
+                onInputCode('*', 4);
+                refs[4].clear();
+              }}
               style={styles.inputNumber}
               maxLength={1}
-              ref={ref5}
-              onChangeText={_inputCode}
+              ref={ref => (refs[4] = ref)}
+              onChangeText={code => {
+                onInputCode(code, 4);
+                refs[5].focus();
+              }}
             />
             <TextInput
+              onFocus={() => {
+                onInputCode('*', 5);
+                refs[5].clear();
+              }}
               style={styles.inputNumber}
               maxLength={1}
-              ref={ref6}
-              onChangeText={_inputCode}
+              ref={ref => (refs[5] = ref)}
+              onChangeText={code => {
+                onInputCode(code, 5);
+              }}
             />
           </View>
           <View
@@ -153,7 +187,7 @@ export default function LoginScreen(props) {
             activeOpacity={0.6}
             underlayColor={'#197cdc88'}
             onPress={() => {
-              _handleLoginForWehago();
+              onWehagoLogin();
             }}
             style={styles.loginButton}
           >
@@ -194,13 +228,13 @@ export default function LoginScreen(props) {
   );
 }
 
-LoginScreen.defaultProps = {
-  wehagoType: 'WEHAGO',
-  serviceCode: '',
-  text1: '',
-  text2: '',
-  onManualLogin: () => {}
-};
+// LoginScreen.defaultProps = {
+//   wehagoType: 'WEHAGO',
+//   serviceCode: '',
+//   text1: '',
+//   text2: '',
+//   onManualLogin: () => {}
+// };
 
 const styles = StyleSheet.create({
   container: {

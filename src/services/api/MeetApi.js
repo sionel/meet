@@ -4,12 +4,9 @@
  * 참조 : http://wiki.duzon.com:8080/display/sky/3.+API
  */
 
-import {
-  meetURL,
-  securityRequest,
-  wehagoBaseURL0
-} from '../../utils';
+import { meetURL, securityRequest, wehagoBaseURL0 } from '../../utils';
 import * as CryptoJS from 'crypto-js';
+import { v4 as uuidv4 } from 'uuid';
 
 const getToken = async accessUrl => {
   try {
@@ -23,32 +20,6 @@ const getToken = async accessUrl => {
     const response = await fetch(url, data);
     return response.json();
   } catch (err) {
-    return false;
-  }
-};
-
-const getSignature = async accessUrl => {
-  try {
-    const date = new Date().getTime();
-    accessUrl = `/video${accessUrl}?timestamp=${date}`;
-    const url = `${wehagoBaseURL0}/get_token/?url=${accessUrl}`;
-    const data = {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-      }
-    };
-    const response = await fetch(url, data);
-    const responseJson = await response.json();
-
-    const encText = accessUrl + responseJson.cur_date + responseJson.token;
-    const hashText = CryptoJS.SHA256(encText);
-    const signature = CryptoJS.enc.Base64.stringify(hashText);
-    return signature;
-  } catch (err) {
-    if (err.message === 'timeout') {
-      Alert.alert('네트워크가 불안정합니다.', '잠시후 다시 시도해주세요.');
-    }
     return false;
   }
 };
@@ -103,6 +74,33 @@ export default {
       return response.json();
     } catch (err) {
       console.warn('2.getMeetRoom : ', err);
+      return false;
+    }
+  },
+  // 3-2-2 화상회의방 상세 조회
+  getMeetRoomNoCert: async roomId => {
+    const accsessUrl = `/video/room?room=${roomId}`;
+    const token = await getToken(accsessUrl);
+    const encText = accsessUrl + token.cur_date + token.token;
+    const hashText = CryptoJS.SHA256(encText);
+    const signature = CryptoJS.enc.Base64.stringify(hashText);
+    const url = `${wehagoBaseURL0}${accsessUrl}`;
+    try {
+      const data = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          signature: signature
+        }
+      };
+
+      const response = await fetch(url, data);
+      if (response.status !== 200) {
+        throw await response.json();
+      }
+      return response.json();
+    } catch (err) {
+      console.warn('3-2-2.getMeetRoomNoCert : ', err);
       return false;
     }
   },
@@ -235,7 +233,75 @@ export default {
       return false;
     }
   },
+  // 3-12-2 화상회의 토큰 생성 (email)
+  getMeetRoomTokenEmail: async (room, emailToken, username) => {
+    const accsessUrl = `/video/token`;
+    const token = await getToken(accsessUrl);
+    const encText = accsessUrl + token.cur_date + token.token;
+    const hashText = CryptoJS.SHA256(encText);
+    const signature = CryptoJS.enc.Base64.stringify(hashText);
+    const url = `${wehagoBaseURL0}${accsessUrl}`;
 
+    try {
+      const data = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          signature
+        },
+        body: JSON.stringify({
+          room,
+          token: emailToken,
+          username
+        })
+      };
+
+      const response = await fetch(url, data);
+      if (response.status !== 200) {
+        throw response.resultCode;
+      }
+      return response.json();
+    } catch (err) {
+      console.warn('12.getMeetRoomToken : ', err);
+      return false;
+    }
+  },
+  // 3-12-3 화상회의 토큰 생성 (joincode)
+  getMeetRoomTokenJoincode: async (room, joincode, username) => {
+    const randomstring = uuidv4();
+
+    const accsessUrl = `/video/token`;
+    const token = await getToken(accsessUrl);
+    const encText = accsessUrl + token.cur_date + token.token;
+    const hashText = CryptoJS.SHA256(encText);
+    const signature = CryptoJS.enc.Base64.stringify(hashText);
+    const url = `${wehagoBaseURL0}${accsessUrl}`;
+
+    try {
+      const data = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          signature
+        },
+        body: JSON.stringify({
+          room,
+          joincode,
+          username,
+          user: randomstring.substr(0, 8)
+        })
+      };
+
+      const response = await fetch(url, data);
+      if (response.status !== 200) {
+        throw response.resultCode;
+      }
+      return response.json();
+    } catch (err) {
+      console.warn('12-3 getMeetRoomTokenJoincode : ', err);
+      return false;
+    }
+  },
   // 3-13 화상회의 접속
   enterMeetRoom: async (a_token, r_token, HASH_KEY, token, videoseq) => {
     const url = `${meetURL}/connect`;
@@ -315,6 +381,37 @@ export default {
       };
 
       const response = await fetch(url, data);
+      if (response.status !== 200) {
+        throw await response.json();
+      }
+      return response.json();
+    } catch (err) {
+      console.warn('21.checkNotice : ', err);
+      return false;
+    }
+  },
+
+  // 3-22 화상회의 접속코드 검색
+  searchJoincode: async joincode => {
+    const accsessUrl = `/video/joincode/search?joincode=${joincode}`;
+    const token = await getToken(accsessUrl);
+    const encText = accsessUrl + token.cur_date + token.token;
+    const hashText = CryptoJS.SHA256(encText);
+    const signature = CryptoJS.enc.Base64.stringify(hashText);
+    const url = `${wehagoBaseURL0}${accsessUrl}`;
+    debugger;
+
+    try {
+      const data = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          signature
+        }
+      };
+
+      const response = await fetch(url, data);
+      debugger;
       if (response.status !== 200) {
         throw await response.json();
       }

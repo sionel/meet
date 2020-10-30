@@ -53,7 +53,7 @@ class MainContainer extends Component {
     //   this._handleGetWehagoToken(this.props.url);
     // }
     // if (Platform.OS === 'ios') {
-    //   Linking.addEventListener('url', this._handleGetWehagoToken);
+    
     // }
   }
 

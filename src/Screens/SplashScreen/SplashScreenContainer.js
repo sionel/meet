@@ -13,6 +13,7 @@ import { MeetApi, ServiceCheckApi } from '../../services';
 import RNRestart from 'react-native-restart';
 
 import { querystringParser } from '../../utils';
+import jwt_decode from 'jwt-decode';
 
 const JailMonkey =
   Platform.OS === 'android' && WEHAGO_ENV === 'WEHAGOV'
@@ -38,8 +39,6 @@ class SplashScreenContainer extends Component {
   };
 
   componentDidMount = async () => {
-    // 아무런 조치를 못하고 있으면 그냥 5초뒤 로그인 페이지로 이동
-
     // 강제종료 했을때를 위한 강제 초기화
     this.props.setInitInfo();
     this.props.setSharingMode();
@@ -49,11 +48,13 @@ class SplashScreenContainer extends Component {
     result = await this._handleCheckSecurity();
     if (!result) return;
 
-    this.props.url.url =
-      'wehago.meet://?login_info=email&type=conference&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ2aWRlby53ZWhhZ28uY29tIiwicm9vbSI6ImIxNTA5MWMxLTJhY2QtNDdmNi1hYTdjLTZhOTRkZjBlNWExNyIsImVtYWlsIjoic2FkYjAxMDFAbmF2ZXIuY29tIiwiaWF0IjoxNjAzODc0NjYyLCJleHAiOjE5MTkyMzQ2NjJ9.MAb1qLAbkjdF3GKk5iZe-9UErD2Lh4Jjac4LKIDRRdE';
+    // this.props.url.url =
+    //   'wehago.meet://?login_info=email&type=conference&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ2aWRlby53ZWhhZ28uY29tIiwicm9vbSI6ImMwMGE0ZTRmLWU1MGUtNDZkYy1hMWM3LTRkMmJlNjEyMTA4MCIsImVtYWlsIjoic2FkYjAxMDFAbmF2ZXIuY29tIiwiaWF0IjoxNjAzOTM5NTkyLCJleHAiOjE5MTkyOTk1OTJ9.1gQzLWSb-8CQSQI0ghnwxjuk9KE4PyS9mfyxOqAN84U';
     // 'com.wehago.meet://?login_info=web&type=conference&mPORTAL_ID=sadb0101&mHASH_KEY=250225457919518237896475074429028380236&mAuth_r_token=nXW4yLhDwJ3SPYwcekCyUDpUdhZlXR&mAuth_a_token=mVROYYM4M23GHrjfDOC3sJHZ80da48&cno=9&video_id=111';
+
     if (this.props.url.url) await this._handleGetDeeplink(this.props.url);
     else this._handleInit();
+    Linking.addEventListener('url', this._handleGetDeeplink);
   };
 
   componentWillUnmount = () => {
@@ -318,54 +319,38 @@ class SplashScreenContainer extends Component {
         ]
       );
       return;
-    } else if (result.login_info === 'mobile') {
-      // 로그인 정보 보관
-      const proceed = await this._compareMeetToOtherLoginInfo(result, 'mobile');
-      if (!proceed) return;
-
-      // 로그인 진행
-      flag = await this._handleSaveUserinfo(
-        result.mAuth_a_token,
-        result.mAuth_r_token,
-        result.mHASH_KEY,
-        result.cno
-      );
-      if (flag) {
-        this.props.onChangeRootState({
-          loaded: true,
-          destination: 'Setting'
-        });
-      } else {
-        this.props.onChangeRootState({
-          loaded: true,
-          destination: 'Login'
-        });
-      }
     } else if (result.login_info === 'web') {
       // 일회성 로그인 처리
-      const proceed = await this._compareMeetToOtherLoginInfo(result, 'web');
+      let proceed = await this._compareMeetToOtherLoginInfo(result, 'web');
       if (!proceed) return;
 
-      if (proceed === 'same') {
-        // 자동 로그인 체크해야하는데 그냥 빼버림 너무 꼬여있음... 다시 리펙토링이 필요해...
-        this.props.onChangeRootState({
-          loaded: true,
-          destination: 'Setting',
-          params: { roomId: result.video_id }
-        });
-      }
+      // if (proceed === 'same') {
+      //   // 자동 로그인 체크해야하는데 그냥 빼버림 너무 꼬여있음... 다시 리펙토링이 필요해...
+      //   this.props.onChangeRootState({
+      //     loaded: true,
+      //     destination: 'Setting',
+      //     params: {
+      //       accesstype: 'web',
+      //       roomId: result.video_id
+      //     }
+      //   });
+      //   return;
+      // }
       flag = await this._handleSaveUserinfo(
         result.mAuth_a_token,
         result.mAuth_r_token,
         result.mHASH_KEY,
         result.cno,
-        'web'
+        proceed === 'same' ? 'this' : 'web'
       );
       if (flag) {
         this.props.onChangeRootState({
           loaded: true,
           destination: 'Setting',
-          params: { roomId: result.video_id }
+          params: {
+            accesstype: 'web',
+            roomId: result.video_id
+          }
         });
       } else {
         this.props.onChangeRootState({
@@ -375,11 +360,65 @@ class SplashScreenContainer extends Component {
       }
     } else if (result.login_info === 'email') {
       // 이메일 접근
+      let decoded = jwt_decode(result.token);
+      /* 
+      email: "sadb0101@naver.com"
+      exp: 1919234662
+      iat: 1603874662
+      room: "b15091c1-2acd-47f6-aa7c-6a94df0e5a17"
+      sub: "video.wehago.com"
+      */
       this.props.onChangeRootState({
         loaded: true,
         destination: 'Setting',
-        params: { token: result.token }
+        params: {
+          roomId: decoded.room,
+          accesstype: 'email',
+          token: result.token
+        }
       });
+    } else {
+      // 로그인 정보 보관
+      let proceed = await this._compareMeetToOtherLoginInfo(result, 'mobile');
+      if (!proceed) return;
+
+      flag = await this._handleSaveUserinfo(
+        result.mAuth_a_token,
+        result.mAuth_r_token,
+        result.mHASH_KEY,
+        result.cno
+      );
+
+      if (result.type === 'conference' || result.type === 'screen') {
+        if (flag) {
+          this.props.onChangeRootState({
+            loaded: true,
+            destination: 'Setting',
+            params: {
+              accesstype: 'mobile',
+              roomId: result.video_id
+            }
+          });
+        } else {
+          this.props.onChangeRootState({
+            loaded: true,
+            destination: 'Login'
+          });
+        }
+      } else {
+        if (flag) {
+          this.props.onChangeRootState({
+            loaded: true,
+            destination: 'List'
+          });
+        } else {
+          this.props.onChangeRootState({
+            loaded: true,
+            destination: 'Login'
+          });
+        }
+      }
+      // 로그인 진행
     }
   };
   _compareMeetToOtherLoginInfo = async (result, from) => {
@@ -435,7 +474,7 @@ class SplashScreenContainer extends Component {
     );
     if (result.errors) {
       if (result.errors.code === 'E002') {
-        Alert.alert('Login', '토큰 정보가 로그아웃 하였습니다.');
+        Alert.alert('Login', '토큰 정보가 만료되었습니다.');
       } else if (result.errors.status === '400') {
         Alert.alert('Login', '로그인 정보가 잘못되었습니다.');
       } else if (result.errors.status === '401') {
@@ -503,75 +542,13 @@ class SplashScreenContainer extends Component {
     }
   };
 
-  _handleCheckConference = async (
-    // 외부 (위하고 앱) 에서 접근할때 만 여기로 오게 됨
-    params
-  ) => {
-    // let { auth } = this.props;
-    // // 위하고(외부)에서 접속인지 아닌지 구분
-    // auth = {
-    //   ...auth,
-    //   conferenceId: params.room_id,
-    //   portal_id: params.owner_id,
-    //   user_name: params.owner_name,
-    //   last_access_company_no: params.cno,
-    //   AUTH_A_TOKEN: params.access
-    // };
-    let videoRoomId = params.room_id;
-    let callType = params.call_type; // 1:화상 / 2:음성
-    let isCreator = params.is_creater; // 0:생성자 / 1:참여자 / 9:비즈박스알파
-    let timestamp = params.timestamp;
-    this.props.onChangeRootState({
-      loaded: true,
-      destination: 'Setting',
-      params: {
-        item: {
-          videoRoomId,
-          callType,
-          isCreator,
-          timestamp
-        },
-        auth: {
-          conferenceId: params.room_id,
-          portal_id: params.owner_id,
-          user_name: params.owner_name,
-          last_access_company_no: params.cno,
-          AUTH_A_TOKEN: params.access
-        }
-      }
-    });
-
-    // this._handleRedirect('Conference', {
-    /* 
-      여기서 막힘
-      여기는 네비게이션으로 묶여있지 않기때문에 navigation을 쓸수가 없음
-      여기서 모든 걸 처리 한 뒤 main으로 넘겨서 각각 네비게이션을 이용하던가 해야함
-      여기서 해야하는것
-      버전, 노티 확인후 다이얼로그 띄워주기
-      딥링크 처리
-      (로그인 or 화상대화 입장)
-      main에서 처리해야할게
-      로그인이 안되어 있으면 로그인 페이지를 보여준다
-      로그인 되어있으면 리스트 창으로
-      로그인 없이 화상대화면 화상대화방으로
-      참여코드일경우 설정창으로
-      꼭꼭 여길 보자ㅌ
-      */
-    //   item: {
-    //     videoRoomId,
-    //     callType,
-    //     isCreator
-    //   }
-    // });
-  };
-
   _handleOnAlert = type => {
     return new Promise((resolve, reject) => {
       let description = '';
       let actions = [];
       let onClose = this._handleOnCloseAlert;
 
-      description = '토큰 정보가 로그아웃 하였습니다.';
+      description = '토큰 정보가 만료되었습니다.';
       onClose = async () => {
         this._handleOnCloseAlert(
           () =>

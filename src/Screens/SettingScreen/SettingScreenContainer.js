@@ -4,6 +4,7 @@ import SettingScreenPresenter from './SettingScreenPresenter';
 import JitsiMeetJS from '../../../jitsi/features/base/lib-jitsi-meet';
 import config from '../../utils/conference/config';
 import Orientation from 'react-native-orientation-locker';
+import { MeetApi } from '../../services';
 
 const commonStyle = {
   height: 53,
@@ -17,13 +18,15 @@ class SettingScreenContainer extends React.Component {
     this.state = {
       name: '',
       tracks: [],
-      orientation: undefined
+      orientation: undefined,
+      nameField: false
     };
   }
 
   async componentDidMount() {
     this._init();
     let tracks = await this._getTrack();
+    let accesstype = this.props.screenProps.params.accesstype;
 
     if (Platform.OS !== 'ios') {
       Orientation.lockToPortrait();
@@ -39,7 +42,8 @@ class SettingScreenContainer extends React.Component {
     Orientation.addOrientationListener(this._handleOrientation);
 
     this.setState({
-      tracks
+      tracks,
+      nameField: accesstype === 'email' || accesstype === 'joincode'
     });
   }
 
@@ -49,11 +53,12 @@ class SettingScreenContainer extends React.Component {
   }
 
   render() {
-    const { tracks, name, orientation } = this.state;
+    const { tracks, name, orientation, nameField } = this.state;
     return (
       <SettingScreenPresenter
         tracks={tracks}
         name={name}
+        nameField={nameField}
         orientation={orientation}
         onConferenceEnter={this._handleConferenceEnter}
         onToggleAudio={this._handleToggleAudio}
@@ -84,17 +89,40 @@ class SettingScreenContainer extends React.Component {
     return [videoTrack, audioTrack];
   };
 
-  _handleConferenceEnter = () => {
+  _handleConferenceEnter = async () => {
     const { navigation, auth, webAuth } = this.props;
     const item = navigation.state.params.item;
-
     let { tracks, name } = this.state;
+    const params = item.params;
     if (!name) {
       name = webAuth?.user_name ? webAuth?.user_name : auth.user_name;
     }
+    let roomToken;
+
+    if (params.accesstype === 'email') {
+      roomToken = (
+        await MeetApi.getMeetRoomTokenEmail(params.roomId, params.token, name)
+      ).resultData;
+    } else if (item?.params?.accesstype === 'joincode') {
+      roomToken = (
+        await MeetApi.getMeetRoomTokenJoincode(params.roomId, params.joincode, name)
+      ).resultData;
+    } else {
+      // 토큰받고
+      roomToken = (
+        await MeetApi.getMeetRoomToken(
+          auth.AUTH_A_TOKEN,
+          auth.AUTH_R_TOKEN,
+          auth.HASH_KEY,
+          auth.last_access_company_no,
+          roomId
+        )
+      ).resultData;
+    }
+    
     // this.props.navigation.navigate('Home'); replace가 문제 없으면 삭제
     navigation.replace('Conference', {
-      item: { tracks, name, ...item }
+      item: { tracks, roomToken, name, ...item }
     });
   };
   _handleToggleVideo = async () => {

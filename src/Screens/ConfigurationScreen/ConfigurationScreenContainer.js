@@ -100,8 +100,8 @@ class ConfigurationScreenContainer extends React.Component {
   _handleLogout = async () => {
     // const { onLogout, navigation } = this.props;
     const from = this.props.from;
-    this.props.screenProps.onChangeRootState({destination: 'login'})
-    from !== 'this' && (await UserApi.logoutRequest(this.props.user));
+    this.props.screenProps.onChangeRootState({destination: 'Login'})
+    from === 'this' && (await UserApi.logoutRequest(this.props.user));
     this.props.onLogout();
     this.props.onSetInitialList();
     // navigation.navigate('Main');
