@@ -79,9 +79,7 @@ class LoginScreenContainer extends Component {
   _enterConference = async joincode => {
     const result = await MeetApi.searchJoincode(joincode);
     if (!result) {
-      Aalert(
-        '요청된 작업을 처리하던중 문제가 발생했습니다. 다시 시도해 주세요'
-      );
+      Alert.alert('개발예정','비인증 api 추가되면 바로 넣을겁니다.')
     } else if (result.resultData.code === 'E00001') {
       Alert.alert('알림', '존재하지 않는 접속코드 입니다.');
     } else {

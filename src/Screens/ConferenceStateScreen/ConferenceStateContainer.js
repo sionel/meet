@@ -210,6 +210,7 @@ class ConferenceStateContainer extends React.Component {
       ).resultData;
     } else {
       // 비인증 인원수
+      Alert.alert('개발예정','비인증 api 추가되면 바로 넣을겁니다.')
     }
 
     // 최대 참여인원 제한 (50명)

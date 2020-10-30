@@ -1,28 +1,30 @@
 // 위하고 앱
 "wehago.meet://
-?   is_creater  =   1
-&   call_type   =   1
-&   type        =   0
-&   room_id     =   ad_XHCIaBtF67rOsiHi_202010271513226vkdv
-&   owner_id    =   sadb0101
-&   owner_name  =   %EC%B5%9C%EC%9D%80%EC%9A%B0
-&   cno         =   9
-&   access      =   7l8MA4WpQHfeQXy3uEzMnUupqty5tZ"
+?   is_creater    =   1
+&   call_type     =   1
+&   type          =   0
+&   room_id       =   ad_XHCIaBtF67rOsiHi_202010271513226vkdv
+&   owner_id      =   sadb0101
+&   owner_name    =   %EC%B5%9C%EC%9D%80%EC%9A%B0
+&   cno           =   9
+&   access        =   7l8MA4WpQHfeQXy3uEzMnUupqty5tZ"
+
+"wehago.meet://?is_creater=1&call_type=1&type=0&room_id=ad_yEFNRUFejACKvtcY_202010301318375zt13&owner_id=sadb0101&owner_name=EC%B5%9C%EC%9D%80%EC%9A%B0&cno=9&access=fHnxfMYHiZHHHNMhLuMsZL8LDamgv1"
 
 
 wehago.meet://
-? mPORTAL_ID    = sadb0101
-& mHASH_KEY     = 85202202888888818054225077194314727084
-& mAuth_r_token = atbjsjL1m7tgHCBHls0kMs5DpgriCU
-& mAuth_a_token = KGoOta3CosenXnSwP6T5J4I0ExfT35
-& cno           = 9
+?   mPORTAL_ID    = sadb0101
+&   mHASH_KEY     = 85202202888888818054225077194314727084
+&   mAuth_r_token = atbjsjL1m7tgHCBHls0kMs5DpgriCU
+&   mAuth_a_token = KGoOta3CosenXnSwP6T5J4I0ExfT35
+&   cno           = 9
 
 // 비즈박스
 "wehago.meet://
-?   is_creater  =   9
-&   call_type   =   1
-&   room_id     =   pmlCKnEB_iwvyBQHtfl__1603081115619
-&   owner_name  =   %EC%B5%9C%EC%9D%80%EC%9A%B0"
+?   is_creater    =   9
+&   call_type     =   1
+&   room_id       =   pmlCKnEB_iwvyBQHtfl__1603081115619
+&   owner_name    =   %EC%B5%9C%EC%9D%80%EC%9A%B0"
 
     auth = {
       ...auth,

@@ -525,60 +525,6 @@ class HomeScreenContainer extends Component {
     }
     this.setState({ appState: nextAppState });
   };
-
-  _checkUpdateVersion = async auth => {
-    // 버전정보를 확인학 업데이트 다이얼로그를 띄우는 곳
-    // 버전정보를 현명하게 보관하고 있지 않으므로 어쩔수없이 강제로 바꿔주도록 한다...
-    const ios = '1.25.2';
-    const android = '1.7.2';
-    const ios_m = '0';
-    const android_m = '0';
-
-    const result = await MeetApi.checkVersion(
-      auth.AUTH_A_TOKEN,
-      auth.AUTH_R_TOKEN,
-      auth.HASH_KEY
-    );
-
-    const {
-      ios_version,
-      android_version,
-      ios_m_version,
-      android_m_version
-    } = result.resultData;
-    if (ios_m_version !== ios_m || android_m_version !== android_m) {
-      return await Alert.alert('업데이트', '해당 버전은 더이상 지원하지 않습니다.', [
-        {
-          text: '업데이트',
-          onPress: () => {
-            const os = Platform.OS;
-            Linking.openURL(
-              os === 'ios'
-                ? 'https://itunes.apple.com/app/id1455726925?mt=8'
-                : 'https://play.google.com/store/apps/details?id=com.wehago.meet'
-            );
-          }
-        }
-      ]);
-    } else if (ios_version !== ios || android_version !== android) {
-      return await Alert.alert('업데이트', '최신 버전 업데이트가 존재합니다.', [
-        {
-          text: '업데이트',
-          onPress: () => {
-            const os = Platform.OS;
-            Linking.openURL(
-              os === 'ios'
-                ? 'https://itunes.apple.com/app/id1455726925?mt=8'
-                : 'https://play.google.com/store/apps/details?id=com.wehago.meet'
-            );
-          }
-        },
-        {
-          text: '취소'
-        }
-      ]);
-    }
-  };
 }
 // #endregion
 

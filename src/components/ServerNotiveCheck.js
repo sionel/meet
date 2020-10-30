@@ -28,13 +28,26 @@ export default function ServerNotiveCheck({ servernoti }) {
               {servernoti.message}
             </Text>
           </View>
+          <View style={styles.subMessage}>
+            {servernoti.subMessage &&
+              // servernoti.subMessage.map(e => {
+                // return (
+                  <Text style={{ lineHeight: 24, fontSize: 14 }}>{servernoti.subMessage}</Text>
+                // );
+              // })}
+            }
+          </View>
         </ScrollView>
 
         <View style={styles.divider} />
 
         <View style={styles.bottom}>
-          {servernoti.buttons.map((e,idx) => (
-            <TouchableOpacity onPress={e.onclick} style={styles.bottomButton} key={idx}>
+          {servernoti.buttons.map((e, idx) => (
+            <TouchableOpacity
+              onPress={e.onclick}
+              style={styles.bottomButton}
+              key={idx}
+            >
               <Text style={styles.bottomButtonText}>{e.text}</Text>
             </TouchableOpacity>
           ))}
@@ -90,6 +103,10 @@ const styles = StyleSheet.create({
   body: {
     flex: 1,
     paddingVertical: 24
+  },
+  subMessage: {
+    flex: 1,
+    paddingVertical: 30
   },
   bottom: {
     flexDirection: 'row',

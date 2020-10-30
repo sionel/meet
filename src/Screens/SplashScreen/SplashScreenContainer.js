@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 import SplashScreenPresenter from './SplashScreenPresenter';
 import { WEHAGO_ENV } from '../../../config';
-import ServerNotiveCheck from '../../components/ServerNotiveCheck';
 import { MeetApi, ServiceCheckApi } from '../../services';
 import RNRestart from 'react-native-restart';
 
@@ -49,9 +48,9 @@ class SplashScreenContainer extends Component {
     if (!result) return;
 
     // this.props.url.url =
+    //   'wehago.meet://?is_creater=1&call_type=3&type=0&room_id=ad_yEFNRUFejACKvtcY_202010301318375zt13&owner_id=sadb0101&owner_name=%ED%85%8C%ED%8B%91&cno=9&access=fHnxfMYHiZHHHNMhLuMsZL8LDamgv1';
     //   'wehago.meet://?login_info=email&type=conference&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ2aWRlby53ZWhhZ28uY29tIiwicm9vbSI6ImMwMGE0ZTRmLWU1MGUtNDZkYy1hMWM3LTRkMmJlNjEyMTA4MCIsImVtYWlsIjoic2FkYjAxMDFAbmF2ZXIuY29tIiwiaWF0IjoxNjAzOTM5NTkyLCJleHAiOjE5MTkyOTk1OTJ9.1gQzLWSb-8CQSQI0ghnwxjuk9KE4PyS9mfyxOqAN84U';
     // 'com.wehago.meet://?login_info=web&type=conference&mPORTAL_ID=sadb0101&mHASH_KEY=250225457919518237896475074429028380236&mAuth_r_token=nXW4yLhDwJ3SPYwcekCyUDpUdhZlXR&mAuth_a_token=mVROYYM4M23GHrjfDOC3sJHZ80da48&cno=9&video_id=111';
-
     if (this.props.url.url) await this._handleGetDeeplink(this.props.url);
     else this._handleInit();
     Linking.addEventListener('url', this._handleGetDeeplink);
@@ -105,11 +104,11 @@ class SplashScreenContainer extends Component {
 
     const android_major_version = '1';
     const ios_major_version = '1';
-    const android_version = '1.7.1';
-    const ios_version = '1.25.1';
+    const android_version = '2.0.0';
+    const ios_version = '2.0.0';
 
     const platform = Platform.OS;
-
+    let subMessage = result.resultData.message
     let title = '업데이트';
     let message;
     let buttons;
@@ -117,7 +116,7 @@ class SplashScreenContainer extends Component {
     if (platform === 'android') {
       if (android_major_version !== result.resultData.android_major_version) {
         message =
-          '더 새로워진 WEHAGO Meet을 만나보세요.\n\n신규 기능은 업데이트 이후 사용 가능합니다.';
+          '더 새로워진 WEHAGO Meet을 만나보세요.\n\n신규 기능은 업데이트 이후 사용 가능합니다.';          
         buttons = [
           {
             text: '업데이트',
@@ -186,7 +185,8 @@ class SplashScreenContainer extends Component {
         title,
         message,
         buttons,
-        onclick
+        onclick,
+        subMessage
       });
     }
 
@@ -294,6 +294,7 @@ class SplashScreenContainer extends Component {
     let result = querystringParser(event.url);
     let flag;
     // 화상회의 요청인지 판별
+
     if (result.is_creater === '9') {
       // 비즈박스에서 올 경우 하나가 있음
       this.props.onChangeRootState({
@@ -308,16 +309,25 @@ class SplashScreenContainer extends Component {
       return;
     } else if (result.is_creater) {
       // 비즈박스 제외 나머지(위하고앱) 에서 오는 경우를 차단
-      Alert.alert(
-        '알림',
-        '현재 해당 기능이 지원되지 않습니다.\n원활한 서비스 이용을 위해 WEHAGO앱을 최신버전로 업데이트 해주세요.\n보다 나은 서비스로 찾아뵙겠습니다.',
-        [
-          {
-            text: '확인',
-            onPress: this._handleInit
-          }
-        ]
-      );
+      // Alert.alert(
+      //   '알림',
+      //   '현재 해당 기능이 지원되지 않습니다.\n원활한 서비스 이용을 위해 WEHAdecodeURI(result.owner_name)GO앱을 최신버전로 업데이트 해주세요.\n보다 나은 서비스로 찾아뵙겠습니다.',
+      //   [
+      //     {
+      //       text: '확인',
+      //       onPress: this._handleInit
+      //     }
+      //   ]
+      // );
+      this.props.onChangeRootState({
+        loaded: true,
+        destination: 'Conference',
+        params: {
+          call_type: result.call_type,
+          room_id: result.room_id,
+          owner_name: decodeURI(result.owner_name)
+        }
+      });
       return;
     } else if (result.login_info === 'web') {
       // 일회성 로그인 처리

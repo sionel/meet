@@ -49,9 +49,8 @@ class ConferenceScreenContainer extends React.Component {
    */
   componentDidMount() {
     const { navigation, auth, dispatch, screenProps } = this.props;
-    
-    let user_name = this.props.navigation.state.params.item.name
 
+    debugger;
     if (screenProps.destination === 'Conference') {
       this.callType = screenProps.params.call_type;
       this._handleCreateConnection(
@@ -61,6 +60,7 @@ class ConferenceScreenContainer extends React.Component {
         dispatch
       );
     } else {
+      let user_name = this.props.navigation.state.params.item.name;
       this._handleCreateConnection(navigation, user_name, auth, dispatch);
     }
     KeepAwake.activate();
@@ -238,7 +238,7 @@ class ConferenceScreenContainer extends React.Component {
           roomType = item.roomType;
           token = item.token;
         } else {
-          roomId = this.props.screenProps.params.room_id
+          roomId = this.props.screenProps.params.room_id;
         }
         this._joinConference(
           roomId,
@@ -318,13 +318,12 @@ class ConferenceScreenContainer extends React.Component {
     ) {
       screenProps.onChangeRootState({
         destination: 'Login',
-        params:{}
+        params: {}
       });
     } else {
       navigation.goBack();
     }
   };
-
 
   _handleAppStateChange = nextAppState => {
     // PIP 모드에서는 appState가 변경되지 않는다.
