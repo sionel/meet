@@ -330,13 +330,22 @@ export default function LoginInputPresenter(props) {
 
       <CustomAlert
         visible={alertVisible.visible}
+        width={320}
         title={'알림'}
-        content={
+        description={
           '고객님의 다른 기기에서 WEHAGO를 사용하고 있습니다. 기존 접속을 종료하시고 새로 접속하시겠습니까?'
         }
-        hideCloseButton={false}
         onClose={alertVisible.onClose}
-        onConfirm={alertVisible.onConfirm}
+        actions={[
+          {
+            name: '취소',
+            action: alertVisible.onClose
+          },
+          {
+            name: '확인',
+            action: alertVisible.onConfirm
+          }
+        ]}
       />
     </View>
   );

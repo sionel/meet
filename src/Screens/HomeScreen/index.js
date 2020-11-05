@@ -12,7 +12,6 @@ const mapStateToProps = state => ({
   auth: state.user.auth,
   from: state.user.from,
   permission: state.user.permission,
-  wetalk: state.wetalk.list,
   conference: state.conference.list,
 });
 

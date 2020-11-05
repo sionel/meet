@@ -41,7 +41,6 @@ class SplashScreenContainer extends Component {
     // 강제종료 했을때를 위한 강제 초기화
     this.props.setInitInfo();
     this.props.setSharingMode();
-
     // 루팅 확인 및 디버깅 모드 확인
     let result = false;
     result = await this._handleCheckSecurity();
@@ -51,14 +50,14 @@ class SplashScreenContainer extends Component {
     //   'wehago.meet://?is_creater=1&call_type=3&type=0&room_id=ad_yEFNRUFejACKvtcY_202010301318375zt13&owner_id=sadb0101&owner_name=%ED%85%8C%ED%8B%91&cno=9&access=fHnxfMYHiZHHHNMhLuMsZL8LDamgv1';
     //   'wehago.meet://?login_info=email&type=conference&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ2aWRlby53ZWhhZ28uY29tIiwicm9vbSI6ImMwMGE0ZTRmLWU1MGUtNDZkYy1hMWM3LTRkMmJlNjEyMTA4MCIsImVtYWlsIjoic2FkYjAxMDFAbmF2ZXIuY29tIiwiaWF0IjoxNjAzOTM5NTkyLCJleHAiOjE5MTkyOTk1OTJ9.1gQzLWSb-8CQSQI0ghnwxjuk9KE4PyS9mfyxOqAN84U';
     // 'com.wehago.meet://?login_info=web&type=conference&mPORTAL_ID=sadb0101&mHASH_KEY=250225457919518237896475074429028380236&mAuth_r_token=nXW4yLhDwJ3SPYwcekCyUDpUdhZlXR&mAuth_a_token=mVROYYM4M23GHrjfDOC3sJHZ80da48&cno=9&video_id=111';
-    if (this.props.url.url) await this._handleGetDeeplink(this.props.url);
+    // Linking.addEventListener('url', this._handleGetDeeplink);
+    if (this.props.url) await this._handleGetDeeplink(this.props.url);
     else this._handleInit();
-    Linking.addEventListener('url', this._handleGetDeeplink);
   };
 
-  componentWillUnmount = () => {
-    // clearTimeout(this.timeout);
-  };
+  // componentWillUnmount = () => {
+  //   // clearTimeout(this.timeout);
+  // };
 
   render() {
     const { alert, servernoti, index } = this.state;
@@ -75,7 +74,24 @@ class SplashScreenContainer extends Component {
     if (servernoti.length > 0) {
       this.setState({ servernoti, index: 0 });
     } else {
-      this._handleCheckAutoLogin();
+      const result = await this._handleCheckAutoLogin();
+      if (result === 'success') {
+        this.props.onChangeRootState({
+          loaded: true,
+          destination: 'List'
+        });
+      } else if (result === 'dany') {
+        this.props.onChangeRootState({
+          loaded: true,
+          destination: 'SelectCompany'
+        });
+      } else {
+        this.props.onLogout();
+        this.props.onChangeRootState({
+          loaded: true,
+          destination: 'Login'
+        });
+      }
     }
   };
   _handleCheckSecurity = async () => {
@@ -104,11 +120,11 @@ class SplashScreenContainer extends Component {
 
     const android_major_version = '1';
     const ios_major_version = '1';
-    const android_version = '2.0.0';
-    const ios_version = '2.0.0';
+    const android_version = '1.7.1';
+    const ios_version = '1.25.1';
 
     const platform = Platform.OS;
-    let subMessage = result.resultData.message
+    let subMessage = result.resultData.message;
     let title = '업데이트';
     let message;
     let buttons;
@@ -116,7 +132,7 @@ class SplashScreenContainer extends Component {
     if (platform === 'android') {
       if (android_major_version !== result.resultData.android_major_version) {
         message =
-          '더 새로워진 WEHAGO Meet을 만나보세요.\n\n신규 기능은 업데이트 이후 사용 가능합니다.';          
+          '더 새로워진 WEHAGO Meet을 만나보세요.\n\n신규 기능은 업데이트 이후 사용 가능합니다.';
         buttons = [
           {
             text: '업데이트',
@@ -217,7 +233,24 @@ class SplashScreenContainer extends Component {
   _handleNextNotice = () => {
     const { servernoti, index } = this.state;
     if (servernoti.length === index + 1) {
-      this._handleCheckAutoLogin();
+      const result = this._handleCheckAutoLogin();
+      if (result === 'success') {
+        this.props.onChangeRootState({
+          loaded: true,
+          destination: 'List'
+        });
+      } else if (result === 'dany') {
+        this.props.onChangeRootState({
+          loaded: true,
+          destination: 'SelectCompany'
+        });
+      } else {
+        this.props.onLogout();
+        this.props.onChangeRootState({
+          loaded: true,
+          destination: 'Login'
+        });
+      }
     } else {
       this.setState({
         ...this.state,
@@ -227,7 +260,7 @@ class SplashScreenContainer extends Component {
   };
 
   _handleCheckAutoLogin = async () => {
-    const { auth, loginCheckRequest, from } = this.props;
+    const { auth, loginCheckRequest, onLogout, from } = this.props;
     if (auth.AUTH_A_TOKEN) {
       const result = await loginCheckRequest(
         auth.AUTH_A_TOKEN,
@@ -237,29 +270,34 @@ class SplashScreenContainer extends Component {
         from
       );
       if (result.errors) {
-        this.props.onChangeRootState({
-          loaded: true,
-          destination: 'Login'
-        });
+        if (result.errors.code === 'E002') {
+          Alert.alert(
+            'Login',
+            '고객님의 다른 기기에서 WEHAGO 접속정보가 확인되어 로그아웃 됩니다.'
+          );
+        } else if (result.errors.status === '400') {
+          Alert.alert('Login', '로그인 정보가 잘못되었습니다.');
+        } else if (result.errors.status === '401') {
+          Alert.alert('Login', '권한이 없습니다.');
+        } else if (result.errors.message === 'timeout') {
+          Alert.alert('Login', `요청 시간을 초과했습니다. 다시 시도해주세요.`);
+        } else {
+          Alert.alert(
+            'Login',
+            `요청된 작업을 처리하던중 문제가 발생했습니다. 다시 시도해주세요.`
+          );
+        }
+        return 'fail';
       } else {
         const flag = this._handleOnLogin();
         if (flag) {
-          this.props.onChangeRootState({
-            loaded: true,
-            destination: 'List'
-          });
+          return 'success';
         } else {
-          this.props.onChangeRootState({
-            loaded: true,
-            destination: 'SelectCompany'
-          });
+          return 'dany';
         }
       }
     } else {
-      this.props.onChangeRootState({
-        loaded: true,
-        destination: 'Login'
-      });
+      return 'fail';
     }
   };
   _handleOnCloseAlert = callback => {
@@ -276,7 +314,7 @@ class SplashScreenContainer extends Component {
   /**
    * DeepLink 로 접근한 경우
    */
-  _handleGetDeeplink = async event => {
+  _handleGetDeeplink = async url => {
     /* 모바일 웹에서 화상회의로 들어올 때 (메신저, meet 둘다 공통)
       login_info= mobile | web | email (모바일은 세션시간 8시간 웹은 3개월 unknown는 비회원)
       type= login | conference | screen
@@ -290,11 +328,12 @@ class SplashScreenContainer extends Component {
       video_id=a25f15cb-01d9-44cf-bafa-4b7122022cb3 // video chat id
       room_name=123 // talk방 이름
     */
-    if (!event.url) return;
-    let result = querystringParser(event.url);
+    if (!url) return;
+    let result = querystringParser(url);
+    // let proceed;
     let flag;
-    // 화상회의 요청인지 판별
 
+    // 화상회의 요청인지 판별
     if (result.is_creater === '9') {
       // 비즈박스에서 올 경우 하나가 있음
       this.props.onChangeRootState({
@@ -309,16 +348,7 @@ class SplashScreenContainer extends Component {
       return;
     } else if (result.is_creater) {
       // 비즈박스 제외 나머지(위하고앱) 에서 오는 경우를 차단
-      // Alert.alert(
-      //   '알림',
-      //   '현재 해당 기능이 지원되지 않습니다.\n원활한 서비스 이용을 위해 WEHAdecodeURI(result.owner_name)GO앱을 최신버전로 업데이트 해주세요.\n보다 나은 서비스로 찾아뵙겠습니다.',
-      //   [
-      //     {
-      //       text: '확인',
-      //       onPress: this._handleInit
-      //     }
-      //   ]
-      // );
+
       this.props.onChangeRootState({
         loaded: true,
         destination: 'Conference',
@@ -332,7 +362,11 @@ class SplashScreenContainer extends Component {
     } else if (result.login_info === 'web') {
       // 일회성 로그인 처리
       let proceed = await this._compareMeetToOtherLoginInfo(result, 'web');
-      if (!proceed) return;
+      if (!proceed)
+        this.props.onChangeRootState({
+          loaded: true,
+          destination: 'Login'
+        });
 
       // if (proceed === 'same') {
       //   // 자동 로그인 체크해야하는데 그냥 빼버림 너무 꼬여있음... 다시 리펙토링이 필요해...
@@ -389,16 +423,22 @@ class SplashScreenContainer extends Component {
       });
     } else {
       // 로그인 정보 보관
-      let proceed = await this._compareMeetToOtherLoginInfo(result, 'mobile');
-      if (!proceed) return;
 
+      let proceed = await this._compareMeetToOtherLoginInfo(result, 'mobile');
+      if (!proceed) {
+        debugger;
+        this.props.onChangeRootState({
+          loaded: true,
+          destination: 'Login'
+        });
+      }
+      debugger;
       flag = await this._handleSaveUserinfo(
         result.mAuth_a_token,
         result.mAuth_r_token,
         result.mHASH_KEY,
         result.cno
       );
-
       if (result.type === 'conference' || result.type === 'screen') {
         if (flag) {
           this.props.onChangeRootState({
@@ -484,7 +524,10 @@ class SplashScreenContainer extends Component {
     );
     if (result.errors) {
       if (result.errors.code === 'E002') {
-        Alert.alert('Login', '토큰 정보가 만료되었습니다.');
+        Alert.alert(
+          'Login',
+          '고객님의 다른 기기에서 WEHAGO 접속정보가 확인되어 로그아웃 됩니다.'
+        );
       } else if (result.errors.status === '400') {
         Alert.alert('Login', '로그인 정보가 잘못되었습니다.');
       } else if (result.errors.status === '401') {

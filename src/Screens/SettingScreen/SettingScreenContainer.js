@@ -26,7 +26,7 @@ class SettingScreenContainer extends React.Component {
   async componentDidMount() {
     this._init();
     let tracks = await this._getTrack();
-    let accesstype = this.props.screenProps.params.accesstype;
+    let accesstype = this.props.screenProps?.params?.accesstype;
 
     if (Platform.OS !== 'ios') {
       Orientation.lockToPortrait();
@@ -98,8 +98,8 @@ class SettingScreenContainer extends React.Component {
       name = webAuth?.user_name ? webAuth?.user_name : auth.user_name;
     }
     let roomToken;
-
-    if (params.accesstype === 'email') {
+    debugger
+    if (params?.accesstype === 'email') {
       roomToken = (
         await MeetApi.getMeetRoomTokenEmail(params.roomId, params.token, name)
       ).resultData;
@@ -115,7 +115,7 @@ class SettingScreenContainer extends React.Component {
           auth.AUTH_R_TOKEN,
           auth.HASH_KEY,
           auth.last_access_company_no,
-          roomId
+          item.videoRoomId
         )
       ).resultData;
     }

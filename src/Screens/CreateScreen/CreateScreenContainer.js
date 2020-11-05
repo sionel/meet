@@ -85,7 +85,6 @@ class CreateScreenContainer extends React.Component {
           list={wetalk}
           onSearch={this._handleSearch}
           onActivateModal={this._handleActivateModal}
-          onCheckConference={this._handleCheckConference}
           onCreateConference={this._handleCreateConference}
           onRefresh={this._handleRefresh}
           orientation={this.state.orientation}
@@ -203,58 +202,6 @@ class CreateScreenContainer extends React.Component {
     } else {
       alert('화상회의 생성에 실패하였습니다. 다시 시도해 주세요');
     }
-  };
-
-  /**
-   * _handleActivateModal
-   * 모달뷰 토글
-   */
-  _handleCheckConference = async (conferenceId, externalData = null) => {
-    // 이거 안씀
-    // 이거 안씀
-    // 이거 안씀
-    // 이거 안씀
-    let { auth } = this.props;
-    let callType = 3;
-    let isCreator;
-    // 위하고에서 접속인지 아닌지 구분
-    if (externalData !== null) {
-      auth = {
-        conferenceId,
-        portal_id: externalData.owner_id,
-        user_name: externalData.owner_name,
-        last_access_company_no: externalData.cno,
-        AUTH_A_TOKEN: externalData.access
-      };
-
-      callType = externalData.call_type; // 1:화상 / 2:음성
-      isCreator = externalData.is_creater; // 1:생성자 / 2:참여자
-    } else {
-      // 생성여부 체크
-      const result = await ConferenceApi.check(
-        conferenceId,
-        auth.AUTH_A_TOKEN,
-        auth.AUTH_R_TOKEN,
-        auth.HASH_KEY
-      );
-      if (!result.resultData) {
-        // alert(result.resultMsg);
-        return;
-      }
-    }
-    // 이거 안씀
-    // 화상회의로 진입
-    this._handleRedirect('Setting', {// 이거 안씀
-    // 이거 안씀
-    // 이거 안씀
-
-      item: {
-        videoRoomId: conferenceId,
-        callType,
-        isCreator,
-        selectedRoomName: this.state.selectedRoomName
-      }
-    });
   };
 
   /**

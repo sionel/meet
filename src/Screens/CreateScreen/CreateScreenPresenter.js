@@ -58,11 +58,7 @@ const CreateScreenPresenter = props => {
             ? true
             : false
         }
-        onClick={() =>
-          item.is_video_access === 'T'
-            ? props.onCheckConference(item.video_chat_id, null, item.room_title)
-            : props.onActivateModal(item.room_id, item.room_title)
-        }
+        onClick={() => props.onActivateModal(item.room_id, item.room_title)}
       />
     ));
 
@@ -210,8 +206,17 @@ const CreateScreenPresenter = props => {
         visible={props.modal}
         title={'화상회의 생성'}
         width={320}
-        content={'화상회의를 생성하시겠습니까?'}
-        onConfirm={() => props.onCreateConference()}
+        description={'화상회의를 생성하시겠습니까?'}
+        actions={[
+          {
+            name: '취소',
+            action: () => props.onActivateModal(null)
+          },
+          {
+            name: '확인',
+            action: () => props.onCreateConference()
+          }
+        ]}
         onClose={() => props.onActivateModal(null)}
       />
     </View>

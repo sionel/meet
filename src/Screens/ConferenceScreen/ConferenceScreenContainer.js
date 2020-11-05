@@ -310,15 +310,15 @@ class ConferenceScreenContainer extends React.Component {
 
   /** 화상회의방 닫기 */
   _handleConferenceClose = () => {
-    const { navigation, screenProps } = this.props;
+    const { navigation, screenProps, auth, from } = this.props;
     if (
       // 딥링크로 들어온 두가지의 경우 login 창으로 보내버린다.
       screenProps.destination === 'Conference' ||
       screenProps.destination === 'Setting'
     ) {
       screenProps.onChangeRootState({
-        destination: 'Login',
-        params: {}
+        loaded: false,
+        url: undefined
       });
     } else {
       navigation.goBack();

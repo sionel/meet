@@ -82,10 +82,20 @@ export default function CompanySelectPresenter(props) {
 
       <CustomAlert
         visible={visible}
+        width={320}
         title={'로그아웃'}
-        content={'로그아웃 하시겠습니까?'}
+        description={'로그아웃 하시겠습니까?'}
         onClose={() => setVisible(false)}
-        onConfirm={onLogout}
+        actions={[
+          {
+            name: '취소',
+            action: () => setVisible(false)
+          },
+          {
+            name: '확인',
+            action: onLogout
+          }
+        ]}
       />
     </View>
   );

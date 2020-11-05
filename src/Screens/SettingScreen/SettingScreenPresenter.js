@@ -17,7 +17,6 @@ import { RTCView } from 'react-native-webrtc';
 
 export default function SettingScreenPresenter({
   tracks,
-  name,
   orientation,
   onConferenceEnter,
   onToggleAudio,

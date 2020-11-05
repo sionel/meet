@@ -33,7 +33,7 @@ const mapStateToProps = state => {
     documentShare,
     list,
     user,
-    from: state.user.from,
+    from: state.user?.from,
 
   };
 };

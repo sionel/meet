@@ -399,7 +399,6 @@ export default {
     const hashText = CryptoJS.SHA256(encText);
     const signature = CryptoJS.enc.Base64.stringify(hashText);
     const url = `${wehagoBaseURL0}${accsessUrl}`;
-    debugger;
 
     try {
       const data = {
@@ -411,7 +410,6 @@ export default {
       };
 
       const response = await fetch(url, data);
-      debugger;
       if (response.status !== 200) {
         throw await response.json();
       }

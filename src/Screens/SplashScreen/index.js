@@ -14,11 +14,13 @@ import { actionCreators as WedriveAcions } from '../../redux/modules/wedrive';
 import { actionCreators as WebUserAcions } from '../../redux/modules/webUser';
 
 // map state to props
-const mapStateToProps = state => ({
-  auth: state.user.auth,
-  from: state.user.from,
-  permission: state.user.permission
-});
+const mapStateToProps = state => {
+  return {
+    auth: state.user.auth,
+    from: state.user.from,
+    permission: state.user.permission
+  };
+};
 
 // map dispatch to props
 const mapDispatchToProps = dispatch => {

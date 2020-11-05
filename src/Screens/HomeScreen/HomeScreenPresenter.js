@@ -29,7 +29,6 @@ import AddButton from './AddButton';
  * HomeScreenPresenter
  */
 const HomeScreenPresenter = props => {
-  const activateList = props.list.filter(item => item.is_video_access === 'T');
   const started = props.started;
   const reservation = props.reservation;
   return (
@@ -40,8 +39,7 @@ const HomeScreenPresenter = props => {
       {/* 검색바 */}
       {/* <SearchForm onChange={props.onSearch} /> */}
 
-      {(props.list.length < 1 || activateList.length < 1) &&
-      (props.started.length < 1 || started.length < 1) &&
+      {(props.started.length < 1 || started.length < 1) &&
       (props.reservation.length < 1 || reservation.length < 1) ? (
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -131,7 +129,7 @@ const HomeScreenPresenter = props => {
                       }
                     })
                   }
-                ></ListItemComp>
+                />
               );
             }}
           />

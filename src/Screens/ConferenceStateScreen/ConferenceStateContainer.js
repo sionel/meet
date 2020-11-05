@@ -31,23 +31,34 @@ class ConferenceStateContainer extends React.Component {
     // 딥링크 웹 접근
     // 딥링크 이메일 접근
     // 참여코드 접근
+
+    // debugger;
     const { params } = this.props.screenProps;
     let roomId;
-    if (this.props.from === 'list') {
-      roomId = this.props.navigation.state.params.item.roomId;
-    } else {
+    let iscret; // 인증 비인증 묻는 것
+    if (params) {
       roomId = params.roomId;
+      iscret =
+        params.accesstype !== 'email' && params.accesstype !== 'joincode';
+    } else {
+      roomId = this.props.navigation.state.params.item.roomId;
     }
-
-    const iscret =
-      params.accesstype !== 'email' && params.accesstype !== 'joincode';
 
     let { conferenceState } = this.state;
     this.roomId = roomId;
-
+    debugger
     let { auth } = this.props;
-    const access = await MeetApi.getMeetRoomNoCert(roomId);
+
+    const access = await MeetApi.getMeetRoom(
+      auth.AUTH_A_TOKEN,
+      auth.AUTH_R_TOKEN,
+      auth.HASH_KEY,
+      roomId
+    );
     this.roomName = access.resultData.name;
+
+    // const access = await MeetApi.getMeetRoomNoCert(roomId);
+    // this.roomName = access.resultData.name;
 
     if (!access) {
       // 종료된 방 또는 문제가 있을때
@@ -198,7 +209,7 @@ class ConferenceStateContainer extends React.Component {
 
     let participantList = [];
     // 50명 체크는 여기서 하되 토큰받는 작업은 setting 페이지에서 함
-    if (iscret) {
+    if (!iscret) {
       participantList = (
         await MeetApi.getParticipant(
           auth.AUTH_A_TOKEN,
@@ -210,7 +221,7 @@ class ConferenceStateContainer extends React.Component {
       ).resultData;
     } else {
       // 비인증 인원수
-      Alert.alert('개발예정','비인증 api 추가되면 바로 넣을겁니다.')
+      Alert.alert('개발예정', '비인증 api 추가되면 바로 넣을겁니다.');
     }
 
     // 최대 참여인원 제한 (50명)

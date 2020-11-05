@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { AppRegistry } from 'react-native';
 import { Provider } from 'react-redux';
+import { Linking } from 'react-native';
 import { PersistGate } from 'redux-persist/es/integration/react';
 import configureStore from './src/redux/configureStore';
 import Main from './src/Main';
@@ -10,9 +11,19 @@ import SplashScreen from './src/Screens/SplashScreen';
 const { persistor, store } = configureStore();
 
 export default class App extends Component {
-  state = { loaded: false };
+  constructor(props) {
+    super(props);
+    this.state = { loaded: false, url: props.url.url };
+  }
+
+  componentDidMount() {
+    Linking.addEventListener('url', event => {
+      debugger;
+      this.setState({ loaded: false, url: event.url });
+    });
+  }
+
   render() {
-    let url = this.state.url ? this.state.url : this.props.url;
     return (
       <Provider store={store}>
         <PersistGate persistor={persistor}>
@@ -25,7 +36,7 @@ export default class App extends Component {
           ) : (
             <SplashScreen
               onChangeRootState={this._handleChangeRootState}
-              url={this.props.url}
+              url={this.state.url}
             />
           )}
         </PersistGate>

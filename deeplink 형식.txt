@@ -36,14 +36,12 @@ wehago.meet://
 
 com.wehago.meet://
 ?login_info=web
-&type=conference
+&type=login
 &mPORTAL_ID=sadb0101
-&mHASH_KEY=60183042527577616866728669482958770213
-&mAuth_r_token=rkw9pfvCIm1Rd1WVBQOXlNHfZBIitM
-&mAuth_a_token=pzMTavd7ZBDIwSc6Yh10wKxdZnBxP2
+&mHASH_KEY=4854725718109116718265452297475928184
+&mAuth_r_token=L53dSjquW44bTjNxVyHJ4hOsGrstIv
+&mAuth_a_token=u3ncUZkZsTL2wVk2fN6zyq29hy2JWF
 &cno=9
-&video_id=111
 
-com.wehago.meet://?login_info=web&type=conference&mPORTAL_ID=sadb0101&mHASH_KEY=250225457919518237896475074429028380236&mAuth_r_token=nXW4yLhDwJ3SPYwcekCyUDpUdhZlXR&mAuth_a_token=mVROYYM4M23GHrjfDOC3sJHZ80da48&cno=9&video_id=111
-
-wehago.meet://?login_info=email&type=conference&token=Gj2EWgBeA3tpu4zEu8PdzIynaha
+com.wehago.meet://?login_info=web&type=login&mPORTAL_ID=sadb0101&mHASH_KEY=4854725718109116718265452297475928184&mAuth_r_token=L53dSjquW44bTjNxVyHJ4hOsGrstIv&mAuth_a_token=u3ncUZkZsTL2wVk2fN6zyq29hy2JWF&cno=9
+wehago.meet://?login_info=web&type=login&mPORTAL_ID=sadb0101&mHASH_KEY=4854725718109116718265452297475928184&mAuth_r_token=L53dSjquW44bTjNxVyHJ4hOsGrstIv&mAuth_a_token=u3ncUZkZsTL2wVk2fN6zyq29hy2JWF&cno=9

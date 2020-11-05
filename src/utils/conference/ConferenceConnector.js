@@ -33,6 +33,18 @@ export const UPDATE_DOCUMENT_DATA = 'UPDATE_DOCUMENT_DATA';
 export const DOCUMENT_SHARE_TARGET = 'DOCUMENT_SHARE_TARGET';
 export const DRAWING_SHARE_TARGET = 'DRAWING_SHARE_TARGET';
 
+// export const REQUEST_INVITE = 'CONFERENCE.EVENT.REQUEST.INVITE'; // 초대 요청 이벤트
+// export const REQUEST_KICK = 'CONFERENCE.EVENT.REQUEST.KICK'; // 추방 요청 이벤트
+
+export const REQUEST_MIC_CONTROL = 'CONFERENCE.EVENT.REQUEST.MIC_CONTROL'; // 화상대화 전체 마이크 제어 요청 이벤트
+export const REQUEST_MIC_CONTROL_USER = 'CONFERENCE.EVENT.REQUEST.MIC_CONTROL_USER'; // 화상대화 전체 마이크 제어 요청자 사용자 정보 이벤트
+export const REQUEST_MIC_CONTROL_TARGET = 'CONFERENCE.EVENT.REQUEST.MIC_CONTROL_TARGET'; // 화상대화 타겟 유저 마이크 제어 요청 이벤트
+
+// export const REQUEST_GET_CONTROL = 'CONFERENCE.EVENT.REQUEST.REQUEST_GET_CONTROL'; // 마스터 제어 권한 위임 요청 이벤트
+
+// export const RESPONSE_GET_CONTROL = 'CONFERENCE.EVENT.REQUEST.RESPONSE_GET_CONTROL'; // 마스터 제어 권한 위임 반환 이벤트
+// export const UPDATE_MASTER_USERS = 'CONFERENCE.EVENT.REQUEST.UPDATE_MASTER_USERS'; // 마스터 권한 유저 리스트 변경 이벤트
+
 /**
  * ConferenceConnector
  * 화상회의 방 생성/참가 및 디바이스 연결을 담당하는 클래스
@@ -367,6 +379,32 @@ class ConferenceConnector {
         );
       }
     });
+
+
+    // 화상대화 전체 마이크 제어 요청 이벤트
+    // - 마스터가 마이크 제어 mute를 함 사용자들은 마이크 임의로 킬 수 없음
+    // 간단한 토스트 메시지 띄움
+    this._room.addCommandListener(REQUEST_MIC_CONTROL, value => {
+      if (this._room.myUserId() === value.attributes.target) {
+       
+      }
+    });
+
+    // 화상대화 전체 마이크 제어 요청자 사용자 정보 이벤트
+    //- 마스터가 마이크 제어 모드 시작하기/종료하기
+    this._room.addCommandListener(REQUEST_MIC_CONTROL_USER, value => {
+      if (this._room.myUserId() === value.attributes.target) {
+       
+      }
+    });
+
+    // 화상대화 타겟 유저 마이크 제어 요청 이벤트
+    // - 마스터가 단일 마일 제어 id형식 8자
+    this._room.addCommandListener(REQUEST_MIC_CONTROL_TARGET, value => {
+      if (this._room.myUserId() === value.attributes.target) {
+        
+      }
+    });
   };
 
   _removeEvents = () => {
@@ -380,6 +418,10 @@ class ConferenceConnector {
     this._room.removeCommandListener(DRAWING_REDO_UNDO);
     this._room.removeCommandListener(DOCUMENT_SHARE_TARGET);
     this._room.removeCommandListener(DRAWING_SHARE_TARGET);
+    
+    this._room.removeCommandListener(REQUEST_MIC_CONTROL);
+    this._room.removeCommandListener(REQUEST_MIC_CONTROL_USER);
+    this._room.removeCommandListener(REQUEST_MIC_CONTROL_TARGET);
   };
 
   /**

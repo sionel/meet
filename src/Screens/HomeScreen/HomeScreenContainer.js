@@ -157,7 +157,6 @@ class HomeScreenContainer extends Component {
     const { navigation, auth } = this.props;
     const plan = auth.last_company.membership_code; // 요금제 [WE: 엣지, SP: 싱글팩, ...]
 
-    let wetalk = []; // We talk list
     let conferenceList = this.props.conference;
 
     let started = [];
@@ -166,14 +165,6 @@ class HomeScreenContainer extends Component {
     if (conferenceList.length > 0) {
       started = conferenceList.filter(i => i.is_started);
       reservation = conferenceList.filter(i => !i.is_started);
-    }
-
-    if (searchKeyword) {
-      wetalk = this.props.wetalk.filter(item =>
-        item.room_title.match(searchKeyword)
-      );
-    } else {
-      wetalk = this.props.wetalk;
     }
 
     const hideStatusbar =
@@ -201,7 +192,6 @@ class HomeScreenContainer extends Component {
           refreshing={refreshing}
           // modal={modal}
           permission={this.props.permission}
-          list={wetalk}
           started={started}
           reservation={reservation}
           auth={auth}
@@ -357,6 +347,7 @@ class HomeScreenContainer extends Component {
     // console.log('CNO : ', auth.last_access_company_no);
     // 메신저조회 API
 
+    // 위톡방 기준 create 할때를 위해 위톡방 리스트를 가져 올 필요가 있음 그래서 살려둔 api
     const wetalkList = await WetalkApi.getWetalkList(
       auth.AUTH_A_TOKEN,
       auth.AUTH_R_TOKEN,
@@ -374,6 +365,7 @@ class HomeScreenContainer extends Component {
       return this._handleAutoLogin();
     }
 
+    // 실제 받아오는 화상회의 리스트
     const cl = await MeetApi.getMeetRoomsList(
       auth.AUTH_A_TOKEN,
       auth.AUTH_R_TOKEN,
@@ -382,7 +374,6 @@ class HomeScreenContainer extends Component {
       auth.HASH_KEY
     );
     // 토큰만료시
-    this.setState({ refreshing: false });
 
     if (cl) {
       onSetConferenceList(
@@ -391,6 +382,9 @@ class HomeScreenContainer extends Component {
         )
       );
     }
+
+    this.setState({ refreshing: false });
+
   };
 
   /**

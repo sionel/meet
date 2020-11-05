@@ -32,6 +32,10 @@ const CONFERENCE_MESSAGE_RECEIVED = 'CONFERENCE_MESSAGE_RECEIVED';
 // CONFERENCE_PIP_MODE
 const CONFERENCE_PIP_MODE = 'CONFERENCE_PIP_MODE';
 
+// 추후 마스터 권한이 생기고 업데이트 된다면 따로 리덕스를 분리하는게 좋을 듯
+// 마스터가 컨트롤 하는지에 대한 여부
+const CONFERENCE_PIP_MODE = 'CONFERENCE_PIP_MODE';
+
 //#endregion Action Types
 
 //#region Initial State
