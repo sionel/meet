@@ -17,7 +17,9 @@ const getToken = async accessUrl => {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
       }
     };
+
     const response = await fetch(url, data);
+
     return response.json();
   } catch (err) {
     return false;
@@ -336,11 +338,11 @@ export default {
 
     const accsessUrl = `/video/mobile/version?timestamp=${date}`;
     const token = await getToken(accsessUrl);
+
     const encText = accsessUrl + token.cur_date + token.token;
     const hashText = CryptoJS.SHA256(encText);
     const signature = CryptoJS.enc.Base64.stringify(hashText);
     const url = `${wehagoBaseURL0}${accsessUrl}`;
-
     try {
       const data = {
         method: 'GET',
@@ -416,6 +418,64 @@ export default {
       return response.json();
     } catch (err) {
       console.warn('21.checkNotice : ', err);
+      return false;
+    }
+  },
+
+  // 3-23 마스터 발언권 제어 유저 조회
+  checkMasterControlUser: async roomId => {
+    const accsessUrl = `/video/room/master/control/user?room=${roomId}`;
+    const token = await getToken(accsessUrl);
+    const encText = accsessUrl + token.cur_date + token.token;
+    const hashText = CryptoJS.SHA256(encText);
+    const signature = CryptoJS.enc.Base64.stringify(hashText);
+    const url = `${wehagoBaseURL0}${accsessUrl}`;
+
+    try {
+      const data = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          signature
+        }
+      };
+
+      const response = await fetch(url, data);
+      if (response.status !== 200) {
+        throw await response.json();
+      }
+      return response.json();
+    } catch (err) {
+      console.warn('23.checkNotice : ', err);
+      return false;
+    }
+  },
+
+  // 3-27 화상회의방 접속중인 사용자 리스트 조회
+  getParticipantCount: async roomId => {
+    const accsessUrl = `/video/room/connecting/count?room=${roomId}`;
+    const token = await getToken(accsessUrl);
+    const encText = accsessUrl + token.cur_date + token.token;
+    const hashText = CryptoJS.SHA256(encText);
+    const signature = CryptoJS.enc.Base64.stringify(hashText);
+    const url = `${wehagoBaseURL0}${accsessUrl}`;
+    debugger
+    try {
+      const data = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          signature
+        }
+      };
+      const response = await fetch(url, data);
+      debugger
+      if (response.status !== 200) {
+        throw response.resultCode;
+      }
+      return response.json();
+    } catch (err) {
+      console.warn('27.getParticipantCount : ', err);
       return false;
     }
   },

@@ -17,7 +17,7 @@ import KeepAwake from 'react-native-keep-awake';
 import ConferenceScreenPresenter from './ConferenceScreenPresenter';
 import EndCallMessage from './EndCallMessage';
 import ConferenceManager from '../../utils/conference/ConferenceManager';
-
+import MeetApi from '../../services/api/MeetApi';
 const { PictureInPicture } = NativeModules;
 const { width, height } = Dimensions.get('window');
 const isIOS = Platform.OS === 'ios';
@@ -50,7 +50,6 @@ class ConferenceScreenContainer extends React.Component {
   componentDidMount() {
     const { navigation, auth, dispatch, screenProps } = this.props;
 
-    debugger;
     if (screenProps.destination === 'Conference') {
       this.callType = screenProps.params.call_type;
       this._handleCreateConnection(
@@ -281,7 +280,13 @@ class ConferenceScreenContainer extends React.Component {
       token,
       tracks
     );
-    this.setState({ connection: true }, () => {
+    this.setState({ connection: true }, async () => {
+      // 마스터 권한으로 사용자 제어를 하고 있는중인지 체크
+      const result = await MeetApi.checkMasterControlUser(roomName);
+      this.props.changeMasterControlMode(
+        result.resultData.videoseq ? true : false
+      );
+
       if (Number(this.callType) !== 3) {
         setTimeout(() => {
           // console.log('15초가 지났다');

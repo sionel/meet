@@ -93,7 +93,6 @@ class ConferenceManager {
    * 연결을 해제한다.
    */
   dispose = async () => {
-
     if (this._conferenceConnector) {
       await this._conferenceConnector.dispose();
     }
@@ -140,7 +139,11 @@ class ConferenceManager {
       CHANGED_DRAWING_SHARE_MODE: this.changeDrawingShareMode,
       CHANGED_DRAW_DATA: this.changeDrawData,
       DOCUMENT_SHARE_TARGET: this.documentShareTarget,
-      MESSAGE_RECEIVED: this.messageReceived
+      MESSAGE_RECEIVED: this.messageReceived,
+      CHANGED_MIC_CONTROL_MODE_BY_MASTER: this.changeMicControlModeByMaster,
+      CHANGED_MIC_CONTROL_USER_MODE_BY_MASTER: this
+        .changeMicControlUserModeByMaster,
+      CHANGED_MIC_MUTE_BY_MASTER: this.changeMicMuteByMaster
     };
     return handler;
   };
@@ -153,7 +156,8 @@ class ConferenceManager {
     JitsiMeetJS.init({
       ...config
     });
-
+    const a = JitsiMeetJS.isDesktopSharingEnabled()
+    
     // JitsiMeetJS Log Level을 설정한다.
     JitsiMeetJS.setLogLevel(JitsiMeetJS.logLevels.ERROR);
   };
@@ -324,6 +328,35 @@ class ConferenceManager {
     if (text && text === '') return;
     this._room.sendTextMessage(text);
   };
+
+  /*
+   * 마스터가 참가자들 컨트롤 할 때
+   */
+  // CHANGED_MIC_CONTROL_MODE_BY_MASTER
+  //CHANGED_MIC_CONTROL_USER_MODE_BY_MASTER
+  //CHANGED_MIC_MODE_BY_MASTER
+  changeMicControlModeByMaster = value => {
+    debugger 
+    this._dispatch(localActionCreators.toggleMuteMicMaster(value));
+  };
+  changeMicControlUserModeByMaster = flag => {
+    debugger
+    this._dispatch(localActionCreators.changeMasterControlMode(flag));
+  };
+  changeMicMuteByMaster = flag => {
+    debugger
+    this._dispatch(localActionCreators.toggleMuteMicMaster(flag));
+  };
+
+  requestAttention = name => {
+    debugger
+    this._conferenceConnector.requestAttention(name)
+  }
+  stopAttention = name => {
+    debugger
+    this._conferenceConnector.stopAttention(name)
+  }
+
 }
 
 export default ConferenceManager;

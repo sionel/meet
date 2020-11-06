@@ -98,7 +98,6 @@ class SettingScreenContainer extends React.Component {
       name = webAuth?.user_name ? webAuth?.user_name : auth.user_name;
     }
     let roomToken;
-    debugger
     if (params?.accesstype === 'email') {
       roomToken = (
         await MeetApi.getMeetRoomTokenEmail(params.roomId, params.token, name)

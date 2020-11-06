@@ -44,15 +44,18 @@ class SplashScreenContainer extends Component {
     // 루팅 확인 및 디버깅 모드 확인
     let result = false;
     result = await this._handleCheckSecurity();
-    if (!result) return;
 
+    if (!result) return;
     // this.props.url.url =
     //   'wehago.meet://?is_creater=1&call_type=3&type=0&room_id=ad_yEFNRUFejACKvtcY_202010301318375zt13&owner_id=sadb0101&owner_name=%ED%85%8C%ED%8B%91&cno=9&access=fHnxfMYHiZHHHNMhLuMsZL8LDamgv1';
     //   'wehago.meet://?login_info=email&type=conference&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ2aWRlby53ZWhhZ28uY29tIiwicm9vbSI6ImMwMGE0ZTRmLWU1MGUtNDZkYy1hMWM3LTRkMmJlNjEyMTA4MCIsImVtYWlsIjoic2FkYjAxMDFAbmF2ZXIuY29tIiwiaWF0IjoxNjAzOTM5NTkyLCJleHAiOjE5MTkyOTk1OTJ9.1gQzLWSb-8CQSQI0ghnwxjuk9KE4PyS9mfyxOqAN84U';
     // 'com.wehago.meet://?login_info=web&type=conference&mPORTAL_ID=sadb0101&mHASH_KEY=250225457919518237896475074429028380236&mAuth_r_token=nXW4yLhDwJ3SPYwcekCyUDpUdhZlXR&mAuth_a_token=mVROYYM4M23GHrjfDOC3sJHZ80da48&cno=9&video_id=111';
     // Linking.addEventListener('url', this._handleGetDeeplink);
-    if (this.props.url) await this._handleGetDeeplink(this.props.url);
-    else this._handleInit();
+    if (this.props.url) {
+      await this._handleGetDeeplink(this.props.url);
+    } else {
+      this._handleInit();
+    }
   };
 
   // componentWillUnmount = () => {
@@ -68,9 +71,9 @@ class SplashScreenContainer extends Component {
   _handleInit = async () => {
     let servernoti = [];
     // 버전 확인
-    servernoti = await this._handleCheckVersion(servernoti);
+    // servernoti = await this._handleCheckVersion(servernoti);
     // 노티 확인
-    servernoti = await this._handleCheckNotice(servernoti);
+    // servernoti = await this._handleCheckNotice(servernoti);
     if (servernoti.length > 0) {
       this.setState({ servernoti, index: 0 });
     } else {
@@ -114,6 +117,7 @@ class SplashScreenContainer extends Component {
   };
 
   _handleCheckVersion = async noti => {
+
     const result = await MeetApi.checkVersion();
     // 버전 수정
     if (!result) return [];
@@ -426,13 +430,11 @@ class SplashScreenContainer extends Component {
 
       let proceed = await this._compareMeetToOtherLoginInfo(result, 'mobile');
       if (!proceed) {
-        debugger;
         this.props.onChangeRootState({
           loaded: true,
           destination: 'Login'
         });
       }
-      debugger;
       flag = await this._handleSaveUserinfo(
         result.mAuth_a_token,
         result.mAuth_r_token,

@@ -23,6 +23,7 @@ const OSID = OS === 'ios' ? 'mobile-ios' : 'mobile-android';
 export const wehagoBaseURL0 = `https://api0.wehago${isWehagoV ? 'v' : ''}.com`;
 export const wehagoBaseURL = `https://api.wehago${isWehagoV ? 'v' : ''}.com`;
 export const wehagoMainURL = `https://www.wehago${isWehagoV ? 'v' : ''}.com`;
+
 export const wehagoDummyImageURL = `https://static.wehago${
   isWehagoV ? 'v' : ''
 }.com/imgs/dummy/@dummy_02.jpg`; // 더미 프로필
@@ -32,8 +33,7 @@ export const wehagoStaticURL = `https://static.wehago${
 }.com`;
 // export const wehagoBaseURL = `https://api.wehago${isWehagoV ? 'v' : ''}.com`;
 
-// export const testURL = `https://rtctest.wehago.com/api-bind`;
-
+// export const meetURL = `https://rtctest.wehago.com/api-bind`;
 export const meetURL = `https://api.wehago.com/video`;
 // export const meetURL = `http://localhost:8080/video`;
 

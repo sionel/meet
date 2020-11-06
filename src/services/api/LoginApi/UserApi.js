@@ -57,6 +57,7 @@ const loginRequest = async (
   access_pass
 ) => {
   try {
+
     const date = new Date().getTime(); // January 1, 1970 로 부터의 시간 (밀리초)
     const url = captcha
       ? '/auth/login/exceed'
@@ -85,6 +86,7 @@ const loginRequest = async (
         login_type: 'MOBILE'
       })
     };
+
     const response = await fetch(`${wehagoBaseURL0}${url}`, data);
     // const response = await response.json();
     return response;

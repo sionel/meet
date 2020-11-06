@@ -113,6 +113,7 @@ export default function LoginInputContainer(props) {
 
     // ANCHOR Create Token
     const UserApiRequest = UserApi;
+    
     const getAuth = await UserApiRequest.loginRequest(
       userId,
       userPw,

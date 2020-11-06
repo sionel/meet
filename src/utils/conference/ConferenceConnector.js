@@ -37,8 +37,10 @@ export const DRAWING_SHARE_TARGET = 'DRAWING_SHARE_TARGET';
 // export const REQUEST_KICK = 'CONFERENCE.EVENT.REQUEST.KICK'; // 추방 요청 이벤트
 
 export const REQUEST_MIC_CONTROL = 'CONFERENCE.EVENT.REQUEST.MIC_CONTROL'; // 화상대화 전체 마이크 제어 요청 이벤트
-export const REQUEST_MIC_CONTROL_USER = 'CONFERENCE.EVENT.REQUEST.MIC_CONTROL_USER'; // 화상대화 전체 마이크 제어 요청자 사용자 정보 이벤트
-export const REQUEST_MIC_CONTROL_TARGET = 'CONFERENCE.EVENT.REQUEST.MIC_CONTROL_TARGET'; // 화상대화 타겟 유저 마이크 제어 요청 이벤트
+export const REQUEST_MIC_CONTROL_USER =
+  'CONFERENCE.EVENT.REQUEST.MIC_CONTROL_USER'; // 화상대화 전체 마이크 제어 요청자 사용자 정보 이벤트
+export const REQUEST_MIC_CONTROL_TARGET =
+  'CONFERENCE.EVENT.REQUEST.MIC_CONTROL_TARGET'; // 화상대화 타겟 유저 마이크 제어 요청 이벤트
 
 // export const REQUEST_GET_CONTROL = 'CONFERENCE.EVENT.REQUEST.REQUEST_GET_CONTROL'; // 마스터 제어 권한 위임 요청 이벤트
 
@@ -380,29 +382,28 @@ class ConferenceConnector {
       }
     });
 
-
     // 화상대화 전체 마이크 제어 요청 이벤트
     // - 마스터가 마이크 제어 mute를 함 사용자들은 마이크 임의로 킬 수 없음
     // 간단한 토스트 메시지 띄움
     this._room.addCommandListener(REQUEST_MIC_CONTROL, value => {
-      if (this._room.myUserId() === value.attributes.target) {
-       
-      }
+      this._handlers.CHANGED_MIC_CONTROL_MODE_BY_MASTER(value);
+        // value.attribute === 'mute' ? true : false
+
     });
 
     // 화상대화 전체 마이크 제어 요청자 사용자 정보 이벤트
     //- 마스터가 마이크 제어 모드 시작하기/종료하기
     this._room.addCommandListener(REQUEST_MIC_CONTROL_USER, value => {
-      if (this._room.myUserId() === value.attributes.target) {
-       
-      }
+      this._handlers.CHANGED_MIC_CONTROL_USER_MODE_BY_MASTER(
+        value.value
+      );
     });
 
     // 화상대화 타겟 유저 마이크 제어 요청 이벤트
     // - 마스터가 단일 마일 제어 id형식 8자
     this._room.addCommandListener(REQUEST_MIC_CONTROL_TARGET, value => {
       if (this._room.myUserId() === value.attributes.target) {
-        
+        this._handlers.CHANGED_MIC_MUTE_BY_MASTER(value.attributes.isMute)
       }
     });
   };
@@ -418,7 +419,7 @@ class ConferenceConnector {
     this._room.removeCommandListener(DRAWING_REDO_UNDO);
     this._room.removeCommandListener(DOCUMENT_SHARE_TARGET);
     this._room.removeCommandListener(DRAWING_SHARE_TARGET);
-    
+
     this._room.removeCommandListener(REQUEST_MIC_CONTROL);
     this._room.removeCommandListener(REQUEST_MIC_CONTROL_USER);
     this._room.removeCommandListener(REQUEST_MIC_CONTROL_TARGET);
@@ -542,6 +543,25 @@ class ConferenceConnector {
       });
     }
   };
+
+  requestAttention = (name) => {
+    this._room.sendCommandOnce(REQUEST_FLOOR, {
+      user: JSON.stringify({
+        jitsiId:this._room.myUserId(),
+        name
+      })      
+    });
+  }
+
+
+  stopAttention = (name) => {
+    this._room.sendCommandOnce(STOP_FLOOR, {
+      user: JSON.stringify({
+        jitsiId:this._room.myUserId(),
+        name
+      })      
+    });
+  }
 
   //#endregion
 }

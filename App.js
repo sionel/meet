@@ -18,7 +18,6 @@ export default class App extends Component {
 
   componentDidMount() {
     Linking.addEventListener('url', event => {
-      debugger;
       this.setState({ loaded: false, url: event.url });
     });
   }

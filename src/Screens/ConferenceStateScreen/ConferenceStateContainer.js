@@ -31,11 +31,10 @@ class ConferenceStateContainer extends React.Component {
     // 딥링크 웹 접근
     // 딥링크 이메일 접근
     // 참여코드 접근
-
-    // debugger;
     const { params } = this.props.screenProps;
-    let roomId;
+    let roomId = true;
     let iscret; // 인증 비인증 묻는 것
+
     if (params) {
       roomId = params.roomId;
       iscret =
@@ -46,20 +45,21 @@ class ConferenceStateContainer extends React.Component {
 
     let { conferenceState } = this.state;
     this.roomId = roomId;
-    debugger
+
     let { auth } = this.props;
 
-    const access = await MeetApi.getMeetRoom(
-      auth.AUTH_A_TOKEN,
-      auth.AUTH_R_TOKEN,
-      auth.HASH_KEY,
-      roomId
-    );
-    this.roomName = access.resultData.name;
-
-    // const access = await MeetApi.getMeetRoomNoCert(roomId);
+    // const access = await MeetApi.getMeetRoom(
+    //   auth.AUTH_A_TOKEN,
+    //   auth.AUTH_R_TOKEN,
+    //   auth.HASH_KEY,
+    //   roomId
+    // );
+    // debugger;
     // this.roomName = access.resultData.name;
 
+    const access = await MeetApi.getMeetRoomNoCert(roomId);
+    this.roomName = access.resultData.name;
+    debugger;
     if (!access) {
       // 종료된 방 또는 문제가 있을때
       conferenceState = 'deleted';
@@ -101,10 +101,6 @@ class ConferenceStateContainer extends React.Component {
     };
 
     if (conferenceState === 'conference') {
-      // 50명 체크
-      // 토큰받고
-      // 접속
-
       this._handleEnterConference(auth, roomId, iscret, params);
     } else if (conferenceState === 'reservationInfo') {
       // 참석자 정보 받고
@@ -208,21 +204,25 @@ class ConferenceStateContainer extends React.Component {
     let isCreator;
 
     let participantList = [];
+    let count = 0;
     // 50명 체크는 여기서 하되 토큰받는 작업은 setting 페이지에서 함
-    if (!iscret) {
-      participantList = (
-        await MeetApi.getParticipant(
-          auth.AUTH_A_TOKEN,
-          auth.AUTH_R_TOKEN,
-          auth.HASH_KEY,
-          auth.last_access_company_no,
-          roomId
-        )
-      ).resultData;
-    } else {
-      // 비인증 인원수
-      Alert.alert('개발예정', '비인증 api 추가되면 바로 넣을겁니다.');
-    }
+    count = (await MeetApi.getParticipantCount(roomId));
+    debugger;
+
+    // if (!iscret) {
+    //   count = (
+    //     await MeetApi.getParticipant(
+    //       auth.AUTH_A_TOKEN,
+    //       auth.AUTH_R_TOKEN,
+    //       auth.HASH_KEY,
+    //       auth.last_access_company_no,
+    //       roomId
+    //     )
+    //   ).resultData;
+    // } else {
+    //   // 비인증 인원수
+    //   Alert.alert('개발예정', '비인증 api 추가되면 바로 넣을겁니다.');
+    // }
 
     // 최대 참여인원 제한 (50명)
     if (participantList.length >= 50) {

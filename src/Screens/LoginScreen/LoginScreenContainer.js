@@ -71,7 +71,6 @@ class LoginScreenContainer extends Component {
     let { joincode } = this.state;
     joincode[index] = code;
     if (index === 5 && joincode.indexOf('*') === -1) {
-      debugger;
       joincode = joincode.reduce((e, v) => e + v, '');
       this._enterConference(joincode);
     }

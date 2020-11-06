@@ -85,7 +85,7 @@ function applyJoinUser(state, action) {
     userInfo: null
   };
   list.push(participant);
-  debugger
+  
   return {
     ...state,
     list

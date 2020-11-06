@@ -34,8 +34,9 @@ const CONFERENCE_PIP_MODE = 'CONFERENCE_PIP_MODE';
 
 // 추후 마스터 권한이 생기고 업데이트 된다면 따로 리덕스를 분리하는게 좋을 듯
 // 마스터가 컨트롤 하는지에 대한 여부
-const CONFERENCE_PIP_MODE = 'CONFERENCE_PIP_MODE';
+const SET_MASTER_CONTROL = 'SET_MASTER_CONTROL';
 
+const TOGGLE_MUTE_MIC_MASTER = 'TOGGLE_MUTE_MIC_MASTER';
 //#endregion Action Types
 
 //#region Initial State
@@ -48,7 +49,8 @@ const initialState = {
   createdTime: null,
   callType: null,
   message: [],
-  pipMode: false
+  pipMode: false,
+  isMasterControl: false
 };
 
 //#endregion
@@ -79,6 +81,11 @@ function reducer(state = initialState, action) {
       return applySetConferenceMessage(state, action);
     case CONFERENCE_PIP_MODE:
       return applySetConferencePIPMode(state, action);
+    case SET_MASTER_CONTROL:
+      return setMasterMode(state, action);
+    case TOGGLE_MUTE_MIC_MASTER:
+      return applyToggleMuteMicMaster(state, action);
+
     default:
       return state;
   }
@@ -98,7 +105,7 @@ function joinConference(conferenceInfo) {
 }
 
 function applyJoinConference(state, action) {
-  const { conferenceInfo } = action; 
+  const { conferenceInfo } = action;
   const user = {
     id: conferenceInfo.id,
     cid: conferenceInfo.cid,
@@ -327,7 +334,7 @@ function applySetConferenceCreatedTime(state, action) {
 
 //#endregion SET_CONFERENCE_CREATED_TIME
 
-// CONFERENCE_MESSAGE_RECEIVED
+//#region  CONFERENCE_MESSAGE_RECEIVED
 function receiceConferenceMessage(newMessage = null) {
   return async (dispatch, getState) => {
     dispatch({
@@ -368,7 +375,7 @@ function applySetConferenceMessage(state, action) {
     message: list
   };
 }
-// #end
+//#endregion
 
 function applySetConferencePIPMode(state, action) {
   const { pipMode } = action;
@@ -377,6 +384,62 @@ function applySetConferencePIPMode(state, action) {
     pipMode
   };
 }
+
+
+//#region  SET_MASTER_CONTROL
+function changeMasterControlMode(id) {
+  return dispatch => {
+    dispatch({
+      type: SET_MASTER_CONTROL,
+      flag: id ? true : false
+    });
+  };
+}
+
+function setMasterMode(state, action) {
+  return {
+    ...state,
+    isMasterControl: action.flag
+  };
+}
+//#endregion
+
+
+//#region TOGGLE_MUTE_MIC_MASTER
+
+function toggleMuteMicMaster(micMuteFlag) {
+  return dispatch => {
+    dispatch({
+      type: TOGGLE_MUTE_MIC_MASTER,
+      micMuteFlag
+    });
+  };
+}
+
+function applyToggleMuteMicMaster(state, action) {
+  const { user } = state;
+  const { micMuteFlag } = action;
+  if (user && user.audioTrack) {
+    if (micMuteFlag) {
+      user.audioTrack.mute();
+    } else {
+      user.audioTrack.unmute();
+    }
+    return {
+      ...state,
+      user: {
+        ...user,
+        isMuteMic: micMuteFlag
+      }
+    };
+  }
+
+  return {
+    ...state
+  };
+}
+
+//#endregion
 
 export const actionCreators = {
   setConferenceMode,
@@ -387,7 +450,9 @@ export const actionCreators = {
   toggleMuteMic,
   toggleMuteSpeaker,
   setConferenceCreatedTime,
-  receiceConferenceMessage
+  receiceConferenceMessage,
+  changeMasterControlMode,
+  toggleMuteMicMaster
 };
 
 export default reducer;
