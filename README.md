@@ -90,3 +90,7 @@ https://zeddios.tistory.com/327
 7. 마스터 권한
 8. 업데이트 안내
 9. 딥링크
+
+## etc
+ios : https://itunes.apple.com/app/id1455726925?mt=8
+android : https://play.google.com/store/apps/details?id=com.wehago.meet

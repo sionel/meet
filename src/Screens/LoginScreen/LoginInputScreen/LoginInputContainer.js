@@ -215,7 +215,6 @@ export default function LoginInputContainer(props) {
       //   );
       //   // 이상이 없는 회사일 경우 로그인 정상 진행
       //   if (statusCheck && statusCheck.code === 200) {
-      //     debugger
       //     // 서비스 구매여부 조회
       //     const isPurchase = await ServiceCheckApi.serviceCheck(
       //       auth,

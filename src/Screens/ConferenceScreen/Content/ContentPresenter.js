@@ -36,7 +36,7 @@ const ContentPresenter = props => {
 
   return (
     <View style={styles.container} onLayout={props.onLayout}>
-      <SimpleNoti/>
+      <SimpleNoti />
       <StatusBar
         barStyle="light-content"
         backgroundColor={'#000'}
@@ -125,6 +125,7 @@ const ContentPresenter = props => {
             orientation={props.orientation}
             callType={callType}
             speaker={speaker}
+            onChangeMicMaster={props.onChangeMicMaster}
           />
         </View>
       )}

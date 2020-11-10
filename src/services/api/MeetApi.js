@@ -86,13 +86,14 @@ export default {
     const encText = accsessUrl + token.cur_date + token.token;
     const hashText = CryptoJS.SHA256(encText);
     const signature = CryptoJS.enc.Base64.stringify(hashText);
-    const url = `${wehagoBaseURL0}${accsessUrl}`;
+    // const url = `${wehagoBaseURL0}${accsessUrl}`;
+    const url = `${meetURL}/room?room=${roomId}`;
     try {
       const data = {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json',
-          signature: signature
+          'Content-Type': 'application/json'
+          // signature: signature
         }
       };
 
@@ -305,18 +306,23 @@ export default {
     }
   },
   // 3-13 화상회의 접속
-  enterMeetRoom: async (a_token, r_token, HASH_KEY, token, videoseq) => {
+  enterMeetRoom: async (videoToken, videoseq) => {
+    const accsessUrl = `/video/connect`;
+    const token = await getToken(accsessUrl);
+    const encText = accsessUrl + token.cur_date + token.token;
+    const hashText = CryptoJS.SHA256(encText);
+    const signature = CryptoJS.enc.Base64.stringify(hashText);
+    // const url = `${wehagoBaseURL0}${accsessUrl}`;
     const url = `${meetURL}/connect`;
-    const headers = securityRequest(a_token, r_token, url, HASH_KEY);
     try {
       const data = {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          ...headers
+          signature
         },
         body: JSON.stringify({
-          token: token,
+          token: videoToken,
           videoseq: videoseq
         })
       };
@@ -459,7 +465,6 @@ export default {
     const hashText = CryptoJS.SHA256(encText);
     const signature = CryptoJS.enc.Base64.stringify(hashText);
     const url = `${wehagoBaseURL0}${accsessUrl}`;
-    debugger
     try {
       const data = {
         method: 'GET',
@@ -469,13 +474,43 @@ export default {
         }
       };
       const response = await fetch(url, data);
-      debugger
       if (response.status !== 200) {
         throw response.resultCode;
       }
       return response.json();
     } catch (err) {
       console.warn('27.getParticipantCount : ', err);
+      return false;
+    }
+  },
+
+  // 3-29 마스터 발언권 제어 유저 조회
+  checkMasterControl: async roomId => {
+    const accsessUrl = `/video/room/master/control/user?room=${roomId}`;
+    const token = await getToken(accsessUrl);
+
+    const encText = accsessUrl + token.cur_date + token.token;
+    const hashText = CryptoJS.SHA256(encText);
+    const signature = CryptoJS.enc.Base64.stringify(hashText);
+
+    // const url = `${wehagoBaseURL0}${accsessUrl}`;
+    const url = `${meetURL}/room/master/control/user?room=${roomId}`;
+    try {
+      const data = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          signature
+        }
+      };
+
+      const response = await fetch(url, data);
+      if (response.status !== 200) {
+        throw await response.json();
+      }
+      return response.json();
+    } catch (err) {
+      console.warn('20.checkVersion : ', err);
       return false;
     }
   },

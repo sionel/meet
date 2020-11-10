@@ -2,10 +2,16 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { View, StyleSheet, Animated, Text } from 'react-native';
-import { useSelector } from 'react-redux';
 
+import { useSelector, useDispatch } from 'react-redux';
 export default function SimpleNoti() {
   const isMasterControl = useSelector(state => state.local['isMasterControl']);
+  const isMuteMic = useSelector(state => state.local['user']['isMuteMic']);
+  const myOrder = useSelector(state => state.local['myOrder']);
+  const messageFlag = useSelector(state => state.local['messageFlag']);
+  const toastMessage = useSelector(state => state.local['toastMessage']);
+
+  const dispatch = useDispatch();
 
   const [isFirst, setIsFirst] = useState(true);
   const [message, setMessage] = useState('');
@@ -28,12 +34,38 @@ export default function SimpleNoti() {
   };
 
   useEffect(() => {
-    debugger
-    setIsFirst(true);
+    debugger;
+    if (isFirst) return;
+    else if (myOrder) {
+      dispatch({ type: 'TOGGLE_MY_ORDER' });
+    } else if (isMasterControl) {
+      setMessage(
+        isMuteMic
+          ? '마스터가 마이크를 비활성화 처리 했습니다.'
+          : '마스터가 마이크를 활성화 처리 했습니다.'
+      );
+      fadeIn(true);
+      setTimeout(() => {
+        fadeOut(false);
+      }, 2000);
+    }
+  }, [isMuteMic]);
+
+  useEffect(() => {
+    setIsFirst(false);
   }, []);
 
   useEffect(() => {
-    debugger
+    if (isFirst) return;
+
+    setMessage(toastMessage);
+    fadeIn(true);
+    setTimeout(() => {
+      fadeOut(false);
+    }, 2000);
+  }, [messageFlag]);
+
+  useEffect(() => {
     if (isFirst) return;
     else {
       setMessage(
@@ -47,7 +79,6 @@ export default function SimpleNoti() {
       }, 2000);
     }
   }, [isMasterControl]);
-
   //return //showFlag ? (
   return (
     <Animated.View

@@ -21,7 +21,6 @@ const mapStateToProps = state => {
     user: { auth },
     documentShare
   } = state;
-
   const mainUser = getMainUser(mainUserId, user, list);
 
   return {
@@ -34,7 +33,8 @@ const mapStateToProps = state => {
     list,
     user,
     from: state.user?.from,
-    isMasterControl
+    isMasterControl,
+    isMuteMic: user?.isMuteMic
   };
 };
 
@@ -46,7 +46,8 @@ const mapDispatchToProps = dispatch => {
       dispatch(localActions.toggleMuteVideo(muteState)),
     toggleMuteMic: muteState => dispatch(localActions.toggleMuteMic(muteState)),
     changeMasterControlMode: flag =>
-      dispatch(localActions.changeMasterControlMode(flag))
+      dispatch(localActions.changeMasterControlMode(flag)),
+    toggleMuteMicByMe: () => dispatch(localActions.toggleMuteMicByMe())
   };
 };
 

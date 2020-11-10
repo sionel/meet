@@ -27,7 +27,6 @@ class SettingScreenContainer extends React.Component {
     this._init();
     let tracks = await this._getTrack();
     let accesstype = this.props.screenProps?.params?.accesstype;
-
     if (Platform.OS !== 'ios') {
       Orientation.lockToPortrait();
     }
@@ -104,7 +103,11 @@ class SettingScreenContainer extends React.Component {
       ).resultData;
     } else if (item?.params?.accesstype === 'joincode') {
       roomToken = (
-        await MeetApi.getMeetRoomTokenJoincode(params.roomId, params.joincode, name)
+        await MeetApi.getMeetRoomTokenJoincode(
+          params.roomId,
+          params.joincode,
+          name
+        )
       ).resultData;
     } else {
       // 토큰받고
@@ -118,7 +121,7 @@ class SettingScreenContainer extends React.Component {
         )
       ).resultData;
     }
-    
+
     // this.props.navigation.navigate('Home'); replace가 문제 없으면 삭제
     navigation.replace('Conference', {
       item: { tracks, roomToken, name, ...item }

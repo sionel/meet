@@ -46,7 +46,9 @@ class SplashScreenContainer extends Component {
     result = await this._handleCheckSecurity();
 
     if (!result) return;
-    // this.props.url.url =
+    // this.props.url =
+    //   'wehago.meet://?call_type=1&type=conference&room_id=ad_MEETXNGPKOWZFJPG_20201109141646h0386&mPORTAL_ID=hancho01&mHASH_KEY=111662869701943769610280347764687033287&mAuth_r_token=mJXqT58MIeGhYeRbSSjK3mMjPAFbDK&mAuth_a_token=qDQCl3EZB3glAxHNk5rk0hdC3g3KMK&cno=9';
+
     //   'wehago.meet://?is_creater=1&call_type=3&type=0&room_id=ad_yEFNRUFejACKvtcY_202010301318375zt13&owner_id=sadb0101&owner_name=%ED%85%8C%ED%8B%91&cno=9&access=fHnxfMYHiZHHHNMhLuMsZL8LDamgv1';
     //   'wehago.meet://?login_info=email&type=conference&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ2aWRlby53ZWhhZ28uY29tIiwicm9vbSI6ImMwMGE0ZTRmLWU1MGUtNDZkYy1hMWM3LTRkMmJlNjEyMTA4MCIsImVtYWlsIjoic2FkYjAxMDFAbmF2ZXIuY29tIiwiaWF0IjoxNjAzOTM5NTkyLCJleHAiOjE5MTkyOTk1OTJ9.1gQzLWSb-8CQSQI0ghnwxjuk9KE4PyS9mfyxOqAN84U';
     // 'com.wehago.meet://?login_info=web&type=conference&mPORTAL_ID=sadb0101&mHASH_KEY=250225457919518237896475074429028380236&mAuth_r_token=nXW4yLhDwJ3SPYwcekCyUDpUdhZlXR&mAuth_a_token=mVROYYM4M23GHrjfDOC3sJHZ80da48&cno=9&video_id=111';
@@ -117,7 +119,6 @@ class SplashScreenContainer extends Component {
   };
 
   _handleCheckVersion = async noti => {
-
     const result = await MeetApi.checkVersion();
     // 버전 수정
     if (!result) return [];
@@ -336,7 +337,6 @@ class SplashScreenContainer extends Component {
     let result = querystringParser(url);
     // let proceed;
     let flag;
-
     // 화상회의 요청인지 판별
     if (result.is_creater === '9') {
       // 비즈박스에서 올 경우 하나가 있음

@@ -37,6 +37,13 @@ const CONFERENCE_PIP_MODE = 'CONFERENCE_PIP_MODE';
 const SET_MASTER_CONTROL = 'SET_MASTER_CONTROL';
 
 const TOGGLE_MUTE_MIC_MASTER = 'TOGGLE_MUTE_MIC_MASTER';
+
+// 마스터 제어중일때 내가 내 마이크 종료하는 경우
+const TOGGLE_MUTE_MIC_BY_ME = 'TOGGLE_MUTE_MIC_BY_ME';
+
+const TOGGLE_MY_ORDER = 'TOGGLE_MY_ORDER';
+
+const TOAST_MESSAGE = 'TOAST_MESSAGE';
 //#endregion Action Types
 
 //#region Initial State
@@ -50,7 +57,9 @@ const initialState = {
   callType: null,
   message: [],
   pipMode: false,
-  isMasterControl: false
+  isMasterControl: false,
+  messageFlag: false,
+  toastMessage:''
 };
 
 //#endregion
@@ -85,7 +94,16 @@ function reducer(state = initialState, action) {
       return setMasterMode(state, action);
     case TOGGLE_MUTE_MIC_MASTER:
       return applyToggleMuteMicMaster(state, action);
-
+    case TOGGLE_MUTE_MIC_BY_ME:
+      return applyToggleMuteMicByMe(state, action);
+    case TOGGLE_MY_ORDER:
+      return { ...state, myOrder: false };
+    case TOAST_MESSAGE:
+      return {
+        ...state,
+        messageFlag: !state.messageFlag,
+        toastMessage: action.toastMessage
+      };
     default:
       return state;
   }
@@ -106,6 +124,7 @@ function joinConference(conferenceInfo) {
 
 function applyJoinConference(state, action) {
   const { conferenceInfo } = action;
+
   const user = {
     id: conferenceInfo.id,
     cid: conferenceInfo.cid,
@@ -286,6 +305,51 @@ function applyToggleMuteMic(state, action) {
 
 //#endregion TOGGLE_MUTE_MIC
 
+//#region
+function toggleMuteMicByMe(micMute) {
+  return dispatch => {
+    dispatch({
+      type: TOGGLE_MUTE_MIC_BY_ME,
+      micMute
+    });
+  };
+}
+
+function applyToggleMuteMicByMe(state, action) {
+  const { user } = state;
+  const { micMute } = action;
+  if (user && user.audioTrack) {
+    const currentMute =
+      typeof micMute === 'undefined' ? user.isMuteMic : !micMute;
+    if (currentMute) {
+      user.audioTrack.unmute();
+    } else {
+      user.audioTrack.mute();
+    }
+    return {
+      ...state,
+      user: {
+        ...user,
+        isMuteMic: !currentMute
+      },
+      myOrder: true
+    };
+  }
+
+  return {
+    ...state
+  };
+}
+
+function toggleMyOrder() {
+  return dispatch => {
+    dispatch({
+      type: TOGGLE_MY_ORDER
+    });
+  };
+}
+//#endregion
+
 //#region TOGGLE_MUTE_SPEAKER
 
 function toggleMuteSpeaker(speakerMute) {
@@ -385,7 +449,6 @@ function applySetConferencePIPMode(state, action) {
   };
 }
 
-
 //#region  SET_MASTER_CONTROL
 function changeMasterControlMode(id) {
   return dispatch => {
@@ -403,7 +466,6 @@ function setMasterMode(state, action) {
   };
 }
 //#endregion
-
 
 //#region TOGGLE_MUTE_MIC_MASTER
 
@@ -441,6 +503,18 @@ function applyToggleMuteMicMaster(state, action) {
 
 //#endregion
 
+//#region  toastMessage
+
+function setToastMessage(toastMessage) {
+  return dispatch => {
+    dispatch({
+      type: TOAST_MESSAGE,
+      toastMessage
+    });
+  };
+}
+//#endregion
+
 export const actionCreators = {
   setConferenceMode,
   joinConference,
@@ -452,7 +526,10 @@ export const actionCreators = {
   setConferenceCreatedTime,
   receiceConferenceMessage,
   changeMasterControlMode,
-  toggleMuteMicMaster
+  toggleMuteMicMaster,
+  toggleMuteMicByMe,
+  toggleMyOrder,
+  setToastMessage
 };
 
 export default reducer;

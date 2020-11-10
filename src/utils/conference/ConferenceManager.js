@@ -55,26 +55,19 @@ class ConferenceManager {
       tracks
     );
 
-    this.callType = callType; // x
-
-    // 입장시 토큰 제출(디비에 인원 파악용)
-    if (Object.keys(this._auth).length > 0) {
-      await MeetApi.enterMeetRoom(
-        this._auth.AUTH_A_TOKEN,
-        this._auth.AUTH_R_TOKEN,
-        this._auth.HASH_KEY,
-        this._item.roomToken,
-        this._room.myUserId()
-      );
-    }
-    // 대화방 접속 시간 세팅
+    await MeetApi.enterMeetRoom(token, this._room.myUserId());
     const createdTime = this._room.properties['created-ms'];
     this._dispatch(localActionCreators.setConferenceCreatedTime(createdTime));
 
     const id = 'localUser';
-    if (!tracks) tracks = this._conferenceConnector.tracks;
     const videoTrack = tracks.find(track => track.getType() === 'video');
     const audioTrack = tracks.find(track => track.getType() === 'audio');
+
+    const { audio: audioPolicy } = this._room.startMutedPolicy;
+    if (audioPolicy) {
+      await audioTrack.mute();
+    }
+
     await this._dispatch(
       localActionCreators.joinConference({
         id,
@@ -83,10 +76,15 @@ class ConferenceManager {
         nickname: auth.nickname,
         videoTrack,
         audioTrack,
-        callType // x
+        callType
       })
     );
     this._dispatch(mainUserActionCreators.setMainUserNotExist(id));
+
+    const master = await MeetApi.checkMasterControl(roomName);
+    this._dispatch(
+      localActionCreators.changeMasterControlMode(master.resultData.videoseq)
+    );
   };
 
   /**
@@ -143,7 +141,8 @@ class ConferenceManager {
       CHANGED_MIC_CONTROL_MODE_BY_MASTER: this.changeMicControlModeByMaster,
       CHANGED_MIC_CONTROL_USER_MODE_BY_MASTER: this
         .changeMicControlUserModeByMaster,
-      CHANGED_MIC_MUTE_BY_MASTER: this.changeMicMuteByMaster
+      CHANGED_MIC_MUTE_BY_MASTER: this.changeMicMuteByMaster,
+      REJECTED_BY_MASTER: this.rejectedByMaster
     };
     return handler;
   };
@@ -156,8 +155,8 @@ class ConferenceManager {
     JitsiMeetJS.init({
       ...config
     });
-    const a = JitsiMeetJS.isDesktopSharingEnabled()
-    
+    const a = JitsiMeetJS.isDesktopSharingEnabled();
+
     // JitsiMeetJS Log Level을 설정한다.
     JitsiMeetJS.setLogLevel(JitsiMeetJS.logLevels.ERROR);
   };
@@ -332,31 +331,30 @@ class ConferenceManager {
   /*
    * 마스터가 참가자들 컨트롤 할 때
    */
-  // CHANGED_MIC_CONTROL_MODE_BY_MASTER
+  //CHANGED_MIC_CONTROL_MODE_BY_MASTER
   //CHANGED_MIC_CONTROL_USER_MODE_BY_MASTER
   //CHANGED_MIC_MODE_BY_MASTER
   changeMicControlModeByMaster = value => {
-    debugger 
+    // 활설화 or 비활성화 누르면
     this._dispatch(localActionCreators.toggleMuteMicMaster(value));
   };
   changeMicControlUserModeByMaster = flag => {
-    debugger
+    // 제어하기 누르면
     this._dispatch(localActionCreators.changeMasterControlMode(flag));
   };
   changeMicMuteByMaster = flag => {
-    debugger
     this._dispatch(localActionCreators.toggleMuteMicMaster(flag));
   };
 
   requestAttention = name => {
-    debugger
-    this._conferenceConnector.requestAttention(name)
-  }
+    this._conferenceConnector.requestAttention(name);
+  };
   stopAttention = name => {
-    debugger
-    this._conferenceConnector.stopAttention(name)
-  }
-
+    this._conferenceConnector.stopAttention(name);
+  };
+  rejectedByMaster = () => {
+    this._dispatch(localActionCreators.setToastMessage('발언권 요청이 거부되었습니다.'));
+  };
 }
 
 export default ConferenceManager;

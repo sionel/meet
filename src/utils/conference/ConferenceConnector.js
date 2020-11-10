@@ -42,6 +42,14 @@ export const REQUEST_MIC_CONTROL_USER =
 export const REQUEST_MIC_CONTROL_TARGET =
   'CONFERENCE.EVENT.REQUEST.MIC_CONTROL_TARGET'; // 화상대화 타겟 유저 마이크 제어 요청 이벤트
 
+// 제어중일때 발언권 요청 보낸 뒤 승인 또는 거부 이벤트
+export const GRANT_FLOOR = 'GRANT_FLOOR';
+
+// 제어중일때 발언권 요청
+export const REQUEST_FLOOR = 'REQUEST_FLOOR';
+// 제어중일때 발언권 취소
+export const STOP_FLOOR = 'STOP_FLOOR';
+
 // export const REQUEST_GET_CONTROL = 'CONFERENCE.EVENT.REQUEST.REQUEST_GET_CONTROL'; // 마스터 제어 권한 위임 요청 이벤트
 
 // export const RESPONSE_GET_CONTROL = 'CONFERENCE.EVENT.REQUEST.RESPONSE_GET_CONTROL'; // 마스터 제어 권한 위임 반환 이벤트
@@ -103,7 +111,7 @@ class ConferenceConnector {
       });
 
       // 대화방 참가
-      this._room.join();
+      await this._room.join();
 
       return this._room;
     });
@@ -386,25 +394,42 @@ class ConferenceConnector {
     // - 마스터가 마이크 제어 mute를 함 사용자들은 마이크 임의로 킬 수 없음
     // 간단한 토스트 메시지 띄움
     this._room.addCommandListener(REQUEST_MIC_CONTROL, value => {
-      this._handlers.CHANGED_MIC_CONTROL_MODE_BY_MASTER(value);
-        // value.attribute === 'mute' ? true : false
-
+      const {
+        attributes: { controlType }
+      } = value;
+      this._handlers.CHANGED_MIC_CONTROL_MODE_BY_MASTER(controlType === 'mute');
+      // value.attribute === 'mute' ? true : false
     });
 
     // 화상대화 전체 마이크 제어 요청자 사용자 정보 이벤트
     //- 마스터가 마이크 제어 모드 시작하기/종료하기
     this._room.addCommandListener(REQUEST_MIC_CONTROL_USER, value => {
-      this._handlers.CHANGED_MIC_CONTROL_USER_MODE_BY_MASTER(
-        value.value
-      );
+      this._handlers.CHANGED_MIC_CONTROL_USER_MODE_BY_MASTER(value.value);
     });
 
     // 화상대화 타겟 유저 마이크 제어 요청 이벤트
     // - 마스터가 단일 마일 제어 id형식 8자
     this._room.addCommandListener(REQUEST_MIC_CONTROL_TARGET, value => {
       if (this._room.myUserId() === value.attributes.target) {
-        this._handlers.CHANGED_MIC_MUTE_BY_MASTER(value.attributes.isMute)
+        this._handlers.CHANGED_MIC_MUTE_BY_MASTER(
+          value.attributes.isMute === 'true'
+        );
       }
+    });
+
+    this._room.addCommandListener(GRANT_FLOOR, value => {
+      debugger;
+      const result = JSON.parse(value.attributes.targetUser);
+      if (result.jitsiId === this._room.myUserId()) {
+        if (value.attributes.type === 'reject') {
+          this._handlers.REJECTED_BY_MASTER();
+        } else {
+          this._handlers.CHANGED_MIC_MUTE_BY_MASTER(
+            value.attributes.isMute === 'true'
+          );
+        }
+      }
+      // this._handlers
     });
   };
 
@@ -423,6 +448,8 @@ class ConferenceConnector {
     this._room.removeCommandListener(REQUEST_MIC_CONTROL);
     this._room.removeCommandListener(REQUEST_MIC_CONTROL_USER);
     this._room.removeCommandListener(REQUEST_MIC_CONTROL_TARGET);
+
+    this._room.removeCommandListener(GRANT_FLOOR);
   };
 
   /**
@@ -544,25 +571,29 @@ class ConferenceConnector {
     }
   };
 
-  requestAttention = (name) => {
+  requestAttention = name => {
     this._room.sendCommandOnce(REQUEST_FLOOR, {
-      user: JSON.stringify({
-        jitsiId:this._room.myUserId(),
-        name
-      })      
+      value: this._room.myUserId(),
+      attributes: {
+        targetUser: JSON.stringify({
+          jitsiId: this._room.myUserId(),
+          name
+        })
+      }
     });
-  }
+  };
 
-
-  stopAttention = (name) => {
+  stopAttention = name => {
     this._room.sendCommandOnce(STOP_FLOOR, {
-      user: JSON.stringify({
-        jitsiId:this._room.myUserId(),
-        name
-      })      
+      value: this._room.myUserId(),
+      attributes: {
+        targetUser: JSON.stringify({
+          jitsiId: this._room.myUserId(),
+          name
+        })
+      }
     });
-  }
-
+  };
   //#endregion
 }
 

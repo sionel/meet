@@ -200,6 +200,7 @@ class ConferenceScreenContainer extends React.Component {
         onChangeDrawingMode={this._handleChangeDrawingMode}
         onChangeSharingMode={this._handleChangeSharingMode}
         onChangeDocumentPage={this._handleChangeDocumentPage}
+        onChangeMicMaster={this._handleToggleMic}
       />
     ) : (
       <EndCallMessage
@@ -215,12 +216,8 @@ class ConferenceScreenContainer extends React.Component {
     if (item) {
       // 전화 타입 - 화상:1 / 음성:2 / 메신저:3
       this.callType = item.callType || this.state.callType;
-      this.roomType = item.roomType;
-      this.roomId = item.videoRoomId;
-      this.roomToken = item.token;
       this.selectedRoomName = item.selectedRoomName;
     }
-
     // 컴포넌트가 마운트 되면 대화방 초기 설정 후 입장한다.
     this._conferenceManager = new ConferenceManager(dispatch);
 
@@ -235,10 +232,11 @@ class ConferenceScreenContainer extends React.Component {
         if (item) {
           roomId = item.videoRoomId; // item.videoRoomId
           roomType = item.roomType;
-          token = item.token;
+          token = item.roomToken;
         } else {
           roomId = this.props.screenProps.params.room_id;
         }
+
         this._joinConference(
           roomId,
           user_name,
@@ -323,7 +321,8 @@ class ConferenceScreenContainer extends React.Component {
     ) {
       screenProps.onChangeRootState({
         loaded: false,
-        url: undefined
+        url: undefined,
+        params: {}
       });
     } else {
       navigation.goBack();
@@ -359,7 +358,7 @@ class ConferenceScreenContainer extends React.Component {
 
       if (!isIOS) {
         // mic 설정 원래대로
-        this.props.toggleMuteMic(this._conferenceState.isMuteMic);
+        this.props.toggleMuteMicByMe(this._conferenceState.isMuteMic);
 
         if (this._backTimeout) {
           clearTimeout(this._backTimeout);
@@ -402,7 +401,7 @@ class ConferenceScreenContainer extends React.Component {
     );
 
     this._backTimeout = setTimeout(() => {
-      this.props.toggleMuteMic(true); // mic mute
+      this.props.toggleMuteMicByMe(true); // mic mute
       ToastAndroid.show('마이크가 꺼졌습니다.', ToastAndroid.SHORT);
     }, 7500);
   };
@@ -471,6 +470,16 @@ class ConferenceScreenContainer extends React.Component {
       .catch(() => {
         // Picture-in-Picture not supported
       });
+  };
+
+  _handleToggleMic = () => {
+    debugger;
+    if (this.props.isMuteMic) {
+      this._conferenceManager.requestAttention(this.props.user_name);
+    } else {
+      this._conferenceManager.stopAttention(this.props.user_name);
+      this.props.toggleMuteMicByMe()
+    }
   };
 }
 

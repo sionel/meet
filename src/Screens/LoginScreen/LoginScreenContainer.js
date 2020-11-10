@@ -86,7 +86,8 @@ class LoginScreenContainer extends Component {
         loaded: true,
         destination: 'Setting',
         params: {
-          accesstype: 'joincode'
+          accesstype: 'joincode',
+          roomId: result.resultData.room
         }
       });
     }

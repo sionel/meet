@@ -11,7 +11,6 @@ const mapStateToProps = (state, ownProps) => {
     mainUser: { isMuteVideo },
     mainUser: { videoTrack }
   } = ownProps;
-
   return {
     mainUser,
     stream: !isMuteVideo && videoTrack && videoTrack.getOriginalStream(),

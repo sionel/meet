@@ -1,3 +1,16 @@
+
+
+"wehago.meet://
+?mPORTAL_ID=hancho01
+&mHASH_KEY=111662869701943769610280347764687033287
+&mAuth_r_token=mJXqT58MIeGhYeRbSSjK3mMjPAFbDK
+&mAuth_a_token=qDQCl3EZB3glAxHNk5rk0hdC3g3KMK
+&cno=9
+
+token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ2aWRlby53ZWhhZ28uY29tIiwicm9vbSI6IjkxZGY1ZmFlLTQzNTAtNDdiMC1iMTZjLTdmYzk2MzRmMTg1ZCIsImVtYWlsIjoic2FkYjAxMDFAbmF2ZXIuY29tIiwiaWF0IjoxNjA0OTA2MjgxLCJleHAiOjE5MjAyNjYyODF9.lY7h6sYaKfrWBQkGa1pZhSF9auhsRsMuzqQtsBi8evQ
+
+wehago.meet://?login_info=email&type=conference&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ2aWRlby53ZWhhZ28uY29tIiwicm9vbSI6IjkxZGY1ZmFlLTQzNTAtNDdiMC1iMTZjLTdmYzk2MzRmMTg1ZCIsImVtYWlsIjoic2FkYjAxMDFAbmF2ZXIuY29tIiwiaWF0IjoxNjA0OTA2MjgxLCJleHAiOjE5MjAyNjYyODF9.lY7h6sYaKfrWBQkGa1pZhSF9auhsRsMuzqQtsBi8evQ
+
 // 위하고 앱
 "wehago.meet://
 ?   is_creater    =   1
@@ -35,13 +48,38 @@ wehago.meet://
 
 
 com.wehago.meet://
-?login_info=web
+?login_info=mobile
 &type=login
-&mPORTAL_ID=sadb0101
-&mHASH_KEY=4854725718109116718265452297475928184
-&mAuth_r_token=L53dSjquW44bTjNxVyHJ4hOsGrstIv
-&mAuth_a_token=u3ncUZkZsTL2wVk2fN6zyq29hy2JWF
+&mPORTAL_ID=hancho01
+&mHASH_KEY=111662869701943769610280347764687033287
+&mAuth_r_token=mJXqT58MIeGhYeRbSSjK3mMjPAFbDK
+&mAuth_a_token=qDQCl3EZB3glAxHNk5rk0hdC3g3KMK
 &cno=9
+
+com.wehago.meet://?login_info=mobile&type=login&mPORTAL_ID=hancho01&mHASH_KEY=111662869701943769610280347764687033287&mAuth_r_token=mJXqT58MIeGhYeRbSSjK3mMjPAFbDK&mAuth_a_token=qDQCl3EZB3glAxHNk5rk0hdC3g3KMK&cno=9
+wehago.meet://?login_info=mobile&type=login&mPORTAL_ID=hancho01&mHASH_KEY=111662869701943769610280347764687033287&mAuth_r_token=mJXqT58MIeGhYeRbSSjK3mMjPAFbDK&mAuth_a_token=qDQCl3EZB3glAxHNk5rk0hdC3g3KMK&cno=9
 
 com.wehago.meet://?login_info=web&type=login&mPORTAL_ID=sadb0101&mHASH_KEY=4854725718109116718265452297475928184&mAuth_r_token=L53dSjquW44bTjNxVyHJ4hOsGrstIv&mAuth_a_token=u3ncUZkZsTL2wVk2fN6zyq29hy2JWF&cno=9
 wehago.meet://?login_info=web&type=login&mPORTAL_ID=sadb0101&mHASH_KEY=4854725718109116718265452297475928184&mAuth_r_token=L53dSjquW44bTjNxVyHJ4hOsGrstIv&mAuth_a_token=u3ncUZkZsTL2wVk2fN6zyq29hy2JWF&cno=9
+
+
+wehago.meet://
+?login_info=mobile
+&type=login
+&mPORTAL_ID=hancho01
+&mHASH_KEY=111662869701943769610280347764687033287
+&mAuth_r_token=mJXqT58MIeGhYeRbSSjK3mMjPAFbDK
+&mAuth_a_token=qDQCl3EZB3glAxHNk5rk0hdC3g3KMK
+&cno=9"
+
+wehago.meet://
+?call_type=1
+&type=conference
+&room_id=ad_MEETXNGPKOWZFJPG_20201109141646h0386
+&mPORTAL_ID=hancho01
+&mHASH_KEY=111662869701943769610280347764687033287
+&mAuth_r_token=mJXqT58MIeGhYeRbSSjK3mMjPAFbDK
+&mAuth_a_token=qDQCl3EZB3glAxHNk5rk0hdC3g3KMK
+&cno=9"
+
+"wehago.meet://?call_type=1&type=conference&room_id=ad_MEETXNGPKOWZFJPG_20201109141646h0386&mPORTAL_ID=hancho01&mHASH_KEY=111662869701943769610280347764687033287&mAuth_r_token=mJXqT58MIeGhYeRbSSjK3mMjPAFbDK&mAuth_a_token=qDQCl3EZB3glAxHNk5rk0hdC3g3KMK&cno=9"
