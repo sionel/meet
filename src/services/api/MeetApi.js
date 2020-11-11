@@ -86,14 +86,14 @@ export default {
     const encText = accsessUrl + token.cur_date + token.token;
     const hashText = CryptoJS.SHA256(encText);
     const signature = CryptoJS.enc.Base64.stringify(hashText);
-    // const url = `${wehagoBaseURL0}${accsessUrl}`;
-    const url = `${meetURL}/room?room=${roomId}`;
+    const url = `${wehagoBaseURL0}${accsessUrl}`;
+    // const url = `${meetURL}/room?room=${roomId}`;
     try {
       const data = {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json'
-          // signature: signature
+          'Content-Type': 'application/json',
+          signature: signature
         }
       };
 
@@ -312,8 +312,8 @@ export default {
     const encText = accsessUrl + token.cur_date + token.token;
     const hashText = CryptoJS.SHA256(encText);
     const signature = CryptoJS.enc.Base64.stringify(hashText);
-    // const url = `${wehagoBaseURL0}${accsessUrl}`;
-    const url = `${meetURL}/connect`;
+    const url = `${wehagoBaseURL0}${accsessUrl}`;
+    // const url = `${meetURL}/connect`;
     try {
       const data = {
         method: 'POST',
@@ -493,8 +493,8 @@ export default {
     const hashText = CryptoJS.SHA256(encText);
     const signature = CryptoJS.enc.Base64.stringify(hashText);
 
-    // const url = `${wehagoBaseURL0}${accsessUrl}`;
-    const url = `${meetURL}/room/master/control/user?room=${roomId}`;
+    const url = `${wehagoBaseURL0}${accsessUrl}`;
+    // const url = `${meetURL}/room/master/control/user?room=${roomId}`;
     try {
       const data = {
         method: 'GET',

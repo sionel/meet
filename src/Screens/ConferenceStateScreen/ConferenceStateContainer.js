@@ -12,7 +12,7 @@ import Orientation from 'react-native-orientation-locker';
 import DeviceInfo from 'react-native-device-info';
 import { v4 as uuidv4 } from 'uuid';
 
-const { width, height } = Dimensions.get('window'); // TODO: 꼭 해야함
+const { width, height } = Dimensions.get('window');
 const isTablet = DeviceInfo.isTablet();
 
 class ConferenceStateContainer extends React.Component {
@@ -198,39 +198,13 @@ class ConferenceStateContainer extends React.Component {
     let callType = 3;
     let isCreator;
 
-    let participantList = [];
     let count = 0;
     // 50명 체크는 여기서 하되 토큰받는 작업은 setting 페이지에서 함
 
-    // participantList = (
-    //   await MeetApi.getParticipant(
-    //     auth.AUTH_A_TOKEN,
-    //     auth.AUTH_R_TOKEN,
-    //     auth.HASH_KEY,
-    //     auth.last_access_company_no,
-    //     roomId
-    //   )
-    // ).resultData;
 
-    // count = (await MeetApi.getParticipantCount(roomId));
-
-    // if (!iscret) {
-    //   count = (
-    //     await MeetApi.getParticipant(
-    //       auth.AUTH_A_TOKEN,
-    //       auth.AUTH_R_TOKEN,
-    //       auth.HASH_KEY,
-    //       auth.last_access_company_no,
-    //       roomId
-    //     )
-    //   ).resultData;
-    // } else {
-    //   // 비인증 인원수
-    //   Alert.alert('개발예정', '비인증 api 추가되면 바로 넣을겁니다.');
-    // }
-
+    count = (await MeetApi.getParticipantCount(roomId)).resultData;
     // 최대 참여인원 제한 (50명)
-    if (participantList.length >= 50 ) {
+    if (count >= 50) {
       // 50명 초과 방 ㄱ
       conferenceState = 'fullroom';
 

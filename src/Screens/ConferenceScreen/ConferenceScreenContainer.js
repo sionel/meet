@@ -473,7 +473,6 @@ class ConferenceScreenContainer extends React.Component {
   };
 
   _handleToggleMic = () => {
-    debugger;
     if (this.props.isMuteMic) {
       this._conferenceManager.requestAttention(this.props.user_name);
     } else {

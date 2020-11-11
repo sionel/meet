@@ -85,7 +85,7 @@ function applyJoinUser(state, action) {
     userInfo: null
   };
   list.push(participant);
-  
+
   return {
     ...state,
     list
@@ -168,6 +168,7 @@ function applySetRemoteTrack(state, action) {
     const type = track.getType();
     if (type === 'video') {
       findUser.videoTrack = track;
+      findUser.isMuteVideo = track.isMuted();
     } else if (type === 'audio') {
       findUser.audioTrack = track;
     }

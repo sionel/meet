@@ -64,7 +64,6 @@ class HomeScreenContainer extends Component {
    * componentDidMount
    */
   async componentDidMount() {
-
     // 화면 회전 처리
     Orientation.getOrientation(orientation => {
       this.setState({ orientation });
@@ -104,7 +103,6 @@ class HomeScreenContainer extends Component {
 
     // 뒤로가기 버튼 동작
     BackHandler.addEventListener('hardwareBackPress', this._handleBackButton);
-
   }
 
   shouldComponentUpdate = (nextProps, nextState) => {
@@ -172,6 +170,7 @@ class HomeScreenContainer extends Component {
       orientation === 'LANDSCAPE-LEFT' ||
       orientation === 'LANDSCAPE-RIGHT';
 
+    // {props.memberType !== 1 && props.permission && props.plan !== 'WE' && (
     return (
       <View style={{ flex: 1 }}>
         <StatusBar
@@ -384,7 +383,6 @@ class HomeScreenContainer extends Component {
     }
 
     this.setState({ refreshing: false });
-
   };
 
   /**
@@ -481,7 +479,7 @@ class HomeScreenContainer extends Component {
       item: {
         videoRoomId: conferenceId,
         callType,
-        isCreator,
+        isCreator
       }
     });
   };
@@ -504,7 +502,6 @@ class HomeScreenContainer extends Component {
       }
     });
   };
-
 
   /**
    * _handleAppStateChange

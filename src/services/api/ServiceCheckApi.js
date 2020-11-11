@@ -180,9 +180,10 @@ const serviceCheck = async (auth, company, type) => {
       method: 'GET',
       headers
     });
+    debugger
 
     const responseJson = await response.json();
-
+    debugger
     if (responseJson.resultCode === 200) {
       const reType = type === 'P' ? 'is_service_purchase' : 'isServiceDeploy'; // api 에 따라서 return 이 다름
       const hasService = responseJson.resultData[reType] === 'T';

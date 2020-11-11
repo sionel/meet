@@ -46,13 +46,7 @@ class SplashScreenContainer extends Component {
     result = await this._handleCheckSecurity();
 
     if (!result) return;
-    // this.props.url =
-    //   'wehago.meet://?call_type=1&type=conference&room_id=ad_MEETXNGPKOWZFJPG_20201109141646h0386&mPORTAL_ID=hancho01&mHASH_KEY=111662869701943769610280347764687033287&mAuth_r_token=mJXqT58MIeGhYeRbSSjK3mMjPAFbDK&mAuth_a_token=qDQCl3EZB3glAxHNk5rk0hdC3g3KMK&cno=9';
 
-    //   'wehago.meet://?is_creater=1&call_type=3&type=0&room_id=ad_yEFNRUFejACKvtcY_202010301318375zt13&owner_id=sadb0101&owner_name=%ED%85%8C%ED%8B%91&cno=9&access=fHnxfMYHiZHHHNMhLuMsZL8LDamgv1';
-    //   'wehago.meet://?login_info=email&type=conference&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ2aWRlby53ZWhhZ28uY29tIiwicm9vbSI6ImMwMGE0ZTRmLWU1MGUtNDZkYy1hMWM3LTRkMmJlNjEyMTA4MCIsImVtYWlsIjoic2FkYjAxMDFAbmF2ZXIuY29tIiwiaWF0IjoxNjAzOTM5NTkyLCJleHAiOjE5MTkyOTk1OTJ9.1gQzLWSb-8CQSQI0ghnwxjuk9KE4PyS9mfyxOqAN84U';
-    // 'com.wehago.meet://?login_info=web&type=conference&mPORTAL_ID=sadb0101&mHASH_KEY=250225457919518237896475074429028380236&mAuth_r_token=nXW4yLhDwJ3SPYwcekCyUDpUdhZlXR&mAuth_a_token=mVROYYM4M23GHrjfDOC3sJHZ80da48&cno=9&video_id=111';
-    // Linking.addEventListener('url', this._handleGetDeeplink);
     if (this.props.url) {
       await this._handleGetDeeplink(this.props.url);
     } else {
@@ -73,9 +67,9 @@ class SplashScreenContainer extends Component {
   _handleInit = async () => {
     let servernoti = [];
     // 버전 확인
-    // servernoti = await this._handleCheckVersion(servernoti);
+    servernoti = await this._handleCheckVersion(servernoti);
     // 노티 확인
-    // servernoti = await this._handleCheckNotice(servernoti);
+    servernoti = await this._handleCheckNotice(servernoti);
     if (servernoti.length > 0) {
       this.setState({ servernoti, index: 0 });
     } else {
@@ -151,7 +145,7 @@ class SplashScreenContainer extends Component {
         message =
           '더 새로워진 WEHAGO Meet을 만나보세요.\n\n신규 기능은 업데이트 이후 사용 가능합니다.\n\n지금 업데이트 하시겠습니까?';
         buttons = [
-          { test: '아니오', onclick: () => this._handleNextNotice() },
+          { test: '아니오', onclick: this._handleNextNotice },
           {
             text: '업데이트',
             onclick: () =>
@@ -161,7 +155,7 @@ class SplashScreenContainer extends Component {
           }
         ];
         onclick = [
-          () => this._handleNextNotice(),
+          this._handleNextNotice,
           () =>
             Linking.openURL(
               'https://play.google.com/store/apps/details?id=com.wehago.meet'
@@ -187,7 +181,7 @@ class SplashScreenContainer extends Component {
         message =
           '더 새로워진 WEHAGO Meet을 만나보세요.\n\n신규 기능은 업데이트 이후 사용 가능합니다.\n\n지금 업데이트 하시겠습니까?';
         buttons = [
-          { text: '아니오', onclick: () => this._handleNextNotice() },
+          { text: '아니오', onclick: this._handleNextNotice },
           {
             text: '업데이트',
             onclick: () =>
@@ -195,7 +189,7 @@ class SplashScreenContainer extends Component {
           }
         ];
         onclick = [
-          () => this._handleNextNotice(),
+          this._handleNextNotice,
           () =>
             Linking.openURL('https://itunes.apple.com/app/id1455726925?mt=8')
         ];
@@ -294,7 +288,7 @@ class SplashScreenContainer extends Component {
         }
         return 'fail';
       } else {
-        const flag = this._handleOnLogin();
+        const flag = await this._handleOnLogin();
         if (flag) {
           return 'success';
         } else {
@@ -563,6 +557,7 @@ class SplashScreenContainer extends Component {
     // 이상이 없는 회사일 경우 로그인 정상 진행
     if (statusCheck && statusCheck.code === 200) {
       // 서비스 구매여부 조회
+
       const isPurchase = await ServiceCheckApi.serviceCheck(
         this.props.auth,
         this.props.auth.last_company,

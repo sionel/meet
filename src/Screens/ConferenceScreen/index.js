@@ -22,7 +22,7 @@ const mapStateToProps = state => {
     documentShare
   } = state;
   const mainUser = getMainUser(mainUserId, user, list);
-
+  debugger;
   return {
     mainUser,
     mainUserId,

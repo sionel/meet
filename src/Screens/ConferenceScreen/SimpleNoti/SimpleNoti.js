@@ -34,7 +34,6 @@ export default function SimpleNoti() {
   };
 
   useEffect(() => {
-    debugger;
     if (isFirst) return;
     else if (myOrder) {
       dispatch({ type: 'TOGGLE_MY_ORDER' });

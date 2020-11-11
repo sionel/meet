@@ -418,7 +418,6 @@ class ConferenceConnector {
     });
 
     this._room.addCommandListener(GRANT_FLOOR, value => {
-      debugger;
       const result = JSON.parse(value.attributes.targetUser);
       if (result.jitsiId === this._room.myUserId()) {
         if (value.attributes.type === 'reject') {

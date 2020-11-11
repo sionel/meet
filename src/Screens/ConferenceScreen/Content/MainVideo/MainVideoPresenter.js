@@ -126,6 +126,7 @@ const MainVideoPresenter = props => {
     character = JSON.parse(props?.mainUser?.userInfo?.avatar)?.value;
   } 
   character = props?.mainUser?.videoTrack?.isMuted() ? 'jangok' : character;
+  debugger
   return (
     <View style={{ flex: 1, backgroundColor: '#1D1D1D' }}>
       {/* 정상적인 화상회의 일 때 */}
