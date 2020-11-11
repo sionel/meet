@@ -54,9 +54,6 @@ class SplashScreenContainer extends Component {
     }
   };
 
-  // componentWillUnmount = () => {
-  //   // clearTimeout(this.timeout);
-  // };
 
   render() {
     const { alert, servernoti, index } = this.state;
@@ -119,8 +116,8 @@ class SplashScreenContainer extends Component {
 
     const android_major_version = '1';
     const ios_major_version = '1';
-    const android_version = '1.7.1';
-    const ios_version = '1.25.1';
+    const android_version = '2.0.0';
+    const ios_version = '2.0.0';
 
     const platform = Platform.OS;
     let subMessage = result.resultData.message;
@@ -229,10 +226,11 @@ class SplashScreenContainer extends Component {
     return noti;
   };
 
-  _handleNextNotice = () => {
+  _handleNextNotice = async () => {
     const { servernoti, index } = this.state;
+    debugger
     if (servernoti.length === index + 1) {
-      const result = this._handleCheckAutoLogin();
+      const result = await this._handleCheckAutoLogin();
       if (result === 'success') {
         this.props.onChangeRootState({
           loaded: true,
