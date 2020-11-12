@@ -54,12 +54,14 @@ class ConferenceManager {
       auth,
       tracks
     );
-
+-
     await MeetApi.enterMeetRoom(token, this._room.myUserId());
     const createdTime = this._room.properties['created-ms'];
     this._dispatch(localActionCreators.setConferenceCreatedTime(createdTime));
 
     const id = 'localUser';
+    if (!tracks) tracks = this._conferenceConnector.tracks;
+
     const videoTrack = tracks.find(track => track.getType() === 'video');
     const audioTrack = tracks.find(track => track.getType() === 'audio');
 

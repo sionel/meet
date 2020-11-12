@@ -20,14 +20,12 @@ export default class App extends Component {
 
   componentDidMount() {
     Linking.addEventListener('url', event => {
-      debugger;
       this.setState({ loaded: false, url: event.url });
     });
   }
 
   componentDidUpdate(prevProps) {
     if (!prevProps.url.url && this.props.url.url) {
-      debugger
       this.setState({ loaded: false, url: this.props.url.url });
     }
   }

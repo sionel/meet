@@ -227,11 +227,9 @@ class ConferenceScreenContainer extends React.Component {
       this.delayLoading && clearTimeout(this.delayLoading);
       this.delayLoading = setTimeout(() => {
         let roomId;
-        let roomType;
         let token;
         if (item) {
           roomId = item.videoRoomId; // item.videoRoomId
-          roomType = item.roomType;
           token = item.roomToken;
         } else {
           roomId = this.props.screenProps.params.room_id;
@@ -241,7 +239,6 @@ class ConferenceScreenContainer extends React.Component {
           roomId,
           user_name,
           auth,
-          roomType,
           token,
           item ? item.tracks : null
         );
@@ -269,7 +266,7 @@ class ConferenceScreenContainer extends React.Component {
   };
 
   /** 대화방 참가 생성 */
-  _joinConference = async (roomName, name, auth, roomType, token, tracks) => {
+  _joinConference = async (roomName, name, auth, token, tracks) => {
     await this._conferenceManager.join(
       roomName,
       name,

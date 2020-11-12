@@ -46,7 +46,6 @@ class SplashScreenContainer extends Component {
     result = await this._handleCheckSecurity();
 
     if (!result) return;
-    debugger;
     if (this.props.url) {
       await this._handleGetDeeplink(this.props.url);
     } else {
