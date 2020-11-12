@@ -102,7 +102,6 @@ class SettingScreenContainer extends React.Component {
         await MeetApi.getMeetRoomTokenEmail(params.roomId, params.token, name)
       ).resultData;
     } else if (item?.params?.accesstype === 'joincode') {
-      debugger
       roomToken = (
         await MeetApi.getMeetRoomTokenJoincode(
           params.roomId,
@@ -110,7 +109,6 @@ class SettingScreenContainer extends React.Component {
           name
         )
       ).resultData;
-      debugger
     } else {
       // 토큰받고
       roomToken = (

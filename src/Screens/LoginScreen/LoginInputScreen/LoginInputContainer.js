@@ -27,7 +27,6 @@ export default function LoginInputContainer(props) {
   } else {
     _serviceCode = Platform.OS === 'ios' ? 'wehagomeet' : 'meet';
   }
-
   const [userId, setUserId] = React.useState('');
   const [userPw, setUserPw] = React.useState('');
   const [captchaInput, setCaptchaInput] = React.useState('');
@@ -50,8 +49,7 @@ export default function LoginInputContainer(props) {
     setCaptchaInput('');
   };
 
-  _handleCheckServce = async (auth) => {
-
+  _handleCheckServce = async auth => {
     const statusCheck = await ServiceCheckApi.companyStatusCheck(
       auth,
       auth.last_access_company_no
@@ -70,8 +68,7 @@ export default function LoginInputContainer(props) {
         auth.last_access_company_no,
         'D' // 배포여부 확인
       );
-      UserActions.setPermission(isDeploy);
-
+      props.setPermission(isDeploy);
       props.onChangeRootState({
         destination: isPurchase ? 'List' : 'SelectCompany'
       });
@@ -113,7 +110,7 @@ export default function LoginInputContainer(props) {
 
     // ANCHOR Create Token
     const UserApiRequest = UserApi;
-    
+
     const getAuth = await UserApiRequest.loginRequest(
       userId,
       userPw,
@@ -202,53 +199,45 @@ export default function LoginInputContainer(props) {
             `요청된 작업을 처리하던중 문제가 발생했습니다. 다시 시도해주세요.`
           );
         }
+
+        //   const statusCheck = await ServiceCheckApi.companyStatusCheck(
+        //     auth,
+        //     auth.last_access_company_no
+        //   );
+        //   // 이상이 없는 회사일 경우 로그인 정상 진행
+        //   if (statusCheck && statusCheck.code === 200) {
+        //     // 서비스 구매여부 조회
+        //     const isPurchase = await ServiceCheckApi.serviceCheck(
+        //       auth,
+        //       auth.last_access_company_no,
+        //       'P' // 구매여부 확인
+        //     );
+        //     // 서비스 배포여부 조회
+        //     const isDeploy = await ServiceCheckApi.serviceCheck(
+        //       auth,
+        //       auth.last_access_company_no,
+        //       'D' // 배포여부 확인
+        //     );
+        //     UserActions.setPermission(isDeploy);
+        //     props.onChangeRootState({
+        //       destination: isPurchase ? 'list' : 'company'
+        //     });
+        //   } else if (statusCheck && statusCheck.code === 400) {
+        //     // 회사에 이상이 있을 경우, 회사 선택 화면으로 이동
+        //     Alert.alert('알림', statusCheck.message);
+        //     props.onChangeRootState({
+        //       destination: 'company'
+        //     });
+        //   } else {
+        //     // 중간에 알 수 없는 오류 발생 시
+        //     props.onChangeRootState({
+        //       destination: 'company'
+        //     });
+        //   }
+        // }
+
         return;
       }
-      // else if (
-      //   result.resultData.user_name ||
-      //   result.resultData.auth.user_name
-      // ) {
-
-      //   const statusCheck = await ServiceCheckApi.companyStatusCheck(
-      //     auth,
-      //     auth.last_access_company_no
-      //   );
-      //   // 이상이 없는 회사일 경우 로그인 정상 진행
-      //   if (statusCheck && statusCheck.code === 200) {
-      //     // 서비스 구매여부 조회
-      //     const isPurchase = await ServiceCheckApi.serviceCheck(
-      //       auth,
-      //       auth.last_access_company_no,
-      //       'P' // 구매여부 확인
-      //     );
-      //     // 서비스 배포여부 조회
-      //     const isDeploy = await ServiceCheckApi.serviceCheck(
-      //       auth,
-      //       auth.last_access_company_no,
-      //       'D' // 배포여부 확인
-      //     );
-      //     UserActions.setPermission(isDeploy);
-      //     props.onChangeRootState({
-      //       destination: isPurchase ? 'list' : 'company'
-      //     });
-      //   } else if (statusCheck && statusCheck.code === 400) {
-      //     // 회사에 이상이 있을 경우, 회사 선택 화면으로 이동
-      //     Alert.alert('알림', statusCheck.message);
-      //     props.onChangeRootState({
-      //       destination: 'company'
-      //     });
-      //   } else {
-      //     // 중간에 알 수 없는 오류 발생 시
-      //     props.onChangeRootState({
-      //       destination: 'company'
-      //     });
-      //   }
-      // }
-
-      // onLoginSuccess({
-      //   type: 'ON_LOGIN_SUCCESS',
-      //   auth: getAuth.resultData
-      // });
     } else {
       // 로그인 실패
       captcha && setCaptcha(_getTransactionId());

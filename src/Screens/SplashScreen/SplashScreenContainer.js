@@ -46,14 +46,13 @@ class SplashScreenContainer extends Component {
     result = await this._handleCheckSecurity();
 
     if (!result) return;
-
+    debugger;
     if (this.props.url) {
       await this._handleGetDeeplink(this.props.url);
     } else {
       this._handleInit();
     }
   };
-
 
   render() {
     const { alert, servernoti, index } = this.state;
@@ -67,10 +66,12 @@ class SplashScreenContainer extends Component {
     servernoti = await this._handleCheckVersion(servernoti);
     // 노티 확인
     servernoti = await this._handleCheckNotice(servernoti);
+
     if (servernoti.length > 0) {
       this.setState({ servernoti, index: 0 });
     } else {
       const result = await this._handleCheckAutoLogin();
+
       if (result === 'success') {
         this.props.onChangeRootState({
           loaded: true,
@@ -111,6 +112,7 @@ class SplashScreenContainer extends Component {
 
   _handleCheckVersion = async noti => {
     const result = await MeetApi.checkVersion();
+
     // 버전 수정
     if (!result) return [];
 
@@ -207,6 +209,7 @@ class SplashScreenContainer extends Component {
 
   _handleCheckNotice = async noti => {
     const result = await MeetApi.checkNotice();
+
     if (!result) return [];
     // 확인코드 :101
     // 강제종료 코드 : 102
@@ -228,7 +231,6 @@ class SplashScreenContainer extends Component {
 
   _handleNextNotice = async () => {
     const { servernoti, index } = this.state;
-    debugger
     if (servernoti.length === index + 1) {
       const result = await this._handleCheckAutoLogin();
       if (result === 'success') {
@@ -339,7 +341,8 @@ class SplashScreenContainer extends Component {
           call_type: result.call_type,
           room_id: result.room_id,
           owner_name: decodeURI(result.owner_name)
-        }
+        },
+        url: undefined
       });
       return;
     } else if (result.is_creater) {
@@ -352,7 +355,8 @@ class SplashScreenContainer extends Component {
           call_type: result.call_type,
           room_id: result.room_id,
           owner_name: decodeURI(result.owner_name)
-        }
+        },
+        url: undefined
       });
       return;
     } else if (result.login_info === 'web') {
@@ -361,7 +365,8 @@ class SplashScreenContainer extends Component {
       if (!proceed)
         this.props.onChangeRootState({
           loaded: true,
-          destination: 'Login'
+          destination: 'Login',
+          url: undefined
         });
 
       // if (proceed === 'same') {
@@ -390,12 +395,14 @@ class SplashScreenContainer extends Component {
           params: {
             accesstype: 'web',
             roomId: result.video_id
-          }
+          },
+          url: undefined
         });
       } else {
         this.props.onChangeRootState({
           loaded: true,
-          destination: 'Login'
+          destination: 'Login',
+          url: undefined
         });
       }
     } else if (result.login_info === 'email') {
@@ -415,7 +422,8 @@ class SplashScreenContainer extends Component {
           roomId: decoded.room,
           accesstype: 'email',
           token: result.token
-        }
+        },
+        url: undefined
       });
     } else {
       // 로그인 정보 보관
@@ -424,7 +432,8 @@ class SplashScreenContainer extends Component {
       if (!proceed) {
         this.props.onChangeRootState({
           loaded: true,
-          destination: 'Login'
+          destination: 'Login',
+          url: undefined
         });
       }
       flag = await this._handleSaveUserinfo(
@@ -441,24 +450,28 @@ class SplashScreenContainer extends Component {
             params: {
               accesstype: 'mobile',
               roomId: result.video_id
-            }
+            },
+            url: undefined
           });
         } else {
           this.props.onChangeRootState({
             loaded: true,
-            destination: 'Login'
+            destination: 'Login',
+            url: undefined
           });
         }
       } else {
         if (flag) {
           this.props.onChangeRootState({
             loaded: true,
-            destination: 'List'
+            destination: 'List',
+            url: undefined
           });
         } else {
           this.props.onChangeRootState({
             loaded: true,
-            destination: 'Login'
+            destination: 'Login',
+            url: undefined
           });
         }
       }
@@ -553,9 +566,9 @@ class SplashScreenContainer extends Component {
       this.props.auth.last_company
     );
     // 이상이 없는 회사일 경우 로그인 정상 진행
+
     if (statusCheck && statusCheck.code === 200) {
       // 서비스 구매여부 조회
-
       const isPurchase = await ServiceCheckApi.serviceCheck(
         this.props.auth,
         this.props.auth.last_company,

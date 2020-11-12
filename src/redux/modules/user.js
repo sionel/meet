@@ -229,8 +229,7 @@ const initialState = {
   appIntro: false,
   from: '',
   log: {},
-  session: true,
-  permission: false
+  session: true
 };
 
 //#endregion initialState
@@ -251,7 +250,7 @@ function reducer(state = initialState, action) {
       };
     // return applyTest(state, action);
     case LOGOUT:
-      return { ...state, auth: {}, isLogin: false };
+      return { ...state, auth: {}, isLogin: false, permission: false };
     case NETWORK_DISCONNECT:
       return { ...state, isLogin: false };
     case TOKEN:

@@ -4,7 +4,7 @@ import LoginInputContainer from './LoginInputContainer';
 
 // map state to props
 const mapStateToProps = state => ({
-    auth: state.user.auth,
+  auth: state.user.auth
   //   from: state.user.from,
   //   permission: state.user.permission
 });
@@ -15,13 +15,7 @@ const mapDispatchToProps = dispatch => {
     // onTokenLogin: (token, cno) => dispatch(UserActions.tokenLogin(token, cno)),
     // loginRequest: (data, access_pass) =>
     //   dispatch(UserActions.loginRequest(data, access_pass)),
-    loginCheckRequest: (
-      AUTH_A_TOKEN,
-      AUTH_R_TOKEN,
-      cno,
-      HASH_KEY,
-      from
-    ) =>
+    loginCheckRequest: (AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY, from) =>
       dispatch(
         UserActions.loginCheckRequest(
           AUTH_A_TOKEN,
@@ -30,7 +24,8 @@ const mapDispatchToProps = dispatch => {
           HASH_KEY,
           from
         )
-      )
+      ),
+    setPermission: permission => dispatch(UserActions.setPermission(permission))
     // onAgreement: () => dispatch(UserActions.agreement()),
     // onLogout: () => dispatch(UserActions.logout())
   };

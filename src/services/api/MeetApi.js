@@ -7,6 +7,7 @@
 import { meetURL, securityRequest, wehagoBaseURL0 } from '../../utils';
 import * as CryptoJS from 'crypto-js';
 import { v4 as uuidv4 } from 'uuid';
+import { Alert } from 'react-native';
 
 const getToken = async accessUrl => {
   try {
@@ -136,7 +137,6 @@ export default {
   getMeetRoomsList: async (a_token, r_token, cno, user_id, HASH_KEY) => {
     const url = `${meetURL}/room/list?cno=${cno}`;
     const headers = securityRequest(a_token, r_token, url, HASH_KEY);
-
     try {
       const data = {
         method: 'GET',
@@ -147,10 +147,20 @@ export default {
       };
       const response = await fetch(url, data);
       if (response.status !== 200) {
-        throw response.resultCode;
+        throw response;
       }
       return response.json();
     } catch (err) {
+      const a = await err.json();
+      await Alert.alert('response', err, [
+        {
+          text: '확인',
+          onPress: () => {
+            resolve();
+          }
+        }
+      ]);
+
       console.warn('4.getMeetRoomsList : ', err);
       return false;
     }
@@ -338,33 +348,34 @@ export default {
     }
   },
 
-  // 3-20 화상회의 모바일 버전 체크
+  // 6-2 화상회의 모바일 버전 체크
   checkVersion: async () => {
     const date = new Date().getTime();
 
     const accsessUrl = `/video/mobile/version?timestamp=${date}`;
     const token = await getToken(accsessUrl);
-
     const encText = accsessUrl + token.cur_date + token.token;
     const hashText = CryptoJS.SHA256(encText);
     const signature = CryptoJS.enc.Base64.stringify(hashText);
     const url = `${wehagoBaseURL0}${accsessUrl}`;
+
     try {
       const data = {
         method: 'GET',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-          signature: signature
+          signature
         }
       };
 
       const response = await fetch(url, data);
+
       if (response.status !== 200) {
         throw await response.json();
       }
       return response.json();
     } catch (err) {
-      console.warn('20.checkVersion : ', err);
+      console.warn('6-2.checkVersion : ', err);
       return false;
     }
   },

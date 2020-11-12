@@ -363,7 +363,6 @@ class HomeScreenContainer extends Component {
     if (wetalkList.errors) {
       return this._handleAutoLogin();
     }
-
     // 실제 받아오는 화상회의 리스트
     const cl = await MeetApi.getMeetRoomsList(
       auth.AUTH_A_TOKEN,
@@ -373,7 +372,6 @@ class HomeScreenContainer extends Component {
       auth.HASH_KEY
     );
     // 토큰만료시
-
     if (cl) {
       onSetConferenceList(
         cl.resultData.sort((a, b) =>
@@ -409,7 +407,6 @@ class HomeScreenContainer extends Component {
       auth.HASH_KEY,
       this.props.from
     );
-
     // 재 로그인
     if (checkResult.errors) {
       if (checkResult.errors.code === 'E002') {

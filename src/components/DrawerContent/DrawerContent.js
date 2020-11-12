@@ -4,7 +4,6 @@ import {
   TouchableOpacity,
   View,
   Text,
-  TouchableHighlight,
   Linking,
   Image,
   StyleSheet
@@ -81,10 +80,13 @@ export default function DrawerContent(props) {
     const androidLoginInfo = `&portal_id=${auth.portal_id}&hash_key=${auth.HASH_KEY}&auth_r_token=${auth.AUTH_R_TOKEN}&auth_a_token=${auth.AUTH_A_TOKEN}&cno=${auth.cno}`;
 
     Linking.openURL(
-      type === 'wehago' ? 
-      os === 'ios' ? iosURL[type] + commonLoginInfo : androidURL[type] + androidLoginInfo
-      :
-      os === 'ios' ? iosURL[type] + commonLoginInfo : androidURL[type] + commonLoginInfo
+      type === 'wehago'
+        ? os === 'ios'
+          ? iosURL[type] + commonLoginInfo
+          : androidURL[type] + androidLoginInfo
+        : os === 'ios'
+        ? iosURL[type] + commonLoginInfo
+        : androidURL[type] + commonLoginInfo
     ).catch(err => {
       console.warn('err1', err);
       Linking.openURL(
@@ -108,7 +110,7 @@ export default function DrawerContent(props) {
       <Text style={styles.serviceText}>전체서비스</Text>
 
       <View style={styles.shortcutRow}>
-        <TouchableHighlight
+        <TouchableOpacity
           onPress={() => {
             onClickShortcutIcon('wehago');
           }}
@@ -118,8 +120,8 @@ export default function DrawerContent(props) {
             <Image source={btnWehago} style={styles.shortcutImage} />
             <Text style={styles.shortcutText}>{'WEHAGO'}</Text>
           </>
-        </TouchableHighlight>
-        <TouchableHighlight
+        </TouchableOpacity>
+        <TouchableOpacity
           onPress={() => {
             onClickShortcutIcon('wedrive');
           }}
@@ -129,9 +131,9 @@ export default function DrawerContent(props) {
             <Image source={btnWedrive} style={styles.shortcutImage} />
             <Text style={styles.shortcutText}>{'웹오피스'}</Text>
           </>
-        </TouchableHighlight>
+        </TouchableOpacity>
 
-        <TouchableHighlight
+        <TouchableOpacity
           onPress={() => {
             onClickShortcutIcon('atr');
           }}
@@ -141,8 +143,8 @@ export default function DrawerContent(props) {
             <Image source={btnAtr} style={styles.shortcutImage} />
             <Text style={styles.shortcutText}>{'근태관리'}</Text>
           </>
-        </TouchableHighlight>
-        {/* <TouchableHighlight
+        </TouchableOpacity>
+        {/* <TouchableOpacity
           onPress={() => {
             onClickShortcutIcon('fax');
           }}
@@ -152,11 +154,11 @@ export default function DrawerContent(props) {
             <Image source={btnFax} style={styles.shortcutImage} />
             <Text style={styles.shortcutText}>{'팩스'}</Text>
           </>
-        </TouchableHighlight> */}
+        </TouchableOpacity> */}
       </View>
 
       <View style={styles.shortcutRow}>
-        <TouchableHighlight
+        <TouchableOpacity
           onPress={() => {
             onClickShortcutIcon('elecapproval');
           }}
@@ -166,19 +168,19 @@ export default function DrawerContent(props) {
             <Image source={btnElecapproval} style={styles.shortcutImage} />
             <Text style={styles.shortcutText}>{'전자결재'}</Text>
           </>
-        </TouchableHighlight>
-        <TouchableHighlight style={styles.shortcut}>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.shortcut}>
           <>
             <View style={styles.shortcutImage} />
             <View style={styles.shortcutText} />
           </>
-        </TouchableHighlight>
-        <TouchableHighlight style={styles.shortcut}>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.shortcut}>
           <>
             <View style={styles.shortcutImage} />
             <View style={styles.shortcutText} />
           </>
-        </TouchableHighlight>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -232,7 +234,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: 40,
     height: 40,
-    marginBottom:10
+    marginBottom: 10
   },
   shortcutText: {
     fontSize: 11,

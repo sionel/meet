@@ -123,7 +123,6 @@ const logoutRequest = async auth => {
 
     const response = await fetch(url, data);
     const responseJson = await response.json();
-    console.warn('success', responseJson);
     return responseJson.resultData;
   } catch (err) {
     console.warn('err', err);
