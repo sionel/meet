@@ -17,43 +17,10 @@ import CustomIcon from '../../components/CustomIcon';
 import { Text } from '../../components/StyledText';
 
 export default function LoginScreenPresenter(props) {
-  const { onWehagoLogin, onInputCode } = props;
+  const { onWehagoLogin, onInputCode, joincode, navigation } = props;
   let refs = [];
-  // let _serviceCode;
 
-  // if (iswehagov) {
-  //   _serviceCode = Platform.OS === 'ios' ? 'wehagovmeet' : 'meetv';
-  // } else {
-  //   _serviceCode = Platform.OS === 'ios' ? 'wehagomeet' : 'meet';
-  // }
-
-  // const _handleLoginForWehago = () => {
-  //   const iosUrl = `wehago${iswehagov ? 'v' : ''}://?${_serviceCode}=login`;
-  //   const androidUrl = `wehago${
-  //     iswehagov ? 'v' : ''
-  //   }://app?name=${_serviceCode}&login=true`;
-  //   const iosMarketURL = iswehagov
-  //     ? 'https://www.wehagov.com/#/mobile'
-  //     : 'http://itunes.apple.com/kr/app/wehago/id1363039300?mt=8';
-  //   const androidMarketURL = iswehagov
-  //     ? 'https://www.wehagov.com/#/mobile'
-  //     : 'https://play.google.com/store/apps/details?id=com.duzon.android.lulubizpotal';
-
-  //   Linking.openURL(Platform.OS === 'ios' ? iosUrl : androidUrl).catch(err => {
-  //     Linking.openURL(
-  //       Platform.OS === 'ios' ? iosMarketURL : androidMarketURL
-  //     ).catch(err => {
-  //       Alert.alert(
-  //         '스토어에서 해당 앱을 찾을 수 없습니다.',
-  //         '',
-  //         [{ text: 'OK' }],
-  //         {
-  //           cancelable: true
-  //         }
-  //       );
-  //     });
-  //   });
-  // };
+  debugger;
   return (
     <ImageBackground
       source={require('../../../assets/bgIntroWehagoIphoneX_3x.png')}
@@ -85,81 +52,97 @@ export default function LoginScreenPresenter(props) {
             }}
           >
             <TextInput
-              onFocus={() => {
-                onInputCode('*', 0);
-                refs[0].clear();
-              }}
+              // onFocus={() => {
+              //   // onInputCode('*', 0);
+              //   // refs[0].clear();
+              // }}
               style={styles.inputNumber}
-              maxLength={1}
+              maxLength={10}
               ref={ref => (refs[0] = ref)}
               onChangeText={code => {
                 onInputCode(code, 0);
-                refs[1].focus();
+                // refs[1].focus();
               }}
+              // value={joincode[0]}
+              // caretHidden={joincode[0] ? true : false}
+              // onChange={(a,b,c)=>{debugger}}
+              // onKeyPress={(a,b,c)=>{debugger}}
+              // caretHidden={(a,b,c)=>{debugger}}
             />
             <TextInput
-              onFocus={() => {
-                onInputCode('*', 1);
-                refs[1].clear();
-              }}
+              // onFocus={() => {
+              //   onInputCode('*', 1);
+              //   refs[1].clear();
+              // }}
               style={styles.inputNumber}
-              maxLength={1}
+              maxLength={10}
               ref={ref => (refs[1] = ref)}
               onChangeText={code => {
                 onInputCode(code, 1);
-                refs[2].focus();
+                // refs[2].focus();
               }}
+              value={joincode[1]}
+              selectionColor={'#ff44ff'}
+              // caretHidden={joincode[1] ? true : false}
             />
             <TextInput
-              onFocus={() => {
-                onInputCode('*', 2);
-                refs[2].clear();
-              }}
+              // onFocus={() => {
+              //   onInputCode('*', 2);
+              //   refs[2].clear();
+              // }}
               style={styles.inputNumber}
               maxLength={1}
               ref={ref => (refs[2] = ref)}
               onChangeText={code => {
                 onInputCode(code, 2);
-                refs[3].focus();
+                // refs[3].focus();
               }}
+              value={joincode[1]}
+              // caretHidden={joincode[2] ? true : false}
             />
             <TextInput
-              onFocus={() => {
-                onInputCode('*', 3);
-                refs[3].clear();
-              }}
+              // onFocus={() => {
+              //   onInputCode('*', 3);
+              //   refs[3].clear();
+              // }}
               style={styles.inputNumber}
               maxLength={1}
               ref={ref => (refs[3] = ref)}
               onChangeText={code => {
                 onInputCode(code, 3);
-                refs[4].focus();
+                // refs[4].focus();
               }}
+              value={joincode[3]}
+              // caretHidden={joincode[3] ? true : false}
             />
             <TextInput
-              onFocus={() => {
-                onInputCode('*', 4);
-                refs[4].clear();
-              }}
+              // onFocus={() => {
+              //   onInputCode('*', 4);
+              //   refs[4].clear();
+              // }}
               style={styles.inputNumber}
               maxLength={1}
               ref={ref => (refs[4] = ref)}
               onChangeText={code => {
                 onInputCode(code, 4);
-                refs[5].focus();
+                // refs[5].focus();
               }}
+              value={joincode[4]}
+              // caretHidden={joincode[4] ? true : false}
             />
             <TextInput
-              onFocus={() => {
-                onInputCode('*', 5);
-                refs[5].clear();
-              }}
+              // onFocus={() => {
+              //   onInputCode('*', 5);
+              //   refs[5].clear();
+              // }}
               style={styles.inputNumber}
               maxLength={1}
               ref={ref => (refs[5] = ref)}
               onChangeText={code => {
                 onInputCode(code, 5);
               }}
+              value={joincode[5]}
+              // caretHidden={joincode[5] ? true : false}
             />
           </View>
           <View
@@ -204,7 +187,7 @@ export default function LoginScreenPresenter(props) {
           <TouchableOpacity
             activeOpacity={1}
             onPress={() =>
-              props.navigation.navigate({
+              navigation.navigate({
                 routeName: 'LoginInput',
                 params: {
                   ...props.screenProps
@@ -293,7 +276,8 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline'
   },
   inputNumber: {
-    backgroundColor: 'rgba(245,248,252,0.3)',
+    // backgroundColor: 'rgba(245,248,252,0.3)',
+    backgroundColor: 'rgb(79,160,222)',
     width: 50,
     height: 55,
     fontSize: 40,

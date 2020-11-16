@@ -129,7 +129,7 @@ export default function DrawerContent(props) {
         >
           <>
             <Image source={btnWedrive} style={styles.shortcutImage} />
-            <Text style={styles.shortcutText}>{'웹오피스'}</Text>
+            <Text style={styles.shortcutText}>{'웹스토리지'}</Text>
           </>
         </TouchableOpacity>
 

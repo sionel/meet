@@ -7,7 +7,6 @@
 import { meetURL, securityRequest, wehagoBaseURL0 } from '../../utils';
 import * as CryptoJS from 'crypto-js';
 import { v4 as uuidv4 } from 'uuid';
-import { Alert } from 'react-native';
 
 const getToken = async accessUrl => {
   try {
@@ -151,17 +150,8 @@ export default {
       }
       return response.json();
     } catch (err) {
-      const a = await err.json();
-      await Alert.alert('response', err, [
-        {
-          text: '확인',
-          onPress: () => {
-            resolve();
-          }
-        }
-      ]);
-
-      console.warn('4.getMeetRoomsList : ', err);
+      const errDetail = await err.json();
+      console.warn('4.getMeetRoomsList : ', errDetail);
       return false;
     }
   },

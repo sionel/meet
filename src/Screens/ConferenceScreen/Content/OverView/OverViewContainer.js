@@ -14,7 +14,7 @@ class OverViewContainer extends Component {
     const tabs = [
       { key: 'CHATTING', name: '대화방' },
       { key: 'USERLIST', name: '참여자 목록' },
-      { key: 'FILELIST', name: '웹오피스 파일' }
+      { key: 'FILELIST', name: '웹스토리지 파일' }
     ];
 
     let selectedTabs = [];

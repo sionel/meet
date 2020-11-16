@@ -12,8 +12,7 @@ class LoginScreenContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      refs: [],
-      joincode: ['*', '*', '*', '*', '*', '*']
+      joincode: ['', '', '', '', '', '']
     };
   }
 
@@ -24,8 +23,8 @@ class LoginScreenContainer extends Component {
   render() {
     return (
       <LoginScreenPresenter
+        joincode={this.state.joincode}
         navigation={this.props.navigation}
-        refs={this.state.refs}
         onWehagoLogin={this._handleLoginForWehago}
         onInputCode={this._inputCode}
       />
@@ -70,6 +69,10 @@ class LoginScreenContainer extends Component {
   _inputCode = (code, index) => {
     let { joincode } = this.state;
     joincode[index] = code;
+    this.setState({
+      ...this.state,
+      joincode
+    });
     if (index === 5 && joincode.indexOf('*') === -1) {
       joincode = joincode.reduce((e, v) => e + v, '');
       this._enterConference(joincode);
@@ -78,7 +81,7 @@ class LoginScreenContainer extends Component {
   _enterConference = async joincode => {
     const result = await MeetApi.searchJoincode(joincode);
     if (!result) {
-      Alert.alert('개발예정','비인증 api 추가되면 바로 넣을겁니다.')
+      Alert.alert('알림', '존재하지 않는 접속코드 입니다.');
     } else if (result.resultData.code === 'E00001') {
       Alert.alert('알림', '존재하지 않는 접속코드 입니다.');
     } else {

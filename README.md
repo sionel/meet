@@ -20,6 +20,9 @@
 4. 안드로이드 디버깅 script<br/>
    "android": "sudo npx react-native run-android" 
 
+
+~/Library/Android/sdk/platform-tools/adb devices
+
 ## 안드로이드 배포용 빌드 설정
 
 /android/gradle.properties
