@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import CompanySelectPresenter from './CompanySelectPresenter';
 import UserApi from '../../services/api/UserApi';
 
-export default function CompanySelect(props) {
+export default function CompanySelectContainer(props) {
   // const { handleChangeCompany } = props;
 
   const { auth } = props;
@@ -13,7 +13,7 @@ export default function CompanySelect(props) {
   const employee_list = auth.employee_list;
   const from = useSelector(state => state.user['from']);
 
-  const isSP = auth.last_company.membership_code === 'SP';
+  const isSP = auth.last_company?.membership_code === 'SP';
 
   const handleChangeCompany = async cno => {
     const companyInfo = employee_list.find(emp => emp.company_no === cno);
@@ -26,6 +26,8 @@ export default function CompanySelect(props) {
   };
 
   const onLogout = async () => {
+    const from = props.from;
+    props.screenProps.onChangeRootState({destination: 'Login'})
     from === 'this' && (await UserApi.logoutRequest(auth));
     props.onLogout();
     props.onSetInitialList();
@@ -37,8 +39,9 @@ export default function CompanySelect(props) {
         employee_list,
         selectedCompany,
         handleChangeCompany,
-        onLogout
+        onLogout,
       }}
+      from={props.from}
     />
   );
 }

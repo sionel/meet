@@ -86,7 +86,15 @@ class ConferenceConnector {
   /**
    * 대화방 참가
    */
-  connect = (connection, roomName, name, auth, tracks) => {
+  connect = (
+    connection,
+    roomName,
+    name,
+    auth,
+    tracks,
+    accesstype,
+    externalUser
+  ) => {
     return new Promise(async (resolve, reject) => {
       // 참여할 room object 생성
       this._room = this._createRoom(connection, roomName);
@@ -106,7 +114,9 @@ class ConferenceConnector {
           companyFullpath: auth.last_company?.full_path,
           profile_url: auth.profile_url ? auth.profile_url : '',
           userName: name,
-          nickname: auth.nickname
+          nickname: auth.nickname,
+          isExternalParticipant : accesstype === 'email' ||accesstype === 'joincode' ,
+          externalUserId : externalUser
         }
       });
 

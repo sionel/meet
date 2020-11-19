@@ -28,15 +28,25 @@ export default function ServerNotiveCheck({ servernoti }) {
               {servernoti.message}
             </Text>
           </View>
-          <View style={styles.subMessage}>
-            {servernoti.subMessage &&
-              // servernoti.subMessage.map(e => {
-                // return (
-                  <Text style={{ lineHeight: 24, fontSize: 14 }}>{servernoti.subMessage}</Text>
-                // );
-              // })}
-            }
-          </View>
+          {servernoti.subMessage && servernoti.subMessage.length > 0 && (
+            <View style={styles.subMessage}>
+              <Text style={{paddingBottom : 10}}>{'[업데이트 내역]'}</Text>
+              {servernoti.subMessage.map((e, idx) => {
+                debugger;
+                return (
+                  <View key={idx} style={{ paddingHorizontal: 10 }}>
+                    <Text
+                      style={{
+                        lineHeight: 24,
+                        fontSize: 14,
+                        paddingVertical: 5
+                      }}
+                    >{`${idx + 1}.  ${e}`}</Text>
+                  </View>
+                );
+              })}
+            </View>
+          )}
         </ScrollView>
 
         <View style={styles.divider} />
@@ -51,18 +61,6 @@ export default function ServerNotiveCheck({ servernoti }) {
               <Text style={styles.bottomButtonText}>{e.text}</Text>
             </TouchableOpacity>
           ))}
-          {/* <TouchableOpacity
-            onPress={() => RNRestart.Restart()}
-            style={styles.bottomButton}
-          >
-            <Text style={styles.bottomButtonText}>확인</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => RNRestart.Restart()}
-            style={styles.bottomButton}
-          >
-            <Text style={styles.bottomButtonText}>확인</Text>
-          </TouchableOpacity> */}
         </View>
       </View>
     </SafeAreaView>
@@ -86,10 +84,11 @@ const styles = StyleSheet.create({
   modalContainer: {
     width: '80%',
     maxWidth: 360,
-    height: '80%',
-    maxHeight: 500,
+    height: '60%',
+    maxHeight: 400,
     backgroundColor: '#fff',
-    paddingHorizontal: 24
+    paddingHorizontal: 24,
+    borderRadius:20
   },
   title: {
     paddingVertical: 24,
@@ -102,11 +101,13 @@ const styles = StyleSheet.create({
   },
   body: {
     flex: 1,
-    paddingVertical: 24
+    paddingVertical: 15,
+    // backgroundColor: '#0f0'
   },
   subMessage: {
     flex: 1,
-    paddingVertical: 30
+    paddingVertical: 5,
+    // backgroundColor: '#f00'
   },
   bottom: {
     flexDirection: 'row',

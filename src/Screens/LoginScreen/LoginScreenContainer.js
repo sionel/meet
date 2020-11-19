@@ -12,7 +12,7 @@ class LoginScreenContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      joincode: ['', '', '', '', '', '']
+      joincode: ''
     };
   }
 
@@ -27,6 +27,7 @@ class LoginScreenContainer extends Component {
         navigation={this.props.navigation}
         onWehagoLogin={this._handleLoginForWehago}
         onInputCode={this._inputCode}
+        tmp={this.state.tmp}
       />
     );
   }
@@ -66,16 +67,22 @@ class LoginScreenContainer extends Component {
     });
   };
 
-  _inputCode = (code, index) => {
+  _inputCode = async code => {
     let { joincode } = this.state;
-    joincode[index] = code;
+
+    joincode = code.trim();
+
     this.setState({
       ...this.state,
       joincode
     });
-    if (index === 5 && joincode.indexOf('*') === -1) {
-      joincode = joincode.reduce((e, v) => e + v, '');
-      this._enterConference(joincode);
+    if (joincode.length === 6) {
+      await this._enterConference(joincode);
+
+      this.setState({
+        ...this.state,
+        joincode: ''
+      });
     }
   };
   _enterConference = async joincode => {

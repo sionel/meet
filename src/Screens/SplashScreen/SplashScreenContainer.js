@@ -121,8 +121,11 @@ class SplashScreenContainer extends Component {
     const ios_version = '2.0.0';
 
     const platform = Platform.OS;
-    let subMessage = result.resultData.message;
-    let title = '업데이트';
+    let subMessage = result.resultData.detail_info;
+    subMessage = []
+    debugger
+    subMessage = ['마스터 마이크 통제권가능','참여코드 접속 가능','가나다라마바사아자차카타파하','가나다라마바사아자차카타파하가나다','마스터 마이크 통제권가능','참여코드 접속 가능','가나다라마바사아자차카타파하','가나다라마바사아자차카타파하가나다','마스터 마이크 통제권가능','참여코드 접속 가능','가나다라마바사아자차카타파하','가나다라마바사아자차카타파하가나다']
+    let title = '업데이트 안내';
     let message;
     let buttons;
     let onclick;
@@ -564,8 +567,9 @@ class SplashScreenContainer extends Component {
       this.props.auth,
       this.props.auth.last_company
     );
+    debugger
     // 이상이 없는 회사일 경우 로그인 정상 진행
-
+    let proceed
     if (statusCheck && statusCheck.code === 200) {
       // 서비스 구매여부 조회
       const isPurchase = await ServiceCheckApi.serviceCheck(
@@ -585,7 +589,7 @@ class SplashScreenContainer extends Component {
       return isPurchase ? true : false;
     } else if (statusCheck && statusCheck.code === 400) {
       // 회사에 이상이 있을 경우, 회사 선택 화면으로 이동
-      await new Promise(resolve => {
+      proceed = await new Promise(resolve => {
         Alert.alert('알림', statusCheck.message, [
           {
             text: '확인',

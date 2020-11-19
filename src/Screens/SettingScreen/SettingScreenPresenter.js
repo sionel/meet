@@ -35,12 +35,6 @@ export default function SettingScreenPresenter({
     >
       <TouchableOpacity
         style={{ flex: 1 }}
-        onPress={() => {
-          // if (this.textInput.isFocused()) {
-          //   Keyboard.dismiss();
-          //   this.textInput.blur();
-          // }
-        }}
         activeOpacity={1}
       >
         <View
@@ -163,9 +157,6 @@ export default function SettingScreenPresenter({
           >
             <Text style={{ width: '100%', paddingLeft: 5 }}>{'이름 설정'}</Text>
             <TextInput
-              ref={aaa => {
-                this.textInput = aaa;
-              }}
               placeholder={'대화방에서 사용할 이름을 설정해주세요.'}
               placeholderTextColor={'#999'}
               style={{
@@ -178,9 +169,6 @@ export default function SettingScreenPresenter({
               }}
               maxLength={20}
               onChangeText={onSetName}
-              onBlur={() => {
-                console.log('@@@ehla');
-              }}
               blurOnSubmit={true}
             ></TextInput>
             <Text

@@ -6,8 +6,8 @@ import {
   TouchableHighlight,
   TouchableOpacity
 } from 'react-native';
-import { CustomAlert } from '../CustomAlert';
-import { CustomIcon } from '../CustomIcon';
+import CustomAlert from '../CustomAlert';
+import CustomIcon from '../CustomIcon';
 
 import { Text } from '../StyledText';
 

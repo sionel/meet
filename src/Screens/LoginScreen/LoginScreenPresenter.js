@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Platform,
   Linking,
@@ -18,9 +18,11 @@ import { Text } from '../../components/StyledText';
 
 export default function LoginScreenPresenter(props) {
   const { onWehagoLogin, onInputCode, joincode, navigation } = props;
-  let refs = [];
 
-  debugger;
+  this.state = {
+    selection: { start: 0, end: 0 }
+  };
+
   return (
     <ImageBackground
       source={require('../../../assets/bgIntroWehagoIphoneX_3x.png')}
@@ -44,105 +46,71 @@ export default function LoginScreenPresenter(props) {
           <Text style={{ color: '#fff', fontSize: 14, fontWeight: 'bold' }}>
             {'공유받은 참여코드 입력 후 바로 참여해보세요.'}
           </Text>
+          <TextInput
+            style={{
+              position: 'absolute',
+              top: 200,
+              height: 200,
+              width: '100%',
+              zIndex: 10,
+              color: 'rgba(0,0,0,0)',
+              fontSize: 1
+            }}
+            autoCapitalize="none"
+            onChangeText={onInputCode}
+            caretHidden={true}
+            value={joincode}
+            maxLength={6}
+            editable={joincode.length === 6 ? false : true}
+          />
+
           <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
-              paddingTop: 32
+              paddingTop: 32,
+              zIndex: 1
             }}
           >
             <TextInput
-              // onFocus={() => {
-              //   // onInputCode('*', 0);
-              //   // refs[0].clear();
-              // }}
               style={styles.inputNumber}
-              maxLength={10}
-              ref={ref => (refs[0] = ref)}
-              onChangeText={code => {
-                onInputCode(code, 0);
-                // refs[1].focus();
-              }}
-              // value={joincode[0]}
-              // caretHidden={joincode[0] ? true : false}
-              // onChange={(a,b,c)=>{debugger}}
-              // onKeyPress={(a,b,c)=>{debugger}}
-              // caretHidden={(a,b,c)=>{debugger}}
+              value={joincode.slice(0, 1)}
+              editable={false}
+              caretHidden={true}
             />
             <TextInput
-              // onFocus={() => {
-              //   onInputCode('*', 1);
-              //   refs[1].clear();
-              // }}
               style={styles.inputNumber}
-              maxLength={10}
-              ref={ref => (refs[1] = ref)}
-              onChangeText={code => {
-                onInputCode(code, 1);
-                // refs[2].focus();
-              }}
-              value={joincode[1]}
-              selectionColor={'#ff44ff'}
-              // caretHidden={joincode[1] ? true : false}
+              value={joincode.slice(1, 2)}
+              editable={false}
+              caretHidden={true}
             />
             <TextInput
-              // onFocus={() => {
-              //   onInputCode('*', 2);
-              //   refs[2].clear();
-              // }}
               style={styles.inputNumber}
               maxLength={1}
-              ref={ref => (refs[2] = ref)}
-              onChangeText={code => {
-                onInputCode(code, 2);
-                // refs[3].focus();
-              }}
-              value={joincode[1]}
-              // caretHidden={joincode[2] ? true : false}
+              value={joincode.slice(2, 3)}
+              editable={false}
+              caretHidden={true}
             />
             <TextInput
-              // onFocus={() => {
-              //   onInputCode('*', 3);
-              //   refs[3].clear();
-              // }}
               style={styles.inputNumber}
               maxLength={1}
-              ref={ref => (refs[3] = ref)}
-              onChangeText={code => {
-                onInputCode(code, 3);
-                // refs[4].focus();
-              }}
-              value={joincode[3]}
-              // caretHidden={joincode[3] ? true : false}
+              value={joincode.slice(3, 4)}
+              editable={false}
+              caretHidden={true}
             />
             <TextInput
-              // onFocus={() => {
-              //   onInputCode('*', 4);
-              //   refs[4].clear();
-              // }}
               style={styles.inputNumber}
               maxLength={1}
-              ref={ref => (refs[4] = ref)}
-              onChangeText={code => {
-                onInputCode(code, 4);
-                // refs[5].focus();
-              }}
-              value={joincode[4]}
-              // caretHidden={joincode[4] ? true : false}
+              value={joincode.slice(4, 5)}
+              editable={false}
+              caretHidden={true}
             />
             <TextInput
-              // onFocus={() => {
-              //   onInputCode('*', 5);
-              //   refs[5].clear();
-              // }}
               style={styles.inputNumber}
               maxLength={1}
-              ref={ref => (refs[5] = ref)}
-              onChangeText={code => {
-                onInputCode(code, 5);
-              }}
-              value={joincode[5]}
-              // caretHidden={joincode[5] ? true : false}
+              value={joincode.slice(5, 6)}
+              editable={false}
+              caretHidden={true}
             />
           </View>
           <View
@@ -152,18 +120,8 @@ export default function LoginScreenPresenter(props) {
               height: 32,
               flexDirection: 'row-reverse'
             }}
-          >
-            {/* <View
-              style={{ width: 58, backgroundColor: 'rgba(255,255,255,0.7)', borderRadius: 8, fontSize:14  }}
-            > */}
-            {/* <Button title="확인" onPress={() => {}} /> */}
-            {/* </View> */}
-          </View>
+          ></View>
         </View>
-
-        {/* <View style={styles.middleContainer}>
-          <Image source={appIcon} style={{ width: 180, height: 180 }} />
-        </View> */}
 
         <View style={styles.bottomContainer}>
           <TouchableHighlight
@@ -229,8 +187,9 @@ const styles = StyleSheet.create({
   topContainer: {
     flex: 1,
     width: 335,
-    paddingTop: 112
+    paddingTop: 112,
     // paddingLeft: 40
+    justifyContent: 'center'
   },
   middleContainer: {
     flex: 1,
@@ -280,7 +239,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgb(79,160,222)',
     width: 50,
     height: 55,
-    fontSize: 40,
+    fontSize: 30,
     textAlign: 'center',
     borderRadius: 10,
     color: '#fff'

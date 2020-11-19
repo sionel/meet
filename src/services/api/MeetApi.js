@@ -270,8 +270,7 @@ export default {
     }
   },
   // 3-12-3 화상회의 토큰 생성 (joincode)
-  getMeetRoomTokenJoincode: async (room, joincode, username) => {
-    const randomstring = uuidv4();
+  getMeetRoomTokenJoincode: async (room, joincode, username,user) => {
 
     const accsessUrl = `/video/token`;
     const token = await getToken(accsessUrl);
@@ -291,7 +290,7 @@ export default {
           room,
           joincode,
           username,
-          user: randomstring.substr(0, 8)
+          user
         })
       };
 
@@ -515,7 +514,36 @@ export default {
       return false;
     }
   },
+  // 넘버링 없음 이름없는 외부참여자 아이디 가져오기
+  getExternalUserId: async (roomId) => {
+    const accsessUrl = `/video/user/default-name?room=${roomId}`;
+    const token = await getToken(accsessUrl);
 
+    const encText = accsessUrl + token.cur_date + token.token;
+    const hashText = CryptoJS.SHA256(encText);
+    const signature = CryptoJS.enc.Base64.stringify(hashText);
+
+    const url = `${wehagoBaseURL0}${accsessUrl}`;
+    // const url = `${meetURL}/room/master/control/user?room=${roomId}`;
+    try {
+      const data = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          signature
+        }
+      };
+
+      const response = await fetch(url, data);
+      if (response.status !== 200) {
+        throw await response.json();
+      }
+      return response.json();
+    } catch (err) {
+      console.warn('20.checkVersion : ', err);
+      return false;
+    }
+  },
   checkTest: async () => {
     const accsessUrl = '/test';
     // const signature = await getSignature(accsessUrl);

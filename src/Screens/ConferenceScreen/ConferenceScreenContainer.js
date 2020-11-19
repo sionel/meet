@@ -228,9 +228,13 @@ class ConferenceScreenContainer extends React.Component {
       this.delayLoading = setTimeout(() => {
         let roomId;
         let token;
+        let accesstype;
+        let externalUser;
         if (item) {
           roomId = item.videoRoomId; // item.videoRoomId
           token = item.roomToken;
+          accesstype = item.accesstype;
+          externalUser = item.externalUser;
         } else {
           roomId = this.props.screenProps.params.room_id;
         }
@@ -240,7 +244,9 @@ class ConferenceScreenContainer extends React.Component {
           user_name,
           auth,
           token,
-          item ? item.tracks : null
+          item ? item.tracks : null,
+          accesstype,
+          externalUser
         );
 
         Platform.OS === 'android' &&
@@ -266,14 +272,24 @@ class ConferenceScreenContainer extends React.Component {
   };
 
   /** 대화방 참가 생성 */
-  _joinConference = async (roomName, name, auth, token, tracks) => {
+  _joinConference = async (
+    roomName,
+    name,
+    auth,
+    token,
+    tracks,
+    accesstype,
+    externalUser
+  ) => {
     await this._conferenceManager.join(
       roomName,
       name,
       auth,
       this.callType,
       token,
-      tracks
+      tracks,
+      accesstype,
+      externalUser
     );
     this.setState({ connection: true }, async () => {
       // 마스터 권한으로 사용자 제어를 하고 있는중인지 체크
@@ -474,7 +490,7 @@ class ConferenceScreenContainer extends React.Component {
       this._conferenceManager.requestAttention(this.props.user_name);
     } else {
       this._conferenceManager.stopAttention(this.props.user_name);
-      this.props.toggleMuteMicByMe()
+      this.props.toggleMuteMicByMe();
     }
   };
 }

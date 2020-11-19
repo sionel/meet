@@ -37,7 +37,16 @@ class ConferenceManager {
   /**
    * connect : 화상회의 참가
    */
-  join = async (roomName, name, auth, callType, token, tracks) => {
+  join = async (
+    roomName,
+    name,
+    auth,
+    callType,
+    token,
+    tracks,
+    accesstype,
+    externalUser
+  ) => {
     // 초기화
     this._init();
     // 대화방 연결을 위한 Connection
@@ -52,10 +61,11 @@ class ConferenceManager {
       roomName.toLowerCase(),
       name,
       auth,
-      tracks
+      tracks,
+      accesstype,
+      externalUser
     );
--
-    await MeetApi.enterMeetRoom(token, this._room.myUserId());
+    -(await MeetApi.enterMeetRoom(token, this._room.myUserId()));
     const createdTime = this._room.properties['created-ms'];
     this._dispatch(localActionCreators.setConferenceCreatedTime(createdTime));
 
@@ -355,7 +365,9 @@ class ConferenceManager {
     this._conferenceConnector.stopAttention(name);
   };
   rejectedByMaster = () => {
-    this._dispatch(localActionCreators.setToastMessage('발언권 요청이 거부되었습니다.'));
+    this._dispatch(
+      localActionCreators.setToastMessage('발언권 요청이 거부되었습니다.')
+    );
   };
 }
 

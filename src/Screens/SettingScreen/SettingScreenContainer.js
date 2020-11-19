@@ -5,6 +5,7 @@ import JitsiMeetJS from '../../../jitsi/features/base/lib-jitsi-meet';
 import config from '../../utils/conference/config';
 import Orientation from 'react-native-orientation-locker';
 import { MeetApi } from '../../services';
+import { v4 as uuidv4 } from 'uuid';
 
 const commonStyle = {
   height: 53,
@@ -91,12 +92,24 @@ class SettingScreenContainer extends React.Component {
   _handleConferenceEnter = async () => {
     const { navigation, auth, webAuth } = this.props;
     const item = navigation.state.params.item;
-    let { tracks, name } = this.state;
+    let { tracks, nameField } = this.state;
+    let name;
     const params = item.params;
-    if (!name) {
+
+    if (nameField) {
+      name = this.state.name;
+      if (!name) {
+        name = (await MeetApi.getExternalUserId(params.roomId)).resultData;
+      }
+    } else {
       name = webAuth?.user_name ? webAuth?.user_name : auth.user_name;
     }
+
     let roomToken;
+
+    const randomstring = uuidv4();
+    const user = randomstring.substr(0, 8)
+
     if (params?.accesstype === 'email') {
       roomToken = (
         await MeetApi.getMeetRoomTokenEmail(params.roomId, params.token, name)
@@ -106,7 +119,8 @@ class SettingScreenContainer extends React.Component {
         await MeetApi.getMeetRoomTokenJoincode(
           params.roomId,
           params.joincode,
-          name
+          name,
+          user
         )
       ).resultData;
     } else {
@@ -124,7 +138,7 @@ class SettingScreenContainer extends React.Component {
 
     // this.props.navigation.navigate('Home'); replace가 문제 없으면 삭제
     navigation.replace('Conference', {
-      item: { tracks, roomToken, name, ...item }
+      item: { tracks, roomToken, name, ...item, accesstype: params?.accesstype, externalUser:user }
     });
   };
   _handleToggleVideo = async () => {

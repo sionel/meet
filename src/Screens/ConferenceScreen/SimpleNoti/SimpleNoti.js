@@ -19,6 +19,8 @@ export default function SimpleNoti() {
   //   const [masterControlFlag, setMasterControlFlag] = useState(false);
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
+  const fadeout = null;
+
   const fadeIn = () => {
     Animated.timing(fadeAnim, {
       toValue: 1,
@@ -38,13 +40,15 @@ export default function SimpleNoti() {
     else if (myOrder) {
       dispatch({ type: 'TOGGLE_MY_ORDER' });
     } else if (isMasterControl) {
+      if (fadeout) clearTimeout(fadeout);
+
       setMessage(
         isMuteMic
           ? '마스터가 마이크를 비활성화 처리 했습니다.'
           : '마스터가 마이크를 활성화 처리 했습니다.'
       );
       fadeIn(true);
-      setTimeout(() => {
+      fadeout = setTimeout(() => {
         fadeOut(false);
       }, 2000);
     }

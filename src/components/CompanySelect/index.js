@@ -6,7 +6,8 @@ import { actionCreators as WetalkActions } from '../../redux/modules/wetalk';
 
 // map state to props
 const mapStateToProps = state => ({
-  auth: state.user.auth
+  auth: state.user.auth,
+  from: state.user.from
 });
 
 const mapDispatchToProps = dispatch => {
