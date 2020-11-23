@@ -53,6 +53,12 @@ class SplashScreenContainer extends Component {
     }
   };
 
+  componentDidUpdate(prevProps) {
+    if (this.props.url && !prevProps.url !== this.props.url) {
+      this._handleGetDeeplink(this.props.url);
+    }
+  }
+
   render() {
     const { alert, servernoti, index } = this.state;
     return (
@@ -113,7 +119,7 @@ class SplashScreenContainer extends Component {
     const result = await MeetApi.checkVersion();
 
     // 버전 수정
-    if (!result) return [];
+    if (!result || !this.props.updateNoti) return [];
 
     const android_major_version = '1';
     const ios_major_version = '1';
@@ -121,14 +127,17 @@ class SplashScreenContainer extends Component {
     const ios_version = '2.0.0';
 
     const platform = Platform.OS;
-    let subMessage = result.resultData.detail_info;
-    subMessage = []
-    debugger
-    subMessage = ['마스터 마이크 통제권가능','참여코드 접속 가능','가나다라마바사아자차카타파하','가나다라마바사아자차카타파하가나다','마스터 마이크 통제권가능','참여코드 접속 가능','가나다라마바사아자차카타파하','가나다라마바사아자차카타파하가나다','마스터 마이크 통제권가능','참여코드 접속 가능','가나다라마바사아자차카타파하','가나다라마바사아자차카타파하가나다']
+    let subMessage = result.resultData.detail_info.split('\\n');
+    // subMessage = []
+    // debugger
+    // subMessage = ['마스터 마이크 통제권가능','참여코드 접속 가능','가나다라마바사아자차카타파하','가나다라마바사아자차카타파하가나다','마스터 마이크 통제권가능','참여코드 접속 가능','가나다라마바사아자차카타파하','가나다라마바사아자차카타파하가나다','마스터 마이크 통제권가능','참여코드 접속 가능','가나다라마바사아자차카타파하','가나다라마바사아자차카타파하가나다']
     let title = '업데이트 안내';
+    let type = 'update';
     let message;
     let buttons;
     let onclick;
+    let onToggle = this.props.toggleUpdateNoti;
+    let buttonValue = this.props.updateNoti;
     if (platform === 'android') {
       if (android_major_version !== result.resultData.android_major_version) {
         message =
@@ -146,7 +155,7 @@ class SplashScreenContainer extends Component {
         message =
           '더 새로워진 WEHAGO Meet을 만나보세요.\n\n신규 기능은 업데이트 이후 사용 가능합니다.\n\n지금 업데이트 하시겠습니까?';
         buttons = [
-          { test: '아니오', onclick: this._handleNextNotice },
+          { text: '아니오', onclick: this._handleNextNotice },
           {
             text: '업데이트',
             onclick: () =>
@@ -202,7 +211,10 @@ class SplashScreenContainer extends Component {
         message,
         buttons,
         onclick,
-        subMessage
+        subMessage,
+        type,
+        onToggle,
+        buttonValue
       });
     }
 
@@ -567,9 +579,8 @@ class SplashScreenContainer extends Component {
       this.props.auth,
       this.props.auth.last_company
     );
-    debugger
     // 이상이 없는 회사일 경우 로그인 정상 진행
-    let proceed
+    let proceed;
     if (statusCheck && statusCheck.code === 200) {
       // 서비스 구매여부 조회
       const isPurchase = await ServiceCheckApi.serviceCheck(

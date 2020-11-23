@@ -18,7 +18,8 @@ const mapStateToProps = state => {
   return {
     auth: state.user.auth,
     from: state.user.from,
-    permission: state.user.permission
+    permission: state.user.permission,
+    updateNoti: state.user.updateNoti
   };
 };
 
@@ -42,7 +43,10 @@ const mapDispatchToProps = dispatch => {
     setPermission: permission =>
       dispatch(UserActions.setPermission(permission)),
     setSharingMode: () => dispatch(DocumentShareActions.setSharingMode()),
-    setInitInfo: () => dispatch(WedriveAcions.setInitInfo())
+    setInitInfo: () => dispatch(WedriveAcions.setInitInfo()),
+    toggleUpdateNoti: () => {
+      dispatch(UserActions.toggleUpdateNoti());
+    }
   };
 };
 

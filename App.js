@@ -25,7 +25,7 @@ export default class App extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (!prevProps.url.url && this.props.url.url) {
+    if (prevProps.url.url !== this.props.url.url) { // 타임스태프를 요구할 것
       this.setState({ loaded: false, url: this.props.url.url });
     }
   }

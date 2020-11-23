@@ -4,7 +4,8 @@ import {
   StyleSheet,
   ScrollView,
   View,
-  TouchableOpacity
+  TouchableOpacity,
+  CheckBox
 } from 'react-native';
 import RNRestart from 'react-native-restart';
 
@@ -22,7 +23,7 @@ export default function ServerNotiveCheck({ servernoti }) {
 
         <View style={styles.divider} />
 
-        <ScrollView bounces={false}>
+        <ScrollView bounces={false} showsVerticalScrollIndicator={true}>
           <View style={styles.body}>
             <Text style={{ lineHeight: 24, fontSize: 14 }}>
               {servernoti.message}
@@ -30,9 +31,8 @@ export default function ServerNotiveCheck({ servernoti }) {
           </View>
           {servernoti.subMessage && servernoti.subMessage.length > 0 && (
             <View style={styles.subMessage}>
-              <Text style={{paddingBottom : 10}}>{'[업데이트 내역]'}</Text>
+              <Text style={{ paddingBottom: 10 }}>{'[업데이트 내역]'}</Text>
               {servernoti.subMessage.map((e, idx) => {
-                debugger;
                 return (
                   <View key={idx} style={{ paddingHorizontal: 10 }}>
                     <Text
@@ -62,6 +62,22 @@ export default function ServerNotiveCheck({ servernoti }) {
             </TouchableOpacity>
           ))}
         </View>
+        {/* {servernoti.type === 'update' && (
+          <View style={{ flexDirection: 'row', marginBottom: 10 }}>
+            <CheckBox
+              // onValueChange={servernoti.onToggle}
+              onValueChange={() => {
+                debugger;
+              }}
+              style={{
+                alignSelf: 'center',
+                width: 30,
+                height: 30
+              }}
+              value={servernoti.buttonValue}
+            ></CheckBox>
+          </View>
+        )} */}
       </View>
     </SafeAreaView>
   );
@@ -88,7 +104,7 @@ const styles = StyleSheet.create({
     maxHeight: 400,
     backgroundColor: '#fff',
     paddingHorizontal: 24,
-    borderRadius:20
+    borderRadius: 20
   },
   title: {
     paddingVertical: 24,
@@ -101,12 +117,12 @@ const styles = StyleSheet.create({
   },
   body: {
     flex: 1,
-    paddingVertical: 15,
+    paddingVertical: 15
     // backgroundColor: '#0f0'
   },
   subMessage: {
     flex: 1,
-    paddingVertical: 5,
+    paddingVertical: 5
     // backgroundColor: '#f00'
   },
   bottom: {

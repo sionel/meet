@@ -14,13 +14,16 @@ const commonStyle = {
 const backBtn = require('../../assets/buttons/back_btn.png');
 
 const BackButton = ({ navigation }) => {
-  const { onChangeRootState, from } = navigation.getScreenProps();
-
+  const { onChangeRootState, destination } = navigation.getScreenProps();
+  destination === 'Conference' || destination === 'Setting';
   return (
     <TouchableOpacity
       onPress={() => {
         onChangeRootState({
-          destination: from === 'this' || from === 'mobile' ? 'List' : 'Login'
+          destination:
+            destination === 'Conference' || destination === 'Setting'
+              ? 'Login'
+              : 'List'
         });
       }}
     >

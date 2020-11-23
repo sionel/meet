@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 import { CustomIcon } from '../../components';
 import ReservationInfoScreen from './subScreens/ReservationInfoScreen';
-import SettingScreen from './subScreens/SettingScreen';
 import FullroomScreen from './subScreens/FullroomScreen';
 import WatingScreen from './subScreens/WatingScreen';
 import DeletedScreen from './subScreens/DeletedScreen';
@@ -55,12 +54,6 @@ const ConferenceStatePresenter = props => {
     return (
       <View style={{ flex: 1 }}>
         <FullroomScreen {...props}></FullroomScreen>
-      </View>
-    );
-  } else if (conferenceState === 'setting') {
-    return (
-      <View style={{ flex: 1 }}>
-        <SettingScreen {...props}></SettingScreen>
       </View>
     );
   } else {

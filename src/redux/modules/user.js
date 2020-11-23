@@ -19,6 +19,7 @@ const NETWORK_DISCONNECT = 'NETWORK_DISCONNECT';
 
 const SESSION_CHECK = 'SESSION_CHECK';
 const SET_PERMISSION = 'SET_PERMISSION'; // 화상회의 생성 권한
+const TOGGLE_UPDATE_NOTI = 'TOGGLE_UPDATE_NOTI';
 //#region Action Creators
 
 /**
@@ -114,6 +115,12 @@ function loginCheckRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY, from) {
       dispatch(eventLog(result));
       return result;
     }
+  };
+}
+
+function toggleUpdateNoti() {
+  return {
+    type: TOGGLE_UPDATE_NOTI
   };
 }
 
@@ -229,7 +236,8 @@ const initialState = {
   appIntro: false,
   from: '',
   log: {},
-  session: true
+  session: true,
+  updateNoti: true
 };
 
 //#endregion initialState
@@ -272,6 +280,8 @@ function reducer(state = initialState, action) {
       return { ...state, session: action.session };
     case SET_PERMISSION:
       return { ...state, permission: action.permission };
+    case TOGGLE_UPDATE_NOTI:
+      return { ...state, updateNoti: !state.updateNoti };
     default:
       return state;
   }
@@ -345,7 +355,8 @@ const actionCreators = {
   changeCompanyRequest,
   toggleVisibleAppIntro,
   sessionCheck,
-  setPermission
+  setPermission,
+  toggleUpdateNoti
 };
 
 export { actionCreators };

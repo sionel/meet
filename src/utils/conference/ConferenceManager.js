@@ -65,21 +65,18 @@ class ConferenceManager {
       accesstype,
       externalUser
     );
-    -(await MeetApi.enterMeetRoom(token, this._room.myUserId()));
+    await MeetApi.enterMeetRoom(token, this._room.myUserId());
     const createdTime = this._room.properties['created-ms'];
     this._dispatch(localActionCreators.setConferenceCreatedTime(createdTime));
 
     const id = 'localUser';
     if (!tracks) tracks = this._conferenceConnector.tracks;
-
     const videoTrack = tracks.find(track => track.getType() === 'video');
     const audioTrack = tracks.find(track => track.getType() === 'audio');
-
     const { audio: audioPolicy } = this._room.startMutedPolicy;
     if (audioPolicy) {
       await audioTrack.mute();
     }
-
     await this._dispatch(
       localActionCreators.joinConference({
         id,
@@ -93,10 +90,12 @@ class ConferenceManager {
     );
     this._dispatch(mainUserActionCreators.setMainUserNotExist(id));
 
-    const master = await MeetApi.checkMasterControl(roomName);
-    this._dispatch(
-      localActionCreators.changeMasterControlMode(master.resultData.videoseq)
-    );
+    if(callType === '3'){
+      const master = await MeetApi.checkMasterControl(roomName);
+      this._dispatch(
+        localActionCreators.changeMasterControlMode(master.resultData.videoseq)
+      );
+    }
   };
 
   /**

@@ -6,7 +6,7 @@ import {
   Image,
   KeyboardAvoidingView,
   Text,
-  TextInput,
+  TextInput
 } from 'react-native';
 
 import ButtonCamera from '../../../assets/buttons/btn_vc_camera_on.png';
@@ -33,10 +33,7 @@ export default function SettingScreenPresenter({
       }}
       behavior={'height'}
     >
-      <TouchableOpacity
-        style={{ flex: 1 }}
-        activeOpacity={1}
-      >
+      <TouchableOpacity style={{ flex: 1 }} activeOpacity={1}>
         <View
           style={{
             justifyContent: 'center',
@@ -179,7 +176,7 @@ export default function SettingScreenPresenter({
                 fontSize: 11
               }}
             >
-              {'입력하지 않을 경우, 기본값이 적용됩니다.(최대 20자 설정가능)'},
+              {'입력하지 않을 경우, 기본값이 적용됩니다.(최대 20자 설정가능)'}
             </Text>
           </View>
         )}
