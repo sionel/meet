@@ -270,8 +270,7 @@ export default {
     }
   },
   // 3-12-3 화상회의 토큰 생성 (joincode)
-  getMeetRoomTokenJoincode: async (room, joincode, username,user) => {
-
+  getMeetRoomTokenJoincode: async (room, joincode, username, user) => {
     const accsessUrl = `/video/token`;
     const token = await getToken(accsessUrl);
     const encText = accsessUrl + token.cur_date + token.token;
@@ -322,7 +321,8 @@ export default {
         },
         body: JSON.stringify({
           token: videoToken,
-          videoseq: videoseq
+          videoseq: videoseq,
+          is_mobile: 'T'
         })
       };
 
@@ -515,7 +515,7 @@ export default {
     }
   },
   // 넘버링 없음 이름없는 외부참여자 아이디 가져오기
-  getExternalUserId: async (roomId) => {
+  getExternalUserId: async roomId => {
     const accsessUrl = `/video/user/default-name?room=${roomId}`;
     const token = await getToken(accsessUrl);
 
