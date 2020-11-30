@@ -6,8 +6,10 @@ import { View, StyleSheet, Animated, Text } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 export default function SimpleNoti() {
   const isMasterControl = useSelector(state => state.local['isMasterControl']);
+  const isMasterMicControl = useSelector(
+    state => state.local['isMasterMicControl']
+  );
   const isMuteMic = useSelector(state => state.local['user']['isMuteMic']);
-  const myOrder = useSelector(state => state.local['myOrder']);
   const messageFlag = useSelector(state => state.local['messageFlag']);
   const toastMessage = useSelector(state => state.local['toastMessage']);
 
@@ -19,9 +21,10 @@ export default function SimpleNoti() {
   //   const [masterControlFlag, setMasterControlFlag] = useState(false);
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
-  const fadeout = null;
+  const [fadeout, setFadeout] = useState(null);
 
   const fadeIn = () => {
+    Animated.timing(fadeAnim).stop();
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 1000
@@ -29,6 +32,7 @@ export default function SimpleNoti() {
   };
 
   const fadeOut = () => {
+    Animated.timing(fadeAnim).stop();
     Animated.timing(fadeAnim, {
       toValue: 0,
       duration: 1000
@@ -37,9 +41,8 @@ export default function SimpleNoti() {
 
   useEffect(() => {
     if (isFirst) return;
-    else if (myOrder) {
-      dispatch({ type: 'TOGGLE_MY_ORDER' });
-    } else if (isMasterControl) {
+
+    if (isMasterMicControl) {
       if (fadeout) clearTimeout(fadeout);
 
       setMessage(
@@ -47,10 +50,13 @@ export default function SimpleNoti() {
           ? '마스터가 마이크를 비활성화 처리 했습니다.'
           : '마스터가 마이크를 활성화 처리 했습니다.'
       );
+
       fadeIn(true);
-      fadeout = setTimeout(() => {
-        fadeOut(false);
-      }, 2000);
+      setFadeout(
+        setTimeout(() => {
+          fadeOut(false);
+        }, 2000)
+      );
     }
   }, [isMuteMic]);
 
@@ -60,26 +66,32 @@ export default function SimpleNoti() {
 
   useEffect(() => {
     if (isFirst) return;
-
+    if (fadeout) clearTimeout(fadeout);
     setMessage(toastMessage);
     fadeIn(true);
-    setTimeout(() => {
-      fadeOut(false);
-    }, 2000);
+    setFadeout(
+      setTimeout(() => {
+        fadeOut(false);
+      }, 2000)
+    );
   }, [messageFlag]);
 
   useEffect(() => {
     if (isFirst) return;
     else {
+      if (fadeout) clearTimeout(fadeout);
+
       setMessage(
         isMasterControl
           ? '마스터가 참여자 전원의 발언권 제어를 시작합니다.'
           : '참여자 발언권 제어기능이 종료 되었습니다.'
       );
       fadeIn(true);
-      setTimeout(() => {
-        fadeOut(false);
-      }, 2000);
+      setFadeout(
+        setTimeout(() => {
+          fadeOut(false);
+        }, 2000)
+      );
     }
   }, [isMasterControl]);
   //return //showFlag ? (

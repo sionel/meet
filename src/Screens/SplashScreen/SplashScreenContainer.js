@@ -127,10 +127,7 @@ class SplashScreenContainer extends Component {
     const ios_version = '2.0.0';
 
     const platform = Platform.OS;
-    let subMessage = result.resultData.detail_info.split('\\n');
-    // subMessage = []
-    // debugger
-    // subMessage = ['마스터 마이크 통제권가능','참여코드 접속 가능','가나다라마바사아자차카타파하','가나다라마바사아자차카타파하가나다','마스터 마이크 통제권가능','참여코드 접속 가능','가나다라마바사아자차카타파하','가나다라마바사아자차카타파하가나다','마스터 마이크 통제권가능','참여코드 접속 가능','가나다라마바사아자차카타파하','가나다라마바사아자차카타파하가나다']
+    let subMessage = result.resultData.detail_info?.split('\\n');
     let title = '업데이트 안내';
     let type = 'update';
     let message;

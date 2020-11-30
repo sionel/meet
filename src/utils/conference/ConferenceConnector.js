@@ -42,8 +42,10 @@ export const REQUEST_MIC_CONTROL_USER =
 export const REQUEST_MIC_CONTROL_TARGET =
   'CONFERENCE.EVENT.REQUEST.MIC_CONTROL_TARGET'; // 화상대화 타겟 유저 마이크 제어 요청 이벤트
 
-// 제어중일때 발언권 요청 보낸 뒤 승인 또는 거부 이벤트
+// 제어중일때 발언권 요청 보낸 뒤 승인 또는 거부 이벤트 (마스터가 전체 발언권 허용)
 export const GRANT_FLOOR = 'GRANT_FLOOR';
+// 제어중일때 발언권 요청 보낸 뒤 승인 또는 거부 이벤트 (마스터가 전체 특정 발언권 허용)
+export const GRANT_FLOOR_TARGET = 'GRANT_FLOOR_TARGET';
 
 // 제어중일때 발언권 요청
 export const REQUEST_FLOOR = 'REQUEST_FLOOR';
@@ -115,8 +117,9 @@ class ConferenceConnector {
           profile_url: auth.profile_url ? auth.profile_url : '',
           userName: name,
           nickname: auth.nickname,
-          isExternalParticipant : accesstype === 'email' ||accesstype === 'joincode' ,
-          externalUserId : externalUser
+          isExternalParticipant:
+            accesstype === 'email' || accesstype === 'joincode',
+          externalUserId: externalUser
         }
       });
 
@@ -414,7 +417,9 @@ class ConferenceConnector {
     // 화상대화 전체 마이크 제어 요청자 사용자 정보 이벤트
     //- 마스터가 마이크 제어 모드 시작하기/종료하기
     this._room.addCommandListener(REQUEST_MIC_CONTROL_USER, value => {
+      
       this._handlers.CHANGED_MIC_CONTROL_USER_MODE_BY_MASTER(value.value);
+      
     });
 
     // 화상대화 타겟 유저 마이크 제어 요청 이벤트
@@ -429,16 +434,24 @@ class ConferenceConnector {
 
     this._room.addCommandListener(GRANT_FLOOR, value => {
       const result = JSON.parse(value.attributes.targetUser);
+      if (result.find(e => e.jitsiId === this._room.myUserId())) {
+        if (value.attributes.type === 'reject') {
+          this._handlers.REJECTED_BY_MASTER();
+        } else {
+          this._handlers.CHANGED_MIC_MUTE_BY_MASTER(false);
+        }
+      }
+    });
+
+    this._room.addCommandListener(GRANT_FLOOR_TARGET, value => {
+      const result = JSON.parse(value.attributes.targetUser);
       if (result.jitsiId === this._room.myUserId()) {
         if (value.attributes.type === 'reject') {
           this._handlers.REJECTED_BY_MASTER();
         } else {
-          this._handlers.CHANGED_MIC_MUTE_BY_MASTER(
-            value.attributes.isMute === 'true'
-          );
+          this._handlers.CHANGED_MIC_MUTE_BY_MASTER(false);
         }
       }
-      // this._handlers
     });
   };
 
@@ -459,6 +472,7 @@ class ConferenceConnector {
     this._room.removeCommandListener(REQUEST_MIC_CONTROL_TARGET);
 
     this._room.removeCommandListener(GRANT_FLOOR);
+    this._room.removeCommandListener(GRANT_FLOOR_TARGET);
   };
 
   /**
@@ -593,13 +607,16 @@ class ConferenceConnector {
   };
 
   stopAttention = name => {
+    // 이름이 담겨 있으면 본인이 끈거여서 이름을 보내서 마스터 하단에 메시지를 띄워줘야하고
+    // 이름이 없으면 마스터가 껐기때문에 이름을 보내줄 필요 없음
     this._room.sendCommandOnce(STOP_FLOOR, {
       value: this._room.myUserId(),
       attributes: {
         targetUser: JSON.stringify({
           jitsiId: this._room.myUserId(),
-          name
-        })
+          name: name ? name : null
+        }),
+        isMasterControlTarget: name ? false : true
       }
     });
   };

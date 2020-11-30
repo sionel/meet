@@ -1,5 +1,6 @@
 import React from 'react';
 import ControlBoxPresenter from './ControlBoxPresenter';
+import { getConferenceManager } from '../../../../../utils/ConferenceManager';
 
 class ControlBoxContainer extends React.Component {
   constructor(props) {
@@ -24,10 +25,19 @@ class ControlBoxContainer extends React.Component {
   }
 
   _handleToggleMic = () => {
-    if (this.props.isMasterControl) {
-      this.props.onChangeMicMaster()
+    let conferenceManager = getConferenceManager();
+    if (this.props.isAudioActive) {
+      this.props.toggleMuteMic();
     } else {
-      this.props.toggleMuteMic()
+      if (this.props.isMuteMic) {
+        conferenceManager.requestAttention(this.props.name);
+        this.props.setSimpleNoti('마스터에게 발언권을 요청하였습니다.')
+      } else {
+        conferenceManager.stopAttention(this.props.name);
+        // this.props.toggleMuteMicByMe();
+        this.props.toggleMuteMic();
+
+      }
     }
   };
 }

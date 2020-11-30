@@ -18,6 +18,9 @@ import ConferenceScreenPresenter from './ConferenceScreenPresenter';
 import EndCallMessage from './EndCallMessage';
 import ConferenceManager from '../../utils/conference/ConferenceManager';
 import MeetApi from '../../services/api/MeetApi';
+
+import { setConferenceManager } from '../../utils/ConferenceManager';
+
 const { PictureInPicture } = NativeModules;
 const { width, height } = Dimensions.get('window');
 const isIOS = Platform.OS === 'ios';
@@ -220,7 +223,8 @@ class ConferenceScreenContainer extends React.Component {
     }
     // 컴포넌트가 마운트 되면 대화방 초기 설정 후 입장한다.
     this._conferenceManager = new ConferenceManager(dispatch);
-
+    setConferenceManager(this._conferenceManager);
+    
     if ((auth, item)) this._conferenceManager.set(auth, item);
     // 참가자/생성자 여부 확인 후 로딩딜레이
     const delayLoading = time => {
@@ -294,10 +298,7 @@ class ConferenceScreenContainer extends React.Component {
     this.setState({ connection: true }, async () => {
       // 마스터 권한으로 사용자 제어를 하고 있는중인지 체크
       const result = await MeetApi.checkMasterControlUser(roomName);
-      this.props.changeMasterControlMode(
-        result.resultData.videoseq ? true : false
-      );
-
+      this.props.changeMasterControlMode(result.resultData.videoseq);
       if (Number(this.callType) !== 3) {
         setTimeout(() => {
           // console.log('15초가 지났다');

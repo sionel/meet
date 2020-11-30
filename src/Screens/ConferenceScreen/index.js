@@ -15,7 +15,7 @@ const getMainUser = (mainUserId, localUser, participants) => {
 
 const mapStateToProps = state => {
   const {
-    local: { user, createdTime, isMasterControl },
+    local: { user, createdTime, isMasterControl,isMasterMicControl },
     mainUser: { mainUserId },
     participants: { list },
     user: { auth },
@@ -33,6 +33,7 @@ const mapStateToProps = state => {
     user,
     from: state.user?.from,
     isMasterControl,
+    isMasterMicControl,
     isMuteMic: user?.isMuteMic
   };
 };

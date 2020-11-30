@@ -65,6 +65,8 @@ class ConferenceManager {
       accesstype,
       externalUser
     );
+    this._roomName = roomName.toLowerCase();
+
     await MeetApi.enterMeetRoom(token, this._room.myUserId());
     const createdTime = this._room.properties['created-ms'];
     this._dispatch(localActionCreators.setConferenceCreatedTime(createdTime));
@@ -74,9 +76,7 @@ class ConferenceManager {
     const videoTrack = tracks.find(track => track.getType() === 'video');
     const audioTrack = tracks.find(track => track.getType() === 'audio');
     const { audio: audioPolicy } = this._room.startMutedPolicy;
-    if (audioPolicy) {
-      await audioTrack.mute();
-    }
+
     await this._dispatch(
       localActionCreators.joinConference({
         id,
@@ -88,9 +88,14 @@ class ConferenceManager {
         callType
       })
     );
+    if (audioPolicy) {
+      // await audioTrack.mute();
+      // this._dispatch(localActionCreators.changeMuteMicMaster(true));
+      this._dispatch(localActionCreators.changeAudioActive(true));
+    }
     this._dispatch(mainUserActionCreators.setMainUserNotExist(id));
 
-    if(callType === '3'){
+    if (callType === '3') {
       const master = await MeetApi.checkMasterControl(roomName);
       this._dispatch(
         localActionCreators.changeMasterControlMode(master.resultData.videoseq)
@@ -186,6 +191,12 @@ class ConferenceManager {
    */
   _leftUser = id => {
     this._dispatch(participantsAcionCreators.leftUser(id));
+    MeetApi.checkMasterList(this._roomName).then(res => {
+      if (res && res?.resultData?.count === 0) {
+        this._dispatch(localActionCreators.changeMasterControlMode(null));
+        this._dispatch(localActionCreators.toggleMuteMic(false));
+      }
+    });
   };
 
   /**
@@ -345,16 +356,16 @@ class ConferenceManager {
   //CHANGED_MIC_CONTROL_MODE_BY_MASTER
   //CHANGED_MIC_CONTROL_USER_MODE_BY_MASTER
   //CHANGED_MIC_MODE_BY_MASTER
-  changeMicControlModeByMaster = value => {
-    // 활설화 or 비활성화 누르면
-    this._dispatch(localActionCreators.toggleMuteMicMaster(value));
-  };
   changeMicControlUserModeByMaster = flag => {
     // 제어하기 누르면
     this._dispatch(localActionCreators.changeMasterControlMode(flag));
   };
+  changeMicControlModeByMaster = value => {
+    // 활설화 or 비활성화 누르면
+    this._dispatch(localActionCreators.changeAudioActive(value));
+  };
   changeMicMuteByMaster = flag => {
-    this._dispatch(localActionCreators.toggleMuteMicMaster(flag));
+    this._dispatch(localActionCreators.changeMuteMicMaster(flag));
   };
 
   requestAttention = name => {

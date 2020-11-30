@@ -394,7 +394,7 @@ export default {
       }
       return response.json();
     } catch (err) {
-      console.warn('21.checkNotice : ', err);
+      console.warn('6-3.checkNotice : ', err);
       return false;
     }
   },
@@ -544,6 +544,38 @@ export default {
       return false;
     }
   },
+
+  checkMasterList: async roomId => {
+    const accsessUrl = `/video/master/remaining-master?room=${roomId}`;
+    const token = await getToken(accsessUrl);
+
+    const encText = accsessUrl + token.cur_date + token.token;
+    const hashText = CryptoJS.SHA256(encText);
+    const signature = CryptoJS.enc.Base64.stringify(hashText);
+
+    const url = `${wehagoBaseURL0}${accsessUrl}`;
+    // const url = `${meetURL}/room/master/control/user?room=${roomId}`;
+    try {
+      const data = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          signature
+        }
+      };
+
+      const response = await fetch(url, data);
+      if (response.status === 404) return { resultData: { count: 0 } };
+      if (response.status !== 200) {
+        throw await response.json();
+      }
+      return response.json();
+    } catch (err) {
+      console.warn('20.checkVersion : ', err);
+      return false;
+    }
+  },
+
   checkTest: async () => {
     const accsessUrl = '/test';
     // const signature = await getSignature(accsessUrl);

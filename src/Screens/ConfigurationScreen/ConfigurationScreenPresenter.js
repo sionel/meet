@@ -32,7 +32,7 @@ const ConfigurationScreenPresenter = props => {
       content:
         WEHAGO_ENV === 'WEHAGOV'
           ? '1.0.1'
-          : '2.0.0'
+          : '2.0.1'
     },
     {
       title: '이용약관 및 법률정보',

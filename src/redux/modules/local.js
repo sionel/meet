@@ -1,5 +1,5 @@
 import { ConferenceModes, FacingModes } from '../../utils/Constants';
-
+import { getConferenceManager } from '../../utils/ConferenceManager';
 //#region Action Types
 
 // JOIN_CONFERENCE
@@ -34,14 +34,14 @@ const CONFERENCE_PIP_MODE = 'CONFERENCE_PIP_MODE';
 
 // 추후 마스터 권한이 생기고 업데이트 된다면 따로 리덕스를 분리하는게 좋을 듯
 // 마스터가 컨트롤 하는지에 대한 여부
-const SET_MASTER_CONTROL = 'SET_MASTER_CONTROL';
+const SET_IS_CONTROL = 'SET_IS_CONTROL';
+
+const SET_AUDIO_ACTIVE = 'SET_AUDIO_ACTIVE';
 
 const TOGGLE_MUTE_MIC_MASTER = 'TOGGLE_MUTE_MIC_MASTER';
 
 // 마스터 제어중일때 내가 내 마이크 종료하는 경우
 const TOGGLE_MUTE_MIC_BY_ME = 'TOGGLE_MUTE_MIC_BY_ME';
-
-const TOGGLE_MY_ORDER = 'TOGGLE_MY_ORDER';
 
 const TOAST_MESSAGE = 'TOAST_MESSAGE';
 //#endregion Action Types
@@ -57,9 +57,11 @@ const initialState = {
   callType: null,
   message: [],
   pipMode: false,
-  isMasterControl: false,
+  isMasterControl: false, // 제어
+  isAudioActive: true, // 마이크 활성화
+  isMasterMicControl: false, // 마스터가 켜고 껐는지
   messageFlag: false,
-  toastMessage:''
+  toastMessage: ''
 };
 
 //#endregion
@@ -90,14 +92,16 @@ function reducer(state = initialState, action) {
       return applySetConferenceMessage(state, action);
     case CONFERENCE_PIP_MODE:
       return applySetConferencePIPMode(state, action);
-    case SET_MASTER_CONTROL:
-      return setMasterMode(state, action);
+
+    case SET_IS_CONTROL:
+      return setIsContorl(state, action);
+    case SET_AUDIO_ACTIVE:
+      return setAudioActive(state, action);
+
     case TOGGLE_MUTE_MIC_MASTER:
       return applyToggleMuteMicMaster(state, action);
     case TOGGLE_MUTE_MIC_BY_ME:
       return applyToggleMuteMicByMe(state, action);
-    case TOGGLE_MY_ORDER:
-      return { ...state, myOrder: false };
     case TOAST_MESSAGE:
       return {
         ...state,
@@ -144,6 +148,8 @@ function applyJoinConference(state, action) {
   return {
     ...state,
     user,
+    isAudioActive: true,
+    isMasterMicControl: false,
     callType: conferenceInfo.callType // 삭제?
   };
 }
@@ -294,7 +300,8 @@ function applyToggleMuteMic(state, action) {
       user: {
         ...user,
         isMuteMic: !currentMute
-      }
+      },
+      isMasterMicControl: false
     };
   }
 
@@ -331,8 +338,7 @@ function applyToggleMuteMicByMe(state, action) {
       user: {
         ...user,
         isMuteMic: !currentMute
-      },
-      myOrder: true
+      }
     };
   }
 
@@ -341,13 +347,6 @@ function applyToggleMuteMicByMe(state, action) {
   };
 }
 
-function toggleMyOrder() {
-  return dispatch => {
-    dispatch({
-      type: TOGGLE_MY_ORDER
-    });
-  };
-}
 //#endregion
 
 //#region TOGGLE_MUTE_SPEAKER
@@ -449,17 +448,17 @@ function applySetConferencePIPMode(state, action) {
   };
 }
 
-//#region  SET_MASTER_CONTROL
+//#region  SET_IS_CONTROL (마스터가 제어모드 중인지 아닌지)
 function changeMasterControlMode(id) {
   return dispatch => {
     dispatch({
-      type: SET_MASTER_CONTROL,
+      type: SET_IS_CONTROL,
       flag: id ? true : false
     });
   };
 }
 
-function setMasterMode(state, action) {
+function setIsContorl(state, action) {
   return {
     ...state,
     isMasterControl: action.flag
@@ -467,9 +466,43 @@ function setMasterMode(state, action) {
 }
 //#endregion
 
+//#region SET_AUDIO_ACTIVE (마스터가 전체마이크 활성화인지 아닌지)
+
+function changeAudioActive(flag) {
+  return dispatch => {
+    dispatch({
+      type: SET_AUDIO_ACTIVE,
+      flag
+    });
+  };
+}
+
+function setAudioActive(state, action) {
+  const { user } = state;
+  const { flag } = action;
+  if (user && user.audioTrack) {
+    if (flag) {
+      user.audioTrack.mute();
+    } else {
+      user.audioTrack.unmute();
+    }
+    return {
+      ...state,
+      user: {
+        ...user,
+        isMuteMic: flag
+      },
+      isAudioActive: !flag, // 비활성화가 mute 임
+      isMasterMicControl: true
+    };
+  }
+}
+
+//#endregion
+
 //#region TOGGLE_MUTE_MIC_MASTER
 
-function toggleMuteMicMaster(micMuteFlag) {
+function changeMuteMicMaster(micMuteFlag) {
   return dispatch => {
     dispatch({
       type: TOGGLE_MUTE_MIC_MASTER,
@@ -479,20 +512,27 @@ function toggleMuteMicMaster(micMuteFlag) {
 }
 
 function applyToggleMuteMicMaster(state, action) {
-  const { user } = state;
+  const { user, isAudioActive } = state;
   const { micMuteFlag } = action;
   if (user && user.audioTrack) {
     if (micMuteFlag) {
       user.audioTrack.mute();
+      // REFACT: 꼭 수정했으면 좋겠따 싶은 부분
+      // 컨넥터에는 리덕스 받지 않음 그런데 이 isaudioactive로 상태체크 해야하는게 있다보니 매개변수지옥 vs 스파게티중
+      // 스파게티를 선택하게 됨
+      if (!isAudioActive) getConferenceManager().stopAttention();
     } else {
       user.audioTrack.unmute();
+      // if (!isAudioActive) getConferenceManager.requestAttention();
     }
     return {
       ...state,
       user: {
         ...user,
         isMuteMic: micMuteFlag
-      }
+      },
+      // isAudioActive: !micMuteFlag,
+      isMasterMicControl: true
     };
   }
 
@@ -526,10 +566,10 @@ export const actionCreators = {
   setConferenceCreatedTime,
   receiceConferenceMessage,
   changeMasterControlMode,
-  toggleMuteMicMaster,
+  changeMuteMicMaster,
   toggleMuteMicByMe,
-  toggleMyOrder,
-  setToastMessage
+  setToastMessage,
+  changeAudioActive
 };
 
 export default reducer;

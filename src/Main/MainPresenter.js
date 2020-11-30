@@ -6,6 +6,7 @@ import Deeplink1Navigation from '../Navigations/Deeplink1Navigation';
 import Deeplink2Navigation from '../Navigations/Deeplink2Navigation';
 import LoginNavigation from '../Navigations/LoginNavigation';
 import CompanySelect from '../components/CompanySelect';
+import AppIntroSlide from '../components/AppIntroSlide';
 
 const MainPresenter = props => {
   Orientation.unlockAllOrientations();
@@ -32,15 +33,17 @@ const MainPresenter = props => {
 
     case 'List':
       return (
-        <RootNavigation
-          screenProps={{
-            onChangeRootState,
-            onChangeMainState,
-            params,
-            destination,
-            from
-          }}
-        />
+        <AppIntroSlide>
+          <RootNavigation
+            screenProps={{
+              onChangeRootState,
+              onChangeMainState,
+              params,
+              destination,
+              from
+            }}
+          />
+        </AppIntroSlide>
       );
 
     case 'SelectCompany':
