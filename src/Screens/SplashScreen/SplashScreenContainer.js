@@ -121,10 +121,10 @@ class SplashScreenContainer extends Component {
     // 버전 수정
     if (!result || !this.props.updateNoti) return [];
 
-    const android_major_version = '1';
-    const ios_major_version = '1';
-    const android_version = '2.0.0';
-    const ios_version = '2.0.0';
+    const android_major_version = '2';
+    const ios_major_version = '2';
+    const android_version = '2.0.1';
+    const ios_version = '2.0.1';
 
     const platform = Platform.OS;
     let subMessage = result.resultData.detail_info?.split('\\n');

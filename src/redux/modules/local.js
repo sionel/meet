@@ -44,6 +44,9 @@ const TOGGLE_MUTE_MIC_MASTER = 'TOGGLE_MUTE_MIC_MASTER';
 const TOGGLE_MUTE_MIC_BY_ME = 'TOGGLE_MUTE_MIC_BY_ME';
 
 const TOAST_MESSAGE = 'TOAST_MESSAGE';
+
+const SPEEK_REQUEST = 'SPEEK_REQUEST';
+
 //#endregion Action Types
 
 //#region Initial State
@@ -60,6 +63,7 @@ const initialState = {
   isMasterControl: false, // 제어
   isAudioActive: true, // 마이크 활성화
   isMasterMicControl: false, // 마스터가 켜고 껐는지
+  isMicRequest: false,
   messageFlag: false,
   toastMessage: ''
 };
@@ -108,6 +112,8 @@ function reducer(state = initialState, action) {
         messageFlag: !state.messageFlag,
         toastMessage: action.toastMessage
       };
+    case SPEEK_REQUEST:
+      return applyToggleMicRequest(state, action);
     default:
       return state;
   }
@@ -149,14 +155,31 @@ function applyJoinConference(state, action) {
     ...state,
     user,
     isAudioActive: true,
-    isMasterControl:false,
+    isMasterControl: false,
     isMasterMicControl: false,
+    isMicRequest: false,
     callType: conferenceInfo.callType // 삭제?
   };
 }
 
 //#endregion
 
+function setMicRequest(flag = null) {
+  return dispatch => {
+    dispatch({
+      type: SPEEK_REQUEST,
+      flag
+    });
+  };
+}
+
+function applyToggleMicRequest(state, action) {
+  const { flag } = action;
+  return {
+    ...state,
+    isMicRequest: flag !== null ? flag : !state.isMicRequest
+  };
+}
 //#region LEAVE_CONFERENCE
 
 function leaveConference() {
@@ -302,7 +325,8 @@ function applyToggleMuteMic(state, action) {
         ...user,
         isMuteMic: !currentMute
       },
-      isMasterMicControl: false
+      isMasterMicControl: false,
+      isMicRequest:false
     };
   }
 
@@ -462,7 +486,8 @@ function changeMasterControlMode(id) {
 function setIsContorl(state, action) {
   return {
     ...state,
-    isMasterControl: action.flag
+    isMasterControl: action.flag,
+    isMicRequest: false,
   };
 }
 //#endregion
@@ -494,7 +519,8 @@ function setAudioActive(state, action) {
         isMuteMic: flag
       },
       isAudioActive: !flag, // 비활성화가 mute 임
-      isMasterMicControl: true
+      isMasterMicControl: true,
+      isMicRequest:false
     };
   }
 }
@@ -533,7 +559,8 @@ function applyToggleMuteMicMaster(state, action) {
         isMuteMic: micMuteFlag
       },
       // isAudioActive: !micMuteFlag,
-      isMasterMicControl: true
+      isMasterMicControl: true,
+      isMicRequest:false
     };
   }
 
@@ -570,7 +597,8 @@ export const actionCreators = {
   changeMuteMicMaster,
   toggleMuteMicByMe,
   setToastMessage,
-  changeAudioActive
+  changeAudioActive,
+  setMicRequest
 };
 
 export default reducer;

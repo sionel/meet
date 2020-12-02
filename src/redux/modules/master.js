@@ -20,18 +20,15 @@ function reducer(state = initialState, action) {
 
 function checkMasterList(token) {
   if (!token) {
-    debugger;
   }
   return async dispatch => {
     const result = await MeetApi.getMasterList(token);
     if (!result) {
-      debugger;
     }
     const masterList = result.resultData.reduce((a, b) => {
       a.push(b.user);
       return a;
     }, []);
-    debugger
     dispatch({
       type: UPDATE_MASTER_LIST,
       masterList

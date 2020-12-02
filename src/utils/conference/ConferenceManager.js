@@ -186,7 +186,6 @@ class ConferenceManager {
    */
   _joinUser = user => {
     this._dispatch(participantsAcionCreators.joinUser(user));
-    debugger;
     this._dispatch(masterAcionCreators.checkMasterList(this._roomToken));
   };
 

@@ -67,7 +67,6 @@ export default function ServerNotiveCheck({ servernoti }) {
             <CheckBox
               // onValueChange={servernoti.onToggle}
               onValueChange={() => {
-                debugger;
               }}
               style={{
                 alignSelf: 'center',

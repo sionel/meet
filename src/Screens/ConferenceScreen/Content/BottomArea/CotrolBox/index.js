@@ -9,7 +9,8 @@ const mapStateToProps = state => {
     isMuteMic: local.user.isMuteMic,
     isMuteSpeaker: local.user.isMuteSpeaker,
     isAudioActive: local.isAudioActive, // 마이크 활성화
-    name: local.user.name
+    name: local.user.name,
+    isMicRequest :local.isMicRequest
   };
 };
 
@@ -19,7 +20,8 @@ const mapDispatchToProps = dispatch => {
     toggleMuteMic: () => dispatch(localActionCreators.toggleMuteMic()),
     toggleMuteMicByMe: () => dispatch(localActionCreators.toggleMuteMicByMe()),
     toggleMuteSpeaker: () => dispatch(localActionCreators.toggleMuteSpeaker()),
-    setSimpleNoti: msg => dispatch(localActionCreators.setToastMessage(msg))
+    setSimpleNoti: msg => dispatch(localActionCreators.setToastMessage(msg)),
+    setMicRequest: flag => dispatch(localActionCreators.setMicRequest(flag))
   };
 };
 

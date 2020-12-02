@@ -557,7 +557,6 @@ export default {
     const signature = CryptoJS.enc.Base64.stringify(hashText);
 
     const url = `${wehagoBaseURL0}${accsessUrl}`;
-    // const url = `${meetURL}/room/master/control/user?room=${roomId}`;
     try {
       const data = {
         method: 'GET',
