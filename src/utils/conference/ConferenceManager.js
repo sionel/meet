@@ -10,6 +10,7 @@ import { actionCreators as mainUserActionCreators } from '../../redux/modules/ma
 import { actionCreators as participantsAcionCreators } from '../../redux/modules/participants';
 import { actionCreators as DocumentShareAcionCreators } from '../../redux/modules/documentShare';
 import { actionCreators as WedriveAcionCreators } from '../../redux/modules/wedrive';
+import { actionCreators as masterAcionCreators } from '../../redux/modules/master';
 import { MeetApi } from '../../services';
 
 /**
@@ -47,6 +48,8 @@ class ConferenceManager {
     accesstype,
     externalUser
   ) => {
+    this._roomToken = token;
+    this._roomName = roomName.toLowerCase();
     // 초기화
     this._init();
     // 대화방 연결을 위한 Connection
@@ -65,11 +68,10 @@ class ConferenceManager {
       accesstype,
       externalUser
     );
-    this._roomName = roomName.toLowerCase();
-
     await MeetApi.enterMeetRoom(token, this._room.myUserId());
     const createdTime = this._room.properties['created-ms'];
     this._dispatch(localActionCreators.setConferenceCreatedTime(createdTime));
+    this._dispatch(masterAcionCreators.checkMasterList(this._roomToken));
 
     const id = 'localUser';
     if (!tracks) tracks = this._conferenceConnector.tracks;
@@ -158,7 +160,8 @@ class ConferenceManager {
       CHANGED_MIC_CONTROL_USER_MODE_BY_MASTER: this
         .changeMicControlUserModeByMaster,
       CHANGED_MIC_MUTE_BY_MASTER: this.changeMicMuteByMaster,
-      REJECTED_BY_MASTER: this.rejectedByMaster
+      REJECTED_BY_MASTER: this.rejectedByMaster,
+      CHANGE_MASTER_LIST: this.changeMasterList
     };
     return handler;
   };
@@ -183,6 +186,8 @@ class ConferenceManager {
    */
   _joinUser = user => {
     this._dispatch(participantsAcionCreators.joinUser(user));
+    debugger;
+    this._dispatch(masterAcionCreators.checkMasterList(this._roomToken));
   };
 
   /**
@@ -195,6 +200,8 @@ class ConferenceManager {
       if (res && res?.resultData?.count === 0) {
         this._dispatch(localActionCreators.changeMasterControlMode(null));
         this._dispatch(localActionCreators.toggleMuteMic(false));
+      } else {
+        this._dispatch(masterAcionCreators.checkMasterList(this._roomToken));
       }
     });
   };
@@ -378,6 +385,9 @@ class ConferenceManager {
     this._dispatch(
       localActionCreators.setToastMessage('발언권 요청이 거부되었습니다.')
     );
+  };
+  changeMasterList = () => {
+    this._dispatch(masterAcionCreators.checkMasterList(this._roomToken));
   };
 }
 

@@ -149,6 +149,7 @@ function applyJoinConference(state, action) {
     ...state,
     user,
     isAudioActive: true,
+    isMasterControl:false,
     isMasterMicControl: false,
     callType: conferenceInfo.callType // 삭제?
   };

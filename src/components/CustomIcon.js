@@ -106,6 +106,8 @@ import btnUserCancelNone from '../../assets/icons/etc/btnUserCancelNone.png';
 
 import img_intro_verification_code from '../../assets/icons/img_intro_verification_code.png';
 
+import labelMaster from '../../assets/icons/labelMaster.png';
+
 const CustomIcon = props => {
   const { name, size, width, height, style, defaultIcon } = props;
   return (
@@ -302,6 +304,8 @@ const getButtonSource = name => {
       return icoDrawNotice72;
     case 'verification':
       return img_intro_verification_code;
+    case 'labelMaster':
+      return labelMaster;
     default:
       return ico_etc;
   }

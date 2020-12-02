@@ -51,8 +51,25 @@ const UserListPresenter = props => {
             onPress={() => {}}
           >
             <View
-              style={{ flex: 5, flexDirection: 'row', alignItems: 'center' }}
+              style={{
+                flex: 5,
+                flexDirection: 'row',
+                alignItems: 'center'
+              }}
             >
+              {item.isMaster && (
+                <CustomIcon
+                  name={'labelMaster'}
+                  width={15}
+                  height={15}
+                  style={{
+                    zIndex: 10,
+                    bottom: 0,
+                    left: 20,
+                    position: 'absolute'
+                  }}
+                />
+              )}
               <View style={styles.profileCover}>
                 <Image
                   style={styles.profileImg}
@@ -66,6 +83,7 @@ const UserListPresenter = props => {
                   resizeMode={'center'}
                 />
               </View>
+
               <Text
                 numberOfLines={1}
                 ellipsizeMode={'tail'}
@@ -157,7 +175,8 @@ const styles = StyleSheet.create({
   },
   profileImg: {
     width: 32,
-    height: 32
+    height: 32,
+    zIndex: -1
   },
   nameField: {
     maxWidth: '50%',

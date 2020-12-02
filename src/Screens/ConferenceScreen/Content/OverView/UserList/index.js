@@ -4,24 +4,24 @@ import { actionCreators as localActionCreators } from '../../../../../redux/modu
 import { actionCreators as participantsActionCreators } from '../../../../../redux/modules/participants';
 
 // map state to props
-const mapStateToProps = state => ({
-  auth: state.user.auth,
-  user: state.local.user,
-  users: state.participants.list,
-  attributes: state.documentShare.attributes,
-  presenter: state.documentShare.presenter,
-});
+const mapStateToProps = state => {
+  return {
+    auth: state.user.auth,
+    user: state.local.user,
+    users: state.participants.list,
+    attributes: state.documentShare.attributes,
+    presenter: state.documentShare.presenter,
+    masters: state.master.masterList
+  };
+};
 
 const mapDispatchToProps = dispatch => {
   return {
     // toggleMuteVideo: () => dispatch(localActionCreators.toggleMuteVideo()),
     toggleMuteMic: () => dispatch(localActionCreators.toggleMuteMic()),
-    toggleMuteSpeaker: () => dispatch(localActionCreators.toggleMuteSpeaker()),
+    toggleMuteSpeaker: () => dispatch(localActionCreators.toggleMuteSpeaker())
     // updateMuteAudio: user => dispatch(participantsActionCreators.updateMuteAudio(user)),
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(UserListContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(UserListContainer);

@@ -11,9 +11,11 @@ export default class UserListContainer extends Component {
       presenter,
       speaker,
       toggleMuteMic,
-      onChangeSpeaker
+      onChangeSpeaker,
       // updateMuteAudio
+      masters
     } = this.props;
+
     let userList = users.slice(0);
     userList.unshift({
       ...user,
@@ -25,6 +27,10 @@ export default class UserListContainer extends Component {
       }
     });
 
+    userList.forEach(user => {
+      user.isMaster = masters.includes(user?.userInfo?.wehagoId);
+    });
+
     return (
       <UserListPresenter
         userList={userList}
@@ -32,6 +38,7 @@ export default class UserListContainer extends Component {
         speaker={speaker}
         toggleMuteMic={toggleMuteMic}
         onChangeSpeaker={onChangeSpeaker}
+        masters={masters}
         // updateMuteAudio={updateMuteAudio}
       />
     );

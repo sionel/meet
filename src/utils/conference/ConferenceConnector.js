@@ -55,7 +55,9 @@ export const STOP_FLOOR = 'STOP_FLOOR';
 // export const REQUEST_GET_CONTROL = 'CONFERENCE.EVENT.REQUEST.REQUEST_GET_CONTROL'; // 마스터 제어 권한 위임 요청 이벤트
 
 // export const RESPONSE_GET_CONTROL = 'CONFERENCE.EVENT.REQUEST.RESPONSE_GET_CONTROL'; // 마스터 제어 권한 위임 반환 이벤트
-// export const UPDATE_MASTER_USERS = 'CONFERENCE.EVENT.REQUEST.UPDATE_MASTER_USERS'; // 마스터 권한 유저 리스트 변경 이벤트
+
+// 마스터 권한 유저 리스트 변경 이벤트
+export const UPDATE_MASTER_USERS = 'CONFERENCE.EVENT.REQUEST.UPDATE_MASTER_USERS';
 
 /**
  * ConferenceConnector
@@ -417,9 +419,7 @@ class ConferenceConnector {
     // 화상대화 전체 마이크 제어 요청자 사용자 정보 이벤트
     //- 마스터가 마이크 제어 모드 시작하기/종료하기
     this._room.addCommandListener(REQUEST_MIC_CONTROL_USER, value => {
-      
       this._handlers.CHANGED_MIC_CONTROL_USER_MODE_BY_MASTER(value.value);
-      
     });
 
     // 화상대화 타겟 유저 마이크 제어 요청 이벤트
@@ -453,6 +453,12 @@ class ConferenceConnector {
         }
       }
     });
+
+    this._room.addCommandListener(UPDATE_MASTER_USERS, value => {
+      this._handlers.CHANGE_MASTER_LIST();
+    });
+
+    
   };
 
   _removeEvents = () => {
@@ -473,6 +479,7 @@ class ConferenceConnector {
 
     this._room.removeCommandListener(GRANT_FLOOR);
     this._room.removeCommandListener(GRANT_FLOOR_TARGET);
+    this._room.removeCommandListener(UPDATE_MASTER_USERS);
   };
 
   /**
