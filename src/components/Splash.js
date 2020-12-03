@@ -57,7 +57,7 @@ export default function Splash() {
                 justifyContent: 'center'
               }}
             >
-              <Image
+              {/* <Image
                 source={require('../../assets/logoAppqward2019.png')}
                 style={{ width: 36.5, height: 50, marginRight: 13 }}
               />
@@ -78,7 +78,7 @@ export default function Splash() {
                 >
                   기능서비스부분 통합대상
                 </Text>
-              </View>
+              </View> */}
             </View>
           </View>
         </View>

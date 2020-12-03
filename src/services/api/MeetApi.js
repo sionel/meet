@@ -88,9 +88,9 @@ export default {
     const signature = CryptoJS.enc.Base64.stringify(hashText);
 
     // 운영기
-    // const url = `${wehagoBaseURL0}${accsessUrl}`;
+    const url = `${wehagoBaseURL0}${accsessUrl}`;
     // 개발기
-    const url = `${meetURL}/room?room=${roomId}`;
+    // const url = `${meetURL}/room?room=${roomId}`;
 
     try {
       const data = {
@@ -249,9 +249,9 @@ export default {
     const signature = CryptoJS.enc.Base64.stringify(hashText);
 
     // 운영기
-    // const url = `${wehagoBaseURL0}${accsessUrl}`;
+    const url = `${wehagoBaseURL0}${accsessUrl}`;
     // 개발기
-    const url = `${meetURL}/token`;
+    // const url = `${meetURL}/token`;
 
     try {
       const data = {
@@ -286,9 +286,9 @@ export default {
     const signature = CryptoJS.enc.Base64.stringify(hashText);
 
     // 운영기
-    // const url = `${wehagoBaseURL0}${accsessUrl}`;
+    const url = `${wehagoBaseURL0}${accsessUrl}`;
     // 개발기
-    const url = `${meetURL}/token`;
+    // const url = `${meetURL}/token`;
 
     try {
       const data = {
@@ -324,9 +324,9 @@ export default {
     const signature = CryptoJS.enc.Base64.stringify(hashText);
 
     // 운영기
-    // const url = `${wehagoBaseURL0}${accsessUrl}`;
+    const url = `${wehagoBaseURL0}${accsessUrl}`;
     // 개발기
-    const url = `${meetURL}/connect`;
+    // const url = `${meetURL}/connect`;
 
     try {
       const data = {
@@ -364,9 +364,9 @@ export default {
     const signature = CryptoJS.enc.Base64.stringify(hashText);
 
     // 운영기
-    // const url = `${wehagoBaseURL0}${accsessUrl}`;
+    const url = `${wehagoBaseURL0}${accsessUrl}`;
     // 개발기
-    const url = `${meetURL}/mobile/version?timestamp=${date}`;
+    // const url = `${meetURL}/mobile/version?timestamp=${date}`;
 
     try {
       const data = {
@@ -399,9 +399,9 @@ export default {
     const signature = CryptoJS.enc.Base64.stringify(hashText);
 
     // 운영기
-    // const url = `${wehagoBaseURL0}${accsessUrl}`;
+    const url = `${wehagoBaseURL0}${accsessUrl}`;
     // 개발기
-    const url = `${meetURL}/mobile/noti?timestamp=${date}`;
+    // const url = `${meetURL}/mobile/noti?timestamp=${date}`;
 
     try {
       const data = {
@@ -432,9 +432,9 @@ export default {
     const signature = CryptoJS.enc.Base64.stringify(hashText);
 
     // 운영기
-    // const url = `${wehagoBaseURL0}${accsessUrl}`;
+    const url = `${wehagoBaseURL0}${accsessUrl}`;
     // 개발기
-    const url = `${meetURL}/joincode/search?joincode=${joincode}`;
+    // const url = `${meetURL}/joincode/search?joincode=${joincode}`;
 
     try {
       const data = {
@@ -465,9 +465,9 @@ export default {
     const signature = CryptoJS.enc.Base64.stringify(hashText);
 
     // 운영기
-    // const url = `${wehagoBaseURL0}${accsessUrl}`;
+    const url = `${wehagoBaseURL0}${accsessUrl}`;
     // 개발기
-    const url = `${meetURL}/room/master/control/user?room=${roomId}`;
+    // const url = `${meetURL}/room/master/control/user?room=${roomId}`;
 
     try {
       const data = {
@@ -498,9 +498,9 @@ export default {
     const signature = CryptoJS.enc.Base64.stringify(hashText);
 
     // 운영기
-    // const url = `${wehagoBaseURL0}${accsessUrl}`;
+    const url = `${wehagoBaseURL0}${accsessUrl}`;
     // 개발기
-    const url = `${meetURL}/room/connecting/count?room=${roomId}`;
+    // const url = `${meetURL}/room/connecting/count?room=${roomId}`;
 
     try {
       const data = {
@@ -530,9 +530,9 @@ export default {
     const signature = CryptoJS.enc.Base64.stringify(hashText);
 
     // 운영기
-    // const url = `${wehagoBaseURL0}${accsessUrl}`;
+    const url = `${wehagoBaseURL0}${accsessUrl}`;
     // 개발기
-    const url = `${meetURL}/room/master/control/user?room=${roomId}`;
+    // const url = `${meetURL}/room/master/control/user?room=${roomId}`;
 
     try {
       const data = {
@@ -563,9 +563,9 @@ export default {
     const signature = CryptoJS.enc.Base64.stringify(hashText);
 
     // 운영기
-    // const url = `${wehagoBaseURL0}${accsessUrl}`;
+    const url = `${wehagoBaseURL0}${accsessUrl}`;
     // 개발기
-    const url = `${meetURL}/room/masters?jwt=${roomToken}`;
+    // const url = `${meetURL}/room/masters?jwt=${roomToken}`;
 
     try {
       const data = {
@@ -596,9 +596,9 @@ export default {
     const signature = CryptoJS.enc.Base64.stringify(hashText);
 
     // 운영기
-    // const url = `${wehagoBaseURL0}${accsessUrl}`;
+    const url = `${wehagoBaseURL0}${accsessUrl}`;
     // 개발기
-    const url = `${meetURL}/user/default-name?room=${roomId}`;
+    // const url = `${meetURL}/user/default-name?room=${roomId}`;
 
     try {
       const data = {
@@ -628,9 +628,9 @@ export default {
     const signature = CryptoJS.enc.Base64.stringify(hashText);
 
     // 운영기
-    // const url = `${wehagoBaseURL0}${accsessUrl}`;
+    const url = `${wehagoBaseURL0}${accsessUrl}`;
     // 개발기
-    const url = `${meetURL}/master/remaining-master?room=${roomId}`;
+    // const url = `${meetURL}/master/remaining-master?room=${roomId}`;
 
     try {
       const data = {

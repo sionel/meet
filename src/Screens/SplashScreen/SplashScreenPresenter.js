@@ -3,6 +3,7 @@ import { CustomAlert, ServerNotiveCheck, Splash } from '../../components';
 
 export default function SplashScreenPresenter(props) {
   const { alert, servernoti } = props;
+  
   if (alert)
     return (
       <CustomAlert

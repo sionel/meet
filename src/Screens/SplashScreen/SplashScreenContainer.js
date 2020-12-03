@@ -121,10 +121,10 @@ class SplashScreenContainer extends Component {
     // 버전 수정
     if (!result || !this.props.updateNoti) return [];
 
-    const android_major_version = '1';
-    const ios_major_version = '1';
-    const android_version = '2.0.0';
-    const ios_version = '2.0.0';
+    const android_major_version = 2;
+    const ios_major_version = 2;
+    const android_version = '2.0.1';
+    const ios_version = '2.0.1';
 
     const platform = Platform.OS;
     let subMessage = result.resultData.detail_info?.split('\\n');
@@ -136,7 +136,10 @@ class SplashScreenContainer extends Component {
     let onToggle = this.props.toggleUpdateNoti;
     let buttonValue = this.props.updateNoti;
     if (platform === 'android') {
-      if (android_major_version !== result.resultData.android_major_version) {
+      if (
+        android_major_version <
+        parseInt(result.resultData.android_major_version)
+      ) {
         message =
           '더 새로워진 WEHAGO Meet을 만나보세요.\n\n신규 기능은 업데이트 이후 사용 가능합니다.';
         buttons = [
@@ -170,7 +173,7 @@ class SplashScreenContainer extends Component {
         ];
       }
     } else {
-      if (ios_major_version !== result.resultData.ios_major_version) {
+      if (ios_major_version < parseInt(result.resultData.ios_major_version)) {
         message =
           '더 새로워진 WEHAGO Meet을 만나보세요.\n\n신규 기능은 업데이트 이후 사용 가능합니다.';
         buttons = [

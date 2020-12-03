@@ -71,7 +71,7 @@ export default function AwardsScreen(props) {
             </Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.card}>
+        {/* <View style={styles.card}>
           <Image
             source={require('../../../../assets/logoAppqward2019.png')}
             style={styles.img}
@@ -126,7 +126,7 @@ export default function AwardsScreen(props) {
               사이트바로가기
             </Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
       </ScrollView>
     </View>
   );
