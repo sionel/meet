@@ -384,6 +384,7 @@ class ConferenceManager {
     this._dispatch(
       localActionCreators.setToastMessage('발언권 요청이 거부되었습니다.')
     );
+    this._dispatch(localActionCreators.setMicRequest(false));
   };
   changeMasterList = () => {
     this._dispatch(masterAcionCreators.checkMasterList(this._roomToken));

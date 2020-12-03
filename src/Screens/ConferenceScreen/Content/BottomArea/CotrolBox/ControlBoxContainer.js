@@ -26,15 +26,13 @@ class ControlBoxContainer extends React.Component {
 
   _handleToggleMic = () => {
     let conferenceManager = getConferenceManager();
-    if (this.props.isAudioActive) {
-      this.props.toggleMuteMic();
-    } else {
+    if (this.props.isMasterControl && !this.props.isAudioActive) {
       if (this.props.isMuteMic) {
         if (this.props.isMicRequest) {
           this.props.setSimpleNoti('요청 수락을 기다리는 중 입니다.');
         } else {
           conferenceManager.requestAttention(this.props.name);
-          this.props.setMicRequest(true)
+          this.props.setMicRequest(true);
           this.props.setSimpleNoti('마스터에게 발언권을 요청하였습니다.');
         }
       } else {
@@ -43,6 +41,8 @@ class ControlBoxContainer extends React.Component {
         // this.props.toggleMuteMicByMe();
         this.props.toggleMuteMic();
       }
+    } else {
+      this.props.toggleMuteMic();
     }
   };
 }

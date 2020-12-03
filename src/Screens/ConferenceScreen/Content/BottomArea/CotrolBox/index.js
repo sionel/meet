@@ -10,7 +10,8 @@ const mapStateToProps = state => {
     isMuteSpeaker: local.user.isMuteSpeaker,
     isAudioActive: local.isAudioActive, // 마이크 활성화
     name: local.user.name,
-    isMicRequest :local.isMicRequest
+    isMicRequest :local.isMicRequest,
+    isMasterControl: local.isMasterControl
   };
 };
 
