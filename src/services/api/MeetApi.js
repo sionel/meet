@@ -86,8 +86,12 @@ export default {
     const encText = accsessUrl + token.cur_date + token.token;
     const hashText = CryptoJS.SHA256(encText);
     const signature = CryptoJS.enc.Base64.stringify(hashText);
-    const url = `${wehagoBaseURL0}${accsessUrl}`;
-    // const url = `${meetURL}/room?room=${roomId}`;
+
+    // 운영기
+    // const url = `${wehagoBaseURL0}${accsessUrl}`;
+    // 개발기
+    const url = `${meetURL}/room?room=${roomId}`;
+
     try {
       const data = {
         method: 'GET',
@@ -243,7 +247,11 @@ export default {
     const encText = accsessUrl + token.cur_date + token.token;
     const hashText = CryptoJS.SHA256(encText);
     const signature = CryptoJS.enc.Base64.stringify(hashText);
-    const url = `${wehagoBaseURL0}${accsessUrl}`;
+
+    // 운영기
+    // const url = `${wehagoBaseURL0}${accsessUrl}`;
+    // 개발기
+    const url = `${meetURL}/token`;
 
     try {
       const data = {
@@ -276,7 +284,11 @@ export default {
     const encText = accsessUrl + token.cur_date + token.token;
     const hashText = CryptoJS.SHA256(encText);
     const signature = CryptoJS.enc.Base64.stringify(hashText);
-    const url = `${wehagoBaseURL0}${accsessUrl}`;
+
+    // 운영기
+    // const url = `${wehagoBaseURL0}${accsessUrl}`;
+    // 개발기
+    const url = `${meetURL}/token`;
 
     try {
       const data = {
@@ -310,8 +322,12 @@ export default {
     const encText = accsessUrl + token.cur_date + token.token;
     const hashText = CryptoJS.SHA256(encText);
     const signature = CryptoJS.enc.Base64.stringify(hashText);
-    const url = `${wehagoBaseURL0}${accsessUrl}`;
-    // const url = `${meetURL}/connect`;
+
+    // 운영기
+    // const url = `${wehagoBaseURL0}${accsessUrl}`;
+    // 개발기
+    const url = `${meetURL}/connect`;
+
     try {
       const data = {
         method: 'POST',
@@ -346,7 +362,11 @@ export default {
     const encText = accsessUrl + token.cur_date + token.token;
     const hashText = CryptoJS.SHA256(encText);
     const signature = CryptoJS.enc.Base64.stringify(hashText);
-    const url = `${wehagoBaseURL0}${accsessUrl}`;
+
+    // 운영기
+    // const url = `${wehagoBaseURL0}${accsessUrl}`;
+    // 개발기
+    const url = `${meetURL}/mobile/version?timestamp=${date}`;
 
     try {
       const data = {
@@ -377,7 +397,11 @@ export default {
     const encText = accsessUrl + token.cur_date + token.token;
     const hashText = CryptoJS.SHA256(encText);
     const signature = CryptoJS.enc.Base64.stringify(hashText);
-    const url = `${wehagoBaseURL0}${accsessUrl}`;
+
+    // 운영기
+    // const url = `${wehagoBaseURL0}${accsessUrl}`;
+    // 개발기
+    const url = `${meetURL}/mobile/noti?timestamp=${date}`;
 
     try {
       const data = {
@@ -406,7 +430,11 @@ export default {
     const encText = accsessUrl + token.cur_date + token.token;
     const hashText = CryptoJS.SHA256(encText);
     const signature = CryptoJS.enc.Base64.stringify(hashText);
-    const url = `${wehagoBaseURL0}${accsessUrl}`;
+
+    // 운영기
+    // const url = `${wehagoBaseURL0}${accsessUrl}`;
+    // 개발기
+    const url = `${meetURL}/joincode/search?joincode=${joincode}`;
 
     try {
       const data = {
@@ -435,7 +463,11 @@ export default {
     const encText = accsessUrl + token.cur_date + token.token;
     const hashText = CryptoJS.SHA256(encText);
     const signature = CryptoJS.enc.Base64.stringify(hashText);
-    const url = `${wehagoBaseURL0}${accsessUrl}`;
+
+    // 운영기
+    // const url = `${wehagoBaseURL0}${accsessUrl}`;
+    // 개발기
+    const url = `${meetURL}/room/master/control/user?room=${roomId}`;
 
     try {
       const data = {
@@ -464,7 +496,12 @@ export default {
     const encText = accsessUrl + token.cur_date + token.token;
     const hashText = CryptoJS.SHA256(encText);
     const signature = CryptoJS.enc.Base64.stringify(hashText);
-    const url = `${wehagoBaseURL0}${accsessUrl}`;
+
+    // 운영기
+    // const url = `${wehagoBaseURL0}${accsessUrl}`;
+    // 개발기
+    const url = `${meetURL}/room/connecting/count?room=${roomId}`;
+
     try {
       const data = {
         method: 'GET',
@@ -488,13 +525,15 @@ export default {
   checkMasterControl: async roomId => {
     const accsessUrl = `/video/room/master/control/user?room=${roomId}`;
     const token = await getToken(accsessUrl);
-
     const encText = accsessUrl + token.cur_date + token.token;
     const hashText = CryptoJS.SHA256(encText);
     const signature = CryptoJS.enc.Base64.stringify(hashText);
 
-    const url = `${wehagoBaseURL0}${accsessUrl}`;
-    // const url = `${meetURL}/room/master/control/user?room=${roomId}`;
+    // 운영기
+    // const url = `${wehagoBaseURL0}${accsessUrl}`;
+    // 개발기
+    const url = `${meetURL}/room/master/control/user?room=${roomId}`;
+
     try {
       const data = {
         method: 'GET',
@@ -515,48 +554,52 @@ export default {
     }
   },
 
-    // 3-31 마스터 리스트 조회
-    getMasterList: async roomToken => {
-      const accsessUrl = `/video/room/masters?jwt=${roomToken}`;
-      const token = await getToken(accsessUrl);
-  
-      const encText = accsessUrl + token.cur_date + token.token;
-      const hashText = CryptoJS.SHA256(encText);
-      const signature = CryptoJS.enc.Base64.stringify(hashText);
-  
-      const url = `${wehagoBaseURL0}${accsessUrl}`;
-      // const url = `${meetURL}/room/master/control/user?room=${roomId}`;
-      try {
-        const data = {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-            signature
-          }
-        };
-  
-        const response = await fetch(url, data);
-        if (response.status !== 200) {
-          throw await response.json();
-        }
-        return response.json();
-      } catch (err) {
-        console.warn('31.getMasterList : ', err);
-        return false;
-      }
-    },
+  // 3-31 마스터 리스트 조회
+  getMasterList: async roomToken => {
+    const accsessUrl = `/video/room/masters?jwt=${roomToken}`;
+    const token = await getToken(accsessUrl);
+    const encText = accsessUrl + token.cur_date + token.token;
+    const hashText = CryptoJS.SHA256(encText);
+    const signature = CryptoJS.enc.Base64.stringify(hashText);
 
+    // 운영기
+    // const url = `${wehagoBaseURL0}${accsessUrl}`;
+    // 개발기
+    const url = `${meetURL}/room/masters?jwt=${roomToken}`;
+
+    try {
+      const data = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          signature
+        }
+      };
+
+      const response = await fetch(url, data);
+      if (response.status !== 200) {
+        throw await response.json();
+      }
+      return response.json();
+    } catch (err) {
+      console.warn('31.getMasterList : ', err);
+      return false;
+    }
+  },
 
   // 넘버링 없음 이름없는 외부참여자 아이디 가져오기
   getExternalUserId: async roomId => {
     const accsessUrl = `/video/user/default-name?room=${roomId}`;
     const token = await getToken(accsessUrl);
-
     const encText = accsessUrl + token.cur_date + token.token;
     const hashText = CryptoJS.SHA256(encText);
     const signature = CryptoJS.enc.Base64.stringify(hashText);
 
-    const url = `${wehagoBaseURL0}${accsessUrl}`;
+    // 운영기
+    // const url = `${wehagoBaseURL0}${accsessUrl}`;
+    // 개발기
+    const url = `${meetURL}/user/default-name?room=${roomId}`;
+
     try {
       const data = {
         method: 'GET',
@@ -580,13 +623,15 @@ export default {
   checkMasterList: async roomId => {
     const accsessUrl = `/video/master/remaining-master?room=${roomId}`;
     const token = await getToken(accsessUrl);
-
     const encText = accsessUrl + token.cur_date + token.token;
     const hashText = CryptoJS.SHA256(encText);
     const signature = CryptoJS.enc.Base64.stringify(hashText);
 
-    const url = `${wehagoBaseURL0}${accsessUrl}`;
-    // const url = `${meetURL}/room/master/control/user?room=${roomId}`;
+    // 운영기
+    // const url = `${wehagoBaseURL0}${accsessUrl}`;
+    // 개발기
+    const url = `${meetURL}/master/remaining-master?room=${roomId}`;
+
     try {
       const data = {
         method: 'GET',
