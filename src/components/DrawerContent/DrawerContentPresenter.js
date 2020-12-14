@@ -194,7 +194,7 @@ export default function DrawerPresenter(props) {
         <View style={styles.children}>{props.children}</View>
 
         {/* addon */}
-        <View style={styles.addon}>
+        {/* <View style={styles.addon}>
           <TouchableOpacity
             onPress={() => {
               selectedCompany.membership_code === 'WT1'
@@ -212,10 +212,10 @@ export default function DrawerPresenter(props) {
               <CustomIcon name={'bannerDraw'} width={'100%'} height={'100%'} />
             )}
           </TouchableOpacity>
-        </View>
+        </View> */}
 
         {/* notice */}
-        <View style={styles.notice}>
+        {/* <View style={styles.notice}>
           {selectedCompany.membership_code !== 'WE' && (
             <TouchableOpacity
               onPress={() =>
@@ -249,7 +249,7 @@ export default function DrawerPresenter(props) {
               고객센터
             </Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
       </View>
     </SafeAreaView>
   );

@@ -317,9 +317,9 @@ SPEC CHECKSUMS:
   Amplitude-iOS: 2ad4d7270c99186236c1272a3a9425463b1ae1a7
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   BVLinearGradient: 0d985ec461359c82bc254f26d11008bdae50d17a
-  Crashlytics: 07fb167b1694128c1c9a5a5cc319b0e9c3ca0933
+  Crashlytics: a33af323773f73904037dc2e684cd2f0d29f4fe2
   DoubleConversion: bb338842f62ab1d708ceb63ec3d999f0f3d98ecd
-  Fabric: f988e33c97f08930a413e08123064d2e5f68d655
+  Fabric: 09ef2d9b99b104702bede1acaf469fb8f20a9146
   Firebase: 02f3281965c075426141a0ce1277e9de6649cab9
   FirebaseAnalytics: 23851fe602c872130a2c5c55040b302120346cc2
   FirebaseAnalyticsInterop: efbe45c8385ec626e29f9525e5ebd38520dfb6c1
