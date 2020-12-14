@@ -202,7 +202,7 @@ export default function DrawerPresenter(props) {
                 : Linking.openURL(
                     `https://www.wehago${
                       wehagoType === 'WEHAGOV' ? 'v' : ''
-                    }.com/landing/`
+                    }.com/landing/cooperation`
                   );
             }}
           >
