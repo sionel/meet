@@ -19,7 +19,7 @@ import documentShare from './modules/documentShare';
 import conference from './modules/conference';
 import webUser from './modules/webUser';
 import master from './modules/master';
-
+import alert from './modules/alert';
 /**
  * middleware list
  */
@@ -46,8 +46,9 @@ const persistConfig = {
     'documentShare',
     'conference',
     'webUser',
-    'master'
-  ] 
+    'master',
+    'alert'
+  ]
 };
 
 /**
@@ -63,7 +64,8 @@ const reducer = persistCombineReducers(persistConfig, {
   documentShare,
   conference,
   webUser,
-  master
+  master,
+  alert
 });
 
 /**
