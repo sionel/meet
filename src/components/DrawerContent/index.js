@@ -2,6 +2,7 @@
 import DrawerContent from './DrawerContent';
 import { connect } from 'react-redux';
 import { actionCreators as UserActions } from '../../redux/modules/user';
+import { actionCreators as AlertActions } from '../../redux/modules/alert';
 
 // map state to props
 const mapStateToProps = state => ({
@@ -11,11 +12,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => {
   return {
     changeCompanyRequest: (auth, company) =>
-      dispatch(UserActions.changeCompanyRequest(auth, company))
+      dispatch(UserActions.changeCompanyRequest(auth, company)),
+    setAlert: params => dispatch(AlertActions.setAlert(params))
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(DrawerContent);
+export default connect(mapStateToProps, mapDispatchToProps)(DrawerContent);

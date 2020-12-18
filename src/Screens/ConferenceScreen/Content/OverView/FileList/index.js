@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { actionCreators as WedriveActions } from '../../../../../redux/modules/wedrive';
 import { actionCreators as mainUserActions } from '../../../../../redux/modules/mainUser';
 import { actionCreators as DocumentShareActions } from '../../../../../redux/modules/documentShare';
+import { actionCreators as AlertActions } from '../../../../../redux/modules/alert';
 
 // map state to props
 const mapStateToProps = state => ({
@@ -28,11 +29,9 @@ const mapDispatchToProps = dispatch => {
     getFileInfoRequest: (authData, fileInfo) =>
       dispatch(WedriveActions.getFileInfoRequest(authData, fileInfo)),
     getDirectoryInfoRequest: (authData, directory) =>
-      dispatch(WedriveActions.getDirectoryInfoRequest(authData, directory))
+      dispatch(WedriveActions.getDirectoryInfoRequest(authData, directory)),
+    setAlert: params => dispatch(AlertActions.setAlert(params))
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(FileListContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(FileListContainer);

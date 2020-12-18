@@ -83,8 +83,6 @@ export default function LoginInputContainer(props) {
         destination: isPurchase ? 'List' : 'SelectCompany'
       });
     } else if (statusCheck && statusCheck.code === 400) {
-      // 회사에 이상이 있을 경우, 회사 선택 화면으로 이동
-      // Alert.alert('알림', statusCheck.message);
 
       const onClose = () => {
         _resetAlert();

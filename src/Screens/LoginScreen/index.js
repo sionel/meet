@@ -5,6 +5,7 @@
 import { connect } from 'react-redux';
 import LoginScreenContainer from './LoginScreenContainer';
 import { actionCreators as UserActions } from '../../redux/modules/user';
+import { actionCreators as AlertActions } from '../../redux/modules/alert';
 
 // map state to props
 const mapStateToProps = state => ({
@@ -16,27 +17,7 @@ const mapStateToProps = state => ({
 // map dispatch to props
 const mapDispatchToProps = dispatch => {
   return {
-    // onTokenLogin: (token, cno) => dispatch(UserActions.tokenLogin(token, cno)),
-    // loginRequest: (data, access_pass) =>
-    //   dispatch(UserActions.loginRequest(data, access_pass)),
-    // loginCheckRequest: (
-    //   AUTH_A_TOKEN,
-    //   AUTH_R_TOKEN,
-    //   cno,
-    //   HASH_KEY,
-    //   from
-    // ) =>
-    //   dispatch(
-    //     UserActions.loginCheckRequest(
-    //       AUTH_A_TOKEN,
-    //       AUTH_R_TOKEN,
-    //       cno,
-    //       HASH_KEY,
-    //       from
-    //     )
-    //   ),
-    // onAgreement: () => dispatch(UserActions.agreement()),
-    // onLogout: () => dispatch(UserActions.logout())
+    setAlert: params => dispatch(AlertActions.setAlert(params))
   };
 };
 

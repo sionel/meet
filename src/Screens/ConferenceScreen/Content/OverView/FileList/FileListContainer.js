@@ -97,9 +97,11 @@ class FileListContainer extends Component {
       last_access_company_no
     );
     if (!initInfoResponse.initInfo) {
-      Alert.alert('Error', '사용자 정보를 불러오지 못했습니다.', [
-        { text: 'OK' }
-      ]);
+      this.props.setAlert({
+        type: 1,
+        title: 'Error',
+        message: '사용자 정보를 불러오지 못했습니다.'
+      });
       this._handleDocumentListMode(false);
       return;
     } else {
@@ -118,9 +120,11 @@ class FileListContainer extends Component {
     );
 
     if (!fileListResponse.storageList) {
-      Alert.alert('Error', '파일 리스트를 불러오지 못했습니다.', [
-        { text: 'OK' }
-      ]);
+      this.props.setAlert({
+        type: 1,
+        title: 'Error',
+        message: '파일 리스트를 불러오지 못했습니다.'
+      });
       return;
     }
   };
@@ -163,11 +167,11 @@ class FileListContainer extends Component {
    */
   _handleGetFileInfo = async file => {
     if (file.size > 1024 * 1024 * 20) {
-      Alert.alert(
-        '공유 파일 용량 초과',
-        '공유 가능한 파일 용량을 초과하였습니다.\n20MB 이하의 파일을 선택해주세요.',
-        [{ text: 'OK' }]
-      );
+      this.props.setAlert({
+        type: 1,
+        title: '공유 파일 용량 초과',
+        message: '공유 가능한 파일 용량을 초과하였습니다.\n20MB 이하의 파일을 선택해주세요.'
+      });
       return;
     }
 
@@ -223,11 +227,11 @@ class FileListContainer extends Component {
         this._handleGetDirectoryInfo(file);
         return;
       default:
-        Alert.alert(
-          '지원하지 않는 확장자',
-          '해당 파일은 문서 공유를 지원하지 않습니다.',
-          [{ text: 'OK' }]
-        );
+      this.props.setAlert({
+        type: 1,
+        title: '지원하지 않는 확장자',
+        message: '해당 파일은 문서 공유를 지원하지 않습니다.'
+      });
         return;
     }
 
@@ -270,17 +274,18 @@ class FileListContainer extends Component {
     }
 
     if (fileInfoResponse.resultCode === 'E2021') {
-      Alert.alert('파일 변환 중입니다.', '잠시후 다시 시도해주시기 바랍니다.', [
-        { text: 'OK' }
-      ]);
+      this.props.setAlert({
+        type: 1,
+        title: '파일 변환 중입니다.',
+        message:  '잠시후 다시 시도해주시기 바랍니다.'
+      });
       return;
     }
-
-    Alert.alert(
-      '파일 상세정보를 불러오지 못했습니다.',
-      '다시 시도해주시기 바랍니다.',
-      [{ text: 'OK' }]
-    );
+    this.props.setAlert({
+      type: 1,
+      title: '파일 상세정보를 불러오지 못했습니다.',
+      message: '다시 시도해주시기 바랍니다.',
+    });
     return;
   };
 
@@ -296,11 +301,11 @@ class FileListContainer extends Component {
       resources = fileInfo;
     } else if (!fileInfo[0].resources) {
       // 이미지 리소스가 없을 시
-      Alert.alert(
-        '파일 상세정보를 불러오지 못했습니다.',
-        '다시 시도해주시기 바랍니다.',
-        [{ text: 'OK' }]
-      );
+      this.props.setAlert({
+        type: 1,
+        title: '파일 상세정보를 불러오지 못했습니다.',
+        message: '다시 시도해주시기 바랍니다.'
+      });
       return;
     } else {
       // 이미지 리소스가 여러개일 경우

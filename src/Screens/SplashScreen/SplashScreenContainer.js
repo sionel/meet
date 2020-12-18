@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import {
   Platform,
-  ToastAndroid,
-  Alert,
   Linking,
   BackHandler
 } from 'react-native';
@@ -23,12 +21,10 @@ class SplashScreenContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // alert: false
       first: true,
       index: 0,
       servernoti: []
     };
-    // this.timeout = () => {};
   }
   setLoginState = () => {
     this.props.onChangeRootState({
@@ -104,12 +100,13 @@ class SplashScreenContainer extends Component {
       WEHAGO_ENV === 'WEHAGOV' &&
       (isJailBroken || isDebuggedMode)
     ) {
-      Alert.alert(
-        '알림',
-        '루팅된 단말에서는 WEHAGO모바일 서비스 이용이 제한됩니다. 보안을 위해 앱을 종료합니다.',
-        [{ text: '확인', onPress: () => BackHandler.exitApp() }],
-        { cancelable: false }
-      );
+      this.props.setAlert({
+        type: 1,
+        title: '알림',
+        message:
+          '루팅된 단말에서는 WEHAGO모바일 서비스 이용이 제한됩니다. 보안을 위해 앱을 종료합니다.',
+        onConfirm: () => BackHandler.exitApp()
+      });
       return false;
     }
     return true;
@@ -284,21 +281,37 @@ class SplashScreenContainer extends Component {
       );
       if (result.errors) {
         if (result.errors.code === 'E002') {
-          Alert.alert(
-            'Login',
-            '고객님의 다른 기기에서 WEHAGO 접속정보가 확인되어 로그아웃 됩니다.'
-          );
+          this.props.setAlert({
+            type: 1,
+            title: 'Login',
+            message:
+              '고객님의 다른 기기에서 WEHAGO 접속정보가 확인되어 로그아웃 됩니다.'
+          });
         } else if (result.errors.status === '400') {
-          Alert.alert('Login', '로그인 정보가 잘못되었습니다.');
+          this.props.setAlert({
+            type: 1,
+            title: 'Login',
+            message: '로그인 정보가 잘못되었습니다.'
+          });
         } else if (result.errors.status === '401') {
-          Alert.alert('Login', '권한이 없습니다.');
+          this.props.setAlert({
+            type: 1,
+            title: 'Login',
+            message: '권한이 없습니다.'
+          });
         } else if (result.errors.message === 'timeout') {
-          Alert.alert('Login', `요청 시간을 초과했습니다. 다시 시도해주세요.`);
+          this.props.setAlert({
+            type: 1,
+            title: 'Login',
+            message: '요청 시간을 초과했습니다. 다시 시도해주세요.'
+          });
         } else {
-          Alert.alert(
-            'Login',
-            `요청된 작업을 처리하던중 문제가 발생했습니다. 다시 시도해주세요.`
-          );
+          this.props.setAlert({
+            type: 1,
+            title: 'Login',
+            message:
+              '요청된 작업을 처리하던중 문제가 발생했습니다. 다시 시도해주세요.'
+          });
         }
         return 'fail';
       } else {
@@ -495,8 +508,10 @@ class SplashScreenContainer extends Component {
   _compareMeetToOtherLoginInfo = async (result, from) => {
     // 기존 meet 로그인 정보와 넘어온 로그인 정보를 비교
     let proceed = true;
-    if (Object.keys(this.props.auth).length !== 0) {
+    // if (Object.keys(this.props.auth).length !== 0) {
+    if (true) {
       if (
+        true ||
         this.props.auth.last_access_company_no !== Number(result.cno) ||
         this.props.auth.portal_id !== result.mPORTAL_ID
       ) {
@@ -505,20 +520,17 @@ class SplashScreenContainer extends Component {
             ? '기존 로그인 정보와 다른 정보로 접근되었습니다. 변경된 정보로 로그인 하시겠습니까?'
             : '기존 로그인 정보와 일치 하지 않습니다.\n계속 진행하시겠습니까? \n 화상회의 종료 후 기존 로그인 정보는\n삭제 처리 됩니다.';
         proceed = await new Promise(resolve => {
-          Alert.alert('알림', msg, [
-            {
-              text: '확인',
-              onPress: () => {
-                resolve(true);
-              }
+          this.props.setAlert({
+            type: 2,
+            title: '알림',
+            message: 'msg',
+            onConfirm: () => {
+              resolve(true);
             },
-            {
-              text: '취소',
-              onPress: () => {
-                resolve(false);
-              }
+            onCencel: () => {
+              resolve(false);
             }
-          ]);
+          });
         });
       } else {
         if (from === 'web') return 'same';
@@ -544,24 +556,41 @@ class SplashScreenContainer extends Component {
       from
     );
     if (result.errors) {
+
       if (result.errors.code === 'E002') {
-        Alert.alert(
-          'Login',
-          '고객님의 다른 기기에서 WEHAGO 접속정보가 확인되어 로그아웃 됩니다.'
-        );
+        this.props.setAlert({
+          type: 1,
+          title: 'Login',
+          message:
+            '고객님의 다른 기기에서 WEHAGO 접속정보가 확인되어 로그아웃 됩니다.'
+        });
       } else if (result.errors.status === '400') {
-        Alert.alert('Login', '로그인 정보가 잘못되었습니다.');
+        this.props.setAlert({
+          type: 1,
+          title: 'Login',
+          message: '로그인 정보가 잘못되었습니다.'
+        });
       } else if (result.errors.status === '401') {
-        Alert.alert('Login', '권한이 없습니다.');
+        this.props.setAlert({
+          type: 1,
+          title: 'Login',
+          message: '권한이 없습니다.'
+        });
       } else if (result.errors.message === 'timeout') {
-        Alert.alert('Login', `요청 시간을 초과했습니다. 다시 시도해주세요.`);
+        this.props.setAlert({
+          type: 1,
+          title: 'Login',
+          message: '요청 시간을 초과했습니다. 다시 시도해주세요.'
+        });
       } else {
-        Alert.alert(
-          'Login',
-          `요청된 작업을 처리하던중 문제가 발생했습니다. 다시 시도해주세요.`
-        );
+        this.props.setAlert({
+          type: 1,
+          title: 'Login',
+          message:
+            '요청된 작업을 처리하던중 문제가 발생했습니다. 다시 시도해주세요.'
+        });
       }
-      return false;
+      return 'fail';
     } else if (
       result.resultData.user_name ||
       result.resultData.auth.user_name
@@ -601,14 +630,14 @@ class SplashScreenContainer extends Component {
     } else if (statusCheck && statusCheck.code === 400) {
       // 회사에 이상이 있을 경우, 회사 선택 화면으로 이동
       proceed = await new Promise(resolve => {
-        Alert.alert('알림', statusCheck.message, [
-          {
-            text: '확인',
-            onPress: () => {
-              resolve(true);
-            }
+        this.props.setAlert({
+          type: 1,
+          title: '알림',
+          message: statusCheck.message,
+          onConfirm: () => {
+            resolve(true);
           }
-        ]);
+        });
       });
       return false;
     } else {

@@ -10,6 +10,7 @@
     actions={alertVisible.actions}
   />
 */
+import { useStore } from 'react-redux';
 
 const SET_ALERT = 'SET_ALERT';
 const RESET_ALERT = 'RESET_ALERT';
@@ -19,7 +20,8 @@ const initialState = {
   title: '',
   message: '',
   onClose: () => {},
-  actions: []
+  actions: [],
+  test: true
 };
 /*
  actions = [
@@ -40,6 +42,9 @@ export default (state = initialState, action) => {
       return { ...action.payload };
     case RESET_ALERT:
       return { ...initialState };
+    case 'TTTEST':
+      debugger;
+      return;
     default:
       return state;
   }
@@ -52,20 +57,22 @@ const resetAlert = () => {
 };
 
 const setAlert = params => {
-  const { title, type = 1, message, onConfirm, onCencel = () => {} } = params;
+  const {
+    title,
+    type = 1,
+    message,
+    onConfirm = () => {},
+    onCencel = () => {}
+  } = params;
   let onClose = () => {};
   let actions = [];
-
   if (type === 1) {
     // 확인밖에 없으니 닫음에 컨펌을 넣음
     onClose = onConfirm;
     actions = [
       {
         name: '확인',
-        action: () => {
-          resetAlert();
-          onConfirm;
-        }
+        action: onConfirm
       }
     ];
   } else if (type === 2) {
@@ -74,17 +81,11 @@ const setAlert = params => {
     actions = [
       {
         name: '확인',
-        action: () => {
-          resetAlert();
-          onConfirm;
-        }
+        action: onConfirm
       },
       {
         name: '취소',
-        action: () => {
-          resetAlert();
-          onCencel;
-        }
+        action: onCencel
       }
     ];
   }
@@ -102,5 +103,6 @@ const setAlert = params => {
 };
 
 export const actionCreators = {
-  setAlert
+  setAlert,
+  resetAlert
 };

@@ -28,6 +28,7 @@ class LoginScreenContainer extends Component {
         onWehagoLogin={this._handleLoginForWehago}
         onInputCode={this._inputCode}
         tmp={this.state.tmp}
+        onTest={this.props.onTest}
       />
     );
   }
@@ -55,14 +56,11 @@ class LoginScreenContainer extends Component {
       Linking.openURL(
         Platform.OS === 'ios' ? iosMarketURL : androidMarketURL
       ).catch(err => {
-        Alert.alert(
-          '스토어에서 해당 앱을 찾을 수 없습니다.',
-          '',
-          [{ text: 'OK' }],
-          {
-            cancelable: true
-          }
-        );
+        this.props.setAlert({
+          type: 1,
+          title: 'Error',
+          message: '스토어에서 해당 앱을 찾을 수 없습니다.'
+        });
       });
     });
   };
@@ -88,9 +86,17 @@ class LoginScreenContainer extends Component {
   _enterConference = async joincode => {
     const result = await MeetApi.searchJoincode(joincode);
     if (!result) {
-      Alert.alert('알림', '존재하지 않는 접속코드 입니다.');
+      this.props.setAlert({
+        type: 1,
+        title: '알림',
+        message: '존재하지 않는 접속코드 입니다.'
+      });
     } else if (result.resultData.code === 'E00001') {
-      Alert.alert('알림', '존재하지 않는 접속코드 입니다.');
+      this.props.setAlert({
+        type: 1,
+        title: '알림',
+        message: '존재하지 않는 접속코드 입니다.'
+      });
     } else {
       this.props.onChangeRootState({
         loaded: true,
