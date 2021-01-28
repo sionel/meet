@@ -89,6 +89,13 @@ https://stackoverflow.com/questions/63267897/building-for-ios-simulator-but-the-
 
 https://stackoverflow.com/questions/63267897/building-for-ios-simulator-but-the-linked-framework-framework-was-built
 https://stackoverflow.com/questions/65303304/xcode-12-3-building-for-ios-simulator-but-the-linked-and-embedded-framework-wa
+
+4. package-lock 문제
+
+현재 버전관리의 문제로 package.json 에서 ^ 이걸로 관리되던 패키지들이 좀 꼬여있어서 트랙에서 문제가 생김
+^ 이걸 다 없애고 해도 문제가 생기기에 ^ 를 적당히 없애가는 방향으로 가야할듯
+
+
 ## 작업목록
 
 1. 화면공유 - sdk 업데이트시 가능
