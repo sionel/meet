@@ -81,19 +81,22 @@ static BOOL RCTParseUnused(const char **input)
 
 https://zeddios.tistory.com/327
 
+3. xcode 빌드 문제
+
+오류 : Building for iOS Simulator, but the linked and embedded framework 'WebRTC.framework' was built for iOS + iOS Simulator.
+
+https://stackoverflow.com/questions/63267897/building-for-ios-simulator-but-the-linked-framework-framework-was-built
 
 ## 작업목록
 
-1. 화면공유
-2. 하울링
+1. 화면공유 - sdk 업데이트시 가능
+2. 하울링 - sdk 업데이트시 가능
 3. 방 생성
-4. 조직도
+4. 조직도 
 5. 프로필
 6. 참가인원 리스트
-7. 마스터 권한
-8. 업데이트 안내
-9. 딥링크
+7. 딥링크 
 
-## etc
+## 스토어 주소
 ios : https://itunes.apple.com/app/id1455726925?mt=8
 android : https://play.google.com/store/apps/details?id=com.wehago.meet
