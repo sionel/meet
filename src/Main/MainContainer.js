@@ -28,8 +28,6 @@ class MainContainer extends Component {
     };
   }
 
-  componentDidMount() {}
-
   render() {
     const { params, destination, onChangeRootState, from } = this.props;
     return (

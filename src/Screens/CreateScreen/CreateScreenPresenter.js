@@ -34,7 +34,7 @@ const CreateScreenPresenter = props => {
     item => item.room_type === '4' && item.is_video_access === 'F'
   );
   const suimList = props.list.filter(
-    item => item.room_type === '5' && item.is_video_access === 'F'
+    item => item.room_type === '5' && item.is_video_access === 'F' && !item.unpaid_status
   );
 
   const personalHeight = new Animated.Value(54 * personalList.length);

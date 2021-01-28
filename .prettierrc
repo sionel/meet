@@ -2,5 +2,6 @@
   "singleQuote": true,
   "jsxSingleQuote": false,
   "trailingComma": "none",
-  "arrowParens": "avoid"
+  "arrowParens": "avoid",
+  "tabWidth": 2
 }

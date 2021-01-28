@@ -15,9 +15,10 @@ import {
 
 import CustomIcon from '../../components/CustomIcon';
 import { Text } from '../../components/StyledText';
+import { useDispatch } from 'react-redux';
 
 export default function LoginScreenPresenter(props) {
-  const { onWehagoLogin, onInputCode, joincode, navigation } = props;
+  const { onWehagoLogin, onInputCode, joincode, navigation, onTest } = props;
 
   this.state = {
     selection: { start: 0, end: 0 }

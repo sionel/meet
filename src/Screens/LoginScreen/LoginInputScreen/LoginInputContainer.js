@@ -36,8 +36,9 @@ export default function LoginInputContainer(props) {
   const [errorMsg, setErrorMsg] = React.useState(null);
   const [alertVisible, setAlertVisible] = React.useState({
     visible: false,
-    onConfirm: () => {},
-    onClose: () => {}
+    description: '',
+    onClose: () => {},
+    actions: []
   });
 
   const usernameRef = React.useRef(null);
@@ -48,6 +49,15 @@ export default function LoginInputContainer(props) {
     setCaptcha(_getTransactionId());
     setCaptchaInput('');
   };
+
+  const _resetAlert = () =>
+    setAlertVisible({
+      visible: false,
+      description: '',
+      onClose: () => {},
+      actions: [],
+      title: ''
+    });
 
   _handleCheckServce = async auth => {
     const statusCheck = await ServiceCheckApi.companyStatusCheck(
@@ -73,11 +83,29 @@ export default function LoginInputContainer(props) {
         destination: isPurchase ? 'List' : 'SelectCompany'
       });
     } else if (statusCheck && statusCheck.code === 400) {
-      // 회사에 이상이 있을 경우, 회사 선택 화면으로 이동
-      Alert.alert('알림', statusCheck.message);
-      props.onChangeRootState({
-        destination: 'SelectCompany'
+
+      const onClose = () => {
+        _resetAlert();
+        props.onChangeRootState({
+          destination: 'SelectCompany'
+        });
+      };
+      setAlertVisible({
+        visible: true,
+        title: '알림',
+        description: statusCheck.message,
+        onClose,
+        actions: [
+          {
+            name: '확인',
+            action: onClose
+          }
+        ]
       });
+
+      // props.onChangeRootState({
+      //   destination: 'SelectCompany'
+      // });
     } else {
       // 중간에 알 수 없는 오류 발생 시
       props.onChangeRootState({
@@ -100,7 +128,23 @@ export default function LoginInputContainer(props) {
 
     setLogging(true);
     if (captcha && captchaInput !== captcha.replace(/(\s*)/g, '')) {
-      Alert.alert('로그인 실패', '자동입력 방지문자를 잘못 입력하셨습니다.');
+      const onClose = () => {
+        _resetAlert();
+      };
+      _resetAlert();
+      setAlertVisible({
+        visible: true,
+        title: '로그인 실패',
+        description: '자동입력 방지문자를 잘못 입력하셨습니다.',
+        onClose,
+        actions: [
+          {
+            name: '확인',
+            action: onClose
+          }
+        ]
+      });
+
       _handleChangeCapcha();
       setLogging(false);
       setUserPw('');
@@ -128,21 +172,34 @@ export default function LoginInputContainer(props) {
         // 중복 로그인 시 알림창
         // const resultAlert = await _handleSetAlert();
         const resultAlert = await new Promise(resolve => {
-          Alert.alert('login', getAuth.resultMsg, [
-            {
-              text: '확인',
-              onPress: () => {
-                resolve(true);
-              }
+          _resetAlert();
+          setAlertVisible({
+            visible: true,
+            title: '알림',
+            description: getAuth.resultMsg,
+            onClose: () => {
+              _resetAlert();
+              resolve(false);
             },
-            {
-              text: '취소',
-              onPress: () => {
-                resolve(false);
+            actions: [
+              {
+                name: '확인',
+                action: () => {
+                  _resetAlert();
+                  resolve(true);
+                }
+              },
+              {
+                name: '취소',
+                action: () => {
+                  _resetAlert();
+                  resolve(false);
+                }
               }
-            }
-          ]);
+            ]
+          });
         });
+
         if (!resultAlert) return setLogging(false);
         else {
           await _handleLogin(userId, userPw, captcha, 'T');
@@ -172,70 +229,95 @@ export default function LoginInputContainer(props) {
 
       if (result.errors) {
         if (result.errors.code === 'E002') {
-          this._handleOnAlert(2);
-          Alert.alert(
-            'Login',
-            iswehagov
+          const onClose = () => {
+            _resetAlert();
+            UserActions.logout();
+          };
+
+          _resetAlert();
+          setAlertVisible({
+            visible: true,
+            title: '알림',
+            description: iswehagov
               ? '세션이 만료되었습니다. 다시 로그인 해주세요.'
               : '고객님의 다른 기기에서 WEHAGO 접속정보가 확인되어 로그아웃 됩니다.',
-            [
+            onClose,
+            actions: [
               {
-                text: '확인',
-                onPress: () => {
-                  UserActions.logout();
-                }
+                name: '확인',
+                action: onClose
               }
             ]
-          );
+          });
         } else if (result.errors.status === '400') {
-          Alert.alert('Login', '로그인 정보가 잘못되었습니다.');
+          const onClose = () => {
+            _resetAlert();
+          };
+          _resetAlert();
+          setAlertVisible({
+            visible: true,
+            title: '알림',
+            description: '로그인 정보가 잘못되었습니다.',
+            onClose,
+            actions: [
+              {
+                name: '확인',
+                action: onClose
+              }
+            ]
+          });
         } else if (result.errors.status === '401') {
-          Alert.alert('Login', '권한이 없습니다.');
+          const onClose = () => {
+            _resetAlert();
+          };
+          _resetAlert();
+          setAlertVisible({
+            visible: true,
+            title:'알림',
+            description: '권한이 없습니다.',
+            onClose,
+            actions: [
+              {
+                name: '확인',
+                action: onClose
+              }
+            ]
+          });
         } else if (result.errors.message === 'timeout') {
-          Alert.alert('Login', `요청 시간을 초과했습니다. 다시 시도해주세요.`);
+          const onClose = () => {
+            _resetAlert();
+          };
+          _resetAlert();
+          setAlertVisible({
+            visible: true,
+            title:'알림',
+            description: `요청 시간을 초과했습니다. 다시 시도해주세요.`,
+            onClose,
+            actions: [
+              {
+                name: '확인',
+                action: onClose
+              }
+            ]
+          });
         } else {
-          Alert.alert(
-            'Login',
-            `요청된 작업을 처리하던중 문제가 발생했습니다. 다시 시도해주세요.`
-          );
+          const onClose = () => {
+            _resetAlert();
+          };
+          _resetAlert();
+          setAlertVisible({
+            visible: true,
+            title:'알림',
+            description: `요청된 작업을 처리하던중 문제가 발생했습니다. 다시 시도해주세요.`,
+            onClose,
+            actions: [
+              {
+                name: '확인',
+                action: onClose
+              }
+            ]
+          });
         }
-
-        //   const statusCheck = await ServiceCheckApi.companyStatusCheck(
-        //     auth,
-        //     auth.last_access_company_no
-        //   );
-        //   // 이상이 없는 회사일 경우 로그인 정상 진행
-        //   if (statusCheck && statusCheck.code === 200) {
-        //     // 서비스 구매여부 조회
-        //     const isPurchase = await ServiceCheckApi.serviceCheck(
-        //       auth,
-        //       auth.last_access_company_no,
-        //       'P' // 구매여부 확인
-        //     );
-        //     // 서비스 배포여부 조회
-        //     const isDeploy = await ServiceCheckApi.serviceCheck(
-        //       auth,
-        //       auth.last_access_company_no,
-        //       'D' // 배포여부 확인
-        //     );
-        //     UserActions.setPermission(isDeploy);
-        //     props.onChangeRootState({
-        //       destination: isPurchase ? 'list' : 'company'
-        //     });
-        //   } else if (statusCheck && statusCheck.code === 400) {
-        //     // 회사에 이상이 있을 경우, 회사 선택 화면으로 이동
-        //     Alert.alert('알림', statusCheck.message);
-        //     props.onChangeRootState({
-        //       destination: 'company'
-        //     });
-        //   } else {
-        //     // 중간에 알 수 없는 오류 발생 시
-        //     props.onChangeRootState({
-        //       destination: 'company'
-        //     });
-        //   }
-        // }
-
         return;
       }
     } else {
@@ -244,21 +326,80 @@ export default function LoginInputContainer(props) {
 
       if (getAuth.resultCode === 401) {
         captcha && setErrorMsg(getAuth.resultMsg);
-        Alert.alert('로그인 실패', '아이디 또는 비밀번호가 올바르지 않습니다.');
+        const onClose = () => {
+          _resetAlert();
+        };
+        _resetAlert();
+        setAlertVisible({
+          visible: true,
+          title: '로그인 실패',
+          description: '아이디 또는 비밀번호가 올바르지 않습니다.',
+          onClose,
+          actions: [
+            {
+              name: '확인',
+              action: onClose
+            }
+          ]
+        });
+
         setLoginFailed(true);
       } else if (getAuth.resultCode === 403) {
         setLoginFailed(true);
         setCaptcha(_getTransactionId());
-        Alert.alert(
-          '로그인 실패',
-          '로그인에 5번 실패해 자동입력 방지 문자 입력으로 이동합니다.'
-        );
+        const onClose = () => {
+          _resetAlert();
+        };
+        _resetAlert();
+        setAlertVisible({
+          visible: true,
+          title: '로그인 실패',
+          description:
+            '로그인에 5번 실패해 자동입력 방지 문자 입력으로 이동합니다.',
+          onClose,
+          actions: [
+            {
+              name: '확인',
+              action: onClose
+            }
+          ]
+        });
       } else if (getAuth.resultCode === 406) {
-        Alert.alert(
-          '사용제한안내',
-          '소속된 회사가 존재하지 않거나 가입단계가 완료되지 않아 로그인할 수 없습니다.'
-        );
-      } else Alert.alert('로그인 실패', '로그인에 실패했습니다.');
+        const onClose = () => {
+          _resetAlert();
+        };
+        _resetAlert();
+        setAlertVisible({
+          visible: true,
+          title: '사용제한안내',
+          description:
+            '소속된 회사가 존재하지 않거나 가입단계가 완료되지 않아 로그인할 수 없습니다.',
+          onClose,
+          actions: [
+            {
+              name: '확인',
+              action: onClose
+            }
+          ]
+        });
+      } else {
+        const onClose = () => {
+          _resetAlert();
+        };
+        _resetAlert();
+        setAlertVisible({
+          visible: true,
+          title: '로그인 실패',
+          description: '로그인에 실패했습니다.',
+          onClose,
+          actions: [
+            {
+              name: '확인',
+              action: onClose
+            }
+          ]
+        });
+      }
     }
   };
 

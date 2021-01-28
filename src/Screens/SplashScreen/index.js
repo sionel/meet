@@ -11,7 +11,7 @@ import SplashScreenContainer from './SplashScreenContainer';
 import { actionCreators as UserActions } from '../../redux/modules/user';
 import { actionCreators as DocumentShareActions } from '../../redux/modules/documentShare';
 import { actionCreators as WedriveAcions } from '../../redux/modules/wedrive';
-import { actionCreators as WebUserAcions } from '../../redux/modules/webUser';
+import { actionCreators as AlertAcions } from '../../redux/modules/alert';
 
 // map state to props
 const mapStateToProps = state => {
@@ -44,9 +44,8 @@ const mapDispatchToProps = dispatch => {
       dispatch(UserActions.setPermission(permission)),
     setSharingMode: () => dispatch(DocumentShareActions.setSharingMode()),
     setInitInfo: () => dispatch(WedriveAcions.setInitInfo()),
-    toggleUpdateNoti: () => {
-      dispatch(UserActions.toggleUpdateNoti());
-    }
+    toggleUpdateNoti: () => dispatch(UserActions.toggleUpdateNoti()),
+    setAlert: (params) => dispatch(AlertAcions.setAlert(params))
   };
 };
 

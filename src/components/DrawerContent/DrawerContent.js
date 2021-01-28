@@ -22,7 +22,7 @@ import CustomIcon from '../CustomIcon';
 import { WEHAGO_ENV } from '../../../config';
 
 export default function DrawerContent(props) {
-  const { navigation } = props;
+  const { navigation, setAlert } = props;
 
   // redux
   const auth = useSelector(state => state.user.auth);
@@ -62,7 +62,6 @@ export default function DrawerContent(props) {
     };
 
     const iosURL = {
-      // wehago: `wehago://app?name=meet&login=false`,
       wehago: `wehago://?`,
       wedrive: `wedrive://?`,
       fax: `wehagofax://?`,
@@ -88,19 +87,14 @@ export default function DrawerContent(props) {
         ? iosURL[type] + commonLoginInfo
         : androidURL[type] + commonLoginInfo
     ).catch(err => {
-      console.warn('err1', err);
       Linking.openURL(
         os === 'ios' ? iosMarketURL[type] : androidMarketURL[type]
       ).catch(err => {
-        console.warn('err2', err);
-        Alert.alert(
-          '스토어에서 해당 앱을 찾을 수 없습니다.',
-          '',
-          [{ text: 'OK' }],
-          {
-            cancelable: true
-          }
-        );
+        setAlert({
+          type: 1,
+          title: '알림',
+          message: '스토어에서 해당 앱을 찾을 수 없습니다.'
+        });
       });
     });
   };
