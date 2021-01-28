@@ -25,6 +25,7 @@ function checkMasterList(token) {
     const result = await MeetApi.getMasterList(token);
     if (!result) {
     }
+    
     const masterList = result.resultData.reduce((a, b) => {
       a.push(b.user);
       return a;
@@ -42,6 +43,7 @@ function updateMasterList(state, action) {
   //   a.push(b.user);
   //   return a;
   // }, []);
+  
   return {
     ...state,
     masterList: action.masterList

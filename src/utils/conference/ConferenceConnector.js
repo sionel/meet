@@ -59,6 +59,9 @@ export const STOP_FLOOR = 'STOP_FLOOR';
 // 마스터 권한 유저 리스트 변경 이벤트
 export const UPDATE_MASTER_USERS = 'CONFERENCE.EVENT.REQUEST.UPDATE_MASTER_USERS';
 
+// 마스터가 유저 추방
+export const REQUEST_KICK = 'CONFERENCE.EVENT.REQUEST.KICK'
+
 /**
  * ConferenceConnector
  * 화상회의 방 생성/참가 및 디바이스 연결을 담당하는 클래스
@@ -458,6 +461,9 @@ class ConferenceConnector {
       this._handlers.CHANGE_MASTER_LIST();
     });
 
+    this._room.addCommandListener(REQUEST_KICK, value => {
+      debugger
+    })
     
   };
 
@@ -480,6 +486,7 @@ class ConferenceConnector {
     this._room.removeCommandListener(GRANT_FLOOR);
     this._room.removeCommandListener(GRANT_FLOOR_TARGET);
     this._room.removeCommandListener(UPDATE_MASTER_USERS);
+    this._room.removeCommandListener(REQUEST_KICK);
   };
 
   /**

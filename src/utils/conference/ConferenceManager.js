@@ -161,7 +161,8 @@ class ConferenceManager {
         .changeMicControlUserModeByMaster,
       CHANGED_MIC_MUTE_BY_MASTER: this.changeMicMuteByMaster,
       REJECTED_BY_MASTER: this.rejectedByMaster,
-      CHANGE_MASTER_LIST: this.changeMasterList
+      CHANGE_MASTER_LIST: this.changeMasterList,
+      REQURES_KICK: this.requestKick
     };
     return handler;
   };
@@ -185,6 +186,7 @@ class ConferenceManager {
    * 대화방에 참여자가 접속하면 호출된다.
    */
   _joinUser = user => {
+    debugger
     this._dispatch(participantsAcionCreators.joinUser(user));
     this._dispatch(masterAcionCreators.checkMasterList(this._roomToken));
   };
@@ -380,6 +382,7 @@ class ConferenceManager {
   stopAttention = name => {
     this._conferenceConnector.stopAttention(name);
   };
+
   rejectedByMaster = () => {
     this._dispatch(
       localActionCreators.setToastMessage('발언권 요청이 거부되었습니다.')
@@ -388,6 +391,11 @@ class ConferenceManager {
   };
   changeMasterList = () => {
     this._dispatch(masterAcionCreators.checkMasterList(this._roomToken));
+  };
+
+  // 마스터가 참여자를 추방
+  requestKick = id => {
+    this._dispatch(participantsAcionCreators.setKickFlag(id));
   };
 }
 

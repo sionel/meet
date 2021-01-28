@@ -87,6 +87,8 @@ https://zeddios.tistory.com/327
 
 https://stackoverflow.com/questions/63267897/building-for-ios-simulator-but-the-linked-framework-framework-was-built
 
+https://stackoverflow.com/questions/63267897/building-for-ios-simulator-but-the-linked-framework-framework-was-built
+https://stackoverflow.com/questions/65303304/xcode-12-3-building-for-ios-simulator-but-the-linked-and-embedded-framework-wa
 ## 작업목록
 
 1. 화면공유 - sdk 업데이트시 가능

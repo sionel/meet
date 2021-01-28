@@ -1,6 +1,6 @@
 import { actionCreators as mainUserActionCreators } from './mainUser';
 import { actionCreators as localActionCreators } from './local';
-import MeetApi from '../../services/api/MeetApi'
+import MeetApi from '../../services/api/MeetApi';
 //#region Action Types
 
 // 새참여자 회의 참가
@@ -23,6 +23,9 @@ const SET_USER_INFO = 'SET_USER_INFO';
 
 // SET_USER_INFO
 const SET_CHANGED_STATUS = 'SET_CHANGED_STATUS';
+
+// 유저 강퇴
+const SET_KICK = 'SET_KICK';
 
 //#endregion Action Types
 
@@ -52,6 +55,8 @@ function reducer(state = initialState, action) {
       return applySetUserInfo(state, action);
     case SET_CHANGED_STATUS:
       return applyChangedStatus(state, action);
+    case SET_KICK:
+      return applySetKickFlag(state, action);
     default:
       return state;
   }
@@ -64,6 +69,7 @@ function reducer(state = initialState, action) {
 function joinUser(user) {
   return (dispatch, getState) => {
     const length = getState().participants.list.length;
+    debugger
     dispatch({
       type: JOIN_USER,
       user
@@ -84,7 +90,8 @@ function applyJoinUser(state, action) {
     isMuteVideo: false,
     videoTrack: null,
     audioTrack: null,
-    userInfo: null
+    userInfo: null,
+    isKicked: false
   };
   list.push(participant);
 
@@ -299,6 +306,23 @@ function applySetUserInfo(state, action) {
 
 //#endregion SET_USER_INFO
 
+function setKickFlag(id) {
+  debugger;
+  return dispatch => {
+    dispatch({
+      type: SET_KICK,
+      id
+    });
+  };
+}
+function applySetKickFlag(state, action) {
+  const list = [...state.list];
+  debugger
+  return {
+    ...state
+  };
+}
+
 export const actionCreators = {
   joinUser,
   leftUser,
@@ -306,7 +330,8 @@ export const actionCreators = {
   updateMuteVideo,
   // updateMuteAudio,
   setUserInfo,
-  changedStatus
+  changedStatus,
+  setKickFlag
 };
 
 export default reducer;
