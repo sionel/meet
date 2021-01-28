@@ -273,7 +273,7 @@ class ConferenceManager {
     this._dispatch(
       DocumentShareAcionCreators.setSharingMode(
         isDrawingShare ? { resources: '[]' } : false,
-        presenter,
+        isDrawingShare ? presenter : undefined,
         0, // page
         documentData, //documentData
         'drawing'

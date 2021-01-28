@@ -34,7 +34,6 @@ const UserListPresenter = props => {
       } else return user.userInfo.userName;
     } else return user.name;
   };
-
   return (
     <ScrollView
       contentContainerStyle={{ paddingLeft: 16, paddingRight: 16 }}
@@ -100,6 +99,10 @@ const UserListPresenter = props => {
               {item.id === presenter && (
                 <View style={styles.presenter}>
                   <Text style={styles.presenterText}>발표자</Text>
+                </View>
+              )}{!item.userInfo.wehagoId && (
+                <View style={[styles.presenter , { backgroundColor: 'rgb(112,172,196)' }]}>
+                  <Text style={styles.presenterText}>외부 참여자</Text>
                 </View>
               )}
             </View>
