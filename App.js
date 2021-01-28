@@ -44,9 +44,6 @@ export default class App extends Component {
             <SplashScreen
               onChangeRootState={this._handleChangeRootState}
               url={this.state.url}
-              // url={
-              //   'wehago.meet://?call_type=1&type=conference&video_id=ad_MEETXNGPKOWZFJPG_20201109141646h0386&mPORTAL_ID=hancho01&mHASH_KEY=111662869701943769610280347764687033287&mAuth_r_token=mJXqT58MIeGhYeRbSSjK3mMjPAFbDK&mAuth_a_token=qDQCl3EZB3glAxHNk5rk0hdC3g3KMK&cno=9'
-              // }
             />
           )}
         </PersistGate>
