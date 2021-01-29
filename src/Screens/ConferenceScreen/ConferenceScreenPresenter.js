@@ -17,7 +17,7 @@ const ConferenceScreenPresenter = props => {
   const dispatch = useDispatch();
   const localPipMode = useSelector(state => state.local.pipMode);
   if (localPipMode !== pipMode) {
-    dispatch({ type: 'CONFERENCE_PIP_MODE', pipMode });
+    dispatch({ type: 'local.CONFERENCE_PIP_MODE', pipMode });
   }
 
   return props.mainUser && props.connection ? (

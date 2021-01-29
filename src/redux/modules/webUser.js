@@ -1,7 +1,7 @@
 import { result } from 'underscore';
 import { UserApi } from '../../services';
-const LOGIN = 'LOGIN';
-const LOGOUT = 'LOGOUT';
+const LOGIN = 'webUser.LOGIN';
+const LOGOUT = 'webUser.LOGOUT';
 
 function login() {
   return { type: LOGIN };
@@ -18,12 +18,7 @@ const initialState = {
 
 //#endregion initialState
 
-function loginCheckRequestWeb(
-  AUTH_A_TOKEN,
-  AUTH_R_TOKEN,
-  cno,
-  HASH_KEY
-) {
+function loginCheckRequestWeb(AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY) {
   return async dispatch => {
     const checkResult = await UserApi.check(
       AUTH_A_TOKEN,

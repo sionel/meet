@@ -5,8 +5,8 @@
 
 // import { UserApi } from '../../services';
 
-const SET_LIST = 'SET_LIST';
-const SET_INITIAL_LIST = 'SET_INITIAL_LIST';
+const SET_LIST = 'wetalk.SET_LIST';
+const SET_INITIAL_LIST = 'wetalk.SET_INITIAL_LIST';
 
 //#region Action Creators
 

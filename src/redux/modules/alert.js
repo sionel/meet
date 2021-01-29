@@ -12,8 +12,8 @@
 */
 import { useStore } from 'react-redux';
 
-const SET_ALERT = 'SET_ALERT';
-const RESET_ALERT = 'RESET_ALERT';
+const SET_ALERT = 'alert.SET_ALERT';
+const RESET_ALERT = 'alert.RESET_ALERT';
 
 const initialState = {
   visible: false,

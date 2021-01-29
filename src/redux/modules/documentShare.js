@@ -1,10 +1,10 @@
 //#region Action Types
 
 // 문서공유 모드
-const SET_DOCUMENT_LIST_MODE = 'SET_DOCUMENT_LIST_MODE';
-const SET_SHARING_MODE = 'SET_SHARING_MODE';
-const SET_DOCUMENT_PAGE = 'SET_DOCUMENT_PAGE';
-const SET_DRAW_DATA = 'SET_DRAW_DATA';
+const SET_DOCUMENT_LIST_MODE = 'documentShare.SET_DOCUMENT_LIST_MODE';
+const SET_SHARING_MODE = 'documentShare.SET_SHARING_MODE';
+const SET_DOCUMENT_PAGE = 'documentShare.SET_DOCUMENT_PAGE';
+const SET_DRAW_DATA = 'documentShare.SET_DRAW_DATA';
 
 //#endregion Action Types
 

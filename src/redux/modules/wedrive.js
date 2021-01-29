@@ -4,12 +4,12 @@
 import { WedriveApi } from '../../services';
 import FetchCancel from 'react-native-cancelable-fetch';
 
-const SET_LOADING_STATUS = 'SET_LOADING_STATUS';
+const SET_LOADING_STATUS = 'wedrive.SET_LOADING_STATUS';
 
-const SET_INIT_INFO = 'SET_INIT_INFO';
-const SET_FILE_LIST = 'SET_FILE_LIST';
-const SET_FILE_INFO = 'SET_FILE_INFO';
-const UPDATE_FILE_LIST_UPDATE = 'UPDATE_FILE_LIST_UPDATE';
+const SET_INIT_INFO = 'wedrive.SET_INIT_INFO';
+const SET_FILE_LIST = 'wedrive.SET_FILE_LIST';
+const SET_FILE_INFO = 'wedrive.SET_FILE_INFO';
+const UPDATE_FILE_LIST_UPDATE = 'wedrive.UPDATE_FILE_LIST_UPDATE';
 
 //#region Action Creators
 

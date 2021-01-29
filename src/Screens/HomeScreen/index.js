@@ -34,7 +34,7 @@ const mapDispatchToProps = dispatch => ({
       )
     ),
   onSetWetalkList: list => dispatch(WetalkActions.setList(list)),
-  onSetConferenceList : list => dispatch(ConferenceActions.setList2(list)),
+  onSetConferenceList : list => dispatch(ConferenceActions.setList(list)),
 
   // onCreateConference: bodyData => dispatch(ConferenceActions.createConference(...bodyData))
 });

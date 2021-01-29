@@ -3,49 +3,49 @@ import { getConferenceManager } from '../../utils/ConferenceManager';
 //#region Action Types
 
 // JOIN_CONFERENCE
-const JOIN_CONFERENCE = 'JOIN_CONFERENCE';
+const JOIN_CONFERENCE = 'local.JOIN_CONFERENCE';
 
 // LEAVE_CONFERENCE
-const LEAVE_CONFERENCE = 'LEAVE_CONFERENCE';
+const LEAVE_CONFERENCE = 'local.LEAVE_CONFERENCE';
 
 // SET_CONFERENCE_MODE
-const SET_CONFERENCE_MODE = 'SET_CONFERENCE_MODE';
+const SET_CONFERENCE_MODE = 'local.SET_CONFERENCE_MODE';
 
 // TOGGLE_MUTE_VIDEO
-const TOGGLE_MUTE_VIDEO = 'TOGGLE_MUTE_VIDEO';
+const TOGGLE_MUTE_VIDEO = 'local.TOGGLE_MUTE_VIDEO';
 
 // TOGGLE_MUTE_AUDIO
-const TOGGLE_MUTE_MIC = 'TOGGLE_MUTE_MIC';
+const TOGGLE_MUTE_MIC = 'local.TOGGLE_MUTE_MIC';
 
 // TOGGLE_MUTE_SPEAKER
-const TOGGLE_MUTE_SPEAKER = 'TOGGLE_MUTE_SPEAKER';
+const TOGGLE_MUTE_SPEAKER = 'local.TOGGLE_MUTE_SPEAKER';
 
 // TOGGLE_CAMERA_FACING_MODE
-const TOGGLE_CAMERA_FACING_MODE = 'TOGGLE_CAMERA_FACING_MODE';
+const TOGGLE_CAMERA_FACING_MODE = 'local.TOGGLE_CAMERA_FACING_MODE';
 
 // SET_CONFERENCE_CREATED_TIME
-const SET_CONFERENCE_CREATED_TIME = 'SET_CONFERENCE_CREATED_TIME';
+const SET_CONFERENCE_CREATED_TIME = 'local.SET_CONFERENCE_CREATED_TIME';
 
 // CONFERENCE_MESSAGE_RECEIVED
-const CONFERENCE_MESSAGE_RECEIVED = 'CONFERENCE_MESSAGE_RECEIVED';
+const CONFERENCE_MESSAGE_RECEIVED = 'local.CONFERENCE_MESSAGE_RECEIVED';
 
 // CONFERENCE_PIP_MODE
-const CONFERENCE_PIP_MODE = 'CONFERENCE_PIP_MODE';
+const CONFERENCE_PIP_MODE = 'local.CONFERENCE_PIP_MODE';
 
 // 추후 마스터 권한이 생기고 업데이트 된다면 따로 리덕스를 분리하는게 좋을 듯
 // 마스터가 컨트롤 하는지에 대한 여부
-const SET_IS_CONTROL = 'SET_IS_CONTROL';
+const SET_IS_CONTROL = 'local.SET_IS_CONTROL';
 
-const SET_AUDIO_ACTIVE = 'SET_AUDIO_ACTIVE';
+const SET_AUDIO_ACTIVE = 'local.SET_AUDIO_ACTIVE';
 
-const TOGGLE_MUTE_MIC_MASTER = 'TOGGLE_MUTE_MIC_MASTER';
+const TOGGLE_MUTE_MIC_MASTER = 'local.TOGGLE_MUTE_MIC_MASTER';
 
 // 마스터 제어중일때 내가 내 마이크 종료하는 경우
-const TOGGLE_MUTE_MIC_BY_ME = 'TOGGLE_MUTE_MIC_BY_ME';
+const TOGGLE_MUTE_MIC_BY_ME = 'local.TOGGLE_MUTE_MIC_BY_ME';
 
-const TOAST_MESSAGE = 'TOAST_MESSAGE';
+const TOAST_MESSAGE = 'local.TOAST_MESSAGE';
 
-const SPEEK_REQUEST = 'SPEEK_REQUEST';
+const SPEEK_REQUEST = 'local.SPEEK_REQUEST';
 
 //#endregion Action Types
 
@@ -326,7 +326,7 @@ function applyToggleMuteMic(state, action) {
         isMuteMic: !currentMute
       },
       isMasterMicControl: false,
-      isMicRequest:false
+      isMicRequest: false
     };
   }
 
@@ -487,7 +487,7 @@ function setIsContorl(state, action) {
   return {
     ...state,
     isMasterControl: action.flag,
-    isMicRequest: false,
+    isMicRequest: false
   };
 }
 //#endregion
@@ -520,7 +520,7 @@ function setAudioActive(state, action) {
       },
       isAudioActive: !flag, // 비활성화가 mute 임
       isMasterMicControl: true,
-      isMicRequest:false
+      isMicRequest: false
     };
   }
 }
@@ -560,7 +560,7 @@ function applyToggleMuteMicMaster(state, action) {
       },
       // isAudioActive: !micMuteFlag,
       isMasterMicControl: true,
-      isMicRequest:false
+      isMicRequest: false
     };
   }
 

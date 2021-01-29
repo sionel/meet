@@ -4,28 +4,28 @@ import MeetApi from '../../services/api/MeetApi';
 //#region Action Types
 
 // 새참여자 회의 참가
-const JOIN_USER = 'JOIN_USER';
+const JOIN_USER = 'participants.JOIN_USER';
 
 // 참여자 나가기
-const LEFT_USER = 'LEFT_USER';
+const LEFT_USER = 'participants.LEFT_USER';
 
 // 참여자의 트랙 추가
-const SET_REMOTE_TRACK = 'SET_REMOTE_TRACK';
+const SET_REMOTE_TRACK = 'participants.SET_REMOTE_TRACK';
 
 // UPDATE_MUTE_VIDEO
-const UPDATE_MUTE_VIDEO = 'UPDATE_MUTE_VIDEO';
+const UPDATE_MUTE_VIDEO = 'participants.UPDATE_MUTE_VIDEO';
 
 // UPDATE_MUTE_AUDIO
-const UPDATE_MUTE_AUDIO = 'UPDATE_MUTE_AUDIO';
+const UPDATE_MUTE_AUDIO = 'participants.UPDATE_MUTE_AUDIO';
 
 // SET_USER_INFO
-const SET_USER_INFO = 'SET_USER_INFO';
+const SET_USER_INFO = 'participants.SET_USER_INFO';
 
 // SET_USER_INFO
-const SET_CHANGED_STATUS = 'SET_CHANGED_STATUS';
+const SET_CHANGED_STATUS = 'participants.SET_CHANGED_STATUS';
 
 // 유저 강퇴
-const SET_KICK = 'SET_KICK';
+const SET_KICK = 'participants.SET_KICK';
 
 //#endregion Action Types
 
@@ -69,7 +69,6 @@ function reducer(state = initialState, action) {
 function joinUser(user) {
   return (dispatch, getState) => {
     const length = getState().participants.list.length;
-    debugger
     dispatch({
       type: JOIN_USER,
       user
@@ -317,7 +316,7 @@ function setKickFlag(id) {
 }
 function applySetKickFlag(state, action) {
   const list = [...state.list];
-  debugger
+  debugger;
   return {
     ...state
   };

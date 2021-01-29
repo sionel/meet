@@ -1,7 +1,7 @@
 /**
  * Actions
  */
-const SET_JITSI_ID = "SET_JITSI_ID";
+const SET_JITSI_ID = 'jitsiInfo.SET_JITSI_ID';
 
 // END Actions
 
@@ -9,7 +9,7 @@ const SET_JITSI_ID = "SET_JITSI_ID";
  * initialState
  */
 const initialState = {
-  userInfo: [],
+  userInfo: []
 };
 // END inititlState
 
@@ -43,7 +43,7 @@ const setJitsiId = (
     _type,
     jitsiId,
     wehagoId,
-    isLocalUser,
+    isLocalUser
   };
 };
 
@@ -52,22 +52,22 @@ const applySetJitsiId = (state, action) => {
   const { _type, jitsiId, wehagoId, isLocalUser } = action;
 
   let userInfo = prevUserInfo;
-  const id = isLocalUser ? "localUser" : jitsiId;
+  const id = isLocalUser ? 'localUser' : jitsiId;
   // 타입이 JOIN일 경우 추가
-  if (_type === "JOIN") {
-    if (!prevUserInfo.find((user) => user.jitsiId === jitsiId)) {
+  if (_type === 'JOIN') {
+    if (!prevUserInfo.find(user => user.jitsiId === jitsiId)) {
       userInfo = [...prevUserInfo, { jitsiId, wehagoId, id }];
     }
   }
 
   // 타입이 LEFT 일 경우 리스트 제외
-  if (_type === "LEFT") {
-    userInfo = prevUserInfo.filter((user) => user.jitsiId !== jitsiId);
+  if (_type === 'LEFT') {
+    userInfo = prevUserInfo.filter(user => user.jitsiId !== jitsiId);
   }
 
   return {
     ...state,
-    userInfo,
+    userInfo
   };
 };
 // end region SET_JITSI_ID
@@ -77,7 +77,7 @@ const applySetJitsiId = (state, action) => {
  * export
  */
 export const actionCreators = {
-  setJitsiId,
+  setJitsiId
 };
 
 export default reducer;

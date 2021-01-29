@@ -6,20 +6,20 @@
 import { UserApi } from '../../services';
 import { actionCreators as wetalkActionCreators } from './wetalk';
 
-const AGREEMENT = 'AGREEMENT';
-const LOGIN = 'LOGIN';
-const LOGOUT = 'LOGOUT';
-const TOKEN = 'TOKEN';
-// const TOKEN_LOGIN = 'TOKEN_LOGIN';
-const CHANGE_COMPANY = 'CHANGE_COMPANY';
-const TOGGLE_VISIBLE_APPINTRO = 'TOGGLE_VISIBLE_APPINTRO';
+const AGREEMENT = 'user.AGREEMENT';
+const LOGIN = 'user.LOGIN';
+const LOGOUT = 'user.LOGOUT';
+const TOKEN = 'user.TOKEN';
+// const TOKEN_LOGIN = 'user.TOKEN_LOGIN';
+const CHANGE_COMPANY = 'user.CHANGE_COMPANY';
+const TOGGLE_VISIBLE_APPINTRO = 'user.TOGGLE_VISIBLE_APPINTRO';
 
-const EVENT_LOG = 'EVENT_LOG';
-const NETWORK_DISCONNECT = 'NETWORK_DISCONNECT';
+const EVENT_LOG = 'user.EVENT_LOG';
+const NETWORK_DISCONNECT = 'user.NETWORK_DISCONNECT';
 
-const SESSION_CHECK = 'SESSION_CHECK';
-const SET_PERMISSION = 'SET_PERMISSION'; // 화상회의 생성 권한
-const TOGGLE_UPDATE_NOTI = 'TOGGLE_UPDATE_NOTI';
+const SESSION_CHECK = 'user.SESSION_CHECK';
+const SET_PERMISSION = 'user.SET_PERMISSION'; // 화상회의 생성 권한
+const TOGGLE_UPDATE_NOTI = 'user.TOGGLE_UPDATE_NOTI';
 //#region Action Creators
 
 /**

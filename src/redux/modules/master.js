@@ -1,6 +1,6 @@
 import MeetApi from '../../services/api/MeetApi';
 
-const UPDATE_MASTER_LIST = 'UPDATE_MASTER_LIST';
+const UPDATE_MASTER_LIST = 'master.UPDATE_MASTER_LIST';
 
 const initialState = {
   masterList: [],
