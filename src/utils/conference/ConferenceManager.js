@@ -91,16 +91,14 @@ class ConferenceManager {
       })
     );
     if (audioPolicy) {
-      // await audioTrack.mute();
-      // this._dispatch(localActionCreators.changeMuteMicMaster(true));
-      this._dispatch(localActionCreators.changeAudioActive(true));
+      this._dispatch(masterAcionCreators.changeAudioActive(true));
     }
     this._dispatch(mainUserActionCreators.setMainUserNotExist(id));
 
     if (callType === '3') {
       const master = await MeetApi.checkMasterControl(roomName);
       this._dispatch(
-        localActionCreators.changeMasterControlMode(master.resultData.videoseq)
+        masterAcionCreators.changeMasterControlMode(master.resultData.videoseq)
       );
     }
   };
@@ -198,7 +196,7 @@ class ConferenceManager {
     this._dispatch(participantsAcionCreators.leftUser(id));
     MeetApi.checkMasterList(this._roomName).then(res => {
       if (res && res?.resultData?.count === 0) {
-        this._dispatch(localActionCreators.changeMasterControlMode(null));
+        this._dispatch(masterAcionCreators.changeMasterControlMode(null));
         this._dispatch(localActionCreators.toggleMuteMic(false));
       } else {
         this._dispatch(masterAcionCreators.checkMasterList(this._roomToken));
@@ -365,14 +363,14 @@ class ConferenceManager {
   //CHANGED_MIC_MODE_BY_MASTER
   changeMicControlUserModeByMaster = flag => {
     // 제어하기 누르면
-    this._dispatch(localActionCreators.changeMasterControlMode(flag));
+    this._dispatch(masterAcionCreators.changeMasterControlMode(flag));
   };
   changeMicControlModeByMaster = value => {
     // 활설화 or 비활성화 누르면
-    this._dispatch(localActionCreators.changeAudioActive(value));
+    this._dispatch(masterAcionCreators.changeAudioActive(value));
   };
   changeMicMuteByMaster = flag => {
-    this._dispatch(localActionCreators.changeMuteMicMaster(flag));
+    this._dispatch(masterAcionCreators.changeMuteMicMaster(flag));
   };
 
   requestAttention = name => {
@@ -384,9 +382,9 @@ class ConferenceManager {
 
   rejectedByMaster = () => {
     this._dispatch(
-      localActionCreators.setToastMessage('발언권 요청이 거부되었습니다.')
+      masterAcionCreators.setToastMessage('발언권 요청이 거부되었습니다.')
     );
-    this._dispatch(localActionCreators.setMicRequest(false));
+    this._dispatch(masterAcionCreators.setMicRequest(false));
   };
   changeMasterList = () => {
     this._dispatch(masterAcionCreators.checkMasterList(this._roomToken));

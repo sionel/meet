@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import ControlBoxContainer from './ControlBoxContainer';
 import { actionCreators as localActionCreators } from '../../../../../redux/modules/local';
+import { actionCreators as masterActionCreators } from '../../../../../redux/modules/master';
 
 const mapStateToProps = state => {
   const { local } = state;
@@ -19,10 +20,10 @@ const mapDispatchToProps = dispatch => {
   return {
     toggleMuteVideo: () => dispatch(localActionCreators.toggleMuteVideo()),
     toggleMuteMic: () => dispatch(localActionCreators.toggleMuteMic()),
-    toggleMuteMicByMe: () => dispatch(localActionCreators.toggleMuteMicByMe()),
+    toggleMuteMicByMe: () => dispatch(masterActionCreators.toggleMuteMicByMe()),
     toggleMuteSpeaker: () => dispatch(localActionCreators.toggleMuteSpeaker()),
-    setSimpleNoti: msg => dispatch(localActionCreators.setToastMessage(msg)),
-    setMicRequest: flag => dispatch(localActionCreators.setMicRequest(flag))
+    setSimpleNoti: msg => dispatch(masterActionCreators.setToastMessage(msg)),
+    setMicRequest: flag => dispatch(masterActionCreators.setMicRequest(flag))
   };
 };
 

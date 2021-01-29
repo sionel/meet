@@ -38,7 +38,6 @@ class ControlBoxContainer extends React.Component {
       } else {
         conferenceManager.stopAttention(this.props.name);
         this.props.setSimpleNoti('발언을 종료하였습니다.');
-        // this.props.toggleMuteMicByMe();
         this.props.toggleMuteMic();
       }
     } else {

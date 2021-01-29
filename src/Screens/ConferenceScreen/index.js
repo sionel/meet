@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import ConferenceScreenContainer from './ConferenceScreenContainer';
 import { actionCreators as DocumentShareActions } from '../../redux/modules/documentShare';
 import { actionCreators as localActions } from '../../redux/modules/local';
+import { actionCreators as masterActions } from '../../redux/modules/master';
 
 const getMainUser = (mainUserId, localUser, participants) => {
   if (!localUser) {
@@ -46,8 +47,8 @@ const mapDispatchToProps = dispatch => {
       dispatch(localActions.toggleMuteVideo(muteState)),
     toggleMuteMic: muteState => dispatch(localActions.toggleMuteMic(muteState)),
     changeMasterControlMode: flag =>
-      dispatch(localActions.changeMasterControlMode(flag)),
-    toggleMuteMicByMe: () => dispatch(localActions.toggleMuteMicByMe())
+      dispatch(masterActions.changeMasterControlMode(flag)),
+    toggleMuteMicByMe: () => dispatch(masterActions.toggleMuteMicByMe())
   };
 };
 

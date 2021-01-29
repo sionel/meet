@@ -1,17 +1,14 @@
-/**
- * Actions
- */
+//#region jitsiInfo
+
+//#region Actions
 const SET_JITSI_ID = 'jitsiInfo.SET_JITSI_ID';
+//#endregion
 
-// END Actions
-
-/**
- * initialState
- */
+//#region inititlState
 const initialState = {
   userInfo: []
 };
-// END inititlState
+//#endregion
 
 /**
  * reducer
@@ -81,3 +78,4 @@ export const actionCreators = {
 };
 
 export default reducer;
+//#endregion
