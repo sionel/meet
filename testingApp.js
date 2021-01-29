@@ -205,7 +205,6 @@ export class App extends Component {
       devices: ['video', 'audio'],
       resolution: 320
     });
-    debugger;
     let video = null;
     tracks.forEach(track => {
       this._jitsiConference.addTrack(track);
