@@ -186,7 +186,6 @@ class ConferenceManager {
    * 대화방에 참여자가 접속하면 호출된다.
    */
   _joinUser = user => {
-    debugger
     this._dispatch(participantsAcionCreators.joinUser(user));
     this._dispatch(masterAcionCreators.checkMasterList(this._roomToken));
   };

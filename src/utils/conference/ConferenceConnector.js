@@ -124,7 +124,8 @@ class ConferenceConnector {
           nickname: auth.nickname,
           isExternalParticipant:
             accesstype === 'email' || accesstype === 'joincode',
-          externalUserId: externalUser
+          externalUserId: externalUser,
+          isMobile:true
         }
       });
 
@@ -462,7 +463,6 @@ class ConferenceConnector {
     });
 
     this._room.addCommandListener(REQUEST_KICK, value => {
-      debugger
     })
     
   };
