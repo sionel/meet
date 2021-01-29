@@ -52,14 +52,6 @@ const getToken = async accessUrl => {
     if (err.message === 'timeout') {
       await new Promise(res => {
         alert('네트워크가 불안정합니다.')
-        // Alert.alert('네트워크가 불안정합니다.', '잠시후 다시 시도해주세요.', [
-        //   {
-        //     text: '확인',
-        //     onPress: () => {
-        //       res(true);
-        //     }
-        //   }
-        // ]);
       });
     }
     return false;
@@ -110,14 +102,6 @@ const login = async (user, captcha, access_pass) => {
     if (err.message === 'timeout') {
       await new Promise(res => {
         alert('네트워크가 불안정합니다.')
-        // Alert.alert('네트워크가 불안정합니다.', '잠시후 다시 시도해주세요.', [
-        //   {
-        //     text: '확인',
-        //     onPress: () => {
-        //       res(true);
-        //     }
-        //   }
-        // ]);
       });
     }
 
@@ -187,14 +171,6 @@ const check = async (a_token, r_token, cno, HASH_KEY) => {
     if (errors.message === 'timeout') {
       await new Promise(res => {
         alert('네트워크가 불안정합니다.')
-        // Alert.alert('네트워크가 불안정합니다.', '잠시후 다시 시도해주세요.', [
-        //   {
-        //     text: '확인',
-        //     onPress: () => {
-        //       res(true);
-        //     }
-        //   }
-        // ]);
       });
     }
     return { message: errors.message };
