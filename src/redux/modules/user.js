@@ -5,6 +5,7 @@
 
 import { UserApi } from '../../services';
 import { actionCreators as wetalkActionCreators } from './wetalk';
+import { actionCreators as conferenceActionCreators } from './conference';
 
 const AGREEMENT = 'user.AGREEMENT';
 const LOGIN = 'user.LOGIN';
@@ -195,6 +196,7 @@ function changeCompanyRequest(auth, company) {
     }
 
     dispatch(wetalkActionCreators.setInitialList());
+    dispatch(conferenceActionCreators.setInitialList());
     return dispatch(changeCompany(company));
   };
 }

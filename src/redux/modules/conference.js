@@ -6,6 +6,7 @@
 // import { UserApi } from '../../services';
 
 const SET_LIST = 'conference.SET_LIST';
+const SET_INITIAL_LIST = 'conference.SET_INITIAL_LIST';
 
 //#region Action Creators
 
@@ -16,6 +17,12 @@ setList = list => {
   return {
     type: SET_LIST,
     list
+  };
+};
+
+setInitialList = () => {
+  return {
+    type: SET_INITIAL_LIST
   };
 };
 
@@ -35,6 +42,8 @@ reducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_LIST:
       return { ...state, list: action.list };
+    case SET_INITIAL_LIST:
+      return { ...state, list: [] };
     default:
       return state;
   }
@@ -45,7 +54,8 @@ reducer = (state = initialState, action) => {
 //#region Export
 
 const actionCreators = {
-  setList
+  setList,
+  setInitialList
 };
 
 export { actionCreators };
