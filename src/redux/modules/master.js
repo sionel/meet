@@ -2,6 +2,8 @@
 
 import MeetApi from '../../services/api/MeetApi';
 
+//#region Action.type
+
 const UPDATE_MASTER_LIST = 'master.UPDATE_MASTER_LIST';
 
 // 추후 마스터 권한이 생기고 업데이트 된다면 따로 리덕스를 분리하는게 좋을 듯
@@ -18,14 +20,21 @@ const TOGGLE_MUTE_MIC_BY_ME = 'master.TOGGLE_MUTE_MIC_BY_ME';
 const TOAST_MESSAGE = 'master.TOAST_MESSAGE';
 
 const SPEEK_REQUEST = 'master.SPEEK_REQUEST';
+//#endregion
 
+//#region initState
 const initialState = {
   masterList: [],
   isMasterControl: false, // 제어
   isAudioActive: true, // 마이크 활성화
-  isMasterMicControl: false // 마스터가 켜고 껐는지
+  isMasterMicControl: false, // 마스터가 켜고 껐는지
+  isMicRequest: false,
+  messageFlag: false,
+  toastMessage: ''
 };
+//#endregion
 
+//#region reducer
 function reducer(state = initialState, action) {
   switch (action.type) {
     case UPDATE_MASTER_LIST:
@@ -53,7 +62,7 @@ function reducer(state = initialState, action) {
       return state;
   }
 }
-
+//#endregion
 //#region 마스터 리스트
 function checkMasterList(token) {
   if (!token) {

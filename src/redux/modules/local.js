@@ -44,12 +44,6 @@ const initialState = {
   callType: null,
   message: [],
   pipMode: false,
-  isMasterControl: false, // 제어
-  isAudioActive: true, // 마이크 활성화
-  isMasterMicControl: false, // 마스터가 켜고 껐는지
-  isMicRequest: false,
-  messageFlag: false,
-  toastMessage: ''
 };
 
 //#endregion
@@ -121,10 +115,6 @@ function applyJoinConference(state, action) {
   return {
     ...state,
     user,
-    isAudioActive: true,
-    isMasterControl: false,
-    isMasterMicControl: false,
-    isMicRequest: false,
     callType: conferenceInfo.callType // 삭제?
   };
 }
@@ -276,8 +266,6 @@ function applyToggleMuteMic(state, action) {
         ...user,
         isMuteMic: !currentMute
       },
-      isMasterMicControl: false,
-      isMicRequest: false
     };
   }
 
