@@ -11,6 +11,7 @@ import { actionCreators as participantsAcionCreators } from '../../redux/modules
 import { actionCreators as DocumentShareAcionCreators } from '../../redux/modules/documentShare';
 import { actionCreators as WedriveAcionCreators } from '../../redux/modules/wedrive';
 import { actionCreators as masterAcionCreators } from '../../redux/modules/master';
+import { actionCreators as toastAcionCreators } from '../../redux/modules/toast';
 import { MeetApi } from '../../services';
 
 /**
@@ -362,31 +363,43 @@ class ConferenceManager {
   //CHANGED_MIC_CONTROL_USER_MODE_BY_MASTER
   //CHANGED_MIC_MODE_BY_MASTER
   changeMicControlUserModeByMaster = flag => {
-    // 제어하기 누르면
     this._dispatch(masterAcionCreators.changeMasterControlMode(flag));
+    const msg = flag
+      ? '마스터가 참여자 전원의 발언권 제어를 시작합니다람쥐.'
+      : '참여자 발언권 제어기능이 종료 되었습니다람쥐.';
+    this._dispatch(toastAcionCreators.setToastMessage(msg));
   };
   changeMicControlModeByMaster = value => {
-    // 활설화 or 비활성화 누르면
     this._dispatch(masterAcionCreators.changeAudioActive(value));
+
+    const msg = value
+      ? '마스터가 마이크를 비활성화 처리 했습니다람쥐.'
+      : '마스터가 마이크를 활성화 처리 했습니다람쥐.';
+    this._dispatch(toastAcionCreators.setToastMessage(msg));
   };
   changeMicMuteByMaster = flag => {
+    debugger;
     this._dispatch(masterAcionCreators.changeMuteMicMaster(flag));
   };
 
   requestAttention = name => {
+    debugger;
     this._conferenceConnector.requestAttention(name);
   };
   stopAttention = name => {
+    debugger;
     this._conferenceConnector.stopAttention(name);
   };
 
   rejectedByMaster = () => {
+    debugger;
     this._dispatch(
-      masterAcionCreators.setToastMessage('발언권 요청이 거부되었습니다.')
+      toastAcionCreators.setToastMessage('발언권 요청이 거부되었습니다.')
     );
     this._dispatch(masterAcionCreators.setMicRequest(false));
   };
   changeMasterList = () => {
+    debugger;
     this._dispatch(masterAcionCreators.checkMasterList(this._roomToken));
   };
 

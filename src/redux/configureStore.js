@@ -20,6 +20,7 @@ import conference from './modules/conference';
 import webUser from './modules/webUser';
 import master from './modules/master';
 import alert from './modules/alert';
+import toast from './modules/toast';
 /**
  * middleware list
  */
@@ -47,7 +48,8 @@ const persistConfig = {
     'conference',
     'webUser',
     'master',
-    'alert'
+    'alert',
+    'toast'
   ]
 };
 
@@ -65,7 +67,8 @@ const reducer = persistCombineReducers(persistConfig, {
   conference,
   webUser,
   master,
-  alert
+  alert,
+  toast
 });
 
 /**

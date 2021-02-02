@@ -28,9 +28,7 @@ const initialState = {
   isMasterControl: false, // 제어
   isAudioActive: true, // 마이크 활성화
   isMasterMicControl: false, // 마스터가 켜고 껐는지
-  isMicRequest: false,
-  messageFlag: false,
-  toastMessage: ''
+  isMicRequest: false
 };
 //#endregion
 
@@ -49,12 +47,6 @@ function reducer(state = initialState, action) {
       return applyToggleMuteMicMaster(state, action);
     case TOGGLE_MUTE_MIC_BY_ME:
       return applyToggleMuteMicByMe(state, action);
-    case TOAST_MESSAGE:
-      return {
-        ...state,
-        messageFlag: !state.messageFlag,
-        toastMessage: action.toastMessage
-      };
     case SPEEK_REQUEST:
       return applyToggleMicRequest(state, action);
 
@@ -113,34 +105,36 @@ function setIsContorl(state, action) {
 //#region SET_AUDIO_ACTIVE (마스터가 전체마이크 활성화인지 아닌지)
 
 function changeAudioActive(flag) {
-  return dispatch => {
+  return (dispatch, getState, extraArgument) => {
+    const user = getState()['local']['user'];
+    if (user && user.audioTrack) {
+      if (flag) {
+        user.audioTrack.mute();
+      } else {
+        user.audioTrack.unmute();
+      }
+    }
+    dispatch({
+      type: 'local.TOGGLE_MUTE_MIC',
+      micMute: flag
+    });
     dispatch({
       type: SET_AUDIO_ACTIVE,
-      flag
+      flag,
+      user
     });
   };
 }
 
 function setAudioActive(state, action) {
-  const { user } = state;
   const { flag } = action;
-  if (user && user.audioTrack) {
-    if (flag) {
-      user.audioTrack.mute();
-    } else {
-      user.audioTrack.unmute();
-    }
-    return {
-      ...state,
-      user: {
-        ...user,
-        isMuteMic: flag
-      },
-      isAudioActive: !flag, // 비활성화가 mute 임
-      isMasterMicControl: true,
-      isMicRequest: false
-    };
-  }
+
+  return {
+    ...state,
+    isAudioActive: !flag, // 비활성화가 mute 임
+    isMasterMicControl: true,
+    isMicRequest: false
+  };
 }
 
 //#endregion
@@ -148,10 +142,13 @@ function setAudioActive(state, action) {
 //#region TOGGLE_MUTE_MIC_MASTER
 
 function changeMuteMicMaster(micMuteFlag) {
-  return dispatch => {
+  return (dispatch, getState, extraArgument) => {
+    const user = getState()['local']['user'];
+
     dispatch({
       type: TOGGLE_MUTE_MIC_MASTER,
-      micMuteFlag
+      micMuteFlag,
+      user
     });
   };
 }
@@ -191,10 +188,13 @@ function applyToggleMuteMicMaster(state, action) {
 
 //#region TOGGLE_MUTE_MIC_BY_ME
 function toggleMuteMicByMe(micMute) {
-  return dispatch => {
+  return (dispatch, getState, extraArgument) => {
+    const user = getState()['local']['user'];
+
     dispatch({
       type: TOGGLE_MUTE_MIC_BY_ME,
-      micMute
+      micMute,
+      user
     });
   };
 }
@@ -245,25 +245,12 @@ function applyToggleMicRequest(state, action) {
 }
 //#endregion
 
-//#region  toastMessage
-
-function setToastMessage(toastMessage) {
-  return dispatch => {
-    dispatch({
-      type: TOAST_MESSAGE,
-      toastMessage
-    });
-  };
-}
-//#endregion
-
 export const actionCreators = {
   checkMasterList,
   changeMasterControlMode,
   changeAudioActive,
   changeMuteMicMaster,
   toggleMuteMicByMe,
-  setToastMessage,
   setMicRequest
 };
 

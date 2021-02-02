@@ -388,8 +388,6 @@ export const actionCreators = {
   toggleMuteSpeaker,
   setConferenceCreatedTime,
   receiceConferenceMessage,
-  toggleMuteMicByMe,
-  setMicRequest
 };
 
 export default reducer;

@@ -1,5 +1,7 @@
 //#region Toast
 
+import { debounce } from 'lodash';
+
 const TOAST_MESSAGE = 'master.TOAST_MESSAGE';
 
 const initialState = {
@@ -30,7 +32,7 @@ function setToastMessage(toastMessage) {
 }
 
 export const actionCreators = {
-  setToastMessage
+  setToastMessage: debounce(setToastMessage, 20, { trailing: true })
 };
 
 export default reducer;

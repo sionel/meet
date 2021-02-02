@@ -35,6 +35,7 @@ const config = {
   stereo: true,
   e2eping: { pingInterval: 10000, analyticsInterval: 60000 },
   devMode: true,
+  useIPv6: true
 };
 
 //  개발기용
