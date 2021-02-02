@@ -93,13 +93,21 @@ class ConferenceManager {
     );
     if (audioPolicy) {
       this._dispatch(masterAcionCreators.changeAudioActive(true));
+      this._dispatch(
+        toastAcionCreators.setToastMessage(
+          '마스터가 마이크를 비활성화 처리 했습니다.'
+        )
+      );
     }
     this._dispatch(mainUserActionCreators.setMainUserNotExist(id));
-
-    if (callType === '3') {
+    if (Number(callType) === 3) {
       const master = await MeetApi.checkMasterControl(roomName);
+      const id = master.resultData.videoseq;
+      this._dispatch(masterAcionCreators.changeMasterControlMode(id));
       this._dispatch(
-        masterAcionCreators.changeMasterControlMode(master.resultData.videoseq)
+        toastAcionCreators.setToastMessage(
+          id ? '마스터가 참여자 전원의 발언권 제어를 시작합니다.' : ''
+        )
       );
     }
   };
@@ -161,7 +169,7 @@ class ConferenceManager {
       CHANGED_MIC_MUTE_BY_MASTER: this.changeMicMuteByMaster,
       REJECTED_BY_MASTER: this.rejectedByMaster,
       CHANGE_MASTER_LIST: this.changeMasterList,
-      REQURES_KICK: this.requestKick
+      REQUEST_KICK: this.requestKick
     };
     return handler;
   };
@@ -365,47 +373,46 @@ class ConferenceManager {
   changeMicControlUserModeByMaster = flag => {
     this._dispatch(masterAcionCreators.changeMasterControlMode(flag));
     const msg = flag
-      ? '마스터가 참여자 전원의 발언권 제어를 시작합니다람쥐.'
-      : '참여자 발언권 제어기능이 종료 되었습니다람쥐.';
+      ? '마스터가 참여자 전원의 발언권 제어를 시작합니다.'
+      : '참여자 발언권 제어기능이 종료 되었습니다.';
     this._dispatch(toastAcionCreators.setToastMessage(msg));
   };
   changeMicControlModeByMaster = value => {
     this._dispatch(masterAcionCreators.changeAudioActive(value));
 
     const msg = value
-      ? '마스터가 마이크를 비활성화 처리 했습니다람쥐.'
-      : '마스터가 마이크를 활성화 처리 했습니다람쥐.';
+      ? '마스터가 마이크를 비활성화 처리 했습니다.'
+      : '마스터가 마이크를 활성화 처리 했습니다.';
     this._dispatch(toastAcionCreators.setToastMessage(msg));
   };
   changeMicMuteByMaster = flag => {
-    debugger;
+    const msg = flag
+      ? '마스터가 마이크를 비활성화 처리 했습니다.'
+      : '마스터가 마이크를 활성화 처리 했습니다.';
+    this._dispatch(toastAcionCreators.setToastMessage(msg));
     this._dispatch(masterAcionCreators.changeMuteMicMaster(flag));
   };
 
   requestAttention = name => {
-    debugger;
     this._conferenceConnector.requestAttention(name);
   };
   stopAttention = name => {
-    debugger;
     this._conferenceConnector.stopAttention(name);
   };
 
   rejectedByMaster = () => {
-    debugger;
     this._dispatch(
       toastAcionCreators.setToastMessage('발언권 요청이 거부되었습니다.')
     );
     this._dispatch(masterAcionCreators.setMicRequest(false));
   };
   changeMasterList = () => {
-    debugger;
     this._dispatch(masterAcionCreators.checkMasterList(this._roomToken));
   };
 
   // 마스터가 참여자를 추방
-  requestKick = id => {
-    this._dispatch(participantsAcionCreators.setKickFlag(id));
+  requestKick = (master, target) => {
+    this._dispatch(participantsAcionCreators.setKickFlag(master, target));
   };
 }
 

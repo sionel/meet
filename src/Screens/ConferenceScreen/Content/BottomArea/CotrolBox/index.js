@@ -23,7 +23,7 @@ const mapDispatchToProps = dispatch => {
     toggleMuteMic: () => dispatch(localActionCreators.toggleMuteMic()),
     toggleMuteMicByMe: () => dispatch(masterActionCreators.toggleMuteMicByMe()),
     toggleMuteSpeaker: () => dispatch(localActionCreators.toggleMuteSpeaker()),
-    setSimpleNoti: msg => dispatch(toastActionCreators.setToastMessage(msg)),
+    setToastMessage: msg => dispatch(toastActionCreators.setToastMessage(msg)),
     setMicRequest: flag => dispatch(masterActionCreators.setMicRequest(flag))
   };
 };

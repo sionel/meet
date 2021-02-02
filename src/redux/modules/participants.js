@@ -305,12 +305,23 @@ function applySetUserInfo(state, action) {
 
 //#endregion SET_USER_INFO
 
-function setKickFlag(id) {
-  debugger;
-  return dispatch => {
+function setKickFlag(master, target) {
+  return (dispatch, getState) => {
+    const state = getState();
+    console.log(state);
+    console.log(master, target);
+    debugger;
+    const masterName = '';
+    const targetName = '';
+    state.participants.list.forEach(user => {
+      if (user.id === master) {
+        masterName = user.userInfo.nickname;
+      } else if (user.id === target) {
+        targetName = user.userInfo.nickname;
+      }
+    });
     dispatch({
-      type: SET_KICK,
-      id
+      type: SET_KICK
     });
   };
 }

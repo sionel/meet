@@ -107,21 +107,13 @@ function setIsContorl(state, action) {
 function changeAudioActive(flag) {
   return (dispatch, getState, extraArgument) => {
     const user = getState()['local']['user'];
-    if (user && user.audioTrack) {
-      if (flag) {
-        user.audioTrack.mute();
-      } else {
-        user.audioTrack.unmute();
-      }
-    }
     dispatch({
       type: 'local.TOGGLE_MUTE_MIC',
       micMute: flag
     });
     dispatch({
       type: SET_AUDIO_ACTIVE,
-      flag,
-      user
+      flag
     });
   };
 }
@@ -143,44 +135,23 @@ function setAudioActive(state, action) {
 
 function changeMuteMicMaster(micMuteFlag) {
   return (dispatch, getState, extraArgument) => {
-    const user = getState()['local']['user'];
+    dispatch({
+      type: 'local.TOGGLE_MUTE_MIC',
+      micMute: micMuteFlag
+    });
 
     dispatch({
       type: TOGGLE_MUTE_MIC_MASTER,
-      micMuteFlag,
-      user
+      micMuteFlag
     });
   };
 }
 
 function applyToggleMuteMicMaster(state, action) {
-  const { user, isAudioActive } = state;
-  const { micMuteFlag } = action;
-  if (user && user.audioTrack) {
-    if (micMuteFlag) {
-      user.audioTrack.mute();
-      // REFACT: 꼭 수정했으면 좋겠따 싶은 부분
-      // 컨넥터에는 리덕스 받지 않음 그런데 이 isaudioactive로 상태체크 해야하는게 있다보니 매개변수지옥 vs 스파게티중
-      // 스파게티를 선택하게 됨
-      if (!isAudioActive) getConferenceManager().stopAttention();
-    } else {
-      user.audioTrack.unmute();
-      // if (!isAudioActive) getConferenceManager.requestAttention();
-    }
-    return {
-      ...state,
-      user: {
-        ...user,
-        isMuteMic: micMuteFlag
-      },
-      // isAudioActive: !micMuteFlag,
-      isMasterMicControl: true,
-      isMicRequest: false
-    };
-  }
-
   return {
-    ...state
+    ...state,
+    isMasterMicControl: true,
+    isMicRequest: false
   };
 }
 

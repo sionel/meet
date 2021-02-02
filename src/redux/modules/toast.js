@@ -32,7 +32,10 @@ function setToastMessage(toastMessage) {
 }
 
 export const actionCreators = {
-  setToastMessage: debounce(setToastMessage, 20, { trailing: true })
+  setToastMessage: debounce(setToastMessage, 100, {
+    leading: true,
+    trailing: true
+  })
 };
 
 export default reducer;

@@ -57,10 +57,11 @@ export const STOP_FLOOR = 'STOP_FLOOR';
 // export const RESPONSE_GET_CONTROL = 'CONFERENCE.EVENT.REQUEST.RESPONSE_GET_CONTROL'; // 마스터 제어 권한 위임 반환 이벤트
 
 // 마스터 권한 유저 리스트 변경 이벤트
-export const UPDATE_MASTER_USERS = 'CONFERENCE.EVENT.REQUEST.UPDATE_MASTER_USERS';
+export const UPDATE_MASTER_USERS =
+  'CONFERENCE.EVENT.REQUEST.UPDATE_MASTER_USERS';
 
 // 마스터가 유저 추방
-export const REQUEST_KICK = 'CONFERENCE.EVENT.REQUEST.KICK'
+export const REQUEST_KICK = 'CONFERENCE.EVENT.REQUEST.KICK';
 
 /**
  * ConferenceConnector
@@ -125,7 +126,7 @@ class ConferenceConnector {
           isExternalParticipant:
             accesstype === 'email' || accesstype === 'joincode',
           externalUserId: externalUser,
-          isMobile:true
+          isMobile: true
         }
       });
 
@@ -264,6 +265,7 @@ class ConferenceConnector {
     // 위하고 접속 아이디 및 정보 가져오기
     this._room.addCommandListener(WEHAGO_ID, user => {
       const id = user.value;
+
       this._handlers.SET_USER_INFO(id, user.attributes);
       //
     });
@@ -463,8 +465,10 @@ class ConferenceConnector {
     });
 
     this._room.addCommandListener(REQUEST_KICK, value => {
-    })
-    
+      const target = value.attributes.targetUser;
+      const master = value.value;
+      this._handlers.REQUEST_KICK(master, target);
+    });
   };
 
   _removeEvents = () => {

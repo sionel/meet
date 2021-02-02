@@ -5,12 +5,12 @@ import { View, StyleSheet, Animated, Text } from 'react-native';
 
 import { useSelector, useDispatch } from 'react-redux';
 export default function SimpleNoti() {
-
   const messageFlag = useSelector(state => state.toast['messageFlag']);
   const toastMessage = useSelector(state => state.toast['toastMessage']);
 
   const [isFirst, setIsFirst] = useState(true);
   const [message, setMessage] = useState('');
+  const dispatch = useDispatch();
 
   const fadeAnimation = useRef(new Animated.Value(0)).current;
   const [fadeout, setFadeout] = useState(null);
@@ -31,9 +31,26 @@ export default function SimpleNoti() {
     }).start();
   };
 
-
   useEffect(() => {
-    setIsFirst(false);
+    if (isFirst) {
+      if (toastMessage) {
+        setMessage(toastMessage);
+        fadeIn(true);
+        setFadeout(
+          setTimeout(() => {
+            fadeOut(false);
+          }, 2000)
+        );
+      }
+      setIsFirst(false);
+    }
+    return () => {
+      setIsFirst(true);
+      dispatch({
+        type: 'master.TOAST_MESSAGE',
+        toastMessage: ''
+      });
+    };
   }, []);
 
   useEffect(() => {
