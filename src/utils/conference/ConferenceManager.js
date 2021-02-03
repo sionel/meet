@@ -12,24 +12,23 @@ import { actionCreators as DocumentShareAcionCreators } from '../../redux/module
 import { actionCreators as WedriveAcionCreators } from '../../redux/modules/wedrive';
 import { actionCreators as masterAcionCreators } from '../../redux/modules/master';
 import { actionCreators as toastAcionCreators } from '../../redux/modules/toast';
+import { actionCreators as alertAcionCreators } from '../../redux/modules/alert';
 import { MeetApi } from '../../services';
 
 /**
  * ConferenceManager 화상회의 접속을 총괄하는 매니저
  */
 class ConferenceManager {
-  constructor(dispatch, auth, item) {
+  constructor(dispatch, endCall) {
     // Singleton
     this._dispatch = dispatch;
-    this._item = { ...item };
-    this._auth = { ...auth };
+    this._endCall = endCall;
     if (!ConferenceManager.instance) {
       // 싱글톤 변수 할당
       ConferenceManager.instance = this;
-    } else if (dispatch && auth && item) {
+    } else if (dispatch && endCall) {
       ConferenceManager.instance._dispatch = dispatch;
-      ConferenceManager.instance._item = item;
-      ConferenceManager.instance._auth = auth;
+      ConferenceManager.instance._endCall = endCall;
     }
     return ConferenceManager.instance;
   }
@@ -412,7 +411,18 @@ class ConferenceManager {
 
   // 마스터가 참여자를 추방
   requestKick = (master, target) => {
-    this._dispatch(participantsAcionCreators.setKickFlag(master, target));
+    this._dispatch(toastAcionCreators.kickMessage(master, target));
+    const myId = this._room.myUserId();
+    if (this._room.myUserId() === target) {
+      this._endCall();
+      this._dispatch(
+        alertAcionCreators.setAlert({
+          type: 1,
+          title: '알림',
+          message: '마스터에 의해 추방되었습니다.'
+        })
+      );
+    }
   };
 }
 

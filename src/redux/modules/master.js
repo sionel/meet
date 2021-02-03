@@ -161,7 +161,6 @@ function applyToggleMuteMicMaster(state, action) {
 function toggleMuteMicByMe(micMute) {
   return (dispatch, getState, extraArgument) => {
     const user = getState()['local']['user'];
-
     dispatch({
       type: TOGGLE_MUTE_MIC_BY_ME,
       micMute,

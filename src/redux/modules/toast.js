@@ -5,7 +5,7 @@ import { debounce } from 'lodash';
 const TOAST_MESSAGE = 'master.TOAST_MESSAGE';
 
 const initialState = {
-  messageFlag: false,
+  toggleFlag: false,
   toastMessage: ''
 };
 
@@ -14,7 +14,7 @@ function reducer(state = initialState, action) {
     case TOAST_MESSAGE:
       return {
         ...state,
-        messageFlag: !state.messageFlag,
+        toggleFlag: !state.toggleFlag, //
         toastMessage: action.toastMessage
       };
     default:
@@ -23,10 +23,32 @@ function reducer(state = initialState, action) {
 }
 
 function setToastMessage(toastMessage) {
-  return dispatch => {
-    dispatch({
+  return {
+    type: TOAST_MESSAGE,
+    toastMessage
+  };
+}
+
+function kickMessage(master, target) {
+  return (dispath, getState) => {
+    const users = getState().participants.list;
+    let masterNickName = '';
+    let masterUserName = '';
+    let targetNickName = '';
+    let targetUserName = '';
+    users.forEach(user => {
+      if (user.id === master) {
+        masterNickName = user.userInfo.nickname;
+        masterUserName = user.userInfo.userName;
+      } else if (user.id === target) {
+        targetNickName = user.userInfo.nickname;
+        targetUserName = user.userInfo.userName;
+      }
+    });
+    debugger;
+    dispath({
       type: TOAST_MESSAGE,
-      toastMessage
+      toastMessage: `${masterNickName}(${masterUserName})님께서 ${targetNickName}(${targetUserName})님을 추방하였습니다`
     });
   };
 }
@@ -35,7 +57,8 @@ export const actionCreators = {
   setToastMessage: debounce(setToastMessage, 100, {
     leading: true,
     trailing: true
-  })
+  }),
+  kickMessage
 };
 
 export default reducer;

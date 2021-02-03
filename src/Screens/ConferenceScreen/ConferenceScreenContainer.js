@@ -148,8 +148,8 @@ class ConferenceScreenContainer extends React.Component {
       mainUserId &&
       mainUserId !== prevProps.mainUserId
     ) {
-      const conferenceManager = new ConferenceManager();
-      conferenceManager.selectParticipant(mainUserId);
+      // const conferenceManager = new ConferenceManager();
+      this._conferenceManager.selectParticipant(mainUserId);
     }
 
     // 드로잉 중에 유저 접속시 실행
@@ -159,8 +159,8 @@ class ConferenceScreenContainer extends React.Component {
       list.length > prevProps.list.length &&
       documentShare.attributes
     ) {
-      const conferenceManager = new ConferenceManager();
-      conferenceManager.documentShareTarget(
+      // const conferenceManager = new ConferenceManager();
+      this._conferenceManager.documentShareTarget(
         list[list.length - 1],
         documentShare
       );
@@ -222,9 +222,12 @@ class ConferenceScreenContainer extends React.Component {
       this.selectedRoomName = item.selectedRoomName;
     }
     // 컴포넌트가 마운트 되면 대화방 초기 설정 후 입장한다.
-    this._conferenceManager = new ConferenceManager(dispatch);
+    this._conferenceManager = new ConferenceManager(
+      dispatch,
+      this._handleEndCall
+    );
     setConferenceManager(this._conferenceManager);
-    
+
     if ((auth, item)) this._conferenceManager.set(auth, item);
     // 참가자/생성자 여부 확인 후 로딩딜레이
     const delayLoading = time => {

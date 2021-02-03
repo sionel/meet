@@ -5,7 +5,7 @@ import { View, StyleSheet, Animated, Text } from 'react-native';
 
 import { useSelector, useDispatch } from 'react-redux';
 export default function SimpleNoti() {
-  const messageFlag = useSelector(state => state.toast['messageFlag']);
+  const toggleFlag = useSelector(state => state.toast['toggleFlag']);
   const toastMessage = useSelector(state => state.toast['toastMessage']);
 
   const [isFirst, setIsFirst] = useState(true);
@@ -63,7 +63,7 @@ export default function SimpleNoti() {
         fadeOut(false);
       }, 2000)
     );
-  }, [messageFlag]);
+  }, [toggleFlag]);
 
   return (
     <Animated.View
