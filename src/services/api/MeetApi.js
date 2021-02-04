@@ -354,10 +354,10 @@ export default {
   },
 
   // 6-2 화상회의 모바일 버전 체크
-  checkVersion: async () => {
+  checkVersion: async (os, major, minor) => {
     const date = new Date().getTime();
 
-    const accsessUrl = `/video/mobile/version?timestamp=${date}`;
+    const accsessUrl = `/video/mobile/version?os=${os}&major=${major}&minor=${minor}`;
     const token = await getToken(accsessUrl);
     const encText = accsessUrl + token.cur_date + token.token;
     const hashText = CryptoJS.SHA256(encText);

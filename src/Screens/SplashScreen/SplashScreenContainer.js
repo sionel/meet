@@ -109,107 +109,60 @@ class SplashScreenContainer extends Component {
   };
 
   _handleCheckVersion = async noti => {
-    const result = await MeetApi.checkVersion();
-
+    const os = Platform.OS;
+    const majorVersion = 3;
+    const minorVersion = '2.0.2';
+    const result = await MeetApi.checkVersion(os, majorVersion, minorVersion);
     // 버전 수정
-    if (!result || !this.props.updateNoti) return [];
+    if (!result || !this.props.updateNoti || result.resultData.dev_mode)
+      return [];
 
-    const android_major_version = 2;
-    const ios_major_version = 2;
-    const android_version = '2.0.1';
-    const ios_version = '2.0.1';
+    const title = '업데이트 안내';
+    const type = 'update';
+    const message =
+      updateType === 'forced'
+        ? '더 새로워진 WEHAGO Meet을 만나보세요.\n\n신규 기능은 업데이트 이후 사용 가능합니다.'
+        : '더 새로워진 WEHAGO Meet을 만나보세요.\n\n신규 기능은 업데이트 이후 사용 가능합니다.\n\n지금 업데이트 하시겠습니까?';
 
-    const platform = Platform.OS;
-    let subMessage = result.resultData.detail_info?.split('\\n');
-    let title = '업데이트 안내';
-    let type = 'update';
-    let message;
-    let buttons;
-    let onclick;
-    let onToggle = this.props.toggleUpdateNoti;
-    let buttonValue = this.props.updateNoti;
-    if (platform === 'android') {
-      if (
-        android_major_version <
-        parseInt(result.resultData.android_major_version)
-      ) {
-        message =
-          '더 새로워진 WEHAGO Meet을 만나보세요.\n\n신규 기능은 업데이트 이후 사용 가능합니다.';
-        buttons = [
-          {
-            text: '업데이트',
-            onclick: () =>
-              Linking.openURL(
-                'https://play.google.com/store/apps/details?id=com.wehago.meet'
-              )
-          }
-        ];
-      } else if (android_version !== result.resultData.android_version) {
-        message =
-          '더 새로워진 WEHAGO Meet을 만나보세요.\n\n신규 기능은 업데이트 이후 사용 가능합니다.\n\n지금 업데이트 하시겠습니까?';
-        buttons = [
-          { text: '아니오', onclick: this._handleNextNotice },
-          {
-            text: '업데이트',
-            onclick: () =>
-              Linking.openURL(
-                'https://play.google.com/store/apps/details?id=com.wehago.meet'
-              )
-          }
-        ];
-        onclick = [
-          this._handleNextNotice,
-          () =>
-            Linking.openURL(
-              'https://play.google.com/store/apps/details?id=com.wehago.meet'
-            )
-        ];
-      }
-    } else {
-      if (ios_major_version < parseInt(result.resultData.ios_major_version)) {
-        message =
-          '더 새로워진 WEHAGO Meet을 만나보세요.\n\n신규 기능은 업데이트 이후 사용 가능합니다.';
-        buttons = [
-          {
-            text: '업데이트',
-            onclick: () =>
-              Linking.openURL('https://itunes.apple.com/app/id1455726925?mt=8')
-          }
-        ];
-        onclick = [
-          () =>
-            Linking.openURL('https://itunes.apple.com/app/id1455726925?mt=8')
-        ];
-      } else if (ios_version !== result.resultData.ios_version) {
-        message =
-          '더 새로워진 WEHAGO Meet을 만나보세요.\n\n신규 기능은 업데이트 이후 사용 가능합니다.\n\n지금 업데이트 하시겠습니까?';
-        buttons = [
-          { text: '아니오', onclick: this._handleNextNotice },
-          {
-            text: '업데이트',
-            onclick: () =>
-              Linking.openURL('https://itunes.apple.com/app/id1455726925?mt=8')
-          }
-        ];
-        onclick = [
-          this._handleNextNotice,
-          () =>
-            Linking.openURL('https://itunes.apple.com/app/id1455726925?mt=8')
-        ];
-      }
-    }
-    if (message) {
-      noti.push({
-        title,
-        message,
-        buttons,
-        onclick,
-        subMessage,
-        type,
-        onToggle,
-        buttonValue
-      });
-    }
+    const onToggle = this.props.toggleUpdateNoti;
+    const buttonValue = this.props.updateNoti;
+    const subMessage = result.resultData.detail_info?.split('\\n');
+    const updateType = result.resultData.update;
+
+    const marketUrl =
+      os === 'ios'
+        ? 'https://itunes.apple.com/app/id1455726925?mt=8'
+        : 'https://play.google.com/store/apps/details?id=com.wehago.meet';
+    const buttons =
+      updateType === 'forced'
+        ? [
+            {
+              text: '업데이트',
+              onclick: () => Linking.openURL(marketUrl)
+            }
+          ]
+        : [
+            { text: '아니오', onclick: this._handleNextNotice },
+            {
+              text: '업데이트',
+              onclick: () => Linking.openURL(marketUrl)
+            }
+          ];
+    const onclick =
+      updateType === 'forced'
+        ? [() => Linking.openURL(marketUrl)]
+        : [this._handleNextNotice, () => Linking.openURL(marketUrl)];
+
+    noti.push({
+      title,
+      message,
+      buttons,
+      onclick,
+      subMessage,
+      type,
+      onToggle,
+      buttonValue
+    });
 
     return noti;
   };
@@ -222,15 +175,17 @@ class SplashScreenContainer extends Component {
     // 강제종료 코드 : 102
 
     result.resultData.forEach(e => {
-      e.buttons = [
-        {
-          text: e.code === 102 ? '종료' : '확인',
-          onclick:
-            e.code === 102
-              ? () => RNRestart.Restart()
-              : () => this._handleNextNotice()
-        }
-      ];
+      if (!e.dev_mode) {
+        e.button_type = [
+          {
+            text: e.code === 102 ? '종료' : '확인',
+            onclick:
+              e.code === 102
+                ? () => RNRestart.Restart()
+                : () => this._handleNextNotice()
+          }
+        ];
+      }
     });
     noti = noti.concat(result.resultData);
     return noti;
