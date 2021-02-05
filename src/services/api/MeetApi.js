@@ -4,7 +4,12 @@
  * 참조 : http://wiki.duzon.com:8080/display/sky/3.+API
  */
 
-import { meetURL, securityRequest, wehagoBaseURL0 } from '../../utils';
+import {
+  meetURL,
+  securityRequest,
+  wehagoBaseURL0,
+  wehagoType
+} from '../../utils';
 import * as CryptoJS from 'crypto-js';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -81,17 +86,21 @@ export default {
   },
   // 3-2-2 화상회의방 상세 조회
   getMeetRoomNoCert: async roomId => {
-    const accsessUrl = `/video/room?room=${roomId}`;
-    const token = await getToken(accsessUrl);
-    const encText = accsessUrl + token.cur_date + token.token;
-    const hashText = CryptoJS.SHA256(encText);
-    const signature = CryptoJS.enc.Base64.stringify(hashText);
-
-    // 운영기
-    const url = `${wehagoBaseURL0}${accsessUrl}`;
-    // 개발기
-    // const url = `${meetURL}/room?room=${roomId}`;
-
+    let url = '';
+    let signature;
+    if (wehagoType === 'dev') {
+      // 개발기
+      url = `${meetURL}/room?room=${roomId}`;
+    } else {
+      const accsessUrl = `/video/room?room=${roomId}`;
+      const token = await getToken(accsessUrl);
+      const encText = accsessUrl + token.cur_date + token.token;
+      const hashText = CryptoJS.SHA256(encText);
+      signature = CryptoJS.enc.Base64.stringify(hashText);
+      // 운영기
+      url = `${wehagoBaseURL0}${accsessUrl}`;
+    }
+    
     try {
       const data = {
         method: 'GET',
@@ -242,16 +251,20 @@ export default {
   },
   // 3-12-2 화상회의 토큰 생성 (email)
   getMeetRoomTokenEmail: async (room, emailToken, username) => {
-    const accsessUrl = `/video/token`;
-    const token = await getToken(accsessUrl);
-    const encText = accsessUrl + token.cur_date + token.token;
-    const hashText = CryptoJS.SHA256(encText);
-    const signature = CryptoJS.enc.Base64.stringify(hashText);
-
-    // 운영기
-    const url = `${wehagoBaseURL0}${accsessUrl}`;
-    // 개발기
-    // const url = `${meetURL}/token`;
+    let url = '';
+    let signature;
+    if (wehagoType === 'dev') {
+      // 개발기
+      url = `${meetURL}/token`;
+    } else {
+      const accsessUrl = `/video/token`;
+      const token = await getToken(accsessUrl);
+      const encText = accsessUrl + token.cur_date + token.token;
+      const hashText = CryptoJS.SHA256(encText);
+      signature = CryptoJS.enc.Base64.stringify(hashText);
+      // 운영기
+      const url = `${wehagoBaseURL0}${accsessUrl}`;
+    }
 
     try {
       const data = {
@@ -279,16 +292,20 @@ export default {
   },
   // 3-12-3 화상회의 토큰 생성 (joincode)
   getMeetRoomTokenJoincode: async (room, joincode, username, user) => {
-    const accsessUrl = `/video/token`;
-    const token = await getToken(accsessUrl);
-    const encText = accsessUrl + token.cur_date + token.token;
-    const hashText = CryptoJS.SHA256(encText);
-    const signature = CryptoJS.enc.Base64.stringify(hashText);
-
-    // 운영기
-    const url = `${wehagoBaseURL0}${accsessUrl}`;
-    // 개발기
-    // const url = `${meetURL}/token`;
+    let url = '';
+    let signature;
+    if (wehagoType === 'dev') {
+      // 개발기
+      url = `${meetURL}/token`;
+    } else {
+      const accsessUrl = `/video/token`;
+      const token = await getToken(accsessUrl);
+      const encText = accsessUrl + token.cur_date + token.token;
+      const hashText = CryptoJS.SHA256(encText);
+      signature = CryptoJS.enc.Base64.stringify(hashText);
+      // 운영기
+      const url = `${wehagoBaseURL0}${accsessUrl}`;
+    }
 
     try {
       const data = {
@@ -317,16 +334,20 @@ export default {
   },
   // 3-13 화상회의 접속
   enterMeetRoom: async (videoToken, videoseq) => {
-    const accsessUrl = `/video/connect`;
-    const token = await getToken(accsessUrl);
-    const encText = accsessUrl + token.cur_date + token.token;
-    const hashText = CryptoJS.SHA256(encText);
-    const signature = CryptoJS.enc.Base64.stringify(hashText);
-
-    // 운영기
-    const url = `${wehagoBaseURL0}${accsessUrl}`;
-    // 개발기
-    // const url = `${meetURL}/connect`;
+    let url = '';
+    let signature;
+    if (wehagoType === 'dev') {
+      // 개발기
+      url = `${meetURL}/connect`;
+    } else {
+      const accsessUrl = `/video/connect`;
+      const token = await getToken(accsessUrl);
+      const encText = accsessUrl + token.cur_date + token.token;
+      const hashText = CryptoJS.SHA256(encText);
+      signature = CryptoJS.enc.Base64.stringify(hashText);
+      // 운영기
+      const url = `${wehagoBaseURL0}${accsessUrl}`;
+    }
 
     try {
       const data = {
@@ -355,18 +376,20 @@ export default {
 
   // 6-2 화상회의 모바일 버전 체크
   checkVersion: async (os, major, minor) => {
-    const date = new Date().getTime();
-
-    const accsessUrl = `/video/mobile/version?os=${os}&major=${major}&minor=${minor}`;
-    const token = await getToken(accsessUrl);
-    const encText = accsessUrl + token.cur_date + token.token;
-    const hashText = CryptoJS.SHA256(encText);
-    const signature = CryptoJS.enc.Base64.stringify(hashText);
-
-    // 운영기
-    const url = `${wehagoBaseURL0}${accsessUrl}`;
-    // 개발기
-    // const url = `${meetURL}/mobile/version?timestamp=${date}`;
+    let url = '';
+    let signature;
+    if (wehagoType === 'dev') {
+      // 개발기
+      url = `${meetURL}/mobile/version?os=${os}&major=${major}&minor=${minor}`;
+    } else {
+      const accsessUrl = `/video/mobile/version?os=${os}&major=${major}&minor=${minor}`;
+      const token = await getToken(accsessUrl);
+      const encText = accsessUrl + token.cur_date + token.token;
+      const hashText = CryptoJS.SHA256(encText);
+      signature = CryptoJS.enc.Base64.stringify(hashText);
+      // 운영기
+      const url = `${wehagoBaseURL0}${accsessUrl}`;
+    }
 
     try {
       const data = {
@@ -392,16 +415,20 @@ export default {
   checkNotice: async () => {
     const date = new Date().getTime();
 
-    const accsessUrl = `/video/mobile/noti?timestamp=${date}`;
-    const token = await getToken(accsessUrl);
-    const encText = accsessUrl + token.cur_date + token.token;
-    const hashText = CryptoJS.SHA256(encText);
-    const signature = CryptoJS.enc.Base64.stringify(hashText);
-
-    // 운영기
-    const url = `${wehagoBaseURL0}${accsessUrl}`;
-    // 개발기
-    // const url = `${meetURL}/mobile/noti?timestamp=${date}`;
+    let url = '';
+    let signature;
+    if (wehagoType === 'dev') {
+      // 개발기
+      url = `${meetURL}/mobile/noti?timestamp=${date}`;
+    } else {
+      const accsessUrl = `/video/mobile/noti?timestamp=${date}`;
+      const token = await getToken(accsessUrl);
+      const encText = accsessUrl + token.cur_date + token.token;
+      const hashText = CryptoJS.SHA256(encText);
+      signature = CryptoJS.enc.Base64.stringify(hashText);
+      // 운영기
+      const url = `${wehagoBaseURL0}${accsessUrl}`;
+    }
 
     try {
       const data = {
@@ -425,16 +452,20 @@ export default {
 
   // 3-22 화상회의 접속코드 검색
   searchJoincode: async joincode => {
-    const accsessUrl = `/video/joincode/search?joincode=${joincode}`;
-    const token = await getToken(accsessUrl);
-    const encText = accsessUrl + token.cur_date + token.token;
-    const hashText = CryptoJS.SHA256(encText);
-    const signature = CryptoJS.enc.Base64.stringify(hashText);
-
-    // 운영기
-    const url = `${wehagoBaseURL0}${accsessUrl}`;
-    // 개발기
-    // const url = `${meetURL}/joincode/search?joincode=${joincode}`;
+    let url = '';
+    let signature;
+    if (wehagoType === 'dev') {
+      // 개발기
+      url = `${meetURL}/joincode/search?joincode=${joincode}`;
+    } else {
+      const accsessUrl = `/video/joincode/search?joincode=${joincode}`;
+      const token = await getToken(accsessUrl);
+      const encText = accsessUrl + token.cur_date + token.token;
+      const hashText = CryptoJS.SHA256(encText);
+      signature = CryptoJS.enc.Base64.stringify(hashText);
+      // 운영기
+      const url = `${wehagoBaseURL0}${accsessUrl}`;
+    }
 
     try {
       const data = {
@@ -458,16 +489,20 @@ export default {
 
   // 3-23 마스터 발언권 제어 유저 조회
   checkMasterControlUser: async roomId => {
-    const accsessUrl = `/video/room/master/control/user?room=${roomId}`;
-    const token = await getToken(accsessUrl);
-    const encText = accsessUrl + token.cur_date + token.token;
-    const hashText = CryptoJS.SHA256(encText);
-    const signature = CryptoJS.enc.Base64.stringify(hashText);
-
-    // 운영기
-    const url = `${wehagoBaseURL0}${accsessUrl}`;
-    // 개발기
-    // const url = `${meetURL}/room/master/control/user?room=${roomId}`;
+    let url = '';
+    let signature;
+    if (wehagoType === 'dev') {
+      // 개발기
+      url = `${meetURL}/room/master/control/user?room=${roomId}`;
+    } else {
+      const accsessUrl = `/video/room/master/control/user?room=${roomId}`;
+      const token = await getToken(accsessUrl);
+      const encText = accsessUrl + token.cur_date + token.token;
+      const hashText = CryptoJS.SHA256(encText);
+      signature = CryptoJS.enc.Base64.stringify(hashText);
+      // 운영기
+      const url = `${wehagoBaseURL0}${accsessUrl}`;
+    }
 
     try {
       const data = {
@@ -491,16 +526,20 @@ export default {
 
   // 3-27 화상회의방 접속중인 사용자 리스트 조회
   getParticipantCount: async roomId => {
-    const accsessUrl = `/video/room/connecting/count?room=${roomId}`;
-    const token = await getToken(accsessUrl);
-    const encText = accsessUrl + token.cur_date + token.token;
-    const hashText = CryptoJS.SHA256(encText);
-    const signature = CryptoJS.enc.Base64.stringify(hashText);
-
-    // 운영기
-    const url = `${wehagoBaseURL0}${accsessUrl}`;
-    // 개발기
-    // const url = `${meetURL}/room/connecting/count?room=${roomId}`;
+    let url = '';
+    let signature;
+    if (wehagoType === 'dev') {
+      // 개발기
+      url = `${meetURL}/room/connecting/count?room=${roomId}`;
+    } else {
+      const accsessUrl = `/video/room/connecting/count?room=${roomId}`;
+      const token = await getToken(accsessUrl);
+      const encText = accsessUrl + token.cur_date + token.token;
+      const hashText = CryptoJS.SHA256(encText);
+      signature = CryptoJS.enc.Base64.stringify(hashText);
+      // 운영기
+      const url = `${wehagoBaseURL0}${accsessUrl}`;
+    }
 
     try {
       const data = {
@@ -523,16 +562,20 @@ export default {
 
   // 3-29 마스터 발언권 제어 유저 조회
   checkMasterControl: async roomId => {
-    const accsessUrl = `/video/room/master/control/user?room=${roomId}`;
-    const token = await getToken(accsessUrl);
-    const encText = accsessUrl + token.cur_date + token.token;
-    const hashText = CryptoJS.SHA256(encText);
-    const signature = CryptoJS.enc.Base64.stringify(hashText);
-
-    // 운영기
-    const url = `${wehagoBaseURL0}${accsessUrl}`;
-    // 개발기
-    // const url = `${meetURL}/room/master/control/user?room=${roomId}`;
+    let url = '';
+    let signature;
+    if (wehagoType === 'dev') {
+      // 개발기
+      url = `${meetURL}/room/master/control/user?room=${roomId}`;
+    } else {
+      const accsessUrl = `/video/room/master/control/user?room=${roomId}`;
+      const token = await getToken(accsessUrl);
+      const encText = accsessUrl + token.cur_date + token.token;
+      const hashText = CryptoJS.SHA256(encText);
+      signature = CryptoJS.enc.Base64.stringify(hashText);
+      // 운영기
+      const url = `${wehagoBaseURL0}${accsessUrl}`;
+    }
 
     try {
       const data = {
@@ -556,16 +599,20 @@ export default {
 
   // 3-31 마스터 리스트 조회
   getMasterList: async roomToken => {
-    const accsessUrl = `/video/room/masters?jwt=${roomToken}`;
-    const token = await getToken(accsessUrl);
-    const encText = accsessUrl + token.cur_date + token.token;
-    const hashText = CryptoJS.SHA256(encText);
-    const signature = CryptoJS.enc.Base64.stringify(hashText);
-
-    // 운영기
-    const url = `${wehagoBaseURL0}${accsessUrl}`;
-    // 개발기
-    // const url = `${meetURL}/room/masters?jwt=${roomToken}`;
+    let url = '';
+    let signature;
+    if (wehagoType === 'dev') {
+      // 개발기
+      url = `${meetURL}/room/masters?jwt=${roomToken}`;
+    } else {
+      const accsessUrl = `/video/room/masters?jwt=${roomToken}`;
+      const token = await getToken(accsessUrl);
+      const encText = accsessUrl + token.cur_date + token.token;
+      const hashText = CryptoJS.SHA256(encText);
+      signature = CryptoJS.enc.Base64.stringify(hashText);
+      // 운영기
+      const url = `${wehagoBaseURL0}${accsessUrl}`;
+    }
 
     try {
       const data = {
@@ -589,16 +636,20 @@ export default {
 
   // 넘버링 없음 이름없는 외부참여자 아이디 가져오기
   getExternalUserId: async roomId => {
-    const accsessUrl = `/video/user/default-name?room=${roomId}`;
-    const token = await getToken(accsessUrl);
-    const encText = accsessUrl + token.cur_date + token.token;
-    const hashText = CryptoJS.SHA256(encText);
-    const signature = CryptoJS.enc.Base64.stringify(hashText);
-
-    // 운영기
-    const url = `${wehagoBaseURL0}${accsessUrl}`;
-    // 개발기
-    // const url = `${meetURL}/user/default-name?room=${roomId}`;
+    let url = '';
+    let signature;
+    if (wehagoType === 'dev') {
+      // 개발기
+      url = `${meetURL}/user/default-name?room=${roomId}`;
+    } else {
+      const accsessUrl = `/video/user/default-name?room=${roomId}`;
+      const token = await getToken(accsessUrl);
+      const encText = accsessUrl + token.cur_date + token.token;
+      const hashText = CryptoJS.SHA256(encText);
+      signature = CryptoJS.enc.Base64.stringify(hashText);
+      // 운영기
+      const url = `${wehagoBaseURL0}${accsessUrl}`;
+    }
 
     try {
       const data = {
@@ -621,16 +672,20 @@ export default {
   },
 
   checkMasterList: async roomId => {
-    const accsessUrl = `/video/master/remaining-master?room=${roomId}`;
-    const token = await getToken(accsessUrl);
-    const encText = accsessUrl + token.cur_date + token.token;
-    const hashText = CryptoJS.SHA256(encText);
-    const signature = CryptoJS.enc.Base64.stringify(hashText);
-
-    // 운영기
-    const url = `${wehagoBaseURL0}${accsessUrl}`;
-    // 개발기
-    // const url = `${meetURL}/master/remaining-master?room=${roomId}`;
+    let url = '';
+    let signature;
+    if (wehagoType === 'dev') {
+      // 개발기
+      url = `${meetURL}/master/remaining-master?room=${roomId}`;
+    } else {
+      const accsessUrl = `/video/master/remaining-master?room=${roomId}`;
+      const token = await getToken(accsessUrl);
+      const encText = accsessUrl + token.cur_date + token.token;
+      const hashText = CryptoJS.SHA256(encText);
+      signature = CryptoJS.enc.Base64.stringify(hashText);
+      // 운영기
+      const url = `${wehagoBaseURL0}${accsessUrl}`;
+    }
 
     try {
       const data = {

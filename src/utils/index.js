@@ -12,17 +12,31 @@ const isWehagoV = WEHAGO_ENV === 'WEHAGOV';
 
 const OS = Platform.OS;
 const OSID = OS === 'ios' ? 'mobile-ios' : 'mobile-android';
+
+export const wehagoType = 'dev';
+// export const wehagoType = 'wehago'
 /**
  * Back-end URL
  */
 // 개발기
-// export const wehagoBaseURL0 = `http://dev.api0.wehago.com`; // 비인증
-// export const wehagoBaseURL = `http://dev.api.wehago.com`; // 인증
-// export const wehagoMainURL = `http://dev.wehago.com`; // 메인 URL
+export const wehagoBaseURL0 =
+  wehagoType === 'dev'
+    ? `http://dev.api0.wehago.com`
+    : `https://api0.wehago${isWehagoV ? 'v' : ''}.com`; // 비인증
+export const wehagoBaseURL =
+  wehagoType === 'dev'
+    ? `http://dev.api.wehago.com`
+    : `https://api.wehago${isWehagoV ? 'v' : ''}.com`; // 인증
+export const wehagoMainURL =
+  wehagoType === 'dev'
+    ? `http://dev.wehago.com`
+    : `https://www.wehago${isWehagoV ? 'v' : ''}.com`; // 메인 URL
 
-export const wehagoBaseURL0 = `https://api0.wehago${isWehagoV ? 'v' : ''}.com`;
-export const wehagoBaseURL = `https://api.wehago${isWehagoV ? 'v' : ''}.com`;
-export const wehagoMainURL = `https://www.wehago${isWehagoV ? 'v' : ''}.com`;
+export const meetURL =
+  wehagoType === 'dev'
+    ? `https://rtctest.wehago.com/api-bind`
+    : `https://api.wehago.com/video`;
+// export const meetURL = `http://localhost:8080/video`;
 
 export const wehagoDummyImageURL = `https://static.wehago${
   isWehagoV ? 'v' : ''
@@ -31,11 +45,8 @@ export const wehagoDummyImageURL = `https://static.wehago${
 export const wehagoStaticURL = `https://static.wehago${
   isWehagoV ? 'v' : ''
 }.com`;
-// export const wehagoBaseURL = `https://api.wehago${isWehagoV ? 'v' : ''}.com`;
 
-// export const meetURL = `https://rtctest.wehago.com/api-bind`;
-export const meetURL = `https://api.wehago.com/video`;
-// export const meetURL = `http://localhost:8080/video`;
+
 
 /**
  * Querystring parser
@@ -73,7 +84,6 @@ export const querystringParser = url => {
  * @param {*} HASH_KEY
  */
 export const securityRequest = (a_token, r_token, url, HASH_KEY) => {
-
   const transactionId = _getTransactionId();
   const clientId = OSID;
   // const clientId = _getServiceCode();
