@@ -30,7 +30,7 @@
     "build-inhouse-abb": "cd ./wehago/android && sudo rm -rf build ./app/build ./sdk/build && sudo ./gradlew bundleRelease && cd ../..",
     "build-inhouse-v": "cd ./wehagoV/android && sudo rm -rf build ./app/build ./sdk/build && sudo ./gradlew assembleRelease && cd ../..",
     "build-aab": "cd ./wehago/android && sudo rm -rf build ./app/build ./sdk/build && sudo ./gradlew bundleRelease && cd ../..",
-    "set-android": "~/Library/Android/sdk/platform-tools/adb -s R3CMB0CXTRB  reverse tcp:8081 tcp:8081",
+    "set-android": "~/Library/Android/sdk/platform-tools/adb -s R59M905GC8X  reverse tcp:8081 tcp:8081",
     "get-android": "~/Library/Android/sdk/platform-tools/adb devices"
   },
   "dependencies": {

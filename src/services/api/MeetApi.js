@@ -100,7 +100,7 @@ export default {
       // 운영기
       url = `${wehagoBaseURL0}${accsessUrl}`;
     }
-    
+
     try {
       const data = {
         method: 'GET',
@@ -263,7 +263,7 @@ export default {
       const hashText = CryptoJS.SHA256(encText);
       signature = CryptoJS.enc.Base64.stringify(hashText);
       // 운영기
-      const url = `${wehagoBaseURL0}${accsessUrl}`;
+      url = `${wehagoBaseURL0}${accsessUrl}`;
     }
 
     try {
@@ -304,7 +304,7 @@ export default {
       const hashText = CryptoJS.SHA256(encText);
       signature = CryptoJS.enc.Base64.stringify(hashText);
       // 운영기
-      const url = `${wehagoBaseURL0}${accsessUrl}`;
+      url = `${wehagoBaseURL0}${accsessUrl}`;
     }
 
     try {
@@ -346,7 +346,7 @@ export default {
       const hashText = CryptoJS.SHA256(encText);
       signature = CryptoJS.enc.Base64.stringify(hashText);
       // 운영기
-      const url = `${wehagoBaseURL0}${accsessUrl}`;
+      url = `${wehagoBaseURL0}${accsessUrl}`;
     }
 
     try {
@@ -388,7 +388,7 @@ export default {
       const hashText = CryptoJS.SHA256(encText);
       signature = CryptoJS.enc.Base64.stringify(hashText);
       // 운영기
-      const url = `${wehagoBaseURL0}${accsessUrl}`;
+      url = `${wehagoBaseURL0}${accsessUrl}`;
     }
 
     try {
@@ -427,7 +427,7 @@ export default {
       const hashText = CryptoJS.SHA256(encText);
       signature = CryptoJS.enc.Base64.stringify(hashText);
       // 운영기
-      const url = `${wehagoBaseURL0}${accsessUrl}`;
+      url = `${wehagoBaseURL0}${accsessUrl}`;
     }
 
     try {
@@ -464,7 +464,7 @@ export default {
       const hashText = CryptoJS.SHA256(encText);
       signature = CryptoJS.enc.Base64.stringify(hashText);
       // 운영기
-      const url = `${wehagoBaseURL0}${accsessUrl}`;
+      url = `${wehagoBaseURL0}${accsessUrl}`;
     }
 
     try {
@@ -501,7 +501,7 @@ export default {
       const hashText = CryptoJS.SHA256(encText);
       signature = CryptoJS.enc.Base64.stringify(hashText);
       // 운영기
-      const url = `${wehagoBaseURL0}${accsessUrl}`;
+      url = `${wehagoBaseURL0}${accsessUrl}`;
     }
 
     try {
@@ -538,7 +538,7 @@ export default {
       const hashText = CryptoJS.SHA256(encText);
       signature = CryptoJS.enc.Base64.stringify(hashText);
       // 운영기
-      const url = `${wehagoBaseURL0}${accsessUrl}`;
+      url = `${wehagoBaseURL0}${accsessUrl}`;
     }
 
     try {
@@ -574,7 +574,7 @@ export default {
       const hashText = CryptoJS.SHA256(encText);
       signature = CryptoJS.enc.Base64.stringify(hashText);
       // 운영기
-      const url = `${wehagoBaseURL0}${accsessUrl}`;
+      url = `${wehagoBaseURL0}${accsessUrl}`;
     }
 
     try {
@@ -611,7 +611,7 @@ export default {
       const hashText = CryptoJS.SHA256(encText);
       signature = CryptoJS.enc.Base64.stringify(hashText);
       // 운영기
-      const url = `${wehagoBaseURL0}${accsessUrl}`;
+      url = `${wehagoBaseURL0}${accsessUrl}`;
     }
 
     try {
@@ -648,7 +648,7 @@ export default {
       const hashText = CryptoJS.SHA256(encText);
       signature = CryptoJS.enc.Base64.stringify(hashText);
       // 운영기
-      const url = `${wehagoBaseURL0}${accsessUrl}`;
+      url = `${wehagoBaseURL0}${accsessUrl}`;
     }
 
     try {
@@ -684,7 +684,7 @@ export default {
       const hashText = CryptoJS.SHA256(encText);
       signature = CryptoJS.enc.Base64.stringify(hashText);
       // 운영기
-      const url = `${wehagoBaseURL0}${accsessUrl}`;
+      url = `${wehagoBaseURL0}${accsessUrl}`;
     }
 
     try {
