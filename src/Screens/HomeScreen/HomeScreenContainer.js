@@ -70,24 +70,6 @@ class HomeScreenContainer extends Component {
     });
     Orientation.addOrientationListener(this._handleOrientation);
 
-    // Linking.getInitialURL().then(url => {
-    //   if (url) {
-    //     this._handleOpenURL({ url });
-    //   }
-    // });
-    // [ios] 앱이 실행중에 딥링크에 의한 화상회의 연결방법
-    // if (Platform.OS === 'ios') {
-    //   Linking.addEventListener('url', this._handleOpenURL);
-    // }
-
-    // [android, ios] 앱이 실행중이 아닐 때 화상회의 연결방법
-    // if (
-    //   this.props.screenProps &&
-    //   (this.props.screenProps.url || this.props.screenProps.conferenceCall)
-    // ) {
-    //   this._handleOpenURL(this.props.screenProps);
-    // }
-
     // 개인 회원 여부 체크
     // 0: 일반, 1: 개인
     if (this.props.auth.member_type !== 1) {
@@ -388,18 +370,10 @@ class HomeScreenContainer extends Component {
    * 접속자확인 및 자동로그인
    */
   _handleAutoLogin = async (count = 0) => {
-    const { auth, onLogin, loginCheckRequest } = this.props;
+    const { auth, loginCheckRequest } = this.props;
 
-    let userData = {};
-
-    // 재 로그인이 필요한 경우 (저장된 정보가 없을 경우)
-    // if (!auth.AUTH_A_TOKEN /* || (!auth.portal_id && !auth.portal_password)*/) {
-    // 	alert('auth is null\n접속 정보가 유효하지 않습니다. 다시 로그인 해주세요');
-    // 	return this._handleRedirect('Main');
-    // }
 
     // 접속자 확인
-    const copyAuth = JSON.stringify(auth);
     const checkResult = await loginCheckRequest(
       auth.AUTH_A_TOKEN,
       auth.AUTH_R_TOKEN,
