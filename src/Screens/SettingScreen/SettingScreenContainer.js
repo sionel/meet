@@ -95,9 +95,9 @@ class SettingScreenContainer extends React.Component {
       
       this.props.setAlert({
         type: 1,
-        title: '경고',
+        title: '접근권한 필요',
         message:
-          '오디오 및 비디오 허용을 하지 않으면 화상대화 사용이 불가능합니다.'
+          '서비스 이용을 위해 마이크 및 카메라의 접근권한이 필요합니다. 설정에서 마이크와 카메라의 접근을 허용해주세요.'
       });
       return null;
     }

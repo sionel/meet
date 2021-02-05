@@ -13,8 +13,8 @@ const isWehagoV = WEHAGO_ENV === 'WEHAGOV';
 const OS = Platform.OS;
 const OSID = OS === 'ios' ? 'mobile-ios' : 'mobile-android';
 
-export const wehagoType = 'dev';
-// export const wehagoType = 'wehago'
+// export const wehagoType = 'dev';
+export const wehagoType = 'wehago'
 /**
  * Back-end URL
  */
