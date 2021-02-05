@@ -29,7 +29,7 @@ function setToastMessage(toastMessage) {
   };
 }
 
-function kickMessage(master, target) {
+function kickMessage(masterId, targetId) {
   return (dispath, getState) => {
     const users = getState().participants.list;
     let masterNickName = '';
@@ -37,18 +37,23 @@ function kickMessage(master, target) {
     let targetNickName = '';
     let targetUserName = '';
     users.forEach(user => {
-      if (user.id === master) {
+      if (user.id === masterId) {
         masterNickName = user.userInfo.nickname;
         masterUserName = user.userInfo.userName;
-      } else if (user.id === target) {
+      } else if (user.id === targetId) {
         targetNickName = user.userInfo.nickname;
         targetUserName = user.userInfo.userName;
       }
     });
-    debugger;
+    const master = masterNickName
+      ? `${masterNickName}(${masterUserName})`
+      : masterUserName;
+    const target = targetNickName
+      ? `${targetNickName}(${targetUserName})`
+      : targetUserName;
     dispath({
       type: TOAST_MESSAGE,
-      toastMessage: `${masterNickName}(${masterUserName})님께서 ${targetNickName}(${targetUserName})님을 추방하였습니다`
+      toastMessage: `${master}님께서 ${target}님을 추방하였습니다`
     });
   };
 }

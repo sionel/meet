@@ -467,7 +467,6 @@ class ConferenceConnector {
     this._room.addCommandListener(REQUEST_KICK, value => {
       const target = value.attributes.targetUser;
       const master = value.value;
-      debugger
       this._handlers.REQUEST_KICK(master, target);
     });
   };

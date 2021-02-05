@@ -22,7 +22,8 @@ export default function SettingScreenPresenter({
   onToggleAudio,
   onToggleVideo,
   onSetName,
-  nameField
+  nameField,
+  buttonActive
 }) {
   return (
     <KeyboardAvoidingView
@@ -74,7 +75,7 @@ export default function SettingScreenPresenter({
               flexDirection: 'row'
             }}
           >
-            {tracks[0] && !tracks[0]?.isMuted() && (
+            {tracks && tracks[0] && !tracks[0]?.isMuted() && (
               <RTCView
                 style={{
                   // flex: 1,
@@ -115,7 +116,11 @@ export default function SettingScreenPresenter({
               onPress={onToggleVideo}
             >
               <Image
-                source={tracks[0]?.isMuted() ? ButtonCameraOff : ButtonCamera}
+                source={
+                  tracks && tracks[0]?.isMuted()
+                    ? ButtonCameraOff
+                    : ButtonCamera
+                }
                 resizeMode={'contain'}
                 style={{
                   width: 55,
@@ -132,7 +137,9 @@ export default function SettingScreenPresenter({
               onPress={onToggleAudio}
             >
               <Image
-                source={tracks[1]?.isMuted() ? ButtonMicOff : ButtonMic}
+                source={
+                  tracks && tracks[1]?.isMuted() ? ButtonMicOff : ButtonMic
+                }
                 resizeMode={'contain'}
                 style={{
                   width: 55,
@@ -190,7 +197,9 @@ export default function SettingScreenPresenter({
         >
           <TouchableOpacity
             style={{
-              backgroundColor: 'rgb(28,144,251)',
+              backgroundColor: buttonActive
+                ? 'rgb(28,144,251)'
+                : 'rgb(125,125,125)',
               borderRadius: 110,
               width: '80%',
               height: 50,
@@ -198,6 +207,7 @@ export default function SettingScreenPresenter({
               alignItems: 'center'
             }}
             onPressOut={onConferenceEnter}
+            disabled={!buttonActive}
           >
             <Text
               style={{

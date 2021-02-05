@@ -45,7 +45,7 @@ const mapDispatchToProps = dispatch => {
     setSharingMode: () => dispatch(DocumentShareActions.setSharingMode()),
     setInitInfo: () => dispatch(WedriveAcions.setInitInfo()),
     toggleUpdateNoti: () => dispatch(UserActions.toggleUpdateNoti()),
-    setAlert: (params) => dispatch(AlertAcions.setAlert(params))
+    setAlert: params => dispatch(AlertAcions.setAlert(params))
   };
 };
 

@@ -20,7 +20,8 @@ class SettingScreenContainer extends React.Component {
       name: '',
       tracks: [],
       orientation: undefined,
-      nameField: false
+      nameField: false,
+      buttonActive: false
     };
   }
 
@@ -42,8 +43,9 @@ class SettingScreenContainer extends React.Component {
     Orientation.addOrientationListener(this._handleOrientation);
 
     this.setState({
-      tracks,
-      nameField: accesstype === 'email' || accesstype === 'joincode'
+      tracks: tracks ? tracks : null,
+      nameField: accesstype === 'email' || accesstype === 'joincode',
+      buttonActive: tracks ? true : false
     });
   }
 
@@ -53,13 +55,14 @@ class SettingScreenContainer extends React.Component {
   }
 
   render() {
-    const { tracks, name, orientation, nameField } = this.state;
+    const { tracks, name, orientation, nameField, buttonActive } = this.state;
     return (
       <SettingScreenPresenter
         tracks={tracks}
         name={name}
         nameField={nameField}
         orientation={orientation}
+        buttonActive={buttonActive}
         onConferenceEnter={this._handleConferenceEnter}
         onToggleAudio={this._handleToggleAudio}
         onToggleVideo={this._handleToggleVideo}
@@ -80,13 +83,24 @@ class SettingScreenContainer extends React.Component {
 
   _getTrack = async () => {
     const devices = ['video', 'audio'];
-    const tracks = await JitsiMeetJS.createLocalTracks({
-      devices,
-      resolution: 320
-    });
-    const videoTrack = tracks.find(track => track.getType() === 'video');
-    const audioTrack = tracks.find(track => track.getType() === 'audio');
-    return [videoTrack, audioTrack];
+    try {
+      const tracks = await JitsiMeetJS.createLocalTracks({
+        devices,
+        resolution: 320
+      });
+      const videoTrack = tracks.find(track => track.getType() === 'video');
+      const audioTrack = tracks.find(track => track.getType() === 'audio');
+      return [videoTrack, audioTrack];
+    } catch (error) {
+      
+      this.props.setAlert({
+        type: 1,
+        title: '경고',
+        message:
+          '오디오 및 비디오 허용을 하지 않으면 화상대화 사용이 불가능합니다.'
+      });
+      return null;
+    }
   };
 
   _handleConferenceEnter = async () => {
@@ -108,7 +122,7 @@ class SettingScreenContainer extends React.Component {
     let roomToken;
 
     const randomstring = uuidv4();
-    const user = randomstring.substr(0, 8)
+    const user = randomstring.substr(0, 8);
 
     if (params?.accesstype === 'email') {
       roomToken = (
@@ -138,7 +152,14 @@ class SettingScreenContainer extends React.Component {
 
     // this.props.navigation.navigate('Home'); replace가 문제 없으면 삭제
     navigation.replace('Conference', {
-      item: { tracks, roomToken, name, ...item, accesstype: params?.accesstype, externalUser:user }
+      item: {
+        tracks,
+        roomToken,
+        name,
+        ...item,
+        accesstype: params?.accesstype,
+        externalUser: user
+      }
     });
   };
   _handleToggleVideo = async () => {

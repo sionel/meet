@@ -1,5 +1,6 @@
 import SettingScreenContainer from './SettingScreenContainer';
 import { connect } from 'react-redux';
+import { actionCreators as AlertAcions } from '../../redux/modules/alert';
 
 const mapStatetoProps = state => {
   return {
@@ -8,7 +9,11 @@ const mapStatetoProps = state => {
   };
 };
 
-const mapDispathtoProps = dispath => ({});
+const mapDispathtoProps = dispatch => {
+  return {
+    setAlert: params => dispatch(AlertAcions.setAlert(params))
+  };
+};
 
 export default connect(
   mapStatetoProps,
