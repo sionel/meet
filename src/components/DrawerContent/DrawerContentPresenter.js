@@ -21,7 +21,6 @@ import {
 
 export default function DrawerPresenter(props) {
   const {
-    wehagoType,
     navigation,
     user,
     serviceDeploy,
@@ -32,7 +31,6 @@ export default function DrawerPresenter(props) {
     statusBarHeight,
     setCompanyChange,
     onTouchSetting,
-    onTouchNotice,
     onShowProfile,
     onChangeCompany
   } = props;
@@ -189,67 +187,7 @@ export default function DrawerPresenter(props) {
             onClose={() => setCompanyChange(false)}
           />
         )}
-
-        {/* approval */}
         <View style={styles.children}>{props.children}</View>
-
-        {/* addon */}
-        {/* <View style={styles.addon}>
-          <TouchableOpacity
-            onPress={() => {
-              selectedCompany.membership_code === 'WT1'
-                ? Linking.openURL('https://www.wehagot.com/#/landingt/home')
-                : Linking.openURL(
-                    `https://www.wehago${
-                      wehagoType === 'WEHAGOV' ? 'v' : ''
-                    }.com/landing/cooperation`
-                  );
-            }}
-          >
-            {selectedCompany.membership_code === 'WT1' ? (
-              <CustomIcon name={'bannerDrawT'} width={'100%'} height={'100%'} />
-            ) : (
-              <CustomIcon name={'bannerDraw'} width={'100%'} height={'100%'} />
-            )}
-          </TouchableOpacity>
-        </View> */}
-
-        {/* notice */}
-        {/* <View style={styles.notice}>
-          {selectedCompany.membership_code !== 'WE' && (
-            <TouchableOpacity
-              onPress={() =>
-                onTouchNotice
-                  ? onTouchNotice()
-                  : Linking.openURL(
-                      'https://wehagohelp.zendesk.com/hc/ko/sections/360000548774-WEHAGO%EA%B3%B5%EC%A7%80%EC%82%AC%ED%95%AD'
-                    )
-              }
-              style={styles.noticeItem}
-            >
-              <CustomIcon name={'icoDrawNotice72'} size={18} />
-              <Text style={{ marginLeft: 2, fontSize: 10, color: '#8c8c8c' }}>
-                공지사항
-              </Text>
-            </TouchableOpacity>
-          )}
-
-          <TouchableOpacity
-            onPress={() => {
-              selectedCompany.membership_code === 'WT1'
-                ? Linking.openURL('https://wehagothelp.zendesk.com/hc/ko')
-                : selectedCompany.membership_code === 'WE'
-                ? Linking.openURL('https://wehagotedgehelp.zendesk.com/hc/ko')
-                : Linking.openURL('https://wehagohelp.zendesk.com');
-            }}
-            style={styles.noticeItem}
-          >
-            <CustomIcon name={'icoDrawCenter72'} size={18} />
-            <Text style={{ marginLeft: 2.5, fontSize: 10, color: '#8c8c8c' }}>
-              고객센터
-            </Text>
-          </TouchableOpacity>
-        </View> */}
       </View>
     </SafeAreaView>
   );

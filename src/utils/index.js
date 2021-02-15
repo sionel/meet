@@ -13,29 +13,25 @@ const isWehagoV = WEHAGO_ENV === 'WEHAGOV';
 const OS = Platform.OS;
 const OSID = OS === 'ios' ? 'mobile-ios' : 'mobile-android';
 
-// export const wehagoType = 'dev';
-export const wehagoType = 'wehago'
+// 개발기로 바꾸려면 해당 주석을 이용하자
+// export const isDev = true;
+export const isDev = false;
 /**
  * Back-end URL
  */
-// 개발기
-export const wehagoBaseURL0 =
-  wehagoType === 'dev'
-    ? `http://dev.api0.wehago.com`
-    : `https://api0.wehago${isWehagoV ? 'v' : ''}.com`; // 비인증
-export const wehagoBaseURL =
-  wehagoType === 'dev'
-    ? `http://dev.api.wehago.com`
-    : `https://api.wehago${isWehagoV ? 'v' : ''}.com`; // 인증
-export const wehagoMainURL =
-  wehagoType === 'dev'
-    ? `http://dev.wehago.com`
-    : `https://www.wehago${isWehagoV ? 'v' : ''}.com`; // 메인 URL
+export const wehagoBaseURL0 = isDev
+  ? `http://dev.api0.wehago.com`
+  : `https://api0.wehago${isWehagoV ? 'v' : ''}.com`; // 비인증
+export const wehagoBaseURL = isDev
+  ? `http://dev.api.wehago.com`
+  : `https://api.wehago${isWehagoV ? 'v' : ''}.com`; // 인증
+export const wehagoMainURL = isDev
+  ? `http://dev.wehago.com`
+  : `https://www.wehago${isWehagoV ? 'v' : ''}.com`; // 메인 URL
 
-export const meetURL =
-  wehagoType === 'dev'
-    ? `https://rtctest.wehago.com/api-bind`
-    : `https://api.wehago.com/video`;
+export const meetURL = isDev
+  ? `https://rtctest.wehago.com/api-bind`
+  : `https://api.wehago.com/video`;
 // export const meetURL = `http://localhost:8080/video`;
 
 export const wehagoDummyImageURL = `https://static.wehago${
@@ -45,8 +41,6 @@ export const wehagoDummyImageURL = `https://static.wehago${
 export const wehagoStaticURL = `https://static.wehago${
   isWehagoV ? 'v' : ''
 }.com`;
-
-
 
 /**
  * Querystring parser

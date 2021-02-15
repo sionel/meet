@@ -197,11 +197,6 @@ export default function DrawerContent(props) {
           />
         </TouchableOpacity>
       }
-      // subActions={[
-      //   <TouchableOpacity onPress={() => {}}>
-      //     <CustomIcon name={'btnDrawAlertNone'} size={24} width={60} />
-      //   </TouchableOpacity>
-      // ]}
       onTouchSetting={() => {
         navigation.closeDrawer();
         navigation.navigate('Configuration');

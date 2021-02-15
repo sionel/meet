@@ -1,21 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
 import {
   Platform,
-  Linking,
-  Alert,
-  Image,
   StyleSheet,
   View,
   TouchableHighlight,
   TouchableOpacity,
   ImageBackground,
-  TextInput,
-  Button
+  TextInput
 } from 'react-native';
 
 import CustomIcon from '../../components/CustomIcon';
 import { Text } from '../../components/StyledText';
-import { useDispatch } from 'react-redux';
 
 export default function LoginScreenPresenter(props) {
   const { onWehagoLogin, onInputCode, joincode, navigation, onTest } = props;
@@ -153,14 +148,6 @@ export default function LoginScreenPresenter(props) {
                 }
               })
             }
-            // onPress={() =>
-            //   props.navigation.navigate({
-            //     routeName: 'LoginInput',
-            //     params: {
-            //       onSetAlert: props.screenProps.onSetAlert
-            //     }
-            //   })
-            // }
           >
             <Text style={styles.loginNavigation}>직접 입력해서 로그인</Text>
           </TouchableOpacity>
@@ -169,14 +156,6 @@ export default function LoginScreenPresenter(props) {
     </ImageBackground>
   );
 }
-
-// LoginScreen.defaultProps = {
-//   wehagoType: 'WEHAGO',
-//   serviceCode: '',
-//   text1: '',
-//   text2: '',
-//   onManualLogin: () => {}
-// };
 
 const styles = StyleSheet.create({
   container: {

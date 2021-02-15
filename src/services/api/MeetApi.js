@@ -4,12 +4,7 @@
  * 참조 : http://wiki.duzon.com:8080/display/sky/3.+API
  */
 
-import {
-  meetURL,
-  securityRequest,
-  wehagoBaseURL0,
-  wehagoType
-} from '../../utils';
+import { isDev, meetURL, securityRequest, wehagoBaseURL0 } from '../../utils';
 import * as CryptoJS from 'crypto-js';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -88,8 +83,7 @@ export default {
   getMeetRoomNoCert: async roomId => {
     let url = '';
     let signature;
-    if (wehagoType === 'dev') {
-      // 개발기
+    if (isDev) {
       url = `${meetURL}/room?room=${roomId}`;
     } else {
       const accsessUrl = `/video/room?room=${roomId}`;
@@ -253,8 +247,7 @@ export default {
   getMeetRoomTokenEmail: async (room, emailToken, username) => {
     let url = '';
     let signature;
-    if (wehagoType === 'dev') {
-      // 개발기
+    if (isDev) {
       url = `${meetURL}/token`;
     } else {
       const accsessUrl = `/video/token`;
@@ -294,8 +287,7 @@ export default {
   getMeetRoomTokenJoincode: async (room, joincode, username, user) => {
     let url = '';
     let signature;
-    if (wehagoType === 'dev') {
-      // 개발기
+    if (isDev) {
       url = `${meetURL}/token`;
     } else {
       const accsessUrl = `/video/token`;
@@ -336,8 +328,7 @@ export default {
   enterMeetRoom: async (videoToken, videoseq) => {
     let url = '';
     let signature;
-    if (wehagoType === 'dev') {
-      // 개발기
+    if (isDev) {
       url = `${meetURL}/connect`;
     } else {
       const accsessUrl = `/video/connect`;
@@ -378,8 +369,7 @@ export default {
   checkVersion: async (os, major, minor) => {
     let url = '';
     let signature;
-    if (wehagoType === 'dev') {
-      // 개발기
+    if (isDev) {
       url = `${meetURL}/mobile/version?os=${os}&major=${major}&minor=${minor}`;
     } else {
       const accsessUrl = `/video/mobile/version?os=${os}&major=${major}&minor=${minor}`;
@@ -417,8 +407,7 @@ export default {
 
     let url = '';
     let signature;
-    if (wehagoType === 'dev') {
-      // 개발기
+    if (isDev) {
       url = `${meetURL}/mobile/noti?timestamp=${date}`;
     } else {
       const accsessUrl = `/video/mobile/noti?timestamp=${date}`;
@@ -454,8 +443,7 @@ export default {
   searchJoincode: async joincode => {
     let url = '';
     let signature;
-    if (wehagoType === 'dev') {
-      // 개발기
+    if (isDev) {
       url = `${meetURL}/joincode/search?joincode=${joincode}`;
     } else {
       const accsessUrl = `/video/joincode/search?joincode=${joincode}`;
@@ -491,8 +479,7 @@ export default {
   checkMasterControlUser: async roomId => {
     let url = '';
     let signature;
-    if (wehagoType === 'dev') {
-      // 개발기
+    if (isDev) {
       url = `${meetURL}/room/master/control/user?room=${roomId}`;
     } else {
       const accsessUrl = `/video/room/master/control/user?room=${roomId}`;
@@ -528,8 +515,7 @@ export default {
   getParticipantCount: async roomId => {
     let url = '';
     let signature;
-    if (wehagoType === 'dev') {
-      // 개발기
+    if (isDev) {
       url = `${meetURL}/room/connecting/count?room=${roomId}`;
     } else {
       const accsessUrl = `/video/room/connecting/count?room=${roomId}`;
@@ -564,8 +550,7 @@ export default {
   checkMasterControl: async roomId => {
     let url = '';
     let signature;
-    if (wehagoType === 'dev') {
-      // 개발기
+    if (isDev) {
       url = `${meetURL}/room/master/control/user?room=${roomId}`;
     } else {
       const accsessUrl = `/video/room/master/control/user?room=${roomId}`;
@@ -601,8 +586,7 @@ export default {
   getMasterList: async roomToken => {
     let url = '';
     let signature;
-    if (wehagoType === 'dev') {
-      // 개발기
+    if (isDev) {
       url = `${meetURL}/room/masters?jwt=${roomToken}`;
     } else {
       const accsessUrl = `/video/room/masters?jwt=${roomToken}`;
@@ -638,8 +622,7 @@ export default {
   getExternalUserId: async roomId => {
     let url = '';
     let signature;
-    if (wehagoType === 'dev') {
-      // 개발기
+    if (isDev) {
       url = `${meetURL}/user/default-name?room=${roomId}`;
     } else {
       const accsessUrl = `/video/user/default-name?room=${roomId}`;
@@ -674,8 +657,7 @@ export default {
   checkMasterList: async roomId => {
     let url = '';
     let signature;
-    if (wehagoType === 'dev') {
-      // 개발기
+    if (isDev) {
       url = `${meetURL}/master/remaining-master?room=${roomId}`;
     } else {
       const accsessUrl = `/video/master/remaining-master?room=${roomId}`;

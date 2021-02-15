@@ -6,7 +6,6 @@ import UserApi from '../../services/api/LoginApi/UserApi';
 
 export default function DrawerContainer(props) {
   const {
-    wehagoType,
     navigation,
     auth,
     user,
@@ -59,7 +58,6 @@ export default function DrawerContainer(props) {
   return (
     <DrawerContentPresenter
       {...{
-        wehagoType,
         navigation,
         user,
         serviceDeploy,
@@ -81,7 +79,6 @@ export default function DrawerContainer(props) {
 }
 
 DrawerContainer.defaultProps = {
-  wehagoType: 'WEHAGO',
   navigation: null,
   auth: {
     AUTH_A_TOKEN: '',
