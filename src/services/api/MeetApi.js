@@ -325,7 +325,7 @@ export default {
     }
   },
   // 3-13 화상회의 접속
-  enterMeetRoom: async (videoToken, videoseq) => {
+  enterMeetRoom: async (videoToken, videoseq,username) => {
     let url = '';
     let signature;
     if (isDev) {
@@ -350,7 +350,8 @@ export default {
         body: JSON.stringify({
           token: videoToken,
           videoseq: videoseq,
-          is_mobile: 'T'
+          is_mobile: 'T',
+          username
         })
       };
 

@@ -7,7 +7,7 @@
 
 ## 초기 설정
 
-1. npm install<br/>(특이사항 : dependencies 에 "rn-component": "git+http://git.duzon.com/peacejung/rn-component.git#0.1.0" 가 있음)
+1. npm install<br/>(특이사항 : dependencies 에 "rn-component": "git+http://git.duzon.com/peacejung/rn-component.git#0.1.0" 가 있었지만 이제 없음)
 2. 안드로이드 sdk 설정<br/>
    /android/local.properties 에 android sdk 경로 설정
 3. 안드로이드 기기 설정<br/>
@@ -94,6 +94,14 @@ https://stackoverflow.com/questions/65303304/xcode-12-3-building-for-ios-simulat
 
 현재 버전관리의 문제로 package.json 에서 ^ 이걸로 관리되던 패키지들이 좀 꼬여있어서 트랙에서 문제가 생김
 ^ 이걸 다 없애고 해도 문제가 생기기에 ^ 를 적당히 없애가는 방향으로 가야할듯
+
+5. 에러코드
+
+com.android.builder.testing.api.DeviceException: com.android.ddmlib.InstallException: INSTALL_FAILED_UPDATE_INCOMPATIBLE: Package com.wehago.meet signatures do not match previously 
+installed version; ignoring!
+
+기존에 깔린 앱 삭제 ㄱ
+
 
 
 ## 작업목록

@@ -68,7 +68,7 @@ class ConferenceManager {
       accesstype,
       externalUser
     );
-    await MeetApi.enterMeetRoom(token, this._room.myUserId());
+    await MeetApi.enterMeetRoom(token, this._room.myUserId(),name);
     const createdTime = this._room.properties['created-ms'];
     this._dispatch(localActionCreators.setConferenceCreatedTime(createdTime));
     this._dispatch(masterAcionCreators.checkMasterList(this._roomToken));
