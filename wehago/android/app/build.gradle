@@ -1,13 +1,10 @@
 apply plugin: 'com.android.application'
 apply from: "../../../node_modules/react-native-vector-icons/fonts.gradle"
 
-boolean googleServicesEnabled \
-    = project.file('google-services.json').exists() && !rootProject.ext.libreBuild
-
 // Crashlytics integration is done as part of Firebase now, so it gets
 // automagically activated with google-services.json
-if (googleServicesEnabled) {
-    apply plugin: 'io.fabric'
+if (googleServicesEnabled) { // TODO: 노티
+    apply plugin: 'com.google.firebase.crashlytics'
 }
 
 // Use the number of seconds/10 since Jan 1 2019 as the versionCode.
@@ -85,6 +82,8 @@ repositories {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+
 //    implementation "com.android.support:support-v4:${rootProject.ext.supportLibVersion}"
 //    implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
 
