@@ -23,9 +23,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.RestrictionEntry;
 import android.content.RestrictionsManager;
-
 import android.net.Uri;
-import android.os.Build;
+import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -40,7 +39,7 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
-import java.util.Map;
+import java.util.HashMap;
 
 /**
  * The one and only Activity that the Jitsi Meet app needs. The

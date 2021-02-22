@@ -60,17 +60,13 @@
             }
         } else {
             implementation project(':react-native-device-info')
-            implementation(project(":react-native-google-signin")) {
-                exclude group: 'com.google.android.gms'
-                exclude group: 'androidx'
-            }
         }
 
 
 
         implementation project(':react-native-async-storage')
         implementation project(':react-native-background-timer')
-        implementation project(':react-native-calendar-events')
+        // implementation project(':react-native-calendar-events')
         implementation project(':react-native-community_netinfo')
         implementation project(':react-native-default-preference')
         implementation project(':react-native-immersive')
@@ -83,8 +79,7 @@
         implementation project(':react-native-splash-screen')                
         implementation project(':react-native-vector-icons')
         
-        // 대기
-        implementation project(':react-native-community-async-storage')
+        
         
 
         // 추가한 라이브러리

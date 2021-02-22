@@ -230,7 +230,6 @@ DEPENDENCIES:
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNFastImage (from `../node_modules/react-native-fast-image`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
-  - RNGoogleSignin (from `../node_modules/react-native-google-signin`)
   - "RNSketchCanvas (from `../node_modules/@terrylinla/react-native-sketch-canvas`)"
   - RNSound (from `../node_modules/react-native-sound`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
@@ -300,8 +299,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-fast-image"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
-  RNGoogleSignin:
-    :path: "../node_modules/react-native-google-signin"
   RNSketchCanvas:
     :path: "../node_modules/@terrylinla/react-native-sketch-canvas"
   RNSound:

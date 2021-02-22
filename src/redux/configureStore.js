@@ -6,7 +6,8 @@ const env = process.env.NODE_ENV;
 
 import { applyMiddleware, createStore } from 'redux';
 import { persistStore, persistCombineReducers } from 'redux-persist';
-import AsyncStorage from '@react-native-community/async-storage';
+// import AsyncStorage from 'react-native-async-storage'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 // import storage from 'redux-persist/lib/storage';
 import thunk from 'redux-thunk';
 import local from './modules/local';
