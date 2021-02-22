@@ -1,6 +1,5 @@
 /*
- * Copyright @ 2018-present 8x8, Inc.
- * Copyright @ 2017-2018 Atlassian Pty Ltd
+ * Copyright @ 2017-present 8x8, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +20,10 @@ import android.content.Context;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import android.util.Log;
 
 import com.facebook.react.bridge.ReadableMap;
 
+import com.wehago.meet.sdk.log.JitsiMeetLogger;
 import java.lang.reflect.Method;
 import java.util.Map;
 
@@ -38,12 +37,6 @@ public class JitsiMeetView extends BaseReactView<JitsiMeetViewListener>
      */
     private static final Map<String, Method> LISTENER_METHODS
         = ListenerUtils.mapListenerMethods(JitsiMeetViewListener.class);
-
-    /**
-     * The {@link Log} tag which identifies the source of the log messages of
-     * {@code JitsiMeetView}.
-     */
-    private static final String TAG = JitsiMeetView.class.getSimpleName();
 
     /**
      * The URL of the current conference.
@@ -131,13 +124,13 @@ public class JitsiMeetView extends BaseReactView<JitsiMeetViewListener>
             = ReactInstanceManagerHolder.getNativeModule(
                 PictureInPictureModule.class);
         if (pipModule != null
-                && PictureInPictureModule.isPictureInPictureSupported()
+                && pipModule.isPictureInPictureSupported()
                 && !JitsiMeetActivityDelegate.arePermissionsBeingRequested()
                 && this.url != null) {
             try {
                 pipModule.enterPictureInPicture();
             } catch (RuntimeException re) {
-                Log.e(TAG, "failed to enter PiP mode", re);
+                JitsiMeetLogger.e(re, "Failed to enter PiP mode");
             }
         }
     }
@@ -203,7 +196,14 @@ public class JitsiMeetView extends BaseReactView<JitsiMeetViewListener>
      * by/associated with the specified {@code name}.
      */
     @Override
+    @Deprecated
     protected void onExternalAPIEvent(String name, ReadableMap data) {
         onExternalAPIEvent(LISTENER_METHODS, name, data);
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        dispose();
+        super.onDetachedFromWindow();
     }
 }
