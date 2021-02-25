@@ -108,41 +108,41 @@ gradle.projectsEvaluated {
     // Dropbox integration
     //
 
-    def dropboxAppKey
-    if (project.file('dropbox.key').exists()) {
-        dropboxAppKey = project.file('dropbox.key').text.trim() - 'db-'
-    }
+    // def dropboxAppKey
+    // if (project.file('dropbox.key').exists()) {
+    //     dropboxAppKey = project.file('dropbox.key').text.trim() - 'db-'
+    // }
 
-    if (dropboxAppKey) {
-        android.defaultConfig.resValue('string', 'dropbox_app_key', "${dropboxAppKey}")
+    // if (dropboxAppKey) {
+    //     android.defaultConfig.resValue('string', 'dropbox_app_key', "${dropboxAppKey}")
 
-        def dropboxActivity = """
-          <activity
-              android:configChanges="keyboard|orientation"
-              android:launchMode="singleTask"
-              android:name="com.dropbox.core.android.AuthActivity">
-            <intent-filter>
-              <action android:name="android.intent.action.VIEW" />
-              <category android:name="android.intent.category.BROWSABLE" />
-              <category android:name="android.intent.category.DEFAULT" />
-              <data android:scheme="db-${dropboxAppKey}" />
-            </intent-filter>
-          </activity>"""
+    //     def dropboxActivity = """
+    //       <activity
+    //           android:configChanges="keyboard|orientation"
+    //           android:launchMode="singleTask"
+    //           android:name="com.dropbox.core.android.AuthActivity">
+    //         <intent-filter>
+    //           <action android:name="android.intent.action.VIEW" />
+    //           <category android:name="android.intent.category.BROWSABLE" />
+    //           <category android:name="android.intent.category.DEFAULT" />
+    //           <data android:scheme="db-${dropboxAppKey}" />
+    //         </intent-filter>
+    //       </activity>"""
 
-        android.applicationVariants.all { variant ->
-            variant.outputs.each { output ->
-                output.getProcessManifestProvider().get().doLast {
-                    def outputDir = manifestOutputDirectory.get().asFile
-                    def manifestPath = new File(outputDir, 'AndroidManifest.xml')
-                    def charset = 'UTF-8'
-                    def text
-                    text = manifestPath.getText(charset)
-                    text = text.replace('</application>', "${dropboxActivity}</application>")
-                    manifestPath.write(text, charset)
-                }
-            }
-        }
-    }
+    //     android.applicationVariants.all { variant ->
+    //         variant.outputs.each { output ->
+    //             output.getProcessManifestProvider().get().doLast {
+    //                 def outputDir = manifestOutputDirectory.get().asFile
+    //                 def manifestPath = new File(outputDir, 'AndroidManifest.xml')
+    //                 def charset = 'UTF-8'
+    //                 def text
+    //                 text = manifestPath.getText(charset)
+    //                 text = text.replace('</application>', "${dropboxActivity}</application>")
+    //                 manifestPath.write(text, charset)
+    //             }
+    //         }
+    //     }
+    // }
 
     // Run React packager
     android.applicationVariants.all { variant ->
@@ -158,7 +158,6 @@ gradle.projectsEvaluated {
                 println "Starting the React packager..."
 
                 def androidRoot = file("${projectDir}/../")
-
                 // Set up the call to the script
                 workingDir androidRoot
 
@@ -168,7 +167,6 @@ gradle.projectsEvaluated {
 
             // Set up dev mode
             def devEnabled = !targetName.toLowerCase().contains("release")
-
             // Only enable for dev builds
             enabled devEnabled
         }

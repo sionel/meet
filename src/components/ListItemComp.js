@@ -10,9 +10,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
-  Platform
 } from 'react-native';
-import CustomLottie from './CustomLottie';
 import { wehagoMainURL } from '../utils';
 
 function getFirtsChar(str) {

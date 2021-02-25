@@ -51,12 +51,6 @@
             android:name="com.wehago.meet.sdk.JitsiMeetOngoingConferenceService"
             android:foregroundServiceType="mediaProjection" />
 
-        <provider
-            android:name="com.reactnativecommunity.webview.RNCWebViewFileProvider"
-            android:authorities="${applicationId}.fileprovider"
-            android:enabled="false"
-            tools:replace="android:authorities">
-        </provider>
     </application>
 
 </manifest>
