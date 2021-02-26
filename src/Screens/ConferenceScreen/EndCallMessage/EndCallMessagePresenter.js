@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Image, Text, Dimensions, TouchableOpacity } from 'react-native';
-import { CustomLottie, CustomIcon } from '../../../components';
+import { CustomIcon } from '../../../components';
 import ProfileImage from '../../../../assets/icons/imgVcNophoto_2x.png';
 import { wehagoMainURL, wehagoStaticURL } from '../../../utils';
 
@@ -40,7 +40,7 @@ const EndCallMessagePresenter = props => {
       }}
     >
       <View style={{ display: 'flex' }}>
-        <CustomLottie source="cc" width={280} height={280}>
+        {/* <CustomLottie source="cc" width={280} height={280}>
           <View
             style={{
               position: 'absolute',
@@ -125,7 +125,7 @@ const EndCallMessagePresenter = props => {
                 : '상대방이 접속하지 않았습니다.'}
             </Text>
           </View>
-        </CustomLottie>
+        </CustomLottie> */}
       </View>
 
       <View

@@ -83,7 +83,7 @@
         
 
         // 추가한 라이브러리
-        implementation project(':lottie-react-native')
+        // implementation project(':lottie-react-native')
         implementation project(':react-native-svg')
         implementation project(':react-native-orientation-locker')
         implementation project(':react-native-gesture-handler')

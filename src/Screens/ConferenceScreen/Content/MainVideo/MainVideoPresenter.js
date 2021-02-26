@@ -17,7 +17,6 @@ import imgCharacter03 from '../../../../../assets/icons/imgCharacter03_2x.png';
 // import ProfileImage from '../../../../../assets/smapleImages/nnn.jpg';
 import ProfileImage from '../../../../../assets/icons/imgVcNophoto_2x.png';
 // import ProfileImage from '../../../../../assets/smapleImages/nnn2.png';
-import { CustomLottie } from '../../../../components';
 import { wehagoMainURL } from '../../../../utils';
 
 const { height, width } = Dimensions.get('window');
@@ -187,7 +186,7 @@ const MainVideoPresenter = props => {
           <View style={{ ...styles.imageContainer }}>
             {/* 음성대화 일 때 */}
             <View style={{ display: 'flex' }}>
-              <CustomLottie source="voiceBroadcast" width={280} height={280}>
+              {/* <CustomLottie source="voiceBroadcast" width={280} height={280}>
                 <View
                   style={{
                     position: 'absolute',
@@ -258,7 +257,7 @@ const MainVideoPresenter = props => {
                       : ''}
                   </Text>
                 </View>
-              </CustomLottie>
+              </CustomLottie> */}
             </View>
           </View>
         )

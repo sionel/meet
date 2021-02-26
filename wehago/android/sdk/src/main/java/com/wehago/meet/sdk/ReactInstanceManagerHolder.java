@@ -190,7 +190,7 @@ class ReactInstanceManagerHolder {
                 new com.rnimmersive.RNImmersivePackage(),
                 new com.zmxv.RNSound.RNSoundPackage(),
                 // 추가한 라이브러리
-                new com.airbnb.android.react.lottie.LottiePackage(),
+                // new com.airbnb.android.react.lottie.LottiePackage(),
                 new com.horcrux.svg.SvgPackage(),
                 new org.wonday.orientation.OrientationPackage(),
                 new com.dylanvann.fastimage.FastImageViewPackage(),

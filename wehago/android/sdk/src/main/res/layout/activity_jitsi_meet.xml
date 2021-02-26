@@ -10,3 +10,7 @@
         android:name="com.wehago.meet.sdk.JitsiMeetFragment"
         android:id="@+id/jitsiFragment"/>
 </FrameLayout>
+
+
+
+
