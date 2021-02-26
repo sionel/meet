@@ -30,7 +30,7 @@
     "build-inhouse-abb": "cd ./wehago/android && sudo rm -rf build ./app/build ./sdk/build && sudo ./gradlew bundleRelease && cd ../..",
     "build-inhouse-v": "cd ./wehagoV/android && sudo rm -rf build ./app/build ./sdk/build && sudo ./gradlew assembleRelease && cd ../..",
     "build-aab": "cd ./wehago/android && sudo rm -rf build ./app/build ./sdk/build && sudo ./gradlew bundleRelease && cd ../..",
-    "set-android": "~/Library/Android/sdk/platform-tools/adb -s R59M905GC8X  reverse tcp:8081 tcp:8081",
+    "set-android": "~/Library/Android/sdk/platform-tools/adb -s R3CMB0CXTRB  reverse tcp:8081 tcp:8081",
     "get-android": "~/Library/Android/sdk/platform-tools/adb devices"
   },
   "dependencies": {
@@ -93,7 +93,7 @@
     "react-linkify": "1.0.0-alpha",
     "react-native": "github:jitsi/react-native#891986ec5ecaef65d1c8a7fe472f86cf84fe7551",
     "react-native-app-intro-slider": "^3.0.0",
-    "react-native-background-timer": "2.1.1",
+    "react-native-background-timer": "2.4.0",
     "react-native-calendar-events": "1.6.4",
     "react-native-callstats": "3.70.1",
     "react-native-cancelable-fetch": "^0.1.1",

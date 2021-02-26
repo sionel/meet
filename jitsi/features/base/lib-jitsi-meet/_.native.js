@@ -1,5 +1,5 @@
 import "./native";
-
+import '../../mobile/polyfills'
 // The library lib-jitsi-meet (externally) depends on the libraries jQuery
 (global => {
   // jQuery
