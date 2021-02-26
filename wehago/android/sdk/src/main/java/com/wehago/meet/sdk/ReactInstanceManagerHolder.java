@@ -194,7 +194,6 @@ class ReactInstanceManagerHolder {
                 new com.horcrux.svg.SvgPackage(),
                 new org.wonday.orientation.OrientationPackage(),
                 new com.dylanvann.fastimage.FastImageViewPackage(),
-                new org.devio.rn.splashscreen.SplashScreenReactPackage(),
                 new com.learnium.RNDeviceInfo.RNDeviceInfo(),
                 new com.terrylinla.rnsketchcanvas.SketchCanvasPackage(),
                 new com.swmansion.gesturehandler.react.RNGestureHandlerPackage(),
