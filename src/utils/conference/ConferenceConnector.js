@@ -497,12 +497,21 @@ class ConferenceConnector {
    * 트랙을 생성한다.
    */
   _createTracks = async () => {
-    const devices = ['video', 'audio'];
-    const tracks = await JitsiMeetJS.createLocalTracks({
-      devices,
+    // const devices = ['video', 'audio'];
+    // const tracks = await JitsiMeetJS.createLocalTracks({
+    //   devices,
+    //   resolution: 320
+    // });
+    const videoTrack = await JitsiMeetJS.createLocalTracks({
+      devices: ['video'],
       resolution: 320
     });
-    return tracks;
+    const audioTrack = await JitsiMeetJS.createLocalTracks({
+      devices: ['audio'],
+      resolution: 320
+    });
+
+    return [videoTrack[0], audioTrack[0]];
   };
 
   /**

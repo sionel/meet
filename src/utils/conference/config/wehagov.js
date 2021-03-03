@@ -29,7 +29,7 @@ const config = {
   disableSimulcast: false,
   minHDHeight: 240,
   p2p: {
-    enabled: true
+    enabled: false
   },
   stereo: true,
   e2eping: { pingInterval: 10000, analyticsInterval: 60000 }

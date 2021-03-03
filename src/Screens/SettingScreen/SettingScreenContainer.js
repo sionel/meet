@@ -82,17 +82,20 @@ class SettingScreenContainer extends React.Component {
   };
 
   _getTrack = async () => {
-    const devices = ['video', 'audio'];
+    // const devices = ['video', 'audio'];
     try {
-      const tracks = await JitsiMeetJS.createLocalTracks({
-        devices,
+      const videoTrack = await JitsiMeetJS.createLocalTracks({
+        devices: ['video'],
         resolution: 320
       });
-      const videoTrack = tracks.find(track => track.getType() === 'video');
-      const audioTrack = tracks.find(track => track.getType() === 'audio');
-      return [videoTrack, audioTrack];
+      const audioTrack = await JitsiMeetJS.createLocalTracks({
+        devices: ['audio'],
+        resolution: 320
+      });
+      // const videoTrack = tracks.find(track => track.getType() === 'video');
+      // const audioTrack = tracks.find(track => track.getType() === 'audio');
+      return [videoTrack[0], audioTrack[0]];
     } catch (error) {
-      
       this.props.setAlert({
         type: 1,
         title: '접근권한 필요',
