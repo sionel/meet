@@ -117,7 +117,7 @@ export class App extends Component {
     this._jitsiConnection;
     this.state = {
       tracks: [],
-      roomName: 'c25f7d90-05eb-45af-9088-71f194cbd51a',
+      roomName: 'd897409e-f359-4071-b4ec-dd7a436fe2fc',
       num: 0
     };
   }
@@ -130,7 +130,31 @@ export class App extends Component {
   _joinUser = () => {};
   _addRemoteTrack = track => {
     if (track.getType() === 'video') {
-      this.setState({ ...this.state, tracks: [...this.state.tracks, track] });
+      let exist = false;
+      let newTrack = [];
+
+      this.state.tracks.forEach(e => {
+        if (e.user === track.ownerEndpointId) {
+          e.video = track;
+          exist = true;
+        }
+        newTrack.push(e);
+      });
+
+      if (exist) {
+        this.setState({
+          ...this.state,
+          tracks: [...newTrack]
+        });
+      } else {
+        this.setState({
+          ...this.state,
+          tracks: [
+            ...this.state.tracks,
+            { video: track, user: track.ownerEndpointId }
+          ]
+        });
+      }
     }
   };
   _changeRoomName = text => {
@@ -201,22 +225,26 @@ export class App extends Component {
       }
     });
 
-    tracks = await JitsiMeetJS.createLocalTracks({
-      devices: ['video', 'audio'],
-      resolution: 320
-    });
-    let video = null;
-    tracks.forEach(track => {
-      this._jitsiConference.addTrack(track);
-      if (track.getType() === 'video') {
-        video = track;
-      }
-    });
+    let video = (
+      await JitsiMeetJS.createLocalTracks({
+        devices: ['video'],
+        resolution: 320
+      })
+    )[0];
+    let audio = (
+      await JitsiMeetJS.createLocalTracks({
+        devices: ['audio'],
+        resolution: 320
+      })
+    )[0];
+    this._jitsiConference.addTrack(video);
+    this._jitsiConference.addTrack(audio);
+
     this._jitsiConference.join();
 
     this.setState({
       ...this.state,
-      tracks: [...this.state.tracks, video]
+      tracks: [{ video, user: 'local' }]
     });
   };
 
@@ -259,7 +287,9 @@ export class App extends Component {
                 right: 0
               }}
               objectFit={'contain'}
-              streamURL={track.getOriginalStream().toURL()}
+              streamURL={track.video
+                  .getOriginalStream()
+                  .toURL()}
               zOrder={1}
             />
           ))
