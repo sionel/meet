@@ -111,7 +111,7 @@ okhttp3 라는 것이 문제가 되는데
 
 리스트 : https://developer.android.com/about/versions/11/non-sdk-11#r-list-changes
 
-문제가 되는 sdk
+문제가 되는 sdk라고 뜨는 것의 오류
 
 
       : Accessing hidden method Lcom/android/org/conscrypt/ConscryptEngineSocket;->setUseSessionTickets(Z)V (greylist-max-q,core-platform-api, reflection, denied)
