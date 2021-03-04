@@ -3,6 +3,9 @@ PODS:
   - boost-for-react-native (1.63.0)
   - BVLinearGradient (2.5.3):
     - React
+  - CocoaLumberjack (3.5.3):
+    - CocoaLumberjack/Core (= 3.5.3)
+  - CocoaLumberjack/Core (3.5.3)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.61.5-jitsi.2)
   - FBReactNativeSpec (0.61.5-jitsi.2):
@@ -285,6 +288,8 @@ PODS:
     - React
   - react-native-slider (1.1.4):
     - React
+  - react-native-splash-screen (3.2.0):
+    - React
   - react-native-webrtc (1.87.3):
     - React-Core
   - react-native-webview (11.0.2):
@@ -377,6 +382,7 @@ PODS:
 DEPENDENCIES:
   - Amplitude-iOS (~> 4.0.4)
   - BVLinearGradient (from `../node_modules/react-native-linear-gradient`)
+  - CocoaLumberjack (~> 3.5.3)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector/`)
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec/`)
@@ -404,6 +410,7 @@ DEPENDENCIES:
   - react-native-keep-awake (from `../node_modules/react-native-keep-awake`)
   - react-native-orientation-locker (from `../node_modules/react-native-orientation-locker/react-native-orientation-locker.podspec`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
+  - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
   - react-native-webrtc (from `../node_modules/react-native-webrtc`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -431,6 +438,7 @@ SPEC REPOS:
   trunk:
     - Amplitude-iOS
     - boost-for-react-native
+    - CocoaLumberjack
     - Firebase
     - FirebaseAnalytics
     - FirebaseCore
@@ -493,6 +501,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-orientation-locker/react-native-orientation-locker.podspec"
   react-native-slider:
     :path: "../node_modules/@react-native-community/slider"
+  react-native-splash-screen:
+    :path: "../node_modules/react-native-splash-screen"
   react-native-webrtc:
     :path: "../node_modules/react-native-webrtc"
   react-native-webview:
@@ -542,6 +552,7 @@ SPEC CHECKSUMS:
   Amplitude-iOS: 2ad4d7270c99186236c1272a3a9425463b1ae1a7
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   BVLinearGradient: 0d985ec461359c82bc254f26d11008bdae50d17a
+  CocoaLumberjack: 2f44e60eb91c176d471fdba43b9e3eae6a721947
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
   FBLazyVector: ca7f56c8ff6cd8590f7a673d7903b06019805581
   FBReactNativeSpec: 8136c3cf27de2bb310a69cffbb423c5643f5c1c4
@@ -577,6 +588,7 @@ SPEC CHECKSUMS:
   react-native-keep-awake: eba3137546b10003361b37c761f6c429b59814ae
   react-native-orientation-locker: 23918c400376a7043e752c639c122fcf6bce8f1c
   react-native-slider: 9fb33ac32cb788360adb5c38685aa3642bebd93c
+  react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
   react-native-webrtc: dc1208bdca2c4d091f7b57859e69332bff6f1986
   react-native-webview: b2542d6fd424bcc3e3b2ec5f854f0abb4ec86c87
   React-RCTActionSheet: bcbc311dc3b47bc8efb2737ff0940239a45789a9
@@ -602,6 +614,6 @@ SPEC CHECKSUMS:
   SDWebImageWebPCoder: 947093edd1349d820c40afbd9f42acb6cdecd987
   Yoga: 96b469c5e81ff51b917b92e8c3390642d4ded30c
 
-PODFILE CHECKSUM: c60ed4ca223db0c6119b6e2a0ed8a93096c1ec8a
+PODFILE CHECKSUM: ccf6d897df8cb4ea3e788bf0f3d5289ec13e6b59
 
 COCOAPODS: 1.10.1

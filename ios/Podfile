@@ -11,7 +11,7 @@ target 'jitsi-meet' do
   pod 'Firebase/DynamicLinks', '~> 6.33.0'
 end
 
-target 'JitsiMeet' do
+target 'JitsiMeetSDK' do
   project 'sdk/sdk.xcodeproj'
 
   # React Native and its dependencies
@@ -77,10 +77,11 @@ target 'JitsiMeet' do
   pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
   pod 'RCTRestart', :path => '../node_modules/react-native-restart'
   pod 'RNFastImage', :path => '../node_modules/react-native-fast-image'
+  pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
 
   # Native pod dependencies
   #
-
+  pod 'CocoaLumberjack', '~>3.5.3'
   pod 'Amplitude-iOS', '~> 4.0.4'
   pod 'ObjectiveDropboxOfficial', '~> 3.9.4'
 end

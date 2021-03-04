@@ -16,15 +16,13 @@
  */
 
 #import "AppDelegate.h"
-#import "FIRUtilities.h"
+// #import "FIRUtilities.h"
 #import "Types.h"
 #import "Orientation.h"
 #import <React/RCTLinkingManager.h>
 
-@import Crashlytics;
-@import Fabric;
 @import Firebase;
-@import JitsiMeet;
+@import JitsiMeetSDK;
 
 
 @implementation AppDelegate
@@ -34,12 +32,12 @@
     // [NSThread sleepForTimeInterval:3.0]; // LaunchScreen 딜레이
 
     // Initialize Crashlytics and Firebase if a valid GoogleService-Info.plist file was provided.
-    if ([FIRUtilities appContainsRealServiceInfoPlist]) {
-        NSLog(@"Enablign Crashlytics and Firebase");
-        [FIRApp configure];
-        [Fabric with:@[[Crashlytics class]]];
-    }
-
+  // if ([FIRUtilities appContainsRealServiceInfoPlist]) {
+  //       NSLog(@"Enabling Firebase");
+  //       [FIRApp configure];
+  //       // Crashlytics defaults to disabled wirth the FirebaseCrashlyticsCollectionEnabled Info.plist key.
+  //       [[FIRCrashlytics crashlytics] setCrashlyticsCollectionEnabled:![jitsiMeet isCrashReportingDisabled]];
+  //   }
     JitsiMeet *jitsiMeet = [JitsiMeet sharedInstance];
 
     jitsiMeet.conferenceActivityType = JitsiMeetConferenceActivityType;

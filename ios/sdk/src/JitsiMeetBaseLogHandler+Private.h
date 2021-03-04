@@ -1,5 +1,5 @@
 /*
- * Copyright @ 2017-present Atlassian Pty Ltd
+ * Copyright @ 2019-present 8x8, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-@import UIKit;
-@import JitsiMeetSDK;
+#import "LogUtils.h"
+#import "JitsiMeetBaseLogHandler.h"
 
-@interface ViewController : UIViewController<JitsiMeetViewDelegate>
+@interface JitsiMeetBaseLogHandler ()
 
-- (void)terminate;
+@property (nonatomic, retain) id<DDLogger> logger;
 
 @end
