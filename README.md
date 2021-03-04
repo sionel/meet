@@ -50,7 +50,7 @@ npx jetify
 
 ## 버전 정보
 
-react-native : 0.59.8
+react-native : 0.61.5
 
 react : 16.8.3
 
