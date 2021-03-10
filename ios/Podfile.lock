@@ -286,7 +286,7 @@ PODS:
     - React
   - react-native-orientation-locker (1.1.6):
     - React
-  - react-native-slider (1.1.4):
+  - react-native-slider (3.0.3):
     - React
   - react-native-splash-screen (3.2.0):
     - React
@@ -360,6 +360,8 @@ PODS:
     - SDWebImageWebPCoder (~> 0.2.3)
   - RNGestureHandler (1.4.1):
     - React
+  - RNLocalize (2.0.2):
+    - React-Core
   - RNSketchCanvas (0.8.0):
     - React
   - RNSound (0.11.0):
@@ -428,6 +430,7 @@ DEPENDENCIES:
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNFastImage (from `../node_modules/react-native-fast-image`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNLocalize (from `../node_modules/react-native-localize`)
   - "RNSketchCanvas (from `../node_modules/@terrylinla/react-native-sketch-canvas`)"
   - RNSound (from `../node_modules/react-native-sound`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
@@ -537,6 +540,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-fast-image"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNLocalize:
+    :path: "../node_modules/react-native-localize"
   RNSketchCanvas:
     :path: "../node_modules/@terrylinla/react-native-sketch-canvas"
   RNSound:
@@ -587,7 +592,7 @@ SPEC CHECKSUMS:
   react-native-calendar-events: ee9573e355711ac679e071be70789542431f4ce3
   react-native-keep-awake: eba3137546b10003361b37c761f6c429b59814ae
   react-native-orientation-locker: 23918c400376a7043e752c639c122fcf6bce8f1c
-  react-native-slider: 9fb33ac32cb788360adb5c38685aa3642bebd93c
+  react-native-slider: b733e17fdd31186707146debf1f04b5d94aa1a93
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
   react-native-webrtc: dc1208bdca2c4d091f7b57859e69332bff6f1986
   react-native-webview: b2542d6fd424bcc3e3b2ec5f854f0abb4ec86c87
@@ -606,6 +611,7 @@ SPEC CHECKSUMS:
   RNDeviceInfo: 72ded653ce636b3f03571e90bed99309a714944e
   RNFastImage: 9b0c22643872bb7494c8d87bbbb66cc4c0d9e7a2
   RNGestureHandler: 4cb47a93019c1a201df2644413a0a1569a51c8aa
+  RNLocalize: 47e22ef8c36df1d572e42a87c8ae22e3fcf551dd
   RNSketchCanvas: 6939b18677cd1794151cc3d8eb5a0a2158a4a05b
   RNSound: c980916b596cc15c8dcd2f6ecd3b13c4881dbe20
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
@@ -614,6 +620,6 @@ SPEC CHECKSUMS:
   SDWebImageWebPCoder: 947093edd1349d820c40afbd9f42acb6cdecd987
   Yoga: 96b469c5e81ff51b917b92e8c3390642d4ded30c
 
-PODFILE CHECKSUM: ccf6d897df8cb4ea3e788bf0f3d5289ec13e6b59
+PODFILE CHECKSUM: 4fb8c523a4f6def31da384cba4e6e33ad1e9b3b9
 
 COCOAPODS: 1.10.1

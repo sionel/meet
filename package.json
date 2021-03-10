@@ -30,7 +30,7 @@
     "build-inhouse-abb": "cd ./wehago/android && sudo rm -rf build ./app/build ./sdk/build && sudo ./gradlew bundleRelease && cd ../..",
     "build-inhouse-v": "cd ./wehagoV/android && sudo rm -rf build ./app/build ./sdk/build && sudo ./gradlew assembleRelease && cd ../..",
     "build-aab": "cd ./wehago/android && sudo rm -rf build ./app/build ./sdk/build && sudo ./gradlew bundleRelease && cd ../..",
-    "set-android": "~/Library/Android/sdk/platform-tools/adb -s R3CMB0CXTRB  reverse tcp:8081 tcp:8081",
+    "set-android": "~/Library/Android/sdk/platform-tools/adb -s 26e1eb6c2b217ece  reverse tcp:8081 tcp:8081",
     "get-android": "~/Library/Android/sdk/platform-tools/adb devices"
   },
   "dependencies": {
@@ -82,8 +82,8 @@
     "lib-jitsi-meet": "github:jitsi/lib-jitsi-meet#c534f748849a308d08b06e306f5a66709ccae056",
     "libflacjs": "github:mmig/libflac.js#93d37e7f811f01cf7d8b6a603e38bd3c3810907d",
     "lodash": "4.17.13",
-    "lottie-ios": "^3.1.8",
-    "lottie-react-native": "^3.5.0",
+    "lottie-ios": "3.1.8",
+    "lottie-react-native": "3.5.0",
     "moment": "2.19.4",
     "moment-duration-format": "2.2.2",
     "postis": "2.2.0",
@@ -109,6 +109,7 @@
     "react-native-incall-manager": "^3.2.7",
     "react-native-keep-awake": "4.0.0",
     "react-native-linear-gradient": "2.5.3",
+    "react-native-localize": "2.0.2",
     "react-native-orientation-locker": "^1.1.6",
     "react-native-permissions": "^1.2.0",
     "react-native-picker-select": "^6.3.2",
