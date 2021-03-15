@@ -122,6 +122,10 @@ function setDocumentListMode(documentListMode) {
       type: SET_DOCUMENT_LIST_MODE,
       documentListMode
     });
+    dispatch({
+      type: 'documentShare.SET_DOCUMENT_LIST_MODE',
+      documentListMode
+    });
   };
 }
 
@@ -137,12 +141,26 @@ function applySetDocumentListMode(state, action) {
 
 //#region SET_SHARING_MODE
 
-function setSharingMode(attributes, presenter) {
+function setSharingMode(
+  attributes = false,
+  presenter = false,
+  page = 0,
+  documentData = [],
+  mode = null
+) {
   return dispatch => {
     dispatch({
       type: SET_SHARING_MODE,
       attributes,
       presenter
+    });
+    dispatch({
+      type: 'documentShare.SET_SHARING_MODE',
+      attributes,
+      presenter,
+      page,
+      documentData,
+      mode
     });
   };
 }
