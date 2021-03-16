@@ -122,6 +122,10 @@ function setDocumentListMode(documentListMode) {
       type: SET_DOCUMENT_LIST_MODE,
       documentListMode
     });
+    dispatch({
+      type: 'documentShare.SET_DOCUMENT_LIST_MODE',
+      documentListMode
+    });
   };
 }
 
