@@ -8,16 +8,19 @@ import Main from './src/Main';
 import SplashScreen from './src/Screens/SplashScreen';
 import AlertScreen from './src/Screens/AlertScreen';
 
+import { withTranslation } from 'react-i18next';
 import './src/locales';
 
 // 스크린샷 막기 및 백그라운드시 정보 보호 정책
 const { persistor, store } = configureStore();
 console.reportErrorsAsExceptions = false;
 
-export default class App extends Component {
+class App extends Component {
   constructor(props) {
     super(props);
     this.state = { loaded: false, url: props?.url?.url };
+    
+    this.translation = this.props.t // i18n을 사용하면 t로 넘겨줌 맨 처음 받는 변수명만 무엇인지 유추 가능하게 적어두고 밑에서부턴 t
     // this.state = { loaded: false, url: 'wehago.meet://?login_info=email&type=conference&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ2aWRlby53ZWhhZ28uY29tIiwicm9vbSI6IjkxZGY1ZmFlLTQzNTAtNDdiMC1iMTZjLTdmYzk2MzRmMTg1ZCIsImVtYWlsIjoic2FkYjAxMDFAbmF2ZXIuY29tIiwiaWF0IjoxNjA0OTA2MjgxLCJleHAiOjE5MjAyNjYyODF9.lY7h6sYaKfrWBQkGa1pZhSF9auhsRsMuzqQtsBi8evQ' };
   }
 
@@ -32,9 +35,11 @@ export default class App extends Component {
       // 타임스태프를 요구할 것
       this.setState({ loaded: false, url: this.props.url.url });
     }
+    
   }
 
   render() {
+    
     return (
       <Provider store={store}>
         <PersistGate persistor={persistor}>
@@ -44,11 +49,13 @@ export default class App extends Component {
                 destination={this.state.destination}
                 params={this.state.params}
                 onChangeRootState={this._handleChangeRootState}
+                t={this.translation}
               />
             ) : (
               <SplashScreen
                 onChangeRootState={this._handleChangeRootState}
                 url={this.state.url}
+                t={this.translation}
               />
             )}
           </AlertScreen>
@@ -65,4 +72,7 @@ export default class App extends Component {
   };
 }
 
-AppRegistry.registerComponent('App', () => App);
+export default withTranslation()(App)
+
+AppRegistry.registerComponent('App', () => withTranslation()(App));
+

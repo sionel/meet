@@ -11,14 +11,6 @@ const languageDetector = {
   async: true,
   detect: async cb => {
     cb(RNLocalize.getLocales()[0].languageCode);
-
-    // const preferredLang = await AsyncStorage.getItem('language');
-    // if (preferredLang) {
-    //   cb(preferredLang);
-    // } else {
-    //   console.log('lang', RNLocalize.getLocales()[0].languageCode);
-    //   cb(RNLocalize.getLocales()[0].languageCode);
-    // }
     initReactI18next
     
   },

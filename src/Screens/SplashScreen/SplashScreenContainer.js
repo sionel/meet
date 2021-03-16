@@ -53,8 +53,13 @@ class SplashScreenContainer extends Component {
 
   render() {
     const { alert, servernoti, index } = this.state;
+    const { t } = this.props;
     return (
-      <SplashScreenPresenter alert={alert} servernoti={servernoti[index]} />
+      <SplashScreenPresenter
+        alert={alert}
+        servernoti={servernoti[index]}
+        t={t}
+      />
     );
   }
   _handleInit = async () => {
@@ -91,6 +96,7 @@ class SplashScreenContainer extends Component {
   _handleCheckSecurity = async () => {
     const isJailBroken = JailMonkey?.isJailBroken();
     const isDebuggedMode = await JailMonkey?.isDebuggedMode();
+    const { t } = this.props;
     if (
       Platform.OS === 'android' &&
       WEHAGO_ENV === 'WEHAGOV' &&
