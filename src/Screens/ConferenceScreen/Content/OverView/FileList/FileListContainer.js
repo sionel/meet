@@ -284,7 +284,7 @@ class FileListContainer extends Component {
     this.props.setAlert({
       type: 1,
       title: '파일 상세정보를 불러오지 못했습니다.',
-      message: '다시 시도해주시기 바랍니다.',
+      message: '잠시후 다시 시도해주시기 바랍니다.',
     });
     return;
   };

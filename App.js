@@ -11,7 +11,6 @@ import AlertScreen from './src/Screens/AlertScreen';
 import { withTranslation } from 'react-i18next';
 import './src/locales';
 
-// 스크린샷 막기 및 백그라운드시 정보 보호 정책
 const { persistor, store } = configureStore();
 console.reportErrorsAsExceptions = false;
 

@@ -44,7 +44,6 @@ const CustomButtonPresenter = props => (
  * CustomButtonPresenter PropTypes
  */
 CustomButtonPresenter.propTypes = {
-  // 버튼 이름입니다.
   name: PropTypes.oneOf([
     'talk',
     'setting',
@@ -60,7 +59,6 @@ CustomButtonPresenter.propTypes = {
     'btnArrowDown',
     'userList'
   ]).isRequired,
-  // 버튼이 클릭되면 발생하는 이벤트 입니다.
   onPress: PropTypes.func.isRequired
 };
 

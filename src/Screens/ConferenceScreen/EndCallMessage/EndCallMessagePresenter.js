@@ -1,8 +1,6 @@
 import React from 'react';
 import { View, Image, Text, Dimensions, TouchableOpacity } from 'react-native';
 import { CustomIcon } from '../../../components';
-import ProfileImage from '../../../../assets/icons/imgVcNophoto_2x.png';
-import { wehagoMainURL, wehagoStaticURL } from '../../../utils';
 
 const { height, width } = Dimensions.get('window');
 
@@ -40,92 +38,6 @@ const EndCallMessagePresenter = props => {
       }}
     >
       <View style={{ display: 'flex' }}>
-        {/* <CustomLottie source="cc" width={280} height={280}>
-          <View
-            style={{
-              position: 'absolute',
-              top: -205,
-              justifyContent: 'center'
-            }}
-          >
-            <Text
-              style={{
-                fontSize: 24,
-                color: '#fff',
-                textAlign: 'center',
-                fontFamily: 'DOUZONEText30'
-              }}
-            >
-              통화 종료
-            </Text>
-            <Text
-              style={{
-                fontSize: 24,
-                color: '#fff',
-                textAlign: 'center',
-                fontFamily: 'DOUZONEText30'
-              }}
-            >
-              {props.createdTime ? time : '00:00:00'}
-            </Text>
-          </View>
-          <Image
-            style={{
-              marginTop: -7,
-              marginLeft: 7,
-              padding: 0,
-              width: 150,
-              height: 150,
-              borderRadius: 145 / 2,
-              borderWidth: 2,
-              backgroundColor: '#1D1D1D',
-              borderColor: '#d1d1d1'
-            }}
-            source={
-              props.user
-                ? {
-                    uri:
-                      props.user.userInfo.profile_url &&
-                      props.user.userInfo.profile_url !== ''
-                        ? wehagoMainURL + props.user.userInfo.profile_url
-                        : wehagoStaticURL + '/imgs/dummy/@dummy_02.jpg' // 더미 프로필
-                  }
-                : ProfileImage
-            }
-          />
-          <View
-            style={{
-              position: 'absolute',
-              top: 180,
-              alignItems: 'center'
-            }}
-          >
-            <Text
-              style={{
-                fontSize: 25,
-                // fontWeight: 'bold',
-                color: '#fff',
-                width: Math.min(height, width) * 0.8,
-                textAlign: 'center',
-                fontFamily: 'DOUZONEText30'
-              }}
-            >
-              {props.user ? props.user.name : '연결에 실패했습니다.'}
-            </Text>
-            <Text
-              style={{
-                fontSize: 13,
-                color: '#fff',
-                paddingTop: 10,
-                fontFamily: 'DOUZONEText30'
-              }}
-            >
-              {props.user
-                ? props.user.userInfo.companyFullpath
-                : '상대방이 접속하지 않았습니다.'}
-            </Text>
-          </View>
-        </CustomLottie> */}
       </View>
 
       <View
