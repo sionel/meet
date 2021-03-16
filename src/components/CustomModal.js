@@ -87,10 +87,10 @@ const CustomModal = props => {
  */
 CustomModal.defaultProps = {
   display: false,
-  title: '알림',
-  text: '내용을 입력해 주세요',
+  title: '',
+  text: '',
   children: null,
-  feedbackText: '확인',
+  feedbackText: '',
   onClickClose: () => alert('Close modal'),
   onClickFeedback: () => alert('Feedback modal')
 };
