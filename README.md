@@ -136,6 +136,12 @@ okhttp3 라는 것이 문제가 되는데
 okhttp3 를 쓰는 nodu_modules 특히 react-native 안에 있는 버전들이 3.12.1 인데 3.12.12에서 전부 처리되었다고 한다
 수동으로 교체해주어야 함
 
+7. webrtc bitcode 블라블라
+
+cd node_modules/react-native-webrtc/tools/
+./downloadBitcode.sh
+
+끗
 ## 작업목록
 
 1. 화면공유 - sdk 업데이트시 가능
