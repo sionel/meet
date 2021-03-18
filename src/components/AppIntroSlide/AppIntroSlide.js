@@ -5,20 +5,16 @@ import {
   Text,
   Image,
   Dimensions,
-  Platform,
   StatusBar
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import AppIntroSlider from './react-native-intro-slider/AppIntroSlider';
-import { WEHAGO_ENV, WEHAGO_TYPE } from '../../../config';
+import { WEHAGO_TYPE } from '../../../config';
 
-const { width, height } = Dimensions.get('window');
-const ratio = 375 / 449;
+import { getT } from '../../utils/translateManager';
 
-// const isTablet = (
-//   Platform.OS === 'ios' &&
-//   Platform.isPad
-// );
+const { height } = Dimensions.get('window');
+
 const isTablet = DeviceInfo.isTablet();
 
 const introImages = [
@@ -30,6 +26,7 @@ const introImages = [
 ];
 
 class AppIntroSlide extends React.Component {
+  t = getT();
   slides = [
     {
       key: '0',
@@ -58,7 +55,7 @@ class AppIntroSlide extends React.Component {
               fontFamily: 'DOUZONEText50'
             }}
           >
-            {'언제 어디서나 ' + WEHAGO_TYPE + ' Meet'}
+            {this.t('splash.1번타이틀') + WEHAGO_TYPE + ' Meet'}
           </Text>
           <Text
             style={{
@@ -68,7 +65,7 @@ class AppIntroSlide extends React.Component {
               fontFamily: 'DOUZONEText30'
             }}
           >
-            시간과 장소의 제약 없는 효율적인 화상회의
+            {this.t('splash.1번내용')}
           </Text>
         </View>
       )
@@ -88,10 +85,10 @@ class AppIntroSlide extends React.Component {
           <View
             style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
           >
-            <Text style={styles.textTitle}>{WEHAGO_TYPE} 연동</Text>
-            <Text style={styles.textContent}>
-              {'새로운 회의를 만들거나 진행중인\nWE톡 화상회의에 바로 참여'}
+            <Text style={styles.textTitle}>
+              {this.t('splash.2번타이틀')} 연동
             </Text>
+            <Text style={styles.textContent}>{this.t('splash.2번내용')}</Text>
           </View>
           <Image
             source={introImages[1]}
@@ -116,10 +113,8 @@ class AppIntroSlide extends React.Component {
           <View
             style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
           >
-            <Text style={styles.textTitle}>화상 및 음성전화</Text>
-            <Text style={styles.textContent}>
-              {'연결된 조직도 직원부터\n거래처까지 화상/음성전화 지원'}
-            </Text>
+            <Text style={styles.textTitle}>{this.t('splash.3번타이틀')}</Text>
+            <Text style={styles.textContent}>{this.t('splash.3번내용')}</Text>
           </View>
           <Image
             source={introImages[2]}
@@ -144,10 +139,8 @@ class AppIntroSlide extends React.Component {
           <View
             style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
           >
-            <Text style={styles.textTitle}>실시간 공유기능</Text>
-            <Text style={styles.textContent}>
-              {'PC화면이나 문서를 실시간으로 공유\n화상회의 중 대화기능 제공'}
-            </Text>
+            <Text style={styles.textTitle}>{this.t('splash.4번타이틀')}</Text>
+            <Text style={styles.textContent}>{this.t('splash.4번내용')}</Text>
           </View>
           <Image
             source={introImages[3]}
@@ -172,10 +165,8 @@ class AppIntroSlide extends React.Component {
           <View
             style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
           >
-            <Text style={styles.textTitle}>고화질의 화상회의</Text>
-            <Text style={styles.textContent}>
-              {'네트워크 속도에 따라\n자동으로 조절되는 화질'}
-            </Text>
+            <Text style={styles.textTitle}>{this.t('splash.5번타이틀')}</Text>
+            <Text style={styles.textContent}>{this.t('splash.5번내용')}</Text>
           </View>
           <Image
             source={introImages[4]}
@@ -224,7 +215,7 @@ class AppIntroSlide extends React.Component {
   _renderNextButton = () => {
     return (
       <View style={styles.nextButton}>
-        <Text style={styles.nextButtonText}>시작하기</Text>
+        <Text style={styles.nextButtonText}>{this.t('splash.시작하기')}</Text>
       </View>
     );
   };
@@ -232,7 +223,7 @@ class AppIntroSlide extends React.Component {
   _renderDoneButton = () => {
     return (
       <View style={styles.doneButton}>
-        <Text style={styles.nextButtonText}>시작하기</Text>
+        <Text style={styles.nextButtonText}>{this.t('splash.시작하기')}</Text>
       </View>
     );
   };

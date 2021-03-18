@@ -6,12 +6,7 @@ import config from '../../utils/conference/config';
 import Orientation from 'react-native-orientation-locker';
 import { MeetApi } from '../../services';
 import { v4 as uuidv4 } from 'uuid';
-
-const commonStyle = {
-  height: 53,
-  color: '#fff',
-  backgroundColor: '#1C90FB'
-};
+import { getT } from '../../utils/translateManager';
 
 class SettingScreenContainer extends React.Component {
   constructor(props) {
@@ -23,6 +18,7 @@ class SettingScreenContainer extends React.Component {
       nameField: false,
       buttonActive: false
     };
+    this.t = getT();
   }
 
   async componentDidMount() {
@@ -92,15 +88,12 @@ class SettingScreenContainer extends React.Component {
         devices: ['audio'],
         resolution: 320
       });
-      // const videoTrack = tracks.find(track => track.getType() === 'video');
-      // const audioTrack = tracks.find(track => track.getType() === 'audio');
       return [videoTrack[0], audioTrack[0]];
     } catch (error) {
       this.props.setAlert({
         type: 1,
-        title: '접근권한 필요',
-        message:
-          '서비스 이용을 위해 마이크 및 카메라의 접근권한이 필요합니다. 설정에서 마이크와 카메라의 접근을 허용해주세요.'
+        title: this.t('alert.title.권한주세요'),
+        message: this.t('alert.text.접근권한')
       });
       return null;
     }

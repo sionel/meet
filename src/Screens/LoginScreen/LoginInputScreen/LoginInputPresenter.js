@@ -14,6 +14,7 @@ import {
 import { Text, TextInput } from '../../../components/StyledText';
 import CustomIcon from '../../../components/CustomIcon';
 import CustomAlert from '../../../components/CustomAlert';
+import { getT } from '../../../utils/translateManager';
 
 let LinearGradient = View;
 
@@ -29,7 +30,6 @@ else if (width < height) scale = width / bottomImageWidth;
 else if (width > height) scale = height / bottomImageWidth;
 
 export default function LoginInputPresenter(props) {
-  
   const {
     iswehagov,
     usernameRef,
@@ -49,7 +49,7 @@ export default function LoginInputPresenter(props) {
     logging,
     alertVisible
   } = props;
-
+  const t = getT();
   const rotate = new Animated.Value(0);
   const spin = rotate.interpolate({
     inputRange: [0, 1],
@@ -96,23 +96,18 @@ export default function LoginInputPresenter(props) {
                   <Text
                     style={[styles.captchaMessageText, { marginBottom: 4 }]}
                   >
-                    아이디 로그인 오류 횟수 초과
+                    {t('login.횟수초과')}
                   </Text>
                   <Text
                     style={[styles.captchaMessageText, { color: '#ababab' }]}
                   >
-                    개인정보 도용으로 인해 발생할 수 있는 피해를 방지하고자
+                    {t('login.피해방지')}
                   </Text>
                   <Text
                     style={[styles.captchaMessageText, { color: '#ababab' }]}
                   >
-                    로그인 오류 허용 횟수를 5회로 제한하고 있습니다.
+                    {t('login.5회제한')}
                   </Text>
-                  {/* <Text
-                    style={[styles.captchaMessageText, { color: '#cacaca' }]}
-                  >
-                    잠시 후 다시 시도해주시기 바랍니다.
-                  </Text> */}
                 </View>
               )}
 
@@ -128,14 +123,12 @@ export default function LoginInputPresenter(props) {
                   customRef={usernameRef}
                   value={userId}
                   textContentType={'username'}
-                  placeholder={'아이디'}
+                  placeholder={t('login.아이디')}
                   placeholderTextColor={'#ccc'}
                   selectionColor={'#505050'}
                   returnKeyType={'next'}
                   keyboardType="default"
                   autoCapitalize="none"
-                  // onFocus={() => inputFocus(true)}
-                  // onBlur={() => inputFocus(false)}
                   onChangeText={text => setUserId(text)}
                   onSubmitEditing={() => passwordRef.current.focus()}
                   style={Object.assign({}, styles.inputField, { flex: 1 })}
@@ -166,7 +159,7 @@ export default function LoginInputPresenter(props) {
                   secureTextEntry={true}
                   value={userPw}
                   textContentType={'password'}
-                  placeholder={'비밀번호'}
+                  placeholder={t('login.비밀번호')}
                   placeholderTextColor={'#ccc'}
                   selectionColor={'#505050'}
                   returnKeyType={'go'}
@@ -192,16 +185,13 @@ export default function LoginInputPresenter(props) {
               </View>
 
               {loginFailed && (
-                <Text style={styles.loginFailedText}>
-                  아이디 또는 비밀번호가 올바르지 않습니다.
-                </Text>
+                <Text style={styles.loginFailedText}>{t('login.틀렸음')}</Text>
               )}
 
               {captcha && (
                 <View style={styles.captchaMessageView}>
                   <Text style={styles.captchaMessageText}>
-                    정보보호를 위해 자동입력 방지문자를 순서대로 입력해주시기
-                    바랍니다.
+                    {t('login.방지문자뜸')}
                   </Text>
                   <View
                     style={{
@@ -210,12 +200,7 @@ export default function LoginInputPresenter(props) {
                       marginTop: 6
                     }}
                   >
-                    <LinearGradient
-                      // start={{ x: 0, y: 0 }}
-                      // end={{ x: 1, y: 1 }}
-                      // colors={['#000', '#eee']}
-                      style={styles.captchaArea}
-                    >
+                    <LinearGradient style={styles.captchaArea}>
                       <Text
                         style={[styles.captchaMessageText, styles.captchaText]}
                       >
@@ -233,7 +218,9 @@ export default function LoginInputPresenter(props) {
                         }}
                       >
                         <CustomIcon name={'btn_reload_none'} size={15} />
-                        <Text style={{ color: '#ababab' }}>새로고침</Text>
+                        <Text style={{ color: '#ababab' }}>
+                          {t('login.새로고침')}
+                        </Text>
                       </TouchableOpacity>
                     </View>
                   </View>
@@ -241,7 +228,7 @@ export default function LoginInputPresenter(props) {
                   <TextInput
                     customRef={captchaRef}
                     value={captchaInput}
-                    placeholder={'자동입력 방지문자'}
+                    placeholder={t('login.자동입력방지문자')}
                     placeholderTextColor={'#ccc'}
                     selectionColor={'#505050'}
                     returnKeyType={'next'}
@@ -299,7 +286,9 @@ export default function LoginInputPresenter(props) {
                         <CustomIcon name={'loadIcon'} size={20} />
                       </Animated.View>
                     ) : (
-                      <Text style={styles.loginButtonText}>로그인</Text>
+                      <Text style={styles.loginButtonText}>
+                        {t('login.로그인')}
+                      </Text>
                     )}
                   </>
                 </TouchableHighlight>
@@ -332,9 +321,7 @@ export default function LoginInputPresenter(props) {
         visible={alertVisible.visible}
         width={320}
         title={alertVisible.title}
-        description={
-          alertVisible.description
-        }
+        description={alertVisible.description}
         onClose={alertVisible.onClose}
         actions={alertVisible.actions}
       />
@@ -344,42 +331,10 @@ export default function LoginInputPresenter(props) {
 
 const styles = StyleSheet.create({
   container: {
-    // ...Platform.select({
-    //   ios: {
-    //     position: 'absolute',
-    //     bottom: 0,
-    //     left: 0,
-    //     right: 0,
-    //     top: 80,
-    //     backgroundColor: 'transparent',
-    //     alignItems: 'center'
-    //   },
-    //   android: {
-    //     flex: 1,
-    //     height: '100%'
-    //   }
-    // })
     flex: 1,
     height: '100%',
     backgroundColor: '#fff'
   },
-  // dragIndicator: {
-  //   marginTop: 12,
-  //   width: 26,
-  //   height: 3,
-  //   backgroundColor: '#ddd',
-  //   borderRadius: 2
-  // },
-  // imageBackground: {
-  //   flex: 1,
-  //   width: '100%',
-  //   height: '100%',
-  //   backgroundColor: 'transparent',
-  //   alignItems: 'center',
-  //   // borderTopLeftRadius: 15,
-  //   // borderTopRightRadius: 15,
-  //   // overflow: 'hidden'
-  // },
   keyboardAvoidingView: {
     flexGrow: 1,
     justifyContent: 'center',
@@ -391,11 +346,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  // topContainer: {
-  //   flex: 1,
-  //   justifyContent: 'flex-start',
-  //   alignItems: 'center'
-  // },
   captchaMessageView: {
     width: 320,
     marginVertical: 20
@@ -444,10 +394,6 @@ const styles = StyleSheet.create({
     fontSize: 10
   },
   buttonContainer: {
-    // position: 'absolute',
-    // bottom: 90,
-    // left: '50%',
-    // marginLeft: -150,
     width: 320,
     justifyContent: 'flex-start',
     alignItems: 'center'
@@ -468,17 +414,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 25,
     backgroundColor: '#1d94fc'
-    // ...Platform.select({
-    //   ios: {
-    //     shadowColor: 'black',
-    //     shadowOffset: { width: 3, height: 6 },
-    //     shadowOpacity: 0.1,
-    //     shadowRadius: 9
-    //   },
-    //   android: {
-    //     elevation: 5
-    //   }
-    // })
   },
   loginButtonText: {
     marginRight: 8,

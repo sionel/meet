@@ -7,8 +7,10 @@ import Deeplink2Navigation from '../Navigations/Deeplink2Navigation';
 import LoginNavigation from '../Navigations/LoginNavigation';
 import CompanySelect from '../components/CompanySelect';
 import AppIntroSlide from '../components/AppIntroSlide';
+import { getT } from '../utils/translateManager';
 
 const MainPresenter = props => {
+  t = getT();
   Orientation.unlockAllOrientations();
   const {
     destination,
@@ -17,73 +19,33 @@ const MainPresenter = props => {
     params,
     from
   } = props;
+  const screenProps = {
+    onChangeRootState,
+    onChangeMainState,
+    params,
+    destination,
+    from,
+    t
+  };
   switch (destination) {
     case 'Login':
-      return (
-        <LoginNavigation
-          screenProps={{
-            onChangeRootState,
-            onChangeMainState,
-            params,
-            destination,
-            from
-          }}
-        />
-      );
+      return <LoginNavigation screenProps={screenProps} />;
 
     case 'List':
       return (
         <AppIntroSlide>
-          <RootNavigation
-            screenProps={{
-              onChangeRootState,
-              onChangeMainState,
-              params,
-              destination,
-              from
-            }}
-          />
+          <RootNavigation screenProps={screenProps} />
         </AppIntroSlide>
       );
 
     case 'SelectCompany':
-      return (
-        <CompanySelect
-          screenProps={{
-            onChangeRootState,
-            onChangeMainState,
-            params,
-            destination,
-            from
-          }}
-        />
-      );
+      return <CompanySelect screenProps={screenProps} />;
 
     case 'Setting':
-      return (
-        <Deeplink1Navigation
-          screenProps={{
-            onChangeRootState,
-            onChangeMainState,
-            params,
-            destination,
-            from
-          }}
-        />
-      );
+      return <Deeplink1Navigation screenProps={screenProps} />;
 
     case 'Conference':
-      return (
-        <Deeplink2Navigation
-          screenProps={{
-            onChangeRootState,
-            onChangeMainState,
-            params,
-            destination,
-            from
-          }}
-        />
-      );
+      return <Deeplink2Navigation screenProps={screenProps} />;
   }
 };
 

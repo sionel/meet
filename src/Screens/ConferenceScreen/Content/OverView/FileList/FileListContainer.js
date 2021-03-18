@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { Alert, Image } from 'react-native';
 import FileListPresenter from './FileListPresenter';
-
+import { getT } from '../../../../../utils/translateManager';
 class FileListContainer extends Component {
   constructor(props) {
     super(props);
     this.pk = []; // 폴더 depth 를 기록
+    this.t = getT();
   }
 
   componentDidMount = () => {
@@ -27,8 +27,6 @@ class FileListContainer extends Component {
     return (
       <FileListPresenter
         isLoading={isLoading}
-        // hasNotch={hasNotch}
-        // orientation={orientation}
         documentList={this.props.wedriveList}
         setSharingMode={this._handleSharingMode}
         setConvertFileSize={this._handleConvertFileSize}
@@ -37,9 +35,6 @@ class FileListContainer extends Component {
     );
   }
 
-  /**
-   * 용량 표시 설정
-   */
   _handleConvertFileSize = byte => {
     if (byte > 1000) {
       const kByte = byte / 1024;
@@ -53,27 +48,14 @@ class FileListContainer extends Component {
     } else return byte + ' byte';
   };
 
-  /**
-   * _handleDocumentListMode
-   * 위드라이브 리스트 보기 모드
-   */
   _handleDocumentListMode = mode => {
     this.props.setDocumentListMode(mode);
   };
 
-  /**
-   * _handleSharingMode
-   * 위드라이브 문서공유 모드
-   */
   _handleSharingMode = file => {
     this._handleGetFileInfo(file);
-    // this.props.setSharingMode(true);
   };
 
-  /**
-   * _handleGetWedriveToken
-   * 위드라이브 토큰 가져오기
-   */
   _handleGetWedriveToken = async () => {
     const {
       AUTH_A_TOKEN,
@@ -91,7 +73,6 @@ class FileListContainer extends Component {
       last_access_company_no
     };
 
-    // wedrive token 가져오기
     const initInfoResponse = await this.props.initInfoRequest(
       authData,
       last_access_company_no
@@ -99,8 +80,8 @@ class FileListContainer extends Component {
     if (!initInfoResponse.initInfo) {
       this.props.setAlert({
         type: 1,
-        title: 'Error',
-        message: '사용자 정보를 불러오지 못했습니다.'
+        title: this.t('alert.title.error'),
+        message: this.t('alert.text.fail_user_info')
       });
       this._handleDocumentListMode(false);
       return;
@@ -110,7 +91,6 @@ class FileListContainer extends Component {
   };
 
   _handleGetFileList = async authData => {
-    // alert(JSON.stringify(initInfoResponse));
     const { TokenID } = this.props;
 
     // wedrive file list 가져오기
@@ -122,17 +102,13 @@ class FileListContainer extends Component {
     if (!fileListResponse.storageList) {
       this.props.setAlert({
         type: 1,
-        title: 'Error',
-        message: '파일 리스트를 불러오지 못했습니다.'
+        title: this.t('alert.title.error'),
+        message: this.t('alert.text.fail_file_list')
       });
       return;
     }
   };
 
-  /**
-   * _handleGetDirectoryInfo
-   * 폴더 정보 가져오기
-   */
   _handleGetDirectoryInfo = async directory => {
     const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, portal_id } = this.props.auth;
     const { TokenID } = this.props;
@@ -161,16 +137,12 @@ class FileListContainer extends Component {
     await this.props.getDirectoryInfoRequest(authData, directoryInfo);
   };
 
-  /**
-   * _handleGetFileInfo
-   * 파일 정보 가져오기
-   */
   _handleGetFileInfo = async file => {
     if (file.size > 1024 * 1024 * 20) {
       this.props.setAlert({
         type: 1,
-        title: '공유 파일 용량 초과',
-        message: '공유 가능한 파일 용량을 초과하였습니다.\n20MB 이하의 파일을 선택해주세요.'
+        title: this.t('alert.title.size_over'),
+        message: this.t('alert.text.fail_share_file_size')
       });
       return;
     }
@@ -191,10 +163,7 @@ class FileListContainer extends Component {
 
     const extentionType = file.directory
       ? 'directory'
-      : file.fileName
-          .split('.')
-          .pop()
-          .toLowerCase();
+      : file.fileName.split('.').pop().toLowerCase();
     let method = '';
 
     switch (extentionType) {
@@ -227,11 +196,11 @@ class FileListContainer extends Component {
         this._handleGetDirectoryInfo(file);
         return;
       default:
-      this.props.setAlert({
-        type: 1,
-        title: '지원하지 않는 확장자',
-        message: '해당 파일은 문서 공유를 지원하지 않습니다.'
-      });
+        this.props.setAlert({
+          type: 1,
+          title: this.t('alert.title.unsupported'),
+          message: this.t('alert.text.unsupported_doc')
+        });
         return;
     }
 
@@ -251,16 +220,6 @@ class FileListContainer extends Component {
       method: method
     };
 
-    // const isCanceled = setInterval(() => {
-    //   if (
-    //     this.props.isLoading === 'CANCELED' ||
-    //     this.props.isLoading === 'FINISH'
-    //   ) {
-    //     clearInterval(isCanceled);
-    //   }
-    // }, 100);
-
-    // wedrive file 상세정보 가져오기
     const fileInfoResponse = await this.props.getFileInfoRequest(
       authData,
       fileInfo
@@ -276,15 +235,15 @@ class FileListContainer extends Component {
     if (fileInfoResponse.resultCode === 'E2021') {
       this.props.setAlert({
         type: 1,
-        title: '파일 변환 중입니다.',
-        message:  '잠시후 다시 시도해주시기 바랍니다.'
+        title: this.t('alert.title.파일변환실패'),
+        message: this.t('alert.text.기다려')
       });
       return;
     }
     this.props.setAlert({
       type: 1,
-      title: '파일 상세정보를 불러오지 못했습니다.',
-      message: '잠시후 다시 시도해주시기 바랍니다.',
+      title: this.t('alert.title.파일불러오기실패'),
+      message: this.t('alert.text.기다려')
     });
     return;
   };
@@ -303,8 +262,8 @@ class FileListContainer extends Component {
       // 이미지 리소스가 없을 시
       this.props.setAlert({
         type: 1,
-        title: '파일 상세정보를 불러오지 못했습니다.',
-        message: '다시 시도해주시기 바랍니다.'
+        title: this.t('alert.title.파일불러오기실패'),
+        message: this.t('alert.text.기다려')
       });
       return;
     } else {

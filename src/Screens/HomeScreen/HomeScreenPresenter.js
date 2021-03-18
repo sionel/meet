@@ -9,9 +9,7 @@ import {
   StyleSheet,
   SectionList,
   ScrollView,
-  RefreshControl,
-  TouchableOpacity,
-  Text
+  RefreshControl
 } from 'react-native';
 
 import {
@@ -21,24 +19,14 @@ import {
   SectionListHeader
 } from '../../components';
 import AddButton from './AddButton';
+import { getT } from '../../utils/translateManager';
 
-// const rootPath = `../../../assets`;
-// const waitingImage = require(`${rootPath}/waiting.gif`);
-
-/**
- * HomeScreenPresenter
- */
 const HomeScreenPresenter = props => {
   const started = props.started;
   const reservation = props.reservation;
+  const t = getT();
   return (
     <View style={styles.container}>
-      {/* <TouchableOpacity style={{ position: 'absolute', top: 500, left: 200, backgroundColor:'#0a0', zIndex:99}} onPress={()=>{props.onMakeRoom()}}>
-        <Text> ccghcghcghfgh</Text>
-      </TouchableOpacity> */}
-      {/* 검색바 */}
-      {/* <SearchForm onChange={props.onSearch} /> */}
-
       {(props.started.length < 1 || started.length < 1) &&
       (props.reservation.length < 1 || reservation.length < 1) ? (
         <ScrollView
@@ -64,15 +52,14 @@ const HomeScreenPresenter = props => {
           }}
         >
           <Placeholder
-            mainText={'진행중인 화상회의가 없습니다.'}
+            mainText={t('main.없음')}
             subText={
               props.memberType === 1 || props.plan === 'WE'
-                ? 'WEHAGO앱에서 화상회의 및 통화를 시작해보세요.'
+                ? t('main.we텍스트')
                 : props.plan === 'SP'
-                ? '화상회의방 생성 후 참여가 가능합니다.'
-                : '대화를 시작하려면 +버튼을 누르세요.'
+                ? t('main.sp텍스트')
+                : t('main.대화시작')
             }
-            // other={reloadButton}
           />
           <View style={{ flex: 1 }} />
         </ScrollView>
@@ -92,12 +79,12 @@ const HomeScreenPresenter = props => {
             ]}
             sections={[
               {
-                title: '진행중',
+                title: t('main.진행중'),
                 data: started,
                 length: started.length - 1
               },
               {
-                title: '예정',
+                title: t('main.예정'),
                 data: reservation,
                 length: reservation.length - 1
               }
@@ -156,7 +143,7 @@ const HomeScreenPresenter = props => {
         description={props.alert.message}
         actions={[
           {
-            name: '확인',
+            name: t('alert.button.confirm'),
             action: props.alert.onClose
           }
         ]}
@@ -166,9 +153,6 @@ const HomeScreenPresenter = props => {
   );
 };
 
-/**
- * styles
- */
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -193,7 +177,6 @@ const styles = StyleSheet.create({
 
   listContainer: {
     width: '100%'
-    // padding: '4% 3%'
   },
 
   notResult: {
@@ -203,7 +186,6 @@ const styles = StyleSheet.create({
   },
 
   modalWrap: {
-    // marginTop: 22,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -230,8 +212,6 @@ const styles = StyleSheet.create({
     paddingBottom: 30,
     paddingLeft: 20,
     paddingRight: 20
-    // borderWidth: 1,
-    // borderColor: '#1C90FB'
   },
 
   modalButtons: { flexDirection: 'row' },

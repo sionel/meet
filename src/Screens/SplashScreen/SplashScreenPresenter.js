@@ -1,14 +1,15 @@
 import React from 'react';
 import { CustomAlert, ServerNotiveCheck, Splash } from '../../components';
+import { getT } from '../../utils/translateManager';
 
 export default function SplashScreenPresenter(props) {
   const { alert, servernoti } = props;
-  
+  const t = getT();
   if (alert)
     return (
       <CustomAlert
         visible={alert.visible}
-        title={'알림'}
+        title={t('alert.title.notion')}
         width={320}
         description={alert.description}
         actions={alert.actions}
@@ -16,8 +17,5 @@ export default function SplashScreenPresenter(props) {
       />
     );
   else if (servernoti) return <ServerNotiveCheck servernoti={servernoti} />;
-  else
-    return (
-      <Splash/>
-    );
+  else return <Splash />;
 }

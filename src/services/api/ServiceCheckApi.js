@@ -1,11 +1,12 @@
 import { wehagoBaseURL, serialize, securityRequest } from '../../utils';
 import fetch from './Fetch';
-
+import { getT } from '../../utils/translateManager';
 /**
  * 회사 설정 및 미납 여부 확인
  * @param {*} last_access_company 회사 정보
  */
 const checkStatusType = ({ company_state, employee_status, step }) => {
+  const t = getT();
   if (typeof step === 'number') {
     if (step === 6) {
       // 초기설정 완료
@@ -17,28 +18,24 @@ const checkStatusType = ({ company_state, employee_status, step }) => {
               case 1:
                 return {
                   code: 400,
-                  message:
-                    '회사초기설정이 진행중입니다. WEHAGO 웹에서 완료 후 서비스를 이용할 수 있습니다.'
+                  message: t('alert.text.init_company')
                 };
               case 3:
                 return {
                   code: 400,
-                  message:
-                    'WEHAGO 이용이 제한되었습니다. 이용제한에 문의가 있을 경우 고객센터로 문의해주세요.'
+                  message: t('alert.text.usage_restriction')
                   // message: '사용중지'
                 };
               case 4:
                 return {
                   code: 400,
-                  message:
-                    'WEHAGO 이용이 제한되었습니다. 이용제한에 문의가 있을 경우 고객센터로 문의해주세요.'
+                  message: t('alert.text.usage_restriction')
                   // message: '퇴사'
                 };
               case 5:
                 return {
                   code: 400,
-                  message:
-                    'WEHAGO 이용이 제한되었습니다. 이용제한에 문의가 있을 경우 고객센터로 문의해주세요.'
+                  message: t('alert.text.usage_restriction')
                   // message: '탈퇴'
                 };
               default:
@@ -55,8 +52,7 @@ const checkStatusType = ({ company_state, employee_status, step }) => {
           // 미납된 케이스
           return {
             code: 400,
-            message:
-              'WEHAGO 이용이 제한되었습니다. 이용제한에 문의가 있을 경우 고객센터로 문의해주세요.'
+            message: t('alert.text.usage_restriction')
             // message: '미납'
           };
         }
@@ -70,15 +66,13 @@ const checkStatusType = ({ company_state, employee_status, step }) => {
       // 대기일 경우 만료 여부 확인해야함
       return {
         code: 400,
-        message:
-          '발급 받으신 가상계좌로 입금이 완료되지 않았습니다. 입금 확인 후 WEHAGO 서비스를 이용할 수 있습니다.'
+        message: t('alert.text.unpaid')
       };
     } else {
       // 초기설정 미완료
       return {
         code: 400,
-        message:
-          '회사초기설정이 진행중입니다. WEHAGO 웹에서 완료 후 서비스를 이용할 수 있습니다.'
+        message: t('alert.text.init_company')
       };
     }
   } else {
@@ -139,8 +133,7 @@ const companyStatusCheck = async (auth, company) => {
     } else {
       return {
         code: 400,
-        message:
-          'WEHAGO 이용이 제한되었습니다. 이용제한에 문의가 있을 경우 고객센터로 문의해주세요.'
+        message: t('alert.text.usage_restriction')
       };
     }
   }
@@ -167,7 +160,6 @@ const serviceCheck = async (auth, company, type) => {
       cno: company.company_no,
       ccode: company.company_code
     });
-
     const urlType =
       type === 'P'
         ? '/common/company/service/purchase/check' // 구매여부

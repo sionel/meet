@@ -8,46 +8,35 @@ import {
   Text,
   StyleSheet,
   SectionList,
-  TouchableOpacity,
-  Modal,
-  Alert,
-  SafeAreaView,
-  Platform
+  TouchableOpacity
 } from 'react-native';
-import {
-  CustomWebView,
-  CustomAlert,
-  SectionListHeader,
-  CustomIcon
-} from '../../components';
+import { CustomAlert, CustomIcon } from '../../components';
 import { WEHAGO_ENV } from '../../../config';
+import { getT } from '../../utils/translateManager';
 
 const ConfigurationScreenPresenter = props => {
-  const { webView } = props;
+  const t = getT();
   const userConfig = [
     {
       // 버전 수정
-      title: '버전정보', 
+      title: t('option.버전정보'),
       icon: 'ico_menu_info',
-      content:
-        WEHAGO_ENV === 'WEHAGOV'
-          ? '1.0.1'
-          : '2.0.2'
+      content: WEHAGO_ENV === 'WEHAGOV' ? '1.0.1' : '2.0.2'
     },
     {
-      title: '이용약관 및 법률정보',
+      title: t('option.약관법률'),
       icon: 'ico_menu_info_law',
       action: () => props.navigation.navigate('Policy'),
       nextPage: true
     },
     {
-      title: '수상 및 인증내역',
+      title: t('option.수상'),
       icon: 'icoMenuTrophy',
       action: () => props.navigation.navigate('Awards'),
       nextPage: true
     },
     {
-      title: '로그아웃',
+      title: t('option.로그아웃'),
       icon: 'ico_menu_login',
       action: () => props.onChangeValue('alert', true)
     }
@@ -57,11 +46,7 @@ const ConfigurationScreenPresenter = props => {
     <View style={styles.container}>
       <View style={{ flex: 1, width: '100%' }}>
         <SectionList
-          sections={[{ title: '시스템', data: userConfig }]}
-          renderSectionHeader={({ section }) =>
-            // <SectionListHeader title={section.title} />
-            null
-          }
+          sections={[{ title: t('option.시스템'), data: userConfig }]}
           renderItem={({ item }, index) => (
             <TouchableOpacity
               key={index}
@@ -92,38 +77,17 @@ const ConfigurationScreenPresenter = props => {
           }
         />
       </View>
-
-      {/* <Modal
-        animationType="slide"
-        transparent={true}
-        visible={webView}
-        blurRadius={1}
-        supportedOrientations={[
-          'portrait',
-          'portrait-upside-down',
-          'landscape',
-          'landscape-left',
-          'landscape-right'
-        ]}
-        onRequestClose={() => props.onChangeValue('webView', false)}
-      >
-        <CustomWebView
-          view={webView}
-          contentTitle="약관 및 정책"
-          buttonTitle="확인"
-          url={'https://www.wehago.com/#/common/policy' + props.subUrl}
-          onClickButton={() => props.onChangeValue('webView', false)}
-        />
-      </Modal> */}
-
       <CustomAlert
         visible={props.alert}
-        title={'로그아웃'}
+        title={t('alert.title.logout')}
         width={320}
-        description={'로그아웃 하시겠습니까?'}
+        description={t('alert.text.로그아웃')}
         actions={[
-          { name: '취소', action: () => props.onChangeValue('alert', false) },
-          { name: '확인', action: () => props.onLogout() }
+          {
+            name: t('alert.button.cancel'),
+            action: () => props.onChangeValue('alert', false)
+          },
+          { name: t('alert.button.confirm'), action: () => props.onLogout() }
         ]}
         onClose={() => {
           props.onChangeValue('alert', false);

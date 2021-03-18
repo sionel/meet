@@ -1,6 +1,3 @@
-/**
- * CustomWebView
- */
 
 import React from 'react';
 import { Text, View, TouchableOpacity, Platform } from 'react-native';
@@ -8,10 +5,6 @@ import DeviceInfo from 'react-native-device-info';
 import { WebView } from 'react-native-webview';
 import { wehagoMainURL } from '../utils';
 
-// const WebView =
-//   Platform.OS === 'ios'
-//     ? require('react-native').WebView
-//     : require('react-native-webview').WebView;
 
 const hasNotch = DeviceInfo.hasNotch() && Platform.OS === 'ios';
 
@@ -44,12 +37,6 @@ const CustomWebView = props => {
           ...headerStyle
         }}
       >
-        {/* <Icon
-          name={icon}
-          size={17}
-          color="#fff"
-          style={{ marginRight: 5, opacity: 0.85 }}
-        /> */}
         <Text
           style={{
             color: '#fff',
@@ -82,9 +69,9 @@ const CustomWebView = props => {
 };
 
 CustomWebView.defaultProps = {
-  icon: 'globe',
-  contentTitle: '웹페이지',
-  buttonTitle: '확인',
+  icon: '',
+  contentTitle: '',
+  buttonTitle: '',
   url: wehagoMainURL + '/#/',
   headerStyle: {},
   titleStyle: {},

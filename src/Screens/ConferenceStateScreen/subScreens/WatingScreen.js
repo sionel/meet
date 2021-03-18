@@ -1,21 +1,13 @@
 import React from 'react';
-import {
-  StyleSheet,
-  View,
-  ScrollView,
-  TouchableOpacity,
-  FlatList,
-  Image,
-  Text
-} from 'react-native';
+import { StyleSheet, View, ScrollView, Image, Text } from 'react-native';
 import waiting from '../../../../assets/wating.png';
+import { getT } from '../../../utils/translateManager';
 
 export default function DeletedScreen(props) {
   const { start } = props;
   const content = () => {
-    const time = '2020-05-26 14:12';
+    const t = getT();
     return (
-      // <View style={styles.container}>
       <View
         style={{
           ...styles.container,
@@ -37,15 +29,13 @@ export default function DeletedScreen(props) {
             style={{ width: 200, height: 200 }}
           />
           <Text style={{ fontSize: 14, color: 'rgb(80,80,80)' }}>
-            {'화상회의 시작전입니다.'}
+            {t('roomstate.wating.타이틀')}
           </Text>
           <View style={{ fontSize: 12, paddingTop: 25 }}>
             <Text style={{ textAlign: 'center', color: 'rgb(171,171,171)' }}>
-              {'해당 화상회의방은 '}
+              {t('roomstate.wating.해당방은')}
               <Text style={{ color: 'rgb(28,144,251)' }}>{start}</Text>
-              {
-                ' 시작 예정입니다.\n화상회의에 진입되지 않는 경우, 앱 종료 후 재실행 해주세요'
-              }
+              {t('roomstate.wating.시작예정')}
             </Text>
           </View>
         </View>
@@ -54,22 +44,30 @@ export default function DeletedScreen(props) {
             <Text style={styles.linedot}>{'\u2B24'}</Text>
             <Text style={{ fontSize: 12 }}>
               {props.isTablet
-                ? '화상회의 일정이 변경되거나 방이 삭제 될 경우, 이용하실수 없습니다.'
-                : '화상회의 일정이 변경되거나 방이 삭제 될 경우,\n이용하실수 없습니다.'}
+                ? `${t('roomstate.wating.변경및삭제')} ${t(
+                    'roomstate.wating.이용불가'
+                  )}`
+                : `${t('roomstate.wating.변경및삭제')}\n${t(
+                    'roomstate.wating.이용불가'
+                  )}`}
             </Text>
           </View>
           <View style={styles.line}>
             <Text style={styles.linedot}>{'\u2B24'}</Text>
             <Text style={{ fontSize: 12 }}>
-              {'일정변경 및 취소에 대한 내용은 마스터에게 문의하세요.'}
+              {t('roomstate.wating.마스터문의')}
             </Text>
           </View>
           <View style={styles.line}>
             <Text style={styles.linedot}>{'\u2B24'}</Text>
             <Text style={{ fontSize: 12 }}>
               {props.isTablet
-                ? '지속적으로 화면전환이 일어나지 않는 경우, 고객센터에 접수해주세요.'
-                : '지속적으로 화면전환이 일어나지 않는 경우,\n고객센터에 접수해주세요.'}
+                ? `${t('roomstate.wating.지속')} ${t(
+                    'roomstate.wating.고객센터'
+                  )}`
+                : `${t('roomstate.wating.지속')}\n${t(
+                    'roomstate.wating.고객센터'
+                  )}`}
             </Text>
           </View>
         </View>

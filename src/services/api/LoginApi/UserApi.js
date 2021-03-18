@@ -1,18 +1,14 @@
 import * as CryptoJS from 'crypto-js';
-// import Constants from 'expo-constants';
 import { Platform, Alert } from 'react-native';
 import fetch from './ApiManager';
-// import { Auth, Company } from '../../types';
 import {
   wehagoBaseURL,
   wehagoBaseURL0,
   serialize,
   createHeader
 } from '../../../utils';
+import { getT } from '../../../utils/translateManager';
 
-/**
- * getIp
- */
 const getIp = async () => {
   try {
     let login_ip = await fetch('https://api.ipify.org?format=json');
@@ -57,7 +53,6 @@ const loginRequest = async (
   access_pass
 ) => {
   try {
-
     const date = new Date().getTime(); // January 1, 1970 로 부터의 시간 (밀리초)
     const url = captcha
       ? '/auth/login/exceed'
@@ -177,7 +172,7 @@ const getUserInfo = async (auth, company, user_no) => {
 const changeCompany = async (auth, user_no, company) => {
   const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, last_access_company_no } = auth;
   const { company_no, company_code } = company;
-
+  const t = getT();
   try {
     const url = `${wehagoBaseURL}/common/layout/company-change`;
     const headers = createHeader({ AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY });
@@ -202,7 +197,7 @@ const changeCompany = async (auth, user_no, company) => {
 
     const response = await fetch(url, data);
     if (response.resultCode === 200) return true;
-    else Alert.alert('회사변경', '다시 시도해주세요.');
+    else Alert.alert(t('alert.title.변경'), t('alert.text.한번더'));
   } catch (err) {
     console.warn('changeCompany', err);
     return false;

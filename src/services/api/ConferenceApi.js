@@ -1,20 +1,6 @@
-/**
- * We talk API
- * 사용자 관련 API
- */
-
-import {
-  wehagoBaseURL,
-  securityRequest,
-  serialize,
-  meetURL
-} from '../../utils';
-// import 'url-search-params-polyfill';
-// #region
+import { wehagoBaseURL, securityRequest, serialize } from '../../utils';
+import { getT } from '../../utils/translateManager';
 export default {
-  /**
-   * 화상회의 생성
-   */
   create: async (
     room_id,
     owner_id,
@@ -25,7 +11,6 @@ export default {
     r_token,
     HASH_KEY
   ) => {
-    
     try {
       const url = `${wehagoBaseURL}/communication/rtc/videoChat`;
       const headers = securityRequest(a_token, r_token, url, HASH_KEY);
@@ -49,9 +34,6 @@ export default {
     }
   },
 
-  /**
-   * We talk발송
-   */
   sendWetalk: async (
     room_id,
     video_chat_id,
@@ -106,10 +88,6 @@ export default {
     }
   },
 
-  /**
-   * check
-   * 대화방 생성확인 API
-   */
   check: async (conferenceId, a_token, r_token, HASH_KEY) => {
     try {
       const url = `${wehagoBaseURL}/communication/rtc/videoChat?video_chat_id=${conferenceId}`;
@@ -126,17 +104,13 @@ export default {
     }
   },
 
-  /**
-   * getParticipant
-   * 화상회의 방에 참가자 정보 조회 API
-   * 유저리스트를 가지고 온다.
-   */
   getParticipant: async (
     videoRoomId = null,
     a_token = null,
     r_token = null,
     HASH_KEY = null
   ) => {
+    const t = getT();
     try {
       if (!videoRoomId || !a_token || !r_token || !HASH_KEY) {
         return {
@@ -154,9 +128,8 @@ export default {
       const result = await response.json();
       return result;
     } catch (e) {
-      alert('요청된 작업을 처리하던중 문제가 발생했습니다. 다시 시도해 주세요');
+      alert(t('alert.text.problem_ocurred'));
       return participant;
     }
   }
 };
-// #endregion

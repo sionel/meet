@@ -14,6 +14,7 @@ import { actionCreators as masterAcionCreators } from '../../redux/modules/maste
 import { actionCreators as toastAcionCreators } from '../../redux/modules/toast';
 import { actionCreators as alertAcionCreators } from '../../redux/modules/alert';
 import { MeetApi } from '../../services';
+import { getT } from '../../utils/translateManager';
 
 /**
  * ConferenceManager 화상회의 접속을 총괄하는 매니저
@@ -23,6 +24,7 @@ class ConferenceManager {
     // Singleton
     this._dispatch = dispatch;
     this._endCall = endCall;
+    this.t = getT();
     if (!ConferenceManager.instance) {
       // 싱글톤 변수 할당
       ConferenceManager.instance = this;
@@ -68,7 +70,7 @@ class ConferenceManager {
       accesstype,
       externalUser
     );
-    await MeetApi.enterMeetRoom(token, this._room.myUserId(),name);
+    await MeetApi.enterMeetRoom(token, this._room.myUserId(), name);
     const createdTime = this._room.properties['created-ms'];
     this._dispatch(localActionCreators.setConferenceCreatedTime(createdTime));
     this._dispatch(masterAcionCreators.checkMasterList(this._roomToken));
@@ -93,9 +95,7 @@ class ConferenceManager {
     if (audioPolicy) {
       this._dispatch(masterAcionCreators.changeAudioActive(true));
       this._dispatch(
-        toastAcionCreators.setToastMessage(
-          '마스터가 마이크를 비활성화 처리 했습니다.'
-        )
+        toastAcionCreators.setToastMessage(this.t('toast.master.마이크비활성'))
       );
     }
     this._dispatch(mainUserActionCreators.setMainUserNotExist(id));
@@ -105,7 +105,7 @@ class ConferenceManager {
       this._dispatch(masterAcionCreators.changeMasterControlMode(id));
       this._dispatch(
         toastAcionCreators.setToastMessage(
-          id ? '마스터가 참여자 전원의 발언권 제어를 시작합니다.' : ''
+          id ? this.t('toast.master.발언권제어시작') : ''
         )
       );
     }
@@ -372,22 +372,22 @@ class ConferenceManager {
   changeMicControlUserModeByMaster = flag => {
     this._dispatch(masterAcionCreators.changeMasterControlMode(flag));
     const msg = flag
-      ? '마스터가 참여자 전원의 발언권 제어를 시작합니다.'
-      : '참여자 발언권 제어기능이 종료 되었습니다.';
+      ? this.t('toast.master.발언권제어시작')
+      : this.t('toast.master.발언권제어끝');
     this._dispatch(toastAcionCreators.setToastMessage(msg));
   };
   changeMicControlModeByMaster = value => {
     this._dispatch(masterAcionCreators.changeAudioActive(value));
 
     const msg = value
-      ? '마스터가 마이크를 비활성화 처리 했습니다.'
-      : '마스터가 마이크를 활성화 처리 했습니다.';
+      ? this.t('toast.master.마이크비활성')
+      : this.t('toast.master.마이크활성');
     this._dispatch(toastAcionCreators.setToastMessage(msg));
   };
   changeMicMuteByMaster = flag => {
     const msg = flag
-      ? '마스터가 마이크를 비활성화 처리 했습니다.'
-      : '마스터가 마이크를 활성화 처리 했습니다.';
+      ? this.t('toast.master.마이크비활성')
+      : this.t('toast.master.마이크활성');
     this._dispatch(toastAcionCreators.setToastMessage(msg));
     this._dispatch(masterAcionCreators.changeMuteMicMaster(flag));
   };
@@ -401,7 +401,7 @@ class ConferenceManager {
 
   rejectedByMaster = () => {
     this._dispatch(
-      toastAcionCreators.setToastMessage('발언권 요청이 거부되었습니다.')
+      toastAcionCreators.setToastMessage(this.t('toast.master.요청거부'))
     );
     this._dispatch(masterAcionCreators.setMicRequest(false));
   };
@@ -418,8 +418,8 @@ class ConferenceManager {
       this._dispatch(
         alertAcionCreators.setAlert({
           type: 1,
-          title: '알림',
-          message: '마스터에 의해 추방되었습니다.'
+          title: this.t('alert.title.notion'),
+          message: this.t('toast.master.내가추방')
         })
       );
     }

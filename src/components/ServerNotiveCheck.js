@@ -4,15 +4,14 @@ import {
   StyleSheet,
   ScrollView,
   View,
-  TouchableOpacity,
-  CheckBox
+  TouchableOpacity
 } from 'react-native';
-import RNRestart from 'react-native-restart';
 
 import { Text } from '../components/StyledText';
 import CustomIcon from './CustomIcon';
-
+import { getT } from '../utils/translateManager';
 export default function ServerNotiveCheck({ servernoti }) {
+  const t = getT();
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.modalContainer}>
@@ -31,7 +30,9 @@ export default function ServerNotiveCheck({ servernoti }) {
           </View>
           {servernoti.subMessage && servernoti.subMessage.length > 0 && (
             <View style={styles.subMessage}>
-              <Text style={{ paddingBottom: 10 }}>{'[업데이트 내역]'}</Text>
+              <Text style={{ paddingBottom: 10 }}>{`[${t(
+                'servernoti.message.update_list'
+              )}]`}</Text>
               {servernoti.subMessage.map((e, idx) => {
                 return (
                   <View key={idx} style={{ paddingHorizontal: 10 }}>

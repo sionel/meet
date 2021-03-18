@@ -16,19 +16,17 @@ import btnFax from '../../../assets/icons/shortcut/ico_service_fax.png'; // 팩�
 import btnElecapproval from '../../../assets/icons/shortcut/ico_service_elecapproval.png'; // 전자결재
 import btnAtr from '../../../assets/icons/shortcut/ico_service_atr.png'; // 근태관리
 
-// import { DrawerContentContainer } from 'rn-component';
 import DrawerContentContainer from './DrawerContentContainer';
 import CustomIcon from '../CustomIcon';
 import { WEHAGO_ENV } from '../../../config';
+import { getT } from '../../utils/translateManager';
 
 export default function DrawerContent(props) {
   const { navigation, setAlert } = props;
 
   // redux
   const auth = useSelector(state => state.user.auth);
-  // const user = useSelector(state => state.user.user);
-  // const selectedCompany = useSelector(state => state.account.selectedCompany);
-
+  const t = getT()
   const handleChangeCompany = async (cno, ccode) => {
     const company = {
       company_no: cno,
@@ -92,8 +90,8 @@ export default function DrawerContent(props) {
       ).catch(err => {
         setAlert({
           type: 1,
-          title: '알림',
-          message: '스토어에서 해당 앱을 찾을 수 없습니다.'
+          title: t('alert.title.notion'),
+          message: t('alert.text.no_app_store')
         });
       });
     });
@@ -101,7 +99,7 @@ export default function DrawerContent(props) {
 
   const DrawerChild = () => (
     <View style={{ marginTop: 10 }}>
-      <Text style={styles.serviceText}>전체서비스</Text>
+      <Text style={styles.serviceText}>{t('drawer.전체서비스')}</Text>
 
       <View style={styles.shortcutRow}>
         <TouchableOpacity
@@ -123,7 +121,7 @@ export default function DrawerContent(props) {
         >
           <>
             <Image source={btnWedrive} style={styles.shortcutImage} />
-            <Text style={styles.shortcutText}>{'웹스토리지'}</Text>
+            <Text style={styles.shortcutText}>{t('drawer.웹스토리지')}</Text>
           </>
         </TouchableOpacity>
 
@@ -135,20 +133,9 @@ export default function DrawerContent(props) {
         >
           <>
             <Image source={btnAtr} style={styles.shortcutImage} />
-            <Text style={styles.shortcutText}>{'근태관리'}</Text>
+            <Text style={styles.shortcutText}>{t('drawer.근태관리')}</Text>
           </>
         </TouchableOpacity>
-        {/* <TouchableOpacity
-          onPress={() => {
-            onClickShortcutIcon('fax');
-          }}
-          style={styles.shortcut}
-        >
-          <>
-            <Image source={btnFax} style={styles.shortcutImage} />
-            <Text style={styles.shortcutText}>{'팩스'}</Text>
-          </>
-        </TouchableOpacity> */}
       </View>
 
       <View style={styles.shortcutRow}>
@@ -160,7 +147,7 @@ export default function DrawerContent(props) {
         >
           <>
             <Image source={btnElecapproval} style={styles.shortcutImage} />
-            <Text style={styles.shortcutText}>{'전자결재'}</Text>
+            <Text style={styles.shortcutText}>{t('drawer.전자결재')}</Text>
           </>
         </TouchableOpacity>
         <TouchableOpacity style={styles.shortcut}>

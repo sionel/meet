@@ -3,23 +3,21 @@ import {
   Text,
   StyleSheet,
   View,
-  Image,
   Dimensions,
   Platform,
   TouchableOpacity,
   ScrollView,
   FlatList,
-  StatusBar,
   SafeAreaView
 } from 'react-native';
 import { useSelector } from 'react-redux';
 import FastImage from 'react-native-fast-image';
 
 import DrawingSketch from '../DrawingSketch';
-// import { CustomButton, CustomModal, CustomAlert } from '../../../../components';
 import CustomButton from '../../../../components/CustomButton';
 import CustomAlert from '../../../../components/CustomAlert';
 import OverView from '../OverView';
+import { getT } from '../../../../utils/translateManager';
 
 const SafetyView = Platform.OS === 'ios' ? SafeAreaView : View;
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
@@ -38,7 +36,7 @@ const FileSharingPresenter = props => {
   } = props;
 
   const localPipMode = useSelector(state => state.local.pipMode);
-
+  const t = getT();
   // 제목 표시줄
   const headerTitle = (
     <View
@@ -68,15 +66,6 @@ const FileSharingPresenter = props => {
           ? props.attributes.fileName
           : props.selectedRoomName}
       </Text>
-      {/* <CustomButton
-        name={'userList'}
-        onPress={() => props.setDocumentListMode(true)}
-        style={{ margin: 0 }}
-        width={28}
-        height={28}
-        areaWidth={42}
-        areaHeight={32}
-      /> */}
       <CustomButton
         name={'talk'}
         onPress={() => props.setDocumentListMode(['CHATTING', 'USERLIST'])}
@@ -129,7 +118,6 @@ const FileSharingPresenter = props => {
     <View style={[styles.preView, !showPreView && styles.preViewHidden]}>
       <ScrollView
         horizontal={true}
-        // pagingEnabled={true}
         showsHorizontalScrollIndicator={false}
         ref={ref => props.onSetRef('preView', ref)}
       >
@@ -163,12 +151,12 @@ const FileSharingPresenter = props => {
     </View>
   );
 
-  const MODE = mode === 'drawing' ? '스케치' : '문서공유';
+  const MODE = mode === 'drawing' ? t('meet.스케치') : t('meet.문서공유');
   const modalMessage =
     presenter === 'localUser'
       ? {
-          title: `${MODE} 종료`,
-          text: `${MODE}를 종료하시겠습니까?\n(종료할 경우, 모든 참여자에게 ${MODE}가 보이지 않으며 화상회의 화면으로 돌아갑니다.)`,
+          title: t('alert.title.종료').replace('[@mode@]', MODE),
+          text: t('alert.text.종료문구').replace('[@mode@]', MODE),
           onClickFeedback: () => {
             props.onSetDrawingData();
             props.onChangeSharingMode(false, false);
@@ -176,8 +164,8 @@ const FileSharingPresenter = props => {
           }
         }
       : {
-          title: '화상회의 종료',
-          text: '화상회의를 종료하시겠습니까?',
+          title: t('alert.title.화상종료'),
+          text: t('alert.text.화상종료문구'),
           onClickFeedback: props.onDisposeConference
         };
 
@@ -197,7 +185,6 @@ const FileSharingPresenter = props => {
         style={{ flex: 1, backgroundColor: '#000', position: 'relative' }}
       >
         <View style={styles.container}>
-          {/* topArea */}
           {!localPipMode && (
             <View style={styles.headerTitle}>
               {showTool && headerTitle}
@@ -217,7 +204,6 @@ const FileSharingPresenter = props => {
             </View>
           )}
 
-          {/* mainArea */}
           <View
             style={[
               styles.mainArea,
@@ -227,7 +213,6 @@ const FileSharingPresenter = props => {
               }
             ]}
           >
-            {/* 문서공유 메인 화면 */}
             {props.isLoading ? (
               <View
                 style={{
@@ -239,9 +224,7 @@ const FileSharingPresenter = props => {
                 <Text
                   style={{ fontFamily: 'DOUZONEText30', textAlign: 'center' }}
                 >
-                  {localPipMode
-                    ? '문서 로딩을 위해\n앱으로 돌아가세요.'
-                    : '문서를 불러오는 중입니다.'}
+                  {localPipMode ? t('meet.돌아가') : t('meet.부르는중')}
                 </Text>
               </View>
             ) : (
@@ -278,23 +261,10 @@ const FileSharingPresenter = props => {
               </View>
             )}
           </View>
-          {/* end mainArea */}
         </View>
       </SafetyView>
 
-      {/* OverView 영역 */}
       {props.documentListMode && !localPipMode && (
-        // <RBSheet
-        //   ref={ref => props.onSetRef(ref)}
-        //   height={props.height}
-        //   closeOnDragDown={true}
-        //   onClose={() => props.setDocumentListMode(false)}
-        //   customStyles={{
-        //     container: {
-        //       backgroundColor: 'transparent'
-        //     }
-        //   }}
-        // >
         <OverView
           mode={props.documentListMode}
           defaultMode={props.documentListMode[0]}
@@ -302,17 +272,7 @@ const FileSharingPresenter = props => {
           speaker={props.speaker}
           onChangeSpeaker={props.onChangeSpeaker}
         />
-        // </RBSheet>
       )}
-
-      {/* <CustomModal
-        display={props.modal}
-        title={modalMessage.title}
-        text={modalMessage.text}
-        feedbackText="확인"
-        onClickClose={() => props.onChangeState('modal')}
-        onClickFeedback={modalMessage.onClickFeedback}
-      /> */}
       {!localPipMode && (
         <CustomAlert
           visible={props.modal}
@@ -321,11 +281,11 @@ const FileSharingPresenter = props => {
           description={modalMessage.text}
           actions={[
             {
-              name: '취소',
+              name: t('alert.button.cancel'),
               action: () => props.onChangeState('modal')
             },
             {
-              name: '확인',
+              name: t('alert.button.confirm'),
               action: modalMessage.onClickFeedback
             }
           ]}

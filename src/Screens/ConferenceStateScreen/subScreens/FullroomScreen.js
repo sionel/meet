@@ -1,20 +1,12 @@
 import React from 'react';
-import {
-  StyleSheet,
-  View,
-  ScrollView,
-  TouchableOpacity,
-  FlatList,
-  Image,
-  Text
-} from 'react-native';
+import { StyleSheet, View, ScrollView, Image, Text } from 'react-native';
 import waiting from '../../../../assets/wating.png';
+import { getT } from '../../../utils/translateManager';
 
 export default function FullroomScreen(props) {
   const content = () => {
-    const time = '2020-05-26 14:12';
+    const t = getT();
     return (
-      // <View style={styles.container}>
       <View
         style={{
           ...styles.container,
@@ -36,26 +28,22 @@ export default function FullroomScreen(props) {
             style={{ width: 200, height: 200 }}
           />
           <Text style={{ fontSize: 14, color: 'rgb(80,80,80)' }}>
-            {'접속가능한 인원을 초과했습니다.'}
+            {t('roomstate.full.타이틀')}
           </Text>
           <View style={{ fontSize: 12, paddingTop: 25 }}>
             <Text style={{ textAlign: 'center', color: 'rgb(171,171,171)' }}>
-              {`접속가능한 인원을 초과했습니다.\n해당방 마스터에게 문의해주세요`}
+              {t('roomstate.full.마스터문의')}
             </Text>
           </View>
         </View>
         <View style={styles.infoBox}>
           <View style={styles.line}>
             <Text style={styles.linedot}>{'\u2B24'}</Text>
-            <Text style={{ fontSize: 12 }}>
-              {'원활한 서비스 이용을 위해 최대 50명까지 접속가능합니다.'}
-            </Text>
+            <Text style={{ fontSize: 12 }}>{t('roomstate.full.50명제한')}</Text>
           </View>
           <View style={styles.line}>
             <Text style={styles.linedot}>{'\u2B24'}</Text>
-            <Text style={{ fontSize: 12 }}>
-              {'지속적으로 문제발생 시 고객센터로 접수 부탁드립니다.'}
-            </Text>
+            <Text style={{ fontSize: 12 }}>{t('roomstate.full.고객센터')}</Text>
           </View>
         </View>
       </View>

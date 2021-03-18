@@ -1,25 +1,19 @@
 import React, { Component } from 'react';
-import { Platform, Linking, Alert } from 'react-native';
+import { Platform, Linking } from 'react-native';
 import LoginScreenPresenter from './LoginScreenPresenter';
-import { WEHAGO_TYPE, WEHAGO_ENV } from '../../../config';
+import { WEHAGO_ENV } from '../../../config';
 import { MeetApi } from '../../services';
+import { getT } from '../../utils/translateManager';
 
 const iswehagov = WEHAGO_ENV === 'WEHAGOV';
-
-const bg = require('../../../assets/bgIntroWehagoIphoneX_3x.png');
-
 class LoginScreenContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
       joincode: ''
     };
+    this.t = getT();
   }
-
-  componentDidMount() {}
-
-  componentWillUnmount() {}
-
   render() {
     return (
       <LoginScreenPresenter
@@ -58,8 +52,8 @@ class LoginScreenContainer extends Component {
       ).catch(err => {
         this.props.setAlert({
           type: 1,
-          title: 'Error',
-          message: '스토어에서 해당 앱을 찾을 수 없습니다.'
+          title: this.t('alert.title.error'),
+          message: this.t('alert.text.no_app_store')
         });
       });
     });
@@ -88,14 +82,14 @@ class LoginScreenContainer extends Component {
     if (!result) {
       this.props.setAlert({
         type: 1,
-        title: '알림',
-        message: '존재하지 않는 접속코드 입니다.'
+        title: this.t('alert.title.notion'),
+        message: this.t('alert.text.no_exist_joincode')
       });
     } else if (result.resultData.code === 'E00001') {
       this.props.setAlert({
         type: 1,
-        title: '알림',
-        message: '존재하지 않는 접속코드 입니다.'
+        title: this.t('alert.title.notion'),
+        message: this.t('alert.text.no_exist_joincode')
       });
     } else {
       this.props.onChangeRootState({
