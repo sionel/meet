@@ -22,7 +22,7 @@ i18next
   .use(languageDetector)
   .use(initReactI18next)
   .init({
-    fallbackLng: 'ko',
+    fallbackLng: 'en',
     debug: true,
     resources: { ko, en, jp },
     react: {
