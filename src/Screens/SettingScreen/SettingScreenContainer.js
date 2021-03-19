@@ -146,17 +146,24 @@ class SettingScreenContainer extends React.Component {
       ).resultData;
     }
 
-    // this.props.navigation.navigate('Home'); replace가 문제 없으면 삭제
-    navigation.replace('Conference', {
-      item: {
-        tracks,
-        roomToken,
-        name,
-        ...item,
-        accesstype: params?.accesstype,
-        externalUser: user
-      }
-    });
+    if (roomToken === '접근금지') { // wehago V 때문에 절차가 하나 늘어남 
+      this.props.setAlert({
+        type: 1,
+        title: this.t('alert.title.error'),
+        message: this.t('alert.text.접근금지')
+      });
+    } else {
+      navigation.replace('Conference', {
+        item: {
+          tracks,
+          roomToken,
+          name,
+          ...item,
+          accesstype: params?.accesstype,
+          externalUser: user
+        }
+      });
+    }
   };
   _handleToggleVideo = async () => {
     const { tracks } = this.state;
