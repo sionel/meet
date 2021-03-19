@@ -113,8 +113,8 @@ class SplashScreenContainer extends Component {
 
   _handleCheckVersion = async noti => {
     const os = Platform.OS;
-    const majorVersion = 3;
-    const minorVersion = '2.0.2';
+    const majorVersion = 4;
+    const minorVersion = '2.1.0';
     const result = await MeetApi.checkVersion(os, majorVersion, minorVersion);
     // 버전 수정
     if (
@@ -130,8 +130,11 @@ class SplashScreenContainer extends Component {
     const message =
       updateType === 'forced'
         ? this.t('servernoti.message.power_update')
-        : this.t('servernoti.message.update_text');
+        : updateType === 'default'
+        ? this.t('servernoti.message.update_text')
+        : 'none';
 
+    if (message === 'none') return [];
     const onToggle = this.props.toggleUpdateNoti;
     const buttonValue = this.props.updateNoti;
     const subMessage = result.resultData.detail_info?.split('\\n');
