@@ -4,7 +4,7 @@ import * as RNLocalize from 'react-native-localize';
 
 import ko from './ko.json';
 import en from './en.json';
-import jp from './jp.json';
+import ja from './ja.json';
 
 const languageDetector = {
   type: 'languageDetector',
@@ -12,8 +12,8 @@ const languageDetector = {
   detect: async cb => {
     cb(RNLocalize.getLocales()[0].languageCode);
     initReactI18next
-    
-  },
+    debugger
+  },  
   init: () => {},
   cacheUserLanguage: () => {}
 };
@@ -22,9 +22,9 @@ i18next
   .use(languageDetector)
   .use(initReactI18next)
   .init({
-    fallbackLng: 'en',
+    fallbackLng: 'ko',
     debug: true,
-    resources: { ko, en, jp },
+    resources: { ko, en, ja },
     react: {
       useSuspense: false
     }
