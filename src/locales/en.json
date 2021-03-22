@@ -1,0 +1,245 @@
+{
+  "translation": {
+    "alert": {
+      "title": {
+        "notion": "notion",
+        "login": "Login",
+        "logout": "Logout",
+        "size_over": "번역없음",
+        "error": "error",
+        "unsupported": "unsupported",
+        "파일변환실패": "번역없음",
+        "파일불러오기실패": "번역없음",
+        "fail": "Login failure",
+        "사용제한": "Limit of use",
+        "권한주세요": "번역없음",
+        "화상회의생성": "Create video conference",
+        "스케치종료": "번역없음",
+        "종료": "번역없음",
+        "화상종료": "번역없음",
+        "변경": "Change company",
+        "update": "번역없음",
+        "noti": "번역없음",
+        "팩미구매": "Company that has not purchased video conference pack",
+        "미구매": "Company that has not purchased video conference pack"
+      },
+      "button": {
+        "yes": "yes",
+        "no": "no",
+        "update": "update",
+        "confirm": "confirm",
+        "exit": "exit",
+        "cancel": "cancel"
+      },
+      "text": {
+        "looting": "번역없음",
+        "duplicate_login": "Logging out, as another device has logged into your WEHAGO account.",
+        "login_info_error": "Incorrect login information",
+        "no_right": "No privileges",
+        "timeover": "Request time has been exceeded. Try again.",
+        "problem_ocurred": "번역없음",
+        "other_info_mobile": "번역없음",
+        "other_info_web": "번역없음",
+        "token_expiration": "번역없음",
+        "usage_restriction": "WEHAGO service use is limited. Contact the Customer Center if you have any inquiries on limited service use.",
+        "init_company": "Initial company settings in progress. You can use the service after completing configuration in WEHAGO web.",
+        "unpaid": "No deposit has been made to the virtual account. You can use WEHAGO services after your deposit is confirmed.",
+        "no_app_store": "Unable to find the app in store.",
+        "no_exist_joincode": "번역없음",
+        "fail_user_info": "Failed to retrieve user information.",
+        "fail_file_list": "Failed to load file list.",
+        "fail_share_file_size": "번역없음",
+        "unsupported_doc": "This file does not support document sharing.",
+        "기다려": "번역없음",
+        "방지문자틀림": "번역없음",
+        "세션만료": "번역없음",
+        "아디비번틀림": "Incorrect ID or password.",
+        "5번틀림": "Login has failed five times. You will be redirected to the page to enter automated input prevention characters.",
+        "사용제한메시지": "Unable to process your login, as there is either no company information or the signup has not been completed.",
+        "로그인실패": "Login has failed",
+        "접근권한": "번역없음",
+        "로그아웃": "Do you want to log out?",
+        "한번더": "Try again",
+        "만들기실패": "Video conference creation has failed. Please try again.",
+        "방만들기": "Do you want to create a video conference?",
+        "통화불가": "Unable to call this user",
+        "종료문구": "번역없음",
+        "화상종료문구": "Do you want to end the video conference?",
+        "생성실패": "Video conference creation has failed. Please try again.",
+        "접근금지": "번역없음"
+      }
+    },
+    "servernoti": {
+      "title": {
+        "update": "번역없음",
+        "noti": "Notice"
+      },
+      "message": {
+        "power_update": "번역없음",
+        "update_text": "번역없음",
+        "update_list": "번역없음"
+      },
+      "button": {
+        "exit": "End",
+        "confirm": "번역없음",
+        "no": "번역없음",
+        "update": "Update"
+      }
+    },
+    "login": {
+      "참여코드": "번역없음",
+      "참여코드내용": "번역없음",
+      "wehago로그인": "Log-in to WEHAGO app",
+      "직접로그인": "Log-in by direct input",
+      "횟수초과": "Maximum number of log-in attempts using ID has been exceeded",
+      "피해방지": "To prevent damages caused by the unauthorized use of personal information",
+      "5회제한": "You can attempt to log in a maximum of 5 times.",
+      "아이디": "ID",
+      "비밀번호": "Password",
+      "틀렸음": "Incorrect ID or password",
+      "방지문자뜸": "For information protection, enter the automated input prevention characters in order",
+      "새로고침": "Refresh",
+      "자동입력방지문자": "Automated input prevention characters",
+      "로그인": "번역없음"
+    },
+    "splash": {
+      "첫화면": "번역없음",
+      "1번타이틀": "번역없음",
+      "1번내용": "번역없음",
+      "2번타이틀": "번역없음",
+      "2번내용": "번역없음",
+      "3번타이틀": "번역없음",
+      "3번내용": "번역없음",
+      "4번타이틀": "번역없음",
+      "4번내용": "번역없음",
+      "5번타이틀": "번역없음",
+      "5번내용": "번역없음",
+      "시작하기": "번역없음"
+    },
+    "main": {
+      "없음": "번역없음",
+      "we텍스트": "Start video conferencing and calling on the WEHAGO app.",
+      "sp텍스트": "You can participate in a video conference after creating a video conference room.",
+      "대화시작": "번역없음",
+      "진행중": "번역없음",
+      "예정": "번역없음"
+    },
+    "create_room": {
+      "검색": "번역없음",
+      "검색결과없음": "Your search returned no results.",
+      "검색결과없음텍스트": "Try creating a messenger in WEHAGO.",
+      "그룹": "번역없음",
+      "일대일": "번역없음",
+      "세무": "번역없음",
+      "수임": "번역없음",
+      "시작버튼": "Start"
+    },
+    "option": {
+      "버전정보": "Version information",
+      "약관법률": "Terms and Conditions and other legal information",
+      "수상": "Awards and certifications",
+      "로그아웃": "Logout",
+      "인증": "Cloud service authentication",
+      "kisa": "KISA Personal Information & Information Security Management System (ISMS-P) certified",
+      "WEHAGOV": "WEHAGO V (IaaS/SaaS standard level)",
+      "바로가기": "To website",
+      "보호정책": "Privacy Policy",
+      "오픈소스": "Open Source License",
+      "이용약관": "WEHAGO Terms and Conditions",
+      "설정": "Settings",
+      "시스템": "System",
+      "화상회의": "Video conference"
+    },
+    "drawer": {
+      "스토어없음": "Unable to find the app in store.",
+      "전체서비스": "All services",
+      "웹스토리지": "번역없음",
+      "근태관리": "Attendance management",
+      "전자결재": "Electronic authorization"
+    },
+    "meet": {
+      "삭제": "번역없음",
+      "스케치": "Sketch",
+      "문서공유": "document share",
+      "돌아가": "Please return to the app\nto load the document.",
+      "부르는중": "번역없음",
+      "스토리지": "번역없음"
+    },
+    "chatting": {
+      "대화방": "번역없음",
+      "목록": "번역없음",
+      "대화없음": "번역없음",
+      "전송": "Send",
+      "나": "번역없음",
+      "외부참여자": "번역없음",
+      "발표자": "번역없음",
+      "마스터": "번역없음"
+    },
+    "toast": {
+      "뒤로버튼": "Click again to close app.",
+      "백그라운드": "번역없음",
+      "마이크꺼진다": "번역없음",
+      "마이크꺼짐": "번역없음",
+      "master": {
+        "마이크비활성": "번역없음",
+        "마이크활성": "번역없음",
+        "발언권제어시작": "번역없음",
+        "발언권제어끝": "번역없음",
+        "발언종료": "번역없음",
+        "요청거부": "번역없음",
+        "요청대기": "번역없음",
+        "요청": "번역없음",
+        "내가추방": "번역없음",
+        "누가추방": "번역없음"
+      }
+    },
+    "roomstate": {
+      "delete": {
+        "타이틀": "The video conference room does not exist.",
+        "고객센터": "Video conference room has been deleted, or cannot currently be entered. \n If the problem persists, report it to the Customer Center.",
+        "30분전부터": "You can connect to a video conference room starting 30 minutes before the conference is scheduled to start.",
+        "참여불가": "You cannot participate in the conference if you are not designated as a participant.",
+        "마스터문의": "Contact the master.",
+        "다른경우": "Unable to enter conference if start time has been changed or schedule has been deleted."
+      },
+      "full": {
+        "타이틀": "The maximum number of users allowed to connect has been exceeded ",
+        "마스터문의": "Contact the room master.",
+        "50명제한": "For successful service access, up to 50 users can connect to the service.",
+        "고객센터": "If the problem persists, please report it to the Customer Center."
+      },
+      "reservation": {
+        "타이틀": "You can join the meeting up to 30 minutes prior to its commencement. \n Only the function to check the details of reservation is provided (Details can be changed by logging in with your PC only.).",
+        "기본정보": "Basic information",
+        "대화방이름": "Chatroom name",
+        "공개여부": "Open/closed",
+        "공개": "Open",
+        "비공개": "Closed",
+        "예약시간": "Reserved time",
+        "시작시간": "Start time",
+        "종료시간": "End time",
+        "참여자정보": "Participant information"
+      },
+      "wating": {
+        "타이틀": "Video conference has not been started.",
+        "해당방은": "This video conference room is",
+        "시작예정": "Meeting is scheduled to start. \n If you cannot enter the video conference, close the app and start it again.",
+        "변경및삭제": "if video conference schedule is changed or video conference room is deleted.",
+        "이용불가": "Unable to use service",
+        "마스터문의": "Check the master for details on schedule change and cancellation.",
+        "지속": "If screen conversion fails continuously",
+        "고객센터": "please report it to the Customer Center."
+      }
+    },
+    "selectcompany": {
+      "title": {
+        "팩미구매": "번역없음",
+        "미구매": "번역없음"
+      },
+      "message": "This company has not purchased the video conference service. \n Please purchase the service.",
+      "회사선택": "Select company",
+      "logout": "logout"
+    },
+    "common": { "exit": "exit" }
+  }
+}

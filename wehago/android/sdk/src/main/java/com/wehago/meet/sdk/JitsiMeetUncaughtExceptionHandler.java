@@ -17,7 +17,7 @@
 
 package com.wehago.meet.sdk;
 
-import android.util.Log;
+import com.wehago.meet.sdk.log.JitsiMeetLogger;
 
 class JitsiMeetUncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
     private final Thread.UncaughtExceptionHandler defaultUncaughtExceptionHandler;
@@ -37,7 +37,7 @@ class JitsiMeetUncaughtExceptionHandler implements Thread.UncaughtExceptionHandl
 
     @Override
     public void uncaughtException(Thread t, Throwable e) {
-        Log.e(this.getClass().getSimpleName(), "FATAL ERROR", e);
+        JitsiMeetLogger.e(e, this.getClass().getSimpleName() + " FATAL ERROR");
 
         // Abort all ConnectionService ongoing calls
         if (AudioModeModule.useConnectionService()) {

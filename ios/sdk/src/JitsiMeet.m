@@ -22,8 +22,9 @@
 #import "JitsiMeetView+Private.h"
 #import "RCTBridgeWrapper.h"
 #import "ReactUtils.h"
+#import "RNSplashScreen.h"
 
-#import <RNGoogleSignin/RNGoogleSignin.h>
+#import <WebRTC/RTCLogging.h>
 
 
 @implementation JitsiMeet {
@@ -51,6 +52,14 @@
 
         // Register a fatal error handler for React.
         registerReactFatalErrorHandler();
+
+        // Register a log handler for React.
+        registerReactLogHandler();
+
+#if 0
+        // Enable WebRTC logs
+        RTCSetMinDebugLogLevel(RTCLoggingSeverityInfo);
+#endif
     }
 
     return self;
@@ -85,12 +94,6 @@
         return YES;
     }
 
-    if ([RNGoogleSignin application:app
-                            openURL:url
-                  sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
-                         annotation:options[UIApplicationOpenURLOptionsAnnotationKey]]) {
-        return YES;
-    }
 
     if (_customUrlScheme == nil || ![_customUrlScheme isEqualToString:url.scheme]) {
         return NO;
@@ -99,7 +102,7 @@
     JitsiMeetConferenceOptions *conferenceOptions = [JitsiMeetConferenceOptions fromBuilder:^(JitsiMeetConferenceOptionsBuilder *builder) {
         builder.room = [url absoluteString];
     }];
-    
+
     return [JitsiMeetView setPropsInViews:[conferenceOptions asProps]];
 }
 
@@ -122,6 +125,11 @@
     }
 
     return nil;
+}
+
+- (BOOL)isCrashReportingDisabled {
+    NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:@"jitsi-default-preferences"];
+    return [userDefaults stringForKey:@"isCrashReportingDisabled"];
 }
 
 - (JitsiMeetConferenceOptions *)optionsFromUserActivity:(NSUserActivity *)userActivity {
@@ -170,10 +178,23 @@
     return nil;
 }
 
+- (void)showSplashScreen:(UIView*)rootView {
+    [RNSplashScreen showSplash:@"LaunchScreen" inRootView:rootView];
+}
+
 #pragma mark - Property getter / setters
 
 - (NSArray<NSString *> *)universalLinkDomains {
     return _universalLinkDomains ? _universalLinkDomains : @[];
+}
+
+- (void)setDefaultConferenceOptions:(JitsiMeetConferenceOptions *)defaultConferenceOptions {
+    if (defaultConferenceOptions != nil && _defaultConferenceOptions.room != nil) {
+        @throw [NSException exceptionWithName:@"RuntimeError"
+                                       reason:@"'room' must be null in the default conference options"
+                                     userInfo:nil];
+    }
+    _defaultConferenceOptions = defaultConferenceOptions;
 }
 
 #pragma mark - Private API methods
@@ -184,6 +205,10 @@
 
 - (RCTBridge *)getReactBridge {
     return _bridgeWrapper.bridge;
+}
+
+- (ExternalAPI *)getExternalAPI {
+    return [_bridgeWrapper.bridge moduleForClass:ExternalAPI.class];
 }
 
 @end

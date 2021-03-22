@@ -1,6 +1,5 @@
 /*
- * Copyright @ 2018-present 8x8, Inc.
- * Copyright @ 2017-2018 Atlassian Pty Ltd
+ * Copyright @ 2017-present 8x8, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +15,18 @@
  */
 package com.wehago.meet.sdk;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.facebook.react.ReactInstanceManager;
 
+import org.devio.rn.splashscreen.SplashScreen;
+import com.wehago.meet.sdk.log.JitsiMeetLogger;
+
 public class JitsiMeet {
+
     /**
      * Default {@link JitsiMeetConferenceOptions} which will be used for all conferences. When
      * joining a conference these options will be merged with the ones passed to
@@ -33,6 +39,9 @@ public class JitsiMeet {
     }
 
     public static void setDefaultConferenceOptions(JitsiMeetConferenceOptions options) {
+        if (options != null && options.getRoom() != null) {
+            throw new RuntimeException("'room' must be null in the default conference options");
+        }
         defaultConferenceOptions = options;
     }
 
@@ -67,6 +76,25 @@ public class JitsiMeet {
 
         if (reactInstanceManager != null) {
             reactInstanceManager.showDevOptionsDialog();
+        }
+    }
+
+    public static boolean isCrashReportingDisabled(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences("jitsi-default-preferences", Context.MODE_PRIVATE);
+        String value = preferences.getString("isCrashReportingDisabled", "");
+        return Boolean.parseBoolean(value);
+    }
+
+    /**
+     * Helper method to show the SplashScreen.
+     *
+     * @param activity - The activity on which to show the SplashScreen {@link Activity}.
+     */
+    public static void showSplashScreen(Activity activity) {
+        try {
+            SplashScreen.show(activity);
+        } catch (Exception e) {
+            JitsiMeetLogger.e(e, "Failed to show splash screen");
         }
     }
 }

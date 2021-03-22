@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react';
-import { Alert, Platform } from 'react-native';
+import { Platform } from 'react-native';
 import LoginInputPresenter from './LoginInputPresenter';
 import { WEHAGO_ENV } from '../../../../config';
 
 import UserApi from '../../../services/api/LoginApi/UserApi';
 import { actionCreators as UserActions } from '../../../redux/modules/user';
 import ServiceCheckApi from '../../../services/api/ServiceCheckApi';
+
+import { getT } from '../../../utils/translateManager';
 
 const iswehagov = WEHAGO_ENV === 'WEHAGOV';
 
@@ -45,6 +47,8 @@ export default function LoginInputContainer(props) {
   const passwordRef = React.useRef(null);
   const captchaRef = React.useRef(null);
 
+  const t = getT();
+
   const _handleChangeCapcha = () => {
     setCaptcha(_getTransactionId());
     setCaptchaInput('');
@@ -83,7 +87,6 @@ export default function LoginInputContainer(props) {
         destination: isPurchase ? 'List' : 'SelectCompany'
       });
     } else if (statusCheck && statusCheck.code === 400) {
-
       const onClose = () => {
         _resetAlert();
         props.onChangeRootState({
@@ -92,22 +95,17 @@ export default function LoginInputContainer(props) {
       };
       setAlertVisible({
         visible: true,
-        title: '알림',
+        title: t('alert.title.notion'),
         description: statusCheck.message,
         onClose,
         actions: [
           {
-            name: '확인',
+            name: t('alert.button.confirm'),
             action: onClose
           }
         ]
       });
-
-      // props.onChangeRootState({
-      //   destination: 'SelectCompany'
-      // });
     } else {
-      // 중간에 알 수 없는 오류 발생 시
       props.onChangeRootState({
         destination: 'SelectCompany'
       });
@@ -134,12 +132,12 @@ export default function LoginInputContainer(props) {
       _resetAlert();
       setAlertVisible({
         visible: true,
-        title: '로그인 실패',
-        description: '자동입력 방지문자를 잘못 입력하셨습니다.',
+        title: t('alert.title.fail'),
+        description: t('alert.text.방지문자틀림'),
         onClose,
         actions: [
           {
-            name: '확인',
+            name: t('alert.button.confirm'),
             action: onClose
           }
         ]
@@ -175,7 +173,7 @@ export default function LoginInputContainer(props) {
           _resetAlert();
           setAlertVisible({
             visible: true,
-            title: '알림',
+            title: t('alert.title.notion'),
             description: getAuth.resultMsg,
             onClose: () => {
               _resetAlert();
@@ -183,14 +181,14 @@ export default function LoginInputContainer(props) {
             },
             actions: [
               {
-                name: '확인',
+                name: t('alert.button.confirm'),
                 action: () => {
                   _resetAlert();
                   resolve(true);
                 }
               },
               {
-                name: '취소',
+                name: t('alert.button.cancel'),
                 action: () => {
                   _resetAlert();
                   resolve(false);
@@ -237,14 +235,14 @@ export default function LoginInputContainer(props) {
           _resetAlert();
           setAlertVisible({
             visible: true,
-            title: '알림',
+            title: t('alert.title.notion'),
             description: iswehagov
-              ? '세션이 만료되었습니다. 다시 로그인 해주세요.'
-              : '고객님의 다른 기기에서 WEHAGO 접속정보가 확인되어 로그아웃 됩니다.',
+              ? t('alert.text.세션만료')
+              : t('alert.text.duplicate_login'),
             onClose,
             actions: [
               {
-                name: '확인',
+                name: t('alert.button.confirm'),
                 action: onClose
               }
             ]
@@ -256,12 +254,12 @@ export default function LoginInputContainer(props) {
           _resetAlert();
           setAlertVisible({
             visible: true,
-            title: '알림',
-            description: '로그인 정보가 잘못되었습니다.',
+            title: t('alert.title.notion'),
+            description: t('alert.text.login_info_error'),
             onClose,
             actions: [
               {
-                name: '확인',
+                name: t('alert.button.confirm'),
                 action: onClose
               }
             ]
@@ -273,12 +271,12 @@ export default function LoginInputContainer(props) {
           _resetAlert();
           setAlertVisible({
             visible: true,
-            title:'알림',
-            description: '권한이 없습니다.',
+            title: t('alert.title.notion'),
+            description: t('alert.text.no_right'),
             onClose,
             actions: [
               {
-                name: '확인',
+                name: t('alert.button.confirm'),
                 action: onClose
               }
             ]
@@ -290,12 +288,12 @@ export default function LoginInputContainer(props) {
           _resetAlert();
           setAlertVisible({
             visible: true,
-            title:'알림',
-            description: `요청 시간을 초과했습니다. 다시 시도해주세요.`,
+            title: t('alert.title.notion'),
+            description: t('alert.text.timeover'),
             onClose,
             actions: [
               {
-                name: '확인',
+                name: t('alert.button.confirm'),
                 action: onClose
               }
             ]
@@ -307,12 +305,12 @@ export default function LoginInputContainer(props) {
           _resetAlert();
           setAlertVisible({
             visible: true,
-            title:'알림',
-            description: `요청된 작업을 처리하던중 문제가 발생했습니다. 다시 시도해주세요.`,
+            title: t('alert.title.notion'),
+            description: t('alert.text.problem_ocurred'),
             onClose,
             actions: [
               {
-                name: '확인',
+                name: t('alert.button.confirm'),
                 action: onClose
               }
             ]
@@ -332,12 +330,12 @@ export default function LoginInputContainer(props) {
         _resetAlert();
         setAlertVisible({
           visible: true,
-          title: '로그인 실패',
-          description: '아이디 또는 비밀번호가 올바르지 않습니다.',
+          title: t('alert.title.fail'),
+          description: t('alert.text.아디비번틀림'),
           onClose,
           actions: [
             {
-              name: '확인',
+              name: t('alert.button.confirm'),
               action: onClose
             }
           ]
@@ -353,13 +351,12 @@ export default function LoginInputContainer(props) {
         _resetAlert();
         setAlertVisible({
           visible: true,
-          title: '로그인 실패',
-          description:
-            '로그인에 5번 실패해 자동입력 방지 문자 입력으로 이동합니다.',
+          title: t('alert.title.fail'),
+          description: t('alert.text.5번틀림'),
           onClose,
           actions: [
             {
-              name: '확인',
+              name: t('alert.button.confirm'),
               action: onClose
             }
           ]
@@ -371,13 +368,12 @@ export default function LoginInputContainer(props) {
         _resetAlert();
         setAlertVisible({
           visible: true,
-          title: '사용제한안내',
-          description:
-            '소속된 회사가 존재하지 않거나 가입단계가 완료되지 않아 로그인할 수 없습니다.',
+          title: t('alert.title.사용제한'),
+          description: t('alert.text.사용제한메시지'),
           onClose,
           actions: [
             {
-              name: '확인',
+              name: t('alert.button.confirm'),
               action: onClose
             }
           ]
@@ -389,12 +385,12 @@ export default function LoginInputContainer(props) {
         _resetAlert();
         setAlertVisible({
           visible: true,
-          title: '로그인 실패',
-          description: '로그인에 실패했습니다.',
+          title: t('alert.title.fail'),
+          description: t('alert.text.로그인실패'),
           onClose,
           actions: [
             {
-              name: '확인',
+              name: t('alert.button.confirm'),
               action: onClose
             }
           ]

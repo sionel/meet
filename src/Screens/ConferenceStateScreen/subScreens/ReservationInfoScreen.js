@@ -6,16 +6,14 @@ import {
   TouchableOpacity,
   FlatList,
   Text,
-  Image,
-  Dimensions
+  Image
 } from 'react-native';
-import DeviceInfo from 'react-native-device-info';
 import { wehagoMainURL } from '../../../utils';
-
+import { getT } from '../../../utils/translateManager';
 export default function ReservationInfoScreen(props) {
   const { name, accessUser, isPublic, start, end, iscret } = props;
+  const t = getT();
   return (
-    // <View style={styles.container}>
     <ScrollView
       style={{
         ...styles.container,
@@ -24,49 +22,61 @@ export default function ReservationInfoScreen(props) {
     >
       <View style={styles.enterInfo}>
         <Text style={styles.enterInfoText}>
-          {
-            '시작 30분 전부터 참여가능합니다.\n예약정보 조회기능만 제공합니다.(변경은 PC에서만 가능)'
-          }
+          {t('roomstate.reservation.타이틀')}
         </Text>
       </View>
 
       <View style={styles.info}>
         <View style={styles.wrap}>
-          <Text style={styles.text3}>기본정보</Text>
+          <Text style={styles.text3}>
+            {t('roomstate.reservation.기본정보')}
+          </Text>
         </View>
 
         <View style={styles.wrap}>
-          <Text style={styles.text2}>대화방 이름</Text>
+          <Text style={styles.text2}>
+            {t('roomstate.reservation.대화방이름')}
+          </Text>
           <Text style={styles.text1}>{name}</Text>
         </View>
 
         <View style={styles.wrap}>
-          <Text style={styles.text2}>공개여부</Text>
-          <Text style={styles.text1}>{isPublic ? '공개' : '비공개'}</Text>
+          <Text style={styles.text2}>{t('roomstate.reservation.공개')}</Text>
+          <Text style={styles.text1}>
+            {isPublic
+              ? t('roomstate.reservation.공개')
+              : t('roomstate.reservation.비공개')}
+          </Text>
         </View>
 
         <View style={styles.hr}></View>
 
         <View style={styles.wrap}>
-          <Text style={styles.text3}>예약시간</Text>
+          <Text style={styles.text3}>
+            {t('roomstate.reservation.예약시간')}
+          </Text>
         </View>
 
         <View style={styles.wrap}>
-          <Text style={styles.text2}>시작시간</Text>
+          <Text style={styles.text2}>
+            {t('roomstate.reservation.시작시간')}
+          </Text>
           <Text style={styles.text1}>{start}</Text>
         </View>
 
         <View style={styles.wrap}>
-          <Text style={styles.text2}>종료시간</Text>
+          <Text style={styles.text2}>
+            {t('roomstate.reservation.종료시간')}
+          </Text>
           <Text style={styles.text1}>{end}</Text>
         </View>
       </View>
       {iscret ? (
         <>
           <View style={styles.Participant}>
-            <Text
-              style={styles.text4}
-            >{`참여자정보 (${accessUser.length})`}</Text>
+            <Text style={styles.text4}>{`${t(
+              'roomstate.reservation.참여자정보'
+            )} (${accessUser.length})`}</Text>
           </View>
           <FlatList
             data={accessUser}
@@ -101,36 +111,22 @@ export default function ReservationInfoScreen(props) {
                     >
                       {user_type === 1 ? user_name : user}
                     </Text>
-                    {/* {item.id === 'localUser' && (
-                <View style={[styles.presenter, { backgroundColor: '#fb0' }]}>
-                  <Text style={styles.presenterText}>나</Text>
-                </View>
-              )} */}
                   </View>
                 </TouchableOpacity>
               );
             }}
           ></FlatList>
         </>
-      ):(
-      // <View style={styles.Participant}>
-      //   <Text
-      //     style={styles.text4}
-      //   >{'비회원은 참여자 정보를 볼 수 없습니다'}</Text>
-      // </View>
-      <></>
+      ) : (
+        <></>
       )}
     </ScrollView>
-    // </View>
   );
 }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#e8ebef'
-    // paddingHorizontal: width > 850 ? '30%' : '0%'
-    // width: isTablet ? '60%' : '100%',
-    // justifyContent: 'center',
   },
   enterInfo: {
     marginTop: 20,

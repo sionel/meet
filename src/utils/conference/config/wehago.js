@@ -7,12 +7,12 @@ const isWehagoV = WEHAGO_ENV === 'WEHAGOV';
  */
 const config = {
   hosts: {
-    domain: "video.wehago.com",
-    muc: "conference.video.wehago.com",
+    domain: 'video.wehago.com',
+    muc: 'conference.video.wehago.com'
   },
 
-  bosh: "//video.wehago.com/http-bind",
-  openBridgeChannel: "datachannel",
+  bosh: '//video.wehago.com/http-bind',
+  openBridgeChannel: 'datachannel',
   channelLastN: -1,
   resolution: 720,
   constraints: {
@@ -21,21 +21,20 @@ const config = {
       height: {
         ideal: 720,
         max: 720,
-        min: 240,
+        min: 240
       },
-      width: { min: 640, max: 1280 },
-    },
+      width: { min: 640, max: 1280 }
+    }
   },
   disableSuspendVideo: true,
   disableSimulcast: false,
   minHDHeight: 240,
   p2p: {
-    enabled: true,
+    enabled: false
   },
   stereo: true,
   e2eping: { pingInterval: 10000, analyticsInterval: 60000 },
-  devMode: true,
+  devMode: true
 };
-
 
 export default config;

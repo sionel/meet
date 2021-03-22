@@ -1,9 +1,4 @@
-/**
- * CreateScreenPresenter
- * 화상회의 히스토리 프레젠터
- */
-
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
   View,
   StyleSheet,
@@ -20,9 +15,8 @@ import {
   SectionListHeader
 } from '../../components';
 
-/**
- * CreateScreenPresenter
- */
+import { getT } from '../../utils/translateManager';
+
 const CreateScreenPresenter = props => {
   const personalList = props.list.filter(
     item => item.room_type === '1' && item.is_video_access === 'F'
@@ -34,9 +28,13 @@ const CreateScreenPresenter = props => {
     item => item.room_type === '4' && item.is_video_access === 'F'
   );
   const suimList = props.list.filter(
-    item => item.room_type === '5' && item.is_video_access === 'F' && !item.unpaid_status
+    item =>
+      item.room_type === '5' &&
+      item.is_video_access === 'F' &&
+      !item.unpaid_status
   );
 
+  const t = getT();
   const personalHeight = new Animated.Value(54 * personalList.length);
   const groupHeight = new Animated.Value(54 * groupList.length);
   const semuHeight = new Animated.Value(54 * semuList.length);
@@ -82,20 +80,6 @@ const CreateScreenPresenter = props => {
     );
   };
 
-  const [refreshing, setRefreshing] = useState(false);
-
-  useEffect(() => {
-    const _redirect = setInterval(() => {
-      setRefreshing(true);
-      // props.onRefresh();
-      // setTimeout(() => {
-      //   setRefreshing(false);
-      // }, 1000);
-    }, 10000);
-    return () => {
-      clearInterval(_redirect);
-    };
-  }, []);
   return (
     <View style={styles.container}>
       {/* 검색바 */}
@@ -108,15 +92,14 @@ const CreateScreenPresenter = props => {
           }
         >
           <Placeholder
-            mainText="검색 결과가 없습니다."
-            subText={'위하고에서 메신저를 생성해 보세요'}
+            mainText={t('create_room.검색결과없음')}
+            subText={t('create_room.검색결과없음텍스트')}
           />
         </ScrollView>
       ) : (
         <SectionList
           keyExtractor={(item, index) => index.toString()}
           refreshing={false}
-          // refreshing={refreshing}
           onRefresh={props.onRefresh}
           style={[
             styles.listContainer,
@@ -127,25 +110,25 @@ const CreateScreenPresenter = props => {
           ]}
           sections={[
             {
-              title: `그룹대화(${groupList.length})`,
+              title: `${t('create_room.그룹')}(${groupList.length})`,
               data: groupList,
               length: groupList.length - 1,
               type: 'group'
             },
             {
-              title: `1:1대화(${personalList.length})`,
+              title: `${t('create_room.일대일')}(${personalList.length})`,
               data: personalList,
               length: personalList.length - 1,
               type: 'personal'
             },
             {
-              title: `세무사와의 대화(${semuList.length})`,
+              title: `${t('create_room.세무')}(${semuList.length})`,
               data: semuList,
               length: semuList.length - 1,
               type: 'semu'
             },
             {
-              title: `수임처와의 대화(${suimList.length})`,
+              title: `${t('create_room.수임')}(${suimList.length})`,
               data: suimList,
               length: suimList.length - 1,
               type: 'suim'
@@ -165,7 +148,6 @@ const CreateScreenPresenter = props => {
                             ? 54 * section.data.length
                             : 0,
                         duration: 400
-                        // easing: Easing.bounce
                       }).start()
                     : section.type === 'personal'
                     ? Animated.timing(personalHeight, {
@@ -174,7 +156,6 @@ const CreateScreenPresenter = props => {
                             ? 54 * section.data.length
                             : 0,
                         duration: 400
-                        // easing: Easing.bounce
                       }).start()
                     : section.type === 'semu'
                     ? Animated.timing(semuHeight, {
@@ -183,7 +164,6 @@ const CreateScreenPresenter = props => {
                             ? 54 * section.data.length
                             : 0,
                         duration: 400
-                        // easing: Easing.bounce
                       }).start()
                     : Animated.timing(suimHeight, {
                         toValue:
@@ -191,7 +171,6 @@ const CreateScreenPresenter = props => {
                             ? 54 * section.data.length
                             : 0,
                         duration: 400
-                        // easing: Easing.bounce
                       }).start();
                 }}
               />
@@ -204,16 +183,16 @@ const CreateScreenPresenter = props => {
 
       <CustomAlert
         visible={props.modal}
-        title={'화상회의 생성'}
+        title={t('alert.title.화상회의생성')}
         width={320}
-        description={'화상회의를 생성하시겠습니까?'}
+        description={t('alert.text.방만들기')}
         actions={[
           {
-            name: '취소',
+            name: t('alert.button.cancel'),
             action: () => props.onActivateModal(null)
           },
           {
-            name: '확인',
+            name: t('alert.button.confirm'),
             action: () => props.onCreateConference()
           }
         ]}
@@ -223,9 +202,6 @@ const CreateScreenPresenter = props => {
   );
 };
 
-/**
- * styles
- */
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -237,7 +213,6 @@ const styles = StyleSheet.create({
   listContainer: {
     width: '100%',
     fontFamily: 'DOUZONEText30'
-    // padding: '4% 3%'
   },
 
   notResult: {
@@ -247,7 +222,6 @@ const styles = StyleSheet.create({
   },
 
   modalWrap: {
-    // marginTop: 22,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -274,8 +248,6 @@ const styles = StyleSheet.create({
     paddingBottom: 30,
     paddingLeft: 20,
     paddingRight: 20
-    // borderWidth: 1,
-    // borderColor: '#1C90FB'
   },
 
   modalButtons: { flexDirection: 'row' },

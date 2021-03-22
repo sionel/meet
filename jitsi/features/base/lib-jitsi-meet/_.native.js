@@ -1,5 +1,5 @@
 import "./native";
-
+import '../../mobile/polyfills'
 // The library lib-jitsi-meet (externally) depends on the libraries jQuery
 (global => {
   // jQuery
@@ -11,5 +11,6 @@ import "./native";
   }
 })(global || window || this); // eslint-disable-line no-invalid-this
 
-import JitsiMeetJS from "./libs/lib-jitsi-meet.min";
+// import JitsiMeetJS from 'lib-jitsi-meet/lib-jitsi-meet.min';
+import JitsiMeetJS from './libs/lib-jitsi-meet.min.js';
 export { JitsiMeetJS as default };

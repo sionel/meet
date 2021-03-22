@@ -4,13 +4,9 @@
  */
 
 import React from 'react';
-import { Image, TouchableOpacity, Dimensions, View } from 'react-native';
+import { Image, TouchableOpacity, View } from 'react-native';
 
-import {
-  createStackNavigator,
-  createAppContainer,
-  createDrawerNavigator
-} from 'react-navigation';
+import { createStackNavigator, createDrawerNavigator } from 'react-navigation';
 
 import CustomIcon from './../components/CustomIcon';
 
@@ -28,6 +24,7 @@ import ConferenceStateScreen from '../Screens/ConferenceStateScreen';
 import RouteTitle from './RouteTitle';
 import DrawerContent from '../components/DrawerContent';
 import { WEHAGO_TYPE } from '../../config';
+import { getT } from '../utils/translateManager';
 
 const commonStyle = {
   height: 53,
@@ -36,12 +33,6 @@ const commonStyle = {
 };
 const backBtn = require('../../assets/buttons/back_btn.png');
 
-const { height, width } = Dimensions.get('window');
-
-/**
- * Back button
- * 뒤로가기버튼
- */
 const BackButton = ({ navigation, to }) => {
   return (
     <TouchableOpacity
@@ -56,38 +47,8 @@ const BackButton = ({ navigation, to }) => {
     </TouchableOpacity>
   );
 };
-/**
- * rightMenuImage
- * 사이드메뉴 토글아이콘
- */
 const RightMenuImage = ({ navigation }) => {
   const { state } = navigation;
-
-  // const opacity = new Animated.Value(1);
-  // const rotate = new Animated.Value(0);
-  // const spin = rotate.interpolate({
-  //   inputRange: [0, 1],
-  //   outputRange: ['0deg', '360deg']
-  // });
-
-  // if (
-  //   (state.drawerMovementDirection === 'opening') ||
-  //   (state.drawerMovementDirection === 'closing')
-  // ) {
-  // Animated.timing(opacity, {
-  //   toValue: 0.3,
-  //   // duration: 20
-  // }).start(() =>
-  //   Animated.timing(opacity, {
-  //     toValue: 1,
-  //     // duration: 200
-  //   }).start()
-  // );
-  // Animated.timing(rotate, {
-  //   toValue: 1,
-  //   // duration: 4000
-  // }).start();
-  // }
 
   return (
     <View
@@ -98,15 +59,6 @@ const RightMenuImage = ({ navigation }) => {
         margin: 10
       }}
     >
-      {/* <Animated.View
-        style={{
-          // transform: [{ rotate: spin }],
-          // opacity: opacity,
-          alignItems: 'center',
-          justifyContent: 'center',
-          margin: 10
-        }}
-      > */}
       <CustomIcon
         name={
           state.drawerMovementDirection === 'opening'
@@ -116,19 +68,14 @@ const RightMenuImage = ({ navigation }) => {
             : state.isDrawerOpen
             ? 'buttonClose'
             : 'buttonMenu'
-          // iconName
         }
         width={26}
         height={26}
       />
-      {/* </Animated.View> */}
     </View>
   );
 };
 
-/**
- * DrawerContent 메뉴
- */
 const HomeDrwawer = createDrawerNavigator(
   {
     Home: {
@@ -140,7 +87,6 @@ const HomeDrwawer = createDrawerNavigator(
   },
   {
     initialRouteName: 'Home',
-    // drawerWidth: Math.min(height, width) * 0.75,
     drawerPosition: 'right',
     overlayColor: '#00000090',
     contentComponent: ({ navigation }) => (
@@ -149,11 +95,8 @@ const HomeDrwawer = createDrawerNavigator(
   }
 );
 
-const HomeRoute = createStackNavigator(
-  {
-    /**
-     * 메인
-     */
+const HomeRouteStack = () => {
+  return {
     Home: {
       screen: HomeDrwawer,
       headerStyle: {
@@ -164,12 +107,9 @@ const HomeRoute = createStackNavigator(
         headerTintColor: '#fff',
         gesturesEnabled: false,
         headerStyle: commonStyle,
-        // headerRight: (
         headerRight: (
-          // Platform.OS === 'ios' &&
           <TouchableOpacity
             onPress={() => {
-              // navigation.navigate('Configuration');
               navigation.toggleDrawer();
             }}
             activeOpacity={0.5}
@@ -177,131 +117,104 @@ const HomeRoute = createStackNavigator(
             <RightMenuImage navigation={navigation} />
           </TouchableOpacity>
         )
-        // headerLeft: (
-        // 	Platform.OS === "android" &&
-        // 	<TouchableOpacity
-        // 		onPress={() => {
-        // 			navigation.navigate('Configuration');
-        // 		}}
-        // 	>
-        // 		<RightMenuImage navigation={navigation} />
-        // 	</TouchableOpacity>
-        // )
       })
     },
 
-    /**
-     * Configuration
-     * 환경설정
-     */
     Configuration: {
       screen: ConfigurationScreen,
       navigationOptions: ({ navigation }) => ({
-        headerTitle: <RouteTitle title={'설정'} />,
+        headerTitle: (
+          <RouteTitle title={navigation.getScreenProps().t('option.설정')} />
+        ),
         headerLeft: <BackButton navigation={navigation} to={'Home'} />,
         headerTintColor: '#fff',
         headerStyle: commonStyle
       })
     },
-    /**
-     * Policy
-     * 이용약관
-     */
     Policy: {
       screen: PolicyScreen,
       navigationOptions: ({ navigation }) => ({
-        headerTitle: <RouteTitle title={'이용약관 및 법률정보'} />,
+        headerTitle: (
+          <RouteTitle
+            title={navigation.getScreenProps().t('option.약관법률')}
+          />
+        ),
         headerLeft: <BackButton navigation={navigation} to={'Configuration'} />,
         headerTintColor: '#fff',
         headerStyle: commonStyle
       })
     },
-    /**
-     * Awards
-     * 수상 및 인증내역
-     */
+
     Awards: {
       screen: AwardsScreen,
       navigationOptions: ({ navigation }) => ({
-        headerTitle: <RouteTitle title={'수상 및 인증내역'} />,
+        headerTitle: (
+          <RouteTitle title={navigation.getScreenProps().t('option.수상')} />
+        ),
         headerLeft: <BackButton navigation={navigation} to={'Configuration'} />,
         headerTintColor: '#fff',
         headerStyle: commonStyle
       })
     },
-    /**
-     * OpenSource
-     * 오픈소스 라이선스
-     */
     OpenSource: {
       screen: OpenSourceScreen,
       navigationOptions: ({ navigation }) => ({
-        headerTitle: <RouteTitle title={'오픈소스 라이선스'} />,
+        headerTitle: (
+          <RouteTitle
+            title={navigation.getScreenProps().t('option.오픈소스')}
+          />
+        ),
         headerLeft: <BackButton navigation={navigation} to={'Policy'} />,
         headerTintColor: '#fff',
         headerStyle: commonStyle
       })
     },
-    /**
-     * OpenSourceDetail
-     * 오픈소스 라이선스 웹뷰
-     */
     OpenSourceDetail: {
       screen: OpenSourceDetailScreen,
       navigationOptions: ({ navigation }) => ({
-        headerTitle: <RouteTitle title={'오픈소스 라이선스'} />,
+        headerTitle: (
+          <RouteTitle
+            title={navigation.getScreenProps().t('option.오픈소스')}
+          />
+        ),
         headerLeft: <BackButton navigation={navigation} to={'OpenSource'} />,
         headerTintColor: '#fff',
         headerStyle: commonStyle
       })
     },
 
-    /**
-     * UserInfo
-     * 사용자 정보
-     */
-    // UserInfo: {
-    //   screen: UserInfoScreen,
-    //   headerStyle: {
-    //     color: '#fff'
-    //   },
-
-    //   navigationOptions: ({ navigation }) => ({
-    //     title: '내정보',
-    //     headerLeft: <BackButton navigation={navigation} to={'Home'} />,
-    //     headerTintColor: '#fff',
-    //     headerStyle: commonStyle
-    //   })
-    // },
-
-    /**
-     * Create
-     * 화상회의 생성
-     */
     Create: {
       screen: CreateScreen,
       navigationOptions: ({ navigation }) => ({
-        headerTitle: <RouteTitle title={'화상회의'} />,
+        headerTitle: (
+          <RouteTitle
+            title={navigation.getScreenProps().t('option.화상회의')}
+          />
+        ),
         headerLeft: <BackButton navigation={navigation} to={'Home'} />,
         headerTintColor: '#fff',
         headerStyle: commonStyle
       })
     },
 
-    ConferenceState:{
-      screen : ConferenceStateScreen,
+    ConferenceState: {
+      screen: ConferenceStateScreen,
       navigationOptions: ({ navigation }) => ({
-        headerTitle: <RouteTitle title={'화상회의'} />,
+        headerTitle: (
+          <RouteTitle
+            title={navigation.getScreenProps().t('option.화상회의')}
+          />
+        ),
         headerLeft: <BackButton navigation={navigation} to={'Home'} />,
         headerTintColor: '#fff',
         headerStyle: commonStyle
       })
     }
-  },
-  {
-    cardStyle: { transparent: true }
-  }
-);
+  };
+};
+
+const HomeRoute = createStackNavigator(HomeRouteStack(), {
+  cardStyle: { transparent: true }
+});
 
 export default HomeRoute;
-// export default createAppContainer(HomeRoute);

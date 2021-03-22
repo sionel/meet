@@ -125,16 +125,10 @@ const CustomIcon = props => {
   );
 };
 
-/**
- * CustomIcon PropTypes
- */
 CustomIcon.propTypes = {
   name: PropTypes.string
 };
 
-/**
- * 버튼 이미지를 얻어온다.
- */
 const getButtonSource = name => {
   switch (name) {
     case 'folder':

@@ -1,18 +1,5 @@
-/**
- * ListItemCopm
- * 화상회의 히스토리 항목
- */
-
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-  Platform
-} from 'react-native';
-import CustomLottie from './CustomLottie';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { wehagoMainURL } from '../utils';
 
 function getFirtsChar(str) {
@@ -83,7 +70,6 @@ const ListItemComp = props => {
       displayUpdated = props.updated;
       break;
   }
-  // 클릭이벤트
 
   // render
   return (
@@ -98,7 +84,6 @@ const ListItemComp = props => {
       }}
       onPress={onClickEvent}
     >
-      {/* 아이콘 */}
       <View style={styles.iconWrapper}>
         <View
           style={{
@@ -110,7 +95,6 @@ const ListItemComp = props => {
             borderWidth: props.active ? 3 : 0
           }}
         >
-          {/* 아이콘 텍스트 */}
           {props.room_profile_url ? (
             <Image
               source={
@@ -128,20 +112,8 @@ const ListItemComp = props => {
           )}
         </View>
       </View>
-      {/* 내용 */}
       <View style={{ ...styles.textWrapper, paddingRight: '13%' }}>
-        {/* 방제목 */}
         <Text style={{ ...styles.roomName }}>{props.title}</Text>
-        {/* 참가자 */}
-        {/* <Text style={{ ...styles.participant }}>{displayUpdated}</Text> */}
-        {/* 활성화 라이트 */}
-        {/* {props.lottie && (
-          <View style={{ ...styles.activeLight, backgroundColor: activeColor }}>
-            {props.active && (
-              <CustomLottie source="broadcast" width={35} height={35} />
-            )}
-          </View>
-        )} */}
         {props.customLottie && (
           <View
             style={{
@@ -166,14 +138,6 @@ const ListItemComp = props => {
             >
               시작
             </Text>
-            {/* <Image
-							style={{
-								width: '100%',
-								height: '100%',
-								opacity: 0.73
-							}}
-							source={require(`../../assets/buttons/playButton.png`)}
-						/> */}
           </View>
         )}
       </View>
@@ -202,51 +166,36 @@ const styles = StyleSheet.create({
     paddingRight: 13,
     borderColor: 'rgb(235,235,235)'
   },
-  // 아이콘 랩
-  iconWrapper: {
-    // flex: 0.2
-    // width: 62
-  },
-  // 룸아이콘
+  iconWrapper: {},
   roomIcon: {
-    // flex: 1,
     width: 40,
     height: 40,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 100,
     backgroundColor: '#eaeaea',
-    // borderWidth: 3,
     overflow: 'hidden'
   },
-  // 아이콘 텍스트
   iconText: {
     fontSize: 10,
-    // fontWeight: 'bold',
     fontFamily: 'DOUZONEText50'
   },
-  // 방 제목
   roomName: {
     fontSize: 14,
-    // fontWeight: 'bold',
     color: 'rgb(80,80,80)',
     fontFamily: 'DOUZONEText30'
   },
-  // 참가자
   participant: {
     fontSize: 13.5,
-    // fontWeight: '400',
     fontFamily: 'DOUZONEText30',
     color: '#3f3f3f'
   },
 
   textWrapper: {
     flex: 1,
-    // width: '85%',
     height: '100%',
     paddingLeft: 12,
     borderBottomWidth: 0,
-    // borderBottomWidth: 1,
     borderBottomColor: '#ececec',
     justifyContent: 'center',
     alignItems: 'flex-start'
@@ -262,7 +211,7 @@ const styles = StyleSheet.create({
 });
 
 ListItemComp.defaultProps = {
-  iconSize: 100, // %기준
+  iconSize: 100,
   disable: false,
   active: false,
   lottie: null,

@@ -1,19 +1,12 @@
-/**
- * HomeScreenContainer
- * 화상회의 히스토리 컨테이너
- */
-
 import React, { Component } from 'react';
 import {
   AppState,
   StatusBar,
   Linking,
   Platform,
-  Dimensions,
   View,
   ToastAndroid,
-  BackHandler,
-  Alert
+  BackHandler
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import Orientation from 'react-native-orientation-locker';
@@ -22,26 +15,20 @@ import { NavigationEvents } from 'react-navigation';
 import HomeScreenPresenter from './HomeScreenPresenter';
 
 // service
-import { ConferenceApi, WetalkApi, MeetApi } from '../../services';
+import { WetalkApi, MeetApi } from '../../services';
 import { querystringParser } from '../../utils';
 
+import { getT } from '../../utils/translateManager';
 const hasNotch = DeviceInfo.hasNotch() && Platform.OS === 'ios';
 
-// #region
-
 class HomeScreenContainer extends Component {
-  /**
-   * constructor
-   */
   constructor(props) {
     super(props);
     this._isFocus = true;
     this._refreshTimeStamp = Date.now();
+    this.t = getT();
   }
 
-  /**
-   * STATE
-   */
   state = {
     appState: AppState.currentState,
     refreshing: false, // 리프레시 상태
@@ -60,9 +47,6 @@ class HomeScreenContainer extends Component {
     room_id: null
   };
 
-  /**
-   * componentDidMount
-   */
   async componentDidMount() {
     // 화면 회전 처리
     Orientation.getOrientation(orientation => {
@@ -99,9 +83,6 @@ class HomeScreenContainer extends Component {
     return true;
   };
 
-  /**
-   * componentWillUnmount
-   */
   componentWillUnmount() {
     clearInterval(this._interval);
     clearTimeout(this.refresh);
@@ -117,23 +98,8 @@ class HomeScreenContainer extends Component {
     );
   }
 
-  // onSwipeRight(gestureState) {
-  //   this.props.navigation.openDrawer();
-  // }
-
-  // #region
-  /**
-   * Rendering
-   */
   render() {
-    const {
-      refreshing,
-      searchKeyword,
-      selectedRoomId,
-      // modal,
-      orientation,
-      alert
-    } = this.state;
+    const { refreshing, selectedRoomId, orientation, alert } = this.state;
     const { navigation, auth } = this.props;
     const plan = auth.last_company.membership_code; // 요금제 [WE: 엣지, SP: 싱글팩, ...]
 
@@ -152,7 +118,6 @@ class HomeScreenContainer extends Component {
       orientation === 'LANDSCAPE-LEFT' ||
       orientation === 'LANDSCAPE-RIGHT';
 
-    // {props.memberType !== 1 && props.permission && props.plan !== 'WE' && (
     return (
       <View style={{ flex: 1 }}>
         <StatusBar
@@ -171,7 +136,6 @@ class HomeScreenContainer extends Component {
           plan={plan}
           navigation={navigation}
           refreshing={refreshing}
-          // modal={modal}
           permission={this.props.permission}
           started={started}
           reservation={reservation}
@@ -179,7 +143,6 @@ class HomeScreenContainer extends Component {
           selectedRoomId={selectedRoomId}
           alert={alert}
           memberType={this.props.auth.member_type}
-          // onActivateModal={this._handleActivateModal}
           onRedirect={this._handleRedirect}
           onRefresh={this._handleRefresh}
           onSearch={this._handleSearch}
@@ -190,11 +153,7 @@ class HomeScreenContainer extends Component {
       </View>
     );
   }
-  // #endregion
 
-  /**
-   * _handleBackButton
-   */
   _handleBackButton = () => {
     // if(this.props.navigation)
     if (!this.props.navigation.isFocused()) return false;
@@ -203,7 +162,7 @@ class HomeScreenContainer extends Component {
 
     // 1000(1초) 안에 back 버튼을 한번 더 클릭 할 경우 앱 종료
     if (this.exitApp == undefined || !this.exitApp) {
-      ToastAndroid.show('한번 더 누르면 앱이 종료됩니다.', ToastAndroid.SHORT);
+      ToastAndroid.show(this.t('toast.뒤로버튼'), ToastAndroid.SHORT);
       this.exitApp = true;
 
       this.timeout = setTimeout(() => {
@@ -217,9 +176,6 @@ class HomeScreenContainer extends Component {
     return true;
   };
 
-  /**
-   * _handleOrientation
-   */
   _handleOrientation = orientation => {
     this.setState({ orientation });
   };
@@ -228,24 +184,6 @@ class HomeScreenContainer extends Component {
     this._handleOpenLink(event.conferenceCall || event.url);
   };
 
-  /**
-   * _handleOpenDeepLink
-   * 딥링크접속 시 테스트
-   */
-  _handleOpenDeepLink = e => {
-    Linking.getInitialURL()
-      .then(url => {
-        if (url) {
-          this._handleOpenLink(url);
-        }
-      })
-      .catch(err => alert('다시 시도해 주세요'));
-  };
-
-  /**
-   * _handleOpenURL
-   * 딥링크로 전달받은 화상회의 접속
-   */
   _handleOpenLink = url => {
     if (!url) return;
     let result;
@@ -283,34 +221,19 @@ class HomeScreenContainer extends Component {
     }
   };
 
-  /**
-   * _handleRedirect
-   * 페이지 이동
-   */
   _handleRedirect = (url, param) => {
     const { navigation } = this.props;
     navigation.navigate(url, param);
   };
 
-  /**
-   * _handleSearch
-   * 검색 필터
-   */
   _handleSearch = searchKeyword => {
     this.setState({ searchKeyword });
   };
 
-  /**
-   *
-   */
   _handleRefressAfterWhile = () => {
     this.refresh = setTimeout(this._handleRefresh, 250);
   };
 
-  /**
-   * _handleRefresh
-   * 리프레시
-   */
   _handleRefresh = () => {
     if (AppState.currentState === 'active' && this._isFocus) {
       this._refreshTimeStamp = Date.now();
@@ -319,13 +242,8 @@ class HomeScreenContainer extends Component {
     }
   };
 
-  /**
-   * _handleGetWetalkList
-   * 메신저 조회
-   */
   _handleGetWetalkList = async () => {
     const { auth, onSetWetalkList, onSetConferenceList } = this.props;
-    // console.log('CNO : ', auth.last_access_company_no);
     // 메신저조회 API
 
     // 위톡방 기준 create 할때를 위해 위톡방 리스트를 가져 올 필요가 있음 그래서 살려둔 api
@@ -365,13 +283,8 @@ class HomeScreenContainer extends Component {
     this.setState({ refreshing: false });
   };
 
-  /**
-   * _handleAutoLogin
-   * 접속자확인 및 자동로그인
-   */
   _handleAutoLogin = async (count = 0) => {
     const { auth, loginCheckRequest } = this.props;
-
 
     // 접속자 확인
     const checkResult = await loginCheckRequest(
@@ -385,44 +298,14 @@ class HomeScreenContainer extends Component {
     if (checkResult.errors) {
       if (checkResult.errors.code === 'E002') {
         return this.props.sessionCheck(false);
-        // return this.props.onLogout();
       } else {
         return this.props.onDisconnect();
       }
-      // alert('Home: 인증실패\nError: ' + JSON.stringify(checkResult.errors) + '\nToken: ' + copyAuth);
     } else {
-      // 최종선택 회사가 달라진 경우
-      // if (
-      //   auth.last_access_company_no != checkResult.auth.last_access_company_no
-      // ) {
-      //   userData = {
-      //     ...checkResult.auth
-      //   };
-      //   onLogin(userData);
-      // }
       this._handleGetWetalkList();
     }
   };
 
-  /**
-   * _handleActivateModal
-   * 모달뷰 토글
-   */
-  // _handleActivateModal = async (
-  //   selectedRoomId = null,
-  //   selectedRoomName = null
-  // ) => {
-  //   this.setState(prev => ({
-  //     modal: !prev.modal,
-  //     selectedRoomId,
-  //     selectedRoomName
-  //   }));
-  // };
-
-  /**
-   * _handleCheckConference
-   * 화상회의 생성/확인
-   */
   _handleCheckConference = async (
     // 외부 (위하고 앱) 에서 접근할때 만 여기로 오게 됨
     conferenceId,
@@ -455,9 +338,6 @@ class HomeScreenContainer extends Component {
     });
   };
 
-  /**
-   * _handleModalChange
-   */
   _handleModalChange = (
     visible = false,
     title = '',
@@ -474,10 +354,6 @@ class HomeScreenContainer extends Component {
     });
   };
 
-  /**
-   * _handleAppStateChange
-   * 포그라운드 전환 시 상태변환
-   */
   _handleAppStateChange = nextAppState => {
     if (
       this.state.appState.match(/inactive|background/) &&
@@ -488,6 +364,5 @@ class HomeScreenContainer extends Component {
     this.setState({ appState: nextAppState });
   };
 }
-// #endregion
 
 export default HomeScreenContainer;

@@ -1,23 +1,12 @@
-/**
- * SearchFormContainer
- * 검색바 컨테이너
- */
-
 import React from 'react';
 import SearchFormPresenter from './SearchFormPresenter';
 
 class SearchFormContainer extends React.Component {
-	/**
-     * STATE
-     */
 	state = {
-		active: false, // 인풋 활성화 여부
-		value: '' // 값
+		active: false, 
+		value: '' 
 	};
 
-	/**
-     * Rendering
-     */
 	render() {
 		const { active, value } = this.state;
 		return (
@@ -30,10 +19,6 @@ class SearchFormContainer extends React.Component {
 		);
 	}
 
-	/**
-     * _handleOnChange
-     * 입력창 활성화 시 이벤트발생
-     */
 	_handleOnChange = value => {
 		const { onChange } = this.props;
 		onChange(value);

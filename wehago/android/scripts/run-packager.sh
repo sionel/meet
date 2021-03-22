@@ -6,7 +6,7 @@
 THIS_DIR=$(cd -P "$(dirname "$(readlink "${BASH_SOURCE[0]}" || echo "${BASH_SOURCE[0]}")")" && pwd)
 
 export RCT_METRO_PORT="${RCT_METRO_PORT:=8081}"
-echo "export RCT_METRO_PORT=${RCT_METRO_PORT}" > "${THIS_DIR}/../../node_modules/react-native/scripts/.packager.env"
+echo "export RCT_METRO_PORT=${RCT_METRO_PORT}" > "${THIS_DIR}/../../../node_modules/react-native/scripts/.packager.env"
 
 adb reverse tcp:8081 tcp:8081
 
@@ -16,11 +16,10 @@ if nc -w 5 -z localhost ${RCT_METRO_PORT} ; then
     exit 2
   fi
 else
-    CMD="${THIS_DIR}/../../node_modules/react-native/scripts/launchPackager.command"
+    CMD="$THIS_DIR/run-packager-helper.command"
     if [[ `uname` == "Darwin"  ]]; then
         open -g "${CMD}" || echo "Can't start packager automatically"
     else
         xdg-open "${CMD}" || echo "Can't start packager automatically"
     fi
 fi
-

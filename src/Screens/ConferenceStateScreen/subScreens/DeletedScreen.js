@@ -1,20 +1,12 @@
 import React from 'react';
-import {
-  StyleSheet,
-  View,
-  ScrollView,
-  TouchableOpacity,
-  FlatList,
-  Image,
-  Text
-} from 'react-native';
+import { StyleSheet, View, ScrollView, Image, Text } from 'react-native';
 import waiting from '../../../../assets/wating.png';
+import { getT } from '../../../utils/translateManager';
 
 export default function DeletedScreen(props) {
   const content = () => {
-    const time = '2020-05-26 14:12';
+    const t = getT();
     return (
-      // <View style={styles.container}>
       <View
         style={{
           ...styles.container,
@@ -36,11 +28,11 @@ export default function DeletedScreen(props) {
             style={{ width: 200, height: 200 }}
           />
           <Text style={{ fontSize: 14, color: 'rgb(80,80,80)' }}>
-            {'화상회의방이 존재하지 않습니다.'}
+            {t('roomstate.delete.타이틀')}
           </Text>
           <View style={{ fontSize: 12, paddingTop: 25 }}>
             <Text style={{ textAlign: 'center', color: 'rgb(171,171,171)' }}>
-              {`화상회의방이 삭제되었거나 진입가능한 시간이 아닙니다. \n 지속적으로 문제발생 시 고객센터로 접수 부탁드립니다.`}
+              {t('roomstate.delete.고객센터')}
             </Text>
           </View>
         </View>
@@ -48,21 +40,24 @@ export default function DeletedScreen(props) {
           <View style={styles.line}>
             <Text style={styles.linedot}>{'\u2B24'}</Text>
             <Text style={{ fontSize: 12 }}>
-              {'화상회의방의 경우, 시작시간 30분전부터 접속이 가능합니다.'}
+              {t('roomstate.delete.30분전부터')}
             </Text>
           </View>
           <View style={styles.line}>
             <Text style={styles.linedot}>{'\u2B24'}</Text>
             <Text style={{ fontSize: 12 }}>
               {props.isTablet
-                ? '참여자로 지정되지 않은 경우, 참여가 불가합니다. 마스터에게 문의해주세요.'
-                : '참여자로 지정되지 않은 경우, 참여가 불가합니다. \n마스터에게 문의해주세요.'}
+                ? t('roomstate.delete.참여불가') +
+                  t('roomstate.delete.마스터문의')
+                : t('roomstate.delete.참여불가') +
+                  '\n' +
+                  t('roomstate.delete.마스터문의')}
             </Text>
           </View>
           <View style={styles.line}>
             <Text style={styles.linedot}>{'\u2B24'}</Text>
             <Text style={{ fontSize: 12 }}>
-              {'시작시간 변경 및 일정이 삭제된 경우 진입이 불가합니다.'}
+              {t('roomstate.delete.다른경우')}
             </Text>
           </View>
         </View>
@@ -85,7 +80,7 @@ const styles = StyleSheet.create({
     height: 150,
     justifyContent: 'center',
     backgroundColor: '#f8f8fa',
-    marginVertical: 20,
+    marginVertical: 20
   },
   line: {
     flexDirection: 'row',

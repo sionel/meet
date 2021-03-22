@@ -12,12 +12,12 @@ import {
 import CustomIcon from '../../components/CustomIcon';
 import { Text } from '../../components/StyledText';
 
+import { getT } from '../../utils/translateManager';
+
 export default function LoginScreenPresenter(props) {
   const { onWehagoLogin, onInputCode, joincode, navigation, onTest } = props;
 
-  this.state = {
-    selection: { start: 0, end: 0 }
-  };
+  const t = getT();
 
   return (
     <ImageBackground
@@ -37,10 +37,10 @@ export default function LoginScreenPresenter(props) {
           </View>
 
           <Text style={{ color: '#fff', fontSize: 24, fontWeight: '100' }}>
-            {'참여코드 입력'}
+            {t('login.참여코드')}
           </Text>
           <Text style={{ color: '#fff', fontSize: 14, fontWeight: 'bold' }}>
-            {'공유받은 참여코드 입력 후 바로 참여해보세요.'}
+            {t('login.참여코드내용')}
           </Text>
           <TextInput
             style={{
@@ -134,7 +134,9 @@ export default function LoginScreenPresenter(props) {
                 size={24}
                 style={{ marginRight: 5.5 }}
               />
-              <Text style={styles.loginButtonText}>WEHAGO 앱으로 로그인</Text>
+              <Text style={styles.loginButtonText}>
+                {t('login.wehago로그인')}
+              </Text>
             </>
           </TouchableHighlight>
 
@@ -149,7 +151,7 @@ export default function LoginScreenPresenter(props) {
               })
             }
           >
-            <Text style={styles.loginNavigation}>직접 입력해서 로그인</Text>
+            <Text style={styles.loginNavigation}>{t('login.직접로그인')}</Text>
           </TouchableOpacity>
         </View>
       </View>

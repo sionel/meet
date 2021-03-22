@@ -11,6 +11,8 @@
   />
 */
 import { useStore } from 'react-redux';
+import { getT } from '../../utils/translateManager';
+
 
 const SET_ALERT = 'alert.SET_ALERT';
 const RESET_ALERT = 'alert.RESET_ALERT';
@@ -66,12 +68,13 @@ const setAlert = params => {
   } = params;
   let onClose = () => {};
   let actions = [];
+  const t = getT()
   if (type === 1) {
     // 확인밖에 없으니 닫음에 컨펌을 넣음
     onClose = onConfirm;
     actions = [
       {
-        name: '확인',
+        name: t('alert.button.confirm'),
         action: onConfirm
       }
     ];
@@ -80,11 +83,11 @@ const setAlert = params => {
     onClose = onCencel;
     actions = [
       {
-        name: '확인',
+        name: t('alert.button.confirm'),
         action: onConfirm
       },
       {
-        name: '취소',
+        name: t('alert.button.cancel'),
         action: onCencel
       }
     ];

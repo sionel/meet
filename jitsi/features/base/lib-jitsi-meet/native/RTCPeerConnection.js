@@ -1,7 +1,7 @@
 // @flow
 
-import { NativeModules } from "react-native";
-import { RTCPeerConnection, RTCSessionDescription } from "react-native-webrtc";
+import { NativeModules } from 'react-native';
+import { RTCPeerConnection, RTCSessionDescription } from 'react-native-webrtc';
 
 // const logger = require('jitsi-meet-logger').getLogger(__filename);
 
@@ -57,7 +57,7 @@ export default function _RTCPeerConnection(...args: any[]) {
   // understand it.
 
   // $FlowFixMe
-  Object.defineProperty(this, "onaddstream", {
+  Object.defineProperty(this, 'onaddstream', {
     configurable: true,
     enumerable: true,
     get() {
@@ -74,13 +74,13 @@ export default function _RTCPeerConnection(...args: any[]) {
 _RTCPeerConnection.prototype = Object.create(RTCPeerConnection.prototype);
 _RTCPeerConnection.prototype.constructor = _RTCPeerConnection;
 
-_RTCPeerConnection.prototype._invokeOnaddstream = function(...args) {
+_RTCPeerConnection.prototype._invokeOnaddstream = function (...args) {
   const onaddstream = this._onaddstream;
 
   return onaddstream && onaddstream.apply(this, args);
 };
 
-_RTCPeerConnection.prototype._invokeQueuedOnaddstream = function(q) {
+_RTCPeerConnection.prototype._invokeQueuedOnaddstream = function (q) {
   q &&
     q.forEach(args => {
       try {
@@ -94,11 +94,11 @@ _RTCPeerConnection.prototype._invokeQueuedOnaddstream = function(q) {
     });
 };
 
-_RTCPeerConnection.prototype._queueOnaddstream = function(...args) {
+_RTCPeerConnection.prototype._queueOnaddstream = function (...args) {
   this._onaddstreamQueue.push(Array.from(args));
 };
 
-_RTCPeerConnection.prototype.setRemoteDescription = function(description) {
+_RTCPeerConnection.prototype.setRemoteDescription = function (description) {
   return _synthesizeIPv6Addresses(description)
     .catch(reason => {
       reason && _LOGE(reason);
@@ -177,14 +177,14 @@ function _setRemoteDescription(description) {
  * be treated as inability to synthesize an IPv6 address from the specified
  * {@code ipv4}.
  */
-const _synthesizeIPv6FromIPv4Address: string => Promise<?string> = (function() {
+const _synthesizeIPv6FromIPv4Address: string => Promise<?string> = (function () {
   // POSIX.getaddrinfo
   const { POSIX } = NativeModules;
 
   if (POSIX) {
     const { getaddrinfo } = POSIX;
 
-    if (typeof getaddrinfo === "function") {
+    if (typeof getaddrinfo === 'function') {
       return ipv4 =>
         getaddrinfo(/* hostname */ ipv4, /* servname */ undefined).then(
           ([{ ai_addr: ipv6 }]) => ipv6
@@ -198,7 +198,7 @@ const _synthesizeIPv6FromIPv4Address: string => Promise<?string> = (function() {
   if (NAT64AddrInfo) {
     const { getIPv6Address } = NAT64AddrInfo;
 
-    if (typeof getIPv6Address === "function") {
+    if (typeof getIPv6Address === 'function') {
       return getIPv6Address;
     }
   }
@@ -206,8 +206,8 @@ const _synthesizeIPv6FromIPv4Address: string => Promise<?string> = (function() {
   // There's no POSIX.getaddrinfo or NAT64AddrInfo.getIPv6Address.
   return () =>
     Promise.reject(
-      "The impossible just happened! No POSIX.getaddrinfo or" +
-        " NAT64AddrInfo.getIPv6Address!"
+      'The impossible just happened! No POSIX.getaddrinfo or' +
+        ' NAT64AddrInfo.getIPv6Address!'
     );
 })();
 
@@ -220,11 +220,12 @@ const _synthesizeIPv6FromIPv4Address: string => Promise<?string> = (function() {
  * @returns {Promise}
  */
 function _synthesizeIPv6Addresses(sdp) {
-  return new Promise(resolve => resolve(_synthesizeIPv6Addresses0(sdp))).then(
-    ({ ips, lines }) =>
-      Promise.all(Array.from(ips.values())).then(() =>
-        _synthesizeIPv6Addresses1(sdp, ips, lines)
-      )
+  return new Promise(resolve =>
+    resolve(_synthesizeIPv6Addresses0(sdp))
+  ).then(({ ips, lines }) =>
+    Promise.all(Array.from(ips.values())).then(() =>
+      _synthesizeIPv6Addresses1(sdp, ips, lines)
+    )
   );
 }
 
@@ -248,7 +249,7 @@ function _synthesizeIPv6Addresses0(sessionDescription) {
   const ips = new Map();
 
   do {
-    const end = sdp.indexOf("\r\n", start);
+    const end = sdp.indexOf('\r\n', start);
     let line;
 
     if (end === -1) {
@@ -261,35 +262,35 @@ function _synthesizeIPv6Addresses0(sessionDescription) {
       start = end + 2;
     }
 
-    if (line.startsWith("a=candidate:")) {
-      const candidate = line.split(" ");
+    if (line.startsWith('a=candidate:')) {
+      const candidate = line.split(' ');
 
-      if (candidate.length >= 10 && candidate[6] === "typ") {
+      if (candidate.length >= 10 && candidate[6] === 'typ') {
         const ip4s = [candidate[4]];
         let abort = false;
 
         for (let i = 8; i < candidate.length; ++i) {
-          if (candidate[i] === "raddr") {
+          if (candidate[i] === 'raddr') {
             ip4s.push(candidate[++i]);
             break;
           }
         }
 
         for (const ip of ip4s) {
-          if (ip.indexOf(":") === -1) {
+          if (ip.indexOf(':') === -1) {
             ips.has(ip) ||
               ips.set(
                 ip,
                 new Promise((resolve, reject) => {
                   const v = ips.get(ip);
 
-                  if (v && typeof v === "string") {
+                  if (v && typeof v === 'string') {
                     resolve(v);
                   } else {
                     _synthesizeIPv6FromIPv4Address(ip).then(value => {
                       if (
                         !value ||
-                        value.indexOf(":") === -1 ||
+                        value.indexOf(':') === -1 ||
                         value === ips.get(ip)
                       ) {
                         ips.delete(ip);
@@ -346,26 +347,26 @@ function _synthesizeIPv6Addresses1(sessionDescription, ips, lines) {
   for (let l = 0; l < lines.length; ++l) {
     const candidate = lines[l];
 
-    if (typeof candidate !== "string") {
+    if (typeof candidate !== 'string') {
       let ip4 = candidate[4];
       let ip6 = ips.get(ip4);
 
       ip6 && (candidate[4] = ip6);
 
       for (let i = 8; i < candidate.length; ++i) {
-        if (candidate[i] === "raddr") {
+        if (candidate[i] === 'raddr') {
           ip4 = candidate[++i];
           (ip6 = ips.get(ip4)) && (candidate[i] = ip6);
           break;
         }
       }
 
-      lines[l] = candidate.join(" ");
+      lines[l] = candidate.join(' ');
     }
   }
 
   return new RTCSessionDescription({
-    sdp: lines.join("\r\n"),
+    sdp: lines.join('\r\n'),
     type: sessionDescription.type
   });
 }

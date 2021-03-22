@@ -8,6 +8,8 @@ import RNRestart from 'react-native-restart';
 import { querystringParser } from '../../utils';
 import jwt_decode from 'jwt-decode';
 
+import { getT } from '../../utils/translateManager';
+
 const JailMonkey =
   Platform.OS === 'android' && WEHAGO_ENV === 'WEHAGOV'
     ? require('jail-monkey').default
@@ -21,6 +23,7 @@ class SplashScreenContainer extends Component {
       index: 0,
       servernoti: []
     };
+    this.t = getT();
   }
   setLoginState = () => {
     this.props.onChangeRootState({
@@ -91,6 +94,7 @@ class SplashScreenContainer extends Component {
   _handleCheckSecurity = async () => {
     const isJailBroken = JailMonkey?.isJailBroken();
     const isDebuggedMode = await JailMonkey?.isDebuggedMode();
+
     if (
       Platform.OS === 'android' &&
       WEHAGO_ENV === 'WEHAGOV' &&
@@ -98,9 +102,8 @@ class SplashScreenContainer extends Component {
     ) {
       this.props.setAlert({
         type: 1,
-        title: '알림',
-        message:
-          '루팅된 단말에서는 WEHAGO모바일 서비스 이용이 제한됩니다. 보안을 위해 앱을 종료합니다.',
+        title: this.t('alert.title.notion'),
+        message: this.t('alert.text.looting'),
         onConfirm: () => BackHandler.exitApp()
       });
       return false;
@@ -110,20 +113,28 @@ class SplashScreenContainer extends Component {
 
   _handleCheckVersion = async noti => {
     const os = Platform.OS;
-    const majorVersion = 3;
-    const minorVersion = '2.0.2';
+    const majorVersion = 4;
+    const minorVersion = '2.1.0';
     const result = await MeetApi.checkVersion(os, majorVersion, minorVersion);
     // 버전 수정
-    if (!result || !this.props.updateNoti || result.resultData.dev_mode)
+    if (
+      !result ||
+      !this.props.updateNoti ||
+      result.resultData.dev_mode ||
+      result.resultData.update
+    )
       return [];
 
-    const title = '업데이트 안내';
+    const title = this.t('servernoti.title.update');
     const type = 'update';
     const message =
       updateType === 'forced'
-        ? '더 새로워진 WEHAGO Meet을 만나보세요.\n\n신규 기능은 업데이트 이후 사용 가능합니다.'
-        : '더 새로워진 WEHAGO Meet을 만나보세요.\n\n신규 기능은 업데이트 이후 사용 가능합니다.\n\n지금 업데이트 하시겠습니까?';
+        ? this.t('servernoti.message.power_update')
+        : updateType === 'default'
+        ? this.t('servernoti.message.update_text')
+        : 'none';
 
+    if (message === 'none') return [];
     const onToggle = this.props.toggleUpdateNoti;
     const buttonValue = this.props.updateNoti;
     const subMessage = result.resultData.detail_info?.split('\\n');
@@ -137,14 +148,17 @@ class SplashScreenContainer extends Component {
       updateType === 'forced'
         ? [
             {
-              text: '업데이트',
+              text: this.t('alert.button.update'),
               onclick: () => Linking.openURL(marketUrl)
             }
           ]
         : [
-            { text: '아니오', onclick: this._handleNextNotice },
             {
-              text: '업데이트',
+              text: this.t('alert.button.no'),
+              onclick: this._handleNextNotice
+            },
+            {
+              text: this.t('alert.button.update'),
               onclick: () => Linking.openURL(marketUrl)
             }
           ];
@@ -178,7 +192,10 @@ class SplashScreenContainer extends Component {
       if (!e.dev_mode) {
         e.button_type = [
           {
-            text: e.code === 102 ? '종료' : '확인',
+            text:
+              e.code === 102
+                ? this.t('alert.button.exit')
+                : this.t('alert.button.confirm'),
             onclick:
               e.code === 102
                 ? () => RNRestart.Restart()
@@ -234,34 +251,32 @@ class SplashScreenContainer extends Component {
         if (result.errors.code === 'E002') {
           this.props.setAlert({
             type: 1,
-            title: 'Login',
-            message:
-              '고객님의 다른 기기에서 WEHAGO 접속정보가 확인되어 로그아웃 됩니다.'
+            title: this.t('alert.title.fail'),
+            message: this.t('alert.text.duplicate_login')
           });
         } else if (result.errors.status === '400') {
           this.props.setAlert({
             type: 1,
-            title: 'Login',
-            message: '로그인 정보가 잘못되었습니다.'
+            title: this.t('alert.title.fail'),
+            message: this.t('alert.text.login_info_error')
           });
         } else if (result.errors.status === '401') {
           this.props.setAlert({
             type: 1,
-            title: 'Login',
-            message: '권한이 없습니다.'
+            title: this.t('alert.title.fail'),
+            message: this.t('alert.text.no_right')
           });
         } else if (result.errors.message === 'timeout') {
           this.props.setAlert({
             type: 1,
-            title: 'Login',
-            message: '요청 시간을 초과했습니다. 다시 시도해주세요.'
+            title: this.t('alert.title.fail'),
+            message: this.t('alert.text.timeover')
           });
         } else {
           this.props.setAlert({
             type: 1,
-            title: 'Login',
-            message:
-              '요청된 작업을 처리하던중 문제가 발생했습니다. 다시 시도해주세요.'
+            title: this.t('alert.title.fail'),
+            message: this.t('alert.text.problem_ocurred')
           });
         }
         return 'fail';
@@ -476,12 +491,12 @@ class SplashScreenContainer extends Component {
       ) {
         let msg =
           from === 'mobile'
-            ? '기존 로그인 정보와 다른 정보로 접근되었습니다. 변경된 정보로 로그인 하시겠습니까?'
-            : '기존 로그인 정보와 일치 하지 않습니다.\n계속 진행하시겠습니까? \n 화상회의 종료 후 기존 로그인 정보는\n삭제 처리 됩니다.';
+            ? this.t('alert.text.other_info_mobile')
+            : this.t('alert.text.other_info_web');
         info = await new Promise(resolve => {
           this.props.setAlert({
             type: 2,
-            title: '알림',
+            title: this.t('alert.title.notion'),
             message: msg,
             onConfirm: () => {
               resolve('change');
@@ -518,34 +533,32 @@ class SplashScreenContainer extends Component {
       if (result.errors.code === 'E002') {
         this.props.setAlert({
           type: 1,
-          title: 'Login',
-          message:
-            '고객님의 다른 기기에서 WEHAGO 접속정보가 확인되어 로그아웃 됩니다.'
+          title: this.t('alert.title.fail'),
+          message: this.t('alert.text.duplicate_login')
         });
       } else if (result.errors.status === '400') {
         this.props.setAlert({
           type: 1,
-          title: 'Login',
-          message: '로그인 정보가 잘못되었습니다.'
+          title: this.t('alert.title.fail'),
+          message: this.t('alert.text.login_info_error')
         });
       } else if (result.errors.status === '401') {
         this.props.setAlert({
           type: 1,
-          title: 'Login',
-          message: '권한이 없습니다.'
+          title: this.t('alert.title.fail'),
+          message: this.t('alert.text.no_right')
         });
       } else if (result.errors.message === 'timeout') {
         this.props.setAlert({
           type: 1,
-          title: 'Login',
-          message: '요청 시간을 초과했습니다. 다시 시도해주세요.'
+          title: this.t('alert.title.fail'),
+          message: this.t('alert.text.timeover')
         });
       } else {
         this.props.setAlert({
           type: 1,
-          title: 'Login',
-          message:
-            '요청된 작업을 처리하던중 문제가 발생했습니다. 다시 시도해주세요.'
+          title: this.t('alert.title.fail'),
+          message: this.t('alert.text.problem_ocurred')
         });
       }
       return 'fail';
@@ -590,7 +603,7 @@ class SplashScreenContainer extends Component {
       proceed = await new Promise(resolve => {
         this.props.setAlert({
           type: 1,
-          title: '알림',
+          title: this.t('alert.title.notion'),
           message: statusCheck.message,
           onConfirm: () => {
             resolve(true);
@@ -610,7 +623,7 @@ class SplashScreenContainer extends Component {
       let actions = [];
       let onClose = this._handleOnCloseAlert;
 
-      description = '토큰 정보가 만료되었습니다.';
+      description = this.t('alert.text.token_expiration');
       onClose = async () => {
         this._handleOnCloseAlert(
           () =>
@@ -620,7 +633,7 @@ class SplashScreenContainer extends Component {
       };
       actions = [
         {
-          name: '확인',
+          name: this.t('alert.button.yes'),
           action: () => {
             this._handleOnCloseAlert(
               () =>

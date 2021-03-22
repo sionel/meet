@@ -1,16 +1,7 @@
-/**
- * We talk API
- * 사용자 관련 API
- */
+import { wehagoBaseURL, securityRequest } from '../../utils';
+import { getT } from '../../utils/translateManager';
 
-import { meetURL, wehagoBaseURL, securityRequest } from '../../utils';
-
-// #region
 export default {
-  /**
-   * We talk list
-   * 메신저 리스트
-   */
   getWetalkList: async (a_token, r_token, cno, user_id, HASH_KEY) => {
     /*
 		a_token: 인증토큰
@@ -20,6 +11,7 @@ export default {
     // alert(1);
     const url = `${wehagoBaseURL}/communication/rtc/rtc-room-list?user_id=${user_id}&cno=${cno}`;
     const headers = securityRequest(a_token, r_token, url, HASH_KEY);
+    const t = getT();
     try {
       const data = {
         method: 'GET',
@@ -31,7 +23,7 @@ export default {
       const response = await fetch(url, data);
       return response.json();
     } catch (err) {
-      alert('요청된 작업을 처리하던중 문제가 발생했습니다. 다시 시도해 주세요');
+      alert(t('alert.text.problem_ocurred'));
       return false;
     }
   },
@@ -51,9 +43,8 @@ export default {
       const response = await fetch(url, data);
       return response.json();
     } catch (err) {
-      alert('요청된 작업을 처리하던중 문제가 발생했습니다. 다시 시도해 주세요');
+      alert(t('alert.text.problem_ocurred'));
       return false;
     }
   }
 };
-// #endregion

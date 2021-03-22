@@ -10,6 +10,7 @@ import CustomAlert from '../CustomAlert';
 import CustomIcon from '../CustomIcon';
 
 import { Text } from '../StyledText';
+import { getT } from '../../utils/translateManager';
 
 export default function CompanySelectPresenter(props) {
   const {
@@ -21,29 +22,29 @@ export default function CompanySelectPresenter(props) {
   } = props;
 
   const [visible, setVisible] = useState(false);
-
+  const t = getT();
   return (
     <View style={styles.container}>
       <View style={styles.companyList}>
         <View style={styles.title}>
           <Text style={styles.titleText}>
-            {isSP ? '화상회의팩 미구매 회사' : '화상회의 미구매 회사'}
+            {isSP
+              ? t('selectcompany.title.팩미구매')
+              : t('selectcompany.title.미구매')}
           </Text>
           <TouchableOpacity
             activeOpacity={0.5}
             onPress={() => setVisible(true)}
           >
-            <Text style={{ color: '#1C90FB' }}>로그아웃</Text>
+            <Text style={{ color: '#1C90FB' }}>
+              {t('selectcompany.title.logout')}
+            </Text>
           </TouchableOpacity>
         </View>
-        <Text style={styles.message}>
-          {
-            '화상회의 서비스를 구매하지 않은 회사입니다.\n서비스 구매 후 이용하세요.'
-          }
-        </Text>
+        <Text style={styles.message}>{t('selectcompany.message')}</Text>
 
         <View style={styles.header}>
-          <Text>회사 선택</Text>
+          <Text>{t('selectcompany.회사선택')}</Text>
         </View>
         <View style={styles.listArea}>
           <FlatList
@@ -83,16 +84,16 @@ export default function CompanySelectPresenter(props) {
       <CustomAlert
         visible={visible}
         width={320}
-        title={'로그아웃'}
-        description={'로그아웃 하시겠습니까?'}
+        title={t('alert.title.logout')}
+        description={t('alert.text.logout')}
         onClose={() => setVisible(false)}
         actions={[
           {
-            name: '취소',
+            name: t('alert.button.cencel'),
             action: () => setVisible(false)
           },
           {
-            name: '확인',
+            name: t('alert.button.confirm'),
             action: onLogout
           }
         ]}

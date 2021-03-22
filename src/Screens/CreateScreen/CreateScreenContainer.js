@@ -1,46 +1,33 @@
-/**
- * CreateScreenContainer
- *
- * 메인페이지
- */
-
-import React, { Component, Fragment } from 'react';
-import {
-  AppState,
-  StatusBar,
-  Linking,
-  Platform,
-  NativeModules,
-  View
-} from 'react-native';
+import React from 'react';
+import { StatusBar, Platform, View } from 'react-native';
 
 import CreateScreenPresenter from './CreateScreenPresenter';
-// service
-// import { WetalkApi } from '../../services';
-// import { UserApi } from '../../services';
 import { ConferenceApi } from '../../services';
 import { MeetApi } from '../../services';
 import { NavigationEvents } from 'react-navigation';
-// import { querystringParser } from '../../utils';
 
 import DeviceInfo from 'react-native-device-info';
 import Orientation from 'react-native-orientation-locker';
+import { getT } from '../../utils/translateManager';
 
 const hasNotch = DeviceInfo.hasNotch() && Platform.OS === 'ios';
 
 class CreateScreenContainer extends React.Component {
-  /**
-   * STATE
-   */
-  state = {
-    refreshing: false, // 리프레시 상태
-    searchKeyword: '', // 검색인풋
-    selectedRoomId: null,
-    selectedRoomName: null,
-    modal: false,
-    url: null,
-    orientation: 'UNKNOWN'
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      refreshing: false, // 리프레시 상태
+      searchKeyword: '', // 검색인풋
+      selectedRoomId: null,
+      selectedRoomName: null,
+      modal: false,
+      url: null,
+      orientation: 'UNKNOWN'
+    };
+    this.t = getT();
+    debugger
+  }
 
   componentDidMount() {
     Orientation.getOrientation(orientation => {
@@ -49,19 +36,12 @@ class CreateScreenContainer extends React.Component {
     Orientation.addOrientationListener(this._handleOrientation);
   }
 
-  /**
-   * componentWillUnmount
-   */
   componentWillUnmount() {
     Orientation.removeOrientationListener(this._handleOrientation);
   }
 
-  /**
-   * Rendering
-   */
   render() {
-    const { refreshing, searchKeyword, selectedRoomId, modal } = this.state;
-    const { navigation, auth } = this.props;
+    const { searchKeyword } = this.state;
     let wetalk = []; // We talk list
     if (searchKeyword) {
       wetalk = this.props.wetalk.filter(item =>
@@ -70,13 +50,12 @@ class CreateScreenContainer extends React.Component {
     } else {
       wetalk = this.props.wetalk;
     }
-    return (  
+    return (
       <View style={{ flex: 1 }}>
         <StatusBar barStyle="light-content" backgroundColor={'#1C90FB'} />
         <NavigationEvents
           onDidFocus={() => {
             this._isFocus = true;
-            // this._handleRefressAfterWhile();
           }}
           onDidBlur={() => (this._isFocus = false)}
         />
@@ -98,35 +77,20 @@ class CreateScreenContainer extends React.Component {
     this.props.navigation.state.params.onGetWetalkList();
   };
 
-  /**
-   * _handleOrientation
-   */
   _handleOrientation = orientation => {
     this.setState({ orientation });
   };
 
-  /**
-   * _handleRedirect
-   * 페이지 이동
-   */
   _handleRedirect = (url, param) => {
     const { navigation } = this.props;
     navigation.navigate('Home');
     navigation.navigate(url, param);
   };
 
-  /**
-   * _handleSearch
-   * 검색 필터
-   */
   _handleSearch = searchKeyword => {
     this.setState({ searchKeyword });
   };
 
-  /**
-   * _handleCreateConference
-   * 화상회의 생성
-   */
   _handleCreateConference = async (externalData = null) => {
     let auth;
     let company_code;
@@ -200,14 +164,10 @@ class CreateScreenContainer extends React.Component {
     } else if (createResult.errors && createResult.errors.code === 'E002') {
       this._handleRefresh();
     } else {
-      alert('화상회의 생성에 실패하였습니다. 다시 시도해 주세요');
+      alert(this.t('alert.text.생성실패'));
     }
   };
 
-  /**
-   * _handleActivateModal
-   * 모달뷰 토글
-   */
   _handleActivateModal = (selectedRoomId = null, selectedRoomName = null) => {
     this.setState(prev => ({
       modal: !prev.modal,

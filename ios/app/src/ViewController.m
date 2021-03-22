@@ -21,7 +21,7 @@
 @import MobileCoreServices;
 @import Intents;  // Needed for NSUserActivity suggestedInvocationPhrase
 
-@import JitsiMeet;
+@import JitsiMeetSDK;
 
 #import "Types.h"
 #import "ViewController.h"
@@ -101,5 +101,12 @@
     [self _onJitsiMeetViewDelegateEvent:@"ENTER_PICTURE_IN_PICTURE" withData:data];
 }
 #endif
+
+
+- (void)terminate {
+    JitsiMeetView *view = (JitsiMeetView *) self.view;
+    [view leave];
+}
+
 
 @end

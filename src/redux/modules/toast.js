@@ -1,6 +1,7 @@
 //#region Toast
 
 import { debounce } from 'lodash';
+import { getT } from '../../utils/translateManager';
 
 const TOAST_MESSAGE = 'master.TOAST_MESSAGE';
 
@@ -51,9 +52,13 @@ function kickMessage(masterId, targetId) {
     const target = targetNickName
       ? `${targetNickName}(${targetUserName})`
       : targetUserName;
+    const t = getT();
+    const toastMessage = t('toast.master.누가추방')
+      .replace('[@master@]', master)
+      .replace('[@target@]', target);
     dispath({
       type: TOAST_MESSAGE,
-      toastMessage: `${master}님께서 ${target}님을 추방하였습니다`
+      toastMessage
     });
   };
 }

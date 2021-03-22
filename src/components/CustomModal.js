@@ -34,7 +34,6 @@ const CustomModal = props => {
     >
       <View style={styles.modalWrap}>
         <View style={styles.modalContentWrap}>
-          {/* Close 버튼 */}
           <TouchableOpacity
             style={{
               position: 'absolute',
@@ -53,11 +52,8 @@ const CustomModal = props => {
               }}
             />
           </TouchableOpacity>
-          {/* Close 버튼 */}
 
-          {/* 본문 */}
           <View style={styles.modalMessage}>
-            {/* 타이틀 */}
             <Text
               style={{
                 fontSize: 22,
@@ -71,9 +67,7 @@ const CustomModal = props => {
             <Text style={{fontFamily: 'DOUZONEText30'}}>{props.text}</Text>
             {props.children}
           </View>
-          {/* 본문 */}
 
-          {/*  */}
           <View style={styles.modalButtons}>
             <TouchableOpacity
               style={{ ...styles.modalButton, ...styles.modalButtonConfirm }}
@@ -82,7 +76,6 @@ const CustomModal = props => {
               <Text style={{ color: '#fff', fontFamily: 'DOUZONEText30' }}>{props.feedbackText}</Text>
             </TouchableOpacity>
           </View>
-          {/*  */}
         </View>
       </View>
     </Modal>
@@ -94,10 +87,10 @@ const CustomModal = props => {
  */
 CustomModal.defaultProps = {
   display: false,
-  title: '알림',
-  text: '내용을 입력해 주세요',
+  title: '',
+  text: '',
   children: null,
-  feedbackText: '확인',
+  feedbackText: '',
   onClickClose: () => alert('Close modal'),
   onClickFeedback: () => alert('Feedback modal')
 };
