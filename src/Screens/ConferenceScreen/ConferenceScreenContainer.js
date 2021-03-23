@@ -20,6 +20,7 @@ import ConferenceManager from '../../utils/conference/ConferenceManager';
 import MeetApi from '../../services/api/MeetApi';
 
 import { setConferenceManager } from '../../utils/ConferenceManager';
+import { getT } from '../../utils/translateManager';
 
 const { PictureInPicture } = NativeModules;
 const { width, height } = Dimensions.get('window');
@@ -45,6 +46,7 @@ class ConferenceScreenContainer extends React.Component {
       createdTime: null,
       pipMode: false
     };
+    this.t = getT();
   }
 
   /**
@@ -351,7 +353,7 @@ class ConferenceScreenContainer extends React.Component {
     // 따라서 아래 로직은 PIP 모드를 지원하지 않을 때 동작한다.
     if (this._appState === 'active' && nextAppState !== 'active') {
       // this.setState({ pipMode: false });
-      ToastAndroid.show('백그라운드에서 실행됩니다.', ToastAndroid.SHORT);
+      ToastAndroid.show(this.t('toast.백그라운드'), ToastAndroid.SHORT);
       // backgroiund 시 video 설정 기억
       if (this.props.user) {
         const { isMuteVideo } = this.props.user;
@@ -412,14 +414,11 @@ class ConferenceScreenContainer extends React.Component {
       clearTimeout(this._backTimeout);
     }
 
-    ToastAndroid.show(
-      '앱으로 돌아가지 않으면 잠시후 마이크가 꺼집니다.',
-      ToastAndroid.LONG
-    );
+    ToastAndroid.show(this.t('toast.마이크꺼진다'), ToastAndroid.LONG);
 
     this._backTimeout = setTimeout(() => {
       this.props.toggleMuteMicByMe(true); // mic mute
-      ToastAndroid.show('마이크가 꺼졌습니다.', ToastAndroid.SHORT);
+      ToastAndroid.show(this.t('toast.마이크꺼짐'), ToastAndroid.SHORT);
     }, 7500);
   };
 

@@ -75,7 +75,7 @@ export default function ReservationInfoScreen(props) {
         <>
           <View style={styles.Participant}>
             <Text style={styles.text4}>{`${t(
-              'roomstate.reservation.참여자정보'
+              'roomstate.reservation.참여자정보'
             )} (${accessUser.length})`}</Text>
           </View>
           <FlatList

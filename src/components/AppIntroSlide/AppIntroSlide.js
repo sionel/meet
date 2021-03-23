@@ -86,7 +86,7 @@ class AppIntroSlide extends React.Component {
             style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
           >
             <Text style={styles.textTitle}>
-              {this.t('splash.2번타이틀')} 연동
+              {this.t('splash.2번타이틀')}
             </Text>
             <Text style={styles.textContent}>{this.t('splash.2번내용')}</Text>
           </View>

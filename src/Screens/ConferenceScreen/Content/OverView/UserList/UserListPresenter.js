@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import CustomIcon from '../../../../../components/CustomIcon';
 import { wehagoMainURL } from '../../../../../utils';
+import { getT } from '../../../../../utils/translateManager';
 
 const UserListPresenter = props => {
   const {
@@ -21,7 +22,7 @@ const UserListPresenter = props => {
     // toggleMuteSpeaker,
     onChangeSpeaker // 스피커폰
   } = props;
-
+  const t = getT();
   /**
    * 닉네임 표기 방법
    * 닉네임(이름) > 이름
@@ -93,16 +94,26 @@ const UserListPresenter = props => {
               </Text>
               {item.id === 'localUser' && (
                 <View style={[styles.presenter, { backgroundColor: '#fb0' }]}>
-                  <Text style={styles.presenterText}>나</Text>
+                  <Text style={styles.presenterText}>{t('chatting.나')}</Text>
                 </View>
               )}
               {item.id === presenter && (
                 <View style={styles.presenter}>
-                  <Text style={styles.presenterText}>발표자</Text>
+                  <Text style={styles.presenterText}>
+                    {t('chatting.발표자')}
+                  </Text>
                 </View>
-              )}{!item.userInfo.wehagoId && (
-                <View style={[styles.presenter , { backgroundColor: 'rgb(112,172,196)' }]}>
-                  <Text style={styles.presenterText}>외부 참여자</Text>
+              )}
+              {!item.userInfo.wehagoId && (
+                <View
+                  style={[
+                    styles.presenter,
+                    { backgroundColor: 'rgb(112,172,196)' }
+                  ]}
+                >
+                  <Text style={styles.presenterText}>
+                    {t('chatting.외부참여자')}
+                  </Text>
                 </View>
               )}
             </View>

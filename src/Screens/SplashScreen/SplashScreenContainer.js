@@ -252,7 +252,7 @@ class SplashScreenContainer extends Component {
           this.props.setAlert({
             type: 1,
             title: this.t('alert.title.fail'),
-            message: this.t('alert.text.duplicate_login')
+            message: this.t('alert.text.duplicate_logout')
           });
         } else if (result.errors.status === '400') {
           this.props.setAlert({
@@ -534,7 +534,7 @@ class SplashScreenContainer extends Component {
         this.props.setAlert({
           type: 1,
           title: this.t('alert.title.fail'),
-          message: this.t('alert.text.duplicate_login')
+          message: this.t('alert.text.duplicate_logout')
         });
       } else if (result.errors.status === '400') {
         this.props.setAlert({

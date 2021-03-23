@@ -14,6 +14,14 @@ class LoginScreenContainer extends Component {
     };
     this.t = getT();
   }
+
+  componentDidMount(){
+    debugger
+  }
+
+  componentDidUpdate(){
+    debugger
+  }
   render() {
     return (
       <LoginScreenPresenter

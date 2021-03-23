@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { wehagoMainURL } from '../utils';
+import { getT } from '../utils/translateManager';
 
 function getFirtsChar(str) {
   split = str.split(/([\uD800-\uDBFF][\uDC00-\uDFFF])/);
@@ -25,6 +26,7 @@ const ListItemComp = props => {
   let onClickEvent = props.onClick;
   const iconWidth = 40 * (props.iconSize / 100);
   const iconTextWidth = 15 * (props.iconSize / 100);
+  const t = getT()
   let iconText = (
     <Text
       style={{
@@ -57,13 +59,13 @@ const ListItemComp = props => {
   let displayUpdated;
   switch (props.descriptionType) {
     case 'date':
-      displayUpdated = `${updated.getFullYear()}년 `;
+      displayUpdated = `${updated.getFullYear()}${t('common.year')} `;
       displayUpdated += `${updated.getMonth() + 1 < 10 ? `0` : ``}${
         updated.getMonth() + 1
-      }월 `;
+      }${t('common.month')} `;
       displayUpdated += `${
         updated.getDate() < 10 ? `0` : ``
-      }${updated.getDate()}일`;
+      }${updated.getDate()}${t('common.day')}`;
       break;
 
     default:
@@ -136,7 +138,7 @@ const ListItemComp = props => {
                 fontFamily: 'DOUZONEText30'
               }}
             >
-              시작
+              {t('create_room.시작버튼')}
             </Text>
           </View>
         )}

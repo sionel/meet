@@ -14,6 +14,7 @@ import ButtonCameraOff from '../../../assets/buttons/btn_vc_camera_off.png';
 import ButtonMic from '../../../assets/buttons/btn_vc_mike_on.png';
 import ButtonMicOff from '../../../assets/buttons/btn_vc_mike_off.png';
 import { RTCView } from 'react-native-webrtc';
+import { getT } from '../../utils/translateManager';
 
 export default function SettingScreenPresenter({
   tracks,
@@ -25,6 +26,7 @@ export default function SettingScreenPresenter({
   nameField,
   buttonActive
 }) {
+  const t = getT();
   return (
     <KeyboardAvoidingView
       style={{
@@ -44,10 +46,10 @@ export default function SettingScreenPresenter({
           }}
         >
           <Text style={{ fontSize: 17, color: '#000', paddingBottom: 10 }}>
-            {'화상대화 전 기본 설정을 진행해주세요.'}
+            {t('roomstate.setting.title')}
           </Text>
           <Text style={{ fontSize: 12, color: 'rgb(140,140,140)' }}>
-            {'원치 않을 경우, 바로 화상대화 참여 버튼클릭 후 진입가능합니다.'}
+            {t('roomstate.setting.detail')}
           </Text>
         </View>
         <View
@@ -62,7 +64,7 @@ export default function SettingScreenPresenter({
           <Text
             style={{ fontSize: 14, color: 'rgb(51,51,51)', paddingBottom: 5 }}
           >
-            {'디스플레이 및 사운드 오디오 출력설정'}
+            {t('roomstate.setting.output')}
           </Text>
 
           <View
@@ -159,9 +161,11 @@ export default function SettingScreenPresenter({
               flex: 1
             }}
           >
-            <Text style={{ width: '100%', paddingLeft: 5 }}>{'이름 설정'}</Text>
+            <Text style={{ width: '100%', paddingLeft: 5 }}>
+              {t('roomstate.setting.name')}
+            </Text>
             <TextInput
-              placeholder={'대화방에서 사용할 이름을 설정해주세요.'}
+              placeholder={t('roomstate.setting.setname')}
               placeholderTextColor={'#999'}
               style={{
                 borderColor: 'rgb(201,205,213)',
@@ -183,7 +187,7 @@ export default function SettingScreenPresenter({
                 fontSize: 11
               }}
             >
-              {'입력하지 않을 경우, 기본값이 적용됩니다.(최대 20자 설정가능)'}
+              {t('roomstate.setting.nameDefault')}
             </Text>
           </View>
         )}
@@ -217,7 +221,7 @@ export default function SettingScreenPresenter({
                 borderColor: '#fff'
               }}
             >
-              {'화상대화 참여'}
+              {t('roomstate.setting.enter')}
             </Text>
           </TouchableOpacity>
         </View>

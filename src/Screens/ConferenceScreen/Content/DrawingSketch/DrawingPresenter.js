@@ -21,6 +21,7 @@ import DeviceInfo from 'react-native-device-info';
 import Slider from '@react-native-community/slider';
 // import { Slider } from 'react-native';
 import CustomIcon from './../../../../components/CustomIcon';
+import { getT } from '../../../../utils/translateManager';
 
 const isIOS = Platform.OS === 'ios';
 const hasNotch = DeviceInfo.hasNotch() && isIOS;
@@ -62,6 +63,7 @@ const DrawingPresenter = props => {
     height: props.imageSize[props.page].imgHeight * scale
   };
 
+  const t = getT()
   const mainPaletteRender = () => {
     const renderList = ['stroke'];
     let rednerTab = [];
@@ -454,7 +456,7 @@ const DrawingPresenter = props => {
                     fontFamily: 'DOUZONEText50'
                   }}
                 >
-                  모두 삭제
+                  {t('meet.삭제')}
                 </Text>
               </TouchableOpacity>
             </View>

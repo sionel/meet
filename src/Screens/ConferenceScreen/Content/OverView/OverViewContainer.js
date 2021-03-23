@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { getT } from '../../../../utils/translateManager';
 import OverViewPresenter from './OverViewPresenter';
 
 class OverViewContainer extends Component {
@@ -6,15 +7,22 @@ class OverViewContainer extends Component {
 
   constructor(props) {
     super(props);
+    this.t = getT();
   }
 
   render() {
-    const { isLoading, mode, hasNotch, orientation, onChangeSharingMode } = this.props;
+    const {
+      isLoading,
+      mode,
+      hasNotch,
+      orientation,
+      onChangeSharingMode
+    } = this.props;
     const { view } = this.state;
     const tabs = [
-      { key: 'CHATTING', name: '대화방' },
-      { key: 'USERLIST', name: '참여자 목록' },
-      { key: 'FILELIST', name: '웹스토리지 파일' }
+      { key: 'CHATTING', name: this.t('chatting.대화방') },
+      { key: 'USERLIST', name: this.t('chatting.목록') },
+      { key: 'FILELIST', name: this.t('meet.스토리지') }
     ];
 
     let selectedTabs = [];

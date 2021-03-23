@@ -174,7 +174,7 @@ export default function LoginInputContainer(props) {
           setAlertVisible({
             visible: true,
             title: t('alert.title.notion'),
-            description: getAuth.resultMsg,
+            description: t('alert.text.duplicate_login'),
             onClose: () => {
               _resetAlert();
               resolve(false);
@@ -238,7 +238,7 @@ export default function LoginInputContainer(props) {
             title: t('alert.title.notion'),
             description: iswehagov
               ? t('alert.text.세션만료')
-              : t('alert.text.duplicate_login'),
+              : t('alert.text.duplicate_logout'),
             onClose,
             actions: [
               {

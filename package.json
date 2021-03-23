@@ -26,7 +26,7 @@
     "build-inhouse-abb": "cd ./wehago/android && sudo rm -rf build ./app/build ./sdk/build && sudo ./gradlew bundleRelease && cd ../..",
     "build-inhouse-v": "cd ./wehagoV/android && sudo rm -rf build ./app/build ./sdk/build && sudo ./gradlew assembleRelease && cd ../..",
     "build-aab": "cd ./wehago/android && sudo rm -rf build ./app/build ./sdk/build && sudo ./gradlew bundleRelease && cd ../..",
-    "set-android": "~/Library/Android/sdk/platform-tools/adb -s 26e1eb6c2b217ece   reverse tcp:8081 tcp:8081",
+    "set-android": "~/Library/Android/sdk/platform-tools/adb -s R3CMB0CXTRB   reverse tcp:8081 tcp:8081",
     "get-android": "~/Library/Android/sdk/platform-tools/adb devices"
   },
   "dependencies": {
@@ -55,6 +55,8 @@
     "@tensorflow-models/body-pix": "^1.0.1",
     "@tensorflow/tfjs": "^1.1.2",
     "@terrylinla/react-native-sketch-canvas": "^0.8.0",
+    "@types/react": "^17.0.3",
+    "@types/react-native": "^0.64.0",
     "@webcomponents/url": "0.7.1",
     "amplitude-js": "4.5.2",
     "bc-css-flags": "3.0.0",

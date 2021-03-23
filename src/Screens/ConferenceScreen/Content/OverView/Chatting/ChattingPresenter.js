@@ -9,6 +9,7 @@ import {
   StyleSheet,
   Platform
 } from 'react-native';
+import { getT } from '../../../../../utils/translateManager';
 const isIOS = Platform.OS === 'ios';
 
 const ChattingPresenter = props => {
@@ -22,7 +23,7 @@ const ChattingPresenter = props => {
     onChangeState,
     onSendTextMessage
   } = props;
-
+  const t = getT()
   /**
    * 닉네임 표기 방법
    * 닉네임(이름) > 이름
@@ -57,7 +58,7 @@ const ChattingPresenter = props => {
         {messages.length === 0 && (
           <View style={{ flex: 1, alignItems: 'center', paddingTop: 50 }}>
             <Text style={{ color: '#999', fontFamily: 'DOUZONEText30' }}>
-              이전 대화가 없습니다. 대화를 시작해보세요.
+              {t('chatting.대화없음')}
             </Text>
           </View>
         )}
@@ -198,7 +199,7 @@ const ChattingPresenter = props => {
                 fontFamily: 'DOUZONEText30'
               }}
             >
-              전송
+              {t('chatting.전송')}
             </Text>
           </TouchableOpacity>
         </View>

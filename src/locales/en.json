@@ -29,7 +29,8 @@
       },
       "text": {
         "looting": "The use of WEHAGO mobile service is restricted on rooted terminals. Exit the app for security.",
-        "duplicate_login": "Logging out, as another device has logged into your WEHAGO account.",
+        "duplicate_logout": "Logging out, as another device has logged into your WEHAGO account.",
+        "duplicate_login": "You are using wehago on your other device. Would you like to close the existing connection and connect a new one?",
         "login_info_error": "Incorrect login information",
         "no_right": "No privileges",
         "timeover": "Request time has been exceeded. Try again.",
@@ -225,6 +226,15 @@
         "마스터문의": "Check the master for details on schedule change and cancellation.",
         "지속": "If screen conversion fails continuously",
         "고객센터": "please report it to the Customer Center."
+      },
+      "setting":{
+        "title":"Please proceed with the basic settings before the video chat.",
+        "detail":"If you do not want to, you can enter immediately after clicking the video chat participation button.",
+        "output":"Display and sound audio output settings",
+        "name":"Name setting",
+        "setname":"Please set a name to use in the chat room.",
+        "nameDefault":"If not entered, the default is applied. (Maximum 20 characters can be set)",
+        "enter":"enter the conference"
       }
     },
     "selectcompany": {
@@ -237,7 +247,10 @@
       "logout": "logout"
     },
     "common": {
-      "exit": "exit"
+      "exit": "exit",
+      "year": "year",
+      "month": "month",
+      "day": "day"
     }
   }
 }

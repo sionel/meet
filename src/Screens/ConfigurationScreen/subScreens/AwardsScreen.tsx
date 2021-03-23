@@ -8,12 +8,13 @@ import {
   Linking,
   Text
 } from 'react-native';
+import { getT } from '../../../utils/translateManager';
 
 export default function AwardsScreen(props) {
   const moveToSite = url => {
     Linking.openURL(url);
   };
-
+  const t = getT()
   return (
     <View style={styles.container}>
       <ScrollView style={styles.list}>
@@ -30,10 +31,10 @@ export default function AwardsScreen(props) {
               marginTop: 20
             }}
           >
-            클라우드 서비스 보안인증
+            {t('option.인증')}
           </Text>
           <Text style={{ fontSize: 12, fontFamily: 'DOUZONEText30' }}>
-            KISA 정보보호 및 개인정보보호관리체계 인증 획득
+            {t('option.kisa')}
           </Text>
           <Text
             style={{
@@ -43,7 +44,7 @@ export default function AwardsScreen(props) {
               marginTop: 20
             }}
           >
-            WEHAGO V(IaaS/SaaS표준등급)
+            {t('option.WEHAGOV')}
           </Text>
           <Text
             style={{
@@ -67,7 +68,7 @@ export default function AwardsScreen(props) {
                 color: 'rgb(39,67,222)'
               }}
             >
-              사이트바로가기
+              {t('option.바로가기')}
             </Text>
           </TouchableOpacity>
         </View>

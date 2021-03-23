@@ -12,15 +12,16 @@ import { useSelector } from 'react-redux';
 import { CustomIcon } from '../../../components';
 import { wehagoMainURL } from '../../../utils';
 import { WEHAGO_TYPE } from '../../../../config';
+import { getT } from '../../../utils/translateManager';
 
 export default function PolicyScreen(props) {
   const { navigation } = props;
   const auth = useSelector(state => state.user['auth']);
   const membership = auth.last_company.membership_code;
-
+  const t = getT()
   const config = {
     terms: {
-      title: WEHAGO_TYPE + ' 이용약관',
+      title: WEHAGO_TYPE + ` ${t('option.이용약관')}`,
       rightSide: <CustomIcon name={'btn_next'} width={24} height={24} />,
       action: () => {
         membership === 'WT1'
@@ -29,7 +30,7 @@ export default function PolicyScreen(props) {
       }
     },
     policy: {
-      title: '개인정보 보호정책',
+      title: t('option.보호정책'),
       rightSide: <CustomIcon name={'btn_next'} width={24} height={24} />,
       action: () => {
         membership === 'WT1'
@@ -38,7 +39,7 @@ export default function PolicyScreen(props) {
       }
     },
     openSource: {
-      title: '오픈소스 라이선스',
+      title: t('option.오픈소스'),
       rightSide: <CustomIcon name={'btn_next'} width={24} height={24} />,
       action: () => {
         navigation.navigate('OpenSource');

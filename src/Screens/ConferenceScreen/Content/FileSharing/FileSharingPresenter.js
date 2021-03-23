@@ -155,8 +155,8 @@ const FileSharingPresenter = props => {
   const modalMessage =
     presenter === 'localUser'
       ? {
-          title: t('alert.title.종료').replace('[@mode@]', MODE),
-          text: t('alert.text.종료문구').replace('[@mode@]', MODE),
+          title: t('alert.title.종료').replaceAll('[@mode@]', MODE),
+          text: t('alert.text.종료문구').replaceAll('[@mode@]', MODE),
           onClickFeedback: () => {
             props.onSetDrawingData();
             props.onChangeSharingMode(false, false);
