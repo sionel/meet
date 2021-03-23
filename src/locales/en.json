@@ -2,93 +2,89 @@
   "translation": {
     "alert": {
       "title": {
-        "notion": "notion",
+        "notion": "Notion",
         "login": "Login",
         "logout": "Logout",
-        "size_over": "번역없음",
+        "size_over": "Shared File Capacity Exceeded",
         "error": "error",
         "unsupported": "unsupported",
-        "파일변환실패": "번역없음",
-        "파일불러오기실패": "번역없음",
+        "파일변환중": "file conversion",
+        "파일불러오기실패": "Loading fail",
         "fail": "Login failure",
         "사용제한": "Limit of use",
-        "권한주세요": "번역없음",
+        "권한주세요": "Access rights required",
         "화상회의생성": "Create video conference",
-        "스케치종료": "번역없음",
-        "종료": "번역없음",
-        "화상종료": "번역없음",
-        "변경": "Change company",
-        "update": "번역없음",
-        "noti": "번역없음",
-        "팩미구매": "Company that has not purchased video conference pack",
-        "미구매": "Company that has not purchased video conference pack"
+        "스케치종료": "Exit",
+        "종료": "[@mode@] Exit",
+        "화상종료": "Conference Exit",
+        "변경": "Change company"
       },
       "button": {
-        "yes": "yes",
-        "no": "no",
-        "update": "update",
-        "confirm": "confirm",
-        "exit": "exit",
+        "yes": "Yes",
+        "no": "No",
+        "update": "Update",
+        "confirm": "Confirm",
+        "exit": "End",
         "cancel": "cancel"
       },
       "text": {
-        "looting": "번역없음",
+        "looting": "The use of WEHAGO mobile service is restricted on rooted terminals. Exit the app for security.",
         "duplicate_login": "Logging out, as another device has logged into your WEHAGO account.",
         "login_info_error": "Incorrect login information",
         "no_right": "No privileges",
         "timeover": "Request time has been exceeded. Try again.",
-        "problem_ocurred": "번역없음",
-        "other_info_mobile": "번역없음",
-        "other_info_web": "번역없음",
-        "token_expiration": "번역없음",
+        "problem_ocurred": "There was a problem processing the requested operation. please try again.",
+        "other_info_mobile": "Accessed with information different from the existing login information. Would you like to log in with the changed information?",
+        "other_info_web": "Does not match existing login information. \n Do you want to continue? \n After the video conference is over, \n the existing login information will be deleted.",
+        "token_expiration": "Token has expired.",
         "usage_restriction": "WEHAGO service use is limited. Contact the Customer Center if you have any inquiries on limited service use.",
         "init_company": "Initial company settings in progress. You can use the service after completing configuration in WEHAGO web.",
         "unpaid": "No deposit has been made to the virtual account. You can use WEHAGO services after your deposit is confirmed.",
         "no_app_store": "Unable to find the app in store.",
-        "no_exist_joincode": "번역없음",
+        "no_exist_joincode": "The participation code does not exist.",
         "fail_user_info": "Failed to retrieve user information.",
         "fail_file_list": "Failed to load file list.",
-        "fail_share_file_size": "번역없음",
+        "fail_share_file_size": "The file size that can be shared is exceeded.\nPlease select a file less than 20MB.",
         "unsupported_doc": "This file does not support document sharing.",
-        "기다려": "번역없음",
-        "방지문자틀림": "번역없음",
-        "세션만료": "번역없음",
+        "기다려": "Please try again later.",
+        "방지문자틀림": "You have entered an incorrect character to prevent automatic entry.",
+        "세션만료": "Your session has expired. Please login again",
         "아디비번틀림": "Incorrect ID or password.",
         "5번틀림": "Login has failed five times. You will be redirected to the page to enter automated input prevention characters.",
         "사용제한메시지": "Unable to process your login, as there is either no company information or the signup has not been completed.",
         "로그인실패": "Login has failed",
-        "접근권한": "번역없음",
+        "접근권한": "The microphone and camera access rights are required to use the service. Please allow access to the microphone and camera in the settings.",
         "로그아웃": "Do you want to log out?",
         "한번더": "Try again",
         "만들기실패": "Video conference creation has failed. Please try again.",
         "방만들기": "Do you want to create a video conference?",
         "통화불가": "Unable to call this user",
-        "종료문구": "번역없음",
+        "종료문구": "Do you want to quit [@mode@]?\n(If you quit, [@mode@] will not be visible to all participants and you will be returned to the video conferencing screen.)",
         "화상종료문구": "Do you want to end the video conference?",
         "생성실패": "Video conference creation has failed. Please try again.",
-        "접근금지": "번역없음"
+        "접근금지": "Waiting to accept the participation request."
       }
     },
     "servernoti": {
       "title": {
-        "update": "번역없음",
+        "update": "Update guide",
         "noti": "Notice"
       },
       "message": {
-        "power_update": "번역없음",
-        "update_text": "번역없음",
-        "update_list": "번역없음"
+        "power_update": "Meet the new WEHAGO Meet.\n\n New features will be available after the update.",
+        "update_text": "Meet the newer WEHAGO Meet.\n\nNew features will be available after the update.\n\nWould you like to update now?",
+        "update_list": "Update history"
       },
       "button": {
-        "exit": "End",
-        "confirm": "번역없음",
-        "no": "번역없음",
+        "exit": "Exit",
+        "confirm": "Confirm",
+        "no": "No",
         "update": "Update"
       }
     },
     "login": {
-      "참여코드": "번역없음",
-      "참여코드내용": "번역없음",
+      "참여코드": "Enter participation code",
+      "참여코드내용": "Enter the shared participation code and participate immediately.",
       "wehago로그인": "Log-in to WEHAGO app",
       "직접로그인": "Log-in by direct input",
       "횟수초과": "Maximum number of log-in attempts using ID has been exceeded",
@@ -100,38 +96,38 @@
       "방지문자뜸": "For information protection, enter the automated input prevention characters in order",
       "새로고침": "Refresh",
       "자동입력방지문자": "Automated input prevention characters",
-      "로그인": "번역없음"
+      "로그인": "Login"
     },
     "splash": {
-      "첫화면": "번역없음",
-      "1번타이틀": "번역없음",
-      "1번내용": "번역없음",
-      "2번타이틀": "번역없음",
-      "2번내용": "번역없음",
-      "3번타이틀": "번역없음",
-      "3번내용": "번역없음",
-      "4번타이틀": "번역없음",
-      "4번내용": "번역없음",
-      "5번타이틀": "번역없음",
-      "5번내용": "번역없음",
-      "시작하기": "번역없음"
+      "첫화면": "Efficient video conferencing \nwithout time and place constraints\n",
+      "1번타이틀": "wherever",
+      "1번내용": "Efficient video conferencing without time and place constraints",
+      "2번타이틀": "peristalsis",
+      "2번내용": "Create a new meeting or join the ongoing WE Talk video conference right away",
+      "3번타이틀": "Video and voice calls",
+      "3번내용": "Connected organization chart Supports video/voice calls from employees to customers",
+      "4번타이틀": "Practical or shared",
+      "4번내용": "Share PC screens or documents in real time\nProvide conversation function during video conference",
+      "5번타이틀": "High-definition video conferencing",
+      "5번내용": "Image quality automatically adjusted \naccording to the network speed",
+      "시작하기": "Getting started"
     },
     "main": {
-      "없음": "번역없음",
+      "없음": "There is no video conference in progress.",
       "we텍스트": "Start video conferencing and calling on the WEHAGO app.",
       "sp텍스트": "You can participate in a video conference after creating a video conference room.",
-      "대화시작": "번역없음",
-      "진행중": "번역없음",
-      "예정": "번역없음"
+      "대화시작": "Press the + button to start a conversation",
+      "진행중": "Proceeding",
+      "예정": "Scheduled"
     },
     "create_room": {
-      "검색": "번역없음",
+      "검색": "Search",
       "검색결과없음": "Your search returned no results.",
       "검색결과없음텍스트": "Try creating a messenger in WEHAGO.",
-      "그룹": "번역없음",
-      "일대일": "번역없음",
-      "세무": "번역없음",
-      "수임": "번역없음",
+      "그룹": "Group conversation",
+      "일대일": "1:1 conversation",
+      "세무": "Conversation with a tax accountant",
+      "수임": "Conversation with the mandate",
       "시작버튼": "Start"
     },
     "option": {
@@ -153,44 +149,44 @@
     "drawer": {
       "스토어없음": "Unable to find the app in store.",
       "전체서비스": "All services",
-      "웹스토리지": "번역없음",
+      "웹스토리지": "Web Storage",
       "근태관리": "Attendance management",
       "전자결재": "Electronic authorization"
     },
     "meet": {
-      "삭제": "번역없음",
+      "삭제": "Delete All",
       "스케치": "Sketch",
       "문서공유": "document share",
       "돌아가": "Please return to the app\nto load the document.",
-      "부르는중": "번역없음",
-      "스토리지": "번역없음"
+      "부르는중": "Loading documents.",
+      "스토리지": "Web Storage Files"
     },
     "chatting": {
-      "대화방": "번역없음",
-      "목록": "번역없음",
-      "대화없음": "번역없음",
+      "대화방": "chat room",
+      "목록": "participants list",
+      "대화없음": "There is no previous conversation. Start the conversation.",
       "전송": "Send",
-      "나": "번역없음",
-      "외부참여자": "번역없음",
-      "발표자": "번역없음",
-      "마스터": "번역없음"
+      "나": "me",
+      "외부참여자": "External participants",
+      "발표자": "Presenter",
+      "마스터": "Master"
     },
     "toast": {
       "뒤로버튼": "Click again to close app.",
-      "백그라운드": "번역없음",
-      "마이크꺼진다": "번역없음",
-      "마이크꺼짐": "번역없음",
+      "백그라운드": "Runs in the background",
+      "마이크꺼진다": "If you don't return to the app, the microphone will turn off after a while.",
+      "마이크꺼짐": "The microphone is turned off.",
       "master": {
-        "마이크비활성": "번역없음",
-        "마이크활성": "번역없음",
-        "발언권제어시작": "번역없음",
-        "발언권제어끝": "번역없음",
-        "발언종료": "번역없음",
-        "요청거부": "번역없음",
-        "요청대기": "번역없음",
-        "요청": "번역없음",
-        "내가추방": "번역없음",
-        "누가추방": "번역없음"
+        "마이크비활성": "The microphone has been disabled by the master.",
+        "마이크활성": "The master has handled mic activation",
+        "발언권제어시작": "The master begins to control the voice of all participants.",
+        "발언권제어끝": "The participant's right to speak control function has ended.",
+        "발언종료": "Finished speaking.",
+        "요청거부": "Request to speak has been denied.",
+        "요청대기": "Waiting to accept your request.",
+        "요청": "Asked the master to speak.",
+        "내가추방": "Exiled by the master",
+        "누가추방": "[@master@] kicked [@target@]."
       }
     },
     "roomstate": {
@@ -203,7 +199,7 @@
         "다른경우": "Unable to enter conference if start time has been changed or schedule has been deleted."
       },
       "full": {
-        "타이틀": "The maximum number of users allowed to connect has been exceeded ",
+        "타이틀": "The maximum number of users allowed to connect has been exceeded",
         "마스터문의": "Contact the room master.",
         "50명제한": "For successful service access, up to 50 users can connect to the service.",
         "고객센터": "If the problem persists, please report it to the Customer Center."
@@ -233,13 +229,15 @@
     },
     "selectcompany": {
       "title": {
-        "팩미구매": "번역없음",
-        "미구매": "번역없음"
+        "팩미구매": "Company that has not purchased video conference pack",
+        "미구매": "Company that has not purchased video conference pack"
       },
       "message": "This company has not purchased the video conference service. \n Please purchase the service.",
       "회사선택": "Select company",
       "logout": "logout"
     },
-    "common": { "exit": "exit" }
+    "common": {
+      "exit": "exit"
+    }
   }
 }

@@ -235,7 +235,7 @@ class FileListContainer extends Component {
     if (fileInfoResponse.resultCode === 'E2021') {
       this.props.setAlert({
         type: 1,
-        title: this.t('alert.title.파일변환실패'),
+        title: this.t('alert.title.파일변환중'),
         message: this.t('alert.text.기다려')
       });
       return;
