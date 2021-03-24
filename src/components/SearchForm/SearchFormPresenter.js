@@ -38,7 +38,7 @@ const SearchFormPresenter = props => {
               onPress={() => props.onChange('')}
               style={styles.closeIcon}
             >
-              <CustomIcon width={20} height={20} name={'btnUserCancelNone'} />
+              <CustomIcon style={{position:'absolute' , top : 4 , right :5}} width={25} height={25} name={'btnUserCancelNone'} />
             </TouchableOpacity>
           )}
         </View>
@@ -74,10 +74,15 @@ const styles = StyleSheet.create({
 
   closeIcon: {
     position: 'absolute',
-    right: 15,
-    top: '50%',
-    marginTop: -10,
-    zIndex: 10
+    width:50,
+    height:50,
+    right: 0,
+    // top: 4,
+    // marginTop: 10,
+    zIndex: 10,
+    padding: 15,
+    // paddingRight:10,
+    // backgroundColor:"rgba(255,0,0,0.5)"
   },
 
   input: {
