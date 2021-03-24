@@ -14,6 +14,9 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		695AF3ED6F686F9C5EE40F9A /* libPods-jitsi-meet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 489E8EFE2C720D10F5961AEF /* libPods-jitsi-meet.a */; };
+		8A08EF30260ADC36007EB029 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8A08EF32260ADC36007EB029 /* InfoPlist.strings */; };
+		8A08EF37260ADDDD007EB029 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8A08EF39260ADDDD007EB029 /* InfoPlist.strings */; };
+		8A08EF3C260ADE12007EB029 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8A08EF3E260ADE12007EB029 /* InfoPlist.strings */; };
 		8AD9D46C25F0B4DB009B1B61 /* JitsiMeetSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AD9D46B25F0B4DB009B1B61 /* JitsiMeetSDK.framework */; };
 		8AD9D46D25F0B4DB009B1B61 /* JitsiMeetSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8AD9D46B25F0B4DB009B1B61 /* JitsiMeetSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8AD9D54125F0C229009B1B61 /* WebRTC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AD9D53B25F0C05F009B1B61 /* WebRTC.xcframework */; };
@@ -74,6 +77,11 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		1A8AAD3E332248076EAFF455 /* Pods-jitsi-meet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-jitsi-meet.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-jitsi-meet/Pods-jitsi-meet.debug.xcconfig"; sourceTree = "<group>"; };
 		489E8EFE2C720D10F5961AEF /* libPods-jitsi-meet.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-jitsi-meet.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8A08EF31260ADC36007EB029 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		8A08EF35260ADDB9007EB029 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		8A08EF36260ADDB9007EB029 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Interface.strings; sourceTree = "<group>"; };
+		8A08EF38260ADDDD007EB029 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		8A08EF3D260ADE12007EB029 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		8AD2D38625F5E953002CD560 /* libRNI18n.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNI18n.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AD9D46B25F0B4DB009B1B61 /* JitsiMeetSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = JitsiMeetSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AD9D53B25F0C05F009B1B61 /* WebRTC.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WebRTC.xcframework; path = "../../node_modules/react-native-webrtc/apple/WebRTC.xcframework"; sourceTree = "<group>"; };
@@ -154,7 +162,10 @@
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				DE4C456021DE1E4E00EA0709 /* FIRUtilities.h */,
 				DE4C455F21DE1E4E00EA0709 /* FIRUtilities.m */,
+				8A08EF3E260ADE12007EB029 /* InfoPlist.strings */,
+				8A08EF39260ADDDD007EB029 /* InfoPlist.strings */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
+				8A08EF32260ADC36007EB029 /* InfoPlist.strings */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
@@ -259,6 +270,7 @@
 				en,
 				Base,
 				ko,
+				ja,
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
@@ -275,7 +287,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A08EF3C260ADE12007EB029 /* InfoPlist.strings in Resources */,
 				0B412F211EDEE95300B1A0A6 /* Main.storyboard in Resources */,
+				8A08EF37260ADDDD007EB029 /* InfoPlist.strings in Resources */,
+				8A08EF30260ADC36007EB029 /* InfoPlist.strings in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				B773AA0E23CC60EC00047498 /* Launch Screen.storyboard in Resources */,
@@ -426,6 +441,7 @@
 			children = (
 				0BEA5C281F7B8F73000D0AB4 /* Base */,
 				B7D753BF231CCB1B00342182 /* ko */,
+				8A08EF36260ADDB9007EB029 /* ja */,
 			);
 			name = Interface.storyboard;
 			sourceTree = "<group>";
@@ -435,8 +451,33 @@
 			children = (
 				13B07FB21A68108700A75B9A /* Base */,
 				B7D753BE231CCB1B00342182 /* ko */,
+				8A08EF35260ADDB9007EB029 /* ja */,
 			);
 			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+		8A08EF32260ADC36007EB029 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8A08EF31260ADC36007EB029 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		8A08EF39260ADDDD007EB029 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8A08EF38260ADDDD007EB029 /* ja */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		8A08EF3E260ADE12007EB029 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8A08EF3D260ADE12007EB029 /* ko */,
+			);
+			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -450,7 +491,7 @@
 				CODE_SIGN_ENTITLEMENTS = app.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 7;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = BR6U9G47ZR;
 				ENABLE_BITCODE = NO;
@@ -491,7 +532,7 @@
 				CODE_SIGN_ENTITLEMENTS = app.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = BR6U9G47ZR;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (

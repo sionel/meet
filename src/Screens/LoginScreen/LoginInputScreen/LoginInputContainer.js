@@ -181,17 +181,17 @@ export default function LoginInputContainer(props) {
             },
             actions: [
               {
-                name: t('alert.button.confirm'),
-                action: () => {
-                  _resetAlert();
-                  resolve(true);
-                }
-              },
-              {
                 name: t('alert.button.cancel'),
                 action: () => {
                   _resetAlert();
                   resolve(false);
+                }
+              },
+              {
+                name: t('alert.button.confirm'),
+                action: () => {
+                  _resetAlert();
+                  resolve(true);
                 }
               }
             ]

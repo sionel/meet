@@ -10,11 +10,12 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import CustomIcon from '../CustomIcon';
-
+import {getT} from '../../utils/translateManager'
 const SafetyView = Platform.OS === 'ios' ? SafeAreaView : View;
 
 const SearchFormPresenter = props => {
   const { active, value } = props;
+  const t = getT()
   return (
     <View style={styles.wrap}>
       <SafetyView style={{ width: '100%' }}>
@@ -26,7 +27,7 @@ const SearchFormPresenter = props => {
             style={styles.searchIcon}
           />
           <TextInput
-            placeholder="검색"
+            placeholder={t('create_room.검색')}
             style={styles.input}
             disableFullscreenUI={true}
             onChangeText={newText => props.onChange(newText)}

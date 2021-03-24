@@ -6,9 +6,9 @@
         "login": "Login",
         "logout": "Logout",
         "size_over": "Shared File Capacity Exceeded",
-        "error": "error",
-        "unsupported": "unsupported",
-        "파일변환중": "file conversion",
+        "error": "Error",
+        "unsupported": "Unsupported",
+        "파일변환중": "File conversion",
         "파일불러오기실패": "Loading fail",
         "fail": "Login failure",
         "사용제한": "Limit of use",
@@ -25,7 +25,7 @@
         "update": "Update",
         "confirm": "Confirm",
         "exit": "End",
-        "cancel": "cancel"
+        "cancel": "Cancel"
       },
       "text": {
         "looting": "The use of WEHAGO mobile service is restricted on rooted terminals. Exit the app for security.",
@@ -55,7 +55,7 @@
         "사용제한메시지": "Unable to process your login, as there is either no company information or the signup has not been completed.",
         "로그인실패": "Login has failed",
         "접근권한": "The microphone and camera access rights are required to use the service. Please allow access to the microphone and camera in the settings.",
-        "로그아웃": "Do you want to log out?",
+        "로그아웃": "Do you want to logout?",
         "한번더": "Try again",
         "만들기실패": "Video conference creation has failed. Please try again.",
         "방만들기": "Do you want to create a video conference?",
@@ -101,9 +101,9 @@
     },
     "splash": {
       "첫화면": "Efficient video conferencing \nwithout time and place constraints\n",
-      "1번타이틀": "wherever",
+      "1번타이틀": "Wherever",
       "1번내용": "Efficient video conferencing without time and place constraints",
-      "2번타이틀": "peristalsis",
+      "2번타이틀": "Peristalsis",
       "2번내용": "Create a new meeting or join the ongoing WE Talk video conference right away",
       "3번타이틀": "Video and voice calls",
       "3번내용": "Connected organization chart Supports video/voice calls from employees to customers",
@@ -163,11 +163,11 @@
       "스토리지": "Web Storage Files"
     },
     "chatting": {
-      "대화방": "chat room",
-      "목록": "participants list",
-      "대화없음": "There is no previous conversation. Start the conversation.",
+      "대화방": "Chat room",
+      "목록": "Participants list",
+      "대화없음": "There is no previous conversation. \n Start the conversation.",
       "전송": "Send",
-      "나": "me",
+      "나": "Me",
       "외부참여자": "External participants",
       "발표자": "Presenter",
       "마스터": "Master"
@@ -227,14 +227,15 @@
         "지속": "If screen conversion fails continuously",
         "고객센터": "please report it to the Customer Center."
       },
-      "setting":{
+      "setting": {
+        "header":"setting",
         "title":"Please proceed with the basic settings before the video chat.",
         "detail":"If you do not want to, you can enter immediately after clicking the video chat participation button.",
         "output":"Display and sound audio output settings",
         "name":"Name setting",
         "setname":"Please set a name to use in the chat room.",
         "nameDefault":"If not entered, the default is applied. (Maximum 20 characters can be set)",
-        "enter":"enter the conference"
+        "enter":"Enter the conference"
       }
     },
     "selectcompany": {

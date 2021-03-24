@@ -56,7 +56,7 @@ const RootNavigation = createStackNavigator(
     Setting: {
       screen: SettingScreen,
       navigationOptions: ({ navigation }) => ({
-        headerTitle: <RouteTitle title={'기본 설정'} />,
+        headerTitle: <RouteTitle title={navigation.getScreenProps().t('roomstate.setting.header')} />,
         // headerTitle:  null,
         headerLeft: <BackButton navigation={navigation} to={'Main'} />,
         headerTintColor: '#fff',

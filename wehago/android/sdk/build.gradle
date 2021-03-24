@@ -95,6 +95,8 @@
         implementation project(':react-native-incall-manager')
         implementation project(':react-native-restart')
         implementation project(':react-native-localize')
+        
+        api("com.squareup.okhttp3:okhttp:3.12.12")
 
         testImplementation 'junit:junit:4.12'
     }

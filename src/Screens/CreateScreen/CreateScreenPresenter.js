@@ -93,7 +93,7 @@ const CreateScreenPresenter = props => {
         >
           <Placeholder
             mainText={t('create_room.검색결과없음')}
-            subText={t('create_room.검색결과없음텍스트')}
+            subText={t('create_room.검색결과없음텍스트')}
           />
         </ScrollView>
       ) : (

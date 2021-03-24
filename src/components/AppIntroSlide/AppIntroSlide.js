@@ -55,7 +55,7 @@ class AppIntroSlide extends React.Component {
               fontFamily: 'DOUZONEText50'
             }}
           >
-            {this.t('splash.1번타이틀') + WEHAGO_TYPE + ' Meet'}
+            {this.t('splash.1번타이틀')+' ' + WEHAGO_TYPE + ' Meet'}
           </Text>
           <Text
             style={{

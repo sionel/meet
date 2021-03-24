@@ -14,6 +14,7 @@ import Chatting from './Chatting';
 import FileList from './FileList';
 import UserList from './UserList';
 import CustomButton from '../../../../components/CustomButton';
+import { getT } from '../../../../utils/translateManager';
 
 const isTablet = DeviceInfo.isTablet();
 const hasNotch = DeviceInfo.hasNotch();
@@ -32,7 +33,7 @@ const OverViewPresenter = props => {
     onChangeState,
     onChangeSpeaker
   } = props;
-
+  const t = getT();
   const ViewComponent = () => {
     switch (view) {
       case 'CHATTING':
@@ -97,7 +98,7 @@ const OverViewPresenter = props => {
         size={isIOS ? 'large' : 100}
         color={'rgb(28, 144, 251)'}
       />
-      <Text style={styles.loadingModalText}>문서를 불러오고 있습니다.</Text>
+      <Text style={styles.loadingModalText}>{t('meet.부르는중')}</Text>
     </View>
   );
 
@@ -154,7 +155,7 @@ const styles = StyleSheet.create({
     flex: 3,
     width: '100%',
     height: '100%',
-    backgroundColor: 'rgb(232, 235, 239)',
+    backgroundColor: 'rgb(232, 235, 239)'
     // borderTopColor: '#ddd',
     // borderTopWidth: 1
   },

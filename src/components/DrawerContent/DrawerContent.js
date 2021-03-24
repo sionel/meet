@@ -163,6 +163,7 @@ export default function DrawerContent(props) {
           </>
         </TouchableOpacity>
       </View>
+   
     </View>
   );
 
@@ -198,13 +199,13 @@ export default function DrawerContent(props) {
 
 const styles = StyleSheet.create({
   shortcut: {
-    width: 80,
-    height: 60,
-    marginHorizontal: 15,
+    width: 120,
+    height: 80,
+    marginHorizontal: 10,
     marginVertical: 5,
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'flex-start',
   },
   shortcutImage: {
     alignItems: 'center',
@@ -220,7 +221,7 @@ const styles = StyleSheet.create({
     height: 80,
     width: '100%',
     flexDirection: 'row',
-    marginTop: 15
+    marginTop: 15,
   },
   serviceText: {
     marginTop: 10,

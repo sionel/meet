@@ -40,7 +40,7 @@ const Deeplink1Navigation = createStackNavigator(
     ConferenceState: {
       screen: ConferenceStateScreen,
       navigationOptions: ({ navigation }) => ({
-        headerTitle: <RouteTitle title={'화상 회의'} />,
+        headerTitle: <RouteTitle title={navigation.getScreenProps().t('option.화상회의')} />,
         headerLeft: <BackButton navigation={navigation} />,
         headerTintColor: '#fff',
         headerStyle: commonStyle
@@ -49,7 +49,7 @@ const Deeplink1Navigation = createStackNavigator(
     Setting: {
       screen: SettingScreen,
       navigationOptions: ({ navigation }) => ({
-        headerTitle: <RouteTitle title={'기본 설정'} />,
+        headerTitle: <RouteTitle title={navigation.getScreenProps().t('setting.header')} />,
         headerLeft: <BackButton navigation={navigation} />,
         headerTintColor: '#fff',
         headerStyle: commonStyle

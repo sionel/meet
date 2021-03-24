@@ -1,0 +1,12 @@
+/* 
+  InfoPlistJA.strings
+  app
+
+  Created by 최은우 on 2021/03/24.
+  Copyright © 2021 Facebook. All rights reserved.
+*/
+NSCameraUsageDescription = "テレビ電話中に相手が私を見ることができるようにアクセス権を付与します。";
+NSLocationAlwaysUsageDescription = "항상 위치정보를 허용하시겠습니까?";
+NSLocationWhenInUseUsageDescription = "앱을 사용할 때 위치정보를 허용하시겠습니까?";
+NSMicrophoneUsageDescription = "通話中に相手が私の声を聞くことができるようにアクセス権を付与します。";
+
