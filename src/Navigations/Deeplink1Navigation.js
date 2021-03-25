@@ -49,7 +49,7 @@ const Deeplink1Navigation = createStackNavigator(
     Setting: {
       screen: SettingScreen,
       navigationOptions: ({ navigation }) => ({
-        headerTitle: <RouteTitle title={navigation.getScreenProps().t('setting.header')} />,
+        headerTitle: <RouteTitle title={navigation.getScreenProps().t('roomstate.setting.header')} />,
         headerLeft: <BackButton navigation={navigation} />,
         headerTintColor: '#fff',
         headerStyle: commonStyle

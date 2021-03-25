@@ -6,6 +6,4 @@
   Copyright © 2021 Facebook. All rights reserved.
 */
 NSCameraUsageDescription = "Give them access so they can see you during a video call.";
-NSLocationAlwaysUsageDescription = "항상 위치정보를 허용하시겠습니까?";
-NSLocationWhenInUseUsageDescription = "앱을 사용할 때 위치정보를 허용하시겠습니까?";
 NSMicrophoneUsageDescription = "Give them access so they can hear you while on a call.";

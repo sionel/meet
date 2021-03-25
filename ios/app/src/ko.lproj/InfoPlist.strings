@@ -6,7 +6,5 @@
   Copyright © 2021 Facebook. All rights reserved.
 */
 
-NSCameraUsageDescription = "화상 전화123 중에 상대방이 나를 볼 수 있도록 액세스 권한을 부여하세요.";
-NSLocationAlwaysUsageDescription = "항상 위치정보를 허용하시겠습니까?";
-NSLocationWhenInUseUsageDescription = "앱을 사용할 때 위치정보를 허용하시겠습니까?";
-NSMicrophoneUsageDescription = "통화5325345 중에 상대방이 내 음성을 들을 수 있도록 액세스 권한을 부여하세요.";
+NSCameraUsageDescription = "화상 전화 중에 상대방이 나를 볼 수 있도록 액세스 권한을 부여하세요.";
+NSMicrophoneUsageDescription = "통화 중에 상대방이 내 음성을 들을 수 있도록 액세스 권한을 부여하세요.";

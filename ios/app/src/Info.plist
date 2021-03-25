@@ -72,8 +72,12 @@
 	<string>Bluetooth Peripheral Usage Description</string>
 	<key>NSCalendarsUsageDescription</key>
 	<string>See your scheduled meetings in the app.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>test</string>
 	<key>NSContactsUsageDescription</key>
 	<string>Contacts Usage Description</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>test</string>
 	<key>NSMotionUsageDescription</key>
 	<string>Motion Usage Description</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
