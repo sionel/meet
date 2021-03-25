@@ -3,14 +3,7 @@
  */
 
 import React, { Component } from 'react';
-import {
-  View,
-  Text,
-  Image,
-  Dimensions,
-  ScrollView,
-  TouchableOpacity
-} from 'react-native';
+import { View } from 'react-native';
 import DrawingPresenter from './DrawingPresenter';
 import DrawingManager from '../../../../utils/DrawingManager';
 

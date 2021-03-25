@@ -39,7 +39,6 @@ class SplashScreenContainer extends Component {
     // 루팅 확인 및 디버깅 모드 확인
     let result = false;
     result = await this._handleCheckSecurity();
-
     if (!result) return;
     if (this.props.url) {
       await this._handleGetDeeplink(this.props.url);
@@ -66,7 +65,6 @@ class SplashScreenContainer extends Component {
     servernoti = await this._handleCheckVersion(servernoti);
     // 노티 확인
     servernoti = await this._handleCheckNotice(servernoti);
-
     if (servernoti.length > 0) {
       this.setState({ servernoti, index: 0 });
     } else {
@@ -182,23 +180,25 @@ class SplashScreenContainer extends Component {
   };
 
   _handleCheckNotice = async noti => {
+    
     const result = await MeetApi.checkNotice();
-
     if (!result) return [];
     // 확인코드 :101
     // 강제종료 코드 : 102
-
+    debugger
     result.resultData.forEach(e => {
       if (!e.dev_mode) {
-        e.button_type = [
+        e.buttons = [
           {
             text:
-              e.code === 102
+              e.button_type === 102
                 ? this.t('alert.button.exit')
                 : this.t('alert.button.confirm'),
             onclick:
-              e.code === 102
-                ? () => RNRestart.Restart()
+              e.button_type === 102
+                ? () => {
+                  console.log("왜안됨");
+                  BackHandler.exitApp()}
                 : () => this._handleNextNotice()
           }
         ];
