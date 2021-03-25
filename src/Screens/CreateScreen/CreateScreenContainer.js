@@ -26,7 +26,6 @@ class CreateScreenContainer extends React.Component {
       orientation: 'UNKNOWN'
     };
     this.t = getT();
-    debugger
   }
 
   componentDidMount() {

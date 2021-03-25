@@ -12,7 +12,6 @@ const languageDetector = {
   detect: async cb => {
     cb(RNLocalize.getLocales()[0].languageCode);
     initReactI18next
-    debugger
   },  
   init: () => {},
   cacheUserLanguage: () => {}
