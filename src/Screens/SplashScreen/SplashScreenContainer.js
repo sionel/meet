@@ -185,7 +185,6 @@ class SplashScreenContainer extends Component {
     if (!result) return [];
     // 확인코드 :101
     // 강제종료 코드 : 102
-    debugger
     result.resultData.forEach(e => {
       if (!e.dev_mode) {
         e.buttons = [

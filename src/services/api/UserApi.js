@@ -183,7 +183,7 @@ const check = async (a_token, r_token, cno, HASH_KEY) => {
 const changeCompany = async (auth, company) => {
   const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, user_no } = auth;
   const { company_no, company_code } = company;
-  const deviceIP = await DeviceInfo.getIPAddress();
+  const deviceIP = await DeviceInfo.getIpAddress();
 
   try {
     const url = `${wehagoBaseURL}/common/layout/company-change`;

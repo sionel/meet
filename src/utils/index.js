@@ -14,8 +14,8 @@ const OS = Platform.OS;
 const OSID = OS === 'ios' ? 'mobile-ios' : 'mobile-android';
 
 // 개발기로 바꾸려면 해당 주석을 이용하자
-export const isDev = true;
-// export const isDev = false;
+// export const isDev = true;
+export const isDev = false;
 /**
  * Back-end URL
  */
@@ -29,10 +29,10 @@ export const wehagoMainURL = isDev
   ? `http://dev.wehago.com`
   : `https://www.wehago${isWehagoV ? 'v' : ''}.com`; // 메인 URL
 
-// export const meetURL = isDev
-//   ? `https://rtctest.wehago.com/api-bind`
-//   : `https://api.wehago.com/video`;
-export const meetURL = `http://localhost:8080/videodev`;
+export const meetURL = isDev
+  ? `https://rtctest.wehago.com/api-bind`
+  : `https://api.wehago.com/video`;
+// export const meetURL = `http://localhost:8080/videodev`;
 
 export const wehagoDummyImageURL = `https://static.wehago${
   isWehagoV ? 'v' : ''
