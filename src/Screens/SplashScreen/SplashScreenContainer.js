@@ -119,31 +119,29 @@ class SplashScreenContainer extends Component {
       !result ||
       !this.props.updateNoti ||
       result.resultData.dev_mode ||
-      result.resultData.update
+      !result.resultData.update
     )
       return [];
-
     const title = this.t('servernoti.title.update');
+    const updateType = result.resultData.update;
     const type = 'update';
     const message =
-      updateType === 'forced'
+      updateType === 'update'
         ? this.t('servernoti.message.power_update')
         : updateType === 'default'
         ? this.t('servernoti.message.update_text')
         : 'none';
-
     if (message === 'none') return [];
     const onToggle = this.props.toggleUpdateNoti;
     const buttonValue = this.props.updateNoti;
     const subMessage = result.resultData.detail_info?.split('\\n');
-    const updateType = result.resultData.update;
 
     const marketUrl =
       os === 'ios'
         ? 'https://itunes.apple.com/app/id1455726925?mt=8'
         : 'https://play.google.com/store/apps/details?id=com.wehago.meet';
     const buttons =
-      updateType === 'forced'
+      updateType === 'update'
         ? [
             {
               text: this.t('alert.button.update'),
@@ -161,7 +159,7 @@ class SplashScreenContainer extends Component {
             }
           ];
     const onclick =
-      updateType === 'forced'
+      updateType === 'update'
         ? [() => Linking.openURL(marketUrl)]
         : [this._handleNextNotice, () => Linking.openURL(marketUrl)];
 
