@@ -37,7 +37,7 @@ export default function CompanySelectPresenter(props) {
             onPress={() => setVisible(true)}
           >
             <Text style={{ color: '#1C90FB' }}>
-              {t('selectcompany.title.logout')}
+              {t('selectcompany.logout')}
             </Text>
           </TouchableOpacity>
         </View>
@@ -71,7 +71,7 @@ export default function CompanySelectPresenter(props) {
                 <>
                   <Text style={styles.companyName}>{item.company_name_kr}</Text>
                   {selectedCompany.company_no === item.company_no && (
-                    <CustomIcon name={'checkbox_circle_on'} size={24} />
+                    <CustomIcon name={'checkbox_login_on'} size={24} />
                   )}
                 </>
               </TouchableHighlight>
@@ -85,11 +85,11 @@ export default function CompanySelectPresenter(props) {
         visible={visible}
         width={320}
         title={t('alert.title.logout')}
-        description={t('alert.text.logout')}
+        description={t('alert.text.로그아웃')}
         onClose={() => setVisible(false)}
         actions={[
           {
-            name: t('alert.button.cencel'),
+            name: t('alert.button.cancel'),
             action: () => setVisible(false)
           },
           {
