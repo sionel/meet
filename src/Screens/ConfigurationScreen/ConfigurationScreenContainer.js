@@ -16,9 +16,6 @@ import UserApi from '../../services/api/UserApi';
 const hasNotch = DeviceInfo.hasNotch() && Platform.OS === 'ios';
 
 class ConfigurationScreenContainer extends React.Component {
-  /**
-   * STATE
-   */
   state = {
     webView: false,
     orientation: 'UNKNOWN',
@@ -26,9 +23,6 @@ class ConfigurationScreenContainer extends React.Component {
     alert: false
   };
 
-  /**
-   * componentDidMount
-   */
   componentDidMount() {
     Orientation.getOrientation(orientation => {
       this.setState({ orientation });
@@ -36,25 +30,15 @@ class ConfigurationScreenContainer extends React.Component {
     Orientation.addOrientationListener(this._handleOrientation);
   }
 
-  /**
-   * componentWillUnmount
-   */
   componentWillUnmount() {
     Orientation.removeOrientationListener(this._handleOrientation);
   }
 
-  /**
-   * handleRedirect
-   * 페이지 이동
-   */
   handleRedirect = url => {
     const { navigation } = this.props;
     navigation.navigate(url);
   };
 
-  /**
-   * Rendering
-   */
   render() {
     const { navigation, onDestroyToken, onToggleVisibleAppIntro } = this.props;
     const { list, webView, alert } = this.state;
@@ -78,32 +62,21 @@ class ConfigurationScreenContainer extends React.Component {
     );
   } // render
 
-  /**
-   * _handleOrientation
-   */
   _handleOrientation = orientation => {
     this.setState({ orientation });
   };
 
-  /**
-   * _handleChangeValue
-   * 페이지 이동
-   */
   _handleChangeValue = (target, value) => {
     this.setState({ [target]: value });
   };
 
-  /**
-   * _handleLogout
-   * 로그아웃
-   */
   _handleLogout = async () => {
     // const { onLogout, navigation } = this.props;
     const from = this.props.from;
-    this.props.screenProps.onChangeRootState({destination: 'Login'})
-    from === 'this' && (await UserApi.logoutRequest(this.props.user));
     this.props.onLogout();
     this.props.onSetInitialList();
+    from === 'this' && (await UserApi.logoutRequest(this.props.user));
+    this.props.screenProps.onChangeRootState({ destination: 'Login' });
     // navigation.navigate('Main');
   };
 }
