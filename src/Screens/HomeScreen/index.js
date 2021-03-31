@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { actionCreators as UserActions } from '../../redux/modules/user';
 import { actionCreators as WetalkActions } from '../../redux/modules/wetalk';
 import { actionCreators as ConferenceActions } from '../../redux/modules/conference';
+import { actionCreators as AlertAcions } from '../../redux/modules/alert';
 
 const mapStateToProps = state => ({
   auth: state.user.auth,
@@ -35,6 +36,7 @@ const mapDispatchToProps = dispatch => ({
     ),
   onSetWetalkList: list => dispatch(WetalkActions.setList(list)),
   onSetConferenceList : list => dispatch(ConferenceActions.setList(list)),
+  setAlert: params => dispatch(AlertAcions.setAlert(params))
 
   // onCreateConference: bodyData => dispatch(ConferenceActions.createConference(...bodyData))
 });

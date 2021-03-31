@@ -285,7 +285,6 @@ class HomeScreenContainer extends Component {
 
   _handleAutoLogin = async (count = 0) => {
     const { auth, loginCheckRequest } = this.props;
-
     // 접속자 확인
     const checkResult = await loginCheckRequest(
       auth.AUTH_A_TOKEN,
@@ -297,10 +296,16 @@ class HomeScreenContainer extends Component {
     // 재 로그인
     if (checkResult.errors) {
       if (checkResult.errors.code === 'E002') {
-        return this.props.sessionCheck(false);
+        this.props.setAlert({
+          type: 1,
+          title: this.t('alert.title.fail'),
+          message: this.t('alert.text.duplicate_logout')
+        });
+        this.props.sessionCheck(false);
       } else {
-        return this.props.onDisconnect();
+        this.props.onDisconnect();
       }
+      this.props.onLogout()
     } else {
       this._handleGetWetalkList();
     }
