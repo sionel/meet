@@ -45,7 +45,6 @@ export default (state = initialState, action) => {
     case RESET_ALERT:
       return { ...initialState };
     case 'TTTEST':
-      debugger;
       return;
     default:
       return state;

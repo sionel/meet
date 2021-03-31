@@ -20,13 +20,14 @@ import DrawerContentContainer from './DrawerContentContainer';
 import CustomIcon from '../CustomIcon';
 import { WEHAGO_ENV } from '../../../config';
 import { getT } from '../../utils/translateManager';
+import RNrestart from 'react-native-restart';
 
 export default function DrawerContent(props) {
   const { navigation, setAlert } = props;
 
   // redux
   const auth = useSelector(state => state.user.auth);
-  const t = getT()
+  const t = getT();
   const handleChangeCompany = async (cno, ccode) => {
     const company = {
       company_no: cno,
@@ -34,6 +35,7 @@ export default function DrawerContent(props) {
     };
 
     await props.changeCompanyRequest(auth, company);
+    RNrestart.Restart();
   };
 
   const onClickShortcutIcon = type => {
@@ -163,7 +165,6 @@ export default function DrawerContent(props) {
           </>
         </TouchableOpacity>
       </View>
-   
     </View>
   );
 
@@ -205,7 +206,7 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'flex-start'
   },
   shortcutImage: {
     alignItems: 'center',
@@ -221,7 +222,7 @@ const styles = StyleSheet.create({
     height: 80,
     width: '100%',
     flexDirection: 'row',
-    marginTop: 15,
+    marginTop: 15
   },
   serviceText: {
     marginTop: 10,

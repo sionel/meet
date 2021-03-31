@@ -4,6 +4,8 @@ import { useSelector } from 'react-redux';
 import CompanySelectPresenter from './CompanySelectPresenter';
 import UserApi from '../../services/api/UserApi';
 
+import RNrestart from 'react-native-restart';
+
 export default function CompanySelectContainer(props) {
   // const { handleChangeCompany } = props;
 
@@ -23,11 +25,12 @@ export default function CompanySelectContainer(props) {
     };
 
     await props.changeCompanyRequest(auth, company);
+    RNrestart.Restart();
   };
 
   const onLogout = async () => {
     const from = props.from;
-    props.screenProps.onChangeRootState({destination: 'Login'})
+    props.screenProps.onChangeRootState({ destination: 'Login' });
     from === 'this' && (await UserApi.logoutRequest(auth));
     props.onLogout();
     props.onSetInitialList();
@@ -39,7 +42,7 @@ export default function CompanySelectContainer(props) {
         employee_list,
         selectedCompany,
         handleChangeCompany,
-        onLogout,
+        onLogout
       }}
       from={props.from}
     />
