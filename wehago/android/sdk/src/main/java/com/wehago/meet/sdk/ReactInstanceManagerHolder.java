@@ -202,6 +202,7 @@ class ReactInstanceManagerHolder {
                 new com.zxcpoiu.incallmanager.InCallManagerPackage(),
                 new com.avishayil.rnrestart.ReactNativeRestartPackage(),
                 new com.zoontek.rnlocalize.RNLocalizePackage(),
+                new com.github.wumke.RNExitApp.RNExitAppPackage(),
                 // end
                 new ReactPackageAdapter() {
                     @Override

@@ -3,12 +3,13 @@ import { Platform, Linking, BackHandler } from 'react-native';
 import SplashScreenPresenter from './SplashScreenPresenter';
 import { WEHAGO_ENV } from '../../../config';
 import { MeetApi, ServiceCheckApi } from '../../services';
-import RNRestart from 'react-native-restart';
+import RNExitApp from 'react-native-exit-app';
 
 import { querystringParser } from '../../utils';
 import jwt_decode from 'jwt-decode';
 
 import { getT } from '../../utils/translateManager';
+import { getConferenceManager } from '../../utils/ConferenceManager';
 
 const JailMonkey =
   Platform.OS === 'android' && WEHAGO_ENV === 'WEHAGOV'
@@ -41,6 +42,7 @@ class SplashScreenContainer extends Component {
     result = await this._handleCheckSecurity();
     if (!result) return;
     if (this.props.url) {
+      const m = getConferenceManager();
       await this._handleGetDeeplink(this.props.url);
     } else {
       this._handleInit();
@@ -178,7 +180,6 @@ class SplashScreenContainer extends Component {
   };
 
   _handleCheckNotice = async noti => {
-    
     const result = await MeetApi.checkNotice();
     if (!result) return [];
     // 확인코드 :101
@@ -193,9 +194,7 @@ class SplashScreenContainer extends Component {
                 : this.t('alert.button.confirm'),
             onclick:
               e.button_type === 102
-                ? () => {
-                  console.log("왜안됨");
-                  BackHandler.exitApp()}
+                ? () => RNExitApp.exitApp()
                 : () => this._handleNextNotice()
           }
         ];
@@ -594,7 +593,7 @@ class SplashScreenContainer extends Component {
       this.props.setPermission(isDeploy);
 
       // this.setState({ isLogin: true, hasService: isPurchase });
-      return isPurchase ? true : false;
+      return isPurchase && isDeploy ? true : false;
     } else if (statusCheck && statusCheck.code === 400) {
       // 회사에 이상이 있을 경우, 회사 선택 화면으로 이동
       proceed = await new Promise(resolve => {

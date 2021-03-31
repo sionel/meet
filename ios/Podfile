@@ -79,6 +79,7 @@ target 'JitsiMeetSDK' do
   pod 'RNFastImage', :path => '../node_modules/react-native-fast-image'
   pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
   pod 'RNLocalize', :path => '../node_modules/react-native-localize'
+  pod 'RNExitApp', :path => '../node_modules/react-native-exit-app'
 
   # Native pod dependencies
   #
