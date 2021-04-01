@@ -367,13 +367,13 @@ export default {
   },
 
   // 6-2 화상회의 모바일 버전 체크
-  checkVersion: async (os, major, minor) => {
+  checkVersion: async (os, major) => {
     let url = '';
     let signature;
     if (isDev) {
-      url = `${meetURL}/mobile/version?os=${os}&major=${major}&minor=${minor}`;
+      url = `${meetURL}/mobile/version?os=${os}&major=${major}`;
     } else {
-      const accsessUrl = `/video/mobile/version?os=${os}&major=${major}&minor=${minor}`;
+      const accsessUrl = `/video/mobile/version?os=${os}&major=${major}`;
       const token = await getToken(accsessUrl);
       const encText = accsessUrl + token.cur_date + token.token;
       const hashText = CryptoJS.SHA256(encText);

@@ -101,7 +101,7 @@ class HomeScreenContainer extends Component {
   render() {
     const { refreshing, selectedRoomId, orientation, alert } = this.state;
     const { navigation, auth } = this.props;
-    const plan = auth.last_company.membership_code; // 요금제 [WE: 엣지, SP: 싱글팩, ...]
+    const plan = auth?.last_company?.membership_code; // 요금제 [WE: 엣지, SP: 싱글팩, ...]
 
     let conferenceList = this.props.conference;
 

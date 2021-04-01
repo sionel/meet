@@ -113,27 +113,15 @@ class SplashScreenContainer extends Component {
 
   _handleCheckVersion = async noti => {
     const os = Platform.OS;
-    const majorVersion = 4;
-    const minorVersion = '2.1.0';
-    const result = await MeetApi.checkVersion(os, majorVersion, minorVersion);
+    const majorVersion = 5;
+    const result = await MeetApi.checkVersion(os, majorVersion);
     // 버전 수정
-    if (
-      !result ||
-      !this.props.updateNoti ||
-      result.resultData.dev_mode ||
-      !result.resultData.update
-    )
-      return [];
+    console.log(result.resultData.update);
+    if (!result.resultData.update|| result.resultData.dev_mode) return [];
     const title = this.t('servernoti.title.update');
-    const updateType = result.resultData.update;
     const type = 'update';
-    const message =
-      updateType === 'update'
-        ? this.t('servernoti.message.power_update')
-        : updateType === 'default'
-        ? this.t('servernoti.message.update_text')
-        : 'none';
-    if (message === 'none') return [];
+    const message = this.t('servernoti.message.power_update');
+
     const onToggle = this.props.toggleUpdateNoti;
     const buttonValue = this.props.updateNoti;
     const subMessage = result.resultData.detail_info?.split('\\n');
@@ -142,29 +130,13 @@ class SplashScreenContainer extends Component {
       os === 'ios'
         ? 'https://itunes.apple.com/app/id1455726925?mt=8'
         : 'https://play.google.com/store/apps/details?id=com.wehago.meet';
-    const buttons =
-      updateType === 'update'
-        ? [
-            {
-              text: this.t('alert.button.update'),
-              onclick: () => Linking.openURL(marketUrl)
-            }
-          ]
-        : [
-            {
-              text: this.t('alert.button.no'),
-              onclick: this._handleNextNotice
-            },
-            {
-              text: this.t('alert.button.update'),
-              onclick: () => Linking.openURL(marketUrl)
-            }
-          ];
-    const onclick =
-      updateType === 'update'
-        ? [() => Linking.openURL(marketUrl)]
-        : [this._handleNextNotice, () => Linking.openURL(marketUrl)];
-
+    const buttons = [
+      {
+        text: this.t('alert.button.update'),
+        onclick: () => Linking.openURL(marketUrl)
+      }
+    ];
+    const onclick = [() => Linking.openURL(marketUrl)];
     noti.push({
       title,
       message,
