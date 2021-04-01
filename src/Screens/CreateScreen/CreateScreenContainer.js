@@ -44,7 +44,7 @@ class CreateScreenContainer extends React.Component {
     let wetalk = []; // We talk list
     if (searchKeyword) {
       wetalk = this.props.wetalk.filter(item =>
-        item.room_title.toLowerCase().match(searchKeyword.toLowerCase())
+        item.room_title.toLowerCase().includes(searchKeyword.toLowerCase())
       );
     } else {
       wetalk = this.props.wetalk;

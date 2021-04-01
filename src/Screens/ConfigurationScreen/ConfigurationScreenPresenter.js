@@ -21,7 +21,7 @@ const ConfigurationScreenPresenter = props => {
       // 버전 수정
       title: t('option.버전정보'),
       icon: 'ico_menu_info',
-      content: WEHAGO_ENV === 'WEHAGOV' ? '1.0.1' : '2.1.0'
+      content: WEHAGO_ENV === 'WEHAGOV' ? '1.0.1' : '2.1.1'
     },
     {
       title: t('option.약관법률'),

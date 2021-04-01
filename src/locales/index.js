@@ -10,9 +10,10 @@ const languageDetector = {
   type: 'languageDetector',
   async: true,
   detect: async cb => {
-    cb(RNLocalize.getLocales()[0].languageCode);
-    initReactI18next
-  },  
+    const language = await RNLocalize.getLocales()[0].languageCode;
+    cb(language);
+    initReactI18next;
+  },
   init: () => {},
   cacheUserLanguage: () => {}
 };

@@ -10,12 +10,12 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import CustomIcon from '../CustomIcon';
-import {getT} from '../../utils/translateManager'
+import { getT } from '../../utils/translateManager';
 const SafetyView = Platform.OS === 'ios' ? SafeAreaView : View;
 
 const SearchFormPresenter = props => {
   const { active, value } = props;
-  const t = getT()
+  const t = getT();
   return (
     <View style={styles.wrap}>
       <SafetyView style={{ width: '100%' }}>
@@ -30,7 +30,9 @@ const SearchFormPresenter = props => {
             placeholder={t('create_room.검색')}
             style={styles.input}
             disableFullscreenUI={true}
-            onChangeText={newText => props.onChange(newText)}
+            onChangeText={newText => {
+              props.onChange(newText);
+            }}
             value={value}
           />
           {active && (
@@ -38,7 +40,12 @@ const SearchFormPresenter = props => {
               onPress={() => props.onChange('')}
               style={styles.closeIcon}
             >
-              <CustomIcon style={{position:'absolute' , top : 4 , right :5}} width={25} height={25} name={'btnUserCancelNone'} />
+              <CustomIcon
+                style={{ position: 'absolute', top: 4, right: 5 }}
+                width={25}
+                height={25}
+                name={'btnUserCancelNone'}
+              />
             </TouchableOpacity>
           )}
         </View>
@@ -74,13 +81,13 @@ const styles = StyleSheet.create({
 
   closeIcon: {
     position: 'absolute',
-    width:50,
-    height:50,
+    width: 50,
+    height: 50,
     right: 0,
     // top: 4,
     // marginTop: 10,
     zIndex: 10,
-    padding: 15,
+    padding: 15
     // paddingRight:10,
     // backgroundColor:"rgba(255,0,0,0.5)"
   },

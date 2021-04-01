@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Platform, Linking, BackHandler } from 'react-native';
+import { Platform, Linking, BackHandler, Alert } from 'react-native';
 import SplashScreenPresenter from './SplashScreenPresenter';
 import { WEHAGO_ENV } from '../../../config';
 import { MeetApi, ServiceCheckApi } from '../../services';
@@ -62,10 +62,10 @@ class SplashScreenContainer extends Component {
     );
   }
   _handleInit = async () => {
-    let servernoti = [];
     // 버전 확인
-    servernoti = await this._handleCheckVersion(servernoti);
+    this._handleCheckVersion();
     // 노티 확인
+    let servernoti = [];
     servernoti = await this._handleCheckNotice(servernoti);
     if (servernoti.length > 0) {
       this.setState({ servernoti, index: 0 });
@@ -111,44 +111,30 @@ class SplashScreenContainer extends Component {
     return true;
   };
 
-  _handleCheckVersion = async noti => {
+  _handleCheckVersion = async () => {
     const os = Platform.OS;
     const majorVersion = 5;
     const result = await MeetApi.checkVersion(os, majorVersion);
-    // 버전 수정
-    console.log(result.resultData.update);
-    if (!result.resultData.update|| result.resultData.dev_mode) return [];
+
+    if (!result.resultData.update || result.resultData.dev_mode) return [];
     const title = this.t('servernoti.title.update');
-    const type = 'update';
     const message = this.t('servernoti.message.power_update');
-
-    const onToggle = this.props.toggleUpdateNoti;
-    const buttonValue = this.props.updateNoti;
-    const subMessage = result.resultData.detail_info?.split('\\n');
-
     const marketUrl =
       os === 'ios'
         ? 'https://itunes.apple.com/app/id1455726925?mt=8'
         : 'https://play.google.com/store/apps/details?id=com.wehago.meet';
-    const buttons = [
-      {
-        text: this.t('alert.button.update'),
-        onclick: () => Linking.openURL(marketUrl)
-      }
-    ];
-    const onclick = [() => Linking.openURL(marketUrl)];
-    noti.push({
-      title,
-      message,
-      buttons,
-      onclick,
-      subMessage,
-      type,
-      onToggle,
-      buttonValue
-    });
 
-    return noti;
+    await new Promise(() => {
+      Alert.alert(title, message, [
+        {
+          onPress: async () => {
+            await Linking.openURL(marketUrl);
+            RNExitApp.exitApp();
+          },
+          text: this.t('alert.button.update')
+        }
+      ]);
+    });
   };
 
   _handleCheckNotice = async noti => {

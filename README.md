@@ -141,6 +141,7 @@ okhttp3 를 쓰는 nodu_modules 특히 react-native 안에 있는 버전들이 3
 cd node_modules/react-native-webrtc/tools/
 ./downloadBitcode.sh
 
+만약 안되거든 인터넷 연결 확인을 하자
 끗
 ## 작업목록
 
