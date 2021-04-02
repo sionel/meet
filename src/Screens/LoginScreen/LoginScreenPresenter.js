@@ -36,7 +36,7 @@ export default function LoginScreenPresenter(props) {
             <CustomIcon name={'verification'} size={70} />
           </View>
 
-          <Text style={{ color: '#fff', fontSize: 24, fontWeight: '100' }}>
+          <Text style={{ color: '#fff', fontSize: 25, fontWeight: '300' }}>
             {t('login.참여코드')}
           </Text>
           <Text style={{ color: '#fff', fontSize: 14, fontWeight: 'bold' }}>
