@@ -1,5 +1,5 @@
 /*
- * Copyright @ 2017-present Atlassian Pty Ltd
+ * Copyright @ 2017-present 8x8, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package com.wehago.meet.sdk;
+package com.wehagov.meet.sdk;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.PictureInPictureParams;
 import android.os.Build;
-import android.util.Log;
 import android.util.Rational;
 
 import com.facebook.react.bridge.Promise;
@@ -29,20 +29,44 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.module.annotations.ReactModule;
 
+import com.wehagov.meet.sdk.log.JitsiMeetLogger;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static android.content.Context.ACTIVITY_SERVICE;
+
 @ReactModule(name = PictureInPictureModule.NAME)
-class PictureInPictureModule
-    extends ReactContextBaseJavaModule {
+class PictureInPictureModule extends ReactContextBaseJavaModule {
 
     public static final String NAME = "PictureInPicture";
-
     private static final String TAG = NAME;
 
-    static boolean isPictureInPictureSupported() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
-    }
+    private static boolean isSupported;
+    private boolean isDisabled;
 
     public PictureInPictureModule(ReactApplicationContext reactContext) {
         super(reactContext);
+
+        ActivityManager am = (ActivityManager) reactContext.getSystemService(ACTIVITY_SERVICE);
+
+        // Android Go devices don't support PiP. There doesn't seem to be a better way to detect it than
+        // to use ActivityManager.isLowRamDevice().
+        // https://stackoverflow.com/questions/58340558/how-to-detect-android-go
+        isSupported = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !am.isLowRamDevice();
+    }
+
+    /**
+     * Gets a {@code Map} of constants this module exports to JS. Supports JSON
+     * types.
+     *
+     * @return a {@link Map} of constants this module exports to JS
+     */
+    @Override
+    public Map<String, Object> getConstants() {
+        Map<String, Object> constants = new HashMap<>();
+        constants.put("SUPPORTED", isSupported);
+        return constants;
     }
 
     /**
@@ -60,7 +84,11 @@ class PictureInPictureModule
      */
     @TargetApi(Build.VERSION_CODES.O)
     public void enterPictureInPicture() {
-        if (!isPictureInPictureSupported()) {
+        if (isDisabled) {
+            return;
+        }
+
+        if (!isSupported) {
             throw new IllegalStateException("Picture-in-Picture not supported");
         }
 
@@ -70,7 +98,7 @@ class PictureInPictureModule
             throw new IllegalStateException("No current Activity!");
         }
 
-        Log.d(TAG, "Entering Picture-in-Picture");
+        JitsiMeetLogger.i(TAG + " Entering Picture-in-Picture");
 
         PictureInPictureParams.Builder builder
             = new PictureInPictureParams.Builder()
@@ -101,6 +129,15 @@ class PictureInPictureModule
         } catch (RuntimeException re) {
             promise.reject(re);
         }
+    }
+
+    @ReactMethod
+    public void setPictureInPictureDisabled(Boolean disabled) {
+        this.isDisabled = disabled;
+    }
+
+    public boolean isPictureInPictureSupported() {
+        return isSupported;
     }
 
     @Override

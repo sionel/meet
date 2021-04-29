@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.wehago.meet.sdk.incoming_call;
+package com.wehagov.meet.sdk.incoming_call;
 
 import java.util.Map;
 

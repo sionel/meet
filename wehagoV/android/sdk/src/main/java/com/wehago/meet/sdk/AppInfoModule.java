@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.wehago.meet.sdk;
+package com.wehagov.meet.sdk;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -76,6 +76,7 @@ class AppInfoModule
             "version",
             packageInfo == null ? "" : packageInfo.versionName);
         constants.put("LIBRE_BUILD", BuildConfig.LIBRE_BUILD);
+        constants.put("GOOGLE_SERVICES_ENABLED", BuildConfig.GOOGLE_SERVICES_ENABLED);
 
         return constants;
     }

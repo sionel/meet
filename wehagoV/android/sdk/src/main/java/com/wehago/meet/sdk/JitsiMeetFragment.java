@@ -15,13 +15,14 @@
  * limitations under the License.
  */
 
-package com.wehago.meet.sdk;
+package com.wehagov.meet.sdk;
 
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,22 +55,6 @@ public class JitsiMeetFragment extends Fragment {
 
     public JitsiMeetView getJitsiView() {
         return view;
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        JitsiMeetActivityDelegate.onActivityResult(
-                getActivity(), requestCode, resultCode, data);
-    }
-
-    @Override
-    public void onDestroyView() {
-        if (view != null) {
-            view.dispose();
-            view = null;
-        }
-
-        super.onDestroyView();
     }
 
     @Override

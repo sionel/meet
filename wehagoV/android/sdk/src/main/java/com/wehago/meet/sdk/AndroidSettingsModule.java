@@ -3,7 +3,7 @@
  * {@link https://github.com/Aleksandern/react-native-android-settings-library}.
  */
 
-package com.wehago.meet.sdk;
+package com.wehagov.meet.sdk;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;

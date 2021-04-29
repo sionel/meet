@@ -7,6 +7,10 @@
     <fragment
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="com.wehago.meet.sdk.JitsiMeetFragment"
+        android:name="com.wehagov.meet.sdk.JitsiMeetFragment"
         android:id="@+id/jitsiFragment"/>
 </FrameLayout>
+
+
+
+

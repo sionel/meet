@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.wehago.meet.sdk;
+package com.wehagov.meet.sdk;
 
 import android.app.Activity;
 

@@ -25,10 +25,10 @@ import androidx.annotation.Nullable;
 import android.util.Log;
 import android.view.KeyEvent;
 
-import com.wehago.meet.sdk.JitsiMeet;
-import com.wehago.meet.sdk.JitsiMeetActivity;
-import com.wehago.meet.sdk.JitsiMeetConferenceOptions;
-import com.wehago.meet.sdk.JitsiMeetUserInfo;
+import com.wehagov.meet.sdk.JitsiMeet;
+import com.wehagov.meet.sdk.JitsiMeetActivity;
+import com.wehagov.meet.sdk.JitsiMeetConferenceOptions;
+import com.wehagov.meet.sdk.JitsiMeetUserInfo;
 
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;

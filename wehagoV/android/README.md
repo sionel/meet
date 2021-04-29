@@ -103,18 +103,18 @@ compileOptions {
 ```
 
 To get started, extends your `android.app.Activity` from
-`com.wehago.meet.sdk.JitsiMeetActivity`:
+`com.wehagov.meet.sdk.JitsiMeetActivity`:
 
 ```java
 package org.jitsi.example;
 
-import com.wehago.meet.sdk.JitsiMeetActivity;
+import com.wehagov.meet.sdk.JitsiMeetActivity;
 
 public class MainActivity extends JitsiMeetActivity {
 }
 ```
 
-Alternatively, you can use the `com.wehago.meet.sdk.JitsiMeetView` class which
+Alternatively, you can use the `com.wehagov.meet.sdk.JitsiMeetView` class which
 extends `android.view.View`.
 
 Note that this should only be needed when `JitsiMeetActivity` cannot be used for
@@ -131,8 +131,8 @@ package org.jitsi.example;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
-import com.wehago.meet.sdk.JitsiMeetView;
-import com.wehago.meet.sdk.ReactActivityLifecycleCallbacks;
+import com.wehagov.meet.sdk.JitsiMeetView;
+import com.wehagov.meet.sdk.ReactActivityLifecycleCallbacks;
 
 // Example
 //

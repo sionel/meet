@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.wehago.meet.sdk;
+package com.wehagov.meet.sdk;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;

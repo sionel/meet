@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.wehago.meet.sdk;
+package com.wehagov.meet.sdk;
 
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
@@ -32,6 +32,7 @@ import java.util.regex.Pattern;
  * Utility methods for helping with transforming {@link ExternalAPIModule}
  * events into listener methods. Used with descendants of {@link BaseReactView}.
  */
+@Deprecated
 public final class ListenerUtils {
     /**
      * Extracts the methods defined in a listener and creates a mapping of this

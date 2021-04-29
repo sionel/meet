@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.wehago.meet.sdk;
+package com.wehagov.meet.sdk;
 
 import android.os.Bundle;
 import android.os.Parcel;
@@ -71,6 +71,46 @@ public class JitsiMeetConferenceOptions implements Parcelable {
      * USer information, to be used when no token is specified.
      */
     private JitsiMeetUserInfo userInfo;
+
+    public URL getServerURL() {
+        return serverURL;
+    }
+
+    public String getRoom() {
+        return room;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public Bundle getColorScheme() {
+        return colorScheme;
+    }
+
+    public Bundle getFeatureFlags() {
+        return featureFlags;
+    }
+
+    public boolean getAudioMuted() {
+        return audioMuted;
+    }
+
+    public boolean getAudioOnly() {
+        return audioOnly;
+    }
+
+    public boolean getVideoMuted() {
+        return videoMuted;
+    }
+
+    public JitsiMeetUserInfo getUserInfo() {
+        return userInfo;
+    }
 
     /**
      * Class used to build the immutable {@link JitsiMeetConferenceOptions} object.
@@ -248,6 +288,7 @@ public class JitsiMeetConferenceOptions implements Parcelable {
     }
 
     private JitsiMeetConferenceOptions(Parcel in) {
+        serverURL = (URL) in.readSerializable();
         room = in.readString();
         subject = in.readString();
         token = in.readString();
@@ -309,7 +350,7 @@ public class JitsiMeetConferenceOptions implements Parcelable {
             urlProps.putString("jwt", token);
         }
 
-        if (token == null && userInfo != null) {
+        if (userInfo != null) {
             props.putBundle("userInfo", userInfo.asBundle());
         }
 
@@ -336,6 +377,7 @@ public class JitsiMeetConferenceOptions implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeSerializable(serverURL);
         dest.writeString(room);
         dest.writeString(subject);
         dest.writeString(token);

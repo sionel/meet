@@ -1,6 +1,10 @@
 <resources>
-    <string name="app_name">Wehago V Meet</string>
+    <string name="app_name">wehagov Meet</string>
     <string name="dropbox_app_key"></string>
     <string name="ongoing_notification_title">앱이 백그라운드에서 실행 중 입니다.</string>
     <string name="ongoing_notification_text">여기를 탭 하시면 대화 화면으로 돌아갈 수 있습니다.</string>
+    <string name="ongoing_notification_action_hang_up"></string>
+    <string name="ongoing_notification_action_mute"></string>
+    <string name="ongoing_notification_action_unmute"></string>
 </resources>
+ 

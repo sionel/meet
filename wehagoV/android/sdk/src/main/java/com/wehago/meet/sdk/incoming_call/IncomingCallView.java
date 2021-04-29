@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.wehago.meet.sdk.incoming_call;
+package com.wehagov.meet.sdk.incoming_call;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -22,8 +22,8 @@ import androidx.annotation.NonNull;
 
 import com.facebook.react.bridge.ReadableMap;
 
-import com.wehago.meet.sdk.BaseReactView;
-import com.wehago.meet.sdk.ListenerUtils;
+import com.wehagov.meet.sdk.BaseReactView;
+import com.wehagov.meet.sdk.ListenerUtils;
 
 import java.lang.reflect.Method;
 import java.util.Map;

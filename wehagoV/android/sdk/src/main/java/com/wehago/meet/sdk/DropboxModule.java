@@ -1,4 +1,4 @@
-package com.wehago.meet.sdk;
+package com.wehagov.meet.sdk;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;

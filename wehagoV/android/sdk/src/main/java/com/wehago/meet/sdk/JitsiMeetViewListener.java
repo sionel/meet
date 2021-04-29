@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package com.wehago.meet.sdk;
+package com.wehagov.meet.sdk;
 
 import java.util.Map;
 
 /**
  * Interface for listening to events coming from Jitsi Meet.
  */
+@Deprecated
 public interface JitsiMeetViewListener {
     /**
      * Called when a conference was joined.

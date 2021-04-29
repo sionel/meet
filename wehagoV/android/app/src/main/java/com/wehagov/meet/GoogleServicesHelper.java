@@ -7,7 +7,7 @@ import com.crashlytics.android.Crashlytics;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import io.fabric.sdk.android.Fabric;
 
-import com.wehago.meet.sdk.JitsiMeetActivity;
+import com.wehagov.meet.sdk.JitsiMeetActivity;
 
 /**
  * Helper class to initialize Google related services and functionality.

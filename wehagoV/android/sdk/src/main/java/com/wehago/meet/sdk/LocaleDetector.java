@@ -18,7 +18,7 @@
  * Based on https://github.com/DylanVann/react-native-locale-detector
  */
 
-package com.wehago.meet.sdk;
+package com.wehagov.meet.sdk;
 
 import android.content.Context;
 

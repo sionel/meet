@@ -1,14 +1,17 @@
 rootProject.name = 'wehagov-meet'
 
 include ':app', ':sdk'
+
+include ':react-native-async-storage'
+project(':react-native-async-storage').projectDir = new File(rootProject.projectDir, '../../node_modules/@react-native-async-storage/async-storage/android')
 include ':react-native-background-timer'
 project(':react-native-background-timer').projectDir = new File(rootProject.projectDir, '../../node_modules/react-native-background-timer/android')
+include ':react-native-default-preference'
+project(':react-native-default-preference').projectDir = new File(rootProject.projectDir, '../../node_modules/react-native-default-preference/android')
 // include ':react-native-calendar-events'
 // project(':react-native-calendar-events').projectDir = new File(rootProject.projectDir, '../../node_modules/react-native-calendar-events/android')
-include ':react-native-community-async-storage'
-project(':react-native-community-async-storage').projectDir = new File(rootProject.projectDir, '../../node_modules/@react-native-community/async-storage/android')
-include ':react-native-google-signin'
-project(':react-native-google-signin').projectDir = new File(rootProject.projectDir, '../../node_modules/react-native-google-signin/android')
+include ':react-native-community_netinfo'
+project(':react-native-community_netinfo').projectDir = new File(rootProject.projectDir, '../../node_modules/@react-native-community/netinfo/android')
 include ':react-native-immersive'
 project(':react-native-immersive').projectDir = new File(rootProject.projectDir, '../../node_modules/react-native-immersive/android')
 include ':react-native-keep-awake'
@@ -17,6 +20,10 @@ include ':react-native-linear-gradient'
 project(':react-native-linear-gradient').projectDir = new File(rootProject.projectDir, '../../node_modules/react-native-linear-gradient/android')
 include ':react-native-sound'
 project(':react-native-sound').projectDir = new File(rootProject.projectDir, '../../node_modules/react-native-sound/android')
+include ':react-native-splash-screen'
+project(':react-native-splash-screen').projectDir = new File(rootProject.projectDir, '../../node_modules/react-native-splash-screen/android')
+include ':react-native-svg'
+project(':react-native-svg').projectDir = new File(rootProject.projectDir, 	'../../node_modules/react-native-svg/android')
 include ':react-native-vector-icons'
 project(':react-native-vector-icons').projectDir = new File(rootProject.projectDir, '../../node_modules/react-native-vector-icons/android')
 include ':react-native-webrtc'
@@ -25,8 +32,8 @@ include ':react-native-webview'
 project(':react-native-webview').projectDir = new File(rootProject.projectDir, '../../node_modules/react-native-webview/android')
 
 // 추가한 라이브러리
-include ':lottie-react-native'
-project(':lottie-react-native').projectDir = new File(rootProject.projectDir, '../../node_modules/lottie-react-native/src/android')
+// include ':lottie-react-native'
+// project(':lottie-react-native').projectDir = new File(rootProject.projectDir, '../../node_modules/lottie-react-native/src/android')
 include ':react-native-svg'
 project(':react-native-svg').projectDir = new File(rootProject.projectDir, '../../node_modules/react-native-svg/android')
 include ':react-native-orientation-locker'
@@ -35,8 +42,6 @@ include ':react-native-gesture-handler'
 project(':react-native-gesture-handler').projectDir = new File(rootProject.projectDir, '../../node_modules/react-native-gesture-handler/android')
 include ':react-native-fast-image'
 project(':react-native-fast-image').projectDir = new File(rootProject.projectDir, '../../node_modules/react-native-fast-image/android')
-include ':react-native-splash-screen'
-project(':react-native-splash-screen').projectDir = new File(rootProject.projectDir, '../../node_modules/react-native-splash-screen/android')
 include ':react-native-device-info'
 project(':react-native-device-info').projectDir = new File(rootProject.projectDir, '../../node_modules/react-native-device-info/android')
 include ':react-native-sketch-canvas'
@@ -49,7 +54,11 @@ include ':react-native-incall-manager'
 project(':react-native-incall-manager').projectDir = new File(rootProject.projectDir, '../../node_modules/react-native-incall-manager/android')
 include ':react-native-restart'
 project(':react-native-restart').projectDir = new File(rootProject.projectDir, '../../node_modules/react-native-restart/android')
-include ':react-native-flag-secure-android'
-project(':react-native-flag-secure-android').projectDir = new File(rootProject.projectDir, 	'../../node_modules/react-native-flag-secure-android/android')
+include ':react-native-localize'
+project(':react-native-localize').projectDir = new File(rootProject.projectDir, '../../node_modules/react-native-localize/android')
+include ':react-native-exit-app'
+project(':react-native-exit-app').projectDir = new File(rootProject.projectDir, '../../node_modules/react-native-exit-app/android')
 include ':jail-monkey'
 project(':jail-monkey').projectDir = new File(rootProject.projectDir, 	'../../node_modules/jail-monkey/android')
+include ':react-native-flag-secure-android'
+project(':react-native-flag-secure-android').projectDir = new File(rootProject.projectDir, 	'../../node_modules/react-native-flag-secure-android/android')
