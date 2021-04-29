@@ -27,22 +27,37 @@ class ControlBoxContainer extends React.Component {
 
   _handleToggleMic = () => {
     let conferenceManager = getConferenceManager();
-    if (this.props.isMasterControl && !this.props.isAudioActive) {
-      if (this.props.isMuteMic) {
-        if (this.props.isMicRequest) {
-          this.props.setToastMessage(t('toast.master.요청대기'));
-        } else {
-          conferenceManager.requestAttention(this.props.name);
-          this.props.setMicRequest(true);
-          this.props.setToastMessage(t('toast.master.요청'));
-        }
+    const {
+      isMasterControl,
+      isAudioActive,
+      isMuteMic,
+      isMicRequest,
+      name,
+      setToastMessage,
+      setMicRequest,
+      toggleMuteMic
+    } = this.props;
+
+    if (isMasterControl) {
+      if (isAudioActive) {
+        // 참가자는 마스터가 제어중일때 오디오가 꺼져있으면 직접 컨트롤 할 수 없음
       } else {
-        conferenceManager.stopAttention(this.props.name);
-        this.props.setToastMessage(t('toast.master.발언종료'));
-        this.props.toggleMuteMic();
+        if (isMuteMic) {
+          if (isMicRequest) {
+            setToastMessage(t('toast.master.요청대기'));
+          } else {
+            conferenceManager.requestAttention(name);
+            setMicRequest(true);
+            setToastMessage(t('toast.master.요청'));
+          }
+        } else {
+          conferenceManager.stopAttention(name);
+          setToastMessage(t('toast.master.발언종료'));
+          toggleMuteMic();
+        }
       }
     } else {
-      this.props.toggleMuteMic();
+      toggleMuteMic();
     }
   };
 }
