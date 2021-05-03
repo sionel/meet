@@ -92,8 +92,8 @@ class SettingScreenContainer extends React.Component {
     } catch (error) {
       this.props.setAlert({
         type: 1,
-        title: this.t('alert.title.권한주세요'),
-        message: this.t('alert.text.접근권한')
+        title: this.t('alert.title.right'),
+        message: this.t('alert.text.permission')
       });
       return null;
     }
@@ -150,7 +150,7 @@ class SettingScreenContainer extends React.Component {
       this.props.setAlert({
         type: 1,
         title: this.t('alert.title.error'),
-        message: this.t('alert.text.접근금지')
+        message: this.t('alert.text.waiting')
       });
     } else {
       navigation.replace('Conference', {

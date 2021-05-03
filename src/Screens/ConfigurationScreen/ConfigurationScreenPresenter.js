@@ -19,24 +19,24 @@ const ConfigurationScreenPresenter = props => {
   const userConfig = [
     {
       // 버전 수정
-      title: t('option.버전정보'),
+      title: t('option.version'),
       icon: 'ico_menu_info',
       content: WEHAGO_ENV === 'WEHAGOV' ? '1.0.1' : '2.1.1'
     },
     {
-      title: t('option.약관법률'),
+      title: t('option.legal'),
       icon: 'ico_menu_info_law',
       action: () => props.navigation.navigate('Policy'),
       nextPage: true
     },
     {
-      title: t('option.수상'),
+      title: t('option.awards'),
       icon: 'icoMenuTrophy',
       action: () => props.navigation.navigate('Awards'),
       nextPage: true
     },
     {
-      title: t('option.로그아웃'),
+      title: t('option.logout'),
       icon: 'ico_menu_login',
       action: () => props.onChangeValue('alert', true)
     }
@@ -46,7 +46,7 @@ const ConfigurationScreenPresenter = props => {
     <View style={styles.container}>
       <View style={{ flex: 1, width: '100%' }}>
         <SectionList
-          sections={[{ title: t('option.시스템'), data: userConfig }]}
+          sections={[{ title: t('option.system'), data: userConfig }]}
           renderItem={({ item }, index) => (
             <TouchableOpacity
               key={index}
@@ -81,7 +81,7 @@ const ConfigurationScreenPresenter = props => {
         visible={props.alert}
         title={t('alert.title.logout')}
         width={320}
-        description={t('alert.text.로그아웃')}
+        description={t('alert.text.logout')}
         actions={[
           {
             name: t('alert.button.cancel'),

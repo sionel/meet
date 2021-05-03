@@ -11,6 +11,7 @@ import {
 
 import CustomIcon from '../../components/CustomIcon';
 import { Text } from '../../components/StyledText';
+import { isWehagoV } from '../../utils';
 
 import { getT } from '../../utils/translateManager';
 
@@ -37,10 +38,10 @@ export default function LoginScreenPresenter(props) {
           </View>
 
           <Text style={{ color: '#fff', fontSize: 25, fontWeight: '300' }}>
-            {t('login.참여코드')}
+            {t('login.code')}
           </Text>
           <Text style={{ color: '#fff', fontSize: 14, fontWeight: 'bold' }}>
-            {t('login.참여코드내용')}
+            {t('login.codemessage')}
           </Text>
           <TextInput
             style={{
@@ -135,7 +136,7 @@ export default function LoginScreenPresenter(props) {
                 style={{ marginRight: 5.5 }}
               />
               <Text style={styles.loginButtonText}>
-                {t('login.wehago로그인')}
+                {isWehagoV ? t('login.wehagologin_V') : t('login.wehagologin')}
               </Text>
             </>
           </TouchableHighlight>
@@ -151,7 +152,7 @@ export default function LoginScreenPresenter(props) {
               })
             }
           >
-            <Text style={styles.loginNavigation}>{t('login.직접로그인')}</Text>
+            <Text style={styles.loginNavigation}>{t('login.direct')}</Text>
           </TouchableOpacity>
         </View>
       </View>

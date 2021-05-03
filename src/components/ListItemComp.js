@@ -138,7 +138,7 @@ const ListItemComp = props => {
                 fontFamily: 'DOUZONEText30'
               }}
             >
-              {t('create_room.시작버튼')}
+              {t('create_room.start')}
             </Text>
           </View>
         )}

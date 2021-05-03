@@ -197,7 +197,7 @@ const changeCompany = async (auth, user_no, company) => {
 
     const response = await fetch(url, data);
     if (response.resultCode === 200) return true;
-    else Alert.alert(t('alert.title.변경'), t('alert.text.한번더'));
+    else Alert.alert(t('alert.title.change'), t('alert.text.onemore'));
   } catch (err) {
     console.warn('changeCompany', err);
     return false;

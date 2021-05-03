@@ -20,6 +20,7 @@ import {
 } from '../../components';
 import AddButton from './AddButton';
 import { getT } from '../../utils/translateManager';
+import { isWehagoV } from '../../utils';
 
 const HomeScreenPresenter = props => {
   const started = props.started;
@@ -52,13 +53,15 @@ const HomeScreenPresenter = props => {
           }}
         >
           <Placeholder
-            mainText={t('main.없음')}
+            mainText={t('main.none')}
             subText={
               props.memberType === 1 || props.plan === 'WE'
-                ? t('main.we텍스트')
+                ? isWehagoV
+                  ? t('main.wetext_V')
+                  : t('main.wetext')
                 : props.plan === 'SP'
-                ? t('main.sp텍스트')
-                : t('main.대화시작')
+                ? t('main.sptext')
+                : t('main.start')
             }
           />
           <View style={{ flex: 1 }} />
@@ -79,12 +82,12 @@ const HomeScreenPresenter = props => {
             ]}
             sections={[
               {
-                title: t('main.진행중'),
+                title: t('main.proceed'),
                 data: started,
                 length: started.length - 1
               },
               {
-                title: t('main.예정'),
+                title: t('main.scheduled'),
                 data: reservation,
                 length: reservation.length - 1
               }

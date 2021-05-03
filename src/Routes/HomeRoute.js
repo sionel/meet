@@ -124,7 +124,7 @@ const HomeRouteStack = () => {
       screen: ConfigurationScreen,
       navigationOptions: ({ navigation }) => ({
         headerTitle: (
-          <RouteTitle title={navigation.getScreenProps().t('option.설정')} />
+          <RouteTitle title={navigation.getScreenProps().t('option.setting')} />
         ),
         headerLeft: <BackButton navigation={navigation} to={'Home'} />,
         headerTintColor: '#fff',
@@ -136,7 +136,7 @@ const HomeRouteStack = () => {
       navigationOptions: ({ navigation }) => ({
         headerTitle: (
           <RouteTitle
-            title={navigation.getScreenProps().t('option.약관법률')}
+            title={navigation.getScreenProps().t('option.legal')}
           />
         ),
         headerLeft: <BackButton navigation={navigation} to={'Configuration'} />,
@@ -149,7 +149,7 @@ const HomeRouteStack = () => {
       screen: AwardsScreen,
       navigationOptions: ({ navigation }) => ({
         headerTitle: (
-          <RouteTitle title={navigation.getScreenProps().t('option.수상')} />
+          <RouteTitle title={navigation.getScreenProps().t('option.awards')} />
         ),
         headerLeft: <BackButton navigation={navigation} to={'Configuration'} />,
         headerTintColor: '#fff',
@@ -161,7 +161,7 @@ const HomeRouteStack = () => {
       navigationOptions: ({ navigation }) => ({
         headerTitle: (
           <RouteTitle
-            title={navigation.getScreenProps().t('option.오픈소스')}
+            title={navigation.getScreenProps().t('option.opensource')}
           />
         ),
         headerLeft: <BackButton navigation={navigation} to={'Policy'} />,
@@ -174,7 +174,7 @@ const HomeRouteStack = () => {
       navigationOptions: ({ navigation }) => ({
         headerTitle: (
           <RouteTitle
-            title={navigation.getScreenProps().t('option.오픈소스')}
+            title={navigation.getScreenProps().t('option.opensource')}
           />
         ),
         headerLeft: <BackButton navigation={navigation} to={'OpenSource'} />,
@@ -188,7 +188,7 @@ const HomeRouteStack = () => {
       navigationOptions: ({ navigation }) => ({
         headerTitle: (
           <RouteTitle
-            title={navigation.getScreenProps().t('option.화상회의')}
+            title={navigation.getScreenProps().t('option.conference')}
           />
         ),
         headerLeft: <BackButton navigation={navigation} to={'Home'} />,
@@ -202,7 +202,7 @@ const HomeRouteStack = () => {
       navigationOptions: ({ navigation }) => ({
         headerTitle: (
           <RouteTitle
-            title={navigation.getScreenProps().t('option.화상회의')}
+            title={navigation.getScreenProps().t('option.conference')}
           />
         ),
         headerLeft: <BackButton navigation={navigation} to={'Home'} />,

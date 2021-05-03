@@ -31,7 +31,7 @@ export default function AwardsScreen(props) {
               marginTop: 20
             }}
           >
-            {t('option.인증')}
+            {t('option.auth')}
           </Text>
           <Text style={{ fontSize: 12, fontFamily: 'DOUZONEText30' }}>
             {t('option.kisa')}
@@ -68,7 +68,7 @@ export default function AwardsScreen(props) {
                 color: 'rgb(39,67,222)'
               }}
             >
-              {t('option.바로가기')}
+              {t('option.to')}
             </Text>
           </TouchableOpacity>
         </View>

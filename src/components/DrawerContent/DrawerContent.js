@@ -101,7 +101,7 @@ export default function DrawerContent(props) {
 
   const DrawerChild = () => (
     <View style={{ marginTop: 10 }}>
-      <Text style={styles.serviceText}>{t('drawer.전체서비스')}</Text>
+      <Text style={styles.serviceText}>{t('drawer.service')}</Text>
 
       <View style={styles.shortcutRow}>
         <TouchableOpacity
@@ -123,7 +123,7 @@ export default function DrawerContent(props) {
         >
           <>
             <Image source={btnWedrive} style={styles.shortcutImage} />
-            <Text style={styles.shortcutText}>{t('drawer.웹스토리지')}</Text>
+            <Text style={styles.shortcutText}>{t('drawer.storage')}</Text>
           </>
         </TouchableOpacity>
 
@@ -135,7 +135,7 @@ export default function DrawerContent(props) {
         >
           <>
             <Image source={btnAtr} style={styles.shortcutImage} />
-            <Text style={styles.shortcutText}>{t('drawer.근태관리')}</Text>
+            <Text style={styles.shortcutText}>{t('drawer.attendance')}</Text>
           </>
         </TouchableOpacity>
       </View>
@@ -149,7 +149,7 @@ export default function DrawerContent(props) {
         >
           <>
             <Image source={btnElecapproval} style={styles.shortcutImage} />
-            <Text style={styles.shortcutText}>{t('drawer.전자결재')}</Text>
+            <Text style={styles.shortcutText}>{t('drawer.eapprovals')}</Text>
           </>
         </TouchableOpacity>
         <TouchableOpacity style={styles.shortcut}>

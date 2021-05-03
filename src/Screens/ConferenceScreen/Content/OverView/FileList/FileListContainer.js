@@ -235,15 +235,15 @@ class FileListContainer extends Component {
     if (fileInfoResponse.resultCode === 'E2021') {
       this.props.setAlert({
         type: 1,
-        title: this.t('alert.title.파일변환중'),
-        message: this.t('alert.text.기다려')
+        title: this.t('alert.title.conversion'),
+        message: this.t('alert.text.wait')
       });
       return;
     }
     this.props.setAlert({
       type: 1,
-      title: this.t('alert.title.파일불러오기실패'),
-      message: this.t('alert.text.기다려')
+      title: this.t('alert.title.loading_fail'),
+      message: this.t('alert.text.wait')
     });
     return;
   };
@@ -262,8 +262,8 @@ class FileListContainer extends Component {
       // 이미지 리소스가 없을 시
       this.props.setAlert({
         type: 1,
-        title: this.t('alert.title.파일불러오기실패'),
-        message: this.t('alert.text.기다려')
+        title: this.t('alert.title.loading_fail'),
+        message: this.t('alert.text.wait')
       });
       return;
     } else {

@@ -28,11 +28,11 @@ export default function DeletedScreen(props) {
             style={{ width: 200, height: 200 }}
           />
           <Text style={{ fontSize: 14, color: 'rgb(80,80,80)' }}>
-            {t('roomstate.delete.타이틀')}
+            {t('roomstate.delete.title')}
           </Text>
           <View style={{ fontSize: 12, paddingTop: 25 }}>
             <Text style={{ textAlign: 'center', color: 'rgb(171,171,171)' }}>
-              {t('roomstate.delete.고객센터')}
+              {t('roomstate.delete.center')}
             </Text>
           </View>
         </View>
@@ -40,24 +40,24 @@ export default function DeletedScreen(props) {
           <View style={styles.line}>
             <Text style={styles.linedot}>{'\u2B24'}</Text>
             <Text style={{ fontSize: 12 }}>
-              {t('roomstate.delete.30분전부터')}
+              {t('roomstate.delete.yet')}
             </Text>
           </View>
           <View style={styles.line}>
             <Text style={styles.linedot}>{'\u2B24'}</Text>
             <Text style={{ fontSize: 12 }}>
               {props.isTablet
-                ? t('roomstate.delete.참여불가') +
-                  t('roomstate.delete.마스터문의')
-                : t('roomstate.delete.참여불가') +
+                ? t('roomstate.delete.cannot') +
+                  t('roomstate.delete.master')
+                : t('roomstate.delete.cannot') +
                   '\n' +
-                  t('roomstate.delete.마스터문의')}
+                  t('roomstate.delete.master')}
             </Text>
           </View>
           <View style={styles.line}>
             <Text style={styles.linedot}>{'\u2B24'}</Text>
             <Text style={{ fontSize: 12 }}>
-              {t('roomstate.delete.다른경우')}
+              {t('roomstate.delete.another')}
             </Text>
           </View>
         </View>

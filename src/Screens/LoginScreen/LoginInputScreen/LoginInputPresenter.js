@@ -96,17 +96,17 @@ export default function LoginInputPresenter(props) {
                   <Text
                     style={[styles.captchaMessageText, { marginBottom: 4 }]}
                   >
-                    {t('login.횟수초과')}
+                    {t('login.exceeded')}
                   </Text>
                   <Text
                     style={[styles.captchaMessageText, { color: '#ababab' }]}
                   >
-                    {t('login.피해방지')}
+                    {t('login.prevent')}
                   </Text>
                   <Text
                     style={[styles.captchaMessageText, { color: '#ababab' }]}
                   >
-                    {t('login.5회제한')}
+                    {t('login.fivetimes')}
                   </Text>
                 </View>
               )}
@@ -123,7 +123,7 @@ export default function LoginInputPresenter(props) {
                   customRef={usernameRef}
                   value={userId}
                   textContentType={'username'}
-                  placeholder={t('login.아이디')}
+                  placeholder={t('login.id')}
                   placeholderTextColor={'#ccc'}
                   selectionColor={'#505050'}
                   returnKeyType={'next'}
@@ -159,7 +159,7 @@ export default function LoginInputPresenter(props) {
                   secureTextEntry={true}
                   value={userPw}
                   textContentType={'password'}
-                  placeholder={t('login.비밀번호')}
+                  placeholder={t('login.pw')}
                   placeholderTextColor={'#ccc'}
                   selectionColor={'#505050'}
                   returnKeyType={'go'}
@@ -185,13 +185,13 @@ export default function LoginInputPresenter(props) {
               </View>
 
               {loginFailed && (
-                <Text style={styles.loginFailedText}>{t('login.틀렸음')}</Text>
+                <Text style={styles.loginFailedText}>{t('login.incorrect')}</Text>
               )}
 
               {captcha && (
                 <View style={styles.captchaMessageView}>
                   <Text style={styles.captchaMessageText}>
-                    {t('login.방지문자뜸')}
+                    {t('login.input')}
                   </Text>
                   <View
                     style={{
@@ -219,7 +219,7 @@ export default function LoginInputPresenter(props) {
                       >
                         <CustomIcon name={'btn_reload_none'} size={15} />
                         <Text style={{ color: '#ababab' }}>
-                          {t('login.새로고침')}
+                          {t('login.refresh')}
                         </Text>
                       </TouchableOpacity>
                     </View>
@@ -228,7 +228,7 @@ export default function LoginInputPresenter(props) {
                   <TextInput
                     customRef={captchaRef}
                     value={captchaInput}
-                    placeholder={t('login.자동입력방지문자')}
+                    placeholder={t('login.preventAuto')}
                     placeholderTextColor={'#ccc'}
                     selectionColor={'#505050'}
                     returnKeyType={'next'}
@@ -287,7 +287,7 @@ export default function LoginInputPresenter(props) {
                       </Animated.View>
                     ) : (
                       <Text style={styles.loginButtonText}>
-                        {t('login.로그인')}
+                        {t('login.login')}
                       </Text>
                     )}
                   </>

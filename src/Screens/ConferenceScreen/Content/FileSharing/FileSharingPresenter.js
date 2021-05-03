@@ -151,12 +151,12 @@ const FileSharingPresenter = props => {
     </View>
   );
 
-  const MODE = mode === 'drawing' ? t('meet.스케치') : t('meet.문서공유');
+  const MODE = mode === 'drawing' ? t('meet.sketch') : t('meet.share');
   const modalMessage =
     presenter === 'localUser'
       ? {
-          title: t('alert.title.종료').replace('[@mode@]', MODE),
-          text: t('alert.text.종료문구').replace('[@mode@]', MODE).replace('[@mode@]', MODE),
+          title: t('alert.title.mode_exit').replace('[@mode@]', MODE),
+          text: t('alert.text.quit').replace('[@mode@]', MODE).replace('[@mode@]', MODE),
           onClickFeedback: () => {
             props.onSetDrawingData();
             props.onChangeSharingMode(false, false);
@@ -164,8 +164,8 @@ const FileSharingPresenter = props => {
           }
         }
       : {
-          title: t('alert.title.화상종료'),
-          text: t('alert.text.화상종료문구'),
+          title: t('alert.title.exit'),
+          text: t('alert.text.quitconference'),
           onClickFeedback: props.onDisposeConference
         };
 
@@ -224,7 +224,7 @@ const FileSharingPresenter = props => {
                 <Text
                   style={{ fontFamily: 'DOUZONEText30', textAlign: 'center' }}
                 >
-                  {localPipMode ? t('meet.돌아가') : t('meet.부르는중')}
+                  {localPipMode ? t('meet.back') : t('meet.loading')}
                 </Text>
               </View>
             ) : (

@@ -29,8 +29,8 @@ export default function CompanySelectPresenter(props) {
         <View style={styles.title}>
           <Text style={styles.titleText}>
             {isSP
-              ? t('selectcompany.title.팩미구매')
-              : t('selectcompany.title.미구매')}
+              ? t('selectcompany.title.packnotpurchase')
+              : t('selectcompany.title.notpurchase')}
           </Text>
           <TouchableOpacity
             activeOpacity={0.5}
@@ -44,7 +44,7 @@ export default function CompanySelectPresenter(props) {
         <Text style={styles.message}>{t('selectcompany.message')}</Text>
 
         <View style={styles.header}>
-          <Text>{t('selectcompany.회사선택')}</Text>
+          <Text>{t('selectcompany.select')}</Text>
         </View>
         <View style={styles.listArea}>
           <FlatList
@@ -85,7 +85,7 @@ export default function CompanySelectPresenter(props) {
         visible={visible}
         width={320}
         title={t('alert.title.logout')}
-        description={t('alert.text.로그아웃')}
+        description={t('alert.text.logout')}
         onClose={() => setVisible(false)}
         actions={[
           {

@@ -92,8 +92,8 @@ const CreateScreenPresenter = props => {
           }
         >
           <Placeholder
-            mainText={t('create_room.검색결과없음')}
-            subText={t('create_room.검색결과없음텍스트')}
+            mainText={t('create_room.search결과없음')}
+            subText={t('create_room.search결과없음텍스트')}
           />
         </ScrollView>
       ) : (
@@ -110,25 +110,25 @@ const CreateScreenPresenter = props => {
           ]}
           sections={[
             {
-              title: `${t('create_room.그룹')}(${groupList.length})`,
+              title: `${t('create_room.group')}(${groupList.length})`,
               data: groupList,
               length: groupList.length - 1,
               type: 'group'
             },
             {
-              title: `${t('create_room.일대일')}(${personalList.length})`,
+              title: `${t('create_room.oneonone')}(${personalList.length})`,
               data: personalList,
               length: personalList.length - 1,
               type: 'personal'
             },
             {
-              title: `${t('create_room.세무')}(${semuList.length})`,
+              title: `${t('create_room.semu')}(${semuList.length})`,
               data: semuList,
               length: semuList.length - 1,
               type: 'semu'
             },
             {
-              title: `${t('create_room.수임')}(${suimList.length})`,
+              title: `${t('create_room.suim')}(${suimList.length})`,
               data: suimList,
               length: suimList.length - 1,
               type: 'suim'
@@ -183,9 +183,9 @@ const CreateScreenPresenter = props => {
 
       <CustomAlert
         visible={props.modal}
-        title={t('alert.title.화상회의생성')}
+        title={t('alert.title.create')}
         width={320}
-        description={t('alert.text.방만들기')}
+        description={t('alert.text.createroom')}
         actions={[
           {
             name: t('alert.button.cancel'),

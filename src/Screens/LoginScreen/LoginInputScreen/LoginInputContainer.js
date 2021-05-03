@@ -132,8 +132,8 @@ export default function LoginInputContainer(props) {
       _resetAlert();
       setAlertVisible({
         visible: true,
-        title: t('alert.title.fail'),
-        description: t('alert.text.방지문자틀림'),
+        title: t('alert.title.loading_fail'),
+        description: t('alert.text.incorrect_prevent'),
         onClose,
         actions: [
           {
@@ -174,7 +174,9 @@ export default function LoginInputContainer(props) {
           setAlertVisible({
             visible: true,
             title: t('alert.title.notion'),
-            description: t('alert.text.duplicate_login'),
+            description: iswehagov
+              ? t('alert.text.duplicate_login_V')
+              : t('alert.text.duplicate_login'),
             onClose: () => {
               _resetAlert();
               resolve(false);
@@ -237,7 +239,7 @@ export default function LoginInputContainer(props) {
             visible: true,
             title: t('alert.title.notion'),
             description: iswehagov
-              ? t('alert.text.세션만료')
+              ? t('alert.text.expired')
               : t('alert.text.duplicate_logout'),
             onClose,
             actions: [
@@ -330,8 +332,8 @@ export default function LoginInputContainer(props) {
         _resetAlert();
         setAlertVisible({
           visible: true,
-          title: t('alert.title.fail'),
-          description: t('alert.text.아디비번틀림'),
+          title: t('alert.title.loading_fail'),
+          description: t('alert.text.incorrect_id'),
           onClose,
           actions: [
             {
@@ -351,8 +353,8 @@ export default function LoginInputContainer(props) {
         _resetAlert();
         setAlertVisible({
           visible: true,
-          title: t('alert.title.fail'),
-          description: t('alert.text.5번틀림'),
+          title: t('alert.title.loading_fail'),
+          description: t('alert.text.five'),
           onClose,
           actions: [
             {
@@ -368,8 +370,8 @@ export default function LoginInputContainer(props) {
         _resetAlert();
         setAlertVisible({
           visible: true,
-          title: t('alert.title.사용제한'),
-          description: t('alert.text.사용제한메시지'),
+          title: t('alert.title.limit'),
+          description: t('alert.text.unable'),
           onClose,
           actions: [
             {
@@ -385,8 +387,8 @@ export default function LoginInputContainer(props) {
         _resetAlert();
         setAlertVisible({
           visible: true,
-          title: t('alert.title.fail'),
-          description: t('alert.text.로그인실패'),
+          title: t('alert.title.loading_fail'),
+          description: t('alert.text.login_fail'),
           onClose,
           actions: [
             {

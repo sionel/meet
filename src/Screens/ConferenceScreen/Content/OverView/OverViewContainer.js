@@ -20,9 +20,9 @@ class OverViewContainer extends Component {
     } = this.props;
     const { view } = this.state;
     const tabs = [
-      { key: 'CHATTING', name: this.t('chatting.대화방') },
-      { key: 'USERLIST', name: this.t('chatting.목록') },
-      { key: 'FILELIST', name: this.t('meet.스토리지') }
+      { key: 'CHATTING', name: this.t('chatting.room') },
+      { key: 'USERLIST', name: this.t('chatting.list') },
+      { key: 'FILELIST', name: this.t('meet.storage') }
     ];
 
     let selectedTabs = [];

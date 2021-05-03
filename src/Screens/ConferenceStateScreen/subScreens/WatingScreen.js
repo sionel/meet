@@ -29,13 +29,13 @@ export default function DeletedScreen(props) {
             style={{ width: 200, height: 200 }}
           />
           <Text style={{ fontSize: 14, color: 'rgb(80,80,80)' }}>
-            {t('roomstate.wating.타이틀')}
+            {t('roomstate.wating.title')}
           </Text>
           <View style={{ fontSize: 12, paddingTop: 25 }}>
             <Text style={{ textAlign: 'center', color: 'rgb(171,171,171)' }}>
-              {t('roomstate.wating.해당방은')}
+              {t('roomstate.wating.thisroom')}
               <Text style={{ color: 'rgb(28,144,251)' }}>{start}</Text>
-              {t('roomstate.wating.시작예정')}
+              {t('roomstate.wating.willstart')}
             </Text>
           </View>
         </View>
@@ -44,29 +44,29 @@ export default function DeletedScreen(props) {
             <Text style={styles.linedot}>{'\u2B24'}</Text>
             <Text style={{ fontSize: 12 }}>
               {props.isTablet
-                ? `${t('roomstate.wating.변경및삭제')} ${t(
-                    'roomstate.wating.이용불가'
+                ? `${t('roomstate.wating.modify')} ${t(
+                    'roomstate.wating.unable'
                   )}`
-                : `${t('roomstate.wating.변경및삭제')}\n${t(
-                    'roomstate.wating.이용불가'
+                : `${t('roomstate.wating.modify')}\n${t(
+                    'roomstate.wating.unable'
                   )}`}
             </Text>
           </View>
           <View style={styles.line}>
             <Text style={styles.linedot}>{'\u2B24'}</Text>
             <Text style={{ fontSize: 12 }}>
-              {t('roomstate.wating.마스터문의')}
+              {t('roomstate.wating.master')}
             </Text>
           </View>
           <View style={styles.line}>
             <Text style={styles.linedot}>{'\u2B24'}</Text>
             <Text style={{ fontSize: 12 }}>
               {props.isTablet
-                ? `${t('roomstate.wating.지속')} ${t(
-                    'roomstate.wating.고객센터'
+                ? `${t('roomstate.wating.continue')} ${t(
+                    'roomstate.wating.center'
                   )}`
-                : `${t('roomstate.wating.지속')}\n${t(
-                    'roomstate.wating.고객센터'
+                : `${t('roomstate.wating.continue')}\n${t(
+                    'roomstate.wating.center'
                   )}`}
             </Text>
           </View>

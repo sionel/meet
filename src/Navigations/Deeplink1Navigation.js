@@ -40,7 +40,7 @@ const Deeplink1Navigation = createStackNavigator(
     ConferenceState: {
       screen: ConferenceStateScreen,
       navigationOptions: ({ navigation }) => ({
-        headerTitle: <RouteTitle title={navigation.getScreenProps().t('option.화상회의')} />,
+        headerTitle: <RouteTitle title={navigation.getScreenProps().t('option.conference')} />,
         headerLeft: <BackButton navigation={navigation} />,
         headerTintColor: '#fff',
         headerStyle: commonStyle

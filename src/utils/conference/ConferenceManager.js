@@ -95,7 +95,7 @@ class ConferenceManager {
     if (audioPolicy) {
       this._dispatch(masterAcionCreators.changeAudioActive(true));
       this._dispatch(
-        toastAcionCreators.setToastMessage(this.t('toast.master.마이크비활성'))
+        toastAcionCreators.setToastMessage(this.t('toast.master.micoffbymaster'))
       );
     }
     this._dispatch(mainUserActionCreators.setMainUserNotExist(id));
@@ -105,7 +105,7 @@ class ConferenceManager {
       this._dispatch(masterAcionCreators.changeMasterControlMode(id));
       this._dispatch(
         toastAcionCreators.setToastMessage(
-          id ? this.t('toast.master.발언권제어시작') : ''
+          id ? this.t('toast.master.clton') : ''
         )
       );
     }
@@ -372,22 +372,22 @@ class ConferenceManager {
   changeMicControlUserModeByMaster = flag => {
     this._dispatch(masterAcionCreators.changeMasterControlMode(flag));
     const msg = flag
-      ? this.t('toast.master.발언권제어시작')
-      : this.t('toast.master.발언권제어끝');
+      ? this.t('toast.master.clton')
+      : this.t('toast.master.cltoff');
     this._dispatch(toastAcionCreators.setToastMessage(msg));
   };
   changeMicControlModeByMaster = value => {
     this._dispatch(masterAcionCreators.changeAudioActive(value));
 
     const msg = value
-      ? this.t('toast.master.마이크비활성')
-      : this.t('toast.master.마이크활성');
+      ? this.t('toast.master.micoffbymaster')
+      : this.t('toast.master.miconbymaster');
     this._dispatch(toastAcionCreators.setToastMessage(msg));
   };
   changeMicMuteByMaster = flag => {
     const msg = flag
-      ? this.t('toast.master.마이크비활성')
-      : this.t('toast.master.마이크활성');
+      ? this.t('toast.master.micoffbymaster')
+      : this.t('toast.master.miconbymaster');
     this._dispatch(toastAcionCreators.setToastMessage(msg));
     this._dispatch(masterAcionCreators.changeMuteMicMaster(flag));
   };
@@ -401,7 +401,7 @@ class ConferenceManager {
 
   rejectedByMaster = () => {
     this._dispatch(
-      toastAcionCreators.setToastMessage(this.t('toast.master.요청거부'))
+      toastAcionCreators.setToastMessage(this.t('toast.master.denied'))
     );
     this._dispatch(masterAcionCreators.setMicRequest(false));
   };
@@ -419,7 +419,7 @@ class ConferenceManager {
         alertAcionCreators.setAlert({
           type: 1,
           title: this.t('alert.title.notion'),
-          message: this.t('toast.master.내가추방')
+          message: this.t('toast.master.ibenned')
         })
       );
     }

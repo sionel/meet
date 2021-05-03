@@ -11,8 +11,10 @@ import jwt_decode from 'jwt-decode';
 import { getT } from '../../utils/translateManager';
 import { getConferenceManager } from '../../utils/ConferenceManager';
 
+const iswehagov = WEHAGO_ENV === 'WEHAGOV';
+
 const JailMonkey =
-  Platform.OS === 'android' && WEHAGO_ENV === 'WEHAGOV'
+  Platform.OS === 'android' && iswehagov
     ? require('jail-monkey').default
     : null;
 
@@ -97,13 +99,13 @@ class SplashScreenContainer extends Component {
 
     if (
       Platform.OS === 'android' &&
-      WEHAGO_ENV === 'WEHAGOV' &&
+      iswehagov &&
       (isJailBroken || isDebuggedMode)
     ) {
       this.props.setAlert({
         type: 1,
         title: this.t('alert.title.notion'),
-        message: this.t('alert.text.looting'),
+        message: this.t('alert.text.looting_V'),
         onConfirm: () => BackHandler.exitApp()
       });
       return false;
@@ -118,7 +120,9 @@ class SplashScreenContainer extends Component {
 
     if (!result.resultData.update || result.resultData.dev_mode) return [];
     const title = this.t('servernoti.title.update');
-    const message = this.t('servernoti.message.power_update');
+    const message = iswehagov
+      ? this.t('servernoti.message.power_update_V')
+      : this.t('servernoti.message.power_update');
     const marketUrl =
       os === 'ios'
         ? 'https://itunes.apple.com/app/id1455726925?mt=8'
@@ -206,7 +210,9 @@ class SplashScreenContainer extends Component {
           this.props.setAlert({
             type: 1,
             title: this.t('alert.title.fail'),
-            message: this.t('alert.text.duplicate_logout')
+            message: iswehagov
+              ? this.t('alert.text.expired')
+              : this.t('alert.text.duplicate_logout')
           });
         } else if (result.errors.status === '400') {
           this.props.setAlert({
@@ -488,7 +494,9 @@ class SplashScreenContainer extends Component {
         this.props.setAlert({
           type: 1,
           title: this.t('alert.title.fail'),
-          message: this.t('alert.text.duplicate_logout')
+          message: iswehagov
+            ? this.t('alert.text.expired')
+            : this.t('alert.text.duplicate_logout')
         });
       } else if (result.errors.status === '400') {
         this.props.setAlert({
