@@ -13,10 +13,10 @@ import { getConferenceManager } from '../../utils/ConferenceManager';
 
 const iswehagov = WEHAGO_ENV === 'WEHAGOV';
 
-const JailMonkey =
-  Platform.OS === 'android' && iswehagov
-    ? require('jail-monkey').default
-    : null;
+// const JailMonkey =
+//   Platform.OS === 'android' && iswehagov
+//     ? require('jail-monkey').default
+//     : null;
 
 class SplashScreenContainer extends Component {
   constructor(props) {
@@ -100,8 +100,10 @@ class SplashScreenContainer extends Component {
     }
   };
   _handleCheckSecurity = async () => {
-    const isJailBroken = JailMonkey?.isJailBroken();
-    const isDebuggedMode = await JailMonkey?.isDebuggedMode();
+    // const isJailBroken = JailMonkey?.isJailBroken();
+    const isJailBroken = false
+    // const isDebuggedMode = await JailMonkey?.isDebuggedMode();
+    const isDebuggedMode = false
 
     if (
       Platform.OS === 'android' &&
