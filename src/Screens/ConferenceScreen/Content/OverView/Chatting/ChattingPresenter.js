@@ -58,7 +58,7 @@ const ChattingPresenter = props => {
         {messages.length === 0 && (
           <View style={{ flex: 1, alignItems: 'center', paddingTop: 50 }}>
             <Text style={{ color: '#999', fontFamily: 'DOUZONEText30' }}>
-              {t('chatting.nochat')}
+              {t('chatting_nochat')}
             </Text>
           </View>
         )}
@@ -199,7 +199,7 @@ const ChattingPresenter = props => {
                 fontFamily: 'DOUZONEText30'
               }}
             >
-              {t('chatting.send')}
+              {t('chatting_send')}
             </Text>
           </TouchableOpacity>
         </View>

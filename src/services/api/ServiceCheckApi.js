@@ -18,24 +18,24 @@ const checkStatusType = ({ company_state, employee_status, step }) => {
               case 1:
                 return {
                   code: 400,
-                  message: t('alert.text.init_company')
+                  message: t('alert_text_init_company')
                 };
               case 3:
                 return {
                   code: 400,
-                  message: t('alert.text.usage_restriction')
+                  message: t('alert_text_usage_restriction')
                   // message: '사용중지'
                 };
               case 4:
                 return {
                   code: 400,
-                  message: t('alert.text.usage_restriction')
+                  message: t('alert_text_usage_restriction')
                   // message: '퇴사'
                 };
               case 5:
                 return {
                   code: 400,
-                  message: t('alert.text.usage_restriction')
+                  message: t('alert_text_usage_restriction')
                   // message: '탈퇴'
                 };
               default:
@@ -52,7 +52,7 @@ const checkStatusType = ({ company_state, employee_status, step }) => {
           // 미납된 케이스
           return {
             code: 400,
-            message: t('alert.text.usage_restriction')
+            message: t('alert_text_usage_restriction')
             // message: '미납'
           };
         }
@@ -66,13 +66,13 @@ const checkStatusType = ({ company_state, employee_status, step }) => {
       // 대기일 경우 만료 여부 확인해야함
       return {
         code: 400,
-        message: t('alert.text.unpaid')
+        message: t('alert_text_unpaid')
       };
     } else {
       // 초기설정 미완료
       return {
         code: 400,
-        message: t('alert.text.init_company')
+        message: t('alert_text_init_company')
       };
     }
   } else {
@@ -133,7 +133,7 @@ const companyStatusCheck = async (auth, company) => {
     } else {
       return {
         code: 400,
-        message: t('alert.text.usage_restriction')
+        message: t('alert_text_usage_restriction')
       };
     }
   }

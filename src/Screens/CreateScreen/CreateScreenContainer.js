@@ -163,7 +163,7 @@ class CreateScreenContainer extends React.Component {
     } else if (createResult.errors && createResult.errors.code === 'E002') {
       this._handleRefresh();
     } else {
-      alert(this.t('alert.text.createfail'));
+      alert(this.t('alert_text_createfail'));
     }
   };
 

@@ -31,7 +31,7 @@ export const wehagoMainURL = isDev
 
 export const meetURL = isDev
   ? `https://rtctest.wehago.com/api-bind`
-  : `https://api.wehago.com/video`;
+  : `https://api.wehago${isWehagoV ? 'v' : ''}.com/video`;
 // export const meetURL = `http://localhost:8080/videodev`;
 
 export const wehagoDummyImageURL = `https://static.wehago${

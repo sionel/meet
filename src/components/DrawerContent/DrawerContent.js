@@ -92,8 +92,8 @@ export default function DrawerContent(props) {
       ).catch(err => {
         setAlert({
           type: 1,
-          title: t('alert.title.notion'),
-          message: t('alert.text.no_app_store')
+          title: t('alert_title_notion'),
+          message: t('alert_text_no_app_store')
         });
       });
     });
@@ -101,7 +101,7 @@ export default function DrawerContent(props) {
 
   const DrawerChild = () => (
     <View style={{ marginTop: 10 }}>
-      <Text style={styles.serviceText}>{t('drawer.service')}</Text>
+      <Text style={styles.serviceText}>{t('drawer_service')}</Text>
 
       <View style={styles.shortcutRow}>
         <TouchableOpacity
@@ -123,7 +123,7 @@ export default function DrawerContent(props) {
         >
           <>
             <Image source={btnWedrive} style={styles.shortcutImage} />
-            <Text style={styles.shortcutText}>{t('drawer.storage')}</Text>
+            <Text style={styles.shortcutText}>{t('drawer_storage')}</Text>
           </>
         </TouchableOpacity>
 
@@ -135,7 +135,7 @@ export default function DrawerContent(props) {
         >
           <>
             <Image source={btnAtr} style={styles.shortcutImage} />
-            <Text style={styles.shortcutText}>{t('drawer.attendance')}</Text>
+            <Text style={styles.shortcutText}>{t('drawer_attendance')}</Text>
           </>
         </TouchableOpacity>
       </View>
@@ -149,7 +149,7 @@ export default function DrawerContent(props) {
         >
           <>
             <Image source={btnElecapproval} style={styles.shortcutImage} />
-            <Text style={styles.shortcutText}>{t('drawer.eapprovals')}</Text>
+            <Text style={styles.shortcutText}>{t('drawer_eapprovals')}</Text>
           </>
         </TouchableOpacity>
         <TouchableOpacity style={styles.shortcut}>

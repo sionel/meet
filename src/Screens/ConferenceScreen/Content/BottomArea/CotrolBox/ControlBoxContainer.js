@@ -44,15 +44,15 @@ class ControlBoxContainer extends React.Component {
       } else {
         if (isMuteMic) {
           if (isMicRequest) {
-            setToastMessage(t('toast.master.waiting'));
+            setToastMessage(t('toast_master_waiting'));
           } else {
             conferenceManager.requestAttention(name);
             setMicRequest(true);
-            setToastMessage(t('toast.master.ask'));
+            setToastMessage(t('toast_master_ask'));
           }
         } else {
           conferenceManager.stopAttention(name);
-          setToastMessage(t('toast.master.finish'));
+          setToastMessage(t('toast_master_finish'));
           toggleMuteMic();
         }
       }

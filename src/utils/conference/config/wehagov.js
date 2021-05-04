@@ -7,10 +7,10 @@ const isWehagoV = WEHAGO_ENV === 'WEHAGOV';
  */
 const config = {
   hosts: {
-    domain: `video.wehago${isWehagoV ? 'v' : ''}.com`,
-    muc: `conference.video.wehago${isWehagoV ? 'v' : ''}.com`
+    domain: `video.wehagov.com`,
+    muc: `conference.video.wehagov.com`
   },
-  bosh: `//video.wehago${isWehagoV ? 'v' : ''}.com/http-bind`,
+  bosh: `//video.wehagov.com/http-bind`,
   openBridgeChannel: 'datachannel',
   channelLastN: -1,
   resolution: 720,

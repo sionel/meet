@@ -31,10 +31,10 @@ export default function AwardsScreen(props) {
               marginTop: 20
             }}
           >
-            {t('option.auth')}
+            {t('option_auth')}
           </Text>
           <Text style={{ fontSize: 12, fontFamily: 'DOUZONEText30' }}>
-            {t('option.kisa')}
+            {t('option_kisa')}
           </Text>
           <Text
             style={{
@@ -44,7 +44,7 @@ export default function AwardsScreen(props) {
               marginTop: 20
             }}
           >
-            {t('option.WEHAGOV')}
+            {t('option_WEHAGOV')}
           </Text>
           <Text
             style={{
@@ -68,7 +68,7 @@ export default function AwardsScreen(props) {
                 color: 'rgb(39,67,222)'
               }}
             >
-              {t('option.to')}
+              {t('option_to')}
             </Text>
           </TouchableOpacity>
         </View>

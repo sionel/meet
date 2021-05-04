@@ -23,7 +23,7 @@ export default {
       const response = await fetch(url, data);
       return response.json();
     } catch (err) {
-      alert(t('alert.text.problem_ocurred'));
+      alert(t('alert_text_problem_ocurred'));
       return false;
     }
   },
@@ -43,7 +43,7 @@ export default {
       const response = await fetch(url, data);
       return response.json();
     } catch (err) {
-      alert(t('alert.text.problem_ocurred'));
+      alert(t('alert_text_problem_ocurred'));
       return false;
     }
   }

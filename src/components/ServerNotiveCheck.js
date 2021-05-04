@@ -31,7 +31,7 @@ export default function ServerNotiveCheck({ servernoti }) {
           {servernoti.subMessage && servernoti.subMessage.length > 0 && (
             <View style={styles.subMessage}>
               <Text style={{ paddingBottom: 10 }}>{`[${t(
-                'servernoti.message.update_list'
+                'servernoti_message_update_list'
               )}]`}</Text>
               {servernoti.subMessage.map((e, idx) => {
                 return (

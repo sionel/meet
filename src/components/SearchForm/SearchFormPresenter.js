@@ -27,7 +27,7 @@ const SearchFormPresenter = props => {
             style={styles.searchIcon}
           />
           <TextInput
-            placeholder={t('create_room.search')}
+            placeholder={t('create_room_search')}
             style={styles.input}
             disableFullscreenUI={true}
             onChangeText={newText => {

@@ -53,7 +53,7 @@ function kickMessage(masterId, targetId) {
       ? `${targetNickName}(${targetUserName})`
       : targetUserName;
     const t = getT();
-    const toastMessage = t('toast.master.whobenned')
+    const toastMessage = t('toast_master_whobenned')
       .replace('[@master@]', master)
       .replace('[@target@]', target);
     dispath({

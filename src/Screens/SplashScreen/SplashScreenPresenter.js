@@ -9,7 +9,7 @@ export default function SplashScreenPresenter(props) {
     return (
       <CustomAlert
         visible={alert.visible}
-        title={t('alert.title.notion')}
+        title={t('alert_title_notion')}
         width={320}
         description={alert.description}
         actions={alert.actions}

@@ -98,7 +98,7 @@ const OverViewPresenter = props => {
         size={isIOS ? 'large' : 100}
         color={'rgb(28, 144, 251)'}
       />
-      <Text style={styles.loadingModalText}>{t('meet.loading')}</Text>
+      <Text style={styles.loadingModalText}>{t('meet_storage')}</Text>
     </View>
   );
 

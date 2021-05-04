@@ -37,7 +37,7 @@ class SettingScreenContainer extends React.Component {
     });
 
     Orientation.addOrientationListener(this._handleOrientation);
-
+    debugger
     this.setState({
       tracks: tracks ? tracks : null,
       nameField: accesstype === 'email' || accesstype === 'joincode',
@@ -92,8 +92,8 @@ class SettingScreenContainer extends React.Component {
     } catch (error) {
       this.props.setAlert({
         type: 1,
-        title: this.t('alert.title.right'),
-        message: this.t('alert.text.permission')
+        title: this.t('alert_title_right'),
+        message: this.t('alert_text_permission')
       });
       return null;
     }
@@ -149,8 +149,8 @@ class SettingScreenContainer extends React.Component {
     if (roomToken === '접근금지') { // wehago V 때문에 절차가 하나 늘어남 
       this.props.setAlert({
         type: 1,
-        title: this.t('alert.title.error'),
-        message: this.t('alert.text.waiting')
+        title: this.t('alert_title_error'),
+        message: this.t('alert_text_waiting')
       });
     } else {
       navigation.replace('Conference', {

@@ -53,15 +53,15 @@ const HomeScreenPresenter = props => {
           }}
         >
           <Placeholder
-            mainText={t('main.none')}
+            mainText={t('main_none')}
             subText={
               props.memberType === 1 || props.plan === 'WE'
                 ? isWehagoV
-                  ? t('main.wetext_V')
-                  : t('main.wetext')
+                  ? t('main_wetext_V')
+                  : t('main_wetext')
                 : props.plan === 'SP'
-                ? t('main.sptext')
-                : t('main.start')
+                ? t('main_sptext')
+                : t('main_start')
             }
           />
           <View style={{ flex: 1 }} />
@@ -82,12 +82,12 @@ const HomeScreenPresenter = props => {
             ]}
             sections={[
               {
-                title: t('main.proceed'),
+                title: t('main_proceed'),
                 data: started,
                 length: started.length - 1
               },
               {
-                title: t('main.scheduled'),
+                title: t('main_scheduled'),
                 data: reservation,
                 length: reservation.length - 1
               }
@@ -146,7 +146,7 @@ const HomeScreenPresenter = props => {
         description={props.alert.message}
         actions={[
           {
-            name: t('alert.button.confirm'),
+            name: t('alert_button_confirm'),
             action: props.alert.onClose
           }
         ]}

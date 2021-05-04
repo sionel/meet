@@ -456,7 +456,7 @@ const DrawingPresenter = props => {
                     fontFamily: 'DOUZONEText50'
                   }}
                 >
-                  {t('meet.delete')}
+                  {t('meet_delete')}
                 </Text>
               </TouchableOpacity>
             </View>

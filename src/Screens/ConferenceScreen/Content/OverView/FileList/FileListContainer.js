@@ -80,8 +80,8 @@ class FileListContainer extends Component {
     if (!initInfoResponse.initInfo) {
       this.props.setAlert({
         type: 1,
-        title: this.t('alert.title.error'),
-        message: this.t('alert.text.fail_user_info')
+        title: this.t('alert_title_error'),
+        message: this.t('alert_text_fail_user_info')
       });
       this._handleDocumentListMode(false);
       return;
@@ -102,8 +102,8 @@ class FileListContainer extends Component {
     if (!fileListResponse.storageList) {
       this.props.setAlert({
         type: 1,
-        title: this.t('alert.title.error'),
-        message: this.t('alert.text.fail_file_list')
+        title: this.t('alert_title_error'),
+        message: this.t('alert_text_fail_file_list')
       });
       return;
     }
@@ -141,8 +141,8 @@ class FileListContainer extends Component {
     if (file.size > 1024 * 1024 * 20) {
       this.props.setAlert({
         type: 1,
-        title: this.t('alert.title.size_over'),
-        message: this.t('alert.text.fail_share_file_size')
+        title: this.t('alert_title_size_over'),
+        message: this.t('alert_text_fail_share_file_size')
       });
       return;
     }
@@ -198,8 +198,8 @@ class FileListContainer extends Component {
       default:
         this.props.setAlert({
           type: 1,
-          title: this.t('alert.title.unsupported'),
-          message: this.t('alert.text.unsupported_doc')
+          title: this.t('alert_title_unsupported'),
+          message: this.t('alert_text_unsupported_doc')
         });
         return;
     }
@@ -235,15 +235,15 @@ class FileListContainer extends Component {
     if (fileInfoResponse.resultCode === 'E2021') {
       this.props.setAlert({
         type: 1,
-        title: this.t('alert.title.conversion'),
-        message: this.t('alert.text.wait')
+        title: this.t('alert_title_conversion'),
+        message: this.t('alert_text_wait')
       });
       return;
     }
     this.props.setAlert({
       type: 1,
-      title: this.t('alert.title.loading_fail'),
-      message: this.t('alert.text.wait')
+      title: this.t('alert_title_loading_fail'),
+      message: this.t('alert_text_wait')
     });
     return;
   };
@@ -262,8 +262,8 @@ class FileListContainer extends Component {
       // 이미지 리소스가 없을 시
       this.props.setAlert({
         type: 1,
-        title: this.t('alert.title.loading_fail'),
-        message: this.t('alert.text.wait')
+        title: this.t('alert_title_loading_fail'),
+        message: this.t('alert_text_wait')
       });
       return;
     } else {

@@ -92,8 +92,8 @@ const CreateScreenPresenter = props => {
           }
         >
           <Placeholder
-            mainText={t('create_room.search결과없음')}
-            subText={t('create_room.search결과없음텍스트')}
+            mainText={t('create_room_noneresult')}
+            subText={t('create_room_nonetext')}
           />
         </ScrollView>
       ) : (
@@ -110,25 +110,25 @@ const CreateScreenPresenter = props => {
           ]}
           sections={[
             {
-              title: `${t('create_room.group')}(${groupList.length})`,
+              title: `${t('create_room_group')}(${groupList.length})`,
               data: groupList,
               length: groupList.length - 1,
               type: 'group'
             },
             {
-              title: `${t('create_room.oneonone')}(${personalList.length})`,
+              title: `${t('create_room_oneonone')}(${personalList.length})`,
               data: personalList,
               length: personalList.length - 1,
               type: 'personal'
             },
             {
-              title: `${t('create_room.semu')}(${semuList.length})`,
+              title: `${t('create_room_semu')}(${semuList.length})`,
               data: semuList,
               length: semuList.length - 1,
               type: 'semu'
             },
             {
-              title: `${t('create_room.suim')}(${suimList.length})`,
+              title: `${t('create_room_suim')}(${suimList.length})`,
               data: suimList,
               length: suimList.length - 1,
               type: 'suim'
@@ -183,16 +183,16 @@ const CreateScreenPresenter = props => {
 
       <CustomAlert
         visible={props.modal}
-        title={t('alert.title.create')}
+        title={t('alert_title_create')}
         width={320}
-        description={t('alert.text.createroom')}
+        description={t('alert_text_createroom')}
         actions={[
           {
-            name: t('alert.button.cancel'),
+            name: t('alert_button_cancel'),
             action: () => props.onActivateModal(null)
           },
           {
-            name: t('alert.button.confirm'),
+            name: t('alert_button_confirm'),
             action: () => props.onCreateConference()
           }
         ]}

@@ -28,11 +28,11 @@ export default function DeletedScreen(props) {
             style={{ width: 200, height: 200 }}
           />
           <Text style={{ fontSize: 14, color: 'rgb(80,80,80)' }}>
-            {t('roomstate.delete.title')}
+            {t('roomstate_delete_title')}
           </Text>
           <View style={{ fontSize: 12, paddingTop: 25 }}>
             <Text style={{ textAlign: 'center', color: 'rgb(171,171,171)' }}>
-              {t('roomstate.delete.center')}
+              {t('roomstate_delete_center')}
             </Text>
           </View>
         </View>
@@ -40,24 +40,24 @@ export default function DeletedScreen(props) {
           <View style={styles.line}>
             <Text style={styles.linedot}>{'\u2B24'}</Text>
             <Text style={{ fontSize: 12 }}>
-              {t('roomstate.delete.yet')}
+              {t('roomstate_delete_yet')}
             </Text>
           </View>
           <View style={styles.line}>
             <Text style={styles.linedot}>{'\u2B24'}</Text>
             <Text style={{ fontSize: 12 }}>
               {props.isTablet
-                ? t('roomstate.delete.cannot') +
-                  t('roomstate.delete.master')
-                : t('roomstate.delete.cannot') +
+                ? t('roomstate_delete_cannot') +
+                  t('roomstate_delete_master')
+                : t('roomstate_delete_cannot') +
                   '\n' +
-                  t('roomstate.delete.master')}
+                  t('roomstate_delete_master')}
             </Text>
           </View>
           <View style={styles.line}>
             <Text style={styles.linedot}>{'\u2B24'}</Text>
             <Text style={{ fontSize: 12 }}>
-              {t('roomstate.delete.another')}
+              {t('roomstate_delete_another')}
             </Text>
           </View>
         </View>

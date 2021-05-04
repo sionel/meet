@@ -73,7 +73,7 @@ const setAlert = params => {
     onClose = onConfirm;
     actions = [
       {
-        name: t('alert.button.confirm'),
+        name: t('alert_button_confirm'),
         action: onConfirm
       }
     ];
@@ -82,11 +82,11 @@ const setAlert = params => {
     onClose = onCencel;
     actions = [
       {
-        name: t('alert.button.confirm'),
+        name: t('alert_button_confirm'),
         action: onConfirm
       },
       {
-        name: t('alert.button.cancel'),
+        name: t('alert_button_cancel'),
         action: onCencel
       }
     ];

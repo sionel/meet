@@ -53,8 +53,8 @@ class LoginScreenContainer extends Component {
       ).catch(err => {
         this.props.setAlert({
           type: 1,
-          title: this.t('alert.title.error'),
-          message: this.t('alert.text.no_app_store')
+          title: this.t('alert_title_error'),
+          message: this.t('alert_text_no_app_store')
         });
       });
     });
@@ -83,14 +83,14 @@ class LoginScreenContainer extends Component {
     if (!result) {
       this.props.setAlert({
         type: 1,
-        title: this.t('alert.title.notion'),
-        message: this.t('alert.text.no_exist_joincode')
+        title: this.t('alert_title_notion'),
+        message: this.t('alert_text_no_exist_joincode')
       });
     } else if (result.resultData.code === 'E00001') {
       this.props.setAlert({
         type: 1,
-        title: this.t('alert.title.notion'),
-        message: this.t('alert.text.no_exist_joincode')
+        title: this.t('alert_title_notion'),
+        message: this.t('alert_text_no_exist_joincode')
       });
     } else {
       this.props.onChangeRootState({

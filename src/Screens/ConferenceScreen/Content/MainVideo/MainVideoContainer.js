@@ -62,7 +62,7 @@ class MainVideoContainer extends React.Component {
       // 1000(1초) 안에 back 버튼을 한번 더 클릭 할 경우 앱 종료
       if (type === 'BACK') {
         if (this.exitContent == undefined || !this.exitContent) {
-          ToastAndroid.show(this.t('toast.closeapp'), ToastAndroid.SHORT);
+          ToastAndroid.show(this.t('toast_closeapp'), ToastAndroid.SHORT);
           this.exitContent = true;
 
           this.timeout = setTimeout(() => {

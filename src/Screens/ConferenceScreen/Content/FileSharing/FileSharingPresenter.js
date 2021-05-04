@@ -151,12 +151,14 @@ const FileSharingPresenter = props => {
     </View>
   );
 
-  const MODE = mode === 'drawing' ? t('meet.sketch') : t('meet.share');
+  const MODE = mode === 'drawing' ? t('meet_sketch') : t('meet_share');
   const modalMessage =
     presenter === 'localUser'
       ? {
-          title: t('alert.title.mode_exit').replace('[@mode@]', MODE),
-          text: t('alert.text.quit').replace('[@mode@]', MODE).replace('[@mode@]', MODE),
+          title: t('alert_title_mode_exit').replace('[@mode@]', MODE),
+          text: t('alert_text_quit')
+            .replace('[@mode@]', MODE)
+            .replace('[@mode@]', MODE),
           onClickFeedback: () => {
             props.onSetDrawingData();
             props.onChangeSharingMode(false, false);
@@ -164,8 +166,8 @@ const FileSharingPresenter = props => {
           }
         }
       : {
-          title: t('alert.title.exit'),
-          text: t('alert.text.quitconference'),
+          title: t('alert_title_exit'),
+          text: t('alert_text_quitconference'),
           onClickFeedback: props.onDisposeConference
         };
 
@@ -224,7 +226,7 @@ const FileSharingPresenter = props => {
                 <Text
                   style={{ fontFamily: 'DOUZONEText30', textAlign: 'center' }}
                 >
-                  {localPipMode ? t('meet.back') : t('meet.loading')}
+                  {localPipMode ? t('meet_back') : t('meet_storage')}
                 </Text>
               </View>
             ) : (
@@ -281,11 +283,11 @@ const FileSharingPresenter = props => {
           description={modalMessage.text}
           actions={[
             {
-              name: t('alert.button.cancel'),
+              name: t('alert_button_cancel'),
               action: () => props.onChangeState('modal')
             },
             {
-              name: t('alert.button.confirm'),
+              name: t('alert_button_confirm'),
               action: modalMessage.onClickFeedback
             }
           ]}

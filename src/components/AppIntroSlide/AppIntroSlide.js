@@ -79,7 +79,7 @@ class AppIntroSlide extends React.Component {
                 fontFamily: 'DOUZONEText50'
               }}
             >
-              {this.t('splash._1sttitle') + ' ' + WEHAGO_TYPE + ' Meet'}
+              {this.t('splash_1sttitle') + ' ' + WEHAGO_TYPE + ' Meet'}
             </Text>
             <Text
               style={{
@@ -89,7 +89,7 @@ class AppIntroSlide extends React.Component {
                 fontFamily: 'DOUZONEText30'
               }}
             >
-              {this.t('splash._1stcontent')}
+              {this.t('splash_1stcontent')}
             </Text>
           </View>
         )
@@ -113,8 +113,8 @@ class AppIntroSlide extends React.Component {
                 alignItems: 'center'
               }}
             >
-              <Text style={styles.textTitle}>{this.t('splash._2ndtitle')}</Text>
-              <Text style={styles.textContent}>{this.t('splash._2ndcontent')}</Text>
+              <Text style={styles.textTitle}>{this.t('splash_2ndtitle')}</Text>
+              <Text style={styles.textContent}>{this.t('splash_2ndcontent')}</Text>
             </View>
             <Image
               source={this.introImages[1]}
@@ -143,8 +143,8 @@ class AppIntroSlide extends React.Component {
                 alignItems: 'center'
               }}
             >
-              <Text style={styles.textTitle}>{this.t('splash._3rdtitle')}</Text>
-              <Text style={styles.textContent}>{this.t('splash._3rdcontent')}</Text>
+              <Text style={styles.textTitle}>{this.t('splash_3rdtitle')}</Text>
+              <Text style={styles.textContent}>{this.t('splash_3rdcontent')}</Text>
             </View>
             <Image
               source={this.introImages[2]}
@@ -173,8 +173,8 @@ class AppIntroSlide extends React.Component {
                 alignItems: 'center'
               }}
             >
-              <Text style={styles.textTitle}>{this.t('splash._4thtitle')}</Text>
-              <Text style={styles.textContent}>{this.t('splash._4thcontent')}</Text>
+              <Text style={styles.textTitle}>{this.t('splash_4thtitle')}</Text>
+              <Text style={styles.textContent}>{this.t('splash_4thcontent')}</Text>
             </View>
             <Image
               source={this.introImages[3]}
@@ -203,8 +203,8 @@ class AppIntroSlide extends React.Component {
                 alignItems: 'center'
               }}
             >
-              <Text style={styles.textTitle}>{this.t('splash._5thtitle')}</Text>
-              <Text style={styles.textContent}>{this.t('splash._5thcontent')}</Text>
+              <Text style={styles.textTitle}>{this.t('splash_5thtitle')}</Text>
+              <Text style={styles.textContent}>{this.t('splash_5thcontent')}</Text>
             </View>
             <Image
               source={this.introImages[4]}
@@ -256,7 +256,7 @@ class AppIntroSlide extends React.Component {
   _renderNextButton = () => {
     return (
       <View style={styles.nextButton}>
-        <Text style={styles.nextButtonText}>{this.t('splash.start')}</Text>
+        <Text style={styles.nextButtonText}>{this.t('splash_start')}</Text>
       </View>
     );
   };
@@ -264,7 +264,7 @@ class AppIntroSlide extends React.Component {
   _renderDoneButton = () => {
     return (
       <View style={styles.doneButton}>
-        <Text style={styles.nextButtonText}>{this.t('splash.start')}</Text>
+        <Text style={styles.nextButtonText}>{this.t('splash_start')}</Text>
       </View>
     );
   };

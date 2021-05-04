@@ -59,13 +59,13 @@ const ListItemComp = props => {
   let displayUpdated;
   switch (props.descriptionType) {
     case 'date':
-      displayUpdated = `${updated.getFullYear()}${t('common.year')} `;
+      displayUpdated = `${updated.getFullYear()}${t('common_year')} `;
       displayUpdated += `${updated.getMonth() + 1 < 10 ? `0` : ``}${
         updated.getMonth() + 1
-      }${t('common.month')} `;
+      }${t('common_month')} `;
       displayUpdated += `${
         updated.getDate() < 10 ? `0` : ``
-      }${updated.getDate()}${t('common.day')}`;
+      }${updated.getDate()}${t('common_day')}`;
       break;
 
     default:
@@ -138,7 +138,7 @@ const ListItemComp = props => {
                 fontFamily: 'DOUZONEText30'
               }}
             >
-              {t('create_room.start')}
+              {t('create_room_start')}
             </Text>
           </View>
         )}

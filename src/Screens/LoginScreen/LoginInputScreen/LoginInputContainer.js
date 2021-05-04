@@ -63,7 +63,7 @@ export default function LoginInputContainer(props) {
       title: ''
     });
 
-  _handleCheckServce = async auth => {
+  const _handleCheckServce = async auth => {
     const statusCheck = await ServiceCheckApi.companyStatusCheck(
       auth,
       auth.last_access_company_no
@@ -90,17 +90,20 @@ export default function LoginInputContainer(props) {
       const onClose = () => {
         _resetAlert();
         props.onChangeRootState({
-          destination: 'SelectCompany'
+          destination: 'SelectCompany',
+          params: {
+            accesstype: 'login'
+          }
         });
       };
       setAlertVisible({
         visible: true,
-        title: t('alert.title.notion'),
+        title: t('alert_title_notion'),
         description: statusCheck.message,
         onClose,
         actions: [
           {
-            name: t('alert.button.confirm'),
+            name: t('alert_button_confirm'),
             action: onClose
           }
         ]
@@ -132,12 +135,12 @@ export default function LoginInputContainer(props) {
       _resetAlert();
       setAlertVisible({
         visible: true,
-        title: t('alert.title.loading_fail'),
-        description: t('alert.text.incorrect_prevent'),
+        title: t('alert_title_login_fail'),
+        description: t('alert_text_incorrect_prevent'),
         onClose,
         actions: [
           {
-            name: t('alert.button.confirm'),
+            name: t('alert_button_confirm'),
             action: onClose
           }
         ]
@@ -173,24 +176,24 @@ export default function LoginInputContainer(props) {
           _resetAlert();
           setAlertVisible({
             visible: true,
-            title: t('alert.title.notion'),
+            title: t('alert_title_notion'),
             description: iswehagov
-              ? t('alert.text.duplicate_login_V')
-              : t('alert.text.duplicate_login'),
+              ? t('alert_text_duplicate_login_V')
+              : t('alert_text_duplicate_login'),
             onClose: () => {
               _resetAlert();
               resolve(false);
             },
             actions: [
               {
-                name: t('alert.button.cancel'),
+                name: t('alert_button_cancel'),
                 action: () => {
                   _resetAlert();
                   resolve(false);
                 }
               },
               {
-                name: t('alert.button.confirm'),
+                name: t('alert_button_confirm'),
                 action: () => {
                   _resetAlert();
                   resolve(true);
@@ -237,14 +240,14 @@ export default function LoginInputContainer(props) {
           _resetAlert();
           setAlertVisible({
             visible: true,
-            title: t('alert.title.notion'),
+            title: t('alert_title_notion'),
             description: iswehagov
-              ? t('alert.text.expired')
-              : t('alert.text.duplicate_logout'),
+              ? t('alert_text_expired')
+              : t('alert_text_duplicate_logout'),
             onClose,
             actions: [
               {
-                name: t('alert.button.confirm'),
+                name: t('alert_button_confirm'),
                 action: onClose
               }
             ]
@@ -256,12 +259,12 @@ export default function LoginInputContainer(props) {
           _resetAlert();
           setAlertVisible({
             visible: true,
-            title: t('alert.title.notion'),
-            description: t('alert.text.login_info_error'),
+            title: t('alert_title_notion'),
+            description: t('alert_text_login_info_error'),
             onClose,
             actions: [
               {
-                name: t('alert.button.confirm'),
+                name: t('alert_button_confirm'),
                 action: onClose
               }
             ]
@@ -273,12 +276,12 @@ export default function LoginInputContainer(props) {
           _resetAlert();
           setAlertVisible({
             visible: true,
-            title: t('alert.title.notion'),
-            description: t('alert.text.no_right'),
+            title: t('alert_title_notion'),
+            description: t('alert_text_no_right'),
             onClose,
             actions: [
               {
-                name: t('alert.button.confirm'),
+                name: t('alert_button_confirm'),
                 action: onClose
               }
             ]
@@ -290,12 +293,12 @@ export default function LoginInputContainer(props) {
           _resetAlert();
           setAlertVisible({
             visible: true,
-            title: t('alert.title.notion'),
-            description: t('alert.text.timeover'),
+            title: t('alert_title_notion'),
+            description: t('alert_text_timeover'),
             onClose,
             actions: [
               {
-                name: t('alert.button.confirm'),
+                name: t('alert_button_confirm'),
                 action: onClose
               }
             ]
@@ -307,12 +310,12 @@ export default function LoginInputContainer(props) {
           _resetAlert();
           setAlertVisible({
             visible: true,
-            title: t('alert.title.notion'),
-            description: t('alert.text.problem_ocurred'),
+            title: t('alert_title_notion'),
+            description: t('alert_text_problem_ocurred'),
             onClose,
             actions: [
               {
-                name: t('alert.button.confirm'),
+                name: t('alert_button_confirm'),
                 action: onClose
               }
             ]
@@ -332,12 +335,12 @@ export default function LoginInputContainer(props) {
         _resetAlert();
         setAlertVisible({
           visible: true,
-          title: t('alert.title.loading_fail'),
-          description: t('alert.text.incorrect_id'),
+          title: t('alert_title_login_fail'),
+          description: t('alert_text_incorrect_id'),
           onClose,
           actions: [
             {
-              name: t('alert.button.confirm'),
+              name: t('alert_button_confirm'),
               action: onClose
             }
           ]
@@ -353,12 +356,12 @@ export default function LoginInputContainer(props) {
         _resetAlert();
         setAlertVisible({
           visible: true,
-          title: t('alert.title.loading_fail'),
-          description: t('alert.text.five'),
+          title: t('alert_title_login_fail'),
+          description: t('alert_text_five'),
           onClose,
           actions: [
             {
-              name: t('alert.button.confirm'),
+              name: t('alert_button_confirm'),
               action: onClose
             }
           ]
@@ -370,12 +373,12 @@ export default function LoginInputContainer(props) {
         _resetAlert();
         setAlertVisible({
           visible: true,
-          title: t('alert.title.limit'),
-          description: t('alert.text.unable'),
+          title: t('alert_title_limit'),
+          description: t('alert_text_unable'),
           onClose,
           actions: [
             {
-              name: t('alert.button.confirm'),
+              name: t('alert_button_confirm'),
               action: onClose
             }
           ]
@@ -387,12 +390,12 @@ export default function LoginInputContainer(props) {
         _resetAlert();
         setAlertVisible({
           visible: true,
-          title: t('alert.title.loading_fail'),
-          description: t('alert.text.login_fail'),
+          title: t('alert_title_login_fail'),
+          description: t('alert_text_login_fail'),
           onClose,
           actions: [
             {
-              name: t('alert.button.confirm'),
+              name: t('alert_button_confirm'),
               action: onClose
             }
           ]

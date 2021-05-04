@@ -46,10 +46,10 @@ export default function SettingScreenPresenter({
           }}
         >
           <Text style={{ fontSize: 17, color: '#000', paddingBottom: 10 }}>
-            {t('roomstate.setting.title')}
+            {t('roomstate_setting_title')}
           </Text>
           <Text style={{ fontSize: 12, color: 'rgb(140,140,140)' }}>
-            {t('roomstate.setting.detail')}
+            {t('roomstate_setting_detail')}
           </Text>
         </View>
         <View
@@ -64,7 +64,7 @@ export default function SettingScreenPresenter({
           <Text
             style={{ fontSize: 14, color: 'rgb(51,51,51)', paddingBottom: 5 }}
           >
-            {t('roomstate.setting.output')}
+            {t('roomstate_setting_output')}
           </Text>
 
           <View
@@ -162,10 +162,10 @@ export default function SettingScreenPresenter({
             }}
           >
             <Text style={{ width: '100%', paddingLeft: 5 }}>
-              {t('roomstate.setting.name')}
+              {t('roomstate_setting_name')}
             </Text>
             <TextInput
-              placeholder={t('roomstate.setting.setname')}
+              placeholder={t('roomstate_setting_setname')}
               placeholderTextColor={'#999'}
               style={{
                 borderColor: 'rgb(201,205,213)',
@@ -187,7 +187,7 @@ export default function SettingScreenPresenter({
                 fontSize: 11
               }}
             >
-              {t('roomstate.setting.nameDefault')}
+              {t('roomstate_setting_nameDefault')}
             </Text>
           </View>
         )}
@@ -221,7 +221,7 @@ export default function SettingScreenPresenter({
                 borderColor: '#fff'
               }}
             >
-              {t('roomstate.setting.enter')}
+              {t('roomstate_setting_enter')}
             </Text>
           </TouchableOpacity>
         </View>

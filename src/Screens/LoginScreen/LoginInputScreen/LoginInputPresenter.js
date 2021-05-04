@@ -96,17 +96,17 @@ export default function LoginInputPresenter(props) {
                   <Text
                     style={[styles.captchaMessageText, { marginBottom: 4 }]}
                   >
-                    {t('login.exceeded')}
+                    {t('login_exceeded')}
                   </Text>
                   <Text
                     style={[styles.captchaMessageText, { color: '#ababab' }]}
                   >
-                    {t('login.prevent')}
+                    {t('login_prevent')}
                   </Text>
                   <Text
                     style={[styles.captchaMessageText, { color: '#ababab' }]}
                   >
-                    {t('login.fivetimes')}
+                    {t('login_fivetimes')}
                   </Text>
                 </View>
               )}
@@ -123,7 +123,7 @@ export default function LoginInputPresenter(props) {
                   customRef={usernameRef}
                   value={userId}
                   textContentType={'username'}
-                  placeholder={t('login.id')}
+                  placeholder={t('login_id')}
                   placeholderTextColor={'#ccc'}
                   selectionColor={'#505050'}
                   returnKeyType={'next'}
@@ -159,7 +159,7 @@ export default function LoginInputPresenter(props) {
                   secureTextEntry={true}
                   value={userPw}
                   textContentType={'password'}
-                  placeholder={t('login.pw')}
+                  placeholder={t('login_pw')}
                   placeholderTextColor={'#ccc'}
                   selectionColor={'#505050'}
                   returnKeyType={'go'}
@@ -185,13 +185,13 @@ export default function LoginInputPresenter(props) {
               </View>
 
               {loginFailed && (
-                <Text style={styles.loginFailedText}>{t('login.incorrect')}</Text>
+                <Text style={styles.loginFailedText}>{t('login_incorrect')}</Text>
               )}
 
               {captcha && (
                 <View style={styles.captchaMessageView}>
                   <Text style={styles.captchaMessageText}>
-                    {t('login.input')}
+                    {t('login_input')}
                   </Text>
                   <View
                     style={{
@@ -219,7 +219,7 @@ export default function LoginInputPresenter(props) {
                       >
                         <CustomIcon name={'btn_reload_none'} size={15} />
                         <Text style={{ color: '#ababab' }}>
-                          {t('login.refresh')}
+                          {t('login_refresh')}
                         </Text>
                       </TouchableOpacity>
                     </View>
@@ -228,7 +228,7 @@ export default function LoginInputPresenter(props) {
                   <TextInput
                     customRef={captchaRef}
                     value={captchaInput}
-                    placeholder={t('login.preventAuto')}
+                    placeholder={t('login_preventAuto')}
                     placeholderTextColor={'#ccc'}
                     selectionColor={'#505050'}
                     returnKeyType={'next'}
@@ -287,7 +287,7 @@ export default function LoginInputPresenter(props) {
                       </Animated.View>
                     ) : (
                       <Text style={styles.loginButtonText}>
-                        {t('login.login')}
+                        {t('login_login')}
                       </Text>
                     )}
                   </>

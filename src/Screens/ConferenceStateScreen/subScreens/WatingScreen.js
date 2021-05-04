@@ -29,13 +29,13 @@ export default function DeletedScreen(props) {
             style={{ width: 200, height: 200 }}
           />
           <Text style={{ fontSize: 14, color: 'rgb(80,80,80)' }}>
-            {t('roomstate.wating.title')}
+            {t('roomstate_wating_title')}
           </Text>
           <View style={{ fontSize: 12, paddingTop: 25 }}>
             <Text style={{ textAlign: 'center', color: 'rgb(171,171,171)' }}>
-              {t('roomstate.wating.thisroom')}
+              {t('roomstate_wating_thisroom')}
               <Text style={{ color: 'rgb(28,144,251)' }}>{start}</Text>
-              {t('roomstate.wating.willstart')}
+              {t('roomstate_wating_willstart')}
             </Text>
           </View>
         </View>
@@ -44,29 +44,29 @@ export default function DeletedScreen(props) {
             <Text style={styles.linedot}>{'\u2B24'}</Text>
             <Text style={{ fontSize: 12 }}>
               {props.isTablet
-                ? `${t('roomstate.wating.modify')} ${t(
-                    'roomstate.wating.unable'
+                ? `${t('roomstate_wating_modify')} ${t(
+                    'roomstate_wating_unable'
                   )}`
-                : `${t('roomstate.wating.modify')}\n${t(
-                    'roomstate.wating.unable'
+                : `${t('roomstate_wating_modify')}\n${t(
+                    'roomstate_wating_unable'
                   )}`}
             </Text>
           </View>
           <View style={styles.line}>
             <Text style={styles.linedot}>{'\u2B24'}</Text>
             <Text style={{ fontSize: 12 }}>
-              {t('roomstate.wating.master')}
+              {t('roomstate_wating_master')}
             </Text>
           </View>
           <View style={styles.line}>
             <Text style={styles.linedot}>{'\u2B24'}</Text>
             <Text style={{ fontSize: 12 }}>
               {props.isTablet
-                ? `${t('roomstate.wating.continue')} ${t(
-                    'roomstate.wating.center'
+                ? `${t('roomstate_wating_continue')} ${t(
+                    'roomstate_wating_center'
                   )}`
-                : `${t('roomstate.wating.continue')}\n${t(
-                    'roomstate.wating.center'
+                : `${t('roomstate_wating_continue')}\n${t(
+                    'roomstate_wating_center'
                   )}`}
             </Text>
           </View>

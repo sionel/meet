@@ -31,7 +31,7 @@ export default function Splash() {
               fontSize: 24
             }}
           >
-            {t('splash.first')}
+            {t('splash_first')}
             <Text
               style={{
                 fontSize: 24,

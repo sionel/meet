@@ -469,6 +469,13 @@ class ConferenceConnector {
       const master = value.value;
       this._handlers.REQUEST_KICK(master, target);
     });
+
+    this._room.addCommandListener(STOP_FLOOR, value => {
+      // 본인이 끈건지 마스터가 끈건지 판단
+      if (value.value !== this._room.myUserId()) {
+        this._handlers.CHANGED_MIC_MUTE_BY_MASTER(true);
+      }
+    });
   };
 
   _removeEvents = () => {

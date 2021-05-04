@@ -31,7 +31,8 @@ class SplashScreenContainer extends Component {
   setLoginState = () => {
     this.props.onChangeRootState({
       loaded: true,
-      destination: 'Login'
+      destination: 'Login',
+      params: {}
     });
   };
 
@@ -77,18 +78,23 @@ class SplashScreenContainer extends Component {
       if (result === 'success') {
         this.props.onChangeRootState({
           loaded: true,
-          destination: 'List'
+          destination: 'List',
+          params: {
+            accesstype: 'login'
+          }
         });
       } else if (result === 'dany') {
         this.props.onChangeRootState({
           loaded: true,
-          destination: 'SelectCompany'
+          destination: 'SelectCompany',
+          params: {}
         });
       } else {
         this.props.onLogout();
         this.props.onChangeRootState({
           loaded: true,
-          destination: 'Login'
+          destination: 'Login',
+          params: {}
         });
       }
     }
@@ -104,8 +110,8 @@ class SplashScreenContainer extends Component {
     ) {
       this.props.setAlert({
         type: 1,
-        title: this.t('alert.title.notion'),
-        message: this.t('alert.text.looting_V'),
+        title: this.t('alert_title_notion'),
+        message: this.t('alert_text_looting_V'),
         onConfirm: () => BackHandler.exitApp()
       });
       return false;
@@ -115,14 +121,14 @@ class SplashScreenContainer extends Component {
 
   _handleCheckVersion = async () => {
     const os = Platform.OS;
-    const majorVersion = 5;
+    const majorVersion = iswehagov ? 1 : 5;
     const result = await MeetApi.checkVersion(os, majorVersion);
 
     if (!result.resultData.update || result.resultData.dev_mode) return [];
-    const title = this.t('servernoti.title.update');
+    const title = this.t('servernoti_title_update');
     const message = iswehagov
-      ? this.t('servernoti.message.power_update_V')
-      : this.t('servernoti.message.power_update');
+      ? this.t('servernoti_message_power_update_V')
+      : this.t('servernoti_message_power_update');
     const marketUrl =
       os === 'ios'
         ? 'https://itunes.apple.com/app/id1455726925?mt=8'
@@ -135,7 +141,7 @@ class SplashScreenContainer extends Component {
             await Linking.openURL(marketUrl);
             RNExitApp.exitApp();
           },
-          text: this.t('alert.button.update')
+          text: this.t('alert_button_update')
         }
       ]);
     });
@@ -152,8 +158,8 @@ class SplashScreenContainer extends Component {
           {
             text:
               e.button_type === 102
-                ? this.t('alert.button.exit')
-                : this.t('alert.button.confirm'),
+                ? this.t('alert_button_exit')
+                : this.t('alert_button_confirm'),
             onclick:
               e.button_type === 102
                 ? () => RNExitApp.exitApp()
@@ -173,18 +179,23 @@ class SplashScreenContainer extends Component {
       if (result === 'success') {
         this.props.onChangeRootState({
           loaded: true,
-          destination: 'List'
+          destination: 'List',
+          params: {
+            accesstype: 'login'
+          }
         });
       } else if (result === 'dany') {
         this.props.onChangeRootState({
           loaded: true,
-          destination: 'SelectCompany'
+          destination: 'SelectCompany',
+          params: {}
         });
       } else {
         this.props.onLogout();
         this.props.onChangeRootState({
           loaded: true,
-          destination: 'Login'
+          destination: 'Login',
+          params: {}
         });
       }
     } else {
@@ -209,34 +220,34 @@ class SplashScreenContainer extends Component {
         if (result.errors.code === 'E002') {
           this.props.setAlert({
             type: 1,
-            title: this.t('alert.title.fail'),
+            title: this.t('alert_title_login_fail'),
             message: iswehagov
-              ? this.t('alert.text.expired')
-              : this.t('alert.text.duplicate_logout')
+              ? this.t('alert_text_expired')
+              : this.t('alert_text_duplicate_logout')
           });
         } else if (result.errors.status === '400') {
           this.props.setAlert({
             type: 1,
-            title: this.t('alert.title.fail'),
-            message: this.t('alert.text.login_info_error')
+            title: this.t('alert_title_login_fail'),
+            message: this.t('alert_text_login_info_error')
           });
         } else if (result.errors.status === '401') {
           this.props.setAlert({
             type: 1,
-            title: this.t('alert.title.fail'),
-            message: this.t('alert.text.no_right')
+            title: this.t('alert_title_login_fail'),
+            message: this.t('alert_text_no_right')
           });
         } else if (result.errors.message === 'timeout') {
           this.props.setAlert({
             type: 1,
-            title: this.t('alert.title.fail'),
-            message: this.t('alert.text.timeover')
+            title: this.t('alert_title_login_fail'),
+            message: this.t('alert_text_timeover')
           });
         } else {
           this.props.setAlert({
             type: 1,
-            title: this.t('alert.title.fail'),
-            message: this.t('alert.text.problem_ocurred')
+            title: this.t('alert_title_login_fail'),
+            message: this.t('alert_text_problem_ocurred')
           });
         }
         return 'fail';
@@ -319,12 +330,18 @@ class SplashScreenContainer extends Component {
         this.props.onChangeRootState({
           loaded: true,
           destination: 'Login',
+          params: {
+            accesstype: 'web'
+          },
           url: undefined
         });
       } else if (info === 'same') {
         this.props.onChangeRootState({
           loaded: true,
           destination: 'List',
+          params: {
+            accesstype: 'login'
+          },
           url: undefined
         });
       } else if (info === 'change') {
@@ -349,6 +366,7 @@ class SplashScreenContainer extends Component {
           this.props.onChangeRootState({
             loaded: true,
             destination: 'Login',
+            params: {},
             url: undefined
           });
         }
@@ -381,12 +399,16 @@ class SplashScreenContainer extends Component {
         this.props.onChangeRootState({
           loaded: true,
           destination: 'Login',
+          params: {},
           url: undefined
         });
       } else if (info === 'same') {
         this.props.onChangeRootState({
           loaded: true,
           destination: 'List',
+          params: {
+            accesstype: 'login'
+          },
           url: undefined
         });
       } else if (info === 'change') {
@@ -411,6 +433,7 @@ class SplashScreenContainer extends Component {
             this.props.onChangeRootState({
               loaded: true,
               destination: 'Login',
+              params: {},
               url: undefined
             });
           }
@@ -419,12 +442,16 @@ class SplashScreenContainer extends Component {
             this.props.onChangeRootState({
               loaded: true,
               destination: 'List',
+              params: {
+                accesstype: 'wehago'
+              },
               url: undefined
             });
           } else {
             this.props.onChangeRootState({
               loaded: true,
               destination: 'Login',
+              params: {},
               url: undefined
             });
           }
@@ -451,12 +478,12 @@ class SplashScreenContainer extends Component {
       ) {
         let msg =
           from === 'mobile'
-            ? this.t('alert.text.other_info_mobile')
-            : this.t('alert.text.other_info_web');
+            ? this.t('alert_text_other_info_mobile')
+            : this.t('alert_text_other_info_web');
         info = await new Promise(resolve => {
           this.props.setAlert({
             type: 2,
-            title: this.t('alert.title.notion'),
+            title: this.t('alert_title_notion'),
             message: msg,
             onConfirm: () => {
               resolve('change');
@@ -493,34 +520,34 @@ class SplashScreenContainer extends Component {
       if (result.errors.code === 'E002') {
         this.props.setAlert({
           type: 1,
-          title: this.t('alert.title.fail'),
+          title: this.t('alert_title_login_fail'),
           message: iswehagov
-            ? this.t('alert.text.expired')
-            : this.t('alert.text.duplicate_logout')
+            ? this.t('alert_text_expired')
+            : this.t('alert_text_duplicate_logout')
         });
       } else if (result.errors.status === '400') {
         this.props.setAlert({
           type: 1,
-          title: this.t('alert.title.fail'),
-          message: this.t('alert.text.login_info_error')
+          title: this.t('alert_title_login_fail'),
+          message: this.t('alert_text_login_info_error')
         });
       } else if (result.errors.status === '401') {
         this.props.setAlert({
           type: 1,
-          title: this.t('alert.title.fail'),
-          message: this.t('alert.text.no_right')
+          title: this.t('alert_title_login_fail'),
+          message: this.t('alert_text_no_right')
         });
       } else if (result.errors.message === 'timeout') {
         this.props.setAlert({
           type: 1,
-          title: this.t('alert.title.fail'),
-          message: this.t('alert.text.timeover')
+          title: this.t('alert_title_login_fail'),
+          message: this.t('alert_text_timeover')
         });
       } else {
         this.props.setAlert({
           type: 1,
-          title: this.t('alert.title.fail'),
-          message: this.t('alert.text.problem_ocurred')
+          title: this.t('alert_title_login_fail'),
+          message: this.t('alert_text_problem_ocurred')
         });
       }
       return 'fail';
@@ -565,7 +592,7 @@ class SplashScreenContainer extends Component {
       proceed = await new Promise(resolve => {
         this.props.setAlert({
           type: 1,
-          title: this.t('alert.title.notion'),
+          title: this.t('alert_title_notion'),
           message: statusCheck.message,
           onConfirm: () => {
             resolve(true);
@@ -585,7 +612,7 @@ class SplashScreenContainer extends Component {
       let actions = [];
       let onClose = this._handleOnCloseAlert;
 
-      description = this.t('alert.text.token_expiration');
+      description = this.t('alert_text_token_expiration');
       onClose = async () => {
         this._handleOnCloseAlert(
           () =>
@@ -595,7 +622,7 @@ class SplashScreenContainer extends Component {
       };
       actions = [
         {
-          name: this.t('alert.button.yes'),
+          name: this.t('alert_button_yes'),
           action: () => {
             this._handleOnCloseAlert(
               () =>

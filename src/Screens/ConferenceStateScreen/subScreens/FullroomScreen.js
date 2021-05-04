@@ -28,22 +28,22 @@ export default function FullroomScreen(props) {
             style={{ width: 200, height: 200 }}
           />
           <Text style={{ fontSize: 14, color: 'rgb(80,80,80)' }}>
-            {t('roomstate.full.title')}
+            {t('roomstate_full_title')}
           </Text>
           <View style={{ fontSize: 12, paddingTop: 25 }}>
             <Text style={{ textAlign: 'center', color: 'rgb(171,171,171)' }}>
-              {t('roomstate.full.master')}
+              {t('roomstate_full_master')}
             </Text>
           </View>
         </View>
         <View style={styles.infoBox}>
           <View style={styles.line}>
             <Text style={styles.linedot}>{'\u2B24'}</Text>
-            <Text style={{ fontSize: 12 }}>{t('roomstate.full.fifty')}</Text>
+            <Text style={{ fontSize: 12 }}>{t('roomstate_full_fifty')}</Text>
           </View>
           <View style={styles.line}>
             <Text style={styles.linedot}>{'\u2B24'}</Text>
-            <Text style={{ fontSize: 12 }}>{t('roomstate.full.center')}</Text>
+            <Text style={{ fontSize: 12 }}>{t('roomstate_full_center')}</Text>
           </View>
         </View>
       </View>

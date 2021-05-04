@@ -22,30 +22,30 @@ export default function ReservationInfoScreen(props) {
     >
       <View style={styles.enterInfo}>
         <Text style={styles.enterInfoText}>
-          {t('roomstate.reservation.title')}
+          {t('roomstate_reservation_title')}
         </Text>
       </View>
 
       <View style={styles.info}>
         <View style={styles.wrap}>
           <Text style={styles.text3}>
-            {t('roomstate.reservation.basicinfo')}
+            {t('roomstate_reservation_basicinfo')}
           </Text>
         </View>
 
         <View style={styles.wrap}>
           <Text style={styles.text2}>
-            {t('roomstate.reservation.name')}
+            {t('roomstate_reservation_name')}
           </Text>
           <Text style={styles.text1}>{name}</Text>
         </View>
 
         <View style={styles.wrap}>
-          <Text style={styles.text2}>{t('roomstate.reservation.open')}</Text>
+          <Text style={styles.text2}>{t('roomstate_reservation_open')}</Text>
           <Text style={styles.text1}>
             {isPublic
-              ? t('roomstate.reservation.open')
-              : t('roomstate.reservation.close')}
+              ? t('roomstate_reservation_open')
+              : t('roomstate_reservation_close')}
           </Text>
         </View>
 
@@ -53,20 +53,20 @@ export default function ReservationInfoScreen(props) {
 
         <View style={styles.wrap}>
           <Text style={styles.text3}>
-            {t('roomstate.reservation.reservedtime')}
+            {t('roomstate_reservation_reservedtime')}
           </Text>
         </View>
 
         <View style={styles.wrap}>
           <Text style={styles.text2}>
-            {t('roomstate.reservation.starttime')}
+            {t('roomstate_reservation_starttime')}
           </Text>
           <Text style={styles.text1}>{start}</Text>
         </View>
 
         <View style={styles.wrap}>
           <Text style={styles.text2}>
-            {t('roomstate.reservation.endtime')}
+            {t('roomstate_reservation_endtime')}
           </Text>
           <Text style={styles.text1}>{end}</Text>
         </View>
@@ -75,7 +75,7 @@ export default function ReservationInfoScreen(props) {
         <>
           <View style={styles.Participant}>
             <Text style={styles.text4}>{`${t(
-              'roomstate.reservation.info'
+              'roomstate_reservation_info'
             )} (${accessUser.length})`}</Text>
           </View>
           <FlatList

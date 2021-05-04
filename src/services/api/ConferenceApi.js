@@ -128,7 +128,7 @@ export default {
       const result = await response.json();
       return result;
     } catch (e) {
-      alert(t('alert.text.problem_ocurred'));
+      alert(t('alert_text_problem_ocurred'));
       return participant;
     }
   }

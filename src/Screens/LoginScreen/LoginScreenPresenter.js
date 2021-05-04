@@ -38,10 +38,10 @@ export default function LoginScreenPresenter(props) {
           </View>
 
           <Text style={{ color: '#fff', fontSize: 25, fontWeight: '300' }}>
-            {t('login.code')}
+            {t('login_code')}
           </Text>
           <Text style={{ color: '#fff', fontSize: 14, fontWeight: 'bold' }}>
-            {t('login.codemessage')}
+            {t('login_codemessage')}
           </Text>
           <TextInput
             style={{
@@ -136,7 +136,7 @@ export default function LoginScreenPresenter(props) {
                 style={{ marginRight: 5.5 }}
               />
               <Text style={styles.loginButtonText}>
-                {isWehagoV ? t('login.wehagologin_V') : t('login.wehagologin')}
+                {isWehagoV ? t('login_wehagologin_V') : t('login_wehagologin')}
               </Text>
             </>
           </TouchableHighlight>
@@ -152,7 +152,7 @@ export default function LoginScreenPresenter(props) {
               })
             }
           >
-            <Text style={styles.loginNavigation}>{t('login.direct')}</Text>
+            <Text style={styles.loginNavigation}>{t('login_direct')}</Text>
           </TouchableOpacity>
         </View>
       </View>

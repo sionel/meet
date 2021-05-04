@@ -94,13 +94,13 @@ const UserListPresenter = props => {
               </Text>
               {item.id === 'localUser' && (
                 <View style={[styles.presenter, { backgroundColor: '#fb0' }]}>
-                  <Text style={styles.presenterText}>{t('chatting.me')}</Text>
+                  <Text style={styles.presenterText}>{t('chatting_me')}</Text>
                 </View>
               )}
               {item.id === presenter && (
                 <View style={styles.presenter}>
                   <Text style={styles.presenterText}>
-                    {t('chatting.presenter')}
+                    {t('chatting_presenter')}
                   </Text>
                 </View>
               )}
@@ -112,7 +112,7 @@ const UserListPresenter = props => {
                   ]}
                 >
                   <Text style={styles.presenterText}>
-                    {t('chatting.external')}
+                    {t('chatting_external')}
                   </Text>
                 </View>
               )}

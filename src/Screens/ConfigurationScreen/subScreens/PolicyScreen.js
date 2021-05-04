@@ -21,7 +21,7 @@ export default function PolicyScreen(props) {
   const t = getT()
   const config = {
     terms: {
-      title: WEHAGO_TYPE + ` ${t('option.terms')}`,
+      title: WEHAGO_TYPE + ` ${t('option_terms')}`,
       rightSide: <CustomIcon name={'btn_next'} width={24} height={24} />,
       action: () => {
         membership === 'WT1'
@@ -30,7 +30,7 @@ export default function PolicyScreen(props) {
       }
     },
     policy: {
-      title: t('option.policy'),
+      title: t('option_policy'),
       rightSide: <CustomIcon name={'btn_next'} width={24} height={24} />,
       action: () => {
         membership === 'WT1'
@@ -39,7 +39,7 @@ export default function PolicyScreen(props) {
       }
     },
     openSource: {
-      title: t('option.opensource'),
+      title: t('option_opensource'),
       rightSide: <CustomIcon name={'btn_next'} width={24} height={24} />,
       action: () => {
         navigation.navigate('OpenSource');

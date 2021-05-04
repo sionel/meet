@@ -162,7 +162,7 @@ class HomeScreenContainer extends Component {
 
     // 1000(1초) 안에 back 버튼을 한번 더 클릭 할 경우 앱 종료
     if (this.exitApp == undefined || !this.exitApp) {
-      ToastAndroid.show(this.t('toast.closeapp'), ToastAndroid.SHORT);
+      ToastAndroid.show(this.t('toast_closeapp'), ToastAndroid.SHORT);
       this.exitApp = true;
 
       this.timeout = setTimeout(() => {
@@ -298,11 +298,11 @@ class HomeScreenContainer extends Component {
       if (checkResult.errors.code === 'E002') {
         this.props.setAlert({
           type: 1,
-          title: this.t('alert.title.loading_fail'),
+          title: this.t('alert_title_login_fail'),
           message: this.t(
             isWehagoV
-              ? t('alert.text.expired')
-              : t('alert.text.duplicate_logout')
+              ? t('alert_text_expired')
+              : t('alert_text_duplicate_logout')
           )
         });
         this.props.sessionCheck(false);

@@ -353,7 +353,7 @@ class ConferenceScreenContainer extends React.Component {
     // 따라서 아래 로직은 PIP 모드를 지원하지 않을 때 동작한다.
     if (this._appState === 'active' && nextAppState !== 'active') {
       // this.setState({ pipMode: false });
-      ToastAndroid.show(this.t('toast.background'), ToastAndroid.SHORT);
+      ToastAndroid.show(this.t('toast_background'), ToastAndroid.SHORT);
       // backgroiund 시 video 설정 기억
       if (this.props.user) {
         const { isMuteVideo } = this.props.user;
@@ -414,11 +414,11 @@ class ConferenceScreenContainer extends React.Component {
       clearTimeout(this._backTimeout);
     }
 
-    ToastAndroid.show(this.t('toast.micwilloff'), ToastAndroid.LONG);
+    ToastAndroid.show(this.t('toast_micwilloff'), ToastAndroid.LONG);
 
     this._backTimeout = setTimeout(() => {
       this.props.toggleMuteMicByMe(true); // mic mute
-      ToastAndroid.show(this.t('toast.micoff'), ToastAndroid.SHORT);
+      ToastAndroid.show(this.t('toast_micoff'), ToastAndroid.SHORT);
     }, 7500);
   };
 

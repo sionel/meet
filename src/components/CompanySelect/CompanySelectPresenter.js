@@ -29,22 +29,22 @@ export default function CompanySelectPresenter(props) {
         <View style={styles.title}>
           <Text style={styles.titleText}>
             {isSP
-              ? t('selectcompany.title.packnotpurchase')
-              : t('selectcompany.title.notpurchase')}
+              ? t('selectcompany_title_packnotpurchase')
+              : t('selectcompany_title_notpurchase')}
           </Text>
           <TouchableOpacity
             activeOpacity={0.5}
             onPress={() => setVisible(true)}
           >
             <Text style={{ color: '#1C90FB' }}>
-              {t('selectcompany.logout')}
+              {t('selectcompany_logout')}
             </Text>
           </TouchableOpacity>
         </View>
-        <Text style={styles.message}>{t('selectcompany.message')}</Text>
+        <Text style={styles.message}>{t('selectcompany_message')}</Text>
 
         <View style={styles.header}>
-          <Text>{t('selectcompany.select')}</Text>
+          <Text>{t('selectcompany_select')}</Text>
         </View>
         <View style={styles.listArea}>
           <FlatList
@@ -84,16 +84,16 @@ export default function CompanySelectPresenter(props) {
       <CustomAlert
         visible={visible}
         width={320}
-        title={t('alert.title.logout')}
-        description={t('alert.text.logout')}
+        title={t('alert_title_logout')}
+        description={t('alert_text_logout')}
         onClose={() => setVisible(false)}
         actions={[
           {
-            name: t('alert.button.cancel'),
+            name: t('alert_button_cancel'),
             action: () => setVisible(false)
           },
           {
-            name: t('alert.button.confirm'),
+            name: t('alert_button_confirm'),
             action: onLogout
           }
         ]}
