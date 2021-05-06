@@ -143,6 +143,12 @@ cd node_modules/react-native-webrtc/tools/
 
 만약 안되거든 인터넷 연결 확인을 하자
 끗
+
+8. apk 제작 오류
+
+평상시대로 build 했는데 실행이 안됨
+react-native bundle --platform android --dev false --entry-file index.android.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/
+경로 잘 바꾼 뒤 실행
 ## 작업목록
 
 1. 화면공유 - sdk 업데이트시 가능

@@ -34,12 +34,12 @@ class ConferenceStateContainer extends React.Component {
     const { params } = this.props.screenProps;
     let roomId;
     let iscret = true; // 인증 비인증 묻는 것
-    if (params && Object.keys(params).length > 0) {
+    if (params.accesstype === 'login') {
+      roomId = this.props.navigation.state.params.item.roomId;
+    } else if (params && Object.keys(params).length > 0) {
       roomId = params.roomId;
       iscret =
         params.accesstype !== 'email' && params.accesstype !== 'joincode';
-    } else {
-      roomId = this.props.navigation.state.params.item.roomId;
     }
     let { conferenceState } = this.state;
     this.roomId = roomId;
@@ -200,7 +200,6 @@ class ConferenceStateContainer extends React.Component {
 
     let count = 0;
     // 50명 체크는 여기서 하되 토큰받는 작업은 setting 페이지에서 함
-
 
     count = (await MeetApi.getParticipantCount(roomId)).resultData;
     // 최대 참여인원 제한 (50명)
