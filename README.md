@@ -58,6 +58,10 @@ jitsi : ?
 
 react-native 만 버전을 업그레이드 하면 jitsi 에서 오류가 날 가능성이 매우 크므로 주의
 
+## IPA파일 만들기 및 plist 파일
+
+https://dodody.github.io/posts/react-native-6/
+
 ## 에러 대응
 
 1. '__attribute__' 에러 :
@@ -149,16 +153,11 @@ cd node_modules/react-native-webrtc/tools/
 평상시대로 build 했는데 실행이 안됨
 react-native bundle --platform android --dev false --entry-file index.android.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/
 경로 잘 바꾼 뒤 실행
-## 작업목록
+react-native bundle --entry-file index.ios.js --platform ios --dev false --bundle-output ios/main.jsbundle --assets-dest ios
 
-1. 화면공유 - sdk 업데이트시 가능
-2. 하울링 - sdk 업데이트시 가능
-3. 방 생성
-4. 조직도 
-5. 프로필
-6. 참가인원 리스트
-7. 딥링크 
+9. ios 빌드 오류
 
+product -> scheme -> edit -> run  에서 빌드 설정을 디버그, 릴리즈 바꿔가면서 해야함
 ## 스토어 주소
 ios : https://itunes.apple.com/app/id1455726925?mt=8
 android : https://play.google.com/store/apps/details?id=com.wehago.meet

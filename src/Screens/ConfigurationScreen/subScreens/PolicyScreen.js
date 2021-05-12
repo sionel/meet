@@ -18,15 +18,25 @@ export default function PolicyScreen(props) {
   const { navigation } = props;
   const auth = useSelector(state => state.user['auth']);
   const membership = auth.last_company.membership_code;
-  const t = getT()
+  const t = getT();
   const config = {
     terms: {
       title: WEHAGO_TYPE + ` ${t('option_terms')}`,
       rightSide: <CustomIcon name={'btn_next'} width={24} height={24} />,
       action: () => {
         membership === 'WT1'
-          ? Linking.openURL('https://www.wehagot.com/#/common/policy')
-          : Linking.openURL(wehagoMainURL + '/#/common/policy');
+          ? Linking.canOpenURL('https://www.wehagot.com/#/common/policy').then(
+              supported => {
+                if (supported)
+                  Linking.openURL('https://www.wehagot.com/#/common/policy');
+              }
+            )
+          : Linking.canOpenURL(wehagoMainURL + '/#/common/policy').then(
+              supported => {
+                if (supported)
+                  Linking.openURL(wehagoMainURL + '/#/common/policy');
+              }
+            );
       }
     },
     policy: {
@@ -34,8 +44,21 @@ export default function PolicyScreen(props) {
       rightSide: <CustomIcon name={'btn_next'} width={24} height={24} />,
       action: () => {
         membership === 'WT1'
-          ? Linking.openURL('https://www.wehagot.com/#/common/policy?code=002')
-          : Linking.openURL(wehagoMainURL + '/#/common/policy?code=002');
+          ? Linking.canOpenURL(
+              'https://www.wehagot.com/#/common/policy?code=002'
+            ).then(supported => {
+              if (supported) {
+                Linking.openURL(
+                  'https://www.wehagot.com/#/common/policy?code=002'
+                );
+              }
+            })
+          : Linking.canOpenURL(
+              wehagoMainURL + '/#/common/policy?code=002'
+            ).then(supported => {
+              if (supported)
+                Linking.openURL(wehagoMainURL + '/#/common/policy?code=002');
+            });
       }
     },
     openSource: {

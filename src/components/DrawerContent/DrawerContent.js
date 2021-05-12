@@ -24,6 +24,7 @@ import RNrestart from 'react-native-restart';
 
 export default function DrawerContent(props) {
   const { navigation, setAlert } = props;
+  const isWehagoV = WEHAGO_ENV === 'WEHAGOV';
 
   // redux
   const auth = useSelector(state => state.user.auth);
@@ -62,18 +63,18 @@ export default function DrawerContent(props) {
     };
 
     const iosURL = {
-      wehago: `wehago://?`,
-      wedrive: `wedrive://?`,
-      fax: `wehagofax://?`,
-      elecapproval: `wehago.eapprovals://?`,
-      atr: `wehago.attendance://?`
+      wehago: `wehago${isWehagoV ? 'v' : ''}://?`,
+      wedrive: `wedrive${isWehagoV ? 'v' : ''}://?`,
+      fax: `wehagofax${isWehagoV ? 'v' : ''}://?`,
+      elecapproval: `wehago${isWehagoV ? 'v' : ''}.eapprovals://?`,
+      atr: `wehago${isWehagoV ? 'v' : ''}.attendance://?`
     };
     const androidURL = {
-      wehago: `wehago://app?name=meet&login=false`,
-      wedrive: `com.douzone.android.wedrive://?`,
-      fax: `cloudfax.co.kr.wehagofax://?`,
-      elecapproval: `wehago.eapprovals://?`,
-      atr: `wehago.attendance://?`
+      wehago: `wehago${isWehagoV ? 'v' : ''}://app?name=meet&login=false`,
+      wedrive: `com.douzone.android.wedrive${isWehagoV ? '.v' : ''}://?`,
+      fax: `cloudfax.co.kr.wehago${isWehagoV ? 'v' : ''}fax://?`,
+      elecapproval: `wehago${isWehagoV ? 'v' : ''}.eapprovals://?`,
+      atr: `wehago${isWehagoV ? 'v' : ''}.attendance://?`
     };
     const commonLoginInfo = `&mPORTAL_ID=${auth.portal_id}&mHASH_KEY=${auth.HASH_KEY}&mAuth_r_token=${auth.AUTH_R_TOKEN}&mAuth_a_token=${auth.AUTH_A_TOKEN}&cno=${auth.cno}`;
     const androidLoginInfo = `&portal_id=${auth.portal_id}&hash_key=${auth.HASH_KEY}&auth_r_token=${auth.AUTH_R_TOKEN}&auth_a_token=${auth.AUTH_A_TOKEN}&cno=${auth.cno}`;
@@ -88,7 +89,11 @@ export default function DrawerContent(props) {
         : androidURL[type] + commonLoginInfo
     ).catch(err => {
       Linking.openURL(
-        os === 'ios' ? iosMarketURL[type] : androidMarketURL[type]
+        isWehagoV
+          ? 'https://wehagov.com/#/mobile'
+          : os === 'ios'
+          ? iosMarketURL[type]
+          : androidMarketURL[type]
       ).catch(err => {
         setAlert({
           type: 1,
@@ -112,7 +117,9 @@ export default function DrawerContent(props) {
         >
           <>
             <Image source={btnWehago} style={styles.shortcutImage} />
-            <Text style={styles.shortcutText}>{'WEHAGO'}</Text>
+            <Text style={styles.shortcutText}>
+              {isWehagoV ? 'WEHAGOV' : 'WEHAGO'}
+            </Text>
           </>
         </TouchableOpacity>
         <TouchableOpacity
@@ -123,7 +130,9 @@ export default function DrawerContent(props) {
         >
           <>
             <Image source={btnWedrive} style={styles.shortcutImage} />
-            <Text style={styles.shortcutText}>{t('drawer_storage')}</Text>
+            <Text style={styles.shortcutText}>
+              {t(isWehagoV ? 'drawer_storage_v' : 'drawer_storage')}
+            </Text>
           </>
         </TouchableOpacity>
 
@@ -135,7 +144,9 @@ export default function DrawerContent(props) {
         >
           <>
             <Image source={btnAtr} style={styles.shortcutImage} />
-            <Text style={styles.shortcutText}>{t('drawer_attendance')}</Text>
+            <Text style={styles.shortcutText}>
+              {t(isWehagoV ? 'drawer_attendance_v' : 'drawer_attendance')}
+            </Text>
           </>
         </TouchableOpacity>
       </View>
@@ -149,7 +160,9 @@ export default function DrawerContent(props) {
         >
           <>
             <Image source={btnElecapproval} style={styles.shortcutImage} />
-            <Text style={styles.shortcutText}>{t('drawer_eapprovals')}</Text>
+            <Text style={styles.shortcutText}>
+              {t(isWehagoV ? 'drawer_eapprovals_v' : 'drawer_eapprovals')}
+            </Text>
           </>
         </TouchableOpacity>
         <TouchableOpacity style={styles.shortcut}>
@@ -180,7 +193,7 @@ export default function DrawerContent(props) {
           style={{ justifyContent: 'center' }}
         >
           <CustomIcon
-            name={WEHAGO_ENV === 'WEHAGOV' ? 'WEHAGO_V_BI' : 'logo64'}
+            name={isWehagoV ? 'WEHAGO_V_BI' : 'logo64'}
             width={85}
             height={16}
           />

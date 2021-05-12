@@ -156,6 +156,7 @@ class ConferenceManager {
       ADD_REMOTE_TRACK: this._addRemoteTrack,
       VIDEO_MUTE_CHANGED: this._videoMutedChanged,
       SUSPEND_DETECTED: () => {},
+      CREATED_TIME:this._createTime,
       SET_USER_INFO: this._setUserInfo,
       CHANGED_USER_STATUS: this._changedUserStatus,
       CHANGED_DOCUMENT_PAGE: this.changeDocumentPage,
@@ -214,6 +215,9 @@ class ConferenceManager {
     });
   };
 
+  _createTime = time => {
+    this._dispatch(localActionCreators.setConferenceCreatedTime(time));
+  }
   /**
    * ADD_REMOTE_TRACK
    * 대화방에 참여자의 트랙이 추가되면 호출된다.

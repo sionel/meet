@@ -212,6 +212,12 @@ class ConferenceConnector {
       }
     );
     // ===== Additional ===== //
+    this._room.on(
+      JitsiConferenceEvents.CONFERENCE_CREATED_TIMESTAMP,
+      createdTime => {
+        this._handlers.CREATED_TIME(createdTime);
+      }
+    );
 
     // 대화방 참가 성공 이벤트 연결
     this._room.on(conferenceEvents.CONFERENCE_JOINED, () => {

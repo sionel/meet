@@ -14,13 +14,14 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		695AF3ED6F686F9C5EE40F9A /* libPods-jitsi-meet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 489E8EFE2C720D10F5961AEF /* libPods-jitsi-meet.a */; };
+		8A064B8E2649297C00686E46 /* WebRTC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AD9D53B25F0C05F009B1B61 /* WebRTC.xcframework */; };
+		8A064B8F2649297C00686E46 /* WebRTC.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8AD9D53B25F0C05F009B1B61 /* WebRTC.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		8A064B902649298B00686E46 /* WebRTC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AD9D53B25F0C05F009B1B61 /* WebRTC.xcframework */; };
 		8A08EF30260ADC36007EB029 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8A08EF32260ADC36007EB029 /* InfoPlist.strings */; };
 		8A08EF37260ADDDD007EB029 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8A08EF39260ADDDD007EB029 /* InfoPlist.strings */; };
 		8A08EF3C260ADE12007EB029 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8A08EF3E260ADE12007EB029 /* InfoPlist.strings */; };
 		8AD9D46C25F0B4DB009B1B61 /* JitsiMeetSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AD9D46B25F0B4DB009B1B61 /* JitsiMeetSDK.framework */; };
 		8AD9D46D25F0B4DB009B1B61 /* JitsiMeetSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8AD9D46B25F0B4DB009B1B61 /* JitsiMeetSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		8AD9D54125F0C229009B1B61 /* WebRTC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AD9D53B25F0C05F009B1B61 /* WebRTC.xcframework */; };
-		8AD9D54225F0C229009B1B61 /* WebRTC.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8AD9D53B25F0C05F009B1B61 /* WebRTC.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B753A84E2318DB4B003F9592 /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = B753A84D2318DB4B003F9592 /* Fonts */; };
 		B773AA0E23CC60EC00047498 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B773AA0D23CC60EC00047498 /* Launch Screen.storyboard */; };
 		DE4C456121DE1E4E00EA0709 /* FIRUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = DE4C455F21DE1E4E00EA0709 /* FIRUtilities.m */; };
@@ -33,7 +34,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				8AD9D54225F0C229009B1B61 /* WebRTC.xcframework in Embed Frameworks */,
+				8A064B8F2649297C00686E46 /* WebRTC.xcframework in Embed Frameworks */,
 				8AD9D46D25F0B4DB009B1B61 /* JitsiMeetSDK.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -103,9 +104,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A064B902649298B00686E46 /* WebRTC.xcframework in Frameworks */,
 				8AD9D46C25F0B4DB009B1B61 /* JitsiMeetSDK.framework in Frameworks */,
 				695AF3ED6F686F9C5EE40F9A /* libPods-jitsi-meet.a in Frameworks */,
-				8AD9D54125F0C229009B1B61 /* WebRTC.xcframework in Frameworks */,
+				8A064B8E2649297C00686E46 /* WebRTC.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -249,8 +251,6 @@
 				ORGANIZATIONNAME = Facebook;
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = BR6U9G47ZR;
-						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.SafariKeychain = {
 								enabled = 1;
@@ -491,9 +491,9 @@
 				CODE_SIGN_ENTITLEMENTS = app.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = BR6U9G47ZR;
+				DEVELOPMENT_TEAM = QRHHV6YR2R;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -510,13 +510,13 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 2.1.1;
+				MARKETING_VERSION = 1.0.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.douzone.wehagomeet;
+				PRODUCT_BUNDLE_IDENTIFIER = com.douzone.wehagovmeet;
 				PRODUCT_NAME = "WEHAGO Meet";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -532,8 +532,8 @@
 				CODE_SIGN_ENTITLEMENTS = app.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
-				DEVELOPMENT_TEAM = BR6U9G47ZR;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = QRHHV6YR2R;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -550,13 +550,13 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 2.1.1;
+				MARKETING_VERSION = 1.0.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.douzone.wehagomeet;
+				PRODUCT_BUNDLE_IDENTIFIER = com.douzone.wehagovmeet;
 				PRODUCT_NAME = "WEHAGO Meet";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
