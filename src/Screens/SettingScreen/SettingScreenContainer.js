@@ -7,6 +7,7 @@ import Orientation from 'react-native-orientation-locker';
 import { MeetApi } from '../../services';
 import { v4 as uuidv4 } from 'uuid';
 import { getT } from '../../utils/translateManager';
+import { isWehagoV } from '../../utils';
 
 class SettingScreenContainer extends React.Component {
   constructor(props) {
@@ -25,6 +26,17 @@ class SettingScreenContainer extends React.Component {
     this._init();
     let tracks = await this._getTrack();
     let accesstype = this.props.screenProps?.params?.accesstype;
+
+    let joincodeField = false;
+    if (isWehagoV && accesstype === 'login') {
+      const { auth } = this.props;
+      const roomId = this.props.navigation.state.params.item.videoRoomId;
+
+      const result = await MeetApi.checkAccessUser(auth, roomId);
+      debugger
+      if (result.resultData) joincodeField = !result.resultData.is_access_user;
+    }
+
     if (Platform.OS !== 'ios') {
       Orientation.lockToPortrait();
     }
@@ -37,11 +49,11 @@ class SettingScreenContainer extends React.Component {
     });
 
     Orientation.addOrientationListener(this._handleOrientation);
-    debugger
     this.setState({
       tracks: tracks ? tracks : null,
       nameField: accesstype === 'email' || accesstype === 'joincode',
-      buttonActive: tracks ? true : false
+      buttonActive: tracks ? true : false,
+      joincodeField
     });
   }
 
@@ -51,18 +63,29 @@ class SettingScreenContainer extends React.Component {
   }
 
   render() {
-    const { tracks, name, orientation, nameField, buttonActive } = this.state;
+    const {
+      tracks,
+      name,
+      orientation,
+      nameField,
+      buttonActive,
+      joincode,
+      joincodeField
+    } = this.state;
     return (
       <SettingScreenPresenter
         tracks={tracks}
         name={name}
         nameField={nameField}
+        joincode={joincode}
+        joincodeField={joincodeField}
         orientation={orientation}
         buttonActive={buttonActive}
         onConferenceEnter={this._handleConferenceEnter}
         onToggleAudio={this._handleToggleAudio}
         onToggleVideo={this._handleToggleVideo}
         onSetName={this._handleSetName}
+        onSetJoincode={this._handleSetJoincode}
       />
     );
   }
@@ -119,34 +142,38 @@ class SettingScreenContainer extends React.Component {
 
     const randomstring = uuidv4();
     const user = randomstring.substr(0, 8);
-
-    if (params?.accesstype === 'email') {
-      roomToken = (
-        await MeetApi.getMeetRoomTokenEmail(params.roomId, params.token, name)
-      ).resultData;
-    } else if (item?.params?.accesstype === 'joincode') {
-      roomToken = (
-        await MeetApi.getMeetRoomTokenJoincode(
-          params.roomId,
-          params.joincode,
-          name,
-          user
-        )
-      ).resultData;
+    if (isWehagoV) {
+      roomToken = null;
     } else {
-      // 토큰받고
-      roomToken = (
-        await MeetApi.getMeetRoomToken(
-          auth.AUTH_A_TOKEN,
-          auth.AUTH_R_TOKEN,
-          auth.HASH_KEY,
-          auth.last_access_company_no,
-          item.videoRoomId
-        )
-      ).resultData;
+      if (params?.accesstype === 'email') {
+        roomToken = (
+          await MeetApi.getMeetRoomTokenEmail(params.roomId, params.token, name)
+        ).resultData;
+      } else if (item?.params?.accesstype === 'joincode') {
+        roomToken = (
+          await MeetApi.getMeetRoomTokenJoincode(
+            params.roomId,
+            params.joincode,
+            name,
+            user
+          )
+        ).resultData;
+      } else {
+        // 토큰받고
+        roomToken = (
+          await MeetApi.getMeetRoomToken(
+            auth.AUTH_A_TOKEN,
+            auth.AUTH_R_TOKEN,
+            auth.HASH_KEY,
+            auth.last_access_company_no,
+            item.videoRoomId
+          )
+        ).resultData;
+      }
     }
 
-    if (roomToken === '접근금지') { // wehago V 때문에 절차가 하나 늘어남 
+    if (roomToken === '접근금지') {
+      // wehago V 때문에 절차가 하나 늘어남
       this.props.setAlert({
         type: 1,
         title: this.t('alert_title_error'),
@@ -160,7 +187,10 @@ class SettingScreenContainer extends React.Component {
           name,
           ...item,
           accesstype: params?.accesstype,
-          externalUser: user
+          externalUser: user,
+          joincode: this.state.joincodeField
+            ? this.state.joincode
+            : item.params.joincode
         }
       });
     }
@@ -194,6 +224,11 @@ class SettingScreenContainer extends React.Component {
   _handleSetName = name => {
     this.setState({
       name
+    });
+  };
+  _handleSetJoincode = joincode => {
+    this.setState({
+      joincode
     });
   };
   _handleOrientation = orientation => {

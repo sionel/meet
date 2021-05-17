@@ -17,9 +17,10 @@ import imgCharacter03 from '../../../../../assets/icons/imgCharacter03_2x.png';
 // import ProfileImage from '../../../../../assets/smapleImages/nnn.jpg';
 import ProfileImage from '../../../../../assets/icons/imgVcNophoto_2x.png';
 // import ProfileImage from '../../../../../assets/smapleImages/nnn2.png';
-import { isWehagoV, wehagoMainURL } from '../../../../utils';
+import { wehagoMainURL } from '../../../../utils';
 
 const { height, width } = Dimensions.get('window');
+
 /**
  * MainVideoPresenter
  */
@@ -77,7 +78,7 @@ const MainVideoPresenter = props => {
       >
         {conferenceMode !== 'control'
           ? selectedRoomName || (mainUser.id !== 'localUser' && mainUser.name)
-          : !isWehagoV && second2String(props.time)}
+          : second2String(props.time)}
       </Text>
     </View>
   );
@@ -122,7 +123,7 @@ const MainVideoPresenter = props => {
   let character = '';
   if (props?.mainUser?.userInfo?.avatar) {
     character = JSON.parse(props?.mainUser?.userInfo?.avatar)?.value;
-  }
+  } 
   character = props?.mainUser?.videoTrack?.isMuted() ? 'jangok' : character;
   return (
     <View style={{ flex: 1, backgroundColor: '#1D1D1D' }}>
@@ -170,20 +171,16 @@ const MainVideoPresenter = props => {
             >
               {mainUser.id !== 'localUser' && mainUser.name}
             </Text>
-            {!isWehagoV ? (
-              <Text
-                style={{
-                  fontSize: 14,
-                  color: '#fff',
-                  textAlign: 'center',
-                  fontFamily: 'DOUZONEText30'
-                }}
-              >
-                {second2String(props.time)}
-              </Text>
-            ) : (
-              <></>
-            )}
+            <Text
+              style={{
+                fontSize: 14,
+                color: '#fff',
+                textAlign: 'center',
+                fontFamily: 'DOUZONEText30'
+              }}
+            >
+              {second2String(props.time)}
+            </Text>
           </View>
         ) : (
           <View style={{ ...styles.imageContainer }}>

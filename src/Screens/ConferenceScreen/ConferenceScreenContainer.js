@@ -247,7 +247,6 @@ class ConferenceScreenContainer extends React.Component {
         } else {
           roomId = this.props.screenProps.params.room_id;
         }
-
         this._joinConference(
           roomId,
           user_name,
@@ -255,7 +254,8 @@ class ConferenceScreenContainer extends React.Component {
           token,
           item ? item.tracks : null,
           accesstype,
-          externalUser
+          externalUser,
+          item
         );
 
         Platform.OS === 'android' &&
@@ -288,7 +288,8 @@ class ConferenceScreenContainer extends React.Component {
     token,
     tracks,
     accesstype,
-    externalUser
+    externalUser,
+    item
   ) => {
     await this._conferenceManager.join(
       roomName,
@@ -298,7 +299,8 @@ class ConferenceScreenContainer extends React.Component {
       token,
       tracks,
       accesstype,
-      externalUser
+      externalUser,
+      item
     );
     this.setState({ connection: true }, async () => {
       // 마스터 권한으로 사용자 제어를 하고 있는중인지 체크

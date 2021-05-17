@@ -13,7 +13,7 @@ const mapStateToProps = state => ({
   auth: state.user.auth,
   from: state.user.from,
   permission: state.user.permission,
-  conference: state.conference.list,
+  conference: state.conference.list
 });
 
 /**
@@ -35,7 +35,7 @@ const mapDispatchToProps = dispatch => ({
       )
     ),
   onSetWetalkList: list => dispatch(WetalkActions.setList(list)),
-  onSetConferenceList : list => dispatch(ConferenceActions.setList(list)),
+  onSetConferenceList: list => dispatch(ConferenceActions.setList(list)),
   setAlert: params => dispatch(AlertAcions.setAlert(params))
 
   // onCreateConference: bodyData => dispatch(ConferenceActions.createConference(...bodyData))

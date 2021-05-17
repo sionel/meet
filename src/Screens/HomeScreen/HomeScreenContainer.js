@@ -309,6 +309,7 @@ class HomeScreenContainer extends Component {
       } else {
         this.props.onDisconnect();
       }
+      this.props.screenProps.onChangeRootState({ destination: 'Login' });
       this.props.onLogout();
     } else {
       this._handleGetWetalkList();

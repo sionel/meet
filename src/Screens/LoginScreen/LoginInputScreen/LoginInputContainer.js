@@ -84,7 +84,10 @@ export default function LoginInputContainer(props) {
       );
       props.setPermission(isDeploy);
       props.onChangeRootState({
-        destination: isPurchase ? 'List' : 'SelectCompany'
+        destination: isPurchase ? 'List' : 'SelectCompany',
+        params: {
+          accesstype: 'login'
+        }
       });
     } else if (statusCheck && statusCheck.code === 400) {
       const onClose = () => {

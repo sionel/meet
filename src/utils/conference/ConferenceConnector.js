@@ -213,7 +213,7 @@ class ConferenceConnector {
     );
     // ===== Additional ===== //
     this._room.on(
-      JitsiConferenceEvents.CONFERENCE_CREATED_TIMESTAMP,
+      conferenceEvents.CONFERENCE_CREATED_TIMESTAMP,
       createdTime => {
         this._handlers.CREATED_TIME(createdTime);
       }

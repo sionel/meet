@@ -691,6 +691,188 @@ export default {
     }
   },
 
+  // 공개방 참석 가능한 사람인지 확인(이메일만으로 확인)
+  checkAccessUser: async (auth, roomId) => {
+    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY } = auth;
+    const url = `${meetURL}/check/access_user?room=${roomId}`;
+    const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
+    try {
+      const data = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          ...headers
+        }
+      };
+
+      const response = await fetch(url, data);
+
+      if (response.status !== 200) {
+        throw response.resultCode;
+      }
+      return response.json();
+    } catch (err) {
+      console.log(err);
+
+      console.warn('42.checkAccessUser : ', err);
+      return false;
+    }
+  },
+
+  // auth가 있는 사람들 기준으로 access_token 요청
+  getAccessToken: async (auth, room, id) => {
+    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY } = auth;
+    const url = `${meetURL}/token/access-token`;
+    const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
+    try {
+      const data = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...headers
+        },
+        body: JSON.stringify({
+          room,
+          user_identify: id
+        })
+      };
+
+      const response = await fetch(url, data);
+      if (response.status !== 200) {
+        throw response.resultCode;
+      }
+      return response.json();
+    } catch (err) {
+      console.log(err);
+
+      console.warn('39.getAccessToken : ', err);
+      return false;
+    }
+  },
+
+  // longpolling
+  // 1. curl --location --request
+  // POST 'http://localhost:8080/video/
+  // lpevent?room=5114fd61-a596-4903-aa0f-33911a45964a&user_identify=e41d94ca-545a-46fd-9bb0-fca60c9e5502&timeout=60'
+  longPolling: async (room, id) => {
+    // const a = {
+    //   extra_data: {
+    //     type: 'join_response',
+    //     status: 'allow',
+    //     access_key: 'uPwTIyJoZPEMNzVMdCVDcmDNmbvGlwUErvCcGUt/8UccVVH6'
+    //   }
+    // };
+    let url = '';
+    let signature;
+    // url = `${meetURL}/lpevent?room=${room}&user_identify=${id}&timeout=30`;
+    // url = `http://localhost:8080/video/lpevent?room=5114fd61-a596-4903-aa0f-33911a45964a&user_identify=e41d94ca-545a-46fd-9bb0-fca60c9e5502&timeout=5`;
+    // if (isDev) {
+    //   url = `${meetURL}/lpevent?room=${room}&user_identify=${id}&timeout=60`;
+    // } else {
+    const accsessUrl = `/video/lpevent?room=${room}&user_identify=${id}&timeout=60`;
+    const token = await getToken(accsessUrl);
+    const encText = accsessUrl + token.cur_date + token.token;
+    const hashText = CryptoJS.SHA256(encText);
+    signature = CryptoJS.enc.Base64.stringify(hashText);
+    // 운영기
+    url = `${wehagoBaseURL0}${accsessUrl}`;
+    // }
+
+    try {
+      const data = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          signature
+        }
+      };
+      console.log('보냄');
+      const response = await fetch(url, data);
+      console.log('받음');
+      console.log(response);
+      if (response.status !== 200) {
+        throw response.resultCode;
+      }
+      return response.json();
+    } catch (err) {
+      console.log(err);
+
+      console.warn('42.checkAccessUser : ', err);
+      return false;
+    }
+  },
+  requestTokenNonauth: async (room, id, name, joincode) => {
+    let url = '';
+    let signature;
+    if (isDev) {
+      url = `${meetURL}/standby/request/joinroom`;
+    } else {
+      const accsessUrl = `/video/standby/request/joinroom`;
+      const token = await getToken(accsessUrl);
+      const encText = accsessUrl + token.cur_date + token.token;
+      const hashText = CryptoJS.SHA256(encText);
+      signature = CryptoJS.enc.Base64.stringify(hashText);
+      // 운영기
+      url = `${wehagoBaseURL0}${accsessUrl}`;
+    }
+
+    try {
+      const data = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          signature
+        },
+        body: JSON.stringify({
+          room,
+          user_identify: id,
+          user_name: name,
+          joincode
+        })
+      };
+
+      const response = await fetch(url, data);
+      const a = await response.json();
+      debugger;
+      if (response.status !== 200) {
+        throw response.resultCode;
+      }
+      return response.json();
+    } catch (err) {
+      console.warn('requestTokenNonauth : ', err);
+      return false;
+    }
+  },
+  requestTokenAuth: async (room, id, name, auth) => {
+    const url = `${meetURL}/standby/request/joinroom`;
+
+    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY } = auth;
+    const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
+
+    try {
+      const data = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...headers
+        },
+        body: JSON.stringify({
+          room,
+          user_identify: id,
+          user_name: name
+        })
+      };
+
+      const response = await fetch(url, data);
+      if (response.status !== 200) {
+        throw response.resultCode;
+      }
+      return response.json();
+    } catch (err) {
+      console.warn('requestTokenAuth : ', err);
+      return false;
+    }
+  },
   checkTest: async () => {
     const accsessUrl = '/test';
     // const signature = await getSignature(accsessUrl);

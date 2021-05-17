@@ -15,6 +15,8 @@ import { actionCreators as toastAcionCreators } from '../../redux/modules/toast'
 import { actionCreators as alertAcionCreators } from '../../redux/modules/alert';
 import { MeetApi } from '../../services';
 import { getT } from '../../utils/translateManager';
+import { isWehagoV } from '..';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * ConferenceManager 화상회의 접속을 총괄하는 매니저
@@ -48,8 +50,72 @@ class ConferenceManager {
     token,
     tracks,
     accesstype,
-    externalUser
+    externalUser,
+    item
   ) => {
+    // auth가 있으면
+    /* 
+auth가 있으면
+http://wiki.duzon.com:8080/pages/viewpage.action?pageId=99977839
+POST /token/access-token
+
+curl --location --request POST 'localhost:8080/video/token?cno=4' \
+--header 'Authorization: Bearer edQxkGUypbGxfTwTKipNktXRtKCcAJ' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "room": "5114fd61-a596-4903-aa0f-33911a45964a",
+    "access_token": "gmdryzx5Vhz8kH2Myf3I9ILLohd39vVH0uogjGFF+wooUn5u"
+}'
+토큰 받아서 connect로
+
+없으면 바로 롱폴링
+1. curl --location --request POST 'http://localhost:8080/video/lpevent?room=5114fd61-a596-4903-aa0f-33911a45964a&user_identify=e41d94ca-545a-46fd-9bb0-fca60c9e5502&timeout=60'
+2. curl --location --request POST 'http://localhost:8080/video/standby/request/joinroom' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "room": "5114fd61-a596-4903-aa0f-33911a45964a",
+    "user_identify": "e41d94ca-545a-46fd-9bb0-fca60c9e5502",
+    "user_name": "사용자 이름",
+    "joincode": "81bb7a"
+}'
+
+1번 결과로 token
+curl --location --request POST 'localhost:8080/video/token?cno=4' \
+--header 'Authorization: Bearer edQxkGUypbGxfTwTKipNktXRtKCcAJ' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "room": "5114fd61-a596-4903-aa0f-33911a45964a",
+    "access_token": "gmdryzx5Vhz8kH2Myf3I9ILLohd39vVH0uogjGFF+wooUn5u"
+}'
+
+받아서 connect
+*/
+    if (isWehagoV) {
+      const uuid = uuidv4();
+      if (auth) {
+        // 로그인 정보가 있는 경우 마스터인지, 일반 참가자인지 확인하고
+        // 마스터일때 바로 토큰들고 넘어갈 수 있도록 함
+        const result = await MeetApi.getAccessToken(auth, roomName, uuid);
+        if (result.resultData) token = result.resultData.access_token;
+      }
+
+      if (!token) {
+        token = await new Promise((res, rej) => {
+          let timer = setTimeout(async function polling() {
+            pollingResult = await MeetApi.longPolling(roomName, uuid);
+            debugger;
+            if (pollingResult) {
+              res(pollingResult.extra_data.access_key);
+            } else {
+              timer = setTimeout(polling, 10);
+            }
+          }, 10);
+          if (auth) MeetApi.requestTokenAuth(roomName, uuid, name, auth);
+          else MeetApi.requestTokenNonauth(roomName, uuid, name, item.joincode);
+        });
+      }
+    }
+
     this._roomToken = token;
     this._roomName = roomName.toLowerCase();
     // 초기화
@@ -70,9 +136,10 @@ class ConferenceManager {
       accesstype,
       externalUser
     );
+
     await MeetApi.enterMeetRoom(token, this._room.myUserId(), name);
-    const createdTime = this._room.properties['created-ms'];
-    this._dispatch(localActionCreators.setConferenceCreatedTime(createdTime));
+    // const createdTime = this._room.properties['created-ms'];
+    // this._dispatch(localActionCreators.setConferenceCreatedTime(createdTime));
     this._dispatch(masterAcionCreators.checkMasterList(this._roomToken));
 
     const id = 'localUser';
@@ -156,7 +223,7 @@ class ConferenceManager {
       ADD_REMOTE_TRACK: this._addRemoteTrack,
       VIDEO_MUTE_CHANGED: this._videoMutedChanged,
       SUSPEND_DETECTED: () => {},
-      CREATED_TIME:this._createTime,
+      CREATED_TIME: this._createTime,
       SET_USER_INFO: this._setUserInfo,
       CHANGED_USER_STATUS: this._changedUserStatus,
       CHANGED_DOCUMENT_PAGE: this.changeDocumentPage,
@@ -166,8 +233,8 @@ class ConferenceManager {
       DOCUMENT_SHARE_TARGET: this.documentShareTarget,
       MESSAGE_RECEIVED: this.messageReceived,
       CHANGED_MIC_CONTROL_MODE_BY_MASTER: this.changeMicControlModeByMaster,
-      CHANGED_MIC_CONTROL_USER_MODE_BY_MASTER: this
-        .changeMicControlUserModeByMaster,
+      CHANGED_MIC_CONTROL_USER_MODE_BY_MASTER:
+        this.changeMicControlUserModeByMaster,
       CHANGED_MIC_MUTE_BY_MASTER: this.changeMicMuteByMaster,
       REJECTED_BY_MASTER: this.rejectedByMaster,
       CHANGE_MASTER_LIST: this.changeMasterList,
@@ -217,7 +284,7 @@ class ConferenceManager {
 
   _createTime = time => {
     this._dispatch(localActionCreators.setConferenceCreatedTime(time));
-  }
+  };
   /**
    * ADD_REMOTE_TRACK
    * 대화방에 참여자의 트랙이 추가되면 호출된다.
