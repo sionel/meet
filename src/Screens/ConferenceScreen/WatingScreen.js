@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, ScrollView, Image, Text } from 'react-native';
-import waiting from '../../../../assets/wating.png';
-import { getT } from '../../../utils/translateManager';
+import waiting from '../../../assets/wating.png';
+import { getT } from '../../utils/translateManager';
 
 export default function WatingScreen(props) {
   const { start } = props;

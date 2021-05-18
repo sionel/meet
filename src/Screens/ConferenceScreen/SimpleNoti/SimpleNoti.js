@@ -76,7 +76,7 @@ export default function SimpleNoti() {
     >
       {/* <View style={[styles.container, { opacity: fadeAnimation }]}> */}
       <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-        <Text style={styles.noti}>{message}</Text>
+        {!!message && <Text style={styles.noti}>{message}</Text>}
       </View>
       {/* </View> */}
     </Animated.View>

@@ -129,15 +129,18 @@ const HomeScreenPresenter = props => {
       {/* 방생성 버튼 */}
       {/* wehago one 회원은 불가 */}
       {/* 미구매 회원은 불가 */}
-      {props.memberType !== 1 && props.permission && props.plan !== 'WE' && (
-        <AddButton
-          onClick={() =>
-            props.onRedirect('Create', {
-              onGetWetalkList: props.onGetWetalkList
-            })
-          }
-        />
-      )}
+      {props.memberType !== 1 &&
+        props.permission &&
+        props.plan !== 'WE' &&
+        !isWehagoV && (
+          <AddButton
+            onClick={() =>
+              props.onRedirect('Create', {
+                onGetWetalkList: props.onGetWetalkList
+              })
+            }
+          />
+        )}
 
       <CustomAlert
         visible={props.alert.visible}

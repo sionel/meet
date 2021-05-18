@@ -36,7 +36,7 @@ const ContentPresenter = props => {
 
   return (
     <View style={styles.container} onLayout={props.onLayout}>
-      <SimpleNoti />
+      {/* <SimpleNoti /> */}
       <StatusBar
         barStyle="light-content"
         backgroundColor={'#000'}
