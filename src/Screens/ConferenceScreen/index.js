@@ -3,6 +3,7 @@ import ConferenceScreenContainer from './ConferenceScreenContainer';
 import { actionCreators as DocumentShareActions } from '../../redux/modules/documentShare';
 import { actionCreators as localActions } from '../../redux/modules/local';
 import { actionCreators as masterActions } from '../../redux/modules/master';
+import { actionCreators as AlertAcions } from '../../redux/modules/alert';
 
 const getMainUser = (mainUserId, localUser, participants) => {
   if (!localUser) {
@@ -48,7 +49,9 @@ const mapDispatchToProps = dispatch => {
     toggleMuteMic: muteState => dispatch(localActions.toggleMuteMic(muteState)),
     changeMasterControlMode: flag =>
       dispatch(masterActions.changeMasterControlMode(flag)),
-    toggleMuteMicByMe: () => dispatch(masterActions.toggleMuteMicByMe())
+    toggleMuteMicByMe: () => dispatch(masterActions.toggleMuteMicByMe()),
+    setAlert: params => dispatch(AlertAcions.setAlert(params))
+
   };
 };
 

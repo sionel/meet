@@ -114,6 +114,15 @@ curl --location --request POST 'localhost:8080/video/token?cno=4' \
           else MeetApi.requestTokenNonauth(roomName, uuid, name, item.joincode);
         });
       }
+      if (!token) {
+        this._dispatch(
+          toastAcionCreators.setToastMessage(
+            '마스터가 참여요청을 거부하였습니다'
+            // this.t('toast_master_micoffbymaster')
+          )
+        );
+        return false;
+      }
     }
 
     this._roomToken = token;
@@ -178,6 +187,7 @@ curl --location --request POST 'localhost:8080/video/token?cno=4' \
         )
       );
     }
+    return true;
   };
 
   /**
