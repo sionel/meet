@@ -24,9 +24,7 @@ export default function SettingScreenPresenter({
   onToggleVideo,
   onSetName,
   nameField,
-  buttonActive,
-  joincodeField,
-  onSetJoincode
+  buttonActive
 }) {
   const t = getT();
   return (
@@ -190,43 +188,6 @@ export default function SettingScreenPresenter({
               }}
             >
               {t('roomstate_setting_nameDefault')}
-            </Text>
-          </View>
-        )}
-        {joincodeField && (
-          <View
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: '100%',
-              flex: 1
-            }}
-          >
-            <Text style={{ width: '100%', paddingLeft: 5 }}>
-              {t('roomstate_setting_joincode')}
-            </Text>
-            <TextInput
-              style={{
-                borderColor: 'rgb(201,205,213)',
-                borderWidth: 1,
-                width: '100%',
-                height: 52,
-                marginVertical: 10,
-                paddingHorizontal: 5
-              }}
-              maxLength={6}
-              onChangeText={onSetJoincode}
-              blurOnSubmit={true}
-            />
-            <Text
-              style={{
-                width: '100%',
-                paddingLeft: 5,
-                color: 'rgb(140,140,140)',
-                fontSize: 11
-              }}
-            >
-              {t('roomstate_setting_joincodeDefault')}
             </Text>
           </View>
         )}

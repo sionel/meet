@@ -832,8 +832,6 @@ export default {
       };
 
       const response = await fetch(url, data);
-      const a = await response.json();
-      debugger;
       if (response.status !== 200) {
         throw response.resultCode;
       }

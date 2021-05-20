@@ -103,7 +103,6 @@ curl --location --request POST 'localhost:8080/video/token?cno=4' \
         token = await new Promise((res, rej) => {
           let timer = setTimeout(async function polling() {
             pollingResult = await MeetApi.longPolling(roomName, uuid);
-            debugger;
             if (pollingResult) {
               res(pollingResult.extra_data.access_key);
             } else {
