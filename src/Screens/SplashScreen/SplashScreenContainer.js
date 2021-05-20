@@ -123,7 +123,7 @@ class SplashScreenContainer extends Component {
 
   _handleCheckVersion = async () => {
     const os = Platform.OS;
-    const majorVersion = iswehagov ? 1 : 5;
+    const majorVersion = iswehagov ? 1 : 6;
     const result = await MeetApi.checkVersion(os, majorVersion);
 
     if (!result.resultData.update || result.resultData.dev_mode) return [];
