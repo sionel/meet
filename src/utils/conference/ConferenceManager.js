@@ -92,15 +92,16 @@ curl --location --request POST 'localhost:8080/video/token?cno=4' \
 */
     if (isWehagoV) {
       const uuid = uuidv4();
+      let tmpToken;
       if (auth) {
         // 로그인 정보가 있는 경우 마스터인지, 일반 참가자인지 확인하고
         // 마스터일때 바로 토큰들고 넘어갈 수 있도록 함
         const result = await MeetApi.getAccessToken(auth, roomName, uuid);
-        if (result.resultData) token = result.resultData.access_token;
+        if (result.resultData) tmpToken = result.resultData.access_token;
       }
 
-      if (!token) {
-        token = await new Promise((res, rej) => {
+      if (!tmpToken) {
+        tmpToken = await new Promise((res, rej) => {
           let timer = setTimeout(async function polling() {
             pollingResult = await MeetApi.longPolling(roomName, uuid);
             if (pollingResult) {
@@ -113,17 +114,14 @@ curl --location --request POST 'localhost:8080/video/token?cno=4' \
           else MeetApi.requestTokenNonauth(roomName, uuid, name, item.joincode);
         });
       }
-      if (!token) {
-        this._dispatch(
-          toastAcionCreators.setToastMessage(
-            '마스터가 참여요청을 거부하였습니다'
-            // this.t('toast_master_micoffbymaster')
-          )
-        );
-        return false;
-      }
+      if (!tmpToken) return false;
+      const tokenResult = await MeetApi.getMeetVRoomToken(
+        auth,
+        roomName,
+        tmpToken
+      );
+      token = tokenResult.resultData;
     }
-
     this._roomToken = token;
     this._roomName = roomName.toLowerCase();
     // 초기화
@@ -149,7 +147,6 @@ curl --location --request POST 'localhost:8080/video/token?cno=4' \
     // const createdTime = this._room.properties['created-ms'];
     // this._dispatch(localActionCreators.setConferenceCreatedTime(createdTime));
     this._dispatch(masterAcionCreators.checkMasterList(this._roomToken));
-
     const id = 'localUser';
     if (!tracks) tracks = this._conferenceConnector.tracks;
     const videoTrack = tracks.find(track => track.getType() === 'video');

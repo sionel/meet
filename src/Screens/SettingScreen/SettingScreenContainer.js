@@ -144,7 +144,6 @@ class SettingScreenContainer extends React.Component {
         )
       ).resultData;
     }
-
     if (roomToken === '접근금지') { // wehago V 때문에 절차가 하나 늘어남 
       this.props.setAlert({
         type: 1,

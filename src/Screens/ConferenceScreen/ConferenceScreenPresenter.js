@@ -5,6 +5,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
+import { View } from 'react-native';
 import LoadingIndicator from './LoadingIndicator';
 import Content from './Content';
 import SimpleNoti from './SimpleNoti';
@@ -23,7 +24,7 @@ const ConferenceScreenPresenter = props => {
   }
 
   return (
-    <>
+    <View style={{ flex: 1 }}>
       <SimpleNoti />
       {props.mainUser && props.connection ? (
         <Content
@@ -39,11 +40,11 @@ const ConferenceScreenPresenter = props => {
           onChangeMicMaster={props.onChangeMicMaster}
         />
       ) : isWehagoV ? (
-        <WatingScreen />
+        <WatingScreen orientation={props.orientation} onClose={props.onClose} />
       ) : (
         <LoadingIndicator />
       )}
-    </>
+    </View>
   );
 };
 

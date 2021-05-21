@@ -57,8 +57,6 @@ function reducer(state = initialState, action) {
 //#endregion
 //#region 마스터 리스트
 function checkMasterList(token) {
-  if (!token) {
-  }
   return async dispatch => {
     const result = await MeetApi.getMasterList(token);
     if (!result) {

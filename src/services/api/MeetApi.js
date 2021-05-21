@@ -279,7 +279,7 @@ export default {
       }
       return response.json();
     } catch (err) {
-      console.warn('12.getMeetRoomToken : ', err);
+      console.warn('12-2.getMeetRoomTokenEmail : ', err);
       return false;
     }
   },
@@ -321,6 +321,34 @@ export default {
       return response.json();
     } catch (err) {
       console.warn('12-3 getMeetRoomTokenJoincode : ', err);
+      return false;
+    }
+  },
+  // 3-12-4 wehagoV화상회의 토큰 생성
+  getMeetVRoomToken: async (auth, roomId, access_token) => {
+    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
+    const url = `${meetURL}/token?cno=${cno}`;
+    const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
+    try {
+      const data = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...headers
+        },
+        body: JSON.stringify({
+          room: roomId,
+          access_token
+        })
+      };
+
+      const response = await fetch(url, data);
+      if (response.status !== 200) {
+        throw response.resultCode;
+      }
+      return response.json();
+    } catch (err) {
+      console.warn('12-4.getMeetVRoomToken : ', err);
       return false;
     }
   },
@@ -797,7 +825,7 @@ export default {
     } catch (err) {
       console.log(err);
 
-      console.warn('42.checkAccessUser : ', err);
+      console.warn('longPolling err : ', err);
       return false;
     }
   },

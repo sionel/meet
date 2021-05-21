@@ -18,6 +18,8 @@ import ConferenceScreenPresenter from './ConferenceScreenPresenter';
 import EndCallMessage from './EndCallMessage';
 import ConferenceManager from '../../utils/conference/ConferenceManager';
 import MeetApi from '../../services/api/MeetApi';
+import Orientation from 'react-native-orientation-locker';
+import DeviceInfo from 'react-native-device-info';
 
 import { setConferenceManager } from '../../utils/ConferenceManager';
 import { getT } from '../../utils/translateManager';
@@ -26,9 +28,12 @@ const { PictureInPicture } = NativeModules;
 const { width, height } = Dimensions.get('window');
 const isIOS = Platform.OS === 'ios';
 
+const isTablet = DeviceInfo.isTablet();
+
 class ConferenceScreenContainer extends React.Component {
   constructor() {
     super();
+    this._screen = true;
     this._appState = 'active';
     this._backTimeout = null;
     this._conferenceState = {
@@ -44,7 +49,8 @@ class ConferenceScreenContainer extends React.Component {
       endCall: false,
       endUser: null,
       createdTime: null,
-      pipMode: false
+      pipMode: false,
+      _this: true
     };
     this.t = getT();
   }
@@ -54,6 +60,20 @@ class ConferenceScreenContainer extends React.Component {
    */
   componentDidMount() {
     const { navigation, auth, dispatch, screenProps } = this.props;
+    if (!isTablet) {
+      Orientation.lockToPortrait();
+    } else {
+      Orientation.getOrientation(orientation => {
+        const status =
+          orientation === 'LANDSCAPE' ||
+          orientation === 'LANDSCAPE-LEFT' ||
+          orientation === 'LANDSCAPE-RIGHT';
+        this.setState({
+          orientation: status ? 'horizontal' : 'vertical'
+        });
+      });
+      Orientation.addOrientationListener(this._handleOrientation);
+    }
 
     if (screenProps.destination === 'Conference') {
       this.callType = screenProps.params.call_type;
@@ -173,6 +193,7 @@ class ConferenceScreenContainer extends React.Component {
    * componentWillUnmount
    */
   componentWillUnmount() {
+    this._screen = false;
     KeepAwake.deactivate();
     DeviceEventEmitter.removeListener(
       'ON_HOME_BUTTON_PRESSED',
@@ -194,6 +215,7 @@ class ConferenceScreenContainer extends React.Component {
     return !this.state.endCall ? (
       <ConferenceScreenPresenter
         {...this.props}
+        orientation={this.state.orientation}
         connection={this.state.connection}
         callType={this.callType}
         selectedRoomName={this.selectedRoomName}
@@ -303,13 +325,14 @@ class ConferenceScreenContainer extends React.Component {
       item
     );
     if (!joinResult) {
-      
-      this.props.setAlert({
-        type: 1,
-        title: '알림',
-        message: '마스터가 입장요청을 거절하였습니다.'
-      });
-      this._handleConferenceClose();
+      if (this._screen) {
+        this.props.setAlert({
+          type: 1,
+          title: '알림',
+          message: '마스터가 입장요청을 거절하였습니다.'
+        });
+        this._handleConferenceClose();
+      }
       return false;
     }
     this.setState({ connection: true }, async () => {
@@ -330,6 +353,13 @@ class ConferenceScreenContainer extends React.Component {
         }, 15000);
       }
     });
+  };
+  _handleOrientation = orientation => {
+    const status =
+      orientation === 'LANDSCAPE' ||
+      orientation === 'LANDSCAPE-LEFT' ||
+      orientation === 'LANDSCAPE-RIGHT';
+    this.setState({ orientation: status ? 'horizontal' : 'vertical' });
   };
 
   /** 전화/대화 종료 */
