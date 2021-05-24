@@ -54,12 +54,28 @@ export default function DrawerContent(props) {
         'https://play.google.com/store/apps/details?id=com.duzon.android.lulubizpotal',
       wedrive:
         'http://play.google.com/store/apps/details?id=com.douzone.android.wedrive',
-      fax:
-        'http://play.google.com/store/apps/details?id=cloudfax.co.kr.wehagofax',
+      fax: 'http://play.google.com/store/apps/details?id=cloudfax.co.kr.wehagofax',
       elecapproval:
         'http://play.google.com/store/apps/details?id=com.douzone.android.eapprovals',
-      atr:
-        'http://play.google.com/store/apps/details?id=com.douzone.android.attendance'
+      atr: 'http://play.google.com/store/apps/details?id=com.douzone.android.attendance'
+    };
+
+    const iosMarketURL_V = {
+      wehago: 'https://itunes.apple.com/app/id1505708178?mt=8',
+      wedrive: 'https://itunes.apple.com/app/id1568621593?mt=8',
+      fax: 'https://itunes.apple.com/app/id1490385513?mt=8',
+      elecapproval: 'https://itunes.apple.com/app/id1568651361?mt=8',
+      atr: 'https://itunes.apple.com/app/id1494995182?mt=8'
+    };
+    const androidMarketURL_V = {
+      wehago:
+        'https://play.google.com/store/apps/details?id=com.douzone.android.wehagov',
+      wedrive:
+        'http://play.google.com/store/apps/details?id=com.douzone.android.wedrive',
+      fax: 'http://play.google.com/store/apps/details?id=cloudfax.co.kr.wehagofax',
+      elecapproval:
+        'http://play.google.com/store/apps/details?id=com.wehagov.android.eapprovals',
+      atr: 'http://play.google.com/store/apps/details?id=com.wehagov.android.attendance'
     };
 
     const iosURL = {
@@ -88,19 +104,29 @@ export default function DrawerContent(props) {
         ? iosURL[type] + commonLoginInfo
         : androidURL[type] + commonLoginInfo
     ).catch(err => {
-      Linking.openURL(
-        isWehagoV
-          ? 'https://wehagov.com/#/mobile'
-          : os === 'ios'
-          ? iosMarketURL[type]
-          : androidMarketURL[type]
-      ).catch(err => {
+      if (!isWehagoV) {
+        Linking.openURL(
+          isWehagoV
+            ? os === 'ios'
+              ? iosMarketURL_V[type]
+              : androidMarketURL_V[type]
+            : os === 'ios'
+            ? iosMarketURL[type]
+            : androidMarketURL[type]
+        ).catch(err => {
+          setAlert({
+            type: 1,
+            title: t('alert_title_notion'),
+            message: t('alert_text_no_app_store')
+          });
+        });
+      } else {
         setAlert({
           type: 1,
           title: t('alert_title_notion'),
-          message: t('alert_text_no_app_store')
+          message: '앱을 다운로드 해주세요'
         });
-      });
+      }
     });
   };
 

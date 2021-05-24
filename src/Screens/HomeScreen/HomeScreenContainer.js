@@ -294,7 +294,10 @@ class HomeScreenContainer extends Component {
       this.props.from
     );
     // 재 로그인
+    debugger;
+
     if (checkResult.errors) {
+
       if (checkResult.errors.code === 'E002') {
         this.props.setAlert({
           type: 1,
