@@ -34,7 +34,7 @@ class ConferenceStateContainer extends React.Component {
     const { params } = this.props.screenProps;
     let roomId;
     let iscret = true; // 인증 비인증 묻는 것
-    if (params.accesstype === 'login') {
+    if (params.accesstype === 'login' || params.accesstype === 'wehago') {
       roomId = this.props.navigation.state.params.item.roomId;
     } else if (params && Object.keys(params).length > 0) {
       roomId = params.roomId;
@@ -52,6 +52,7 @@ class ConferenceStateContainer extends React.Component {
     //   roomId
     // );
     // this.roomName = access.resultData.name;
+    debugger;
     const access = await MeetApi.getMeetRoomNoCert(roomId);
     this.roomName = access?.resultData?.name;
 
@@ -101,12 +102,8 @@ class ConferenceStateContainer extends React.Component {
       // 참석자 정보 받고
       // 시작시간 종료시간 컨버팅 하고
       // 페이지 이동
-      const {
-        name,
-        r_start_datetime,
-        r_end_datetime,
-        is_public
-      } = access.resultData;
+      const { name, r_start_datetime, r_end_datetime, is_public } =
+        access.resultData;
       let accessUser = [];
       if (Object.keys(auth).length > 0) {
         accessUser = (

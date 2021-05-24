@@ -101,9 +101,9 @@ class SplashScreenContainer extends Component {
   };
   _handleCheckSecurity = async () => {
     // const isJailBroken = JailMonkey?.isJailBroken();
-    const isJailBroken = false
+    const isJailBroken = false;
     // const isDebuggedMode = await JailMonkey?.isDebuggedMode();
-    const isDebuggedMode = false
+    const isDebuggedMode = false;
 
     if (
       Platform.OS === 'android' &&
@@ -401,7 +401,9 @@ class SplashScreenContainer extends Component {
         this.props.onChangeRootState({
           loaded: true,
           destination: 'Login',
-          params: {},
+          params: {
+            accesstype: 'login'
+          },
           url: undefined
         });
       } else if (info === 'same') {
