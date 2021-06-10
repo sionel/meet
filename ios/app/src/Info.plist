@@ -26,10 +26,10 @@
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>CFBundleURLName</key>
-			<string>wehagov.meet</string>
+			<string>wehago.meet</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>wehagov.meet</string>
+				<string>wehago.meet</string>
 			</array>
 		</dict>
 		<dict>

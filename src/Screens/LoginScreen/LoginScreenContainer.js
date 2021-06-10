@@ -41,10 +41,10 @@ class LoginScreenContainer extends Component {
       iswehagov ? 'v' : ''
     }://app?name=${serviceCode}&login=true`;
     const iosMarketURL = iswehagov
-      ? 'https://www.wehagov.com/#/mobile'
+      ? 'http://itunes.apple.com/kr/app/wehago/id1505708178?mt=8'
       : 'http://itunes.apple.com/kr/app/wehago/id1363039300?mt=8';
     const androidMarketURL = iswehagov
-      ? 'https://www.wehagov.com/#/mobile'
+      ? 'https://play.google.com/store/apps/details?id=com.douzone.android.wehagov'
       : 'https://play.google.com/store/apps/details?id=com.duzon.android.lulubizpotal';
 
     Linking.openURL(Platform.OS === 'ios' ? iosUrl : androidUrl).catch(err => {
