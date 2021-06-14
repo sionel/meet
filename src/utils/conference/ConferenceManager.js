@@ -489,18 +489,23 @@ curl --location --request POST 'localhost:8080/video/token?cno=4' \
   };
 
   // 마스터가 참여자를 추방
-  requestKick = (master, target) => {
-    this._dispatch(toastAcionCreators.kickMessage(master, target));
+  requestKick = (masterInfo, targetInfo) => {
+    const { masterName } = JSON.parse(masterInfo);
+    const { targetName, targetId } = JSON.parse(targetInfo);
+
     const myId = this._room.myUserId();
-    if (this._room.myUserId() === target) {
+    if (myId === targetId) {
+      const message = masterName + this.t('toast_master_ibenned');
       this._endCall();
       this._dispatch(
         alertAcionCreators.setAlert({
           type: 1,
           title: this.t('alert_title_notion'),
-          message: this.t('toast_master_ibenned')
+          message
         })
       );
+    } else {
+      this._dispatch(toastAcionCreators.kickMessage(targetName));
     }
   };
 }

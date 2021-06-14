@@ -11,6 +11,7 @@ import AlertScreen from './src/Screens/AlertScreen';
 import { withTranslation } from 'react-i18next';
 import './src/locales';
 import { setT } from './src/utils/translateManager';
+// import { io } from "socket.io-client";
 
 const { persistor, store } = configureStore();
 console.reportErrorsAsExceptions = false;
@@ -30,6 +31,24 @@ class App extends Component {
     Linking.addEventListener('url', event => {
       this.setState({ loaded: false, url: event.url });
     });
+
+    
+    // const ws = io("ws://10.70.242.129:8080", {
+    //   path: "/wehagomeet",
+    //   transports: ["websocket"],
+    //   query: {
+    //     room: "room1234",
+    //     uid: "5114fd61-a596-4903-aa0f-33911a45964a",
+    //   },
+    // });
+    
+    // ws.on("message", (data) => {
+    //   debugger
+    //   console.log({ data });
+    // });
+  
+    // ws.emit("hello world", "foo");
+    
   }
 
   componentDidUpdate(prevProps) {

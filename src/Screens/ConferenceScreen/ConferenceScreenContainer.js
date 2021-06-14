@@ -170,7 +170,6 @@ class ConferenceScreenContainer extends React.Component {
       mainUserId &&
       mainUserId !== prevProps.mainUserId
     ) {
-      // const conferenceManager = new ConferenceManager();
       this._conferenceManager.selectParticipant(mainUserId);
     }
 
@@ -181,7 +180,6 @@ class ConferenceScreenContainer extends React.Component {
       list.length > prevProps.list.length &&
       documentShare.attributes
     ) {
-      // const conferenceManager = new ConferenceManager();
       this._conferenceManager.documentShareTarget(
         list[list.length - 1],
         documentShare

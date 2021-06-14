@@ -30,32 +30,10 @@ function setToastMessage(toastMessage) {
   };
 }
 
-function kickMessage(masterId, targetId) {
+function kickMessage(targetName) {
   return (dispath, getState) => {
-    const users = getState().participants.list;
-    let masterNickName = '';
-    let masterUserName = '';
-    let targetNickName = '';
-    let targetUserName = '';
-    users.forEach(user => {
-      if (user.id === masterId) {
-        masterNickName = user.userInfo.nickname;
-        masterUserName = user.userInfo.userName;
-      } else if (user.id === targetId) {
-        targetNickName = user.userInfo.nickname;
-        targetUserName = user.userInfo.userName;
-      }
-    });
-    const master = masterNickName
-      ? `${masterNickName}(${masterUserName})`
-      : masterUserName;
-    const target = targetNickName
-      ? `${targetNickName}(${targetUserName})`
-      : targetUserName;
     const t = getT();
-    const toastMessage = t('toast_master_whobenned')
-      .replace('[@master@]', master)
-      .replace('[@target@]', target);
+    const toastMessage = targetName + t('toast_master_whobenned')
     dispath({
       type: TOAST_MESSAGE,
       toastMessage
