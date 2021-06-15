@@ -175,10 +175,10 @@
 
             // Bundle fonts
             //
-            copy {
-                from("${projectDir}/../../fonts/jitsi.ttf")
-                into("${assetsDir}/fonts")
-            }
+            // copy {
+            //     from("${projectDir}/../../fonts/jitsi.ttf")
+            //     into("${assetsDir}/fonts")
+            // }
 
             // Bundle sounds
             //

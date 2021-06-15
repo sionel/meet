@@ -490,9 +490,8 @@ curl --location --request POST 'localhost:8080/video/token?cno=4' \
 
   // 마스터가 참여자를 추방
   requestKick = (masterInfo, targetInfo) => {
-    const { masterName } = JSON.parse(masterInfo);
-    const { targetName, targetId } = JSON.parse(targetInfo);
-
+    const { name: masterName } = JSON.parse(masterInfo);
+    const { name: targetName, id: targetId } = JSON.parse(targetInfo);
     const myId = this._room.myUserId();
     if (myId === targetId) {
       const message = masterName + this.t('toast_master_ibenned');

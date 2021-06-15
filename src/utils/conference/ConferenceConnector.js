@@ -438,7 +438,6 @@ class ConferenceConnector {
     // - 마스터가 단일 마일 제어 id형식 8자
     this._room.addCommandListener(REQUEST_MIC_CONTROL_TARGET, value => {
       if (this._room.myUserId() === value.attributes.target) {
-        debugger;
         this._handlers.CHANGED_MIC_MUTE_BY_MASTER(
           value.attributes.isMute === 'true'
         );
@@ -451,7 +450,6 @@ class ConferenceConnector {
         if (value.attributes.type === 'reject') {
           this._handlers.REJECTED_BY_MASTER();
         } else {
-          debugger;
           this._handlers.CHANGED_MIC_MUTE_BY_MASTER(false);
         }
       }
@@ -463,7 +461,6 @@ class ConferenceConnector {
         if (value.attributes.type === 'reject') {
           this._handlers.REJECTED_BY_MASTER();
         } else {
-          debugger;
           this._handlers.CHANGED_MIC_MUTE_BY_MASTER(false);
         }
       }

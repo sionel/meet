@@ -52,7 +52,6 @@ class ConferenceStateContainer extends React.Component {
     //   roomId
     // );
     // this.roomName = access.resultData.name;
-    debugger;
     const access = await MeetApi.getMeetRoomNoCert(roomId);
     this.roomName = access?.resultData?.name;
 

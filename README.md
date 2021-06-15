@@ -154,6 +154,16 @@ cd node_modules/react-native-webrtc/tools/
 react-native bundle --platform android --dev false --entry-file index.android.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/
 경로 잘 바꾼 뒤 실행
 
+9. xcode 12.5 버전 오류
+
+node_modules/react-native/React/CxxBridge/RCTCxxBridge.mm
+ -> (NSArray<RCTModuleData *> *)_initializeModules:(NSArray<id<RCTBridgeModule>> *)modules
+ > (NSArray<RCTModuleData *> *)_initializeModules:(NSArray<Class> *)modules
+
+node_modules/react-native/ReactCommon/turbomodule/core/platform/ios/RCTTurboModuleManager.mm
+ -> RCTBridgeModuleNameForClass(module));
+ > RCTBridgeModuleNameForClass(Class(module)));
+
 ## 스토어 주소
 ios : https://itunes.apple.com/app/id1455726925?mt=8
 android : https://play.google.com/store/apps/details?id=com.wehago.meet
