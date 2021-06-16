@@ -42,7 +42,7 @@ class SplashScreenContainer extends Component {
     this.props.setSharingMode();
     // 루팅 확인 및 디버깅 모드 확인
     let result = false;
-    result = await this._handleCheckSecurity();
+    // result = await this._handleCheckSecurity();
     if (!result) return;
     if (this.props.url) {
       const m = getConferenceManager();
@@ -99,38 +99,36 @@ class SplashScreenContainer extends Component {
       }
     }
   };
-  _handleCheckSecurity = async () => {
-    // const isJailBroken = JailMonkey?.isJailBroken();
-    const isJailBroken = false;
-    // const isDebuggedMode = await JailMonkey?.isDebuggedMode();
-    const isDebuggedMode = false;
+  // _handleCheckSecurity = async () => {
+  //   // const isJailBroken = JailMonkey?.isJailBroken();
+  //   const isJailBroken = false;
+  //   // const isDebuggedMode = await JailMonkey?.isDebuggedMode();
+  //   const isDebuggedMode = false;
 
-    if (
-      Platform.OS === 'android' &&
-      iswehagov &&
-      (isJailBroken || isDebuggedMode)
-    ) {
-      this.props.setAlert({
-        type: 1,
-        title: this.t('alert_title_notion'),
-        message: this.t('alert_text_looting_V'),
-        onConfirm: () => BackHandler.exitApp()
-      });
-      return false;
-    }
-    return true;
-  };
+  //   if (
+  //     Platform.OS === 'android' &&
+  //     iswehagov &&
+  //     (isJailBroken || isDebuggedMode)
+  //   ) {
+  //     this.props.setAlert({
+  //       type: 1,
+  //       title: this.t('alert_title_notion'),
+  //       message: this.t('alert_text_looting_V'),
+  //       onConfirm: () => BackHandler.exitApp()
+  //     });
+  //     return false;
+  //   }
+  //   return true;
+  // };
 
   _handleCheckVersion = async () => {
     const os = Platform.OS;
-    const majorVersion = iswehagov ? 1 : 7;
+    const majorVersion = 8;
     const result = await MeetApi.checkVersion(os, majorVersion);
 
     if (!result.resultData.update || result.resultData.dev_mode) return [];
     const title = this.t('servernoti_title_update');
-    const message = iswehagov
-      ? this.t('servernoti_message_power_update_V')
-      : this.t('servernoti_message_power_update');
+    const message = this.t('servernoti_message_power_update');
     const marketUrl =
       os === 'ios'
         ? 'https://itunes.apple.com/app/id1455726925?mt=8'
@@ -223,9 +221,7 @@ class SplashScreenContainer extends Component {
           this.props.setAlert({
             type: 1,
             title: this.t('alert_title_login_fail'),
-            message: iswehagov
-              ? this.t('alert_text_expired')
-              : this.t('alert_text_duplicate_logout')
+            message: this.t('alert_text_duplicate_logout')
           });
         } else if (result.errors.status === '400') {
           this.props.setAlert({
@@ -525,9 +521,7 @@ class SplashScreenContainer extends Component {
         this.props.setAlert({
           type: 1,
           title: this.t('alert_title_login_fail'),
-          message: iswehagov
-            ? this.t('alert_text_expired')
-            : this.t('alert_text_duplicate_logout')
+          message:this.t('alert_text_duplicate_logout')
         });
       } else if (result.errors.status === '400') {
         this.props.setAlert({
