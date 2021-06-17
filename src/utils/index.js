@@ -14,24 +14,24 @@ const OS = Platform.OS;
 const OSID = OS === 'ios' ? 'mobile-ios' : 'mobile-android';
 
 // 개발기,운영기 로 바꾸려면 해당 주석을 이용하자
-// export const isDev = true;
-export const isDev = false;
+export const isDev = true;
+// export const isDev = false;
 /**
  * Back-end URL
  */
 export const wehagoBaseURL0 = isDev
   ? `http://dev.api0.wehago.com`
-  : `https://api0.wehago${isWehagoV ? 'v' : ''}.com`; // 비인증
+  : `https://api0.wehago.com`; // 비인증
 export const wehagoBaseURL = isDev
   ? `http://dev.api.wehago.com`
-  : `https://api.wehago${isWehagoV ? 'v' : ''}.com`; // 인증
+  : `https://api.wehago.com`; // 인증
 export const wehagoMainURL = isDev
   ? `http://dev.wehago.com`
-  : `https://www.wehago${isWehagoV ? 'v' : ''}.com`; // 메인 URL
+  : `https://www.wehago.com`; // 메인 URL
 
 export const meetURL = isDev
   ? `https://rtctest.wehago.com/api-bind`
-  : `https://api.wehago${isWehagoV ? 'v' : ''}.com/video`;
+  : `https://api.wehago.com/video`;
 // export const meetURL = `http://localhost:8080/videodev`;
 
 export const wehagoDummyImageURL = `https://static.wehago${
