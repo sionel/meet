@@ -31,8 +31,11 @@ const isIOS = Platform.OS === 'ios';
 const isTablet = DeviceInfo.isTablet();
 
 class ConferenceScreenContainer extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    // 빠른 삭제 요망
+    const isServiceDeploy = props.navigation.getParam('item').isServiceDeploy;
+
+    super(props);
     this._screen = true;
     this._appState = 'active';
     this._backTimeout = null;
@@ -50,7 +53,8 @@ class ConferenceScreenContainer extends React.Component {
       endUser: null,
       createdTime: null,
       pipMode: false,
-      _this: true
+      _this: true,
+      isServiceDeploy: isServiceDeploy
     };
     this.t = getT();
   }
@@ -226,6 +230,7 @@ class ConferenceScreenContainer extends React.Component {
         onChangeSharingMode={this._handleChangeSharingMode}
         onChangeDocumentPage={this._handleChangeDocumentPage}
         onChangeMicMaster={this._handleToggleMic}
+        isServiceDeploy={this.state.isServiceDeploy}
       />
     ) : (
       <EndCallMessage

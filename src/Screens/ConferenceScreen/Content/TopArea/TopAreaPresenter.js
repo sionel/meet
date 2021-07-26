@@ -62,21 +62,23 @@ const TopAreaPresenter = props => {
           )}
 
           {/* 문서 공유 모드 */}
-          {props.memberType !== 1 && props.callType === 3 && (
-            <CustomButton
-              name="docShare"
-              width={28}
-              height={28}
-              areaWidth={42}
-              areaHeight={36}
-              // onPress={() => props.onChangeDrawing(!props.drawing)}
-              // onPress={_.throttle(() => props.onChangeSharingMode(!props.sharing), 500)}
-              onPress={_.throttle(
-                () => props.toggleDocumentListMode(['FILELIST']),
-                500
-              )}
-            />
-          )}
+          {props.memberType !== 1 &&
+            props.callType === 3 &&
+            props.isServiceDeploy === 'T' && (
+              <CustomButton
+                name="docShare"
+                width={28}
+                height={28}
+                areaWidth={42}
+                areaHeight={36}
+                // onPress={() => props.onChangeDrawing(!props.drawing)}
+                // onPress={_.throttle(() => props.onChangeSharingMode(!props.sharing), 500)}
+                onPress={_.throttle(
+                  () => props.toggleDocumentListMode(['FILELIST']),
+                  500
+                )}
+              />
+            )}
 
           {/* <CustomButton
             name={props.objectFit === 'contain' ? 'zoomIn' : 'zoomOut'}

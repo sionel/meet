@@ -116,6 +116,8 @@ class SettingScreenContainer extends React.Component {
 
     let roomToken;
 
+    const wedive = await MeetApi.checkWedrive(auth);
+    const { isServiceDeploy } = wedive.resultData;
     const randomstring = uuidv4();
     const user = randomstring.substr(0, 8);
 
@@ -144,7 +146,8 @@ class SettingScreenContainer extends React.Component {
         )
       ).resultData;
     }
-    if (roomToken === '접근금지') { // wehago V 때문에 절차가 하나 늘어남 
+    if (roomToken === '접근금지') {
+      // wehago V 때문에 절차가 하나 늘어남
       this.props.setAlert({
         type: 1,
         title: this.t('alert_title_error'),
@@ -158,7 +161,8 @@ class SettingScreenContainer extends React.Component {
           name,
           ...item,
           accesstype: params?.accesstype,
-          externalUser: user
+          externalUser: user,
+          isServiceDeploy
         }
       });
     }

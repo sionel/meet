@@ -4,7 +4,13 @@
  * 참조 : http://wiki.duzon.com:8080/display/sky/3.+API
  */
 
-import { isDev, meetURL, securityRequest, wehagoBaseURL0 } from '../../utils';
+import {
+  isDev,
+  meetURL,
+  securityRequest,
+  wehagoBaseURL0,
+  wehagoBaseURL
+} from '../../utils';
 import * as CryptoJS from 'crypto-js';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -885,6 +891,37 @@ export default {
       return false;
     }
   },
+
+  checkWedrive: async auth => {
+    const {
+      AUTH_A_TOKEN: a_token,
+      AUTH_R_TOKEN: r_token,
+      HASH_KEY,
+      cno
+    } = auth;
+    const url = `${wehagoBaseURL}/common/company/deploy/whether/employee?service_code=wedrive&cno=${cno}`;
+    const headers = securityRequest(a_token, r_token, url, HASH_KEY);
+    try {
+      const data = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          ...headers
+        }
+      };
+
+      const response = await fetch(url, data);
+
+      if (response.status !== 200) {
+        throw response.resultCode;
+      }
+      return response.json();
+    } catch (err) {
+      console.warn('checkWedrive : ', err);
+      return false;
+    }
+  },
+
   checkTest: async () => {
     const accsessUrl = '/test';
     // const signature = await getSignature(accsessUrl);
