@@ -9,12 +9,14 @@ import {
   StyleSheet
 } from 'react-native';
 import { useSelector } from 'react-redux';
+import { UserApi } from '../../services';
 
 import btnWehago from '../../../assets/icons/shortcut/ico_service_wehago.png'; // 위하고
 import btnWedrive from '../../../assets/icons/shortcut/ico_service_wedrive.png'; // 위드라이브
 import btnFax from '../../../assets/icons/shortcut/ico_service_fax.png'; // 팩스
 import btnElecapproval from '../../../assets/icons/shortcut/ico_service_elecapproval.png'; // 전자결재
 import btnAtr from '../../../assets/icons/shortcut/ico_service_atr.png'; // 근태관리
+import btnRs10 from '../../../assets/icons/shortcut/ico_service_remote.png'; // rs10
 
 import DrawerContentContainer from './DrawerContentContainer';
 import CustomIcon from '../CustomIcon';
@@ -39,7 +41,7 @@ export default function DrawerContent(props) {
     RNrestart.Restart();
   };
 
-  const onClickShortcutIcon = type => {
+  const onClickShortcutIcon = async type => {
     const os = Platform.OS;
 
     const iosMarketURL = {
@@ -47,7 +49,8 @@ export default function DrawerContent(props) {
       wedrive: 'https://itunes.apple.com/app/id1371359896?mt=8',
       fax: 'https://itunes.apple.com/app/id1490385513?mt=8',
       elecapproval: 'https://itunes.apple.com/app/id1485842855?mt=8',
-      atr: 'https://itunes.apple.com/app/id1494995182?mt=8'
+      atr: 'https://itunes.apple.com/app/id1494995182?mt=8',
+      rs10: 'https://itunes.apple.com/app/id1554789764?mt=8'
     };
     const androidMarketURL = {
       wehago:
@@ -57,79 +60,83 @@ export default function DrawerContent(props) {
       fax: 'http://play.google.com/store/apps/details?id=cloudfax.co.kr.wehagofax',
       elecapproval:
         'http://play.google.com/store/apps/details?id=com.douzone.android.eapprovals',
-      atr: 'http://play.google.com/store/apps/details?id=com.douzone.android.attendance'
+      atr: 'http://play.google.com/store/apps/details?id=com.douzone.android.attendance',
+      rs10: 'http://play.google.com/store/apps/details?id=com.douzone.rs10.rs10viewer'
     };
 
-    const iosMarketURL_V = {
-      wehago: 'https://itunes.apple.com/app/id1505708178?mt=8',
-      wedrive: 'https://itunes.apple.com/app/id1568621593?mt=8',
-      fax: 'https://itunes.apple.com/app/id1490385513?mt=8',
-      elecapproval: 'https://itunes.apple.com/app/id1568651361?mt=8',
-      atr: 'https://itunes.apple.com/app/id1494995182?mt=8'
-    };
-    const androidMarketURL_V = {
-      wehago:
-        'https://play.google.com/store/apps/details?id=com.douzone.android.wehagov',
-      wedrive:
-        'http://play.google.com/store/apps/details?id=com.douzone.android.wedrive',
-      fax: 'http://play.google.com/store/apps/details?id=cloudfax.co.kr.wehagofax',
-      elecapproval:
-        'http://play.google.com/store/apps/details?id=com.wehagov.android.eapprovals',
-      atr: 'http://play.google.com/store/apps/details?id=com.wehagov.android.attendance'
-    };
-
+    // ('RS10Viewer://mDeviceKey=<DeivceKey>&mPORTAL_ID=<portalId>&mAuth_a_token=<auth_a_token>&mAuth_r_token=<auth_r_token>&cno=<company_no>');
     const iosURL = {
-      wehago: `wehago${isWehagoV ? 'v' : ''}://?`,
-      wedrive: `wedrive${isWehagoV ? 'v' : ''}://?`,
-      fax: `wehagofax${isWehagoV ? 'v' : ''}://?`,
-      elecapproval: `wehago${isWehagoV ? 'v' : ''}.eapprovals://?`,
-      atr: `wehago${isWehagoV ? 'v' : ''}.attendance://?`
+      wehago: `wehago://?`,
+      wedrive: `wedrive://?`,
+      fax: `wehagofax://?`,
+      elecapproval: `wehago.eapprovals://?`,
+      atr: `wehago.attendance://?`,
+      rs10: 'RS10Viewer://?'
     };
     const androidURL = {
-      wehago: `wehago${isWehagoV ? 'v' : ''}://app?name=meet&login=false`,
-      wedrive: `com.douzone.android.wedrive${isWehagoV ? '.v' : ''}://?`,
-      fax: `cloudfax.co.kr.wehago${isWehagoV ? 'v' : ''}fax://?`,
-      elecapproval: `wehago${isWehagoV ? 'v' : ''}.eapprovals://?`,
-      atr: `wehago${isWehagoV ? 'v' : ''}.attendance://?`
+      wehago: `wehago://app?name=meet&login=false`,
+      wedrive: `com.douzone.android.wedrive://?`,
+      fax: `cloudfax.co.kr.wehagofax://?`,
+      elecapproval: `wehago.eapprovals://?`,
+      atr: `wehago.attendance://?`,
+      rs10: 'com.douzone.rs10.rs10viewer://?'
     };
-    const commonLoginInfo = `&mPORTAL_ID=${auth.portal_id}&mHASH_KEY=${auth.HASH_KEY}&mAuth_r_token=${auth.AUTH_R_TOKEN}&mAuth_a_token=${auth.AUTH_A_TOKEN}&cno=${auth.cno}`;
-    const androidLoginInfo = `&portal_id=${auth.portal_id}&hash_key=${auth.HASH_KEY}&auth_r_token=${auth.AUTH_R_TOKEN}&auth_a_token=${auth.AUTH_A_TOKEN}&cno=${auth.cno}`;
 
-    Linking.openURL(
+    let deviceToken = type === 'rs10' ? await UserApi.getDeviceInfo(auth) : '';
+
+    const commonLoginInfo = `mPORTAL_ID=${auth.portal_id}&mHASH_KEY=${
+      auth.HASH_KEY
+    }&mAuth_r_token=${auth.AUTH_R_TOKEN}&mAuth_a_token=${
+      auth.AUTH_A_TOKEN
+    }&cno=${auth.cno}${
+      type === 'rs10' ? `&mDEVICE_TOKEN=${deviceToken?.thirdparty_a_token}` : ''
+    }`;
+
+    const androidLoginInfo = `portal_id=${auth.portal_id}&hash_key=${
+      auth.HASH_KEY
+    }&auth_r_token=${auth.AUTH_R_TOKEN}&auth_a_token=${auth.AUTH_A_TOKEN}&cno=${
+      auth.cno
+    }${
+      type === 'rs10' ? `&mDeviceKey=${deviceToken?.thirdparty_a_token}` : ''
+    }`;
+
+    /*
+      param = { 
+        mPORTAL_ID:auth.portal_id ... 
+      }
+      같은 형식으로 처리해서 보는게 더 깔끔할 것 같음 이렇게 수정 합시다
+    */
+    const url =
       type === 'wehago'
         ? os === 'ios'
           ? iosURL[type] + commonLoginInfo
           : androidURL[type] + androidLoginInfo
         : os === 'ios'
         ? iosURL[type] + commonLoginInfo
-        : androidURL[type] + commonLoginInfo
-    ).catch(err => {
-      if (!isWehagoV) {
-        Linking.openURL(
-          isWehagoV
-            ? os === 'ios'
-              ? iosMarketURL_V[type]
-              : androidMarketURL_V[type]
-            : os === 'ios'
-            ? iosMarketURL[type]
-            : androidMarketURL[type]
-        ).catch(err => {
-          setAlert({
-            type: 1,
-            title: t('alert_title_notion'),
-            message: t('alert_text_no_app_store')
-          });
-        });
-      } else {
+        : androidURL[type] + commonLoginInfo;
+
+    debugger;
+
+    Linking.openURL(url).catch(err => {
+      Linking.openURL(
+        os === 'ios' ? iosMarketURL[type] : androidMarketURL[type]
+      ).catch(err => {
         setAlert({
           type: 1,
           title: t('alert_title_notion'),
-          message: '앱을 다운로드 해주세요'
+          message: t('alert_text_no_app_store')
         });
-      }
+      });
     });
   };
-
+  const emptyIcon = () => (
+    <TouchableOpacity style={styles.shortcut}>
+      <>
+        <View style={styles.shortcutImage} />
+        <View style={styles.shortcutText} />
+      </>
+    </TouchableOpacity>
+  );
   const DrawerChild = () => (
     <View style={{ marginTop: 10 }}>
       <Text style={styles.serviceText}>{t('drawer_service')}</Text>
@@ -148,61 +155,75 @@ export default function DrawerContent(props) {
             </Text>
           </>
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            onClickShortcutIcon('wedrive');
-          }}
-          style={styles.shortcut}
-        >
-          <>
-            <Image source={btnWedrive} style={styles.shortcutImage} />
-            <Text style={styles.shortcutText}>
-              {t(isWehagoV ? 'drawer_storage_v' : 'drawer_storage')}
-            </Text>
-          </>
-        </TouchableOpacity>
 
-        <TouchableOpacity
-          onPress={() => {
-            onClickShortcutIcon('atr');
-          }}
-          style={styles.shortcut}
-        >
-          <>
-            <Image source={btnAtr} style={styles.shortcutImage} />
-            <Text style={styles.shortcutText}>
-              {t(isWehagoV ? 'drawer_attendance_v' : 'drawer_attendance')}
-            </Text>
-          </>
-        </TouchableOpacity>
+        {auth.membership_code !== 'C19' ? (
+          <TouchableOpacity
+            onPress={() => {
+              onClickShortcutIcon('wedrive');
+            }}
+            style={styles.shortcut}
+          >
+            <>
+              <Image source={btnWedrive} style={styles.shortcutImage} />
+              <Text style={styles.shortcutText}>
+                {t(isWehagoV ? 'drawer_storage_v' : 'drawer_storage')}
+              </Text>
+            </>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            onPress={() => {
+              onClickShortcutIcon('rs10');
+            }}
+            style={styles.shortcut}
+          >
+            <>
+              <Image source={btnRs10} style={styles.shortcutImage} />
+              <Text style={styles.shortcutText}>{'내PC원격접속'}</Text>
+            </>
+          </TouchableOpacity>
+        )}
+
+        {auth.membership_code !== 'C19' ? (
+          <TouchableOpacity
+            onPress={() => {
+              onClickShortcutIcon('atr');
+            }}
+            style={styles.shortcut}
+          >
+            <>
+              <Image source={btnAtr} style={styles.shortcutImage} />
+              <Text style={styles.shortcutText}>
+                {t(isWehagoV ? 'drawer_attendance_v' : 'drawer_attendance')}
+              </Text>
+            </>
+          </TouchableOpacity>
+        ) : (
+          emptyIcon()
+        )}
       </View>
 
       <View style={styles.shortcutRow}>
-        <TouchableOpacity
-          onPress={() => {
-            onClickShortcutIcon('elecapproval');
-          }}
-          style={styles.shortcut}
-        >
-          <>
-            <Image source={btnElecapproval} style={styles.shortcutImage} />
-            <Text style={styles.shortcutText}>
-              {t(isWehagoV ? 'drawer_eapprovals_v' : 'drawer_eapprovals')}
-            </Text>
-          </>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.shortcut}>
-          <>
-            <View style={styles.shortcutImage} />
-            <View style={styles.shortcutText} />
-          </>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.shortcut}>
-          <>
-            <View style={styles.shortcutImage} />
-            <View style={styles.shortcutText} />
-          </>
-        </TouchableOpacity>
+        {auth.membership_code !== 'C19' ? (
+          <TouchableOpacity
+            onPress={() => {
+              onClickShortcutIcon('elecapproval');
+            }}
+            style={styles.shortcut}
+          >
+            <>
+              <Image source={btnElecapproval} style={styles.shortcutImage} />
+              <Text style={styles.shortcutText}>
+                {t(isWehagoV ? 'drawer_eapprovals_v' : 'drawer_eapprovals')}
+              </Text>
+            </>
+          </TouchableOpacity>
+        ) : (
+          emptyIcon()
+        )}
+
+        {emptyIcon()}
+        {emptyIcon()}
       </View>
     </View>
   );

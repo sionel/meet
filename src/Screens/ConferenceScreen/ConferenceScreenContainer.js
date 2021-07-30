@@ -64,20 +64,17 @@ class ConferenceScreenContainer extends React.Component {
    */
   componentDidMount() {
     const { navigation, auth, dispatch, screenProps } = this.props;
-    if (!isTablet) {
-      Orientation.lockToPortrait();
-    } else {
-      Orientation.getOrientation(orientation => {
-        const status =
-          orientation === 'LANDSCAPE' ||
-          orientation === 'LANDSCAPE-LEFT' ||
-          orientation === 'LANDSCAPE-RIGHT';
-        this.setState({
-          orientation: status ? 'horizontal' : 'vertical'
-        });
+
+    Orientation.getOrientation(orientation => {
+      const status =
+        orientation === 'LANDSCAPE' ||
+        orientation === 'LANDSCAPE-LEFT' ||
+        orientation === 'LANDSCAPE-RIGHT';
+      this.setState({
+        orientation: status ? 'horizontal' : 'vertical'
       });
-      Orientation.addOrientationListener(this._handleOrientation);
-    }
+    });
+    Orientation.addOrientationListener(this._handleOrientation);
 
     if (screenProps.destination === 'Conference') {
       this.callType = screenProps.params.call_type;

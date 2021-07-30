@@ -34,13 +34,9 @@ export const meetURL = isDev
   : `https://api.wehago.com/video`;
 // export const meetURL = `http://localhost:8080/videodev`;
 
-export const wehagoDummyImageURL = `https://static.wehago${
-  isWehagoV ? 'v' : ''
-}.com/imgs/dummy/@dummy_02.jpg`; // 더미 프로필
+export const wehagoDummyImageURL = `https://static.wehago.com/imgs/dummy/@dummy_02.jpg`; // 더미 프로필
 
-export const wehagoStaticURL = `https://static.wehago${
-  isWehagoV ? 'v' : ''
-}.com`;
+export const wehagoStaticURL = `https://static.wehago.com`;
 
 /**
  * Querystring parser

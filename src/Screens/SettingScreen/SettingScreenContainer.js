@@ -25,9 +25,9 @@ class SettingScreenContainer extends React.Component {
     this._init();
     let tracks = await this._getTrack();
     let accesstype = this.props.screenProps?.params?.accesstype;
-    if (Platform.OS !== 'ios') {
-      Orientation.lockToPortrait();
-    }
+    // if (Platform.OS !== 'ios') {
+    //   Orientation.lockToPortrait();
+    // }
     Orientation.getOrientation(orientation => {
       const status =
         orientation === 'LANDSCAPE' ||
@@ -117,7 +117,8 @@ class SettingScreenContainer extends React.Component {
     let roomToken;
 
     const wedive = await MeetApi.checkWedrive(auth);
-    const { isServiceDeploy } = wedive.resultData;
+    
+    const isServiceDeploy = wedive ? wedive.resultData.isServiceDeploy : 'F';
     const randomstring = uuidv4();
     const user = randomstring.substr(0, 8);
 

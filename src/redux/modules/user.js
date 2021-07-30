@@ -3,7 +3,7 @@
  * user 스토어
  */
 
-import { UserApi } from '../../services';
+import { UserApi, ServiceCheckApi } from '../../services';
 import { actionCreators as wetalkActionCreators } from './wetalk';
 import { actionCreators as conferenceActionCreators } from './conference';
 
@@ -107,7 +107,8 @@ function loginCheckRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY, from) {
             )[0]
           : checkResult.resultData.employee_list[0], // last_access_company_no가 비어있는 상태로 올 수 있어서 null이 뜬다면 리스트중 첫번째 인덱스로 처리
         member_type: checkResult.resultData.member_type, // 0: 일반회원, 1: 개인회원
-        nickname: checkResult.nickname
+        nickname: checkResult.nickname,
+        membership_code: checkResult.resultData.employee_list[0].membership_code
       };
       dispatch(login(userData, from));
       return checkResult;

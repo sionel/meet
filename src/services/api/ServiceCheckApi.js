@@ -115,6 +115,29 @@ const checkPurchaseTEdge = async (auth, company) => {
   }
 };
 
+const checkMembership = async (AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno) => {
+  const url = `${wehagoBaseURL}common/market/membership?cno=${cno}`;
+  const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
+  try {
+    const data = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        ...headers
+      }
+    };
+    const response = await fetch(url, data);
+
+    if (response.status !== 200) {
+      throw response.resultCode;
+    }
+    return response.json();
+  } catch (err) {
+    console.warn('checkWedrive : ', err);
+    return false;
+  }
+};
+
 /**
  * 회사 상태 체크
  * @param {any} auth
@@ -190,5 +213,6 @@ const serviceCheck = async (auth, company, type) => {
 export default {
   serviceCheck,
   companyStatusCheck,
-  checkStatusType
+  checkStatusType,
+  checkMembership
 };

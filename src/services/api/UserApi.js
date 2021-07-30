@@ -22,8 +22,10 @@ import fetch from './Fetch';
  * TEST
  * 테스트 api
  */
-const test = () => {
-  fetch(`${tempBaseUrl}/posts`)
+const test = async auth => {
+  const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
+
+  fetch(`${wehagoBaseURL}/auth/fromsoftware/userDeviceInfo`)
     .then(response => response.json())
     .then(responseJson => responseJson)
     .catch(err => {
@@ -51,7 +53,7 @@ const getToken = async accessUrl => {
   } catch (err) {
     if (err.message === 'timeout') {
       await new Promise(res => {
-        alert('네트워크가 불안정합니다.')
+        alert('네트워크가 불안정합니다.');
       });
     }
     return false;
@@ -101,7 +103,7 @@ const login = async (user, captcha, access_pass) => {
     console.warn('er', err);
     if (err.message === 'timeout') {
       await new Promise(res => {
-        alert('네트워크가 불안정합니다.')
+        alert('네트워크가 불안정합니다.');
       });
     }
 
@@ -125,6 +127,34 @@ const logoutRequest = async auth => {
       headers
     };
 
+    const response = await fetch(url, data);
+    const responseJson = await response.json();
+    return responseJson.resultData;
+  } catch (err) {
+    console.warn('err', err);
+    return false;
+  }
+};
+
+const getDeviceInfo = async auth => {
+  const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
+
+  try {
+    const url = `${wehagoBaseURL}/auth/fromsoftware/settingUserDeviceInfo`;
+    const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
+    const param = {
+      device_id: DeviceInfo.getDeviceId(),
+      software_key: '328c574b-eda8-4ab4-a097-d063166a88c8',
+      software_name: 'RS10-i'
+    };
+    const data = {
+      method: 'POST',
+      headers: {
+        ...headers,
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      },
+      body: serialize(param)
+    };
     const response = await fetch(url, data);
     const responseJson = await response.json();
     return responseJson.resultData;
@@ -170,7 +200,7 @@ const check = async (a_token, r_token, cno, HASH_KEY) => {
     console.warn('errors', errors);
     if (errors.message === 'timeout') {
       await new Promise(res => {
-        alert('네트워크가 불안정합니다.')
+        alert('네트워크가 불안정합니다.');
       });
     }
     return { message: errors.message };
@@ -225,5 +255,6 @@ export default {
   login,
   logoutRequest,
   check,
-  changeCompany
+  changeCompany,
+  getDeviceInfo
 };
