@@ -71,20 +71,21 @@ export default function LoginInputContainer(props) {
     // 이상이 없는 회사일 경우 로그인 정상 진행
     if (statusCheck && statusCheck.code === 200) {
       // 서비스 구매여부 조회
-      const isPurchase = await ServiceCheckApi.serviceCheck(
+      const isDeployWebrtc = await ServiceCheckApi.serviceCheck(
         auth,
         auth.last_access_company_no,
-        'P' // 구매여부 확인
+        'webrtc' // 구매여부 확인
       );
       // 서비스 배포여부 조회
-      const isDeploy = await ServiceCheckApi.serviceCheck(
+      const isDeployWehagomeet = await ServiceCheckApi.serviceCheck(
         auth,
         auth.last_access_company_no,
-        'D' // 배포여부 확인
+        'wehagomeet' // 배포여부 확인
       );
+      const isDeploy = isDeployWehagomeet || isDeployWebrtc;
       props.setPermission(isDeploy);
       props.onChangeRootState({
-        destination: isPurchase ? 'List' : 'SelectCompany',
+        destination: isDeploy ? 'List' : 'SelectCompany',
         params: {
           accesstype: 'login'
         }

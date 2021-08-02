@@ -567,21 +567,24 @@ class SplashScreenContainer extends Component {
     let proceed;
     if (statusCheck && statusCheck.code === 200) {
       // 서비스 구매여부 조회
-      const isPurchase = await ServiceCheckApi.serviceCheck(
+      const isDeployWebrtc = await ServiceCheckApi.serviceCheck(
         this.props.auth,
         this.props.auth.last_company,
-        'P' // 구매여부 확인
+        'webrtc' // 구매여부 확인
       );
       // 서비스 배포여부 조회
-      const isDeploy = await ServiceCheckApi.serviceCheck(
+      const isDeployWehagomeet = await ServiceCheckApi.serviceCheck(
         this.props.auth,
         this.props.auth.last_company,
-        'D' // 배포여부 확인
+        'wehagomeet' // 배포여부 확인
       );
+
+      const isDeploy = isDeployWehagomeet || isDeployWebrtc;
+
       this.props.setPermission(isDeploy);
 
       // this.setState({ isLogin: true, hasService: isPurchase });
-      return isPurchase && isDeploy ? true : false;
+      return isDeploy
     } else if (statusCheck && statusCheck.code === 400) {
       // 회사에 이상이 있을 경우, 회사 선택 화면으로 이동
       proceed = await new Promise(resolve => {

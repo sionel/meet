@@ -177,16 +177,12 @@ const serviceCheck = async (auth, company, type) => {
     if (!isSP) return true;
 
     const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY } = auth;
-    const service_code = 'webrtc'; // 화상회의팩
     const params = serialize({
-      service_code,
+      type,
       cno: company.company_no,
       ccode: company.company_code
     });
-    const urlType =
-      type === 'P'
-        ? '/common/company/service/purchase/check' // 구매여부
-        : '/common/company/deploy/whether/employee'; // 배포여부
+    const urlType ='/common/company/deploy/whether/employee'; // 배포여부
     const url = `${wehagoBaseURL}${urlType}?${params}`;
 
     const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
@@ -198,8 +194,7 @@ const serviceCheck = async (auth, company, type) => {
 
     const responseJson = await response.json();
     if (responseJson.resultCode === 200) {
-      const reType = type === 'P' ? 'is_service_purchase' : 'isServiceDeploy'; // api 에 따라서 return 이 다름
-      const hasService = responseJson.resultData[reType] === 'T';
+      const hasService = responseJson.resultData['isServiceDeploy'] === 'T';
       return hasService;
     } else {
       return false;
