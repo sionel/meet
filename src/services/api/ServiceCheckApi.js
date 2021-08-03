@@ -171,18 +171,17 @@ const companyStatusCheck = async (auth, company) => {
  * @param {any} company
  * @param {string} type P: 구매, D: 배포
  */
-const serviceCheck = async (auth, company, type) => {
+const serviceCheck = async (auth, type) => {
   try {
     const isSP = auth.last_company.membership_code === 'SP';
     if (!isSP) return true;
 
-    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY } = auth;
+    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY ,cno} = auth;
     const params = serialize({
-      type,
-      cno: company.company_no,
-      ccode: company.company_code
+      service_code: type,
+      cno
     });
-    const urlType ='/common/company/deploy/whether/employee'; // 배포여부
+    const urlType = '/common/company/deploy/whether/employee'; // 배포여부
     const url = `${wehagoBaseURL}${urlType}?${params}`;
 
     const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
@@ -190,6 +189,41 @@ const serviceCheck = async (auth, company, type) => {
     const response = await fetch(url, {
       method: 'GET',
       headers
+    });
+
+    const responseJson = await response.json();
+    debugger;
+    if (responseJson.resultCode === 200) {
+      const hasService = responseJson.resultData['isServiceDeploy'] === 'T';
+      return hasService;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.warn('serviceCheck : ', err);
+    return false;
+  }
+};
+
+const anotherServiceCheck = async (auth, company, type) => {
+  try {
+    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY } = auth;
+    const params = serialize({
+      service_code: type,
+      cno: company.company_no
+      // ccode: company.company_code
+    });
+    const urlType = '/common/company/deploy/whether/employee'; // 배포여부
+    const url = `${wehagoBaseURL}${urlType}?${params}`;
+
+    const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        ...headers
+      }
     });
 
     const responseJson = await response.json();
@@ -209,5 +243,6 @@ export default {
   serviceCheck,
   companyStatusCheck,
   checkStatusType,
-  checkMembership
+  checkMembership,
+  anotherServiceCheck
 };

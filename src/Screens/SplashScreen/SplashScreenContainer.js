@@ -40,7 +40,7 @@ class SplashScreenContainer extends Component {
     // 강제종료 했을때를 위한 강제 초기화
     this.props.setInitInfo();
     this.props.setSharingMode();
-    
+
     if (this.props.url) {
       const m = getConferenceManager();
       await this._handleGetDeeplink(this.props.url);
@@ -518,7 +518,7 @@ class SplashScreenContainer extends Component {
         this.props.setAlert({
           type: 1,
           title: this.t('alert_title_login_fail'),
-          message:this.t('alert_text_duplicate_logout')
+          message: this.t('alert_text_duplicate_logout')
         });
       } else if (result.errors.status === '400') {
         this.props.setAlert({
@@ -569,13 +569,11 @@ class SplashScreenContainer extends Component {
       // 서비스 구매여부 조회
       const isDeployWebrtc = await ServiceCheckApi.serviceCheck(
         this.props.auth,
-        this.props.auth.last_company,
         'webrtc' // 구매여부 확인
       );
       // 서비스 배포여부 조회
       const isDeployWehagomeet = await ServiceCheckApi.serviceCheck(
         this.props.auth,
-        this.props.auth.last_company,
         'wehagomeet' // 배포여부 확인
       );
 
@@ -584,7 +582,7 @@ class SplashScreenContainer extends Component {
       this.props.setPermission(isDeploy);
 
       // this.setState({ isLogin: true, hasService: isPurchase });
-      return isDeploy
+      return isDeploy;
     } else if (statusCheck && statusCheck.code === 400) {
       // 회사에 이상이 있을 경우, 회사 선택 화면으로 이동
       proceed = await new Promise(resolve => {

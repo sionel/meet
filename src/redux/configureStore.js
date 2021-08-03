@@ -7,7 +7,7 @@ const env = process.env.NODE_ENV;
 import { applyMiddleware, createStore } from 'redux';
 import { persistStore, persistCombineReducers } from 'redux-persist';
 // import AsyncStorage from 'react-native-async-storage'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 // import storage from 'redux-persist/lib/storage';
 import thunk from 'redux-thunk';
 import local from './modules/local';
@@ -22,6 +22,7 @@ import webUser from './modules/webUser';
 import master from './modules/master';
 import alert from './modules/alert';
 import toast from './modules/toast';
+import deployed from './modules/deployed';
 /**
  * middleware list
  */
@@ -50,7 +51,8 @@ const persistConfig = {
     'webUser',
     'master',
     'alert',
-    'toast'
+    'toast',
+    'deployed'
   ]
 };
 
@@ -69,7 +71,8 @@ const reducer = persistCombineReducers(persistConfig, {
   webUser,
   master,
   alert,
-  toast
+  toast,
+  deployed
 });
 
 /**

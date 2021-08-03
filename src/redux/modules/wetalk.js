@@ -41,7 +41,7 @@ const initialState = {
 
 //#region Reducer
 
-reducer = (state = initialState, action) => {
+const reducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_LIST:
       return { ...state, list: action.list };

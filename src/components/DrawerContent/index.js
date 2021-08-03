@@ -6,7 +6,8 @@ import { actionCreators as AlertActions } from '../../redux/modules/alert';
 
 // map state to props
 const mapStateToProps = state => ({
-  auth: state.user.auth
+  auth: state.user.auth,
+  deployedServices : state.deployedServices
 });
 
 const mapDispatchToProps = dispatch => {

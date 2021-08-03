@@ -4,13 +4,14 @@ import { actionCreators as localActionCreators } from '../../../../redux/modules
 import { actionCreators as mainUserActionCreators } from '../../../../redux/modules/mainUser';
 
 const mapStateToProps = state => {
-  const { local, mainUser, user } = state;
+  const { local, mainUser, user, deployed } = state;
 
   return {
     conferenceMode: local.conferenceMode,
     isMuteVideo: local.user.isMuteVideo,
     documentListMode: mainUser.documentListMode,
-    memberType: user.auth.member_type // wehago one 사용자
+    memberType: user.auth.member_type, // wehago one 사용자
+    deployedServices: deployed.deployedServices
   };
 };
 

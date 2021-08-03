@@ -73,15 +73,14 @@ export default function LoginInputContainer(props) {
       // 서비스 구매여부 조회
       const isDeployWebrtc = await ServiceCheckApi.serviceCheck(
         auth,
-        auth.last_access_company_no,
         'webrtc' // 구매여부 확인
       );
       // 서비스 배포여부 조회
       const isDeployWehagomeet = await ServiceCheckApi.serviceCheck(
         auth,
-        auth.last_access_company_no,
         'wehagomeet' // 배포여부 확인
       );
+      debugger;
       const isDeploy = isDeployWehagomeet || isDeployWebrtc;
       props.setPermission(isDeploy);
       props.onChangeRootState({

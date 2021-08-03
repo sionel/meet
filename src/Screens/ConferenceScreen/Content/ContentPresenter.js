@@ -102,7 +102,6 @@ const ContentPresenter = props => {
               onChangeObjectFit={props.onChangeObjectFit}
               objectFit={props.objectFit}
               onChangeDrawingMode={props.onChangeDrawingMode}
-              isServiceDeploy={props.isServiceDeploy}
             />
           )}
         </View>

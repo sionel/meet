@@ -15,7 +15,7 @@ import { NavigationEvents } from 'react-navigation';
 import HomeScreenPresenter from './HomeScreenPresenter';
 
 // service
-import { WetalkApi, MeetApi } from '../../services';
+import { WetalkApi, MeetApi, ServiceCheckApi } from '../../services';
 import { querystringParser, isWehagoV } from '../../utils';
 
 import { getT } from '../../utils/translateManager';
@@ -48,6 +48,7 @@ class HomeScreenContainer extends Component {
   };
 
   async componentDidMount() {
+    this._getServices();
     // 화면 회전 처리
     Orientation.getOrientation(orientation => {
       this.setState({ orientation });
@@ -153,6 +154,38 @@ class HomeScreenContainer extends Component {
       </View>
     );
   }
+
+  _getServices = async () => {
+    const { auth, setDeployedServices } = this.props;
+
+    const neors = await ServiceCheckApi.anotherServiceCheck(
+      auth,
+      auth.last_company,
+      'neors'
+    );
+    const wedrive = await ServiceCheckApi.anotherServiceCheck(
+      auth,
+      auth.last_company,
+      'wedrive'
+    );
+    const attendance = await ServiceCheckApi.anotherServiceCheck(
+      auth,
+      auth.last_company,
+      'attendance'
+    );
+    const eapprovals = await ServiceCheckApi.anotherServiceCheck(
+      auth,
+      auth.last_company,
+      'eapprovals'
+    );
+    const isDeployedServices = ['wehago'];
+    neors && isDeployedServices.push('neors');
+    wedrive && isDeployedServices.push('wedrive');
+    attendance && isDeployedServices.push('attendance');
+    eapprovals && isDeployedServices.push('eapprovals');
+    setDeployedServices(isDeployedServices);
+    // this.setState({ isDeployedServices, ...this.state });
+  };
 
   _handleBackButton = () => {
     // if(this.props.navigation)
@@ -296,7 +329,6 @@ class HomeScreenContainer extends Component {
     // 재 로그인
 
     if (checkResult.errors) {
-
       if (checkResult.errors.code === 'E002') {
         this.props.setAlert({
           type: 1,

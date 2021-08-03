@@ -64,7 +64,7 @@ const TopAreaPresenter = props => {
           {/* 문서 공유 모드 */}
           {props.memberType !== 1 &&
             props.callType === 3 &&
-            props.isServiceDeploy === 'T' && (
+            props.deployedServices.includes('wedrive') && (
               <CustomButton
                 name="docShare"
                 width={28}

@@ -118,7 +118,6 @@ class SettingScreenContainer extends React.Component {
 
     const wedive = await MeetApi.checkWedrive(auth);
     
-    const isServiceDeploy = wedive ? wedive.resultData.isServiceDeploy : 'F';
     const randomstring = uuidv4();
     const user = randomstring.substr(0, 8);
 
@@ -163,7 +162,6 @@ class SettingScreenContainer extends React.Component {
           ...item,
           accesstype: params?.accesstype,
           externalUser: user,
-          isServiceDeploy
         }
       });
     }
