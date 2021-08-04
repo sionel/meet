@@ -66,15 +66,15 @@ target 'JitsiMeetSDK' do
   pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-async-storage/async-storage'
   pod 'RNDeviceInfo', :path => '../node_modules/react-native-device-info'
   pod 'RNGoogleSignin', :path => '../node_modules/@react-native-community/google-signin'
-  pod 'RNSound', :path => '../node_modules/react-native-sound'
   pod 'RNSVG', :path => '../node_modules/react-native-svg'
   pod 'RNWatch', :path => '../node_modules/react-native-watch-connectivity'
   pod 'RNDefaultPreference', :path => '../node_modules/react-native-default-preference'
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
 
     # 추가 외부 라이브러리
-    pod 'lottie-ios', :path => '../node_modules/lottie-ios'
-    # pod 'lottie-react-native', :path => '../node_modules/lottie-react-native'
+    # pod 'lottie-ios', :path => '../node_modules/lottie-ios'
+    pod 'lottie-react-native', :path => '../node_modules/lottie-react-native'
     # pod 'RNSVG', :path => '../node_modules/react-native-svg'
     pod 'react-native-orientation-locker', :path => '../node_modules/react-native-orientation-locker/react-native-orientation-locker.podspec'
     pod 'RNDeviceInfo', :path => '../node_modules/react-native-device-info'
@@ -87,7 +87,8 @@ target 'JitsiMeetSDK' do
     pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
     pod 'RNLocalize', :path => '../node_modules/react-native-localize'
     pod 'RNExitApp', :path => '../node_modules/react-native-exit-app'
-    
+    pod 'jail-monkey', :path => '../node_modules/jail-monkey'
+
   # Native pod dependencies
   #
 

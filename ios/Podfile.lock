@@ -106,6 +106,21 @@ PODS:
     - AppAuth/Core (~> 1.4)
     - GTMSessionFetcher/Core (~> 1.5)
   - GTMSessionFetcher/Core (1.6.1)
+  - jail-monkey (2.6.0):
+    - React-Core
+  - libwebp (1.2.0):
+    - libwebp/demux (= 1.2.0)
+    - libwebp/mux (= 1.2.0)
+    - libwebp/webp (= 1.2.0)
+  - libwebp/demux (1.2.0):
+    - libwebp/webp
+  - libwebp/mux (1.2.0):
+    - libwebp/demux
+  - libwebp/webp (1.2.0)
+  - lottie-ios (3.1.9)
+  - lottie-react-native (3.5.0):
+    - lottie-ios (~> 3.1.8)
+    - React
   - nanopb (1.30906.0):
     - nanopb/decode (= 1.30906.0)
     - nanopb/encode (= 1.30906.0)
@@ -114,6 +129,8 @@ PODS:
   - ObjectiveDropboxOfficial (3.9.4)
   - PromisesObjC (1.2.12)
   - RCTRequired (0.61.5-jitsi.2)
+  - RCTRestart (0.0.14):
+    - React
   - RCTTypeSafety (0.61.5-jitsi.2):
     - FBLazyVector (= 0.61.5-jitsi.2)
     - Folly (= 2018.10.22.00)
@@ -278,12 +295,14 @@ PODS:
   - React-jsinspector (0.61.5-jitsi.2)
   - react-native-background-timer (2.4.0):
     - React
-  - react-native-calendar-events (2.0.0):
+  - react-native-calendar-events (1.6.4):
     - React
   - react-native-keep-awake (4.0.0):
     - React
   - react-native-netinfo (4.1.5):
     - React
+  - react-native-orientation-locker (1.3.1):
+    - React-Core
   - react-native-slider (3.0.3):
     - React
   - react-native-splash-screen (3.2.0):
@@ -351,24 +370,41 @@ PODS:
     - React-jsi (= 0.61.5-jitsi.2)
     - ReactCommon/jscallinvoker (= 0.61.5-jitsi.2)
     - ReactCommon/turbomodule/core (= 0.61.5-jitsi.2)
-  - RNCAsyncStorage (1.15.5):
-    - React-Core
+  - ReactNativePermissions (1.2.1):
+    - React
+  - RNCAsyncStorage (1.13.2):
+    - React
   - RNDefaultPreference (1.4.2):
     - React
   - RNDeviceInfo (8.0.0):
     - React-Core
-  - RNGoogleSignin (3.0.1):
+  - RNExitApp (1.1.0):
+    - React
+  - RNFastImage (7.0.2):
+    - React
+    - SDWebImage (~> 5.0)
+    - SDWebImageWebPCoder (~> 0.2.3)
+  - RNGestureHandler (1.5.2):
+    - React
+  - RNGoogleSignin (5.0.0):
     - GoogleSignIn (~> 5.0.0)
-    - React
-  - RNSound (0.11.0):
-    - React
-    - RNSound/Core (= 0.11.0)
-  - RNSound/Core (0.11.0):
+    - React-Core
+  - RNLocalize (2.0.2):
+    - React-Core
+  - RNSketchCanvas (0.8.0):
     - React
   - RNSVG (12.1.0):
     - React
+  - RNVectorIcons (6.7.0):
+    - React
   - RNWatch (0.4.3):
     - React
+  - SDWebImage (5.11.1):
+    - SDWebImage/Core (= 5.11.1)
+  - SDWebImage/Core (5.11.1)
+  - SDWebImageWebPCoder (0.2.5):
+    - libwebp (~> 1.0)
+    - SDWebImage/Core (~> 5.0)
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -381,8 +417,11 @@ DEPENDENCIES:
   - Firebase/DynamicLinks (~> 6.33.0)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
+  - jail-monkey (from `../node_modules/jail-monkey`)
+  - lottie-react-native (from `../node_modules/lottie-react-native`)
   - ObjectiveDropboxOfficial (~> 3.9.4)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired/`)
+  - RCTRestart (from `../node_modules/react-native-restart`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety/`)
   - React (from `../node_modules/react-native/`)
   - React-Core/CoreModulesHeaders (from `../node_modules/react-native/`)
@@ -397,6 +436,7 @@ DEPENDENCIES:
   - react-native-calendar-events (from `../node_modules/react-native-calendar-events`)
   - react-native-keep-awake (from `../node_modules/react-native-keep-awake`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
+  - react-native-orientation-locker (from `../node_modules/react-native-orientation-locker/react-native-orientation-locker.podspec`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
   - react-native-video (from `../node_modules/react-native-video/react-native-video.podspec`)
@@ -412,12 +452,18 @@ DEPENDENCIES:
   - React-RCTText (from `../node_modules/react-native/Libraries/Text`)
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - ReactCommon/turbomodule (from `../node_modules/react-native/ReactCommon`)
+  - ReactNativePermissions (from `../node_modules/react-native-permissions`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - RNDefaultPreference (from `../node_modules/react-native-default-preference`)
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
+  - RNExitApp (from `../node_modules/react-native-exit-app`)
+  - RNFastImage (from `../node_modules/react-native-fast-image`)
+  - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "RNGoogleSignin (from `../node_modules/@react-native-community/google-signin`)"
-  - RNSound (from `../node_modules/react-native-sound`)
+  - RNLocalize (from `../node_modules/react-native-localize`)
+  - "RNSketchCanvas (from `../node_modules/@terrylinla/react-native-sketch-canvas`)"
   - RNSVG (from `../node_modules/react-native-svg`)
+  - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - RNWatch (from `../node_modules/react-native-watch-connectivity`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -439,9 +485,13 @@ SPEC REPOS:
     - GoogleUtilities
     - GTMAppAuth
     - GTMSessionFetcher
+    - libwebp
+    - lottie-ios
     - nanopb
     - ObjectiveDropboxOfficial
     - PromisesObjC
+    - SDWebImage
+    - SDWebImageWebPCoder
 
 EXTERNAL SOURCES:
   DoubleConversion:
@@ -454,8 +504,14 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/Folly.podspec"
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
+  jail-monkey:
+    :path: "../node_modules/jail-monkey"
+  lottie-react-native:
+    :path: "../node_modules/lottie-react-native"
   RCTRequired:
     :path: "../node_modules/react-native/Libraries/RCTRequired/"
+  RCTRestart:
+    :path: "../node_modules/react-native-restart"
   RCTTypeSafety:
     :path: "../node_modules/react-native/Libraries/TypeSafety/"
   React:
@@ -480,6 +536,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-keep-awake"
   react-native-netinfo:
     :path: "../node_modules/@react-native-community/netinfo"
+  react-native-orientation-locker:
+    :path: "../node_modules/react-native-orientation-locker/react-native-orientation-locker.podspec"
   react-native-slider:
     :path: "../node_modules/@react-native-community/slider"
   react-native-splash-screen:
@@ -510,18 +568,30 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/Libraries/Vibration"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  ReactNativePermissions:
+    :path: "../node_modules/react-native-permissions"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNDefaultPreference:
     :path: "../node_modules/react-native-default-preference"
   RNDeviceInfo:
     :path: "../node_modules/react-native-device-info"
+  RNExitApp:
+    :path: "../node_modules/react-native-exit-app"
+  RNFastImage:
+    :path: "../node_modules/react-native-fast-image"
+  RNGestureHandler:
+    :path: "../node_modules/react-native-gesture-handler"
   RNGoogleSignin:
     :path: "../node_modules/@react-native-community/google-signin"
-  RNSound:
-    :path: "../node_modules/react-native-sound"
+  RNLocalize:
+    :path: "../node_modules/react-native-localize"
+  RNSketchCanvas:
+    :path: "../node_modules/@terrylinla/react-native-sketch-canvas"
   RNSVG:
     :path: "../node_modules/react-native-svg"
+  RNVectorIcons:
+    :path: "../node_modules/react-native-vector-icons"
   RNWatch:
     :path: "../node_modules/react-native-watch-connectivity"
   Yoga:
@@ -549,10 +619,15 @@ SPEC CHECKSUMS:
   GoogleUtilities: 7f2f5a07f888cdb145101d6042bc4422f57e70b3
   GTMAppAuth: ad5c2b70b9a8689e1a04033c9369c4915bfcbe89
   GTMSessionFetcher: 36689134877faeb055b27dfa4ccc9ceaa42e029e
+  jail-monkey: 07b83767601a373db876e939b8dbf3f5eb15f073
+  libwebp: e90b9c01d99205d03b6bb8f2c8c415e5a4ef66f0
+  lottie-ios: 3a3758ef5a008e762faec9c9d50a39842f26d124
+  lottie-react-native: 1fb4ce21d6ad37dab8343eaff8719df76035bd93
   nanopb: 59317e09cf1f1a0af72f12af412d54edf52603fc
   ObjectiveDropboxOfficial: a5afefc83f6467c42c45f2253f583f2ad1ffc701
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   RCTRequired: a686731276578c125dff205f08b6ec9cee6ede32
+  RCTRestart: f1ebdc8018ad1487f25d5098aae2510cccb064b4
   RCTTypeSafety: 88e5500e801c00d16a3d1895e3470d13beed6584
   React: 8b2bcf6a93846e47a7a365a54ec6edeb78b37701
   React-Core: 3fbdbc87c18c4742b735ff9a0c02fa38c87e0fba
@@ -562,9 +637,10 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 67106691c60030ec888d7cbbc4f48a3168e27a02
   React-jsinspector: 92ceee6c66dc19886289b52436ade7e020b89602
   react-native-background-timer: e0384ea2fa5a98f67f84f9c4dc274260ddd674ed
-  react-native-calendar-events: 1442fad71a00388f933cfa25512588fec300fcf8
+  react-native-calendar-events: ee9573e355711ac679e071be70789542431f4ce3
   react-native-keep-awake: eba3137546b10003361b37c761f6c429b59814ae
   react-native-netinfo: 8d8db463bcc5db66a8ac5c48a7d86beb3b92f61a
+  react-native-orientation-locker: 998c0744e26624407dac068c04c605b4af7304a2
   react-native-slider: b733e17fdd31186707146debf1f04b5d94aa1a93
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
   react-native-video: 1574074179ecaf6a9dd067116c8f31bf9fec15c8
@@ -580,15 +656,23 @@ SPEC CHECKSUMS:
   React-RCTText: 4f1b99f228278d2a5e9008eced8dc9c974c4a270
   React-RCTVibration: c1041024893fdfdb8371e7c720c437751b711676
   ReactCommon: 18014e1d98dbeb9141e935cfe35fc93bd511ffb6
-  RNCAsyncStorage: 8324611026e8dc3706f829953aa6e3899f581589
+  ReactNativePermissions: e7db6c38a2f3fb8f26dbfdcaeb5c5e9364657a6d
+  RNCAsyncStorage: bc2f81cc1df90c267ce9ed30bb2dbc93b945a8ee
   RNDefaultPreference: 56a405ce61033ac77b95004dccd7ac54c2eb50d1
   RNDeviceInfo: 72ded653ce636b3f03571e90bed99309a714944e
-  RNGoogleSignin: 39336070b35fc4cea6a98cf111e00480317be0ae
-  RNSound: c980916b596cc15c8dcd2f6ecd3b13c4881dbe20
+  RNExitApp: 7d81855142a4d11eb75f4f06fdebf5a950d7aef2
+  RNFastImage: 9b0c22643872bb7494c8d87bbbb66cc4c0d9e7a2
+  RNGestureHandler: 946a7691e41df61e2c4b1884deab41a4cdc3afff
+  RNGoogleSignin: ad866d4c4af2651e36801dd3b7771d7715353499
+  RNLocalize: 47e22ef8c36df1d572e42a87c8ae22e3fcf551dd
+  RNSketchCanvas: 6939b18677cd1794151cc3d8eb5a0a2158a4a05b
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
+  RNVectorIcons: 368d6d8b8301224e5ffb6254191f4f8876c2be0d
   RNWatch: a5320c959c75e72845c07985f3e935e58998f1d3
+  SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
+  SDWebImageWebPCoder: 947093edd1349d820c40afbd9f42acb6cdecd987
   Yoga: 96b469c5e81ff51b917b92e8c3390642d4ded30c
 
-PODFILE CHECKSUM: f4db44d934caeae7212dbaa33abe62ed164363e8
+PODFILE CHECKSUM: 3af50af410cbba43185218788ae80f362c23a602
 
 COCOAPODS: 1.10.1
