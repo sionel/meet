@@ -11,6 +11,8 @@ import AlertScreen from './src/Screens/AlertScreen';
 import { withTranslation } from 'react-i18next';
 import './src/locales';
 import { setT } from './src/utils/translateManager';
+
+import Splash from 'react-native-splash-screen'
 // import { io } from "socket.io-client";
 
 const { persistor, store } = configureStore();
@@ -28,6 +30,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+    Splash.hide()
     Linking.addEventListener('url', event => {
       this.setState({ loaded: false, url: event.url });
     });
