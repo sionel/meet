@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>ko</string>
+	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>WEHAGO Meet</string>
+	<string>Jitsi Meet</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -17,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>$(MARKETING_VERSION)</string>
+	<string>21.2.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -26,10 +26,10 @@
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>CFBundleURLName</key>
-			<string>wehago.meet</string>
+			<string>org.jitsi.meet</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>wehago.meet</string>
+				<string>org.jitsi.meet</string>
 			</array>
 		</dict>
 		<dict>
@@ -44,7 +44,9 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<string>1</string>
+	<key>FirebaseCrashlyticsCollectionEnabled</key>
+	<string>false</string>
 	<key>FirebaseScreenReportingEnabled</key>
 	<false/>
 	<key>ITSAppUsesNonExemptEncryption</key>
@@ -53,8 +55,6 @@
 	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
 		<key>NSExceptionDomains</key>
 		<dict>
 			<key>localhost</key>
@@ -64,36 +64,22 @@
 			</dict>
 		</dict>
 	</dict>
-	<key>NSAppleMusicUsageDescription</key>
-	<string>Apple Music Usage Description</string>
-	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>Bluetooth Always Usage Description</string>
-	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>Bluetooth Peripheral Usage Description</string>
 	<key>NSCalendarsUsageDescription</key>
 	<string>See your scheduled meetings in the app.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>test</string>
-	<key>NSContactsUsageDescription</key>
-	<string>Contacts Usage Description</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>test</string>
-	<key>NSMotionUsageDescription</key>
-	<string>Motion Usage Description</string>
-	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>Speech Recognition Usage Description</string>
+	<string>Participate in meetings with video.</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Local network is used for establishing Peer-to-Peer connections.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Participate in meetings with voice.</string>
 	<key>NSUserActivityTypes</key>
 	<array>
 		<string>org.jitsi.JitsiMeet.ios.conference</string>
 	</array>
-	<key>UIAppFonts</key>
-	<array>
-		<string>Fonts/AntDesign.ttf</string>
-		<string>Fonts/FontAwesome.ttf</string>
-		<string>Fonts/DOUZONEText10.ttf</string>
-		<string>Fonts/DOUZONEText30.ttf</string>
-		<string>Fonts/DOUZONEText50.ttf</string>
-	</array>
+	<key>RTCAppGroupIdentifier</key>
+	<string>group.org.jitsi.meet.appgroup</string>
+	<key>RTCScreenSharingExtension</key>
+	<string>org.jitsi.meet.broadcast.extension</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>
@@ -101,7 +87,7 @@
 		<string>voip</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
-	<string>Launch Screen</string>
+	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -109,7 +95,7 @@
 		<string>armv7</string>
 	</array>
 	<key>UIStatusBarStyle</key>
-	<string>UIStatusBarStyleDefault</string>
+	<string>UIStatusBarStyleLightContent</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
@@ -117,11 +103,7 @@
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
-	<key>UIUserInterfaceStyle</key>
-	<string>Light</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>firebase_crashlytics_collection_enabled</key>
-	<string>false</string>
 </dict>
 </plist>

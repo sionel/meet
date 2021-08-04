@@ -1,9 +1,0 @@
-/* 
-  InfoPlist.strings
-  app
-
-  Created by 최은우 on 2021/03/24.
-  Copyright © 2021 Facebook. All rights reserved.
-*/
-NSCameraUsageDescription = "Give them access so they can see you during a video call.";
-NSMicrophoneUsageDescription = "Give them access so they can hear you while on a call.";
