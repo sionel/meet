@@ -9,8 +9,8 @@ THE_MVN_REPO=${MVN_REPO:-${1:-$DEFAULT_MVN_REPO}}
 MVN_HTTP=0
 DEFAULT_SDK_VERSION=$(grep sdkVersion ${THIS_DIR}/../gradle.properties | cut -d"=" -f2)
 SDK_VERSION=${OVERRIDE_SDK_VERSION:-${DEFAULT_SDK_VERSION}}
-RN_VERSION=$(jq -r '.version' ${THIS_DIR}/../../node_modules/react-native/package.json)
-JSC_VERSION="r"$(jq -r '.dependencies."jsc-android"' ${THIS_DIR}/../../node_modules/react-native/package.json | cut -d . -f 1 | cut -c 2-)
+RN_VERSION=$(jq -r '.version' ${THIS_DIR}/../../../node_modules/react-native/package.json)
+JSC_VERSION="r"$(jq -r '.dependencies."jsc-android"' ${THIS_DIR}/../../../node_modules/react-native/package.json | cut -d . -f 1 | cut -c 2-)
 DO_GIT_TAG=${GIT_TAG:-0}
 
 if [[ $THE_MVN_REPO == http* ]]; then
@@ -28,7 +28,7 @@ echo "Using ${MVN_REPO} as the Maven repo"
 if [[ $MVN_HTTP == 1 ]]; then
     # Push React Native
     echo "Pushing React Native ${RN_VERSION} to the Maven repo"
-    pushd ${THIS_DIR}/../../node_modules/react-native/android/com/facebook/react/react-native/${RN_VERSION}
+    pushd ${THIS_DIR}/../../../node_modules/react-native/android/com/facebook/react/react-native/${RN_VERSION}
     mvn \
         deploy:deploy-file \
         -Durl=${MVN_REPO} \
@@ -40,7 +40,7 @@ if [[ $MVN_HTTP == 1 ]]; then
     popd
     # Push JSC
     echo "Pushing JSC ${JSC_VERSION} to the Maven repo"
-    pushd ${THIS_DIR}/../../node_modules/jsc-android/dist/org/webkit/android-jsc/${JSC_VERSION}
+    pushd ${THIS_DIR}/../../../node_modules/jsc-android/dist/org/webkit/android-jsc/${JSC_VERSION}
     mvn \
         deploy:deploy-file \
         -Durl=${MVN_REPO} \
@@ -54,7 +54,7 @@ else
     # Push React Native, if necessary
     if [[ ! -d ${MVN_REPO}/com/facebook/react/react-native/${RN_VERSION} ]]; then
         echo "Pushing React Native ${RN_VERSION} to the Maven repo"
-        pushd ${THIS_DIR}/../../node_modules/react-native/android/com/facebook/react/react-native/${RN_VERSION}
+        pushd ${THIS_DIR}/../../../node_modules/react-native/android/com/facebook/react/react-native/${RN_VERSION}
         mvn \
             deploy:deploy-file \
             -Durl=${MVN_REPO} \
@@ -68,7 +68,7 @@ else
     # Push JSC, if necessary
     if [[ ! -d ${MVN_REPO}/org/webkit/android-jsc/${JSC_VERSION} ]]; then
         echo "Pushing JSC ${JSC_VERSION} to the Maven repo"
-        pushd ${THIS_DIR}/../../node_modules/jsc-android/dist/org/webkit/android-jsc/${JSC_VERSION}
+        pushd ${THIS_DIR}/../../../node_modules/jsc-android/dist/org/webkit/android-jsc/${JSC_VERSION}
         mvn \
             deploy:deploy-file \
             -Durl=${MVN_REPO} \

@@ -71,7 +71,6 @@ dependencies {
     implementation project(':react-native-immersive')
     implementation project(':react-native-keep-awake')
     implementation project(':react-native-slider')
-    implementation project(':react-native-sound')
     implementation project(':react-native-splash-screen')
     implementation project(':react-native-svg')
     implementation project(':react-native-video')
@@ -149,34 +148,6 @@ android.libraryVariants.all { def variant ->
     mergeAssetsTask.dependsOn(currentBundleTask)
     mergeResourcesTask.dependsOn(currentBundleTask)
 
-    mergeAssetsTask.doLast {
-        def assetsDir = mergeAssetsTask.outputDir.get()
-
-        // Bundle sounds
-        //
-        copy {
-            from("${projectDir}/../../sounds/incomingMessage.wav")
-            from("${projectDir}/../../sounds/joined.wav")
-            from("${projectDir}/../../sounds/left.wav")
-            from("${projectDir}/../../sounds/liveStreamingOn.mp3")
-            from("${projectDir}/../../sounds/liveStreamingOff.mp3")
-            from("${projectDir}/../../sounds/outgoingRinging.wav")
-            from("${projectDir}/../../sounds/outgoingStart.wav")
-            from("${projectDir}/../../sounds/recordingOn.mp3")
-            from("${projectDir}/../../sounds/recordingOff.mp3")
-            from("${projectDir}/../../sounds/rejected.wav")
-            into("${assetsDir}/sounds")
-        }
-
-        // Copy React assets
-        //
-        if (currentBundleTask.enabled) {
-            copy {
-                from(jsBundleFile)
-                into(assetsDir)
-            }
-        }
-    }
 
     mergeResourcesTask.doLast {
         // Copy React resources
