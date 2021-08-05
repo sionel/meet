@@ -1,6 +1,6 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.wehago.meet"
+    package="org.jitsi.meet"
     android:installLocation="auto">
   <application
       android:allowBackup="true"
@@ -36,7 +36,7 @@
         <action android:name="android.intent.action.VIEW" />
         <category android:name="android.intent.category.BROWSABLE" />
         <category android:name="android.intent.category.DEFAULT" />
-        <data android:scheme="com.wehago.meet" />
+        <data android:scheme="org.jitsi.meet" />
       </intent-filter>
     </activity>
   </application>
