@@ -206,7 +206,7 @@
 
 #pragma mark - Property getter / setters
 
-- (NSArray<NSString *> *)universalLinkDomains {
+- (NSArray<NSString *> *) {
     return _universalLinkDomains ? _universalLinkDomains : @[];
 }
 
