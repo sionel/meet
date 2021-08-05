@@ -190,8 +190,14 @@ class ReactInstanceManagerHolder {
                 new com.reactnativecommunity.slider.ReactSliderPackage(),
                 new com.reactnativecommunity.webview.RNCWebViewPackage(),
                 new com.rnimmersive.RNImmersivePackage(),
-                new com.zmxv.RNSound.RNSoundPackage(),
                 new com.brentvatne.react.ReactVideoPackage(),
+
+                new com.zoontek.rnlocalize.RNLocalizePackage(),
+                new com.swmansion.gesturehandler.react.RNGestureHandlerPackage(),
+                new org.wonday.orientation.OrientationPackage(),
+                new com.dylanvann.fastimage.FastImageViewPackage(),
+                new com.terrylinla.rnsketchcanvas.SketchCanvasPackage(),
+
                 new ReactPackageAdapter() {
                     @Override
                     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {

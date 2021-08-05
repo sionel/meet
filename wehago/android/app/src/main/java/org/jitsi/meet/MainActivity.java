@@ -81,7 +81,7 @@ public class MainActivity extends JitsiMeetActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        JitsiMeet.showSplashScreen(this);
+        // JitsiMeet.showSplashScreen(this);
         super.onCreate(savedInstanceState);
     }
 
