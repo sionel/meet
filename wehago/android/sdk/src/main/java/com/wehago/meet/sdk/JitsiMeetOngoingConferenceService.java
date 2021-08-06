@@ -27,7 +27,7 @@ import android.os.IBinder;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import org.jitsi.meet.sdk.log.JitsiMeetLogger;
+import com.wehago.meet.sdk.log.JitsiMeetLogger;
 
 /**
  * This class implements an Android {@link Service}, a foreground one specifically, and it's

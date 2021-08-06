@@ -23,7 +23,7 @@ import android.os.Bundle;
 import com.facebook.react.ReactInstanceManager;
 
 import org.devio.rn.splashscreen.SplashScreen;
-import org.jitsi.meet.sdk.log.JitsiMeetLogger;
+import com.wehago.meet.sdk.log.JitsiMeetLogger;
 
 public class JitsiMeet {
 

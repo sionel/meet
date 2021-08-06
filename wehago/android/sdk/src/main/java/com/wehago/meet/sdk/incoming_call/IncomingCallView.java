@@ -22,8 +22,8 @@ import androidx.annotation.NonNull;
 
 import com.facebook.react.bridge.ReadableMap;
 
-import org.jitsi.meet.sdk.BaseReactView;
-import org.jitsi.meet.sdk.ListenerUtils;
+import com.wehago.meet.sdk.BaseReactView;
+import com.wehago.meet.sdk.ListenerUtils;
 
 import java.lang.reflect.Method;
 import java.util.Map;

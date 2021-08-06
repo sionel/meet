@@ -25,7 +25,7 @@ import androidx.annotation.RequiresApi;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jitsi.meet.sdk.log.JitsiMeetLogger;
+import com.wehago.meet.sdk.log.JitsiMeetLogger;
 
 
 /**

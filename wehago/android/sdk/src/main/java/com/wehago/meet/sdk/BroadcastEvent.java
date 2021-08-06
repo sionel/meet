@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import com.facebook.react.bridge.ReadableMap;
 
-import org.jitsi.meet.sdk.log.JitsiMeetLogger;
+import com.wehago.meet.sdk.log.JitsiMeetLogger;
 
 import java.util.HashMap;
 
@@ -75,18 +75,18 @@ public class BroadcastEvent {
     }
 
     public enum Type {
-        CONFERENCE_JOINED("org.jitsi.meet.CONFERENCE_JOINED"),
-        CONFERENCE_TERMINATED("org.jitsi.meet.CONFERENCE_TERMINATED"),
-        CONFERENCE_WILL_JOIN("org.jitsi.meet.CONFERENCE_WILL_JOIN"),
-        AUDIO_MUTED_CHANGED("org.jitsi.meet.AUDIO_MUTED_CHANGED"),
-        PARTICIPANT_JOINED("org.jitsi.meet.PARTICIPANT_JOINED"),
-        PARTICIPANT_LEFT("org.jitsi.meet.PARTICIPANT_LEFT"),
-        ENDPOINT_TEXT_MESSAGE_RECEIVED("org.jitsi.meet.ENDPOINT_TEXT_MESSAGE_RECEIVED"),
-        SCREEN_SHARE_TOGGLED("org.jitsi.meet.SCREEN_SHARE_TOGGLED"),
-        PARTICIPANTS_INFO_RETRIEVED("org.jitsi.meet.PARTICIPANTS_INFO_RETRIEVED"),
-        CHAT_MESSAGE_RECEIVED("org.jitsi.meet.CHAT_MESSAGE_RECEIVED"),
-        CHAT_TOGGLED("org.jitsi.meet.CHAT_TOGGLED"),
-        VIDEO_MUTED_CHANGED("org.jitsi.meet.VIDEO_MUTED_CHANGED");
+        CONFERENCE_JOINED("com.wehago.meet.CONFERENCE_JOINED"),
+        CONFERENCE_TERMINATED("com.wehago.meet.CONFERENCE_TERMINATED"),
+        CONFERENCE_WILL_JOIN("com.wehago.meet.CONFERENCE_WILL_JOIN"),
+        AUDIO_MUTED_CHANGED("com.wehago.meet.AUDIO_MUTED_CHANGED"),
+        PARTICIPANT_JOINED("com.wehago.meet.PARTICIPANT_JOINED"),
+        PARTICIPANT_LEFT("com.wehago.meet.PARTICIPANT_LEFT"),
+        ENDPOINT_TEXT_MESSAGE_RECEIVED("com.wehago.meet.ENDPOINT_TEXT_MESSAGE_RECEIVED"),
+        SCREEN_SHARE_TOGGLED("com.wehago.meet.SCREEN_SHARE_TOGGLED"),
+        PARTICIPANTS_INFO_RETRIEVED("com.wehago.meet.PARTICIPANTS_INFO_RETRIEVED"),
+        CHAT_MESSAGE_RECEIVED("com.wehago.meet.CHAT_MESSAGE_RECEIVED"),
+        CHAT_TOGGLED("com.wehago.meet.CHAT_TOGGLED"),
+        VIDEO_MUTED_CHANGED("com.wehago.meet.VIDEO_MUTED_CHANGED");
 
 
         private static final String CONFERENCE_WILL_JOIN_NAME = "CONFERENCE_WILL_JOIN";

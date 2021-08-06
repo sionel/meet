@@ -26,7 +26,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.module.annotations.ReactModule;
 
-import org.jitsi.meet.sdk.log.JitsiMeetLogger;
+import com.wehago.meet.sdk.log.JitsiMeetLogger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

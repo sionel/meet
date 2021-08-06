@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import com.facebook.react.bridge.WritableNativeMap;
 
-import org.jitsi.meet.sdk.log.JitsiMeetLogger;
+import com.wehago.meet.sdk.log.JitsiMeetLogger;
 
 import java.util.HashMap;
 
@@ -68,15 +68,15 @@ public class BroadcastAction {
     }
 
     enum Type {
-        SET_AUDIO_MUTED("org.jitsi.meet.SET_AUDIO_MUTED"),
-        HANG_UP("org.jitsi.meet.HANG_UP"),
-        SEND_ENDPOINT_TEXT_MESSAGE("org.jitsi.meet.SEND_ENDPOINT_TEXT_MESSAGE"),
-        TOGGLE_SCREEN_SHARE("org.jitsi.meet.TOGGLE_SCREEN_SHARE"),
-        RETRIEVE_PARTICIPANTS_INFO("org.jitsi.meet.RETRIEVE_PARTICIPANTS_INFO"),
-        OPEN_CHAT("org.jitsi.meet.OPEN_CHAT"),
-        CLOSE_CHAT("org.jitsi.meet.CLOSE_CHAT"),
-        SEND_CHAT_MESSAGE("org.jitsi.meet.SEND_CHAT_MESSAGE"),
-        SET_VIDEO_MUTED("org.jitsi.meet.SET_VIDEO_MUTED");
+        SET_AUDIO_MUTED("com.wehago.meet.SET_AUDIO_MUTED"),
+        HANG_UP("com.wehago.meet.HANG_UP"),
+        SEND_ENDPOINT_TEXT_MESSAGE("com.wehago.meet.SEND_ENDPOINT_TEXT_MESSAGE"),
+        TOGGLE_SCREEN_SHARE("com.wehago.meet.TOGGLE_SCREEN_SHARE"),
+        RETRIEVE_PARTICIPANTS_INFO("com.wehago.meet.RETRIEVE_PARTICIPANTS_INFO"),
+        OPEN_CHAT("com.wehago.meet.OPEN_CHAT"),
+        CLOSE_CHAT("com.wehago.meet.CLOSE_CHAT"),
+        SEND_CHAT_MESSAGE("com.wehago.meet.SEND_CHAT_MESSAGE"),
+        SET_VIDEO_MUTED("com.wehago.meet.SET_VIDEO_MUTED");
 
         private final String action;
 

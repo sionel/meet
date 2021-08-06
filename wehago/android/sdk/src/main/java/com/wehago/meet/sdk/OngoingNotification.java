@@ -27,7 +27,7 @@ import android.os.Build;
 import androidx.annotation.StringRes;
 import androidx.core.app.NotificationCompat;
 
-import org.jitsi.meet.sdk.log.JitsiMeetLogger;
+import com.wehago.meet.sdk.log.JitsiMeetLogger;
 
 import java.util.Random;
 

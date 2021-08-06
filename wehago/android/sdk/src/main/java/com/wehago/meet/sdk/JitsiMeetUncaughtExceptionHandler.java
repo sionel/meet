@@ -17,7 +17,7 @@
 
 package com.wehago.meet.sdk;
 
-import org.jitsi.meet.sdk.log.JitsiMeetLogger;
+import com.wehago.meet.sdk.log.JitsiMeetLogger;
 
 class JitsiMeetUncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
     private final Thread.UncaughtExceptionHandler defaultUncaughtExceptionHandler;
