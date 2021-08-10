@@ -33,6 +33,8 @@ const CONFERENCE_MESSAGE_RECEIVED = 'local.CONFERENCE_MESSAGE_RECEIVED';
 const CONFERENCE_PIP_MODE = 'local.CONFERENCE_PIP_MODE';
 //#endregion Action Types
 
+const SET_EXTERNAL = 'local.SET_EXTERNAL';
+
 //#region Initial State
 
 const initialState = {
@@ -44,6 +46,7 @@ const initialState = {
   callType: null,
   message: [],
   pipMode: false,
+  externalAPIScope: ''
 };
 
 //#endregion
@@ -74,7 +77,8 @@ function reducer(state = initialState, action) {
       return applySetConferenceMessage(state, action);
     case CONFERENCE_PIP_MODE:
       return applySetConferencePIPMode(state, action);
-
+    case SET_EXTERNAL:
+      return { ...state, externalAPIScope: action.externalAPIScope };
     default:
       return state;
   }
@@ -265,7 +269,7 @@ function applyToggleMuteMic(state, action) {
       user: {
         ...user,
         isMuteMic: !currentMute
-      },
+      }
     };
   }
 
@@ -275,7 +279,6 @@ function applyToggleMuteMic(state, action) {
 }
 
 //#endregion TOGGLE_MUTE_MIC
-
 
 //#region TOGGLE_MUTE_SPEAKER
 
@@ -376,8 +379,6 @@ function applySetConferencePIPMode(state, action) {
   };
 }
 
-
-
 export const actionCreators = {
   setConferenceMode,
   joinConference,
@@ -387,7 +388,7 @@ export const actionCreators = {
   toggleMuteMic,
   toggleMuteSpeaker,
   setConferenceCreatedTime,
-  receiceConferenceMessage,
+  receiceConferenceMessage
 };
 
 export default reducer;

@@ -5,10 +5,11 @@ import {
   Image,
   Text,
   Platform,
-  Dimensions
+  Dimensions,
+  TouchableOpacity
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { RTCView } from 'react-native-webrtc';
+import { RTCView, ScreenCapturePickerView } from 'react-native-webrtc';
 import ButtonCameraOff from '../../../../../assets/buttons/btn_vc_camera_off.png';
 import ButtonCameraOff2 from '../../../../../assets/icons/icoCameraWhLargeOff_2x.png';
 import imgCharacter01 from '../../../../../assets/icons/imgCharacter01_2x.png';
@@ -34,7 +35,9 @@ const MainVideoPresenter = props => {
     selectedRoomName,
     conferenceMode,
     isVideoReverse,
-    pipMode
+    pipMode,
+    setRef,
+    test
   } = props;
   // const dispatch = useDispatch();
   const localPipMode = useSelector(state => state.local.pipMode);
@@ -123,10 +126,23 @@ const MainVideoPresenter = props => {
   let character = '';
   if (props?.mainUser?.userInfo?.avatar) {
     character = JSON.parse(props?.mainUser?.userInfo?.avatar)?.value;
-  } 
+  }
   character = props?.mainUser?.videoTrack?.isMuted() ? 'jangok' : character;
   return (
     <View style={{ flex: 1, backgroundColor: '#1D1D1D' }}>
+      <TouchableOpacity
+        style={{
+          position: 'absolute',
+          width: 100,
+          height: 100,
+          top: 200,
+          left: 100,
+          backgroundColor: '#2825f2',
+          zIndex: 99
+        }}
+        onPress={test}
+      />
+      <ScreenCapturePickerView ref={setRef} />
       {/* 정상적인 화상회의 일 때 */}
       {!isMuteVideo &&
       stream &&

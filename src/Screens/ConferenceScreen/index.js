@@ -17,7 +17,13 @@ const getMainUser = (mainUserId, localUser, participants) => {
 
 const mapStateToProps = state => {
   const {
-    local: { user, createdTime, isMasterControl,isMasterMicControl },
+    local: {
+      user,
+      createdTime,
+      isMasterControl,
+      isMasterMicControl,
+      externalAPIScope
+    },
     mainUser: { mainUserId },
     participants: { list },
     user: { auth },
@@ -36,7 +42,8 @@ const mapStateToProps = state => {
     from: state.user?.from,
     isMasterControl,
     isMasterMicControl,
-    isMuteMic: user?.isMuteMic
+    isMuteMic: user?.isMuteMic,
+    externalAPIScope
   };
 };
 
@@ -51,7 +58,6 @@ const mapDispatchToProps = dispatch => {
       dispatch(masterActions.changeMasterControlMode(flag)),
     toggleMuteMicByMe: () => dispatch(masterActions.toggleMuteMicByMe()),
     setAlert: params => dispatch(AlertAcions.setAlert(params))
-
   };
 };
 

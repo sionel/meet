@@ -10,7 +10,8 @@ import {
   NativeModules,
   Platform,
   Dimensions,
-  ToastAndroid
+  ToastAndroid,
+  NativeEventEmitter
 } from 'react-native';
 import KeepAwake from 'react-native-keep-awake';
 
@@ -50,7 +51,7 @@ class ConferenceScreenContainer extends React.Component {
       endUser: null,
       createdTime: null,
       pipMode: false,
-      _this: true,
+      _this: true
     };
     this.t = getT();
   }
@@ -223,6 +224,7 @@ class ConferenceScreenContainer extends React.Component {
         onChangeDocumentPage={this._handleChangeDocumentPage}
         onChangeMicMaster={this._handleToggleMic}
         isDeployedServices={this.state.isDeployedServices}
+        test={this.test}
       />
     ) : (
       <EndCallMessage
@@ -232,6 +234,20 @@ class ConferenceScreenContainer extends React.Component {
       />
     );
   }
+
+  // _test = () => {
+  //   const { ExternalAPI } = NativeModules;
+  //   ExternalAPI.sendEvent(
+  //     'CONFERENCE_JOINED',
+  //     {
+  //       url: `https://video.wehago.com/${this.roomName}`
+  //     },
+  //     this.externalAPIScope
+  //   );
+  // };
+  test = () => {
+    this._conferenceManager.changeTrack();
+  };
 
   _handleCreateConnection = (navigation, user_name, auth, dispatch) => {
     const item = navigation.getParam('item');
@@ -308,6 +324,7 @@ class ConferenceScreenContainer extends React.Component {
     externalUser,
     item
   ) => {
+    this.roomName = roomName;
     const joinResult = await this._conferenceManager.join(
       roomName,
       name,
@@ -319,6 +336,7 @@ class ConferenceScreenContainer extends React.Component {
       externalUser,
       item
     );
+
     if (!joinResult) {
       if (this._screen) {
         this.props.setAlert({
@@ -330,6 +348,23 @@ class ConferenceScreenContainer extends React.Component {
       }
       return false;
     }
+    // debugger;
+    const { ExternalAPI } = NativeModules;
+    setTimeout(() => {
+      ExternalAPI.sendEvent(
+        'CONFERENCE_JOINED',
+        {
+          url: `https://video.wehago.com/${roomName}`
+        },
+        this.props.externalAPIScope
+      );
+    }, 3000);
+
+    // this._conferenceManager.sendNative(
+    //   ExternalAPI,
+    //   this.externalAPIScope,
+    //   roomName
+    // );
     this.setState({ connection: true }, async () => {
       // 마스터 권한으로 사용자 제어를 하고 있는중인지 체크
       const result = await MeetApi.checkMasterControlUser(roomName);

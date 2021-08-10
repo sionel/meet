@@ -39,6 +39,15 @@ class ConferenceManager {
 
   // #region Public Functions
 
+  sendNative = (ExternalAPI, externalAPIScope, roomId) => {
+    ExternalAPI.sendEvent(
+      'CONFERENCE_JOINED',
+      {
+        url: `https://video.wehago.com/${roomId}`
+      },
+      externalAPIScope
+    );
+  };
   /**
    * connect : 화상회의 참가
    */
@@ -152,7 +161,7 @@ curl --location --request POST 'localhost:8080/video/token?cno=4' \
     const videoTrack = tracks.find(track => track.getType() === 'video');
     const audioTrack = tracks.find(track => track.getType() === 'audio');
     const { audio: audioPolicy } = this._room.startMutedPolicy;
-
+    this.videoTrack = videoTrack;
     await this._dispatch(
       localActionCreators.joinConference({
         id,
@@ -186,6 +195,16 @@ curl --location --request POST 'localhost:8080/video/token?cno=4' \
     return true;
   };
 
+  changeTrack = async() => {
+    const newTrack = (
+      await JitsiMeetJS.createLocalTracks({
+        devices: ['desktop'],
+        resolution: 320
+      })
+    )[0];
+    debugger
+    this._room.replaceTrack(this.videoTrack, newTrack);
+  };
   /**
    * 연결을 해제한다.
    */
