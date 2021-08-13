@@ -297,18 +297,12 @@ class SplashScreenContainer extends Component {
         this.props.onChangeRootState({
           loaded: true,
           destination: 'List',
-          params: {
-            accesstype: ''
-          },
           url: undefined
         });
       } else {
         this.props.onChangeRootState({
           loaded: true,
           destination: 'Login',
-          params: {
-            accesstype: ''
-          },
           url: undefined
         });
       }
@@ -395,14 +389,26 @@ class SplashScreenContainer extends Component {
           url: undefined
         });
       } else if (info === 'same') {
-        this.props.onChangeRootState({
-          loaded: true,
-          destination: 'List',
-          params: {
-            accesstype: 'login'
-          },
-          url: undefined
-        });
+        if(result.type === 'conference'){
+          this.props.onChangeRootState({
+            loaded: true,
+            destination: 'Setting',
+            params: {
+              accesstype: 'mobile',
+              roomId: result.video_id
+            },
+            url: undefined
+          });
+        }else {
+          this.props.onChangeRootState({
+            loaded: true,
+            destination: 'List',
+            params: {
+              accesstype: 'login'
+            },
+            url: undefined
+          });
+        }
       } else if (info === 'change') {
         flag = await this._handleSaveUserinfo(
           result.mAuth_a_token,
