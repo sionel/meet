@@ -1,9 +1,11 @@
 import { connect } from 'react-redux';
 import ConferenceScreenContainer from './ConferenceScreenContainer';
 import { actionCreators as DocumentShareActions } from '../../redux/modules/documentShare';
-import { actionCreators as localActions } from '../../redux/modules/local';
-import { actionCreators as masterActions } from '../../redux/modules/master';
+import { actionCreators as LocalActions } from '../../redux/modules/local';
+import { actionCreators as MasterActions } from '../../redux/modules/master';
 import { actionCreators as AlertAcions } from '../../redux/modules/alert';
+import { actionCreators as MainUserAcions } from '../../redux/modules/mainUser';
+import { actionCreators as ToastAcions } from '../../redux/modules/toast';
 
 const getMainUser = (mainUserId, localUser, participants) => {
   if (!localUser) {
@@ -52,12 +54,17 @@ const mapDispatchToProps = dispatch => {
     dispatch: dispatch,
     setSharingMode: () => dispatch(DocumentShareActions.setSharingMode()),
     toggleMuteVideo: muteState =>
-      dispatch(localActions.toggleMuteVideo(muteState)),
-    toggleMuteMic: muteState => dispatch(localActions.toggleMuteMic(muteState)),
+      dispatch(LocalActions.toggleMuteVideo(muteState)),
+    toggleMuteMic: muteState => dispatch(LocalActions.toggleMuteMic(muteState)),
     changeMasterControlMode: flag =>
-      dispatch(masterActions.changeMasterControlMode(flag)),
-    toggleMuteMicByMe: () => dispatch(masterActions.toggleMuteMicByMe()),
-    setAlert: params => dispatch(AlertAcions.setAlert(params))
+      dispatch(MasterActions.changeMasterControlMode(flag)),
+    toggleMuteMicByMe: () => dispatch(MasterActions.toggleMuteMicByMe()),
+    setAlert: params => dispatch(AlertAcions.setAlert(params)),
+    joinConference: params => dispatch(LocalActions.joinConference(params)),
+    setMainUserNotExist: id => dispatch(MainUserAcions.setMainUserNotExist(id)),
+    changeMasterControlMode: id =>
+      dispatch(MasterActions.changeMasterControlMode(id)),
+    setToastMessage: msg => dispatch(ToastAcions.setToastMessage(msg))
   };
 };
 

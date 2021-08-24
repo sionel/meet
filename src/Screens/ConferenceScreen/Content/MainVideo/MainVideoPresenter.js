@@ -130,7 +130,7 @@ const MainVideoPresenter = props => {
   character = props?.mainUser?.videoTrack?.isMuted() ? 'jangok' : character;
   return (
     <View style={{ flex: 1, backgroundColor: '#1D1D1D' }}>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={{
           position: 'absolute',
           width: 100,
@@ -141,8 +141,8 @@ const MainVideoPresenter = props => {
           zIndex: 99
         }}
         onPress={test}
-      />
-      <ScreenCapturePickerView ref={setRef} />
+      /> */}
+      {/* <ScreenCapturePickerView ref={setRef} /> */}
       {/* 정상적인 화상회의 일 때 */}
       {!isMuteVideo &&
       stream &&

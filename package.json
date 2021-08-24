@@ -17,7 +17,7 @@
   "author": "",
   "readmeFilename": "README.md",
   "scripts": {
-    "pod_jetify": "cd ios && pod cache clean --all && pod install && cd .. && npx jetify",
+    "pod_jetify": "cd ios && pod cache clean --all && pod install && cd .. && npx jetify && patch-package",
     "android-bundling": "react-native bundle --platform android --dev false --entry-file index.android.js --bundle-output wehago/android/app/src/main/assets/index.android.bundle --assets-dest wehago/android/app/src/main/res/",
     "android": "sudo npx react-native run-android --root wehago",
     "build-inhouse": "cd ./wehago/android && sudo rm -rf build ./app/build ./sdk/build && sudo ./gradlew assembleRelease && cd ../..",

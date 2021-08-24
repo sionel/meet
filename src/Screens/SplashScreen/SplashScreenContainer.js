@@ -291,31 +291,12 @@ class SplashScreenContainer extends Component {
     // let proceed;
     let flag;
     // 화상회의 요청인지 판별
-    if (result.is_creater === '9') {
-      // 비즈박스에서 올 경우 하나가 있음
-      this.props.onChangeRootState({
-        loaded: true,
-        destination: 'Conference',
-        params: {
-          call_type: result.call_type,
-          room_id: result.room_id,
-          owner_name: decodeURI(result.owner_name)
-        },
-        url: undefined
-      });
-      return;
-    } else if (result.is_creater) {
-      // 비즈박스 제외 나머지(위하고앱) 에서 오는 경우를 차단
-
-      this.props.onChangeRootState({
-        loaded: true,
-        destination: 'Conference',
-        params: {
-          call_type: result.call_type,
-          room_id: result.room_id,
-          owner_name: decodeURI(result.owner_name)
-        },
-        url: undefined
+    if (result.is_creater) {
+      // 오래된 딥링크 주소 차단
+      this.props.setAlert({
+        type: 1,
+        title: '오류',
+        message: 'meet 앱에서 다시 접근 해주시길 바랍니다'
       });
       return;
     } else if (result.login_info === 'web') {

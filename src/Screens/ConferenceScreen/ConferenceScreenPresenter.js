@@ -26,6 +26,18 @@ const ConferenceScreenPresenter = props => {
   return (
     <View style={{ flex: 1 }}>
       <SimpleNoti />
+      <TouchableOpacity
+        style={{
+          position: 'absolute',
+          width: 100,
+          height: 100,
+          top: 200,
+          left: 100,
+          backgroundColor: '#2825f2',
+          zIndex: 99
+        }}
+        onPress={props.test}
+      />
       {props.mainUser && props.connection ? (
         <Content
           mainUser={props.mainUser}

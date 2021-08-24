@@ -31,9 +31,12 @@ const CONFERENCE_MESSAGE_RECEIVED = 'local.CONFERENCE_MESSAGE_RECEIVED';
 
 // CONFERENCE_PIP_MODE
 const CONFERENCE_PIP_MODE = 'local.CONFERENCE_PIP_MODE';
-//#endregion Action Types
 
 const SET_EXTERNAL = 'local.SET_EXTERNAL';
+
+const SET_TRACK = 'local.SET_TRACK';
+
+//#endregion Action Types
 
 //#region Initial State
 
@@ -79,6 +82,8 @@ function reducer(state = initialState, action) {
       return applySetConferencePIPMode(state, action);
     case SET_EXTERNAL:
       return { ...state, externalAPIScope: action.externalAPIScope };
+    case SET_TRACK:
+      return applySetTrack;
     default:
       return state;
   }
@@ -86,13 +91,29 @@ function reducer(state = initialState, action) {
 
 //#endregion
 
+function setTrack(track) {
+  return {
+    type: SET_TRACK,
+    track
+  };
+}
+
+function applySetTrack(state, action) {
+  const { user } = state;
+  user.videoTrack = action.track;
+  user.isMuteVideo = action.track.isMuted();
+  return { ...state, user };
+}
+
 //#region JOIN_CONFERENCE
 
 function joinConference(conferenceInfo) {
-  return dispatch => {
+  return (dispatch, getState) => {
+    const { auth } = getState()['user'];
     dispatch({
       type: JOIN_CONFERENCE,
-      conferenceInfo
+      conferenceInfo,
+      auth
     });
   };
 }
@@ -101,7 +122,7 @@ function applyJoinConference(state, action) {
   const { conferenceInfo } = action;
 
   const user = {
-    id: conferenceInfo.id,
+    id: 'localUser',
     cid: conferenceInfo.cid,
     name: conferenceInfo.name,
     isLocal: true,
@@ -119,7 +140,7 @@ function applyJoinConference(state, action) {
   return {
     ...state,
     user,
-    callType: conferenceInfo.callType // 삭제?
+    callType: '3' // 삭제?
   };
 }
 
@@ -388,7 +409,8 @@ export const actionCreators = {
   toggleMuteMic,
   toggleMuteSpeaker,
   setConferenceCreatedTime,
-  receiceConferenceMessage
+  receiceConferenceMessage,
+  setTrack
 };
 
 export default reducer;

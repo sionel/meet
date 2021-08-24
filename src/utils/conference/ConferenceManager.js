@@ -17,7 +17,6 @@ import { MeetApi } from '../../services';
 import { getT } from '../../utils/translateManager';
 import { isWehagoV } from '..';
 import { v4 as uuidv4 } from 'uuid';
-
 /**
  * ConferenceManager 화상회의 접속을 총괄하는 매니저
  */
@@ -48,89 +47,14 @@ class ConferenceManager {
       externalAPIScope
     );
   };
+
+  getMutedPolicy = () => this._room.startMutedPolicy;
+  getUserId = () => this._room.getUserId();
+
   /**
    * connect : 화상회의 참가
    */
-  join = async (
-    roomName,
-    name,
-    auth,
-    callType,
-    token,
-    tracks,
-    accesstype,
-    externalUser,
-    item
-  ) => {
-    // auth가 있으면
-    /* 
-auth가 있으면
-http://wiki.duzon.com:8080/pages/viewpage.action?pageId=99977839
-POST /token/access-token
-
-curl --location --request POST 'localhost:8080/video/token?cno=4' \
---header 'Authorization: Bearer edQxkGUypbGxfTwTKipNktXRtKCcAJ' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "room": "5114fd61-a596-4903-aa0f-33911a45964a",
-    "access_token": "gmdryzx5Vhz8kH2Myf3I9ILLohd39vVH0uogjGFF+wooUn5u"
-}'
-토큰 받아서 connect로
-
-없으면 바로 롱폴링
-1. curl --location --request POST 'http://localhost:8080/video/lpevent?room=5114fd61-a596-4903-aa0f-33911a45964a&user_identify=e41d94ca-545a-46fd-9bb0-fca60c9e5502&timeout=60'
-2. curl --location --request POST 'http://localhost:8080/video/standby/request/joinroom' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "room": "5114fd61-a596-4903-aa0f-33911a45964a",
-    "user_identify": "e41d94ca-545a-46fd-9bb0-fca60c9e5502",
-    "user_name": "사용자 이름",
-    "joincode": "81bb7a"
-}'
-
-1번 결과로 token
-curl --location --request POST 'localhost:8080/video/token?cno=4' \
---header 'Authorization: Bearer edQxkGUypbGxfTwTKipNktXRtKCcAJ' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "room": "5114fd61-a596-4903-aa0f-33911a45964a",
-    "access_token": "gmdryzx5Vhz8kH2Myf3I9ILLohd39vVH0uogjGFF+wooUn5u"
-}'
-
-받아서 connect
-*/
-    if (isWehagoV) {
-      const uuid = uuidv4();
-      let tmpToken;
-      if (auth) {
-        // 로그인 정보가 있는 경우 마스터인지, 일반 참가자인지 확인하고
-        // 마스터일때 바로 토큰들고 넘어갈 수 있도록 함
-        const result = await MeetApi.getAccessToken(auth, roomName, uuid);
-        if (result.resultData) tmpToken = result.resultData.access_token;
-      }
-
-      if (!tmpToken) {
-        tmpToken = await new Promise((res, rej) => {
-          let timer = setTimeout(async function polling() {
-            pollingResult = await MeetApi.longPolling(roomName, uuid);
-            if (pollingResult) {
-              res(pollingResult.extra_data.access_key);
-            } else {
-              timer = setTimeout(polling, 10);
-            }
-          }, 10);
-          if (auth) MeetApi.requestTokenAuth(roomName, uuid, name, auth);
-          else MeetApi.requestTokenNonauth(roomName, uuid, name, item.joincode);
-        });
-      }
-      if (!tmpToken) return false;
-      const tokenResult = await MeetApi.getMeetVRoomToken(
-        auth,
-        roomName,
-        tmpToken
-      );
-      token = tokenResult.resultData;
-    }
+  join = async (roomName, token, tracks, attributes) => {
     this._roomToken = token;
     this._roomName = roomName.toLowerCase();
     // 초기화
@@ -142,68 +66,28 @@ curl --location --request POST 'localhost:8080/video/token?cno=4' \
     // connection 연결
     await this._connection.connect(roomName.toLowerCase(), token);
     // 대화방 참가
-    this._room = await this._conferenceConnector.connect(
-      this._connection,
-      roomName.toLowerCase(),
-      name,
-      auth,
-      tracks,
-      accesstype,
-      externalUser
-    );
-
-    await MeetApi.enterMeetRoom(token, this._room.myUserId(), name);
-    // const createdTime = this._room.properties['created-ms'];
-    // this._dispatch(localActionCreators.setConferenceCreatedTime(createdTime));
-    this._dispatch(masterAcionCreators.checkMasterList(this._roomToken));
-    const id = 'localUser';
-    if (!tracks) tracks = this._conferenceConnector.tracks;
-    const videoTrack = tracks.find(track => track.getType() === 'video');
-    const audioTrack = tracks.find(track => track.getType() === 'audio');
-    const { audio: audioPolicy } = this._room.startMutedPolicy;
-    this.videoTrack = videoTrack;
-    await this._dispatch(
-      localActionCreators.joinConference({
-        id,
-        cid: this._room.myUserId(),
-        name,
-        nickname: auth.nickname,
-        videoTrack,
-        audioTrack,
-        callType
+    this._room = this._conferenceConnector
+      .connect(this._connection, roomName.toLowerCase(), tracks, attributes)
+      .then(res => {
+        setConferenceManager(this._room);
+        return true;
       })
-    );
-    if (audioPolicy) {
-      this._dispatch(masterAcionCreators.changeAudioActive(true));
-      this._dispatch(
-        toastAcionCreators.setToastMessage(
-          this.t('toast_master_micoffbymaster')
-        )
-      );
-    }
-    this._dispatch(mainUserActionCreators.setMainUserNotExist(id));
-    if (Number(callType) === 3) {
-      const master = await MeetApi.checkMasterControl(roomName);
-      const id = master.resultData.videoseq;
-      this._dispatch(masterAcionCreators.changeMasterControlMode(id));
-      this._dispatch(
-        toastAcionCreators.setToastMessage(
-          id ? this.t('toast_master_clton') : ''
-        )
-      );
-    }
-    return true;
+      .catch(rej => false);
   };
 
-  changeTrack = async() => {
+  changeTrack = async (type, oldTrack) => {
     const newTrack = (
       await JitsiMeetJS.createLocalTracks({
-        devices: ['desktop'],
+        devices: [type],
         resolution: 320
       })
     )[0];
-    debugger
-    this._room.replaceTrack(this.videoTrack, newTrack);
+    debugger;
+    await this._room.replaceTrack(oldTrack, newTrack);
+    // debugger
+    // if(type === 'desktop') newTrack.mute()
+    // debugger
+    localActionCreators.setTrack(newTrack);
   };
   /**
    * 연결을 해제한다.
@@ -231,11 +115,6 @@ curl --location --request POST 'localhost:8080/video/token?cno=4' \
     this._conferenceConnector.setDocumentData(data);
   };
 
-  set = (item, auth) => {
-    this._item = item;
-    this._auth = auth;
-  };
-
   // #endregion
 
   /**
@@ -243,6 +122,7 @@ curl --location --request POST 'localhost:8080/video/token?cno=4' \
    */
   _createHandlers = () => {
     const handler = {
+      CONFERENCE_JOINED: this._conferenceJoined,
       JOIN_USER: this._joinUser,
       LEFT_USER: this._leftUser,
       ADD_REMOTE_TRACK: this._addRemoteTrack,
@@ -267,6 +147,58 @@ curl --location --request POST 'localhost:8080/video/token?cno=4' \
     };
     return handler;
   };
+
+  // _conferenceJoined = async() => {
+  //   try {
+  //     const videoTrack = this._tracks.find(
+  //       track => track.getType() === 'video'
+  //     );
+  //     const audioTrack = this._tracks.find(
+  //       track => track.getType() === 'audio'
+  //     );
+  //     await this._dispatch(
+  //       localActionCreators.joinConference({
+  //         cid: this._room.myUserId(),
+  //         name: this._userName,
+  //         // nickname: auth.nickname,
+  //         videoTrack,
+  //         audioTrack,
+  //         tracks: this._tracks
+  //       })
+  //     );
+  //     await MeetApi.enterMeetRoom(
+  //       this._roomToken,
+  //       this._room.myUserId(),
+  //       this._userName
+  //     );
+
+  //     this._dispatch(masterAcionCreators.checkMasterList(this._roomToken));
+
+  //     const { audio: audioPolicy } = this._room.startMutedPolicy;
+  //     if (audioPolicy) {
+  //       this._dispatch(masterAcionCreators.changeAudioActive(true));
+  //       this._dispatch(
+  //         toastAcionCreators.setToastMessage(
+  //           this.t('toast_master_micoffbymaster')
+  //         )
+  //       );
+  //     }
+  //     this._dispatch(mainUserActionCreators.setMainUserNotExist(id));
+  //     const master = await MeetApi.checkMasterControl(this._roomName);
+  //     const id = master.resultData.videoseq;
+  //     this._dispatch(masterAcionCreators.changeMasterControlMode(id));
+  //     this._dispatch(
+  //       toastAcionCreators.setToastMessage(
+  //         id ? this.t('toast_master_clton') : ''
+  //       )
+  //     );
+  //     return true;
+  //   } catch (error) {
+  //     console.log(error);
+
+  //     return false;
+  //   }
+  // };
 
   /**
    * init: 화상회의 연결을 위한 초기화

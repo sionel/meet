@@ -97,43 +97,26 @@ class ConferenceConnector {
   connect = (
     connection,
     roomName,
-    name,
-    auth,
     tracks,
-    accesstype,
-    externalUser
+    attributes
   ) => {
     return new Promise(async (resolve, reject) => {
       // 참여할 room object 생성
       this._room = this._createRoom(connection, roomName);
       // 이벤트 연결
-      this._bindEvents(resolve, reject);
+      await this._bindEvents(resolve, reject);
       // 트랙 생성
-      if (!tracks) tracks = await this._createTracks();
+      // if (!tracks) tracks = await this._createTracks();
       // 트랙 추가
       this._addTracks(tracks);
-      // display Name 설정
-      this._room.setDisplayName(name);
       // wehago id를 커맨드로 전송한다.
       this._room.sendCommand(WEHAGO_ID, {
         value: this._room.myUserId(),
-        attributes: {
-          wehagoId: auth.portal_id,
-          companyFullpath: auth.last_company?.full_path,
-          profile_url: auth.profile_url ? auth.profile_url : '',
-          userName: name,
-          nickname: auth.nickname,
-          isExternalParticipant:
-            accesstype === 'email' || accesstype === 'joincode',
-          externalUserId: externalUser,
-          isMobile: true
-        }
+        attributes
       });
 
       // 대화방 참가
       await this._room.join();
-
-      return this._room;
     });
   };
 
@@ -221,6 +204,7 @@ class ConferenceConnector {
 
     // 대화방 참가 성공 이벤트 연결
     this._room.on(conferenceEvents.CONFERENCE_JOINED, () => {
+      // this._handlers.CONFERENCE_JOINED(this._room);
       resolve(this._room);
     });
 
