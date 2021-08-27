@@ -279,6 +279,7 @@ const DrawingPresenter = props => {
           horizontal={true}
           pagingEnabled={true}
           showsHorizontalScrollIndicator={false}
+          //scrollEnabled={스캐치 활성화시 false}
           onLayout={e => {
             // console.log('onLayout', props.page);
             props.onScrollViewIsOnLayout();
