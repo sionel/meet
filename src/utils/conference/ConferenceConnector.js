@@ -231,7 +231,9 @@ class ConferenceConnector {
 
     // JOIN_USER 이벤트 연결
     this._room.on(conferenceEvents.USER_JOINED, (id, user) => {
-      if (user.getStatsID() === "jibri") return;
+      if (new Set(['wehagorecord', 'wehagorecord-dev']).has(user.getStatsID()))
+        return;
+
       this._handlers.JOIN_USER(user);
     });
 

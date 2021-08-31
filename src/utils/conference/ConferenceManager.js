@@ -151,7 +151,6 @@ curl --location --request POST 'localhost:8080/video/token?cno=4' \
     if (!tracks) tracks = this._conferenceConnector.tracks;
     const videoTrack = tracks.find(track => track.getType() === 'video');
     const audioTrack = tracks.find(track => track.getType() === 'audio');
-    const { audio: audioPolicy } = this._room.startMutedPolicy;
 
     await this._dispatch(
       localActionCreators.joinConference({
@@ -164,19 +163,23 @@ curl --location --request POST 'localhost:8080/video/token?cno=4' \
         callType
       })
     );
-    if (audioPolicy) {
-      this._dispatch(masterAcionCreators.changeAudioActive(true));
-      this._dispatch(
-        toastAcionCreators.setToastMessage(
-          this.t('toast_master_micoffbymaster')
-        )
-      );
-    }
+
+    // const { audio: audioPolicy } = this._room.startMutedPolicy;
+    // if (audioPolicy) {
+    //   this._dispatch(masterAcionCreators.changeAudioActive(true));
+    //   this._dispatch(
+    //     toastAcionCreators.setToastMessage(
+    //       this.t('toast_master_micoffbymaster')
+    //     )
+    //   );
+    // }
     this._dispatch(mainUserActionCreators.setMainUserNotExist(id));
     if (Number(callType) === 3) {
       const master = await MeetApi.checkMasterControl(roomName);
       const id = master.resultData.videoseq;
+      const audioPolicy = master.resultData.audio_active
       this._dispatch(masterAcionCreators.changeMasterControlMode(id));
+      this._dispatch(masterAcionCreators.changeAudioActive(!audioPolicy))
       this._dispatch(
         toastAcionCreators.setToastMessage(
           id ? this.t('toast_master_clton') : ''
@@ -456,6 +459,7 @@ curl --location --request POST 'localhost:8080/video/token?cno=4' \
     this._dispatch(toastAcionCreators.setToastMessage(msg));
   };
   changeMicControlModeByMaster = value => {
+
     this._dispatch(masterAcionCreators.changeAudioActive(value));
 
     const msg = value

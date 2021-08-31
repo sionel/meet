@@ -80,7 +80,6 @@ export default function LoginInputContainer(props) {
         auth,
         'wehagomeet' // 배포여부 확인
       );
-      debugger;
       const isDeploy = isDeployWehagomeet || isDeployWebrtc;
       props.setPermission(isDeploy);
       props.onChangeRootState({
