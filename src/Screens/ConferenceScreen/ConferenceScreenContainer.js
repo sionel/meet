@@ -251,9 +251,8 @@ class ConferenceScreenContainer extends React.Component {
       auth,
       dispatch,
       joinConference,
-      setMainUserNotExist,
       changeMasterControlMode,
-      setToastMessage
+      setToastMessage,
     } = this.props;
     const item = navigation.getParam('item');
     const {
@@ -303,11 +302,6 @@ class ConferenceScreenContainer extends React.Component {
     } else {
       const userId = this._conferenceManager.getMyId();
       MeetApi.enterMeetRoom(token, userId, name);
-      // this._conferenceJoined()
-      // await MeetApi.enterMeetRoom(token, this._room.myUserId(), name);
-      // this._dispatch(masterAcionCreators.checkMasterList(this._roomToken));
-      // const id = 'localUser';
-      // if (!tracks) tracks = this._conferenceConnector.tracks;
 
       const videoTrack = tracks.find(track => track.getType() === 'video');
       const audioTrack = tracks.find(track => track.getType() === 'audio');
@@ -317,17 +311,6 @@ class ConferenceScreenContainer extends React.Component {
         videoTrack,
         audioTrack
       });
-
-      // const { audio: audioPolicy } = this._room.startMutedPolicy;
-      // if (audioPolicy) {
-      //   this._dispatch(masterAcionCreators.changeAudioActive(true));
-      //   this._dispatch(
-      //     toastAcionCreators.setToastMessage(
-      //       this.t('toast_master_micoffbymaster')
-      //     )
-      //   );
-      // }
-      // setMainUserNotExist(id);
 
       const master = await MeetApi.checkMasterControl(roomName);
       const id = master.resultData.videoseq;
@@ -356,11 +339,7 @@ class ConferenceScreenContainer extends React.Component {
 
   /** 전화/대화 종료 */
   _handleEndCall = () => {
-    if (Number(this.callType) === 3) {
-      this._handleConferenceClose();
-    } else {
-      this._conferenceManager && this._conferenceManager.dispose();
-    }
+    this._handleConferenceClose();
     this.setState({ connection: false, endCall: true });
   };
 
