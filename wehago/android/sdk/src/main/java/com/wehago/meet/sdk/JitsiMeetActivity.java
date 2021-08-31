@@ -194,7 +194,7 @@ public class JitsiMeetActivity extends FragmentActivity
 
     protected void onConferenceTerminated(HashMap<String, Object> extraData) {
         JitsiMeetLogger.i("Conference terminated: " + extraData);
-        finish();
+        JitsiMeetOngoingConferenceService.abort(this);
     }
 
     protected void onConferenceWillJoin(HashMap<String, Object> extraData) {

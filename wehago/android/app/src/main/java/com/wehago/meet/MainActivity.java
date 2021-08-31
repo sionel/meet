@@ -182,10 +182,10 @@ public class MainActivity extends JitsiMeetActivity {
         }
     }
 
-    @Override
-    protected void onConferenceTerminated(HashMap<String, Object> extraData) {
-        Log.d(TAG, "Conference terminated: " + extraData);
-    }
+    // @Override
+    // protected void onConferenceTerminated(HashMap<String, Object> extraData) {
+    //     Log.d(TAG, "Conference terminated: " + extraData);
+    // }
 
     // Activity lifecycle method overrides
     //

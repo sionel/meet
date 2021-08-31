@@ -66,6 +66,11 @@ public class JitsiMeetOngoingConferenceService extends Service
         context.stopService(intent);
     }
 
+    static void stop(Context context) {
+        Intent intent = new Intent(context, JitsiMeetOngoingConferenceService.class);
+        context.stopService(intent);
+    }
+    
     @Override
     public void onCreate() {
         super.onCreate();

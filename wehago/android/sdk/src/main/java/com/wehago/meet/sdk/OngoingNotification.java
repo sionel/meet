@@ -39,7 +39,7 @@ import java.util.Random;
 class OngoingNotification {
     private static final String TAG = OngoingNotification.class.getSimpleName();
 
-    private static final String CHANNEL_ID = "JitsiNotificationChannel";
+    private static final String CHANNEL_ID = "WehagoMeetNotificationChannel";
     private static final String CHANNEL_NAME = "Ongoing Conference Notifications";
 
     static final int NOTIFICATION_ID = new Random().nextInt(99999) + 10000;
@@ -101,8 +101,8 @@ class OngoingNotification {
             .setUsesChronometer(true)
             .setAutoCancel(false)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-            .setOnlyAlertOnce(true)
-            .setSmallIcon(context.getResources().getIdentifier("ic_notification", "drawable", context.getPackageName()));
+            .setOnlyAlertOnce(true);
+            // .setSmallIcon(context.getResources().getIdentifier("ic_notification", "drawable", context.getPackageName()));
 
         NotificationCompat.Action hangupAction = createAction(context, JitsiMeetOngoingConferenceService.Action.HANGUP, R.string.ongoing_notification_action_hang_up);
 
@@ -111,8 +111,8 @@ class OngoingNotification {
         int toggleAudioTitle = isMuted ? R.string.ongoing_notification_action_unmute : R.string.ongoing_notification_action_mute;
         NotificationCompat.Action audioAction = createAction(context, toggleAudioAction, toggleAudioTitle);
 
-        builder.addAction(hangupAction);
-        builder.addAction(audioAction);
+        // builder.addAction(hangupAction);
+        // builder.addAction(audioAction);
 
         return builder.build();
     }
