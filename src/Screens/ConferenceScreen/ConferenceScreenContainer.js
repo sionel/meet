@@ -44,7 +44,6 @@ class ConferenceScreenContainer extends React.Component {
       volume: 0
     };
     this.state = {
-      callType: 3,
       connection: false,
       selectedRoomName: '',
       endCall: false,
@@ -76,9 +75,7 @@ class ConferenceScreenContainer extends React.Component {
     });
     Orientation.addOrientationListener(this._handleOrientation);
 
-    // let user_name = this.props.navigation.state.params.item.name;
     this._joinConference();
-    // this._handleCreateConnection(navigation, user_name, auth, dispatch);
 
     KeepAwake.activate();
     DeviceEventEmitter.addListener(
@@ -92,68 +89,7 @@ class ConferenceScreenContainer extends React.Component {
         this._handleAppSizeChange();
       }, 500);
 
-    // if (Number(this.callType) !== 3) {
-    //   this.connectDisposeCheck = setInterval(() => {
-    //     if (this.state.connection) {
-    //       // console.log('length', this.props.list.length);
-    //       // 대기하고 있는데 사용자가 들어온 경우
-    //       if (this.props.list.length > 0 && !this.state.endUser) {
-    //         // console.log('누가 들어옴');
-    //         this.setState({
-    //           endUser: this.props.list[0],
-    //           createdTime: this.props.createdTime
-    //         });
-    //       }
-    //       // 통화 중에 상대 접속자가 종료했는지 체크
-    //       if (this.props.list.length === 0 && this.state.endUser) {
-    //         // console.log('다 나갔음');
-    //         clearInterval(this.connectDisposeCheck);
-    //         this._conferenceManager && this._conferenceManager.dispose();
-    //         this.setState({ endCall: true });
-    //       }
-    //     }
-    //   }, 1000);
-    // }
   }
-
-  // shouldComponentUpdate(nextProps, nextState) {
-  // 상대방이 통화를 종료했는지 확인
-  // if (Number(this.callType) !== 3) {
-  //   if (nextState.connection && !this.state.connection) {
-  //     if (nextProps.mainUser) {
-  //       const endUser = this.props.list;
-  //       // 대기하고 있는데 사용자가 들어온 경우
-  //       if (endUser.length > 0 && !this.state.endUser) {
-  //         this.setState({
-  //           endUser: endUser[0],
-  //           createdTime: this.props.createdTime
-  //         });
-  //         return false;
-  //       }
-  //       this.connectFailCheck && clearInterval(this.connectFailCheck);
-  //       this.connectDisposeCheck && clearInterval(this.connectDisposeCheck);
-  //     }
-  //   }
-  // }
-
-  // 통화종료 안내화면에서 전화를 받았을 때
-  // Connection 을 새로 생성하고 연결한다.
-  // const { navigation: nav1 } = this.props;
-  // const { navigation: nav2 } = nextProps;
-  // const item1 = nav1.getParam('item');
-  // const item2 = nav2.getParam('item');
-  // if (item1 !== item2) {
-  //   this.setState({ endCall: false, endUser: null, connection: false });
-  //   const { navigation, user_name, auth, dispatch } = nextProps;
-  //   this._handleCreateConnection(navigation, user_name, auth, dispatch);
-  //   return false;
-  // }
-
-  // if (this.state.endCall) return false;
-  // if (this.props !== nextProps) return true;
-  // if (this.state !== nextState) return true;
-  // return false;
-  // }
 
   /** */
   componentDidUpdate(prevProps) {
@@ -184,19 +120,30 @@ class ConferenceScreenContainer extends React.Component {
    * componentWillUnmount
    */
   componentWillUnmount() {
-    this._screen = false;
-    KeepAwake.deactivate();
-    DeviceEventEmitter.removeListener(
-      'ON_HOME_BUTTON_PRESSED',
-      this._handleEnterPIPMode
-    );
-    AppState.removeEventListener('change', this._handleAppStateChange);
-    this._timer && clearInterval(this._timer);
+    try {
+      this._screen = false;
+      KeepAwake.deactivate();
+      DeviceEventEmitter.removeListener(
+        'ON_HOME_BUTTON_PRESSED',
+        this._handleEnterPIPMode
+      );
+      AppState.removeEventListener('change', this._handleAppStateChange);
+      this._timer && clearInterval(this._timer);
+      // 컴포넌트가 언마운트 되기전 화상회의 관련 리소스를 해제 한다.
+      const { ExternalAPI } = NativeModules;
+      ExternalAPI.sendEvent(
+        'CONFERENCE_TERMINATED',
+        {
+          url: null
+        },
+        this.props.externalAPIScope
+      );
+      this._conferenceManager?.dispose();
+      this.props.setSharingMode();
+      this.connectFailCheck && clearInterval(this.connectFailCheck);
+    } catch (error) {
+    }
 
-    // 컴포넌트가 언마운트 되기전 화상회의 관련 리소스를 해제 한다.
-    this._conferenceManager?.dispose();
-    this.props.setSharingMode();
-    this.connectFailCheck && clearInterval(this.connectFailCheck);
   }
 
   /**
@@ -208,7 +155,7 @@ class ConferenceScreenContainer extends React.Component {
         {...this.props}
         orientation={this.state.orientation}
         connection={this.state.connection}
-        callType={this.callType}
+        callType={3}
         selectedRoomName={this.state.selectedRoomName}
         pipMode={this.state.pipMode}
         onBack={this._handleConferenceClose} // 여기서는 단순 뒤로 가는 것이기에... 백으로...
@@ -231,16 +178,6 @@ class ConferenceScreenContainer extends React.Component {
     );
   }
 
-  // _test = () => {
-  //   const { ExternalAPI } = NativeModules;
-  //   ExternalAPI.sendEvent(
-  //     'CONFERENCE_JOINED',
-  //     {
-  //       url: `https://video.wehago.com/${this.roomName}`
-  //     },
-  //     this.externalAPIScope
-  //   );
-  // };
   test = async () => {
     const { isDesktopSharing } = this.state;
     const newTrackType = isDesktopSharing ? 'video' : 'desktop';
@@ -318,14 +255,16 @@ class ConferenceScreenContainer extends React.Component {
       changeMasterControlMode,
       setToastMessage
     } = this.props;
-    const name = navigation.state.params.item.name;
     const item = navigation.getParam('item');
-
-    const roomName = item.videoRoomId; // item.videoRoomId
-    const token = item.roomToken;
-    const accesstype = item.accesstype;
-    const externalUser = item.externalUser;
-    const tracks = item.tracks;
+    const {
+      name,
+      selectedRoomName,
+      videoRoomId: roomName,
+      roomToken: token,
+      accesstype,
+      externalUser,
+      tracks
+    } = item;
 
     this._conferenceManager = new ConferenceManager(
       dispatch,
@@ -362,7 +301,7 @@ class ConferenceScreenContainer extends React.Component {
       }
       return false;
     } else {
-      const userId = this._conferenceManager.getUserId();
+      const userId = this._conferenceManager.getMyId();
       MeetApi.enterMeetRoom(token, userId, name);
       // this._conferenceJoined()
       // await MeetApi.enterMeetRoom(token, this._room.myUserId(), name);
@@ -379,22 +318,21 @@ class ConferenceScreenContainer extends React.Component {
         audioTrack
       });
 
-      const { audio: audioPolicy } = this._room.startMutedPolicy;
-      if (audioPolicy) {
-        this._dispatch(masterAcionCreators.changeAudioActive(true));
-        this._dispatch(
-          toastAcionCreators.setToastMessage(
-            this.t('toast_master_micoffbymaster')
-          )
-        );
-      }
-      setMainUserNotExist(id);
+      // const { audio: audioPolicy } = this._room.startMutedPolicy;
+      // if (audioPolicy) {
+      //   this._dispatch(masterAcionCreators.changeAudioActive(true));
+      //   this._dispatch(
+      //     toastAcionCreators.setToastMessage(
+      //       this.t('toast_master_micoffbymaster')
+      //     )
+      //   );
+      // }
+      // setMainUserNotExist(id);
 
       const master = await MeetApi.checkMasterControl(roomName);
       const id = master.resultData.videoseq;
       changeMasterControlMode(id);
       setToastMessage(id ? this.t('toast_master_clton') : '');
-      // debugger;
       const { ExternalAPI } = NativeModules;
       ExternalAPI.sendEvent(
         'CONFERENCE_JOINED',
@@ -404,7 +342,7 @@ class ConferenceScreenContainer extends React.Component {
         this.props.externalAPIScope
       );
 
-      this.setState({ connection: true, selectedRoomName: roomName });
+      this.setState({ connection: true, selectedRoomName });
       setConferenceManager(this._conferenceManager);
     }
   };

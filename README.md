@@ -7,6 +7,12 @@
 
 ## 초기 설정
 
+
+1. npm install
+2. pod_jetify
+3. android local.properties & keystore 복사
+4. 
+
 1. npm install<br/>(특이사항 : dependencies 에 "rn-component": "git+http://git.duzon.com/peacejung/rn-component.git#0.1.0" 가 있었지만 이제 없음)
 2. 안드로이드 sdk 설정<br/>
    /android/local.properties 에 android sdk 경로 설정

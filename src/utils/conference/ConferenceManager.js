@@ -49,7 +49,7 @@ class ConferenceManager {
   };
 
   getMutedPolicy = () => this._room.startMutedPolicy;
-  getUserId = () => this._room.getUserId();
+  getMyId = () => this._room.myUserId();
 
   /**
    * connect : 화상회의 참가
@@ -66,13 +66,14 @@ class ConferenceManager {
     // connection 연결
     await this._connection.connect(roomName.toLowerCase(), token);
     // 대화방 참가
-    this._room = this._conferenceConnector
-      .connect(this._connection, roomName.toLowerCase(), tracks, attributes)
-      .then(res => {
-        setConferenceManager(this._room);
-        return true;
-      })
-      .catch(rej => false);
+    this._room = await this._conferenceConnector.connect(
+      this._connection,
+      roomName.toLowerCase(),
+      tracks,
+      attributes
+    );
+    if (this._room) return true;
+    else return false;
   };
 
   changeTrack = async (type, oldTrack) => {
@@ -82,11 +83,7 @@ class ConferenceManager {
         resolution: 320
       })
     )[0];
-    debugger;
     await this._room.replaceTrack(oldTrack, newTrack);
-    // debugger
-    // if(type === 'desktop') newTrack.mute()
-    // debugger
     localActionCreators.setTrack(newTrack);
   };
   /**
@@ -100,7 +97,7 @@ class ConferenceManager {
       this._connection.dispose();
     }
     this._dispatch(WedriveAcionCreators.setInitInfo());
-    this._dispatch(localActionCreators.leaveConference());
+    // this._dispatch(localActionCreators.leaveConference());
   };
 
   /**
@@ -122,7 +119,6 @@ class ConferenceManager {
    */
   _createHandlers = () => {
     const handler = {
-      CONFERENCE_JOINED: this._conferenceJoined,
       JOIN_USER: this._joinUser,
       LEFT_USER: this._leftUser,
       ADD_REMOTE_TRACK: this._addRemoteTrack,
@@ -148,57 +144,7 @@ class ConferenceManager {
     return handler;
   };
 
-  // _conferenceJoined = async() => {
-  //   try {
-  //     const videoTrack = this._tracks.find(
-  //       track => track.getType() === 'video'
-  //     );
-  //     const audioTrack = this._tracks.find(
-  //       track => track.getType() === 'audio'
-  //     );
-  //     await this._dispatch(
-  //       localActionCreators.joinConference({
-  //         cid: this._room.myUserId(),
-  //         name: this._userName,
-  //         // nickname: auth.nickname,
-  //         videoTrack,
-  //         audioTrack,
-  //         tracks: this._tracks
-  //       })
-  //     );
-  //     await MeetApi.enterMeetRoom(
-  //       this._roomToken,
-  //       this._room.myUserId(),
-  //       this._userName
-  //     );
 
-  //     this._dispatch(masterAcionCreators.checkMasterList(this._roomToken));
-
-  //     const { audio: audioPolicy } = this._room.startMutedPolicy;
-  //     if (audioPolicy) {
-  //       this._dispatch(masterAcionCreators.changeAudioActive(true));
-  //       this._dispatch(
-  //         toastAcionCreators.setToastMessage(
-  //           this.t('toast_master_micoffbymaster')
-  //         )
-  //       );
-  //     }
-  //     this._dispatch(mainUserActionCreators.setMainUserNotExist(id));
-  //     const master = await MeetApi.checkMasterControl(this._roomName);
-  //     const id = master.resultData.videoseq;
-  //     this._dispatch(masterAcionCreators.changeMasterControlMode(id));
-  //     this._dispatch(
-  //       toastAcionCreators.setToastMessage(
-  //         id ? this.t('toast_master_clton') : ''
-  //       )
-  //     );
-  //     return true;
-  //   } catch (error) {
-  //     console.log(error);
-
-  //     return false;
-  //   }
-  // };
 
   /**
    * init: 화상회의 연결을 위한 초기화

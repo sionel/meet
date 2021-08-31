@@ -56,14 +56,15 @@ const mapDispatchToProps = dispatch => {
     toggleMuteVideo: muteState =>
       dispatch(LocalActions.toggleMuteVideo(muteState)),
     toggleMuteMic: muteState => dispatch(LocalActions.toggleMuteMic(muteState)),
+    changeAudioActive: flag => dispatch(MasterActions.changeAudioActive(flag)),
     changeMasterControlMode: flag =>
       dispatch(MasterActions.changeMasterControlMode(flag)),
     toggleMuteMicByMe: () => dispatch(MasterActions.toggleMuteMicByMe()),
     setAlert: params => dispatch(AlertAcions.setAlert(params)),
     joinConference: params => dispatch(LocalActions.joinConference(params)),
-    setMainUserNotExist: id => dispatch(MainUserAcions.setMainUserNotExist(id)),
-    changeMasterControlMode: id =>
-      dispatch(MasterActions.changeMasterControlMode(id)),
+    setMainUserNotExist: id => dispatch(MainUserAcions.setMainUserNotExist()),
+    // changeMasterControlMode: id =>
+    //   dispatch(MasterActions.changeMasterControlMode(id)),
     setToastMessage: msg => dispatch(ToastAcions.setToastMessage(msg))
   };
 };

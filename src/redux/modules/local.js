@@ -158,8 +158,8 @@ function leaveConference() {
 
 function applyLeaveConference(state) {
   /** video/audio mute */
-  state.user.videoTrack.mute();
-  state.user.audioTrack.mute();
+  state.user.videoTrack.dispose();
+  state.user.audioTrack.dispose();
 
   const user = null;
   return {
