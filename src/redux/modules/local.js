@@ -83,7 +83,7 @@ function reducer(state = initialState, action) {
     case SET_EXTERNAL:
       return { ...state, externalAPIScope: action.externalAPIScope };
     case SET_TRACK:
-      return applySetTrack;
+      return applySetTrack(state,action);
     default:
       return state;
   }
@@ -101,7 +101,7 @@ function setTrack(track) {
 function applySetTrack(state, action) {
   const { user } = state;
   user.videoTrack = action.track;
-  user.isMuteVideo = action.track.isMuted();
+  user.isMuteVideo = action.track?.isMuted();
   return { ...state, user };
 }
 

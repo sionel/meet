@@ -113,7 +113,7 @@
 		0BEA5C3C1F7B8F73000D0AB4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0BEA5C3E1F7B8F73000D0AB4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0CF5A52C0ACD47E99E1972C4 /* DOUZONEText50.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = DOUZONEText50.ttf; path = ../../assets/fonts/DOUZONEText50.ttf; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* Wehago-meet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Wehago-meet.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07F961A680F5B00A75B9A /* WEHAGO Meet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "WEHAGO Meet.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB21A68108700A75B9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -299,7 +299,7 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* Wehago-meet.app */,
+				13B07F961A680F5B00A75B9A /* WEHAGO Meet.app */,
 				4EB06023260E026600F524C5 /* WehagoMeetBroadcastExtension.appex */,
 			);
 			name = Products;
@@ -358,7 +358,7 @@
 			);
 			name = WehagoMeet;
 			productName = "Jitsi Meet";
-			productReference = 13B07F961A680F5B00A75B9A /* Wehago-meet.app */;
+			productReference = 13B07F961A680F5B00A75B9A /* WEHAGO Meet.app */;
 			productType = "com.apple.product-type.application";
 		};
 		4EB06022260E026600F524C5 /* WehagoMeetBroadcastExtension */ = {
@@ -631,7 +631,7 @@
 				CODE_SIGN_ENTITLEMENTS = app.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = BR6U9G47ZR;
 				ENABLE_BITCODE = NO;
@@ -641,14 +641,14 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 2.1.7;
+				MARKETING_VERSION = 2.2.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.douzone.wehagomeet;
-				PRODUCT_NAME = "Wehago-meet";
+				PRODUCT_NAME = "WEHAGO Meet";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
@@ -662,23 +662,23 @@
 				CODE_SIGN_ENTITLEMENTS = app.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = BR6U9G47ZR;
-				ENABLE_BITCODE = YES;
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = src/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 2.1.7;
+				MARKETING_VERSION = 2.2.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.douzone.wehagomeet;
-				PRODUCT_NAME = "Wehago-meet";
+				PRODUCT_NAME = "WEHAGO Meet";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
@@ -696,6 +696,7 @@
 				CODE_SIGN_ENTITLEMENTS = "broadcast-extension/extension.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = BR6U9G47ZR;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -706,10 +707,10 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.1.7;
+				MARKETING_VERSION = 2.2.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.douzone.wehagomeet.broadcast.extension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.douzone.wehagomeet.broadcast;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -733,6 +734,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 3;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = BR6U9G47ZR;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -743,9 +745,9 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.1.7;
+				MARKETING_VERSION = 2.2.0;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.douzone.wehagomeet.broadcast.extension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.douzone.wehagomeet.broadcast;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";

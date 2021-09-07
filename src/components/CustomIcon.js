@@ -99,6 +99,8 @@ import ico_menu_rsakey from '../../assets/icons/settingIcon/ico_menu_rsakey.png'
 import ico_menu_wifi from '../../assets/icons/settingIcon/ico_menu_wifi.png';
 import icoMenuTrophy from '../../assets/icons/settingIcon/icoMenuTrophy.png';
 
+import icoScreenShagre from '../../assets/icons/icoScreenShagre.png';
+
 // etc
 import ico_setting_160 from '../../assets/icons/etc/ico_setting_160.png';
 import btn_navi_search_press from '../../assets/icons/etc/btn_navi_search_press.png';
@@ -300,6 +302,8 @@ const getButtonSource = name => {
       return img_intro_verification_code;
     case 'labelMaster':
       return labelMaster;
+    case 'icoScreenShagre':
+      return icoScreenShagre;
     default:
       return ico_etc;
   }

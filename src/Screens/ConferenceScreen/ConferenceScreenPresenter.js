@@ -5,12 +5,14 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { View, TouchableOpacity } from 'react-native';
+import { Platform, View, TouchableOpacity } from 'react-native';
 import LoadingIndicator from './LoadingIndicator';
 import Content from './Content';
 import SimpleNoti from './SimpleNoti';
 import { isWehagoV } from '../../utils';
 import WatingScreen from './WatingScreen';
+import ScreenShareIOS from './ScreenShare/ScreenShareIOS';
+import ScreenShareANDROID from './ScreenShare/ScreenShareANDROID';
 /**
  * ConferenceScreenPresenter
  */
@@ -26,7 +28,12 @@ const ConferenceScreenPresenter = props => {
   return (
     <View style={{ flex: 1 }}>
       <SimpleNoti />
-      <TouchableOpacity
+      {Platform.OS === 'ios' ? (
+        <ScreenShareIOS />
+      ) : (
+        <ScreenShareANDROID/>
+      )}
+      {/* <TouchableOpacity
         style={{
           position: 'absolute',
           width: 100,
@@ -36,8 +43,8 @@ const ConferenceScreenPresenter = props => {
           backgroundColor: '#2825f2',
           zIndex: 99
         }}
-        onPress={props.test}
-      />
+        onPress={props.toggleScreenFlag}
+      /> */}
       {props.mainUser && props.connection ? (
         <Content
           mainUser={props.mainUser}

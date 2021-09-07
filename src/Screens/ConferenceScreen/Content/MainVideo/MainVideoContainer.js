@@ -25,15 +25,6 @@ class MainVideoContainer extends React.Component {
       time > 0 && this.setState({ time });
     }, 500);
 
-    const { ExternalAPI } = NativeModules;
-    const eventEmitter = new NativeEventEmitter(ExternalAPI);
-    this._conference = getConferenceManager()
-    eventEmitter.addListener(
-        ExternalAPI.TOGGLE_SCREEN_SHARE,
-        ({ enabled }) => {
-          this._conference.changeTrack()   
-        }
-    );
 
     BackHandler.addEventListener('hardwareBackPress', this._handleBackButton);
   }
@@ -65,13 +56,6 @@ class MainVideoContainer extends React.Component {
       />
     );
   }
-  test = () => {
-    const handle = findNodeHandle(this._nativeComponent);
-    NativeModules.ScreenCapturePickerViewManager.show(handle);
-  }
-  _setNativeComponent = component => {
-    this._nativeComponent = component;
-  };
   _handleBackButton = () => {
     this._handleEnterPIPMode('BACK');
 

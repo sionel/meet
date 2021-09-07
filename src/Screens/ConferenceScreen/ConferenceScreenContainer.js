@@ -50,8 +50,7 @@ class ConferenceScreenContainer extends React.Component {
       endUser: null,
       createdTime: null,
       pipMode: false,
-      _this: true,
-      isDesktopSharing: false
+      _this: true
     };
     this.t = getT();
   }
@@ -88,7 +87,6 @@ class ConferenceScreenContainer extends React.Component {
       setInterval(() => {
         this._handleAppSizeChange();
       }, 500);
-
   }
 
   /** */
@@ -141,11 +139,14 @@ class ConferenceScreenContainer extends React.Component {
       this._conferenceManager?.dispose();
       this.props.setSharingMode();
       this.connectFailCheck && clearInterval(this.connectFailCheck);
-    } catch (error) {
-    }
-
+    } catch (error) {}
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.isScreenShare !== this.props.isScreenShare && !isIOS) {
+      this._handleChangeScreen();
+    }
+  }
   /**
    * render
    */
@@ -167,7 +168,7 @@ class ConferenceScreenContainer extends React.Component {
         onChangeDocumentPage={this._handleChangeDocumentPage}
         onChangeMicMaster={this._handleToggleMic}
         isDeployedServices={this.state.isDeployedServices}
-        test={this.test}
+        toggleScreenFlag={this.props.toggleScreenFlag}
       />
     ) : (
       <EndCallMessage
@@ -178,70 +179,33 @@ class ConferenceScreenContainer extends React.Component {
     );
   }
 
-  test = async () => {
-    const { isDesktopSharing } = this.state;
-    const newTrackType = isDesktopSharing ? 'video' : 'desktop';
-    debugger;
-    await this._conferenceManager.changeTrack(
-      newTrackType,
-      this.props.user.videoTrack
-    );
-    this.setState({
-      ...this.state,
-      isDesktopSharing: !isDesktopSharing
-    });
+  // toggleScreenFlag = async () => {
+  //   const { isDesktopSharing } = this.props;
+  //   this.setState({
+  //     ...this.state,
+  //     isDesktopSharing: !isDesktopSharing
+  //   });
+  // };
+  _handleChangeScreen = async () => {
+    const { isScreenShare ,setScreenFlag} = this.props;
+    const newTrackType = isScreenShare ? 'desktop' : 'video';
+    try {
+      await this._conferenceManager.changeTrack(
+        newTrackType,
+        this.props.user.videoTrack
+      );
+    } catch (error) {
+      setScreenFlag(false)
+    }
   };
-
   _handleCreateConnection = () => {
-    const { navigation, auth, dispatch } = this.props;
+    const { dispatch } = this.props;
 
-    // const item = navigation.getParam('item');
-
-    // 컴포넌트가 마운트 되면 대화방 초기 설정 후 입장한다.
     this._conferenceManager = new ConferenceManager(
       dispatch,
       this._handleEndCall
     );
     setConferenceManager(this._conferenceManager);
-
-    // 참가자/생성자 여부 확인 후 로딩딜레이
-
-    // let roomId;
-    // let token;
-    // let accesstype;
-    // let externalUser;
-    // if (item) {
-    //   roomId = item.videoRoomId; // item.videoRoomId
-    //   token = item.roomToken;
-    //   accesstype = item.accesstype;
-    //   externalUser = item.externalUser;
-    // } else {
-    //   roomId = this.props.screenProps.params.room_id;
-    // }
-    // this._joinConference(
-    //   roomId,
-    //   user_name,
-    //   auth,
-    //   token,
-    //   item ? item.tracks : null,
-    //   accesstype,
-    //   externalUser,
-    //   item
-    // );
-
-    // is_creator
-    // 0 : 화상회의 생성 / 1 : 화상회의 참여 / 9 : 비즈박스알파(외부서비스)
-    // if (item.isCreator == 2) {
-    //   // 받은사람
-    //   // console.warn('delayLoading', '4500');
-    //   // FIXME mobile 의 경우만 발생하는 이슈 (아래)
-    //   // 모바일-모바일 or 모바일-웹에서화상대화를 동시에 접속하면 모바일이 화면을 송출/수신 못하는 이슈 발생
-    //   // 최소 딜레이 2-3초 정도
-    //   delayLoading(4500);
-    // } else {
-    //   // console.warn('delayLoading', '0');
-    // delayLoading(0);
-    // }
   };
 
   /** 대화방 참가 생성 */
@@ -253,6 +217,7 @@ class ConferenceScreenContainer extends React.Component {
       joinConference,
       changeMasterControlMode,
       setToastMessage,
+      setMainUserNotExist
     } = this.props;
     const item = navigation.getParam('item');
     const {
@@ -294,12 +259,18 @@ class ConferenceScreenContainer extends React.Component {
         this.props.setAlert({
           type: 1,
           title: '알림',
-          message: '마스터가 입장요청을 거절하였습니다.'
+          message: '입장에 실패하였습니다.'
         });
         this._handleConferenceClose();
       }
       return false;
     } else {
+      const { ExternalAPI } = NativeModules;
+      const eventEmitter = new NativeEventEmitter(ExternalAPI);
+      eventEmitter.addListener(ExternalAPI.TOGGLE_SCREEN_SHARE, () => {
+        this.props.toggleScreenFlag();
+      });
+
       const userId = this._conferenceManager.getMyId();
       MeetApi.enterMeetRoom(token, userId, name);
 
@@ -316,7 +287,6 @@ class ConferenceScreenContainer extends React.Component {
       const id = master.resultData.videoseq;
       changeMasterControlMode(id);
       setToastMessage(id ? this.t('toast_master_clton') : '');
-      const { ExternalAPI } = NativeModules;
       ExternalAPI.sendEvent(
         'CONFERENCE_JOINED',
         {
@@ -324,9 +294,9 @@ class ConferenceScreenContainer extends React.Component {
         },
         this.props.externalAPIScope
       );
-
       this.setState({ connection: true, selectedRoomName });
       setConferenceManager(this._conferenceManager);
+      setMainUserNotExist();
     }
   };
   _handleOrientation = orientation => {
@@ -345,7 +315,8 @@ class ConferenceScreenContainer extends React.Component {
 
   /** 화상회의방 닫기 */
   _handleConferenceClose = () => {
-    const { navigation, screenProps, auth, from } = this.props;
+    const { navigation, screenProps, setScreenFlag } = this.props;
+    setScreenFlag(false);
     if (
       // 딥링크로 들어온 두가지의 경우 login 창으로 보내버린다.
       screenProps.destination === 'Conference' ||
@@ -375,7 +346,7 @@ class ConferenceScreenContainer extends React.Component {
         };
       }
       // 비디오 off
-      this.props.toggleMuteVideo(true);
+      if (!this.props.isScreenShare) this.props.toggleMuteVideo(true);
     } else if (this._appState !== 'active' && nextAppState === 'active') {
       // active 시 video 설정 원래대로
       this.props.toggleMuteVideo(this._conferenceState.isMuteVideo);
@@ -407,7 +378,7 @@ class ConferenceScreenContainer extends React.Component {
       }
 
       // 비디오 off
-      this.props.toggleMuteVideo(true);
+      // this.props.toggleMuteVideo(true);
 
       // SystemSetting.getVolume().then(volume => {
       //   this._conferenceState.volume = volume;

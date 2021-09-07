@@ -84,7 +84,7 @@ class ConferenceManager {
       })
     )[0];
     await this._room.replaceTrack(oldTrack, newTrack);
-    localActionCreators.setTrack(newTrack);
+    this._dispatch(localActionCreators.setTrack(newTrack));
   };
   /**
    * 연결을 해제한다.

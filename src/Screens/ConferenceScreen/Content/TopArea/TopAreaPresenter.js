@@ -49,21 +49,18 @@ const TopAreaPresenter = props => {
           )}
 
           {/* 스케치 모드 */}
-          {props.callType === 3 && (
-            <CustomButton
-              name="pen"
-              width={24}
-              height={24}
-              areaWidth={42}
-              areaHeight={36}
-              // onPress={() => props.onChangeDrawing(!props.drawing)}
-              onPress={_.throttle(() => props.onChangeDrawingMode(true), 500)}
-            />
-          )}
+          <CustomButton
+            name="pen"
+            width={24}
+            height={24}
+            areaWidth={42}
+            areaHeight={36}
+            // onPress={() => props.onChangeDrawing(!props.drawing)}
+            onPress={_.throttle(() => props.onChangeDrawingMode(true), 500)}
+          />
 
           {/* 문서 공유 모드 */}
           {props.memberType !== 1 &&
-            props.callType === 3 &&
             props.deployedServices.includes('wedrive') && (
               <CustomButton
                 name="docShare"
@@ -79,7 +76,18 @@ const TopAreaPresenter = props => {
                 )}
               />
             )}
-
+          {!Platform.isPad && (
+            <CustomButton
+              name="icoScreenShagre"
+              width={28}
+              height={28}
+              areaWidth={42}
+              areaHeight={36}
+              onPress={() => {
+                props.setScreenFlag(true);
+              }}
+            />
+          )}
           {/* <CustomButton
             name={props.objectFit === 'contain' ? 'zoomIn' : 'zoomOut'}
             onPress={props.onChangeObjectFit}

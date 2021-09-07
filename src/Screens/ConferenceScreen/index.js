@@ -6,6 +6,7 @@ import { actionCreators as MasterActions } from '../../redux/modules/master';
 import { actionCreators as AlertAcions } from '../../redux/modules/alert';
 import { actionCreators as MainUserAcions } from '../../redux/modules/mainUser';
 import { actionCreators as ToastAcions } from '../../redux/modules/toast';
+import { actionCreators as ScreenShareAcions } from '../../redux/modules/ScreenShare';
 
 const getMainUser = (mainUserId, localUser, participants) => {
   if (!localUser) {
@@ -29,8 +30,10 @@ const mapStateToProps = state => {
     mainUser: { mainUserId },
     participants: { list },
     user: { auth },
-    documentShare
+    documentShare,
+    screenShare: { isScreenShare }
   } = state;
+
   const mainUser = getMainUser(mainUserId, user, list);
   return {
     mainUser,
@@ -45,7 +48,8 @@ const mapStateToProps = state => {
     isMasterControl,
     isMasterMicControl,
     isMuteMic: user?.isMuteMic,
-    externalAPIScope
+    externalAPIScope,
+    isScreenShare
   };
 };
 
@@ -62,10 +66,14 @@ const mapDispatchToProps = dispatch => {
     toggleMuteMicByMe: () => dispatch(MasterActions.toggleMuteMicByMe()),
     setAlert: params => dispatch(AlertAcions.setAlert(params)),
     joinConference: params => dispatch(LocalActions.joinConference(params)),
+    setTrack: track => dispatch(LocalActions.setTrack(track)),
     setMainUserNotExist: id => dispatch(MainUserAcions.setMainUserNotExist()),
     // changeMasterControlMode: id =>
     //   dispatch(MasterActions.changeMasterControlMode(id)),
-    setToastMessage: msg => dispatch(ToastAcions.setToastMessage(msg))
+    setToastMessage: msg => dispatch(ToastAcions.setToastMessage(msg)),
+    toggleScreenFlag: () => dispatch(ScreenShareAcions.toggleScreenFlag()),
+    setScreenFlag: (flag) => dispatch(ScreenShareAcions.setScreenFlag(flag)),
+
   };
 };
 

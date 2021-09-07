@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import TopAreaContainer from './TopAreaContainer';
 import { actionCreators as localActionCreators } from '../../../../redux/modules/local';
 import { actionCreators as mainUserActionCreators } from '../../../../redux/modules/mainUser';
+import { actionCreators as ScreenShareCreators } from '../../../../redux/modules/ScreenShare';
 
 const mapStateToProps = state => {
   const { local, mainUser, user, deployed } = state;
@@ -20,7 +21,8 @@ const mapDispatchToProps = dispatch => {
     toggleCameraFacingMode: () =>
       dispatch(localActionCreators.toggleCameraFacingMode()),
     toggleDocumentListMode: documentListMode =>
-      dispatch(mainUserActionCreators.setDocumentListMode(documentListMode))
+      dispatch(mainUserActionCreators.setDocumentListMode(documentListMode)),
+    setScreenFlag: flag => dispatch(ScreenShareCreators.setScreenFlag(flag))
   };
 };
 

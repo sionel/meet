@@ -40,9 +40,8 @@ class SplashScreenContainer extends Component {
     // 강제종료 했을때를 위한 강제 초기화
     this.props.setInitInfo();
     this.props.setSharingMode();
-
+    const m = getConferenceManager();
     if (this.props.url) {
-      const m = getConferenceManager();
       await this._handleGetDeeplink(this.props.url);
     } else {
       this._handleInit();

@@ -44,7 +44,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>FirebaseCrashlyticsCollectionEnabled</key>
 	<string>false</string>
 	<key>FirebaseScreenReportingEnabled</key>
@@ -64,14 +64,28 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>Apple Music Usage Description</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Bluetooth Always Usage Description</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>Bluetooth Peripheral Usage Description</string>
 	<key>NSCalendarsUsageDescription</key>
 	<string>See your scheduled meetings in the app.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Participate in meetings with video.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Contacts Usage Description</string>
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>Local network is used for establishing Peer-to-Peer connections.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>test</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Participate in meetings with voice.</string>
+	<key>NSMotionUsageDescription</key>
+	<string>Motion Usage Description</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Speech Recognition Usage Description</string>
 	<key>NSUserActivityTypes</key>
 	<array>
 		<string>org.jitsi.JitsiMeet.ios.conference</string>
@@ -79,7 +93,7 @@
 	<key>RTCAppGroupIdentifier</key>
 	<string>group.com.douzone.wehagomeet.appgroup</string>
 	<key>RTCScreenSharingExtension</key>
-	<string>com.douzone.wehagomeet.broadcast.extension</string>
+	<string>com.douzone.wehagomeet.broadcast</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
@@ -116,6 +130,8 @@
 	<array>
 		<string>armv7</string>
 	</array>
+	<key>UIRequiresFullScreen</key>
+	<true/>
 	<key>UIStatusBarStyle</key>
 	<string>UIStatusBarStyleLightContent</string>
 	<key>UISupportedInterfaceOrientations</key>
