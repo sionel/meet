@@ -53,43 +53,6 @@ class ConferenceManager {
     externalUser,
     item
   ) => {
-    // auth가 있으면
-    /* 
-auth가 있으면
-http://wiki.duzon.com:8080/pages/viewpage.action?pageId=99977839
-POST /token/access-token
-
-curl --location --request POST 'localhost:8080/video/token?cno=4' \
---header 'Authorization: Bearer edQxkGUypbGxfTwTKipNktXRtKCcAJ' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "room": "5114fd61-a596-4903-aa0f-33911a45964a",
-    "access_token": "gmdryzx5Vhz8kH2Myf3I9ILLohd39vVH0uogjGFF+wooUn5u"
-}'
-토큰 받아서 connect로
-
-없으면 바로 롱폴링
-1. curl --location --request POST 'http://localhost:8080/video/lpevent?room=5114fd61-a596-4903-aa0f-33911a45964a&user_identify=e41d94ca-545a-46fd-9bb0-fca60c9e5502&timeout=60'
-2. curl --location --request POST 'http://localhost:8080/video/standby/request/joinroom' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "room": "5114fd61-a596-4903-aa0f-33911a45964a",
-    "user_identify": "e41d94ca-545a-46fd-9bb0-fca60c9e5502",
-    "user_name": "사용자 이름",
-    "joincode": "81bb7a"
-}'
-
-1번 결과로 token
-curl --location --request POST 'localhost:8080/video/token?cno=4' \
---header 'Authorization: Bearer edQxkGUypbGxfTwTKipNktXRtKCcAJ' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "room": "5114fd61-a596-4903-aa0f-33911a45964a",
-    "access_token": "gmdryzx5Vhz8kH2Myf3I9ILLohd39vVH0uogjGFF+wooUn5u"
-}'
-
-받아서 connect
-*/
     if (isWehagoV) {
       const uuid = uuidv4();
       let tmpToken;
@@ -177,9 +140,9 @@ curl --location --request POST 'localhost:8080/video/token?cno=4' \
     if (Number(callType) === 3) {
       const master = await MeetApi.checkMasterControl(roomName);
       const id = master.resultData.videoseq;
-      const audioPolicy = master.resultData.audio_active
+      const audioPolicy = master.resultData.audio_active;
       this._dispatch(masterAcionCreators.changeMasterControlMode(id));
-      this._dispatch(masterAcionCreators.changeAudioActive(!audioPolicy))
+      this._dispatch(masterAcionCreators.changeAudioActive(!audioPolicy));
       this._dispatch(
         toastAcionCreators.setToastMessage(
           id ? this.t('toast_master_clton') : ''
@@ -247,7 +210,9 @@ curl --location --request POST 'localhost:8080/video/token?cno=4' \
       CHANGED_MIC_MUTE_BY_MASTER: this.changeMicMuteByMaster,
       REJECTED_BY_MASTER: this.rejectedByMaster,
       CHANGE_MASTER_LIST: this.changeMasterList,
-      REQUEST_KICK: this.requestKick
+      REQUEST_KICK: this.requestKick,
+      START_RECORDING: this.startRecord,
+      STOP_RECORDING: this.stopRecord
     };
     return handler;
   };
@@ -459,7 +424,6 @@ curl --location --request POST 'localhost:8080/video/token?cno=4' \
     this._dispatch(toastAcionCreators.setToastMessage(msg));
   };
   changeMicControlModeByMaster = value => {
-
     this._dispatch(masterAcionCreators.changeAudioActive(value));
 
     const msg = value
@@ -510,6 +474,18 @@ curl --location --request POST 'localhost:8080/video/token?cno=4' \
     } else {
       this._dispatch(toastAcionCreators.kickMessage(targetName));
     }
+  };
+
+  startRecord = () => {
+    this._dispatch(
+      toastAcionCreators.setToastMessage(this.t('녹화가 시작 되었습니다.'))
+    );
+  };
+
+  stopRecord = () => {
+    this._dispatch(
+      toastAcionCreators.setToastMessage(this.t('녹화가 중지 되었습니다.'))
+    );
   };
 }
 

@@ -63,6 +63,7 @@ export const UPDATE_MASTER_USERS =
 // 마스터가 유저 추방
 export const REQUEST_KICK = 'CONFERENCE.EVENT.REQUEST.KICK';
 
+export const REQUEST_ROOM_STOP_RECORDING = 'CONFERENCE.EVENT.ROOM.REQUEST_ROOM_STOP_RECORDING'
 /**
  * ConferenceConnector
  * 화상회의 방 생성/참가 및 디바이스 연결을 담당하는 클래스
@@ -79,6 +80,7 @@ class ConferenceConnector {
     //   drawingData: []
     // };
     // 드로잉 클래스
+    this._sessionID = null
     this._drawingManager = new DrawingMananger();
   }
 
@@ -239,6 +241,7 @@ class ConferenceConnector {
 
     // LEFT_USER 이벤트 연결
     this._room.on(conferenceEvents.USER_LEFT, id => {
+
       if (this._room.presenter === id) {
         this._handlers.CHANGED_DOCUMENT_SHARE_MODE(false, false);
       }
@@ -261,14 +264,27 @@ class ConferenceConnector {
     });
 
     // SUSPEND_DETECTED
-    this._room.on(conferenceEvents.SUSPEND_DETECTED, () =>
-      this._handlers.SUSPEND_DETECTED()
-    );
+    this._room.on(conferenceEvents.SUSPEND_DETECTED, () => {
+      this._handlers.SUSPEND_DETECTED();
+    });
 
     this._room.on(conferenceEvents.MESSAGE_RECEIVED, (user, text, date) => {
       this._handlers.MESSAGE_RECEIVED(user, text, date);
     });
 
+    this._room.on(conferenceEvents.RECORDER_STATE_CHANGED, data => {
+      const { _status, _sessionID, _initiator } = data;
+
+      if (_initiator && _status === 'on') {
+        this._handlers.START_RECORDING();
+        this._sessionID = _sessionID
+      }
+
+      if (_status === 'off') {
+        this._handlers.STOP_RECORDING();
+        this._sessionID = null
+      }
+    });
     // ======== addEventListener ========== //
 
     // 위하고 접속 아이디 및 정보 가져오기
@@ -339,7 +355,6 @@ class ConferenceConnector {
       if (userId !== this._room.myUserId()) {
         // const _drawData = JSON.parse(drawData);
         // this._drawingManager.handleConvertFormat('web', value);
-        // console.log('documentData', documentData);
         this._handlers.CHANGED_DRAW_DATA(
           JSON.parse(documentData),
           selectResource
@@ -489,6 +504,18 @@ class ConferenceConnector {
         this._handlers.CHANGED_MIC_MUTE_BY_MASTER(true);
       }
     });
+
+    this._room.addCommandListener(
+      REQUEST_ROOM_STOP_RECORDING,
+      (value) => {
+        debugger
+        if (this._room.isModerator()) {
+          if (this._sessionID) {
+            this._room.stopRecording(this._sessionID);
+          }
+        }
+      }
+    );
   };
 
   _removeEvents = () => {
@@ -511,6 +538,8 @@ class ConferenceConnector {
     this._room.removeCommandListener(GRANT_FLOOR_TARGET);
     this._room.removeCommandListener(UPDATE_MASTER_USERS);
     this._room.removeCommandListener(REQUEST_KICK);
+    
+    this._room.removeCommandListener(REQUEST_ROOM_STOP_RECORDING);
   };
 
   /**
