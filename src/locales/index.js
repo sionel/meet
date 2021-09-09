@@ -3,7 +3,6 @@ import { initReactI18next } from 'react-i18next';
 import * as RNLocalize from 'react-native-localize';
 
 import ko from './ko.json';
-import ko2 from './ko2.json';
 import en from './en.json';
 import ja from './ja.json';
 
