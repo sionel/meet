@@ -25,20 +25,22 @@ const ConferenceScreenPresenter = props => {
 
   return (
     <View style={{ flex: 1 }}>
-      <SimpleNoti />
       {props.mainUser && props.connection ? (
-        <Content
-          mainUser={props.mainUser}
-          callType={props.callType}
-          selectedRoomName={props.selectedRoomName}
-          onClose={props.onClose}
-          onClear={props.onClear}
-          onSetDrawingData={props.onSetDrawingData}
-          onChangeDrawingMode={props.onChangeDrawingMode}
-          onChangeSharingMode={props.onChangeSharingMode}
-          onChangeDocumentPage={props.onChangeDocumentPage}
-          onChangeMicMaster={props.onChangeMicMaster}
-        />
+        <>
+          <Content
+            mainUser={props.mainUser}
+            callType={props.callType}
+            selectedRoomName={props.selectedRoomName}
+            onClose={props.onClose}
+            onClear={props.onClear}
+            onSetDrawingData={props.onSetDrawingData}
+            onChangeDrawingMode={props.onChangeDrawingMode}
+            onChangeSharingMode={props.onChangeSharingMode}
+            onChangeDocumentPage={props.onChangeDocumentPage}
+            onChangeMicMaster={props.onChangeMicMaster}
+          />
+          <SimpleNoti />
+        </>
       ) : isWehagoV ? (
         <WatingScreen orientation={props.orientation} onClose={props.onClose} />
       ) : (

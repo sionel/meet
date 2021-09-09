@@ -319,17 +319,17 @@ class ConferenceScreenContainer extends React.Component {
       externalUser,
       item
     );
-    if (!joinResult) {
-      if (this._screen) {
-        this.props.setAlert({
-          type: 1,
-          title: '알림',
-          message: '마스터가 입장요청을 거절하였습니다.'
-        });
-        this._handleConferenceClose();
-      }
-      return false;
-    }
+    // if (!joinResult) {
+    //   if (this._screen) {
+    //     this.props.setAlert({
+    //       type: 1,
+    //       title: '알림',
+    //       message: '마스터가 입장요청을 거절하였습니다.'
+    //     });
+    //     this._handleConferenceClose();
+    //   }
+    //   return false;
+    // }
     this.setState({ connection: true }, async () => {
       // 마스터 권한으로 사용자 제어를 하고 있는중인지 체크
       const result = await MeetApi.checkMasterControlUser(roomName);

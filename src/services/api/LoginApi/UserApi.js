@@ -35,6 +35,42 @@ const getToken = async accessUrl => {
     const response = await fetch(url, data);
     return response;
   } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
+const getRK = async userPw => {
+  try {
+    const date = new Date().getTime();
+    const url = `/auth/login/rk/?rand=${date}`;
+    const getTokenResult = await getToken(url);
+    const encText = url + getTokenResult.cur_date + getTokenResult.token;
+    // NOTE 토큰 -> SHA256 -> Base64 String
+    const hashText = CryptoJS.SHA256(encText);
+    const signature = CryptoJS.enc.Base64.stringify(hashText);
+    const data = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        signature
+      }
+    };
+    const response = await fetch(`${wehagoBaseURL0}${url}`, data);
+
+    const key = response.resultData.random_key;
+
+    const encPw = CryptoJS.AES.encrypt(userPw, CryptoJS.enc.Utf8.parse(key), {
+      mode: CryptoJS.mode.ECB,
+      padding: CryptoJS.pad.Pkcs7
+    }).toString();
+    const obj = {
+      encPw,
+      key
+    };
+    return encPw.includes('+') ? getRK(userPw) : obj;
+  } catch (err) {
+    console.log(err);
     return false;
   }
 };
@@ -53,6 +89,7 @@ const loginRequest = async (
   access_pass
 ) => {
   try {
+    const { encPw, key } = await getRK(userPw);
     const date = new Date().getTime(); // January 1, 1970 로 부터의 시간 (밀리초)
     const url = captcha
       ? '/auth/login/exceed'
@@ -62,7 +99,6 @@ const loginRequest = async (
     // NOTE 토큰 -> SHA256 -> Base64 String
     const hashText = CryptoJS.SHA256(encText);
     const signature = CryptoJS.enc.Base64.stringify(hashText);
-
     const data = {
       method: 'POST',
       headers: {
@@ -72,8 +108,9 @@ const loginRequest = async (
       body: serialize({
         access_type: service_code,
         access_pass: access_pass,
+        random_key: key,
         portal_id: userId,
-        portal_password: userPw,
+        portal_password: encPw,
         login_os: Platform.OS,
         login_device: Platform.OS,
         login_ip: await getIp(),
