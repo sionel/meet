@@ -7,6 +7,7 @@ import { actionCreators as AlertAcions } from '../../redux/modules/alert';
 import { actionCreators as MainUserAcions } from '../../redux/modules/mainUser';
 import { actionCreators as ToastAcions } from '../../redux/modules/toast';
 import { actionCreators as ScreenShareAcions } from '../../redux/modules/ScreenShare';
+import _ from 'underscore';
 
 const getMainUser = (mainUserId, localUser, participants) => {
   if (!localUser) {
@@ -31,7 +32,7 @@ const mapStateToProps = state => {
     participants: { list },
     user: { auth },
     documentShare,
-    screenShare: { isScreenShare }
+    screenShare: { isScreenShare, screenToggleFlag }
   } = state;
 
   const mainUser = getMainUser(mainUserId, user, list);
@@ -49,7 +50,8 @@ const mapStateToProps = state => {
     isMasterMicControl,
     isMuteMic: user?.isMuteMic,
     externalAPIScope,
-    isScreenShare
+    isScreenShare,
+    screenToggleFlag
   };
 };
 
@@ -72,8 +74,7 @@ const mapDispatchToProps = dispatch => {
     //   dispatch(MasterActions.changeMasterControlMode(id)),
     setToastMessage: msg => dispatch(ToastAcions.setToastMessage(msg)),
     toggleScreenFlag: () => dispatch(ScreenShareAcions.toggleScreenFlag()),
-    setScreenFlag: (flag) => dispatch(ScreenShareAcions.setScreenFlag(flag)),
-
+    setScreenFlag: flag => dispatch(ScreenShareAcions.setScreenFlag(flag))
   };
 };
 

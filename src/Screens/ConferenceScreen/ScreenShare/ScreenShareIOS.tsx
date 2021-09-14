@@ -1,22 +1,26 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, findNodeHandle, NativeModules } from 'react-native';
 import { ScreenCapturePickerView } from 'react-native-webrtc';
 import { useSelector, useDispatch } from 'react-redux';
 
 export default function ScreenShareIOS(props) {
-  const isScreenShare = useSelector(state => state.screenShare['isScreenShare']);
-
+  const screenToggleFlag = useSelector(
+    state => state.screenShare['screenToggleFlag']
+  );
   let _nativeComponent;
   const _setNativeComponent = component => {
     _nativeComponent = component;
   };
 
+  const [isFirst, setIsFirst] = useState(true);
+
   useEffect(() => {
-    if (isScreenShare) {
+    debugger;
+    if (!isFirst) {
       const handle = findNodeHandle(_nativeComponent);
       NativeModules.ScreenCapturePickerViewManager.show(handle);
-    }
-  }, [isScreenShare]);
+    } else setIsFirst(false);
+  }, [screenToggleFlag]);
 
   return <ScreenCapturePickerView ref={_setNativeComponent} />;
 }

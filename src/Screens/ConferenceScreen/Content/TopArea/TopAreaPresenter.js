@@ -16,15 +16,6 @@ import _ from 'underscore';
 const TopAreaPresenter = props => {
   if (props.conferenceMode !== ConferenceModes.NORMAL) {
     return (
-      // <TouchableOpacity
-      // <View
-      //   activeOpacity={1}
-      //   style={
-      //     props.orientation === 'vertical'
-      //       ? styles.containerVertical
-      //       : styles.containerHorizontal
-      //   }
-      // >
       <View
         style={
           props.orientation === 'vertical'
@@ -32,9 +23,7 @@ const TopAreaPresenter = props => {
             : styles.settingBoxHorizontal
         }
       >
-        {/* {props.isMuteVideo ? null : ( */}
         <Fragment>
-          {/* 채팅 / 참여 유저 */}
           {props.callType === 3 && (
             <CustomButton
               name="talk"
@@ -47,19 +36,14 @@ const TopAreaPresenter = props => {
               areaHeight={36}
             />
           )}
-
-          {/* 스케치 모드 */}
           <CustomButton
             name="pen"
             width={24}
             height={24}
             areaWidth={42}
             areaHeight={36}
-            // onPress={() => props.onChangeDrawing(!props.drawing)}
             onPress={_.throttle(() => props.onChangeDrawingMode(true), 500)}
           />
-
-          {/* 문서 공유 모드 */}
           {props.memberType !== 1 &&
             props.deployedServices.includes('wedrive') && (
               <CustomButton
@@ -68,8 +52,6 @@ const TopAreaPresenter = props => {
                 height={28}
                 areaWidth={42}
                 areaHeight={36}
-                // onPress={() => props.onChangeDrawing(!props.drawing)}
-                // onPress={_.throttle(() => props.onChangeSharingMode(!props.sharing), 500)}
                 onPress={_.throttle(
                   () => props.toggleDocumentListMode(['FILELIST']),
                   500
@@ -83,21 +65,9 @@ const TopAreaPresenter = props => {
               height={28}
               areaWidth={42}
               areaHeight={36}
-              onPress={() => {
-                props.setScreenFlag(true);
-              }}
+              onPress={props.toggleScreenFlag}
             />
           )}
-          {/* <CustomButton
-            name={props.objectFit === 'contain' ? 'zoomIn' : 'zoomOut'}
-            onPress={props.onChangeObjectFit}
-            width={23}
-            height={23}
-            areaWidth={42}
-            areaHeight={36}
-          /> */}
-
-          {/* 카메라 전후 토글 */}
           <CustomButton
             name="switch"
             width={30}
@@ -106,11 +76,8 @@ const TopAreaPresenter = props => {
             areaHeight={36}
             onPress={() => {
               props.toggleCameraFacingMode();
-              // props.onReverseVideo();
             }}
           />
-
-          {/* 화면 좌우 반전 */}
           <CustomButton
             name="reverse"
             onPress={props.onReverseVideo}
@@ -120,10 +87,6 @@ const TopAreaPresenter = props => {
             areaHeight={36}
           />
         </Fragment>
-        {/* )} */}
-        {/* </View> */}
-        {/* </TouchableOpacity> */}
-        {/* isVideoReverse */}
       </View>
     );
   } else {

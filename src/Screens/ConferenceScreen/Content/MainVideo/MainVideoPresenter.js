@@ -41,7 +41,8 @@ const MainVideoPresenter = props => {
     test,
     drawing,
     isScreenShare,
-    setScreenFlag
+    setScreenFlag,
+    toggleScreenFlag
   } = props;
 
   const localPipMode = useSelector(state => state.local.pipMode);
@@ -165,7 +166,7 @@ const MainVideoPresenter = props => {
               justifyContent: 'center',
               borderRadius: 50
             }}
-            onPress={()=>setScreenFlag(false)}
+            onPress={toggleScreenFlag}
           >
             <Text
               style={{

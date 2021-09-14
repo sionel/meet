@@ -27,7 +27,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    setScreenFlag: flag => dispatch(ScreenShareCreators.setScreenFlag(flag))
+    setScreenFlag: flag => dispatch(ScreenShareCreators.setScreenFlag(flag)),
+    toggleScreenFlag: () => dispatch(ScreenShareCreators.toggleScreenFlag())
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(MainVideoContainer);

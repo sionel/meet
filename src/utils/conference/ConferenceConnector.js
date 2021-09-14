@@ -63,6 +63,9 @@ export const UPDATE_MASTER_USERS =
 // 마스터가 유저 추방
 export const REQUEST_KICK = 'CONFERENCE.EVENT.REQUEST.KICK';
 
+export const REQUEST_ROOM_STOP_RECORDING =
+  'CONFERENCE.EVENT.ROOM.REQUEST_ROOM_STOP_RECORDING';
+
 /**
  * ConferenceConnector
  * 화상회의 방 생성/참가 및 디바이스 연결을 담당하는 클래스
@@ -79,6 +82,7 @@ class ConferenceConnector {
     //   drawingData: []
     // };
     // 드로잉 클래스
+    this._sessionID = null;
     this._drawingManager = new DrawingMananger();
   }
 
@@ -94,12 +98,7 @@ class ConferenceConnector {
   /**
    * 대화방 참가
    */
-  connect = (
-    connection,
-    roomName,
-    tracks,
-    attributes
-  ) => {
+  connect = (connection, roomName, tracks, attributes) => {
     return new Promise(async (resolve, reject) => {
       // 참여할 room object 생성
       this._room = this._createRoom(connection, roomName);
@@ -215,6 +214,8 @@ class ConferenceConnector {
 
     // JOIN_USER 이벤트 연결
     this._room.on(conferenceEvents.USER_JOINED, (id, user) => {
+      if (new Set(['wehagorecord', 'wehagorecord-dev']).has(user.getStatsID()))
+        return;
       this._handlers.JOIN_USER(user);
     });
 
@@ -273,6 +274,19 @@ class ConferenceConnector {
       }
     });
 
+    this._room.on(conferenceEvents.RECORDER_STATE_CHANGED, data => {
+      const { _status, _sessionID, _initiator } = data;
+
+      if (_initiator && _status === 'on') {
+        this._handlers.START_RECORDING();
+        this._sessionID = _sessionID;
+      }
+
+      if (_status === 'off') {
+        this._handlers.STOP_RECORDING();
+        this._sessionID = null;
+      }
+    });
     /**
      * @description 문서 공유 모드 설정 감지
      */
@@ -470,6 +484,13 @@ class ConferenceConnector {
         this._handlers.CHANGED_MIC_MUTE_BY_MASTER(true);
       }
     });
+    this._room.addCommandListener(REQUEST_ROOM_STOP_RECORDING, value => {
+      if (this._room.isModerator()) {
+        if (this._sessionID) {
+          this._room.stopRecording(this._sessionID);
+        }
+      }
+    });
   };
 
   _removeEvents = () => {
@@ -483,15 +504,17 @@ class ConferenceConnector {
     this._room.removeCommandListener(DRAWING_REDO_UNDO);
     this._room.removeCommandListener(DOCUMENT_SHARE_TARGET);
     this._room.removeCommandListener(DRAWING_SHARE_TARGET);
-
     this._room.removeCommandListener(REQUEST_MIC_CONTROL);
     this._room.removeCommandListener(REQUEST_MIC_CONTROL_USER);
     this._room.removeCommandListener(REQUEST_MIC_CONTROL_TARGET);
-
     this._room.removeCommandListener(GRANT_FLOOR);
+    this._room.removeCommandListener(STOP_FLOOR);
     this._room.removeCommandListener(GRANT_FLOOR_TARGET);
     this._room.removeCommandListener(UPDATE_MASTER_USERS);
     this._room.removeCommandListener(REQUEST_KICK);
+    this._room.removeCommandListener(REQUEST_ROOM_STOP_RECORDING);
+
+
   };
 
   /**

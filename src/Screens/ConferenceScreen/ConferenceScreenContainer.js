@@ -53,6 +53,9 @@ class ConferenceScreenContainer extends React.Component {
       _this: true
     };
     this.t = getT();
+
+    this.ExternalAPI = NativeModules.ExternalAPI;
+    this.eventEmitter = new NativeEventEmitter(this.ExternalAPI);
   }
 
   /**
@@ -128,14 +131,17 @@ class ConferenceScreenContainer extends React.Component {
       AppState.removeEventListener('change', this._handleAppStateChange);
       this._timer && clearInterval(this._timer);
       // 컴포넌트가 언마운트 되기전 화상회의 관련 리소스를 해제 한다.
-      const { ExternalAPI } = NativeModules;
-      ExternalAPI.sendEvent(
+      this.ExternalAPI.sendEvent(
         'CONFERENCE_TERMINATED',
         {
           url: null
         },
         this.props.externalAPIScope
       );
+      this.eventEmitter.removeAllListeners(
+        this.ExternalAPI.TOGGLE_SCREEN_SHARE
+      );
+
       this._conferenceManager?.dispose();
       this.props.setSharingMode();
       this.connectFailCheck && clearInterval(this.connectFailCheck);
@@ -143,7 +149,9 @@ class ConferenceScreenContainer extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.isScreenShare !== this.props.isScreenShare && !isIOS) {
+    debugger
+    if (prevProps.screenToggleFlag !== this.props.screenToggleFlag && !isIOS) {
+      debugger
       this._handleChangeScreen();
     }
   }
@@ -187,15 +195,17 @@ class ConferenceScreenContainer extends React.Component {
   //   });
   // };
   _handleChangeScreen = async () => {
-    const { isScreenShare ,setScreenFlag} = this.props;
-    const newTrackType = isScreenShare ? 'desktop' : 'video';
+    const { isScreenShare, setScreenFlag } = this.props;
+    const newTrackType = isScreenShare ? 'video' : 'desktop';
+    debugger
     try {
       await this._conferenceManager.changeTrack(
         newTrackType,
         this.props.user.videoTrack
       );
+      setScreenFlag(!isScreenShare);
     } catch (error) {
-      setScreenFlag(false)
+      setScreenFlag(false);
     }
   };
   _handleCreateConnection = () => {
@@ -265,11 +275,10 @@ class ConferenceScreenContainer extends React.Component {
       }
       return false;
     } else {
-      const { ExternalAPI } = NativeModules;
-      const eventEmitter = new NativeEventEmitter(ExternalAPI);
-      eventEmitter.addListener(ExternalAPI.TOGGLE_SCREEN_SHARE, () => {
-        this.props.toggleScreenFlag();
-      });
+      this.eventEmitter.addListener(
+        this.ExternalAPI.TOGGLE_SCREEN_SHARE,
+        this._handleChangeScreen
+      );
 
       const userId = this._conferenceManager.getMyId();
       MeetApi.enterMeetRoom(token, userId, name);
@@ -287,7 +296,7 @@ class ConferenceScreenContainer extends React.Component {
       const id = master.resultData.videoseq;
       changeMasterControlMode(id);
       setToastMessage(id ? this.t('toast_master_clton') : '');
-      ExternalAPI.sendEvent(
+      this.ExternalAPI.sendEvent(
         'CONFERENCE_JOINED',
         {
           url: `https://video.wehago.com/${roomName}`

@@ -22,7 +22,9 @@ const mapDispatchToProps = dispatch => {
       dispatch(localActionCreators.toggleCameraFacingMode()),
     toggleDocumentListMode: documentListMode =>
       dispatch(mainUserActionCreators.setDocumentListMode(documentListMode)),
-    setScreenFlag: flag => dispatch(ScreenShareCreators.setScreenFlag(flag))
+    setScreenFlag: (flag) => dispatch(ScreenShareCreators.setScreenFlag(flag)),
+    toggleScreenFlag: () => dispatch(ScreenShareCreators.toggleScreenFlag())
+
   };
 };
 

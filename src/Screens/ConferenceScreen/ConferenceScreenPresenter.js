@@ -33,18 +33,6 @@ const ConferenceScreenPresenter = props => {
       ) : (
         <ScreenShareANDROID/>
       )}
-      {/* <TouchableOpacity
-        style={{
-          position: 'absolute',
-          width: 100,
-          height: 100,
-          top: 200,
-          left: 100,
-          backgroundColor: '#2825f2',
-          zIndex: 99
-        }}
-        onPress={props.toggleScreenFlag}
-      /> */}
       {props.mainUser && props.connection ? (
         <Content
           mainUser={props.mainUser}

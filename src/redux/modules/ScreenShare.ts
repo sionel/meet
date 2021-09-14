@@ -5,9 +5,11 @@ const TOGGLE = 'screenShage.TOGGLE';
 
 interface state {
   isScreenShare: boolean;
+  screenToggleFlag: boolean;
 }
 const initialState: state = {
-  isScreenShare: false
+  isScreenShare: false,
+  screenToggleFlag: false
 };
 
 const reducer: (state: state, action: AnyAction) => state = (
@@ -16,25 +18,24 @@ const reducer: (state: state, action: AnyAction) => state = (
 ) => {
   switch (action.type) {
     case SET:
-      debugger
-
+      debugger;
       return _setScreenFlag(state, action);
     case TOGGLE:
-
-      return _toggleScreenFlag(state, action);
+      return _toggleScreenFlag(state);
     default:
       return state;
   }
 };
 
 const toggleScreenFlag = () => {
+  debugger
   return {
     type: TOGGLE
   };
 };
-const _toggleScreenFlag = (state, action) => ({
+const _toggleScreenFlag = state => ({
   ...state,
-  isScreenShare: !state.isScreenShare
+  screenToggleFlag: !state.screenToggleFlag
 });
 
 const setScreenFlag = (flag: boolean) => {

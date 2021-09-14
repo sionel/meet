@@ -139,7 +139,9 @@ class ConferenceManager {
       CHANGED_MIC_MUTE_BY_MASTER: this.changeMicMuteByMaster,
       REJECTED_BY_MASTER: this.rejectedByMaster,
       CHANGE_MASTER_LIST: this.changeMasterList,
-      REQUEST_KICK: this.requestKick
+      REQUEST_KICK: this.requestKick,
+      START_RECORDING: this.startRecord,
+      STOP_RECORDING: this.stopRecord
     };
     return handler;
   };
@@ -403,6 +405,17 @@ class ConferenceManager {
     } else {
       this._dispatch(toastAcionCreators.kickMessage(targetName));
     }
+  };
+  startRecord = () => {
+    this._dispatch(
+      toastAcionCreators.setToastMessage(this.t('녹화가 시작 되었습니다.'))
+    );
+  };
+
+  stopRecord = () => {
+    this._dispatch(
+      toastAcionCreators.setToastMessage(this.t('녹화가 중지 되었습니다.'))
+    );
   };
 }
 
