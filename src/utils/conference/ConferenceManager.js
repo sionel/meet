@@ -141,12 +141,11 @@ class ConferenceManager {
       CHANGE_MASTER_LIST: this.changeMasterList,
       REQUEST_KICK: this.requestKick,
       START_RECORDING: this.startRecord,
-      STOP_RECORDING: this.stopRecord
+      STOP_RECORDING: this.stopRecord,
+      REQUEST_RECORD_USER: this.requestRecordUser
     };
     return handler;
   };
-
-
 
   /**
    * init: 화상회의 연결을 위한 초기화
@@ -416,6 +415,9 @@ class ConferenceManager {
     this._dispatch(
       toastAcionCreators.setToastMessage(this.t('녹화가 중지 되었습니다.'))
     );
+  };
+  requestRecordUser = user => {
+    MeetApi.recordRequest(this._roomName, user);
   };
 }
 

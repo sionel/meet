@@ -65,7 +65,8 @@ export const REQUEST_KICK = 'CONFERENCE.EVENT.REQUEST.KICK';
 
 export const REQUEST_ROOM_STOP_RECORDING =
   'CONFERENCE.EVENT.ROOM.REQUEST_ROOM_STOP_RECORDING';
-
+export const REQUEST_ROOM_START_RECORDING =
+  'CONFERENCE.EVENT.ROOM.REQUEST_ROOM_START_RECORDING';
 /**
  * ConferenceConnector
  * 화상회의 방 생성/참가 및 디바이스 연결을 담당하는 클래스
@@ -276,8 +277,7 @@ class ConferenceConnector {
 
     this._room.on(conferenceEvents.RECORDER_STATE_CHANGED, data => {
       const { _status, _sessionID, _initiator } = data;
-
-      if (_initiator && _status === 'on') {
+      if ((_initiator || this._room.isModerator()) && _status === 'on') {
         this._handlers.START_RECORDING();
         this._sessionID = _sessionID;
       }
@@ -491,6 +491,25 @@ class ConferenceConnector {
         }
       }
     });
+    // 방 녹화 요청 이벤트 핸들러
+    this._room.addCommandListener(REQUEST_ROOM_START_RECORDING, value => {
+      const {
+        attributes: { user }
+      } = value;
+      if (this._room.isModerator()) {
+        // 녹화 요청 등록 API 호출
+        this._handlers.REQUEST_RECORD_USER(user);
+        // 녹화 시작
+        this._room.startRecording({
+          mode: 'file',
+          appData: JSON.stringify({
+            file_recording_metadata: {
+              share: true
+            }
+          })
+        });
+      }
+    });
   };
 
   _removeEvents = () => {
@@ -513,8 +532,7 @@ class ConferenceConnector {
     this._room.removeCommandListener(UPDATE_MASTER_USERS);
     this._room.removeCommandListener(REQUEST_KICK);
     this._room.removeCommandListener(REQUEST_ROOM_STOP_RECORDING);
-
-
+    this._room.removeCommandListener(REQUEST_ROOM_START_RECORDING);
   };
 
   /**
