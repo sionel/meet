@@ -13,6 +13,7 @@ import { actionCreators as WedriveAcionCreators } from '../../redux/modules/wedr
 import { actionCreators as masterAcionCreators } from '../../redux/modules/master';
 import { actionCreators as toastAcionCreators } from '../../redux/modules/toast';
 import { actionCreators as alertAcionCreators } from '../../redux/modules/alert';
+import { actionCreators as indicatorAcionCreators } from '../../redux/modules/indicator';
 import { MeetApi } from '../../services';
 import { getT } from '../../utils/translateManager';
 import { isWehagoV } from '..';
@@ -96,7 +97,8 @@ class ConferenceManager {
       this._dispatch(WedriveAcionCreators.setInitInfo()),
       this._dispatch(localActionCreators.leaveConference())
     ]).then(() => {
-      console.log('디포 다끝남');
+      console.log('디포ㅓ 끝');
+      this._dispatch(indicatorAcionCreators.resetIndicator())
     });
     // if (this._conferenceConnector) {
     //   await this._conferenceConnector.dispose();

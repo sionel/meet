@@ -8,6 +8,8 @@ import { actionCreators as MainUserAcions } from '../../redux/modules/mainUser';
 import { actionCreators as ToastAcions } from '../../redux/modules/toast';
 import { actionCreators as ScreenShareAcions } from '../../redux/modules/ScreenShare';
 import { actionCreators as ParticipantsAcions } from '../../redux/modules/participants';
+import { actionCreators as indicatorAcionCreators } from '../../redux/modules/indicator';
+
 import _ from 'underscore';
 
 const getMainUser = (mainUserId, localUser, participants) => {
@@ -93,7 +95,8 @@ const mapDispatchToProps = dispatch => {
     setToastMessage: msg => dispatch(ToastAcions.setToastMessage(msg)),
     toggleScreenFlag: () => dispatch(ScreenShareAcions.toggleScreenFlag()),
     setScreenFlag: flag => dispatch(ScreenShareAcions.setScreenFlag(flag)),
-    initParticipants: () => dispatch(ParticipantsAcions.initParticipants())
+    initParticipants: () => dispatch(ParticipantsAcions.initParticipants()),
+    setIndicator: () => dispatch(indicatorAcionCreators.setIndicator('화상회의 종료 중'))
   };
 };
 

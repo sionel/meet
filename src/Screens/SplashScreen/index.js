@@ -12,6 +12,7 @@ import { actionCreators as UserActions } from '../../redux/modules/user';
 import { actionCreators as DocumentShareActions } from '../../redux/modules/documentShare';
 import { actionCreators as WedriveAcions } from '../../redux/modules/wedrive';
 import { actionCreators as AlertAcions } from '../../redux/modules/alert';
+import { actionCreators as IndicatorAcions } from '../../redux/modules/indicator';
 
 // map state to props
 const mapStateToProps = state => {
@@ -45,7 +46,9 @@ const mapDispatchToProps = dispatch => {
     setSharingMode: () => dispatch(DocumentShareActions.setSharingMode()),
     setInitInfo: () => dispatch(WedriveAcions.setInitInfo()),
     toggleUpdateNoti: () => dispatch(UserActions.toggleUpdateNoti()),
-    setAlert: params => dispatch(AlertAcions.setAlert(params))
+    setAlert: params => dispatch(AlertAcions.setAlert(params)),
+    setIndicator: () => dispatch(IndicatorAcions.setIndicator()),
+    resetIndicator: () => dispatch(IndicatorAcions.resetIndicator())
   };
 };
 

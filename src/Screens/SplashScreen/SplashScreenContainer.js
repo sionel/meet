@@ -41,6 +41,14 @@ class SplashScreenContainer extends Component {
     this.props.setInitInfo();
     this.props.setSharingMode();
     const m = getConferenceManager();
+    if (m) {
+      console.log("'여기닷");
+      this.props.setIndicator();
+      console.log(m);
+      await m.dispose();
+      console.log(m);
+    }
+
     if (this.props.url) {
       await this._handleGetDeeplink(this.props.url);
     } else {

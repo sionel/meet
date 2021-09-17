@@ -336,6 +336,7 @@ class ConferenceScreenContainer extends React.Component {
       toggleScreenFlag
     } = this.props;
 
+    this.props.setIndicator()
     await this.props.initParticipants();
     await this.props.initMainUser();
     if (
