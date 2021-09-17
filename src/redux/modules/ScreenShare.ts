@@ -18,7 +18,6 @@ const reducer: (state: state, action: AnyAction) => state = (
 ) => {
   switch (action.type) {
     case SET:
-      debugger;
       return _setScreenFlag(state, action);
     case TOGGLE:
       return _toggleScreenFlag(state);
@@ -28,7 +27,6 @@ const reducer: (state: state, action: AnyAction) => state = (
 };
 
 const toggleScreenFlag = () => {
-  debugger
   return {
     type: TOGGLE
   };

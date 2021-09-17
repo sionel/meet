@@ -1,5 +1,8 @@
 //#region Action Types
 
+// init 설정
+const INIT = 'mainUser.INIT';
+
 // MAIN_USER 설정
 const SET_MAIN_USER = 'mainUser.SET_MAIN_USER';
 
@@ -31,6 +34,8 @@ const initialState = {
 
 function reducer(state = initialState, action) {
   switch (action.type) {
+    case INIT:
+      return _initMainUser();
     case SET_MAIN_USER:
       return applySetMainUser(state, action);
     case SET_MAIN_USER_NOTEXIST:
@@ -48,6 +53,12 @@ function reducer(state = initialState, action) {
 
 //#endregion
 
+function initMainUser() {
+  return { type: INIT };
+}
+function _initMainUser() {
+  return { ...initialState };
+}
 //#region SET_MAIN_USER
 
 function setMainUser(mainUserId) {
@@ -180,7 +191,8 @@ export const actionCreators = {
   setMainUserNotExist,
   setDrawingMode,
   setDocumentListMode,
-  setSharingMode
+  setSharingMode,
+  initMainUser
 };
 
 export default reducer;

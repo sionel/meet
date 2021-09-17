@@ -5,14 +5,21 @@ import { actionCreators as mainUserActionCreators } from '../../../../redux/modu
 import { actionCreators as ScreenShareCreators } from '../../../../redux/modules/ScreenShare';
 
 const mapStateToProps = state => {
-  const { local, mainUser, user, deployed } = state;
+  const {
+    local,
+    mainUser,
+    user,
+    deployed,
+    screenShare: { isScreenShare }
+  } = state;
 
   return {
     conferenceMode: local.conferenceMode,
     isMuteVideo: local.user.isMuteVideo,
     documentListMode: mainUser.documentListMode,
     memberType: user.auth.member_type, // wehago one 사용자
-    deployedServices: deployed.deployedServices
+    deployedServices: deployed.deployedServices,
+    isScreenShare
   };
 };
 
@@ -22,9 +29,8 @@ const mapDispatchToProps = dispatch => {
       dispatch(localActionCreators.toggleCameraFacingMode()),
     toggleDocumentListMode: documentListMode =>
       dispatch(mainUserActionCreators.setDocumentListMode(documentListMode)),
-    setScreenFlag: (flag) => dispatch(ScreenShareCreators.setScreenFlag(flag)),
+    setScreenFlag: flag => dispatch(ScreenShareCreators.setScreenFlag(flag)),
     toggleScreenFlag: () => dispatch(ScreenShareCreators.toggleScreenFlag())
-
   };
 };
 

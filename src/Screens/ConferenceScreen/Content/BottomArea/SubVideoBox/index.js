@@ -7,9 +7,6 @@ const mapStateToProps = state => {
     mainUser: { mainUserId },
     participants: { list }
   } = state;
-
-  // console.log('PARTICIPANT : ', participants);
-
   return {
     mainUserId,
     user,

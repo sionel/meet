@@ -89,15 +89,24 @@ class ConferenceManager {
   /**
    * 연결을 해제한다.
    */
-  dispose = async () => {
-    if (this._conferenceConnector) {
-      await this._conferenceConnector.dispose();
-    }
-    if (this._connection) {
-      this._connection.dispose();
-    }
-    this._dispatch(WedriveAcionCreators.setInitInfo());
-    // this._dispatch(localActionCreators.leaveConference());
+  dispose = () => {
+    new Promise.all([
+      this._conferenceConnector && this._conferenceConnector.dispose(),
+      this._connection && this._connection.dispose(),
+      this._dispatch(WedriveAcionCreators.setInitInfo()),
+      this._dispatch(localActionCreators.leaveConference())
+    ]).then(() => {
+      console.log('디포 다끝남');
+    });
+    // if (this._conferenceConnector) {
+    //   await this._conferenceConnector.dispose();
+    // }
+    // if (this._connection) {
+    //   await this._connection.dispose();
+    // }
+    // await this._dispatch(WedriveAcionCreators.setInitInfo());
+    // await this._dispatch(localActionCreators.leaveConference());
+    // console.log('디포 다끝남');
   };
 
   /**

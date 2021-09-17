@@ -141,17 +141,16 @@ class ConferenceScreenContainer extends React.Component {
       this.eventEmitter.removeAllListeners(
         this.ExternalAPI.TOGGLE_SCREEN_SHARE
       );
-
       this._conferenceManager?.dispose();
       this.props.setSharingMode();
       this.connectFailCheck && clearInterval(this.connectFailCheck);
-    } catch (error) {}
+    } catch (error) {
+      console.log('에러에러');
+    }
   }
 
   componentDidUpdate(prevProps) {
-    debugger
     if (prevProps.screenToggleFlag !== this.props.screenToggleFlag && !isIOS) {
-      debugger
       this._handleChangeScreen();
     }
   }
@@ -197,7 +196,6 @@ class ConferenceScreenContainer extends React.Component {
   _handleChangeScreen = async () => {
     const { isScreenShare, setScreenFlag } = this.props;
     const newTrackType = isScreenShare ? 'video' : 'desktop';
-    debugger
     try {
       await this._conferenceManager.changeTrack(
         newTrackType,
@@ -215,6 +213,7 @@ class ConferenceScreenContainer extends React.Component {
       dispatch,
       this._handleEndCall
     );
+    
     setConferenceManager(this._conferenceManager);
   };
 
@@ -318,14 +317,27 @@ class ConferenceScreenContainer extends React.Component {
 
   /** 전화/대화 종료 */
   _handleEndCall = () => {
+    const { setScreenFlag, isScreenShare, toggleScreenFlag } = this.props;
+    if (isScreenShare && isIOS) {
+      toggleScreenFlag();
+      return;
+    }
     this._handleConferenceClose();
     this.setState({ connection: false, endCall: true });
   };
 
   /** 화상회의방 닫기 */
-  _handleConferenceClose = () => {
-    const { navigation, screenProps, setScreenFlag } = this.props;
-    setScreenFlag(false);
+  _handleConferenceClose = async () => {
+    const {
+      navigation,
+      screenProps,
+      setScreenFlag,
+      isScreenShare,
+      toggleScreenFlag
+    } = this.props;
+
+    await this.props.initParticipants();
+    await this.props.initMainUser();
     if (
       // 딥링크로 들어온 두가지의 경우 login 창으로 보내버린다.
       screenProps.destination === 'Conference' ||

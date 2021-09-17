@@ -4,6 +4,9 @@ import MeetApi from '../../services/api/MeetApi';
 //#region Action Types
 
 // 새참여자 회의 참가
+const INIT = 'participants.INIT';
+
+// 새참여자 회의 참가
 const JOIN_USER = 'participants.JOIN_USER';
 
 // 참여자 나가기
@@ -41,6 +44,8 @@ const initialState = {
 
 function reducer(state = initialState, action) {
   switch (action.type) {
+    case INIT:
+      return _initParticipants(state, action);
     case JOIN_USER:
       return applyJoinUser(state, action);
     case LEFT_USER:
@@ -63,6 +68,14 @@ function reducer(state = initialState, action) {
 }
 
 //#endregion
+
+function initParticipants() {
+  return { type: INIT };
+}
+
+function _initParticipants() {
+  return { ...initialState };
+}
 
 //#region JOIN_USER : 새로운 유저 참가
 
@@ -287,6 +300,7 @@ function applySetUserInfo(state, action) {
   const { id, info } = action;
   const list = state.list.slice(0);
   const findUser = list.find(user => {
+    // WEHAGO_ID로 sendCommand 받는데 이상한 로직에서도 받는게 있어서 중복처리 하려고 둔 로직
     if (user.id === id) {
       return true;
     }
@@ -312,7 +326,8 @@ export const actionCreators = {
   updateMuteVideo,
   // updateMuteAudio,
   setUserInfo,
-  changedStatus
+  changedStatus,
+  initParticipants
 };
 
 export default reducer;

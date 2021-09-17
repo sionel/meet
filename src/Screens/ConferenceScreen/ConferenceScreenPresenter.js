@@ -24,15 +24,14 @@ const ConferenceScreenPresenter = props => {
   if (localPipMode !== pipMode) {
     dispatch({ type: 'local.CONFERENCE_PIP_MODE', pipMode });
   }
+  // console.log('ConferenceScreenPresenter');
+  // console.log(props.mainUser);
+  // console.log(props.connection);
 
   return (
     <View style={{ flex: 1 }}>
       <SimpleNoti />
-      {Platform.OS === 'ios' ? (
-        <ScreenShareIOS />
-      ) : (
-        <ScreenShareANDROID/>
-      )}
+      {Platform.OS === 'ios' ? <ScreenShareIOS /> : <ScreenShareANDROID />}
       {props.mainUser && props.connection ? (
         <Content
           mainUser={props.mainUser}

@@ -83,7 +83,7 @@ function reducer(state = initialState, action) {
     case SET_EXTERNAL:
       return { ...state, externalAPIScope: action.externalAPIScope };
     case SET_TRACK:
-      return applySetTrack(state,action);
+      return applySetTrack(state, action);
     default:
       return state;
   }
@@ -120,7 +120,8 @@ function joinConference(conferenceInfo) {
 
 function applyJoinConference(state, action) {
   const { conferenceInfo } = action;
-
+  console.log('applyJoinConference');
+  console.log(conferenceInfo);
   const user = {
     id: 'localUser',
     cid: conferenceInfo.cid,
@@ -158,9 +159,8 @@ function leaveConference() {
 
 function applyLeaveConference(state) {
   /** video/audio mute */
-  state.user.videoTrack.dispose();
-  state.user.audioTrack.dispose();
-
+  // state.user.videoTrack.dispose();
+  // state.user.audioTrack.dispose();
   const user = null;
   return {
     ...state,
