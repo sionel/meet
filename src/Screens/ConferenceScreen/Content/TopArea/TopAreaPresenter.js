@@ -13,6 +13,8 @@ import _ from 'underscore';
 /**
  * TopAreaPresenter
  */
+
+//TODO: 각 상황에 따라서 버튼 활성화를 해주는데 이 부분을 컨테이너에서 처리해주고 여기서는 해당 기능 플래그로만 관리하는게 베스트
 const TopAreaPresenter = props => {
   if (props.conferenceMode !== ConferenceModes.NORMAL) {
     return (
@@ -68,24 +70,28 @@ const TopAreaPresenter = props => {
               onPress={props.toggleScreenFlag}
             />
           )}
-          <CustomButton
-            name="switch"
-            width={30}
-            height={30}
-            areaWidth={42}
-            areaHeight={36}
-            onPress={() => {
-              props.toggleCameraFacingMode();
-            }}
-          />
-          <CustomButton
-            name="reverse"
-            onPress={props.onReverseVideo}
-            width={24}
-            height={24}
-            areaWidth={42}
-            areaHeight={36}
-          />
+          {!props.isScreenShare && (
+            <CustomButton
+              name="switch"
+              width={30}
+              height={30}
+              areaWidth={42}
+              areaHeight={36}
+              onPress={() => {
+                props.toggleCameraFacingMode();
+              }}
+            />
+          )}
+          {!props.isScreenShare && (
+            <CustomButton
+              name="reverse"
+              onPress={props.onReverseVideo}
+              width={24}
+              height={24}
+              areaWidth={42}
+              areaHeight={36}
+            />
+          )}
         </Fragment>
       </View>
     );

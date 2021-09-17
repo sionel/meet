@@ -7,6 +7,7 @@ import { actionCreators as AlertAcions } from '../../redux/modules/alert';
 import { actionCreators as MainUserAcions } from '../../redux/modules/mainUser';
 import { actionCreators as ToastAcions } from '../../redux/modules/toast';
 import { actionCreators as ScreenShareAcions } from '../../redux/modules/ScreenShare';
+import { actionCreators as ParticipantsAcions } from '../../redux/modules/participants';
 import _ from 'underscore';
 
 const getMainUser = (mainUserId, localUser, participants) => {
@@ -36,6 +37,22 @@ const mapStateToProps = state => {
   } = state;
 
   const mainUser = getMainUser(mainUserId, user, list);
+  // console.log('asdasd');
+  // if (mainUserId) {
+  //   console.log('mainUserId');
+  //   console.log(mainUserId);
+  // }
+  // console.log('---');
+  // if (user) {
+  //   console.log('user');
+  //   console.log(user);
+  // }
+  // console.log('---');
+  // if (list) {
+  //   console.log('list');
+  //   console.log(list);
+  // }
+  // console.log('===');
   return {
     mainUser,
     mainUserId,
@@ -70,11 +87,13 @@ const mapDispatchToProps = dispatch => {
     joinConference: params => dispatch(LocalActions.joinConference(params)),
     setTrack: track => dispatch(LocalActions.setTrack(track)),
     setMainUserNotExist: id => dispatch(MainUserAcions.setMainUserNotExist()),
+    initMainUser: () => dispatch(MainUserAcions.initMainUser()),
     // changeMasterControlMode: id =>
     //   dispatch(MasterActions.changeMasterControlMode(id)),
     setToastMessage: msg => dispatch(ToastAcions.setToastMessage(msg)),
     toggleScreenFlag: () => dispatch(ScreenShareAcions.toggleScreenFlag()),
-    setScreenFlag: flag => dispatch(ScreenShareAcions.setScreenFlag(flag))
+    setScreenFlag: flag => dispatch(ScreenShareAcions.setScreenFlag(flag)),
+    initParticipants: () => dispatch(ParticipantsAcions.initParticipants())
   };
 };
 

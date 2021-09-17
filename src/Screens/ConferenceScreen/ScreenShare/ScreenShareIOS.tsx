@@ -15,7 +15,6 @@ export default function ScreenShareIOS(props) {
   const [isFirst, setIsFirst] = useState(true);
 
   useEffect(() => {
-    debugger;
     if (!isFirst) {
       const handle = findNodeHandle(_nativeComponent);
       NativeModules.ScreenCapturePickerViewManager.show(handle);

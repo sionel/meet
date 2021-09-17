@@ -7,7 +7,7 @@ import { ConferenceModes } from '../../../../utils/Constants';
  * BottomAreaBoxPresenter
  */
 const BottomAreaPresenter = props =>
-  props.conferenceMode !== ConferenceModes.CONTROL ? (
+  props.conferenceMode !== ConferenceModes.CONTROL || props.isScreenShare ? (
     <CotrolBox
       onClose={props.onClose}
       onChangeSpeaker={props.onChangeSpeaker}
