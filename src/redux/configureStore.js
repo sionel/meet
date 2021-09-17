@@ -24,6 +24,7 @@ import alert from './modules/alert';
 import toast from './modules/toast';
 import deployed from './modules/deployed';
 import screenShare from './modules/ScreenShare';
+import indicator from './modules/indicator';
 /**
  * middleware list
  */
@@ -54,7 +55,8 @@ const persistConfig = {
     'alert',
     'toast',
     'deployed',
-    'ScreenShare'
+    'ScreenShare',
+    'indicator'
   ]
 };
 
@@ -75,7 +77,8 @@ const reducer = persistCombineReducers(persistConfig, {
   alert,
   toast,
   deployed,
-  screenShare
+  screenShare,
+  indicator
 });
 
 /**

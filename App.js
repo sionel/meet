@@ -15,6 +15,8 @@ import { setT } from './src/utils/translateManager';
 import Splash from 'react-native-splash-screen';
 import { actionCreators } from './src/redux/modules/local';
 
+import CustomProvider from './src/Provider';
+
 // import { io } from "socket.io-client";
 
 const { persistor, store } = configureStore();
@@ -39,7 +41,7 @@ class App extends Component {
 
     store.dispatch({
       type: 'local.SET_EXTERNAL',
-      externalAPIScope:this.props.externalAPIScope
+      externalAPIScope: this.props.externalAPIScope
     });
     // const ws = io("ws://10.70.242.129:8080", {
     //   path: "/wehagomeet",
@@ -69,7 +71,7 @@ class App extends Component {
     return (
       <Provider store={store}>
         <PersistGate persistor={persistor}>
-          <AlertScreen>
+          <CustomProvider>
             {this.state.loaded ? (
               <Main
                 destination={this.state.destination}
@@ -83,7 +85,7 @@ class App extends Component {
                 t={this.translation}
               />
             )}
-          </AlertScreen>
+          </CustomProvider>
         </PersistGate>
       </Provider>
     );

@@ -128,7 +128,8 @@ const CustomIcon = props => {
 };
 
 CustomIcon.propTypes = {
-  name: PropTypes.string
+  name: PropTypes.string,
+  size: PropTypes.number
 };
 
 const getButtonSource = name => {
@@ -322,7 +323,7 @@ const styles = StyleSheet.create({
 CustomIcon.defaultProps = {
   width: 45,
   height: 45,
-  borderRadius: 0
+  borderRadius: 0,
 };
 
 export default CustomIcon;
