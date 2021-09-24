@@ -105,7 +105,6 @@ class ConferenceManager {
       accesstype,
       externalUser
     );
-
     await MeetApi.enterMeetRoom(token, this._room.myUserId(), name);
     // const createdTime = this._room.properties['created-ms'];
     // this._dispatch(localActionCreators.setConferenceCreatedTime(createdTime));
@@ -114,7 +113,6 @@ class ConferenceManager {
     if (!tracks) tracks = this._conferenceConnector.tracks;
     const videoTrack = tracks.find(track => track.getType() === 'video');
     const audioTrack = tracks.find(track => track.getType() === 'audio');
-
     await this._dispatch(
       localActionCreators.joinConference({
         id,
@@ -142,7 +140,7 @@ class ConferenceManager {
       const id = master.resultData.videoseq;
       const audioPolicy = master.resultData.audio_active;
       this._dispatch(masterAcionCreators.changeMasterControlMode(id));
-      this._dispatch(masterAcionCreators.changeAudioActive(!audioPolicy));
+      this._dispatch(masterAcionCreators.changeAudioActive(audioPolicy));
       this._dispatch(
         toastAcionCreators.setToastMessage(
           id ? this.t('toast_master_clton') : ''
