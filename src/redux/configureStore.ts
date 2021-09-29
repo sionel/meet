@@ -35,6 +35,25 @@ if (env === 'development') {
   // middlewares.push(logger);
 }
 
+
+export interface RootState {
+  local: any;
+  // user;
+  // local;
+  // mainUser;
+  // participants;
+  // wetalk;
+  // wedrive;
+  // documentShare;
+  // conference;
+  // webUser;
+  // master;
+  // toast;
+  // loginInfo;
+  // alert:alertState;
+}
+
+
 /**
  * persistConfig
  */
