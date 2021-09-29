@@ -348,31 +348,31 @@ RCT_EXPORT_METHOD(updateDeviceList) {
             }
         }
         
-        for (AVAudioSessionPortDescription *portDesc in session.availableInputs) {
-            // Skip "Phone" if headphones are present.
-            if (headphonesAvailable && [portDesc.portType isEqualToString:AVAudioSessionPortBuiltInMic]) {
-                continue;
-            }
-            id deviceData
-                = @{
-                    @"type": [self portTypeToString:portDesc.portType],
-                    @"name": portDesc.portName,
-                    @"uid": portDesc.UID,
-                    @"selected": [NSNumber numberWithBool:[portDesc.UID isEqualToString:currentPort]]
-                };
-            [data addObject:deviceData];
-        }
+        // for (AVAudioSessionPortDescription *portDesc in session.availableInputs) {
+        //     // Skip "Phone" if headphones are present.
+        //     if (headphonesAvailable && [portDesc.portType isEqualToString:AVAudioSessionPortBuiltInMic]) {
+        //         continue;
+        //     }
+        //     id deviceData
+        //         = @{
+        //             @"type": [self portTypeToString:portDesc.portType],
+        //             @"name": portDesc.portName,
+        //             @"uid": portDesc.UID,
+        //             @"selected": [NSNumber numberWithBool:[portDesc.UID isEqualToString:currentPort]]
+        //         };
+        //     [data addObject:deviceData];
+        // }
 
-        // We need to manually add the speaker because it will never show up in the
-        // previous list, as it's not an input.
-        [data addObject:
-            @{ @"type": kDeviceTypeSpeaker,
-               @"name": @"Speaker",
-               @"uid": kDeviceTypeSpeaker,
-               @"selected": [NSNumber numberWithBool:[kDeviceTypeSpeaker isEqualToString:currentPort]]
-        }];
+        // // We need to manually add the speaker because it will never show up in the
+        // // previous list, as it's not an input.
+        // [data addObject:
+        //     @{ @"type": kDeviceTypeSpeaker,
+        //        @"name": @"Speaker",
+        //        @"uid": kDeviceTypeSpeaker,
+        //        @"selected": [NSNumber numberWithBool:[kDeviceTypeSpeaker isEqualToString:currentPort]]
+        // }];
         
-        [self sendEventWithName:kDevicesChanged body:data];
+        // [self sendEventWithName:kDevicesChanged body:data];
     });
 }
 
