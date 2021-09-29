@@ -82,6 +82,10 @@ dependencies {
         implementation project(':react-native-orientation-locker')
         implementation project(':react-native-fast-image')
         implementation project(':react-native-sketch-canvas')
+        implementation project(':react-native-home-pressed')
+        implementation project(':react-native-restart')
+        implementation project(':react-native-exit-app')
+        implementation project(':react-native-incall-manager')
 
 
     testImplementation 'junit:junit:4.12'
