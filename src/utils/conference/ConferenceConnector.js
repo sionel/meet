@@ -109,6 +109,7 @@ class ConferenceConnector {
       // if (!tracks) tracks = await this._createTracks();
       // 트랙 추가
       this._addTracks(tracks);
+      this.tracks = tracks
       // wehago id를 커맨드로 전송한다.
       this._room.sendCommand(WEHAGO_ID, {
         value: this._room.myUserId(),
@@ -137,8 +138,8 @@ class ConferenceConnector {
             attributes: { isDrawingShare: 'false' }
           });
         }
-        await this._room.leave();
-        this._room = null;
+        // await this._room.leave();
+        // this._room = null;
       } catch (error) {
         // Nothing to do
       }
