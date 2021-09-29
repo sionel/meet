@@ -1,0 +1,10 @@
+/* 
+  InfoPlistKR.strings
+  app
+
+  Created by 최은우 on 2021/03/24.
+  Copyright © 2021 Facebook. All rights reserved.
+*/
+
+NSCameraUsageDescription = "화상 전화 중에 상대방이 나를 볼 수 있도록 액세스 권한을 부여하세요.";
+NSMicrophoneUsageDescription = "통화 중에 상대방이 내 음성을 들을 수 있도록 액세스 권한을 부여하세요.";
