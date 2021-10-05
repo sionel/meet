@@ -1,10 +1,8 @@
-import React, {RefObject, useState} from 'react';
-import {Alert} from 'react-native';
+import React, { RefObject, useState } from 'react';
+import { Alert } from 'react-native';
 import LoginInputPresenter from './LoginInputPresenter';
 
-const LoginInputContainer = ({navigation}: any) => {
-  const [toggleChk, setToggleChk] = useState(false);
-
+const LoginInputContainer = ({ navigation }: any) => {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
 
@@ -24,15 +22,15 @@ const LoginInputContainer = ({navigation}: any) => {
     if (!password) return passwordRef.current.focus();
 
     Alert.alert('로그인성공', `userId : ${userId}\npassword : ${password}`, [
-      {text: '이전페이지로', onPress: goLogin},
+      { text: '이전페이지로', onPress: goLogin }
     ]);
   };
 
   const goLogin = () => {
-    navigation.navigate('LOGIN');
+    navigation.navigate('Login');
   };
 
-  const inputOut = () => {
+  const inputFocusOut = () => {
     if (usernameRef.current.isFocused()) return usernameRef.current.blur();
     else if (passwordRef.current.isFocused()) return passwordRef.current.blur();
   };
@@ -40,8 +38,6 @@ const LoginInputContainer = ({navigation}: any) => {
   return (
     <LoginInputPresenter
       {...{
-        toggleChk,
-        setToggleChk,
         userId,
         idInput,
         usernameRef,
@@ -49,7 +45,7 @@ const LoginInputContainer = ({navigation}: any) => {
         pwInput,
         passwordRef,
         loginchk,
-        inputOut
+        inputFocusOut
       }}
     />
   );

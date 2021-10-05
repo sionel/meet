@@ -3,7 +3,7 @@
  * 최상위화면 컨테이너
  */
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { SafeAreaView, View } from 'react-native';
 
 import MainPresenter from './MainPresenter';
 
@@ -31,7 +31,7 @@ class MainContainer extends Component {
   render() {
     const { params, destination, onChangeRootState, from } = this.props;
     return (
-      <View style={{ flex: 1, width: '100%', hight: '100%' }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
         <MainPresenter
           params={params}
           from={from}
@@ -39,7 +39,7 @@ class MainContainer extends Component {
           onChangeRootState={onChangeRootState}
           onChangeMainState={this._handleChangeMainState}
         />
-      </View>
+      </SafeAreaView>
     );
   }
 

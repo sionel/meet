@@ -49,11 +49,11 @@ const MainPresenter = props => {
   }
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff'
-  }
-});
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: '#fff'
+//   }
+// });
 
 export default MainPresenter;

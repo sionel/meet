@@ -197,7 +197,7 @@ class ReactInstanceManagerHolder {
                 new org.wonday.orientation.OrientationPackage(),
                 new com.dylanvann.fastimage.FastImageViewPackage(),
                 new com.terrylinla.rnsketchcanvas.SketchCanvasPackage(),
-
+                new com.BV.LinearGradient.LinearGradientPackage(),
                 new ReactPackageAdapter() {
                     @Override
                     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {

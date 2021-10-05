@@ -79,9 +79,10 @@ dependencies {
 
     implementation project(':react-native-localize')
     implementation project(':react-native-gesture-handler')
-        implementation project(':react-native-orientation-locker')
-        implementation project(':react-native-fast-image')
-        implementation project(':react-native-sketch-canvas')
+    implementation project(':react-native-orientation-locker')
+    implementation project(':react-native-fast-image')
+    implementation project(':react-native-sketch-canvas')
+    implementation project(':react-native-linear-gradient')
 
 
     testImplementation 'junit:junit:4.12'

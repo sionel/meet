@@ -25,7 +25,7 @@ const LoginScreenContainer = ({navigation}: any) => {
   };
 
   const goLoginD = () => {
-    navigation.navigate('LOGIND');
+    navigation.navigate('LoginInput');
   };
 
   return (

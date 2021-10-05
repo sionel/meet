@@ -1,25 +1,25 @@
 import React from 'react';
 import {
   Image,
-  SafeAreaView,
   StyleSheet,
-  Text,
-  TextInput,
   TouchableHighlight,
   TouchableOpacity,
   View,
-  Platform,
+  Platform
 } from 'react-native';
-// import CheckBox from '@react-native-community/checkbox';
-// import Icon from 'react-native-vector-icons/Ionicons';
-// import LinearGradient from 'react-native-linear-gradient';
+import { Text, TextInput } from '../../../components/StyledText';
+import CustomCheckBoxContainer from '../../../components/CustomCheckBox';
 
-const logo = require('../../img/logo.png');
+const logo = require('../../../../assets2/logos/logo.png');
+
+const user = require('../../../../assets2/icons/ic_person.png');
+const lock = require('../../../../assets2/icons/ic_lock.png');
+
+const patternU = require('../../../../assets/icons/bg_pattern_up.png');
+const patternD = require('../../../../assets/icons/bg_pattern_down.png');
 
 const LoginInputPresenter = (props: any) => {
   const {
-    toggleChk,
-    setToggleChk,
     userId,
     idInput,
     usernameRef,
@@ -27,47 +27,37 @@ const LoginInputPresenter = (props: any) => {
     pwInput,
     passwordRef,
     loginchk,
-    inputOut,
+    inputFocusOut
   } = props;
   return (
-    <View style={{flex: 1, backgroundColor: '#e7f9fe'}}>
+    <View style={styles.baseView}>
       <TouchableOpacity
         style={styles.container}
         activeOpacity={1}
-        onPress={inputOut}>
-          <View style={{flex:1}}></View>
-        <Image source={logo} style={styles.imageView} resizeMode={'center'}/>
+        onPress={inputFocusOut}
+      >
+        <View style={{ flex: 1 }} />
+        <Image source={logo} style={styles.imageView} resizeMode={'center'} />
         <View style={styles.topContainer}>
           <View style={styles.inputSec}>
-            {/* <Icon
-              name="person-outline"
-              size={24}
-              color="black"
-              style={styles.icon}
-            /> */}
+            <Image source={user} style={styles.icon} />
             <TextInput
               style={styles.inputLogin}
               placeholder="아이디"
-              ref={usernameRef}
+              customRef={usernameRef}
               returnKeyType="next"
-              // autoCapitalize="characters"
               value={userId}
               onChangeText={idInput}
               onSubmitEditing={() => passwordRef.current.focus()}
             />
           </View>
           <View style={styles.inputSec}>
-            {/* <Icon
-              name="lock-closed-outline"
-              size={24}
-              color="black"
-              style={styles.icon}
-            /> */}
+            <Image source={lock} style={styles.icon} />
             <TextInput
               style={styles.inputLogin}
               placeholder="비밀번호"
               secureTextEntry={true}
-              ref={passwordRef}
+              customRef={passwordRef}
               value={password}
               returnKeyType="go"
               autoCapitalize="none"
@@ -77,119 +67,119 @@ const LoginInputPresenter = (props: any) => {
           </View>
         </View>
         <View style={styles.bottomContainer}>
-          {/* <LinearGradient
-            end={{x:0, y:0.5}}
-            start={{x:1, y:0.5}}
-            colors={['#56ccf2', '#2f80ed']}
-            style={styles.loginButtonView}> */}
-            <TouchableHighlight
-              style={styles.loginButtonTouch}
-              activeOpacity={1}
-              onPress={() => loginchk(userId, password)}>
-              <Text style={styles.loginButtonText}>로그인</Text>
-            </TouchableHighlight>
-          {/* </LinearGradient> */}
+          <TouchableHighlight
+            style={styles.loginButtonView}
+            onPress={() => loginchk(userId, password)}
+          >
+            <Text style={styles.loginButtonText}>로그인</Text>
+          </TouchableHighlight>
           <TouchableOpacity activeOpacity={1} style={styles.chkboxView}>
-            {/* {Platform.OS === 'ios' ? (
-              <CheckBox
-                boxType="square"
-                value={toggleChk}
-                onValueChange={setToggleChk}
-              />
-            ) : (
-              <CheckBox value={toggleChk} onValueChange={setToggleChk} />
-            )} */}
-
+            <CustomCheckBoxContainer />
             <Text style={styles.chkboxText}>아이디 저장</Text>
           </TouchableOpacity>
         </View>
-        <View style={{flex:1}}></View>
+        <View style={{ flex: 1 }}></View>
         <View style={styles.copyrightView}>
           <Text style={styles.copyrightText}>
             CopyRight{'\u00A9'} DOUZONE BIZONE. All rights reserved.
           </Text>
         </View>
       </TouchableOpacity>
+      <Image
+        source={patternD}
+        style={{
+          position: 'absolute',
+          left: 0,
+          bottom: '8%',
+          resizeMode: 'center',
+          width: 260,
+          height: 82
+        }}
+      />
+      <Image
+        source={patternU}
+        style={{
+          position: 'absolute',
+          width: 240,
+          height: 240,
+          right: 0,
+          top: 0,
+          resizeMode: 'center'
+        }}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  baseView: {
     flex: 1,
-    width: '100%',
-    height: '100%',
+    backgroundColor: 'rgb(240,248,255)',
+    position: 'relative'
+  },
+  container: {
+    paddingLeft: '8%',
+    paddingRight: '8%',
+    zIndex: 1,
+    flex: 1,
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   imageView: {
-    flex:1,
-    width: '100%',
-    alignItems: 'center',
-    paddingLeft: '6%',
-    paddingRight: '6%',
-    // backgroundColor:'#f12'
+    flex: 1,
+    alignItems: 'center'
   },
   topContainer: {
     flex: 1,
-    width: '100%',
     alignItems: 'center',
-    justifyContent: 'space-evenly',
-    backgroundColor: '#e7f9fe',
-    paddingLeft: '6%',
-    paddingRight: '6%',
+    justifyContent: 'space-evenly'
   },
   bottomContainer: {
     flex: 1,
     width: '100%',
-    paddingLeft: '6%',
-    paddingRight: '6%',
     justifyContent: 'center',
-    alignItems: 'center',
-    // backgroundColor: '#8a9',
+    alignItems: 'center'
   },
   //아이디, 비밀번호 입력
   inputSec: {
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    position: 'relative',
+    position: 'relative'
   },
   icon: {
-    left: 30,
+    resizeMode: 'center',
+    left: -20,
     bottom: Platform.OS === 'ios' ? 5 : 0,
+    position: 'absolute'
   },
   inputLogin: {
-    paddingLeft: '15%',
+    flex: 1,
+    paddingLeft: '12%',
     paddingBottom: 5,
     fontSize: 16,
-    width: '100%',
-    borderBottomColor: 'rgba(204,204,204,0.5)',
-    borderBottomWidth: 1,
+    borderBottomColor: 'rgb(230,230,230)',
+    borderBottomWidth: 1
   },
   //로그인버튼
   loginButtonView: {
-    flexDirection: 'row',
     width: '95%',
-    height: 50,
+    height: 42,
     borderRadius: 25,
     justifyContent: 'center',
     alignItems: 'center',
     marginVertical: 10,
-  },
-  loginButtonTouch: {
-    flex: 1, 
-    alignItems: 'center'
+    backgroundColor: '#56ccf2'
   },
   loginButtonText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 16
   },
   //체크박스
   chkboxView: {
     flexDirection: 'row',
-    width: '95%',
-    // backgroundColor:'#63c'
+    width: '95%'
   },
   chkboxText: {
     // paddingTop: Platform.OS === 'ios' ? 8 : 5,
@@ -197,20 +187,19 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: 'rgb(51,51,51)',
     paddingTop: 8,
-    paddingLeft: 5,
+    paddingLeft: 5
   },
   //저작권
   copyrightView: {
     position: 'absolute',
     bottom: 0,
-    justifyContent: 'flex-end',
     alignItems: 'center',
-    paddingBottom: '5%',
+    paddingBottom: '5%'
   },
   copyrightText: {
     color: 'rgb(147,147,147)',
-    fontSize: 11,
-  },
+    fontSize: 11
+  }
 });
 
 export default LoginInputPresenter;
