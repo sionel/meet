@@ -30,7 +30,6 @@
 		5043A8A0282842B7AF0A0329 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 02AA3DC8748248B489A8A6BD /* MaterialCommunityIcons.ttf */; };
 		6AAE0D16495D4BB4AB64DB60 /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3829BA3B87B240CFAD016E3B /* FontAwesome5_Regular.ttf */; };
 		6EBB9C6A0D724BD49FDA16FB /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6C5F60D3F05247468B32762B /* Octicons.ttf */; };
-		8A0F903C26F187C10016B04F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8A0F903826F187C10016B04F /* InfoPlist.strings */; };
 		9ED76A7D4CD14CF2833AD5D8 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 18E0E509A0794B61AE8D32CA /* Zocial.ttf */; };
 		B44361510E9344469689B522 /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 440A3B3E04824CBD89125EC7 /* FontAwesome5_Brands.ttf */; };
 		BA3F9908B5C9486BADBB5BDA /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 96D7E4D506C4437BA1F3B579 /* AntDesign.ttf */; };
@@ -46,6 +45,10 @@
 		F064381ADDF548409D9529CA /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1F6E4808E11241FD888B81CB /* Entypo.ttf */; };
 		FC190ABC6BA64E6F8A3057FE /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D070A209F4E44BB2B82F50B5 /* Ionicons.ttf */; };
 		FD246213C22A4AC29BA889AD /* DOUZONEText30.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4B3421C1BF50477C8F0F51A9 /* DOUZONEText30.ttf */; };
+		FDC834A82702E5B500FE6826 /* File.strings in Resources */ = {isa = PBXBuildFile; fileRef = FDC834A72702E5B500FE6826 /* File.strings */; };
+		FDC834AC2702E8CE00FE6826 /* ja.lproj in Resources */ = {isa = PBXBuildFile; fileRef = FDC834A92702E8CE00FE6826 /* ja.lproj */; };
+		FDC834AD2702E8CE00FE6826 /* en.lproj in Resources */ = {isa = PBXBuildFile; fileRef = FDC834AA2702E8CE00FE6826 /* en.lproj */; };
+		FDC834AE2702E8CE00FE6826 /* ko.lproj in Resources */ = {isa = PBXBuildFile; fileRef = FDC834AB2702E8CE00FE6826 /* ko.lproj */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -144,9 +147,6 @@
 		6C5F60D3F05247468B32762B /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		7443D8986FEF4591AE20685C /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		7CD88D13B8FF2670B191D6CD /* Pods-WehagoMeet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WehagoMeet.release.xcconfig"; path = "../Pods/Target Support Files/Pods-WehagoMeet/Pods-WehagoMeet.release.xcconfig"; sourceTree = "<group>"; };
-		8A0F903926F187C10016B04F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = ../../../../WehagoMeet/ios/app/src/en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		8A0F903A26F187C10016B04F /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ../../../../WehagoMeet/ios/app/src/ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		8A0F903B26F187C10016B04F /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ../../../../WehagoMeet/ios/app/src/ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		96D7E4D506C4437BA1F3B579 /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
 		99CF24157FF14692825B45C4 /* DOUZONEText10.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = DOUZONEText10.ttf; path = ../../assets/fonts/DOUZONEText10.ttf; sourceTree = "<group>"; };
 		9F891AAA22E2843EF91D9684 /* Pods-WehagoMeet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WehagoMeet.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-WehagoMeet/Pods-WehagoMeet.debug.xcconfig"; sourceTree = "<group>"; };
@@ -166,6 +166,10 @@
 		E5C97B62227A1EB400199214 /* JitsiMeetCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JitsiMeetCommands.swift; sourceTree = "<group>"; };
 		E7DCC18FC4D24C7A8FD342DD /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
 		FC040BBED70876444D89E91C /* Pods-JitsiMeet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JitsiMeet.release.xcconfig"; path = "../Pods/Target Support Files/Pods-JitsiMeet/Pods-JitsiMeet.release.xcconfig"; sourceTree = "<group>"; };
+		FDC834A72702E5B500FE6826 /* File.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = File.strings; sourceTree = "<group>"; };
+		FDC834A92702E8CE00FE6826 /* ja.lproj */ = {isa = PBXFileReference; lastKnownFileType = file; path = ja.lproj; sourceTree = SOURCE_ROOT; };
+		FDC834AA2702E8CE00FE6826 /* en.lproj */ = {isa = PBXFileReference; lastKnownFileType = file; path = en.lproj; sourceTree = SOURCE_ROOT; };
+		FDC834AB2702E8CE00FE6826 /* ko.lproj */ = {isa = PBXFileReference; lastKnownFileType = file; path = ko.lproj; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -235,19 +239,22 @@
 		13B07FAE1A68108700A75B9A /* src */ = {
 			isa = PBXGroup;
 			children = (
+				FDC834AA2702E8CE00FE6826 /* en.lproj */,
+				FDC834A92702E8CE00FE6826 /* ja.lproj */,
+				FDC834AB2702E8CE00FE6826 /* ko.lproj */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				DE4C456021DE1E4E00EA0709 /* FIRUtilities.h */,
 				DE4C455F21DE1E4E00EA0709 /* FIRUtilities.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
-				8A0F903826F187C10016B04F /* InfoPlist.strings */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				0B412F201EDEE95300B1A0A6 /* Main.storyboard */,
 				0BBD021F212EB69D00CCB19F /* Types.h */,
 				0B412F1D1EDEE6E800B1A0A6 /* ViewController.h */,
 				0B412F1E1EDEE6E800B1A0A6 /* ViewController.m */,
+				FDC834A72702E5B500FE6826 /* File.strings */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -435,6 +442,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0B412F211EDEE95300B1A0A6 /* Main.storyboard in Resources */,
+				FDC834AE2702E8CE00FE6826 /* ko.lproj in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				BA3F9908B5C9486BADBB5BDA /* AntDesign.ttf in Resources */,
@@ -443,7 +451,6 @@
 				3BF721CD40E54E3DAEEA93E2 /* Feather.ttf in Resources */,
 				07866616193C4547BB53A8C5 /* FontAwesome.ttf in Resources */,
 				B44361510E9344469689B522 /* FontAwesome5_Brands.ttf in Resources */,
-				8A0F903C26F187C10016B04F /* InfoPlist.strings in Resources */,
 				6AAE0D16495D4BB4AB64DB60 /* FontAwesome5_Regular.ttf in Resources */,
 				34A476BBE4B648418B3A250E /* FontAwesome5_Solid.ttf in Resources */,
 				4F9847D71A774AB88425D33D /* Fontisto.ttf in Resources */,
@@ -451,9 +458,12 @@
 				FC190ABC6BA64E6F8A3057FE /* Ionicons.ttf in Resources */,
 				5043A8A0282842B7AF0A0329 /* MaterialCommunityIcons.ttf in Resources */,
 				D52263BC69B44F169BF6E044 /* MaterialIcons.ttf in Resources */,
+				FDC834AC2702E8CE00FE6826 /* ja.lproj in Resources */,
 				6EBB9C6A0D724BD49FDA16FB /* Octicons.ttf in Resources */,
+				FDC834AD2702E8CE00FE6826 /* en.lproj in Resources */,
 				CFD9EA02141A442991401EC1 /* SimpleLineIcons.ttf in Resources */,
 				9ED76A7D4CD14CF2833AD5D8 /* Zocial.ttf in Resources */,
+				FDC834A82702E5B500FE6826 /* File.strings in Resources */,
 				1D9C556ECB7D4EBFBB12EBDB /* DOUZONEText10.ttf in Resources */,
 				FD246213C22A4AC29BA889AD /* DOUZONEText30.ttf in Resources */,
 				352C5A791AC3408180CBBD62 /* DOUZONEText50.ttf in Resources */,
@@ -625,16 +635,6 @@
 				13B07FB21A68108700A75B9A /* Base */,
 			);
 			name = LaunchScreen.xib;
-			sourceTree = "<group>";
-		};
-		8A0F903826F187C10016B04F /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				8A0F903926F187C10016B04F /* en */,
-				8A0F903A26F187C10016B04F /* ko */,
-				8A0F903B26F187C10016B04F /* ja */,
-			);
-			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
