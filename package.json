@@ -51,7 +51,7 @@
     "js-utils": "github:jitsi/js-utils#192b1c996e8c05530eb1f19e82a31069c3021e31",
     "jsc-android": "241213.1.0",
     "jwt-decode": "2.2.0",
-    "lib-jitsi-meet": "github:jitsi/lib-jitsi-meet#3b8baa9d3be2839510abaa954357d0b0ab023649",
+    "lib-jitsi-meet": "github:jitsi/lib-jitsi-meet#49c4e75f37cfec5a5bdd921c869b6ec1bff8f9d2",
     "libflacjs": "github:mmig/libflac.js#93d37e7f811f01cf7d8b6a603e38bd3c3810907d",
     "lodash": "4.17.13",
     "lottie-react-native": "3.5.0",

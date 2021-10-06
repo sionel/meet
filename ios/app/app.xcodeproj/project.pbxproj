@@ -146,9 +146,9 @@
 		6C5F60D3F05247468B32762B /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		7443D8986FEF4591AE20685C /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		7CD88D13B8FF2670B191D6CD /* Pods-WehagoMeet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WehagoMeet.release.xcconfig"; path = "../Pods/Target Support Files/Pods-WehagoMeet/Pods-WehagoMeet.release.xcconfig"; sourceTree = "<group>"; };
-		8AF6C8022702E683001F6494 /* ja.lproj */ = {isa = PBXFileReference; lastKnownFileType = file; path = ja.lproj; sourceTree = SOURCE_ROOT; };
-		8AF6C8032702E683001F6494 /* en.lproj */ = {isa = PBXFileReference; lastKnownFileType = file; path = en.lproj; sourceTree = SOURCE_ROOT; };
-		8AF6C8042702E683001F6494 /* ko.lproj */ = {isa = PBXFileReference; lastKnownFileType = file; path = ko.lproj; sourceTree = SOURCE_ROOT; };
+		8AF6C8022702E683001F6494 /* ja.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ja.lproj; sourceTree = SOURCE_ROOT; };
+		8AF6C8032702E683001F6494 /* en.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = en.lproj; sourceTree = SOURCE_ROOT; };
+		8AF6C8042702E683001F6494 /* ko.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ko.lproj; sourceTree = SOURCE_ROOT; };
 		96D7E4D506C4437BA1F3B579 /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
 		99CF24157FF14692825B45C4 /* DOUZONEText10.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = DOUZONEText10.ttf; path = ../../assets/fonts/DOUZONEText10.ttf; sourceTree = "<group>"; };
 		9F891AAA22E2843EF91D9684 /* Pods-WehagoMeet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WehagoMeet.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-WehagoMeet/Pods-WehagoMeet.debug.xcconfig"; sourceTree = "<group>"; };
@@ -645,7 +645,7 @@
 				CODE_SIGN_ENTITLEMENTS = app.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 13;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = BR6U9G47ZR;
 				ENABLE_BITCODE = NO;
@@ -676,7 +676,7 @@
 				CODE_SIGN_ENTITLEMENTS = app.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = BR6U9G47ZR;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = src/Info.plist;
@@ -710,7 +710,7 @@
 				CODE_SIGN_ENTITLEMENTS = "broadcast-extension/extension.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 13;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = BR6U9G47ZR;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -748,7 +748,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 13;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = BR6U9G47ZR;
 				GCC_C_LANGUAGE_STANDARD = gnu11;

@@ -5,7 +5,7 @@ import { actionCreators as masterActionCreators } from '../../../../../redux/mod
 import { actionCreators as toastActionCreators } from '../../../../../redux/modules/toast';
 
 const mapStateToProps = state => {
-  const { local, master } = state;
+  const { local, master, screenShare } = state;
   return {
     isMuteVideo: local.user.isMuteVideo,
     isMuteMic: local.user.isMuteMic,
@@ -13,7 +13,8 @@ const mapStateToProps = state => {
     isAudioActive: master.isAudioActive, // 마이크 활성화
     name: local.user.name,
     isMicRequest: master.isMicRequest,
-    isMasterControl: master.isMasterControl
+    isMasterControl: master.isMasterControl,
+    isScreenShare: screenShare.isScreenShare
   };
 };
 

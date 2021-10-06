@@ -141,12 +141,10 @@ class ConferenceScreenContainer extends React.Component {
       this.eventEmitter.removeAllListeners(
         this.ExternalAPI.TOGGLE_SCREEN_SHARE
       );
-      this._conferenceManager?.dispose();
+      // this._conferenceManager?.dispose();
       this.props.setSharingMode();
       this.connectFailCheck && clearInterval(this.connectFailCheck);
-    } catch (error) {
-      console.log('에러에러');
-    }
+    } catch (error) {}
   }
 
   componentDidUpdate(prevProps) {
@@ -166,7 +164,7 @@ class ConferenceScreenContainer extends React.Component {
         callType={3}
         selectedRoomName={this.state.selectedRoomName}
         pipMode={this.state.pipMode}
-        onBack={this._handleConferenceClose} // 여기서는 단순 뒤로 가는 것이기에... 백으로...
+        // onBack={this._handleConferenceClose} // 여기서는 단순 뒤로 가는 것이기에... 백으로...
         onClose={this._handleEndCall}
         onClear={this._handleClear}
         onSetDrawingData={this._handleSetDrawingData}
@@ -318,9 +316,9 @@ class ConferenceScreenContainer extends React.Component {
   /** 전화/대화 종료 */
   _handleEndCall = () => {
     const { setScreenFlag, isScreenShare, toggleScreenFlag } = this.props;
-    if (isScreenShare && isIOS) {
+    if (isScreenShare) {
       toggleScreenFlag();
-      return;
+      if (isIOS) return;
     }
     this._handleConferenceClose();
   };
@@ -332,11 +330,20 @@ class ConferenceScreenContainer extends React.Component {
       screenProps,
       setScreenFlag,
       isScreenShare,
-      toggleScreenFlag
+      toggleScreenFlag,
+      setIndicator,
+      initParticipants,
+      initMainUser,
+      user
     } = this.props;
-    this.props.setIndicator();
-    await this.props.initParticipants();
-    await this.props.initMainUser();
+    setIndicator();
+    initParticipants();
+    initMainUser();
+
+    this._conferenceManager.dispose();
+    user.videoTrack.dispose();
+    user.audioTrack.dispose();
+
     if (
       // 딥링크로 들어온 두가지의 경우 login 창으로 보내버린다.
       screenProps.destination === 'Conference' ||
@@ -356,16 +363,11 @@ class ConferenceScreenContainer extends React.Component {
   _handleAppStateChange = nextAppState => {
     // PIP 모드에서는 appState가 변경되지 않는다.
     // 따라서 아래 로직은 PIP 모드를 지원하지 않을 때 동작한다.
-    console.log('-------------');
-    console.log(this._appState);
-    console.log(nextAppState);
-    console.log('-------------');
+
     if (this._appState === 'active' && nextAppState !== 'active') {
       ToastAndroid.show(this.t('toast_background'), ToastAndroid.SHORT);
       if (this.props.isScreenShare) {
-        console.log(1);
       } else {
-        console.log(2);
         // backgroiund 시 video 설정 기억
         if (this.props.user) {
           const { isMuteVideo } = this.props.user;
@@ -376,16 +378,13 @@ class ConferenceScreenContainer extends React.Component {
         // 비디오 off
         this.props.toggleMuteVideo(true);
       }
-      console.log(3);
     } else if (this._appState !== 'active' && nextAppState === 'active') {
-      console.log(4);
       // active 시 video 설정 원래대로
       this.props.toggleMuteVideo(this._conferenceState.isMuteVideo);
     }
-    console.log(5);
+
     this._appState = nextAppState;
     if (nextAppState === 'active') {
-      console.log(6);
       // active 시 video 설정 원래대로
       this.props.toggleMuteVideo(this._conferenceState.isMuteVideo);
 
@@ -396,13 +395,10 @@ class ConferenceScreenContainer extends React.Component {
         if (this._backTimeout) {
           clearTimeout(this._backTimeout);
         }
-        console.log(7);
       }
     } else {
-      console.log(8);
       // backgroiund 시 video, mic, 설정 기억
       if (this.props.user) {
-        console.log(9);
         const { isMuteVideo, isMuteMic } = this.props.user;
         this._conferenceState = {
           isMuteVideo,
@@ -411,11 +407,9 @@ class ConferenceScreenContainer extends React.Component {
       }
 
       if (!isIOS || !this.props.isScreenShare) {
-        console.log(10);
         this._handleBackgroundWarning();
       }
     }
-    console.log(11);
   };
 
   /**

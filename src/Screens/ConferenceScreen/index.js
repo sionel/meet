@@ -39,22 +39,6 @@ const mapStateToProps = state => {
   } = state;
 
   const mainUser = getMainUser(mainUserId, user, list);
-  // console.log('asdasd');
-  // if (mainUserId) {
-  //   console.log('mainUserId');
-  //   console.log(mainUserId);
-  // }
-  // console.log('---');
-  // if (user) {
-  //   console.log('user');
-  //   console.log(user);
-  // }
-  // console.log('---');
-  // if (list) {
-  //   console.log('list');
-  //   console.log(list);
-  // }
-  // console.log('===');
   return {
     mainUser,
     mainUserId,

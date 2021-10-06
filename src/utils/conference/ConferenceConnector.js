@@ -109,7 +109,7 @@ class ConferenceConnector {
       // if (!tracks) tracks = await this._createTracks();
       // 트랙 추가
       this._addTracks(tracks);
-      this.tracks = tracks
+      this.tracks = tracks;
       // wehago id를 커맨드로 전송한다.
       this._room.sendCommand(WEHAGO_ID, {
         value: this._room.myUserId(),
@@ -138,8 +138,8 @@ class ConferenceConnector {
             attributes: { isDrawingShare: 'false' }
           });
         }
-        // await this._room.leave();
-        // this._room = null;
+        await this._room.leave();
+        this._room = null;
       } catch (error) {
         // Nothing to do
       }
@@ -205,6 +205,7 @@ class ConferenceConnector {
 
     // 대화방 참가 성공 이벤트 연결
     this._room.on(conferenceEvents.CONFERENCE_JOINED, () => {
+      console.log('CONFERENCE_JOINED');
       // this._handlers.CONFERENCE_JOINED(this._room);
       resolve(this._room);
     });
@@ -216,6 +217,9 @@ class ConferenceConnector {
 
     // JOIN_USER 이벤트 연결
     this._room.on(conferenceEvents.USER_JOINED, (id, user) => {
+      console.log('USER_JOINED');
+      console.log(conferenceEvents.USER_JOINED);
+      console.log(conferenceEvents.USER_LEFT);
       if (new Set(['wehagorecord', 'wehagorecord-dev']).has(user.getStatsID()))
         return;
       this._handlers.JOIN_USER(user);
@@ -223,6 +227,7 @@ class ConferenceConnector {
 
     // LEFT_USER 이벤트 연결
     this._room.on(conferenceEvents.USER_LEFT, id => {
+      console.log('USER_LEFT');
       if (this._room.presenter === id) {
         this._handlers.CHANGED_DOCUMENT_SHARE_MODE(false, false);
       }

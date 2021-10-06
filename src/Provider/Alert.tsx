@@ -22,9 +22,7 @@ export default function AlertScreenPresenter(props) {
   };
 
   return (
-    <View style={{ flex: 1 }}>
-      {children}
-
+    <View style={{ position:'absolute' , width:'100%' , height:'100%' }}>
       <Modal
         animationType={'fade'}
         transparent={true}

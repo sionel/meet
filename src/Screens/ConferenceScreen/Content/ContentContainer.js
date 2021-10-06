@@ -162,17 +162,12 @@ class ContentContainer extends React.Component {
 		[ 1(수화기) | 2(스피커) ]
 		*/
     const { speaker } = this.state;
-    debugger;
     this.setState(
       prev => ({ speaker: prev.speaker == 2 ? 1 : 2 }),
       () => {
         if (isIOS) {
-          //{text: '스피커', type: 'SPEAKER', selected: true, uid: 'SPEAKER', icon: ƒ}
-          //{text: '폰', type: 'EARPIECE', selected: false, uid: 'Built-In Microphone', icon: ƒ}
-          // AudioMode.setMode(speaker);
           AudioMode.setAudioDevice(speaker === 1 ? 'Built-In Microphone' : 'SPEAKER');
         } else {
-          debugger;
           InCallManager &&
             InCallManager.setSpeakerphoneOn &&
             InCallManager.setSpeakerphoneOn(speaker == 2);

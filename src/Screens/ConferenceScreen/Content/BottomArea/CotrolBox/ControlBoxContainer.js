@@ -11,16 +11,18 @@ class ControlBoxContainer extends React.Component {
   render() {
     return (
       <ControlBoxPresenter
-        callType={this.props.callType}
-        speaker={this.props.speaker}
-        onClose={this.props.onClose}
-        onChangeSpeaker={this.props.onChangeSpeaker}
-        toggleMuteSpeaker={this.props.toggleMuteSpeaker}
-        toggleMuteVideo={this.props.toggleMuteVideo}
+        {...this.props}
         toggleMuteMic={this._handleToggleMic}
-        isMuteSpeaker={this.props.isMuteSpeaker}
-        isMuteVideo={this.props.isMuteVideo}
-        isMuteMic={this.props.isMuteMic}
+        // callType={this.props.callType}
+        // speaker={this.props.speaker}
+        // onClose={this.props.onClose}
+        // onChangeSpeaker={this.props.onChangeSpeaker}
+        // toggleMuteSpeaker={this.props.toggleMuteSpeaker}
+        // toggleMuteVideo={this.props.toggleMuteVideo}
+        // isMuteSpeaker={this.props.isMuteSpeaker}
+        // isMuteVideo={this.props.isMuteVideo}
+        // isMuteMic={this.props.isMuteMic}
+        // isScreenShare={this.props.isScreenShare}
       />
     );
   }

@@ -120,8 +120,6 @@ function joinConference(conferenceInfo) {
 
 function applyJoinConference(state, action) {
   const { conferenceInfo } = action;
-  console.log('applyJoinConference');
-  console.log(conferenceInfo);
   const user = {
     id: 'localUser',
     cid: conferenceInfo.cid,

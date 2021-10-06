@@ -73,7 +73,7 @@ class ConferenceManager {
       tracks,
       attributes
     );
-    this.tracks = tracks
+    this.tracks = tracks;
     if (this._room) return true;
     else return false;
   };
@@ -93,7 +93,7 @@ class ConferenceManager {
    */
   dispose = () => {
     new Promise.all([
-      this._conferenceConnector && this._conferenceConnector.dispose(),
+      this._conferenceConnector & this._conferenceConnector.dispose(),
       this._connection && this._connection.dispose(),
       this._dispatch(WedriveAcionCreators.setInitInfo()),
       this._dispatch(localActionCreators.leaveConference())
@@ -395,13 +395,7 @@ class ConferenceManager {
     const myId = this._room.myUserId();
     if (myId === targetId) {
       const message = masterName + this.t('toast_master_ibenned');
-      // this.dispose();
-      // debugger
-      this._room.getLocalTracks().forEach(t=>t.dispose())
-      // this.tracks.forEach(t=>t.dispose())
-      // debugger
-      // this._endCall();
-      // debugger
+      this._endCall();
       this._dispatch(
         alertAcionCreators.setAlert({
           type: 1,
