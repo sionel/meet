@@ -180,8 +180,9 @@ class ConferenceManager {
     this._dispatch(participantsAcionCreators.leftUser(id));
     MeetApi.checkMasterList(this._roomName).then(res => {
       if (res && res?.resultData?.count === 0) {
-        this._dispatch(masterAcionCreators.changeMasterControlMode(null));
-        this._dispatch(localActionCreators.toggleMuteMic(false));
+        this._dispatch(masterAcionCreators.noWhereMaster());
+        // this._dispatch(masterAcionCreators.changeMasterControlMode(null));
+        // this._dispatch(localActionCreators.toggleMuteMic(false));
       } else {
         this._dispatch(masterAcionCreators.checkMasterList(this._roomToken));
       }

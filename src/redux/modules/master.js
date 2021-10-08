@@ -14,6 +14,8 @@ const SET_AUDIO_ACTIVE = 'master.SET_AUDIO_ACTIVE';
 
 const TOGGLE_MUTE_MIC_MASTER = 'master.TOGGLE_MUTE_MIC_MASTER';
 
+const NO_WHERE_MASTER = 'master.NO_WHERE_MASTER';
+
 // 마스터 제어중일때 내가 내 마이크 종료하는 경우
 const TOGGLE_MUTE_MIC_BY_ME = 'master.TOGGLE_MUTE_MIC_BY_ME';
 
@@ -49,7 +51,6 @@ function reducer(state = initialState, action) {
       return applyToggleMuteMicByMe(state, action);
     case SPEEK_REQUEST:
       return applyToggleMicRequest(state, action);
-
     default:
       return state;
   }
@@ -98,6 +99,25 @@ function setIsContorl(state, action) {
     isMicRequest: false
   };
 }
+//#endregion
+
+//#region  SET_IS_CONTROL (마스터가 제어모드 중인지 아닌지)
+function noWhereMaster() {
+  return (dispatch, getState, extraArgument) => {
+    const isMasterControl = getState()['master']['isMasterControl']
+    isMasterControl && dispatch({
+      type: 'local.TOGGLE_MUTE_MIC',
+      micMute: false
+    });
+    dispatch({
+      type: SET_IS_CONTROL,
+      flag: false
+    });
+
+
+  };
+}
+
 //#endregion
 
 //#region SET_AUDIO_ACTIVE (마스터가 전체마이크 활성화인지 아닌지)
@@ -219,7 +239,8 @@ export const actionCreators = {
   changeAudioActive,
   changeMuteMicMaster,
   toggleMuteMicByMe,
-  setMicRequest
+  setMicRequest,
+  noWhereMaster
 };
 
 export default reducer;

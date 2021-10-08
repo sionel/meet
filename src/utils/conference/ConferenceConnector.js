@@ -205,7 +205,6 @@ class ConferenceConnector {
 
     // 대화방 참가 성공 이벤트 연결
     this._room.on(conferenceEvents.CONFERENCE_JOINED, () => {
-      console.log('CONFERENCE_JOINED');
       // this._handlers.CONFERENCE_JOINED(this._room);
       resolve(this._room);
     });
@@ -217,9 +216,6 @@ class ConferenceConnector {
 
     // JOIN_USER 이벤트 연결
     this._room.on(conferenceEvents.USER_JOINED, (id, user) => {
-      console.log('USER_JOINED');
-      console.log(conferenceEvents.USER_JOINED);
-      console.log(conferenceEvents.USER_LEFT);
       if (new Set(['wehagorecord', 'wehagorecord-dev']).has(user.getStatsID()))
         return;
       this._handlers.JOIN_USER(user);
@@ -227,7 +223,6 @@ class ConferenceConnector {
 
     // LEFT_USER 이벤트 연결
     this._room.on(conferenceEvents.USER_LEFT, id => {
-      console.log('USER_LEFT');
       if (this._room.presenter === id) {
         this._handlers.CHANGED_DOCUMENT_SHARE_MODE(false, false);
       }
@@ -282,13 +277,11 @@ class ConferenceConnector {
     });
 
     this._room.on(conferenceEvents.RECORDER_STATE_CHANGED, data => {
-      const { _status, _sessionID, _initiator } = data;
-      if ((_initiator || this._room.isModerator()) && _status === 'on') {
+      const { _status, _sessionID } = data;
+      if (_status === 'on' && this._sessionID === null) {
         this._handlers.START_RECORDING();
         this._sessionID = _sessionID;
-      }
-
-      if (_status === 'off') {
+      } else if (_status === 'off') {
         this._handlers.STOP_RECORDING();
         this._sessionID = null;
       }
@@ -497,6 +490,7 @@ class ConferenceConnector {
         }
       }
     });
+
     // 방 녹화 요청 이벤트 핸들러
     this._room.addCommandListener(REQUEST_ROOM_START_RECORDING, value => {
       const {

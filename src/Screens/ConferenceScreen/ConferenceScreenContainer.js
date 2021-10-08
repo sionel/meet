@@ -192,7 +192,7 @@ class ConferenceScreenContainer extends React.Component {
   //   });
   // };
   _handleChangeScreen = async () => {
-    const { isScreenShare, setScreenFlag } = this.props;
+    const { isScreenShare, setScreenFlag, toggleMuteVideo } = this.props;
     const newTrackType = isScreenShare ? 'video' : 'desktop';
     try {
       await this._conferenceManager.changeTrack(
@@ -200,6 +200,7 @@ class ConferenceScreenContainer extends React.Component {
         this.props.user.videoTrack
       );
       setScreenFlag(!isScreenShare);
+      if (newTrackType === 'video') toggleMuteVideo(true);
     } catch (error) {
       setScreenFlag(false);
     }
@@ -328,9 +329,6 @@ class ConferenceScreenContainer extends React.Component {
     const {
       navigation,
       screenProps,
-      setScreenFlag,
-      isScreenShare,
-      toggleScreenFlag,
       setIndicator,
       initParticipants,
       initMainUser,
