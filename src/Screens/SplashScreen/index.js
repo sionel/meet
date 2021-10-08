@@ -13,6 +13,7 @@ import { actionCreators as DocumentShareActions } from '../../redux/modules/docu
 import { actionCreators as WedriveAcions } from '../../redux/modules/wedrive';
 import { actionCreators as AlertAcions } from '../../redux/modules/alert';
 import { actionCreators as IndicatorAcions } from '../../redux/modules/indicator';
+import { actionCreators as RootActions } from '../../redux/modules/root';
 
 // map state to props
 const mapStateToProps = state => {
@@ -20,7 +21,11 @@ const mapStateToProps = state => {
     auth: state.user.auth,
     from: state.user.from,
     permission: state.user.permission,
-    updateNoti: state.user.updateNoti
+    updateNoti: state.user.updateNoti,
+    loaded : state.root.loaded,
+    destination : state.root.destination,
+    params: state.root.params,
+    url: state.root.url,
   };
 };
 
@@ -48,7 +53,8 @@ const mapDispatchToProps = dispatch => {
     toggleUpdateNoti: () => dispatch(UserActions.toggleUpdateNoti()),
     setAlert: params => dispatch(AlertAcions.setAlert(params)),
     setIndicator: () => dispatch(IndicatorAcions.setIndicator()),
-    resetIndicator: () => dispatch(IndicatorAcions.resetIndicator())
+    resetIndicator: () => dispatch(IndicatorAcions.resetIndicator()),
+    setRootState: (rstate)=> dispatch(RootActions.setRootState(rstate)),
   };
 };
 

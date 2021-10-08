@@ -5,6 +5,8 @@ import ConferenceScreen from '../Screens/ConferenceScreen';
 import SettingScreen from '../Screens/SettingScreen';
 import { Image, TouchableOpacity } from 'react-native';
 import RouteTitle from '../Routes/RouteTitle';
+import { useDispatch, useSelector } from 'react-redux';
+import { actionCreators as RootActions } from '../redux/modules/root';
 
 const commonStyle = {
   height: 53,
@@ -13,13 +15,18 @@ const commonStyle = {
 };
 const backBtn = require('../../assets/buttons/back_btn.png');
 
-const BackButton = ({ navigation }) => {
-  const { onChangeRootState, destination } = navigation.getScreenProps();
+const BackButton = () => {
+  const dispatch = useDispatch();
+  const _setRootState = rstate => dispatch(RootActions.setRootState(rstate));
+
+  const root = useSelector(state => state.root);
+  const { destination } = root;
+
   destination === 'Conference' || destination === 'Setting';
   return (
     <TouchableOpacity
       onPress={() => {
-        onChangeRootState({
+        _setRootState({
           destination:
             destination === 'Conference' || destination === 'Setting'
               ? 'Login'
@@ -40,7 +47,11 @@ const Deeplink1Navigation = createStackNavigator(
     ConferenceState: {
       screen: ConferenceStateScreen,
       navigationOptions: ({ navigation }) => ({
-        headerTitle: <RouteTitle title={navigation.getScreenProps().t('option_conference')} />,
+        headerTitle: (
+          <RouteTitle
+            title={navigation.getScreenProps().t('option_conference')}
+          />
+        ),
         headerLeft: <BackButton navigation={navigation} />,
         headerTintColor: '#fff',
         headerStyle: commonStyle
@@ -49,7 +60,11 @@ const Deeplink1Navigation = createStackNavigator(
     Setting: {
       screen: SettingScreen,
       navigationOptions: ({ navigation }) => ({
-        headerTitle: <RouteTitle title={navigation.getScreenProps().t('roomstate_setting_header')} />,
+        headerTitle: (
+          <RouteTitle
+            title={navigation.getScreenProps().t('roomstate_setting_header')}
+          />
+        ),
         headerLeft: <BackButton navigation={navigation} />,
         headerTintColor: '#fff',
         headerStyle: commonStyle

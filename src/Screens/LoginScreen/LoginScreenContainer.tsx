@@ -1,22 +1,54 @@
-import React, {RefObject, useRef, useState} from 'react';
+import React, { RefObject, useRef, useState } from 'react';
 import LoginScreenPresenter from './LoginScreenPresenter';
-import {Alert} from 'react-native';
+import { MeetApi } from '../../services';
+import { getT } from '../../utils/translateManager';
 
-const LoginScreenContainer = ({navigation}: any) => {
+const LoginScreenContainer = ({
+  navigation,
+  setAlert,
+  setRootState,
+}: any) => {
   const [code, setCode] = useState('');
-  const codeLineRef:RefObject<any> = useRef();
+  const t = getT();
 
-  const codeInput = (value: string) => {
+  const codeLineRef: RefObject<any> = useRef();
+
+  const codeInput = async (value: string) => {
     let joincode = value.trim();
 
-    setCode(value);
+    setCode(joincode);
 
     if (joincode.length === 6) {
-      setCode('');
+      await _goJoincode(joincode);
 
-      Alert.alert('참여코드 조회', joincode, [
-        {text: '다음페이지로', onPress: goLoginD},
-      ]);
+      setCode('');
+    }
+  };
+
+  const _goJoincode = async (joincode: string) => {
+    const result = await MeetApi.searchJoincode(joincode);
+    if (!result) {
+      setAlert({
+        type: 1,
+        title: t('alert_title_notion'),
+        message: t('alert_text_no_exist_joincode')
+      });
+    } else if (result.resultData.code === 'E00001') {
+      setAlert({
+        type: 1,
+        title: t('alert_title_notion'),
+        message: t('alert_text_no_exist_joincode')
+      });
+    } else {
+      setRootState({
+        loaded: true,
+        destination: 'Setting',
+        params: {
+          accesstype: 'joincode',
+          roomId: result.resultData.room,
+          joincode
+        }
+      });
     }
   };
 
@@ -28,8 +60,14 @@ const LoginScreenContainer = ({navigation}: any) => {
     navigation.navigate('LoginInput');
   };
 
+  const inputFocusOut = () => {
+    if (codeLineRef.current.isFocused()) return codeLineRef.current.blur();
+  };
+
   return (
-    <LoginScreenPresenter {...{code, codeInput, codeFocus, codeLineRef, goLoginD}} />
+    <LoginScreenPresenter
+      {...{ code, codeInput, codeFocus, codeLineRef, goLoginD, inputFocusOut }}
+    />
   );
 };
 

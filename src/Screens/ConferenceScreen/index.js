@@ -9,6 +9,7 @@ import { actionCreators as ToastAcions } from '../../redux/modules/toast';
 import { actionCreators as ScreenShareAcions } from '../../redux/modules/ScreenShare';
 import { actionCreators as ParticipantsAcions } from '../../redux/modules/participants';
 import { actionCreators as indicatorAcionCreators } from '../../redux/modules/indicator';
+import { actionCreators as RootActions } from '../../redux/modules/root';
 
 import _ from 'underscore';
 
@@ -35,7 +36,8 @@ const mapStateToProps = state => {
     participants: { list },
     user: { auth },
     documentShare,
-    screenShare: { isScreenShare, screenToggleFlag }
+    screenShare: { isScreenShare, screenToggleFlag },
+    root: { destination }
   } = state;
 
   const mainUser = getMainUser(mainUserId, user, list);
@@ -96,7 +98,9 @@ const mapDispatchToProps = dispatch => {
     toggleScreenFlag: () => dispatch(ScreenShareAcions.toggleScreenFlag()),
     setScreenFlag: flag => dispatch(ScreenShareAcions.setScreenFlag(flag)),
     initParticipants: () => dispatch(ParticipantsAcions.initParticipants()),
-    setIndicator: () => dispatch(indicatorAcionCreators.setIndicator('화상회의 종료 중'))
+    setIndicator: () =>
+      dispatch(indicatorAcionCreators.setIndicator('화상회의 종료 중')),
+    setRootState: rstate => dispatch(RootActions.setRootState(rstate))
   };
 };
 

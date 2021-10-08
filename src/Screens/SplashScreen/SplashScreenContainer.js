@@ -29,7 +29,8 @@ class SplashScreenContainer extends Component {
     this.t = getT();
   }
   setLoginState = () => {
-    this.props.onChangeRootState({
+    const { setRootState } = this.props;
+    setRootState({
       loaded: true,
       destination: 'Login',
       params: {}
@@ -37,6 +38,8 @@ class SplashScreenContainer extends Component {
   };
 
   componentDidMount = async () => {
+    const { url } = this.props;
+
     // 강제종료 했을때를 위한 강제 초기화
     this.props.setInitInfo();
     this.props.setSharingMode();
@@ -49,16 +52,18 @@ class SplashScreenContainer extends Component {
       console.log(m);
     }
 
-    if (this.props.url) {
-      await this._handleGetDeeplink(this.props.url);
+    if (url) {
+      await this._handleGetDeeplink(url);
     } else {
       this._handleInit();
     }
   };
 
   componentDidUpdate(prevProps) {
-    if (this.props.url && !prevProps.url !== this.props.url) {
-      this._handleGetDeeplink(this.props.url);
+    const { url } = this.props;
+
+    if (url && !prevProps.url !== url) {
+      this._handleGetDeeplink(url);
     }
   }
 
@@ -68,7 +73,10 @@ class SplashScreenContainer extends Component {
       <SplashScreenPresenter alert={alert} servernoti={servernoti[index]} />
     );
   }
+  
   _handleInit = async () => {
+    // RootState 액션
+    const { setRootState } = this.props;
     // 버전 확인
     this._handleCheckVersion();
     // 노티 확인
@@ -80,7 +88,7 @@ class SplashScreenContainer extends Component {
       const result = await this._handleCheckAutoLogin();
 
       if (result === 'success') {
-        this.props.onChangeRootState({
+        setRootState({
           loaded: true,
           destination: 'List',
           params: {
@@ -88,14 +96,14 @@ class SplashScreenContainer extends Component {
           }
         });
       } else if (result === 'dany') {
-        this.props.onChangeRootState({
+        setRootState({
           loaded: true,
           destination: 'SelectCompany',
           params: {}
         });
       } else {
         this.props.onLogout();
-        this.props.onChangeRootState({
+        setRootState({
           loaded: true,
           destination: 'Login',
           params: {}
@@ -177,11 +185,12 @@ class SplashScreenContainer extends Component {
   };
 
   _handleNextNotice = async () => {
+    const { setRootState } = this.props;
     const { servernoti, index } = this.state;
     if (servernoti.length === index + 1) {
       const result = await this._handleCheckAutoLogin();
       if (result === 'success') {
-        this.props.onChangeRootState({
+        setRootState({
           loaded: true,
           destination: 'List',
           params: {
@@ -189,14 +198,14 @@ class SplashScreenContainer extends Component {
           }
         });
       } else if (result === 'dany') {
-        this.props.onChangeRootState({
+        setRootState({
           loaded: true,
           destination: 'SelectCompany',
           params: {}
         });
       } else {
         this.props.onLogout();
-        this.props.onChangeRootState({
+        setRootState({
           loaded: true,
           destination: 'Login',
           params: {}
@@ -280,6 +289,7 @@ class SplashScreenContainer extends Component {
    * DeepLink 로 접근한 경우
    */
   _handleGetDeeplink = async url => {
+    const { setRootState } = this.props;
     /* 모바일 웹에서 화상회의로 들어올 때 (메신저, meet 둘다 공통)
       login_info= mobile | web | email (모바일은 세션시간 8시간 웹은 3개월 unknown는 비회원)
       type= login | conference | screen
@@ -310,7 +320,7 @@ class SplashScreenContainer extends Component {
       // 일회성 로그인 처리
       let info = await this._compareMeetToOtherLoginInfo(result, 'web');
       if (info === 'not') {
-        this.props.onChangeRootState({
+        setRootState({
           loaded: true,
           destination: 'Login',
           params: {
@@ -319,7 +329,7 @@ class SplashScreenContainer extends Component {
           url: undefined
         });
       } else if (info === 'same') {
-        this.props.onChangeRootState({
+        setRootState({
           loaded: true,
           destination: 'List',
           params: {
@@ -336,7 +346,7 @@ class SplashScreenContainer extends Component {
           proceed === 'same' ? 'this' : 'web'
         );
         if (flag) {
-          this.props.onChangeRootState({
+          setRootState({
             loaded: true,
             destination: 'Setting',
             params: {
@@ -346,7 +356,7 @@ class SplashScreenContainer extends Component {
             url: undefined
           });
         } else {
-          this.props.onChangeRootState({
+          setRootState({
             loaded: true,
             destination: 'Login',
             params: {},
@@ -364,7 +374,7 @@ class SplashScreenContainer extends Component {
       room: "b15091c1-2acd-47f6-aa7c-6a94df0e5a17"
       sub: "video.wehago.com"
       */
-      this.props.onChangeRootState({
+      setRootState({
         loaded: true,
         destination: 'Setting',
         params: {
@@ -379,7 +389,7 @@ class SplashScreenContainer extends Component {
 
       let info = await this._compareMeetToOtherLoginInfo(result, 'mobile');
       if (info === 'not') {
-        this.props.onChangeRootState({
+        setRootState({
           loaded: true,
           destination: 'Login',
           params: {
@@ -388,7 +398,7 @@ class SplashScreenContainer extends Component {
           url: undefined
         });
       } else if (info === 'same') {
-        this.props.onChangeRootState({
+        setRootState({
           loaded: true,
           destination: 'List',
           params: {
@@ -405,7 +415,7 @@ class SplashScreenContainer extends Component {
         );
         if (result.type === 'conference' || result.type === 'screen') {
           if (flag) {
-            this.props.onChangeRootState({
+            setRootState({
               loaded: true,
               destination: 'Setting',
               params: {
@@ -415,7 +425,7 @@ class SplashScreenContainer extends Component {
               url: undefined
             });
           } else {
-            this.props.onChangeRootState({
+            setRootState({
               loaded: true,
               destination: 'Login',
               params: {},
@@ -424,7 +434,7 @@ class SplashScreenContainer extends Component {
           }
         } else {
           if (flag) {
-            this.props.onChangeRootState({
+            setRootState({
               loaded: true,
               destination: 'List',
               params: {
@@ -433,7 +443,7 @@ class SplashScreenContainer extends Component {
               url: undefined
             });
           } else {
-            this.props.onChangeRootState({
+            setRootState({
               loaded: true,
               destination: 'Login',
               params: {},

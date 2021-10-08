@@ -330,7 +330,8 @@ class ConferenceScreenContainer extends React.Component {
   _handleConferenceClose = async () => {
     const {
       navigation,
-      screenProps,
+      destination,
+      setRootState,
       setScreenFlag,
       isScreenShare,
       toggleScreenFlag
@@ -341,10 +342,10 @@ class ConferenceScreenContainer extends React.Component {
     await this.props.initMainUser();
     if (
       // 딥링크로 들어온 두가지의 경우 login 창으로 보내버린다.
-      screenProps.destination === 'Conference' ||
-      screenProps.destination === 'Setting'
+      destination === 'Conference' ||
+      destination === 'Setting'
     ) {
-      screenProps.onChangeRootState({
+      setRootState({
         loaded: false,
         url: undefined,
         params: {}

@@ -7,7 +7,9 @@ import LoginScreen from '../Screens/LoginScreen';
 /**
  * LoginNavigation
  */
+
 const LoginNavigation = createStackNavigator(
+
   {
     /**
      * Main Navigation
@@ -16,7 +18,6 @@ const LoginNavigation = createStackNavigator(
       screen: props => {
         return (
           <LoginScreen
-            onChangeRootState={props.screenProps.onChangeRootState}
             onChangeMainState={props.screenProps.onChangeMainState}
             navigation={props.navigation}
           />
@@ -31,7 +32,6 @@ const LoginNavigation = createStackNavigator(
       screen: props => {
         return (
           <LoginInputScreen
-            onChangeRootState={props.screenProps.onChangeRootState}
             onChangeMainState={props.screenProps.onChangeMainState}
             navigation={props.navigation}
           />

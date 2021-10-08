@@ -3,8 +3,7 @@
  * 최상위화면 컨테이너
  */
 import React, { Component } from 'react';
-import { SafeAreaView, View } from 'react-native';
-
+// import { SafeAreaView, View } from 'react-native';
 import MainPresenter from './MainPresenter';
 
 // 로그인 했을때 정보를 저장
@@ -14,40 +13,14 @@ import MainPresenter from './MainPresenter';
 class MainContainer extends Component {
   constructor(props) {
     super();
-    this.state = {
-      isLogin: false,
-      hasService: false,
-      url: null,
-      alert: {
-        visible: false,
-        type: 0,
-        description: '',
-        actions: [],
-        onClose: () => {}
-      }
-    };
   }
+  // const { destination, params, loaded, url, t } = props;
 
   render() {
-    const { params, destination, onChangeRootState, from } = this.props;
-    return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
-        <MainPresenter
-          params={params}
-          from={from}
-          destination={destination}
-          onChangeRootState={onChangeRootState}
-          onChangeMainState={this._handleChangeMainState}
-        />
-      </SafeAreaView>
-    );
+    const {loaded} = this.props;
+    
+    return <MainPresenter {...{loaded}}/>
   }
 
-  _handleChangeMainState = state => {
-    this.setState({
-      ...this.state,
-      ...state
-    });
-  };
 }
 export default MainContainer;

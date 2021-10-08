@@ -25,7 +25,7 @@ console.reportErrorsAsExceptions = false;
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { loaded: false, url: props?.url?.url };
+    // this.state = { loaded: false, url: props?.url?.url };
     // externalAPIScope: "57ba2032-0393-4359-8543-b758d641e132"
     // i18n을 사용하면 t로 넘겨줌 맨 처음 받는 변수명만 무엇인지 유추 가능하게 적어두고 밑에서부턴 t
     // 만약 언어 선택 옵션창이 생긴다면 훅으로 처리해야하므로  didupdate로 바꿔야지 않을까
@@ -36,7 +36,10 @@ class App extends Component {
   componentDidMount() {
     Splash.hide();
     Linking.addEventListener('url', event => {
-      this.setState({ loaded: false, url: event.url });
+      store.dispatch({
+        type: 'root.SETROOTSTATE',
+        rstate: { loaded: false, url: event.url }
+      })
     });
 
     store.dispatch({
@@ -61,9 +64,14 @@ class App extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    // console.log('app did update');
     if (prevProps.url.url !== this.props.url.url) {
       // 타임스태프를 요구할 것
-      this.setState({ loaded: false, url: this.props.url.url });
+      store.dispatch({
+        type: 'root.SETROOTSTATE',
+        rstate: { loaded: false, url: this.props.url.url }
+      })
+      // this.setState({ loaded: false, url: this.props.url.url });
     }
   }
 
@@ -72,31 +80,14 @@ class App extends Component {
       <Provider store={store}>
         <PersistGate persistor={persistor}>
           <CustomProvider>
-            {this.state.loaded ? (
-              <Main
-                destination={this.state.destination}
-                params={this.state.params}
-                onChangeRootState={this._handleChangeRootState}
-              />
-            ) : (
-              <SplashScreen
-                onChangeRootState={this._handleChangeRootState}
-                url={this.state.url}
-                t={this.translation}
-              />
-            )}
+            <Main />
           </CustomProvider>
         </PersistGate>
       </Provider>
     );
   }
 
-  _handleChangeRootState = param => {
-    this.setState({
-      ...this.state,
-      ...param
-    });
-  };
+
 }
 
 export default withTranslation()(App);
