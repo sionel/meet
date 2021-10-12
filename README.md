@@ -170,6 +170,13 @@ node_modules/react-native/ReactCommon/turbomodule/core/platform/ios/RCTTurboModu
  -> RCTBridgeModuleNameForClass(module));
  > RCTBridgeModuleNameForClass(Class(module)));
 
+10. sdk 업데이트 이후 ios 딥링크 문제
+
+정확히 앱이 실행되고 있는 상태에서의 문제
+기존 코드에서 #import <React/RCTLinkingManager.h>
+검색 후 어떤식으로 사용되었는지 확인하면 됨
+참조 : https://reactnative.dev/docs/0.61/linking
+
 ## 스토어 주소
 ios : https://itunes.apple.com/app/id1455726925?mt=8
 android : https://play.google.com/store/apps/details?id=com.wehago.meet

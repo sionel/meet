@@ -200,7 +200,12 @@ class ConferenceScreenContainer extends React.Component {
         this.props.user.videoTrack
       );
       setScreenFlag(!isScreenShare);
-      if (newTrackType === 'video') toggleMuteVideo(true);
+      if (newTrackType === 'video') {
+        toggleMuteVideo(true);
+        setTimeout(() => {
+          toggleMuteVideo(false);
+        }, 500);
+      }
     } catch (error) {
       setScreenFlag(false);
     }
@@ -262,7 +267,7 @@ class ConferenceScreenContainer extends React.Component {
       sendCommandParams
     );
 
-    if (!joinResult) {
+    if (!joinResult) { 
       if (this._screen) {
         this.props.setAlert({
           type: 1,
