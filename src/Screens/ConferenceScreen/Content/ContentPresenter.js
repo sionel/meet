@@ -13,6 +13,7 @@ import TopArea from './TopArea';
 import BottomArea from './BottomArea';
 import OverView from './OverView';
 import SimpleNoti from '../SimpleNoti';
+import { ConferenceModes } from '../../../utils/ConstantsBackup';
 
 /**
  * ContentPresenter
@@ -33,7 +34,6 @@ const ContentPresenter = props => {
 
   const localPipMode = useSelector(state => state.local.pipMode);
   const hideStatusbar = orientation === 'horizontal';
-
   return (
     <View style={styles.container} onLayout={props.onLayout}>
       {/* <SimpleNoti /> */}
@@ -81,7 +81,7 @@ const ContentPresenter = props => {
       {/* END MAIN VIDEO 영역 */}
 
       {/* START 싱단 영역 */}
-      {!localPipMode && (
+      {!localPipMode && conferenceMode === ConferenceModes.CONTROL && (
         <View
           style={[
             styles.topArea,

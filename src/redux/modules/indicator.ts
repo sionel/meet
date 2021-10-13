@@ -4,12 +4,12 @@ import { getT } from '../../utils/translateManager';
 const SET_INDICATOR = 'indicator.SET_INDICATOR';
 const RESET_INDICATOR = 'indicator.RESET_INDICATOR';
 
-type indicator = {
+export interface state {
   visible: boolean;
   message: string;
-};
+}
 
-const initialState: indicator = {
+const initialState: state = {
   visible: false,
   message: ''
 };

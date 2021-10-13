@@ -22,9 +22,9 @@ import webUser from './modules/webUser';
 import master from './modules/master';
 import alert from './modules/alert';
 import toast from './modules/toast';
-import deployed from './modules/deployed';
-import screenShare from './modules/ScreenShare';
-import indicator from './modules/indicator';
+import deployed, { state as deployedState } from './modules/deployed';
+import screenShare, { state as screenShageState } from './modules/ScreenShare';
+import indicator, { state as indicatorState } from './modules/indicator';
 /**
  * middleware list
  */
@@ -35,24 +35,25 @@ if (env === 'development') {
   // middlewares.push(logger);
 }
 
-
 export interface RootState {
   local: any;
-  // user;
-  // local;
-  // mainUser;
-  // participants;
-  // wetalk;
-  // wedrive;
-  // documentShare;
-  // conference;
-  // webUser;
-  // master;
-  // toast;
-  // loginInfo;
-  // alert:alertState;
+  user: any;
+  mainUser: any;
+  participants: any;
+  wetalk: any;
+  wedrive: any;
+  documentShare: any;
+  conference: any;
+  webUser: any;
+  master: any;
+  toast: any;
+  loginInfo: any;
+  alert: any;
+  screenShare: screenShageState;
+  record: any;
+  indicator: indicatorState;
+  deployed: deployedState;
 }
-
 
 /**
  * persistConfig

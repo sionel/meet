@@ -1,7 +1,3 @@
-/**
- * test.js
- * 추후 삭제 요망
- */
 import { UserApi } from '../../services';
 
 const SET = 'deployed.SET';
@@ -9,7 +5,11 @@ const RESET = 'deployed.RESET';
 
 //#region Action Creators
 
-const initialState = {
+export interface state {
+  deployedServices: any[];
+}
+
+const initialState: state = {
   deployedServices: ['wehago']
 };
 
