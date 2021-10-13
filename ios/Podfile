@@ -89,6 +89,7 @@ target 'JitsiMeetSDK' do
     pod 'RNExitApp', :path => '../node_modules/react-native-exit-app'
     pod 'jail-monkey', :path => '../node_modules/jail-monkey'
     pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
+    pod 'ReactNativeIncallManager', :path => '../node_modules/react-native-incall-manager'
 
   # Native pod dependencies
   #

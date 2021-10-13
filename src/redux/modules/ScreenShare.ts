@@ -1,9 +1,11 @@
 import { AnyAction } from 'redux';
+import { ThunkAction } from 'redux-thunk';
 
 const SET = 'screenShage.SET';
 const TOGGLE = 'screenShage.TOGGLE';
+import { RootState } from '../configureStore';
 
-interface state {
+export interface state {
   isScreenShare: boolean;
   screenToggleFlag: boolean;
 }
@@ -11,7 +13,7 @@ const initialState: state = {
   isScreenShare: false,
   screenToggleFlag: false
 };
-
+//localActionCreators.toggleCameraFacingMode()
 const reducer: (state: state, action: AnyAction) => state = (
   state = initialState,
   action
@@ -26,9 +28,11 @@ const reducer: (state: state, action: AnyAction) => state = (
   }
 };
 
-const toggleScreenFlag = () => {
-  return {
-    type: TOGGLE
+const toggleScreenFlag = (): ThunkAction<void, RootState, unknown> => {
+  return dispatch => {
+    dispatch({
+      type: TOGGLE
+    });
   };
 };
 const _toggleScreenFlag = state => ({
@@ -36,10 +40,19 @@ const _toggleScreenFlag = state => ({
   screenToggleFlag: !state.screenToggleFlag
 });
 
-const setScreenFlag = (flag: boolean) => {
-  return {
-    type: SET,
-    flag
+const setScreenFlag = (
+  flag: boolean
+): ThunkAction<void, RootState, unknown> => {
+  return async (dispatch, getState) => {
+    const local = getState().local;
+    // 카메라가 back를 보는 도중에 화면공유를 하는 경우 다시 복구가 안됨
+    if (local.facingMode === 'back')
+      dispatch({ type: 'local.TOGGLE_CAMERA_FACING_MODE' });
+
+    dispatch({
+      type: SET,
+      flag
+    });
   };
 };
 const _setScreenFlag = (state, action) => ({

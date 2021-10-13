@@ -73,6 +73,7 @@ class ConferenceManager {
       tracks,
       attributes
     );
+    this.tracks = tracks;
     if (this._room) return true;
     else return false;
   };
@@ -92,23 +93,13 @@ class ConferenceManager {
    */
   dispose = () => {
     new Promise.all([
-      this._conferenceConnector && this._conferenceConnector.dispose(),
+      this._conferenceConnector & this._conferenceConnector.dispose(),
       this._connection && this._connection.dispose(),
       this._dispatch(WedriveAcionCreators.setInitInfo()),
       this._dispatch(localActionCreators.leaveConference())
     ]).then(() => {
-      console.log('디포ㅓ 끝');
-      this._dispatch(indicatorAcionCreators.resetIndicator())
+      this._dispatch(indicatorAcionCreators.resetIndicator());
     });
-    // if (this._conferenceConnector) {
-    //   await this._conferenceConnector.dispose();
-    // }
-    // if (this._connection) {
-    //   await this._connection.dispose();
-    // }
-    // await this._dispatch(WedriveAcionCreators.setInitInfo());
-    // await this._dispatch(localActionCreators.leaveConference());
-    // console.log('디포 다끝남');
   };
 
   /**
@@ -189,8 +180,9 @@ class ConferenceManager {
     this._dispatch(participantsAcionCreators.leftUser(id));
     MeetApi.checkMasterList(this._roomName).then(res => {
       if (res && res?.resultData?.count === 0) {
-        this._dispatch(masterAcionCreators.changeMasterControlMode(null));
-        this._dispatch(localActionCreators.toggleMuteMic(false));
+        this._dispatch(masterAcionCreators.noWhereMaster());
+        // this._dispatch(masterAcionCreators.changeMasterControlMode(null));
+        // this._dispatch(localActionCreators.toggleMuteMic(false));
       } else {
         this._dispatch(masterAcionCreators.checkMasterList(this._roomToken));
       }

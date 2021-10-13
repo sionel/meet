@@ -109,6 +109,7 @@ class ConferenceConnector {
       // if (!tracks) tracks = await this._createTracks();
       // 트랙 추가
       this._addTracks(tracks);
+      this.tracks = tracks;
       // wehago id를 커맨드로 전송한다.
       this._room.sendCommand(WEHAGO_ID, {
         value: this._room.myUserId(),
@@ -276,13 +277,11 @@ class ConferenceConnector {
     });
 
     this._room.on(conferenceEvents.RECORDER_STATE_CHANGED, data => {
-      const { _status, _sessionID, _initiator } = data;
-      if ((_initiator || this._room.isModerator()) && _status === 'on') {
+      const { _status, _sessionID } = data;
+      if (_status === 'on' && this._sessionID === null) {
         this._handlers.START_RECORDING();
         this._sessionID = _sessionID;
-      }
-
-      if (_status === 'off') {
+      } else if (_status === 'off') {
         this._handlers.STOP_RECORDING();
         this._sessionID = null;
       }
@@ -491,6 +490,7 @@ class ConferenceConnector {
         }
       }
     });
+
     // 방 녹화 요청 이벤트 핸들러
     this._room.addCommandListener(REQUEST_ROOM_START_RECORDING, value => {
       const {
