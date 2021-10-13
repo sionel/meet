@@ -5,7 +5,7 @@ const SET = 'screenShage.SET';
 const TOGGLE = 'screenShage.TOGGLE';
 import { RootState } from '../configureStore';
 
-interface state {
+export interface state {
   isScreenShare: boolean;
   screenToggleFlag: boolean;
 }
