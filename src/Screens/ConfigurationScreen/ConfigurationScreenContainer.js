@@ -75,8 +75,8 @@ class ConfigurationScreenContainer extends React.Component {
     const from = this.props.from;
     this.props.onLogout();
     this.props.onSetInitialList();
-    from === 'this' && (await UserApi.logoutRequest(this.props.user));
-    this.props.screenProps.onChangeRootState({ destination: 'Login' });
+    from === 'this' && (await UserApi.logoutRequest(this.props.user)); 
+    this.props.setRootState({ destination: 'Login' });
     // navigation.navigate('Main');
   };
 }

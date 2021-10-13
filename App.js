@@ -63,8 +63,12 @@ class App extends Component {
     // ws.emit("hello world", "foo");
   }
 
+  shouldComponentUpdate(nextProps) {
+    console.log('shouldupdate');
+  }
+
   componentDidUpdate(prevProps) {
-    // console.log('app did update');
+    console.log('app did update');
     if (prevProps.url.url !== this.props.url.url) {
       // 타임스태프를 요구할 것
       store.dispatch({
@@ -75,7 +79,8 @@ class App extends Component {
     }
   }
 
-  render() {
+  render() {                   
+    console.log(this.props.url);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
     return (
       <Provider store={store}>
         <PersistGate persistor={persistor}>

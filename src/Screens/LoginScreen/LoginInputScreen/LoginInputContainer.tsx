@@ -19,9 +19,12 @@ const LoginInputContainer = ({
 
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
-  const [logging, setLogging] = React.useState(false);
-  const [loginFailed, setLoginFailed] = React.useState(false);
-  const [alertVisible, setAlertVisible] = React.useState({
+  const [captcha, setCaptcha] = useState<string | null>(null);
+  const [captchaInput, setCaptchaInput] = useState('');
+  const [logging, setLogging] = useState(false);
+  const [loginFailed, setLoginFailed] = useState(false);
+  const [errorMsg, setErrorMsg] = useState(null);
+  const [alertVisible, setAlertVisible] = useState({
     visible: false,
     description: '',
     onClose: () => {},
@@ -31,6 +34,7 @@ const LoginInputContainer = ({
 
   const usernameRef: RefObject<any> = React.useRef(null);
   const passwordRef: RefObject<any> = React.useRef(null);
+  const captchaRef: RefObject<any> = React.useRef(null);
 
   const _handleCheckServce = async (auth: any) => {
     const statusCheck = await ServiceCheckApi.companyStatusCheck(
@@ -96,14 +100,38 @@ const LoginInputContainer = ({
   const loginchk = async (
     userId: string,
     password: string,
+    captcha?: any,
     access_pass: null | string = 'F'
   ) => {
     if (!userId) return usernameRef.current.focus();
     if (!password) return passwordRef.current.focus();
-
-    console.log('here');
+    else if (captcha && !captchaInput) return captchaRef.current.focus();
 
     setLogging(true);
+    if (captcha && captchaInput !== captcha.replace(/(\s*)/g, '')) {
+      const onClose = () => {
+        _resetAlert();
+      };
+      _resetAlert();
+      setAlertVisible({
+        visible: true,
+        title: t('alert_title_login_fail'),
+        description: t('alert_text_incorrect_prevent'),
+        onClose,
+        actions: [
+          {
+            name: t('alert_button_confirm'),
+            action: onClose
+          }
+        ]
+      });
+
+      handleChangeCaptcha();
+      setLogging(false);
+      setPassword('');
+      setCaptchaInput('');
+      return;
+    }
 
     const UserApiRequest = UserApi;
 
@@ -111,13 +139,14 @@ const LoginInputContainer = ({
       userId,
       password,
       _serviceCode,
-      false,
+      captcha,
       access_pass
     );
 
     const tempPw = password.slice();
     setLogging(false);
     setPassword('');
+    setCaptchaInput('');
 
     if (getAuth.resultCode === 200 || getAuth.resultCode === 207) {
       if (getAuth.resultCode === 207 && access_pass === 'F') {
@@ -154,7 +183,7 @@ const LoginInputContainer = ({
 
         if (!resultAlert) return setLogging(false);
         else {
-          await loginchk(userId, password, 'T');
+          await loginchk(userId, password, captcha,'T');
           return;
         }
       }
@@ -164,6 +193,7 @@ const LoginInputContainer = ({
         getAuth.resultData.viewType &&
         getAuth.resultData.viewType === 'qrcode'
       ) {
+        await setCaptcha(null);
         loginchk(userId, tempPw, null);
         return;
       }
@@ -269,11 +299,30 @@ const LoginInputContainer = ({
       }
     } else {
       // 로그인 실패
+      captcha && setCaptcha(_getTransactionId());
       if (getAuth.resultCode === 401) {
-        console.log('ERROR 401');
-      }
-      if (getAuth.resultCode === 403) {
+        captcha && setErrorMsg(getAuth.resultMsg);
+        const onClose = () => {
+          _resetAlert();
+        };
+        _resetAlert();
+        setAlertVisible({
+          visible: true,
+          title: t('alert_title_login_fail'),
+          description: t('alert_text_incorrect_id'),
+          onClose,
+          actions: [
+            {
+              name: t('alert_button_confirm'),
+              action: onClose
+            }
+          ]
+        });
+
         setLoginFailed(true);
+      }else if (getAuth.resultCode === 403) {
+        setLoginFailed(true);
+        setCaptcha(_getTransactionId());
         const onClose = () => {
           _resetAlert();
         };
@@ -328,16 +377,11 @@ const LoginInputContainer = ({
     }
   };
 
-  // const goLogin = () => {
-  //   Alert.alert('로그인성공', `userId : ${userId}\npassword : ${password}`, [
-  //     { text: '이전페이지로', onPress: goLogin }
-  //   ]);
-  //   navigation.navigate('Login');
-  // };
-
   const inputFocusOut = () => {
     if (usernameRef.current.isFocused()) return usernameRef.current.blur();
     else if (passwordRef.current.isFocused()) return passwordRef.current.blur();
+    else if (captcha)
+      if (captchaRef.current.isFocused()) return captchaRef.current.blur();
   };
 
   const _resetAlert = () =>
@@ -348,6 +392,22 @@ const LoginInputContainer = ({
       actions: [],
       title: ''
     });
+
+  const handleChangeCaptcha = () => {
+    setCaptcha(_getTransactionId());
+    setCaptchaInput('');
+  };
+
+  const _getTransactionId = () => {
+    let chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz';
+    let string_length = 6;
+    let randomstring = '';
+    for (let i = 0; i < string_length; i++) {
+      let rnum = Math.floor(Math.random() * chars.length);
+      randomstring += chars.substring(rnum, rnum + 1);
+    }
+    return String(randomstring).split('').join(' ');
+  };
 
   const idInput = (text: string) => {
     setUserId(text.trim());
@@ -370,7 +430,13 @@ const LoginInputContainer = ({
         inputFocusOut,
         loginFailed,
         logging,
-        alertVisible
+        alertVisible,
+        captcha,
+        captchaInput,
+        captchaRef,
+        setCaptchaInput,
+        errorMsg,
+        handleChangeCaptcha
       }}
     />
   );

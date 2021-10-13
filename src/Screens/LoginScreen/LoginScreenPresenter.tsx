@@ -15,8 +15,16 @@ import LinearGradient from 'react-native-linear-gradient';
 const arrowRight = require('../../../assets/assets_2/icons/ic_arrow_right.png');
 
 const LoginScreenPresenter = (props: any) => {
-  const { code, codeInput, codeLineRef, codeFocus, goLoginD, inputFocusOut } =
-    props;
+  const {
+    code,
+    codeInput,
+    codeLineRef,
+    joincodeErr,
+    codeFocus,
+    goLoginD,
+    inputFocusOut,
+    LoginForWehago
+  } = props;
 
   return (
     <View style={styles.container}>
@@ -31,7 +39,7 @@ const LoginScreenPresenter = (props: any) => {
           <Text style={styles.textSub1}>공유받은 참여코드 입력 후</Text>
           <Text style={styles.textSub2}>바로 회의에 참여해보세요.</Text>
         </View>
-        <View style={{ flex: 1 }} />
+        <View style={{ flex: 0.7 }} />
         <View style={styles.codeView}>
           <TextInput
             onChangeText={codeInput}
@@ -85,6 +93,11 @@ const LoginScreenPresenter = (props: any) => {
             onFocus={codeFocus}
           />
         </View>
+        {joincodeErr && (
+          <Text style={styles.joincodeErr}>
+            대소문자 [A~F], [0~9] 이외의 값은 입력할수 없습니다.
+          </Text>
+        )}
         <View style={styles.bottomContainer}>
           <LinearGradient
             end={{ x: 0, y: 0.5 }}
@@ -92,7 +105,10 @@ const LoginScreenPresenter = (props: any) => {
             colors={['#3BBFF0', '#1C90FB']}
             style={styles.loginButtonView}
           >
-            <TouchableHighlight style={styles.loginButtonView}>
+            <TouchableHighlight
+              style={styles.loginButtonView}
+              onPress={LoginForWehago}
+            >
               <Text style={styles.loginButtonText}>WEHAGO 계정으로 로그인</Text>
             </TouchableHighlight>
           </LinearGradient>
@@ -174,6 +190,9 @@ const styles = StyleSheet.create({
     marginVertical: 20
   },
   loginButtonTouch: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
     alignItems: 'center'
   },
   loginButtonText: {
@@ -199,7 +218,8 @@ const styles = StyleSheet.create({
     zIndex: 10,
     color: 'rgba(0,0,0,0)',
     fontSize: 1
-  }
+  },
+  joincodeErr: { color: 'red', top: '-5%', fontSize: 13 }
 });
 
 export default LoginScreenPresenter;

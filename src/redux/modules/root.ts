@@ -31,15 +31,16 @@ const setRootState = (rstate: Rootsstate) => ({
 });
 
 const applySetRootState = (state: any, action: AnyAction) => {
+  
   const {
-    rstate: { loaded, destination, params }
+    rstate: { loaded, destination, params, url }
   } = action;
-
   return {
     ...state,
     loaded,
     destination,
-    params
+    params,
+    url
   };
 };
 

@@ -8,7 +8,8 @@ import {
   Text,
   TextInput,
   Animated,
-  Easing
+  Easing,
+  KeyboardAvoidingView
 } from 'react-native';
 // import { Text, TextInput } from '../../../components/StyledText';
 import CustomCheckBoxContainer from '../../../components/CustomCheckBox';
@@ -36,8 +37,14 @@ const LoginInputPresenter = (props: any) => {
     loginchk,
     inputFocusOut,
     loginFailed,
+    captchaRef,
+    captcha,
+    captchaInput,
     logging,
-    alertVisible
+    alertVisible,
+    handleChangeCaptcha,
+    setCaptchaInput,
+    errorMsg
   } = props;
 
   const t = getT();
@@ -62,15 +69,35 @@ const LoginInputPresenter = (props: any) => {
       colors={['#FCFDFF', '#F0F8FF']}
       style={styles.baseView}
     >
+      {/* <KeyboardAvoidingView style={styles.avoidingView} behavior="padding" keyboardVerticalOffset={70}> */}
       <TouchableOpacity
         style={styles.container}
         activeOpacity={1}
         onPress={inputFocusOut}
       >
-        <View style={{ flex: 0.8 }} />
+        {!captcha && (<View style={{ flex: 0.8 }} />)}
         <Image source={logo} style={styles.imageView} resizeMode={'center'} />
+        {captcha && (
+          <View style={styles.captchaMessageView}>
+            <Text style={[styles.captchaMessageText, { marginBottom: 4 }]}>
+              {t('login_exceeded')}
+            </Text>
+            <Text style={[styles.captchaMessageText, { color: '#ababab' }]}>
+              {t('login_prevent')}
+            </Text>
+            <Text style={[styles.captchaMessageText, { color: '#ababab' }]}>
+              {t('login_fivetimes')}
+            </Text>
+          </View>
+        )}
         <View style={styles.topContainer}>
-          <View style={styles.inputSec}>
+          <View
+            style={[
+              styles.inputSec,
+              userId && { borderBottomColor: '#36d3fa' },
+              loginFailed && { borderBottomColor: 'red' }
+            ]}
+          >
             <Image source={user} style={styles.icon} />
             <TextInput
               style={styles.inputLogin}
@@ -79,10 +106,17 @@ const LoginInputPresenter = (props: any) => {
               returnKeyType="next"
               value={userId}
               onChangeText={idInput}
+              autoCapitalize="none"
               onSubmitEditing={() => passwordRef.current.focus()}
             />
           </View>
-          <View style={styles.inputSec}>
+          <View
+            style={[
+              styles.inputSec,
+              password && { borderBottomColor: '#36d3fa' },
+              loginFailed && { borderBottomColor: 'red' }
+            ]}
+          >
             <Image source={lock} style={styles.icon} />
             <TextInput
               style={styles.inputLogin}
@@ -93,20 +127,83 @@ const LoginInputPresenter = (props: any) => {
               returnKeyType="go"
               autoCapitalize="none"
               onChangeText={pwInput}
-              onSubmitEditing={() => loginchk(userId, password)}
+              onSubmitEditing={() => loginchk(userId, password, captcha)}
             />
           </View>
         </View>
+
+        {loginFailed && (
+          <Text style={styles.loginFailedText}>{t('login_incorrect')}</Text>
+        )}
+
+        {captcha && (
+          <View style={styles.captchaMessageView}>
+            <Text style={styles.captchaMessageText}>{t('login_input')}</Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                width: '100%',
+                marginTop: 6
+              }}
+            >
+              <View style={styles.captchaArea}>
+                <Text style={[styles.captchaMessageText, styles.captchaText]}>
+                  {captcha}
+                </Text>
+              </View>
+              <View style={styles.refresh}>
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  onPress={handleChangeCaptcha}
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                  }}
+                >
+                  <Text style={{ color: '#ababab' }}>{t('login_refresh')}</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <TextInput
+              ref={captchaRef}
+              value={captchaInput}
+              placeholder={t('login_preventAuto')}
+              placeholderTextColor={'#ccc'}
+              selectionColor={'#505050'}
+              returnKeyType={'next'}
+              keyboardType="default"
+              autoCapitalize="none"
+              onChangeText={text => setCaptchaInput(text)}
+              onSubmitEditing={() => loginchk(userId, password, captcha)}
+              style={Object.assign(
+                {},
+                styles.inputField,
+                {
+                  borderBottomWidth: 1,
+                  borderBottomColor: '#d9d9d9'
+                },
+                loginFailed && { borderBottomColor: 'red' }
+              )}
+            />
+            {errorMsg && (
+              <Text style={[styles.captchaMessageText, styles.errorMsg]}>
+                {errorMsg}
+              </Text>
+            )}
+          </View>
+        )}
         <View style={styles.bottomContainer}>
-          <LinearGradient
-            end={{ x: 0, y: 0 }}
-            start={{ x: 1, y: 0 }}
-            colors={['#3BBFF0', '#1C90FB']}
-            style={styles.loginButtonView}
+          <TouchableHighlight
+            style={styles.loginButtonTouch}
+            onPress={() => loginchk(userId, password, captcha)}
           >
-            <TouchableHighlight
+            <LinearGradient
+              end={{ x: 0, y: 0 }}
+              start={{ x: 1, y: 0 }}
+              colors={['#3BBFF0', '#1C90FB']}
               style={styles.loginButtonView}
-              onPress={() => loginchk(userId, password)}
             >
               {logging ? (
                 <Animated.View
@@ -120,8 +217,9 @@ const LoginInputPresenter = (props: any) => {
               ) : (
                 <Text style={styles.loginButtonText}>{t('login_login')}</Text>
               )}
-            </TouchableHighlight>
-          </LinearGradient>
+            </LinearGradient>
+          </TouchableHighlight>
+
           <CustomCheckBoxContainer text="아이디 저장" color="#e6e6e6" />
         </View>
         <View style={{ flex: 1.2 }}></View>
@@ -131,28 +229,8 @@ const LoginInputPresenter = (props: any) => {
           </Text>
         </View>
       </TouchableOpacity>
-      <Image
-        source={patternD}
-        style={{
-          position: 'absolute',
-          left: 0,
-          bottom: '8%',
-          resizeMode: 'center',
-          width: 260,
-          height: 82
-        }}
-      />
-      <Image
-        source={patternU}
-        style={{
-          position: 'absolute',
-          width: 240,
-          height: 240,
-          right: 0,
-          top: 0,
-          resizeMode: 'center'
-        }}
-      />
+      <Image source={patternD} style={styles.bottomImg} />
+      <Image source={patternU} style={styles.topImg} />
       <CustomAlert
         visible={alertVisible.visible}
         width={320}
@@ -161,6 +239,7 @@ const LoginInputPresenter = (props: any) => {
         onClose={alertVisible.onClose}
         actions={alertVisible.actions}
       />
+      {/* </KeyboardAvoidingView> */}
     </LinearGradient>
   );
 };
@@ -170,6 +249,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgb(240,248,255)',
     position: 'relative'
+  },
+  avoidingView: {
+    flexGrow: 1
+    // justifyContent: 'center',
+    // width: '100%'
   },
   container: {
     paddingLeft: '8%',
@@ -194,13 +278,35 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
+  captchaMessageView: {
+    // width: 320,
+    marginVertical: 20,
+    alignSelf: 'flex-start'
+  },
+  captchaMessageText: {
+    fontSize: 10,
+    color: '#505050'
+  },
+  captchaArea: {
+    flex: 1,
+    padding: 10,
+    backgroundColor: '#ccc'
+  },
+  captchaText: {
+    color: '#000',
+    fontWeight: 'bold',
+    fontSize: 16,
+    textAlign: 'center'
+  },
   //아이디, 비밀번호 입력
   inputSec: {
     // flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    position: 'relative'
+    position: 'relative',
+    borderBottomColor: 'rgb(230,230,230)',
+    borderBottomWidth: 1
   },
   icon: {
     resizeMode: 'center',
@@ -215,9 +321,13 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
     fontSize: 16,
     color: 'rgb(147,147,147)',
-    fontWeight: '200',
-    borderBottomColor: 'rgb(230,230,230)',
-    borderBottomWidth: 1
+    fontWeight: '200'
+  },
+  loginFailedText: {
+    color: 'red',
+    fontSize: 11,
+    top: '-2%',
+    alignSelf: 'flex-start'
   },
   //로그인버튼
   loginButtonView: {
@@ -226,9 +336,11 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: 10
+    marginVertical: 10,
+    marginBottom: 17
   },
   loginButtonTouch: {
+    width: '100%',
     alignItems: 'center'
   },
   loginButtonText: {
@@ -256,6 +368,38 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  bottomImg: {
+    position: 'absolute',
+    left: 0,
+    bottom: '9%',
+    resizeMode: 'center',
+    width: 260,
+    height: 82
+  },
+  topImg: {
+    position: 'absolute',
+    width: 240,
+    height: 240,
+    right: 0,
+    top: 0,
+    resizeMode: 'center'
+  },
+  refresh: {
+    marginLeft: 6,
+    padding: 6,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    justifyContent: 'center'
+  },
+  inputField: {
+    paddingVertical: 8,
+    // width: '100%',
+    color: '#333',
+    fontSize: 15
+  },
+  errorMsg: {
+    color: 'red'
   }
 });
 

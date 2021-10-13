@@ -31,7 +31,7 @@ class ConferenceStateContainer extends React.Component {
     // 딥링크 웹 접근
     // 딥링크 이메일 접근
     // 참여코드 접근
-    const { params } = this.props.screenProps;
+    const { params } = this.props;
     let roomId;
     let iscret = true; // 인증 비인증 묻는 것
     if (params.accesstype === 'login' || params.accesstype === 'wehago') {
