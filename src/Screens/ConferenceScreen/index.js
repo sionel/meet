@@ -56,7 +56,8 @@ const mapStateToProps = state => {
     isMuteMic: user?.isMuteMic,
     externalAPIScope,
     isScreenShare,
-    screenToggleFlag
+    screenToggleFlag,
+    destination,
   };
 };
 

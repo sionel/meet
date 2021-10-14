@@ -17,14 +17,14 @@ import LinearGradient from 'react-native-linear-gradient';
 import { getT } from '../../../utils/translateManager';
 import CustomAlert from '../../../components/CustomAlert';
 
-const logo = require('../../../../assets/assets_2/logos/logo.png');
+const logo = require('../../../../assets/new/logos/logo.png');
 
-const user = require('../../../../assets/assets_2/icons/ic_person.png');
-const lock = require('../../../../assets/assets_2/icons/ic_lock.png');
-const loading = require('../../../../assets/assets_2/icons/loadingIcon.png');
+const user = require('../../../../assets/new/icons/ic_person.png');
+const lock = require('../../../../assets/new/icons/ic_lock.png');
+const loading = require('../../../../assets/new/icons/loadingIcon.png');
 
-const patternU = require('../../../../assets/assets_2/patterns/bg_pattern_up.png');
-const patternD = require('../../../../assets/assets_2/patterns/bg_pattern_down.png');
+const patternU = require('../../../../assets/new/patterns/bg_pattern_up.png');
+const patternD = require('../../../../assets/new/patterns/bg_pattern_down.png');
 
 const LoginInputPresenter = (props: any) => {
   const {
@@ -44,10 +44,13 @@ const LoginInputPresenter = (props: any) => {
     alertVisible,
     handleChangeCaptcha,
     setCaptchaInput,
-    errorMsg
+    errorMsg,
+    t,
+    captcahFocus,
+    captcahBlur,
+    captchaFocus
   } = props;
 
-  const t = getT();
   const rotate = new Animated.Value(0);
   const spin = rotate.interpolate({
     inputRange: [0, 1],
@@ -69,15 +72,14 @@ const LoginInputPresenter = (props: any) => {
       colors={['#FCFDFF', '#F0F8FF']}
       style={styles.baseView}
     >
-      {/* <KeyboardAvoidingView style={styles.avoidingView} behavior="padding" keyboardVerticalOffset={70}> */}
       <TouchableOpacity
         style={styles.container}
         activeOpacity={1}
         onPress={inputFocusOut}
       >
-        {!captcha && (<View style={{ flex: 0.8 }} />)}
+        {!captcha && <View style={{ flex: 0.8 }} />}
         <Image source={logo} style={styles.imageView} resizeMode={'center'} />
-        {captcha && (
+        {!captchaFocus && captcha && (
           <View style={styles.captchaMessageView}>
             <Text style={[styles.captchaMessageText, { marginBottom: 4 }]}>
               {t('login_exceeded')}
@@ -177,15 +179,16 @@ const LoginInputPresenter = (props: any) => {
               autoCapitalize="none"
               onChangeText={text => setCaptchaInput(text)}
               onSubmitEditing={() => loginchk(userId, password, captcha)}
-              style={Object.assign(
-                {},
+              onFocus={captcahFocus}
+              onBlur={captcahBlur}
+              style={[
                 styles.inputField,
                 {
                   borderBottomWidth: 1,
                   borderBottomColor: '#d9d9d9'
                 },
                 loginFailed && { borderBottomColor: 'red' }
-              )}
+              ]}
             />
             {errorMsg && (
               <Text style={[styles.captchaMessageText, styles.errorMsg]}>
@@ -239,7 +242,6 @@ const LoginInputPresenter = (props: any) => {
         onClose={alertVisible.onClose}
         actions={alertVisible.actions}
       />
-      {/* </KeyboardAvoidingView> */}
     </LinearGradient>
   );
 };

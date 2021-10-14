@@ -44,10 +44,8 @@ include ':react-native-fast-image'
 project(':react-native-fast-image').projectDir = new File(rootProject.projectDir, '../../node_modules/react-native-fast-image/android')
 include ':react-native-sketch-canvas'
 project(':react-native-sketch-canvas').projectDir = new File(rootProject.projectDir, '../../node_modules/@terrylinla/react-native-sketch-canvas/android')
-<<<<<<< HEAD
 include ':react-native-linear-gradient'
 project(':react-native-linear-gradient').projectDir = new File(rootProject.projectDir, '../../node_modules/react-native-linear-gradient/android')
-=======
 include ':react-native-home-pressed'
 project(':react-native-home-pressed').projectDir = new File(rootProject.projectDir,   '../../node_modules/react-native-home-pressed/android')
 include ':react-native-restart'
@@ -56,4 +54,3 @@ include ':react-native-exit-app'
 project(':react-native-exit-app').projectDir = new File(rootProject.projectDir, '../../node_modules/react-native-exit-app/android')
 include ':react-native-incall-manager'
 project(':react-native-incall-manager').projectDir = new File(rootProject.projectDir, '../../node_modules/react-native-incall-manager/android')
->>>>>>> 14ba38625c211698594729bcd877027ce6016292

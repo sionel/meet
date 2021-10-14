@@ -1,5 +1,4 @@
 import React from 'react';
-// import type {Node} from 'react';
 import {
   StyleSheet,
   View,
@@ -12,7 +11,7 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
-const arrowRight = require('../../../assets/assets_2/icons/ic_arrow_right.png');
+const arrowRight = require('../../../assets/new/icons/ic_arrow_right.png');
 
 const LoginScreenPresenter = (props: any) => {
   const {
@@ -21,11 +20,12 @@ const LoginScreenPresenter = (props: any) => {
     codeLineRef,
     joincodeErr,
     codeFocus,
-    goLoginD,
+    goLoginInput,
     inputFocusOut,
-    LoginForWehago
+    LoginForWehago,
+    t
   } = props;
-
+  
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -35,7 +35,7 @@ const LoginScreenPresenter = (props: any) => {
       >
         <View style={{ flex: 1 }} />
         <View style={styles.topContainer}>
-          <Text style={styles.textHead}>참여코드를 입력해주세요.</Text>
+          <Text style={styles.textHead}>참여코드를 입력해주세요</Text>
           <Text style={styles.textSub1}>공유받은 참여코드 입력 후</Text>
           <Text style={styles.textSub2}>바로 회의에 참여해보세요.</Text>
         </View>
@@ -93,11 +93,11 @@ const LoginScreenPresenter = (props: any) => {
             onFocus={codeFocus}
           />
         </View>
-        {joincodeErr && (
-          <Text style={styles.joincodeErr}>
-            대소문자 [A~F], [0~9] 이외의 값은 입력할수 없습니다.
+        
+          <Text style={[styles.joincodeErr, Platform.OS === 'ios' && {height:15}]}>
+          {joincodeErr && ('대소문자 [A~F], [0~9] 이외의 값은 입력할수 없습니다.')}
           </Text>
-        )}
+        
         <View style={styles.bottomContainer}>
           <LinearGradient
             end={{ x: 0, y: 0.5 }}
@@ -114,7 +114,7 @@ const LoginScreenPresenter = (props: any) => {
           </LinearGradient>
           <TouchableOpacity
             activeOpacity={1}
-            onPress={goLoginD}
+            onPress={goLoginInput}
             style={styles.loginNaviView}
           >
             <Text style={styles.loginNavigation}>직접 입력하여 로그인</Text>
@@ -219,7 +219,12 @@ const styles = StyleSheet.create({
     color: 'rgba(0,0,0,0)',
     fontSize: 1
   },
-  joincodeErr: { color: 'red', top: '-5%', fontSize: 13 }
+  joincodeErr: { 
+    color: 'red', 
+    top: '-5%', 
+    fontSize: 13,
+    // height: ,
+  }
 });
 
 export default LoginScreenPresenter;

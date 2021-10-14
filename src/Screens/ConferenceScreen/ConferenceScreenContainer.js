@@ -333,19 +333,12 @@ class ConferenceScreenContainer extends React.Component {
   _handleConferenceClose = async () => {
     const {
       navigation,
-<<<<<<< HEAD
-      destination,
-      setRootState,
-      setScreenFlag,
-      isScreenShare,
-      toggleScreenFlag
-=======
       screenProps,
       setIndicator,
       initParticipants,
       initMainUser,
-      user
->>>>>>> 14ba38625c211698594729bcd877027ce6016292
+      user,
+      destination
     } = this.props;
     setIndicator();
     initParticipants();

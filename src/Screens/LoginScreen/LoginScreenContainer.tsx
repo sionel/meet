@@ -1,18 +1,20 @@
-import React, { RefObject, useRef, useState } from 'react';
+import React, { RefObject, useEffect, useRef, useState } from 'react';
 import LoginScreenPresenter from './LoginScreenPresenter';
 import { MeetApi } from '../../services';
-import { getT } from '../../utils/translateManager';
 import { Linking, Platform } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 const LoginScreenContainer = ({ navigation, setAlert, setRootState }: any) => {
   const [code, setCode] = useState('');
   const [joincodeErr, setJoincodeErr] = useState(false);
-  const t = getT();
+  // const t = getT();
+  const { t } = useTranslation();
 
   const codeLineRef: RefObject<any> = useRef();
 
   const codeInput = async (value: string) => {
     const regex = /^[0-9|a-f|A-F|]*$/;
+    
     let joincode = '';
 
     if (value.match(regex)) {
@@ -62,7 +64,7 @@ const LoginScreenContainer = ({ navigation, setAlert, setRootState }: any) => {
     codeLineRef.current.focus();
   };
 
-  const goLoginD = () => {
+  const goLoginInput = () => {
     navigation.navigate('LoginInput');
   };
 
@@ -102,10 +104,11 @@ const LoginScreenContainer = ({ navigation, setAlert, setRootState }: any) => {
         codeInput,
         codeFocus,
         codeLineRef,
-        goLoginD,
+        goLoginInput,
         inputFocusOut,
         LoginForWehago,
-        joincodeErr
+        joincodeErr,
+        t
       }}
     />
   );

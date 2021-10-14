@@ -22,9 +22,10 @@ class SettingScreenContainer extends React.Component {
   }
 
   async componentDidMount() {
+    const {params} = this.props;
     this._init();
     let tracks = await this._getTrack();
-    let accesstype = this.props.screenProps?.params?.accesstype;
+    let accesstype = params?.accesstype;
     // if (Platform.OS !== 'ios') {
     //   Orientation.lockToPortrait();
     // }

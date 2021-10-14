@@ -5,7 +5,8 @@ import { actionCreators as AlertAcions } from '../../redux/modules/alert';
 const mapStatetoProps = state => {
   return {
     auth: state.user.auth,
-    from: state.user.from
+    from: state.user.from,
+    params: state.root.params
   };
 };
 

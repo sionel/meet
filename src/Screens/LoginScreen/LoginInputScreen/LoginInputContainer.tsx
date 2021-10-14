@@ -3,8 +3,9 @@ import { Platform } from 'react-native';
 import LoginInputPresenter from './LoginInputPresenter';
 import UserApi from '../../../services/api/LoginApi/UserApi';
 import { actionCreators as UserActions } from '../../../redux/modules/user';
-import { getT } from '../../../utils/translateManager';
+// import { getT } from '../../../utils/translateManager';
 import ServiceCheckApi from '../../../services/api/ServiceCheckApi';
+import { useTranslation } from 'react-i18next';
 
 const LoginInputContainer = ({
   loginCheckRequest,
@@ -15,7 +16,7 @@ const LoginInputContainer = ({
   let _serviceCode: string;
   _serviceCode = Platform.OS === 'ios' ? 'wehagomeet' : 'meet';
 
-  const t = getT();
+  const { t } = useTranslation();
 
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
@@ -24,6 +25,7 @@ const LoginInputContainer = ({
   const [logging, setLogging] = useState(false);
   const [loginFailed, setLoginFailed] = useState(false);
   const [errorMsg, setErrorMsg] = useState(null);
+  const [captchaFocus, setCaptchaFocus] = useState(false);
   const [alertVisible, setAlertVisible] = useState({
     visible: false,
     description: '',
@@ -48,6 +50,7 @@ const LoginInputContainer = ({
         auth,
         'webrtc' // 구매여부 확인
       );
+
       // 서비스 배포여부 조회
       const isDeployWehagomeet = await ServiceCheckApi.serviceCheck(
         auth,
@@ -384,6 +387,16 @@ const LoginInputContainer = ({
       if (captchaRef.current.isFocused()) return captchaRef.current.blur();
   };
 
+  const captcahFocus = () => {
+    if(captchaRef.current.isFocused()) {
+      setCaptchaFocus(true);
+    }
+  }
+
+  const captcahBlur = () => {
+    setCaptchaFocus(false);
+  }
+
   const _resetAlert = () =>
     setAlertVisible({
       visible: false,
@@ -436,7 +449,11 @@ const LoginInputContainer = ({
         captchaRef,
         setCaptchaInput,
         errorMsg,
-        handleChangeCaptcha
+        handleChangeCaptcha,
+        t,
+        captcahFocus,
+        captcahBlur,
+        captchaFocus
       }}
     />
   );
