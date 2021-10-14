@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Platform, Linking } from 'react-native';
+import { Platform, Linking, Alert } from 'react-native';
 import LoginScreenPresenter from './LoginScreenPresenter';
 import { WEHAGO_ENV } from '../../../config';
 import { MeetApi } from '../../services';
@@ -47,17 +47,30 @@ class LoginScreenContainer extends Component {
       ? 'https://play.google.com/store/apps/details?id=com.douzone.android.wehagov'
       : 'https://play.google.com/store/apps/details?id=com.duzon.android.lulubizpotal';
 
-    Linking.openURL(Platform.OS === 'ios' ? iosUrl : androidUrl).catch(err => {
-      Linking.openURL(
-        Platform.OS === 'ios' ? iosMarketURL : androidMarketURL
-      ).catch(err => {
-        this.props.setAlert({
-          type: 1,
-          title: this.t('alert_title_error'),
-          message: this.t('alert_text_no_app_store')
+    Linking.openURL(Platform.OS === 'ios' ? iosUrl : androidUrl).catch(
+      async err => {
+        const a = await new Promise(res => {
+          Alert.alert('error', '위하고 앱이 없습니다.', [
+            { text: '직접입력로그인', onPress: res() }
+          ]);
         });
-      });
-    });
+        this.props.navigation.navigate({
+          routeName: 'LoginInput',
+          params: {
+            ...this.props.screenProps
+          }
+        });
+        // Linking.openURL(
+        //   Platform.OS === 'ios' ? iosMarketURL : androidMarketURL
+        // ).catch(err => {
+        //   this.props.setAlert({
+        //     type: 1,
+        //     title: this.t('alert_title_error'),
+        //     message: this.t('alert_text_no_app_store')
+        //   });
+        // });
+      }
+    );
   };
 
   _inputCode = async code => {

@@ -43,15 +43,6 @@ const TopAreaPresenter = (props: propsType) => {
           : styles.settingBoxHorizontal
       }
     >
-      <View
-        style={{
-          position: 'absolute',
-          width: 252,
-          height: 36,
-          top : 36,
-          backgroundColor: '#ccf'
-        }}
-      />
       {talkButton && (
         <CustomButton
           name="talk"
@@ -112,6 +103,15 @@ const TopAreaPresenter = (props: propsType) => {
           areaHeight={36}
         />
       )}
+      {/* <View
+        style={{
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+          top: 40,
+          backgroundColor: 'rgba(10,255,10,0.8)'
+        }}
+      /> */}
     </View>
   );
 };

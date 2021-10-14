@@ -143,6 +143,15 @@ const ContentPresenter = props => {
           onChangeSpeaker={props.onChangeSpeaker}
         />
       )}
+      {/* <TouchableOpacity
+        style={{
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+          top: 100,
+          backgroundColor: 'rgba(10,255,10,0.8)'
+        }}
+      /> */}
     </View>
   );
 };
