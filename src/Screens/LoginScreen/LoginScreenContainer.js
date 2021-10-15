@@ -40,23 +40,29 @@ class LoginScreenContainer extends Component {
     const androidUrl = `wehago${
       iswehagov ? 'v' : ''
     }://app?name=${serviceCode}&login=true`;
-    const iosMarketURL = iswehagov
-      ? 'http://itunes.apple.com/kr/app/wehago/id1505708178?mt=8'
-      : 'http://itunes.apple.com/kr/app/wehago/id1363039300?mt=8';
-    const androidMarketURL = iswehagov
-      ? 'https://play.google.com/store/apps/details?id=com.douzone.android.wehagov'
-      : 'https://play.google.com/store/apps/details?id=com.duzon.android.lulubizpotal';
+    // const iosMarketURL = iswehagov
+    //   ? 'http://itunes.apple.com/kr/app/wehago/id1505708178?mt=8'
+    //   : 'http://itunes.apple.com/kr/app/wehago/id1363039300?mt=8';
+    // const androidMarketURL = iswehagov
+    //   ? 'https://play.google.com/store/apps/details?id=com.douzone.android.wehagov'
+    //   : 'https://play.google.com/store/apps/details?id=com.duzon.android.lulubizpotal';
 
     Linking.openURL(Platform.OS === 'ios' ? iosUrl : androidUrl).catch(err => {
-      Linking.openURL(
-        Platform.OS === 'ios' ? iosMarketURL : androidMarketURL
-      ).catch(err => {
-        this.props.setAlert({
-          type: 1,
-          title: this.t('alert_title_error'),
-          message: this.t('alert_text_no_app_store')
-        });
-      });
+      this.props.navigation.navigate({
+        routeName: 'LoginInput',
+        params: {
+          ...this.props.screenProps
+        }
+      })
+      // Linking.openURL(
+      //   Platform.OS === 'ios' ? iosMarketURL : androidMarketURL
+      // ).catch(err => {
+      //   this.props.setAlert({
+      //     type: 1,
+      //     title: this.t('alert_title_error'),
+      //     message: this.t('alert_text_no_app_store')
+      //   });
+      // });
     });
   };
 
