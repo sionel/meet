@@ -76,7 +76,7 @@
     "servernoti_button_update": "Update",
     "login_code": "Enter participation code",
     "login_codemessage": "Enter the shared participation code and participate immediately.",
-    "login_wehagologin": "Log-in to WEHAGO app",
+    "login_wehagologin": "Log in with WEHAGO account.",
     "login_wehagologin_V": "Log-in to WEHAGOV app",
     "login_direct": "Log-in by direct input",
     "login_exceeded": "Maximum number of log-in attempts using ID has been exceeded",
