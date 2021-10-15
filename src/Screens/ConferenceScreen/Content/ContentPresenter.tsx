@@ -26,10 +26,11 @@ const ContentPresenter = props => {
     conferenceMode,
     createdTime,
     orientation,
-    onClose
+    onClose,
+    localPipMode
   } = props;
 
-  const localPipMode = useSelector((state: RootState) => state.local.pipMode);
+  // const localPipMode = useSelector((state: RootState) => state.local.pipMode);
   const hideStatusbar = orientation === 'horizontal';
   return (
     <View style={styles.container} onLayout={props.onLayout}>
@@ -39,19 +40,6 @@ const ContentPresenter = props => {
         backgroundColor={'#000'}
         hidden={hideStatusbar}
       />
-      {/* {drawingMode && ( */}
-      {/* <DrawingSketch
-        // display={true}
-        display={drawingMode}
-        drawing={drawingMode}
-        onClear={props.onClear}
-        orientation={props.orientation}
-        onChangeDrawing={props.setDrawingMode}
-        onSetDrawingData={props.onSetDrawingData}
-        onChangeDrawingMode={props.onChangeDrawingMode}
-        hasNotch={props.hasNotch}
-      /> */}
-      {/* )} */}
 
       {/* START MAIN VIDEO 영역 */}
       <TouchableOpacity

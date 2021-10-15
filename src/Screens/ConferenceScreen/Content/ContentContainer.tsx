@@ -7,6 +7,11 @@ import DeviceInfo from 'react-native-device-info';
 import Orientation from 'react-native-orientation-locker';
 import _ from 'underscore';
 
+import { useDispatch, useSelector } from 'react-redux';
+import { actionCreators as localAction } from '../../../redux/modules/local';
+import { actionCreators as mainUserAction } from '../../../redux/modules/mainUser';
+import { RootState } from '../../../redux/configureStore';
+
 const isIOS = Platform.OS === 'ios';
 const InCallManager = !isIOS && require('react-native-incall-manager').default;
 
@@ -30,13 +35,40 @@ function ContentContainer(props: any) {
   const [speaker, setSpeaker] = useState(2);
   const [objectFit, setObjectFit] = useState('contain');
   const [height, setHeight] = useState(Dimensions.get('window').height);
+  const { mainUser } = props;
+  const { videoTrack, isMuteVideo } = mainUser;
+  // const localPipMode = useSelector((state: RootState) => state.local.pipMode);
+  const {
+    conferenceMode,
+    drawingMode,
+    documentListMode,
+    attributes,
+    localPipMode
+  } = useSelector((state: RootState) => {
+    return {
+      conferenceMode: state.local.conferenceMode,
+      drawingMode: state.mainUser.drawingMode,
+      documentListMode: state.mainUser.documentListMode,
+      attributes: state.documentShare.attributes,
+      localPipMode: state.local.pipMode
+    };
+  });
+
+  const dispatch = useDispatch();
+  const setConferenceMode = mode =>
+    dispatch(localAction.setConferenceMode(mode));
+  const setDrawingMode = value =>
+    dispatch(mainUserAction.setDrawingMode(value));
+  const setDocumentListMode = value =>
+    dispatch(mainUserAction.setDocumentListMode(value));
+
   let RNBS;
 
   useEffect(() => {
     _handleChangeSpeaker();
-    Orientation.addOrientationListener(this._setOrientation);
+    Orientation.addOrientationListener(_setOrientation);
     return () => {
-      Orientation.removeOrientationListener(this._setOrientation);
+      Orientation.removeOrientationListener(_setOrientation);
     };
   }, []);
 
@@ -49,7 +81,6 @@ function ContentContainer(props: any) {
   };
 
   const _toggleConferenceMode = () => {
-    const { setConferenceMode, conferenceMode } = props;
     if (conferenceMode === ConferenceModes.CONTROL) {
       setConferenceMode(ConferenceModes.NORMAL);
     } else {
@@ -100,7 +131,15 @@ function ContentContainer(props: any) {
         isVideoReverse,
         speaker,
         objectFit,
-        height
+        height,
+        localPipMode,
+        videoTrack,
+        isMuteVideo,
+        drawingMode,
+        documentListMode,
+        attributes,
+        mainUser,
+        conferenceMode
       }}
       {...props}
       hasNotch={hasNotch}

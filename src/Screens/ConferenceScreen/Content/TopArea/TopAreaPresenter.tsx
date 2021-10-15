@@ -1,7 +1,9 @@
-import React, { Fragment } from 'react';
-import { View, StyleSheet } from 'react-native';
+import React from 'react';
+import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import CustomButton from '../../../../components/CustomButton';
 import _ from 'underscore';
+// import icMore from '../../../../../assets/new/ic_more.png'
+import icMore from '../../../../../assets/new/ic_more.png';
 
 type propsType = {
   talkButton: boolean;
@@ -101,7 +103,31 @@ const TopAreaPresenter = (props: propsType) => {
           height={24}
           areaWidth={42}
           areaHeight={36}
+          // style={{
+          //   backgroundColor: '#faf'
+          // }}
         />
+      )}
+      {reverseButton && (
+        <TouchableOpacity
+          style={{
+            width: 28,
+            height: 36,
+            borderRadius: 30 / 2,
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          <Image
+            source={icMore}
+            style={{
+              width: 24,
+              height: 24,
+              resizeMode: 'contain'
+            }}
+            // resizeMode={'contain'}
+          />
+        </TouchableOpacity>
       )}
       {/* <View
         style={{
@@ -150,16 +176,16 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    alignItems: 'flex-end',
-    backgroundColor: '#d12d'
+    alignItems: 'flex-end'
+    // backgroundColor: '#d12d'
   },
   settingBoxHorizontal: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    marginVertical: 10,
-    backgroundColor: '#12d'
+    marginVertical: 10
+    // backgroundColor: '#12d'
   }
 });
 
