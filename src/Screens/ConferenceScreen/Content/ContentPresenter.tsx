@@ -14,10 +14,7 @@ import BottomArea from './BottomArea';
 import OverView from './OverView';
 import SimpleNoti from '../SimpleNoti';
 import { ConferenceModes } from '../../../utils/ConstantsBackup';
-
-/**
- * ContentPresenter
- */
+import { RootState } from '../../../redux/configureStore';
 const ContentPresenter = props => {
   const {
     mainUser,
@@ -32,7 +29,7 @@ const ContentPresenter = props => {
     onClose
   } = props;
 
-  const localPipMode = useSelector(state => state.local.pipMode);
+  const localPipMode = useSelector((state: RootState) => state.local.pipMode);
   const hideStatusbar = orientation === 'horizontal';
   return (
     <View style={styles.container} onLayout={props.onLayout}>
