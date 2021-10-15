@@ -11,6 +11,10 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
+
+//multilingual
+//다국어 적용 안되어있음
+
 const arrowRight = require('../../../assets/new/icons/ic_arrow_right.png');
 
 const LoginScreenPresenter = (props: any) => {
@@ -106,7 +110,9 @@ const LoginScreenPresenter = (props: any) => {
             style={styles.loginButtonView}
           >
             <TouchableHighlight
-              style={styles.loginButtonView}
+              activeOpacity={0.8}
+              underlayColor={'transparent'}
+              style={styles.loginButtonTouch}
               onPress={LoginForWehago}
             >
               <Text style={styles.loginButtonText}>WEHAGO 계정으로 로그인</Text>
@@ -187,13 +193,14 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: 20
+    marginVertical: 20,
   },
   loginButtonTouch: {
     width: '100%',
     height: '100%',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: 'transparent'
   },
   loginButtonText: {
     color: '#fff',

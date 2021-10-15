@@ -338,7 +338,8 @@ class ConferenceScreenContainer extends React.Component {
       initParticipants,
       initMainUser,
       user,
-      destination
+      destination,
+      setRootState
     } = this.props;
     setIndicator();
     initParticipants();

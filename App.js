@@ -6,6 +6,7 @@ import configureStore from './src/redux/configureStore';
 import Main from './src/Main';
 import { withTranslation } from 'react-i18next';
 import './src/locales/index';
+import { setT } from './src/utils/translateManager';
 
 import Splash from 'react-native-splash-screen';
 import { actionCreators } from './src/redux/modules/root';
@@ -19,6 +20,7 @@ function App(props) {
 
   useEffect(() => {
     Splash.hide();
+    setT(props.t);
   }, []);
 
   useEffect(() => {

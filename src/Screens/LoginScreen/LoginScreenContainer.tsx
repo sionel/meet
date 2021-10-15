@@ -2,19 +2,43 @@ import React, { RefObject, useEffect, useRef, useState } from 'react';
 import LoginScreenPresenter from './LoginScreenPresenter';
 import { MeetApi } from '../../services';
 import { Linking, Platform } from 'react-native';
-import { useTranslation } from 'react-i18next';
+import { actionCreators as UserActions } from '../../redux/modules/user';
+import { actionCreators as AlertActions } from '../../redux/modules/alert';
+import {
+  actionCreators as RootActions,
+  Rootsstate
+} from '../../redux/modules/root';
+import { getT } from '../../utils/translateManager';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../redux/configureStore';
+import Orientation, { OrientationType } from 'react-native-orientation-locker';
+// import { useTranslation } from 'react-i18next';
 
-const LoginScreenContainer = ({ navigation, setAlert, setRootState }: any) => {
+const LoginScreenContainer = ({ navigation }: any) => {
   const [code, setCode] = useState('');
+  const [orientation, setOrientation] = useState('');
   const [joincodeErr, setJoincodeErr] = useState(false);
-  // const t = getT();
-  const { t } = useTranslation();
 
   const codeLineRef: RefObject<any> = useRef();
 
+  const { auth, from, permission } = useSelector((state: RootState) => {
+    return {
+      auth: state.user.auth,
+      from: state.user.from,
+      permission: state.user.permission
+    };
+  });
+
+  const dispatch = useDispatch();
+  const setAlert = (params: any) => dispatch(AlertActions.setAlert(params));
+
+  const setRootState = (rstate: Rootsstate) =>
+    dispatch(RootActions.setRootState(rstate));
+
+  const t = getT();
   const codeInput = async (value: string) => {
     const regex = /^[0-9|a-f|A-F|]*$/;
-    
+
     let joincode = '';
 
     if (value.match(regex)) {
@@ -96,6 +120,25 @@ const LoginScreenContainer = ({ navigation, setAlert, setRootState }: any) => {
       });
     });
   };
+
+  const _handleOrientation = (orientation:OrientationType) => {
+    const status:boolean =
+    orientation === 'LANDSCAPE' ||
+    orientation === 'LANDSCAPE-LEFT' ||
+    orientation === 'LANDSCAPE-RIGHT';
+    setOrientation(status ? 'horizontal' : 'vertical');
+  };
+
+  useEffect(() => {
+    Orientation.getOrientation(orientation => {
+      const status:boolean = 
+      orientation === 'LANDSCAPE' ||
+      orientation === 'LANDSCAPE-LEFT' ||
+      orientation === 'LANDSCAPE-RIGHT';
+      setOrientation(status ? 'horizontal' : 'vertical');
+    })
+    Orientation.addOrientationListener(_handleOrientation)
+  })
 
   return (
     <LoginScreenPresenter

@@ -1,23 +1,31 @@
 import React, { RefObject, useEffect, useState } from 'react';
-import { Platform } from 'react-native';
+import { Animated, Dimensions, Easing, Platform } from 'react-native';
 import LoginInputPresenter from './LoginInputPresenter';
 import UserApi from '../../../services/api/LoginApi/UserApi';
-import { actionCreators as UserActions } from '../../../redux/modules/user';
-// import { getT } from '../../../utils/translateManager';
+import { getT } from '../../../utils/translateManager';
 import ServiceCheckApi from '../../../services/api/ServiceCheckApi';
-import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../redux/configureStore';
+import { actionCreators as UserActions } from '../../../redux/modules/user';
+import {
+  actionCreators as RootActions,
+  Rootsstate
+} from '../../../redux/modules/root';
 
-const LoginInputContainer = ({
-  loginCheckRequest,
-  auth,
-  setPermission,
-  setRootState
-}: any) => {
+// import { useTranslation } from 'react-i18next';
+
+const LoginInputContainer = () => {
   let _serviceCode: string;
   _serviceCode = Platform.OS === 'ios' ? 'wehagomeet' : 'meet';
 
-  const { t } = useTranslation();
+  const t = getT();
 
+  const rotate = new Animated.Value(0);
+  const spin = rotate.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '360deg']
+  });
+  
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const [captcha, setCaptcha] = useState<string | null>(null);
@@ -37,6 +45,35 @@ const LoginInputContainer = ({
   const usernameRef: RefObject<any> = React.useRef(null);
   const passwordRef: RefObject<any> = React.useRef(null);
   const captchaRef: RefObject<any> = React.useRef(null);
+
+  const { auth } = useSelector((state: RootState) => {
+    return {
+      auth: state.user.auth
+    };
+  });
+
+  const dispatch = useDispatch();
+  const loginCheckRequest = (
+    AUTH_A_TOKEN: any,
+    AUTH_R_TOKEN: any,
+    cno: any,
+    HASH_KEY: any,
+    from: any
+  ) =>
+    dispatch(
+      UserActions.loginCheckRequest(
+        AUTH_A_TOKEN,
+        AUTH_R_TOKEN,
+        cno,
+        HASH_KEY,
+        from
+      )
+    );
+  const setPermission = (permission: any) =>
+    dispatch(UserActions.setPermission(permission));
+
+  const setRootState = (rstate: Rootsstate) =>
+    dispatch(RootActions.setRootState(rstate));
 
   const _handleCheckServce = async (auth: any) => {
     const statusCheck = await ServiceCheckApi.companyStatusCheck(
@@ -186,7 +223,7 @@ const LoginInputContainer = ({
 
         if (!resultAlert) return setLogging(false);
         else {
-          await loginchk(userId, password, captcha,'T');
+          await loginchk(userId, password, captcha, 'T');
           return;
         }
       }
@@ -323,7 +360,7 @@ const LoginInputContainer = ({
         });
 
         setLoginFailed(true);
-      }else if (getAuth.resultCode === 403) {
+      } else if (getAuth.resultCode === 403) {
         setLoginFailed(true);
         setCaptcha(_getTransactionId());
         const onClose = () => {
@@ -388,14 +425,14 @@ const LoginInputContainer = ({
   };
 
   const captcahFocus = () => {
-    if(captchaRef.current.isFocused()) {
+    if (captchaRef.current.isFocused()) {
       setCaptchaFocus(true);
     }
-  }
+  };
 
   const captcahBlur = () => {
     setCaptchaFocus(false);
-  }
+  };
 
   const _resetAlert = () =>
     setAlertVisible({
@@ -430,6 +467,17 @@ const LoginInputContainer = ({
     setPassword(text.trim());
   };
 
+  const cycleAnimated = () => {
+    Animated.loop(
+      Animated.timing(rotate, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: true,
+        easing: Easing.out(Easing.poly(1))
+      })
+    ).start();
+  }
+
   return (
     <LoginInputPresenter
       {...{
@@ -453,7 +501,9 @@ const LoginInputContainer = ({
         t,
         captcahFocus,
         captcahBlur,
-        captchaFocus
+        captchaFocus,
+        cycleAnimated,
+        spin,
       }}
     />
   );

@@ -8,8 +8,8 @@ import {
   Text,
   TextInput,
   Animated,
-  Easing,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  Dimensions
 } from 'react-native';
 // import { Text, TextInput } from '../../../components/StyledText';
 import CustomCheckBoxContainer from '../../../components/CustomCheckBox';
@@ -25,6 +25,8 @@ const loading = require('../../../../assets/new/icons/loadingIcon.png');
 
 const patternU = require('../../../../assets/new/patterns/bg_pattern_up.png');
 const patternD = require('../../../../assets/new/patterns/bg_pattern_down.png');
+
+const height = Dimensions.get("window").height;
 
 const LoginInputPresenter = (props: any) => {
   const {
@@ -48,24 +50,18 @@ const LoginInputPresenter = (props: any) => {
     t,
     captcahFocus,
     captcahBlur,
-    captchaFocus
+    captchaFocus,
+    cycleAnimated,
+    spin,
   } = props;
 
-  const rotate = new Animated.Value(0);
-  const spin = rotate.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0deg', '360deg']
-  });
-  Animated.loop(
-    Animated.timing(rotate, {
-      toValue: 1,
-      duration: 1000,
-      useNativeDriver: true,
-      easing: Easing.out(Easing.poly(1))
-    })
-  ).start();
+  //Height 700 아래일경우 
+  console.log(height);
+  
+  cycleAnimated();
 
   return (
+    // <KeyboardAvoidingView style={{flex:1}} behavior={"height"}>
     <LinearGradient
       end={{ x: 0, y: 0 }}
       start={{ x: 0, y: 1 }}
@@ -77,9 +73,9 @@ const LoginInputPresenter = (props: any) => {
         activeOpacity={1}
         onPress={inputFocusOut}
       >
-        {!captcha && <View style={{ flex: 0.8 }} />}
-        <Image source={logo} style={styles.imageView} resizeMode={'center'} />
-        {!captchaFocus && captcha && (
+        {!captchaFocus && <View style={{ flex: 0.8 }} />}
+        <Image source={logo} style={styles.imageView} resizeMode={'center'}  />
+        {captcha && (
           <View style={styles.captchaMessageView}>
             <Text style={[styles.captchaMessageText, { marginBottom: 4 }]}>
               {t('login_exceeded')}
@@ -198,15 +194,17 @@ const LoginInputPresenter = (props: any) => {
           </View>
         )}
         <View style={styles.bottomContainer}>
-          <TouchableHighlight
-            style={styles.loginButtonTouch}
-            onPress={() => loginchk(userId, password, captcha)}
+          <LinearGradient
+            end={{ x: 0, y: 0 }}
+            start={{ x: 1, y: 0 }}
+            colors={['#3BBFF0', '#1C90FB']}
+            style={styles.loginButtonView}
           >
-            <LinearGradient
-              end={{ x: 0, y: 0 }}
-              start={{ x: 1, y: 0 }}
-              colors={['#3BBFF0', '#1C90FB']}
-              style={styles.loginButtonView}
+            <TouchableHighlight
+              activeOpacity={0.8}
+              underlayColor={'transparent'}
+              style={styles.loginButtonTouch}
+              onPress={() => loginchk(userId, password, captcha)}
             >
               {logging ? (
                 <Animated.View
@@ -220,8 +218,8 @@ const LoginInputPresenter = (props: any) => {
               ) : (
                 <Text style={styles.loginButtonText}>{t('login_login')}</Text>
               )}
-            </LinearGradient>
-          </TouchableHighlight>
+            </TouchableHighlight>
+          </LinearGradient>
 
           <CustomCheckBoxContainer text="아이디 저장" color="#e6e6e6" />
         </View>
@@ -243,6 +241,7 @@ const LoginInputPresenter = (props: any) => {
         actions={alertVisible.actions}
       />
     </LinearGradient>
+    // </KeyboardAvoidingView>
   );
 };
 
@@ -266,7 +265,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   imageView: {
-    flex: 1,
+    flex: (height > 700 ?  1 : 0.5),
     alignItems: 'center'
   },
   topContainer: {
@@ -322,13 +321,12 @@ const styles = StyleSheet.create({
     paddingLeft: '12%',
     paddingBottom: 5,
     fontSize: 16,
-    color: 'rgb(147,147,147)',
     fontWeight: '200'
   },
   loginFailedText: {
     color: 'red',
     fontSize: 11,
-    top: '-2%',
+    top: '-0.5%',
     alignSelf: 'flex-start'
   },
   //로그인버튼

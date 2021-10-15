@@ -25,7 +25,7 @@ import toast from './modules/toast';
 import deployed from './modules/deployed';
 import screenShare from './modules/ScreenShare';
 import indicator from './modules/indicator';
-import root from './modules/root';
+import root, { Rootsstate } from './modules/root';
 
 /**
  * middleware list
@@ -40,7 +40,8 @@ if (env === 'development') {
 
 export interface RootState {
   local: any;
-  // user;
+  user: any;
+  root: Rootsstate;
   // local;
   // mainUser;
   // participants;

@@ -11,10 +11,8 @@
   />
 */
 import { useStore } from 'react-redux';
-// import { getT } from '../../utils/translateManager';
-import { useTranslation } from 'react-i18next';
-
-const { t } = useTranslation();
+import { getT } from '../../utils/translateManager';
+// import { useTranslation } from 'react-i18next';
 
 const SET_ALERT = 'alert.SET_ALERT';
 const RESET_ALERT = 'alert.RESET_ALERT';
@@ -69,6 +67,7 @@ const setAlert = params => {
   } = params;
   let onClose = () => {};
   let actions = [];
+  const t = getT();
 
   if (type === 1) {
     // 확인밖에 없으니 닫음에 컨펌을 넣음
