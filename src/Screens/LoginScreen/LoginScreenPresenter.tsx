@@ -9,8 +9,9 @@ import {
   Image,
   Platform
 } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import LinearGradient from 'react-native-linear-gradient';
-
 
 //multilingual
 //다국어 적용 안되어있음
@@ -24,113 +25,143 @@ const LoginScreenPresenter = (props: any) => {
     codeLineRef,
     joincodeErr,
     codeFocus,
-    goLoginInput,
     inputFocusOut,
     LoginForWehago,
-    t
+    t,
+    isHorizon,
+    isTablet
   } = props;
-  
+
   return (
-    <View style={styles.container}>
-      <TouchableOpacity
-        style={{ flex: 1 }}
-        activeOpacity={1}
-        onPress={inputFocusOut}
+    <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <ScrollView
+        contentInsetAdjustmentBehavior="automatic"
+        contentContainerStyle={{ flexGrow: 1, minHeight: 700 }}
       >
-        <View style={{ flex: 1 }} />
-        <View style={styles.topContainer}>
-          <Text style={styles.textHead}>참여코드를 입력해주세요</Text>
-          <Text style={styles.textSub1}>공유받은 참여코드 입력 후</Text>
-          <Text style={styles.textSub2}>바로 회의에 참여해보세요.</Text>
-        </View>
-        <View style={{ flex: 0.7 }} />
-        <View style={styles.codeView}>
-          <TextInput
-            onChangeText={codeInput}
-            value={code}
-            style={styles.none}
-            autoCapitalize="none"
-            maxLength={6}
-            editable={code.length === 6 ? false : true}
-            ref={codeLineRef}
-          />
-          <TextInput
-            style={styles.inputNumber}
-            value={code.slice(0, 1)}
-            maxLength={1}
-            caretHidden={true}
-            onFocus={codeFocus}
-          />
-          <TextInput
-            style={styles.inputNumber}
-            maxLength={1}
-            value={code.slice(1, 2)}
-            caretHidden={true}
-            onFocus={codeFocus}
-          />
-          <TextInput
-            style={styles.inputNumber}
-            value={code.slice(2, 3)}
-            maxLength={1}
-            caretHidden={true}
-            onFocus={codeFocus}
-          />
-          <TextInput
-            style={styles.inputNumber}
-            value={code.slice(3, 4)}
-            maxLength={1}
-            caretHidden={true}
-            onFocus={codeFocus}
-          />
-          <TextInput
-            style={styles.inputNumber}
-            value={code.slice(4, 5)}
-            maxLength={1}
-            caretHidden={true}
-            onFocus={codeFocus}
-          />
-          <TextInput
-            style={styles.inputNumber}
-            value={code.slice(5, 6)}
-            maxLength={1}
-            caretHidden={true}
-            onFocus={codeFocus}
-          />
-        </View>
-        
-          <Text style={[styles.joincodeErr, Platform.OS === 'ios' && {height:15}]}>
-          {joincodeErr && ('대소문자 [A~F], [0~9] 이외의 값은 입력할수 없습니다.')}
-          </Text>
-        
-        <View style={styles.bottomContainer}>
-          <LinearGradient
-            end={{ x: 0, y: 0.5 }}
-            start={{ x: 1, y: 0.5 }}
-            colors={['#3BBFF0', '#1C90FB']}
-            style={styles.loginButtonView}
-          >
-            <TouchableHighlight
-              activeOpacity={0.8}
-              underlayColor={'transparent'}
-              style={styles.loginButtonTouch}
-              onPress={LoginForWehago}
-            >
-              <Text style={styles.loginButtonText}>WEHAGO 계정으로 로그인</Text>
-            </TouchableHighlight>
-          </LinearGradient>
+        <View
+          style={[
+            styles.container,
+            isHorizon && styles.horizonContainer, //세로
+            isHorizon && isTablet && styles.horPadContainer, //테블릿, 세로
+            !isHorizon && isTablet && styles.varPadContainer //테블릿, 가로
+          ]}
+        >
           <TouchableOpacity
+            style={{ flex: 1 }}
             activeOpacity={1}
-            onPress={goLoginInput}
-            style={styles.loginNaviView}
+            onPress={inputFocusOut}
           >
-            <Text style={styles.loginNavigation}>직접 입력하여 로그인</Text>
+            {(!isHorizon || isTablet) && <View style={{ flex: 1 }} />}
+
+            <View style={styles.topContainer}>
+              <Text style={styles.textHead}>참여코드를 입력해주세요</Text>
+              <Text style={styles.textSub1}>공유받은 참여코드 입력 후</Text>
+              <Text style={styles.textSub2}>바로 회의에 참여해보세요.</Text>
+            </View>
+            <View style={{ flex: 0.7 }} />
+            <View style={[styles.codeView]}>
+              <TextInput
+                onChangeText={codeInput}
+                value={code}
+                style={[styles.none]}
+                autoCapitalize="none"
+                caretHidden={true}
+                maxLength={6}
+                editable={code.length === 6 ? false : true}
+                ref={codeLineRef}
+              />
+              <TextInput
+                style={styles.inputNumber}
+                value={code.slice(0, 1)}
+                maxLength={1}
+                caretHidden={true}
+                onFocus={codeFocus}
+              />
+              <TextInput
+                style={styles.inputNumber}
+                maxLength={1}
+                value={code.slice(1, 2)}
+                caretHidden={true}
+                onFocus={codeFocus}
+              />
+              <TextInput
+                style={styles.inputNumber}
+                value={code.slice(2, 3)}
+                maxLength={1}
+                caretHidden={true}
+                onFocus={codeFocus}
+              />
+              <TextInput
+                style={styles.inputNumber}
+                value={code.slice(3, 4)}
+                maxLength={1}
+                caretHidden={true}
+                onFocus={codeFocus}
+              />
+              <TextInput
+                style={styles.inputNumber}
+                value={code.slice(4, 5)}
+                maxLength={1}
+                caretHidden={true}
+                onFocus={codeFocus}
+              />
+              <TextInput
+                style={styles.inputNumber}
+                value={code.slice(5, 6)}
+                maxLength={1}
+                caretHidden={true}
+                onFocus={codeFocus}
+              />
+            </View>
+
+            <Text
+              style={[
+                styles.joincodeErr,
+                Platform.OS === 'ios' && { height: 15 },
+              ]}
+            >
+              {joincodeErr &&
+                '대소문자 [A~F], [0~9] 이외의 값은 입력할수 없습니다.'}
+            </Text>
+
+            <View
+              style={[
+                styles.bottomContainer,
+                isTablet && { justifyContent: 'center' }
+              ]}
+            >
+              <LinearGradient
+                end={{ x: 0, y: 0.5 }}
+                start={{ x: 1, y: 0.5 }}
+                colors={['#3BBFF0', '#1C90FB']}
+                style={styles.loginButtonView}
+              >
+                <TouchableHighlight
+                  activeOpacity={0.8}
+                  underlayColor={'transparent'}
+                  style={styles.loginButtonTouch}
+                  onPress={LoginForWehago}
+                >
+                  <Text style={styles.loginButtonText}>
+                    WEHAGO 계정으로 로그인
+                  </Text>
+                </TouchableHighlight>
+              </LinearGradient>
+              {/* <TouchableOpacity
+              activeOpacity={1}
+              onPress={goLoginInput}
+              style={styles.loginNaviView}
+            >
+              <Text style={styles.loginNavigation}>직접 입력하여 로그인</Text>
             <Image source={arrowRight} style={styles.arrowImage} />
+            </TouchableOpacity> */}
+            </View>
+            <View style={{ flex: 1 }} />
+            <View style={{ flex: 0.5 }} />
           </TouchableOpacity>
         </View>
-        <View style={{ flex: 1 }} />
-        <View style={{ flex: 1 }} />
-      </TouchableOpacity>
-    </View>
+      </ScrollView>
+    </KeyboardAwareScrollView>
   );
 };
 
@@ -140,6 +171,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#f7f8fa',
     paddingLeft: '8%',
     paddingRight: '8%'
+  },
+  horizonContainer: {
+    paddingLeft: '28%',
+    paddingRight: '28%'
+  },
+  horPadContainer: {
+    paddingLeft: '33%',
+    paddingRight: '33%'
+  },
+  varPadContainer: {
+    paddingLeft: '25%',
+    paddingRight: '25%'
   },
   topContainer: {
     flex: 1,
@@ -153,7 +196,6 @@ const styles = StyleSheet.create({
   },
   bottomContainer: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center'
   },
   textHead: {
@@ -192,8 +234,8 @@ const styles = StyleSheet.create({
     height: 42,
     borderRadius: 25,
     justifyContent: 'center',
-    alignItems: 'center',
-    marginVertical: 20,
+    alignItems: 'center'
+    // marginVertical: 20
   },
   loginButtonTouch: {
     width: '100%',
@@ -206,31 +248,30 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16
   },
-  loginNaviView: {
-    flexDirection: 'row'
-  },
-  loginNavigation: {
-    color: '#333333',
-    fontSize: 13,
-    lineHeight: Platform.OS === 'ios' ? 18 : 16.5
-  },
-  arrowImage: {
-    width: 18,
-    height: 18
-  },
+  // loginNaviView: {
+  //   flexDirection: 'row'
+  // },
+  // loginNavigation: {
+  //   color: '#333333',
+  //   fontSize: 13,
+  //   lineHeight: Platform.OS === 'ios' ? 18 : 16.5
+  // },
+  // arrowImage: {
+  //   width: 18,
+  //   height: 18
+  // },
   none: {
     position: 'absolute',
-    bottom: -300,
+    bottom: 95,
     width: '100%',
     zIndex: 10,
     color: 'rgba(0,0,0,0)',
-    fontSize: 1
+    fontSize: 1,
   },
-  joincodeErr: { 
-    color: 'red', 
-    top: '-5%', 
-    fontSize: 13,
-    // height: ,
+  joincodeErr: {
+    color: 'red',
+    top: '-9%',
+    fontSize: 13
   }
 });
 

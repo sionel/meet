@@ -28,7 +28,7 @@ const MainScreenContainer = (props: any) => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'transparent' }}>
       <MainScreenPresenter 
         {...{ handleChangeMainState, destination }}
       />

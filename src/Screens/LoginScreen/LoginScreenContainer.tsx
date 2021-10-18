@@ -11,23 +11,26 @@ import {
 import { getT } from '../../utils/translateManager';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/configureStore';
-import Orientation, { OrientationType } from 'react-native-orientation-locker';
-// import { useTranslation } from 'react-i18next';
+import {
+  OrientationType,
+  useDeviceOrientationChange
+} from 'react-native-orientation-locker';
+import deviceInfoModule from 'react-native-device-info';
 
 const LoginScreenContainer = ({ navigation }: any) => {
   const [code, setCode] = useState('');
-  const [orientation, setOrientation] = useState('');
+  const [isHorizon, setIsHorizon] = useState(false);
   const [joincodeErr, setJoincodeErr] = useState(false);
 
   const codeLineRef: RefObject<any> = useRef();
 
-  const { auth, from, permission } = useSelector((state: RootState) => {
-    return {
-      auth: state.user.auth,
-      from: state.user.from,
-      permission: state.user.permission
-    };
-  });
+  // const { auth, from, permission } = useSelector((state: RootState) => {
+  //   return {
+  //     auth: state.user.auth,
+  //     from: state.user.from,
+  //     permission: state.user.permission
+  //   };
+  // });
 
   const dispatch = useDispatch();
   const setAlert = (params: any) => dispatch(AlertActions.setAlert(params));
@@ -35,7 +38,10 @@ const LoginScreenContainer = ({ navigation }: any) => {
   const setRootState = (rstate: Rootsstate) =>
     dispatch(RootActions.setRootState(rstate));
 
+  //
   const t = getT();
+  const isTablet: boolean = deviceInfoModule.isTablet();
+
   const codeInput = async (value: string) => {
     const regex = /^[0-9|a-f|A-F|]*$/;
 
@@ -109,36 +115,30 @@ const LoginScreenContainer = ({ navigation }: any) => {
       'https://play.google.com/store/apps/details?id=com.duzon.android.lulubizpotal';
 
     Linking.openURL(Platform.OS === 'ios' ? iosUrl : androidUrl).catch(err => {
-      Linking.openURL(
-        Platform.OS === 'ios' ? iosMarketURL : androidMarketURL
-      ).catch(err => {
-        setAlert({
-          type: 1,
-          title: t('alert_title_error'),
-          message: t('alert_text_no_app_store')
-        });
-      });
+      goLoginInput();
+      // Linking.openURL(
+      //   Platform.OS === 'ios' ? iosMarketURL : androidMarketURL
+      // ).catch(err => {
+      //   setAlert({
+      //     type: 1,
+      //     title: t('alert_title_error'),
+      //     message: t('alert_text_no_app_store')
+      //   });
+      // });
     });
   };
 
-  const _handleOrientation = (orientation:OrientationType) => {
-    const status:boolean =
-    orientation === 'LANDSCAPE' ||
-    orientation === 'LANDSCAPE-LEFT' ||
-    orientation === 'LANDSCAPE-RIGHT';
-    setOrientation(status ? 'horizontal' : 'vertical');
+  const _handleHorizon = (orientation: OrientationType) => {
+    const status: boolean =
+      orientation === 'LANDSCAPE-LEFT' || orientation === 'LANDSCAPE-RIGHT';
+    setIsHorizon(status);
   };
 
-  useEffect(() => {
-    Orientation.getOrientation(orientation => {
-      const status:boolean = 
-      orientation === 'LANDSCAPE' ||
-      orientation === 'LANDSCAPE-LEFT' ||
-      orientation === 'LANDSCAPE-RIGHT';
-      setOrientation(status ? 'horizontal' : 'vertical');
-    })
-    Orientation.addOrientationListener(_handleOrientation)
-  })
+  useEffect(() => {});
+
+  useDeviceOrientationChange((orientation: OrientationType) => {
+    _handleHorizon(orientation);
+  });
 
   return (
     <LoginScreenPresenter
@@ -151,7 +151,9 @@ const LoginScreenContainer = ({ navigation }: any) => {
         inputFocusOut,
         LoginForWehago,
         joincodeErr,
-        t
+        t,
+        isHorizon,
+        isTablet
       }}
     />
   );

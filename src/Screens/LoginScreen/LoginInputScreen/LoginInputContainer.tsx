@@ -11,6 +11,8 @@ import {
   actionCreators as RootActions,
   Rootsstate
 } from '../../../redux/modules/root';
+import { OrientationType, useDeviceOrientationChange } from 'react-native-orientation-locker';
+import deviceInfoModule from 'react-native-device-info';
 
 // import { useTranslation } from 'react-i18next';
 
@@ -19,6 +21,9 @@ const LoginInputContainer = () => {
   _serviceCode = Platform.OS === 'ios' ? 'wehagomeet' : 'meet';
 
   const t = getT();
+
+  const Devices = Platform.OS === 'ios' ? true : false ;
+  const isTablet = deviceInfoModule.isTablet() === true;
 
   const rotate = new Animated.Value(0);
   const spin = rotate.interpolate({
@@ -33,7 +38,7 @@ const LoginInputContainer = () => {
   const [logging, setLogging] = useState(false);
   const [loginFailed, setLoginFailed] = useState(false);
   const [errorMsg, setErrorMsg] = useState(null);
-  const [captchaFocus, setCaptchaFocus] = useState(false);
+  const [orientation, setOrientation] = useState(false);
   const [alertVisible, setAlertVisible] = useState({
     visible: false,
     description: '',
@@ -136,6 +141,16 @@ const LoginInputContainer = () => {
       _handleCheckServce(authR);
     }
   }, [auth]);
+
+  useDeviceOrientationChange((orientation: OrientationType) => {
+    _handleOrientation(orientation);
+  });
+
+  const _handleOrientation = (orientation: OrientationType) => {
+    const status: boolean =
+      orientation === 'LANDSCAPE-LEFT' || orientation === 'LANDSCAPE-RIGHT';
+    setOrientation(status);
+  };
 
   const loginchk = async (
     userId: string,
@@ -424,16 +439,6 @@ const LoginInputContainer = () => {
       if (captchaRef.current.isFocused()) return captchaRef.current.blur();
   };
 
-  const captcahFocus = () => {
-    if (captchaRef.current.isFocused()) {
-      setCaptchaFocus(true);
-    }
-  };
-
-  const captcahBlur = () => {
-    setCaptchaFocus(false);
-  };
-
   const _resetAlert = () =>
     setAlertVisible({
       visible: false,
@@ -499,11 +504,10 @@ const LoginInputContainer = () => {
         errorMsg,
         handleChangeCaptcha,
         t,
-        captcahFocus,
-        captcahBlur,
-        captchaFocus,
         cycleAnimated,
         spin,
+        orientation,
+        isTablet
       }}
     />
   );
