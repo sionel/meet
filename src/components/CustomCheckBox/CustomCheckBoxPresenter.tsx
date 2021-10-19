@@ -3,11 +3,10 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
-  TouchableHighlight,
   View
 } from 'react-native';
 import { Text } from '../StyledText';
-const chk_on = require('../../../assets/icons/palette/color-check_2x.png');
+const chk_on = require('../../../assets/new/icons/color-check-wh_2x.png');
 
 const CustomCheckBoxPresenter = (props: any) => {
   const { check, onCheck, text, color } = props;
@@ -18,7 +17,7 @@ const CustomCheckBoxPresenter = (props: any) => {
       activeOpacity={0.7}
       style={styles.touchview}
     >
-      <View style={{...styles.container, borderColor:color}}>
+      <View style={[{...styles.container, borderColor:color}, check && {backgroundColor:'rgb(28,144,251)'}]}>
         {check && <Image source={chk_on} resizeMode={'contain'} />}
       </View>
       <Text style={styles.chkboxText}>{text}</Text>
@@ -29,7 +28,8 @@ const CustomCheckBoxPresenter = (props: any) => {
 const styles = StyleSheet.create({
   touchview: {
     flexDirection: 'row', 
-    alignSelf:'flex-start'
+    alignSelf:'flex-start',
+    zIndex: 1,
   },
   container: {
     width: 30,

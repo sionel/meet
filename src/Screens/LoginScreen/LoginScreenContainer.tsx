@@ -2,15 +2,14 @@ import React, { RefObject, useEffect, useRef, useState } from 'react';
 import LoginScreenPresenter from './LoginScreenPresenter';
 import { MeetApi } from '../../services';
 import { Linking, Platform } from 'react-native';
-import { actionCreators as UserActions } from '../../redux/modules/user';
-import { actionCreators as AlertActions } from '../../redux/modules/alert';
+// import { actionCreators as UserActions } from '../../redux/modules/user';
+// 01import { actionCreators as AlertActions } from '../../redux/modules/alert';
 import {
   actionCreators as RootActions,
   Rootsstate
 } from '../../redux/modules/root';
 import { getT } from '../../utils/translateManager';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../redux/configureStore';
+import { useDispatch } from 'react-redux';
 import {
   OrientationType,
   useDeviceOrientationChange
@@ -21,6 +20,8 @@ const LoginScreenContainer = ({ navigation }: any) => {
   const [code, setCode] = useState('');
   const [isHorizon, setIsHorizon] = useState(false);
   const [joincodeErr, setJoincodeErr] = useState(false);
+  const [inputcodeErr, setInputcodeErr] = useState(false);
+  const [logging, setLogging] = useState(false);
 
   const codeLineRef: RefObject<any> = useRef();
 
@@ -33,7 +34,7 @@ const LoginScreenContainer = ({ navigation }: any) => {
   // });
 
   const dispatch = useDispatch();
-  const setAlert = (params: any) => dispatch(AlertActions.setAlert(params));
+  // const setAlert = (params: any) => dispatch(AlertActions.setAlert(params));
 
   const setRootState = (rstate: Rootsstate) =>
     dispatch(RootActions.setRootState(rstate));
@@ -42,7 +43,7 @@ const LoginScreenContainer = ({ navigation }: any) => {
   const t = getT();
   const isTablet: boolean = deviceInfoModule.isTablet();
 
-  const codeInput = async (value: string) => {
+  const changeInputcode = async (value: string) => {
     const regex = /^[0-9|a-f|A-F|]*$/;
 
     let joincode = '';
@@ -64,19 +65,22 @@ const LoginScreenContainer = ({ navigation }: any) => {
   };
 
   const _goJoincode = async (joincode: string) => {
+    setLogging(true);
     const result = await MeetApi.searchJoincode(joincode);
     if (!result) {
-      setAlert({
-        type: 1,
-        title: t('alert_title_notion'),
-        message: t('alert_text_no_exist_joincode')
-      });
+      setInputcodeErr(true);
+      // setAlert({
+      //   type: 1,
+      //   title: t('alert_title_notion'),
+      //   message: t('alert_text_no_exist_joincode')
+      // });
     } else if (result.resultData.code === 'E00001') {
-      setAlert({
-        type: 1,
-        title: t('alert_title_notion'),
-        message: t('alert_text_no_exist_joincode')
-      });
+      setInputcodeErr(true);
+      // setAlert({
+      //   type: 1,
+      //   title: t('alert_title_notion'),
+      //   message: t('alert_text_no_exist_joincode')
+      // });
     } else {
       setRootState({
         loaded: true,
@@ -88,9 +92,14 @@ const LoginScreenContainer = ({ navigation }: any) => {
         }
       });
     }
+    setLogging(false);
   };
 
-  const codeFocus = () => {
+  const onFocusInput = () => {
+    setInputcodeErr(false);
+  };
+
+  const onFocusingCode = () => {
     codeLineRef.current.focus();
   };
 
@@ -98,7 +107,7 @@ const LoginScreenContainer = ({ navigation }: any) => {
     navigation.navigate('LoginInput');
   };
 
-  const inputFocusOut = () => {
+  const onFocusOutInput = () => {
     if (codeLineRef.current.isFocused()) return codeLineRef.current.blur();
   };
 
@@ -144,16 +153,18 @@ const LoginScreenContainer = ({ navigation }: any) => {
     <LoginScreenPresenter
       {...{
         code,
-        codeInput,
-        codeFocus,
+        onFocusingCode,
+        changeInputcode,
+        onFocusInput,
+        onFocusOutInput,
         codeLineRef,
-        goLoginInput,
-        inputFocusOut,
         LoginForWehago,
         joincodeErr,
-        t,
+        inputcodeErr,
         isHorizon,
-        isTablet
+        isTablet,
+        t,
+        logging,
       }}
     />
   );

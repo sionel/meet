@@ -8,13 +8,13 @@ import {
   Text,
   TextInput,
   Animated,
-  ScrollView
+  ScrollView,
+  Platform
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 // import { Text, TextInput } from '../../../components/StyledText';
 import CustomCheckBoxContainer from '../../../components/CustomCheckBox';
 import LinearGradient from 'react-native-linear-gradient';
-import { getT } from '../../../utils/translateManager';
 import CustomAlert from '../../../components/CustomAlert';
 
 const logo = require('../../../../assets/new/logos/logo.png');
@@ -25,6 +25,8 @@ const loading = require('../../../../assets/new/icons/loadingIcon.png');
 
 const patternU = require('../../../../assets/new/patterns/bg_pattern_up.png');
 const patternD = require('../../../../assets/new/patterns/bg_pattern_down.png');
+
+const cancel = require('../../../../assets/new/icons/ic_cancel_fill.png');
 
 const LoginInputPresenter = (props: any) => {
   const {
@@ -48,8 +50,9 @@ const LoginInputPresenter = (props: any) => {
     t,
     cycleAnimated,
     spin,
-    orientation,
-    isTablet
+    isHorizon,
+    isTablet,
+    clearId
   } = props;
 
   cycleAnimated();
@@ -58,20 +61,25 @@ const LoginInputPresenter = (props: any) => {
     <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
-        contentContainerStyle={{ flexGrow: 1, minHeight: 600 }}
+        contentContainerStyle={{ flexGrow: 1, minHeight: 750 }}
+        keyboardShouldPersistTaps="never"
       >
         <LinearGradient
           end={{ x: 0, y: 0 }}
           start={{ x: 0, y: 1 }}
           colors={['#FCFDFF', '#F0F8FF']}
-          style={[styles.baseView]}
+          style={[
+            styles.container, 
+            isHorizon && styles.horizonContainer,
+            !isHorizon && isTablet && styles.verPadContainer,
+          ]}
         >
           <TouchableOpacity
-            style={[styles.container, orientation && styles.horizonContainer]}
+            style={{ flex: 1 }}
             activeOpacity={1}
             onPress={inputFocusOut}
           >
-            {!orientation && <View style={{ flex: 0.8 }} />}
+            {(!isHorizon || isTablet) && (<View style={{ flex: 1.4 }} />)}
             <Image
               source={logo}
               style={styles.imageView}
@@ -81,7 +89,6 @@ const LoginInputPresenter = (props: any) => {
               <View
                 style={[
                   styles.captchaMessageView,
-                  orientation && styles.horcaptchaMsgView
                 ]}
               >
                 <Text style={[styles.captchaMessageText, { marginBottom: 4 }]}>
@@ -103,10 +110,11 @@ const LoginInputPresenter = (props: any) => {
                   loginFailed && { borderBottomColor: 'red' }
                 ]}
               >
-                <Image source={user} style={styles.icon} />
+                <Image source={user} style={styles.loginicon} />
                 <TextInput
                   style={[styles.inputLogin, isTablet && styles.padInputLogin]}
                   placeholder={t('login_id')}
+                  placeholderTextColor={'rgb(147,147,147)'}
                   ref={usernameRef}
                   returnKeyType="next"
                   value={userId}
@@ -114,6 +122,18 @@ const LoginInputPresenter = (props: any) => {
                   autoCapitalize="none"
                   onSubmitEditing={() => passwordRef.current.focus()}
                 />
+                {(userId || loginFailed) && (
+                  <TouchableOpacity
+                    onPress={clearId}
+                    style={{
+                      width: 20,
+                      height: 20,
+                      backgroundColor: 'transparent'
+                    }}
+                  >
+                    <Image source={cancel} style={styles.cancelicon} />
+                  </TouchableOpacity>
+                )}
               </View>
               <View
                 style={[
@@ -122,10 +142,11 @@ const LoginInputPresenter = (props: any) => {
                   loginFailed && { borderBottomColor: 'red' }
                 ]}
               >
-                <Image source={lock} style={styles.icon} />
+                <Image source={lock} style={styles.loginicon} />
                 <TextInput
                   style={[styles.inputLogin, isTablet && styles.padInputLogin]}
                   placeholder={t('login_pw')}
+                  placeholderTextColor={'rgb(147,147,147)'}
                   secureTextEntry={true}
                   ref={passwordRef}
                   value={password}
@@ -136,6 +157,7 @@ const LoginInputPresenter = (props: any) => {
                 />
               </View>
             </View>
+            <View />
 
             {loginFailed && (
               <Text style={[styles.loginFailedText]}>
@@ -147,7 +169,6 @@ const LoginInputPresenter = (props: any) => {
               <View
                 style={[
                   styles.captchaMessageView,
-                  orientation && styles.horcaptchaMsgView
                 ]}
               >
                 <Text style={styles.captchaMessageText}>
@@ -178,7 +199,7 @@ const LoginInputPresenter = (props: any) => {
                   ref={captchaRef}
                   value={captchaInput}
                   placeholder={t('login_preventAuto')}
-                  placeholderTextColor={'#ccc'}
+                  placeholderTextColor={'rgb(147,147,147)'}
                   selectionColor={'#505050'}
                   returnKeyType={'next'}
                   keyboardType="default"
@@ -257,28 +278,23 @@ const LoginInputPresenter = (props: any) => {
 };
 
 const styles = StyleSheet.create({
-  baseView: {
-    flex: 1,
-    backgroundColor: 'rgb(240,248,255)',
-    position: 'relative',
-    height: 600
-  },
   container: {
+    flex: 1,
     paddingLeft: '8%',
     paddingRight: '8%',
-    zIndex: 1,
-    flex: 1,
-    alignItems: 'center',
     justifyContent: 'space-between'
-    // backgroundColor:'red',
   },
   horizonContainer: {
-    paddingLeft: '33%',
-    paddingRight: '33%'
+    paddingLeft: '28%',
+    paddingRight: '28%'
+  },
+  verPadContainer: {
+    paddingLeft: '25%',
+    paddingRight: '25%'
   },
   imageView: {
-    flex: 1,
-    alignItems: 'center'
+    flex: 0.5,
+    alignSelf: 'center'
   },
   topContainer: {
     flex: 1,
@@ -287,17 +303,11 @@ const styles = StyleSheet.create({
   },
   bottomContainer: {
     flex: 1,
-    // width: '100%',
-    justifyContent: 'center',
+    marginTop: '8%',
     alignItems: 'center'
   },
   captchaMessageView: {
-    // width: 320,
-    marginVertical: 20,
     alignSelf: 'flex-start'
-  },
-  horcaptchaMsgView: {
-    alignSelf: 'center'
   },
   captchaMessageText: {
     fontSize: 10,
@@ -333,28 +343,33 @@ const styles = StyleSheet.create({
     borderBottomColor: 'rgb(230,230,230)',
     borderBottomWidth: 1
   },
-  icon: {
+  loginicon: {
     resizeMode: 'center',
     left: -20,
-    paddingBottom: 10,
-    bottom: -20,
+    bottom: -15,
+    position: 'absolute'
+  },
+  cancelicon: {
+    resizeMode: 'center',
+    right: -20,
+    bottom: -25,
     position: 'absolute'
   },
   inputLogin: {
     flex: 1,
-    paddingLeft: '12%',
-    paddingVertical: 3,
+    paddingLeft: '10%',
+    paddingVertical: Platform.OS === 'ios' ? 10 : 6,
     fontSize: 16,
     fontWeight: '200',
     color: 'black'
   },
   padInputLogin: {
-    paddingLeft: '10%',
+    paddingLeft: '9%'
   },
   loginFailedText: {
     color: 'red',
     fontSize: 11,
-    top: '-3%',
+    top: '-2%',
     alignSelf: 'flex-start'
   },
   //로그인버튼
@@ -363,13 +378,16 @@ const styles = StyleSheet.create({
     height: 42,
     borderRadius: 25,
     justifyContent: 'center',
-    // alignItems: 'center',
-    marginVertical: 10,
+    alignItems: 'center',
+    // marginVertical: 10,
     marginBottom: 17
   },
   loginButtonTouch: {
     width: '100%',
-    alignItems: 'center'
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'transparent'
   },
   loginButtonText: {
     color: '#fff',
@@ -379,7 +397,7 @@ const styles = StyleSheet.create({
   copyrightView: {
     position: 'absolute',
     bottom: 0,
-    alignItems: 'center',
+    alignSelf: 'center',
     paddingBottom: '5%'
   },
   copyrightText: {
@@ -403,7 +421,8 @@ const styles = StyleSheet.create({
     bottom: '9%',
     resizeMode: 'center',
     width: 260,
-    height: 82
+    height: 82,
+    zIndex: 999
   },
   topImg: {
     position: 'absolute',
@@ -422,7 +441,6 @@ const styles = StyleSheet.create({
   },
   inputField: {
     paddingVertical: 8,
-    // width: '100%',
     color: '#333',
     fontSize: 15
   },

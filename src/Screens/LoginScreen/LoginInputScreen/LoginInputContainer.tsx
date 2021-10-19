@@ -1,5 +1,5 @@
 import React, { RefObject, useEffect, useState } from 'react';
-import { Animated, Dimensions, Easing, Platform } from 'react-native';
+import { Animated, Easing, Platform } from 'react-native';
 import LoginInputPresenter from './LoginInputPresenter';
 import UserApi from '../../../services/api/LoginApi/UserApi';
 import { getT } from '../../../utils/translateManager';
@@ -38,7 +38,7 @@ const LoginInputContainer = () => {
   const [logging, setLogging] = useState(false);
   const [loginFailed, setLoginFailed] = useState(false);
   const [errorMsg, setErrorMsg] = useState(null);
-  const [orientation, setOrientation] = useState(false);
+  const [isHorizon, setIsHorizon] = useState(false);
   const [alertVisible, setAlertVisible] = useState({
     visible: false,
     description: '',
@@ -143,13 +143,13 @@ const LoginInputContainer = () => {
   }, [auth]);
 
   useDeviceOrientationChange((orientation: OrientationType) => {
-    _handleOrientation(orientation);
+    _handleHorizon(orientation);
   });
 
-  const _handleOrientation = (orientation: OrientationType) => {
+  const _handleHorizon = (orientation: OrientationType) => {
     const status: boolean =
       orientation === 'LANDSCAPE-LEFT' || orientation === 'LANDSCAPE-RIGHT';
-    setOrientation(status);
+    setIsHorizon(status);
   };
 
   const loginchk = async (
@@ -472,6 +472,10 @@ const LoginInputContainer = () => {
     setPassword(text.trim());
   };
 
+  const clearId = () => setUserId('');
+  const clearPw = () => setPassword('');
+  
+
   const cycleAnimated = () => {
     Animated.loop(
       Animated.timing(rotate, {
@@ -506,8 +510,9 @@ const LoginInputContainer = () => {
         t,
         cycleAnimated,
         spin,
-        orientation,
-        isTablet
+        isHorizon,
+        isTablet,
+        clearId,
       }}
     />
   );
