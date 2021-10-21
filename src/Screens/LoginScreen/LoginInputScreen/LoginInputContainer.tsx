@@ -1,5 +1,5 @@
 import React, { RefObject, useEffect, useState } from 'react';
-import { Animated, Easing, Platform } from 'react-native';
+import { Animated, Dimensions, Easing, Platform } from 'react-native';
 import LoginInputPresenter from './LoginInputPresenter';
 import UserApi from '../../../services/api/LoginApi/UserApi';
 import { getT } from '../../../utils/translateManager';
@@ -11,8 +11,12 @@ import {
   actionCreators as RootActions,
   Rootsstate
 } from '../../../redux/modules/root';
-import { OrientationType, useDeviceOrientationChange } from 'react-native-orientation-locker';
+import Orientation, {
+  OrientationType,
+  useDeviceOrientationChange,
+} from 'react-native-orientation-locker';
 import deviceInfoModule from 'react-native-device-info';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // import { useTranslation } from 'react-i18next';
 
@@ -21,8 +25,6 @@ const LoginInputContainer = () => {
   _serviceCode = Platform.OS === 'ios' ? 'wehagomeet' : 'meet';
 
   const t = getT();
-
-  const Devices = Platform.OS === 'ios' ? true : false ;
   const isTablet = deviceInfoModule.isTablet() === true;
 
   const rotate = new Animated.Value(0);
@@ -30,15 +32,16 @@ const LoginInputContainer = () => {
     inputRange: [0, 1],
     outputRange: ['0deg', '360deg']
   });
-  
-  const [userId, setUserId] = useState('');
-  const [password, setPassword] = useState('');
+
+  const [userId, setUserId] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
   const [captcha, setCaptcha] = useState<string | null>(null);
-  const [captchaInput, setCaptchaInput] = useState('');
-  const [logging, setLogging] = useState(false);
-  const [loginFailed, setLoginFailed] = useState(false);
-  const [errorMsg, setErrorMsg] = useState(null);
-  const [isHorizon, setIsHorizon] = useState(false);
+  const [captchaInput, setCaptchaInput] = useState<string>('');
+  const [logging, setLogging] = useState<boolean>(false);
+  const [loginFailed, setLoginFailed] = useState<boolean>(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [isHorizon, setIsHorizon] = useState<boolean>(false);
+  const [check, setCheck] = useState<boolean>(false);
   const [alertVisible, setAlertVisible] = useState({
     visible: false,
     description: '',
@@ -53,7 +56,7 @@ const LoginInputContainer = () => {
 
   const { auth } = useSelector((state: RootState) => {
     return {
-      auth: state.user.auth
+      auth: state.user.auth,
     };
   });
 
@@ -79,6 +82,10 @@ const LoginInputContainer = () => {
 
   const setRootState = (rstate: Rootsstate) =>
     dispatch(RootActions.setRootState(rstate));
+
+  const onCheck = () => {
+    setCheck(!check);
+  }
 
   const _handleCheckServce = async (auth: any) => {
     const statusCheck = await ServiceCheckApi.companyStatusCheck(
@@ -142,14 +149,34 @@ const LoginInputContainer = () => {
     }
   }, [auth]);
 
+  useEffect(() => {
+    AsyncStorage.getItem('idchk', (err, result) => {
+      let chk = result;
+      if(chk === 'Y') {
+        AsyncStorage.getItem('id', (err, result) => {
+          setUserId(String(result));
+        });
+      }
+
+    });
+  },[])
+
+  
   useDeviceOrientationChange((orientation: OrientationType) => {
     _handleHorizon(orientation);
   });
 
   const _handleHorizon = (orientation: OrientationType) => {
-    const status: boolean =
-      orientation === 'LANDSCAPE-LEFT' || orientation === 'LANDSCAPE-RIGHT';
-    setIsHorizon(status);
+    if (orientation === 'LANDSCAPE-LEFT' || orientation === 'LANDSCAPE-RIGHT') {
+      setIsHorizon(true);
+      Orientation.unlockAllOrientations();
+    } else if (
+      orientation === 'PORTRAIT-UPSIDEDOWN' ||
+      orientation === 'PORTRAIT'
+    ) {
+      setIsHorizon(false);
+      Orientation.lockToPortrait();
+    }
   };
 
   const loginchk = async (
@@ -252,6 +279,9 @@ const LoginInputContainer = () => {
         loginchk(userId, tempPw, null);
         return;
       }
+
+    
+      await AsyncStorage.setItem('idchk', check ? 'Y' : 'N');
 
       const auth = getAuth.resultData;
       const result = await loginCheckRequest(
@@ -464,17 +494,15 @@ const LoginInputContainer = () => {
     return String(randomstring).split('').join(' ');
   };
 
-  const idInput = (text: string) => {
+  const onChangeId = (text: string) => {
     setUserId(text.trim());
   };
 
-  const pwInput = (text: string) => {
+  const onChangePw = (text: string) => {
     setPassword(text.trim());
   };
 
   const clearId = () => setUserId('');
-  const clearPw = () => setPassword('');
-  
 
   const cycleAnimated = () => {
     Animated.loop(
@@ -485,16 +513,16 @@ const LoginInputContainer = () => {
         easing: Easing.out(Easing.poly(1))
       })
     ).start();
-  }
+  };
 
   return (
     <LoginInputPresenter
       {...{
         userId,
-        idInput,
+        onChangeId,
         usernameRef,
         password,
-        pwInput,
+        onChangePw,
         passwordRef,
         loginchk,
         inputFocusOut,
@@ -513,6 +541,8 @@ const LoginInputContainer = () => {
         isHorizon,
         isTablet,
         clearId,
+        onCheck,
+        check
       }}
     />
   );

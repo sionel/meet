@@ -10,13 +10,15 @@ import {
 } from '../../redux/modules/root';
 import { getT } from '../../utils/translateManager';
 import { useDispatch } from 'react-redux';
-import {
+import Orientation, {
   OrientationType,
-  useDeviceOrientationChange
+  useDeviceOrientationChange,
 } from 'react-native-orientation-locker';
 import deviceInfoModule from 'react-native-device-info';
 
 const LoginScreenContainer = ({ navigation }: any) => {
+  const isIOS = Platform.OS === 'ios';
+
   const [code, setCode] = useState('');
   const [isHorizon, setIsHorizon] = useState(false);
   const [joincodeErr, setJoincodeErr] = useState(false);
@@ -114,16 +116,16 @@ const LoginScreenContainer = ({ navigation }: any) => {
   const LoginForWehago = () => {
     let serviceCode;
 
-    serviceCode = Platform.OS === 'ios' ? 'wehagomeet' : 'meet';
+    serviceCode = isIOS ? 'wehagomeet' : 'meet';
 
     const iosUrl = `wehago://?${serviceCode}=login`;
     const androidUrl = `wehago://app?name=${serviceCode}&login=true`;
-    const iosMarketURL =
-      'http://itunes.apple.com/kr/app/wehago/id1363039300?mt=8';
-    const androidMarketURL =
-      'https://play.google.com/store/apps/details?id=com.duzon.android.lulubizpotal';
+    // const iosMarketURL =
+    //   'http://itunes.apple.com/kr/app/wehago/id1363039300?mt=8';
+    // const androidMarketURL =
+    //   'https://play.google.com/store/apps/details?id=com.duzon.android.lulubizpotal';
 
-    Linking.openURL(Platform.OS === 'ios' ? iosUrl : androidUrl).catch(err => {
+    Linking.openURL(isIOS ? iosUrl : androidUrl).catch(err => {
       goLoginInput();
       // Linking.openURL(
       //   Platform.OS === 'ios' ? iosMarketURL : androidMarketURL
@@ -138,9 +140,16 @@ const LoginScreenContainer = ({ navigation }: any) => {
   };
 
   const _handleHorizon = (orientation: OrientationType) => {
-    const status: boolean =
-      orientation === 'LANDSCAPE-LEFT' || orientation === 'LANDSCAPE-RIGHT';
-    setIsHorizon(status);
+    if (orientation === 'LANDSCAPE-LEFT' || orientation === 'LANDSCAPE-RIGHT') {
+      Orientation.unlockAllOrientations();
+      setIsHorizon(true);
+    } else if (
+      orientation === 'PORTRAIT-UPSIDEDOWN' ||
+      orientation === 'PORTRAIT'
+    ) {
+      Orientation.lockToPortrait();
+      setIsHorizon(false);
+    }
   };
 
   useEffect(() => {});
@@ -164,7 +173,7 @@ const LoginScreenContainer = ({ navigation }: any) => {
         isHorizon,
         isTablet,
         t,
-        logging,
+        logging
       }}
     />
   );

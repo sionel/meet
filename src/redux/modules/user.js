@@ -6,6 +6,7 @@
 import { UserApi, ServiceCheckApi } from '../../services';
 import { actionCreators as wetalkActionCreators } from './wetalk';
 import { actionCreators as conferenceActionCreators } from './conference';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AGREEMENT = 'user.AGREEMENT';
 const LOGIN = 'user.LOGIN';
@@ -60,6 +61,16 @@ function agreement() {
  * login
  */
 function login(auth, from) {
+
+  //AsyncStorage 에서 아이디 저장 여부 확인
+  AsyncStorage.getItem('idchk', (err, result) => {
+    if(result === 'N') {
+        AsyncStorage.removeItem('id');
+    } else if(result === 'Y') {
+        AsyncStorage.setItem('id', auth.portal_id);
+    }
+  });
+  
   return {
     type: LOGIN,
     auth,
@@ -68,6 +79,7 @@ function login(auth, from) {
 }
 
 function loginRequest(data, access_pass) {
+  console.log(data);
   return async () => {
     return await UserApi.login(data, access_pass);
   };
@@ -110,6 +122,7 @@ function loginCheckRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY, from) {
         nickname: checkResult.nickname,
         membership_code: checkResult.resultData.employee_list[0].membership_code
       };
+
       dispatch(login(userData, from));
       return checkResult;
     } else {

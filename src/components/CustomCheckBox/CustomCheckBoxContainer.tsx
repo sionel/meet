@@ -3,11 +3,9 @@ import React, { useState } from 'react';
 
 
 const CustomCheckBoxContainer = (props: any) => {
-  const [check, setCheck] = useState(false);
-  const {text, color} = props;
-  const onCheck = () => setCheck(!check);
+  const {text, color, style, onCheck, checked} = props;
   
-  return <CustomCheckBoxPresenter {...{ check, onCheck, text, color }} />;
+  return <CustomCheckBoxPresenter {...{ checked, onCheck, text, color, style}} />;
 };
 
 export default CustomCheckBoxContainer;

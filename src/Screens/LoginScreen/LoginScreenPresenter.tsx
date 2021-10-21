@@ -39,15 +39,18 @@ const LoginScreenPresenter = (props: any) => {
     <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
-        contentContainerStyle={{ flexGrow: 1, minHeight: 700 }}
+        contentContainerStyle={{
+          flexGrow: 1,
+          minHeight: isHorizon && !isTablet ? 350 : 700
+        }}
         keyboardShouldPersistTaps="never"
       >
         <View
           style={[
             styles.verContainer,
-            isHorizon && styles.horizonContainer, //세로
-            isTablet && isHorizon && styles.horPadContainer, //태블릿 && 세로
-            isTablet && !isHorizon && styles.verPadContainer //테블릿 && 가로
+            isHorizon && styles.horizonContainer, //가로
+            isTablet && isHorizon && styles.horPadContainer, //태블릿 && 가로
+            isTablet && !isHorizon && styles.verPadContainer //테블릿 && 세로
           ]}
         >
           <TouchableOpacity
@@ -55,7 +58,7 @@ const LoginScreenPresenter = (props: any) => {
             activeOpacity={1}
             onPress={onFocusOutInput}
           >
-            {(!isHorizon || isTablet) && <View style={{ flex: 1 }} />}
+            <View style={{ flex: 1 }} />
 
             <View style={styles.topContainer}>
               <Text style={styles.textHead}>참여코드를 입력해주세요</Text>
@@ -63,12 +66,12 @@ const LoginScreenPresenter = (props: any) => {
               <Text style={styles.textSub2}>바로 회의에 참여해보세요.</Text>
             </View>
             <View style={{ flex: 0.7 }} />
-            <View style={[styles.codeContainer]}>
+            <View style={styles.codeContainer}>
               <TextInput
                 onChangeText={changeInputcode}
                 onFocus={onFocusInput}
                 value={code}
-                style={[styles.none]}
+                style={styles.none}
                 autoCapitalize="none"
                 caretHidden={true}
                 maxLength={6}
@@ -146,7 +149,8 @@ const LoginScreenPresenter = (props: any) => {
             <Text
               style={[
                 styles.ErrorText,
-                Platform.OS === 'ios' && { height: 15 }
+                Platform.OS === 'ios' && { height: 15 },
+                isHorizon && !isTablet && { top: '-4%' }
               ]}
             >
               {joincodeErr &&
@@ -189,6 +193,7 @@ const LoginScreenPresenter = (props: any) => {
 };
 
 const styles = StyleSheet.create({
+  //화면 방향에 따른 패딩
   verContainer: {
     flex: 1,
     backgroundColor: '#f7f8fa',
@@ -207,6 +212,7 @@ const styles = StyleSheet.create({
     paddingLeft: '25%',
     paddingRight: '25%'
   },
+  //전체 레이아웃 컨테이너
   topContainer: {
     flex: 1,
     justifyContent: 'center'
@@ -215,18 +221,21 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between'
-    // paddingBottom: 40
   },
   bottomContainer: {
     flex: 1,
     alignItems: 'center'
   },
+  //코드 입력 안내문
   textHead: {
     fontSize: 20,
     fontWeight: '500',
     textAlign: 'center',
     color: '#000'
   },
+  // padTextHead: {
+  //   fontSize: 28
+  // },
   textSub1: {
     paddingTop: 15,
     fontSize: 16,
@@ -240,6 +249,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'rgb(147,147,147)'
   },
+  // padTextSub: {
+  //   fontSize: 22
+  // },
+  //코드입력
   inputNumber: {
     backgroundColor: '#fff',
     width: 44,
@@ -259,6 +272,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgb(221,221,221)',
     color: 'rgb(221,221,221)'
   },
+  //로그인버튼
   loginBtnGradation: {
     width: '95%',
     height: 42,

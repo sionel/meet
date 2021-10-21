@@ -1,3 +1,3 @@
 import CustomCheckBoxContainer from "./CustomCheckBoxContainer";
 
-export default CustomCheckBoxContainer;
+export {CustomCheckBoxContainer};
