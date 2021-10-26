@@ -12,8 +12,11 @@ const SubVideoBoxPresenter = props => (
     contentContainerStyle={Object.assign(
       {},
       styles.scrollView,
-      props.participants.length === 0 ? { margin: 0, padding: 0 } : {}
+      props.list.length === 0 ? { margin: 0, padding: 0 } : {}
     )}
+    onMomentumScrollEnd={props.moveScroll}
+    onScrollEndDrag={props.moveScroll}
+    scrollEventThrottle={0} // ios전용 이벤트를 얼마나 발생할지에 대한 빈도 0-16 16하면 디게많이 발생
   >
     {props.user && props.mainUserId !== props.user.id ? (
       <ParticipantBox
@@ -23,7 +26,7 @@ const SubVideoBoxPresenter = props => (
         isSelect={props.mainUserId === props.user.id}
       />
     ) : null}
-    {props.participants.map(
+    {props.list.map(
       participant =>
         props.mainUserId !== participant.id && (
           <ParticipantBox

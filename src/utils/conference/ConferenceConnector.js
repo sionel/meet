@@ -191,8 +191,8 @@ class ConferenceConnector {
          * interrupted : 연결이 끊어졌을 때 - 네트워크
          * restoring : 복원중 - 네트워크 - 해결메시지가 없음! : 일단 무시
          */
-        this._handlers.CHANGED_USER_STATUS(userId, status);
-        resolve(this._room);
+        // this._handlers.CHANGED_USER_STATUS(userId, status);
+        // resolve(this._room);
       }
     );
     // ===== Additional ===== //

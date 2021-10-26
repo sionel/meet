@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { actionCreators as localAction } from '../../../redux/modules/local';
 import { actionCreators as mainUserAction } from '../../../redux/modules/mainUser';
 import { RootState } from '../../../redux/configureStore';
+import { getConferenceManager } from '../../../utils/ConferenceManager';
 
 const isIOS = Platform.OS === 'ios';
 const InCallManager = !isIOS && require('react-native-incall-manager').default;
@@ -72,12 +73,12 @@ function ContentContainer(props: any) {
     };
   }, []);
 
+  useEffect(() => {
+    const m = getConferenceManager();
+    if (mainUser.id !== 'localUser') m?.setReceiverConstraints(mainUser.id);
+  }, [mainUser]);
   const _handleSetRef = ref => {
     if (ref && RNBS !== ref) RNBS = ref;
-  };
-
-  const _handleChangeObjectFit = () => {
-    setObjectFit(objectFit === 'cover' ? 'contain' : 'cover');
   };
 
   const _toggleConferenceMode = () => {
@@ -148,7 +149,6 @@ function ContentContainer(props: any) {
       onLayout={_setOrientation}
       onChangeSpeaker={_handleChangeSpeaker}
       // onChangeState={_handleChangeState}
-      onChangeObjectFit={_handleChangeObjectFit}
       onSetRef={_handleSetRef}
     />
   );

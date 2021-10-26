@@ -13,6 +13,7 @@ import { isWehagoV } from '../../utils';
 import WatingScreen from './WatingScreen';
 import ScreenShareIOS from './ScreenShare/ScreenShareIOS';
 import ScreenShareANDROID from './ScreenShare/ScreenShareANDROID';
+import { SafeAreaView } from 'react-navigation';
 /**
  * ConferenceScreenPresenter
  */
@@ -29,28 +30,33 @@ const ConferenceScreenPresenter = props => {
   // console.log(props.connection);
 
   return (
-    <View style={{ flex: 1 }}>
-      <SimpleNoti />
-      {Platform.OS === 'ios' ? <ScreenShareIOS /> : <ScreenShareANDROID />}
-      {props.mainUser && props.connection ? (
-        <Content
-          mainUser={props.mainUser}
-          callType={props.callType}
-          selectedRoomName={props.selectedRoomName}
-          onClose={props.onClose}
-          onClear={props.onClear}
-          onSetDrawingData={props.onSetDrawingData}
-          onChangeDrawingMode={props.onChangeDrawingMode}
-          onChangeSharingMode={props.onChangeSharingMode}
-          onChangeDocumentPage={props.onChangeDocumentPage}
-          onChangeMicMaster={props.onChangeMicMaster}
-        />
-      ) : isWehagoV ? (
-        <WatingScreen orientation={props.orientation} onClose={props.onClose} />
-      ) : (
-        <LoadingIndicator />
-      )}
-    </View>
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={{ flex: 1 }}>
+        <SimpleNoti />
+        {Platform.OS === 'ios' ? <ScreenShareIOS /> : <ScreenShareANDROID />}
+        {props.mainUser && props.connection ? (
+          <Content
+            mainUser={props.mainUser}
+            callType={props.callType}
+            selectedRoomName={props.selectedRoomName}
+            onClose={props.onClose}
+            onClear={props.onClear}
+            onSetDrawingData={props.onSetDrawingData}
+            onChangeDrawingMode={props.onChangeDrawingMode}
+            onChangeSharingMode={props.onChangeSharingMode}
+            onChangeDocumentPage={props.onChangeDocumentPage}
+            onChangeMicMaster={props.onChangeMicMaster}
+          />
+        ) : isWehagoV ? (
+          <WatingScreen
+            orientation={props.orientation}
+            onClose={props.onClose}
+          />
+        ) : (
+          <LoadingIndicator />
+        )}
+      </View>
+    </SafeAreaView>
   );
 };
 

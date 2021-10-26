@@ -34,14 +34,11 @@ const ContentPresenter = props => {
   const hideStatusbar = orientation === 'horizontal';
   return (
     <View style={styles.container} onLayout={props.onLayout}>
-      {/* <SimpleNoti /> */}
       <StatusBar
         barStyle="light-content"
         backgroundColor={'#000'}
         hidden={hideStatusbar}
       />
-
-      {/* START MAIN VIDEO 영역 */}
       <TouchableOpacity
         style={{ flex: 1 }}
         onPress={props.toggleConferenceMode}
@@ -84,7 +81,6 @@ const ContentPresenter = props => {
               onReverseVideo={props.onReverseVideo}
               onChangeState={props.onChangeState}
               onChangeDrawing={props.setSharingMode}
-              onChangeObjectFit={props.onChangeObjectFit}
               objectFit={props.objectFit}
               onChangeDrawingMode={props.onChangeDrawingMode}
             />
