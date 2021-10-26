@@ -31,7 +31,7 @@ class MainContainer extends Component {
   render() {
     const { params, destination, onChangeRootState, from } = this.props;
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor:'transparent' }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor:'#1C90FB' }}>
         <MainPresenter
           params={params}
           from={from}

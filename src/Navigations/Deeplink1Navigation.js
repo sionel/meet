@@ -7,9 +7,10 @@ import { Image, TouchableOpacity } from 'react-native';
 import RouteTitle from '../Routes/RouteTitle';
 
 const commonStyle = {
-  height: 53,
+  height: 45,
   color: '#fff',
-  backgroundColor: '#1C90FB'
+  backgroundColor: '#1C90FB',
+  paddingBottom: 15
 };
 const backBtn = require('../../assets/buttons/back_btn.png');
 
