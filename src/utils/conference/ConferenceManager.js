@@ -368,7 +368,6 @@ class ConferenceManager {
     this._dispatch(toastAcionCreators.setToastMessage(msg));
   };
   changeMicControlModeByMaster = value => {
-
     this._dispatch(masterAcionCreators.changeAudioActive(value));
 
     const msg = value

@@ -245,14 +245,26 @@ class ConferenceConnector {
     });
 
     // SUSPEND_DETECTED
-    this._room.on(conferenceEvents.SUSPEND_DETECTED, () =>
-      this._handlers.SUSPEND_DETECTED()
-    );
+    this._room.on(conferenceEvents.SUSPEND_DETECTED, () => {
+      this._handlers.SUSPEND_DETECTED();
+    });
 
     this._room.on(conferenceEvents.MESSAGE_RECEIVED, (user, text, date) => {
       this._handlers.MESSAGE_RECEIVED(user, text, date);
     });
 
+    this._room.on(conferenceEvents.RECORDER_STATE_CHANGED, data => {
+      const { _status, _sessionID, _initiator } = data;
+      if ((_initiator || this._room.isModerator()) && _status === 'on') {
+        this._handlers.START_RECORDING();
+        this._sessionID = _sessionID;
+      }
+
+      if (_status === 'off') {
+        this._handlers.STOP_RECORDING();
+        this._sessionID = null;
+      }
+    });
     // ======== addEventListener ========== //
 
     // 위하고 접속 아이디 및 정보 가져오기
@@ -333,7 +345,6 @@ class ConferenceConnector {
       if (userId !== this._room.myUserId()) {
         // const _drawData = JSON.parse(drawData);
         // this._drawingManager.handleConvertFormat('web', value);
-        // console.log('documentData', documentData);
         this._handlers.CHANGED_DRAW_DATA(
           JSON.parse(documentData),
           selectResource
@@ -490,7 +501,6 @@ class ConferenceConnector {
         }
       }
     });
-
     // 방 녹화 요청 이벤트 핸들러
     this._room.addCommandListener(REQUEST_ROOM_START_RECORDING, value => {
       const {
