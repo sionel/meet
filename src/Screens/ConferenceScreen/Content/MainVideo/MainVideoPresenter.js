@@ -183,7 +183,7 @@ const MainVideoPresenter = props => {
       ) : !isMuteVideo && stream && !drawing ? (
         <RTCView
           style={styles.RTCVideo}
-          mirror={!isVideoReverse}
+          mirror={videoType !== 'desktop' && !isVideoReverse}
           objectFit={
             localPipMode
               ? 'cover'
