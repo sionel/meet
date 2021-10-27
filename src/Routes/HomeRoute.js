@@ -27,10 +27,9 @@ import { WEHAGO_TYPE } from '../../config';
 import { getT } from '../utils/translateManager';
 
 const commonStyle = {
-  height: 45,
+  height: 53,
   color: '#fff',
   backgroundColor: '#1C90FB',
-  paddingBottom: 15
 };
 const backBtn = require('../../assets/buttons/back_btn.png');
 

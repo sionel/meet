@@ -3,7 +3,7 @@ import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import CustomButton from '../../../../components/CustomButton';
 import _ from 'underscore';
 // import icMore from '../../../../../assets/new/ic_more.png'
-import icMore from '../../../../../assets/new/ic_more.png';
+// import icMore from '../../../../../assets/new/ic_more.png';
 
 type propsType = {
   talkButton: boolean;
@@ -108,7 +108,7 @@ const TopAreaPresenter = (props: propsType) => {
           // }}
         />
       )}
-      {reverseButton && (
+      {/* {reverseButton && (
         <TouchableOpacity
           style={{
             width: 28,
@@ -128,7 +128,7 @@ const TopAreaPresenter = (props: propsType) => {
             // resizeMode={'contain'}
           />
         </TouchableOpacity>
-      )}
+      )} */}
       {/* <View
         style={{
           position: 'absolute',
