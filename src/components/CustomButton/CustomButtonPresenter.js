@@ -15,6 +15,8 @@ import buttonClose from '../../../assets/buttons/btnTnaviCloseNone_3x.png';
 import btnArrowUp from '../../../assets/buttons/btnArrowUp.png';
 import btnArrowDown from '../../../assets/buttons/btnArrowDown.png';
 import btnUserList from '../../../assets/buttons/btn_tnavi_person_none.png';
+import icoScreenShagre from '../../../assets/icons/icoScreenShagre.png';
+
 /**
  * CustomButtonPresenter
  */
@@ -93,6 +95,8 @@ const getButtonSource = name => {
       return btnArrowDown;
     case 'userList':
       return btnUserList;
+    case 'icoScreenShagre':
+      return icoScreenShagre;
     default:
       return null;
   }

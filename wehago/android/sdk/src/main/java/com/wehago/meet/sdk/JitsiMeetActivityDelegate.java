@@ -125,6 +125,7 @@ public class JitsiMeetActivityDelegate {
             }
         }
     }
+
     /**
      * {@link Activity} lifecycle method which should be called from
      * {@code Activity#onResume} so we can do the required internal processing.

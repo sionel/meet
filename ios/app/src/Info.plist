@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>ko</string>
+	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>WEHAGO Meet</string>
+	<string>Wehago Meet</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -45,6 +45,8 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>FirebaseCrashlyticsCollectionEnabled</key>
+	<string>false</string>
 	<key>FirebaseScreenReportingEnabled</key>
 	<false/>
 	<key>ITSAppUsesNonExemptEncryption</key>
@@ -73,11 +75,15 @@
 	<key>NSCalendarsUsageDescription</key>
 	<string>See your scheduled meetings in the app.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>test</string>
+	<string>Participate in meetings with video.</string>
 	<key>NSContactsUsageDescription</key>
 	<string>Contacts Usage Description</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Local network is used for establishing Peer-to-Peer connections.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>test</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Participate in meetings with voice.</string>
 	<key>NSMotionUsageDescription</key>
 	<string>Motion Usage Description</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
@@ -86,13 +92,31 @@
 	<array>
 		<string>org.jitsi.JitsiMeet.ios.conference</string>
 	</array>
+	<key>RTCAppGroupIdentifier</key>
+	<string>group.com.douzone.wehagomeet.appgroup</string>
+	<key>RTCScreenSharingExtension</key>
+	<string>com.douzone.wehagomeet.broadcast</string>
 	<key>UIAppFonts</key>
 	<array>
-		<string>Fonts/AntDesign.ttf</string>
-		<string>Fonts/FontAwesome.ttf</string>
-		<string>Fonts/DOUZONEText10.ttf</string>
-		<string>Fonts/DOUZONEText30.ttf</string>
-		<string>Fonts/DOUZONEText50.ttf</string>
+		<string>AntDesign.ttf</string>
+		<string>Entypo.ttf</string>
+		<string>EvilIcons.ttf</string>
+		<string>Feather.ttf</string>
+		<string>FontAwesome.ttf</string>
+		<string>FontAwesome5_Brands.ttf</string>
+		<string>FontAwesome5_Regular.ttf</string>
+		<string>FontAwesome5_Solid.ttf</string>
+		<string>Fontisto.ttf</string>
+		<string>Foundation.ttf</string>
+		<string>Ionicons.ttf</string>
+		<string>MaterialCommunityIcons.ttf</string>
+		<string>MaterialIcons.ttf</string>
+		<string>Octicons.ttf</string>
+		<string>SimpleLineIcons.ttf</string>
+		<string>Zocial.ttf</string>
+		<string>DOUZONEText10.ttf</string>
+		<string>DOUZONEText30.ttf</string>
+		<string>DOUZONEText50.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
@@ -101,27 +125,24 @@
 		<string>voip</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
-	<string>Launch Screen</string>
+	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
 	</array>
+	<key>UIRequiresFullScreen</key>
+	<true/>
 	<key>UIStatusBarStyle</key>
-	<string>UIStatusBarStyleDefault</string>
+	<string>UIStatusBarStyleLightContent</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
-	<key>UIUserInterfaceStyle</key>
-	<string>Light</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>firebase_crashlytics_collection_enabled</key>
-	<string>false</string>
 </dict>
 </plist>

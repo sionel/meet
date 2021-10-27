@@ -17,6 +17,7 @@
 package com.wehago.meet.sdk;
 
 import android.app.Activity;
+
 import androidx.annotation.Nullable;
 
 import com.facebook.react.ReactInstanceManager;
@@ -58,7 +59,7 @@ class ReactInstanceManagerHolder {
 
     private static List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         List<NativeModule> nativeModules
-            = new ArrayList<>(Arrays.<NativeModule>asList( //TODO: 지금 이거 이 java파일 정리
+            = new ArrayList<>(Arrays.<NativeModule>asList(
                 new AndroidSettingsModule(reactContext),
                 new AppInfoModule(reactContext),
                 new AudioModeModule(reactContext),
@@ -67,7 +68,7 @@ class ReactInstanceManagerHolder {
                 new JavaScriptSandboxModule(reactContext),
                 new LocaleDetector(reactContext),
                 new LogBridgeModule(reactContext),
-                new SplashScreenModule(reactContext), // TODO: 일단 모듈은 넣되 정리는 해야함
+                new SplashScreenModule(reactContext),
                 new PictureInPictureModule(reactContext),
                 new ProximityModule(reactContext),
                 new WiFiStatsModule(reactContext),
@@ -177,33 +178,30 @@ class ReactInstanceManagerHolder {
 
         List<ReactPackage> packages
             = new ArrayList<>(Arrays.asList(
-                new com.BV.LinearGradient.LinearGradientPackage(),
-                // new com.calendarevents.CalendarEventsPackage(),
+                new com.calendarevents.CalendarEventsPackage(),
                 new com.corbt.keepawake.KCKeepAwakePackage(),
                 new com.facebook.react.shell.MainReactPackage(),
-                new com.oblador.vectoricons.VectorIconsPackage(),
+                new com.horcrux.svg.SvgPackage(),
                 new com.kevinresol.react_native_default_preference.RNDefaultPreferencePackage(),
+                new com.learnium.RNDeviceInfo.RNDeviceInfo(),
                 new com.ocetnik.timer.BackgroundTimerPackage(),
                 new com.reactnativecommunity.asyncstorage.AsyncStoragePackage(),
                 new com.reactnativecommunity.netinfo.NetInfoPackage(),
+                new com.reactnativecommunity.slider.ReactSliderPackage(),
                 new com.reactnativecommunity.webview.RNCWebViewPackage(),
                 new com.rnimmersive.RNImmersivePackage(),
-                new com.zmxv.RNSound.RNSoundPackage(),
-                // 추가한 라이브러리
-                // new com.airbnb.android.react.lottie.LottiePackage(),
-                new com.horcrux.svg.SvgPackage(),
+                new com.brentvatne.react.ReactVideoPackage(),
+
+                new com.zoontek.rnlocalize.RNLocalizePackage(),
+                new com.swmansion.gesturehandler.react.RNGestureHandlerPackage(),
                 new org.wonday.orientation.OrientationPackage(),
                 new com.dylanvann.fastimage.FastImageViewPackage(),
-                new com.learnium.RNDeviceInfo.RNDeviceInfo(),
                 new com.terrylinla.rnsketchcanvas.SketchCanvasPackage(),
-                new com.swmansion.gesturehandler.react.RNGestureHandlerPackage(),
-                new com.reactnativecommunity.slider.ReactSliderPackage(),
                 new com.evanjmg.RNHomePressedPackage(),
-                new com.zxcpoiu.incallmanager.InCallManagerPackage(),
                 new com.avishayil.rnrestart.ReactNativeRestartPackage(),
-                new com.zoontek.rnlocalize.RNLocalizePackage(),
                 new com.github.wumke.RNExitApp.RNExitAppPackage(),
-                // end
+                new com.zxcpoiu.incallmanager.InCallManagerPackage(),
+
                 new ReactPackageAdapter() {
                     @Override
                     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {

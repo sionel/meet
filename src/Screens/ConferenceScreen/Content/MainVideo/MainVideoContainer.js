@@ -1,7 +1,8 @@
 import React from 'react';
-import { BackHandler, NativeModules, ToastAndroid } from 'react-native';
+import { BackHandler, NativeModules, ToastAndroid ,findNodeHandle,NativeEventEmitter} from 'react-native';
 import MainVideoPresenter from './MainVideoPresenter';
 import { getT } from '../../../../utils/translateManager';
+import { getConferenceManager } from '../../../../utils/ConferenceManager';
 
 const { PictureInPicture } = NativeModules;
 
@@ -24,6 +25,7 @@ class MainVideoContainer extends React.Component {
       time > 0 && this.setState({ time });
     }, 500);
 
+
     BackHandler.addEventListener('hardwareBackPress', this._handleBackButton);
   }
 
@@ -45,9 +47,15 @@ class MainVideoContainer extends React.Component {
   }
 
   render() {
-    return <MainVideoPresenter {...this.props} {...this.state} />;
+    return (
+      <MainVideoPresenter
+        {...this.props}
+        {...this.state}
+        setRef={this._setNativeComponent}
+        test={this.test}
+      />
+    );
   }
-
   _handleBackButton = () => {
     this._handleEnterPIPMode('BACK');
 

@@ -1,11 +1,15 @@
 // stream={stream} isMuteVideo={mainUser.isMuteVideo} mainUser={mainUser}>
 
-import { connect } from "react-redux";
-import MainVideoContainer from "./MainVideoContainer";
+import { connect } from 'react-redux';
+import MainVideoContainer from './MainVideoContainer';
 // import { actionCreators as localActions } from '../../../../redux/modules/local';
+import { actionCreators as ScreenShareCreators } from '../../../../redux/modules/ScreenShare';
 
 const mapStateToProps = (state, ownProps) => {
-	const { local: { createdTime } } = state;
+  const {
+    local: { createdTime },
+    screenShare: { isScreenShare }
+  } = state;
   const {
     mainUser,
     mainUser: { isMuteVideo },
@@ -17,10 +21,14 @@ const mapStateToProps = (state, ownProps) => {
     isMuteVideo,
     videoType: videoTrack && videoTrack.videoType,
     createdTime,
+    isScreenShare
   };
 };
 
-export default connect(
-  mapStateToProps,
-  null
-)(MainVideoContainer);
+const mapDispatchToProps = dispatch => {
+  return {
+    setScreenFlag: flag => dispatch(ScreenShareCreators.setScreenFlag(flag)),
+    toggleScreenFlag: () => dispatch(ScreenShareCreators.toggleScreenFlag())
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(MainVideoContainer);

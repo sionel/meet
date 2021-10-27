@@ -66,6 +66,11 @@ public class JitsiMeetOngoingConferenceService extends Service
         context.stopService(intent);
     }
 
+    static void stop(Context context) {
+        Intent intent = new Intent(context, JitsiMeetOngoingConferenceService.class);
+        context.stopService(intent);
+    }
+    
     @Override
     public void onCreate() {
         super.onCreate();
@@ -132,6 +137,7 @@ public class JitsiMeetOngoingConferenceService extends Service
     public void onCurrentConferenceChanged(String conferenceUrl) {
         if (conferenceUrl == null) {
             stopSelf();
+            OngoingNotification.resetStartingtime();
             JitsiMeetLogger.i(TAG + "Service stopped");
         }
     }

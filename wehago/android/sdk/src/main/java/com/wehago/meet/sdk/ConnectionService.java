@@ -5,7 +5,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.RequiresApi;
 import android.telecom.CallAudioState;
 import android.telecom.Connection;
 import android.telecom.ConnectionRequest;
@@ -14,12 +13,14 @@ import android.telecom.PhoneAccount;
 import android.telecom.PhoneAccountHandle;
 import android.telecom.TelecomManager;
 import android.telecom.VideoProfile;
+import androidx.annotation.RequiresApi;
 
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableNativeMap;
 
 import com.wehago.meet.sdk.log.JitsiMeetLogger;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -357,7 +358,7 @@ public class ConnectionService extends android.telecom.ConnectionService {
             WritableNativeMap data = new WritableNativeMap();
             data.putString("callUUID", getCallUUID());
             ReactInstanceManagerHolder.emitEvent(
-                    "org.jitsi.meet:features/connection_service#disconnect",
+                    "com.wehago.meet:features/connection_service#disconnect",
                     data);
             // The JavaScript side will not go back to the native with
             // 'endCall', so the Connection must be removed immediately.
@@ -377,7 +378,7 @@ public class ConnectionService extends android.telecom.ConnectionService {
             WritableNativeMap data = new WritableNativeMap();
             data.putString("callUUID", getCallUUID());
             ReactInstanceManagerHolder.emitEvent(
-                    "org.jitsi.meet:features/connection_service#abort",
+                    "com.wehago.meet:features/connection_service#abort",
                     data);
             // The JavaScript side will not go back to the native with
             // 'endCall', so the Connection must be removed immediately.

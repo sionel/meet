@@ -20,6 +20,7 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.module.annotations.ReactModule;
 
 import com.wehago.meet.sdk.log.JitsiMeetLogger;
+
 /**
  * The react-native side of Jitsi Meet's {@link ConnectionService}. Exposes
  * the Java Script API.

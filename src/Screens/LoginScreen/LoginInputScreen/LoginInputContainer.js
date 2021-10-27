@@ -169,7 +169,6 @@ export default function LoginInputContainer(props) {
     setLogging(false);
     setUserPw('');
     setCaptchaInput('');
-
     if (getAuth.resultCode === 200 || getAuth.resultCode === 207) {
       if (getAuth.resultCode === 207 && access_pass === 'F') {
         // 중복 로그인 시 알림창
@@ -231,7 +230,6 @@ export default function LoginInputContainer(props) {
         auth.HASH_KEY,
         'this'
       );
-
       if (result.errors) {
         if (result.errors.code === 'E002') {
           const onClose = () => {
@@ -328,7 +326,6 @@ export default function LoginInputContainer(props) {
     } else {
       // 로그인 실패
       captcha && setCaptcha(_getTransactionId());
-
       if (getAuth.resultCode === 401) {
         captcha && setErrorMsg(getAuth.resultMsg);
         const onClose = () => {

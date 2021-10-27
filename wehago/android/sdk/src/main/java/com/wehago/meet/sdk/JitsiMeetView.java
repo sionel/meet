@@ -24,6 +24,7 @@ import androidx.annotation.Nullable;
 import com.facebook.react.bridge.ReadableMap;
 
 import com.wehago.meet.sdk.log.JitsiMeetLogger;
+
 import java.lang.reflect.Method;
 import java.util.Map;
 

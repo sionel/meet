@@ -63,6 +63,10 @@ export const UPDATE_MASTER_USERS =
 // 마스터가 유저 추방
 export const REQUEST_KICK = 'CONFERENCE.EVENT.REQUEST.KICK';
 
+export const REQUEST_ROOM_STOP_RECORDING =
+  'CONFERENCE.EVENT.ROOM.REQUEST_ROOM_STOP_RECORDING';
+export const REQUEST_ROOM_START_RECORDING =
+  'CONFERENCE.EVENT.ROOM.REQUEST_ROOM_START_RECORDING';
 /**
  * ConferenceConnector
  * 화상회의 방 생성/참가 및 디바이스 연결을 담당하는 클래스
@@ -79,6 +83,7 @@ class ConferenceConnector {
     //   drawingData: []
     // };
     // 드로잉 클래스
+    this._sessionID = null;
     this._drawingManager = new DrawingMananger();
   }
 
@@ -94,46 +99,25 @@ class ConferenceConnector {
   /**
    * 대화방 참가
    */
-  connect = (
-    connection,
-    roomName,
-    name,
-    auth,
-    tracks,
-    accesstype,
-    externalUser
-  ) => {
+  connect = (connection, roomName, tracks, attributes) => {
     return new Promise(async (resolve, reject) => {
       // 참여할 room object 생성
       this._room = this._createRoom(connection, roomName);
       // 이벤트 연결
-      this._bindEvents(resolve, reject);
+      await this._bindEvents(resolve, reject);
       // 트랙 생성
-      if (!tracks) tracks = await this._createTracks();
+      // if (!tracks) tracks = await this._createTracks();
       // 트랙 추가
       this._addTracks(tracks);
-      // display Name 설정
-      this._room.setDisplayName(name);
+      this.tracks = tracks;
       // wehago id를 커맨드로 전송한다.
       this._room.sendCommand(WEHAGO_ID, {
         value: this._room.myUserId(),
-        attributes: {
-          wehagoId: auth.portal_id,
-          companyFullpath: auth.last_company?.full_path,
-          profile_url: auth.profile_url ? auth.profile_url : '',
-          userName: name,
-          nickname: auth.nickname,
-          isExternalParticipant:
-            accesstype === 'email' || accesstype === 'joincode',
-          externalUserId: externalUser,
-          isMobile: true
-        }
+        attributes
       });
 
       // 대화방 참가
       await this._room.join();
-
-      return this._room;
     });
   };
 
@@ -207,8 +191,8 @@ class ConferenceConnector {
          * interrupted : 연결이 끊어졌을 때 - 네트워크
          * restoring : 복원중 - 네트워크 - 해결메시지가 없음! : 일단 무시
          */
-        this._handlers.CHANGED_USER_STATUS(userId, status);
-        resolve(this._room);
+        // this._handlers.CHANGED_USER_STATUS(userId, status);
+        // resolve(this._room);
       }
     );
     // ===== Additional ===== //
@@ -221,6 +205,7 @@ class ConferenceConnector {
 
     // 대화방 참가 성공 이벤트 연결
     this._room.on(conferenceEvents.CONFERENCE_JOINED, () => {
+      // this._handlers.CONFERENCE_JOINED(this._room);
       resolve(this._room);
     });
 
@@ -233,7 +218,6 @@ class ConferenceConnector {
     this._room.on(conferenceEvents.USER_JOINED, (id, user) => {
       if (new Set(['wehagorecord', 'wehagorecord-dev']).has(user.getStatsID()))
         return;
-
       this._handlers.JOIN_USER(user);
     });
 
@@ -292,6 +276,16 @@ class ConferenceConnector {
       }
     });
 
+    this._room.on(conferenceEvents.RECORDER_STATE_CHANGED, data => {
+      const { _status, _sessionID } = data;
+      if (_status === 'on' && this._sessionID === null) {
+        this._handlers.START_RECORDING();
+        this._sessionID = _sessionID;
+      } else if (_status === 'off') {
+        this._handlers.STOP_RECORDING();
+        this._sessionID = null;
+      }
+    });
     /**
      * @description 문서 공유 모드 설정 감지
      */
@@ -489,6 +483,33 @@ class ConferenceConnector {
         this._handlers.CHANGED_MIC_MUTE_BY_MASTER(true);
       }
     });
+    this._room.addCommandListener(REQUEST_ROOM_STOP_RECORDING, value => {
+      if (this._room.isModerator()) {
+        if (this._sessionID) {
+          this._room.stopRecording(this._sessionID);
+        }
+      }
+    });
+
+    // 방 녹화 요청 이벤트 핸들러
+    this._room.addCommandListener(REQUEST_ROOM_START_RECORDING, value => {
+      const {
+        attributes: { user }
+      } = value;
+      if (this._room.isModerator()) {
+        // 녹화 요청 등록 API 호출
+        this._handlers.REQUEST_RECORD_USER(user);
+        // 녹화 시작
+        this._room.startRecording({
+          mode: 'file',
+          appData: JSON.stringify({
+            file_recording_metadata: {
+              share: true
+            }
+          })
+        });
+      }
+    });
   };
 
   _removeEvents = () => {
@@ -502,15 +523,16 @@ class ConferenceConnector {
     this._room.removeCommandListener(DRAWING_REDO_UNDO);
     this._room.removeCommandListener(DOCUMENT_SHARE_TARGET);
     this._room.removeCommandListener(DRAWING_SHARE_TARGET);
-
     this._room.removeCommandListener(REQUEST_MIC_CONTROL);
     this._room.removeCommandListener(REQUEST_MIC_CONTROL_USER);
     this._room.removeCommandListener(REQUEST_MIC_CONTROL_TARGET);
-
     this._room.removeCommandListener(GRANT_FLOOR);
+    this._room.removeCommandListener(STOP_FLOOR);
     this._room.removeCommandListener(GRANT_FLOOR_TARGET);
     this._room.removeCommandListener(UPDATE_MASTER_USERS);
     this._room.removeCommandListener(REQUEST_KICK);
+    this._room.removeCommandListener(REQUEST_ROOM_STOP_RECORDING);
+    this._room.removeCommandListener(REQUEST_ROOM_START_RECORDING);
   };
 
   /**

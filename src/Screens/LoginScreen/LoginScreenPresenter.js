@@ -141,7 +141,7 @@ export default function LoginScreenPresenter(props) {
             </>
           </TouchableHighlight>
 
-          <TouchableOpacity
+          {/* <TouchableOpacity
             activeOpacity={1}
             onPress={() =>
               navigation.navigate({
@@ -153,7 +153,7 @@ export default function LoginScreenPresenter(props) {
             }
           >
             <Text style={styles.loginNavigation}>{t('login_direct')}</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
     </ImageBackground>

@@ -5,10 +5,11 @@ import {
   Image,
   Text,
   Platform,
-  Dimensions
+  Dimensions,
+  TouchableOpacity
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { RTCView } from 'react-native-webrtc';
+import { RTCView, ScreenCapturePickerView } from 'react-native-webrtc';
 import ButtonCameraOff from '../../../../../assets/buttons/btn_vc_camera_off.png';
 import ButtonCameraOff2 from '../../../../../assets/icons/icoCameraWhLargeOff_2x.png';
 import imgCharacter01 from '../../../../../assets/icons/imgCharacter01_2x.png';
@@ -18,6 +19,7 @@ import imgCharacter03 from '../../../../../assets/icons/imgCharacter03_2x.png';
 import ProfileImage from '../../../../../assets/icons/imgVcNophoto_2x.png';
 // import ProfileImage from '../../../../../assets/smapleImages/nnn2.png';
 import { wehagoMainURL } from '../../../../utils';
+import { CustomIcon } from '../../../../components';
 
 const { height, width } = Dimensions.get('window');
 
@@ -34,19 +36,17 @@ const MainVideoPresenter = props => {
     selectedRoomName,
     conferenceMode,
     isVideoReverse,
-    pipMode
+    pipMode,
+    setRef,
+    test,
+    drawing,
+    isScreenShare,
+    setScreenFlag,
+    toggleScreenFlag
   } = props;
-  // const dispatch = useDispatch();
-  const localPipMode = useSelector(state => state.local.pipMode);
-  // if (localPipMode !== pipMode) {
-  //   dispatch({ type: 'CONFERENCE_PIP_MODE', pipMode });
-  // }
 
-  /**
-   * 닉네임 표기 방법
-   * 닉네임(이름) > 이름
-   * @param {*} user
-   */
+  const localPipMode = useSelector(state => state.local.pipMode);
+
   const getUserName = user => {
     if (user.userInfo) {
       if (user.userInfo.nickname) {
@@ -57,7 +57,6 @@ const MainVideoPresenter = props => {
 
   const displayTime = (
     <View
-      // onTouchEnd={props.onChangeObjectFit}
       style={{
         position: 'absolute',
         top: props.hasNotch && props.orientation === 'vertical' ? 50 : 25,
@@ -88,27 +87,20 @@ const MainVideoPresenter = props => {
       style={{
         position: 'absolute',
         top: '45%',
-        // bottom: 0,
         height: 41,
         left: 0,
-        // width: '50%',
         right: 0,
         justifyContent: 'center',
         alignItems: 'center',
-        // backgroundColor: 'rgba(255,255,255, .67)',
-        // backgroundColor: '#F15F5F',
         zIndex: 4
       }}
     >
       <Text
         style={{
-          // backgroundColor: 'black',
           backgroundColor: '#F15F5F',
-          // width: '100%',
           padding: 10,
           color: '#fff',
           textAlign: 'center',
-          // fontWeight: '700',
           fontSize: 14,
           fontFamily: 'DOUZONEText50'
         }}
@@ -123,18 +115,74 @@ const MainVideoPresenter = props => {
   let character = '';
   if (props?.mainUser?.userInfo?.avatar) {
     character = JSON.parse(props?.mainUser?.userInfo?.avatar)?.value;
-  } 
+  }
   character = props?.mainUser?.videoTrack?.isMuted() ? 'jangok' : character;
+
   return (
-    <View style={{ flex: 1, backgroundColor: '#1D1D1D' }}>
-      {/* 정상적인 화상회의 일 때 */}
-      {!isMuteVideo &&
-      stream &&
-      (Number(callType) === 1 || Number(callType) === 3) &&
-      !props.drawing ? (
+    <View style={{ flex: 1 }}>
+      {isScreenShare ? (
+        <View
+          style={{
+            position: 'absolute',
+            top: 250,
+            bottom: 250,
+            left: 50,
+            right: 50,
+            // backgroundColor: '#f5353a',
+            justifyContent: 'center',
+            alignItems: 'center',
+            textAlign: 'center'
+          }}
+        >
+          <CustomIcon name={'icoScreenShagre'} height={70} width={70} />
+          <Text
+            style={{
+              textAlign: 'center',
+              fontSize: 20,
+              fontWeight: 'bold',
+              marginVertical: 20,
+              color: 'white'
+            }}
+          >
+            {'화면을 공유 중 입니다.'}
+          </Text>
+          <Text
+            style={{
+              textAlign: 'center',
+              fontSize: 15,
+              fontWeight: 'bold',
+              color: 'white'
+            }}
+          >
+            {'현재 참석자들이 알림을 포함한 모든화면을\n확인할 수 있습니다'}
+          </Text>
+          <TouchableOpacity
+            style={{
+              width: 200,
+              marginVertical: 40,
+              backgroundColor: 'red',
+              height: 50,
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: 50
+            }}
+            onPress={toggleScreenFlag}
+          >
+            <Text
+              style={{
+                textAlign: 'center',
+                fontSize: 18,
+                fontWeight: 'bold',
+                color: 'white'
+              }}
+            >
+              {'공유중지'}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      ) : !isMuteVideo && stream && !drawing ? (
         <RTCView
           style={styles.RTCVideo}
-          // mirror={true}
           mirror={!isVideoReverse}
           objectFit={
             localPipMode
@@ -146,124 +194,9 @@ const MainVideoPresenter = props => {
           streamURL={stream.toURL()}
           zOrder={0} // zOrder 는 [0, 1] 만 사용가능 (아마?)
         />
-      ) : Number(callType) === 2 ? (
-        localPipMode ? (
-          <View
-            style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-          >
-            <Text
-              style={{
-                fontSize: 14,
-                color: '#fff',
-                textAlign: 'center',
-                fontFamily: 'DOUZONEText30'
-              }}
-            >
-              통화중
-            </Text>
-            <Text
-              style={{
-                fontSize: 14,
-                color: '#fff',
-                textAlign: 'center',
-                fontFamily: 'DOUZONEText30'
-              }}
-            >
-              {mainUser.id !== 'localUser' && mainUser.name}
-            </Text>
-            <Text
-              style={{
-                fontSize: 14,
-                color: '#fff',
-                textAlign: 'center',
-                fontFamily: 'DOUZONEText30'
-              }}
-            >
-              {second2String(props.time)}
-            </Text>
-          </View>
-        ) : (
-          <View style={{ ...styles.imageContainer }}>
-            {/* 음성대화 일 때 */}
-            <View style={{ display: 'flex' }}>
-              {/* <CustomLottie source="voiceBroadcast" width={280} height={280}>
-                <View
-                  style={{
-                    position: 'absolute',
-                    top: -205,
-                    justifyContent: 'center'
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: 24,
-                      color: '#fff',
-                      textAlign: 'center',
-                      fontFamily: 'DOUZONEText30'
-                    }}
-                  >
-                    통화중
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 24,
-                      color: '#fff',
-                      textAlign: 'center',
-                      fontFamily: 'DOUZONEText30'
-                    }}
-                  >
-                    {second2String(props.time)}
-                  </Text>
-                </View>
-                <Image
-                  style={styles.profileImage}
-                  source={
-                    userInfo
-                      ? {
-                          uri: wehagoMainURL + userInfo.profile_url
-                        }
-                      : ProfileImage
-                  }
-                />
-                <View
-                  style={{
-                    position: 'absolute',
-                    top: 180,
-                    alignItems: 'center'
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: 25,
-                      // fontWeight: 'bold',
-                      color: '#fff',
-                      width: Math.min(height, width) * 0.8,
-                      textAlign: 'center',
-                      fontFamily: 'DOUZONEText50'
-                    }}
-                  >
-                    {mainUser.id !== 'localUser' && mainUser.name}
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 13,
-                      color: '#fff',
-                      paddingTop: 10,
-                      fontFamily: 'DOUZONEText30'
-                    }}
-                  >
-                    {userInfo && userInfo.companyFullpath
-                      ? userInfo.companyFullpath
-                      : ''}
-                  </Text>
-                </View>
-              </CustomLottie> */}
-            </View>
-          </View>
-        )
       ) : (
         <View style={styles.imageContainer}>
-          {!props.drawing && (
+          {!drawing && (
             <Image
               source={
                 character === 'jessie'

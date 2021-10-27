@@ -29,7 +29,7 @@ const RouteTitlePresenter = props => {
           color: '#fff',
           fontSize: 18,
           fontFamily: 'DOUZONEText50',
-          marginHorizontal: 12
+          marginHorizontal: 12,
           // fontWeight: '700'
         }}
       >

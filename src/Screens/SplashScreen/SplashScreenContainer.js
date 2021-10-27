@@ -40,9 +40,13 @@ class SplashScreenContainer extends Component {
     // 강제종료 했을때를 위한 강제 초기화
     this.props.setInitInfo();
     this.props.setSharingMode();
+    const m = getConferenceManager();
+    if (m) {
+      this.props.setIndicator();
+      await m.dispose();
+    }
 
     if (this.props.url) {
-      const m = getConferenceManager();
       await this._handleGetDeeplink(this.props.url);
     } else {
       this._handleInit();
@@ -120,7 +124,7 @@ class SplashScreenContainer extends Component {
 
   _handleCheckVersion = async () => {
     const os = Platform.OS;
-    const majorVersion = 9;
+    const majorVersion = 13;
     const result = await MeetApi.checkVersion(os, majorVersion);
 
     if (!result.resultData.update || result.resultData.dev_mode) return [];
@@ -292,20 +296,12 @@ class SplashScreenContainer extends Component {
     let flag;
     // 화상회의 요청인지 판별
     if (result.is_creater) {
-      // 오래된 딥링크 양식
-      if (this.props.auth.cno) {
-        this.props.onChangeRootState({
-          loaded: true,
-          destination: 'List',
-          url: undefined
-        });
-      } else {
-        this.props.onChangeRootState({
-          loaded: true,
-          destination: 'Login',
-          url: undefined
-        });
-      }
+      // 오래된 딥링크 주소 차단
+      this.props.setAlert({
+        type: 1,
+        title: '오류',
+        message: 'meet 앱에서 다시 접근 해주시길 바랍니다'
+      });
       return;
     } else if (result.login_info === 'web') {
       // 일회성 로그인 처리

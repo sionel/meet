@@ -1,5 +1,8 @@
 //#region Action Types
 
+// init 설정
+const INIT = 'mainUser.INIT';
+
 // MAIN_USER 설정
 const SET_MAIN_USER = 'mainUser.SET_MAIN_USER';
 
@@ -31,10 +34,12 @@ const initialState = {
 
 function reducer(state = initialState, action) {
   switch (action.type) {
+    case INIT:
+      return _initMainUser();
     case SET_MAIN_USER:
       return applySetMainUser(state, action);
     case SET_MAIN_USER_NOTEXIST:
-      return applySetMainUserNotExist(state, action);
+      return applySetMainUserNotExist(state);
     case SET_DRAWING_MODE:
       return applySetDrawingMode(state, action);
     case SET_DOCUMENT_LIST_MODE:
@@ -48,6 +53,12 @@ function reducer(state = initialState, action) {
 
 //#endregion
 
+function initMainUser() {
+  return { type: INIT };
+}
+function _initMainUser() {
+  return { ...initialState };
+}
 //#region SET_MAIN_USER
 
 function setMainUser(mainUserId) {
@@ -71,22 +82,20 @@ function applySetMainUser(state, action) {
 
 //#region SET_MAIN_USER_NOTEXIST
 
-function setMainUserNotExist(mainUserId) {
+function setMainUserNotExist() {
   return (dispatch, getState) => {
     if (!getState().mainUser.mainUserId) {
       dispatch({
-        type: SET_MAIN_USER_NOTEXIST,
-        mainUserId
+        type: SET_MAIN_USER_NOTEXIST
       });
     }
   };
 }
 
-function applySetMainUserNotExist(state, action) {
-  const { mainUserId } = action;
+function applySetMainUserNotExist(state) {
   return {
     ...state,
-    mainUserId
+    mainUserId: 'localUser'
   };
 }
 
@@ -182,7 +191,8 @@ export const actionCreators = {
   setMainUserNotExist,
   setDrawingMode,
   setDocumentListMode,
-  setSharingMode
+  setSharingMode,
+  initMainUser
 };
 
 export default reducer;

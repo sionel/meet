@@ -21,12 +21,15 @@ const ControlBoxPresenter = props => (
         onPress={props.onChangeSpeaker}
       />
     )}
-    {Number(props.callType) !== 2 && (
+    {Number(props.callType) !== 2 && !props.isScreenShare && (
       <ControlButton
         name={'camera'}
         on={!props.isMuteVideo}
         onPress={props.toggleMuteVideo}
       />
+    )}
+    {props.isScreenShare && (
+      <ControlButton name={'camera'} on={false} onPress={() => {}} />
     )}
     <ControlButton
       name={'mic'}

@@ -7,25 +7,58 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		07866616193C4547BB53A8C5 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E30251FCF893482A823EB3CC /* FontAwesome.ttf */; };
 		0B412F1F1EDEE6E800B1A0A6 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B412F1E1EDEE6E800B1A0A6 /* ViewController.m */; };
 		0B412F211EDEE95300B1A0A6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0B412F201EDEE95300B1A0A6 /* Main.storyboard */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		695AF3ED6F686F9C5EE40F9A /* libPods-jitsi-meet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 489E8EFE2C720D10F5961AEF /* libPods-jitsi-meet.a */; };
-		8A064B8E2649297C00686E46 /* WebRTC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AD9D53B25F0C05F009B1B61 /* WebRTC.xcframework */; };
-		8A064B8F2649297C00686E46 /* WebRTC.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8AD9D53B25F0C05F009B1B61 /* WebRTC.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		8A064B902649298B00686E46 /* WebRTC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AD9D53B25F0C05F009B1B61 /* WebRTC.xcframework */; };
-		8A08EF30260ADC36007EB029 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8A08EF32260ADC36007EB029 /* InfoPlist.strings */; };
-		8A08EF37260ADDDD007EB029 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8A08EF39260ADDDD007EB029 /* InfoPlist.strings */; };
-		8A08EF3C260ADE12007EB029 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8A08EF3E260ADE12007EB029 /* InfoPlist.strings */; };
-		8AD9D46C25F0B4DB009B1B61 /* JitsiMeetSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AD9D46B25F0B4DB009B1B61 /* JitsiMeetSDK.framework */; };
-		8AD9D46D25F0B4DB009B1B61 /* JitsiMeetSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8AD9D46B25F0B4DB009B1B61 /* JitsiMeetSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		B753A84E2318DB4B003F9592 /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = B753A84D2318DB4B003F9592 /* Fonts */; };
-		B773AA0E23CC60EC00047498 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B773AA0D23CC60EC00047498 /* Launch Screen.storyboard */; };
+		17C1A18126D29D23BE6A326C /* libPods-WehagoMeet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 367E090DE5DF8B75F0631E19 /* libPods-WehagoMeet.a */; };
+		1D9C556ECB7D4EBFBB12EBDB /* DOUZONEText10.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 99CF24157FF14692825B45C4 /* DOUZONEText10.ttf */; };
+		34A476BBE4B648418B3A250E /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B187FE8495B44F138B823C31 /* FontAwesome5_Solid.ttf */; };
+		352C5A791AC3408180CBBD62 /* DOUZONEText50.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0CF5A52C0ACD47E99E1972C4 /* DOUZONEText50.ttf */; };
+		3BF721CD40E54E3DAEEA93E2 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BCE17EC6878E415B9366BF5E /* Feather.ttf */; };
+		4E90F9402632D1AB001102D4 /* Atomic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E90F93F2632D1AB001102D4 /* Atomic.swift */; };
+		4EB06024260E026600F524C5 /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EC49B8625BED71300E76218 /* ReplayKit.framework */; };
+		4EB06027260E026600F524C5 /* SampleHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB06026260E026600F524C5 /* SampleHandler.swift */; };
+		4EB0602B260E026600F524C5 /* WehagoMeetBroadcastExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 4EB06023260E026600F524C5 /* WehagoMeetBroadcastExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		4EB0603C260E09D000F524C5 /* SocketConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB06039260E09D000F524C5 /* SocketConnection.swift */; };
+		4EB0603D260E09D000F524C5 /* DarwinNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0603A260E09D000F524C5 /* DarwinNotificationCenter.swift */; };
+		4EB0603E260E09D000F524C5 /* SampleUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EB0603B260E09D000F524C5 /* SampleUploader.swift */; };
+		4F9847D71A774AB88425D33D /* Fontisto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AAAE30678B664ABF9597E238 /* Fontisto.ttf */; };
+		5043A8A0282842B7AF0A0329 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 02AA3DC8748248B489A8A6BD /* MaterialCommunityIcons.ttf */; };
+		6AAE0D16495D4BB4AB64DB60 /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3829BA3B87B240CFAD016E3B /* FontAwesome5_Regular.ttf */; };
+		6EBB9C6A0D724BD49FDA16FB /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6C5F60D3F05247468B32762B /* Octicons.ttf */; };
+		8AF6C8052702E683001F6494 /* ja.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 8AF6C8022702E683001F6494 /* ja.lproj */; };
+		8AF6C8062702E683001F6494 /* en.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 8AF6C8032702E683001F6494 /* en.lproj */; };
+		8AF6C8072702E683001F6494 /* ko.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 8AF6C8042702E683001F6494 /* ko.lproj */; };
+		9ED76A7D4CD14CF2833AD5D8 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 18E0E509A0794B61AE8D32CA /* Zocial.ttf */; };
+		B44361510E9344469689B522 /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 440A3B3E04824CBD89125EC7 /* FontAwesome5_Brands.ttf */; };
+		BA3F9908B5C9486BADBB5BDA /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 96D7E4D506C4437BA1F3B579 /* AntDesign.ttf */; };
+		BAD296FC9C84493795D508FD /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1CFDDA5CD9DE4E30A4AE33A8 /* EvilIcons.ttf */; };
+		CFD9EA02141A442991401EC1 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E7DCC18FC4D24C7A8FD342DD /* SimpleLineIcons.ttf */; };
+		D52263BC69B44F169BF6E044 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7443D8986FEF4591AE20685C /* MaterialIcons.ttf */; };
+		DD0B91E1C23E45A4A4876292 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 42CF4547463644F2AE0A11A3 /* Foundation.ttf */; };
+		DE050389256E904600DEE3A5 /* WebRTC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE050388256E904600DEE3A5 /* WebRTC.xcframework */; };
+		DE05038A256E904600DEE3A5 /* WebRTC.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DE050388256E904600DEE3A5 /* WebRTC.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		DE4C456121DE1E4E00EA0709 /* FIRUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = DE4C455F21DE1E4E00EA0709 /* FIRUtilities.m */; };
+		DEA9F289258A6EA800D4CD74 /* JitsiMeetSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEA9F288258A6EA800D4CD74 /* JitsiMeetSDK.framework */; };
+		DEA9F28A258A6EA800D4CD74 /* JitsiMeetSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DEA9F288258A6EA800D4CD74 /* JitsiMeetSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F064381ADDF548409D9529CA /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1F6E4808E11241FD888B81CB /* Entypo.ttf */; };
+		FC190ABC6BA64E6F8A3057FE /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D070A209F4E44BB2B82F50B5 /* Ionicons.ttf */; };
+		FD246213C22A4AC29BA889AD /* DOUZONEText30.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4B3421C1BF50477C8F0F51A9 /* DOUZONEText30.ttf */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4EB06029260E026600F524C5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4EB06022260E026600F524C5;
+			remoteInfo = "JitsiMeetBroadcast Extension";
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		0B26BE701EC5BC3C00EEFB41 /* Embed Frameworks */ = {
@@ -34,8 +67,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				8A064B8F2649297C00686E46 /* WebRTC.xcframework in Embed Frameworks */,
-				8AD9D46D25F0B4DB009B1B61 /* JitsiMeetSDK.framework in Embed Frameworks */,
+				DEA9F28A258A6EA800D4CD74 /* JitsiMeetSDK.framework in Embed Frameworks */,
+				DE05038A256E904600DEE3A5 /* WebRTC.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -50,9 +83,22 @@
 			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4EC49B9025BED71300E76218 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				4EB0602B260E026600F524C5 /* WehagoMeetBroadcastExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		02AA3DC8748248B489A8A6BD /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
+		09AA3B93E4CC62D84B424690 /* Pods-jitsi-meet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-jitsi-meet.release.xcconfig"; path = "../Pods/Target Support Files/Pods-jitsi-meet/Pods-jitsi-meet.release.xcconfig"; sourceTree = "<group>"; };
 		0B26BE6D1EC5BC3C00EEFB41 /* JitsiMeet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = JitsiMeet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0B412F1D1EDEE6E800B1A0A6 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		0B412F1E1EDEE6E800B1A0A6 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
@@ -69,6 +115,7 @@
 		0BEA5C3A1F7B8F73000D0AB4 /* ComplicationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplicationController.swift; sourceTree = "<group>"; };
 		0BEA5C3C1F7B8F73000D0AB4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0BEA5C3E1F7B8F73000D0AB4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0CF5A52C0ACD47E99E1972C4 /* DOUZONEText50.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = DOUZONEText50.ttf; path = ../../assets/fonts/DOUZONEText50.ttf; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* WEHAGO Meet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "WEHAGO Meet.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -76,27 +123,51 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		1A8AAD3E332248076EAFF455 /* Pods-jitsi-meet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-jitsi-meet.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-jitsi-meet/Pods-jitsi-meet.debug.xcconfig"; sourceTree = "<group>"; };
-		489E8EFE2C720D10F5961AEF /* libPods-jitsi-meet.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-jitsi-meet.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		8A08EF31260ADC36007EB029 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		8A08EF35260ADDB9007EB029 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
-		8A08EF36260ADDB9007EB029 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Interface.strings; sourceTree = "<group>"; };
-		8A08EF38260ADDDD007EB029 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		8A08EF3D260ADE12007EB029 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		8AD2D38625F5E953002CD560 /* libRNI18n.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNI18n.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		8AD9D46B25F0B4DB009B1B61 /* JitsiMeetSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = JitsiMeetSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		8AD9D53B25F0C05F009B1B61 /* WebRTC.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WebRTC.xcframework; path = "../../node_modules/react-native-webrtc/apple/WebRTC.xcframework"; sourceTree = "<group>"; };
-		8AD9D53E25F0C074009B1B61 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
-		B753A84D2318DB4B003F9592 /* Fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Fonts; path = ../Fonts; sourceTree = "<group>"; };
-		B773AA0D23CC60EC00047498 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = "Launch Screen.storyboard"; path = "../../Launch Screen.storyboard"; sourceTree = "<group>"; };
-		B79E0FF92316497C0020C27C /* app.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = app.entitlements; sourceTree = "<group>"; };
-		B7D753BE231CCB1B00342182 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
-		B7D753BF231CCB1B00342182 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Interface.strings; sourceTree = "<group>"; };
-		C0EF928B7F8CD15D578C61B0 /* Pods-jitsi-meet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-jitsi-meet.release.xcconfig"; path = "../Pods/Target Support Files/Pods-jitsi-meet/Pods-jitsi-meet.release.xcconfig"; sourceTree = "<group>"; };
+		18E0E509A0794B61AE8D32CA /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
+		1CFDDA5CD9DE4E30A4AE33A8 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
+		1F6E4808E11241FD888B81CB /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
+		367E090DE5DF8B75F0631E19 /* libPods-WehagoMeet.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-WehagoMeet.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3829BA3B87B240CFAD016E3B /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
+		42CF4547463644F2AE0A11A3 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
+		440A3B3E04824CBD89125EC7 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
+		4670A512A688E2DC34528282 /* Pods-jitsi-meet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-jitsi-meet.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-jitsi-meet/Pods-jitsi-meet.debug.xcconfig"; sourceTree = "<group>"; };
+		4B3421C1BF50477C8F0F51A9 /* DOUZONEText30.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = DOUZONEText30.ttf; path = ../../assets/fonts/DOUZONEText30.ttf; sourceTree = "<group>"; };
+		4E90F93F2632D1AB001102D4 /* Atomic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Atomic.swift; sourceTree = "<group>"; };
+		4EB06023260E026600F524C5 /* WehagoMeetBroadcastExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = WehagoMeetBroadcastExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		4EB06026260E026600F524C5 /* SampleHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleHandler.swift; sourceTree = "<group>"; };
+		4EB06028260E026600F524C5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4EB06032260E08CC00F524C5 /* extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = extension.entitlements; sourceTree = "<group>"; };
+		4EB06039260E09D000F524C5 /* SocketConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocketConnection.swift; sourceTree = "<group>"; };
+		4EB0603A260E09D000F524C5 /* DarwinNotificationCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DarwinNotificationCenter.swift; sourceTree = "<group>"; };
+		4EB0603B260E09D000F524C5 /* SampleUploader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleUploader.swift; sourceTree = "<group>"; };
+		4EC49B8625BED71300E76218 /* ReplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReplayKit.framework; path = System/Library/Frameworks/ReplayKit.framework; sourceTree = SDKROOT; };
+		5FEF9D87A4D2A38AD7193308 /* Pods-JitsiMeet-JitsiMeetBroadcastExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JitsiMeet-JitsiMeetBroadcastExtension.release.xcconfig"; path = "../Pods/Target Support Files/Pods-JitsiMeet-JitsiMeetBroadcastExtension/Pods-JitsiMeet-JitsiMeetBroadcastExtension.release.xcconfig"; sourceTree = "<group>"; };
+		609CB2080B75F75A89923F3D /* Pods-JitsiMeet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JitsiMeet.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-JitsiMeet/Pods-JitsiMeet.debug.xcconfig"; sourceTree = "<group>"; };
+		6C5F60D3F05247468B32762B /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
+		7443D8986FEF4591AE20685C /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
+		7CD88D13B8FF2670B191D6CD /* Pods-WehagoMeet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WehagoMeet.release.xcconfig"; path = "../Pods/Target Support Files/Pods-WehagoMeet/Pods-WehagoMeet.release.xcconfig"; sourceTree = "<group>"; };
+		8AF6C8022702E683001F6494 /* ja.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ja.lproj; sourceTree = SOURCE_ROOT; };
+		8AF6C8032702E683001F6494 /* en.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = en.lproj; sourceTree = SOURCE_ROOT; };
+		8AF6C8042702E683001F6494 /* ko.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ko.lproj; sourceTree = SOURCE_ROOT; };
+		96D7E4D506C4437BA1F3B579 /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
+		99CF24157FF14692825B45C4 /* DOUZONEText10.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = DOUZONEText10.ttf; path = ../../assets/fonts/DOUZONEText10.ttf; sourceTree = "<group>"; };
+		9F891AAA22E2843EF91D9684 /* Pods-WehagoMeet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WehagoMeet.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-WehagoMeet/Pods-WehagoMeet.debug.xcconfig"; sourceTree = "<group>"; };
+		A7B2827E068A0E05260054AC /* Pods-JitsiMeet-JitsiMeetBroadcastExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JitsiMeet-JitsiMeetBroadcastExtension.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-JitsiMeet-JitsiMeetBroadcastExtension/Pods-JitsiMeet-JitsiMeetBroadcastExtension.debug.xcconfig"; sourceTree = "<group>"; };
+		AAAE30678B664ABF9597E238 /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf"; sourceTree = "<group>"; };
+		B187FE8495B44F138B823C31 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
+		B3B083EB1D4955FF0069CEE7 /* app.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = app.entitlements; sourceTree = "<group>"; };
+		BCE17EC6878E415B9366BF5E /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
+		D070A209F4E44BB2B82F50B5 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
+		DE050388256E904600DEE3A5 /* WebRTC.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WebRTC.xcframework; path = "../../node_modules/react-native-webrtc/apple/WebRTC.xcframework"; sourceTree = "<group>"; };
 		DE4C455F21DE1E4E00EA0709 /* FIRUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FIRUtilities.m; sourceTree = "<group>"; };
 		DE4C456021DE1E4E00EA0709 /* FIRUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FIRUtilities.h; sourceTree = "<group>"; };
+		DEA9F288258A6EA800D4CD74 /* JitsiMeetSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = JitsiMeetSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DEFDBBDB25656E3B00344B23 /* WebRTC.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WebRTC.xcframework; path = "../../node_modules/react-native-webrtc/ios/WebRTC.xcframework"; sourceTree = "<group>"; };
+		E30251FCF893482A823EB3CC /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		E58801132278944E008B0561 /* JitsiMeetContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JitsiMeetContext.swift; sourceTree = "<group>"; };
 		E5C97B62227A1EB400199214 /* JitsiMeetCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JitsiMeetCommands.swift; sourceTree = "<group>"; };
+		E7DCC18FC4D24C7A8FD342DD /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
+		FC040BBED70876444D89E91C /* Pods-JitsiMeet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JitsiMeet.release.xcconfig"; path = "../Pods/Target Support Files/Pods-JitsiMeet/Pods-JitsiMeet.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,10 +175,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8A064B902649298B00686E46 /* WebRTC.xcframework in Frameworks */,
-				8AD9D46C25F0B4DB009B1B61 /* JitsiMeetSDK.framework in Frameworks */,
-				695AF3ED6F686F9C5EE40F9A /* libPods-jitsi-meet.a in Frameworks */,
-				8A064B8E2649297C00686E46 /* WebRTC.xcframework in Frameworks */,
+				DE050389256E904600DEE3A5 /* WebRTC.xcframework in Frameworks */,
+				DEA9F289258A6EA800D4CD74 /* JitsiMeetSDK.framework in Frameworks */,
+				17C1A18126D29D23BE6A326C /* libPods-WehagoMeet.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4EB06020260E026600F524C5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4EB06024260E026600F524C5 /* ReplayKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -117,13 +195,13 @@
 		0B26BE711EC5BC4D00EEFB41 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				8AD2D38625F5E953002CD560 /* libRNI18n.a */,
-				8AD9D53E25F0C074009B1B61 /* WebKit.framework */,
-				8AD9D53B25F0C05F009B1B61 /* WebRTC.xcframework */,
-				8AD9D46B25F0B4DB009B1B61 /* JitsiMeetSDK.framework */,
+				DEA9F288258A6EA800D4CD74 /* JitsiMeetSDK.framework */,
+				DE050388256E904600DEE3A5 /* WebRTC.xcframework */,
 				0B26BE6D1EC5BC3C00EEFB41 /* JitsiMeet.framework */,
+				DEFDBBDB25656E3B00344B23 /* WebRTC.xcframework */,
 				0BD6B4361EF82A6B00D1F4CD /* WebRTC.framework */,
-				489E8EFE2C720D10F5961AEF /* libPods-jitsi-meet.a */,
+				4EC49B8625BED71300E76218 /* ReplayKit.framework */,
+				367E090DE5DF8B75F0631E19 /* libPods-WehagoMeet.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -159,15 +237,14 @@
 		13B07FAE1A68108700A75B9A /* src */ = {
 			isa = PBXGroup;
 			children = (
-				B773AA0D23CC60EC00047498 /* Launch Screen.storyboard */,
+				8AF6C8032702E683001F6494 /* en.lproj */,
+				8AF6C8022702E683001F6494 /* ja.lproj */,
+				8AF6C8042702E683001F6494 /* ko.lproj */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				DE4C456021DE1E4E00EA0709 /* FIRUtilities.h */,
 				DE4C455F21DE1E4E00EA0709 /* FIRUtilities.m */,
-				8A08EF3E260ADE12007EB029 /* InfoPlist.strings */,
-				8A08EF39260ADDDD007EB029 /* InfoPlist.strings */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
-				8A08EF32260ADC36007EB029 /* InfoPlist.strings */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
@@ -179,11 +256,34 @@
 			path = src;
 			sourceTree = "<group>";
 		};
+		4EB06025260E026600F524C5 /* JitsiMeetBroadcast Extension */ = {
+			isa = PBXGroup;
+			children = (
+				4EB06032260E08CC00F524C5 /* extension.entitlements */,
+				4EB06026260E026600F524C5 /* SampleHandler.swift */,
+				4EB0603B260E09D000F524C5 /* SampleUploader.swift */,
+				4EB06039260E09D000F524C5 /* SocketConnection.swift */,
+				4EB0603A260E09D000F524C5 /* DarwinNotificationCenter.swift */,
+				4E90F93F2632D1AB001102D4 /* Atomic.swift */,
+				4EB06028260E026600F524C5 /* Info.plist */,
+			);
+			indentWidth = 4;
+			name = "JitsiMeetBroadcast Extension";
+			path = "broadcast-extension";
+			sourceTree = "<group>";
+			tabWidth = 4;
+		};
 		5E96ADD5E49F3B3822EF9A52 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				1A8AAD3E332248076EAFF455 /* Pods-jitsi-meet.debug.xcconfig */,
-				C0EF928B7F8CD15D578C61B0 /* Pods-jitsi-meet.release.xcconfig */,
+				4670A512A688E2DC34528282 /* Pods-jitsi-meet.debug.xcconfig */,
+				09AA3B93E4CC62D84B424690 /* Pods-jitsi-meet.release.xcconfig */,
+				609CB2080B75F75A89923F3D /* Pods-JitsiMeet.debug.xcconfig */,
+				FC040BBED70876444D89E91C /* Pods-JitsiMeet.release.xcconfig */,
+				A7B2827E068A0E05260054AC /* Pods-JitsiMeet-JitsiMeetBroadcastExtension.debug.xcconfig */,
+				5FEF9D87A4D2A38AD7193308 /* Pods-JitsiMeet-JitsiMeetBroadcastExtension.release.xcconfig */,
+				9F891AAA22E2843EF91D9684 /* Pods-WehagoMeet.debug.xcconfig */,
+				7CD88D13B8FF2670B191D6CD /* Pods-WehagoMeet.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -191,14 +291,15 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				B753A84D2318DB4B003F9592 /* Fonts */,
-				B79E0FF92316497C0020C27C /* app.entitlements */,
+				B3B083EB1D4955FF0069CEE7 /* app.entitlements */,
 				0B26BE711EC5BC4D00EEFB41 /* Frameworks */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				13B07FAE1A68108700A75B9A /* src */,
 				5E96ADD5E49F3B3822EF9A52 /* Pods */,
 				0BEA5C261F7B8F73000D0AB4 /* Watch app */,
 				0BEA5C351F7B8F73000D0AB4 /* WatchKit extension */,
+				4EB06025260E026600F524C5 /* JitsiMeetBroadcast Extension */,
+				D47546BBD5204D1592814307 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -208,16 +309,43 @@
 			isa = PBXGroup;
 			children = (
 				13B07F961A680F5B00A75B9A /* WEHAGO Meet.app */,
+				4EB06023260E026600F524C5 /* WehagoMeetBroadcastExtension.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		D47546BBD5204D1592814307 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				96D7E4D506C4437BA1F3B579 /* AntDesign.ttf */,
+				1F6E4808E11241FD888B81CB /* Entypo.ttf */,
+				1CFDDA5CD9DE4E30A4AE33A8 /* EvilIcons.ttf */,
+				BCE17EC6878E415B9366BF5E /* Feather.ttf */,
+				E30251FCF893482A823EB3CC /* FontAwesome.ttf */,
+				440A3B3E04824CBD89125EC7 /* FontAwesome5_Brands.ttf */,
+				3829BA3B87B240CFAD016E3B /* FontAwesome5_Regular.ttf */,
+				B187FE8495B44F138B823C31 /* FontAwesome5_Solid.ttf */,
+				AAAE30678B664ABF9597E238 /* Fontisto.ttf */,
+				42CF4547463644F2AE0A11A3 /* Foundation.ttf */,
+				D070A209F4E44BB2B82F50B5 /* Ionicons.ttf */,
+				02AA3DC8748248B489A8A6BD /* MaterialCommunityIcons.ttf */,
+				7443D8986FEF4591AE20685C /* MaterialIcons.ttf */,
+				6C5F60D3F05247468B32762B /* Octicons.ttf */,
+				E7DCC18FC4D24C7A8FD342DD /* SimpleLineIcons.ttf */,
+				18E0E509A0794B61AE8D32CA /* Zocial.ttf */,
+				99CF24157FF14692825B45C4 /* DOUZONEText10.ttf */,
+				4B3421C1BF50477C8F0F51A9 /* DOUZONEText30.ttf */,
+				0CF5A52C0ACD47E99E1972C4 /* DOUZONEText50.ttf */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		13B07F861A680F5B00A75B9A /* jitsi-meet */ = {
+		13B07F861A680F5B00A75B9A /* WehagoMeet */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "jitsi-meet" */;
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "WehagoMeet" */;
 			buildPhases = (
 				B6607F42A5CF0C76E98929E2 /* [CP] Check Pods Manifest.lock */,
 				0BBA83C41EC9F7600075A103 /* Run React packager */,
@@ -225,21 +353,39 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				0B26BE701EC5BC3C00EEFB41 /* Embed Frameworks */,
-				B35383AD1DDA0083008F406A /* Adjust embedded framework architectures */,
 				0BB7DA181EC9E695007AAE98 /* Adjust ATS */,
 				DEF4813D224925A2002AD03A /* Copy Google Plist file */,
 				DE11877A21EE09640078D059 /* Setup Google reverse URL handler */,
 				DE4F6D6E22005C0400DE699E /* Setup Dropbox */,
 				0BEA5C491F7B8F73000D0AB4 /* Embed Watch Content */,
+				4EC49B9025BED71300E76218 /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4EB0602A260E026600F524C5 /* PBXTargetDependency */,
+			);
+			name = WehagoMeet;
+			productName = "Jitsi Meet";
+			productReference = 13B07F961A680F5B00A75B9A /* WEHAGO Meet.app */;
+			productType = "com.apple.product-type.application";
+		};
+		4EB06022260E026600F524C5 /* WehagoMeetBroadcastExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4EB0602C260E026700F524C5 /* Build configuration list for PBXNativeTarget "WehagoMeetBroadcastExtension" */;
+			buildPhases = (
+				4EB0601F260E026600F524C5 /* Sources */,
+				4EB06020260E026600F524C5 /* Frameworks */,
+				4EB06021260E026600F524C5 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = "jitsi-meet";
-			productName = "Jitsi Meet";
-			productReference = 13B07F961A680F5B00A75B9A /* WEHAGO Meet.app */;
-			productType = "com.apple.product-type.application";
+			name = WehagoMeetBroadcastExtension;
+			productName = "JitsiMeetBroadcast Extension";
+			productReference = 4EB06023260E026600F524C5 /* WehagoMeetBroadcastExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -247,7 +393,8 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1150;
+				LastSwiftUpdateCheck = 1240;
+				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = Facebook;
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
@@ -259,6 +406,9 @@
 								enabled = 1;
 							};
 						};
+					};
+					4EB06022260E026600F524C5 = {
+						CreatedOnToolsVersion = 12.4;
 					};
 				};
 			};
@@ -277,7 +427,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				13B07F861A680F5B00A75B9A /* jitsi-meet */,
+				13B07F861A680F5B00A75B9A /* WehagoMeet */,
+				4EB06022260E026600F524C5 /* WehagoMeetBroadcastExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -287,14 +438,38 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8A08EF3C260ADE12007EB029 /* InfoPlist.strings in Resources */,
 				0B412F211EDEE95300B1A0A6 /* Main.storyboard in Resources */,
-				8A08EF37260ADDDD007EB029 /* InfoPlist.strings in Resources */,
-				8A08EF30260ADC36007EB029 /* InfoPlist.strings in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
-				B773AA0E23CC60EC00047498 /* Launch Screen.storyboard in Resources */,
-				B753A84E2318DB4B003F9592 /* Fonts in Resources */,
+				BA3F9908B5C9486BADBB5BDA /* AntDesign.ttf in Resources */,
+				F064381ADDF548409D9529CA /* Entypo.ttf in Resources */,
+				BAD296FC9C84493795D508FD /* EvilIcons.ttf in Resources */,
+				3BF721CD40E54E3DAEEA93E2 /* Feather.ttf in Resources */,
+				07866616193C4547BB53A8C5 /* FontAwesome.ttf in Resources */,
+				B44361510E9344469689B522 /* FontAwesome5_Brands.ttf in Resources */,
+				6AAE0D16495D4BB4AB64DB60 /* FontAwesome5_Regular.ttf in Resources */,
+				34A476BBE4B648418B3A250E /* FontAwesome5_Solid.ttf in Resources */,
+				4F9847D71A774AB88425D33D /* Fontisto.ttf in Resources */,
+				DD0B91E1C23E45A4A4876292 /* Foundation.ttf in Resources */,
+				8AF6C8072702E683001F6494 /* ko.lproj in Resources */,
+				FC190ABC6BA64E6F8A3057FE /* Ionicons.ttf in Resources */,
+				5043A8A0282842B7AF0A0329 /* MaterialCommunityIcons.ttf in Resources */,
+				D52263BC69B44F169BF6E044 /* MaterialIcons.ttf in Resources */,
+				8AF6C8062702E683001F6494 /* en.lproj in Resources */,
+				6EBB9C6A0D724BD49FDA16FB /* Octicons.ttf in Resources */,
+				CFD9EA02141A442991401EC1 /* SimpleLineIcons.ttf in Resources */,
+				9ED76A7D4CD14CF2833AD5D8 /* Zocial.ttf in Resources */,
+				1D9C556ECB7D4EBFBB12EBDB /* DOUZONEText10.ttf in Resources */,
+				FD246213C22A4AC29BA889AD /* DOUZONEText30.ttf in Resources */,
+				352C5A791AC3408180CBBD62 /* DOUZONEText50.ttf in Resources */,
+				8AF6C8052702E683001F6494 /* ja.lproj in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4EB06021260E026600F524C5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -329,20 +504,6 @@
 			shellPath = /bin/sh;
 			shellScript = "../scripts/run-packager.sh\n";
 		};
-		B35383AD1DDA0083008F406A /* Adjust embedded framework architectures */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Adjust embedded framework architectures";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "../scripts/fixup-frameworks.sh\n";
-		};
 		B6607F42A5CF0C76E98929E2 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -358,7 +519,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-jitsi-meet-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-WehagoMeet-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -433,15 +594,33 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4EB0601F260E026600F524C5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4EB0603C260E09D000F524C5 /* SocketConnection.swift in Sources */,
+				4EB0603E260E09D000F524C5 /* SampleUploader.swift in Sources */,
+				4EB0603D260E09D000F524C5 /* DarwinNotificationCenter.swift in Sources */,
+				4EB06027260E026600F524C5 /* SampleHandler.swift in Sources */,
+				4E90F9402632D1AB001102D4 /* Atomic.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4EB0602A260E026600F524C5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4EB06022260E026600F524C5 /* WehagoMeetBroadcastExtension */;
+			targetProxy = 4EB06029260E026600F524C5 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		0BEA5C271F7B8F73000D0AB4 /* Interface.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				0BEA5C281F7B8F73000D0AB4 /* Base */,
-				B7D753BF231CCB1B00342182 /* ko */,
-				8A08EF36260ADDB9007EB029 /* ja */,
 			);
 			name = Interface.storyboard;
 			sourceTree = "<group>";
@@ -450,34 +629,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				13B07FB21A68108700A75B9A /* Base */,
-				B7D753BE231CCB1B00342182 /* ko */,
-				8A08EF35260ADDB9007EB029 /* ja */,
 			);
 			name = LaunchScreen.xib;
-			sourceTree = "<group>";
-		};
-		8A08EF32260ADC36007EB029 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				8A08EF31260ADC36007EB029 /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		8A08EF39260ADDDD007EB029 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				8A08EF38260ADDDD007EB029 /* ja */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		8A08EF3E260ADE12007EB029 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				8A08EF3D260ADE12007EB029 /* ko */,
-			);
-			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -485,32 +638,24 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1A8AAD3E332248076EAFF455 /* Pods-jitsi-meet.debug.xcconfig */;
+			baseConfigurationReference = 9F891AAA22E2843EF91D9684 /* Pods-WehagoMeet.debug.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconRelease;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = app.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 23;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = BR6U9G47ZR;
 				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"../../node_modules/react-native-webrtc/ios",
-				);
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-				);
 				INFOPLIST_FILE = src/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 2.1.7;
+				MARKETING_VERSION = 2.2.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -519,38 +664,28 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.douzone.wehagomeet;
 				PRODUCT_NAME = "WEHAGO Meet";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_WORKSPACE = YES;
 			};
 			name = Debug;
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C0EF928B7F8CD15D578C61B0 /* Pods-jitsi-meet.release.xcconfig */;
+			baseConfigurationReference = 7CD88D13B8FF2670B191D6CD /* Pods-WehagoMeet.release.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconRelease;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = app.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 23;
 				DEVELOPMENT_TEAM = BR6U9G47ZR;
 				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"../../node_modules/react-native-webrtc/ios",
-				);
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-				);
 				INFOPLIST_FILE = src/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 2.1.7;
+				MARKETING_VERSION = 2.2.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -559,8 +694,79 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.douzone.wehagomeet;
 				PRODUCT_NAME = "WEHAGO Meet";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+			};
+			name = Release;
+		};
+		4EB0602D260E026700F524C5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "broadcast-extension/extension.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 23;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = BR6U9G47ZR;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "broadcast-extension/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 2.2.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.douzone.wehagomeet.broadcast;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_WORKSPACE = YES;
+			};
+			name = Debug;
+		};
+		4EB0602E260E026700F524C5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "broadcast-extension/extension.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 23;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = BR6U9G47ZR;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "broadcast-extension/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 2.2.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.douzone.wehagomeet.broadcast;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -616,10 +822,11 @@
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -668,10 +875,11 @@
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -679,11 +887,20 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "jitsi-meet" */ = {
+		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "WehagoMeet" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
 				13B07F951A680F5B00A75B9A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4EB0602C260E026700F524C5 /* Build configuration list for PBXNativeTarget "WehagoMeetBroadcastExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4EB0602D260E026700F524C5 /* Debug */,
+				4EB0602E260E026700F524C5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

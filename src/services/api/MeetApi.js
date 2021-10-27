@@ -922,6 +922,43 @@ export default {
     }
   },
 
+  recordRequest: async (room, requestUser) => {
+    let url = '';
+    let signature;
+    if (isDev) {
+      url = `${meetURL}/record/request`;
+    } else {
+      const accsessUrl = `/video/record/request`;
+      const token = await getToken(accsessUrl);
+      const encText = accsessUrl + token.cur_date + token.token;
+      const hashText = CryptoJS.SHA256(encText);
+      signature = CryptoJS.enc.Base64.stringify(hashText);
+      url = `${wehagoBaseURL0}${accsessUrl}`;
+    }
+
+    try {
+      const data = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          signature
+        },
+        body: JSON.stringify({
+          room,
+          request_user: requestUser
+        })
+      };
+      const response = await fetch(url, data);
+      if (response.status !== 200) {
+        throw await response.json();
+      }
+      return response.json();
+    } catch (err) {
+      console.warn('recordRequest : ', err);
+      return false;
+    }
+  },
+  
   checkTest: async () => {
     const accsessUrl = '/test';
     // const signature = await getSignature(accsessUrl);

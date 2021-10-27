@@ -192,7 +192,6 @@ const serviceCheck = async (auth, type) => {
     });
 
     const responseJson = await response.json();
-    debugger;
     if (responseJson.resultCode === 200) {
       const hasService = responseJson.resultData['isServiceDeploy'] === 'T';
       return hasService;

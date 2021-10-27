@@ -1,6 +1,5 @@
 /*
- * Copyright @ 2018-present 8x8, Inc.
- * Copyright @ 2017-2018 Atlassian Pty Ltd
+ * Copyright @ 2017-present 8x8, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -82,7 +81,7 @@ public class MainActivity extends JitsiMeetActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // JitsiMeet.showSplashScreen(this); 
+        // JitsiMeet.showSplashScreen(this);
         super.onCreate(savedInstanceState);
     }
 
@@ -183,10 +182,10 @@ public class MainActivity extends JitsiMeetActivity {
         }
     }
 
-    @Override
-    protected void onConferenceTerminated(HashMap<String, Object> extraData) {
-        Log.d(TAG, "Conference terminated: " + extraData);
-    }
+    // @Override
+    // protected void onConferenceTerminated(HashMap<String, Object> extraData) {
+    //     Log.d(TAG, "Conference terminated: " + extraData);
+    // }
 
     // Activity lifecycle method overrides
     //
