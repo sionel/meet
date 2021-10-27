@@ -8,7 +8,7 @@ import { Image, TouchableOpacity } from 'react-native';
 import RouteTitle from '../Routes/RouteTitle';
 
 const commonStyle = {
-  height: 45,
+  height: 40,
   color: '#fff',
   backgroundColor: '#1C90FB',
   paddingBottom: 15

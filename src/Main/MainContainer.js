@@ -2,7 +2,7 @@
  * MainContainer
  * 최상위화면 컨테이너
  */
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { View, SafeAreaView } from 'react-native';
 
 import MainPresenter from './MainPresenter';
@@ -24,22 +24,29 @@ class MainContainer extends Component {
         description: '',
         actions: [],
         onClose: () => {}
-      }
+      },
+      topAraa:'rgb(0,121,221)',
+      bottomArea : 'rgb(60,160,210)'
     };
   }
+  // backgroundColor: 'rgb(0,111,222)',
 
   render() {
     const { params, destination, onChangeRootState, from } = this.props;
+    debugger
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor:'#1C90FB' }}>
-        <MainPresenter
-          params={params}
-          from={from}
-          destination={destination}
-          onChangeRootState={onChangeRootState}
-          onChangeMainState={this._handleChangeMainState}
-        />
-      </SafeAreaView>
+      <Fragment>
+        <SafeAreaView style={{ flex: 0, backgroundColor: this.state.topAraa }} />
+        <SafeAreaView style={{ flex: 1, backgroundColor: 'rgb(60,160,210)' }}>
+          <MainPresenter
+            params={params}
+            from={from}
+            destination={destination}
+            onChangeRootState={onChangeRootState}
+            onChangeMainState={this._handleChangeMainState}
+          />
+        </SafeAreaView>
+      </Fragment>
     );
   }
 
