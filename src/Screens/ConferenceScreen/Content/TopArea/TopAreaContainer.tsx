@@ -32,7 +32,7 @@ function TopAreaContainer(props) {
   const penButton = true;
   const docShareButton =
     memberType !== 1 && deployedServices.includes('wedrive');
-  const screenShareButton = Platform.OS === 'ios' && !Platform.isPad;
+  const screenShareButton = Platform.OS === 'ios' ? !Platform.isPad : true;
   const switchButton = !isScreenShare;
   const reverseButton = !isScreenShare;
 

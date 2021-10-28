@@ -30,7 +30,7 @@ const ConferenceScreenPresenter = props => {
   // console.log(props.connection);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    // <SafeAreaView style={{ flex: 1 }}>
       <View style={{ flex: 1 }}>
         <SimpleNoti />
         {Platform.OS === 'ios' ? <ScreenShareIOS /> : <ScreenShareANDROID />}
@@ -56,7 +56,7 @@ const ConferenceScreenPresenter = props => {
           <LoadingIndicator />
         )}
       </View>
-    </SafeAreaView>
+    // </SafeAreaView>
   );
 };
 

@@ -11,7 +11,6 @@ const commonStyle = {
   height: 40,
   color: '#fff',
   backgroundColor: '#1C90FB',
-  paddingBottom: 15
 };
 const backBtn = require('../../assets/buttons/back_btn.png');
 
