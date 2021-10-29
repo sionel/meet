@@ -80,28 +80,12 @@ const ParticipantBoxPresenter = props => {
       style={styles.container}
       onPress={() => props.setMainUser(props.user.id)}
     >
-      <View
-        style={styles.videoArea}
-        // style={[styles.videoArea, props.isSelect && styles.videoAreaSelected]}
-      >
-        {content}
-        {/* {(props.isMuteAudio || props.isMuteMic) && (
-          <CustomIcon
-            name={'icoMikeOff'}
-            width={24}
-            height={24}
-            style={{
-              position: 'absolute',
-              bottom: 5,
-              right: 5
-            }}
-          />
-        )} */}
-      </View>
+      <View style={styles.videoArea}>{content}</View>
       <View style={styles.nameArea}>
         <Text ellipsizeMode="tail" numberOfLines={1} style={styles.name}>
           {getUserName(props.user)}
         </Text>
+        <Text style={{ color: '#fff' }}>{props.number}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -122,7 +106,8 @@ const styles = StyleSheet.create({
     // height: 120,
     display: 'flex',
     marginHorizontal: 5
-    // marginLeft: 10
+    // marginLeft: 10,
+    // backgroundColor:'#5f5'
   },
   videoArea: {
     flex: 1,
@@ -134,10 +119,6 @@ const styles = StyleSheet.create({
     // borderColor: 'rgba(255, 255, 255, 0.5)',
     // borderRadius: 50,
     overflow: 'hidden'
-  },
-  videoAreaSelected: {
-    borderWidth: 3,
-    borderColor: '#039BE5'
   },
   video: {
     flex: 1,

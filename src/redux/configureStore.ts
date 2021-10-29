@@ -25,6 +25,7 @@ import toast from './modules/toast';
 import deployed, { state as deployedState } from './modules/deployed';
 import screenShare, { state as screenShageState } from './modules/ScreenShare';
 import indicator, { state as indicatorState } from './modules/indicator';
+import orientation, { state as orientationState } from './modules/orientation';
 /**
  * middleware list
  */
@@ -53,6 +54,7 @@ export interface RootState {
   record: any;
   indicator: indicatorState;
   deployed: deployedState;
+  orientation: orientationState;
 }
 
 /**
@@ -76,7 +78,8 @@ const persistConfig = {
     'toast',
     'deployed',
     'ScreenShare',
-    'indicator'
+    'indicator',
+    'orientation'
   ]
 };
 
@@ -98,7 +101,8 @@ const reducer = persistCombineReducers(persistConfig, {
   toast,
   deployed,
   screenShare,
-  indicator
+  indicator,
+  orientation
 });
 
 /**

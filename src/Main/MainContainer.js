@@ -33,11 +33,10 @@ class MainContainer extends Component {
 
   render() {
     const { params, destination, onChangeRootState, from } = this.props;
-    debugger
     return (
       <Fragment>
-        <SafeAreaView style={{ flex: 0, backgroundColor: this.state.topAraa }} />
-        <SafeAreaView style={{ flex: 1, backgroundColor: 'rgb(60,160,210)' }}>
+        {/* <SafeAreaView style={{ flex: 0, backgroundColor: this.state.topAraa }} />
+        <SafeAreaView style={{ flex: 1, backgroundColor: 'rgb(60,160,210)' }}> */}
           <MainPresenter
             params={params}
             from={from}
@@ -45,7 +44,7 @@ class MainContainer extends Component {
             onChangeRootState={onChangeRootState}
             onChangeMainState={this._handleChangeMainState}
           />
-        </SafeAreaView>
+        {/* </SafeAreaView> */}
       </Fragment>
     );
   }

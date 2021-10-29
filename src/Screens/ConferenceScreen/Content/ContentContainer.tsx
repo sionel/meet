@@ -73,10 +73,11 @@ function ContentContainer(props: any) {
     };
   }, []);
 
-  useEffect(() => {
-    const m = getConferenceManager();
-    if (mainUser.id !== 'localUser') m?.setReceiverConstraints(mainUser.id);
-  }, [mainUser]);
+  // useEffect(() => {
+  //   const m = getConferenceManager();
+  //   if (mainUser.id !== 'localUser') m?.setReceiverConstraints(mainUser.id);
+  // }, [mainUser]);
+
   const _handleSetRef = ref => {
     if (ref && RNBS !== ref) RNBS = ref;
   };

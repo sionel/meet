@@ -48,17 +48,19 @@ class ConferenceManager {
       externalAPIScope
     );
   };
-  setReceiverConstraints = id => {
-    // console.log(123123123123);
-    this._room.setReceiverConstraints({
+  setReceiverConstraints = (id, sublist = []) => {
+    const obj = {
       colibriClass: 'ReceiverVideoConstraints',
-      lastN: -1,
+      lastN: sublist.length + 1,
       onStageEndpoints: [id],
+      selectedEndpoints: sublist,
       defaultConstraints: { maxHeight: 180 },
       constraints: {
         [id]: { maxHeight: 720 }
       }
-    });
+    };
+    console.log(sublist);
+    this._room.setReceiverConstraints(obj);
   };
   getMutedPolicy = () => this._room.startMutedPolicy;
   getMyId = () => this._room.myUserId();

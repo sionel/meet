@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 import Alert from './Alert';
 import Indicator from './Indicator';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import Orientation, { OrientationType } from 'react-native-orientation-locker';
+import { actionCreators as orientationAction } from '../redux/modules/orientation';
 
 export default function CustomProvider(props) {
   const { children } = props;
@@ -10,9 +12,21 @@ export default function CustomProvider(props) {
   const indicator = useSelector(state => state.indicator);
   const { visible: alertVisible } = alert;
   const { visible: indicatorVisible } = indicator;
-  
+  const dispatch = useDispatch();
+
+  const _setOrientation = orientation => {
+    dispatch(orientationAction.setOrientation(orientation));
+  };
+
+  useEffect(() => {
+    Orientation.addOrientationListener(_setOrientation);
+    return () => {
+      Orientation.removeOrientationListener(_setOrientation);
+    };
+  }, []);
+
   return (
-    <View style={{ flex: 1,zIndex:9 }}>
+    <View style={{ flex: 1, zIndex: 9 }}>
       {alertVisible && <Alert />}
       {indicatorVisible && <Indicator />}
       {children}
