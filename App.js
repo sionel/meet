@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { AppRegistry } from 'react-native';
+import { AppRegistry, Linking } from 'react-native';
 import { Provider, useDispatch } from 'react-redux';
 import { PersistGate } from 'redux-persist/es/integration/react';
 import configureStore from './src/redux/configureStore';
@@ -20,11 +20,20 @@ function App(props) {
 
   useEffect(() => {
     Splash.hide();
+    // Linking.getInitialURL().then(url => console.log('getInitialURL : ', url));
+    Linking.addEventListener('url', event => {
+      // console.log('addEventListener : ', event.url);
+      dispatch(actionCreators.setRootState({ loaded: false, url: event.url }));
+    });
     setT(props.t);
+
+    // return () => Linking.removeEventListener('url');
   }, []);
 
   useEffect(() => {
-    dispatch(actionCreators.setRootState({ url: props?.url?.url }));
+    dispatch(
+      actionCreators.setRootState({ loaded: false, url: props?.url?.url })
+    );
   }, [props.url]);
 
   return <Main />;
@@ -33,7 +42,10 @@ function App(props) {
 function AppWapper(props) {
   const { persistor, store } = configureStore();
   console.reportErrorsAsExceptions = false;
-
+  store.dispatch({
+    type: 'local.SET_EXTERNAL',
+    externalAPIScope: props.externalAPIScope
+  });
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>

@@ -4,7 +4,6 @@
  */
 
 import { connect } from 'react-redux';
-import { Rootsstate } from '../redux/modules/root';
 import MainContainer from './MainContainer';
 
 import { actionCreators as rootActions } from '../redux/modules/root';
@@ -22,8 +21,8 @@ const mapStateToProps = (state) => {
 
 // map dispatch to props
 const mapDispatchToProps = (dispatch) => {
-  const setRootState = (rstate) => {
-    dispatch(rootActions.setRootState(rstate));
+  const setRootState = (rootstate) => {
+    dispatch(rootActions.setRootState(rootstate));
   };
   return { setRootState };
 };

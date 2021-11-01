@@ -4,11 +4,10 @@ import {
   View,
   TouchableHighlight,
   TouchableOpacity,
-  // Text,
-  // TextInput,
+  Text,
+  TextInput,
   Platform
 } from 'react-native';
-import { Text, TextInput } from '../../components/StyledText';
 import { ScrollView } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import LinearGradient from 'react-native-linear-gradient';
@@ -16,7 +15,7 @@ import LinearGradient from 'react-native-linear-gradient';
 //mulLug
 //다국어 적용 안되어있음
 
-const arrowRight = require('../../../assets/new/icons/ic_arrow_right.png');
+// const arrowRight = require('../../../assets/new/icons/ic_arrow_right.png');
 
 const LoginScreenPresenter = (props: any) => {
   const {
@@ -32,7 +31,7 @@ const LoginScreenPresenter = (props: any) => {
     isHorizon,
     isTablet,
     t,
-    logging
+    logging,goLoginInput
   } = props;
 
   return (
@@ -61,9 +60,13 @@ const LoginScreenPresenter = (props: any) => {
             <View style={{ flex: 1 }} />
 
             <View style={styles.topContainer}>
-              <Text style={styles.textHead}>참여코드를 입력해주세요</Text>
-              <Text style={styles.textSub1}>공유받은 참여코드 입력 후</Text>
-              <Text style={styles.textSub2}>바로 회의에 참여해보세요.</Text>
+              <Text style={styles.textHead}>{t('renewal.login_code')}</Text>
+              <Text style={styles.textSub1}>
+                {t('renewal.login_codemessage1')}
+              </Text>
+              <Text style={styles.textSub2}>
+                {t('renewal.login_codemessage2')}
+              </Text>
             </View>
             <View style={{ flex: 0.7 }} />
             <View style={styles.codeContainer}>
@@ -76,7 +79,7 @@ const LoginScreenPresenter = (props: any) => {
                 caretHidden={true}
                 maxLength={6}
                 editable={code.length === 6 ? false : true}
-                customRef={codeLineRef}
+                ref={codeLineRef}
               />
               <TextInput
                 style={[
@@ -153,10 +156,8 @@ const LoginScreenPresenter = (props: any) => {
                 isHorizon && !isTablet && { top: '-4%' }
               ]}
             >
-              {joincodeErr &&
-                '대소문자(A~F), 숫자(0~9) 이외의 값은 입력할수 없습니다.'}
-              {inputcodeErr &&
-                '일치하는 회의가 없습니다. 확인 후 다시 입력해주세요.'}
+              {joincodeErr && t('renewal.text_incorrect_code_error')}
+              {inputcodeErr && t('renewal.text_nomatch_conference_error')}
             </Text>
 
             <View
@@ -178,10 +179,21 @@ const LoginScreenPresenter = (props: any) => {
                   onPress={LoginForWehago}
                 >
                   <Text style={styles.loginBtnText}>
-                    WEHAGO 계정으로 로그인
+                    {t('renewal.login_wehagologin')}
                   </Text>
                 </TouchableHighlight>
               </LinearGradient>
+
+              <TouchableHighlight
+                  activeOpacity={0.7}
+                  underlayColor={'red'}
+                  style={{backgroundColor:'red'}}
+                  onPress={goLoginInput}
+                >
+                  <Text style={styles.loginBtnText}>
+                    {'입력페이지로'}
+                  </Text>
+                </TouchableHighlight>
             </View>
             <View style={{ flex: 1 }} />
             <View style={{ flex: 0.5 }} />

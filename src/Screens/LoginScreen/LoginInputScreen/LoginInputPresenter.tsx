@@ -7,11 +7,12 @@ import {
   View,
   Animated,
   ScrollView,
-  Platform
+  Platform,
+  Text,
+  TextInput
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Text, TextInput } from '../../../components/StyledText';
-import {CustomCheckBoxContainer as CheckBox} from '../../../components/CustomCheckBox';
+import { CustomCheckBoxContainer as CheckBox } from '../../../components/CustomCheckBox';
 import LinearGradient from 'react-native-linear-gradient';
 import CustomAlert from '../../../components/CustomAlert';
 import { reduceRight } from '../../../../webpack.config';
@@ -47,16 +48,13 @@ const LoginInputPresenter = (props: any) => {
     errorMsg,
     handleChangeCaptcha,
     t,
-    cycleAnimated,
     spin,
     isHorizon,
     isTablet,
     clearId,
     onCheck,
-    check,
+    check
   } = props;
-
-  cycleAnimated();
 
   return (
     <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -79,7 +77,7 @@ const LoginInputPresenter = (props: any) => {
           ]}
         >
           <TouchableOpacity
-            style={{ flex: 1, zIndex: 3}}
+            style={{ flex: 1, zIndex: 3 }}
             activeOpacity={1}
             onPress={inputFocusOut}
           >
@@ -92,13 +90,13 @@ const LoginInputPresenter = (props: any) => {
             {captcha && (
               <View style={[styles.captchaMessageContainer]}>
                 <Text style={[styles.captchaMessageText, { marginBottom: 4 }]}>
-                  {t('login_exceeded')}
+                  {t('renewal.login_exceeded')}
                 </Text>
                 <Text style={[styles.captchaMessageText, { color: '#ababab' }]}>
-                  {t('login_prevent')}
+                  {t('renewal.login_prevent')}
                 </Text>
                 <Text style={[styles.captchaMessageText, { color: '#ababab' }]}>
-                  {t('login_fivetimes')}
+                  {t('renewal.login_fivetimes')}
                 </Text>
               </View>
             )}
@@ -112,13 +110,10 @@ const LoginInputPresenter = (props: any) => {
               >
                 <Image source={user} style={styles.loginicon} />
                 <TextInput
-                  style={[
-                    styles.inputLoginText,
-                    isTablet && styles.padInputLoginText
-                  ]}
-                  placeholder={t('login_id')}
+                  style={styles.inputLoginText}
+                  placeholder={t('renewal.login_id')}
                   placeholderTextColor={'rgb(147,147,147)'}
-                  customRef={usernameRef}
+                  ref={usernameRef}
                   value={userId}
                   returnKeyType="next"
                   autoCapitalize="none"
@@ -128,11 +123,7 @@ const LoginInputPresenter = (props: any) => {
                 {userId !== '' && (
                   <TouchableOpacity
                     onPress={clearId}
-                    style={{
-                      right: -10,
-                      bottom: -15,
-                      position: 'absolute'
-                    }}
+                    style={styles.idClearView}
                   >
                     <Image source={cancel} style={styles.cancelIcon} />
                   </TouchableOpacity>
@@ -147,14 +138,11 @@ const LoginInputPresenter = (props: any) => {
               >
                 <Image source={lock} style={styles.loginicon} />
                 <TextInput
-                  style={[
-                    styles.inputLoginText,
-                    isTablet && styles.padInputLoginText
-                  ]}
-                  placeholder={t('login_pw')}
+                  style={styles.inputLoginText}
+                  placeholder={t('renewal.login_pw')}
                   placeholderTextColor={'rgb(147,147,147)'}
                   secureTextEntry={true}
-                  customRef={passwordRef}
+                  ref={passwordRef}
                   value={password}
                   returnKeyType="go"
                   autoCapitalize="none"
@@ -172,14 +160,14 @@ const LoginInputPresenter = (props: any) => {
                   isHorizon && !isTablet && { top: 0 }
                 ]}
               >
-                {t('login_incorrect')}
+                {t('renewal.login_incorrect')}
               </Text>
             )}
 
             {captcha && (
               <View style={[styles.captchaMessageContainer]}>
                 <Text style={styles.captchaMessageText}>
-                  {t('login_input')}
+                  {t('renewal.login_input')}
                 </Text>
                 <View style={styles.captchaAreaView}>
                   <View style={styles.captchaArea}>
@@ -196,16 +184,16 @@ const LoginInputPresenter = (props: any) => {
                       style={styles.captchaRefresh}
                     >
                       <Text style={{ color: '#ababab' }}>
-                        {t('login_refresh')}
+                        {t('renewal.login_refresh')}
                       </Text>
                     </TouchableOpacity>
                   </View>
                 </View>
 
                 <TextInput
-                  customRef={captchaRef}
+                  ref={captchaRef}
                   value={captchaInput}
-                  placeholder={t('login_preventAuto')}
+                  placeholder={t('renewal.login_preventAuto')}
                   placeholderTextColor={'rgb(147,147,147)'}
                   selectionColor={'#505050'}
                   returnKeyType={'next'}
@@ -252,12 +240,17 @@ const LoginInputPresenter = (props: any) => {
                       <Image source={loading} style={styles.loadingIcon} />
                     </Animated.View>
                   ) : (
-                    <Text style={styles.loginBtnText}>{t('login_login')}</Text>
+                    <Text style={styles.loginBtnText}>{t('renewal.login_login')}</Text>
                   )}
                 </TouchableHighlight>
               </LinearGradient>
 
-              <CheckBox text="아이디 저장" color="#e6e6e6" onCheck={onCheck} checked={check}/>
+              <CheckBox
+                text={t('renewal.login_auto')}
+                color="#e6e6e6"
+                onCheck={onCheck}
+                checked={check}
+              />
             </View>
             <View style={{ flex: 1.2 }}></View>
             <View style={styles.copyrightContainer}>
@@ -269,19 +262,13 @@ const LoginInputPresenter = (props: any) => {
           <View style={styles.topImgView}>
             <Image
               source={patternTop}
-              style={[
-                styles.topImg,
-                isTablet && { width: 350, height: 350 }
-              ]}
+              style={isTablet ? styles.topPadImg : styles.topImg}
             />
           </View>
           <View style={[styles.bottomImgView]}>
             <Image
               source={patternBot}
-              style={[
-                styles.bottomImg,
-                isTablet && { width: 390, height: 123 }
-              ]}
+              style={isTablet ? styles.botPadImg : styles.bottomImg}
             />
           </View>
           <CustomAlert
@@ -371,24 +358,20 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1
   },
   loginicon: {
-    resizeMode: 'center',
-    left: -20,
-    bottom: -15,
-    position: 'absolute'
+    resizeMode: 'contain',
+    width: 24,
+    height: 24
   },
   cancelIcon: {
     resizeMode: 'center'
   },
   inputLoginText: {
     flex: 1,
-    paddingLeft: '10%',
+    // paddingHorizontal: '10%',
     paddingVertical: Platform.OS === 'ios' ? 10 : 6,
     fontSize: 16,
     fontWeight: '200',
     color: 'black'
-  },
-  padInputLoginText: {
-    paddingLeft: '9%'
   },
   loginFailedText: {
     color: 'red',
@@ -442,24 +425,30 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 0,
     top: 0,
-    zIndex: 1,
+    zIndex: 1
   },
   topImg: {
     resizeMode: 'contain',
     width: 240,
     height: 240
   },
+  topPadImg: {
+    resizeMode: 'contain',
+    width: 350,
+    height: 350
+  },
   bottomImgView: {
     position: 'absolute',
     left: 0,
     bottom: '10%',
-    zIndex: 2,
+    zIndex: 2
   },
   bottomImg: {
     resizeMode: 'contain',
     width: 260,
     height: 82
   },
+  botPadImg: { width: 390, height: 123 },
   refresh: {
     marginLeft: 6,
     padding: 6,
@@ -474,6 +463,11 @@ const styles = StyleSheet.create({
   },
   errorMsg: {
     color: 'red'
+  },
+  idClearView: {
+    right: -10,
+    bottom: -15,
+    position: 'absolute'
   }
 });
 

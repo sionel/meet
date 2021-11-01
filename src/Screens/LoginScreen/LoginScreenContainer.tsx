@@ -5,16 +5,16 @@ import { Linking, Platform } from 'react-native';
 // import { actionCreators as UserActions } from '../../redux/modules/user';
 // 01import { actionCreators as AlertActions } from '../../redux/modules/alert';
 import {
-  actionCreators as RootActions,
-  Rootsstate
+  actionCreators as RootActions, Rootsstate
 } from '../../redux/modules/root';
 import { getT } from '../../utils/translateManager';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Orientation, {
   OrientationType,
   useDeviceOrientationChange,
 } from 'react-native-orientation-locker';
 import deviceInfoModule from 'react-native-device-info';
+import { RootState } from '../../redux/configureStore';
 
 const LoginScreenContainer = ({ navigation }: any) => {
   const isIOS = Platform.OS === 'ios';
@@ -34,12 +34,12 @@ const LoginScreenContainer = ({ navigation }: any) => {
   //     permission: state.user.permission
   //   };
   // });
-
+  
   const dispatch = useDispatch();
   // const setAlert = (params: any) => dispatch(AlertActions.setAlert(params));
 
-  const setRootState = (rstate: Rootsstate) =>
-    dispatch(RootActions.setRootState(rstate));
+  const setRootState = (rootstate: Rootsstate) =>
+    dispatch(RootActions.setRootState(rootstate));
 
   //
   const t = getT();
@@ -115,27 +115,13 @@ const LoginScreenContainer = ({ navigation }: any) => {
 
   const LoginForWehago = () => {
     let serviceCode;
-
     serviceCode = isIOS ? 'wehagomeet' : 'meet';
 
     const iosUrl = `wehago://?${serviceCode}=login`;
     const androidUrl = `wehago://app?name=${serviceCode}&login=true`;
-    // const iosMarketURL =
-    //   'http://itunes.apple.com/kr/app/wehago/id1363039300?mt=8';
-    // const androidMarketURL =
-    //   'https://play.google.com/store/apps/details?id=com.duzon.android.lulubizpotal';
 
     Linking.openURL(isIOS ? iosUrl : androidUrl).catch(err => {
       goLoginInput();
-      // Linking.openURL(
-      //   Platform.OS === 'ios' ? iosMarketURL : androidMarketURL
-      // ).catch(err => {
-      //   setAlert({
-      //     type: 1,
-      //     title: t('alert_title_error'),
-      //     message: t('alert_text_no_app_store')
-      //   });
-      // });
     });
   };
 
@@ -151,8 +137,6 @@ const LoginScreenContainer = ({ navigation }: any) => {
       setIsHorizon(false);
     }
   };
-
-  useEffect(() => {});
 
   useDeviceOrientationChange((orientation: OrientationType) => {
     _handleHorizon(orientation);
@@ -173,7 +157,8 @@ const LoginScreenContainer = ({ navigation }: any) => {
         isHorizon,
         isTablet,
         t,
-        logging
+        logging,
+        goLoginInput
       }}
     />
   );

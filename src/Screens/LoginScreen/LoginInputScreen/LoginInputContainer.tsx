@@ -1,22 +1,21 @@
 import React, { RefObject, useEffect, useState } from 'react';
-import { Animated, Dimensions, Easing, Platform } from 'react-native';
+import { Animated, Easing, Platform } from 'react-native';
 import LoginInputPresenter from './LoginInputPresenter';
 import UserApi from '../../../services/api/LoginApi/UserApi';
+import { UserApi as UserApi2 } from '../../../services';
 import { getT } from '../../../utils/translateManager';
 import ServiceCheckApi from '../../../services/api/ServiceCheckApi';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../redux/configureStore';
 import { actionCreators as UserActions } from '../../../redux/modules/user';
 import {
-  actionCreators as RootActions,
-  Rootsstate
+  actionCreators as RootActions, Rootsstate
 } from '../../../redux/modules/root';
 import Orientation, {
   OrientationType,
-  useDeviceOrientationChange,
+  useDeviceOrientationChange
 } from 'react-native-orientation-locker';
 import deviceInfoModule from 'react-native-device-info';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // import { useTranslation } from 'react-i18next';
 
@@ -33,8 +32,8 @@ const LoginInputContainer = () => {
     outputRange: ['0deg', '360deg']
   });
 
-  const [userId, setUserId] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+  const [userId, setUserId] = useState<string>('95yeongil');
+  const [password, setPassword] = useState<string>('rladusrlf1');
   const [captcha, setCaptcha] = useState<string | null>(null);
   const [captchaInput, setCaptchaInput] = useState<string>('');
   const [logging, setLogging] = useState<boolean>(false);
@@ -54,40 +53,42 @@ const LoginInputContainer = () => {
   const passwordRef: RefObject<any> = React.useRef(null);
   const captchaRef: RefObject<any> = React.useRef(null);
 
+  //selector
   const { auth } = useSelector((state: RootState) => {
     return {
-      auth: state.user.auth,
+      auth: state.user.auth
     };
   });
+  //
 
+  //dispatch
   const dispatch = useDispatch();
-  const loginCheckRequest = (
-    AUTH_A_TOKEN: any,
-    AUTH_R_TOKEN: any,
-    cno: any,
-    HASH_KEY: any,
-    from: any
-  ) =>
-    dispatch(
-      UserActions.loginCheckRequest(
-        AUTH_A_TOKEN,
-        AUTH_R_TOKEN,
-        cno,
-        HASH_KEY,
-        from
-      )
-    );
   const setPermission = (permission: any) =>
     dispatch(UserActions.setPermission(permission));
 
-  const setRootState = (rstate: Rootsstate) =>
-    dispatch(RootActions.setRootState(rstate));
+  const setRootState = (rootstate:Rootsstate) =>
+    dispatch(RootActions.setRootState(rootstate));
 
-  const onCheck = () => {
-    setCheck(!check);
+  const login = (auth: any, from: any, chk: boolean) =>{
+    dispatch(UserActions.login(auth, from, chk));
   }
+  const logout = () => dispatch(UserActions.logout());
+  const eventLog = (evnet: any) => dispatch(UserActions.eventLog(evnet));
+  // const setAuth = (auth: any) => dispatch(UserActions.setAuth(auth));
+  //
 
-  const _handleCheckServce = async (auth: any) => {
+  useEffect(() => {
+    let authR = auth;
+    if (Object.keys(authR).length !== 0) {
+      _handleCheckService(authR);
+    }
+  }, [auth]);
+
+  useDeviceOrientationChange((orientation: OrientationType) => {
+    _handleHorizon(orientation);
+  });
+
+  const _handleCheckService = async (auth: any) => {
     const statusCheck = await ServiceCheckApi.companyStatusCheck(
       auth,
       auth.last_access_company_no
@@ -125,12 +126,12 @@ const LoginInputContainer = () => {
       };
       setAlertVisible({
         visible: true,
-        title: t('alert_title_notion'),
+        title: t('renewal.alert_title_notion'),
         description: statusCheck.message,
         onClose,
         actions: [
           {
-            name: t('alert_button_confirm'),
+            name: t('renewal.alert_button_confirm'),
             action: onClose
           }
         ]
@@ -141,30 +142,6 @@ const LoginInputContainer = () => {
       });
     }
   };
-
-  useEffect(() => {
-    let authR = auth;
-    if (Object.keys(authR).length !== 0) {
-      _handleCheckServce(authR);
-    }
-  }, [auth]);
-
-  useEffect(() => {
-    AsyncStorage.getItem('idchk', (err, result) => {
-      let chk = result;
-      if(chk === 'Y') {
-        AsyncStorage.getItem('id', (err, result) => {
-          setUserId(String(result));
-        });
-      }
-
-    });
-  },[])
-
-  
-  useDeviceOrientationChange((orientation: OrientationType) => {
-    _handleHorizon(orientation);
-  });
 
   const _handleHorizon = (orientation: OrientationType) => {
     if (orientation === 'LANDSCAPE-LEFT' || orientation === 'LANDSCAPE-RIGHT') {
@@ -197,12 +174,12 @@ const LoginInputContainer = () => {
       _resetAlert();
       setAlertVisible({
         visible: true,
-        title: t('alert_title_login_fail'),
-        description: t('alert_text_incorrect_prevent'),
+        title: t('renewal.alert_title_login_fail'),
+        description: t('renewal.alert_text_incorrect_prevent'),
         onClose,
         actions: [
           {
-            name: t('alert_button_confirm'),
+            name: t('renewal.alert_button_confirm'),
             action: onClose
           }
         ]
@@ -224,7 +201,6 @@ const LoginInputContainer = () => {
       captcha,
       access_pass
     );
-
     const tempPw = password.slice();
     setLogging(false);
     setPassword('');
@@ -238,22 +214,22 @@ const LoginInputContainer = () => {
           _resetAlert();
           setAlertVisible({
             visible: true,
-            title: t('alert_title_notion'),
-            description: t('alert_text_duplicate_login'),
+            title: t('renewal.alert_title_notion'),
+            description: t('renewal.alert_text_duplicate_login'),
             onClose: () => {
               _resetAlert();
               resolve(false);
             },
             actions: [
               {
-                name: t('alert_button_cancel'),
+                name: t('renewal.alert_button_cancel'),
                 action: () => {
                   _resetAlert();
                   resolve(false);
                 }
               },
               {
-                name: t('alert_button_confirm'),
+                name: t('renewal.alert_button_confirm'),
                 action: () => {
                   _resetAlert();
                   resolve(true);
@@ -265,123 +241,22 @@ const LoginInputContainer = () => {
 
         if (!resultAlert) return setLogging(false);
         else {
-          await loginchk(userId, password, captcha, 'T');
+          loginchk(userId, password, captcha, 'T');
           return;
         }
       }
+      // if (
+      //   getAuth.resultData.viewType &&
+      //   getAuth.resultData.viewType === 'qrcode'
+      // ) {
+      //   await setCaptcha(null);
+      //   loginchk(userId, tempPw, null);
+      //   return;
+      // }
 
       // 로그인 성공 시
-      if (
-        getAuth.resultData.viewType &&
-        getAuth.resultData.viewType === 'qrcode'
-      ) {
-        await setCaptcha(null);
-        loginchk(userId, tempPw, null);
-        return;
-      }
-
-    
-      await AsyncStorage.setItem('idchk', check ? 'Y' : 'N');
-
       const auth = getAuth.resultData;
-      const result = await loginCheckRequest(
-        auth.AUTH_A_TOKEN,
-        auth.AUTH_R_TOKEN,
-        auth.last_access_company_no,
-        auth.HASH_KEY,
-        'this'
-      );
-      if (result.errors) {
-        if (result.errors.code === 'E002') {
-          const onClose = () => {
-            _resetAlert();
-            UserActions.logout();
-          };
-
-          _resetAlert();
-          setAlertVisible({
-            visible: true,
-            title: t('alert_title_notion'),
-            description: t('alert_text_duplicate_logout'),
-            onClose,
-            actions: [
-              {
-                name: t('alert_button_confirm'),
-                action: onClose
-              }
-            ]
-          });
-        } else if (result.errors.status === '400') {
-          const onClose = () => {
-            _resetAlert();
-          };
-          _resetAlert();
-          setAlertVisible({
-            visible: true,
-            title: t('alert_title_notion'),
-            description: t('alert_text_login_info_error'),
-            onClose,
-            actions: [
-              {
-                name: t('alert_button_confirm'),
-                action: onClose
-              }
-            ]
-          });
-        } else if (result.errors.status === '401') {
-          const onClose = () => {
-            _resetAlert();
-          };
-          _resetAlert();
-          setAlertVisible({
-            visible: true,
-            title: t('alert_title_notion'),
-            description: t('alert_text_no_right'),
-            onClose,
-            actions: [
-              {
-                name: t('alert_button_confirm'),
-                action: onClose
-              }
-            ]
-          });
-        } else if (result.errors.message === 'timeout') {
-          const onClose = () => {
-            _resetAlert();
-          };
-          _resetAlert();
-          setAlertVisible({
-            visible: true,
-            title: t('alert_title_notion'),
-            description: t('alert_text_timeover'),
-            onClose,
-            actions: [
-              {
-                name: t('alert_button_confirm'),
-                action: onClose
-              }
-            ]
-          });
-        } else {
-          const onClose = () => {
-            _resetAlert();
-          };
-          _resetAlert();
-          setAlertVisible({
-            visible: true,
-            title: t('alert_title_notion'),
-            description: t('alert_text_problem_ocurred'),
-            onClose,
-            actions: [
-              {
-                name: t('alert_button_confirm'),
-                action: onClose
-              }
-            ]
-          });
-        }
-        return;
-      }
+      _loginApiRequest(auth);
     } else {
       // 로그인 실패
       captcha && setCaptcha(_getTransactionId());
@@ -393,12 +268,12 @@ const LoginInputContainer = () => {
         _resetAlert();
         setAlertVisible({
           visible: true,
-          title: t('alert_title_login_fail'),
-          description: t('alert_text_incorrect_id'),
+          title: t('renewal.alert_title_login_fail'),
+          description: t('renewal.alert_text_incorrect_id'),
           onClose,
           actions: [
             {
-              name: t('alert_button_confirm'),
+              name: t('renewal.alert_button_confirm'),
               action: onClose
             }
           ]
@@ -414,12 +289,12 @@ const LoginInputContainer = () => {
         _resetAlert();
         setAlertVisible({
           visible: true,
-          title: t('alert_title_login_fail'),
-          description: t('alert_text_five'),
+          title: t('renewal.alert_title_login_fail'),
+          description: t('renewal.alert_text_five'),
           onClose,
           actions: [
             {
-              name: t('alert_button_confirm'),
+              name: t('renewal.alert_button_confirm'),
               action: onClose
             }
           ]
@@ -431,12 +306,12 @@ const LoginInputContainer = () => {
         _resetAlert();
         setAlertVisible({
           visible: true,
-          title: t('alert_title_limit'),
-          description: t('alert_text_unable'),
+          title: t('renewal.alert_title_limit'),
+          description: t('renewal.alert_text_unable'),
           onClose,
           actions: [
             {
-              name: t('alert_button_confirm'),
+              name: t('renewal.alert_button_confirm'),
               action: onClose
             }
           ]
@@ -448,17 +323,171 @@ const LoginInputContainer = () => {
         _resetAlert();
         setAlertVisible({
           visible: true,
-          title: t('alert_title_login_fail'),
-          description: t('alert_text_login_fail'),
+          title: t('renewal.alert_title_login_fail'),
+          description: t('renewal.alert_text_login_fail'),
           onClose,
           actions: [
             {
-              name: t('alert_button_confirm'),
+              name: t('renewal.alert_button_confirm'),
               action: onClose
             }
           ]
         });
       }
+    }
+  };
+
+  const _loginApiRequest = async (auth: any) => {
+    const result = await _loginCheckRequest(
+      auth.AUTH_A_TOKEN,
+      auth.AUTH_R_TOKEN,
+      auth.last_access_company_no,
+      auth.HASH_KEY,
+      'this'
+    );
+    if (result.errors) {
+      if (result.errors.code === 'E002') {
+        const onClose = () => {
+          _resetAlert();
+          logout();
+        };
+
+        _resetAlert();
+        setAlertVisible({
+          visible: true,
+          title: t('renewal.alert_title_notion'),
+          description: t('renewal.alert_text_duplicate_logout'),
+          onClose,
+          actions: [
+            {
+              name: t('renewal.alert_button_confirm'),
+              action: onClose
+            }
+          ]
+        });
+      } else if (result.errors.status === '400') {
+        const onClose = () => {
+          _resetAlert();
+        };
+        _resetAlert();
+        setAlertVisible({
+          visible: true,
+          title: t('renewal.alert_title_notion'),
+          description: t('renewal.alert_text_login_info_error'),
+          onClose,
+          actions: [
+            {
+              name: t('renewal.alert_button_confirm'),
+              action: onClose
+            }
+          ]
+        });
+      } else if (result.errors.status === '401') {
+        const onClose = () => {
+          _resetAlert();
+        };
+        _resetAlert();
+        setAlertVisible({
+          visible: true,
+          title: t('renewal.alert_title_notion'),
+          description: t('renewal.alert_text_no_right'),
+          onClose,
+          actions: [
+            {
+              name: t('renewal.alert_button_confirm'),
+              action: onClose
+            }
+          ]
+        });
+      } else if (result.errors.message === 'timeout') {
+        const onClose = () => {
+          _resetAlert();
+        };
+        _resetAlert();
+        setAlertVisible({
+          visible: true,
+          title: t('renewal.alert_title_notion'),
+          description: t('renewal.alert_text_timeover'),
+          onClose,
+          actions: [
+            {
+              name: t('renewal.alert_button_confirm'),
+              action: onClose
+            }
+          ]
+        });
+      } else {
+        const onClose = () => {
+          _resetAlert();
+        };
+        _resetAlert();
+        setAlertVisible({
+          visible: true,
+          title: t('renewal.alert_title_notion'),
+          description: t('renewal.alert_text_problem_ocurred'),
+          onClose,
+          actions: [
+            {
+              name: t('renewal.alert_button_confirm'),
+              action: onClose
+            }
+          ]
+        });
+      }
+      return;
+    }
+
+  }
+
+  const _loginCheckRequest = async (
+    AUTH_A_TOKEN: any,
+    AUTH_R_TOKEN: any,
+    cno: any,
+    HASH_KEY: any,
+    from: any
+  ) => {
+    const checkResult = await UserApi2.check(
+      AUTH_A_TOKEN,
+      AUTH_R_TOKEN,
+      cno,
+      HASH_KEY
+    );
+
+    if (checkResult.resultCode === 200) {
+      const userData = {
+        // login api data
+        AUTH_A_TOKEN,
+        AUTH_R_TOKEN,
+        HASH_KEY,
+        cno,
+        // check api data
+        user_no: checkResult.resultData.user_no,
+        portal_id: checkResult.resultData.portal_id, // 아이디
+        user_name: checkResult.resultData.user_name,
+        user_default_email: checkResult.resultData.user_default_email,
+        user_email: checkResult.resultData.user_email,
+        profile_url: checkResult.resultData.profile_url,
+        user_contact: checkResult.resultData.user_contact,
+        employee_list: checkResult.resultData.employee_list, // 회사정보
+        last_access_company_no: checkResult.resultData.last_access_company_no
+          ? checkResult.resultData.last_access_company_no
+          : cno,
+        last_company: checkResult.resultData.last_access_company_no
+          ? checkResult.resultData.employee_list.filter(
+              (e: any) =>
+                e.company_no == checkResult.resultData.last_access_company_no
+            )[0]
+          : checkResult.resultData.employee_list[0], // last_access_company_no가 비어있는 상태로 올 수 있어서 null이 뜬다면 리스트중 첫번째 인덱스로 처리
+        member_type: checkResult.resultData.member_type, // 0: 일반회원, 1: 개인회원
+        nickname: checkResult.nickname,
+        membership_code: checkResult.resultData.employee_list[0].membership_code
+      };
+      login(userData, from, check);
+      return checkResult;
+    } else {
+      const result = checkResult.errors ? checkResult : { errors: checkResult };
+      eventLog(result);
+      return result;
     }
   };
 
@@ -502,6 +531,10 @@ const LoginInputContainer = () => {
     setPassword(text.trim());
   };
 
+  const onCheck = () => {
+    setCheck(!check);
+  };
+
   const clearId = () => setUserId('');
 
   const cycleAnimated = () => {
@@ -514,6 +547,8 @@ const LoginInputContainer = () => {
       })
     ).start();
   };
+
+  cycleAnimated();
 
   return (
     <LoginInputPresenter
