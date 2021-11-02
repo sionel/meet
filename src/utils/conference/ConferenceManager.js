@@ -59,7 +59,6 @@ class ConferenceManager {
         [id]: { maxHeight: 720 }
       }
     };
-    console.log(sublist);
     this._room.setReceiverConstraints(obj);
   };
   getMutedPolicy = () => this._room.startMutedPolicy;

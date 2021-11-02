@@ -179,12 +179,10 @@ const setRemakeThumbNail = async (authData, fileInfo) => {
       },
       body: serialize(bodyData)
     };
-    console.log('bodyData', bodyData, data);
 
     return FetchCancel(url, data, 'getFileInfo')
       .then(response => response.json())
       .then(responseJson => {
-        console.log('responseJson11', responseJson);
         alert(responseJson.serverMsg);
         return responseJson;
       });

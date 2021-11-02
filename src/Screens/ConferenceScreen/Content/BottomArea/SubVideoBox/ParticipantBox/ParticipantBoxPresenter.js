@@ -85,7 +85,6 @@ const ParticipantBoxPresenter = props => {
         <Text ellipsizeMode="tail" numberOfLines={1} style={styles.name}>
           {getUserName(props.user)}
         </Text>
-        <Text style={{ color: '#fff' }}>{props.number}</Text>
       </View>
     </TouchableOpacity>
   );

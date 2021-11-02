@@ -26,16 +26,16 @@ const reducer: (state: state, action: AnyAction) => state = (
 
 const setOrientation = (state: string) => {
   switch (state) {
-    case 'PORTRAIT':
-    case 'PORTRAIT-UPSIDEDOWN':
-      state = 'vertical';
-      break;
     case 'LANDSCAPE-LEFT':
     case 'LANDSCAPE-RIGHT':
       state = 'horizontal';
       break;
+    case 'PORTRAIT':
+    case 'PORTRAIT-UPSIDEDOWN':
+    default:
+      state = 'vertical';
+      break;
   }
-
   return {
     type: SET,
     state

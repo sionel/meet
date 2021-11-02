@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Button } from 'react-native';
 import Alert from './Alert';
 import Indicator from './Indicator';
 import { useSelector, useDispatch } from 'react-redux';
-import Orientation, { OrientationType } from 'react-native-orientation-locker';
+import Orientation, {
+  OrientationType,
+  useDeviceOrientationChange
+} from 'react-native-orientation-locker';
 import { actionCreators as orientationAction } from '../redux/modules/orientation';
 
 export default function CustomProvider(props) {
@@ -14,7 +17,7 @@ export default function CustomProvider(props) {
   const { visible: indicatorVisible } = indicator;
   const dispatch = useDispatch();
 
-  const _setOrientation = orientation => {
+  const _setOrientation = (orientation: OrientationType) => {
     dispatch(orientationAction.setOrientation(orientation));
   };
 
@@ -24,7 +27,7 @@ export default function CustomProvider(props) {
       Orientation.removeOrientationListener(_setOrientation);
     };
   }, []);
-
+  useDeviceOrientationChange(_setOrientation);
   return (
     <View style={{ flex: 1, zIndex: 9 }}>
       {alertVisible && <Alert />}

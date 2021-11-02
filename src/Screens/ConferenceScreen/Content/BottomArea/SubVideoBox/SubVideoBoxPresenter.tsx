@@ -9,7 +9,7 @@ const SubVideoBoxPresenter = props => {
   // debugger
   return (
     <ScrollView
-      horizontal={props.orientation1 === 'vertical'}
+      horizontal={props.orientation === 'vertical'}
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={Object.assign(
         {},
