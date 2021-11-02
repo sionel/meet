@@ -68,9 +68,6 @@ function ContentContainer(props: any) {
   let RNBS;
 
   useEffect(() => {
-console.log(props);
-    
-    debugger
     _handleChangeSpeaker();
     Orientation.addOrientationListener(_setOrientation);
     return () => {
