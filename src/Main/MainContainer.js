@@ -14,12 +14,9 @@ class MainContainer extends Component {
   constructor(props) {
     super();
   }
-  // const { destination, params, loaded, url, t } = props;
 
-  render() {
-    const {loaded} = this.props;
-    
-    return <MainPresenter {...{loaded}}/>
+  render() {    
+    return <MainPresenter/>
   }
 
 }

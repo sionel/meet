@@ -20,6 +20,7 @@ import { actionCreators as WedriveAcions } from '../../redux/modules/wedrive';
 import { actionCreators as AlertAcions } from '../../redux/modules/alert';
 import { actionCreators as IndicatorAcions } from '../../redux/modules/indicator';
 import { actionCreators as RootActions } from '../../redux/modules/root';
+import _ from 'lodash';
 
 // const iswehagov = WEHAGO_ENV === 'WEHAGOV';
 
@@ -29,9 +30,22 @@ import { actionCreators as RootActions } from '../../redux/modules/root';
 //     : null;
 
 const SplashScreenContainer = (props: any) => {
-  const [serverNoti, setServerNoti] = useState([]);
-  const [notiIndex, setNotiIndex] = useState(0);
-  const [first, setFirst] = useState(true);
+  const [state, setState] = useState({
+    first: true,
+    index: 0,
+    servernoti: []
+  });
+  const [alertVisible, setAlertVisible] = useState({
+    visible: false,
+    description: '',
+    onClose: () => {},
+    actions: [{ name: '', action: () => {} }],
+    title: ''
+  });
+
+  const [time, setTime] = useState<NodeJS.Timeout | null>(null);
+  const [num, setnum] = useState<number>(1);
+
   const t = getT();
 
   //#region  selector
@@ -75,14 +89,13 @@ const SplashScreenContainer = (props: any) => {
   const setIndicator = (message: any) =>
     dispatch(IndicatorAcions.setIndicator(message));
   const resetIndicator = () => dispatch(IndicatorAcions.resetIndicator());
-  const _setLoaded = (loaded: boolean) =>
-    dispatch(RootActions.setLoaded(loaded));
-  const _setDestination = (destination: string) =>
-    dispatch(RootActions.setDestination(destination));
-  const _setParams = (params: {}) => dispatch(RootActions.setParams(params));
-  const _setVideoId = (id: string) => dispatch(RootActions.setVideoId(id));
-  const _setUrl = (url: string|undefined) => dispatch(RootActions.setUrl(url));
   const eventLog = (event: any) => dispatch(UserActions.eventLog(event));
+  const setLoaded = (loaded: boolean) =>
+    dispatch(RootActions.setLoaded(loaded));
+  const setDestination = (destination: string) =>
+    dispatch(RootActions.setDestination(destination));
+  const setParams = (params: {}) => dispatch(RootActions.setParams(params));
+  const setUrl = (url: string) => dispatch(RootActions.setUrl(url));
 
   //#endregion
 
@@ -91,30 +104,82 @@ const SplashScreenContainer = (props: any) => {
     setInitInfo();
     setSharingMode();
 
-    _handleInit();
-
-  }, []);
-
-  useEffect(() => {
-    if (!first) {
-      if (url) _handleGetDeeplink(url);
-      else autoLoginChk();
+    if (url) {
+      _handleGetDeeplink(url);
+    } else {
+      _handleInit();
     }
-  }, [url, first]);
+    console.log(url);
+    console.log(num);
+    setnum(num + 1);
+
+    // const m = getConferenceManager();
+
+    // setIndicator(m);
+    // m?.dispose();
+  }, [url]);
 
   const _handleInit = async () => {
+    !autoLogin && onLogout();
     // 버전 확인
     _handleCheckVersion();
     // 노티 확인
     let servernoti: [] = [];
     servernoti = await _handleCheckNotice(servernoti);
     if (servernoti.length > 0) {
-      setServerNoti(servernoti);
+      setState({ ...state, servernoti, index: 0 });
     } else {
-      setTimeout(() => {
-        setFirst(false);
-      }, 2000);
+      const result = await _handleCheckAutoLogin();
+      if (result === 'success') {
+        setRootState(true, 'List', {
+          accesstype: 'login'
+        });
+      } else if (result === 'dany') {
+        setRootState(true, 'SelectCompany', {});
+      } else {
+        if (result === 'autoLoginFalse') {
+          if (auth !== {}) await UserApi.logoutRequest(auth);
+        }
+        // onLogout();
+        setRootState(true, 'Login', {});
+      }
     }
+  };
+
+  const setRootState = (
+    loaded?: any,
+    destination?: string,
+    params?: {},
+    url?: string
+  ) => {
+    if (loaded !== undefined) {
+      setLoaded(loaded);
+    }
+
+    if (destination !== undefined) {
+      setDestination(destination);
+    }
+
+    if (params !== undefined) {
+      setParams(params);
+    }
+
+    if (url !== undefined) {
+      setUrl(url);
+    }
+  };
+
+  const _setRootState = (
+    loaded?: boolean,
+    destination?: string,
+    params?: {},
+    url?: string
+  ) => {
+    time && clearTimeout(time);
+    const tmp = setTimeout(() => {
+      setRootState(loaded, destination, params, url);
+    }, 2000);
+    setTime(tmp);
   };
 
   const _handleCheckVersion = async () => {
@@ -168,51 +233,26 @@ const SplashScreenContainer = (props: any) => {
   };
 
   const _handleNextNotice = async () => {
-    if (serverNoti.length === notiIndex + 1) {
+    const { servernoti, index } = state;
+    if (servernoti.length === index + 1) {
       const result = await _handleCheckAutoLogin();
       if (result === 'success') {
-        _setLoaded(true);
-        _setDestination('List');
-        _setParams({
+        _setRootState(true, 'List', {
           accesstype: 'login'
         });
       } else if (result === 'dany') {
-        _setLoaded(true);
-        _setDestination('SelectCompany');
-        _setParams({});
+        _setRootState(true, 'SelectCompany', {});
       } else {
         onLogout();
-        _setLoaded(true);
-        _setDestination('Login');
-        _setParams({});
+        _setRootState(true, 'Login', {});
       }
     } else {
-      setNotiIndex(notiIndex + 1);
+      setState({
+        ...state,
+        index: index + 1
+      });
     }
   };
-
-  async function autoLoginChk() {
-    const result = await _handleCheckAutoLogin()
-      if (result === 'success') {
-        _setLoaded(true);
-        _setDestination('List');
-        _setParams({
-          accesstype: 'login'
-        })
-      } else if (result === 'dany') {
-        _setLoaded(true);
-        _setDestination('SelectCompany');
-        _setParams({});
-      } else {
-        if (result === 'autoLoginFalse') {
-          if (auth !== {}) await UserApi.logoutRequest(auth);
-        }
-        onLogout();
-        _setLoaded(true);
-        _setDestination('Login');
-        _setParams({});
-      }
-  }
 
   //자동로그인
   const _handleCheckAutoLogin = async () => {
@@ -272,7 +312,7 @@ const SplashScreenContainer = (props: any) => {
       }
     } else {
       return 'autoLoginFalse';
-    }3
+    }
   };
 
   //DeepLink로 접근
@@ -291,11 +331,7 @@ const SplashScreenContainer = (props: any) => {
       room_name=123 // talk방 이름
     */
     if (!url) return;
-    let result: any = querystringParser(url)
-    // if(result.type === 'conference') {
-    // if(result.video_id) {
-      result.video_id && _setVideoId(result.video_id);
-    // }
+    let result: any = querystringParser(url);
     // 화상회의 요청인지 판별
     if (result.is_creater) {
       // 오래된 딥링크 주소 차단
@@ -305,12 +341,14 @@ const SplashScreenContainer = (props: any) => {
         message: 'meet 앱에서 다시 접근 해주시길 바랍니다'
       });
       return;
-    } else if (result.mHASH_KEY && result.cno) {
+    } else if (result.mPORTAL_ID && result.cno) {
       //토근정보가 있을때
-      const { mHASH_KEY, mAuth_r_token, mAuth_a_token, cno } = result;
-      onLogout();
 
-      const info = await _loginCheckRequest(
+      const { mHASH_KEY, mAuth_r_token, mAuth_a_token, cno } = result;
+
+      onLogout();
+      let info: any;
+      info = await _loginCheckRequest(
         mAuth_a_token,
         mAuth_r_token,
         cno,
@@ -355,12 +393,9 @@ const SplashScreenContainer = (props: any) => {
       } else {
         _handleOnLogin(info);
       }
-
     } else if (result.login_info === 'email') {
       //토근정보가 없을때
       let decoded = jwt_decode(result.token);
-
-      
       /*
       email: "sadb0101@naver.com"
       exp: 1919234662
@@ -368,13 +403,14 @@ const SplashScreenContainer = (props: any) => {
       room: "b15091c1-2acd-47f6-aa7c-6a94df0e5a17"
       sub: "video.wehago.com"
       */
-      _setLoaded(true);
-      _setDestination('Setting');
-      _setParams({
+      setLoaded(true);
+      setDestination('Setting');
+      setParams({
         roomId: decoded.room,
         accesstype: 'email',
         token: result.token
       });
+      setUrl('');
     }
   };
 
@@ -398,15 +434,33 @@ const SplashScreenContainer = (props: any) => {
       );
 
       const isDeploy = isDeployWehagomeet || isDeployWebrtc;
+
       setPermission(isDeploy);
-      _setLoaded(true);
-      _setDestination(isDeploy ? 'List' : 'SelectCompany');
-      _setParams({
+      setDestination(isDeploy ? 'List' : 'SelectCompany');
+      setParams({
         accesstype: 'login'
       });
+    } else if (statusCheck && statusCheck.code === 400) {
+      const onClose = () => {
+        setDestination('SelectCompany');
+        setParams({
+          accesstype: 'login'
+        });
+      };
+      setAlertVisible({
+        visible: true,
+        title: t('renewal.alert_title_notion'),
+        description: statusCheck.message,
+        onClose,
+        actions: [
+          {
+            name: t('renewal.alert_button_confirm'),
+            action: onClose
+          }
+        ]
+      });
     } else {
-      _setLoaded(true);
-      _setDestination('SelectCompany');
+      setDestination('SelectCompany');
     }
   };
 
@@ -468,7 +522,7 @@ const SplashScreenContainer = (props: any) => {
 
   return (
     <SplashScreenPresenter
-      servernoti={serverNoti[notiIndex]}
+      servernoti={state.servernoti[state.index]}
       loaded={loaded}
       children={props.children}
     />

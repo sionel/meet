@@ -19,7 +19,7 @@ const mapDispatchTopProps = dispatch => ({
   },
   onDestroyToken: () => dispatch(UserActions.token()),
   onToggleVisibleAppIntro: () => dispatch(UserActions.toggleVisibleAppIntro()),
-  setRootState: (rstate) => dispatch(RootActions.setRootState(rstate))
+  setDestination: (destination) => dispatch(RootActions.setDestination(destination))
 });
 
 export default connect(

@@ -8,9 +8,7 @@ import ServiceCheckApi from '../../../services/api/ServiceCheckApi';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../redux/configureStore';
 import { actionCreators as UserActions } from '../../../redux/modules/user';
-import {
-  actionCreators as RootActions, Rootsstate
-} from '../../../redux/modules/root';
+import { actionCreators as RootActions } from '../../../redux/modules/root';
 import Orientation, {
   OrientationType,
   useDeviceOrientationChange
@@ -66,12 +64,16 @@ const LoginInputContainer = () => {
   const setPermission = (permission: any) =>
     dispatch(UserActions.setPermission(permission));
 
-  const setRootState = (rootstate:Rootsstate) =>
-    dispatch(RootActions.setRootState(rootstate));
+  const setLoaded = (loaded: boolean) =>
+    dispatch(RootActions.setLoaded(loaded));
+  const setDestination = (destination: string) =>
+    dispatch(RootActions.setDestination(destination));
+  const setParams = (params: {}) => dispatch(RootActions.setParams(params));
+  const setUrl = (url: string) => dispatch(RootActions.setUrl(url));
 
-  const login = (auth: any, from: any, chk: boolean) =>{
+  const login = (auth: any, from: any, chk: boolean) => {
     dispatch(UserActions.login(auth, from, chk));
-  }
+  };
   const logout = () => dispatch(UserActions.logout());
   const eventLog = (evnet: any) => dispatch(UserActions.eventLog(evnet));
   // const setAuth = (auth: any) => dispatch(UserActions.setAuth(auth));
@@ -108,21 +110,15 @@ const LoginInputContainer = () => {
       );
       const isDeploy = isDeployWehagomeet || isDeployWebrtc;
       setPermission(isDeploy);
-      setRootState({
-        destination: isDeploy ? 'List' : 'SelectCompany',
-        params: {
-          accesstype: 'login'
-        }
+      setDestination(isDeploy ? 'List' : 'SelectCompany');
+      setParams({
+        accesstype: 'login'
       });
     } else if (statusCheck && statusCheck.code === 400) {
       const onClose = () => {
         _resetAlert();
-        setRootState({
-          destination: 'SelectCompany',
-          params: {
-            accesstype: 'login'
-          }
-        });
+        setDestination('SelectCompany');
+        setParams({accesstype: 'login'});
       };
       setAlertVisible({
         visible: true,
@@ -137,9 +133,7 @@ const LoginInputContainer = () => {
         ]
       });
     } else {
-      setRootState({
-        destination: 'SelectCompany'
-      });
+      setDestination('SelectCompany');
     }
   };
 
@@ -436,8 +430,7 @@ const LoginInputContainer = () => {
       }
       return;
     }
-
-  }
+  };
 
   const _loginCheckRequest = async (
     AUTH_A_TOKEN: any,

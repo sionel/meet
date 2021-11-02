@@ -7,6 +7,8 @@ const mapStateToProps = state => ({
   auth: state.user.auth,
   from: state.user.from,
   params: state.root.params,
+  videoId: state.root.videoId,
+
 });
 
 const mapDispatchTopProps = dispatch => ({});

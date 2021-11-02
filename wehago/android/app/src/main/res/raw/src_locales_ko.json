@@ -259,7 +259,9 @@
       "login_login": "로그인",
       "login_incorrect": "아이디 또는 비밀번호가 올바르지 않습니다.",
       "login_auto": "자동 로그인",
-      "toast_closeapp": "한번 더 누르면 앱이 종료됩니다."
+      "toast_closeapp": "한번 더 누르면 앱이 종료됩니다.",
+      "option_conference": "화상회의",
+      "roomstate_setting_header": "기본 설정"
     }
   }
 }

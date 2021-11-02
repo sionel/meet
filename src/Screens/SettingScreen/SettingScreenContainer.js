@@ -22,7 +22,7 @@ class SettingScreenContainer extends React.Component {
   }
 
   async componentDidMount() {
-    const {params} = this.props;
+    const {params,isLogin} = this.props;
     this._init();
     let tracks = await this._getTrack();
     let accesstype = params?.accesstype;
@@ -40,7 +40,7 @@ class SettingScreenContainer extends React.Component {
     Orientation.addOrientationListener(this._handleOrientation);
     this.setState({
       tracks: tracks ? tracks : null,
-      nameField: accesstype === 'email' || accesstype === 'joincode',
+      nameField: !isLogin,
       buttonActive: tracks ? true : false
     });
   }
@@ -117,7 +117,7 @@ class SettingScreenContainer extends React.Component {
 
     let roomToken;
 
-    const wedive = await MeetApi.checkWedrive(auth);
+    // const wedive = await MeetApi.checkWedrive(auth);
     
     const randomstring = uuidv4();
     const user = randomstring.substr(0, 8);

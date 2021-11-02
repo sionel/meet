@@ -31,7 +31,7 @@ export default function CompanySelectContainer(props) {
 
   const onLogout = async () => {
     const from = props.from;
-    dispatch(actionCreators.setRootState({ destination: 'Login' }))
+    dispatch(actionCreators.setDestination('Login'));
     from === 'this' && (await UserApi.logoutRequest(auth));
     props.onLogout();
     props.onSetInitialList();

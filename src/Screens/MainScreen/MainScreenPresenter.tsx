@@ -14,8 +14,7 @@ const MainScreenPresenter = (props: any) => {
   const t = getT();
   Orientation.unlockAllOrientations();
   const { handleChangeMainState, destination } = props;
-  const screenProps = {handleChangeMainState, t}
-
+  const screenProps = {handleChangeMainState, t};
   switch (destination) {
     case 'Login':
       return <LoginNavigation screenProps={screenProps} />;

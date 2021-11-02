@@ -71,23 +71,23 @@ class HomeScreenContainer extends Component {
     BackHandler.addEventListener('hardwareBackPress', this._handleBackButton);
   }
 
-  shouldComponentUpdate = (nextProps, nextState) => {
+  // shouldComponentUpdate = (nextProps, nextState) => {
     // [android] 앱이 실행중에 딥링크에 의한 화상회의 연결방법
-    if (
-      // Platform.OS === 'android' &&
-      this.props.screenProps !== nextProps.screenProps
-    ) {
-      this._handleOpenURL(nextProps.screenProps);
-    }
+    // if (
+    //   // Platform.OS === 'android' &&
+    //   this.props.screenProps !== nextProps.screenProps
+    // ) {
+    //   this._handleOpenURL(nextProps.screenProps);
+    // }
 
-    return true;
-  };
+    // return true;
+  // };
 
   componentWillUnmount() {
     clearInterval(this._interval);
     clearTimeout(this.refresh);
     Orientation.removeOrientationListener(this._handleOrientation);
-    Linking.removeEventListener('url', this._handleOpenURL);
+    // Linking.removeEventListener('url', this._handleOpenURL);
     AppState.removeEventListener('change', this._handleAppStateChange);
 
     // 앱 종료를 막음
@@ -100,7 +100,7 @@ class HomeScreenContainer extends Component {
 
   render() {
     const { refreshing, selectedRoomId, orientation, alert } = this.state;
-    const { navigation, auth } = this.props;
+    const { navigation, auth ,setVideoId} = this.props;
     const plan = auth?.last_company?.membership_code; // 요금제 [WE: 엣지, SP: 싱글팩, ...]
  
     let conferenceList = this.props.conference;
@@ -148,6 +148,7 @@ class HomeScreenContainer extends Component {
           onSearch={this._handleSearch}
           onGetWetalkList={this._handleGetWetalkList}
           orientation={this.state.orientation}
+          setVideoId={setVideoId}
           hasNotch={hasNotch}
         />
       </View>
@@ -332,17 +333,13 @@ class HomeScreenContainer extends Component {
         this.props.setAlert({
           type: 1,
           title: this.t('renewal.alert_title_login_fail'),
-          message: this.t(
-            isWehagoV
-              ? this.t('renewal.alert_text_expired')
-              : this.t('renewal.alert_text_duplicate_logout')
-          )
+          message: this.t('renewal.alert_text_duplicate_logout')
         });
         this.props.sessionCheck(false);
       } else {
         this.props.onDisconnect();
       }
-      this.props.setRootState({ destination: 'Login' });
+      this.props.setDestination('Login');
       this.props.onLogout();
     } else {
       this._handleGetWetalkList();

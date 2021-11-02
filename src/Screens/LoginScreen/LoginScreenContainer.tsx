@@ -4,14 +4,12 @@ import { MeetApi } from '../../services';
 import { Linking, Platform } from 'react-native';
 // import { actionCreators as UserActions } from '../../redux/modules/user';
 // 01import { actionCreators as AlertActions } from '../../redux/modules/alert';
-import {
-  actionCreators as RootActions, Rootsstate
-} from '../../redux/modules/root';
+import { actionCreators as RootActions } from '../../redux/modules/root';
 import { getT } from '../../utils/translateManager';
 import { useDispatch, useSelector } from 'react-redux';
 import Orientation, {
   OrientationType,
-  useDeviceOrientationChange,
+  useDeviceOrientationChange
 } from 'react-native-orientation-locker';
 import deviceInfoModule from 'react-native-device-info';
 import { RootState } from '../../redux/configureStore';
@@ -34,12 +32,14 @@ const LoginScreenContainer = ({ navigation }: any) => {
   //     permission: state.user.permission
   //   };
   // });
-  
+
   const dispatch = useDispatch();
   // const setAlert = (params: any) => dispatch(AlertActions.setAlert(params));
 
-  const setRootState = (rootstate: Rootsstate) =>
-    dispatch(RootActions.setRootState(rootstate));
+  const setLoaded = (loaded: boolean) => dispatch(RootActions.setLoaded(loaded));
+  const setDestination = (destination: string) => dispatch(RootActions.setDestination(destination));
+  const setParams = (params: {}) => dispatch(RootActions.setParams(params));
+  const setUrl = (url: string) => dispatch(RootActions.setUrl(url));
 
   //
   const t = getT();
@@ -84,14 +84,12 @@ const LoginScreenContainer = ({ navigation }: any) => {
       //   message: t('alert_text_no_exist_joincode')
       // });
     } else {
-      setRootState({
-        loaded: true,
-        destination: 'Setting',
-        params: {
-          accesstype: 'joincode',
-          roomId: result.resultData.room,
-          joincode
-        }
+      setLoaded(true);
+      setDestination('Setting');
+      setParams({
+        accesstype: 'joincode',
+        roomId: result.resultData.room,
+        joincode
       });
     }
     setLogging(false);

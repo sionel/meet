@@ -46,8 +46,11 @@ const mapDispatchToProps = dispatch => ({
   setAlert: params => dispatch(AlertAcions.setAlert(params)),
   setDeployedServices: params =>
     dispatch(DeployedAcions.setDeployedServices(params)),
-  setRootState: rstate => dispatch(RootActions.setRootState(rstate)),
-  eventLog: event => dispatch(UserActions.eventLog(event))
+  setDestination: destination =>
+    dispatch(RootActions.setDestination(destination)),
+  eventLog: event => dispatch(UserActions.eventLog(event)),
+  setVideoId: id => dispatch(RootActions.setVideoId(id))
+
   // onCreateConference: bodyData => dispatch(ConferenceActions.createConference(...bodyData))
 });
 

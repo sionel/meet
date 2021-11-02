@@ -20,20 +20,17 @@ function App(props) {
 
   useEffect(() => {
     Splash.hide();
-    // Linking.getInitialURL().then(url => console.log('getInitialURL : ', url));
     Linking.addEventListener('url', event => {
-      // console.log('addEventListener : ', event.url);
-      dispatch(actionCreators.setRootState({ loaded: false, url: event.url }));
+      dispatch(actionCreators.setLoaded(false));
+      dispatch(actionCreators.setUrl(event.url));
     });
     setT(props.t);
-
-    // return () => Linking.removeEventListener('url');
   }, []);
 
   useEffect(() => {
-    dispatch(
-      actionCreators.setRootState({ loaded: false, url: props?.url?.url })
-    );
+    dispatch(actionCreators.setLoaded(false));
+    dispatch(actionCreators.setUrl(props?.url?.url));
+    // dispatch(actionCreators.setUrl("com.wehago.meet://?login_info=email&type=conference&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ2aWRlby53ZWhhZ28uY29tIiwicm9vbSI6ImZiYjY2MTliLWFlMmYtNDE0MS05MmNjLTA3NWEyOTBkZWVjNyIsImVtYWlsIjoieWVvbmdpbDQ3NjRAbmF2ZXIuY29tIiwiaWF0IjoxNjM1NzQ3OTY3LCJleHAiOjE5NTExMDc5Njd9.O6UMML-qjav_-rkvLb-6tZvY-NYctt6Yxy0TF03gfxU&timeStamp=1635750152425"));
   }, [props.url]);
 
   return <Main />;

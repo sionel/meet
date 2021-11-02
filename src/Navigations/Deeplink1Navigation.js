@@ -17,21 +17,24 @@ const backBtn = require('../../assets/buttons/back_btn.png');
 
 const BackButton = () => {
   const dispatch = useDispatch();
-  const _setRootState = rstate => dispatch(RootActions.setRootState(rstate));
+  const _setDestination = destination =>
+    dispatch(RootActions.setDestination(destination));
 
-  const root = useSelector(state => state.root);
-  const { destination } = root;
+  const { destination } = useSelector((state) => {
+    return {
+      destination: state.root.destination
+    }
+  });
 
   destination === 'Conference' || destination === 'Setting';
   return (
     <TouchableOpacity
       onPress={() => {
-        _setRootState({
-          destination:
-            destination === 'Conference' || destination === 'Setting'
-              ? 'Login'
-              : 'List'
-        });
+        _setDestination(
+          destination === 'Conference' || destination === 'Setting'
+            ? 'Login'
+            : 'List'
+        );
       }}
     >
       <Image
@@ -49,7 +52,7 @@ const Deeplink1Navigation = createStackNavigator(
       navigationOptions: ({ navigation }) => ({
         headerTitle: (
           <RouteTitle
-            title={navigation.getScreenProps().t('option_conference')}
+            title={navigation.getScreenProps().t('renewal.option_conference')}
           />
         ),
         headerLeft: <BackButton navigation={navigation} />,
@@ -62,7 +65,7 @@ const Deeplink1Navigation = createStackNavigator(
       navigationOptions: ({ navigation }) => ({
         headerTitle: (
           <RouteTitle
-            title={navigation.getScreenProps().t('roomstate_setting_header')}
+            title={navigation.getScreenProps().t('renewal.roomstate_setting_header')}
           />
         ),
         headerLeft: <BackButton navigation={navigation} />,

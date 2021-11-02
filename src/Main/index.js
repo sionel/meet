@@ -15,16 +15,11 @@ const mapStateToProps = (state) => {
   return {
     from,
     loaded
-    // params,
   };
 };
 
 // map dispatch to props
 const mapDispatchToProps = (dispatch) => {
-  const setRootState = (rootstate) => {
-    dispatch(rootActions.setRootState(rootstate));
-  };
-  return { setRootState };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MainContainer);
+export default connect(mapStateToProps, '')(MainContainer);

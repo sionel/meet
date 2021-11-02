@@ -216,8 +216,6 @@ function reducer(state = initialState, action) {
     // case AUTH:
     //   return { ...state, auth: action.auth};
     case LOGIN:
-      console.log(888);
-
       return {
         ...state,
         auth: action.auth,
@@ -228,9 +226,6 @@ function reducer(state = initialState, action) {
       };
     // return applyTest(state, action);
     case LOGOUT:
-      console.log(999);
-      
-
       return {
         ...state,
         auth: {},
