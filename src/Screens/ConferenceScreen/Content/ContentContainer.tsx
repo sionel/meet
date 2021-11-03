@@ -49,8 +49,8 @@ function ContentContainer(props: any) {
   } = useSelector((state: RootState) => {
     return {
       conferenceMode: state.local.conferenceMode,
-      drawingMode: state.mainUser.drawingMode,
-      documentListMode: state.mainUser.documentListMode,
+      drawingMode: state.documentShare.drawingMode,
+      documentListMode: state.documentShare.documentListMode,
       attributes: state.documentShare.attributes,
       localPipMode: state.local.pipMode,
       orientation: state.orientation.orientation
@@ -119,7 +119,7 @@ function ContentContainer(props: any) {
     }
   };
 
-  return props.attributes ? (
+  return attributes ? (
     <FileSharing
       {...props}
       height={height}
