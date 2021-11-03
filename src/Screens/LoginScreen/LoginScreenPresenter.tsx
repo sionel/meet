@@ -183,17 +183,6 @@ const LoginScreenPresenter = (props: any) => {
                   </Text>
                 </TouchableHighlight>
               </LinearGradient>
-
-              {/* <TouchableHighlight
-                  activeOpacity={0.7}
-                  underlayColor={'red'}
-                  style={{backgroundColor:'red'}}
-                  onPress={goLoginInput}
-                >
-                  <Text style={styles.loginBtnText}>
-                    {'입력페이지로'}
-                  </Text>
-                </TouchableHighlight> */}
             </View>
             <View style={{ flex: 1 }} />
             <View style={{ flex: 0.5 }} />

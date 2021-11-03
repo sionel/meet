@@ -36,10 +36,10 @@ const LoginScreenContainer = ({ navigation }: any) => {
   const dispatch = useDispatch();
   // const setAlert = (params: any) => dispatch(AlertActions.setAlert(params));
 
-  const setLoaded = (loaded: boolean) => dispatch(RootActions.setLoaded(loaded));
-  const setDestination = (destination: string) => dispatch(RootActions.setDestination(destination));
-  const setParams = (params: {}) => dispatch(RootActions.setParams(params));
-  const setUrl = (url: string) => dispatch(RootActions.setUrl(url));
+  const _setLoaded = (loaded: boolean) => dispatch(RootActions.setLoaded(loaded));
+  const _setDestination = (destination: string) => dispatch(RootActions.setDestination(destination));
+  const _setParams = (params: {}) => dispatch(RootActions.setParams(params));
+  const _setUrl = (url: string) => dispatch(RootActions.setUrl(url));
 
   //
   const t = getT();
@@ -67,30 +67,20 @@ const LoginScreenContainer = ({ navigation }: any) => {
   };
 
   const _goJoincode = async (joincode: string) => {
+    // V 고려해야할부분 
     setLogging(true);
     const result = await MeetApi.searchJoincode(joincode);
-    if (!result) {
-      setInputcodeErr(true);
-      // setAlert({
-      //   type: 1,
-      //   title: t('alert_title_notion'),
-      //   message: t('alert_text_no_exist_joincode')
-      // });
-    } else if (result.resultData.code === 'E00001') {
-      setInputcodeErr(true);
-      // setAlert({
-      //   type: 1,
-      //   title: t('alert_title_notion'),
-      //   message: t('alert_text_no_exist_joincode')
-      // });
-    } else {
-      setLoaded(true);
-      setDestination('Setting');
-      setParams({
+    if (!result) setInputcodeErr(true);
+    else if (result.resultData.code === 'E00001') setInputcodeErr(true);
+    else {
+      _setLoaded(true);
+      _setParams({
         accesstype: 'joincode',
         roomId: result.resultData.room,
         joincode
       });
+      _setDestination('Setting');
+      
     }
     setLogging(false);
   };

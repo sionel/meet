@@ -99,7 +99,6 @@ export default {
       signature = CryptoJS.enc.Base64.stringify(hashText);
       url = `${wehagoBaseURL0}${accsessUrl}`;
     }
-
     try {
       const data = {
         method: 'GET',

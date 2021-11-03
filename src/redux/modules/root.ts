@@ -9,14 +9,15 @@ const SET_PARAMS = 'root.SET_PARAMS';
 const SET_URL = 'root.SET_URL';
 const SET_VIDEO_ID = 'root.SET_VIDEO_ID';
 
-// export interface Rootsstate {
-//   destination?: string | null;
-//   params?: {} | null;
-//   loaded?: boolean | null;
-//   url?: string | null;
-// }
+export interface state {
+  destination: string | null;
+  params: {} | null;
+  loaded: boolean | null;
+  url: string | undefined;
+  videoId: '';
+}
 
-export const rootinitialState = {
+export const rootinitialState:state = {
   destination: '',
   params: {},
   loaded: false,
@@ -24,7 +25,7 @@ export const rootinitialState = {
   videoId: '',
 };
 
-export default function reducer(state = rootinitialState, action: any) {
+export default function reducer(state:state = rootinitialState, action: any) {
   switch (action.type) {
     case SET_LOADED:
       return _applySetLoaded(state, action);
@@ -69,10 +70,6 @@ const _applySetVideoId = (state: any, action: any) => {
 const setDestination = (destination: string) : ThunkAction<void, RootState, unknown> => {
   return (dispatch, getState) => {
     const {videoId} = getState().root;
-    console.log('destination');
-    console.log(destination);
-    console.log(videoId);
-    
     dispatch({
       type: SET_DESTINATION,
       destination: videoId ? 'Setting' : destination

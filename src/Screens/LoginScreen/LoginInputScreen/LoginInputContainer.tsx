@@ -30,8 +30,8 @@ const LoginInputContainer = () => {
     outputRange: ['0deg', '360deg']
   });
 
-  const [userId, setUserId] = useState<string>('95yeongil');
-  const [password, setPassword] = useState<string>('rladusrlf1');
+  const [userId, setUserId] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
   const [captcha, setCaptcha] = useState<string | null>(null);
   const [captchaInput, setCaptchaInput] = useState<string>('');
   const [logging, setLogging] = useState<boolean>(false);
@@ -110,15 +110,17 @@ const LoginInputContainer = () => {
       );
       const isDeploy = isDeployWehagomeet || isDeployWebrtc;
       setPermission(isDeploy);
-      setDestination(isDeploy ? 'List' : 'SelectCompany');
       setParams({
         accesstype: 'login'
       });
+      setDestination(isDeploy ? 'List' : 'SelectCompany');
+      
     } else if (statusCheck && statusCheck.code === 400) {
       const onClose = () => {
         _resetAlert();
-        setDestination('SelectCompany');
         setParams({accesstype: 'login'});
+        setDestination('SelectCompany');
+        
       };
       setAlertVisible({
         visible: true,
