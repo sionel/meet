@@ -15,7 +15,7 @@ import { NavigationEvents } from 'react-navigation';
 import HomeScreenPresenter from './HomeScreenPresenter';
 
 // service
-import { WetalkApi, MeetApi, ServiceCheckApi } from '../../services';
+import { WetalkApi, MeetApi, ServiceCheckApi, UserApi } from '../../services';
 import { querystringParser, isWehagoV } from '../../utils';
 
 import { getT } from '../../utils/translateManager';
@@ -54,7 +54,6 @@ class HomeScreenContainer extends Component {
       this.setState({ orientation });
     });
     Orientation.addOrientationListener(this._handleOrientation);
-
     // 개인 회원 여부 체크
     // 0: 일반, 1: 개인
     if (this.props.auth.member_type !== 1) {
@@ -72,23 +71,23 @@ class HomeScreenContainer extends Component {
     BackHandler.addEventListener('hardwareBackPress', this._handleBackButton);
   }
 
-  shouldComponentUpdate = (nextProps, nextState) => {
+  // shouldComponentUpdate = (nextProps, nextState) => {
     // [android] 앱이 실행중에 딥링크에 의한 화상회의 연결방법
-    if (
-      // Platform.OS === 'android' &&
-      this.props.screenProps !== nextProps.screenProps
-    ) {
-      this._handleOpenURL(nextProps.screenProps);
-    }
+    // if (
+    //   // Platform.OS === 'android' &&
+    //   this.props.screenProps !== nextProps.screenProps
+    // ) {
+    //   this._handleOpenURL(nextProps.screenProps);
+    // }
 
-    return true;
-  };
+    // return true;
+  // };
 
   componentWillUnmount() {
     clearInterval(this._interval);
     clearTimeout(this.refresh);
     Orientation.removeOrientationListener(this._handleOrientation);
-    Linking.removeEventListener('url', this._handleOpenURL);
+    // Linking.removeEventListener('url', this._handleOpenURL);
     AppState.removeEventListener('change', this._handleAppStateChange);
 
     // 앱 종료를 막음
@@ -101,9 +100,9 @@ class HomeScreenContainer extends Component {
 
   render() {
     const { refreshing, selectedRoomId, orientation, alert } = this.state;
-    const { navigation, auth } = this.props;
+    const { navigation, auth ,setVideoId} = this.props;
     const plan = auth?.last_company?.membership_code; // 요금제 [WE: 엣지, SP: 싱글팩, ...]
-
+ 
     let conferenceList = this.props.conference;
 
     let started = [];
@@ -143,12 +142,13 @@ class HomeScreenContainer extends Component {
           auth={auth}
           selectedRoomId={selectedRoomId}
           alert={alert}
-          memberType={this.props.auth.member_type}
+          memberType={auth.member_type}
           onRedirect={this._handleRedirect}
           onRefresh={this._handleRefresh}
           onSearch={this._handleSearch}
           onGetWetalkList={this._handleGetWetalkList}
           orientation={this.state.orientation}
+          setVideoId={setVideoId}
           hasNotch={hasNotch}
         />
       </View>
@@ -195,7 +195,7 @@ class HomeScreenContainer extends Component {
 
     // 1000(1초) 안에 back 버튼을 한번 더 클릭 할 경우 앱 종료
     if (this.exitApp == undefined || !this.exitApp) {
-      ToastAndroid.show(this.t('toast_closeapp'), ToastAndroid.SHORT);
+      ToastAndroid.show(this.t('renewal.toast_closeapp'), ToastAndroid.SHORT);
       this.exitApp = true;
 
       this.timeout = setTimeout(() => {
@@ -317,9 +317,9 @@ class HomeScreenContainer extends Component {
   };
 
   _handleAutoLogin = async (count = 0) => {
-    const { auth, loginCheckRequest } = this.props;
+    const { auth } = this.props;
     // 접속자 확인
-    const checkResult = await loginCheckRequest(
+    const checkResult = await this._loginCheckRequest(
       auth.AUTH_A_TOKEN,
       auth.AUTH_R_TOKEN,
       auth.last_access_company_no,
@@ -332,21 +332,69 @@ class HomeScreenContainer extends Component {
       if (checkResult.errors.code === 'E002') {
         this.props.setAlert({
           type: 1,
-          title: this.t('alert_title_login_fail'),
-          message: this.t(
-            isWehagoV
-              ? t('alert_text_expired')
-              : t('alert_text_duplicate_logout')
-          )
+          title: this.t('renewal.alert_title_login_fail'),
+          message: this.t('renewal.alert_text_duplicate_logout')
         });
         this.props.sessionCheck(false);
       } else {
         this.props.onDisconnect();
       }
-      this.props.screenProps.onChangeRootState({ destination: 'Login' });
+      this.props.setDestination('Login');
       this.props.onLogout();
     } else {
       this._handleGetWetalkList();
+    }
+  };
+
+  _loginCheckRequest = async (
+    AUTH_A_TOKEN,
+    AUTH_R_TOKEN,
+    cno,
+    HASH_KEY,
+    from
+  ) => {
+    const checkResult = await UserApi.check(
+      AUTH_A_TOKEN,
+      AUTH_R_TOKEN,
+      cno,
+      HASH_KEY
+    );
+
+    if (checkResult.resultCode === 200) {
+      const {autoLogin} = this.props;
+      const userData = {
+        // login api data
+        AUTH_A_TOKEN,
+        AUTH_R_TOKEN,
+        HASH_KEY,
+        cno,
+        // check api data
+        user_no: checkResult.resultData.user_no,
+        portal_id: checkResult.resultData.portal_id, // 아이디
+        user_name: checkResult.resultData.user_name,
+        user_default_email: checkResult.resultData.user_default_email,
+        user_email: checkResult.resultData.user_email,
+        profile_url: checkResult.resultData.profile_url,
+        user_contact: checkResult.resultData.user_contact,
+        employee_list: checkResult.resultData.employee_list, // 회사정보
+        last_access_company_no: checkResult.resultData.last_access_company_no
+          ? checkResult.resultData.last_access_company_no
+          : cno,
+        last_company: checkResult.resultData.last_access_company_no
+          ? checkResult.resultData.employee_list.filter(
+              e => e.company_no == checkResult.resultData.last_access_company_no
+            )[0]
+          : checkResult.resultData.employee_list[0], // last_access_company_no가 비어있는 상태로 올 수 있어서 null이 뜬다면 리스트중 첫번째 인덱스로 처리
+        member_type: checkResult.resultData.member_type, // 0: 일반회원, 1: 개인회원
+        nickname: checkResult.nickname,
+        membership_code: checkResult.resultData.employee_list[0].membership_code
+      };
+      this.props.login(userData, from, autoLogin);
+      return checkResult;
+    } else {
+      const result = checkResult.errors ? checkResult : { errors: checkResult };
+      this.props.eventLog(result);
+      return result;
     }
   };
 

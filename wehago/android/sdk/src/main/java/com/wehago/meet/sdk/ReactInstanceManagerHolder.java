@@ -197,10 +197,13 @@ class ReactInstanceManagerHolder {
                 new org.wonday.orientation.OrientationPackage(),
                 new com.dylanvann.fastimage.FastImageViewPackage(),
                 new com.terrylinla.rnsketchcanvas.SketchCanvasPackage(),
+
                 new com.evanjmg.RNHomePressedPackage(),
                 new com.avishayil.rnrestart.ReactNativeRestartPackage(),
                 new com.github.wumke.RNExitApp.RNExitAppPackage(),
                 new com.zxcpoiu.incallmanager.InCallManagerPackage(),
+
+                new com.BV.LinearGradient.LinearGradientPackage(),
 
                 new ReactPackageAdapter() {
                     @Override

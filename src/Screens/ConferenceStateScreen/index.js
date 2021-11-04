@@ -5,7 +5,10 @@ import { actionCreators as WetalkActions } from '../../redux/modules/wetalk';
 
 const mapStateToProps = state => ({
   auth: state.user.auth,
-  from: state.user.from
+  from: state.user.from,
+  params: state.root.params,
+  videoId: state.root.videoId,
+
 });
 
 const mapDispatchTopProps = dispatch => ({});

@@ -410,7 +410,6 @@ export default {
       signature = CryptoJS.enc.Base64.stringify(hashText);
       url = `${wehagoBaseURL0}${accsessUrl}`;
     }
-
     try {
       const data = {
         method: 'GET',
@@ -427,6 +426,7 @@ export default {
       }
       return response.json();
     } catch (err) {
+      console.log(err);
       console.warn('6-2.checkVersion : ', err);
       return false;
     }

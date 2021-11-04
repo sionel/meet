@@ -133,7 +133,7 @@ const checkMembership = async (AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno) => {
     }
     return response.json();
   } catch (err) {
-    console.warn('checkWedrive : ', err);
+    console.warn('checkMembership : ', err);
     return false;
   }
 };

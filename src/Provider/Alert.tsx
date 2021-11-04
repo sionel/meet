@@ -8,21 +8,22 @@ import {
   Platform
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../redux/configureStore';
 import { actionCreators } from '../redux/modules/alert';
 
-export default function AlertScreenPresenter(props) {
+export default function AlertScreenPresenter(props: any) {
   const { children } = props;
-  const alert = useSelector(state => state.alert);
-  
+  const alert = useSelector((state: RootState) => state.alert);
+
   const { visible, title, message, actions, onClose } = alert;
-  
+
   const dispatch = useDispatch();
   const resetAlert = () => {
     dispatch(actionCreators.resetAlert());
   };
 
   return (
-    <View style={{ position:'absolute' , width:'100%' , height:'100%' }}>
+    <View style={{ position: 'absolute', width: '100%', height: '100%' }}>
       <Modal
         animationType={'fade'}
         transparent={true}

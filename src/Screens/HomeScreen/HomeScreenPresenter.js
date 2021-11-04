@@ -110,15 +110,17 @@ const HomeScreenPresenter = props => {
                   underline={index < section.length ? true : false}
                   active={true}
                   disable={false}
-                  onClick={() =>
+                  onClick={() => {
+                    debugger;
+                    props.setVideoId(item.room_id)
                     props.onRedirect('ConferenceState', {
                       item: {
                         roomId: item.room_id,
                         externalData: null,
                         from: 'meet'
                       }
-                    })
-                  }
+                    });
+                  }}
                 />
               );
             }}

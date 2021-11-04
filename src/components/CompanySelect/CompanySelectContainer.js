@@ -1,14 +1,15 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import CompanySelectPresenter from './CompanySelectPresenter';
 import UserApi from '../../services/api/UserApi';
 
 import RNrestart from 'react-native-restart';
+import { actionCreators } from '../../redux/modules/root';
 
 export default function CompanySelectContainer(props) {
   // const { handleChangeCompany } = props;
-
+  const dispatch = useDispatch();
   const { auth } = props;
 
   const selectedCompany = auth.last_company;
@@ -30,7 +31,7 @@ export default function CompanySelectContainer(props) {
 
   const onLogout = async () => {
     const from = props.from;
-    props.screenProps.onChangeRootState({ destination: 'Login' });
+    dispatch(actionCreators.setDestination('Login'));
     from === 'this' && (await UserApi.logoutRequest(auth));
     props.onLogout();
     props.onSetInitialList();

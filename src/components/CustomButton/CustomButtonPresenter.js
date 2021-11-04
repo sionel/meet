@@ -59,7 +59,8 @@ CustomButtonPresenter.propTypes = {
     'buttonClose',
     'btnArrowUp',
     'btnArrowDown',
-    'userList'
+    'userList',
+    'icoScreenShagre'
   ]).isRequired,
   onPress: PropTypes.func.isRequired
 };

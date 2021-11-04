@@ -31,20 +31,20 @@ class ConferenceStateContainer extends React.Component {
     // 딥링크 웹 접근
     // 딥링크 이메일 접근
     // 참여코드 접근
-    const { params } = this.props.screenProps;
-    let roomId;
-    let iscret = true; // 인증 비인증 묻는 것
-    if (params.accesstype === 'login' || params.accesstype === 'wehago') {
-      roomId = this.props.navigation.state.params.item.roomId;
-    } else if (params && Object.keys(params).length > 0) {
-      roomId = params.roomId;
-      iscret =
-        params.accesstype !== 'email' && params.accesstype !== 'joincode';
-    }
+    const { params, auth,videoId } = this.props;
+    const { roomId , token ,accesstype } = params
+    // let roomId;
+    // let iscret = true; // 인증 비인증 묻는 것
+    const iscret = auth.isLogin
+    // if (params.accesstype === 'login' || params.accesstype === 'wehago') {
+    //   roomId = this.props.navigation.state.params.item.roomId;
+    // } else if (params && Object.keys(params).length > 0) {
+    //   roomId = params.roomId;
+    // }
     let { conferenceState } = this.state;
-    this.roomId = roomId;
-
-    let { auth } = this.props;
+    this.roomId = videoId ? videoId: roomId;
+    debugger
+    // let { auth } = this.props;
     // const access = await MeetApi.getMeetRoom(
     //   auth.AUTH_A_TOKEN,
     //   auth.AUTH_R_TOKEN,
@@ -52,7 +52,7 @@ class ConferenceStateContainer extends React.Component {
     //   roomId
     // );
     // this.roomName = access.resultData.name;
-    const access = await MeetApi.getMeetRoomNoCert(roomId);
+    const access = await MeetApi.getMeetRoomNoCert(this.roomId);
     this.roomName = access?.resultData?.name;
 
     if (!access) {
@@ -96,7 +96,7 @@ class ConferenceStateContainer extends React.Component {
     };
 
     if (conferenceState === 'conference') {
-      this._handleEnterConference(auth, roomId, iscret, params);
+      this._handleEnterConference(auth, this.roomId, iscret, params);
     } else if (conferenceState === 'reservationInfo') {
       // 참석자 정보 받고
       // 시작시간 종료시간 컨버팅 하고
@@ -111,7 +111,7 @@ class ConferenceStateContainer extends React.Component {
             auth.AUTH_R_TOKEN,
             auth.HASH_KEY,
             auth.last_access_company_no,
-            roomId
+            this.roomId
           )
         ).resultData;
       }
@@ -131,7 +131,7 @@ class ConferenceStateContainer extends React.Component {
       const start = access.resultData.r_start_datetime;
 
       this.enterTimer = setTimeout(() => {
-        this._handleEnterConference(auth, roomId);
+        this._handleEnterConference(auth, this.roomId);
       }, start - now);
 
       this.setState({

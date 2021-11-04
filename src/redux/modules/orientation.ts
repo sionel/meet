@@ -4,12 +4,15 @@ import { ThunkAction } from 'redux-thunk';
 import { RootState } from '../configureStore';
 
 const SET = 'orientation.SET_ORIENTATION';
+const STAY = 'orientation.STAY_ORIENTATION';
 
 export interface state {
   orientation: 'vertical' | 'horizontal';
+  isHorizon: boolean;
 }
 const initialState: state = {
-  orientation: 'vertical'
+  orientation: 'vertical',
+  isHorizon: false
 };
 
 const reducer: (state: state, action: AnyAction) => state = (
@@ -19,6 +22,8 @@ const reducer: (state: state, action: AnyAction) => state = (
   switch (action.type) {
     case SET:
       return _setOrientation(state, action);
+    case STAY:
+      return { ...state };
     default:
       return state;
   }
@@ -32,18 +37,25 @@ const setOrientation = (state: string) => {
       break;
     case 'PORTRAIT':
     case 'PORTRAIT-UPSIDEDOWN':
-    default:
       state = 'vertical';
       break;
+    default:
+      return { // 다른 이상한 값이 들어오면 lock 시키도록 
+        type: STAY
+      };
   }
+  const isHorizon = state === 'horizontal' ? true : false;
   return {
     type: SET,
-    state
+    state,
+    isHorizon
   };
 };
-const _setOrientation = (state, action) => ({
+const _setOrientation = (state: state, action: AnyAction) => ({
   ...state,
-  orientation: action.state
+  orientation: action.state,
+
+  isHorizon: action.isHorizon
 });
 
 export const actionCreators = {

@@ -9,6 +9,7 @@ import { actionCreators as ToastAcions } from '../../redux/modules/toast';
 import { actionCreators as ScreenShareAcions } from '../../redux/modules/ScreenShare';
 import { actionCreators as ParticipantsAcions } from '../../redux/modules/participants';
 import { actionCreators as indicatorAcionCreators } from '../../redux/modules/indicator';
+import { actionCreators as RootActions } from '../../redux/modules/root';
 
 import _ from 'underscore';
 
@@ -33,9 +34,10 @@ const mapStateToProps = state => {
     },
     mainUser: { mainUserId },
     participants: { list },
-    user: { auth },
+    user: { auth,isLogin },
     documentShare,
-    screenShare: { isScreenShare, screenToggleFlag }
+    screenShare: { isScreenShare, screenToggleFlag },
+    root: { destination }
   } = state;
 
   const mainUser = getMainUser(mainUserId, user, list);
@@ -54,7 +56,9 @@ const mapStateToProps = state => {
     isMuteMic: user?.isMuteMic,
     externalAPIScope,
     isScreenShare,
-    screenToggleFlag
+    screenToggleFlag,
+    destination,
+    isLogin
   };
 };
 
@@ -80,7 +84,13 @@ const mapDispatchToProps = dispatch => {
     toggleScreenFlag: () => dispatch(ScreenShareAcions.toggleScreenFlag()),
     setScreenFlag: flag => dispatch(ScreenShareAcions.setScreenFlag(flag)),
     initParticipants: () => dispatch(ParticipantsAcions.initParticipants()),
-    setIndicator: () => dispatch(indicatorAcionCreators.setIndicator('화상회의 종료 중'))
+    setIndicator: () =>
+      dispatch(indicatorAcionCreators.setIndicator('화상회의 종료 중')),
+    setLoaded: loaded => dispatch(RootActions.setLoaded(loaded)),
+    setDestination: destination => dispatch(RootActions.setDestination(destination)),
+    setParams: params => dispatch(RootActions.setParams(params)),
+    setUrl: url => dispatch(RootActions.setUrl(url)),
+    resetVideoId: () => dispatch(RootActions.setVideoId('')),
   };
 };
 

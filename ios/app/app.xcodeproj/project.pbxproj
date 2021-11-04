@@ -48,6 +48,10 @@
 		F064381ADDF548409D9529CA /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1F6E4808E11241FD888B81CB /* Entypo.ttf */; };
 		FC190ABC6BA64E6F8A3057FE /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D070A209F4E44BB2B82F50B5 /* Ionicons.ttf */; };
 		FD246213C22A4AC29BA889AD /* DOUZONEText30.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4B3421C1BF50477C8F0F51A9 /* DOUZONEText30.ttf */; };
+		FDC834A82702E5B500FE6826 /* File.strings in Resources */ = {isa = PBXBuildFile; fileRef = FDC834A72702E5B500FE6826 /* File.strings */; };
+		FDC834AC2702E8CE00FE6826 /* ja.lproj in Resources */ = {isa = PBXBuildFile; fileRef = FDC834A92702E8CE00FE6826 /* ja.lproj */; };
+		FDC834AD2702E8CE00FE6826 /* en.lproj in Resources */ = {isa = PBXBuildFile; fileRef = FDC834AA2702E8CE00FE6826 /* en.lproj */; };
+		FDC834AE2702E8CE00FE6826 /* ko.lproj in Resources */ = {isa = PBXBuildFile; fileRef = FDC834AB2702E8CE00FE6826 /* ko.lproj */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -168,6 +172,10 @@
 		E5C97B62227A1EB400199214 /* JitsiMeetCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JitsiMeetCommands.swift; sourceTree = "<group>"; };
 		E7DCC18FC4D24C7A8FD342DD /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
 		FC040BBED70876444D89E91C /* Pods-JitsiMeet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JitsiMeet.release.xcconfig"; path = "../Pods/Target Support Files/Pods-JitsiMeet/Pods-JitsiMeet.release.xcconfig"; sourceTree = "<group>"; };
+		FDC834A72702E5B500FE6826 /* File.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = File.strings; sourceTree = "<group>"; };
+		FDC834A92702E8CE00FE6826 /* ja.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ja.lproj; sourceTree = SOURCE_ROOT; };
+		FDC834AA2702E8CE00FE6826 /* en.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = en.lproj; sourceTree = SOURCE_ROOT; };
+		FDC834AB2702E8CE00FE6826 /* ko.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ko.lproj; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -237,6 +245,9 @@
 		13B07FAE1A68108700A75B9A /* src */ = {
 			isa = PBXGroup;
 			children = (
+				FDC834AA2702E8CE00FE6826 /* en.lproj */,
+				FDC834A92702E8CE00FE6826 /* ja.lproj */,
+				FDC834AB2702E8CE00FE6826 /* ko.lproj */,
 				8AF6C8032702E683001F6494 /* en.lproj */,
 				8AF6C8022702E683001F6494 /* ja.lproj */,
 				8AF6C8042702E683001F6494 /* ko.lproj */,
@@ -252,6 +263,7 @@
 				0BBD021F212EB69D00CCB19F /* Types.h */,
 				0B412F1D1EDEE6E800B1A0A6 /* ViewController.h */,
 				0B412F1E1EDEE6E800B1A0A6 /* ViewController.m */,
+				FDC834A72702E5B500FE6826 /* File.strings */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -439,6 +451,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0B412F211EDEE95300B1A0A6 /* Main.storyboard in Resources */,
+				FDC834AE2702E8CE00FE6826 /* ko.lproj in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				BA3F9908B5C9486BADBB5BDA /* AntDesign.ttf in Resources */,
@@ -455,10 +468,13 @@
 				FC190ABC6BA64E6F8A3057FE /* Ionicons.ttf in Resources */,
 				5043A8A0282842B7AF0A0329 /* MaterialCommunityIcons.ttf in Resources */,
 				D52263BC69B44F169BF6E044 /* MaterialIcons.ttf in Resources */,
+				FDC834AC2702E8CE00FE6826 /* ja.lproj in Resources */,
 				8AF6C8062702E683001F6494 /* en.lproj in Resources */,
 				6EBB9C6A0D724BD49FDA16FB /* Octicons.ttf in Resources */,
+				FDC834AD2702E8CE00FE6826 /* en.lproj in Resources */,
 				CFD9EA02141A442991401EC1 /* SimpleLineIcons.ttf in Resources */,
 				9ED76A7D4CD14CF2833AD5D8 /* Zocial.ttf in Resources */,
+				FDC834A82702E5B500FE6826 /* File.strings in Resources */,
 				1D9C556ECB7D4EBFBB12EBDB /* DOUZONEText10.ttf in Resources */,
 				FD246213C22A4AC29BA889AD /* DOUZONEText30.ttf in Resources */,
 				352C5A791AC3408180CBBD62 /* DOUZONEText50.ttf in Resources */,

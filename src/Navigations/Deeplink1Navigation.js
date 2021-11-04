@@ -5,6 +5,8 @@ import ConferenceScreen from '../Screens/ConferenceScreen';
 import SettingScreen from '../Screens/SettingScreen';
 import { Image, TouchableOpacity } from 'react-native';
 import RouteTitle from '../Routes/RouteTitle';
+import { useDispatch, useSelector } from 'react-redux';
+import { actionCreators as RootActions } from '../redux/modules/root';
 
 const commonStyle = {
   height: 53,
@@ -13,18 +15,26 @@ const commonStyle = {
 };
 const backBtn = require('../../assets/buttons/back_btn.png');
 
-const BackButton = ({ navigation }) => {
-  const { onChangeRootState, destination } = navigation.getScreenProps();
+const BackButton = () => {
+  const dispatch = useDispatch();
+  const _setDestination = destination =>
+    dispatch(RootActions.setDestination(destination));
+
+  const { destination } = useSelector((state) => {
+    return {
+      destination: state.root.destination
+    }
+  });
+
   destination === 'Conference' || destination === 'Setting';
   return (
     <TouchableOpacity
       onPress={() => {
-        onChangeRootState({
-          destination:
-            destination === 'Conference' || destination === 'Setting'
-              ? 'Login'
-              : 'List'
-        });
+        _setDestination(
+          destination === 'Conference' || destination === 'Setting'
+            ? 'Login'
+            : 'List'
+        );
       }}
     >
       <Image
@@ -40,7 +50,11 @@ const Deeplink1Navigation = createStackNavigator(
     ConferenceState: {
       screen: ConferenceStateScreen,
       navigationOptions: ({ navigation }) => ({
-        headerTitle: <RouteTitle title={navigation.getScreenProps().t('option_conference')} />,
+        headerTitle: (
+          <RouteTitle
+            title={navigation.getScreenProps().t('renewal.option_conference')}
+          />
+        ),
         headerLeft: <BackButton navigation={navigation} />,
         headerTintColor: '#fff',
         headerStyle: commonStyle
@@ -49,7 +63,11 @@ const Deeplink1Navigation = createStackNavigator(
     Setting: {
       screen: SettingScreen,
       navigationOptions: ({ navigation }) => ({
-        headerTitle: <RouteTitle title={navigation.getScreenProps().t('roomstate_setting_header')} />,
+        headerTitle: (
+          <RouteTitle
+            title={navigation.getScreenProps().t('renewal.roomstate_setting_header')}
+          />
+        ),
         headerLeft: <BackButton navigation={navigation} />,
         headerTintColor: '#fff',
         headerStyle: commonStyle
