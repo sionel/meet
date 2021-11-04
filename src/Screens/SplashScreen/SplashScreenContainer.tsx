@@ -41,6 +41,7 @@ const SplashScreenContainer = (props: any) => {
     permission,
     updateNoti,
     autoLogin,
+    isLogin,
     loaded,
     destination,
     params,
@@ -52,6 +53,7 @@ const SplashScreenContainer = (props: any) => {
       permission: state.user.permission,
       updateNoti: state.user.updateNoti,
       autoLogin: state.user.autoLogin,
+      isLogin: state.user.isLogin,
       loaded: state.root.loaded,
       destination: state.root.destination,
       params: state.root.params,
@@ -81,7 +83,8 @@ const SplashScreenContainer = (props: any) => {
     dispatch(RootActions.setDestination(destination));
   const _setParams = (params: {}) => dispatch(RootActions.setParams(params));
   const _setVideoId = (id: string) => dispatch(RootActions.setVideoId(id));
-  const _setUrl = (url: string|undefined) => dispatch(RootActions.setUrl(url));
+  const _setUrl = (url: string | undefined) =>
+    dispatch(RootActions.setUrl(url));
   const eventLog = (event: any) => dispatch(UserActions.eventLog(event));
 
   //#endregion
@@ -92,13 +95,12 @@ const SplashScreenContainer = (props: any) => {
     setSharingMode();
 
     _handleInit();
-
   }, []);
 
   useEffect(() => {
     if (!first) {
       if (url) _handleGetDeeplink(url);
-      else autoLoginChk();
+      else _autoLoginChk();
     }
   }, [url, first]);
 
@@ -172,46 +174,48 @@ const SplashScreenContainer = (props: any) => {
       const result = await _handleCheckAutoLogin();
       if (result === 'success') {
         _setLoaded(true);
-        _setDestination('List');
         _setParams({
           accesstype: 'login'
         });
+        _setDestination('List');
       } else if (result === 'dany') {
         _setLoaded(true);
-        _setDestination('SelectCompany');
         _setParams({});
+        _setDestination('SelectCompany');
       } else {
         onLogout();
         _setLoaded(true);
-        _setDestination('Login');
         _setParams({});
+        _setDestination('Login');
       }
     } else {
       setNotiIndex(notiIndex + 1);
     }
   };
 
-  async function autoLoginChk() {
-    const result = await _handleCheckAutoLogin()
-      if (result === 'success') {
-        _setLoaded(true);
-        _setDestination('List');
-        _setParams({
-          accesstype: 'login'
-        })
-      } else if (result === 'dany') {
-        _setLoaded(true);
-        _setDestination('SelectCompany');
-        _setParams({});
-      } else {
-        if (result === 'autoLoginFalse') {
-          if (auth !== {}) await UserApi.logoutRequest(auth);
-        }
-        onLogout();
-        _setLoaded(true);
-        _setDestination('Login');
-        _setParams({});
+  async function _autoLoginChk() {
+    const result = await _handleCheckAutoLogin();
+    if (result === 'success') {
+      _setLoaded(true);
+      _setParams({
+        accesstype: 'login'
+      });
+      _setDestination('List');
+
+    } else if (result === 'dany') {
+      _setLoaded(true);
+      _setParams({});
+      _setDestination('SelectCompany');
+      
+    } else {
+      if (result === 'autoLoginFalse') {
+        if (auth !== {}) await UserApi.logoutRequest(auth);
       }
+      onLogout();
+      _setLoaded(true);
+      _setParams({});
+      _setDestination('Login');
+    }
   }
 
   //자동로그인
@@ -226,37 +230,7 @@ const SplashScreenContainer = (props: any) => {
           from
         );
         if (result.errors) {
-          if (result.errors.code === 'E002') {
-            setAlert({
-              type: 1,
-              title: t('renewal.alert_title_login_fail'),
-              message: t('renewal.alert_text_duplicate_logout')
-            });
-          } else if (result.errors.status === '400') {
-            setAlert({
-              type: 1,
-              title: t('renewal.alert_title_login_fail'),
-              message: t('renewal.alert_text_login_info_error')
-            });
-          } else if (result.errors.status === '401') {
-            setAlert({
-              type: 1,
-              title: t('renewal.alert_title_login_fail'),
-              message: t('renewal.alert_text_no_right')
-            });
-          } else if (result.errors.message === 'timeout') {
-            setAlert({
-              type: 1,
-              title: t('renewal.alert_title_login_fail'),
-              message: t('renewal.alert_text_timeover')
-            });
-          } else {
-            setAlert({
-              type: 1,
-              title: t('renewal.alert_title_login_fail'),
-              message: t('renewal.alert_text_problem_ocurred')
-            });
-          }
+          _handleloginCheckError(result.errors);
           return 'fail';
         } else {
           const flag: any = _handleOnLogin(auth);
@@ -272,7 +246,8 @@ const SplashScreenContainer = (props: any) => {
       }
     } else {
       return 'autoLoginFalse';
-    }3
+    }
+    3;
   };
 
   //DeepLink로 접근
@@ -291,11 +266,23 @@ const SplashScreenContainer = (props: any) => {
       room_name=123 // talk방 이름
     */
     if (!url) return;
-    let result: any = querystringParser(url)
+    let result: any = querystringParser(url);
+    console.log('RESULT : ' , result);
+    console.log('AUTH : ', auth);
+    
     // if(result.type === 'conference') {
-    // if(result.video_id) {
-      result.video_id && _setVideoId(result.video_id);
-    // }
+    if (result.video_id) {
+      // TODO: 컨퍼런스로 받았을때 이 분기 처리를 어떻게 해야할지 검토필요성 있음
+      // WEHAGO에서 계정 정보를 가지고 올때 이 분기랑 토큰이 있는 분기랑 둘다 접근함 문제가 없는건지 ? 
+        if(result.cno || isLogin) {
+          _setVideoId(result.video_id);
+          _setLoaded(true);
+          _setDestination('Setting');
+        } else {
+          _setLoaded(true);
+          _setDestination('Login');
+        }
+    }
     // 화상회의 요청인지 판별
     if (result.is_creater) {
       // 오래된 딥링크 주소 차단
@@ -355,12 +342,10 @@ const SplashScreenContainer = (props: any) => {
       } else {
         _handleOnLogin(info);
       }
-
     } else if (result.login_info === 'email') {
       //토근정보가 없을때
       let decoded = jwt_decode(result.token);
 
-      
       /*
       email: "sadb0101@naver.com"
       exp: 1919234662
@@ -369,12 +354,12 @@ const SplashScreenContainer = (props: any) => {
       sub: "video.wehago.com"
       */
       _setLoaded(true);
-      _setDestination('Setting');
       _setParams({
         roomId: decoded.room,
         accesstype: 'email',
         token: result.token
       });
+      _setDestination('Setting');
     }
   };
 
@@ -400,10 +385,10 @@ const SplashScreenContainer = (props: any) => {
       const isDeploy = isDeployWehagomeet || isDeployWebrtc;
       setPermission(isDeploy);
       _setLoaded(true);
-      _setDestination(isDeploy ? 'List' : 'SelectCompany');
       _setParams({
         accesstype: 'login'
       });
+      _setDestination(isDeploy ? 'List' : 'SelectCompany');
     } else {
       _setLoaded(true);
       _setDestination('SelectCompany');
@@ -465,6 +450,40 @@ const SplashScreenContainer = (props: any) => {
       return result;
     }
   };
+
+  const _handleloginCheckError = (errors:any) => {
+    if (errors.code === 'E002') {
+      setAlert({
+        type: 1,
+        title: t('renewal.alert_title_login_fail'),
+        message: t('renewal.alert_text_duplicate_logout')
+      });
+    } else if (errors.status === '400') {
+      setAlert({
+        type: 1,
+        title: t('renewal.alert_title_login_fail'),
+        message: t('renewal.alert_text_login_info_error')
+      });
+    } else if (errors.status === '401') {
+      setAlert({
+        type: 1,
+        title: t('renewal.alert_title_login_fail'),
+        message: t('renewal.alert_text_no_right')
+      });
+    } else if (errors.message === 'timeout') {
+      setAlert({
+        type: 1,
+        title: t('renewal.alert_title_login_fail'),
+        message: t('renewal.alert_text_timeover')
+      });
+    } else {
+      setAlert({
+        type: 1,
+        title: t('renewal.alert_title_login_fail'),
+        message: t('renewal.alert_text_problem_ocurred')
+      });
+    }
+  }
 
   return (
     <SplashScreenPresenter

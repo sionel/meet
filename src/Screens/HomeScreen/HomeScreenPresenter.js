@@ -111,7 +111,6 @@ const HomeScreenPresenter = props => {
                   active={true}
                   disable={false}
                   onClick={() => {
-                    debugger;
                     props.setVideoId(item.room_id)
                     props.onRedirect('ConferenceState', {
                       item: {

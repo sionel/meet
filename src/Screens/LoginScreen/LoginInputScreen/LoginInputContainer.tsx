@@ -110,15 +110,17 @@ const LoginInputContainer = () => {
       );
       const isDeploy = isDeployWehagomeet || isDeployWebrtc;
       setPermission(isDeploy);
-      setDestination(isDeploy ? 'List' : 'SelectCompany');
       setParams({
         accesstype: 'login'
       });
+      setDestination(isDeploy ? 'List' : 'SelectCompany');
+      
     } else if (statusCheck && statusCheck.code === 400) {
       const onClose = () => {
         _resetAlert();
-        setDestination('SelectCompany');
         setParams({accesstype: 'login'});
+        setDestination('SelectCompany');
+        
       };
       setAlertVisible({
         visible: true,

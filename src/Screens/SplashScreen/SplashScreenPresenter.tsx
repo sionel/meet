@@ -13,14 +13,3 @@ export default function SplashScreenPresenter(props: {
   // else return <Splash />
 }
 
-// if (alert.visible)
-//   return (
-//     <CustomAlert
-//       visible={alert.visible}
-//       title={t('renewal.alert_title_notion')}
-//       width={320}
-//       description={alert.description}
-//       actions={alert.actions}
-//       onClose={alert.onClose}
-//     />
-//   );

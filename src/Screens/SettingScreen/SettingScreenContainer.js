@@ -22,7 +22,7 @@ class SettingScreenContainer extends React.Component {
   }
 
   async componentDidMount() {
-    const {params,isLogin} = this.props;
+    const { params, isLogin } = this.props;
     this._init();
     let tracks = await this._getTrack();
     let accesstype = params?.accesstype;
@@ -92,8 +92,8 @@ class SettingScreenContainer extends React.Component {
     } catch (error) {
       this.props.setAlert({
         type: 1,
-        title: this.t('alert_title_right'),
-        message: this.t('alert_text_permission')
+        title: this.t('renewal.alert_title_right'),
+        message: this.t('renewal.alert_text_permission')
       });
       return null;
     }
@@ -118,7 +118,7 @@ class SettingScreenContainer extends React.Component {
     let roomToken;
 
     // const wedive = await MeetApi.checkWedrive(auth);
-    
+
     const randomstring = uuidv4();
     const user = randomstring.substr(0, 8);
 
@@ -127,6 +127,7 @@ class SettingScreenContainer extends React.Component {
         await MeetApi.getMeetRoomTokenEmail(params.roomId, params.token, name)
       ).resultData;
     } else if (item?.params?.accesstype === 'joincode') {
+
       roomToken = (
         await MeetApi.getMeetRoomTokenJoincode(
           params.roomId,
@@ -151,8 +152,8 @@ class SettingScreenContainer extends React.Component {
       // wehago V 때문에 절차가 하나 늘어남
       this.props.setAlert({
         type: 1,
-        title: this.t('alert_title_error'),
-        message: this.t('alert_text_waiting')
+        title: this.t('renewal.alert_title_error'),
+        message: this.t('renewal.alert_text_waiting')
       });
     } else {
       navigation.replace('Conference', {
@@ -162,7 +163,7 @@ class SettingScreenContainer extends React.Component {
           name,
           ...item,
           accesstype: params?.accesstype,
-          externalUser: user,
+          externalUser: user
         }
       });
     }

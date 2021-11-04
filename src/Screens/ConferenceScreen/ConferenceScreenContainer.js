@@ -355,11 +355,11 @@ class ConferenceScreenContainer extends React.Component {
     user.videoTrack.dispose();
     user.audioTrack.dispose();
     resetVideoId();
-    debugger
+
     if (!isLogin) {
       setLoaded(false);
       setParams({});
-      setUrl('');
+      setUrl(undefined);
     } else {
       destination === 'List' ? navigation.goBack() : setDestination('List')
     }
