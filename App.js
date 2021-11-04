@@ -36,9 +36,7 @@ class App extends Component {
   componentDidMount() {
     Splash.hide();
     Linking.addEventListener('url', event => {
-      debugger
       this.setState({ loaded: false, url: event.url });
-
     });
 
     store.dispatch({
@@ -65,7 +63,6 @@ class App extends Component {
   componentDidUpdate(prevProps) {
     if (prevProps.url.url !== this.props.url.url) {
       // 타임스태프를 요구할 것
-      debugger
       this.setState({ loaded: false, url: this.props.url.url });
     }
   }

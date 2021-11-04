@@ -60,9 +60,9 @@ class SplashScreenContainer extends Component {
   }
 
   render() {
-    const { servernoti, index } = this.state;
+    const { alert, servernoti, index } = this.state;
     return (
-      <SplashScreenPresenter servernoti={servernoti[index]} />
+      <SplashScreenPresenter alert={alert} servernoti={servernoti[index]} />
     );
   }
   _handleInit = async () => {
@@ -262,16 +262,16 @@ class SplashScreenContainer extends Component {
       return 'fail';
     }
   };
-  // _handleOnCloseAlert = callback => {
-  //   this.setState( //이거
-  //     {
-  //       alert: { visible: false, type: 0, description: '' }
-  //     },
-  //     () => {
-  //       callback && callback();
-  //     }
-  //   );
-  // };
+  _handleOnCloseAlert = callback => {
+    this.setState(
+      {
+        alert: { visible: false, type: 0, description: '' }
+      },
+      () => {
+        callback && callback();
+      }
+    );
+  };
 
   /**
    * DeepLink 로 접근한 경우
@@ -292,7 +292,6 @@ class SplashScreenContainer extends Component {
     */
     if (!url) return;
     let result = querystringParser(url);
-    debugger
     // let proceed;
     let flag;
     // 화상회의 요청인지 판별
@@ -600,38 +599,38 @@ class SplashScreenContainer extends Component {
     }
   };
 
-  // _handleOnAlert = type => {
-  //   return new Promise((resolve, reject) => {
-  //     let description = '';
-  //     let actions = [];
-  //     let onClose = this._handleOnCloseAlert;
+  _handleOnAlert = type => {
+    return new Promise((resolve, reject) => {
+      let description = '';
+      let actions = [];
+      let onClose = this._handleOnCloseAlert;
 
-  //     description = this.t('alert_text_token_expiration');
-  //     onClose = async () => {
-  //       this._handleOnCloseAlert(
-  //         () =>
-  //           JSON.stringify(this.props.auth) !== '{}' && this.props.onLogout()
-  //       );
-  //       resolve(false);
-  //     };
-  //     actions = [
-  //       {
-  //         name: this.t('alert_button_yes'),
-  //         action: () => {
-  //           this._handleOnCloseAlert(
-  //             () =>
-  //               JSON.stringify(this.props.auth) !== '{}' &&
-  //               this.props.onLogout()
-  //           );
-  //           resolve(false);
-  //         }
-  //       }
-  //     ];
-  //     this.setState({ // 이거
-  //       alert: { visible: true, type, description, actions, onClose }
-  //     });
-  //   });
-  // };
+      description = this.t('alert_text_token_expiration');
+      onClose = async () => {
+        this._handleOnCloseAlert(
+          () =>
+            JSON.stringify(this.props.auth) !== '{}' && this.props.onLogout()
+        );
+        resolve(false);
+      };
+      actions = [
+        {
+          name: this.t('alert_button_yes'),
+          action: () => {
+            this._handleOnCloseAlert(
+              () =>
+                JSON.stringify(this.props.auth) !== '{}' &&
+                this.props.onLogout()
+            );
+            resolve(false);
+          }
+        }
+      ];
+      this.setState({
+        alert: { visible: true, type, description, actions, onClose }
+      });
+    });
+  };
 
   _handleRedirect = (url, param) => {
     const { navigation } = this.props;

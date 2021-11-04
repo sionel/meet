@@ -22,7 +22,7 @@
     "android": "sudo npx react-native run-android --root wehago",
     "build-inhouse": "cd ./wehago/android && sudo rm -rf build ./app/build ./sdk/build && sudo ./gradlew assembleRelease && cd ../..",
     "build-inhouse-aab": "cd ./wehago/android && sudo rm -rf build ./app/build ./sdk/build && sudo ./gradlew bundleRelease && cd ../..",
-    "set-android": "~/Library/Android/sdk/platform-tools/adb -s R3CMB0CXTRB reverse tcp:8081 tcp:8081",
+    "set-android": "~/Library/Android/sdk/platform-tools/adb -s 26e1eb6c2b217ece reverse tcp:8081 tcp:8081",
     "get-android": "~/Library/Android/sdk/platform-tools/adb devices",
     "device": "~/Library/Android/sdk/emulator/emulator @Nexus_5X_API_29"
   },

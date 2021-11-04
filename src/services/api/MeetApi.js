@@ -733,6 +733,8 @@ export default {
       }
       return response.json();
     } catch (err) {
+      console.log(err);
+
       console.warn('42.checkAccessUser : ', err);
       return false;
     }
@@ -805,7 +807,10 @@ export default {
           signature
         }
       };
+      console.log('보냄');
       const response = await fetch(url, data);
+      console.log('받음');
+      console.log(response);
       if (response.status !== 200) {
         throw response.resultCode;
       }
