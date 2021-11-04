@@ -93,12 +93,11 @@ const SplashScreenContainer = (props: any) => {
     // 강제종료 했을때를 위한 강제 초기화
     setInitInfo();
     setSharingMode();
-
     _handleInit();
   }, []);
 
   useEffect(() => {
-    if (!first) {
+    if (!first ) {
       if (url) _handleGetDeeplink(url);
       else _autoLoginChk();
     }
@@ -115,7 +114,7 @@ const SplashScreenContainer = (props: any) => {
     } else {
       setTimeout(() => {
         setFirst(false);
-      }, 2000);
+      }, 10000);
     }
   };
 
@@ -194,6 +193,11 @@ const SplashScreenContainer = (props: any) => {
   };
 
   async function _autoLoginChk() {
+    await new Promise((res)=>{
+      setTimeout(() => {
+        res(true)
+      }, 2000);
+    })
     const result = await _handleCheckAutoLogin();
     if (result === 'success') {
       _setLoaded(true);
@@ -201,16 +205,15 @@ const SplashScreenContainer = (props: any) => {
         accesstype: 'login'
       });
       _setDestination('List');
-
     } else if (result === 'dany') {
       _setLoaded(true);
       _setParams({});
       _setDestination('SelectCompany');
-      
     } else {
       if (result === 'autoLoginFalse') {
         if (auth !== {}) await UserApi.logoutRequest(auth);
       }
+
       onLogout();
       _setLoaded(true);
       _setParams({});
@@ -267,21 +270,21 @@ const SplashScreenContainer = (props: any) => {
     */
     if (!url) return;
     let result: any = querystringParser(url);
-    console.log('RESULT : ' , result);
+    console.log('RESULT : ', result);
     console.log('AUTH : ', auth);
-    
+
     // if(result.type === 'conference') {
     if (result.video_id) {
       // TODO: 컨퍼런스로 받았을때 이 분기 처리를 어떻게 해야할지 검토필요성 있음
-      // WEHAGO에서 계정 정보를 가지고 올때 이 분기랑 토큰이 있는 분기랑 둘다 접근함 문제가 없는건지 ? 
-        if(result.cno || isLogin) {
-          _setVideoId(result.video_id);
-          _setLoaded(true);
-          _setDestination('Setting');
-        } else {
-          _setLoaded(true);
-          _setDestination('Login');
-        }
+      // WEHAGO에서 계정 정보를 가지고 올때 이 분기랑 토큰이 있는 분기랑 둘다 접근함 문제가 없는건지 ?
+      if (result.cno || isLogin) {
+        _setVideoId(result.video_id);
+        _setLoaded(true);
+        _setDestination('Setting');
+      } else {
+        _setLoaded(true);
+        _setDestination('Login');
+      }
     }
     // 화상회의 요청인지 판별
     if (result.is_creater) {
@@ -451,7 +454,7 @@ const SplashScreenContainer = (props: any) => {
     }
   };
 
-  const _handleloginCheckError = (errors:any) => {
+  const _handleloginCheckError = (errors: any) => {
     if (errors.code === 'E002') {
       setAlert({
         type: 1,
@@ -483,7 +486,7 @@ const SplashScreenContainer = (props: any) => {
         message: t('renewal.alert_text_problem_ocurred')
       });
     }
-  }
+  };
 
   return (
     <SplashScreenPresenter

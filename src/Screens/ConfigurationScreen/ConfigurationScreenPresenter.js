@@ -21,7 +21,7 @@ const ConfigurationScreenPresenter = props => {
       // 버전 수정
       title: t('option_version'),
       icon: 'ico_menu_info',
-      content: '2.2.2'
+      content: '2.3.0'
     },
     {
       title: t('option_legal'),
