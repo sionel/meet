@@ -230,7 +230,8 @@ const SplashScreenContainer = (props: any) => {
           auth.AUTH_R_TOKEN,
           auth.last_access_company_no,
           auth.HASH_KEY,
-          from
+          from,
+          true
         );
         if (result.errors) {
           _handleloginCheckError(result.errors);
@@ -405,7 +406,7 @@ const SplashScreenContainer = (props: any) => {
     cno: string,
     HASH_KEY: string,
     from: string,
-    flag = false // 자동로그인
+    flag = true // 자동로그인
   ) => {
     const checkResult = await UserApi.check(
       AUTH_A_TOKEN,
