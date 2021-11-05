@@ -114,7 +114,7 @@ const SplashScreenContainer = (props: any) => {
     } else {
       setTimeout(() => {
         setFirst(false);
-      }, 10000);
+      }, 3000);
     }
   };
 
@@ -193,11 +193,11 @@ const SplashScreenContainer = (props: any) => {
   };
 
   async function _autoLoginChk() {
-    await new Promise((res)=>{
-      setTimeout(() => {
-        res(true)
-      }, 2000);
-    })
+    // await new Promise((res)=>{
+    //   setTimeout(() => {
+    //     res(true)
+    //   }, 10000);
+    // })
     const result = await _handleCheckAutoLogin();
     if (result === 'success') {
       _setLoaded(true);
@@ -493,6 +493,7 @@ const SplashScreenContainer = (props: any) => {
       servernoti={serverNoti[notiIndex]}
       loaded={loaded}
       children={props.children}
+      destination={destination}
     />
   );
 };

@@ -202,6 +202,7 @@ class ReactInstanceManagerHolder {
                 new com.avishayil.rnrestart.ReactNativeRestartPackage(),
                 new com.github.wumke.RNExitApp.RNExitAppPackage(),
                 new com.zxcpoiu.incallmanager.InCallManagerPackage(),
+                new com.airbnb.android.react.lottie.LottiePackage(),
 
                 new com.BV.LinearGradient.LinearGradientPackage(),
 

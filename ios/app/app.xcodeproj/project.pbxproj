@@ -33,6 +33,10 @@
 		8AF6C8052702E683001F6494 /* ja.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 8AF6C8022702E683001F6494 /* ja.lproj */; };
 		8AF6C8062702E683001F6494 /* en.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 8AF6C8032702E683001F6494 /* en.lproj */; };
 		8AF6C8072702E683001F6494 /* ko.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 8AF6C8042702E683001F6494 /* ko.lproj */; };
+		8AFC07C22734B9DF00CC895F /* img_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 8AFC07BB2734B9DF00CC895F /* img_1.png */; };
+		8AFC07C32734B9DF00CC895F /* img_0.png in Resources */ = {isa = PBXBuildFile; fileRef = 8AFC07BC2734B9DF00CC895F /* img_0.png */; };
+		8AFC07C42734B9DF00CC895F /* data.json in Resources */ = {isa = PBXBuildFile; fileRef = 8AFC07BD2734B9DF00CC895F /* data.json */; };
+		8AFC07C52734B9DF00CC895F /* splash.json in Resources */ = {isa = PBXBuildFile; fileRef = 8AFC07BE2734B9DF00CC895F /* splash.json */; };
 		9ED76A7D4CD14CF2833AD5D8 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 18E0E509A0794B61AE8D32CA /* Zocial.ttf */; };
 		B44361510E9344469689B522 /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 440A3B3E04824CBD89125EC7 /* FontAwesome5_Brands.ttf */; };
 		BA3F9908B5C9486BADBB5BDA /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 96D7E4D506C4437BA1F3B579 /* AntDesign.ttf */; };
@@ -153,6 +157,10 @@
 		8AF6C8022702E683001F6494 /* ja.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ja.lproj; sourceTree = SOURCE_ROOT; };
 		8AF6C8032702E683001F6494 /* en.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = en.lproj; sourceTree = SOURCE_ROOT; };
 		8AF6C8042702E683001F6494 /* ko.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ko.lproj; sourceTree = SOURCE_ROOT; };
+		8AFC07BB2734B9DF00CC895F /* img_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = img_1.png; sourceTree = "<group>"; };
+		8AFC07BC2734B9DF00CC895F /* img_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = img_0.png; sourceTree = "<group>"; };
+		8AFC07BD2734B9DF00CC895F /* data.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = data.json; sourceTree = "<group>"; };
+		8AFC07BE2734B9DF00CC895F /* splash.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = splash.json; sourceTree = "<group>"; };
 		96D7E4D506C4437BA1F3B579 /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
 		99CF24157FF14692825B45C4 /* DOUZONEText10.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = DOUZONEText10.ttf; path = ../../assets/fonts/DOUZONEText10.ttf; sourceTree = "<group>"; };
 		9F891AAA22E2843EF91D9684 /* Pods-WehagoMeet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WehagoMeet.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-WehagoMeet/Pods-WehagoMeet.debug.xcconfig"; sourceTree = "<group>"; };
@@ -326,9 +334,38 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		8AFC07B32734B9DF00CC895F /* lottie */ = {
+			isa = PBXGroup;
+			children = (
+				8AFC07B42734B9DF00CC895F /* splash */,
+			);
+			name = lottie;
+			path = ../../assets/new/lottie;
+			sourceTree = "<group>";
+		};
+		8AFC07B42734B9DF00CC895F /* splash */ = {
+			isa = PBXGroup;
+			children = (
+				8AFC07BA2734B9DF00CC895F /* images */,
+				8AFC07BD2734B9DF00CC895F /* data.json */,
+				8AFC07BE2734B9DF00CC895F /* splash.json */,
+			);
+			path = splash;
+			sourceTree = "<group>";
+		};
+		8AFC07BA2734B9DF00CC895F /* images */ = {
+			isa = PBXGroup;
+			children = (
+				8AFC07BB2734B9DF00CC895F /* img_1.png */,
+				8AFC07BC2734B9DF00CC895F /* img_0.png */,
+			);
+			path = images;
+			sourceTree = "<group>";
+		};
 		D47546BBD5204D1592814307 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8AFC07B32734B9DF00CC895F /* lottie */,
 				96D7E4D506C4437BA1F3B579 /* AntDesign.ttf */,
 				1F6E4808E11241FD888B81CB /* Entypo.ttf */,
 				1CFDDA5CD9DE4E30A4AE33A8 /* EvilIcons.ttf */,
@@ -455,7 +492,9 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				BA3F9908B5C9486BADBB5BDA /* AntDesign.ttf in Resources */,
+				8AFC07C52734B9DF00CC895F /* splash.json in Resources */,
 				F064381ADDF548409D9529CA /* Entypo.ttf in Resources */,
+				8AFC07C42734B9DF00CC895F /* data.json in Resources */,
 				BAD296FC9C84493795D508FD /* EvilIcons.ttf in Resources */,
 				3BF721CD40E54E3DAEEA93E2 /* Feather.ttf in Resources */,
 				07866616193C4547BB53A8C5 /* FontAwesome.ttf in Resources */,
@@ -466,11 +505,13 @@
 				DD0B91E1C23E45A4A4876292 /* Foundation.ttf in Resources */,
 				8AF6C8072702E683001F6494 /* ko.lproj in Resources */,
 				FC190ABC6BA64E6F8A3057FE /* Ionicons.ttf in Resources */,
+				8AFC07C32734B9DF00CC895F /* img_0.png in Resources */,
 				5043A8A0282842B7AF0A0329 /* MaterialCommunityIcons.ttf in Resources */,
 				D52263BC69B44F169BF6E044 /* MaterialIcons.ttf in Resources */,
 				FDC834AC2702E8CE00FE6826 /* ja.lproj in Resources */,
 				8AF6C8062702E683001F6494 /* en.lproj in Resources */,
 				6EBB9C6A0D724BD49FDA16FB /* Octicons.ttf in Resources */,
+				8AFC07C22734B9DF00CC895F /* img_1.png in Resources */,
 				FDC834AD2702E8CE00FE6826 /* en.lproj in Resources */,
 				CFD9EA02141A442991401EC1 /* SimpleLineIcons.ttf in Resources */,
 				9ED76A7D4CD14CF2833AD5D8 /* Zocial.ttf in Resources */,
@@ -661,7 +702,7 @@
 				CODE_SIGN_ENTITLEMENTS = app.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = BR6U9G47ZR;
 				ENABLE_BITCODE = NO;
@@ -692,7 +733,7 @@
 				CODE_SIGN_ENTITLEMENTS = app.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = BR6U9G47ZR;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = src/Info.plist;
@@ -726,7 +767,7 @@
 				CODE_SIGN_ENTITLEMENTS = "broadcast-extension/extension.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = BR6U9G47ZR;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -764,7 +805,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = BR6U9G47ZR;
 				GCC_C_LANGUAGE_STANDARD = gnu11;

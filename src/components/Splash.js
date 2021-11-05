@@ -25,8 +25,8 @@ export default function Splash() {
       style={[styles.container, styles.horizonContainer]}
     >
       <Lottie
-        source={require('../../assets/new/lottie/splash/data.json')}
-        imageAssetsFolder={'assets/new/lottie/splash/images'}
+        source={require('../../assets/new/lottie/splash/splash.json')}
+        imageAssetsFolder={'images'}
         autoPlay
         loop
       />

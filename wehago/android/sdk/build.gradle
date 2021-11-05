@@ -90,6 +90,7 @@ dependencies {
     implementation project(':react-native-exit-app')
     implementation project(':react-native-incall-manager')
     implementation project(':react-native-linear-gradient')
+    implementation project(':lottie-react-native')
 
 
 
