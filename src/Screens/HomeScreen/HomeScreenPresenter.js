@@ -136,9 +136,10 @@ const HomeScreenPresenter = props => {
         !isWehagoV && (
           <AddButton
             onClick={() =>
-              props.onRedirect('Create', {
-                onGetWetalkList: props.onGetWetalkList
-              })
+              // props.onRedirect('Create', {
+              //   onGetWetalkList: props.onGetWetalkList
+              // })
+              props.onRedirect('CreateMeetRoom')
             }
           />
         )}

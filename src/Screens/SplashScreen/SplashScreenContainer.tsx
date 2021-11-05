@@ -405,7 +405,7 @@ const SplashScreenContainer = (props: any) => {
     cno: string,
     HASH_KEY: string,
     from: string,
-    flag = false // 자동로그인
+    flag = autoLogin // 자동로그인
   ) => {
     const checkResult = await UserApi.check(
       AUTH_A_TOKEN,

@@ -299,6 +299,8 @@ PODS:
     - React
   - react-native-calendar-events (1.6.4):
     - React
+  - react-native-date-picker (4.1.1):
+    - React-Core
   - react-native-keep-awake (4.0.0):
     - React
   - react-native-netinfo (4.1.5):
@@ -439,6 +441,7 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-background-timer (from `../node_modules/react-native-background-timer`)
   - react-native-calendar-events (from `../node_modules/react-native-calendar-events`)
+  - react-native-date-picker (from `../node_modules/react-native-date-picker`)
   - react-native-keep-awake (from `../node_modules/react-native-keep-awake`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-orientation-locker (from `../node_modules/react-native-orientation-locker/react-native-orientation-locker.podspec`)
@@ -540,6 +543,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-background-timer"
   react-native-calendar-events:
     :path: "../node_modules/react-native-calendar-events"
+  react-native-date-picker:
+    :path: "../node_modules/react-native-date-picker"
   react-native-keep-awake:
     :path: "../node_modules/react-native-keep-awake"
   react-native-netinfo:
@@ -649,6 +654,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 92ceee6c66dc19886289b52436ade7e020b89602
   react-native-background-timer: e0384ea2fa5a98f67f84f9c4dc274260ddd674ed
   react-native-calendar-events: ee9573e355711ac679e071be70789542431f4ce3
+  react-native-date-picker: 414fe8f73392bae030dc4efec39d743b5c5de283
   react-native-keep-awake: eba3137546b10003361b37c761f6c429b59814ae
   react-native-netinfo: 8d8db463bcc5db66a8ac5c48a7d86beb3b92f61a
   react-native-orientation-locker: 998c0744e26624407dac068c04c605b4af7304a2
@@ -685,6 +691,6 @@ SPEC CHECKSUMS:
   SDWebImageWebPCoder: 947093edd1349d820c40afbd9f42acb6cdecd987
   Yoga: 96b469c5e81ff51b917b92e8c3390642d4ded30c
 
-PODFILE CHECKSUM: a6b44f92a31ceaf0e7b283b498391ddc286e4cdc
+PODFILE CHECKSUM: 4a5a03512ddb3976c99f4d99d120ffdf338689f6
 
 COCOAPODS: 1.11.2

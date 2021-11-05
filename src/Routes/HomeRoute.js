@@ -25,6 +25,7 @@ import RouteTitle from './RouteTitle';
 import DrawerContent from '../components/DrawerContent';
 import { WEHAGO_TYPE } from '../../config';
 import { getT } from '../utils/translateManager';
+import CreateMeetScreen from '../Screens/CreateMeetScreen';
 
 const commonStyle = {
   height: 53,
@@ -209,7 +210,11 @@ const HomeRouteStack = () => {
         headerTintColor: '#fff',
         headerStyle: commonStyle
       })
-    }
+    },
+
+    CreateMeetRoom: {
+      screen: CreateMeetScreen,
+    },
   };
 };
 
