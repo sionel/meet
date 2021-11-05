@@ -203,9 +203,14 @@ export default function CreateMeetScreenContainer(props: any) {
     setSwitchAlram(!switchAlram);
   };
   const onSwitchReserveChange = () => {
-    const now = new Date();
-    setStartTime(getDate(now));
-    setEndTime(getDate(new Date(now)));
+    if(switchReserve) {
+      const now = new Date();
+      setStartTime(getDate(now));
+      setEndTime(getDate(new Date(now)));
+    }else {
+      openDateTimePicker('none');
+    }
+
     setSwitchReserve(!switchReserve);
   };
   const onSwitchDelAlramChange = () => {
@@ -254,6 +259,10 @@ export default function CreateMeetScreenContainer(props: any) {
     setSendMessage(msg);
     setSendMsgCnt(msg.length);
   };
+
+  const onHandleBack = () => {
+    props.navigation.goBack();
+  }
 
   return (
     <View style={{ flex: 1 }}>
@@ -315,6 +324,7 @@ export default function CreateMeetScreenContainer(props: any) {
           roomNameCnt={roomNameCnt}
           sendMsgCnt={sendMsgCnt}
           old={true}
+          onHandleBack={onHandleBack}
         />
       )}
     </View>

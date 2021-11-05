@@ -30,7 +30,7 @@ import CreateMeetScreen from '../Screens/CreateMeetScreen';
 const commonStyle = {
   height: 53,
   color: '#fff',
-  backgroundColor: '#1C90FB',
+  backgroundColor: '#1C90FB'
 };
 const backBtn = require('../../assets/buttons/back_btn.png');
 
@@ -136,9 +136,7 @@ const HomeRouteStack = () => {
       screen: PolicyScreen,
       navigationOptions: ({ navigation }) => ({
         headerTitle: (
-          <RouteTitle
-            title={navigation.getScreenProps().t('option_legal')}
-          />
+          <RouteTitle title={navigation.getScreenProps().t('option_legal')} />
         ),
         headerLeft: <BackButton navigation={navigation} to={'Configuration'} />,
         headerTintColor: '#fff',
@@ -214,7 +212,11 @@ const HomeRouteStack = () => {
 
     CreateMeetRoom: {
       screen: CreateMeetScreen,
-    },
+      navigationOptions: ({ navigation }) => ({
+        header:null
+      }),
+      
+    }
   };
 };
 
