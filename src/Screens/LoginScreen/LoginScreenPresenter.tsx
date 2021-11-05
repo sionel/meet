@@ -37,7 +37,8 @@ const LoginScreenPresenter = (props: any) => {
   } = props;
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: 'transparent' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+      <StatusBar />
       <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
@@ -207,7 +208,7 @@ const styles = StyleSheet.create({
   //화면 방향에 따른 패딩
   verContainer: {
     flex: 1,
-    backgroundColor: '#e7e8ea',
+    backgroundColor: '#fff',
     paddingLeft: '8%',
     paddingRight: '8%'
   },
@@ -240,7 +241,7 @@ const styles = StyleSheet.create({
   //코드 입력 안내문
   textHead: {
     fontSize: 20,
-    fontWeight: '500',
+    fontWeight: 'bold',
     textAlign: 'center',
     color: '#000'
   },
@@ -250,13 +251,13 @@ const styles = StyleSheet.create({
   textSub1: {
     paddingTop: 15,
     fontSize: 16,
-    fontWeight: '300',
+    fontWeight: '400',
     textAlign: 'center',
     color: 'rgb(147,147,147)'
   },
   textSub2: {
     fontSize: 16,
-    fontWeight: '300',
+    fontWeight: '400',
     textAlign: 'center',
     color: 'rgb(147,147,147)'
   },
@@ -270,19 +271,20 @@ const styles = StyleSheet.create({
     height: 54,
     fontSize: 30,
     textAlign: 'center',
-    borderRadius: 8,
+    // borderRadius: 8,
     borderColor: '#e6e6e6',
     color: '#000',
     zIndex: 999,
-    padding: 0
+    padding: 0,
+    borderBottomWidth: 4
   },
   focusAccent: {
     borderColor: '#0033ff',
-    borderWidth: 1
+    borderBottomWidth: 4
   },
   inputAccent: {
     borderColor: '#333333',
-    borderWidth: 1
+    borderBottomWidth: 4
   },
   inputLogging: {
     borderColor: 'rgb(221,221,221)',
@@ -307,18 +309,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16
   },
-  // loginNaviView: {
-  //   flexDirection: 'row'
-  // },
-  // loginNavigation: {
-  //   color: '#333333',
-  //   fontSize: 13,
-  //   lineHeight: Platform.OS === 'ios' ? 18 : 16.5
-  // },
-  // arrowImage: {
-  //   width: 18,
-  //   height: 18
-  // },
   none: {
     position: 'absolute',
     bottom: 95,

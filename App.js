@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { AppRegistry, Linking ,StatusBar} from 'react-native';
+import { AppRegistry, Linking } from 'react-native';
 import { Provider, useDispatch } from 'react-redux';
 import { PersistGate } from 'redux-persist/es/integration/react';
 import configureStore from './src/redux/configureStore';
@@ -47,7 +47,6 @@ function AppWapper(props) {
     <Provider store={store}>
       <PersistGate persistor={persistor}>
         <CustomProvider>
-          <StatusBar backgroundColor="blue" barStyle="light-content" translucent={true} />
           <App {...props} />
         </CustomProvider>
       </PersistGate>
