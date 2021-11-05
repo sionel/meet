@@ -7,7 +7,8 @@ import {
   Text,
   TextInput,
   Platform,
-  SafeAreaView
+  SafeAreaView,
+  StatusBar
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -36,7 +37,7 @@ const LoginScreenPresenter = (props: any) => {
   } = props;
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#e7e8ea' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'transparent' }}>
       <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"

@@ -59,8 +59,13 @@ const LoginInputPresenter = (props: any) => {
 
   return (
     <Fragment>
-      <SafeAreaView style={{ flex: 0, backgroundColor: '#F0F8FF' }} />
-      <SafeAreaView style={{ flex: 1, backgroundColor: '#FCFDFF' }}>
+      <LinearGradient
+        end={{ x: 0, y: 0 }}
+        start={{ x: 0, y: 1 }}
+        colors={['#FCFDFF', '#F0F8FF']}
+        style={{ position:'absolute' , width:'100%' ,height:'100%'}}
+      />
+      <SafeAreaView style={{ flex: 1, backgroundColor: 'transparent' }}>
         <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <ScrollView
             contentInsetAdjustmentBehavior="automatic"
