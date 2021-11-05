@@ -38,12 +38,11 @@ const LoginScreenContainer = ({ navigation }: any) => {
 
   const changeInputcode = async (value: string) => {
     const regex = /^[0-9|a-f|A-F|]*$/;
-
+    setInputcodeErr(false);
     logging && setCode('');
     setLogging(false);
-
+    setShadowCode('');
     let joincode = '';
-
     if (value.match(regex)) {
       joincode = value.trim();
       setCode(joincode);
@@ -58,6 +57,8 @@ const LoginScreenContainer = ({ navigation }: any) => {
       }
     } else {
       setJoincodeErr(true);
+      // logging && setInputcodeErr(true);
+      // setLogging(true);
     }
   };
 
@@ -65,9 +66,13 @@ const LoginScreenContainer = ({ navigation }: any) => {
     // V 고려해야할부분
     setLogging(true);
     const result = await MeetApi.searchJoincode(joincode);
-    if (!result) setInputcodeErr(true);
-    else if (result.resultData.code === 'E00001') setInputcodeErr(true);
-    else {
+    if (!result) {
+      setInputcodeErr(true);
+      setFocusingNum(0);
+    } else if (result.resultData.code === 'E00001') {
+      setFocusingNum(0);
+      setInputcodeErr(true);
+    } else {
       _setLoaded(true);
       _setParams({
         accesstype: 'joincode',
@@ -76,7 +81,7 @@ const LoginScreenContainer = ({ navigation }: any) => {
       });
       _setDestination('Setting');
     }
-    setLogging(true);
+    // setLogging(true);
   };
 
   const onFocusInput = () => {
@@ -93,8 +98,9 @@ const LoginScreenContainer = ({ navigation }: any) => {
   };
 
   const onFocusOutInput = () => {
-    if (codeLineRef.current.isFocused()) codeLineRef.current.blur();
-    else setFocusingNum(-1);
+    // if (codeLineRef.current.isFocused()) codeLineRef.current.blur();
+    setFocusingNum(-1);
+    
   };
 
   const LoginForWehago = () => {

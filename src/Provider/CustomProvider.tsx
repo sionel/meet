@@ -29,8 +29,6 @@ export default function CustomProvider(props: any) {
     ) {
       Orientation.lockToPortrait();
     }
-    console.log('orientation');
-    console.log(orientation);
 
     dispatch(orientationAction.setOrientation(orientation));
   };
