@@ -24,8 +24,8 @@ const user = require('../../../../assets/new/icons/ic_person.png');
 const lock = require('../../../../assets/new/icons/ic_lock.png');
 const loading = require('../../../../assets/new/icons/loadingIcon.png');
 
-const patternTop = require('../../../../assets/new/patterns/bg_pattern_up.png');
-const patternBot = require('../../../../assets/new/patterns/bg_pattern_down.png');
+const patternTop = require('../../../../assets/new/patterns/login_pattern_top.png');
+const patternBot = require('../../../../assets/new/patterns/login_pattern_bottom.png');
 
 const cancel = require('../../../../assets/new/icons/ic_cancel_fill.png');
 
@@ -250,7 +250,7 @@ const LoginInputPresenter = (props: any) => {
                   >
                     <TouchableHighlight
                       activeOpacity={0.8}
-                      underlayColor={'transparent'}
+                      underlayColor={'rgba(0,0,0,0.2)'}
                       style={styles.loginBtnTouch}
                       onPress={() => loginchk(userId, password, captcha)}
                     >

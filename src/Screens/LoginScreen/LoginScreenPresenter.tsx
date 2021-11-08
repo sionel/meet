@@ -187,9 +187,10 @@ const LoginScreenPresenter = (props: any) => {
                 >
                   <TouchableHighlight
                     activeOpacity={0.7}
-                    underlayColor={'transparent'}
+                    // underlayColor={'transparent'}
                     style={styles.loginBtnTouch}
                     onPress={LoginForWehago}
+                    underlayColor={'rgba(0,0,0,0.2)'}
                   >
                     <Text style={styles.loginBtnText}>
                       {t('renewal.login_wehagologin')}
@@ -235,7 +236,9 @@ const styles = StyleSheet.create({
   codeContainer: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    // backgroundColor:'red',
+    paddingHorizontal:10
   },
   bottomContainer: {
     flex: 1,
@@ -270,7 +273,7 @@ const styles = StyleSheet.create({
   //코드입력
   inputNumber: {
     backgroundColor: '#fff',
-    width: 44,
+    width: 34,
     height: 54,
     fontSize: 30,
     textAlign: 'center',
