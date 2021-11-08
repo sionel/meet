@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  Platform,
-  Image,
-  StyleSheet,
-  View,
-  ImageBackground
-} from 'react-native';
+import { Platform, Image, StyleSheet, View, StatusBar } from 'react-native';
 import { Text } from './StyledText';
 import { WEHAGO_TYPE } from '../../config';
 import { getT } from '../utils/translateManager';
@@ -24,6 +18,8 @@ export default function Splash() {
       colors={['#FCFDFF', '#dbecfe']}
       style={[styles.container, styles.horizonContainer]}
     >
+      <StatusBar hidden={true} />
+
       <Lottie
         source={require('../../assets/new/lottie/splash/splash.json')}
         imageAssetsFolder={'images'}
