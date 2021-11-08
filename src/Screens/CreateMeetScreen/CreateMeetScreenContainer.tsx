@@ -16,7 +16,7 @@ import { actionCreators } from '../../redux/modules/alert';
 const { width, height } = Dimensions.get('window');
 
 export default function CreateMeetScreenContainer(props: any) {
-  const date = new Date();
+  const time = new Date();
   const [switchAlram, setSwitchAlram] = useState(false);
   const [switchReserve, setSwitchReserve] = useState(false);
   const [switchDelAlram, setSwitchDelAlram] = useState(false);
@@ -28,14 +28,17 @@ export default function CreateMeetScreenContainer(props: any) {
   const [roomName, setRoomName] = useState('');
   const [roomNameCnt, setRoomNameCnt] = useState(0);
   const [isPublic, setIsPublic] = useState(true);
-  const [dateTimePicker, setDateTimePicker] = useState<'none' | 'start' | 'end'>(
+  const [timePicker, setTimePicker] = useState<'none' | 'start' | 'end'>(
+    'none'
+  );
+  const [datePicker, setDatePicker] = useState<'none' | 'start' | 'end'>(
     'none'
   );
 
   const [invited, setInvited] = useState([]);
   const [recents, setRecents] = useState([]);
   const [inviteText, setInviteText] = useState('');
-  // const [timeType, setTimeType] = useState('');
+  const [timeType, setTimeType] = useState('');
 
   //
   //
@@ -51,6 +54,8 @@ export default function CreateMeetScreenContainer(props: any) {
     current: new Date()
   });
 
+  const [date, setDate] = useState(new Date());
+
   const [email, setEmail] = useState('');
   const [selectedEmployee, setSelectedEmployee] = useState({
     member: {},
@@ -61,7 +66,7 @@ export default function CreateMeetScreenContainer(props: any) {
 
   const fadeAnim = useRef(new Animated.ValueXY()).current;
 
-  const { auth } = useSelector((state:any) => state.user);
+  const { auth } = useSelector((state: any) => state.user);
   const dispatch = useDispatch();
 
   const resetAni = () => {
@@ -105,7 +110,7 @@ export default function CreateMeetScreenContainer(props: any) {
     } else {
       const company = result.resultData;
 
-      const hangleMapper = company.reduce((acc:any, i:any) => {
+      const hangleMapper = company.reduce((acc: any, i: any) => {
         const charCode = i.user_name.charCodeAt(0);
         let charIndex;
         if (
@@ -178,11 +183,27 @@ export default function CreateMeetScreenContainer(props: any) {
     setIsPublic(!isPublic);
   };
 
-  const openDateTimePicker = async (type: 'start' | 'end' | 'none') => {
-    setDateTimePicker(type);
+  const openDatePicker = async (type: 'start' | 'end' | 'none') => {
+    setTimePicker('none');
+    if (datePicker === type) setDatePicker('none');
+    else {
+      setDatePicker(type);
+      setTimeType(type);
+    }
+  };
+
+  const openTimePicker = async (type: 'start' | 'end' | 'none') => {
+    setDatePicker('none');
+    if (timePicker === type) setTimePicker('none');
+    else {
+      setTimePicker(type);
+      setTimeType(type);
+    }
   };
 
   const getDate = (date: Date) => {
+    console.log(date);
+    
     let obj = {
       date: `${date.getFullYear()}.${(date.getMonth() + 1)
         .toString()
@@ -196,19 +217,35 @@ export default function CreateMeetScreenContainer(props: any) {
       current: date
     };
 
+    console.log(obj);
+    
+
     return obj;
   };
+
+  // const setDate = (d)
 
   const onSwitchAlramChange = () => {
     setSwitchAlram(!switchAlram);
   };
-  const onSwitchReserveChange = () => {
-    if(switchReserve) {
+  const onSwitchReserveChange = (value: any) => {
+    if (value) {
       const now = new Date();
       setStartTime(getDate(now));
       setEndTime(getDate(new Date(now)));
-    }else {
-      openDateTimePicker('none');
+    } else {
+      setStartTime({
+        date: '',
+        time: '',
+        current: new Date()
+      });
+      setEndTime({
+        date: '',
+        time: '',
+        current: new Date()
+      });
+      openDatePicker('none');
+      openTimePicker('none');
     }
 
     setSwitchReserve(!switchReserve);
@@ -217,22 +254,47 @@ export default function CreateMeetScreenContainer(props: any) {
     setSwitchDelAlram(!switchDelAlram);
   };
 
+  const onDateChange = (date: any) => {
+    // console.log(date);
+
+    setTimePicker(datePicker);
+    setDatePicker('none');
+  };
+
+  const onTimeChange = (time: any) => {
+    let obj;
+    // console.log(timeType);
+    // console.log(time);
+
+    if (timeType === 'start') {
+      obj = getDate(time);
+      setStartTime(obj);
+    } else if (timeType === 'end') {
+      // obj = endTime;
+      setEndTime(getDate(time));
+    }
+  };
+
+  const onTimeConfirm = () => {
+    // console.log(timeType);
+    setTimePicker('none');
+  };
   // const onSelectDate = (date:any) => {
   //   // if (datePicker === 'start') {
   //   // } else if (datePicker === 'end') {
   //   // }
 
   //   console.log(date);
-  //   setTimePicker(dateTimePicker);
-  //   setDateTimePicker('none');
+  //   setTimePicker(datePicker);
+  //   setDatePicker('none');
   // };
 
   // const onSelectTime = (time:any) => {
   //   console.log(time);
   //   setTimePicker('none');
   // };
-
-  useEffect(() => {}, [dateTimePicker]);
+  // useEffect(() => {}, [timePicker]);
+  // useEffect(() => {}, [datePicker]);
 
   useEffect(() => {}, [sendMessage]);
   useEffect(() => {
@@ -262,7 +324,7 @@ export default function CreateMeetScreenContainer(props: any) {
 
   const onHandleBack = () => {
     props.navigation.goBack();
-  }
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -294,7 +356,8 @@ export default function CreateMeetScreenContainer(props: any) {
           employee={employee}
           roomName={roomName}
           isPublic={isPublic}
-          dateTimePicker={dateTimePicker}
+          datePicker={datePicker}
+          timePicker={timePicker}
           startTime={startTime}
           endTime={endTime} // 여기서 시간 숫자인거 수정
           email={email}
@@ -305,10 +368,10 @@ export default function CreateMeetScreenContainer(props: any) {
           setRoomName={setRoomName}
           roomNameChange={roomNameChange}
           togglePublic={togglePublic}
-          // onSelectDate={onSelectDate}
-          // onSelectTime={onSelectTime}
-          setDateTimePicker={setDateTimePicker}
-          openDateTimePicker={openDateTimePicker}
+          setDatePicker={setDatePicker}
+          setTimePicker={setTimePicker}
+          openTimePicker={openTimePicker}
+          openDatePicker={openDatePicker}
           // setTime={setTime}
           // setDate={setDate}
           setEmail={setEmail}
@@ -321,10 +384,16 @@ export default function CreateMeetScreenContainer(props: any) {
           onSwitchAlramChange={onSwitchAlramChange}
           onSwitchReserveChange={onSwitchReserveChange}
           onSwitchDelAlramChange={onSwitchDelAlramChange}
+          setStartTime={setStartTime}
           roomNameCnt={roomNameCnt}
           sendMsgCnt={sendMsgCnt}
           old={true}
           onHandleBack={onHandleBack}
+          onDateChange={onDateChange}
+          onTimeChange={onTimeChange}
+          onTimeConfirm={onTimeConfirm}
+          date={date}
+          setDate={setDate}
         />
       )}
     </View>

@@ -16,9 +16,8 @@ import {
   Animated,
   StatusBar
 } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-import openDateTimePicker from 'react-native-date-picker';
+import DatePicker from 'react-native-date-picker';
 // import Autocomplete from 'react-native-autocomplete-input';
 import CalendarPicker from 'react-native-calendar-picker';
 
@@ -43,7 +42,8 @@ const CreateMeetScreenPresenter = (props: any) => {
     timeType,
     startTime,
     endTime,
-    dateTimePicker,
+    timePicker,
+    datePicker,
     email,
     selectedEmployee,
     sendMessage,
@@ -51,7 +51,8 @@ const CreateMeetScreenPresenter = (props: any) => {
     setRoomName,
     roomNameChange,
     togglePublic,
-    openDateTimePicker,
+    openTimePicker,
+    openDatePicker,
     // onSelectDate,
     // onSelectTime,
     setEmail,
@@ -65,12 +66,20 @@ const CreateMeetScreenPresenter = (props: any) => {
     onSwitchAlramChange,
     onSwitchReserveChange,
     onSwitchDelAlramChange,
+    setStartTime,
     roomNameCnt,
     sendMsgCnt,
     old,
-    onHandleBack
+    onHandleBack,
+    onDateChange,
+    onTimeChange,
+    onTimeConfirm,
+    date,
+    setDate
   } = props;
   const t = getT();
+  
+  // console.log(startTime);
 
   const TimePickerComponent = (
     <View
@@ -90,7 +99,7 @@ const CreateMeetScreenPresenter = (props: any) => {
           {'시간설정'}
         </Text>
         <TouchableOpacity
-          // onPress={onSelectTime}
+          onPress={() => onTimeConfirm()}
           style={{
             flex: 1,
             alignItems: 'flex-end',
@@ -109,277 +118,379 @@ const CreateMeetScreenPresenter = (props: any) => {
           </Text>
         </TouchableOpacity>
       </View>
-      {/* <openDateTimePicker
-        onDateChange={(time:any)=>{console.log(time);
-        }}
+      <DatePicker
+        onDateChange={setDate}
         mode={'time'}
-        date={timeType === 'start' ? startTime.current : endTime.current}
-      /> */}
+        date={date}
+      />
     </View>
   );
-  const openDateTimePickerComponent = (
+
+  const DatePickerComponent = (
     <CalendarPicker
-      // onDateChange={onSelectDate}
       weekdays={['일', '월', '화', '수', '목', '금', '토']}
       months={['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']}
-      previousTitle="이전"
-      nextTitle="다음"
+      previousTitle="<"
+      // previousTitleStyle={{ fontSize: 18, paddingLeft: '5%' }}
+      nextTitle=">"
+      // nextTitleStyle={{ fontSize: 18, paddingRight: '5%' }}
       minDate={timeType === 'end' ? startTime.current : undefined}
+      dayShape="square"
+      scaleFactor={400}
+      selectedDayTextColor="#fff"
+      selectedDayStyle={{ borderRadius: 5, backgroundColor: '#1c90fb' }}
+      onDateChange={onDateChange}
+      selectYearTitle={'년도 선택'}
+      selectMonthTitle={''}
+      textStyle={{ fontSize: 14 }}
     />
   );
 
-  // useEffect(() => {
-  //   if (Object.keys(selectedEmployee.member).length > 0) debugger;
-  // }, []);
-
-  // useEffect(() => {}, [employee]);
-  // useEffect(() => {}, [timePicker]);
-
   return old ? (
     // <SafeAreaProvider>
-      <SafeAreaView style={styles.safeArea}>
-        <ScrollView contentContainerStyle={{flex:1, minHeight: 812}}>
-          <View style={styles.topTitle}>
-            <TouchableOpacity onPress={onHandleBack}>
-              <Text style={styles.ft14N}>{t('취소')}</Text>
-            </TouchableOpacity>
-            <Text style={styles.TitleText}>{t('회의 생성하기')}</Text>
-            <TouchableOpacity>
-              <Text style={styles.ft14N}>{t('생성')}</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={{ flex: 1.3, backgroundColor: '#fff' }}>
-            
-              <View style={styles.privateContainer}>
-                <View
-                  style={[
-                    styles.codeContainer,
-                    !isPublic && { backgroundColor: '#1c90fb' }
-                  ]}
-                >
-                  <TouchableOpacity onPress={togglePublic}>
-                    <Image
-                      source={isPublic ? ic_code : ic_lock}
-                      style={styles.icCode}
-                    />
-                  </TouchableOpacity>
-                </View>
-                <View style={styles.privateTextContainer}>
-                  <Text style={styles.privateMainText}>
-                    {isPublic ? t('공개 회의') : t('비공개 회의')}
-                  </Text>
-                  <Text style={styles.privateSubText}>
-                    {isPublic
-                      ? t(
-                          '공유 URL과 참여코드를 통해 초대 및 입장이 가능합니다.'
-                        )
-                      : t('지정된 참여자 이외엔 접속 불가능합니다.')}
-                  </Text>
-                </View>
-              </View>
-            
-            <View style={{ backgroundColor: '#F7F8FA', flex: 0.01 }} />
-            {isPublic && (
-              <>
-                <View style={styles.alramContainer}>
-                  <Text style={styles.ft12}>
-                    {t('모든 조직 구성원에게 해당 회의정보 알림을 보냅니다.')}
-                  </Text>
-                  <Switch
-                    onValueChange={onSwitchAlramChange}
-                    value={switchAlram}
-                    trackColor={{ false: '', true: '#1c90fb' }}
-                  />
-                </View>
-              </>
-            )}
-            <View style={{ backgroundColor: '#F7F8FA', flex: 0.02 }} />
-            <View style={styles.middleContainer}>
-              <View style={styles.directionCol}>
-                <Text style={styles.textHeader}>{t('회의명')}</Text>
-                <TextInput
-                  onChangeText={roomNameChange}
-                  value={roomName}
-                  maxLength={20}
-                  style={styles.roomNameStyle}
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView contentContainerStyle={[{ flex: 1, minHeight: 813 }]}>
+        <View style={styles.topTitle}>
+          <TouchableOpacity onPress={onHandleBack}>
+            <Text style={styles.ft14N}>{t('취소')}</Text>
+          </TouchableOpacity>
+          <Text style={styles.TitleText}>{t('회의 생성하기')}</Text>
+          <TouchableOpacity>
+            <Text style={styles.ft14N}>{t('생성')}</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={[{ flex: 1, backgroundColor: '#fff' }]}>
+          <View style={styles.privateContainer}>
+            <View
+              style={[
+                styles.codeContainer,
+                !isPublic && { backgroundColor: '#1c90fb' }
+              ]}
+            >
+              <TouchableOpacity onPress={togglePublic}>
+                <Image
+                  source={isPublic ? ic_code : ic_lock}
+                  style={styles.icCode}
                 />
-                <View style={styles.countContainer}>
-                  <Text style={styles.ft12}>{roomNameCnt}</Text>
-                  <Text style={styles.maxLength}>/20</Text>
-                </View>
-              </View>
-              <View style={styles.directionCol}>
-                <Text style={styles.textHeader}>{t('초대메세지')}</Text>
-                <TextInput
-                  onChangeText={sendMessageChange}
-                  value={sendMessage}
-                  maxLength={200}
-                  multiline
-                  style={styles.sendStyle}
-                />
-                <View style={styles.countContainer}>
-                  <Text style={styles.ft12}>{sendMsgCnt}</Text>
-                  <Text style={styles.maxLength}>/200</Text>
-                </View>
-              </View>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.privateTextContainer}>
+              <Text style={styles.privateMainText}>
+                {isPublic ? t('공개 회의') : t('비공개 회의')}
+              </Text>
+              <Text style={styles.privateSubText}>
+                {isPublic
+                  ? t('공유 URL과 참여코드를 통해 초대 및 입장이 가능합니다.')
+                  : t('지정된 참여자 이외엔 접속 불가능합니다.')}
+              </Text>
             </View>
           </View>
 
-          <View style={{ flex: 1, backgroundColor: '#fff' }}>
-            <View style={styles.graybar1} />
+          <View style={{ backgroundColor: '#F7F8FA', flex: 0.01 }} />
+          {isPublic && (
+            <>
+              <View style={styles.alramContainer}>
+                <Text style={styles.ft12}>
+                  {t('모든 조직 구성원에게 해당 회의정보 알림을 보냅니다.')}
+                </Text>
+                <Switch
+                  onValueChange={onSwitchAlramChange}
+                  value={switchAlram}
+                  trackColor={{ false: '', true: '#1c90fb' }}
+                />
+              </View>
+            </>
+          )}
+          <View style={{ backgroundColor: '#F7F8FA', flex: 0.02 }} />
+          <View style={styles.middleContainer}>
+            <View style={styles.directionCol}>
+              <Text style={styles.textHeader}>{t('회의명')}</Text>
+              <TextInput
+                onChangeText={roomNameChange}
+                value={roomName}
+                maxLength={20}
+                style={styles.roomNameStyle}
+              />
+              <View style={styles.countContainer}>
+                <Text style={styles.ft12}>{roomNameCnt}</Text>
+                <Text style={styles.maxLength}>/20</Text>
+              </View>
+            </View>
+            <View style={styles.directionCol}>
+              <Text style={styles.textHeader}>{t('초대메세지')}</Text>
+              <TextInput
+                onChangeText={sendMessageChange}
+                value={sendMessage}
+                maxLength={200}
+                multiline
+                style={[styles.sendStyle, !isPublic && { height: 100 }]}
+              />
+              <View style={styles.countContainer}>
+                <Text style={styles.ft12}>{sendMsgCnt}</Text>
+                <Text style={styles.maxLength}>/200</Text>
+              </View>
+            </View>
+          </View>
+        </View>
+
+        <View style={[{ flex: 1, backgroundColor: '#fff' }]}>
+          <View style={styles.graybar1} />
+          <View
+            style={[
+              styles.reserveContainer,
+              switchReserve && { flex: 0.6, marginTop: 5 }
+            ]}
+          >
             <View
-              style={[styles.reserveContainer, switchReserve && { flex: 1 }]}
-            >
-              <View
-                style={{
+              style={[
+                {
                   flexDirection: 'row',
                   flex: 1,
                   alignItems: 'center',
                   justifyContent: 'space-between'
-                }}
-              >
-                <Text style={styles.ft14B}>{t('예약회의')}</Text>
-                <Switch
-                  onValueChange={onSwitchReserveChange}
-                  value={switchReserve}
-                  trackColor={{ false: '', true: '#1c90fb' }}
-                />
-              </View>
-              {switchReserve && (
-                <>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      flex: 1,
-                      justifyContent: 'space-between',
-                      alignItems: 'center'
-                    }}
-                  >
-                    <Text style={{ fontSize: 14 }}>{t('시작시간')}</Text>
-                    <TouchableOpacity
-                      style={[
-                        styles.datetimeBox,
-                        dateTimePicker === 'start' && {
-                          borderColor: 'rgb(28, 144, 251)'
-                        }
-                      ]}
-                      onPress={() => {
-                        openDateTimePicker('start');
-                      }}
-                    >
-                      <Text
-                        style={
-                          dateTimePicker === 'start' && {
-                            color: 'rgb(28, 144, 251)'
-                          }
-                        }
-                      >
-                        {`${startTime.date} ${startTime.time}`}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      flex: 1,
-                      justifyContent: 'space-between',
-                      alignItems: 'center'
-                    }}
-                  >
-                    <Text style={{ fontSize: 14, fontWeight: 'bold' }}>
-                      {t('시간')}
-                    </Text>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        flex: 1,
-                        justifyContent: 'space-between',
-                        alignItems: 'center'
-                      }}
-                    >
-                      <Switch />
-                      <View>
-                        <Text></Text>
-                      </View>
-                    </View>
-                  </View>
-                  <View></View>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      flex: 1,
-                      justifyContent: 'space-between',
-                      alignItems: 'center'
-                    }}
-                  >
-                    <Text style={{ fontSize: 14 }}>{t('종료시간')}</Text>
-                    <TouchableOpacity
-                      style={[
-                        styles.datetimeBox,
-                        dateTimePicker === 'end'
-                          ? { borderColor: 'rgb(28, 144, 251)' }
-                          : {}
-                      ]}
-                      onPress={() => {
-                        openDateTimePicker('end');
-                      }}
-                    >
-                      <Text
-                        style={
-                          dateTimePicker === 'end'
-                            ? { color: 'rgb(28, 144, 251)' }
-                            : {}
-                        }
-                      >
-                        {`${endTime.date} ${endTime.time}`}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                </>
-              )}
+                }
+              ]}
+            >
+              <Text style={styles.ft14B}>{t('예약회의')}</Text>
+              <Switch
+                onValueChange={onSwitchReserveChange}
+                value={switchReserve}
+                trackColor={{ false: '', true: '#1c90fb' }}
+              />
             </View>
-            <View style={styles.graybar1} />
-            <View style={styles.botContainer}>
-              <View style={styles.conferenceMember}>
-                <View style={{ flexDirection: 'row' }}>
-                  <Text style={styles.ft14B}>{t('참석자')} </Text>
-                  <Text style={[styles.ft14B, { color: '#1c90fb' }]}>1</Text>
-                </View>
-                <Image source={ic_person_plus} style={styles.icPersonPlus} />
-              </View>
-              <View style={styles.deleteAlram}>
-                <View>
-                  <Text
+            {switchReserve && (
+              <>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    flex: 1,
+                    justifyContent: 'space-between',
+                    alignItems: 'center'
+                  }}
+                >
+                  <Text style={{ fontSize: 15 }}>{t('시작시간')}</Text>
+                  <TouchableOpacity
                     style={[
-                      styles.ft12,
-                      { letterSpacing: -0.18, lineHeight: 18 }
+                      styles.datetimeBox,
+                      datePicker === 'start' && {
+                        borderColor: 'rgb(28, 144, 251)'
+                      }
                     ]}
+                    onPress={() => {
+                      openDatePicker('start');
+                    }}
                   >
+                    <Text
+                      style={
+                        datePicker === 'start' && {
+                          color: 'rgb(28, 144, 251)'
+                        }
+                      }
+                    >
+                      {`${startTime.date}`}
+                    </Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={[
+                      styles.datetimeBox,
+                      timePicker === 'start' && {
+                        borderColor: 'rgb(28, 144, 251)'
+                      }
+                    ]}
+                    onPress={() => {
+                      openTimePicker('start');
+                    }}
+                  >
+                    <Text
+                      style={
+                        timePicker === 'start' && {
+                          color: 'rgb(28, 144, 251)'
+                        }
+                      }
+                    >
+                      {`${startTime.time}`}
+                    </Text>
+                  </TouchableOpacity>
+
+                </View>
+                <View
+                  style={[
                     {
-                      '화상회의가 변경 또는 삭제될 경우, \n알림 이메일을 보냅니다.'
+                      flexDirection: 'row',
+                      flex: 1,
+                      justifyContent: 'space-between',
+                      alignItems: 'center'
                     }
-                  </Text>
+                  ]}
+                >
+                  <Text style={{ fontSize: 15 }}>{t('종료시간')}</Text>
+                  <TouchableOpacity
+                    style={[
+                      styles.datetimeBox,
+                      datePicker === 'end'
+                        ? { borderColor: 'rgb(28, 144, 251)' }
+                        : {}
+                    ]}
+                    onPress={() => {
+                      openDatePicker('end');
+                    }}
+                  >
+                    <Text
+                      style={
+                        datePicker === 'end'
+                          ? { color: 'rgb(28, 144, 251)' }
+                          : {}
+                      }
+                    >
+                      {`${endTime.date}`}
+                    </Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={[
+                      styles.datetimeBox,
+                      timePicker === 'end'
+                        ? { borderColor: 'rgb(28, 144, 251)' }
+                        : {}
+                    ]}
+                    onPress={() => {
+                      openTimePicker('end');
+                    }}
+                  >
+                    <Text
+                      style={
+                        timePicker === 'end'
+                          ? { color: 'rgb(28, 144, 251)' }
+                          : {}
+                      }
+                    >
+                      {`${endTime.time}`}
+                    </Text>
+                  </TouchableOpacity>
                 </View>
 
-                <Switch
-                  onValueChange={onSwitchDelAlramChange}
-                  value={switchDelAlram}
-                  trackColor={{ false: '', true: '#1c90fb' }}
-                />
-              </View>
-              <ScrollView
-                contentInsetAdjustmentBehavior="automatic"
-                contentContainerStyle={{
-                  flexGrow: 1
-                }}
-                keyboardShouldPersistTaps="never"
-              ></ScrollView>
-            </View>
+                {/* <View
+                      style={[
+                        {
+                          flexDirection: 'row',
+                          flex: 1,
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          backgroundColor: 'rgb(255,255,255)'
+                        }
+                      ]}
+                    >
+                      <Text style={{ fontSize: 14, fontWeight: 'bold' }}>
+                        {t('시간')}
+                      </Text>
+                      <DatePicker
+                        date={startTime.current}
+                        mode={'time'}
+                        style={{ width: 150, height: 120 }}
+                      />
+                    </View>
+                    <View
+                      style={{
+                        flex: 2.7,
+                        paddingLeft: '5%',
+                        paddingRight: '5%',
+                        marginTop: '1%'
+                      }}
+                    >
+                      {openDatePickerComponent('start')}
+                    </View> */}
+
+                {/* <View
+                      style={[
+                        {
+                          flexDirection: 'row',
+                          flex: 1,
+                          justifyContent: 'space-between',
+                          alignItems: 'center'
+                        }
+                      ]}
+                    >
+                      <Text style={{ fontSize: 14, fontWeight: 'bold' }}>
+                        {t('시간')}
+                      </Text>
+                      <DatePicker
+                        date={endTime.current}
+                        mode={'time'}
+                        style={{ width: 150, height: 120 }}
+                      />
+                    </View>
+                    <View
+                      style={{
+                        flex: 2.7,
+                        paddingLeft: '5%',
+                        paddingRight: '5%',
+                        marginTop: '1%'
+                      }}
+                    >
+                      {openDatePickerComponent('end')}
+                    </View> */}
+              </>
+            )}
           </View>
-        </ScrollView>
-      </SafeAreaView>
-    // </SafeAreaProvider>
+          <View style={styles.graybar1} />
+          <View style={[styles.botContainer]}>
+            <View style={styles.conferenceMember}>
+              <View style={{ flexDirection: 'row' }}>
+                <Text style={styles.ft14B}>{t('참석자')} </Text>
+                <Text style={[styles.ft14B, { color: '#1c90fb' }]}>1</Text>
+              </View>
+              <Image source={ic_person_plus} style={styles.icPersonPlus} />
+            </View>
+            <View style={styles.deleteAlram}>
+              <View>
+                <Text
+                  style={[
+                    styles.ft12,
+                    { letterSpacing: -0.18, lineHeight: 18 }
+                  ]}
+                >
+                  {
+                    '화상회의가 변경 또는 삭제될 경우, \n알림 이메일을 보냅니다.'
+                  }
+                </Text>
+              </View>
+
+              <Switch
+                onValueChange={onSwitchDelAlramChange}
+                value={switchDelAlram}
+                trackColor={{ false: '', true: '#1c90fb' }}
+              />
+            </View>
+            <ScrollView
+              contentInsetAdjustmentBehavior="automatic"
+              contentContainerStyle={{
+                flexGrow: 1
+              }}
+              keyboardShouldPersistTaps="never"
+            ></ScrollView>
+          </View>
+        </View>
+      </ScrollView>
+      <View
+        style={{
+          position: 'absolute',
+          backgroundColor: 'rgb(255,255,255)',
+          bottom: 0,
+          width: '100%',
+          borderRadius: 20,
+          shadowRadius: 10,
+          shadowColor: '#aaa',
+          shadowOpacity: 10,
+          borderWidth: 1
+        }}
+      >
+        {timePicker !== 'none' && TimePickerComponent}
+        {datePicker !== 'none' && DatePickerComponent}
+      </View>
+    </SafeAreaView>
   ) : (
+    // </SafeAreaProvider>
     // 좌우 패딩 5%
     //#region 이전
     <View style={styles.container}>
@@ -433,17 +544,17 @@ const CreateMeetScreenPresenter = (props: any) => {
                 <TouchableOpacity
                   style={[
                     styles.datetimeBox,
-                    openDateTimePicker === 'start'
+                    datePicker === 'start'
                       ? { borderColor: '#1C90FB' }
                       : {}
                   ]}
                   onPress={() => {
-                    openDateTimePicker('start');
+                    openDatePicker('start');
                   }}
                 >
                   <Text
                     style={
-                      openDateTimePicker === 'start' ? { color: '#1C90FB' } : {}
+                      datePicker === 'start' ? { color: '#1C90FB' } : {}
                     }
                   >
                     {[startTime.date]}
@@ -455,17 +566,17 @@ const CreateMeetScreenPresenter = (props: any) => {
                 <TouchableOpacity
                   style={[
                     styles.datetimeBox,
-                    openDateTimePicker === 'end'
+                    timePicker === 'end'
                       ? { borderColor: '#1C90FB' }
                       : {}
                   ]}
                   onPress={() => {
-                    openDateTimePicker('end');
+                    openTimePicker('end');
                   }}
                 >
                   <Text
                     style={
-                      openDateTimePicker === 'end' ? { color: '#1C90FB' } : {}
+                      timePicker === 'end' ? { color: '#1C90FB' } : {}
                     }
                   >
                     {endTime.date}
@@ -568,7 +679,7 @@ const CreateMeetScreenPresenter = (props: any) => {
           borderWidth: 1
         }}
       >
-        {openDateTimePicker !== 'none' && openDateTimePickerComponent}
+        {/* {openDateTimePicker !== 'none' && openDateTimePickerComponent} */}
       </View>
     </View>
     //#endregion
@@ -578,15 +689,11 @@ const CreateMeetScreenPresenter = (props: any) => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor:'red'
+    backgroundColor: 'red'
+    // justifyContent:'flex-start'
   },
   //상단
-  topContainer: {
-    marginTop: 10,
-    flex: 0.4
-  },
   topTitle: {
-    // flex: 0.9,
     paddingLeft: '5%',
     paddingRight: '5%',
     justifyContent: 'space-between',
@@ -606,8 +713,8 @@ const styles = StyleSheet.create({
     paddingRight: '5%',
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    alignItems: 'center',
-    backgroundColor: 'blue'
+    alignItems: 'center'
+    // backgroundColor: 'blue'
   },
   privateTextContainer: {
     flexDirection: 'column',
@@ -623,12 +730,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   alramContainer: {
-    flex: 0.3,
+    flex: 0.2,
     paddingLeft: '5%',
     paddingRight: '5%',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'center'
     // backgroundColor: 'green'
   },
   ft14N: {
@@ -734,6 +841,24 @@ const styles = StyleSheet.create({
   graybar1: {
     backgroundColor: '#F7F8FA',
     height: '1%'
+  },
+  PMON: {
+    backgroundColor: 'white',
+    flex: 5.1,
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderTopStartRadius: 5,
+    borderBottomStartRadius: 5
+  },
+  AMON: {
+    backgroundColor: '#e6e6e6',
+    flex: 4.9,
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderTopEndRadius: 5,
+    borderBottomEndRadius: 5
   },
   //#region 이전 스타일
   container: {
@@ -907,8 +1032,6 @@ const styles = StyleSheet.create({
     width: '10%',
     height: 30
   },
-  timePicker: {},
-  openDateTimePicker: {}
   // presenter: {
   //   width: '80%',
   //   // backgroundColor: '#0ff',
