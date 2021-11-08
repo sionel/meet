@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import {
   StyleSheet,
   View,
@@ -44,7 +44,7 @@ class AppIntroSlide extends React.Component {
   constructor(props) {
     super(props);
     this.language = RNLocalize.getLocales()[0].languageCode;
-    
+
     this.introImages =
       this.language === 'ko'
         ? KRintroImages
@@ -114,7 +114,9 @@ class AppIntroSlide extends React.Component {
               }}
             >
               <Text style={styles.textTitle}>{this.t('splash_2ndtitle')}</Text>
-              <Text style={styles.textContent}>{this.t('splash_2ndcontent')}</Text>
+              <Text style={styles.textContent}>
+                {this.t('splash_2ndcontent')}
+              </Text>
             </View>
             <Image
               source={this.introImages[1]}
@@ -144,7 +146,9 @@ class AppIntroSlide extends React.Component {
               }}
             >
               <Text style={styles.textTitle}>{this.t('splash_3rdtitle')}</Text>
-              <Text style={styles.textContent}>{this.t('splash_3rdcontent')}</Text>
+              <Text style={styles.textContent}>
+                {this.t('splash_3rdcontent')}
+              </Text>
             </View>
             <Image
               source={this.introImages[2]}
@@ -174,7 +178,9 @@ class AppIntroSlide extends React.Component {
               }}
             >
               <Text style={styles.textTitle}>{this.t('splash_4thtitle')}</Text>
-              <Text style={styles.textContent}>{this.t('splash_4thcontent')}</Text>
+              <Text style={styles.textContent}>
+                {this.t('splash_4thcontent')}
+              </Text>
             </View>
             <Image
               source={this.introImages[3]}
@@ -204,7 +210,9 @@ class AppIntroSlide extends React.Component {
               }}
             >
               <Text style={styles.textTitle}>{this.t('splash_5thtitle')}</Text>
-              <Text style={styles.textContent}>{this.t('splash_5thcontent')}</Text>
+              <Text style={styles.textContent}>
+                {this.t('splash_5thcontent')}
+              </Text>
             </View>
             <Image
               source={this.introImages[4]}
@@ -222,20 +230,22 @@ class AppIntroSlide extends React.Component {
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: 'transparent' }}>
-        <StatusBar hidden={true} />
         {this.props.intro ? (
           this.props.children
         ) : (
-          <AppIntroSlider
-            renderItem={this._renderItem}
-            slides={this.slides}
-            onDone={this._onDone}
-            renderNextButton={this._renderNextButton}
-            renderDoneButton={this._renderDoneButton}
-            bottomButton
-            dotStyle={styles.dotStyle}
-            activeDotStyle={styles.activeDotStyle}
-          />
+          <Fragment>
+            <StatusBar hidden={true} />
+            <AppIntroSlider
+              renderItem={this._renderItem}
+              slides={this.slides}
+              onDone={this._onDone}
+              renderNextButton={this._renderNextButton}
+              renderDoneButton={this._renderDoneButton}
+              bottomButton
+              dotStyle={styles.dotStyle}
+              activeDotStyle={styles.activeDotStyle}
+            />
+          </Fragment>
         )}
       </View>
     );

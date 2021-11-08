@@ -38,11 +38,6 @@ const CustomAlert = props => {
       ]}
       onRequestClose={onClose}
     >
-      {/* <StatusBar
-        barStyle={'light-content'}
-        backgroundColor={'#000'}
-        hidden={false}
-      /> */}
       <TouchableOpacity
         activeOpacity={1}
         onPress={onClose}

@@ -38,7 +38,7 @@ const LoginScreenPresenter = (props: any) => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
-      <StatusBar />
+      <StatusBar  barStyle={'dark-content'}/>
       <KeyboardAwareScrollView
         contentContainerStyle={{ flexGrow: 1 }}
         onKeyboardDidHide={onFocusOutInput}

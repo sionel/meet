@@ -9,7 +9,8 @@ import {
   StyleSheet,
   SectionList,
   ScrollView,
-  RefreshControl
+  RefreshControl,
+  StatusBar
 } from 'react-native';
 
 import {
@@ -111,7 +112,7 @@ const HomeScreenPresenter = props => {
                   active={true}
                   disable={false}
                   onClick={() => {
-                    props.setVideoId(item.room_id)
+                    props.setVideoId(item.room_id);
                     props.onRedirect('ConferenceState', {
                       item: {
                         roomId: item.room_id,
@@ -126,10 +127,6 @@ const HomeScreenPresenter = props => {
           />
         </Fragment>
       )}
-
-      {/* 방생성 버튼 */}
-      {/* wehago one 회원은 불가 */}
-      {/* 미구매 회원은 불가 */}
       {props.memberType !== 1 &&
         props.permission &&
         props.plan !== 'WE' &&
@@ -156,6 +153,7 @@ const HomeScreenPresenter = props => {
         ]}
         onClose={props.alert.onClose}
       />
+      <StatusBar barStyle={'dark-content'} />
     </View>
   );
 };
