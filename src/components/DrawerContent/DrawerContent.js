@@ -122,16 +122,29 @@ export default function DrawerContent(props) {
         ? iosURL[type] + commonLoginInfo
         : androidURL[type] + commonLoginInfo;
 
-    Linking.openURL(url).catch(err => {
-      Linking.openURL(
-        os === 'ios' ? iosMarketURL[type] : androidMarketURL[type]
-      ).catch(err => {
+    Linking.openURL(url).catch(async err => {
+      const result = await new Promise(res => {
         setAlert({
-          type: 1,
-          title: t('alert_title_notion'),
-          message: t('alert_text_no_app_store')
+          type: 2,
+          title: t('안내'),
+          message: t(
+            '해당 서비스 사용을 위해 앱 설치가 필요합니다.\n해당 어플을 설치하시겠습니까?'
+          ),
+          onConfirm: () => res(true),
+          onCencel: () => res(false)
         });
       });
+      debugger;
+      result &&
+        Linking.openURL(
+          os === 'ios' ? iosMarketURL[type] : androidMarketURL[type]
+        ).catch(err => {
+          setAlert({
+            type: 1,
+            title: t('alert_title_notion'),
+            message: t('alert_text_no_app_store')
+          });
+        });
     });
   };
   const emptyIcon = () => (
