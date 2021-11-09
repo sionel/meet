@@ -214,7 +214,8 @@ const HomeRouteStack = () => {
 };
 
 const HomeRoute = createStackNavigator(HomeRouteStack(), {
-  cardStyle: { transparent: true }
+  cardStyle: { transparent: true },
+  headerMode:'none'
 });
 
 export default HomeRoute;

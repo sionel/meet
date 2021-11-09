@@ -10,26 +10,204 @@ import {
   SectionList,
   ScrollView,
   RefreshControl,
-  StatusBar
+  StatusBar,
+  SafeAreaView,
+  Image,
+  TouchableOpacity,
+  Text
 } from 'react-native';
 
-import {
-  ListItemComp,
-  CustomAlert,
-  Placeholder,
-  SectionListHeader
-} from '../../components';
+// import {
+//   ListItemComp,
+//   CustomAlert,
+//   Placeholder,
+//   SectionListHeader
+// } from '../../components';
 import AddButton from './AddButton';
 import { getT } from '../../utils/translateManager';
-import { isWehagoV } from '../../utils';
+// import { isWehagoV } from '../../utils';
+// import { Text } from '../../components/StyledText';
+const loginLogo = require('../../../assets/new/logos/logo.png');
+const icSet = require('../../../assets/new/icons/ic_set.png');
+const icCalendar = require('../../../assets/new/icons/ic_calendar.png');
+const icVideo = require('../../../assets/new/icons/ic_video.png');
+const icKeyboard = require('../../../assets/new/icons/ic_keyboard.png');
 
 const HomeScreenPresenter = props => {
   const started = props.started;
   const reservation = props.reservation;
   const t = getT();
   return (
-    <View style={styles.container}>
-      {(props.started.length < 1 || started.length < 1) &&
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor: '#F7F8FA',
+        justifyContent: 'flex-start',
+        alignItems: 'center'
+      }}
+    >
+      <StatusBar barStyle={'dark-content'} />
+      <View
+        style={{
+          width: '100%',
+          height: '6%',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexDirection: 'row',
+          paddingHorizontal: 20
+          // backgroundColor:"#a0a"
+        }}
+      >
+        <Image
+          source={loginLogo}
+          style={{
+            flex: 1,
+            height: '100%'
+            // backgroundColor:'#128'
+          }}
+          resizeMode={'contain'}
+        />
+        <TouchableOpacity
+          style={{
+            flex: 1,
+            flexDirection: 'row-reverse',
+            alignItems: 'center'
+          }}
+        >
+          <Image source={icSet} />
+          <Text style={{ textAlign: 'right' }}>{'(주)더존비즈온'}</Text>
+          <Image source={icSet} />
+        </TouchableOpacity>
+      </View>
+      <View
+        style={{
+          width: '100%',
+          height: '25%',
+          paddingHorizontal: 20,
+          // paddingTop: 30,
+          // backgroundColor: '#930',
+          justifyContent: 'space-between',
+          alignItems: 'stretch'
+        }}
+      >
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'flex-start',
+            flexDirection: 'row',
+            alignItems: 'flex-end'
+            // backgroundColor:'#131'
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 20,
+              fontWeight: 'bold'
+            }}
+          >
+            {'김더존'}
+          </Text>
+          <Text
+            style={{
+              fontSize: 20
+            }}
+          >
+            {'님, 좋은 아침입니다!'}
+          </Text>
+        </View>
+        <View
+          style={{
+            flex: 2,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }}
+        >
+          <View
+            style={{
+              borderRadius: 12,
+              borderWidth: 1,
+              backgroundColor: '#fff',
+              borderColor: '#fff',
+              width: 102,
+              height: 90,
+              justifyContent: 'space-evenly',
+              alignItems: 'center',
+              padding: 5,
+              shadowColor: 'rgba(0,0,0,0.1)',
+              shadowOpacity: 1,
+              shadowOffset: {
+                width: 0,
+                height: 8
+              }
+            }}
+          >
+            <Image
+              source={icCalendar}
+              style={{ width: 40, height: 40 }}
+              resizeMode={'cover'}
+            />
+            <Text>{'회의생성'}</Text>
+          </View>
+          <View
+            style={{
+              borderRadius: 12,
+              borderWidth: 1,
+              backgroundColor: '#fff',
+              borderColor: '#fff',
+              width: 102,
+              height: 90,
+              justifyContent: 'space-evenly',
+              alignItems: 'center',
+              padding: 5,
+              shadowColor: 'rgba(0,0,0,0.1)',
+              shadowOpacity: 1,
+              shadowOffset: {
+                width: 0,
+                height: 8
+              }
+            }}
+          >
+            <Image
+              source={icVideo}
+              style={{ width: 40, height: 40 }}
+              resizeMode={'cover'}
+            />
+            <Text>{'회의일정'}</Text>
+          </View>
+          <View
+            style={{
+              borderRadius: 12,
+              borderWidth: 1,
+              backgroundColor: '#fff',
+              borderColor: '#fff',
+              width: 102,
+              height: 90,
+              justifyContent: 'space-evenly',
+              alignItems: 'center',
+              padding: 5,
+              shadowColor: 'rgba(0,0,0,0.1)',
+              shadowOpacity: 1,
+              shadowOffset: {
+                width: 0,
+                height: 8
+              }
+            }}
+          >
+            <Image
+              source={icKeyboard}
+              style={{ width: 40, height: 40 }}
+              resizeMode={'cover'}
+            />
+            <Text>{'참여코드'}</Text>
+          </View>
+        </View>
+      </View>
+      <View
+        style={{ width: '100%', height: '25%', backgroundColor: 'pink' }}
+      ></View>
+      <View style={{ width: '100%', flex: 1, backgroundColor: 'brown' }}></View>
+      {/* {(props.started.length < 1 || started.length < 1) &&
       (props.reservation.length < 1 || reservation.length < 1) ? (
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -69,7 +247,6 @@ const HomeScreenPresenter = props => {
         </ScrollView>
       ) : (
         <Fragment>
-          {/* 화상회의 히스토리 리스트 */}
           <SectionList
             keyExtractor={(item, index) => index.toString()}
             refreshing={props.refreshing}
@@ -99,7 +276,6 @@ const HomeScreenPresenter = props => {
               )
             }
             renderItem={({ item, index, section }) => {
-              // 히스토리 아이템
               return (
                 <ListItemComp
                   key={item.room_id}
@@ -152,84 +328,84 @@ const HomeScreenPresenter = props => {
           }
         ]}
         onClose={props.alert.onClose}
-      />
-      <StatusBar barStyle={'dark-content'} />
-    </View>
+      /> */}
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'transparent',
-    justifyContent: 'center',
+    backgroundColor: '#F7F8FA',
+    justifyContent: 'flex-start',
     alignItems: 'center'
   },
+  imageContainer: {}
 
-  reloadButtonWrap: {
-    marginTop: 10,
-    borderWidth: 1,
-    borderRadius: 18,
-    borderColor: '#aaa'
-  },
-  reloadButton: {
-    marginTop: 3,
-    marginBottom: 3,
-    marginLeft: 12,
-    marginRight: 12,
-    textAlign: 'center'
-  },
+  // reloadButtonWrap: {
+  //   marginTop: 10,
+  //   borderWidth: 1,
+  //   borderRadius: 18,
+  //   borderColor: '#aaa'
+  // },
+  // reloadButton: {
+  //   marginTop: 3,
+  //   marginBottom: 3,
+  //   marginLeft: 12,
+  //   marginRight: 12,
+  //   textAlign: ''
+  // },
 
-  listContainer: {
-    width: '100%'
-  },
+  // listContainer: {
+  //   width: '100%'
+  // },
 
-  notResult: {
-    height: '10%',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
+  // notResult: {
+  //   height: '10%',
+  //   justifyContent: 'center',
+  //   alignItems: 'center'
+  // },
 
-  modalWrap: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0, .75)'
-  },
+  // modalWrap: {
+  //   flex: 1,
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  //   backgroundColor: 'rgba(0,0,0, .75)'
+  // },
 
-  modalContentWrap: {
-    backgroundColor: '#fff',
-    width: '100%',
-    maxWidth: 300,
-    padding: 0,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5
-  },
+  // modalContentWrap: {
+  //   backgroundColor: '#fff',
+  //   width: '100%',
+  //   maxWidth: 300,
+  //   padding: 0,
+  //   shadowColor: '#000',
+  //   shadowOffset: {
+  //     width: 0,
+  //     height: 2
+  //   },
+  //   shadowOpacity: 0.25,
+  //   shadowRadius: 3.84,
+  //   elevation: 5
+  // },
 
-  modalMessage: {
-    paddingTop: 20,
-    paddingBottom: 30,
-    paddingLeft: 20,
-    paddingRight: 20
-  },
+  // modalMessage: {
+  //   paddingTop: 20,
+  //   paddingBottom: 30,
+  //   paddingLeft: 20,
+  //   paddingRight: 20
+  // },
 
-  modalButtons: { flexDirection: 'row' },
-  modalButton: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingTop: 15,
-    paddingBottom: 15,
-    marginBottom: -1
-  },
-  modalButtonCancel: { backgroundColor: '#f1f1f1' },
-  modalButtonConfirm: { backgroundColor: '#1C90FB' }
+  // modalButtons: { flexDirection: 'row' },
+  // modalButton: {
+  //   flex: 1,
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  //   paddingTop: 15,
+  //   paddingBottom: 15,
+  //   marginBottom: -1
+  // },
+  // modalButtonCancel: { backgroundColor: '#f1f1f1' },
+  // modalButtonConfirm: { backgroundColor: '#1C90FB' }
 });
 
 export default HomeScreenPresenter;
