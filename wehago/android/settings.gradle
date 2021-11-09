@@ -56,3 +56,8 @@ include ':react-native-incall-manager'
 project(':react-native-incall-manager').projectDir = new File(rootProject.projectDir, '../../node_modules/react-native-incall-manager/android')
 include ':lottie-react-native'
 project(':lottie-react-native').projectDir = new File(rootProject.projectDir, '../../node_modules/lottie-react-native/src/android')
+include ':react-native-safe-area-context'
+project(':react-native-safe-area-context').projectDir = new File(rootProject.projectDir, '../../node_modules/react-native-safe-area-context/android')
+include ':react-native-date-picker'
+project(':react-native-date-picker').projectDir = new File(rootProject.projectDir, '../../node_modules/react-native-date-picker/android')
+

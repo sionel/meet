@@ -11,12 +11,12 @@ import OrganizationScreen from '../../components/Organization';
 import { OrganizationApi, MeetApi } from '../../services';
 
 import { actionCreators } from '../../redux/modules/alert';
+import moment, { calendarFormat } from 'moment';
 
 // const hasNotch = DeviceInfo.hasNotch() && Platform.OS === 'ios';
 const { width, height } = Dimensions.get('window');
 
 export default function CreateMeetScreenContainer(props: any) {
-  const time = new Date();
   const [switchAlram, setSwitchAlram] = useState(false);
   const [switchReserve, setSwitchReserve] = useState(false);
   const [switchDelAlram, setSwitchDelAlram] = useState(false);
@@ -54,6 +54,7 @@ export default function CreateMeetScreenContainer(props: any) {
     current: new Date()
   });
 
+  const [time, setTime] = useState(new Date());
   const [date, setDate] = useState(new Date());
 
   const [email, setEmail] = useState('');
@@ -101,82 +102,107 @@ export default function CreateMeetScreenContainer(props: any) {
     }
   };
 
-  const getAllEmployee = async () => {
-    const result = await OrganizationApi.getOrganizationTreeAllEmployeeRequest(
-      auth
-    );
-    if (result.error) {
-      // Alert.alert('조직도', '조직도를 가져올 수 없습니다.');
-    } else {
-      const company = result.resultData;
+  // const getAllEmployee = async () => {
+  //   const result = await OrganizationApi.getOrganizationTreeAllEmployeeRequest(
+  //     auth
+  //   );
+  //   if (result.error) {
+  //     // Alert.alert('조직도', '조직도를 가져올 수 없습니다.');
+  //   } else {
+  //     const company = result.resultData;
 
-      const hangleMapper = company.reduce((acc: any, i: any) => {
-        const charCode = i.user_name.charCodeAt(0);
-        let charIndex;
-        if (
-          charCode >= parseInt('0xac00', 16) &&
-          charCode <= parseInt('0xd7af', 16)
-        ) {
-          const hangle =
-            (charCode - parseInt('0xac00', 16)) / 28 / 21 +
-            parseInt('0x1100', 16);
-          charIndex = String.fromCharCode(hangle);
-        } else {
-          charIndex = String.fromCharCode(charCode);
-        }
+  //     const hangleMapper = company.reduce((acc: any, i: any) => {
+  //       const charCode = i.user_name.charCodeAt(0);
+  //       let charIndex;
+  //       if (
+  //         charCode >= parseInt('0xac00', 16) &&
+  //         charCode <= parseInt('0xd7af', 16)
+  //       ) {
+  //         const hangle =
+  //           (charCode - parseInt('0xac00', 16)) / 28 / 21 +
+  //           parseInt('0x1100', 16);
+  //         charIndex = String.fromCharCode(hangle);
+  //       } else {
+  //         charIndex = String.fromCharCode(charCode);
+  //       }
 
-        if (acc.has(charIndex)) {
-          acc.set(charIndex, [...acc.get(charIndex), i]);
-        } else {
-          acc.set(charIndex, [i]);
-        }
-        return acc;
-      }, new Map());
-      let obj = Array.from(hangleMapper).reduce((obj, [key, value]: any) => {
-        return Object.assign(obj, { [key]: value });
-      }, {});
+  //       if (acc.has(charIndex)) {
+  //         acc.set(charIndex, [...acc.get(charIndex), i]);
+  //       } else {
+  //         acc.set(charIndex, [i]);
+  //       }
+  //       return acc;
+  //     }, new Map());
+  //     let obj = Array.from(hangleMapper).reduce((obj, [key, value]: any) => {
+  //       return Object.assign(obj, { [key]: value });
+  //     }, {});
 
-      const employee = Object.keys(obj).map(key => ({
-        title: key,
-        data: obj[key]
-      }));
+  //     const employee = Object.keys(obj).map(key => ({
+  //       title: key,
+  //       data: obj[key]
+  //     }));
 
-      employee.sort((a, b) => a.title.charCodeAt(0) - b.title.charCodeAt(0));
-      setEmployee(employee);
-    }
-  };
+  //     employee.sort((a, b) => a.title.charCodeAt(0) - b.title.charCodeAt(0));
+  //     setEmployee(employee);
+  //   }
+  // };
 
   const startConference = () => {
     const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
-
     const params = {
       service_code: 'videoconference',
-      name: '모바일테스트방',
+      name: roomName,
       is_public: true,
       access_user: [
-        {
-          type: 'email',
-          value: 'sadb0101@naver.com',
-          is_master: false,
-          user_name: '이름'
-          // cno: '회사번호(선택)',
-          // user_no: '사용자번호(선택)'
-        },
+        // {
+        //   type: 'email',
+        //   value: 'sadb0101@naver.com',
+        //   is_master: false,
+        //   user_name: '이름'
+        //   // cno: '회사번호(선택)',
+        //   // user_no: '사용자번호(선택)'
+        // },
         {
           type: 'portal_id',
-          value: 'sadb0101',
+          value: auth.portal_id,
           is_master: true,
-          user_name: '최은우',
-          cno: 9,
-          user_no: 799127
+          user_name: auth.user_name,
+          cno: cno,
+          user_no: auth.user_no
         }
       ],
-      is_send_updated_email: false,
-      is_reservation: false,
+      is_send_updated_email: switchDelAlram,
+      is_reservation: switchReserve,
       call_type: '1',
-      invite_messsage: '초대메시지'
+      invite_messsage: sendMessage
     };
-    MeetApi.createMeetRoom(AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno, params);
+
+    // MeetApi.createMeetRoom(AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno, params);
+    // console.log('startTime');
+    // console.log(startTime);
+    // console.log('endTime');
+    // console.log(endTime);
+
+    const clearInput = () => {
+      setRoomName('');
+      setSendMessage('');
+      if (switchReserve) {
+        setStartTime({
+          date: '',
+          time: '',
+          current: new Date()
+        });
+        setEndTime({
+          date: '',
+          time: '',
+          current: new Date()
+        });
+        setSwitchReserve(false);
+      }
+      setSwitchAlram(false);
+      setSwitchDelAlram(false);
+    };
+    clearInput();
   };
 
   const togglePublic = () => {
@@ -202,8 +228,6 @@ export default function CreateMeetScreenContainer(props: any) {
   };
 
   const getDate = (date: Date) => {
-    console.log(date);
-    
     let obj = {
       date: `${date.getFullYear()}.${(date.getMonth() + 1)
         .toString()
@@ -217,13 +241,8 @@ export default function CreateMeetScreenContainer(props: any) {
       current: date
     };
 
-    console.log(obj);
-    
-
     return obj;
   };
-
-  // const setDate = (d)
 
   const onSwitchAlramChange = () => {
     setSwitchAlram(!switchAlram);
@@ -255,52 +274,49 @@ export default function CreateMeetScreenContainer(props: any) {
   };
 
   const onDateChange = (date: any) => {
-    // console.log(date);
+    let obj = getDate(new Date(date));
+
+    if (timeType === 'start') setStartTime({ ...obj, time: startTime.time });
+    else if (timeType === 'end') {
+      setEndTime({ ...obj, time: endTime.time });
+    }
 
     setTimePicker(datePicker);
     setDatePicker('none');
   };
 
-  const onTimeChange = (time: any) => {
-    let obj;
-    // console.log(timeType);
-    // console.log(time);
+  const onTimeConfirm = () => {
+    let obj = getDate(time);
+    // console.log(obj.current);
+  
+    let h = moment(obj.current).hours()-12;
+    let m = moment(obj.current).minutes();
+    
+    let DT;
 
     if (timeType === 'start') {
-      obj = getDate(time);
-      setStartTime(obj);
+      DT = moment(startTime.current).add(h, 'h').add(m, 'm').toDate()
+      setStartTime({
+        ...obj,
+        date: startTime.date,
+        current: DT
+      });
     } else if (timeType === 'end') {
-      // obj = endTime;
-      setEndTime(getDate(time));
+      DT = moment(endTime.current).add(h, 'h').add(m, 'm').toDate()
+      setEndTime({
+        ...obj,
+        date: endTime.date,
+        current: DT
+      });
     }
-  };
-
-  const onTimeConfirm = () => {
-    // console.log(timeType);
     setTimePicker('none');
   };
-  // const onSelectDate = (date:any) => {
-  //   // if (datePicker === 'start') {
-  //   // } else if (datePicker === 'end') {
-  //   // }
-
-  //   console.log(date);
-  //   setTimePicker(datePicker);
-  //   setDatePicker('none');
-  // };
-
-  // const onSelectTime = (time:any) => {
-  //   console.log(time);
-  //   setTimePicker('none');
-  // };
-  // useEffect(() => {}, [timePicker]);
-  // useEffect(() => {}, [datePicker]);
 
   useEffect(() => {}, [sendMessage]);
   useEffect(() => {
     setSelectMode(false);
     getOrganization();
-    getAllEmployee();
+    // getAllEmployee();
   }, []);
 
   useEffect(() => {
@@ -390,10 +406,11 @@ export default function CreateMeetScreenContainer(props: any) {
           old={true}
           onHandleBack={onHandleBack}
           onDateChange={onDateChange}
-          onTimeChange={onTimeChange}
           onTimeConfirm={onTimeConfirm}
           date={date}
           setDate={setDate}
+          time={time}
+          setTime={setTime}
         />
       )}
     </View>

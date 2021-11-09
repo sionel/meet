@@ -205,7 +205,8 @@ class ReactInstanceManagerHolder {
                 new com.airbnb.android.react.lottie.LottiePackage(),
 
                 new com.BV.LinearGradient.LinearGradientPackage(),
-
+                new com.th3rdwave.safeareacontext.SafeAreaContextPackage(),
+                new com.henninghall.date_picker.DatePickerPackage(),
                 new ReactPackageAdapter() {
                     @Override
                     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
