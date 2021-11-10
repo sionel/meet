@@ -122,19 +122,29 @@ export default function DrawerContent(props) {
         ? iosURL[type] + commonLoginInfo
         : androidURL[type] + commonLoginInfo;
 
+    const serviceName =
+      type === 'wehago'
+        ? 'WEHAGO'
+        : type === 'neors'
+        ? '내PC원격접속'
+        : type === 'wedrive'
+        ? '웹스토리지'
+        : type === 'attendance'
+        ? '근태관리'
+        : type === 'eapprovals'
+        ? '전자결재'
+        : '';
+
     Linking.openURL(url).catch(async err => {
       const result = await new Promise(res => {
         setAlert({
           type: 2,
           title: t('안내'),
-          message: t(
-            '해당 서비스 사용을 위해 앱 설치가 필요합니다.\n해당 어플을 설치하시겠습니까?'
-          ),
+          message: `해당 서비스 사용을 위해 어플 설치가 필요합니다.\n${serviceName} 어플을 설치하시겠습니까?`,
           onConfirm: () => res(true),
           onCencel: () => res(false)
         });
       });
-      debugger;
       result &&
         Linking.openURL(
           os === 'ios' ? iosMarketURL[type] : androidMarketURL[type]

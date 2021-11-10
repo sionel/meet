@@ -25,6 +25,8 @@ import {
 // } from '../../components';
 import AddButton from './AddButton';
 import { getT } from '../../utils/translateManager';
+import Card from './Component/ConferenceCard';
+
 // import { isWehagoV } from '../../utils';
 // import { Text } from '../../components/StyledText';
 const loginLogo = require('../../../assets/new/logos/logo.png');
@@ -47,6 +49,7 @@ const HomeScreenPresenter = props => {
       }}
     >
       <StatusBar barStyle={'dark-content'} />
+      {/* 헤더 */}
       <View
         style={{
           width: '100%',
@@ -79,6 +82,8 @@ const HomeScreenPresenter = props => {
           <Image source={icSet} />
         </TouchableOpacity>
       </View>
+
+      {/* 김더존님 ~~~ */}
       <View
         style={{
           width: '100%',
@@ -203,9 +208,53 @@ const HomeScreenPresenter = props => {
           </View>
         </View>
       </View>
+
+      {/* 진행중인 화상회의 */}
       <View
-        style={{ width: '100%', height: '25%', backgroundColor: 'pink' }}
-      ></View>
+        style={{
+          width: '100%',
+          height: '30%',
+          paddingVertical: 10
+        }}
+      >
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'flex-start',
+            flexDirection: 'row',
+            alignItems: 'center',
+            paddingHorizontal: 20
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 16
+            }}
+          >
+            {'진행중인 화상회의'}
+          </Text>
+          <Text
+            style={{
+              fontSize: 16,
+              marginLeft: 10
+            }}
+          >
+            {'15'}
+          </Text>
+        </View>
+        <View style={{ flex: 4 }}>
+          <ScrollView
+            horizontal={true}
+            // style={{ padding: 0, margin: 0 }}
+          >
+            {[1, 2, 3, 4].map((v, i) => (
+              <Card index={i} />
+            ))}
+          </ScrollView>
+        </View>
+      </View>
+
+      {/* 예약 회의  */}
       <View style={{ width: '100%', flex: 1, backgroundColor: 'brown' }}></View>
       {/* {(props.started.length < 1 || started.length < 1) &&
       (props.reservation.length < 1 || reservation.length < 1) ? (
