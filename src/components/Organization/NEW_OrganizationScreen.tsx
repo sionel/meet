@@ -28,9 +28,11 @@ import { OrganizationApi, MeetApi } from '../../services';
 
 // type
 import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/configureStore';
+import { getT } from '../../utils/translateManager';
 const { width, height } = Dimensions.get('screen');
 
-export default function OrganizationScreen(props) {
+export default function OrganizationScreen(props:any) {
   const {
     // organization,
     employee,
@@ -59,7 +61,8 @@ export default function OrganizationScreen(props) {
     outputRange: ['0deg', '360deg']
   });
 
-  const auth = useSelector(state => state.user.auth);
+  const auth = useSelector((state:RootState) => state.user.auth);
+  const t = getT();
 
   // 조직 리스트 조회
   const getOrganizationTree = async () => {
@@ -79,8 +82,8 @@ export default function OrganizationScreen(props) {
       if (keyword === '') {
         setSearchedEmployee(contacts);
       } else {
-        const data = employee.reduce((acc, item) => {
-          const temp = item.data.filter(data => data.user_name.match(keyword));
+        const data = employee.reduce((acc:any, item:any) => {
+          const temp = item.data.filter((data:any) => data.user_name.match(keyword));
           if (temp.length > 0) acc.push({ title: item.title, data: temp });
           return acc;
         }, []);
@@ -176,7 +179,7 @@ export default function OrganizationScreen(props) {
     } else {
       const chocungList: { dataindex: number; word: string }[] =
         result.resultData.chosungList;
-      const indexList = [];
+      const indexList:any[] = [];
       type secction = { title: string; data: object[] }[];
       let arr: secction = [];
       chocungList.forEach(({ word }) => {
@@ -435,9 +438,7 @@ export default function OrganizationScreen(props) {
       />
     );
   };
-  const test = item => {
-    debugger;
-  };
+
   const selectedPreView = selectedEmployee => {
     const group = selectedEmployee.group;
     const member = selectedEmployee.member;
@@ -551,15 +552,27 @@ export default function OrganizationScreen(props) {
   };
 
   return (
-    <View
-      style={{
-        position: 'absolute',
-        width: '100%',
-        height: '100%'
-      }}
-    >
-      <View style={{ height: 20, backgroundColor: '#1C90FB' }} />
-      <View
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.topTitle}>
+          <TouchableOpacity onPress={() => {
+            props.setSelectMode(false);
+          }}>
+            <Text style={styles.ft14N}>{t('뒤로')}</Text>
+          </TouchableOpacity>
+          <Text style={styles.TitleText}>{t('참석자 추가')}</Text>
+          <TouchableOpacity >
+            <Text style={styles.ft14N}>{t('추가')}</Text>
+          </TouchableOpacity>
+        </View>
+      <View style={{ backgroundColor: '#F7F8FA', flex: 0.005 }} />
+    {/* <View
+     style={{
+       position: 'absolute',
+       width: '100%',
+       height: '100%'
+     }}
+   > */}
+      {/* <View
         style={{
           height: 40,
           backgroundColor: '#1C90FB',
@@ -585,7 +598,10 @@ export default function OrganizationScreen(props) {
         >
           <CustomIcon name={'checkWhite'} size={23} />
         </TouchableOpacity>
-      </View>
+      </View> */}
+      
+
+      
       {isDataLoading ? (
         <View style={styles.dimmed}>
           <Animated.View
@@ -1079,7 +1095,8 @@ export default function OrganizationScreen(props) {
           )}
         </View>
       )}
-    </View>
+      </SafeAreaView>
+    // </View>
   );
 }
 
@@ -1095,10 +1112,33 @@ OrganizationScreen.defaultProps = {
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    // backgroundColor: 'red',
+    justifyContent:'flex-start'
+  },
   container: {
     flex: 1,
     // backgroundColor: '#17a',
-    width: '100%'
+    // width: '100%'
+  },
+  topTitle: {
+    paddingLeft: '5%',
+    paddingRight: '5%',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
+    width: '100%',
+    height: '6%',
+    backgroundColor: '#fff'
+  },
+  TitleText: {
+    fontSize: 18,
+    fontWeight: '600'
+  },
+  ft14N: {
+    fontSize: 14,
+    fontWeight: 'normal'
   },
   dimmed: {
     position: 'absolute',

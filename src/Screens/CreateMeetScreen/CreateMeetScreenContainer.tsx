@@ -177,7 +177,8 @@ export default function CreateMeetScreenContainer(props: any) {
       invite_messsage: sendMessage
     };
 
-    // MeetApi.createMeetRoom(AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno, params);
+    MeetApi.createMeetRoom(AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno, params);
+
     // console.log('startTime');
     // console.log(startTime);
     // console.log('endTime');
@@ -403,7 +404,6 @@ export default function CreateMeetScreenContainer(props: any) {
           setStartTime={setStartTime}
           roomNameCnt={roomNameCnt}
           sendMsgCnt={sendMsgCnt}
-          old={true}
           onHandleBack={onHandleBack}
           onDateChange={onDateChange}
           onTimeConfirm={onTimeConfirm}
@@ -411,6 +411,7 @@ export default function CreateMeetScreenContainer(props: any) {
           setDate={setDate}
           time={time}
           setTime={setTime}
+          auth={auth}
         />
       )}
     </View>

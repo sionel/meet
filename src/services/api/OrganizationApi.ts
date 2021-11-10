@@ -1,6 +1,7 @@
+import { RootState } from '../../redux/configureStore';
 import { wehagoBaseURL, serialize, createHeader } from '../../utils';
 
-const getOrganizationTreeRequest = async auth => {
+const getOrganizationTreeRequest = async (auth:any) => {
   const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
   try {
     const params = serialize({
@@ -26,7 +27,7 @@ const getOrganizationTreeRequest = async auth => {
 };
 
 const getOrganizationTreeEmployeeRequest = async (
-  auth,
+  auth: any,
   organizationNo: number
 ) => {
   const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
@@ -56,7 +57,7 @@ const getOrganizationTreeEmployeeRequest = async (
   }
 };
 
-const getOrganizationTreeAllEmployeeRequest = async auth => {
+const getOrganizationTreeAllEmployeeRequest = async (auth:any) => {
   const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
   try {
     const params = serialize({
@@ -86,7 +87,7 @@ const getOrganizationTreeAllEmployeeRequest = async auth => {
   }
 };
 
-const getContactsList = async auth => {
+const getContactsList = async (auth:any) => {
   const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
   try {
     // const params = {

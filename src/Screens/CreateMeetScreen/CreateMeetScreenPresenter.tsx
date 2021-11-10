@@ -7,14 +7,7 @@ import {
   TouchableOpacity,
   FlatList,
   Image,
-  Share,
-  Keyboard,
-  TouchableWithoutFeedback,
-  TouchableHighlightBase,
   Switch,
-  ScrollView,
-  Animated,
-  StatusBar
 } from 'react-native';
 
 import DatePicker from 'react-native-date-picker';
@@ -27,9 +20,12 @@ import { CustomIcon } from '../../components';
 import { wehagoMainURL, wehagoDummyImageURL } from '../../utils';
 // import { SafeAreaView } from 'react-navigation';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { last } from 'lodash';
+
 const ic_code = require('../../../assets/new/icons/ic_code.png');
 const ic_lock = require('../../../assets/new/icons/ic_lock_wh.png');
 const ic_person_plus = require('../../../assets/new/icons/ic_person_plus.png');
+const ic_master = require('../../../assets/new/icons/ic_master.png');
 
 // 알림 생성 칸이 있는데 이건 삭제
 // 왜냐 이 앱은 노티를 못보내기 때문
@@ -69,17 +65,17 @@ const CreateMeetScreenPresenter = (props: any) => {
     setStartTime,
     roomNameCnt,
     sendMsgCnt,
-    old,
     onHandleBack,
     onDateChange,
     onTimeConfirm,
     date,
     setDate,
     time,
-    setTime
+    setTime,
+    auth
   } = props;
   const t = getT();
-
+  
   const TimePickerComponent = (
     <View
       style={{ marginTop: 20, justifyContent: 'center', alignItems: 'center' }}
@@ -460,39 +456,36 @@ const CreateMeetScreenPresenter = (props: any) => {
               />
             </View>
             <FlatList
-              style={{ flex: 1, width: '100%' }}
+              contentContainerStyle={{ flex: 1, paddingLeft: '5%', paddingRight: '5%'}}
               data={[
-                { name: 'rk', age: 10 },
-                { name: 'sk', age: 20 },
-                { name: 'ek', age: 56 },
-                { name: 'fk', age: 25 },
-                { name: 'ak', age: 33 }
+                { image: wehagoMainURL + auth.profile_url, name: `${auth.user_name} ${auth.last_company.rank_name}`, full_path: auth.last_company.full_path },
               ]}
               // data={Object.values(selectedEmployee.member)}
               keyExtractor={(item, index) => String(index)}
               renderItem={({ item, index }) => {
                 // const { user, user_name, user_type, profile_url } = item;
+                console.log(item);
                 return (
                   <View style={styles.participantList}>
                     <Image
                       style={styles.profile}
-                      source={{ uri: wehagoDummyImageURL }}
-                      resizeMode={'center'}
+                      source={{ uri: item.image }}
+                      resizeMode={'cover'}
                     />
                     <View style={styles.infoBox}>
                       <Text style={styles.name}>{item.name}</Text>
-                      <Text style={styles.tree}>{item.age}</Text>
+                      <View style={{overflow:'scroll'}}>
+                        <Text style={styles.tree}>{item.full_path}</Text>
+                      </View>
                     </View>
-                    <Image
-                      source={{ uri: wehagoDummyImageURL }}
-                      style={styles.identity}
-                      resizeMode={'center'}
-                    />
-                    <Image
-                      source={{ uri: wehagoDummyImageURL }}
-                      style={styles.delete}
-                      resizeMode={'center'}
-                    />
+                    <View style={styles.masterContainer}>
+                      <Image
+                        style={{ width: '25%', height: 20 }}
+                        source={ic_master}
+                        resizeMode={'contain'}
+                      />
+                      <Text style={styles.maseterText}>{t('마스터')}</Text>
+                    </View>
                   </View>
                 );
               }}
@@ -523,7 +516,7 @@ const CreateMeetScreenPresenter = (props: any) => {
 
 const styles = StyleSheet.create({
   safeArea: {
-    flex: 1,
+    flex: 1
     // backgroundColor: 'red'
     // justifyContent:'flex-start'
   },
@@ -673,6 +666,21 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     width: 24,
     height: 24
+  },
+  masterContainer: {
+    flexDirection: 'row',
+    backgroundColor: '#febc2c',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    width: '17%',
+    borderRadius: 15
+  },
+  maseterText: {
+    fontSize: 12,
+    lineHeight: 15,
+    letterSpacing: -0.22,
+    color: '#fff',
+    fontWeight:'800'
   },
   graybar1: {
     backgroundColor: '#F7F8FA',
@@ -844,22 +852,33 @@ const styles = StyleSheet.create({
   },
   notiInfo: {},
   participantList: {
-    width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginVertical: 5,
-    paddingHorizontal: 10
+    height: 56,
+    paddingTop: '1%',
+    paddingBottom: '1%',
   },
   profile: {
-    width: '10%',
-    height: 30
+    width: '12%',
+    height: 40,
+    borderRadius: 25
   },
-  infoBox: {
-    width: '50%'
+  infoBox: { width: '67%' },
+  name: {
+    fontWeight: '500',
+    fontSize: 15,
+    lineHeight: 15,
+    letterSpacing: -0.3,
+    paddingBottom: '0.5%'
   },
-  name: { fontWeight: 'bold', fontSize: 20 },
-  tree: { fontSize: 15 },
+  tree: {
+    fontSize: 12,
+    lineHeight: 15,
+    letterSpacing: -0.24,
+    color: '#939393',
+    fontWeight: '500'
+  },
   identity: {
     width: '20%',
     height: 30
