@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
   },
   alertContainer: {
     backgroundColor: '#fff',
-    maxWidth: '80%',
+    maxWidth: 350,
     minHeight: 30,
     padding: 12,
     borderRadius: 4,
