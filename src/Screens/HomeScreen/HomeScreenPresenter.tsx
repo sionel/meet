@@ -80,8 +80,15 @@ const HomeScreenPresenter = (props: any) => {
           }}
         >
           <Image source={icSet} />
-          <Text style={{ textAlign: 'right' }}>{'(주)더존비즈온'}</Text>
-          <Image source={icSet} />
+          <Text style={{ textAlign: 'right', marginRight: 5 }}>
+            {'(주)더존비즈온'}
+          </Text>
+          <Image
+            source={{
+              uri: 'https://www.wehago.com/uploads/profile/338136/hejevjsiwr.jpg'
+            }}
+            style={{ width: 30, height: 30, borderRadius: 30, marginRight: 5 }}
+          />
         </TouchableOpacity>
       </View>
 
