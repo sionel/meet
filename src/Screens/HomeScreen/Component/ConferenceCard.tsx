@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, Image } from 'react-native';
 
 import LinearGradient from 'react-native-linear-gradient';
 
-const icLock = require('../../../../assets/new/icons/ic_lock_white.png');
+const icLockWhite = require('../../../../assets/new/icons/ic_lock_white.png');
 const icLive = require('../../../../assets/new/icons/ic_live.png');
 const icClock = require('../../../../assets/new/icons/ic_clock.png');
 const icMore = require('../../../../assets/new/icons/ic_more.png');
@@ -14,7 +14,12 @@ interface cardProps {
 
 export default function ConferenceCard(props: cardProps) {
   const { index } = props;
-  const a = [1, 2, 3, 4, 5];
+  const a = [1, 2, 3, 4, 5, 6];
+  const b = [1, 2];
+  const c = [1, 2, 4, 5, 6];
+  const d = [1, 2, 3, 4, 5, 6, 2, 3, 4, 5, 6, 2, 3, 4, 5, 6, 2, 3, 4, 5, 6];
+  const arr = [a, b, c, d];
+
   const colors = [
     ['rgb(75,234,200)', 'rgb(34,172,204)'],
     ['rgb(74,198,252)', 'rgb(48,109,242)'],
@@ -23,11 +28,22 @@ export default function ConferenceCard(props: cardProps) {
   ];
 
   return (
-    <TouchableOpacity activeOpacity={0.8}>
+    <TouchableOpacity
+      activeOpacity={0.8}
+      style={{
+        shadowColor: 'rgb(9,33,60)',
+        shadowOpacity: 0.3,
+        shadowOffset: {
+          width: 0,
+          height: 8
+        },
+        paddingBottom:10
+      }}
+    >
       <LinearGradient
         end={{ x: 1, y: 0 }}
         start={{ x: 0, y: 0 }}
-        colors={colors[index]}
+        colors={colors[index % 4]}
         style={{
           width: 300,
           height: '100%',
@@ -48,12 +64,12 @@ export default function ConferenceCard(props: cardProps) {
           <Image
             source={icLive}
             resizeMode={'contain'}
-            style={{ width: 24, height: 24, marginRight: 5 }}
+            style={{ width: 30, height: 30, marginRight: 5 }}
           />
           <Text
             style={{
               color: '#fff',
-              fontSize: 16,
+              fontSize: 20,
               fontWeight: 'bold',
               flex: 1
               // backgroundColor: '#661'
@@ -62,7 +78,7 @@ export default function ConferenceCard(props: cardProps) {
             {'어디어디 주간회의'}
           </Text>
           <Image
-            source={icLock}
+            source={icLockWhite}
             resizeMode={'contain'}
             style={{ width: 18, height: 18 }}
           />
@@ -70,7 +86,7 @@ export default function ConferenceCard(props: cardProps) {
 
         <View
           style={{
-            height: 25,
+            height: 30,
             flexDirection: 'row',
             alignItems: 'center',
             marginVertical: 3
@@ -79,7 +95,7 @@ export default function ConferenceCard(props: cardProps) {
           <Text
             style={{
               color: '#fff',
-              fontSize: 14,
+              fontSize: 16,
               marginRight: 5
             }}
           >
@@ -88,7 +104,7 @@ export default function ConferenceCard(props: cardProps) {
           <Text
             style={{
               color: '#fff',
-              fontSize: 14,
+              fontSize: 16,
               marginRight: 5
             }}
           >
@@ -122,47 +138,72 @@ export default function ConferenceCard(props: cardProps) {
 
         <View
           style={{
-            flex: 2,
-            backgroundColor: '#519',
-            flexDirection: 'row',
-            paddingTop: 20,
-            alignItems: 'center'
+            flex: 2
           }}
         >
-          {a.reduce((prev, present) => {
-            
-            return prev.length < 5
-              ? [...prev, present]
-              : a.length > 5
-              ? [...prev, a.length - 4]
-              : prev;
-            // <Image
-            //   source={{
-            //     uri: 'https://www.wehago.com/uploads/profile/338136/hejevjsiwr.jpg'
-            //   }}
-            //   resizeMode={'center'}
-            //   style={{
-            //     backgroundColor: '#ff0',
-            //     height: 40,
-            //     width: 40,
-            //     borderRadius: 40
-            //   }}
-            // />;
-          }, [] as number[])}
-          {/* {[1, 2, 3, 4, 5].map((v, i) => (
-            <Image
-              source={{
-                uri: 'https://www.wehago.com/uploads/profile/338136/hejevjsiwr.jpg'
-              }}
-              resizeMode={'center'}
-              style={{
-                backgroundColor: '#ff0',
-                height: 40,
-                width: 40,
-                borderRadius: 40
-              }}
-            />
-          ))} */}
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+
+              paddingTop: 15
+            }}
+          >
+            {arr[index % 4]
+              .reduce<{ type: string; value: string | number }[]>(
+                (prev, present) => {
+                  if (prev.length > 4) return prev;
+
+                  let type;
+                  let value;
+
+                  if (arr[index % 4].length <= 5) {
+                    type = 'string';
+                    value =
+                      'https://www.wehago.com/uploads/profile/338136/hejevjsiwr.jpg';
+                  } else {
+                    type = prev.length < 4 ? 'string' : 'number';
+                    value =
+                      prev.length < 4
+                        ? 'https://www.wehago.com/uploads/profile/338136/hejevjsiwr.jpg'
+                        : arr[index % 4].length - 4;
+                  }
+
+                  return [...prev, { type, value }];
+                },
+                []
+              )
+              .map(v => {
+                return v.type === 'string' ? (
+                  <Image
+                    source={{
+                      uri: 'https://www.wehago.com/uploads/profile/338136/hejevjsiwr.jpg'
+                    }}
+                    resizeMode={'center'}
+                    style={{
+                      height: 40,
+                      width: 40,
+                      borderRadius: 40,
+                      marginRight: 5
+                    }}
+                  />
+                ) : (
+                  <TouchableOpacity
+                    style={{
+                      backgroundColor: 'rgba(255,255,255,0.25)',
+                      height: 40,
+                      width: 40,
+                      borderRadius: 40,
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                      // zIndex: 10
+                    }}
+                  >
+                    <Text>{'+' + v.value}</Text>
+                  </TouchableOpacity>
+                );
+              })}
+          </View>
         </View>
       </LinearGradient>
     </TouchableOpacity>

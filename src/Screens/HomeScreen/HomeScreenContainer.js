@@ -268,11 +268,11 @@ class HomeScreenContainer extends Component {
   };
 
   _handleRefresh = () => {
-    if (AppState.currentState === 'active' && this._isFocus) {
-      this._refreshTimeStamp = Date.now();
-      this.setState({ refreshing: true });
-      this._handleAutoLogin();
-    }
+    // if (AppState.currentState === 'active' && this._isFocus) {
+    //   this._refreshTimeStamp = Date.now();
+    //   this.setState({ refreshing: true });
+    //   this._handleAutoLogin();
+    // }
   };
 
   _handleGetWetalkList = async () => {

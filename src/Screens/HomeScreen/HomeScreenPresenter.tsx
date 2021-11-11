@@ -14,7 +14,8 @@ import {
   SafeAreaView,
   Image,
   TouchableOpacity,
-  Text
+  Text,
+  FlatList
 } from 'react-native';
 
 // import {
@@ -26,6 +27,7 @@ import {
 import AddButton from './AddButton';
 import { getT } from '../../utils/translateManager';
 import Card from './Component/ConferenceCard';
+import Box from './Component/ConferenceBox';
 
 // import { isWehagoV } from '../../utils';
 // import { Text } from '../../components/StyledText';
@@ -35,7 +37,7 @@ const icCalendar = require('../../../assets/new/icons/ic_calendar.png');
 const icVideo = require('../../../assets/new/icons/ic_video.png');
 const icKeyboard = require('../../../assets/new/icons/ic_keyboard.png');
 
-const HomeScreenPresenter = props => {
+const HomeScreenPresenter = (props: any) => {
   const started = props.started;
   const reservation = props.reservation;
   const t = getT();
@@ -87,7 +89,7 @@ const HomeScreenPresenter = props => {
       <View
         style={{
           width: '100%',
-          height: '25%',
+          height: '22%',
           paddingHorizontal: 20,
           // paddingTop: 30,
           // backgroundColor: '#930',
@@ -213,7 +215,7 @@ const HomeScreenPresenter = props => {
       <View
         style={{
           width: '100%',
-          height: '30%',
+          height: '28%',
           paddingVertical: 10
         }}
       >
@@ -242,20 +244,57 @@ const HomeScreenPresenter = props => {
             {'15'}
           </Text>
         </View>
-        <View style={{ flex: 4 }}>
-          <ScrollView
+        <View style={{ flex: 3 }}>
+          <FlatList
             horizontal={true}
-            // style={{ padding: 0, margin: 0 }}
-          >
-            {[1, 2, 3, 4].map((v, i) => (
-              <Card index={i} />
-            ))}
-          </ScrollView>
+            data={[1, 2, 3, 4, 5, 6, 7, 8, 9]}
+            renderItem={v => {
+              return <Card index={v.index} />;
+            }}
+            windowSize={2}
+            showsHorizontalScrollIndicator={false}
+          />
         </View>
       </View>
 
       {/* 예약 회의  */}
-      <View style={{ width: '100%', flex: 1, backgroundColor: 'brown' }}></View>
+      <View
+        style={{
+          width: '100%',
+          flex: 1,
+          paddingHorizontal: 20,
+          marginTop: 10
+        }}
+      >
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginBottom: 10
+          }}
+        >
+          <Text style={{ fontSize: 16, paddingRight: 5 }}>{'예약회의'}</Text>
+          <Text style={{ fontSize: 16 }}>{'10'}</Text>
+          <View
+            style={{
+              borderWidth: 1,
+              borderColor: '#aaa',
+              height: '100%',
+              marginHorizontal: 10
+            }}
+          />
+          <Text style={{ fontSize: 16, paddingRight: 5 }}>{'회의기록'}</Text>
+          <Text style={{ fontSize: 16, paddingRight: 20 }}>{'25'}</Text>
+        </View>
+        <FlatList
+          data={[1, 2, 3, 4, 5, 6, 7, 8]}
+          renderItem={v => {
+            return <Box></Box>;
+          }}
+          showsVerticalScrollIndicator={false}
+        />
+      </View>
+
       {/* {(props.started.length < 1 || started.length < 1) &&
       (props.reservation.length < 1 || reservation.length < 1) ? (
         <ScrollView
