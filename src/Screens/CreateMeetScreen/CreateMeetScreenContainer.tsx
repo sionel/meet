@@ -1,17 +1,16 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Platform, View, Animated, Dimensions } from 'react-native';
+import React, { RefObject, useEffect, useRef, useState } from 'react';
+import { View, Animated, Dimensions } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import CreateMeetScreenPresenter from './CreateMeetScreenPresenter';
+import OrganizationScreen from './OrganizationScreen';
+// import OrganizationScreen from '../../components/Organization';
 
-import DeviceInfo from 'react-native-device-info';
+import { OrganizationApi } from '../../services';
+
+import moment from 'moment';
+import { wehagoMainURL } from '../../utils';
 import { getT } from '../../utils/translateManager';
-import OrganizationScreen from '../../components/Organization';
-
-import { OrganizationApi, MeetApi } from '../../services';
-
-import { actionCreators } from '../../redux/modules/alert';
-import moment, { calendarFormat } from 'moment';
 
 // const hasNotch = DeviceInfo.hasNotch() && Platform.OS === 'ios';
 const { width, height } = Dimensions.get('window');
@@ -22,8 +21,8 @@ export default function CreateMeetScreenContainer(props: any) {
   const [switchDelAlram, setSwitchDelAlram] = useState(false);
   const [selectMode, setSelectMode] = useState(false);
 
-  const [organization, setorganization] = useState<any>({ company_no: -1 });
-  const [employee, setEmployee] = useState([]);
+  // const [organization, setorganization] = useState<any>({ company_no: -1 });
+  const [employee, setEmployee] = useState([{}]);
 
   const [roomName, setRoomName] = useState('');
   const [roomNameCnt, setRoomNameCnt] = useState(0);
@@ -64,10 +63,17 @@ export default function CreateMeetScreenContainer(props: any) {
   });
   const [sendMessage, setSendMessage] = useState('');
   const [sendMsgCnt, setSendMsgCnt] = useState(0);
+  const [participantList, setParticipantList] = useState<{}[]>([]);
+  const [textLess2, setTextLess2] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const fadeAnim = useRef(new Animated.ValueXY()).current;
-
   const { auth } = useSelector((state: any) => state.user);
+  const t = getT();
+
+  const rnRef: RefObject<any> = React.useRef(null);
+  const smRef: RefObject<any> = React.useRef(null);
+
   const dispatch = useDispatch();
 
   const resetAni = () => {
@@ -92,64 +98,78 @@ export default function CreateMeetScreenContainer(props: any) {
       friction: 500
     }).start();
   };
-  const getOrganization = async () => {
-    const result = await OrganizationApi.getOrganizationTreeRequest(auth);
-    if (result.error) {
-      // Alert.alert('조직도', '조직도를 가져올 수 없습니다.');
-    } else {
-      const organization = result.resultData[0];
-      setorganization(organization);
-    }
-  };
-
-  // const getAllEmployee = async () => {
-  //   const result = await OrganizationApi.getOrganizationTreeAllEmployeeRequest(
-  //     auth
-  //   );
+  // const getOrganization = async () => {
+  //   const result = await OrganizationApi.getOrganizationTreeRequest(auth);
   //   if (result.error) {
   //     // Alert.alert('조직도', '조직도를 가져올 수 없습니다.');
   //   } else {
-  //     const company = result.resultData;
-
-  //     const hangleMapper = company.reduce((acc: any, i: any) => {
-  //       const charCode = i.user_name.charCodeAt(0);
-  //       let charIndex;
-  //       if (
-  //         charCode >= parseInt('0xac00', 16) &&
-  //         charCode <= parseInt('0xd7af', 16)
-  //       ) {
-  //         const hangle =
-  //           (charCode - parseInt('0xac00', 16)) / 28 / 21 +
-  //           parseInt('0x1100', 16);
-  //         charIndex = String.fromCharCode(hangle);
-  //       } else {
-  //         charIndex = String.fromCharCode(charCode);
-  //       }
-
-  //       if (acc.has(charIndex)) {
-  //         acc.set(charIndex, [...acc.get(charIndex), i]);
-  //       } else {
-  //         acc.set(charIndex, [i]);
-  //       }
-  //       return acc;
-  //     }, new Map());
-  //     let obj = Array.from(hangleMapper).reduce((obj, [key, value]: any) => {
-  //       return Object.assign(obj, { [key]: value });
-  //     }, {});
-
-  //     const employee = Object.keys(obj).map(key => ({
-  //       title: key,
-  //       data: obj[key]
-  //     }));
-
-  //     employee.sort((a, b) => a.title.charCodeAt(0) - b.title.charCodeAt(0));
-  //     setEmployee(employee);
+  //     const organization = result.resultData[0];
+  //     setorganization(organization);
   //   }
   // };
 
+  const getAllEmployee = async () => {
+    const result = await OrganizationApi.getOrganizationTreeAllEmployeeRequest(
+      auth
+    );
+    if (result.error) {
+      // Alert.alert('조직도', '조직도를 가져올 수 없습니다.');
+    } else {
+      const company = result.resultData;
+
+      const hangleMapper = company.reduce((acc: any, i: any) => {
+        const charCode = i.user_name.charCodeAt(0);
+        let charIndex;
+        if (
+          charCode >= parseInt('0xac00', 16) &&
+          charCode <= parseInt('0xd7af', 16)
+        ) {
+          const hangle =
+            (charCode - parseInt('0xac00', 16)) / 28 / 21 +
+            parseInt('0x1100', 16);
+          charIndex = String.fromCharCode(hangle);
+        } else {
+          charIndex = String.fromCharCode(charCode);
+        }
+
+        if (acc.has(charIndex)) {
+          acc.set(charIndex, [...acc.get(charIndex), i]);
+        } else {
+          acc.set(charIndex, [i]);
+        }
+        return acc;
+      }, new Map());
+      let obj: any = Array.from(hangleMapper).reduce(
+        (obj, [key, value]: any) => {
+          return Object.assign(obj, { [key]: value });
+        },
+        {}
+      );
+
+      const employee = Object.keys(obj).map(key => ({
+        title: key,
+        data: obj[key]
+      }));
+
+      employee.sort((a, b) => a.title.charCodeAt(0) - b.title.charCodeAt(0));
+      setEmployee(employee);
+    }
+  };
+
   const startConference = () => {
     const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
-    const params = {
+    const params: {
+      service_code: string;
+      name: string;
+      is_public: boolean;
+      access_user: [{}];
+      is_send_updated_email: boolean;
+      is_reservation: boolean;
+      call_type: string;
+      invite_messsage: string;
+      // start_date_time?: Date,
+      // end_date_time?: Date,
+    } = {
       service_code: 'videoconference',
       name: roomName,
       is_public: true,
@@ -173,11 +193,13 @@ export default function CreateMeetScreenContainer(props: any) {
       ],
       is_send_updated_email: switchDelAlram,
       is_reservation: switchReserve,
+      // start_date_time: startTime.current,
+      // end_date_time: endTime.current,
       call_type: '1',
       invite_messsage: sendMessage
     };
 
-    MeetApi.createMeetRoom(AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno, params);
+    // MeetApi.createMeetRoom(AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno, params);
 
     // console.log('startTime');
     // console.log(startTime);
@@ -288,22 +310,21 @@ export default function CreateMeetScreenContainer(props: any) {
 
   const onTimeConfirm = () => {
     let obj = getDate(time);
-    // console.log(obj.current);
-  
-    let h = moment(obj.current).hours()-12;
+
+    let h = moment(obj.current).hours() - 12;
     let m = moment(obj.current).minutes();
-    
+
     let DT;
 
     if (timeType === 'start') {
-      DT = moment(startTime.current).add(h, 'h').add(m, 'm').toDate()
+      DT = moment(startTime.current).add(h, 'h').add(m, 'm').toDate();
       setStartTime({
         ...obj,
         date: startTime.date,
         current: DT
       });
     } else if (timeType === 'end') {
-      DT = moment(endTime.current).add(h, 'h').add(m, 'm').toDate()
+      DT = moment(endTime.current).add(h, 'h').add(m, 'm').toDate();
       setEndTime({
         ...obj,
         date: endTime.date,
@@ -316,8 +337,16 @@ export default function CreateMeetScreenContainer(props: any) {
   useEffect(() => {}, [sendMessage]);
   useEffect(() => {
     setSelectMode(false);
-    getOrganization();
-    // getAllEmployee();
+    // getOrganization();
+    getAllEmployee();
+    setParticipantList([
+      {
+        user_name: auth.user_name,
+        rank_name: auth.last_company.rank_name,
+        profile_url: auth.profile_url,
+        full_path: auth.last_company.full_path
+      }
+    ]);
   }, []);
 
   useEffect(() => {
@@ -329,10 +358,14 @@ export default function CreateMeetScreenContainer(props: any) {
 
   const roomNameChange = (name: string) => {
     let rn = name;
+    if (rn.length < 2) {
+      setTextLess2(true);
+    } else {
+      setTextLess2(false);
+    }
     setRoomName(rn);
     setRoomNameCnt(rn.length);
   };
-
   const sendMessageChange = (content: string) => {
     let msg = content;
     setSendMessage(msg);
@@ -356,7 +389,6 @@ export default function CreateMeetScreenContainer(props: any) {
         >
           <OrganizationScreen
             {...props}
-            organization={organization}
             employee={employee}
             selectedEmployee={selectedEmployee}
             invited={invited}
@@ -366,33 +398,27 @@ export default function CreateMeetScreenContainer(props: any) {
             setSelectedEmployee={setSelectedEmployee}
             setInvited={setInvited}
             setInviteText={setInviteText}
+            participantList={participantList}
+            setParticipantList={setParticipantList}
           />
         </Animated.View>
       ) : (
         <CreateMeetScreenPresenter
-          employee={employee}
           roomName={roomName}
           isPublic={isPublic}
           datePicker={datePicker}
           timePicker={timePicker}
           startTime={startTime}
           endTime={endTime} // 여기서 시간 숫자인거 수정
-          email={email}
-          selectedEmployee={selectedEmployee}
           sendMessage={sendMessage}
           sendMessageChange={sendMessageChange}
           setSelectMode={setSelectMode}
-          setRoomName={setRoomName}
           roomNameChange={roomNameChange}
           togglePublic={togglePublic}
           setDatePicker={setDatePicker}
           setTimePicker={setTimePicker}
           openTimePicker={openTimePicker}
           openDatePicker={openDatePicker}
-          // setTime={setTime}
-          // setDate={setDate}
-          setEmail={setEmail}
-          setsendMessage={setSendMessage}
           startConference={startConference}
           //신규Props
           switchAlram={switchAlram}
@@ -401,17 +427,18 @@ export default function CreateMeetScreenContainer(props: any) {
           onSwitchAlramChange={onSwitchAlramChange}
           onSwitchReserveChange={onSwitchReserveChange}
           onSwitchDelAlramChange={onSwitchDelAlramChange}
-          setStartTime={setStartTime}
           roomNameCnt={roomNameCnt}
           sendMsgCnt={sendMsgCnt}
           onHandleBack={onHandleBack}
           onDateChange={onDateChange}
           onTimeConfirm={onTimeConfirm}
-          date={date}
-          setDate={setDate}
           time={time}
           setTime={setTime}
           auth={auth}
+          participantList={participantList}
+          textLess2={textLess2}
+          smRef={smRef}
+          rnRef={rnRef}
         />
       )}
     </View>
