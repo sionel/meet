@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, Image } from 'react-native';
 
 import LinearGradient from 'react-native-linear-gradient';
 
-const icLockWhite = require('../../../../assets/new/icons/ic_lock_white.png');
+const icLockwhite = require('../../../../assets/new/icons/ic_lock_white.png');
 const icLive = require('../../../../assets/new/icons/ic_live.png');
 const icClock = require('../../../../assets/new/icons/ic_clock.png');
 const icMore = require('../../../../assets/new/icons/ic_more.png');
@@ -31,13 +31,16 @@ export default function ConferenceCard(props: cardProps) {
     <TouchableOpacity
       activeOpacity={0.8}
       style={{
+        marginHorizontal:15,
+        marginBottom: 10,
+        backgroundColor:'#fff',
+        borderRadius: 12,
         shadowColor: 'rgb(9,33,60)',
         shadowOpacity: 0.3,
         shadowOffset: {
           width: 0,
           height: 8
-        },
-        paddingBottom:10
+        }
       }}
     >
       <LinearGradient
@@ -47,7 +50,7 @@ export default function ConferenceCard(props: cardProps) {
         style={{
           width: 300,
           height: '100%',
-          marginLeft: 20,
+          // marginLeft: 20,
           padding: 15,
           borderRadius: 12
         }}
@@ -78,7 +81,7 @@ export default function ConferenceCard(props: cardProps) {
             {'어디어디 주간회의'}
           </Text>
           <Image
-            source={icLockWhite}
+            source={icLockwhite}
             resizeMode={'contain'}
             style={{ width: 18, height: 18 }}
           />

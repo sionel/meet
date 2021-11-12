@@ -38,218 +38,73 @@ const icVideo = require('../../../assets/new/icons/ic_video.png');
 const icKeyboard = require('../../../assets/new/icons/ic_keyboard.png');
 
 const HomeScreenPresenter = (props: any) => {
-  const started = props.started;
-  const reservation = props.reservation;
+  const {
+    onClickSetting,
+    companyName,
+    userImg,
+    createConference,
+    enterInviteCode
+  } = props;
   const t = getT();
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: '#F7F8FA',
-        justifyContent: 'flex-start',
-        alignItems: 'center'
-      }}
-    >
+    <SafeAreaView style={styles.safeContainer}>
       <StatusBar barStyle={'dark-content'} />
       {/* 헤더 */}
-      <View
-        style={{
-          width: '100%',
-          height: '6%',
-          alignItems: 'center',
-          justifyContent: 'center',
-          flexDirection: 'row',
-          paddingHorizontal: 20
-          // backgroundColor:"#a0a"
-        }}
-      >
-        <Image
-          source={loginLogo}
-          style={{
-            flex: 1,
-            height: '100%'
-            // backgroundColor:'#128'
-          }}
-          resizeMode={'contain'}
-        />
-        <TouchableOpacity
-          style={{
-            flex: 1,
-            flexDirection: 'row-reverse',
-            alignItems: 'center'
-          }}
-        >
+      <View style={styles.header}>
+        <Image source={loginLogo} style={styles.logo} resizeMode={'contain'} />
+        <TouchableOpacity style={styles.setting} onPress={onClickSetting}>
           <Image source={icSet} />
-          <Text style={{ textAlign: 'right', marginRight: 5 }}>
-            {'(주)더존비즈온'}
-          </Text>
-          <Image
-            source={{
-              uri: 'https://www.wehago.com/uploads/profile/338136/hejevjsiwr.jpg'
-            }}
-            style={{ width: 30, height: 30, borderRadius: 30, marginRight: 5 }}
-          />
+          <Text style={styles.companyText}>{companyName}</Text>
+          <Image source={{ uri: userImg }} style={styles.settingImg} />
         </TouchableOpacity>
       </View>
 
       {/* 김더존님 ~~~ */}
-      <View
-        style={{
-          width: '100%',
-          height: '22%',
-          paddingHorizontal: 20,
-          // paddingTop: 30,
-          // backgroundColor: '#930',
-          justifyContent: 'space-between',
-          alignItems: 'stretch'
-        }}
-      >
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'flex-start',
-            flexDirection: 'row',
-            alignItems: 'flex-end'
-            // backgroundColor:'#131'
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 20,
-              fontWeight: 'bold'
-            }}
-          >
-            {'김더존'}
-          </Text>
-          <Text
-            style={{
-              fontSize: 20
-            }}
-          >
-            {'님, 좋은 아침입니다!'}
-          </Text>
+      <View style={styles.helloContainer}>
+        <View style={styles.helloTextContainer}>
+          <Text style={styles.name}>{'김더존'}</Text>
+          <Text style={styles.greeting}>{'님, 좋은 아침입니다!'}</Text>
         </View>
-        <View
-          style={{
-            flex: 2,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center'
-          }}
-        >
-          <View
-            style={{
-              borderRadius: 12,
-              borderWidth: 1,
-              backgroundColor: '#fff',
-              borderColor: '#fff',
-              width: 102,
-              height: 90,
-              justifyContent: 'space-evenly',
-              alignItems: 'center',
-              padding: 5,
-              shadowColor: 'rgba(0,0,0,0.1)',
-              shadowOpacity: 1,
-              shadowOffset: {
-                width: 0,
-                height: 8
-              }
-            }}
-          >
-            <Image
-              source={icCalendar}
-              style={{ width: 40, height: 40 }}
-              resizeMode={'cover'}
-            />
-            <Text>{'회의생성'}</Text>
-          </View>
-          <View
-            style={{
-              borderRadius: 12,
-              borderWidth: 1,
-              backgroundColor: '#fff',
-              borderColor: '#fff',
-              width: 102,
-              height: 90,
-              justifyContent: 'space-evenly',
-              alignItems: 'center',
-              padding: 5,
-              shadowColor: 'rgba(0,0,0,0.1)',
-              shadowOpacity: 1,
-              shadowOffset: {
-                width: 0,
-                height: 8
-              }
-            }}
+
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={styles.topButtons}
+            onPress={createConference}
           >
             <Image
               source={icVideo}
-              style={{ width: 40, height: 40 }}
+              style={styles.topButtonImg}
+              resizeMode={'cover'}
+            />
+            <Text>{'회의생성'}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.topButtons}
+            onPress={createConference}
+          >
+            <Image
+              source={icCalendar}
+              style={styles.topButtonImg}
               resizeMode={'cover'}
             />
             <Text>{'회의일정'}</Text>
-          </View>
-          <View
-            style={{
-              borderRadius: 12,
-              borderWidth: 1,
-              backgroundColor: '#fff',
-              borderColor: '#fff',
-              width: 102,
-              height: 90,
-              justifyContent: 'space-evenly',
-              alignItems: 'center',
-              padding: 5,
-              shadowColor: 'rgba(0,0,0,0.1)',
-              shadowOpacity: 1,
-              shadowOffset: {
-                width: 0,
-                height: 8
-              }
-            }}
-          >
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.topButtons} onPress={enterInviteCode}>
             <Image
               source={icKeyboard}
-              style={{ width: 40, height: 40 }}
+              style={styles.topButtonImg}
               resizeMode={'cover'}
             />
             <Text>{'참여코드'}</Text>
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
 
       {/* 진행중인 화상회의 */}
-      <View
-        style={{
-          width: '100%',
-          height: '28%',
-          paddingVertical: 10
-        }}
-      >
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'flex-start',
-            flexDirection: 'row',
-            alignItems: 'center',
-            paddingHorizontal: 20
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 16
-            }}
-          >
-            {'진행중인 화상회의'}
-          </Text>
-          <Text
-            style={{
-              fontSize: 16,
-              marginLeft: 10
-            }}
-          >
-            {'15'}
-          </Text>
+      <View style={styles.ongoingContainer}>
+        <View style={styles.goingTextContainer}>
+          <Text style={{ fontSize: 16 }}>{'진행중인 화상회의'}</Text>
+          <Text style={{ fontSize: 16, marginLeft: 10 }}>{'15'}</Text>
         </View>
         <View style={{ flex: 3 }}>
           <FlatList
@@ -429,13 +284,94 @@ const HomeScreenPresenter = (props: any) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  safeContainer: {
     flex: 1,
     backgroundColor: '#F7F8FA',
     justifyContent: 'flex-start',
     alignItems: 'center'
   },
-  imageContainer: {}
+  header: {
+    width: '100%',
+    height: '6%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    paddingHorizontal: 20
+  },
+  logo: {
+    flex: 1,
+    height: '100%'
+  },
+  setting: {
+    flex: 1,
+    flexDirection: 'row-reverse',
+    alignItems: 'center'
+  },
+  companyText: { textAlign: 'right', marginRight: 5 },
+  settingImg: { width: 30, height: 30, borderRadius: 30, marginRight: 5 },
+  helloContainer: {
+    width: '100%',
+    height: '22%',
+    paddingHorizontal: 20,
+    justifyContent: 'space-between',
+    alignItems: 'stretch'
+  },
+  helloTextContainer: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    flexDirection: 'row',
+    alignItems: 'flex-end'
+  },
+  name: {
+    fontSize: 20,
+    fontWeight: 'bold'
+  },
+  greeting: {
+    fontSize: 20
+  },
+  buttonContainer: {
+    flex: 2,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  topButtons: {
+    borderRadius: 12,
+    borderWidth: 1,
+    backgroundColor: '#fff',
+    borderColor: '#fff',
+    width: '28%',
+    height: 90,
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    padding: 5,
+    shadowColor: 'rgb(0,0,0)',
+    shadowOpacity: 0.2,
+    shadowOffset: {
+      width: 0,
+      height: 8
+    }
+  },
+  topButtonImg: { width: 40, height: 40 },
+  ongoingContainer: {
+    width: '100%',
+    height: '28%',
+    paddingVertical: 10
+  },
+  goingTextContainer: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 20
+  }
+  // container: {
+  //   flex: 1,
+  //   backgroundColor: '#F7F8FA',
+  //   justifyContent: 'flex-start',
+  //   alignItems: 'center'
+  // },
+  // imageContainer: {}
 
   // reloadButtonWrap: {
   //   marginTop: 10,

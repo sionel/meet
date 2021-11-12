@@ -120,9 +120,10 @@ export default {
   },
 
   // 3-3 화상회의방 수정
-  updateMeetRoom: async (a_token, r_token, HASH_KEY, cno, roomId) => {
+  updateMeetRoom: async (auth, roomId) => {
+    const {AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno} = auth
     const url = `${meetURL}/room?cno=${cno}&room=${roomId}`;
-    const headers = securityRequest(a_token, r_token, url, HASH_KEY);
+    const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
     try {
       const data = {
         method: 'PUT',
