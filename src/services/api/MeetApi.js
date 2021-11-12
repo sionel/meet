@@ -9,7 +9,8 @@ import {
   meetURL,
   securityRequest,
   wehagoBaseURL0,
-  wehagoBaseURL
+  wehagoBaseURL,
+  serialize
 } from '../../utils';
 import * as CryptoJS from 'crypto-js';
 import { v4 as uuidv4 } from 'uuid';
@@ -35,9 +36,10 @@ const getToken = async accessUrl => {
 // #region
 export default {
   // 3-1 화상회의방 생성
-  createMeetRoom: async (a_token, r_token, HASH_KEY, cno, param) => {
+  createMeetRoom: async (auth, param) => {
+    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
     const url = `${meetURL}/room?cno=${cno}`;
-    const headers = securityRequest(a_token, r_token, url, HASH_KEY);
+    const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
     try {
       const data = {
         method: 'POST',
@@ -63,9 +65,10 @@ export default {
   },
 
   // 3-2 화상회의방 상세 조회
-  getMeetRoom: async (a_token, r_token, HASH_KEY, roomId) => {
+  getMeetRoom: async (auth, roomId) => {
+    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY } = auth;
     const url = `${meetURL}/room?room=${roomId}`;
-    const headers = securityRequest(a_token, r_token, url, HASH_KEY);
+    const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
     try {
       const data = {
         method: 'GET',
@@ -121,7 +124,7 @@ export default {
 
   // 3-3 화상회의방 수정
   updateMeetRoom: async (auth, roomId) => {
-    const {AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno} = auth
+    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
     const url = `${meetURL}/room?cno=${cno}&room=${roomId}`;
     const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
     try {
@@ -145,9 +148,11 @@ export default {
   },
 
   // 3-4 화상회의방 리스트 조회
-  getMeetRoomsList: async (a_token, r_token, cno, user_id, HASH_KEY) => {
+  getMeetRoomsList: async auth => {
+    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
+
     const url = `${meetURL}/room/list?cno=${cno}`;
-    const headers = securityRequest(a_token, r_token, url, HASH_KEY);
+    const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
     try {
       const data = {
         method: 'GET',
@@ -160,10 +165,37 @@ export default {
       if (response.status !== 200) {
         throw response;
       }
-      return response.json();
+      const { resultData } = await response.json();
+      return resultData;
     } catch (err) {
       const errDetail = await err.json();
       console.warn('4.getMeetRoomsList : ', errDetail);
+      return false;
+    }
+  },
+  // 3-?? 회의 기록
+  getMeetFinished: async (auth, start, end, offset, limit) => {
+    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
+    const param = serialize({ cno, start, end, offset, limit });
+    const url = `${meetURL}/room/finished?${param}`;
+    const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
+    try {
+      const data = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          ...headers
+        }
+      };
+      const response = await fetch(url, data);
+      if (response.status !== 200) {
+        throw response;
+      }
+      const { resultData } = await response.json();
+      return resultData;
+    } catch (err) {
+      const errDetail = await err.json();
+      console.warn('3-?? 회의기록 : ', errDetail);
       return false;
     }
   },
@@ -173,9 +205,11 @@ export default {
   // 3-7 화상회의방 삭제
   // 3-8 화상회의방 종료 리스트 조회
   // 3-9 화상회의방 참가자 허용 리스트 조회
-  getAccessUsers: async (a_token, r_token, HASH_KEY, cno, roomId) => {
+  getAccessUsers: async (auth, roomId) => {
+    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
+
     const url = `${meetURL}/room/access-user?cno=${cno}&room=${roomId}`;
-    const headers = securityRequest(a_token, r_token, url, HASH_KEY);
+    const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
 
     try {
       const data = {
@@ -197,9 +231,11 @@ export default {
   },
 
   // 3-10 화상회의방 접속중인 사용자 리스트 조회
-  getParticipant: async (a_token, r_token, HASH_KEY, cno, roomId) => {
+  getParticipant: async (auth, roomId) => {
+    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
+
     const url = `${meetURL}/room/connecting-user?cno=${cno}&room=${roomId}`;
-    const headers = securityRequest(a_token, r_token, url, HASH_KEY);
+    const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
 
     try {
       const data = {
@@ -223,9 +259,10 @@ export default {
   // 3-11 화상회의방 접속했던 사용자 리스트 조회
 
   // 3-12 화상회의 토큰 생성
-  getMeetRoomToken: async (a_token, r_token, HASH_KEY, cno, roomId) => {
+  getMeetRoomToken: async (auth, roomId) => {
+    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
     const url = `${meetURL}/token?cno=${cno}`;
-    const headers = securityRequest(a_token, r_token, url, HASH_KEY);
+    const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
     try {
       const data = {
         method: 'POST',
@@ -739,8 +776,8 @@ export default {
   },
 
   // auth가 있는 사람들 기준으로 access_token 요청
-  getAccessToken: async (auth, room, id) => {
-    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY } = auth;
+  getAccessToken: async (auth, room) => {
+    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, portal_id } = auth;
     const url = `${meetURL}/token/access-token`;
     const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
     try {
@@ -752,7 +789,7 @@ export default {
         },
         body: JSON.stringify({
           room,
-          user_identify: id
+          user_identify: portal_id
         })
       };
 
@@ -888,14 +925,9 @@ export default {
   },
 
   checkWedrive: async auth => {
-    const {
-      AUTH_A_TOKEN: a_token,
-      AUTH_R_TOKEN: r_token,
-      HASH_KEY,
-      cno
-    } = auth;
+    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
     const url = `${wehagoBaseURL}/common/company/deploy/whether/employee?service_code=wedrive&cno=${cno}`;
-    const headers = securityRequest(a_token, r_token, url, HASH_KEY);
+    const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
     try {
       const data = {
         method: 'GET',
@@ -953,7 +985,7 @@ export default {
       return false;
     }
   },
-  
+
   checkTest: async () => {
     const accsessUrl = '/test';
     // const signature = await getSignature(accsessUrl);

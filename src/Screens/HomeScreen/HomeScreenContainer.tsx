@@ -3,6 +3,8 @@ import { Platform, Linking, BackHandler, Alert } from 'react-native';
 
 import { getT } from '../../utils/translateManager';
 
+import { MeetApi, ServiceCheckApi } from '../../services';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/configureStore';
 
@@ -11,8 +13,13 @@ import { actionCreators as UserActions } from '../../redux/modules/user';
 import HomeScreenPresenter from './HomeScreenPresenter';
 
 export default function HomeScreenContainer(props: any) {
-  const [serverNoti, setServerNoti] = useState([]);
-
+  const [indicator, setIndicator] = useState(true);
+  const [ongoingConference, setOngoingConference] = useState<any[]>([]);
+  const [reservationConference, setReservationConference] = useState<any[]>([]);
+  const [finishedConference, setFinishedConference] = useState<any[]>([]);
+  const [highlight, setHighlight] = useState<'reservation' | 'finished'>(
+    'reservation'
+  );
   //#region  selector
   const { auth } = useSelector((state: RootState) => {
     return {
@@ -25,11 +32,73 @@ export default function HomeScreenContainer(props: any) {
   const onLogout = () => dispatch(UserActions.logout());
 
   useEffect(() => {
-    console.log(auth);
-    
+    const reload = setInterval(() => {
+      _getConoferences();
+    }, 15000);
+    return () => {
+      clearInterval(reload);
+    };
+    // MeetApi.getMeetRoomsList(auth )
   }, []);
 
-  return <HomeScreenPresenter />;
+  const _getConoferences = () => {
+    Promise.all([
+      MeetApi.getMeetRoomsList(auth).then(result => {
+        const going = result.filter(
+          (conference: any) => !conference.r_start_date_time
+        );
+        const reservation: any[] = result.filter(
+          (conference: any) => conference.r_start_date_time
+        );
+        console.log('going');
+        console.log(going);
+        console.log('reservation');
+        console.log(reservation);
+        const reservationList = reservation.map((conference: any, index) => {
+          const data = {
+            roomName: conference.name,
+            date: new Date(conference.r_start_date_time).toLocaleDateString(),
+            start: new Date(conference.r_start_date_time).toLocaleTimeString(),
+            end: new Date(conference.r_end_date_time).toLocaleTimeString(),
+            users: conference.access_user,
+            roomId: conference.room_id,
+            isPublic: conference.is_public,
+            onClick: () => {},
+            key: index
+          };
+          return data;
+        });
+        setOngoingConference(going);
+        setReservationConference(reservationList);
+        setHighlight(reservationList.length > 0 ? 'reservation' : 'finished');
+      }),
+      MeetApi.getMeetFinished(auth, '2021-11-01', '2021-11-12', 0, 20).then(
+        result => {
+          const finished = result.list;
+          console.log('finished');
+          console.log(finished);
+          setFinishedConference(finished);
+        }
+      )
+    ]).then(() => {
+      setIndicator(false);
+    });
+  };
+
+  const a = () => {};
+
+  return (
+    <HomeScreenPresenter
+      {...{
+        indicator,
+        ongoingConference,
+        reservationConference,
+        finishedConference,
+        highlight,
+        setHighlight
+      }}
+    />
+  );
 }
 
 // import React, { Component } from 'react';

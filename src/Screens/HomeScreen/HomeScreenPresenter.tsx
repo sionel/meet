@@ -26,8 +26,9 @@ import {
 // } from '../../components';
 import AddButton from './AddButton';
 import { getT } from '../../utils/translateManager';
-import Card from './Component/ConferenceCard';
-import Box from './Component/ConferenceBox';
+import ConferenceCard from './Component/ConferenceCard';
+import FinishedCard from './Component/FinishedCard';
+import ReservationCard from './Component/ReservationCard';
 
 // import { isWehagoV } from '../../utils';
 // import { Text } from '../../components/StyledText';
@@ -39,6 +40,13 @@ const icKeyboard = require('../../../assets/new/icons/ic_keyboard.png');
 
 const HomeScreenPresenter = (props: any) => {
   const {
+    indicator,
+    ongoingConference,
+    reservationConference,
+    finishedConference,
+    highlight,
+    setHighlight,
+
     onClickSetting,
     companyName,
     userImg,
@@ -65,7 +73,6 @@ const HomeScreenPresenter = (props: any) => {
           <Text style={styles.name}>{'김더존'}</Text>
           <Text style={styles.greeting}>{'님, 좋은 아침입니다!'}</Text>
         </View>
-
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.topButtons}
@@ -101,23 +108,25 @@ const HomeScreenPresenter = (props: any) => {
       </View>
 
       {/* 진행중인 화상회의 */}
-      <View style={styles.ongoingContainer}>
-        <View style={styles.goingTextContainer}>
-          <Text style={{ fontSize: 16 }}>{'진행중인 화상회의'}</Text>
-          <Text style={{ fontSize: 16, marginLeft: 10 }}>{'15'}</Text>
+      {ongoingConference.length > 0 && (
+        <View style={styles.ongoingContainer}>
+          <View style={styles.goingTextContainer}>
+            <Text style={{ fontSize: 16 }}>{'진행중인 화상회의'}</Text>
+            <Text style={{ fontSize: 16, marginLeft: 10 }}>{'15'}</Text>
+          </View>
+          <View style={{ flex: 3 }}>
+            <FlatList
+              horizontal={true}
+              data={ongoingConference}
+              renderItem={v => {
+                return <ConferenceCard index={v.index} />;
+              }}
+              windowSize={2}
+              showsHorizontalScrollIndicator={false}
+            />
+          </View>
         </View>
-        <View style={{ flex: 3 }}>
-          <FlatList
-            horizontal={true}
-            data={[1, 2, 3, 4, 5, 6, 7, 8, 9]}
-            renderItem={v => {
-              return <Card index={v.index} />;
-            }}
-            windowSize={2}
-            showsHorizontalScrollIndicator={false}
-          />
-        </View>
-      </View>
+      )}
 
       {/* 예약 회의  */}
       <View
@@ -135,23 +144,92 @@ const HomeScreenPresenter = (props: any) => {
             marginBottom: 10
           }}
         >
-          <Text style={{ fontSize: 16, paddingRight: 5 }}>{'예약회의'}</Text>
-          <Text style={{ fontSize: 16 }}>{'10'}</Text>
-          <View
-            style={{
-              borderWidth: 1,
-              borderColor: '#aaa',
-              height: '100%',
-              marginHorizontal: 10
-            }}
-          />
-          <Text style={{ fontSize: 16, paddingRight: 5 }}>{'회의기록'}</Text>
-          <Text style={{ fontSize: 16, paddingRight: 20 }}>{'25'}</Text>
+          {reservationConference.length > 0 && (
+            <TouchableOpacity
+              style={{ flexDirection: 'row' }}
+              onPress={() => {
+                setHighlight('reservation');
+              }}
+            >
+              <Text
+                style={[
+                  { color: '#939393', fontSize: 16, paddingRight: 5 },
+                  highlight === 'reservation' && {
+                    fontWeight: 'bold',
+                    color: '#000'
+                  }
+                ]}
+              >
+                {'예약회의'}
+              </Text>
+              <Text
+                style={[
+                  { color: '#939393', fontSize: 16 },
+                  highlight === 'reservation' && {
+                    fontWeight: 'bold',
+                    color: '#1c90fb'
+                  }
+                ]}
+              >
+                {reservationConference.length}
+              </Text>
+            </TouchableOpacity>
+          )}
+          {reservationConference.length > 0 && finishedConference.length > 0 && (
+            <View
+              style={{
+                borderWidth: 1,
+                borderColor: '#aaa',
+                height: '100%',
+                marginHorizontal: 10
+              }}
+            />
+          )}
+          {finishedConference.length > 0 && (
+            <TouchableOpacity
+              style={{ flexDirection: 'row' }}
+              onPress={() => {
+                setHighlight('finished');
+              }}
+            >
+              <Text
+                style={[
+                  { color: '#939393', fontSize: 16, paddingRight: 5 },
+
+                  highlight === 'finished' && {
+                    fontWeight: 'bold',
+                    color: '#000'
+                  }
+                ]}
+              >
+                {'회의기록'}
+              </Text>
+              <Text
+                style={[
+                  { color: '#939393', fontSize: 16, paddingRight: 20 },
+                  highlight === 'finished' && {
+                    fontWeight: 'bold',
+                    color: '#1c90fb'
+                  }
+                ]}
+              >
+                {finishedConference.length}
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
         <FlatList
-          data={[1, 2, 3, 4, 5, 6, 7, 8]}
-          renderItem={v => {
-            return <Box></Box>;
+          data={
+            highlight === 'reservation'
+              ? reservationConference
+              : finishedConference
+          }
+          renderItem={data => {
+            return highlight === 'reservation' ? (
+              <ReservationCard data={data} />
+            ) : (
+              <FinishedCard data={data} />
+            );
           }}
           showsVerticalScrollIndicator={false}
         />
@@ -314,7 +392,8 @@ const styles = StyleSheet.create({
     height: '22%',
     paddingHorizontal: 20,
     justifyContent: 'space-between',
-    alignItems: 'stretch'
+    alignItems: 'stretch',
+    marginBottom: 10
   },
   helloTextContainer: {
     flex: 1,
@@ -356,7 +435,7 @@ const styles = StyleSheet.create({
   ongoingContainer: {
     width: '100%',
     height: '28%',
-    paddingVertical: 10
+    paddingBottom: 10
   },
   goingTextContainer: {
     flex: 1,

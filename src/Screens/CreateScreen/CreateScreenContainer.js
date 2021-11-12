@@ -133,15 +133,8 @@ class CreateScreenContainer extends React.Component {
       const videoRoomId = sendWetalkResult.resultData.chatList[0].mobile_key;
 
       // 토큰받고
-      const roomToken = (
-        await MeetApi.getMeetRoomToken(
-          auth.AUTH_A_TOKEN,
-          auth.AUTH_R_TOKEN,
-          auth.HASH_KEY,
-          auth.last_access_company_no,
-          videoRoomId
-        )
-      ).resultData;
+      const roomToken = (await MeetApi.getMeetRoomToken(auth, videoRoomId))
+        .resultData;
 
       let callType = 3;
       let isCreator;

@@ -5,6 +5,7 @@ const icMore = require('../../../../assets/new/icons/ic_more.png');
 const icLockBlack = require('../../../../assets/new/icons/ic_lock_black.png');
 
 export default function ConferenceBox(props: any) {
+  const { data } = props;
   return (
     <View
       style={{
