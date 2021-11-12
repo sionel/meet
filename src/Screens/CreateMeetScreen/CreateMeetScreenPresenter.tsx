@@ -69,8 +69,6 @@ const CreateMeetScreenPresenter = (props: any) => {
     auth,
     participantList,
     textLess2,
-    // smRef,
-    // rnRef,
     focusBlur
   } = props;
   const t = getT();
@@ -139,18 +137,18 @@ const CreateMeetScreenPresenter = (props: any) => {
   return (
     <SafeAreaView style={styles.safeArea}>
       {/* <ScrollView contentContainerStyle={[{ flex: 1, minHeight: 1000 }]}> */}
-      <TouchableOpacity
+      {/* <TouchableOpacity
                 style={{ flex: 1}}
                 activeOpacity={1}
                 onPress={focusBlur}
-      >
+      > */}
       <View style={styles.topTitle}>
         <TouchableOpacity onPress={onHandleBack}>
           <Text style={styles.ft14N}>{t('취소')}</Text>
         </TouchableOpacity>
         <Text style={styles.TitleText}>{t('회의 생성하기')}</Text>
-        <TouchableOpacity onPress={startConference}>
-          <Text style={styles.ft14N}>{t('생성')}</Text>
+        <TouchableOpacity disabled={textLess2} onPress={startConference}>
+          <Text style={[styles.confirmText, !textLess2  && {color : '#000'}]}>{t('생성')}</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.privateContainer}>
@@ -160,7 +158,7 @@ const CreateMeetScreenPresenter = (props: any) => {
           colors={isPublic ? ['#a460ff', '#5d5dff'] : ['#1cc8fb', '#1c90fb']}
           style={styles.codeContainer}
         >
-          <TouchableOpacity onPress={togglePublic}>
+          <TouchableOpacity onPress={togglePublic} >
             <Image
               source={isPublic ? ic_code : ic_lock}
               style={styles.icCode}
@@ -205,23 +203,22 @@ const CreateMeetScreenPresenter = (props: any) => {
           <View style={styles.directionCol}>
             <Text style={styles.textHeader}>{t('회의명')}</Text>
             <TextInput
-              // ref={rnRef}
               onChangeText={roomNameChange}
               value={roomName}
               maxLength={20}
               style={[
                 styles.roomNameStyle,
                 roomName && { borderColor: '#1c90fb' },
-                textLess2 && { borderColor: '#fc4c60' }
+                (textLess2 && roomName) && { borderColor: '#fc4c60' }
               ]}
             />
             <View
               style={[
                 styles.countContainer,
-                textLess2 && { justifyContent: 'space-between' }
+                (textLess2 && roomName) && { justifyContent: 'space-between' }
               ]}
             >
-              {textLess2 && (
+              {(textLess2 && roomName != '') && (
                 <Text
                   style={{
                     color: '#fc4c60',
@@ -467,7 +464,7 @@ const CreateMeetScreenPresenter = (props: any) => {
         <View style={styles.graybar1} />
         <View style={[styles.botContainer]}>
           <View
-            style={[styles.conferenceMember, switchReserve && { flex: 0.33 }]}
+            style={[styles.conferenceMember, switchReserve && { flex: 0.28}]}
           >
             <View style={{ flexDirection: 'row' }}>
               <Text style={styles.ft14B}>{t('참석자')} </Text>
@@ -590,7 +587,7 @@ const CreateMeetScreenPresenter = (props: any) => {
           {datePicker !== 'none' && DatePickerComponent}
         </View>
       )}
-      </TouchableOpacity>
+      {/* </TouchableOpacity> */}
     </SafeAreaView>
   );
 };
@@ -652,6 +649,11 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     color: '#000'
   },
+  confirmText: {
+    fontSize: 14,
+    fontWeight: 'normal',
+    color: '#d3d3d3'
+  },
   ft14B: {
     fontSize: 14,
     fontWeight: 'bold',
@@ -707,7 +709,7 @@ const styles = StyleSheet.create({
   reserveContainer: {
     paddingLeft: '5%',
     paddingRight: '5%',
-    flex: 0.25
+    flex: 0.2
   },
   datetimeBox: {
     fontSize: 15,
@@ -719,7 +721,7 @@ const styles = StyleSheet.create({
     flex: 1.4
   },
   deleteAlram: {
-    flex: 0.3,
+    flex: 0.25,
     backgroundColor: '#e9f5ff',
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -728,7 +730,7 @@ const styles = StyleSheet.create({
     paddingRight: '5%'
   },
   conferenceMember: {
-    flex: 0.25,
+    flex: 0.2,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',

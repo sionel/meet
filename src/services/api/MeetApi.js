@@ -56,7 +56,7 @@ export default {
       if (response.status !== 201) {
         throw response.resultCode;
       }
-      return response.json();
+      return { result } = response.json();
     } catch (err) {
       console.warn('1.createMeetRoom : ', err);
       return false;

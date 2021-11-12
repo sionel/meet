@@ -50,7 +50,7 @@ const OrganizationScreenContainer = (props: any) => {
       // 조직도 조회 안됨 에러 표현
       // 생성화면으로 Back
     } else {
-      const organization = result.resultData[0];
+      const organization = result[0];
       setorganization(organization);
     }
   };
@@ -94,11 +94,12 @@ const OrganizationScreenContainer = (props: any) => {
       auth,
       organizationNo
     );
+
     if (result.error) {
       //   Alert.alert('조직도', '조직도를 가져올 수 없습니다.');
-      console.log('조직도를 가져올 수 없습니다.');
+      console.log('조직도를 가져올 수 없습니다.1');
     } else {
-      const member = result.resultData;
+      const member = result;
 
       const employee = JSON.parse(JSON.stringify(organizationEmployee));
       employee[organizationNo] = member;
@@ -112,15 +113,15 @@ const OrganizationScreenContainer = (props: any) => {
   const getContactsList = async () => {
     // 최적화 하려면 여기 코드를 상위로 옮기자
     const result = await OrganizationApi.getContactsList(auth);
-    if (result.error || !result?.resultData) {
+    if (result.error || !result) {
       //   Alert.alert('조직도', '조직도를 가져올 수 없습니다.');
-      console.log('조직도를 가져올 수 없습니다.');
+      console.log('조직도를 가져올 수 없습니다.2');
 
       //   props.navigation.pop();
       // 생성하기 화면으로
     } else {
       const chocungList: { dataindex: number; word: string }[] =
-        result.resultData.chosungList;
+        result.chosungList;
       const indexList: any[] = [];
       type secction = { title: string; data: object[] }[];
       let arr: secction = [];
@@ -129,7 +130,7 @@ const OrganizationScreenContainer = (props: any) => {
         indexList.push(word);
       });
 
-      const contactsList = [...result.resultData.contactsList];
+      const contactsList = [...result.contactsList];
 
       contactsList.forEach(item => {
         const index = indexList.indexOf(item.word);
@@ -181,8 +182,9 @@ const OrganizationScreenContainer = (props: any) => {
 
   const participantListAdd = () => {
     let arr: any[] = [];
+
     Object.values(selectedEmployee.member).map((value: any) => {
-      if (value.user_name !== auth.user_name) {
+      if (value.user_no !== auth.user_no) {
         arr.push(value);
       }
     });

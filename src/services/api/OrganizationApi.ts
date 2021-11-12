@@ -1,7 +1,7 @@
 import { RootState } from '../../redux/configureStore';
 import { wehagoBaseURL, serialize, createHeader } from '../../utils';
 
-const getOrganizationTreeRequest = async (auth:any) => {
+const getOrganizationTreeRequest = async (auth: any) => {
   const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
   try {
     const params = serialize({
@@ -18,8 +18,8 @@ const getOrganizationTreeRequest = async (auth:any) => {
       headers: { ...header, service: 'common' }
     };
     const response = await fetch(url, data);
-    const responseJson = await response.json();
-    return responseJson;
+    const { resultData } = await response.json();
+    return resultData;
   } catch (err) {
     console.log('err', err);
     return { error: err };
@@ -49,15 +49,15 @@ const getOrganizationTreeEmployeeRequest = async (
       })
     };
     const response = await fetch(url, data);
-    const responseJson = await response.json();
-    return responseJson;
+    const { resultData } = await response.json();
+    return resultData;
   } catch (err) {
     console.log('err', err);
     return { error: err };
   }
 };
 
-const getOrganizationTreeAllEmployeeRequest = async (auth:any) => {
+const getOrganizationTreeAllEmployeeRequest = async (auth: any) => {
   const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
   try {
     const params = serialize({
@@ -78,16 +78,16 @@ const getOrganizationTreeAllEmployeeRequest = async (auth:any) => {
       })
     };
     const response = await fetch(url, data);
-    const responseJson = await response.json();
+    const { resultData } = await response.json();
 
-    return responseJson;
+    return resultData;
   } catch (err) {
     console.log('err', err);
     return { error: err };
   }
 };
 
-const getContactsList = async (auth:any) => {
+const getContactsList = async (auth: any) => {
   const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
   try {
     // const params = {
@@ -113,13 +113,13 @@ const getContactsList = async (auth:any) => {
     const data: any = {
       method: 'POST',
       headers,
-      body: serialize(params),
+      body: serialize(params)
       // body: JSON.stringify(params)
     };
 
     const response = await fetch(url, data);
-    const responseJson = await response.json();
-    return responseJson;
+    const { resultData } = await response.json();
+    return resultData;
   } catch (err) {
     console.log('err', err);
     return { error: err };

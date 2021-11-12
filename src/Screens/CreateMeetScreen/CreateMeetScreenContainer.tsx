@@ -64,7 +64,7 @@ export default function CreateMeetScreenContainer(props: any) {
   const [sendMessage, setSendMessage] = useState('');
   const [sendMsgCnt, setSendMsgCnt] = useState(0);
   const [participantList, setParticipantList] = useState<{}[]>([]);
-  const [textLess2, setTextLess2] = useState(false);
+  const [textLess2, setTextLess2] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   // const fadeAnim = useRef(new Animated.ValueXY()).current;
@@ -72,10 +72,9 @@ export default function CreateMeetScreenContainer(props: any) {
   const { auth } = useSelector((state: any) => state.user);
   const t = getT();
 
-  const rnRef: RefObject<any> = React.useRef(null);
-  const smRef: RefObject<any> = React.useRef(null);
-
   const dispatch = useDispatch();
+
+  console.log(participantList);
 
   const resetAni = () => {
     Animated.decay(animation, {
@@ -108,7 +107,7 @@ export default function CreateMeetScreenContainer(props: any) {
     if (result.error) {
       // Alert.alert('조직도', '조직도를 가져올 수 없습니다.');
     } else {
-      const company = result.resultData;
+      const company = result;
 
       const hangleMapper = company.reduce((acc: any, i: any) => {
         const charCode = i.user_name.charCodeAt(0);
@@ -149,77 +148,82 @@ export default function CreateMeetScreenContainer(props: any) {
     }
   };
 
-  const startConference = () => {
-    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
-    const params: {
-      service_code: string;
-      name: string;
-      is_public: boolean;
-      access_user: [{}];
-      is_send_updated_email: boolean;
-      is_reservation: boolean;
-      call_type: string;
-      invite_messsage: string;
-      start_date_time?: string;
-      end_date_time?: string;
-    } = {
-      service_code: 'videoconference',
-      name: roomName,
-      is_public: true,
-      access_user: [
-        // {
-        //   type: 'email',
-        //   value: 'sadb0101@naver.com',
-        //   is_master: false,
-        //   user_name: '이름'
-        //   // cno: '회사번호(선택)',
-        //   // user_no: '사용자번호(선택)'
-        // },
-        {
+  const startConference = async () => {
+    if (1 < roomName.length) {
+      let arr: any[] = [{}];
+      participantList.map((values: any) => {
+        if (values.user_no !== auth.user_no) {
+          arr.push({
+            type: 'email',
+            value: values.user_default_email,
+            is_master: false,
+            user_name: values.user_name
+          });
+        }
+      });
+
+      const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
+      const params: {
+        service_code: string;
+        name: string;
+        is_public: boolean;
+        access_user: any;
+        is_send_updated_email: boolean;
+        is_reservation: boolean;
+        call_type: string;
+        invite_messsage: string;
+        start_date_time?: string;
+        end_date_time?: string;
+        is_schedule_share?: boolean;
+      } = {
+        service_code: 'meetapp',
+        name: roomName,
+        is_public: isPublic,
+        access_user: 
+        arr.unshift({
           type: 'portal_id',
           value: auth.portal_id,
           is_master: true,
           user_name: auth.user_name,
           cno: cno,
           user_no: auth.user_no
-        }
-      ],
-      is_send_updated_email: switchDelAlram,
-      is_reservation: switchReserve,
-      start_date_time: moment(startTime.current).format('x'),
-      end_date_time: moment(endTime.current).format('x'),
-      call_type: '1',
-      invite_messsage: sendMessage
-    };
+        }),
+        is_send_updated_email: switchDelAlram,
+        is_reservation: switchReserve,
+        // start_date_time: moment(startTime.current).format('x'),
+        // end_date_time: moment(endTime.current).format('x'),
+        call_type: '1',
+        invite_messsage: sendMessage
+      };
 
-    // MeetApi.createMeetRoom(auth, params);
-    console.log('시작시간');
-
-    console.log(moment(startTime.current).format('YYYY-MM-DD HH:mm:ss'));
-    console.log('종료시간');
-
-    console.log(moment(endTime.current).format('YYYY-MM-DD HH:mm:ss'));
-
-    const clearInput = () => {
-      setRoomName('');
-      setSendMessage('');
-      if (switchReserve) {
-        setStartTime({
-          date: '',
-          time: '',
-          current: new Date()
-        });
-        setEndTime({
-          date: '',
-          time: '',
-          current: new Date()
-        });
-        setSwitchReserve(false);
+      const result = await MeetApi.createMeetRoom(auth, params);
+      if (result) {
+        onHandleBack();
+        clearInput();
+      } else if (result.error) {
+        console.log('error : ', result.error);
       }
-      setSwitchAlram(false);
-      setSwitchDelAlram(false);
-    };
-    clearInput();
+    }
+  };
+
+  const clearInput = () => {
+    setRoomName('');
+    setSendMessage('');
+    if (switchReserve) {
+      setStartTime({
+        date: '',
+        time: '',
+        current: new Date()
+      });
+      setEndTime({
+        date: '',
+        time: '',
+        current: new Date()
+      });
+      setSwitchReserve(false);
+    }
+    setSwitchAlram(false);
+    setSwitchDelAlram(false);
   };
 
   const togglePublic = () => {
@@ -332,7 +336,6 @@ export default function CreateMeetScreenContainer(props: any) {
     setTimePicker('none');
   };
 
-  useEffect(() => {}, [sendMessage]);
   useEffect(() => {
     setSelectMode(false);
     // getOrganization();
@@ -375,10 +378,7 @@ export default function CreateMeetScreenContainer(props: any) {
   };
 
   const focusBlur = () => {
-    // console.log(timePicker);
-
     if (datePicker === 'start' || 'end') setDatePicker('none');
-
     if (timePicker === 'start' || 'end') setTimePicker('none');
   };
 
@@ -434,8 +434,6 @@ export default function CreateMeetScreenContainer(props: any) {
           auth={auth}
           participantList={participantList}
           textLess2={textLess2}
-          smRef={smRef}
-          rnRef={rnRef}
           timeType={timeType}
           focusBlur={focusBlur}
         />
