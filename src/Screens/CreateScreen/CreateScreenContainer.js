@@ -135,10 +135,7 @@ class CreateScreenContainer extends React.Component {
       // 토큰받고
       const roomToken = (
         await MeetApi.getMeetRoomToken(
-          auth.AUTH_A_TOKEN,
-          auth.AUTH_R_TOKEN,
-          auth.HASH_KEY,
-          auth.last_access_company_no,
+          auth,
           videoRoomId
         )
       ).resultData;

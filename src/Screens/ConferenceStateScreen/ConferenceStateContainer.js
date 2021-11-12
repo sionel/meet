@@ -112,10 +112,7 @@ class ConferenceStateContainer extends React.Component {
       if (Object.keys(auth).length > 0) {
         accessUser = (
           await MeetApi.getAccessUsers(
-            auth.AUTH_A_TOKEN,
-            auth.AUTH_R_TOKEN,
-            auth.HASH_KEY,
-            auth.last_access_company_no,
+            auth,
             this.roomId
           )
         ).resultData;

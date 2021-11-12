@@ -298,10 +298,7 @@ class HomeScreenContainer extends Component {
     }
     // 실제 받아오는 화상회의 리스트
     const cl = await MeetApi.getMeetRoomsList(
-      auth.AUTH_A_TOKEN,
-      auth.AUTH_R_TOKEN,
-      auth.last_access_company_no,
-      auth.portal_id,
+      auth,
       auth.HASH_KEY
     );
     // 토큰만료시

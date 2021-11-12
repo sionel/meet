@@ -69,8 +69,9 @@ const CreateMeetScreenPresenter = (props: any) => {
     auth,
     participantList,
     textLess2,
-    smRef,
-    rnRef
+    // smRef,
+    // rnRef,
+    focusBlur
   } = props;
   const t = getT();
 
@@ -121,11 +122,13 @@ const CreateMeetScreenPresenter = (props: any) => {
       months={['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']}
       previousTitle="<"
       nextTitle=">"
-      minDate={timeType === 'end' ? startTime.current : undefined}
-      dayShape="square"
-      scaleFactor={400}
+      minDate={startTime.current}
+      selectedStartDate={startTime.current}
       selectedDayTextColor="#fff"
       selectedDayStyle={{ borderRadius: 5, backgroundColor: '#1c90fb' }}
+      todayBackgroundColor='blue'
+      dayShape="square"
+      scaleFactor={400}
       onDateChange={onDateChange}
       selectYearTitle={'년도 선택'}
       selectMonthTitle={''}
@@ -136,6 +139,11 @@ const CreateMeetScreenPresenter = (props: any) => {
   return (
     <SafeAreaView style={styles.safeArea}>
       {/* <ScrollView contentContainerStyle={[{ flex: 1, minHeight: 1000 }]}> */}
+      <TouchableOpacity
+                style={{ flex: 1}}
+                activeOpacity={1}
+                onPress={focusBlur}
+      >
       <View style={styles.topTitle}>
         <TouchableOpacity onPress={onHandleBack}>
           <Text style={styles.ft14N}>{t('취소')}</Text>
@@ -197,7 +205,7 @@ const CreateMeetScreenPresenter = (props: any) => {
           <View style={styles.directionCol}>
             <Text style={styles.textHeader}>{t('회의명')}</Text>
             <TextInput
-              ref={rnRef}
+              // ref={rnRef}
               onChangeText={roomNameChange}
               value={roomName}
               maxLength={20}
@@ -234,7 +242,7 @@ const CreateMeetScreenPresenter = (props: any) => {
           <View style={styles.directionCol}>
             <Text style={styles.textHeader}>{t('초대메세지')}</Text>
             <TextInput
-              ref={smRef}
+              // ref={smRef}
               onChangeText={sendMessageChange}
               value={sendMessage}
               maxLength={200}
@@ -253,7 +261,7 @@ const CreateMeetScreenPresenter = (props: any) => {
         </View>
       </View>
 
-      <View style={[{ flex: 1, backgroundColor: '#fff' }]}>
+      <View style={[{ flex: 1.4, backgroundColor: '#fff' }]}>
         <View style={styles.graybar1} />
         <View
           style={[
@@ -459,7 +467,7 @@ const CreateMeetScreenPresenter = (props: any) => {
         <View style={styles.graybar1} />
         <View style={[styles.botContainer]}>
           <View
-            style={[styles.conferenceMember, switchReserve && { flex: 0.3 }]}
+            style={[styles.conferenceMember, switchReserve && { flex: 0.33 }]}
           >
             <View style={{ flexDirection: 'row' }}>
               <Text style={styles.ft14B}>{t('참석자')} </Text>
@@ -582,6 +590,7 @@ const CreateMeetScreenPresenter = (props: any) => {
           {datePicker !== 'none' && DatePickerComponent}
         </View>
       )}
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
@@ -630,7 +639,7 @@ const styles = StyleSheet.create({
     fontWeight: '600'
   },
   alramContainer: {
-    flex: 0.2,
+    flex: 0.17,
     paddingLeft: '5%',
     paddingRight: '5%',
     flexDirection: 'row',
@@ -698,7 +707,7 @@ const styles = StyleSheet.create({
   reserveContainer: {
     paddingLeft: '5%',
     paddingRight: '5%',
-    flex: 0.2
+    flex: 0.25
   },
   datetimeBox: {
     fontSize: 15,
@@ -719,7 +728,7 @@ const styles = StyleSheet.create({
     paddingRight: '5%'
   },
   conferenceMember: {
-    flex: 0.2,
+    flex: 0.25,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',

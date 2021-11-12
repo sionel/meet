@@ -6,7 +6,7 @@ import CreateMeetScreenPresenter from './CreateMeetScreenPresenter';
 import OrganizationScreen from './OrganizationScreen';
 // import OrganizationScreen from '../../components/Organization';
 
-import { OrganizationApi } from '../../services';
+import { MeetApi, OrganizationApi } from '../../services';
 
 import moment from 'moment';
 import { wehagoMainURL } from '../../utils';
@@ -67,7 +67,8 @@ export default function CreateMeetScreenContainer(props: any) {
   const [textLess2, setTextLess2] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  const fadeAnim = useRef(new Animated.ValueXY()).current;
+  // const fadeAnim = useRef(new Animated.ValueXY()).current;
+  const animation = new Animated.Value(-150);
   const { auth } = useSelector((state: any) => state.user);
   const t = getT();
 
@@ -77,25 +78,17 @@ export default function CreateMeetScreenContainer(props: any) {
   const dispatch = useDispatch();
 
   const resetAni = () => {
-    Animated.spring(fadeAnim, {
-      toValue: {
-        x: 0,
-        y: height
-      },
-      tension: 500,
-      friction: 500,
+    Animated.decay(animation, {
+      velocity: 0.95,
+      deceleration: 0.998,
       useNativeDriver: true
     }).start();
   };
   const runAni = () => {
-    Animated.spring(fadeAnim, {
-      toValue: {
-        x: 0,
-        y: 0
-      },
-      useNativeDriver: true,
-      tension: 500,
-      friction: 500
+    Animated.decay(animation, {
+      velocity: 0.95,
+      deceleration: 0.998,
+      useNativeDriver: true
     }).start();
   };
   // const getOrganization = async () => {
@@ -167,8 +160,8 @@ export default function CreateMeetScreenContainer(props: any) {
       is_reservation: boolean;
       call_type: string;
       invite_messsage: string;
-      // start_date_time?: Date,
-      // end_date_time?: Date,
+      start_date_time?: string;
+      end_date_time?: string;
     } = {
       service_code: 'videoconference',
       name: roomName,
@@ -193,18 +186,19 @@ export default function CreateMeetScreenContainer(props: any) {
       ],
       is_send_updated_email: switchDelAlram,
       is_reservation: switchReserve,
-      // start_date_time: startTime.current,
-      // end_date_time: endTime.current,
+      start_date_time: moment(startTime.current).format('x'),
+      end_date_time: moment(endTime.current).format('x'),
       call_type: '1',
       invite_messsage: sendMessage
     };
 
-    // MeetApi.createMeetRoom(AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno, params);
+    // MeetApi.createMeetRoom(auth, params);
+    console.log('시작시간');
 
-    // console.log('startTime');
-    // console.log(startTime);
-    // console.log('endTime');
-    // console.log(endTime);
+    console.log(moment(startTime.current).format('YYYY-MM-DD HH:mm:ss'));
+    console.log('종료시간');
+
+    console.log(moment(endTime.current).format('YYYY-MM-DD HH:mm:ss'));
 
     const clearInput = () => {
       setRoomName('');
@@ -300,30 +294,34 @@ export default function CreateMeetScreenContainer(props: any) {
     let obj = getDate(new Date(date));
 
     if (timeType === 'start') setStartTime({ ...obj, time: startTime.time });
-    else if (timeType === 'end') {
-      setEndTime({ ...obj, time: endTime.time });
-    }
+    else if (timeType === 'end') setEndTime({ ...obj, time: endTime.time });
 
     setTimePicker(datePicker);
     setDatePicker('none');
   };
 
+  //시간 선택후 확인버튼 눌렀을때
   const onTimeConfirm = () => {
     let obj = getDate(time);
-
-    let h = moment(obj.current).hours() - 12;
+    let h = moment(obj.current).hours();
     let m = moment(obj.current).minutes();
-
     let DT;
 
     if (timeType === 'start') {
+      startTime.current.setHours(0);
+      startTime.current.setMinutes(0);
+
       DT = moment(startTime.current).add(h, 'h').add(m, 'm').toDate();
+
       setStartTime({
         ...obj,
         date: startTime.date,
         current: DT
       });
     } else if (timeType === 'end') {
+      endTime.current.setHours(0);
+      endTime.current.setMinutes(0);
+
       DT = moment(endTime.current).add(h, 'h').add(m, 'm').toDate();
       setEndTime({
         ...obj,
@@ -350,7 +348,7 @@ export default function CreateMeetScreenContainer(props: any) {
   }, []);
 
   useEffect(() => {
-    selectMode ? runAni() : resetAni();
+    // selectMode ? runAni() : resetAni();
     props.navigation.setParams({
       screenType: selectMode ? 'organization' : 'create'
     });
@@ -376,32 +374,31 @@ export default function CreateMeetScreenContainer(props: any) {
     props.navigation.goBack();
   };
 
+  const focusBlur = () => {
+    // console.log(timePicker);
+
+    if (datePicker === 'start' || 'end') setDatePicker('none');
+
+    if (timePicker === 'start' || 'end') setTimePicker('none');
+  };
+
   return (
     <View style={{ flex: 1 }}>
       {selectMode ? (
-        <Animated.View
-          style={{
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-            transform: fadeAnim.getTranslateTransform()
-          }}
-        >
-          <OrganizationScreen
-            {...props}
-            employee={employee}
-            selectedEmployee={selectedEmployee}
-            invited={invited}
-            recents={recents}
-            inviteText={inviteText}
-            setSelectMode={setSelectMode}
-            setSelectedEmployee={setSelectedEmployee}
-            setInvited={setInvited}
-            setInviteText={setInviteText}
-            participantList={participantList}
-            setParticipantList={setParticipantList}
-          />
-        </Animated.View>
+        <OrganizationScreen
+          {...props}
+          employee={employee}
+          selectedEmployee={selectedEmployee}
+          invited={invited}
+          recents={recents}
+          inviteText={inviteText}
+          setSelectMode={setSelectMode}
+          setSelectedEmployee={setSelectedEmployee}
+          setInvited={setInvited}
+          setInviteText={setInviteText}
+          participantList={participantList}
+          setParticipantList={setParticipantList}
+        />
       ) : (
         <CreateMeetScreenPresenter
           roomName={roomName}
@@ -439,6 +436,8 @@ export default function CreateMeetScreenContainer(props: any) {
           textLess2={textLess2}
           smRef={smRef}
           rnRef={rnRef}
+          timeType={timeType}
+          focusBlur={focusBlur}
         />
       )}
     </View>
