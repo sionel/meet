@@ -1,23 +1,42 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 
 import LinearGradient from 'react-native-linear-gradient';
 
 const icLockwhite = require('../../../../assets/new/icons/ic_lock_white.png');
 const icLive = require('../../../../assets/new/icons/ic_live.png');
 const icClock = require('../../../../assets/new/icons/ic_clock.png');
-const icMore = require('../../../../assets/new/icons/ic_more.png');
+const icMoreWhite = require('../../../../assets/new/icons/ic_more_white.png');
 
 interface cardProps {
   index: number;
+  conference: {
+    conferenceName: string;
+    startTime: string;
+    onMinte: number;
+    participants: [];
+    isLock: boolean;
+    onMoreClick: Function;
+  };
 }
 
 export default function ConferenceCard(props: cardProps) {
-  const { index } = props;
+  const {
+    index,
+    conference: {
+      conferenceName,
+      startTime,
+      onMinte,
+      participants,
+      isLock,
+      onMoreClick
+    }
+  } = props;
   const a = [1, 2, 3, 4, 5, 6];
   const b = [1, 2];
   const c = [1, 2, 4, 5, 6];
   const d = [1, 2, 3, 4, 5, 6, 2, 3, 4, 5, 6, 2, 3, 4, 5, 6, 2, 3, 4, 5, 6];
+  // const arr = participants ? participants :  [a, b, c, d];
   const arr = [a, b, c, d];
 
   const colors = [
@@ -28,37 +47,16 @@ export default function ConferenceCard(props: cardProps) {
   ];
 
   return (
-    <TouchableOpacity
-      activeOpacity={0.8}
-      style={{
-        marginHorizontal:15,
-        marginBottom: 10,
-        backgroundColor:'#fff',
-        borderRadius: 12,
-        shadowColor: 'rgb(9,33,60)',
-        shadowOpacity: 0.3,
-        shadowOffset: {
-          width: 0,
-          height: 8
-        }
-      }}
-    >
+    <TouchableOpacity activeOpacity={0.8} style={styles.container}>
       <LinearGradient
         end={{ x: 1, y: 0 }}
         start={{ x: 0, y: 0 }}
         colors={colors[index % 4]}
-        style={{
-          width: 300,
-          height: '100%',
-          // marginLeft: 20,
-          padding: 15,
-          borderRadius: 12
-        }}
+        style={styles.gradient}
       >
         <View
           style={{
             height: 30,
-            // backgroundColor: '#953',
             flexDirection: 'row',
             alignItems: 'center',
             marginVertical: 3
@@ -78,13 +76,15 @@ export default function ConferenceCard(props: cardProps) {
               // backgroundColor: '#661'
             }}
           >
-            {'어디어디 주간회의'}
+            {conferenceName}
           </Text>
-          <Image
-            source={icLockwhite}
-            resizeMode={'contain'}
-            style={{ width: 18, height: 18 }}
-          />
+          {isLock && (
+            <Image
+              source={icLockwhite}
+              resizeMode={'contain'}
+              style={{ width: 18, height: 18 }}
+            />
+          )}
         </View>
 
         <View
@@ -102,7 +102,7 @@ export default function ConferenceCard(props: cardProps) {
               marginRight: 5
             }}
           >
-            {'01:00 PM'}
+            {startTime}
           </Text>
           <Text
             style={{
@@ -134,53 +134,33 @@ export default function ConferenceCard(props: cardProps) {
                 fontSize: 14
               }}
             >
-              {'72분간 진행중'}
+              {`${onMinte}분간 진행중`}
             </Text>
           </View>
         </View>
 
         <View
           style={{
-            flex: 2
+            flex: 2,
+
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between'
+            // backgroundColor:'#f21',
           }}
         >
           <View
             style={{
               flexDirection: 'row',
-              alignItems: 'center',
-
-              paddingTop: 15
+              alignItems: 'center'
             }}
           >
-            {arr[index % 4]
-              .reduce<{ type: string; value: string | number }[]>(
-                (prev, present) => {
-                  if (prev.length > 4) return prev;
-
-                  let type;
-                  let value;
-
-                  if (arr[index % 4].length <= 5) {
-                    type = 'string';
-                    value =
-                      'https://www.wehago.com/uploads/profile/338136/hejevjsiwr.jpg';
-                  } else {
-                    type = prev.length < 4 ? 'string' : 'number';
-                    value =
-                      prev.length < 4
-                        ? 'https://www.wehago.com/uploads/profile/338136/hejevjsiwr.jpg'
-                        : arr[index % 4].length - 4;
-                  }
-
-                  return [...prev, { type, value }];
-                },
-                []
-              )
-              .map(v => {
+            {participants.map(
+              (v: { type: string | number; value: string | number }) => {
                 return v.type === 'string' ? (
                   <Image
                     source={{
-                      uri: 'https://www.wehago.com/uploads/profile/338136/hejevjsiwr.jpg'
+                      uri: v.value
                     }}
                     resizeMode={'center'}
                     style={{
@@ -205,10 +185,37 @@ export default function ConferenceCard(props: cardProps) {
                     <Text>{'+' + v.value}</Text>
                   </TouchableOpacity>
                 );
-              })}
+              }
+            )}
           </View>
+          <Image
+            source={icMoreWhite}
+            style={{ height: '50%' }}
+            resizeMode={'contain'}
+          ></Image>
         </View>
       </LinearGradient>
     </TouchableOpacity>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    marginHorizontal: 15,
+    marginBottom: 10,
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    shadowColor: 'rgb(9,33,60)',
+    shadowOpacity: 0.3,
+    shadowOffset: {
+      width: 0,
+      height: 8
+    }
+  },
+  gradient: {
+    width: 300,
+    height: '100%',
+    padding: 15,
+    borderRadius: 12
+  }
+});

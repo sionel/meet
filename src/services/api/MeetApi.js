@@ -173,6 +173,36 @@ export default {
       return false;
     }
   },
+
+  getUserInfoList: async (auth, portalIdList) => {
+    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
+
+    // const url = `${config.baseTempApiHost}/user/userinfo/list`;
+ 
+    const url = `${meetURL}/user/userinfo/list?cno=${cno}&portal_id=${portalIdList}`;
+    const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
+
+    try {
+      const data = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          ...headers
+        }
+      };
+      const response = await fetch(url, data);
+      if (response.status !== 200) {
+        throw response;
+      }
+      const { resultData } = await response.json();
+      return resultData;
+    } catch (err) {
+      const errDetail = await err.json();
+      console.warn('3-?? 사용자 프로필 리스트 : ', errDetail);
+      return false;
+    }
+  },
+
   // 3-?? 회의 기록
   getMeetFinished: async (auth, start, end, offset, limit) => {
     const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;

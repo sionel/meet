@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { Component, useEffect, useRef, useState } from 'react';
 import { Platform, Linking, BackHandler, Alert } from 'react-native';
 
 import { getT } from '../../utils/translateManager';
@@ -11,19 +11,23 @@ import { RootState } from '../../redux/configureStore';
 import { actionCreators as UserActions } from '../../redux/modules/user';
 
 import HomeScreenPresenter from './HomeScreenPresenter';
+import { wehagoMainURL } from '../../utils';
 
 export default function HomeScreenContainer(props: any) {
   const [indicator, setIndicator] = useState(true);
   const [ongoingConference, setOngoingConference] = useState<any[]>([]);
   const [reservationConference, setReservationConference] = useState<any[]>([]);
   const [finishedConference, setFinishedConference] = useState<any[]>([]);
-  const [highlight, setHighlight] = useState<'reservation' | 'finished'>(
-    'reservation'
+  const [highlight, setHighlight] = useState<'reservation' | 'finished' | null>(
+    null
   );
   //#region  selector
-  const { auth } = useSelector((state: RootState) => {
+  const { auth, userImg, companyName } = useSelector((state: RootState) => {
+    const { auth } = state.user;
     return {
-      auth: state.user.auth
+      auth: auth,
+      userImg: wehagoMainURL + auth.profile_url,
+      companyName: auth.last_company.company_name_kr
     };
   });
 
@@ -32,28 +36,85 @@ export default function HomeScreenContainer(props: any) {
   const onLogout = () => dispatch(UserActions.logout());
 
   useEffect(() => {
+    _getConoferences();
     const reload = setInterval(() => {
       _getConoferences();
     }, 15000);
     return () => {
       clearInterval(reload);
     };
-    // MeetApi.getMeetRoomsList(auth )
   }, []);
+
+  useEffect(() => {
+    const now = !reservationConference.length
+      ? 'finished'
+      : !finishedConference.length
+      ? 'reservation'
+      : highlight;
+    setHighlight(now);
+  }, [reservationConference, finishedConference]);
 
   const _getConoferences = () => {
     Promise.all([
-      MeetApi.getMeetRoomsList(auth).then(result => {
-        const going = result.filter(
+      MeetApi.getMeetRoomsList(auth).then(async result => {
+        const going: any[] = result.filter(
           (conference: any) => !conference.r_start_date_time
         );
+        const goingList = await Promise.all(
+          going.map(async (conference: any) => {
+            const startTime = new Date(conference.start_date_time)
+              .toLocaleTimeString()
+              .slice(0, 7);
+            const onMinte = Math.floor(
+              (new Date().getTime() - conference.start_date_time) / 1000 / 60
+            );
+
+            const portalIdList = conference.connecting_user
+              .map((user: any) => user.user)
+              .filter((user: any) => user);
+            const participants: any[] = await MeetApi.getUserInfoList(
+              auth,
+              portalIdList
+            );
+            // console.log(participants);
+            const tmp = participants.reduce<
+              { type: string; value: string | number }[]
+            >((prev, present) => {
+              if (prev.length > 4) return prev;
+
+              let type;
+              let value;
+
+              if (participants.length <= 5) {
+                type = 'string';
+                value = `https://www.wehago.com/${present.profile_url}`;
+              } else {
+                type = prev.length < 4 ? 'string' : 'number';
+                value =
+                  prev.length < 4
+                    ? `https://www.wehago.com/${present.profile_url}`
+                    : participants.length - 4;
+              }
+
+              return [...prev, { type, value }];
+            }, []);
+            const data = {
+              conferenceName: conference.name,
+              startTime,
+              onMinte,
+              participants:tmp,
+              isLock: !conference.is_public,
+              onMoreClick: _moreClick
+            };
+            return data;
+          })
+        );
+
+        setOngoingConference(goingList);
+
         const reservation: any[] = result.filter(
           (conference: any) => conference.r_start_date_time
         );
-        console.log('going');
-        console.log(going);
-        console.log('reservation');
-        console.log(reservation);
         const reservationList = reservation.map((conference: any, index) => {
           const data = {
             roomName: conference.name,
@@ -68,15 +129,12 @@ export default function HomeScreenContainer(props: any) {
           };
           return data;
         });
-        setOngoingConference(going);
+
         setReservationConference(reservationList);
-        setHighlight(reservationList.length > 0 ? 'reservation' : 'finished');
       }),
       MeetApi.getMeetFinished(auth, '2021-11-01', '2021-11-12', 0, 20).then(
         result => {
           const finished = result.list;
-          console.log('finished');
-          console.log(finished);
           setFinishedConference(finished);
         }
       )
@@ -84,8 +142,7 @@ export default function HomeScreenContainer(props: any) {
       setIndicator(false);
     });
   };
-
-  const a = () => {};
+  const _moreClick = () => {};
 
   return (
     <HomeScreenPresenter
@@ -95,7 +152,9 @@ export default function HomeScreenContainer(props: any) {
         reservationConference,
         finishedConference,
         highlight,
-        setHighlight
+        setHighlight,
+        userImg,
+        companyName
       }}
     />
   );

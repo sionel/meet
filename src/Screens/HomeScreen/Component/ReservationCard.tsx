@@ -10,7 +10,6 @@ export default function ConferenceBox(props: any) {
       item: { roomName, date, start, end, users, roomId, isPublic, key }
     }
   } = props;
-  console.log(roomName);
 
   return (
     <View

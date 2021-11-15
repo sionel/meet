@@ -62,16 +62,15 @@ const HomeScreenPresenter = (props: any) => {
         <Image source={loginLogo} style={styles.logo} resizeMode={'contain'} />
         <TouchableOpacity style={styles.setting} onPress={onClickSetting}>
           <Image source={icSet} />
-          <Text style={styles.companyText}>{companyName}</Text>
-          <Image source={{ uri: userImg }} style={styles.settingImg} />
         </TouchableOpacity>
       </View>
 
       {/* 김더존님 ~~~ */}
       <View style={styles.helloContainer}>
         <View style={styles.helloTextContainer}>
+          <Image source={{ uri: userImg }} style={styles.settingImg} />
           <Text style={styles.name}>{'김더존'}</Text>
-          <Text style={styles.greeting}>{'님, 좋은 아침입니다!'}</Text>
+          <Text style={styles.companyText}>{companyName}</Text>
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
@@ -118,8 +117,13 @@ const HomeScreenPresenter = (props: any) => {
             <FlatList
               horizontal={true}
               data={ongoingConference}
-              renderItem={v => {
-                return <ConferenceCard index={v.index} />;
+              renderItem={conference => {
+                return (
+                  <ConferenceCard
+                    index={conference.index}
+                    conference={conference.item}
+                  />
+                );
               }}
               windowSize={2}
               showsHorizontalScrollIndicator={false}
