@@ -16,9 +16,9 @@ const OrganizationScreenContainer = (props: any) => {
     setInvited,
     inviteText,
     setInviteText,
-    participantList,
+    // participantList,
     setParticipantList,
-    setSelectMode
+    setSelectMode,
   } = props;
 
   const [keyword, setKeyword] = useState('');
@@ -38,6 +38,7 @@ const OrganizationScreenContainer = (props: any) => {
     inputRange: [0, 1],
     outputRange: ['0deg', '360deg']
   });
+
   const t = getT();
 
   const auth = useSelector((state: RootState) => state.user.auth);
@@ -192,7 +193,8 @@ const OrganizationScreenContainer = (props: any) => {
       user_name: auth.user_name,
       rank_name: auth.last_company.rank_name,
       profile_url: auth.profile_url,
-      full_path: auth.last_company.full_path
+      full_path: auth.last_company.full_path,
+      user_no: auth.user_no
     });
     setParticipantList(arr);
     setSelectMode(false);
@@ -251,6 +253,7 @@ const OrganizationScreenContainer = (props: any) => {
       spin={spin}
       t={t}
       participantListAdd={participantListAdd}
+      auth={auth}
     />
   );
 };

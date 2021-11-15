@@ -10,6 +10,8 @@ import {
   Switch
 } from 'react-native';
 
+import OrganizationScreen from './OrganizationScreen';
+
 import DatePicker from 'react-native-date-picker';
 // import Autocomplete from 'react-native-autocomplete-input';
 import CalendarPicker from 'react-native-calendar-picker';
@@ -53,10 +55,10 @@ const CreateMeetScreenPresenter = (props: any) => {
     sendMessageChange,
     startConference,
     //신규Props
-    switchAlram,
+    switchAllSend,
     switchReserve,
     switchDelAlram,
-    onSwitchAlramChange,
+    onSwitchAllSendChange,
     onSwitchReserveChange,
     onSwitchDelAlramChange,
     roomNameCnt,
@@ -69,10 +71,11 @@ const CreateMeetScreenPresenter = (props: any) => {
     auth,
     participantList,
     textLess2,
-    focusBlur
+    focusBlur,
   } = props;
   const t = getT();
 
+  
   const TimePickerComponent = (
     <View
       style={{ marginTop: 20, justifyContent: 'center', alignItems: 'center' }}
@@ -124,7 +127,7 @@ const CreateMeetScreenPresenter = (props: any) => {
       selectedStartDate={startTime.current}
       selectedDayTextColor="#fff"
       selectedDayStyle={{ borderRadius: 5, backgroundColor: '#1c90fb' }}
-      todayBackgroundColor='blue'
+      todayBackgroundColor="blue"
       dayShape="square"
       scaleFactor={400}
       onDateChange={onDateChange}
@@ -148,7 +151,9 @@ const CreateMeetScreenPresenter = (props: any) => {
         </TouchableOpacity>
         <Text style={styles.TitleText}>{t('회의 생성하기')}</Text>
         <TouchableOpacity disabled={textLess2} onPress={startConference}>
-          <Text style={[styles.confirmText, !textLess2  && {color : '#000'}]}>{t('생성')}</Text>
+          <Text style={[styles.confirmText, !textLess2 && { color: '#000' }]}>
+            {t('생성')}
+          </Text>
         </TouchableOpacity>
       </View>
       <View style={styles.privateContainer}>
@@ -158,7 +163,7 @@ const CreateMeetScreenPresenter = (props: any) => {
           colors={isPublic ? ['#a460ff', '#5d5dff'] : ['#1cc8fb', '#1c90fb']}
           style={styles.codeContainer}
         >
-          <TouchableOpacity onPress={togglePublic} >
+          <TouchableOpacity onPress={togglePublic}>
             <Image
               source={isPublic ? ic_code : ic_lock}
               style={styles.icCode}
@@ -178,26 +183,7 @@ const CreateMeetScreenPresenter = (props: any) => {
         </View>
       </View>
       <View style={[{ flex: 1, backgroundColor: '#fff' }]}>
-        <View
-          style={[
-            { backgroundColor: '#F7F8FA', flex: 0.02 },
-            !isPublic && { flex: 0.005 }
-          ]}
-        />
-        {isPublic && (
-          <>
-            <View style={styles.alramContainer}>
-              <Text style={styles.ft12}>
-                {t('모든 조직 구성원에게 해당 회의정보 알림을 보냅니다.')}
-              </Text>
-              <Switch
-                onValueChange={onSwitchAlramChange}
-                value={switchAlram}
-                trackColor={{ false: '', true: '#1c90fb' }}
-              />
-            </View>
-          </>
-        )}
+        <View style={[{ backgroundColor: '#F7F8FA', flex: 0.015 }]} />
         <View style={{ backgroundColor: '#F7F8FA', flex: 0.02 }} />
         <View style={styles.middleContainer}>
           <View style={styles.directionCol}>
@@ -209,16 +195,16 @@ const CreateMeetScreenPresenter = (props: any) => {
               style={[
                 styles.roomNameStyle,
                 roomName && { borderColor: '#1c90fb' },
-                (textLess2 && roomName) && { borderColor: '#fc4c60' }
+                textLess2 && roomName && { borderColor: '#fc4c60' }
               ]}
             />
             <View
               style={[
                 styles.countContainer,
-                (textLess2 && roomName) && { justifyContent: 'space-between' }
+                textLess2 && roomName && { justifyContent: 'space-between' }
               ]}
             >
-              {(textLess2 && roomName != '') && (
+              {textLess2 && roomName != '' && (
                 <Text
                   style={{
                     color: '#fc4c60',
@@ -246,7 +232,6 @@ const CreateMeetScreenPresenter = (props: any) => {
               multiline
               style={[
                 styles.sendStyle,
-                !isPublic && { height: 130 },
                 sendMessage && { borderColor: '#1c90fb' }
               ]}
             />
@@ -464,7 +449,7 @@ const CreateMeetScreenPresenter = (props: any) => {
         <View style={styles.graybar1} />
         <View style={[styles.botContainer]}>
           <View
-            style={[styles.conferenceMember, switchReserve && { flex: 0.28}]}
+            style={[styles.conferenceMember, switchReserve && { flex: 0.28 }]}
           >
             <View style={{ flexDirection: 'row' }}>
               <Text style={styles.ft14B}>{t('참석자')} </Text>
@@ -497,6 +482,8 @@ const CreateMeetScreenPresenter = (props: any) => {
           </View>
           <View style={{ flex: 1 }}>
             <FlatList
+              showsVerticalScrollIndicator={false}
+              bounces={false}
               contentContainerStyle={{
                 flexGrow: 1,
                 paddingLeft: '5%',
@@ -518,7 +505,7 @@ const CreateMeetScreenPresenter = (props: any) => {
                 return (
                   <View style={styles.participantList}>
                     <View style={styles.profileView}>
-                      {item.user_name === auth.user_name && (
+                      {item.user_no === auth.user_no && (
                         <View style={styles.myView}>
                           <Text style={styles.myText}>나</Text>
                         </View>
@@ -536,7 +523,7 @@ const CreateMeetScreenPresenter = (props: any) => {
                     <View
                       style={[
                         styles.infoBox,
-                        item.user_name !== auth.user_name && { width: '86%' }
+                        item.user_no !== auth.user_no && { width: '86%' }
                       ]}
                     >
                       <Text style={styles.name}>
@@ -550,7 +537,7 @@ const CreateMeetScreenPresenter = (props: any) => {
                         {user_path}
                       </Text>
                     </View>
-                    {item.user_name === auth.user_name && (
+                    {item.user_no === auth.user_no && (
                       <View style={styles.masterContainer}>
                         <Image
                           style={styles.icMaster}
@@ -575,6 +562,7 @@ const CreateMeetScreenPresenter = (props: any) => {
             backgroundColor: 'rgb(255,255,255)',
             bottom: 0,
             width: '100%',
+            height: '50%',
             borderRadius: 20,
             shadowRadius: 10,
             shadowColor: '#aaa',
@@ -688,7 +676,7 @@ const styles = StyleSheet.create({
     paddingTop: '2%',
     paddingLeft: '3.5%',
     paddingRight: '3.5%',
-    height: 100,
+    height: 130,
     letterSpacing: -0.28,
     borderColor: '#E6E6E6',
     fontSize: 14,

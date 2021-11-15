@@ -43,7 +43,8 @@ const OrganizationScreenPresenter = (props: any) => {
     isDataLoading,
     spin,
     t,
-    participantListAdd
+    participantListAdd,
+    auth,
   } = props;
   const OrganizationFlatList = (
     data: any[],
@@ -163,7 +164,7 @@ const OrganizationScreenPresenter = (props: any) => {
                   </View>
 
                   {/* checkBox UI */}
-                  {!isParentSelected && type === 'member' && (
+                  {!isParentSelected && type === 'member' && item.user_no !== auth.user_no && (
                     <TouchableHighlight
                       underlayColor={'#e9f5ff00'} // 투명
                       style={{
@@ -349,7 +350,10 @@ const OrganizationScreenPresenter = (props: any) => {
         </TouchableOpacity>
         <Text style={styles.TitleText}>{t('참석자 추가')}</Text>
         <TouchableOpacity
-          onPress={() => participantListAdd()}
+          onPress={() => {
+            participantListAdd();
+            // fadeOut();
+          }}
         >
           <Text style={styles.ft14N}>{t('추가')}</Text>
         </TouchableOpacity>
@@ -391,8 +395,9 @@ const OrganizationScreenPresenter = (props: any) => {
           </View> */}
 
       {isDataLoading ? (
+        // <></>
         <View style={styles.dimmed}>
-          <Animated.View
+          <View
             style={{
               transform: [{ rotate: spin }],
               alignItems: 'center',
@@ -400,7 +405,7 @@ const OrganizationScreenPresenter = (props: any) => {
             }}
           >
             <CustomIcon name={'loading'} size={48} />
-          </Animated.View>
+          </View>
           <Text style={styles.loadingText}>
             {'조직도를 불러오고 있습니다.'}
           </Text>
@@ -581,6 +586,7 @@ const OrganizationScreenPresenter = (props: any) => {
                     renderItem={({ item, index, section }) => {
                       return (
                         <TouchableOpacity
+                          disabled={item.user_no === auth.user_no}
                           onPress={() => selectEmployee('member', item)}
                           activeOpacity={0.7}
                           style={{
@@ -625,10 +631,14 @@ const OrganizationScreenPresenter = (props: any) => {
                             </Text>
                           </View>
                           <View style={{ marginLeft: 'auto', width: 30 }}>
-                            {selectedEmployee.member[item.user_no] ? (
-                              <CustomIcon name={'checkbox_on'} size={24} />
+                            {item.user_no !== auth.user_no ? (
+                              selectedEmployee.member[item.user_no] ? (
+                                <CustomIcon name={'checkbox_on'} size={24} />
+                              ) : (
+                                <CustomIcon name={'checkbox_off'} size={24} />
+                              )
                             ) : (
-                              <CustomIcon name={'checkbox_off'} size={24} />
+                              <></>
                             )}
                           </View>
                         </TouchableOpacity>

@@ -1,5 +1,5 @@
 import React, { RefObject, useEffect, useRef, useState } from 'react';
-import { View, Animated, Dimensions } from 'react-native';
+import { Animated, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import CreateMeetScreenPresenter from './CreateMeetScreenPresenter';
@@ -9,14 +9,12 @@ import OrganizationScreen from './OrganizationScreen';
 import { MeetApi, OrganizationApi } from '../../services';
 
 import moment from 'moment';
-import { wehagoMainURL } from '../../utils';
 import { getT } from '../../utils/translateManager';
 
 // const hasNotch = DeviceInfo.hasNotch() && Platform.OS === 'ios';
-const { width, height } = Dimensions.get('window');
 
 export default function CreateMeetScreenContainer(props: any) {
-  const [switchAlram, setSwitchAlram] = useState(false);
+  const [switchAllSend, setSwitchAllSend] = useState(false);
   const [switchReserve, setSwitchReserve] = useState(false);
   const [switchDelAlram, setSwitchDelAlram] = useState(false);
   const [selectMode, setSelectMode] = useState(false);
@@ -66,30 +64,45 @@ export default function CreateMeetScreenContainer(props: any) {
   const [participantList, setParticipantList] = useState<{}[]>([]);
   const [textLess2, setTextLess2] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-
-  // const fadeAnim = useRef(new Animated.ValueXY()).current;
-  const animation = new Animated.Value(-150);
   const { auth } = useSelector((state: any) => state.user);
   const t = getT();
 
   const dispatch = useDispatch();
 
-  console.log(participantList);
 
-  const resetAni = () => {
-    Animated.decay(animation, {
-      velocity: 0.95,
-      deceleration: 0.998,
-      useNativeDriver: true
-    }).start();
-  };
-  const runAni = () => {
-    Animated.decay(animation, {
-      velocity: 0.95,
-      deceleration: 0.998,
-      useNativeDriver: true
-    }).start();
-  };
+  // const fadeIn = () => {
+  //   // Will change fadeAnim value to 1 in 5 seconds
+  //   Animated.timing(fadeAnim, {
+  //     toValue: 1,
+  //     duration: 5000,
+  //     useNativeDriver: true
+  //   }).start();
+  // };
+
+  // const fadeOut = () => {
+  //   // Will change fadeAnim value to 0 in 3 seconds
+  //   Animated.timing(fadeAnim, {
+  //     toValue: 0,
+  //     duration: 10000,
+  //     useNativeDriver: true
+  //   }).start();
+  // };
+
+
+  // const resetAni = () => {
+  //   Animated.decay(animation, {
+  //     velocity: 0.95,
+  //     deceleration: 0.998,
+  //     useNativeDriver: true
+  //   }).start();
+  // };
+  // const runAni = () => {
+  //   Animated.decay(animation, {
+  //     velocity: 0.95,
+  //     deceleration: 0.998,
+  //     useNativeDriver: true
+  //   }).start();
+  // };
   // const getOrganization = async () => {
   //   const result = await OrganizationApi.getOrganizationTreeRequest(auth);
   //   if (result.error) {
@@ -151,6 +164,7 @@ export default function CreateMeetScreenContainer(props: any) {
   const startConference = async () => {
     if (1 < roomName.length) {
       let arr: any[] = [{}];
+      arr.pop();
       participantList.map((values: any) => {
         if (values.user_no !== auth.user_no) {
           arr.push({
@@ -162,8 +176,21 @@ export default function CreateMeetScreenContainer(props: any) {
         }
       });
 
-      const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
-      const params: {
+      let start_time = moment(parseInt(moment(startTime.current).format('x')));
+      let end_time = moment(parseInt(moment(endTime.current).format('x')));
+
+      const { cno } = auth;
+
+      arr.unshift({
+        type: 'portal_id',
+        value: auth.portal_id,
+        is_master: true,
+        user_name: auth.user_name,
+        cno: cno,
+        user_no: auth.user_no
+      });
+
+      let params: {
         service_code: string;
         name: string;
         is_public: boolean;
@@ -171,30 +198,28 @@ export default function CreateMeetScreenContainer(props: any) {
         is_send_updated_email: boolean;
         is_reservation: boolean;
         call_type: string;
-        invite_messsage: string;
-        start_date_time?: string;
-        end_date_time?: string;
-        is_schedule_share?: boolean;
+        invite_message: string;
+        start_date_time?: any;
+        end_date_time?: any;
       } = {
         service_code: 'meetapp',
         name: roomName,
         is_public: isPublic,
-        access_user: 
-        arr.unshift({
-          type: 'portal_id',
-          value: auth.portal_id,
-          is_master: true,
-          user_name: auth.user_name,
-          cno: cno,
-          user_no: auth.user_no
-        }),
+        access_user: arr,
         is_send_updated_email: switchDelAlram,
         is_reservation: switchReserve,
-        // start_date_time: moment(startTime.current).format('x'),
-        // end_date_time: moment(endTime.current).format('x'),
         call_type: '1',
-        invite_messsage: sendMessage
+        invite_message: sendMessage
       };
+
+      if (switchReserve) {
+        let object = params;
+        params = {
+          ...object,
+          start_date_time: start_time,
+          end_date_time: end_time
+        };
+      }
 
       const result = await MeetApi.createMeetRoom(auth, params);
       if (result) {
@@ -222,7 +247,7 @@ export default function CreateMeetScreenContainer(props: any) {
       });
       setSwitchReserve(false);
     }
-    setSwitchAlram(false);
+    setSwitchAllSend(false);
     setSwitchDelAlram(false);
   };
 
@@ -265,8 +290,8 @@ export default function CreateMeetScreenContainer(props: any) {
     return obj;
   };
 
-  const onSwitchAlramChange = () => {
-    setSwitchAlram(!switchAlram);
+  const onSwitchAllSendChange = () => {
+    setSwitchAllSend(!switchAllSend);
   };
   const onSwitchReserveChange = (value: any) => {
     if (value) {
@@ -345,17 +370,11 @@ export default function CreateMeetScreenContainer(props: any) {
         user_name: auth.user_name,
         rank_name: auth.last_company.rank_name,
         profile_url: auth.profile_url,
-        full_path: auth.last_company.full_path
+        full_path: auth.last_company.full_path,
+        user_no: auth.user_no
       }
     ]);
   }, []);
-
-  useEffect(() => {
-    // selectMode ? runAni() : resetAni();
-    props.navigation.setParams({
-      screenType: selectMode ? 'organization' : 'create'
-    });
-  }, [selectMode]);
 
   const roomNameChange = (name: string) => {
     let rn = name;
@@ -383,7 +402,7 @@ export default function CreateMeetScreenContainer(props: any) {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1}}>
       {selectMode ? (
         <OrganizationScreen
           {...props}
@@ -418,10 +437,10 @@ export default function CreateMeetScreenContainer(props: any) {
           openDatePicker={openDatePicker}
           startConference={startConference}
           //신규Props
-          switchAlram={switchAlram}
+          switchAllSend={switchAllSend}
           switchReserve={switchReserve}
           switchDelAlram={switchDelAlram}
-          onSwitchAlramChange={onSwitchAlramChange}
+          onSwitchAllSendChange={onSwitchAllSendChange}
           onSwitchReserveChange={onSwitchReserveChange}
           onSwitchDelAlramChange={onSwitchDelAlramChange}
           roomNameCnt={roomNameCnt}
