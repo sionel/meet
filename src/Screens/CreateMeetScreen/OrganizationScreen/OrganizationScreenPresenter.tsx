@@ -9,12 +9,13 @@ import {
   TouchableOpacity,
   Alert,
   SectionList,
-  Animated,
   SafeAreaView,
   Text,
   TextInput,
-  Platform
+  Platform,
+  Animated
 } from 'react-native';
+import CustomCheckBox from '../../../components/renewal/CustomCheckBox';
 import { CustomIcon } from '../../../components';
 import { wehagoDummyImageURL, wehagoMainURL } from '../../../utils';
 
@@ -164,30 +165,37 @@ const OrganizationScreenPresenter = (props: any) => {
                   </View>
 
                   {/* checkBox UI */}
-                  {!isParentSelected && type === 'member' && item.user_no !== auth.user_no && (
-                    <TouchableHighlight
-                      underlayColor={'#e9f5ff00'} // 투명
-                      style={{
-                        width: 52, // 터치영역은 넓으면 편함
-                        height: 52,
-                        justifyContent: 'center',
-                        alignItems: 'center'
-                      }}
-                      onPress={() => selectEmployee(type, item)}
-                    >
-                      <View
-                        style={Object.assign(
-                          {},
-                          styles.checkBox,
-                          isSelected && styles.checkBoxSelected
-                        )}
-                      >
-                        {isSelected && (
-                          <CustomIcon name={'btnTnaviCheckNone'} size={18} />
-                        )}
-                      </View>
-                    </TouchableHighlight>
-                  )}
+                  {!isParentSelected &&
+                    type === 'member' &&
+                    item.user_no !== auth.user_no && (
+                      <>
+                      <CustomCheckBox color="#e6e6e6"
+                    // onCheck={onCheck}
+                    checked={isSelected}/>
+                      </>
+                      // <TouchableHighlight
+                      //   underlayColor={'#e9f5ff00'} // 투명
+                      //   style={{
+                      //     width: 52, // 터치영역은 넓으면 편함
+                      //     height: 52,
+                      //     justifyContent: 'center',
+                      //     alignItems: 'center'
+                      //   }}
+                      //   onPress={() => selectEmployee(type, item)}
+                      // >
+                      //   <View
+                      //     style={Object.assign(
+                      //       {},
+                      //       styles.checkBox,
+                      //       isSelected && styles.checkBoxSelected
+                      //     )}
+                      //   >
+                      //     {isSelected && (
+                      //       <CustomIcon name={'btnTnaviCheckNone'} size={18} />
+                      //     )}
+                      //   </View>
+                      // </TouchableHighlight>
+                    )}
                 </>
               </TouchableHighlight>
 
@@ -233,7 +241,7 @@ const OrganizationScreenPresenter = (props: any) => {
   }) => {
     const group = selectedEmployee.group;
     const member = selectedEmployee.member;
-    
+
     if (Object.keys(group).length > 0)
       console.log('1wrjajs fhsjdgfhjksg hks dghkashgfjk');
     // 선택된 데이터가 없을 시 return null
@@ -395,9 +403,8 @@ const OrganizationScreenPresenter = (props: any) => {
           </View> */}
 
       {isDataLoading ? (
-        // <></>
         <View style={styles.dimmed}>
-          <View
+          <Animated.View
             style={{
               transform: [{ rotate: spin }],
               alignItems: 'center',
@@ -405,7 +412,7 @@ const OrganizationScreenPresenter = (props: any) => {
             }}
           >
             <CustomIcon name={'loading'} size={48} />
-          </View>
+          </Animated.View>
           <Text style={styles.loadingText}>
             {'조직도를 불러오고 있습니다.'}
           </Text>
@@ -990,7 +997,7 @@ const styles = StyleSheet.create({
     width: 18,
     height: 18,
     borderWidth: 1,
-    borderColor: '#999',
+    borderColor: 'red',
     borderRadius: 3,
     justifyContent: 'center',
     alignItems: 'center'

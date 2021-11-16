@@ -1,5 +1,5 @@
 import React, { RefObject, useEffect, useRef, useState } from 'react';
-import { Animated, View } from 'react-native';
+import { GestureResponderEvent, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import CreateMeetScreenPresenter from './CreateMeetScreenPresenter';
@@ -37,9 +37,6 @@ export default function CreateMeetScreenContainer(props: any) {
   const [inviteText, setInviteText] = useState('');
   const [timeType, setTimeType] = useState('');
 
-  //
-  //
-
   const [startTime, setStartTime] = useState({
     date: '',
     time: '',
@@ -52,9 +49,11 @@ export default function CreateMeetScreenContainer(props: any) {
   });
 
   const [time, setTime] = useState(new Date());
+  const [timeChangeDetect, setTimeChangeDetect] = useState(false);
   const [date, setDate] = useState(new Date());
 
-  const [email, setEmail] = useState('');
+  const titleRef: RefObject<any> = useRef();
+  const sendMsgRef: RefObject<any> = useRef();
   const [selectedEmployee, setSelectedEmployee] = useState({
     member: {},
     group: {}
@@ -69,40 +68,6 @@ export default function CreateMeetScreenContainer(props: any) {
 
   const dispatch = useDispatch();
 
-
-  // const fadeIn = () => {
-  //   // Will change fadeAnim value to 1 in 5 seconds
-  //   Animated.timing(fadeAnim, {
-  //     toValue: 1,
-  //     duration: 5000,
-  //     useNativeDriver: true
-  //   }).start();
-  // };
-
-  // const fadeOut = () => {
-  //   // Will change fadeAnim value to 0 in 3 seconds
-  //   Animated.timing(fadeAnim, {
-  //     toValue: 0,
-  //     duration: 10000,
-  //     useNativeDriver: true
-  //   }).start();
-  // };
-
-
-  // const resetAni = () => {
-  //   Animated.decay(animation, {
-  //     velocity: 0.95,
-  //     deceleration: 0.998,
-  //     useNativeDriver: true
-  //   }).start();
-  // };
-  // const runAni = () => {
-  //   Animated.decay(animation, {
-  //     velocity: 0.95,
-  //     deceleration: 0.998,
-  //     useNativeDriver: true
-  //   }).start();
-  // };
   // const getOrganization = async () => {
   //   const result = await OrganizationApi.getOrganizationTreeRequest(auth);
   //   if (result.error) {
@@ -166,10 +131,12 @@ export default function CreateMeetScreenContainer(props: any) {
       let arr: any[] = [{}];
       arr.pop();
       participantList.map((values: any) => {
+        // type에 따라 access_user에 받는게 다름
+        // type: portal_id, email
         if (values.user_no !== auth.user_no) {
           arr.push({
-            type: 'email',
-            value: values.user_default_email,
+            type: 'portal_id',
+            value: values.portal_id,
             is_master: false,
             user_name: values.user_name
           });
@@ -202,7 +169,7 @@ export default function CreateMeetScreenContainer(props: any) {
         start_date_time?: any;
         end_date_time?: any;
       } = {
-        service_code: 'meetapp',
+        service_code: 'wehagomeet',
         name: roomName,
         is_public: isPublic,
         access_user: arr,
@@ -220,6 +187,8 @@ export default function CreateMeetScreenContainer(props: any) {
           end_date_time: end_time
         };
       }
+
+      // console.log(params);
 
       const result = await MeetApi.createMeetRoom(auth, params);
       if (result) {
@@ -293,11 +262,18 @@ export default function CreateMeetScreenContainer(props: any) {
   const onSwitchAllSendChange = () => {
     setSwitchAllSend(!switchAllSend);
   };
-  const onSwitchReserveChange = (value: any) => {
-    if (value) {
-      const now = new Date();
-      setStartTime(getDate(now));
-      setEndTime(getDate(new Date(now)));
+
+  //예약회의 기본값 설정
+  const onSwitchReserveChange = (reserve: boolean) => {
+    if (reserve) {
+      let start_default = new Date();
+      start_default.setMinutes(start_default.getMinutes() + 30);
+
+      let end_default = new Date(start_default);
+      end_default.setHours(end_default.getHours() + 1);
+
+      setStartTime(getDate(start_default));
+      setEndTime(getDate(end_default));
     } else {
       setStartTime({
         date: '',
@@ -321,49 +297,76 @@ export default function CreateMeetScreenContainer(props: any) {
 
   const onDateChange = (date: any) => {
     let obj = getDate(new Date(date));
+    // console.log(obj);
+    // console.log(startTime);
 
-    if (timeType === 'start') setStartTime({ ...obj, time: startTime.time });
-    else if (timeType === 'end') setEndTime({ ...obj, time: endTime.time });
+    if (timeType === 'start') {
+      obj.current.setHours(startTime.current.getHours());
+      obj.current.setMinutes(startTime.current.getMinutes());
+      setStartTime({
+        ...obj,
+        time: startTime.time
+      });
+    } else if (timeType === 'end') {
+      obj.current.setHours(endTime.current.getHours());
+      obj.current.setMinutes(endTime.current.getMinutes());
+      setEndTime({
+        ...obj,
+        time: endTime.time
+      });
+    }
 
     setTimePicker(datePicker);
     setDatePicker('none');
   };
 
+  const timeChange = (time: any) => {
+    setTimeChangeDetect(true);
+    setTime(time);
+  };
+
   //시간 선택후 확인버튼 눌렀을때
   const onTimeConfirm = () => {
-    let obj = getDate(time);
+    let obj: any;
+    if (timeChangeDetect) {
+      obj = getDate(time);
+    } else {
+      if (timeType === 'start') obj = getDate(startTime.current);
+      else if (timeType === 'end') obj = getDate(endTime.current);
+    }
+
+    let start_DT, end_DT;
     let h = moment(obj.current).hours();
     let m = moment(obj.current).minutes();
-    let DT;
 
     if (timeType === 'start') {
-      startTime.current.setHours(0);
-      startTime.current.setMinutes(0);
-
-      DT = moment(startTime.current).add(h, 'h').add(m, 'm').toDate();
-
+      startTime.current.setHours(h);
+      startTime.current.setMinutes(m);
+      start_DT = moment(startTime.current).toDate();
       setStartTime({
         ...obj,
         date: startTime.date,
-        current: DT
+        current: start_DT
       });
+      obj = getDate(moment(startTime.current).add(1, 'hours').toDate());
+      setEndTime(obj);
     } else if (timeType === 'end') {
-      endTime.current.setHours(0);
-      endTime.current.setMinutes(0);
-
-      DT = moment(endTime.current).add(h, 'h').add(m, 'm').toDate();
+      endTime.current.setHours(h);
+      endTime.current.setMinutes(m);
+      end_DT = moment(endTime.current).toDate();
       setEndTime({
         ...obj,
         date: endTime.date,
-        current: DT
+        current: end_DT
       });
     }
+
     setTimePicker('none');
+    setTimeChangeDetect(false);
   };
 
   useEffect(() => {
     setSelectMode(false);
-    // getOrganization();
     getAllEmployee();
     setParticipantList([
       {
@@ -396,13 +399,29 @@ export default function CreateMeetScreenContainer(props: any) {
     props.navigation.goBack();
   };
 
-  const focusBlur = () => {
-    if (datePicker === 'start' || 'end') setDatePicker('none');
-    if (timePicker === 'start' || 'end') setTimePicker('none');
+  // const focusBlur = () => {
+
+  // };
+
+  const onFocusOut = () => {
+    if (sendMsgRef.current.isFocused()) sendMsgRef.current.blur();
+    else if (titleRef.current.isFocused()) titleRef.current.blur();
+
+    
+    
+  };
+
+  const exitDateTime = () => {
+    if (datePicker === 'start' || 'end') {
+      setDatePicker('none');
+    }
+    if (timePicker === 'start' || 'end') {
+      setTimePicker('none');
+    }
   };
 
   return (
-    <View style={{ flex: 1}}>
+    <View style={{ flex: 1 }}>
       {selectMode ? (
         <OrganizationScreen
           {...props}
@@ -454,7 +473,13 @@ export default function CreateMeetScreenContainer(props: any) {
           participantList={participantList}
           textLess2={textLess2}
           timeType={timeType}
-          focusBlur={focusBlur}
+          sendMsgRef={sendMsgRef}
+          titleRef={titleRef}
+          onFocusOut={onFocusOut}
+          setTimeChangeDetect={setTimeChangeDetect}
+          timeChangeDetect={timeChangeDetect}
+          timeChange={timeChange}
+          exitDateTime={exitDateTime}
         />
       )}
     </View>

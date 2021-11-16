@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Animated, Easing, StyleSheet } from 'react-native';
+import { Animated, Easing } from 'react-native';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/configureStore';
 import { getT } from '../../../utils/translateManager';
@@ -18,7 +18,7 @@ const OrganizationScreenContainer = (props: any) => {
     setInviteText,
     // participantList,
     setParticipantList,
-    setSelectMode,
+    setSelectMode
   } = props;
 
   const [keyword, setKeyword] = useState('');
@@ -185,9 +185,9 @@ const OrganizationScreenContainer = (props: any) => {
     let arr: any[] = [];
 
     Object.values(selectedEmployee.member).map((value: any) => {
-      if (value.user_no !== auth.user_no) {
-        arr.push(value);
-      }
+      // if (value.user_no !== auth.user_no) {
+      // }
+      arr.push(value);
     });
     arr.unshift({
       user_name: auth.user_name,

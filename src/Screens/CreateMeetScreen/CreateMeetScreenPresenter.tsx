@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   View,
   StyleSheet,
@@ -10,8 +10,6 @@ import {
   Switch
 } from 'react-native';
 
-import OrganizationScreen from './OrganizationScreen';
-
 import DatePicker from 'react-native-date-picker';
 // import Autocomplete from 'react-native-autocomplete-input';
 import CalendarPicker from 'react-native-calendar-picker';
@@ -20,10 +18,8 @@ import { getT } from '../../utils/translateManager';
 import { CustomIcon } from '../../components';
 
 import { wehagoMainURL, wehagoDummyImageURL } from '../../utils';
-// import { SafeAreaView } from 'react-navigation';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { last } from 'lodash';
-import { ScrollView } from 'react-navigation';
 import LinearGradient from 'react-native-linear-gradient';
 
 const ic_code = require('../../../assets/new/icons/ic_code.png');
@@ -31,6 +27,8 @@ const ic_lock = require('../../../assets/new/icons/ic_lock_wh.png');
 const ic_person_plus = require('../../../assets/new/icons/ic_person_plus.png');
 const ic_master = require('../../../assets/new/icons/ic_master.png');
 const ic_person = require('../../../assets/new/icons/ic_person.png');
+const ic_cancel = require('../../../assets/new/icons/ic_cancel.png');
+const ic_check_black = require('../../../assets/new/icons/ic_check_black.png');
 
 // 알림 생성 칸이 있는데 이건 삭제
 // 왜냐 이 앱은 노티를 못보내기 때문
@@ -71,16 +69,20 @@ const CreateMeetScreenPresenter = (props: any) => {
     auth,
     participantList,
     textLess2,
-    focusBlur,
+    sendMsgRef,
+    titleRef,
+    onFocusOut,
+    timeChange,
+    timeChangeDetect,
+    exitDateTime
   } = props;
   const t = getT();
 
-  
   const TimePickerComponent = (
     <View
       style={{ marginTop: 20, justifyContent: 'center', alignItems: 'center' }}
     >
-      <View style={{ flexDirection: 'row' }}>
+      {/* <View style={{ flexDirection: 'row' }}>
         <View style={{ flex: 1 }}></View>
         <Text
           style={{
@@ -112,8 +114,18 @@ const CreateMeetScreenPresenter = (props: any) => {
             {'완료'}
           </Text>
         </TouchableOpacity>
-      </View>
-      <DatePicker onDateChange={setTime} mode={'time'} date={time} />
+      </View> */}
+      <DatePicker
+        onDateChange={time => timeChange(time)}
+        mode={'time'}
+        date={
+          timeChangeDetect
+            ? time
+            : timeType === 'start'
+            ? startTime.current
+            : endTime.current
+        }
+      />
     </View>
   );
 
@@ -129,7 +141,7 @@ const CreateMeetScreenPresenter = (props: any) => {
       selectedDayStyle={{ borderRadius: 5, backgroundColor: '#1c90fb' }}
       todayBackgroundColor="blue"
       dayShape="square"
-      scaleFactor={400}
+      scaleFactor={370}
       onDateChange={onDateChange}
       selectYearTitle={'년도 선택'}
       selectMonthTitle={''}
@@ -138,13 +150,9 @@ const CreateMeetScreenPresenter = (props: any) => {
   );
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea} onTouchStart={onFocusOut}>
       {/* <ScrollView contentContainerStyle={[{ flex: 1, minHeight: 1000 }]}> */}
-      {/* <TouchableOpacity
-                style={{ flex: 1}}
-                activeOpacity={1}
-                onPress={focusBlur}
-      > */}
+
       <View style={styles.topTitle}>
         <TouchableOpacity onPress={onHandleBack}>
           <Text style={styles.ft14N}>{t('취소')}</Text>
@@ -156,19 +164,15 @@ const CreateMeetScreenPresenter = (props: any) => {
           </Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.privateContainer}>
+      <TouchableOpacity onPress={togglePublic} style={styles.privateContainer}>
+        {/* <View style={styles.privateContainer}> */}
         <LinearGradient
           end={{ x: 1, y: 1 }}
           start={{ x: 0, y: 0 }}
           colors={isPublic ? ['#a460ff', '#5d5dff'] : ['#1cc8fb', '#1c90fb']}
           style={styles.codeContainer}
         >
-          <TouchableOpacity onPress={togglePublic}>
-            <Image
-              source={isPublic ? ic_code : ic_lock}
-              style={styles.icCode}
-            />
-          </TouchableOpacity>
+          <Image source={isPublic ? ic_code : ic_lock} style={styles.icCode} />
         </LinearGradient>
 
         <View style={styles.privateTextContainer}>
@@ -181,7 +185,8 @@ const CreateMeetScreenPresenter = (props: any) => {
               : t('지정된 참여자 이외엔 접속 불가능합니다.')}
           </Text>
         </View>
-      </View>
+        {/* </View> */}
+      </TouchableOpacity>
       <View style={[{ flex: 1, backgroundColor: '#fff' }]}>
         <View style={[{ backgroundColor: '#F7F8FA', flex: 0.015 }]} />
         <View style={{ backgroundColor: '#F7F8FA', flex: 0.02 }} />
@@ -197,6 +202,7 @@ const CreateMeetScreenPresenter = (props: any) => {
                 roomName && { borderColor: '#1c90fb' },
                 textLess2 && roomName && { borderColor: '#fc4c60' }
               ]}
+              ref={titleRef}
             />
             <View
               style={[
@@ -225,7 +231,6 @@ const CreateMeetScreenPresenter = (props: any) => {
           <View style={styles.directionCol}>
             <Text style={styles.textHeader}>{t('초대메세지')}</Text>
             <TextInput
-              // ref={smRef}
               onChangeText={sendMessageChange}
               value={sendMessage}
               maxLength={200}
@@ -234,6 +239,7 @@ const CreateMeetScreenPresenter = (props: any) => {
                 styles.sendStyle,
                 sendMessage && { borderColor: '#1c90fb' }
               ]}
+              ref={sendMsgRef}
             />
             <View style={styles.countContainer}>
               <Text style={styles.ft12}>{sendMsgCnt}</Text>
@@ -470,7 +476,9 @@ const CreateMeetScreenPresenter = (props: any) => {
               <Text
                 style={[styles.ft12, { letterSpacing: -0.18, lineHeight: 18 }]}
               >
-                {'화상회의가 변경 또는 삭제될 경우, \n알림 이메일을 보냅니다.'}
+                {t(
+                  '화상회의가 변경 또는 삭제될 경우, \n알림 이메일을 보냅니다.'
+                )}
               </Text>
             </View>
 
@@ -571,11 +579,28 @@ const CreateMeetScreenPresenter = (props: any) => {
             paddingBottom: '5%'
           }}
         >
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginTop: '5%',
+              marginBottom: '3%',
+              paddingLeft: '4%',
+              paddingRight: '4%'
+            }}
+          >
+            <TouchableOpacity onPress={exitDateTime}>
+              <Image source={ic_cancel} style={styles.icCancel} />
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={onTimeConfirm}>
+              {timePicker !== 'none' && <Image source={ic_check_black} style={styles.icCancel} />}
+            </TouchableOpacity>
+          </View>
           {timePicker !== 'none' && TimePickerComponent}
           {datePicker !== 'none' && DatePickerComponent}
         </View>
       )}
-      {/* </TouchableOpacity> */}
     </SafeAreaView>
   );
 };
@@ -742,6 +767,11 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     width: 24,
     height: 24
+  },
+  icCancel: {
+    resizeMode: 'cover',
+    width: 18,
+    height: 18,
   },
   icMaster: { width: '25%', height: 20 },
   masterContainer: {
@@ -990,52 +1020,6 @@ const styles = StyleSheet.create({
     width: '10%',
     height: 30
   }
-  // presenter: {
-  //   width: '80%',
-  //   // backgroundColor: '#0ff',
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  //   zIndex: 2
-  // },
-  // rowContainer: {
-  //   width: '100%',
-  //   flexDirection: 'row',
-  //   alignItems: 'center',
-  //   alignContent: 'center',
-  //   justifyContent: 'flex-start',
-  //   marginVertical: 6
-  //   // backgroundColor:'#0f0'
-  // },
-  // rowTitle: { width: '30%', fontSize: 15, fontWeight: 'bold' },
-  // inputTitle: {
-  //   borderWidth: 1,
-  //   width: '70%',
-  //   fontSize: 15,
-  //   padding: 3,
-  //   backgroundColor: 'white'
-  // },
-  // rowContent: {
-  //   flexDirection: 'row',
-  //   alignItems: 'center',
-  //   marginVertical: 3
-  // },
-  // timeBox: { borderWidth: 1, borderColor: '#000', padding: 3 },
-
-  // itemText: {
-  //   fontSize: 15,
-  //   margin: 2
-  //   // borderWidth: 1,
-  //   // borderColor: '#777'
-  // },
-  // inputContainerStyle: {
-  //   borderRadius: 0,
-  //   borderWidth: 0
-  // },
-  // listContainerStyle: {
-  //   backgroundColor: '#f02',
-  //   padding: 1
-  // }
-  //#endregion
 });
 
 export default CreateMeetScreenPresenter;
