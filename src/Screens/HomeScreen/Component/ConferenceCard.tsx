@@ -11,12 +11,14 @@ const icMoreWhite = require('../../../../assets/new/icons/ic_more_white.png');
 interface cardProps {
   index: number;
   conference: {
+    roomId: string;
     conferenceName: string;
-    startTime: string;
+    time: string;
     onMinte: number;
     participants: [];
     isLock: boolean;
-    onMoreClick: Function;
+    goingMoreClick: (roomId: string) => void;
+    enterConference: (roomId: string) => void;
   };
 }
 
@@ -24,20 +26,16 @@ export default function ConferenceCard(props: cardProps) {
   const {
     index,
     conference: {
+      roomId,
       conferenceName,
-      startTime,
+      time,
       onMinte,
       participants,
       isLock,
-      onMoreClick
+      goingMoreClick,
+      enterConference
     }
   } = props;
-  const a = [1, 2, 3, 4, 5, 6];
-  const b = [1, 2];
-  const c = [1, 2, 4, 5, 6];
-  const d = [1, 2, 3, 4, 5, 6, 2, 3, 4, 5, 6, 2, 3, 4, 5, 6, 2, 3, 4, 5, 6];
-  // const arr = participants ? participants :  [a, b, c, d];
-  const arr = [a, b, c, d];
 
   const colors = [
     ['rgb(75,234,200)', 'rgb(34,172,204)'],
@@ -47,7 +45,11 @@ export default function ConferenceCard(props: cardProps) {
   ];
 
   return (
-    <TouchableOpacity activeOpacity={0.8} style={styles.container}>
+    <TouchableOpacity
+      activeOpacity={0.8}
+      style={styles.container}
+      onPress={() => enterConference(roomId)}
+    >
       <LinearGradient
         end={{ x: 1, y: 0 }}
         start={{ x: 0, y: 0 }}
@@ -75,6 +77,7 @@ export default function ConferenceCard(props: cardProps) {
               flex: 1
               // backgroundColor: '#661'
             }}
+            numberOfLines={1}
           >
             {conferenceName}
           </Text>
@@ -82,7 +85,7 @@ export default function ConferenceCard(props: cardProps) {
             <Image
               source={icLockwhite}
               resizeMode={'contain'}
-              style={{ width: 18, height: 18 }}
+              style={{ width: 30, height: 30, marginLeft: 10 }}
             />
           )}
         </View>
@@ -102,7 +105,7 @@ export default function ConferenceCard(props: cardProps) {
               marginRight: 5
             }}
           >
-            {startTime}
+            {time}
           </Text>
           <Text
             style={{
@@ -142,11 +145,9 @@ export default function ConferenceCard(props: cardProps) {
         <View
           style={{
             flex: 2,
-
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between'
-            // backgroundColor:'#f21',
           }}
         >
           <View
@@ -156,13 +157,13 @@ export default function ConferenceCard(props: cardProps) {
             }}
           >
             {participants.map(
-              (v: { type: string | number; value: string | number }) => {
-                return v.type === 'string' ? (
+              (user: { type: string | number; value: string }) => {
+                return user.type === 'string' ? (
                   <Image
                     source={{
-                      uri: v.value
+                      uri: user.value
                     }}
-                    resizeMode={'center'}
+                    resizeMode={'cover'}
                     style={{
                       height: 40,
                       width: 40,
@@ -181,18 +182,21 @@ export default function ConferenceCard(props: cardProps) {
                       justifyContent: 'center'
                       // zIndex: 10
                     }}
+                    onPress={() => goingMoreClick(roomId)}
                   >
-                    <Text>{'+' + v.value}</Text>
+                    <Text>{'+' + user.value}</Text>
                   </TouchableOpacity>
                 );
               }
             )}
           </View>
-          <Image
-            source={icMoreWhite}
-            style={{ height: '50%' }}
-            resizeMode={'contain'}
-          ></Image>
+          <TouchableOpacity onPress={() => goingMoreClick(roomId)}>
+            <Image
+              source={icMoreWhite}
+              style={{ height: '50%' }}
+              resizeMode={'contain'}
+            />
+          </TouchableOpacity>
         </View>
       </LinearGradient>
     </TouchableOpacity>

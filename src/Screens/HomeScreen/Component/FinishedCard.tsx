@@ -1,11 +1,28 @@
 import React from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
 
 const icMore = require('../../../../assets/new/icons/ic_more.png');
 const icLockBlack = require('../../../../assets/new/icons/ic_lock_black.png');
 
-export default function ConferenceBox(props: any) {
-  const { data } = props;
+interface conferenceBoxProps {
+  conferenceName: string;
+  usageTime: string;
+  users: [];
+  roomId: string;
+  timeString: string;
+  finishedMoreClick: (roomId:string) => void;
+}
+
+export default function ConferenceBox(props: conferenceBoxProps) {
+  const {
+    conferenceName,
+    timeString,
+    usageTime,
+    users,
+    roomId,
+    finishedMoreClick
+  } = props;
+
   return (
     <View
       style={{
@@ -24,8 +41,7 @@ export default function ConferenceBox(props: any) {
         style={{
           flex: 2,
           alignItems: 'flex-start',
-          justifyContent: 'center',
-          marginRight: 10
+          justifyContent: 'center'
         }}
       >
         <View
@@ -37,13 +53,8 @@ export default function ConferenceBox(props: any) {
           }}
         >
           <Text numberOfLines={1} style={{ fontSize: 20 }}>
-            {'어디어디12312311223112323121321323121323123112233123'}
+            {conferenceName}
           </Text>
-          <Image
-            source={icLockBlack}
-            resizeMode={'contain'}
-            style={{ height: 20, width: 20 }}
-          />
         </View>
         <View
           style={{
@@ -52,77 +63,61 @@ export default function ConferenceBox(props: any) {
             justifyContent: 'center'
           }}
         >
-          <Text>{'01:00 PM ~ 06:00 PM | 10분뒤 시작'}</Text>
+          <Text>{timeString}</Text>
         </View>
       </View>
-      <View
+      <TouchableOpacity
         style={{
-          flex: 1,
+          width: '35%',
+          flexDirection: 'row',
           alignItems: 'center',
-          justifyContent: 'center',
-          flexDirection: 'row'
+          justifyContent: 'space-between'
         }}
+        onPress={()=>finishedMoreClick(roomId)}
       >
         <View
           style={{
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexDirection: 'row-reverse'
-            // flex:1
-            // alignContent:'space-around'
-            // alignSelf:'center'
+            flex: 1,
+            flexDirection: 'row',
+            alignItems: 'center'
           }}
         >
-          <Image
-            source={{
-              uri: 'https://www.wehago.com/uploads/profile/338136/hejevjsiwr.jpg'
-            }}
-            resizeMode={'center'}
-            style={{
-              height: 45,
-              width: 45,
-              borderRadius: 45,
-              left: 0,
-              borderColor: '#fff',
-              borderWidth: 2
-            }}
-          />
-          <Image
-            source={{
-              uri: 'https://www.wehago.com/uploads/profile/338136/hejevjsiwr.jpg'
-            }}
-            resizeMode={'center'}
-            style={{
-              height: 45,
-              width: 45,
-              borderRadius: 45,
-              left: -10,
-              borderColor: '#fff',
-              borderWidth: 2
-            }}
-          />
-          <Image
-            source={{
-              uri: 'https://www.wehago.com/uploads/profile/338136/hejevjsiwr.jpg'
-            }}
-            resizeMode={'center'}
-            style={{
-              height: 45,
-              width: 45,
-              borderRadius: 45,
-              left: -20,
-              borderColor: '#fff',
-              borderWidth: 2
-            }}
-          />
+          {users.map((user: { type: string | number; value: string }) => {
+            return user.type === 'string' ? (
+              <Image
+                source={{
+                  uri: user.value
+                }}
+                resizeMode={'cover'}
+                style={{
+                  height: 30,
+                  width: 30,
+                  borderRadius: 30
+                }}
+              />
+            ) : (
+              <View
+                style={{
+                  backgroundColor: '#e9f5ff',
+                  height: 30,
+                  width: 30,
+                  borderRadius: 30,
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                <Text>{'+' + user.value}</Text>
+              </View>
+            );
+          })}
         </View>
-
         <Image
           source={icMore}
           resizeMode={'contain'}
-          style={{ height: 30, width: 30, marginRight: 3 }}
+          style={{ height: 30, width: 30 }}
         />
-      </View>
+      </TouchableOpacity>
+      {/* </View> */}
     </View>
   );
 }

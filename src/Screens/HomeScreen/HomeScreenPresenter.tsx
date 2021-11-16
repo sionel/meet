@@ -37,9 +37,14 @@ const icSet = require('../../../assets/new/icons/ic_set.png');
 const icCalendar = require('../../../assets/new/icons/ic_calendar.png');
 const icVideo = require('../../../assets/new/icons/ic_video.png');
 const icKeyboard = require('../../../assets/new/icons/ic_keyboard.png');
+const icArrowDownBlack = require('../../../assets/new/icons/ic_arrow_down_black.png');
+const icChange = require('../../../assets/new/icons/ic_change.png');
 
 const HomeScreenPresenter = (props: any) => {
   const {
+    test,
+
+    userName,
     indicator,
     ongoingConference,
     reservationConference,
@@ -64,13 +69,26 @@ const HomeScreenPresenter = (props: any) => {
           <Image source={icSet} />
         </TouchableOpacity>
       </View>
-
-      {/* 김더존님 ~~~ */}
+      <TouchableOpacity
+        style={{
+          position: 'absolute',
+          width: 100,
+          height: 100,
+          top: 250,
+          backgroundColor: 'blue',
+          zIndex: 9
+        }}
+        onPress={test}
+      />
+      {/* 프로필, 이름 , 회사*/}
       <View style={styles.helloContainer}>
         <View style={styles.helloTextContainer}>
           <Image source={{ uri: userImg }} style={styles.settingImg} />
-          <Text style={styles.name}>{'김더존'}</Text>
-          <Text style={styles.companyText}>{companyName}</Text>
+          <Text style={styles.name}>{userName}</Text>
+          <TouchableOpacity style={styles.selectConpany}>
+            <Text style={styles.companyText}>{companyName}</Text>
+            <Image source={icArrowDownBlack} style={styles.downArrow} />
+          </TouchableOpacity>
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
@@ -105,13 +123,33 @@ const HomeScreenPresenter = (props: any) => {
           </TouchableOpacity>
         </View>
       </View>
-
+      {/* <TouchableOpacity
+        style={{
+          position: 'absolute',
+          width: 30,
+          height: 30,
+          top: '36%',
+          backgroundColor: 'black',
+          right: '10%'
+        }}
+      >
+        <Image source={icChange} style={{ width: 30, height: 30 }} />
+      </TouchableOpacity> */}
       {/* 진행중인 화상회의 */}
       {ongoingConference.length > 0 && (
         <View style={styles.ongoingContainer}>
           <View style={styles.goingTextContainer}>
-            <Text style={{ fontSize: 16 }}>{'진행중인 화상회의'}</Text>
-            <Text style={{ fontSize: 16, marginLeft: 10 }}>{'15'}</Text>
+            <Text style={styles.goingText}>{'진행중인 화상회의'}</Text>
+            <Text
+              style={[
+                styles.goingText,
+                {
+                  color: '#1c90fb'
+                }
+              ]}
+            >
+              {ongoingConference.length}
+            </Text>
           </View>
           <View style={{ flex: 3 }}>
             <FlatList
@@ -229,10 +267,13 @@ const HomeScreenPresenter = (props: any) => {
               : finishedConference
           }
           renderItem={data => {
+            const { item } = data;
+
             return highlight === 'reservation' ? (
-              <ReservationCard data={data} />
+              <ReservationCard {...item} />
             ) : (
-              <FinishedCard data={data} />
+              // <FinishedCard {...{item}} />
+              <FinishedCard {...item} />
             );
           }}
           showsVerticalScrollIndicator={false}
@@ -389,8 +430,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row-reverse',
     alignItems: 'center'
   },
-  companyText: { textAlign: 'right', marginRight: 5 },
-  settingImg: { width: 30, height: 30, borderRadius: 30, marginRight: 5 },
+  companyText: { fontSize: 15, textAlign: 'right' },
+  selectConpany: {
+    justifyContent: 'flex-start',
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  settingImg: { width: 28, height: 28, borderRadius: 24, marginRight: 10 },
+  downArrow: { width: 28, height: 28, borderRadius: 24 },
   helloContainer: {
     width: '100%',
     height: '22%',
@@ -403,11 +450,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     flexDirection: 'row',
-    alignItems: 'flex-end'
+    alignItems: 'center',
+    paddingTop: 20
   },
   name: {
     fontSize: 20,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    marginRight: 10,
+    textAlign: 'center'
   },
   greeting: {
     fontSize: 20
@@ -447,7 +497,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 20
-  }
+  },
+  goingText: { fontSize: 16, fontWeight: 'bold', marginRight: 5 }
   // container: {
   //   flex: 1,
   //   backgroundColor: '#F7F8FA',

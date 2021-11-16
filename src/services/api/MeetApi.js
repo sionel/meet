@@ -168,6 +168,8 @@ export default {
       const { resultData } = await response.json();
       return resultData;
     } catch (err) {
+      console.log(err);
+      debugger
       const errDetail = await err.json();
       console.warn('4.getMeetRoomsList : ', errDetail);
       return false;
@@ -202,6 +204,37 @@ export default {
       return false;
     }
   },
+
+
+  getUserList: async (auth, roomId) => {
+    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
+
+    // const url = `${config.baseTempApiHost}/user/userinfo/list`;
+ 
+    const url = `${meetURL}/room/connecting-user?cno=${cno}&room=${roomId}`;
+    const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
+
+    try {
+      const data = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          ...headers
+        }
+      };
+      const response = await fetch(url, data);
+      if (response.status !== 200) {
+        throw response;
+      }
+      const { resultData } = await response.json();
+      return resultData;
+    } catch (err) {
+      const errDetail = await err.json();
+      console.warn('3-?? 사용자 프로필 리스트 : ', errDetail);
+      return false;
+    }
+  },
+
 
   // 3-?? 회의 기록
   getMeetFinished: async (auth, start, end, offset, limit) => {

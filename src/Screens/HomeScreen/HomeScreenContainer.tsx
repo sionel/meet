@@ -11,7 +11,7 @@ import { RootState } from '../../redux/configureStore';
 import { actionCreators as UserActions } from '../../redux/modules/user';
 
 import HomeScreenPresenter from './HomeScreenPresenter';
-import { wehagoMainURL } from '../../utils';
+import { wehagoDummyImageURL, wehagoMainURL } from '../../utils';
 
 export default function HomeScreenContainer(props: any) {
   const [indicator, setIndicator] = useState(true);
@@ -21,27 +21,35 @@ export default function HomeScreenContainer(props: any) {
   const [highlight, setHighlight] = useState<'reservation' | 'finished' | null>(
     null
   );
+  const [conferenceInterval, setConferenceInterval] =
+    useState<NodeJS.Timeout>();
   //#region  selector
-  const { auth, userImg, companyName } = useSelector((state: RootState) => {
-    const { auth } = state.user;
-    return {
-      auth: auth,
-      userImg: wehagoMainURL + auth.profile_url,
-      companyName: auth.last_company.company_name_kr
-    };
-  });
+  const { auth, userImg, companyName, userName } = useSelector(
+    (state: RootState) => {
+      const { auth } = state.user;
+
+      return {
+        auth: auth,
+        userName: auth.user_name,
+        userImg: wehagoMainURL + auth.profile_url,
+        companyName: auth.last_company.company_name_kr
+      };
+    }
+  );
 
   const dispatch = useDispatch();
   const onAgreement = () => dispatch(UserActions.agreement());
   const onLogout = () => dispatch(UserActions.logout());
 
   useEffect(() => {
-    _getConoferences();
-    const reload = setInterval(() => {
-      _getConoferences();
-    }, 15000);
+    _getConferences();
+    _getFinishedConferences();
+    // const reload = setInterval(() => {
+    //   _getConferences();
+    // }, 15000);
+    // setConferenceInterval(reload);
     return () => {
-      clearInterval(reload);
+      conferenceInterval && clearInterval(conferenceInterval);
     };
   }, []);
 
@@ -54,99 +62,220 @@ export default function HomeScreenContainer(props: any) {
     setHighlight(now);
   }, [reservationConference, finishedConference]);
 
-  const _getConoferences = () => {
-    Promise.all([
-      MeetApi.getMeetRoomsList(auth).then(async result => {
-        const going: any[] = result.filter(
-          (conference: any) => !conference.r_start_date_time
-        );
-        const goingList = await Promise.all(
-          going.map(async (conference: any) => {
-            const startTime = new Date(conference.start_date_time)
-              .toLocaleTimeString()
-              .slice(0, 7);
-            const onMinte = Math.floor(
-              (new Date().getTime() - conference.start_date_time) / 1000 / 60
-            );
+  const _getFinishedConferences = () => {
+    MeetApi.getMeetFinished(auth, '2021-11-01', '2021-11-16', 0, 20).then(
+      async result => {
+        const finished = result.list;
+        const finishedConference = await Promise.all(
+          finished.map(async (conference: any) => {
+            const year = new Date(conference.start_date_time).getFullYear();
+            const month = new Date(conference.start_date_time).getMonth();
+            const day = new Date(conference.start_date_time).getDate();
+            const dateString = `${year}.${month}.${day}`;
+            const ampm = new Date(conference.start_date_time)
+              .toLocaleString('en')
+              .slice(-2);
+            const startTimeString = new Date(conference.start_date_time)
+              .toLocaleTimeString('en')
+              .slice(0, 4);
+            const endTimeString = new Date(conference.end_date_time)
+              .toLocaleTimeString('en')
+              .slice(0, 4);
+            const timeString = `${dateString}   ${startTimeString}${ampm} ~ ${endTimeString}${ampm}`;
 
-            const portalIdList = conference.connecting_user
+            const { hour, minutes } = conference.usage_time;
+            const usageTime = hour * 60 + minutes;
+            const users = conference.users;
+
+            const portalIdList = users
               .map((user: any) => user.user)
               .filter((user: any) => user);
             const participants: any[] = await MeetApi.getUserInfoList(
               auth,
               portalIdList
             );
-            // console.log(participants);
-            const tmp = participants.reduce<
+
+            const uriList = participants.reduce<
               { type: string; value: string | number }[]
             >((prev, present) => {
-              if (prev.length > 4) return prev;
+              if (prev.length > 2) return prev;
 
               let type;
               let value;
+              const uri = present.profile_url
+                ? wehagoMainURL + present.profile_url
+                : wehagoDummyImageURL;
 
-              if (participants.length <= 5) {
+              if (participants.length <= 3) {
                 type = 'string';
-                value = `https://www.wehago.com/${present.profile_url}`;
+                value = uri;
               } else {
-                type = prev.length < 4 ? 'string' : 'number';
-                value =
-                  prev.length < 4
-                    ? `https://www.wehago.com/${present.profile_url}`
-                    : participants.length - 4;
+                type = prev.length < 2 ? 'string' : 'number';
+                value = prev.length < 2 ? uri : participants.length - 2;
               }
 
               return [...prev, { type, value }];
             }, []);
+
+            const roomId = conference.t_room_id;
             const data = {
               conferenceName: conference.name,
-              startTime,
-              onMinte,
-              participants:tmp,
-              isLock: !conference.is_public,
-              onMoreClick: _moreClick
+              timeString,
+              usageTime,
+              users: uriList,
+              roomId,
+              finishedMoreClick: _finishedMoreClick
             };
             return data;
           })
         );
 
-        setOngoingConference(goingList);
+        setFinishedConference(finishedConference);
+      }
+    );
+  };
 
-        const reservation: any[] = result.filter(
-          (conference: any) => conference.r_start_date_time
-        );
-        const reservationList = reservation.map((conference: any, index) => {
+  const _getConferences = () => {
+    MeetApi.getMeetRoomsList(auth).then(async result => {
+      const going: any[] = result.filter(
+        (conference: any) => conference.is_started
+      );
+      const goingList = await Promise.all(
+        going.map(async (conference: any) => {
+          const startTime = new Date(
+            conference.start_date_time
+              ? conference.start_date_time
+              : conference.created_at
+          ).toLocaleTimeString('en');
+          const time = startTime.slice(-2) + ' ' + startTime.slice(0, 4);
+
+          const onMinte = Math.floor(
+            (new Date().getTime() -
+              (conference.start_date_time
+                ? conference.start_date_time
+                : conference.created_at)) /
+              1000 /
+              60
+          );
+
+          const connectingUser = await MeetApi.getUserList(
+            auth,
+            conference.room_id
+          );
+          const sortedConnectingUserList = connectingUser.sort(
+            (user: any, _user: any) => _user.is_master - user.is_master
+          );
+
+          const portalIdList = sortedConnectingUserList
+            .map((user: any) => user.user)
+            .filter((user: any) => user);
+
+          const participants: any[] = await MeetApi.getUserInfoList(
+            auth,
+            portalIdList
+          );
+
+          const sortedPortalIdList: any[] = portalIdList.map((id: any) => {
+            const item = participants.find(e => e.portal_id === id);
+            return item;
+          });
+
+          const uriList = sortedPortalIdList.reduce<
+            { type: string; value: string | number }[]
+          >((prev, present) => {
+            if (prev.length > 4) return prev;
+            let type;
+            let value;
+            const uri = present?.profile_url
+              ? wehagoMainURL + present.profile_url
+              : wehagoDummyImageURL;
+            if (participants.length <= 5) {
+              type = 'string';
+              value = uri;
+            } else {
+              type = prev.length < 4 ? 'string' : 'number';
+              value = prev.length < 4 ? uri : participants.length - 4;
+            }
+
+            return [...prev, { type, value }];
+          }, []);
+
+          const data = {
+            conferenceName: conference.name,
+            time,
+            onMinte,
+            participants: uriList,
+            isLock: !conference.is_public,
+            goingMoreClick: _goingMoreClick,
+            enterConference: _enterConference
+          };
+          return data;
+        })
+      );
+      setOngoingConference(goingList);
+
+      const reservation: any[] = result.filter(
+        (conference: any) => !conference.is_started
+      );
+
+      const reservationList = await Promise.all(
+        reservation.map(async (conference: any, index: number) => {
+          const portalIdList = conference.access_user
+            .map((user: any) => user.portal_id)
+            .filter((user: any) => user);
+
+          const participants: any[] = await MeetApi.getUserInfoList(
+            auth,
+            portalIdList
+          );
+
+          const uriList = participants.reduce<
+            { type: string; value: string | number }[]
+          >((prev, present) => {
+            if (prev.length > 2) return prev;
+
+            let type;
+            let value;
+            const uri = present.profile_url
+              ? wehagoMainURL + present.profile_url
+              : wehagoDummyImageURL;
+            if (participants.length <= 3) {
+              type = 'string';
+              value = uri;
+            } else {
+              type = prev.length < 2 ? 'string' : 'number';
+              value = prev.length < 2 ? uri : participants.length - 2;
+            }
+
+            return [...prev, { type, value }];
+          }, []);
+
           const data = {
             roomName: conference.name,
             date: new Date(conference.r_start_date_time).toLocaleDateString(),
             start: new Date(conference.r_start_date_time).toLocaleTimeString(),
             end: new Date(conference.r_end_date_time).toLocaleTimeString(),
-            users: conference.access_user,
+            users: uriList,
             roomId: conference.room_id,
             isPublic: conference.is_public,
-            onClick: () => {},
+            reservationMoreClick: _reservationMoreClick,
             key: index
           };
           return data;
-        });
+        })
+      );
 
-        setReservationConference(reservationList);
-      }),
-      MeetApi.getMeetFinished(auth, '2021-11-01', '2021-11-12', 0, 20).then(
-        result => {
-          const finished = result.list;
-          setFinishedConference(finished);
-        }
-      )
-    ]).then(() => {
-      setIndicator(false);
+      setReservationConference(reservationList);
     });
   };
-  const _moreClick = () => {};
-
+  const _goingMoreClick = (roomId: string) => {};
+  const _reservationMoreClick = (roomId: string) => {};
+  const _finishedMoreClick = (roomId: string) => {};
+  const _enterConference = (roomId: string) => {};
   return (
     <HomeScreenPresenter
       {...{
+        userName,
         indicator,
         ongoingConference,
         reservationConference,
@@ -154,7 +283,8 @@ export default function HomeScreenContainer(props: any) {
         highlight,
         setHighlight,
         userImg,
-        companyName
+        companyName,
+        test:_getConferences
       }}
     />
   );

@@ -1,14 +1,30 @@
 import React from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
 
 const icMore = require('../../../../assets/new/icons/ic_more.png');
 const icLockBlack = require('../../../../assets/new/icons/ic_lock_black.png');
 
-export default function ConferenceBox(props: any) {
+interface ReservationCardProps {
+  roomName: string;
+  date: string;
+  start: string;
+  end: string;
+  users: [];
+  roomId: string;
+  isPublic: boolean;
+  reservationMoreClick: (roomId: string) => void;
+}
+
+export default function ConferenceBox(props: ReservationCardProps) {
   const {
-    data: {
-      item: { roomName, date, start, end, users, roomId, isPublic, key }
-    }
+    roomName,
+    date,
+    start,
+    end,
+    users,
+    roomId,
+    isPublic,
+    reservationMoreClick
   } = props;
 
   return (
@@ -59,77 +75,61 @@ export default function ConferenceBox(props: any) {
             justifyContent: 'center'
           }}
         >
-          <Text>{date + '\n' + start + " ~ "+ end}</Text>
+          <Text>{date + '\n' + start + ' ~ ' + end}</Text>
         </View>
       </View>
-      <View
+      <TouchableOpacity
         style={{
-          flex: 1,
+          width: '35%',
+          flexDirection: 'row',
           alignItems: 'center',
-          justifyContent: 'center',
-          flexDirection: 'row'
+          justifyContent: 'space-between'
         }}
+        onPress={() => reservationMoreClick(roomId)}
       >
         <View
           style={{
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexDirection: 'row-reverse'
-            // flex:1
-            // alignContent:'space-around'
-            // alignSelf:'center'
+            flex: 1,
+            flexDirection: 'row',
+            alignItems: 'center'
           }}
         >
-          <Image
-            source={{
-              uri: 'https://www.wehago.com/uploads/profile/338136/hejevjsiwr.jpg'
-            }}
-            resizeMode={'center'}
-            style={{
-              height: 45,
-              width: 45,
-              borderRadius: 45,
-              left: 0,
-              borderColor: '#fff',
-              borderWidth: 2
-            }}
-          />
-          <Image
-            source={{
-              uri: 'https://www.wehago.com/uploads/profile/338136/hejevjsiwr.jpg'
-            }}
-            resizeMode={'center'}
-            style={{
-              height: 45,
-              width: 45,
-              borderRadius: 45,
-              left: -10,
-              borderColor: '#fff',
-              borderWidth: 2
-            }}
-          />
-          <Image
-            source={{
-              uri: 'https://www.wehago.com/uploads/profile/338136/hejevjsiwr.jpg'
-            }}
-            resizeMode={'center'}
-            style={{
-              height: 45,
-              width: 45,
-              borderRadius: 45,
-              left: -20,
-              borderColor: '#fff',
-              borderWidth: 2
-            }}
-          />
+          {users.map((user: { type: string | number; value: string }) => {
+            return user.type === 'string' ? (
+              <Image
+                source={{
+                  uri: user.value
+                }}
+                resizeMode={'cover'}
+                style={{
+                  height: 30,
+                  width: 30,
+                  borderRadius: 30
+                }}
+              />
+            ) : (
+              <View
+                style={{
+                  backgroundColor: '#e9f5ff',
+                  height: 30,
+                  width: 30,
+                  borderRadius: 30,
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                <Text>{'+' + user.value}</Text>
+              </View>
+            );
+          })}
         </View>
 
         <Image
           source={icMore}
           resizeMode={'contain'}
-          style={{ height: 30, width: 30, marginRight: 3 }}
+          style={{ height: 30, width: 30 }}
         />
-      </View>
+      </TouchableOpacity>
     </View>
   );
 }
