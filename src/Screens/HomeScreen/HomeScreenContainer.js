@@ -341,6 +341,8 @@ class HomeScreenContainer extends Component {
       }
       this.props.setDestination('Login');
       this.props.onLogout();
+      this.props.resetDeployedServices();
+
     } else {
       this._handleGetWetalkList();
     }

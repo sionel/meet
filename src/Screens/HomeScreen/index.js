@@ -46,6 +46,7 @@ const mapDispatchToProps = dispatch => ({
   setAlert: params => dispatch(AlertAcions.setAlert(params)),
   setDeployedServices: params =>
     dispatch(DeployedAcions.setDeployedServices(params)),
+  resetDeployedServices: () => dispatch(DeployedAcions.resetDeployedServices()),
   setDestination: destination =>
     dispatch(RootActions.setDestination(destination)),
   eventLog: event => dispatch(UserActions.eventLog(event)),
