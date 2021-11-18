@@ -1,5 +1,11 @@
 import React, { Component, useEffect, useRef, useState } from 'react';
-import { Platform, Linking, BackHandler, Alert } from 'react-native';
+import {
+  Platform,
+  Linking,
+  BackHandler,
+  Alert,
+  ToastAndroid
+} from 'react-native';
 
 import { getT } from '../../utils/translateManager';
 
@@ -47,7 +53,10 @@ export default function HomeScreenContainer(props: any) {
     onClickOutside: () => {}
   });
 
-  const ref = useRef({ reservationConference });
+  // let timeout: any = null;
+  // let exitApp = false;
+
+  const ref = useRef({ reservationConference, timeout, exitApp : false });
   // ref.current.reservationConference = reservationConference
   //#region  selector
   const { auth, userImg, companyName, userName, portalId } = useSelector(
@@ -71,12 +80,15 @@ export default function HomeScreenContainer(props: any) {
   useEffect(() => {
     _getConferences();
     _getFinishedConferences();
+    BackHandler.addEventListener('hardwareBackPress', _handleBackButton);
+
     // const reload = setInterval(() => {
     //   _getConferences();
     // }, 15000);
     // setConferenceInterval(reload);
     return () => {
       conferenceInterval && clearInterval(conferenceInterval);
+      BackHandler.removeEventListener('hardwareBackPress', _handleBackButton);
     };
   }, []);
 
@@ -89,6 +101,25 @@ export default function HomeScreenContainer(props: any) {
     setHighlight(now);
     ref.current.reservationConference = reservationConference;
   }, [reservationConference, finishedConference]);
+
+  const _handleBackButton = () => {
+    // if(this.props.navigation)
+    // if (!this.props.navigation.isFocused()) return false;
+    // this.props.navigation.closeDrawer();
+
+    // 1000(1초) 안에 back 버튼을 한번 더 클릭 할 경우 앱 종료
+    if (!ref.current.exitApp) {
+      ToastAndroid.show('한번더 누르면 앱이 종료됩니다', ToastAndroid.SHORT);
+      ref.current.exitApp = true;
+      ref.current.timeout = setTimeout(() => {
+        ref.current.exitApp = false;
+      }, 1000);
+    } else {
+      clearTimeout(ref.current.timeout);
+      BackHandler.exitApp(); // 앱 종료
+    }
+    return true;
+  };
 
   const _getFinishedConferences = () => {
     MeetApi.getMeetFinished(auth, '2021-11-01', '2021-11-30', 0, 20).then(

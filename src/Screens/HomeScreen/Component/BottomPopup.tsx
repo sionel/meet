@@ -8,6 +8,7 @@ import {
   Image,
   ImageSourcePropType
 } from 'react-native';
+// import {Text,TextInput} from '../../../components/StyledText';
 const { width, height } = Dimensions.get('window');
 const icPerson = require('../../../../assets/new/icons/ic_user.png');
 
@@ -26,6 +27,7 @@ interface BottomPopupProps {
 
 export default function BottomPopup(props: BottomPopupProps) {
   const { title, contentList, onClickOutside } = props;
+  // <StyledText></StyledText>
   return (
     <View
       style={{
@@ -41,10 +43,17 @@ export default function BottomPopup(props: BottomPopupProps) {
         onPress={onClickOutside}
       />
 
-      <View style={{ backgroundColor: '#fff', borderRadius: 20 }}>
+      <View
+        style={{
+          backgroundColor: '#fff',
+          borderTopLeftRadius: 20,
+          borderTopRightRadius: 20
+        }}
+      >
         <View
           style={{
             marginTop: 25,
+            marginBottom: 10,
             paddingBottom: 10,
             height: 40,
             alignItems: 'center',
@@ -52,7 +61,15 @@ export default function BottomPopup(props: BottomPopupProps) {
             borderColor: '#e6e6e6'
           }}
         >
-          <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{title}</Text>
+          <Text
+            douzone={5}
+            style={{
+              fontSize: 20,
+              fontFamily: 'DOUZONEText50'
+            }}
+          >
+            {title}
+          </Text>
         </View>
         {contentList.map(content => (
           <TouchableOpacity
@@ -74,10 +91,9 @@ export default function BottomPopup(props: BottomPopupProps) {
             />
             <Text
               style={{
-                fontSize: 20,
-                // fontWeight: '500',
+                fontSize: 18,
                 flex: 1,
-                // fontFamily: 'DOUZONEText50'
+                fontFamily: 'DOUZONEText30'
               }}
               numberOfLines={1}
             >
@@ -93,7 +109,7 @@ export default function BottomPopup(props: BottomPopupProps) {
           </TouchableOpacity>
         ))}
 
-        <View style={{ height: 50 }}></View>
+        <View style={{ height: 20 }}></View>
       </View>
     </View>
   );

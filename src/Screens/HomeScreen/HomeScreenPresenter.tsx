@@ -63,7 +63,7 @@ const HomeScreenPresenter = (props: any) => {
   const t = getT();
   return (
     <SafeAreaView style={styles.safeContainer}>
-      <StatusBar barStyle={'dark-content'} />
+      <StatusBar barStyle={'dark-content'} backgroundColor={'#F7F8FA'} />
       {/* 헤더 */}
       <View style={styles.header}>
         <Image source={loginLogo} style={styles.logo} resizeMode={'contain'} />
