@@ -19,16 +19,16 @@ import { CustomIcon } from '../../components';
 
 import { wehagoMainURL, wehagoDummyImageURL } from '../../utils';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { last } from 'lodash';
+import { last, parseInt } from 'lodash';
 import LinearGradient from 'react-native-linear-gradient';
 
 const ic_code = require('../../../assets/new/icons/ic_code.png');
-const ic_lock = require('../../../assets/new/icons/ic_lock_wh.png');
+const ic_lock = require('../../../assets/new/icons/ic_lock_w.png');
 const ic_person_plus = require('../../../assets/new/icons/ic_person_plus.png');
 // const ic_master = require('../../../assets/new/icons/ic_master.png');
 // const ic_person = require('../../../assets/new/icons/ic_person.png');
 const ic_cancel = require('../../../assets/new/icons/ic_cancel.png');
-const ic_cancel_wh = require('../../../assets/new/icons/ic_cancel_wh.png');
+const ic_cancel_w = require('../../../assets/new/icons/ic_cancel_w.png');
 const ic_check_black = require('../../../assets/new/icons/ic_check_black.png');
 const ic_master_circle = require('../../../assets/new/icons/ic_master_circle.png');
 const ic_attd_circle = require('../../../assets/new/icons/ic_attd_circle.png');
@@ -80,49 +80,14 @@ const CreateMeetScreenPresenter = (props: any) => {
     exitDateTime,
     clickChangeRole,
     clickDeleteUser,
-    selectedEmployee,
+    selectedEmployee
   } = props;
   const t = getT();
 
-  // console.log(selectedEmployee);
-  
   const TimePickerComponent = (
     <View
       style={{ marginTop: 20, justifyContent: 'center', alignItems: 'center' }}
     >
-      {/* <View style={{ flexDirection: 'row' }}>
-        <View style={{ flex: 1 }}></View>
-        <Text
-          style={{
-            flex: 1,
-            textAlign: 'center',
-            alignItems: 'center',
-            fontSize: 24,
-            fontWeight: 'bold'
-          }}
-        >
-          {'시간설정'}
-        </Text>
-        <TouchableOpacity
-          onPress={() => onTimeConfirm()}
-          style={{
-            flex: 1,
-            alignItems: 'flex-end',
-            justifyContent: 'center'
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 20,
-              marginRight: 20,
-              color: '#1C90FB',
-              fontWeight: 'bold'
-            }}
-          >
-            {'완료'}
-          </Text>
-        </TouchableOpacity>
-      </View> */}
       <DatePicker
         onDateChange={time => timeChange(time)}
         mode={'time'}
@@ -468,7 +433,7 @@ const CreateMeetScreenPresenter = (props: any) => {
             <View style={{ flexDirection: 'row' }}>
               <Text style={styles.ft14B}>{t('참석자')} </Text>
               <Text style={[styles.ft14B, { color: '#1c90fb' }]}>
-                {participantList.length}
+                {selectedEmployee.member.length}
               </Text>
             </View>
             <TouchableOpacity
@@ -497,115 +462,119 @@ const CreateMeetScreenPresenter = (props: any) => {
             />
           </View>
           <View style={{ flex: 1 }}>
-            <FlatList
-              showsVerticalScrollIndicator={false}
-              bounces={false}
-              contentContainerStyle={{
-                flexGrow: 1,
-                paddingLeft: '5%',
-                paddingRight: '5%'
-              }}
-              data={Object.values(selectedEmployee.member)}
-              keyExtractor={(item, index) => String(index)}
-              renderItem={({ item, index }: any) => {
-                console.log('user_no');
-                console.log(Object.values(item));
-                
-                let path: [] = item['user_no'].full_path.split('>');
-                let user_path = '';
-                for (let i = 1; i < path.length; i++) {
-                  if (i === path.length - 1) {
-                    user_path = user_path + path[i];
-                  } else {
-                    user_path = user_path + `${path[i]} | `;
+            {selectedEmployee.member[0].user_no !== undefined && (
+              <FlatList
+                showsVerticalScrollIndicator={false}
+                bounces={false}
+                contentContainerStyle={{
+                  flexGrow: 1,
+                  paddingLeft: '5%',
+                  paddingRight: '5%'
+                }}
+                data={selectedEmployee.member}
+                keyExtractor={(item, index) => String(index)}
+                renderItem={({ item, index }: any) => {
+                  let path: [] = item.full_path.split('>');
+
+                  let user_path = '';
+                  for (let i = 1; i < path.length; i++) {
+                    if (i === path.length - 1) {
+                      user_path = user_path + path[i];
+                    } else {
+                      user_path = user_path + `${path[i]} | `;
+                    }
                   }
-                }
 
-                // console.log(participantList[index]);
-                
-                const isSelected = participantList[index].is_master;
-          
-                return (
-                  <View style={styles.participantList}>
-                    <View style={styles.profileView}>
-                      <View
-                        style={[
-                          styles.myView,
-                          item.user_no !== auth.user_no && {
-                            backgroundColor: '#1c90fb'
-                          }
-                        ]}
-                      >
-                        {item.user_no === auth.user_no ? (
-                          <Text style={styles.myText}>나</Text>
-                        ) : (
-                          <TouchableOpacity onPress={()=> {clickDeleteUser(index)}}>
-                            <Image
-                              source={ic_cancel_wh}
-                              style={styles.icCancelUser}
-                            />
-                          </TouchableOpacity>
-                        )}
+                  const isSelected = item.is_master;
+
+                  return (
+                    <View style={styles.participantList}>
+                      <View style={styles.profileView}>
+                        <View
+                          style={[
+                            styles.myView,
+                            item.user_no !== auth.user_no && {
+                              backgroundColor: '#1c90fb'
+                            }
+                          ]}
+                        >
+                          {item.user_no === auth.user_no ? (
+                            <Text style={styles.myText}>나</Text>
+                          ) : (
+                            <TouchableOpacity
+                              onPress={() => {
+                                clickDeleteUser(item);
+                              }}
+                            >
+                              <Image
+                                source={ic_cancel_w}
+                                style={styles.icCancelUser}
+                              />
+                            </TouchableOpacity>
+                          )}
+                        </View>
+                        <Image
+                          style={styles.profile}
+                          source={{
+                            uri: item.profile_url
+                              ? wehagoMainURL + item.profile_url
+                              : wehagoDummyImageURL
+                          }}
+                          resizeMode={'cover'}
+                        />
                       </View>
-                      <Image
-                        style={styles.profile}
-                        source={{
-                          uri: item.profile_url
-                            ? wehagoMainURL + item.profile_url
-                            : wehagoDummyImageURL
+                      <View style={[styles.infoBox]}>
+                        <Text style={styles.name}>
+                          {item.user_name} {item.rank_name}
+                        </Text>
+                        <Text
+                          numberOfLines={1}
+                          ellipsizeMode="tail"
+                          style={styles.tree}
+                        >
+                          {user_path}
+                        </Text>
+                      </View>
+                      <TouchableOpacity
+                        style={[
+                          styles.roleContainer,
+                          isSelected && { borderColor: '#01acc1' }
+                        ]}
+                        onPress={() => {
+                          clickChangeRole(item);
                         }}
-                        resizeMode={'cover'}
-                      />
-                    </View>
-                    <View style={[styles.infoBox]}>
-                      <Text style={styles.name}>
-                        {item.user_name} {item.rank_name}
-                      </Text>
-                      <Text
-                        numberOfLines={1}
-                        ellipsizeMode="tail"
-                        style={styles.tree}
+                        disabled={item.user_no === auth.user_no}
                       >
-                        {user_path}
-                      </Text>
-                    </View>
-                    <TouchableOpacity
-                      style={[
-                        styles.roleContainer,
-                        isSelected && { borderColor: '#01acc1' }
-                      ]}
-                      onPress={() => {
-                        clickChangeRole(index, item);
-                      }}
-                      disabled={item.user_no === auth.user_no}
-                    >
-                      {isSelected ? (
-                        <>
-                          <Text style={styles.maseterText}>{t('마스터')}</Text>
-                          <Image
-                            style={styles.icMaster}
-                            source={ic_master_circle}
-                            resizeMode={'contain'}
-                          />
-                        </>
-                      ) : (
-                        <>
-                          <Image
-                            style={styles.icMaster}
-                            source={ic_attd_circle}
-                            resizeMode={'contain'}
-                          />
+                        {isSelected ? (
+                          <>
+                            <Text style={styles.maseterText}>
+                              {t('마스터')}
+                            </Text>
+                            <Image
+                              style={styles.icMaster}
+                              source={ic_master_circle}
+                              resizeMode={'contain'}
+                            />
+                          </>
+                        ) : (
+                          <>
+                            <Image
+                              style={styles.icMaster}
+                              source={ic_attd_circle}
+                              resizeMode={'contain'}
+                            />
 
-                          <Text style={styles.attendantText}>
-                            {t('참석자')}
-                          </Text>
-                        </>
-                      )}
-                    </TouchableOpacity>
-                  </View>
-                );
-              }}
-            />
+                            <Text style={styles.attendantText}>
+                              {t('참석자')}
+                            </Text>
+                          </>
+                        )}
+                      </TouchableOpacity>
+                    </View>
+                  );
+                }}
+              />
+            )}
           </View>
         </View>
       </View>
@@ -637,7 +606,7 @@ const CreateMeetScreenPresenter = (props: any) => {
             }}
           >
             <TouchableOpacity onPress={exitDateTime}>
-              <Image source={ic_cancel_wh} style={styles.icCancel} />
+              <Image source={ic_cancel_w} style={styles.icCancel} />
             </TouchableOpacity>
 
             <TouchableOpacity onPress={onTimeConfirm}>
@@ -825,7 +794,7 @@ const styles = StyleSheet.create({
   icCancelUser: {
     resizeMode: 'cover',
     width: 14,
-    height: 14,
+    height: 14
   },
   icMaster: { width: '25%', height: 20 },
   roleContainer: {

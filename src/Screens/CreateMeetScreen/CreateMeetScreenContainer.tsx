@@ -55,9 +55,11 @@ export default function CreateMeetScreenContainer(props: any) {
   const titleRef: RefObject<any> = useRef();
   const sendMsgRef: RefObject<any> = useRef();
   const [selectedEmployee, setSelectedEmployee] = useState({
-    member: {},
+    member: [{}],
     group: {}
   });
+
+  const [listLng, setListLng] = useState(1);
   const [sendMessage, setSendMessage] = useState('');
   const [sendMsgCnt, setSendMsgCnt] = useState(0);
   const [participantList, setParticipantList] = useState<any[]>([]);
@@ -130,15 +132,15 @@ export default function CreateMeetScreenContainer(props: any) {
     if (1 < roomName.length) {
       let arr: any[] = [{}];
       arr.pop();
-      participantList.map((values: any) => {
+      Object.values(selectedEmployee.member).map((value: any) => {
         // type에 따라 access_user에 받는게 다름
         // type: portal_id, email
-        if (values.user_no !== auth.user_no) {
+        if (value.user_no !== auth.user_no) {
           arr.push({
             type: 'portal_id',
-            value: values.portal_id,
-            is_master: values.is_master,
-            user_name: values.user_name
+            value: value.portal_id,
+            is_master: value.is_master,
+            user_name: value.user_name
           });
         }
       });
@@ -187,8 +189,6 @@ export default function CreateMeetScreenContainer(props: any) {
           end_date_time: end_time
         };
       }
-
-      // console.log(params);
 
       const result = await MeetApi.createMeetRoom(auth, params);
       if (result) {
@@ -297,8 +297,6 @@ export default function CreateMeetScreenContainer(props: any) {
 
   const onDateChange = (date: any) => {
     let obj = getDate(new Date(date));
-    // console.log(obj);
-    // console.log(startTime);
 
     if (timeType === 'start') {
       obj.current.setHours(startTime.current.getHours());
@@ -368,16 +366,19 @@ export default function CreateMeetScreenContainer(props: any) {
   useEffect(() => {
     setSelectMode(false);
     getAllEmployee();
-    setParticipantList([
-      {
-        user_name: auth.user_name,
-        rank_name: auth.last_company.rank_name,
-        profile_url: auth.profile_url,
-        full_path: auth.last_company.full_path,
-        user_no: auth.user_no,
-        is_master: true,
-      }
-    ]);
+    setSelectedEmployee({
+      member: [
+        {
+          user_name: auth.user_name,
+          rank_name: auth.last_company.rank_name,
+          profile_url: auth.profile_url,
+          full_path: auth.last_company.full_path,
+          user_no: auth.user_no,
+          is_master: true
+        }
+      ],
+      group: {}
+    });
   }, []);
 
   const roomNameChange = (name: string) => {
@@ -402,7 +403,7 @@ export default function CreateMeetScreenContainer(props: any) {
 
   const onFocusOut = () => {
     if (sendMsgRef.current.isFocused()) sendMsgRef.current.blur();
-    else if (titleRef.current.isFocused()) titleRef.current.blur();   
+    else if (titleRef.current.isFocused()) titleRef.current.blur();
   };
 
   const exitDateTime = () => {
@@ -414,21 +415,45 @@ export default function CreateMeetScreenContainer(props: any) {
     }
   };
 
-  const clickChangeRole = (index:number) => {
-    const newList = [...participantList];
-    newList[index]['is_master'] = !newList[index]['is_master'];
-    setParticipantList(newList);
-  }
+  const clickChangeRole = (item: any) => {
+    const resList: any[] = [];
 
-  const clickDeleteUser = (index:number) => {
-    const newList = [...participantList];
-    const tmpList = newList.filter((v,i)=>i !== index)
+    const updateList: any[] = selectedEmployee.member;
+    let idx: number = updateList.findIndex(
+      (i: any) => i.user_no === item.user_no
+    );
+    updateList[idx].is_master = !updateList[idx].is_master;
 
-    // delete newList[index];
-    // console.log(tmp);
-    
-    setParticipantList(tmpList);
-  }
+    const roomMaster: any[] = updateList[0];
+    resList.push(roomMaster);
+
+    const userList: any[] = updateList.filter((v: any, i: number) => i !== 0);
+
+    const masterList: any[] = userList.filter(
+      (v: any, i) => v.is_master === true
+    );
+    const masterUserNoOrderList: any[] = masterList.sort((a: any, b: any) => {
+      return a.user_no - b.user_no;
+    });
+    masterUserNoOrderList.map(v => resList.push(v));
+
+    const partList: any[] = userList.filter(
+      (v: any, i) => v.is_master !== true
+    );
+    const partListUserNoOrderList: any[] = partList.sort((a: any, b: any) => {
+      return a.user_no - b.user_no;
+    });
+    partListUserNoOrderList.map(v => resList.push(v));
+
+    setSelectedEmployee({ member: resList, group: {} });
+  };
+
+  const clickDeleteUser = (item: any) => {
+    const newList: any[] = selectedEmployee.member;
+    let idx = newList.findIndex((i: any) => i.user_no === item.user_no);
+    const updateList: any[] = newList.filter((v, i) => i !== idx);
+    setSelectedEmployee({ member: updateList, group: {} });
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -446,6 +471,8 @@ export default function CreateMeetScreenContainer(props: any) {
           setInviteText={setInviteText}
           participantList={participantList}
           setParticipantList={setParticipantList}
+          listLng={listLng}
+          setListLng={setListLng}
         />
       ) : (
         <CreateMeetScreenPresenter

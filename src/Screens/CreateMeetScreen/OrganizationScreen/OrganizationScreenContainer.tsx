@@ -5,6 +5,7 @@ import { RootState } from '../../../redux/configureStore';
 import { getT } from '../../../utils/translateManager';
 import { OrganizationApi } from '../../../services';
 import OrganizationScreenPresenter from './OrganizationScreenPresenter';
+import { values } from 'lodash';
 
 const OrganizationScreenContainer = (props: any) => {
   const {
@@ -18,7 +19,9 @@ const OrganizationScreenContainer = (props: any) => {
     setInviteText,
     // participantList,
     setParticipantList,
-    setSelectMode
+    setSelectMode,
+    listLng,
+    setListLng
   } = props;
 
   const [keyword, setKeyword] = useState('');
@@ -98,7 +101,7 @@ const OrganizationScreenContainer = (props: any) => {
 
     if (result.error) {
       //   Alert.alert('조직도', '조직도를 가져올 수 없습니다.');
-      console.log('조직도를 가져올 수 없습니다.1');
+      console.log('조직도를 가져올 수 없습니다.');
     } else {
       const member = result;
 
@@ -116,7 +119,7 @@ const OrganizationScreenContainer = (props: any) => {
     const result = await OrganizationApi.getContactsList(auth);
     if (result.error || !result) {
       //   Alert.alert('조직도', '조직도를 가져올 수 없습니다.');
-      console.log('조직도를 가져올 수 없습니다.2');
+      console.log('조직도를 가져올 수 없습니다.');
 
       //   props.navigation.pop();
       // 생성하기 화면으로
@@ -146,14 +149,18 @@ const OrganizationScreenContainer = (props: any) => {
   const selectEmployee = (type: string, item: any) => {
     // 조직원 선택 시
     if (type === 'member') {
-      const newItem = JSON.parse(JSON.stringify(selectedEmployee.member));
-      if (newItem[item.user_no]) {
-        delete newItem[item.user_no];
+      const newList: any[] = selectedEmployee.member;
+      let tmpList: any[] = [];
+      let idx = newList.findIndex((i: any) => i.user_no === item.user_no);
+
+      if (idx !== -1) {
+        tmpList = newList.filter((v, i) => i !== idx);
       } else {
-        newItem[item.user_no] = item;
+        item.is_master = false;
+        newList.push(item);
       }
       setSelectedEmployee({
-        member: newItem,
+        member: idx === -1 ? newList : tmpList,
         group: selectedEmployee.group
       });
     } else {
@@ -182,27 +189,27 @@ const OrganizationScreenContainer = (props: any) => {
   };
 
   const participantListAdd = () => {
-    let arr: any[] = [];
-    Object.values(selectedEmployee.member).map((value: any) => {
-      arr.push({ [value.user_no]: { ...value, is_master: false }});
-    });
-    arr.unshift({
-      [auth.user_no]: {
-        user_name: auth.user_name,
-        rank_name: auth.last_company.rank_name,
-        profile_url: auth.profile_url,
-        full_path: auth.last_company.full_path,
-        user_no: auth.user_no,
-        is_master: true
-      }
-    });
+    setListLng(Object.keys(selectedEmployee.member).length);
+    const newList = selectedEmployee.member;
+    const roomMaster = newList[0];
+    // 방 생서 제외한 유저리스트 선언
+    const userList = newList.filter((v: any, i: number) => i !== 0);
+    // 참석자 넘겨줄 리스트 선언
+    const resList: any[] = [];
+    // 방생성자 정보 먼저 넘김
+    resList.push(roomMaster);
 
-    console.log(arr);
-    
-    setSelectedEmployee({
-      member: arr,
-      group: selectedEmployee.group
-    })
+    // 사번별 정렬된 리스트 선언
+    const userNoOrderList: any[] = userList.sort((a: any, b: any) => {
+      return a.user_no - b.user_no;
+    });
+    userNoOrderList.map(value => resList.push(value));
+
+    setSelectedEmployee({ member: resList, group: {} });
+    setSelectMode(false);
+  };
+
+  const onClickCancel = () => {
     setSelectMode(false);
   };
 
@@ -259,7 +266,9 @@ const OrganizationScreenContainer = (props: any) => {
       spin={spin}
       t={t}
       participantListAdd={participantListAdd}
+      onClickCancel={onClickCancel}
       auth={auth}
+      listLng={listLng}
     />
   );
 };
