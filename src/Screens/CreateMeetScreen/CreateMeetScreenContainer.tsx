@@ -60,7 +60,7 @@ export default function CreateMeetScreenContainer(props: any) {
   });
   const [sendMessage, setSendMessage] = useState('');
   const [sendMsgCnt, setSendMsgCnt] = useState(0);
-  const [participantList, setParticipantList] = useState<{}[]>([]);
+  const [participantList, setParticipantList] = useState<any[]>([]);
   const [textLess2, setTextLess2] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const { auth } = useSelector((state: any) => state.user);
@@ -137,7 +137,7 @@ export default function CreateMeetScreenContainer(props: any) {
           arr.push({
             type: 'portal_id',
             value: values.portal_id,
-            is_master: false,
+            is_master: values.is_master,
             user_name: values.user_name
           });
         }
@@ -374,7 +374,8 @@ export default function CreateMeetScreenContainer(props: any) {
         rank_name: auth.last_company.rank_name,
         profile_url: auth.profile_url,
         full_path: auth.last_company.full_path,
-        user_no: auth.user_no
+        user_no: auth.user_no,
+        is_master: true,
       }
     ]);
   }, []);
@@ -399,16 +400,9 @@ export default function CreateMeetScreenContainer(props: any) {
     props.navigation.goBack();
   };
 
-  // const focusBlur = () => {
-
-  // };
-
   const onFocusOut = () => {
     if (sendMsgRef.current.isFocused()) sendMsgRef.current.blur();
-    else if (titleRef.current.isFocused()) titleRef.current.blur();
-
-    
-    
+    else if (titleRef.current.isFocused()) titleRef.current.blur();   
   };
 
   const exitDateTime = () => {
@@ -419,6 +413,22 @@ export default function CreateMeetScreenContainer(props: any) {
       setTimePicker('none');
     }
   };
+
+  const clickChangeRole = (index:number) => {
+    const newList = [...participantList];
+    newList[index]['is_master'] = !newList[index]['is_master'];
+    setParticipantList(newList);
+  }
+
+  const clickDeleteUser = (index:number) => {
+    const newList = [...participantList];
+    const tmpList = newList.filter((v,i)=>i !== index)
+
+    // delete newList[index];
+    // console.log(tmp);
+    
+    setParticipantList(tmpList);
+  }
 
   return (
     <View style={{ flex: 1 }}>
@@ -480,6 +490,9 @@ export default function CreateMeetScreenContainer(props: any) {
           timeChangeDetect={timeChangeDetect}
           timeChange={timeChange}
           exitDateTime={exitDateTime}
+          clickChangeRole={clickChangeRole}
+          clickDeleteUser={clickDeleteUser}
+          selectedEmployee={selectedEmployee}
         />
       )}
     </View>

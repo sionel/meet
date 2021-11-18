@@ -183,20 +183,26 @@ const OrganizationScreenContainer = (props: any) => {
 
   const participantListAdd = () => {
     let arr: any[] = [];
-
     Object.values(selectedEmployee.member).map((value: any) => {
-      // if (value.user_no !== auth.user_no) {
-      // }
-      arr.push(value);
+      arr.push({ [value.user_no]: { ...value, is_master: false }});
     });
     arr.unshift({
-      user_name: auth.user_name,
-      rank_name: auth.last_company.rank_name,
-      profile_url: auth.profile_url,
-      full_path: auth.last_company.full_path,
-      user_no: auth.user_no
+      [auth.user_no]: {
+        user_name: auth.user_name,
+        rank_name: auth.last_company.rank_name,
+        profile_url: auth.profile_url,
+        full_path: auth.last_company.full_path,
+        user_no: auth.user_no,
+        is_master: true
+      }
     });
-    setParticipantList(arr);
+
+    console.log(arr);
+    
+    setSelectedEmployee({
+      member: arr,
+      group: selectedEmployee.group
+    })
     setSelectMode(false);
   };
 

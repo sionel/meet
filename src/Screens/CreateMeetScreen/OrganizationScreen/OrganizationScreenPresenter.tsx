@@ -19,6 +19,12 @@ import CustomCheckBox from '../../../components/renewal/CustomCheckBox';
 import { CustomIcon } from '../../../components';
 import { wehagoDummyImageURL, wehagoMainURL } from '../../../utils';
 
+const ic_cancel = require('../../../../assets/new/icons/ic_cancel_wh.png');
+const ic_building = require('../../../../assets/new/icons/ic_build.png');
+const ic_arrow_up = require('../../../../assets/new/icons/ic_arrow_up.png');
+const ic_arrow_down = require('../../../../assets/new/icons/ic_arrow_down.png');
+const ic_person = require('../../../../assets/new/icons/ic_person.png');
+
 const OrganizationScreenPresenter = (props: any) => {
   const {
     contacts,
@@ -45,7 +51,7 @@ const OrganizationScreenPresenter = (props: any) => {
     spin,
     t,
     participantListAdd,
-    auth,
+    auth
   } = props;
   const OrganizationFlatList = (
     data: any[],
@@ -68,6 +74,7 @@ const OrganizationScreenPresenter = (props: any) => {
             type === 'group' && selectedEmployee.group[item.organization_no];
           // 그래서 선택이 되었느냐
           const isSelected = isEmployeeSelected || isGroupSelected;
+
           return (
             <View
               style={{
@@ -77,6 +84,7 @@ const OrganizationScreenPresenter = (props: any) => {
               key={index}
             >
               <TouchableHighlight
+                disabled={item.user_no === auth.user_no}
                 style={{ flexDirection: 'row' }}
                 underlayColor={'#e9f5ff'}
                 onPress={() => {
@@ -111,35 +119,48 @@ const OrganizationScreenPresenter = (props: any) => {
                   >
                     <View
                       style={[
-                        { flexDirection: 'row', alignItems: 'center' },
-                        (isParentSelected || isSelected) && styles.selectedItem
+                        { flexDirection: 'row', alignItems: 'center' }
+                        // (isParentSelected || isSelected) && styles.selectedItem
                       ]}
                     >
-                      <CustomIcon
-                        name={
+                      <Image
+                        source={
                           type === 'group'
                             ? openGroup[item.organization_no]
                               ? isParentSelected || isSelected
-                                ? 'btnFolderCloseSele'
-                                : 'btnFolderCloseNone'
+                                ? ic_arrow_up
+                                : ic_arrow_down
                               : isParentSelected || isSelected
-                              ? 'btnFolderOpenSele'
-                              : 'btnFolderOpenNone'
+                              ? ic_arrow_down
+                              : ic_arrow_up
                             : isParentSelected || isSelected
-                            ? 'btnUserSele'
-                            : 'btnUserNone'
+                            ? ic_person
+                            : ic_person
                         }
-                        size={24}
+                        style={{ width: 24, height: 24 }}
                       />
                       <View style={styles.lineItem}>
                         <Text
-                          style={Object.assign(
-                            {},
+                          style={[
                             styles.textStyle,
-                            (isParentSelected || isSelected) && {
-                              color: '#fff'
-                            }
-                          )}
+                            type === 'group'
+                              ? openGroup[item.organization_no]
+                                ? isParentSelected || isSelected
+                                  ? null
+                                  : {
+                                      color: '#1c90fb'
+                                    }
+                                : isParentSelected || isSelected
+                                ? {
+                                    color: '#1c90fb'
+                                  }
+                                : null
+                              : isParentSelected || isSelected
+                              ? {
+                                  color: '#1c90fb'
+                                }
+                              : null
+                          ]}
                         >
                           {type === 'group'
                             ? item.organization_name
@@ -151,7 +172,8 @@ const OrganizationScreenPresenter = (props: any) => {
                                 color:
                                   isParentSelected || isSelected
                                     ? '#fff'
-                                    : '#1c90fb'
+                                    : '#1c90fb',
+                                fontWeight: 'bold'
                               }}
                             >
                               {item.employee_count}
@@ -168,33 +190,19 @@ const OrganizationScreenPresenter = (props: any) => {
                   {!isParentSelected &&
                     type === 'member' &&
                     item.user_no !== auth.user_no && (
-                      <>
-                      <CustomCheckBox color="#e6e6e6"
-                    // onCheck={onCheck}
-                    checked={isSelected}/>
-                      </>
-                      // <TouchableHighlight
-                      //   underlayColor={'#e9f5ff00'} // 투명
-                      //   style={{
-                      //     width: 52, // 터치영역은 넓으면 편함
-                      //     height: 52,
-                      //     justifyContent: 'center',
-                      //     alignItems: 'center'
-                      //   }}
-                      //   onPress={() => selectEmployee(type, item)}
-                      // >
-                      //   <View
-                      //     style={Object.assign(
-                      //       {},
-                      //       styles.checkBox,
-                      //       isSelected && styles.checkBoxSelected
-                      //     )}
-                      //   >
-                      //     {isSelected && (
-                      //       <CustomIcon name={'btnTnaviCheckNone'} size={18} />
-                      //     )}
-                      //   </View>
-                      // </TouchableHighlight>
+                      <View
+                        style={{
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          paddingRight: 10
+                        }}
+                      >
+                        <CustomCheckBox
+                          color="#ccc"
+                          onCheck={() => selectEmployee(type, item)}
+                          checked={isSelected}
+                        />
+                      </View>
                     )}
                 </>
               </TouchableHighlight>
@@ -305,10 +313,11 @@ const OrganizationScreenPresenter = (props: any) => {
                     justifyContent: 'center',
                     alignItems: 'center',
                     borderRadius: 7,
-                    backgroundColor: '#999'
+                    backgroundColor: '#1c90fb'
                   }}
                 >
-                  <CustomIcon name={'btnCancelInput'} size={8} />
+                  <Image source={ic_cancel} style={{ width: 10, height: 10 }} />
+                  {/* <CustomIcon name={'btnCancelInput'} size={8} /> */}
                 </View>
               </View>
 
@@ -357,50 +366,11 @@ const OrganizationScreenPresenter = (props: any) => {
           <Text style={styles.ft14N}>{t('뒤로')}</Text>
         </TouchableOpacity>
         <Text style={styles.TitleText}>{t('참석자 추가')}</Text>
-        <TouchableOpacity
-          onPress={() => {
-            participantListAdd();
-            // fadeOut();
-          }}
-        >
+        <TouchableOpacity onPress={() => participantListAdd()}>
           <Text style={styles.ft14N}>{t('추가')}</Text>
         </TouchableOpacity>
       </View>
       <View style={{ backgroundColor: '#F7F8FA', flex: 0.005 }} />
-      {/* <View
-         style={{
-           position: 'absolute',
-           width: '100%',
-           height: '100%'
-         }}
-       > */}
-      {/* <View
-            style={{
-              height: 40,
-              backgroundColor: '#1C90FB',
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}
-          >
-            <Text
-              style={{
-                color: '#fff',
-                fontSize: 18,
-                fontFamily: 'DOUZONEText50'
-              }}
-            >
-              {'참가자 선택'}
-            </Text>
-            <TouchableOpacity
-              style={{ position: 'absolute', right: 10, padding: 10 }}
-              onPress={() => {
-                props.setSelectMode(false);
-              }}
-            >
-              <CustomIcon name={'checkWhite'} size={23} />
-            </TouchableOpacity>
-          </View> */}
 
       {isDataLoading ? (
         <View style={styles.dimmed}>
@@ -517,11 +487,7 @@ const OrganizationScreenPresenter = (props: any) => {
                     {keyword ? (
                       <TouchableOpacity onPress={() => setKeyword('')}>
                         <View style={styles.cancleIcon}>
-                          <CustomIcon
-                            width={8}
-                            height={8}
-                            name={'btnCancelInput'}
-                          />
+                          <Image source={ic_cancel} style={styles.icCancel} />
                         </View>
                       </TouchableOpacity>
                     ) : null}
@@ -550,7 +516,8 @@ const OrganizationScreenPresenter = (props: any) => {
                           { backgroundColor: '#fbfbfb' }
                         ]}
                       >
-                        <CustomIcon name={'icoCompany'} size={24} />
+                        <Image source={ic_building} />
+                        {/* <CustomIcon name={'icoCompany'} size={24} /> */}
                         <Text
                           style={[
                             styles.textStyle,
@@ -639,11 +606,23 @@ const OrganizationScreenPresenter = (props: any) => {
                           </View>
                           <View style={{ marginLeft: 'auto', width: 30 }}>
                             {item.user_no !== auth.user_no ? (
-                              selectedEmployee.member[item.user_no] ? (
-                                <CustomIcon name={'checkbox_on'} size={24} />
-                              ) : (
-                                <CustomIcon name={'checkbox_off'} size={24} />
-                              )
+                              <View
+                                style={{
+                                  justifyContent: 'center',
+                                  alignItems: 'center',
+                                  paddingRight: 10
+                                }}
+                              >
+                                <CustomCheckBox
+                                  color="#ccc"
+                                  onCheck={() => selectEmployee('member', item)}
+                                  checked={
+                                    selectedEmployee.member[item.user_no]
+                                      ? true
+                                      : false
+                                  }
+                                />
+                              </View>
                             ) : (
                               <></>
                             )}
@@ -693,11 +672,23 @@ const OrganizationScreenPresenter = (props: any) => {
                               </Text>
                             </View>
                             <View style={{ marginLeft: 'auto', width: 30 }}>
-                              {selectedEmployee.member[item.user_no] ? (
-                                <CustomIcon name={'checkbox_on'} size={24} />
-                              ) : (
-                                <CustomIcon name={'checkbox_off'} size={24} />
-                              )}
+                              <View
+                                style={{
+                                  justifyContent: 'center',
+                                  alignItems: 'center',
+                                  paddingRight: 10
+                                }}
+                              >
+                                <CustomCheckBox
+                                  color="#ccc"
+                                  onCheck={() => selectEmployee('member', item)}
+                                  checked={
+                                    selectedEmployee.member[item.user_no]
+                                      ? true
+                                      : false
+                                  }
+                                />
+                              </View>
                             </View>
                           </TouchableOpacity>
                         );
@@ -759,11 +750,23 @@ const OrganizationScreenPresenter = (props: any) => {
                               </Text>
                             </View>
                             <View style={{ marginLeft: 'auto', width: 30 }}>
-                              {selectedEmployee.member[item.user_no] ? (
-                                <CustomIcon name={'checkbox_on'} size={24} />
-                              ) : (
-                                <CustomIcon name={'checkbox_off'} size={24} />
-                              )}
+                              <View
+                                style={{
+                                  justifyContent: 'center',
+                                  alignItems: 'center',
+                                  paddingRight: 10
+                                }}
+                              >
+                                <CustomCheckBox
+                                  color="#ccc"
+                                  onCheck={() => selectEmployee('member', item)}
+                                  checked={
+                                    selectedEmployee.member[item.user_no]
+                                      ? true
+                                      : false
+                                  }
+                                />
+                              </View>
                             </View>
                           </TouchableOpacity>
                         );
@@ -1035,21 +1038,26 @@ const styles = StyleSheet.create({
     paddingLeft: 15
   },
   cancleIcon: {
-    backgroundColor: '#888888',
-    width: 16,
-    height: 16,
+    backgroundColor: '#1c90fb',
+    width: 18,
+    height: 18,
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 4
   },
   searchIcon: {
-    paddingTop: 2,
+    // paddingTop: 2,
     width: 30,
     height: 30,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 4
+  },
+  icCancel: {
+    resizeMode: 'cover',
+    width: 14,
+    height: 14
   }
 });
 

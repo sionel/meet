@@ -25,10 +25,13 @@ import LinearGradient from 'react-native-linear-gradient';
 const ic_code = require('../../../assets/new/icons/ic_code.png');
 const ic_lock = require('../../../assets/new/icons/ic_lock_wh.png');
 const ic_person_plus = require('../../../assets/new/icons/ic_person_plus.png');
-const ic_master = require('../../../assets/new/icons/ic_master.png');
-const ic_person = require('../../../assets/new/icons/ic_person.png');
+// const ic_master = require('../../../assets/new/icons/ic_master.png');
+// const ic_person = require('../../../assets/new/icons/ic_person.png');
 const ic_cancel = require('../../../assets/new/icons/ic_cancel.png');
+const ic_cancel_wh = require('../../../assets/new/icons/ic_cancel_wh.png');
 const ic_check_black = require('../../../assets/new/icons/ic_check_black.png');
+const ic_master_circle = require('../../../assets/new/icons/ic_master_circle.png');
+const ic_attd_circle = require('../../../assets/new/icons/ic_attd_circle.png');
 
 // 알림 생성 칸이 있는데 이건 삭제
 // 왜냐 이 앱은 노티를 못보내기 때문
@@ -74,10 +77,15 @@ const CreateMeetScreenPresenter = (props: any) => {
     onFocusOut,
     timeChange,
     timeChangeDetect,
-    exitDateTime
+    exitDateTime,
+    clickChangeRole,
+    clickDeleteUser,
+    selectedEmployee,
   } = props;
   const t = getT();
 
+  // console.log(selectedEmployee);
+  
   const TimePickerComponent = (
     <View
       style={{ marginTop: 20, justifyContent: 'center', alignItems: 'center' }}
@@ -497,10 +505,13 @@ const CreateMeetScreenPresenter = (props: any) => {
                 paddingLeft: '5%',
                 paddingRight: '5%'
               }}
-              data={participantList}
+              data={Object.values(selectedEmployee.member)}
               keyExtractor={(item, index) => String(index)}
               renderItem={({ item, index }: any) => {
-                let path: [] = item.full_path.split('>');
+                console.log('user_no');
+                console.log(Object.values(item));
+                
+                let path: [] = item['user_no'].full_path.split('>');
                 let user_path = '';
                 for (let i = 1; i < path.length; i++) {
                   if (i === path.length - 1) {
@@ -510,14 +521,32 @@ const CreateMeetScreenPresenter = (props: any) => {
                   }
                 }
 
+                // console.log(participantList[index]);
+                
+                const isSelected = participantList[index].is_master;
+          
                 return (
                   <View style={styles.participantList}>
                     <View style={styles.profileView}>
-                      {item.user_no === auth.user_no && (
-                        <View style={styles.myView}>
+                      <View
+                        style={[
+                          styles.myView,
+                          item.user_no !== auth.user_no && {
+                            backgroundColor: '#1c90fb'
+                          }
+                        ]}
+                      >
+                        {item.user_no === auth.user_no ? (
                           <Text style={styles.myText}>나</Text>
-                        </View>
-                      )}
+                        ) : (
+                          <TouchableOpacity onPress={()=> {clickDeleteUser(index)}}>
+                            <Image
+                              source={ic_cancel_wh}
+                              style={styles.icCancelUser}
+                            />
+                          </TouchableOpacity>
+                        )}
+                      </View>
                       <Image
                         style={styles.profile}
                         source={{
@@ -528,12 +557,7 @@ const CreateMeetScreenPresenter = (props: any) => {
                         resizeMode={'cover'}
                       />
                     </View>
-                    <View
-                      style={[
-                        styles.infoBox,
-                        item.user_no !== auth.user_no && { width: '86%' }
-                      ]}
-                    >
+                    <View style={[styles.infoBox]}>
                       <Text style={styles.name}>
                         {item.user_name} {item.rank_name}
                       </Text>
@@ -545,16 +569,39 @@ const CreateMeetScreenPresenter = (props: any) => {
                         {user_path}
                       </Text>
                     </View>
-                    {item.user_no === auth.user_no && (
-                      <View style={styles.masterContainer}>
-                        <Image
-                          style={styles.icMaster}
-                          source={ic_master}
-                          resizeMode={'contain'}
-                        />
-                        <Text style={styles.maseterText}>{t('마스터')}</Text>
-                      </View>
-                    )}
+                    <TouchableOpacity
+                      style={[
+                        styles.roleContainer,
+                        isSelected && { borderColor: '#01acc1' }
+                      ]}
+                      onPress={() => {
+                        clickChangeRole(index, item);
+                      }}
+                      disabled={item.user_no === auth.user_no}
+                    >
+                      {isSelected ? (
+                        <>
+                          <Text style={styles.maseterText}>{t('마스터')}</Text>
+                          <Image
+                            style={styles.icMaster}
+                            source={ic_master_circle}
+                            resizeMode={'contain'}
+                          />
+                        </>
+                      ) : (
+                        <>
+                          <Image
+                            style={styles.icMaster}
+                            source={ic_attd_circle}
+                            resizeMode={'contain'}
+                          />
+
+                          <Text style={styles.attendantText}>
+                            {t('참석자')}
+                          </Text>
+                        </>
+                      )}
+                    </TouchableOpacity>
                   </View>
                 );
               }}
@@ -590,11 +637,13 @@ const CreateMeetScreenPresenter = (props: any) => {
             }}
           >
             <TouchableOpacity onPress={exitDateTime}>
-              <Image source={ic_cancel} style={styles.icCancel} />
+              <Image source={ic_cancel_wh} style={styles.icCancel} />
             </TouchableOpacity>
 
             <TouchableOpacity onPress={onTimeConfirm}>
-              {timePicker !== 'none' && <Image source={ic_check_black} style={styles.icCancel} />}
+              {timePicker !== 'none' && (
+                <Image source={ic_check_black} style={styles.icCancel} />
+              )}
             </TouchableOpacity>
           </View>
           {timePicker !== 'none' && TimePickerComponent}
@@ -771,12 +820,19 @@ const styles = StyleSheet.create({
   icCancel: {
     resizeMode: 'cover',
     width: 18,
-    height: 18,
+    height: 18
+  },
+  icCancelUser: {
+    resizeMode: 'cover',
+    width: 14,
+    height: 14,
   },
   icMaster: { width: '25%', height: 20 },
-  masterContainer: {
+  roleContainer: {
     flexDirection: 'row',
-    backgroundColor: '#febc2c',
+    // backgroundColor: '#febc2c',
+    borderColor: '#f49750',
+    borderWidth: 1,
     justifyContent: 'space-evenly',
     alignItems: 'center',
     width: '17%',
@@ -786,8 +842,17 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 15,
     letterSpacing: -0.22,
-    color: '#fff',
-    fontWeight: '800'
+    color: '#01acc1',
+    fontWeight: '800',
+    paddingLeft: '5%'
+  },
+  attendantText: {
+    fontSize: 12,
+    lineHeight: 15,
+    letterSpacing: -0.22,
+    color: '#f49750',
+    fontWeight: '800',
+    paddingRight: '5%'
   },
   graybar1: {
     backgroundColor: '#F7F8FA',
