@@ -29,6 +29,7 @@ import { getT } from '../../utils/translateManager';
 import ConferenceCard from './Component/ConferenceCard';
 import FinishedCard from './Component/FinishedCard';
 import ReservationCard from './Component/ReservationCard';
+import BottomPopup from './Component/BottomPopup';
 
 // import { isWehagoV } from '../../utils';
 // import { Text } from '../../components/StyledText';
@@ -56,7 +57,8 @@ const HomeScreenPresenter = (props: any) => {
     companyName,
     userImg,
     createConference,
-    enterInviteCode
+    enterInviteCode,
+    bottomPopup
   } = props;
   const t = getT();
   return (
@@ -153,6 +155,19 @@ const HomeScreenPresenter = (props: any) => {
           </View>
           <View style={{ flex: 3 }}>
             <FlatList
+              // showsHorizontalScrollIndicator={false}
+              // refreshControl={(
+              //     <RefreshControl
+              //       refreshing={function test(){
+              //         let a = true
+              //         setInterval(()=>{a = !a},1000)
+              //         return a}()}
+              //       onRefresh={()=>{}}
+              //     />
+              //   )
+              // }
+
+              // onRefresh={() => {}}
               horizontal={true}
               data={ongoingConference}
               renderItem={conference => {
@@ -279,6 +294,7 @@ const HomeScreenPresenter = (props: any) => {
           showsVerticalScrollIndicator={false}
         />
       </View>
+      {bottomPopup.show && <BottomPopup {...bottomPopup} />}
 
       {/* {(props.started.length < 1 || started.length < 1) &&
       (props.reservation.length < 1 || reservation.length < 1) ? (

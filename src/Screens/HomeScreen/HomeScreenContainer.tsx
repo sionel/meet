@@ -13,24 +13,51 @@ import { actionCreators as UserActions } from '../../redux/modules/user';
 import HomeScreenPresenter from './HomeScreenPresenter';
 import { wehagoDummyImageURL, wehagoMainURL } from '../../utils';
 
+import { content } from './Component/bottomPopup';
+
+const icUser = require('../../../assets/new/icons/ic_user.png');
+const icModify = require('../../../assets/new/icons/ic_modify.png');
+const icLink = require('../../../assets/new/icons/ic_link.png');
+const icCancel = require('../../../assets/new/icons/ic_cancel.png');
+const icInfo = require('../../../assets/new/icons/ic_info.png');
+
 export default function HomeScreenContainer(props: any) {
   const [indicator, setIndicator] = useState(true);
   const [ongoingConference, setOngoingConference] = useState<any[]>([]);
+
   const [reservationConference, setReservationConference] = useState<any[]>([]);
+
   const [finishedConference, setFinishedConference] = useState<any[]>([]);
+
   const [highlight, setHighlight] = useState<'reservation' | 'finished' | null>(
     null
   );
   const [conferenceInterval, setConferenceInterval] =
     useState<NodeJS.Timeout>();
+
+  const [bottomPopup, setBottomPopup] = useState<{
+    show: boolean;
+    contentList: content[];
+    title: string;
+    onClickOutside: () => void;
+  }>({
+    show: false,
+    contentList: [],
+    title: '',
+    onClickOutside: () => {}
+  });
+
+  const ref = useRef({ reservationConference });
+  // ref.current.reservationConference = reservationConference
   //#region  selector
-  const { auth, userImg, companyName, userName } = useSelector(
+  const { auth, userImg, companyName, userName, portalId } = useSelector(
     (state: RootState) => {
       const { auth } = state.user;
 
       return {
         auth: auth,
         userName: auth.user_name,
+        portalId: auth.portal_id,
         userImg: wehagoMainURL + auth.profile_url,
         companyName: auth.last_company.company_name_kr
       };
@@ -60,10 +87,11 @@ export default function HomeScreenContainer(props: any) {
       ? 'reservation'
       : highlight;
     setHighlight(now);
+    ref.current.reservationConference = reservationConference;
   }, [reservationConference, finishedConference]);
 
   const _getFinishedConferences = () => {
-    MeetApi.getMeetFinished(auth, '2021-11-01', '2021-11-16', 0, 20).then(
+    MeetApi.getMeetFinished(auth, '2021-11-01', '2021-11-30', 0, 20).then(
       async result => {
         const finished = result.list;
         const finishedConference = await Promise.all(
@@ -76,13 +104,12 @@ export default function HomeScreenContainer(props: any) {
               .toLocaleString('en')
               .slice(-2);
             const startTimeString = new Date(conference.start_date_time)
-              .toLocaleTimeString('en')
-              .slice(0, 4);
+              .toTimeString()
+              .slice(0, 5);
             const endTimeString = new Date(conference.end_date_time)
-              .toLocaleTimeString('en')
-              .slice(0, 4);
+              .toTimeString()
+              .slice(0, 5);
             const timeString = `${dateString}   ${startTimeString}${ampm} ~ ${endTimeString}${ampm}`;
-
             const { hour, minutes } = conference.usage_time;
             const usageTime = hour * 60 + minutes;
             const users = conference.users;
@@ -124,7 +151,7 @@ export default function HomeScreenContainer(props: any) {
               usageTime,
               users: uriList,
               roomId,
-              finishedMoreClick: _finishedMoreClick
+              finishedMoreClick: () => _finishedMoreClick(conference)
             };
             return data;
           })
@@ -162,6 +189,14 @@ export default function HomeScreenContainer(props: any) {
             auth,
             conference.room_id
           );
+
+          const isMaster = connectingUser.filter(
+            (user: any) => user.user === portalId
+          )[0]?.is_master
+            ? true
+            : false;
+          //진행중인 방에서는 내가 없을수 있으므로 ?를 붙임
+
           const sortedConnectingUserList = connectingUser.sort(
             (user: any, _user: any) => _user.is_master - user.is_master
           );
@@ -206,7 +241,7 @@ export default function HomeScreenContainer(props: any) {
             onMinte,
             participants: uriList,
             isLock: !conference.is_public,
-            goingMoreClick: _goingMoreClick,
+            goingMoreClick: () => _goingMoreClick(conference, isMaster),
             enterConference: _enterConference
           };
           return data;
@@ -220,8 +255,23 @@ export default function HomeScreenContainer(props: any) {
 
       const reservationList = await Promise.all(
         reservation.map(async (conference: any, index: number) => {
-          const portalIdList = conference.access_user
-            .map((user: any) => user.portal_id)
+          const accessUser = await MeetApi.getAccessUsers(
+            auth,
+            conference.room_id
+          );
+
+          const isMaster = accessUser.filter(
+            (user: any) => user.user === portalId
+          )[0].is_master
+            ? true
+            : false;
+
+          const sortedAccessUserList = accessUser.sort(
+            (user: any, _user: any) => _user.is_master - user.is_master
+          );
+
+          const portalIdList = sortedAccessUserList
+            .map((user: any) => user.user)
             .filter((user: any) => user);
 
           const participants: any[] = await MeetApi.getUserInfoList(
@@ -229,7 +279,12 @@ export default function HomeScreenContainer(props: any) {
             portalIdList
           );
 
-          const uriList = participants.reduce<
+          const sortedPortalIdList: any[] = portalIdList.map((id: any) => {
+            const item = participants.find(e => e.portal_id === id);
+            return item;
+          });
+
+          const uriList = sortedPortalIdList.reduce<
             { type: string; value: string | number }[]
           >((prev, present) => {
             if (prev.length > 2) return prev;
@@ -258,20 +313,119 @@ export default function HomeScreenContainer(props: any) {
             users: uriList,
             roomId: conference.room_id,
             isPublic: conference.is_public,
-            reservationMoreClick: _reservationMoreClick,
+            reservationMoreClick: () =>
+              _reservationMoreClick(conference, isMaster),
             key: index
           };
           return data;
         })
       );
 
+      if (
+        ref.current.reservationConference.length === 0 &&
+        reservationList.length > 0
+      )
+        setHighlight('reservation');
+
       setReservationConference(reservationList);
     });
   };
-  const _goingMoreClick = (roomId: string) => {};
-  const _reservationMoreClick = (roomId: string) => {};
-  const _finishedMoreClick = (roomId: string) => {};
+
+  /* 
+  icUser
+icModify
+icLink
+icCancel
+icInfo
+*/
+  const _goingMoreClick = (conference: any, isMaster: boolean) => {
+    const list = {
+      name: '참석자 명단',
+      icon1: icUser,
+      icon2: null,
+      onClick: () => {}
+    };
+    const copy = {
+      name: '공유링크 복사',
+      icon1: icLink,
+      icon2: null,
+      onClick: () => {}
+    };
+    const detailInfo = {
+      name: '회의 상세정보',
+      icon1: icInfo,
+      icon2: null,
+      onClick: () => {}
+    };
+
+    setBottomPopup({
+      onClickOutside: _onClickOutside,
+      contentList: [list, copy, detailInfo],
+      show: true,
+      title: conference.name
+    });
+  };
+  const _reservationMoreClick = (conference: any, isMaster: boolean) => {
+    const list = {
+      name: '참석 예정자 명단',
+      icon1: icUser,
+      icon2: null,
+      onClick: () => {}
+    };
+    const modify = {
+      name: '예약정보 수정',
+      icon1: icModify,
+      icon2: null,
+      onClick: () => {}
+    };
+    const copy = {
+      name: '공유링크 복사',
+      icon1: icLink,
+      icon2: null,
+      onClick: () => {}
+    };
+    const detailInfo = {
+      name: '회의 상세정보',
+      icon1: icInfo,
+      icon2: null,
+      onClick: () => {}
+    };
+    const cancle = {
+      name: '예약 취소',
+      icon1: icCancel,
+      icon2: null,
+      onClick: () => {}
+    };
+
+    const contentList = [];
+
+    contentList.push(list);
+    isMaster && contentList.push(modify);
+    contentList.push(copy);
+    contentList.push(detailInfo);
+    isMaster && contentList.push(cancle);
+    setBottomPopup({
+      onClickOutside: _onClickOutside,
+      contentList,
+      show: true,
+      title: conference.name
+    });
+  };
+  const _finishedMoreClick = (conference: any) => {
+    setBottomPopup({
+      onClickOutside: _onClickOutside,
+      contentList: [],
+      show: true,
+      title: conference.name
+    });
+  };
   const _enterConference = (roomId: string) => {};
+  const _onClickOutside = () => {
+    setBottomPopup({
+      ...bottomPopup,
+      show: false
+    });
+  };
   return (
     <HomeScreenPresenter
       {...{
@@ -284,7 +438,8 @@ export default function HomeScreenContainer(props: any) {
         setHighlight,
         userImg,
         companyName,
-        test:_getConferences
+        bottomPopup,
+        test: _getConferences
       }}
     />
   );

@@ -213,14 +213,16 @@
     "common_year": "year",
     "common_month": "month",
     "common_day": "day",
-    "renewal":{
+    "renewal": {
       "alert_title_notion": "알림",
+      "alert_title_error": "에러",
       "alert_title_login_fail": "로그인 실패",
       "alert_button_confirm": "확인",
       "alert_button_cancel": "취소",
       "alert_text_unable": "소속된 회사가 존재하지 않거나 가입단계가 완료되지 않아 로그인할 수 없습니다.",
       "alert_text_no_right": "권한이 없습니다",
       "alert_text_problem_ocurred": "요청된 작업을 처리하던 중 문제가 발생했습니다. 다시 시도해주세요.",
+      "alert_text_network_problem_ocurred": "네트워크에 문제가 생겨 로그아웃 됩니다",
       "alert_text_login_info_error": "로그인 정보가 잘못되었습니다.",
       "alert_text_login_fail": "로그인에 실패했습니다.",
       "alert_text_timeover": "요청 시간을 초과했습니다. 다시 시도해주세요",
@@ -244,7 +246,7 @@
       "login_refresh": "새로고침",
       "login_preventAuto": "자동입력 방지문자",
       "login_login": "로그인",
-      "login_incorrect":"아이디 또는 비밀번호가 올바르지 않습니다.",
+      "login_incorrect": "아이디 또는 비밀번호가 올바르지 않습니다.",
       "login_auto": "자동 로그인"
     }
   }

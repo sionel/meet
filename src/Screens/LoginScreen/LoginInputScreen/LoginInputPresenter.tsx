@@ -20,7 +20,7 @@ import { reduceRight } from '../../../../webpack.config';
 
 const loginLogo = require('../../../../assets/new/logos/logo.png');
 
-const user = require('../../../../assets/new/icons/ic_person.png');
+const user = require('../../../../assets/new/icons/ic_user.png');
 const lock = require('../../../../assets/new/icons/ic_lock_black.png');
 const loading = require('../../../../assets/new/icons/loadingIcon.png');
 

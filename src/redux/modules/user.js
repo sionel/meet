@@ -24,6 +24,82 @@ const SET_PERMISSION = 'user.SET_PERMISSION'; // 화상회의 생성 권한
 const TOGGLE_UPDATE_NOTI = 'user.TOGGLE_UPDATE_NOTI';
 //#region Action Creators
 
+
+
+//#region initialState
+
+const initialState = {
+  isLogin: false,
+  auth: {},
+  permission: false,
+  appIntro: false,
+  from: '',
+  log: {},
+  session: true,
+  updateNoti: true,
+  autoLogin: false,
+};
+
+//#endregion initialState
+
+//#region Reducer
+
+function reducer(state = initialState, action) {
+  switch (action.type) {
+    case AGREEMENT:
+      return { ...state, permission: !state.permission };
+    // case AUTH:
+    //   return { ...state, auth: action.auth};
+    case LOGIN:
+      return {
+        ...state,
+        auth: action.auth,
+        isLogin: true,
+        from: action.from,
+        session: true,
+        autoLogin: action.autoLogin
+      };
+    // return applyTest(state, action);
+    case LOGOUT:
+      return {
+        ...state,
+        auth: {},
+        isLogin: false,
+        permission: false,
+        autoLogin: false
+      };
+    case NETWORK_DISCONNECT:
+      return { ...state, isLogin: false };
+    case TOKEN:
+      let auth = state.auth;
+      auth.AUTH_A_TOKEN = action.newToken;
+      return {
+      ...state,
+        auth
+      };
+    // case TOKEN_LOGIN:
+    // 	return applyTokenLogin(state, action);
+    case TOGGLE_VISIBLE_APPINTRO:
+      return applyToggleVisibleAppIntro(state, action);
+    case CHANGE_COMPANY:
+      return applyChangeCompany(state, action);
+    case EVENT_LOG:
+      return applyEventLog(state, action);
+    case SESSION_CHECK:
+      return { ...state, session: action.session };
+    case SET_PERMISSION:
+      return { ...state, permission: action.permission };
+    case TOGGLE_UPDATE_NOTI:
+      return { ...state, updateNoti: !state.updateNoti };
+    default:
+      return state;
+  }
+}
+
+//#endregion Reducer
+
+
+
 /**
  * Event Log
  */
@@ -190,78 +266,6 @@ function changeCompanyRequest(auth, company) {
 // };
 
 //#endregion
-
-//#region initialState
-
-const initialState = {
-  isLogin: false,
-  auth: {},
-  permission: false,
-  appIntro: false,
-  from: '',
-  log: {},
-  session: true,
-  updateNoti: true,
-  autoLogin: false,
-};
-
-//#endregion initialState
-
-//#region Reducer
-
-function reducer(state = initialState, action) {
-  switch (action.type) {
-    case AGREEMENT:
-      return { ...state, permission: !state.permission };
-    // case AUTH:
-    //   return { ...state, auth: action.auth};
-    case LOGIN:
-      return {
-        ...state,
-        auth: action.auth,
-        isLogin: true,
-        from: action.from,
-        session: true,
-        autoLogin: action.autoLogin
-      };
-    // return applyTest(state, action);
-    case LOGOUT:
-      return {
-        ...state,
-        auth: {},
-        isLogin: false,
-        permission: false,
-        autoLogin: false
-      };
-    case NETWORK_DISCONNECT:
-      return { ...state, isLogin: false };
-    case TOKEN:
-      let auth = state.auth;
-      auth.AUTH_A_TOKEN = action.newToken;
-      return {
-      ...state,
-        auth
-      };
-    // case TOKEN_LOGIN:
-    // 	return applyTokenLogin(state, action);
-    case TOGGLE_VISIBLE_APPINTRO:
-      return applyToggleVisibleAppIntro(state, action);
-    case CHANGE_COMPANY:
-      return applyChangeCompany(state, action);
-    case EVENT_LOG:
-      return applyEventLog(state, action);
-    case SESSION_CHECK:
-      return { ...state, session: action.session };
-    case SET_PERMISSION:
-      return { ...state, permission: action.permission };
-    case TOGGLE_UPDATE_NOTI:
-      return { ...state, updateNoti: !state.updateNoti };
-    default:
-      return state;
-  }
-}
-
-//#endregion Reducer
 
 //#region Reducer Functions
 

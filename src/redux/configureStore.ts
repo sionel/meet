@@ -22,11 +22,12 @@ import webUser from './modules/webUser';
 import master from './modules/master';
 import alert from './modules/alert';
 import toast from './modules/toast';
-import root from './modules/root';
+// import root from './modules/root';
 import deployed, { state as deployedState } from './modules/deployed';
 import screenShare, { state as screenShageState } from './modules/ScreenShare';
 import indicator, { state as indicatorState } from './modules/indicator';
 import orientation, { state as orientationState } from './modules/orientation';
+import root, { state as rootState } from './modules/root';
 /**
  * middleware list
  */
@@ -56,7 +57,7 @@ export interface RootState {
   indicator: indicatorState;
   deployed: deployedState;
   orientation: orientationState;
-  root: any;
+  root: rootState;
 }
 
 /**

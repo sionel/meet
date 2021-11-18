@@ -6,7 +6,7 @@ import LinearGradient from 'react-native-linear-gradient';
 const icLockwhite = require('../../../../assets/new/icons/ic_lock_white.png');
 const icLive = require('../../../../assets/new/icons/ic_live.png');
 const icClock = require('../../../../assets/new/icons/ic_clock.png');
-const icMoreWhite = require('../../../../assets/new/icons/ic_more_white.png');
+const icMoreWhite = require('../../../../assets/new/icons/ic_more_w.png');
 
 interface cardProps {
   index: number;
