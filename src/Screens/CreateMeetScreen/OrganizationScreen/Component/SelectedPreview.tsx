@@ -31,6 +31,7 @@ const SelectedPreview = (props: any) => {
       horizontal={true}
       keyExtractor={(item, index) => String(index)}
       renderItem={({ item, index }) => {
+        // console.log(item);
         return (
           <View style={styles.profile} key={index}>
             <TouchableOpacity
@@ -62,8 +63,10 @@ const SelectedPreview = (props: any) => {
                   <Image
                     source={{
                       uri: item.profile_url
-                        ? wehagoMainURL + item.profile_url
-                        : wehagoDummyImageURL
+                      ? wehagoMainURL + item.profile_url
+                      : item.profile_image
+                      ? wehagoMainURL + item.profile_image
+                      : wehagoDummyImageURL
                     }}
                     style={{
                       width: 40,
@@ -107,7 +110,7 @@ const SelectedPreview = (props: any) => {
                       ? 'organization_name'
                       : item['user_name']
                       ? 'user_name'
-                      : 'employee_name'
+                      : 'address_name'
                   ]
                 }
               </Text>

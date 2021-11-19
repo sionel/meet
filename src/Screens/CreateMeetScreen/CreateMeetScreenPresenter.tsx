@@ -474,16 +474,21 @@ const CreateMeetScreenPresenter = (props: any) => {
                 data={selectedEmployee.member}
                 keyExtractor={(item, index) => String(index)}
                 renderItem={({ item, index }: any) => {
-                  let path: [] = item.full_path.split('>');
-
+                  console.log(item);
+                  
+                  let path: [] = [];
                   let user_path = '';
-                  for (let i = 1; i < path.length; i++) {
-                    if (i === path.length - 1) {
-                      user_path = user_path + path[i];
-                    } else {
-                      user_path = user_path + `${path[i]} | `;
+                  if (item.full_path) {
+                    path = item.full_path.split('>');
+                    for (let i = 1; i < path.length; i++) {
+                      if (i === path.length - 1) {
+                        user_path = user_path + path[i];
+                      } else {
+                        user_path = user_path + `${path[i]} | `;
+                      }
                     }
-                  }
+                  } else user_path = '';
+                  
 
                   const isSelected = item.is_master;
 
@@ -518,6 +523,8 @@ const CreateMeetScreenPresenter = (props: any) => {
                           source={{
                             uri: item.profile_url
                               ? wehagoMainURL + item.profile_url
+                              : item.profile_image
+                              ? wehagoMainURL + item.profile_image
                               : wehagoDummyImageURL
                           }}
                           resizeMode={'cover'}
@@ -525,20 +532,26 @@ const CreateMeetScreenPresenter = (props: any) => {
                       </View>
                       <View style={[styles.infoBox]}>
                         <Text style={styles.name}>
-                          {item.user_name} {item.rank_name}
+                          {item.user_name ? item.user_name : item.address_name}{' '}
+                          {item.rank_name
+                            ? item.rank_name
+                            : item.position_rank_name}
                         </Text>
                         <Text
                           numberOfLines={1}
                           ellipsizeMode="tail"
                           style={styles.tree}
                         >
-                          {user_path}
+                          {user_path
+                            ? user_path
+                            : item.emailinfolist[0].email_address}
                         </Text>
                       </View>
                       <TouchableOpacity
                         style={[
                           styles.roleContainer,
-                          isSelected && { borderColor: '#01acc1' }
+                          isSelected && { borderColor: '#01acc1' },
+                          !item.user_no && { borderColor: '#000' }
                         ]}
                         onPress={() => {
                           clickChangeRole(item);
@@ -556,7 +569,7 @@ const CreateMeetScreenPresenter = (props: any) => {
                               resizeMode={'contain'}
                             />
                           </>
-                        ) : (
+                        ) : item.user_no ? (
                           <>
                             <Image
                               style={styles.icMaster}
@@ -566,6 +579,12 @@ const CreateMeetScreenPresenter = (props: any) => {
 
                             <Text style={styles.attendantText}>
                               {t('참석자')}
+                            </Text>
+                          </>
+                        ) : (
+                          <>
+                            <Text style={styles.extText}>
+                              {t('외부참여자')}
                             </Text>
                           </>
                         )}
@@ -822,6 +841,13 @@ const styles = StyleSheet.create({
     color: '#f49750',
     fontWeight: '800',
     paddingRight: '5%'
+  },
+  extText: {
+    fontSize: 10,
+    lineHeight: 18,
+    letterSpacing: -0.22,
+    color: '#000',
+    fontWeight: '800',
   },
   graybar1: {
     backgroundColor: '#F7F8FA',

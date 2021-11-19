@@ -85,8 +85,11 @@ export default function CreateMeetScreenContainer(props: any) {
       auth
     );
     if (result.error) {
+      console.log('조직도를 가져올 수 없습니다.');
       // Alert.alert('조직도', '조직도를 가져올 수 없습니다.');
     } else {
+      // console.log(result);
+      
       const company = result;
 
       const hangleMapper = company.reduce((acc: any, i: any) => {
@@ -429,18 +432,20 @@ export default function CreateMeetScreenContainer(props: any) {
 
     const userList: any[] = updateList.filter((v: any, i: number) => i !== 0);
 
-    const masterList: any[] = userList.filter(
-      (v: any, i) => v.is_master === true
-    );
-    const masterUserNoOrderList: any[] = masterList.sort((a: any, b: any) => {
-      return a.user_no - b.user_no;
-    });
-    masterUserNoOrderList.map(v => resList.push(v));
+    // 마스터권한 정렬
+    // const masterList: any[] = userList.filter(
+    //   (v: any, i) => v.is_master === true
+    // );
+    // const masterUserNoOrderList: any[] = masterList.sort((a: any, b: any) => {
+    //   return a.user_no - b.user_no;
+    // });
+    // masterUserNoOrderList.map(v => resList.push(v));
 
-    const partList: any[] = userList.filter(
-      (v: any, i) => v.is_master !== true
-    );
-    const partListUserNoOrderList: any[] = partList.sort((a: any, b: any) => {
+    // const partList: any[] = userList.filter(
+    //   (v: any, i) => v.is_master !== true
+    // );
+
+    const partListUserNoOrderList: any[] = userList.sort((a: any, b: any) => {
       return a.user_no - b.user_no;
     });
     partListUserNoOrderList.map(v => resList.push(v));

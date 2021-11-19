@@ -64,7 +64,7 @@ const OrganizationScreenContainer = (props: any) => {
   const doSearch = async () => {
     if (tabType === 'org') {
       if (keyword === '') {
-        setSearchedEmployee(contacts);
+        // setSearchedEmployee(contacts);?
       } else {
         const data = employee.reduce((acc: any, item: any) => {
           const temp = item.data.filter((data: any) =>
@@ -119,7 +119,7 @@ const OrganizationScreenContainer = (props: any) => {
     const result = await OrganizationApi.getContactsList(auth);
     if (result.error || !result) {
       //   Alert.alert('조직도', '조직도를 가져올 수 없습니다.');
-      console.log('조직도를 가져올 수 없습니다.');
+      console.log('연락처를 가져올 수 없습니다.');
 
       //   props.navigation.pop();
       // 생성하기 화면으로
@@ -149,20 +149,24 @@ const OrganizationScreenContainer = (props: any) => {
   const selectEmployee = (type: string, item: any) => {
     // 조직원 선택 시
     if (type === 'member') {
-      const newList: any[] = selectedEmployee.member;
-      let tmpList: any[] = [];
-      let idx = newList.findIndex((i: any) => i.user_no === item.user_no);
+        const newList: any[] = selectedEmployee.member;
+        let tmpList: any[] = [];
+        let idx = newList.findIndex((i: any) => {
+          if (item.user_no) return i.user_no === item.user_no;
+          else return i.address_service_no === item.address_service_no;
+        });
 
-      if (idx !== -1) {
-        tmpList = newList.filter((v, i) => i !== idx);
-      } else {
-        item.is_master = false;
-        newList.push(item);
-      }
-      setSelectedEmployee({
-        member: idx === -1 ? newList : tmpList,
-        group: selectedEmployee.group
-      });
+        if (idx !== -1) {
+          tmpList = newList.filter((v, i) => i !== idx);
+        } else {
+          item.is_master = false;
+          newList.push(item);
+        }
+        setSelectedEmployee({
+          member: idx === -1 ? newList : tmpList,
+          group: selectedEmployee.group
+        });
+      
     } else {
       // 조직 선택 시
       const newItem = JSON.parse(JSON.stringify(selectedEmployee.group));

@@ -103,7 +103,7 @@ const getContactsList = async (auth: any) => {
       sortIdx: -1,
       isAscending: 'T'
     };
-    console.log(serialize(params));
+    // console.log(serialize(params));
 
     const url = `${wehagoBaseURL}/contacts/contact-list?cno=${cno}`;
     const headers = createHeader({ AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, url });

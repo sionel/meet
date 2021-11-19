@@ -12,16 +12,17 @@ import {
   Text,
   TextInput,
   Platform,
-  Animated
+  Animated,
+  TouchableHighlight
 } from 'react-native';
 import CustomCheckBox from '../../../components/renewal/CustomCheckBox';
 import { CustomIcon } from '../../../components';
 import { wehagoDummyImageURL, wehagoMainURL } from '../../../utils';
 import SelectedPreview from './Component/SelectedPreview';
-import OrganizationFlatList from './Component/OrganizationFlatList';
+import OrganizationTab from './Component/OrganizationTab';
 
 const ic_cancel = require('../../../../assets/new/icons/ic_cancel_w.png');
-const ic_building = require('../../../../assets/new/icons/ic_build.png');
+
 const ic_arrow_up = require('../../../../assets/new/icons/ic_arrow_up.png');
 const ic_arrow_down = require('../../../../assets/new/icons/ic_arrow_down.png');
 const ic_person = require('../../../../assets/new/icons/ic_person.png');
@@ -56,6 +57,200 @@ const OrganizationScreenPresenter = (props: any) => {
     auth,
     listLng
   } = props;
+
+  const OrganizationFlatList = (
+    data: any[],
+    i = 1,
+    type = 'group',
+    depth = 0,
+    isParentSelected = false
+  ) => {
+    return (
+      <FlatList
+        data={data}
+        extraData={[openGroup]}
+        keyExtractor={(item, index) => String(index)}
+        renderItem={({ item, index }) => {
+          // 조직원 선택여부
+          const selected =
+            selectedEmployee.member.findIndex(
+              (i: any) => i.user_no === item.user_no
+            ) !== -1
+              ? true
+              : false;
+          const isEmployeeSelected = type === 'member' && selected;
+          // 조직단위 선택여부
+          const isGroupSelected =
+            type === 'group' && selectedEmployee.group[item.organization_no];
+          // 그래서 선택이 되었느냐
+          const isSelected = isEmployeeSelected || isGroupSelected;
+          return (
+            <View
+              style={{
+                backgroundColor: (index + i) % 2 === 0 ? '#fbfbfb' : '#f7f7f7'
+                // marginLeft: 16
+              }}
+              key={index}
+            >
+              <TouchableHighlight
+                disabled={item.user_no === auth.user_no}
+                style={{ flexDirection: 'row' }}
+                underlayColor={'#e9f5ff'}
+                onPress={() => {
+                  if (type === 'group') {
+                    // 조직일 경우 자식요소 토글
+                    const group = JSON.parse(JSON.stringify(openGroup));
+                    if (group[item.organization_no]) {
+                      delete group[item.organization_no];
+                    } else {
+                      group[item.organization_no] = item;
+                    }
+                    setOpenGroup(group);
+                    if (!item.children) {
+                      if (!organizationEmployee[item.organization_no]) {
+                        getOrganizationEmployeeTree(
+                          Number(item.organization_no)
+                        );
+                      }
+                    }
+                  } else {
+                    // 조직원일 경우 해당 조직원 선택
+                    !isParentSelected && selectEmployee(type, item);
+                  }
+                }}
+              >
+                <>
+                  <View
+                    style={[
+                      styles.lineContainer,
+                      { flex: 1, marginLeft: 16 * (depth + 1) }
+                    ]}
+                  >
+                    <View
+                      style={[
+                        { flexDirection: 'row', alignItems: 'center' }
+                        // (isParentSelected || isSelected) && styles.selectedItem
+                      ]}
+                    >
+                      <Image
+                        source={
+                          type === 'group'
+                            ? openGroup[item.organization_no]
+                              ? isParentSelected || isSelected
+                                ? ic_arrow_up
+                                : ic_arrow_down
+                              : isParentSelected || isSelected
+                              ? ic_arrow_down
+                              : ic_arrow_up
+                            : isParentSelected || isSelected
+                            ? ic_person
+                            : ic_person
+                        }
+                        style={{ width: 24, height: 24 }}
+                      />
+                      <View style={styles.lineItem}>
+                        <Text
+                          style={[
+                            styles.textStyle,
+                            type === 'group'
+                              ? openGroup[item.organization_no]
+                                ? isParentSelected || isSelected
+                                  ? null
+                                  : {
+                                      color: '#1c90fb'
+                                    }
+                                : isParentSelected || isSelected
+                                ? {
+                                    color: '#1c90fb'
+                                  }
+                                : null
+                              : isParentSelected || isSelected
+                              ? {
+                                  color: '#1c90fb'
+                                }
+                              : null
+                          ]}
+                        >
+                          {type === 'group'
+                            ? item.organization_name
+                            : item.user_name}
+                          &nbsp;
+                          {type === 'group' ? (
+                            <Text
+                              style={{
+                                color:
+                                  isParentSelected || isSelected
+                                    ? '#fff'
+                                    : '#1c90fb',
+                                fontWeight: 'bold'
+                              }}
+                            >
+                              {item.employee_count}
+                            </Text>
+                          ) : (
+                            item.rank_name
+                          )}
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+
+                  {/* checkBox UI */}
+                  {!isParentSelected &&
+                    type === 'member' &&
+                    item.user_no !== auth.user_no && (
+                      <View
+                        style={{
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          paddingRight: 10
+                        }}
+                      >
+                        <CustomCheckBox
+                          color="#ccc"
+                          onCheck={() => selectEmployee(type, item)}
+                          checked={isSelected}
+                        />
+                      </View>
+                    )}
+                </>
+              </TouchableHighlight>
+
+              {/* 자식 조직이 존재할 때 */}
+              {type === 'group' && openGroup[item.organization_no] && (
+                <View>
+                  {item.children &&
+                    OrganizationFlatList(
+                      item.children,
+                      index,
+                      type,
+                      depth + 1,
+                      isParentSelected || isSelected
+                    )}
+                </View>
+              )}
+
+              {/* 자식 조직이 더 없을 때 조직원 리스트 */}
+              {type === 'group' &&
+                openGroup[item.organization_no] &&
+                organizationEmployee[item.organization_no] && (
+                  <View>
+                    {!item.children &&
+                      OrganizationFlatList(
+                        organizationEmployee[item.organization_no],
+                        index,
+                        'member',
+                        depth + 1,
+                        isParentSelected || isSelected
+                      )}
+                  </View>
+                )}
+            </View>
+          );
+        }}
+      />
+    );
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -219,416 +414,22 @@ const OrganizationScreenPresenter = (props: any) => {
               ) : (
                 <View></View>
               )}
-
-              {(tabType === 'org' &&
-                (keyword === '' ? (
-                  <ScrollView bounces={false} style={{ flex: 1 }}>
-                    <View>
-                      <View
-                        style={[
-                          styles.lineContainer,
-                          { backgroundColor: '#fbfbfb' }
-                        ]}
-                      >
-                        <Image source={ic_building} />
-                        {/* <CustomIcon name={'icoCompany'} size={24} /> */}
-                        <Text
-                          style={[
-                            styles.textStyle,
-                            { color: '#1c90fb', marginLeft: 4 }
-                          ]}
-                        >
-                          {organization.organization_name}(
-                          {organization.employee_count})
-                        </Text>
-                      </View>
-                      <OrganizationFlatList
-                        selectedEmployee={selectedEmployee}
-                        openGroup={openGroup}
-                        auth={auth}
-                        setOpenGroup={setOpenGroup}
-                        organizationEmployee={organizationEmployee}
-                        getOrganizationEmployeeTree={
-                          getOrganizationEmployeeTree
-                        }
-                        selectEmployee={selectEmployee}
-                      />
-                      {OrganizationFlatList(organization.children)}
-                    </View>
-                  </ScrollView>
-                ) : searchedEmployee.length === 0 ? (
-                  <View
-                    style={{
-                      paddingTop: 118,
-                      alignItems: 'center',
-                      justifyContent: 'center'
-                    }}
-                  >
-                    {/* <Image
-                          source={''}
-                          style={{
-                            width: Math.min(width, height) / 2,
-                            height: Math.min(width, height) / 2,
-                            resizeMode: 'contain'
-                          }}
-                        /> */}
-                    <Text>검색결과가 존재하지 않습니다.</Text>
-                  </View>
-                ) : (
-                  <SectionList
-                    sections={searchedEmployee}
-                    keyExtractor={(item, index) => index.toString()}
-                    renderSectionHeader={({ section }) => (
-                      <Text style={styles.category}>{section.title}</Text>
-                    )}
-                    renderItem={({ item, index, section }) => {
-                      return (
-                        <TouchableOpacity
-                          disabled={item.user_no === auth.user_no}
-                          onPress={() => selectEmployee('member', item)}
-                          activeOpacity={0.7}
-                          style={{
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            padding: 10
-                          }}
-                        >
-                          <Image
-                            source={{
-                              uri: item.profile_url
-                                ? wehagoMainURL + item.profile_url
-                                : wehagoDummyImageURL
-                            }}
-                            style={{
-                              width: 40,
-                              height: 40,
-                              resizeMode: 'cover',
-                              borderRadius: 20,
-                              backgroundColor: '#ececec'
-                            }}
-                          />
-                          <View style={{ marginHorizontal: 10, flex: 1 }}>
-                            <Text style={{ fontWeight: 'bold' }}>
-                              {item.user_name +
-                                ' ' +
-                                item.rank_name +
-                                '(' +
-                                item.portal_id +
-                                ')'}
-                            </Text>
-                            <Text
-                              numberOfLines={1}
-                              ellipsizeMode={'tail'}
-                              style={{
-                                fontSize: 10,
-                                color: '#8c8c8c',
-                                marginTop: 5
-                              }}
-                            >
-                              {item.full_path}
-                            </Text>
-                          </View>
-                          <View style={{ marginLeft: 'auto', width: 30 }}>
-                            {item.user_no !== auth.user_no ? (
-                              <View
-                                style={{
-                                  justifyContent: 'center',
-                                  alignItems: 'center',
-                                  paddingRight: 10
-                                }}
-                              >
-                                <CustomCheckBox
-                                  color="#ccc"
-                                  onCheck={() => selectEmployee('member', item)}
-                                  checked={
-                                    selectedEmployee.member.findIndex(
-                                      (i: any) => i.user_no === item.user_no
-                                    ) !== -1
-                                      ? true
-                                      : false
-                                  }
-                                />
-                              </View>
-                            ) : (
-                              <></>
-                            )}
-                          </View>
-                        </TouchableOpacity>
-                      );
-                    }}
-                  />
-                ))) ||
-                (tabType === 'contact' &&
-                  (keyword === '' ? (
-                    <SectionList
-                      sections={contacts}
-                      keyExtractor={(item, index) => index.toString()}
-                      renderSectionHeader={({ section }: any) => (
-                        <Text style={styles.category}>{section.title}</Text>
-                      )}
-                      renderItem={({ item, index, section }) => {
-                        test(item);
-                        return (
-                          <TouchableOpacity
-                            onPress={() => selectEmployee('member', item)}
-                            activeOpacity={0.7}
-                            style={{
-                              flexDirection: 'row',
-                              alignItems: 'center',
-                              padding: 10
-                            }}
-                          >
-                            <Image
-                              source={{
-                                uri: item.profile_image
-                                  ? wehagoMainURL + item.profile_image
-                                  : wehagoDummyImageURL
-                              }}
-                              style={{
-                                width: 40,
-                                height: 40,
-                                resizeMode: 'cover',
-                                borderRadius: 20,
-                                backgroundColor: '#ececec'
-                              }}
-                            />
-                            <View style={{ marginHorizontal: 10, flex: 1 }}>
-                              <Text style={{ fontWeight: 'bold' }}>
-                                {item.address_name}
-                              </Text>
-                            </View>
-                            <View style={{ marginLeft: 'auto', width: 30 }}>
-                              <View
-                                style={{
-                                  justifyContent: 'center',
-                                  alignItems: 'center',
-                                  paddingRight: 10
-                                }}
-                              >
-                                <CustomCheckBox
-                                  color="#ccc"
-                                  onCheck={() => selectEmployee('member', item)}
-                                  checked={
-                                    selectedEmployee.member[item.user_no]
-                                      ? true
-                                      : false
-                                  }
-                                />
-                              </View>
-                            </View>
-                          </TouchableOpacity>
-                        );
-                      }}
-                    />
-                  ) : searchedEmployee.length === 0 ? (
-                    <View
-                      style={{
-                        paddingTop: 118,
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                      }}
-                    >
-                      {/* <Image
-                            source={require('../../../assets/emptySearch.png')}
-                            style={{
-                              width: Math.min(width, height) / 2,
-                              height: Math.min(width, height) / 2,
-                              resizeMode: 'contain'
-                            }}
-                          /> */}
-                      <Text>검색결과가 존재하지 않습니다.</Text>
-                    </View>
-                  ) : (
-                    <SectionList
-                      sections={searchedEmployee}
-                      keyExtractor={(item, index) => index.toString()}
-                      renderSectionHeader={({ section }) => (
-                        <Text style={styles.category}>{section.title}</Text>
-                      )}
-                      renderItem={({ item, index, section }) => {
-                        return (
-                          <TouchableOpacity
-                            onPress={() => selectEmployee('member', item)}
-                            activeOpacity={0.7}
-                            style={{
-                              flexDirection: 'row',
-                              alignItems: 'center',
-                              padding: 10
-                            }}
-                          >
-                            <Image
-                              source={{
-                                uri: item.profile_image
-                                  ? wehagoMainURL + item.profile_image
-                                  : wehagoDummyImageURL
-                              }}
-                              style={{
-                                width: 40,
-                                height: 40,
-                                resizeMode: 'cover',
-                                borderRadius: 20,
-                                backgroundColor: '#ececec'
-                              }}
-                            />
-                            <View style={{ marginHorizontal: 10, flex: 1 }}>
-                              <Text style={{ fontWeight: 'bold' }}>
-                                {item.address_name}
-                              </Text>
-                            </View>
-                            <View style={{ marginLeft: 'auto', width: 30 }}>
-                              <View
-                                style={{
-                                  justifyContent: 'center',
-                                  alignItems: 'center',
-                                  paddingRight: 10
-                                }}
-                              >
-                                <CustomCheckBox
-                                  color="#ccc"
-                                  onCheck={() => selectEmployee('member', item)}
-                                  checked={
-                                    selectedEmployee.member[item.user_no]
-                                      ? true
-                                      : false
-                                  }
-                                />
-                              </View>
-                            </View>
-                          </TouchableOpacity>
-                        );
-                      }}
-                    />
-                  ))) ||
-                (tabType === 'exter' && (
-                  <View style={{ flex: 1, justifyContent: 'flex-start' }}>
-                    <Text style={{ marginHorizontal: 10, marginTop: 10 }}>
-                      {'참여자 초대'}
-                    </Text>
-                    <TextInput
-                      style={{
-                        margin: 10,
-                        borderBottomWidth: 1,
-                        borderBottomColor: '#ccc'
-                      }}
-                      placeholder={
-                        '초대할 사람의 이메일 또는 전화번호를 입력해주세요'
-                      }
-                      autoCompleteType={'email' || 'tel'}
-                      onSubmitEditing={() => {
-                        let value = inviteText;
-                        let type = 'error';
-                        let flag = false;
-                        const numReg1 = /^\d{2,3}-\d{3,4}-\d{4}/;
-                        const numReg2 = /^01\d{9,11}/;
-                        const emailReg =
-                          /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
-                        if (numReg1.test(inviteText)) {
-                          type = 'number';
-                          flag = true;
-                        } else if (numReg2.test(inviteText)) {
-                          value =
-                            value.length <= 10
-                              ? value.replace(
-                                  /(\d{3})(\d{3})(\d{3,4})/g,
-                                  '$1-$2-$3'
-                                )
-                              : value.replace(
-                                  /(\d{3})(\d{4})(\d{4})/g,
-                                  '$1-$2-$3'
-                                );
-                          type = 'number';
-                          flag = true;
-                        } else if (emailReg.test(inviteText)) {
-                          type = 'email';
-                          flag = true;
-                        }
-                        if (flag) {
-                          setInvited([
-                            ...invited,
-                            {
-                              type,
-                              value
-                            }
-                          ]);
-                          setInviteText('');
-                        } else {
-                          Alert.alert(
-                            '서식 오류',
-                            '전화번호 또는 이메일을 입력해주세요.'
-                          );
-                          setInviteText('');
-                        }
-                      }}
-                      clearButtonMode={'always'}
-                      onChangeText={setInviteText}
-                      value={inviteText}
-                    />
-                    <View>
-                      {recents.length ? (
-                        <>
-                          <Text>{'최근 초대한 참여자'}</Text>
-                          <FlatList
-                            data={recents}
-                            renderItem={({ index, item, separators }) => (
-                              <View style={{ flexDirection: 'row' }}>
-                                <Text>{item.type}</Text>
-                                <Text>{item.value}</Text>
-                              </View>
-                            )}
-                          />
-                        </>
-                      ) : (
-                        <></>
-                      )}
-                    </View>
-                    <View
-                      style={{ borderBottomWidth: 1, borderColor: '#ccc' }}
-                    />
-                    <Text style={{ margin: 10 }}>{'화상회의 참여자'}</Text>
-                    <View
-                      style={{ borderBottomWidth: 1, borderColor: '#ccc' }}
-                    />
-                    {invited.length ? (
-                      <FlatList
-                        data={invited}
-                        renderItem={({ index, item, separators }) => {
-                          test(item);
-                          return (
-                            <View style={{ flexDirection: 'row' }}>
-                              <Text>{item.type}</Text>
-                              <Text>{item.value}</Text>
-                            </View>
-                          );
-                        }}
-                      />
-                    ) : (
-                      <View
-                        style={{
-                          paddingTop: 118,
-                          alignItems: 'center',
-                          justifyContent: 'center'
-                        }}
-                      >
-                        {/* <Image
-                              source={require('../../../assets/emptySearch.png')}
-                              style={{
-                                width: Math.min(width, height) / 2,
-                                height: Math.min(width, height) / 2,
-                                resizeMode: 'contain'
-                              }}
-                            /> */}
-                        <Text style={{ margin: 10 }}>
-                          {'등록된 참여자가 없습니다.'}
-                        </Text>
-                        <Text style={{ textAlign: 'center' }}>
-                          {
-                            '초대할 참여자의 이메일 또는\n전화번호를 입력해보세요.'
-                          }
-                        </Text>
-                      </View>
-                    )}
-                  </View>
-                ))}
+              <OrganizationTab
+                tabType={tabType}
+                keyword={keyword}
+                organization={organization}
+                OrganizationFlatList={OrganizationFlatList}
+                searchedEmployee={searchedEmployee}
+                selectEmployee={selectEmployee}
+                auth={auth}
+                invited={invited}
+                selectedEmployee={selectedEmployee}
+                contacts={contacts}
+                inviteText={inviteText}
+                setInvited={setInvited}
+                setInviteText={setInviteText}
+                recents={recents}
+              />
             </>
           )}
         </View>
@@ -734,21 +535,6 @@ const styles = StyleSheet.create({
   checkBoxSelected: {
     backgroundColor: '#1C90FB',
     borderColor: '#1C90FB'
-  },
-  category: {
-    flex: 1,
-    padding: 12,
-    paddingTop: 6,
-    paddingBottom: 6,
-    borderBottomWidth: 1,
-    borderWidth: 1,
-    borderColor: '#ececec',
-    backgroundColor: '#f6f7f8',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    fontSize: 12,
-    color: '#555555'
   },
   search: {
     flex: 1,
