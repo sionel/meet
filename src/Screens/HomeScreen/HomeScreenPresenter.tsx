@@ -30,6 +30,8 @@ import ConferenceCard from './Component/ConferenceCard';
 import FinishedCard from './Component/FinishedCard';
 import ReservationCard from './Component/ReservationCard';
 import BottomPopup from './Component/BottomPopup';
+import ParticipantsList from '../../components/renewal/ParticipantsList';
+// import ParticipantBox from '../ConferenceScreen/Content/BottomArea/SubVideoBox/ParticipantBox';
 
 // import { isWehagoV } from '../../utils';
 // import { Text } from '../../components/StyledText';
@@ -44,7 +46,7 @@ const icChange = require('../../../assets/new/icons/ic_change.png');
 const HomeScreenPresenter = (props: any) => {
   const {
     test,
-
+    setTest,
     userName,
     indicator,
     ongoingConference,
@@ -58,367 +60,232 @@ const HomeScreenPresenter = (props: any) => {
     userImg,
     createConference,
     enterInviteCode,
-    bottomPopup
+    bottomPopup,
+    participantsList
   } = props;
   const t = getT();
   return (
-    <SafeAreaView style={styles.safeContainer}>
+    <Fragment>
       <StatusBar barStyle={'dark-content'} backgroundColor={'#F7F8FA'} />
-      {/* 헤더 */}
-      <View style={styles.header}>
-        <Image source={loginLogo} style={styles.logo} resizeMode={'contain'} />
-        <TouchableOpacity style={styles.setting} onPress={onClickSetting}>
-          <Image source={icSet} />
-        </TouchableOpacity>
-      </View>
-      <TouchableOpacity
-        style={{
-          position: 'absolute',
-          width: 100,
-          height: 100,
-          top: 250,
-          backgroundColor: 'blue',
-          zIndex: 9
-        }}
-        onPress={test}
-      />
-      {/* 프로필, 이름 , 회사*/}
-      <View style={styles.helloContainer}>
-        <View style={styles.helloTextContainer}>
-          <Image source={{ uri: userImg }} style={styles.settingImg} />
-          <Text style={styles.name}>{userName}</Text>
-          <TouchableOpacity style={styles.selectConpany}>
-            <Text style={styles.companyText}>{companyName}</Text>
-            <Image source={icArrowDownBlack} style={styles.downArrow} />
+      <SafeAreaView style={styles.safeContainer}>
+        {participantsList.show && <ParticipantsList {...participantsList} />}
+        <View style={styles.header}>
+          <Image
+            source={loginLogo}
+            style={styles.logo}
+            resizeMode={'contain'}
+          />
+          <TouchableOpacity style={styles.setting} onPress={onClickSetting}>
+            <Image source={icSet} />
           </TouchableOpacity>
         </View>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={styles.topButtons}
-            onPress={createConference}
-          >
-            <Image
-              source={icVideo}
-              style={styles.topButtonImg}
-              resizeMode={'cover'}
-            />
-            <Text>{'회의생성'}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.topButtons}
-            onPress={createConference}
-          >
-            <Image
-              source={icCalendar}
-              style={styles.topButtonImg}
-              resizeMode={'cover'}
-            />
-            <Text>{'회의일정'}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.topButtons} onPress={enterInviteCode}>
-            <Image
-              source={icKeyboard}
-              style={styles.topButtonImg}
-              resizeMode={'cover'}
-            />
-            <Text>{'참여코드'}</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-      {/* <TouchableOpacity
-        style={{
-          position: 'absolute',
-          width: 30,
-          height: 30,
-          top: '36%',
-          backgroundColor: 'black',
-          right: '10%'
-        }}
-      >
-        <Image source={icChange} style={{ width: 30, height: 30 }} />
-      </TouchableOpacity> */}
-      {/* 진행중인 화상회의 */}
-      {ongoingConference.length > 0 && (
-        <View style={styles.ongoingContainer}>
-          <View style={styles.goingTextContainer}>
-            <Text style={styles.goingText}>{'진행중인 화상회의'}</Text>
-            <Text
-              style={[
-                styles.goingText,
-                {
-                  color: '#1c90fb'
-                }
-              ]}
-            >
-              {ongoingConference.length}
-            </Text>
-          </View>
-          <View style={{ flex: 3 }}>
-            <FlatList
-              // showsHorizontalScrollIndicator={false}
-              // refreshControl={(
-              //     <RefreshControl
-              //       refreshing={function test(){
-              //         let a = true
-              //         setInterval(()=>{a = !a},1000)
-              //         return a}()}
-              //       onRefresh={()=>{}}
-              //     />
-              //   )
-              // }
-
-              // onRefresh={() => {}}
-              horizontal={true}
-              data={ongoingConference}
-              renderItem={conference => {
-                return (
-                  <ConferenceCard
-                    index={conference.index}
-                    conference={conference.item}
-                  />
-                );
-              }}
-              windowSize={2}
-              showsHorizontalScrollIndicator={false}
-            />
-          </View>
-        </View>
-      )}
-
-      {/* 예약 회의  */}
-      <View
-        style={{
-          width: '100%',
-          flex: 1,
-          paddingHorizontal: 20,
-          marginTop: 10
-        }}
-      >
-        <View
+        {/* <TouchableOpacity
           style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginBottom: 10
+            position: 'absolute',
+            width: 100,
+            height: 100,
+            top: 250,
+            backgroundColor: '#1322fa',
+            zIndex: 9
           }}
-        >
-          {reservationConference.length > 0 && (
-            <TouchableOpacity
-              style={{ flexDirection: 'row' }}
-              onPress={() => {
-                setHighlight('reservation');
-              }}
-            >
-              <Text
-                style={[
-                  { color: '#939393', fontSize: 16, paddingRight: 5 },
-                  highlight === 'reservation' && {
-                    fontWeight: 'bold',
-                    color: '#000'
-                  }
-                ]}
-              >
-                {'예약회의'}
-              </Text>
-              <Text
-                style={[
-                  { color: '#939393', fontSize: 16 },
-                  highlight === 'reservation' && {
-                    fontWeight: 'bold',
-                    color: '#1c90fb'
-                  }
-                ]}
-              >
-                {reservationConference.length}
-              </Text>
+          onPress={setTest}
+        /> */}
+        {/* 프로필, 이름 , 회사*/}
+        <View style={styles.helloContainer}>
+          <View style={styles.helloTextContainer}>
+            <Image source={{ uri: userImg }} style={styles.settingImg} />
+            <Text style={styles.name}>{userName}</Text>
+            <TouchableOpacity style={styles.selectConpany}>
+              <Text style={styles.companyText}>{companyName}</Text>
+              <Image source={icArrowDownBlack} style={styles.downArrow} />
             </TouchableOpacity>
-          )}
-          {reservationConference.length > 0 && finishedConference.length > 0 && (
-            <View
-              style={{
-                borderWidth: 1,
-                borderColor: '#aaa',
-                height: '100%',
-                marginHorizontal: 10
-              }}
-            />
-          )}
-          {finishedConference.length > 0 && (
+          </View>
+          <View style={styles.buttonContainer}>
             <TouchableOpacity
-              style={{ flexDirection: 'row' }}
-              onPress={() => {
-                setHighlight('finished');
-              }}
+              style={styles.topButtons}
+              onPress={createConference}
             >
-              <Text
-                style={[
-                  { color: '#939393', fontSize: 16, paddingRight: 5 },
-
-                  highlight === 'finished' && {
-                    fontWeight: 'bold',
-                    color: '#000'
-                  }
-                ]}
-              >
-                {'회의기록'}
-              </Text>
-              <Text
-                style={[
-                  { color: '#939393', fontSize: 16, paddingRight: 20 },
-                  highlight === 'finished' && {
-                    fontWeight: 'bold',
-                    color: '#1c90fb'
-                  }
-                ]}
-              >
-                {finishedConference.length}
-              </Text>
-            </TouchableOpacity>
-          )}
-        </View>
-        <FlatList
-          data={
-            highlight === 'reservation'
-              ? reservationConference
-              : finishedConference
-          }
-          renderItem={data => {
-            const { item } = data;
-
-            return highlight === 'reservation' ? (
-              <ReservationCard {...item} />
-            ) : (
-              // <FinishedCard {...{item}} />
-              <FinishedCard {...item} />
-            );
-          }}
-          showsVerticalScrollIndicator={false}
-        />
-      </View>
-      {bottomPopup.show && <BottomPopup {...bottomPopup} />}
-
-      {/* {(props.started.length < 1 || started.length < 1) &&
-      (props.reservation.length < 1 || reservation.length < 1) ? (
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          refreshControl={
-            props.memberType !== 1 && (
-              <RefreshControl
-                refreshing={props.refreshing}
-                onRefresh={props.onRefresh}
+              <Image
+                source={icVideo}
+                style={styles.topButtonImg}
+                resizeMode={'cover'}
               />
-            )
-          }
-          style={{
-            flex: 1,
-            width: '100%',
-            height: '100%',
-            backgroundColor: '#f1f2f5'
-          }}
-          contentContainerStyle={{
-            justifyContent: 'center',
-            alignContent: 'center',
-            flexGrow: 1
-          }}
-        >
-          <Placeholder
-            mainText={t('main_none')}
-            subText={
-              props.memberType === 1 || props.plan === 'WE'
-                ? isWehagoV
-                  ? t('main_wetext_V')
-                  : t('main_wetext')
-                : props.plan === 'SP'
-                ? t('main_sptext')
-                : t('main_start')
-            }
-          />
-          <View style={{ flex: 1 }} />
-        </ScrollView>
-      ) : (
-        <Fragment>
-          <SectionList
-            keyExtractor={(item, index) => index.toString()}
-            refreshing={props.refreshing}
-            onRefresh={props.onRefresh}
-            style={[
-              styles.listContainer,
-              props.hasNotch && {
-                paddingLeft: props.orientation === 'LANDSCAPE-LEFT' ? 24 : 0,
-                paddingRight: props.orientation === 'LANDSCAPE-RIGHT' ? 24 : 0
-              }
-            ]}
-            sections={[
-              {
-                title: t('main_proceed'),
-                data: started,
-                length: started.length - 1
-              },
-              {
-                title: t('main_scheduled'),
-                data: reservation,
-                length: reservation.length - 1
-              }
-            ]}
-            renderSectionHeader={({ section }) =>
-              section.data.length > 0 && (
-                <SectionListHeader title={section.title} />
-              )
-            }
-            renderItem={({ item, index, section }) => {
-              return (
-                <ListItemComp
-                  key={item.room_id}
-                  title={item.name}
-                  personnel={item.receiver_user_count}
-                  updated={item.start_date_time}
-                  room_profile_url={''}
-                  lottie={true}
-                  underline={index < section.length ? true : false}
-                  active={true}
-                  disable={false}
-                  onClick={() => {
-                    props.setVideoId(item.room_id);
-                    props.onRedirect('ConferenceState', {
-                      item: {
-                        roomId: item.room_id,
-                        externalData: null,
-                        from: 'meet'
-                      }
-                    });
-                  }}
-                />
-              );
-            }}
-          />
-        </Fragment>
-      )}
-      {props.memberType !== 1 &&
-        props.permission &&
-        props.plan !== 'WE' &&
-        !isWehagoV && (
-          <AddButton
-            onClick={() =>
-              props.onRedirect('Create', {
-                onGetWetalkList: props.onGetWetalkList
-              })
-            }
-          />
+              <Text>{'회의생성'}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.topButtons}
+              onPress={createConference}
+            >
+              <Image
+                source={icCalendar}
+                style={styles.topButtonImg}
+                resizeMode={'cover'}
+              />
+              <Text>{'회의일정'}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.topButtons}
+              onPress={enterInviteCode}
+            >
+              <Image
+                source={icKeyboard}
+                style={styles.topButtonImg}
+                resizeMode={'cover'}
+              />
+              <Text>{'참여코드'}</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        {/* 진행중인 화상회의 */}
+        {ongoingConference.length > 0 && (
+          <View style={styles.ongoingContainer}>
+            <View style={styles.goingTextContainer}>
+              <Text style={styles.goingText}>{'진행중인 화상회의'}</Text>
+              <Text
+                style={[
+                  styles.goingText,
+                  {
+                    color: '#1c90fb'
+                  }
+                ]}
+              >
+                {ongoingConference.length}
+              </Text>
+            </View>
+            <View style={{ flex: 3 }}>
+              <FlatList
+                keyExtractor={(item, index) => index.toString()}
+                horizontal={true}
+                data={ongoingConference}
+                renderItem={conference => {
+                  return (
+                    <ConferenceCard
+                      index={conference.index}
+                      conference={conference.item}
+                    />
+                  );
+                }}
+                windowSize={2}
+                showsHorizontalScrollIndicator={false}
+              />
+            </View>
+          </View>
         )}
 
-      <CustomAlert
-        visible={props.alert.visible}
-        title={props.alert.title}
-        width={320}
-        description={props.alert.message}
-        actions={[
-          {
-            name: t('alert_button_confirm'),
-            action: props.alert.onClose
-          }
-        ]}
-        onClose={props.alert.onClose}
-      /> */}
-    </SafeAreaView>
+        {/* 예약 회의  */}
+        <View
+          style={{
+            width: '100%',
+            flex: 1,
+            paddingHorizontal: 20,
+            marginTop: 10
+          }}
+        >
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginBottom: 10
+            }}
+          >
+            {reservationConference.length > 0 && (
+              <TouchableOpacity
+                style={{ flexDirection: 'row' }}
+                onPress={() => {
+                  setHighlight('reservation');
+                }}
+              >
+                <Text
+                  style={[
+                    { color: '#939393', fontSize: 16, paddingRight: 5 },
+                    highlight === 'reservation' && {
+                      fontWeight: 'bold',
+                      color: '#000'
+                    }
+                  ]}
+                >
+                  {'예약회의'}
+                </Text>
+                <Text
+                  style={[
+                    { color: '#939393', fontSize: 16 },
+                    highlight === 'reservation' && {
+                      fontWeight: 'bold',
+                      color: '#1c90fb'
+                    }
+                  ]}
+                >
+                  {reservationConference.length}
+                </Text>
+              </TouchableOpacity>
+            )}
+            {reservationConference.length > 0 && finishedConference.length > 0 && (
+              <View
+                style={{
+                  borderWidth: 1,
+                  borderColor: '#aaa',
+                  height: '100%',
+                  marginHorizontal: 10
+                }}
+              />
+            )}
+            {finishedConference.length > 0 && (
+              <TouchableOpacity
+                style={{ flexDirection: 'row' }}
+                onPress={() => {
+                  setHighlight('finished');
+                }}
+              >
+                <Text
+                  style={[
+                    { color: '#939393', fontSize: 16, paddingRight: 5 },
+
+                    highlight === 'finished' && {
+                      fontWeight: 'bold',
+                      color: '#000'
+                    }
+                  ]}
+                >
+                  {'회의기록'}
+                </Text>
+                <Text
+                  style={[
+                    { color: '#939393', fontSize: 16, paddingRight: 20 },
+                    highlight === 'finished' && {
+                      fontWeight: 'bold',
+                      color: '#1c90fb'
+                    }
+                  ]}
+                >
+                  {finishedConference.length}
+                </Text>
+              </TouchableOpacity>
+            )}
+          </View>
+          <FlatList
+            keyExtractor={(item, index) => index.toString()}
+            data={
+              highlight === 'reservation'
+                ? reservationConference
+                : finishedConference
+            }
+            renderItem={data => {
+              const { item } = data;
+
+              return highlight === 'reservation' ? (
+                <ReservationCard {...item} />
+              ) : (
+                // <FinishedCard {...{item}} />
+                <FinishedCard {...item} />
+              );
+            }}
+            showsVerticalScrollIndicator={false}
+          />
+        </View>
+        {bottomPopup.show && <BottomPopup {...bottomPopup} />}
+        {/* </View> */}
+      </SafeAreaView>
+    </Fragment>
   );
 };
 
@@ -426,8 +293,8 @@ const styles = StyleSheet.create({
   safeContainer: {
     flex: 1,
     backgroundColor: '#F7F8FA',
-    justifyContent: 'flex-start',
-    alignItems: 'center'
+    justifyContent: 'flex-start'
+    // alignItems: 'center'
   },
   header: {
     width: '100%',
@@ -590,3 +457,128 @@ const styles = StyleSheet.create({
 });
 
 export default HomeScreenPresenter;
+
+{
+  /* {(props.started.length < 1 || started.length < 1) &&
+      (props.reservation.length < 1 || reservation.length < 1) ? (
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            props.memberType !== 1 && (
+              <RefreshControl
+                refreshing={props.refreshing}
+                onRefresh={props.onRefresh}
+              />
+            )
+          }
+          style={{
+            flex: 1,
+            width: '100%',
+            height: '100%',
+            backgroundColor: '#f1f2f5'
+          }}
+          contentContainerStyle={{
+            justifyContent: 'center',
+            alignContent: 'center',
+            flexGrow: 1
+          }}
+        >
+          <Placeholder
+            mainText={t('main_none')}
+            subText={
+              props.memberType === 1 || props.plan === 'WE'
+                ? isWehagoV
+                  ? t('main_wetext_V')
+                  : t('main_wetext')
+                : props.plan === 'SP'
+                ? t('main_sptext')
+                : t('main_start')
+            }
+          />
+          <View style={{ flex: 1 }} />
+        </ScrollView>
+      ) : (
+        <Fragment>
+          <SectionList
+            keyExtractor={(item, index) => index.toString()}
+            refreshing={props.refreshing}
+            onRefresh={props.onRefresh}
+            style={[
+              styles.listContainer,
+              props.hasNotch && {
+                paddingLeft: props.orientation === 'LANDSCAPE-LEFT' ? 24 : 0,
+                paddingRight: props.orientation === 'LANDSCAPE-RIGHT' ? 24 : 0
+              }
+            ]}
+            sections={[
+              {
+                title: t('main_proceed'),
+                data: started,
+                length: started.length - 1
+              },
+              {
+                title: t('main_scheduled'),
+                data: reservation,
+                length: reservation.length - 1
+              }
+            ]}
+            renderSectionHeader={({ section }) =>
+              section.data.length > 0 && (
+                <SectionListHeader title={section.title} />
+              )
+            }
+            renderItem={({ item, index, section }) => {
+              return (
+                <ListItemComp
+                  key={item.room_id}
+                  title={item.name}
+                  personnel={item.receiver_user_count}
+                  updated={item.start_date_time}
+                  room_profile_url={''}
+                  lottie={true}
+                  underline={index < section.length ? true : false}
+                  active={true}
+                  disable={false}
+                  onClick={() => {
+                    props.setVideoId(item.room_id);
+                    props.onRedirect('ConferenceState', {
+                      item: {
+                        roomId: item.room_id,
+                        externalData: null,
+                        from: 'meet'
+                      }
+                    });
+                  }}
+                />
+              );
+            }}
+          />
+        </Fragment>
+      )}
+      {props.memberType !== 1 &&
+        props.permission &&
+        props.plan !== 'WE' &&
+        !isWehagoV && (
+          <AddButton
+            onClick={() =>
+              props.onRedirect('Create', {
+                onGetWetalkList: props.onGetWetalkList
+              })
+            }
+          />
+        )}
+
+      <CustomAlert
+        visible={props.alert.visible}
+        title={props.alert.title}
+        width={320}
+        description={props.alert.message}
+        actions={[
+          {
+            name: t('alert_button_confirm'),
+            action: props.alert.onClose
+          }
+        ]}
+        onClose={props.alert.onClose}
+      /> */
+}

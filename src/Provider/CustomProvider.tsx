@@ -9,13 +9,14 @@ import Orientation, {
 } from 'react-native-orientation-locker';
 import { actionCreators as orientationAction } from '../redux/modules/orientation';
 import { RootState } from '../redux/configureStore';
-import { UserApi } from '../services';
+import { UserApi, ServiceCheckApi } from '../services';
 
 import { getT } from '../utils/translateManager';
 
-import { actionCreators as AlertAcions } from '../redux/modules/alert';
+import { actionCreators as AlertActions } from '../redux/modules/alert';
 import { actionCreators as UserActions } from '../redux/modules/user';
 import { actionCreators as RootActions } from '../redux/modules/root';
+import { actionCreators as DeployedActions } from '../redux/modules/deployed';
 
 export default function CustomProvider(props: any) {
   const { children } = props;
@@ -47,7 +48,10 @@ export default function CustomProvider(props: any) {
   const _setDestination = (destination: string) =>
     dispatch(RootActions.setDestination(destination));
   const _setNetwork = (flag: boolean) => dispatch(RootActions.setNetwork(flag));
-  const _setAlert = (params: any) => dispatch(AlertAcions.setAlert(params));
+  const _setAlert = (params: any) => dispatch(AlertActions.setAlert(params));
+
+  const _setDeployedServices = (params: any) =>
+    dispatch(DeployedActions.setDeployedServices(params));
 
   const [sessionInterval, setSessionInterval] = useState();
 
@@ -66,6 +70,47 @@ export default function CustomProvider(props: any) {
       sessionInterval && clearInterval(sessionInterval);
     };
   }, [isLogin, network]);
+
+  useEffect(() => {
+    _checkDeployedServices();
+  }, [auth]);
+  const _checkDeployedServices = () => {
+
+    const isDeployedServices = ['wehago'];
+    Promise.all([
+      ServiceCheckApi.anotherServiceCheck(
+        auth,
+        auth.last_company,
+        'neors'
+      ).then(res => {
+        res && isDeployedServices.push('neors');
+      }),
+      ServiceCheckApi.anotherServiceCheck(
+        auth,
+        auth.last_company,
+        'wedrive'
+      ).then(res => {
+        res && isDeployedServices.push('wedrive');
+      }),
+      ServiceCheckApi.anotherServiceCheck(
+        auth,
+        auth.last_company,
+        'attendance'
+      ).then(res => {
+        res && isDeployedServices.push('attendance');
+      }),
+      ServiceCheckApi.anotherServiceCheck(
+        auth,
+        auth.last_company,
+        'eapprovals'
+      ).then(res => {
+        res && isDeployedServices.push('eapprovals');
+      })
+    ]).then(res => {
+      _setDeployedServices(isDeployedServices);
+    });
+    
+  };
 
   const _setOrientation = (orientation: OrientationType) => {
     if (orientation === 'LANDSCAPE-LEFT') {
