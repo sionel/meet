@@ -17,7 +17,7 @@ import user from './modules/user';
 import wetalk from './modules/wetalk';
 import wedrive from './modules/wedrive';
 import documentShare from './modules/documentShare';
-import conference from './modules/conference';
+import conference, { state as conferenceState } from './modules/conference';
 import webUser from './modules/webUser';
 import master from './modules/master';
 import alert from './modules/alert';
@@ -46,7 +46,7 @@ export interface RootState {
   wetalk: any;
   wedrive: any;
   documentShare: any;
-  conference: any;
+  conference: conferenceState;
   webUser: any;
   master: any;
   toast: any;

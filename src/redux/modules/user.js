@@ -24,8 +24,6 @@ const SET_PERMISSION = 'user.SET_PERMISSION'; // 화상회의 생성 권한
 const TOGGLE_UPDATE_NOTI = 'user.TOGGLE_UPDATE_NOTI';
 //#region Action Creators
 
-
-
 //#region initialState
 
 const initialState = {
@@ -37,7 +35,7 @@ const initialState = {
   log: {},
   session: true,
   updateNoti: true,
-  autoLogin: false,
+  autoLogin: false
 };
 
 //#endregion initialState
@@ -74,7 +72,7 @@ function reducer(state = initialState, action) {
       let auth = state.auth;
       auth.AUTH_A_TOKEN = action.newToken;
       return {
-      ...state,
+        ...state,
         auth
       };
     // case TOKEN_LOGIN:
@@ -97,8 +95,6 @@ function reducer(state = initialState, action) {
 }
 
 //#endregion Reducer
-
-
 
 /**
  * Event Log
@@ -155,7 +151,6 @@ function login(auth, from, autoLogin) {
 //     auth,
 //   }
 // }
-
 
 function toggleUpdateNoti() {
   return {
@@ -335,7 +330,7 @@ const actionCreators = {
   sessionCheck,
   setPermission,
   toggleUpdateNoti,
-  eventLog,
+  eventLog
   // setAuth
 };
 
@@ -343,7 +338,6 @@ export { actionCreators };
 export default reducer;
 
 //#endregion Export
-
 
 // 리덕스에서 api쓰는 방식 주석처리
 // function loginRequest(data, access_pass) {

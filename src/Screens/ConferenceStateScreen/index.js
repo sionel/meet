@@ -8,7 +8,7 @@ const mapStateToProps = state => ({
   from: state.user.from,
   isLogin: state.user.isLogin,
   params: state.root.params,
-  videoId: state.root.videoId,
+  videoId: state.conference.roomId,
 
 });
 

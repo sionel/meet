@@ -318,7 +318,34 @@ export default {
     }
   },
 
-  // 3-11 화상회의방 접속했던 사용자 리스트 조회
+    // 3-11 종료된 화상회의방 접속했던 사용자 리스트 조회
+  getFinishedParticipant: async (auth, roomId) => {
+    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
+
+    const url = `${meetURL}/room/connected-user?cno=${cno}&room=${roomId}`;
+    const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
+
+    try {
+      const data = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          ...headers
+        }
+      };
+      const response = await fetch(url, data);
+      if (response.status !== 200) {
+        throw response.resultCode;
+      }
+      const { resultData } = await response.json();
+      return resultData;
+    } catch (err) {
+      console.warn('11.getMeetRoomsList : ', err);
+      return false;
+    }
+  },
+
+
 
   // 3-12 화상회의 토큰 생성
   getMeetRoomToken: async (auth, roomId) => {

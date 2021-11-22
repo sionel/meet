@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 
 import icBack from '../../../assets/new/icons/ic_back.png';
+import icMaster from '../../../assets/new/icons/ic_master.png';
 
 const { height, width } = Dimensions.get('window');
 
@@ -83,7 +84,6 @@ export default function ParticipantsList(props: participantsListProps) {
           data={participants}
           renderItem={user => {
             const { index, item, separators } = user;
-            console.log(item);
 
             return (
               <TouchableOpacity
@@ -92,19 +92,11 @@ export default function ParticipantsList(props: participantsListProps) {
                   flexDirection: 'row',
                   height: 35,
                   marginVertical: '2%',
-                  marginHorizontal: '3%',
+                  marginHorizontal: '5%',
                   alignItems: 'center',
                   justifyContent: 'center'
                 }}
               >
-                {/* <View
-                  style={{
-                    height: 100,
-                    width: '100%',
-                    margin: 5,
-                    backgroundColor: '#9922af'
-                  }}
-                /> */}
                 <Image
                   source={{ uri: item.image }}
                   resizeMode={'cover'}
@@ -114,15 +106,67 @@ export default function ParticipantsList(props: participantsListProps) {
                   style={{
                     flex: 1,
                     fontSize: 20,
-                    marginHorizontal: 15
+                    marginHorizontal: '5%'
                   }}
                 >
                   {item.name}
                 </Text>
-                <Image
-                  source={item.image}
-                  style={{ width: '20%', backgroundColor: '#100200' }}
-                />
+                {item.status === 'master' && (
+                  <View
+                    style={{
+                      height: '70%',
+                      width: '20%',
+                      marginHorizontal: '5%',
+                      borderRadius: 35,
+                      backgroundColor: '#febc2c',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      flexDirection: 'row'
+                    }}
+                  >
+                    <Image
+                      source={icMaster}
+                      resizeMode={'cover'}
+                      style={{
+                        width: 20,
+                        height: 20
+                      }}
+                    />
+                    <Text
+                      style={{
+                        paddingHorizontal: 5,
+                        color: '#fff',
+                        fontSize: 14
+                      }}
+                    >
+                      {'마스터'}
+                    </Text>
+                  </View>
+                )}
+                {item.status === 'extra' && (
+                  <View
+                    style={{
+                      height: '70%',
+                      width: '20%',
+                      borderRadius: 35,
+                      marginHorizontal: '5%',
+                      backgroundColor: '#75b7cb',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      flexDirection: 'row'
+                    }}
+                  >
+                    <Text
+                      style={{
+                        paddingHorizontal: 5,
+                        color: '#fff',
+                        fontSize: 14
+                      }}
+                    >
+                      {'외부참여자'}
+                    </Text>
+                  </View>
+                )}
               </TouchableOpacity>
             );
           }}

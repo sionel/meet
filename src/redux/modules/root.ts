@@ -72,10 +72,18 @@ const _applySetLoaded = (state: any, action: any) => {
     loaded
   };
 };
-const setVideoId = (videoId: string) => ({
-  type: SET_VIDEO_ID,
-  videoId
-});
+const setVideoId = (videoId: string): ThunkAction<void, RootState, unknown> => {
+  return dispatch => {
+    dispatch({
+      type: SET_VIDEO_ID,
+      videoId
+    });
+    dispatch({
+      type: 'conference.SET_ROOM_ID',
+      id: videoId
+    });
+  };
+};
 
 const _applySetVideoId = (state: any, action: any) => {
   const { videoId } = action;
