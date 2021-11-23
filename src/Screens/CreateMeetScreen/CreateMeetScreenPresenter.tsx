@@ -474,8 +474,6 @@ const CreateMeetScreenPresenter = (props: any) => {
                 data={selectedEmployee.member}
                 keyExtractor={(item, index) => String(index)}
                 renderItem={({ item, index }: any) => {
-                  console.log(item);
-                  
                   let path: [] = [];
                   let user_path = '';
                   if (item.full_path) {

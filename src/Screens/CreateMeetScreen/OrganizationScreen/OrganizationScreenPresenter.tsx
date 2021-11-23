@@ -55,7 +55,10 @@ const OrganizationScreenPresenter = (props: any) => {
     participantListAdd,
     onClickCancel,
     auth,
-    listLng
+    listLng,
+    contactType,
+    setContactType,
+    validateExter
   } = props;
 
   const OrganizationFlatList = (
@@ -373,6 +376,76 @@ const OrganizationScreenPresenter = (props: any) => {
                   </Text>
                 </TouchableOpacity>
               </View>
+
+              {/* {tabType === 'contact' && (
+                <>
+                  <View style={{ backgroundColor: '#F7F8FA', height: 15 }} />
+                  <View style={{ flexDirection: 'row' }}>
+                    <TouchableOpacity
+                      activeOpacity={0.7}
+                        onPress={() => setContactType('one')}
+                      style={{
+                        flex: 1,
+                        height: 40,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        borderColor: contactType === 'one' ? '#1c90fb' : '#8c8c8c',
+                        borderBottomWidth: contactType === 'one' ? 2 : 1
+                      }}
+                    >
+                      <Text
+                        style={{
+                          color: contactType === 'one' ? '#1c90fb' : '#8c8c8c'
+                        }}
+                      >
+                        {t('ONE')}
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      activeOpacity={0.7}
+                        onPress={() => setContactType('email')}
+                      style={{
+                        flex: 1,
+                        height: 40,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        borderColor:
+                          contactType === 'email' ? '#1c90fb' : '#8c8c8c',
+                        borderBottomWidth: contactType === 'email' ? 2 : 1
+                      }}
+                    >
+                      <Text
+                        style={{
+                          color: contactType === 'email' ? '#1c90fb' : '#8c8c8c'
+                        }}
+                      >
+                        {t('이메일')}
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      activeOpacity={0.7}
+                        onPress={() => setContactType('sms')}
+                      style={{
+                        flex: 1,
+                        height: 40,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        borderColor:
+                          contactType === 'sms' ? '#1c90fb' : '#8c8c8c',
+                        borderBottomWidth: contactType === 'sms' ? 2 : 1
+                      }}
+                    >
+                      <Text
+                        style={{
+                          color: contactType === 'sms' ? '#1c90fb' : '#8c8c8c'
+                        }}
+                      >
+                        {t('SMS')}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </>
+              )} */}
               {tabType !== 'exter' ? (
                 <View
                   style={{
@@ -429,6 +502,7 @@ const OrganizationScreenPresenter = (props: any) => {
                 setInvited={setInvited}
                 setInviteText={setInviteText}
                 recents={recents}
+                validateExter={validateExter}
               />
             </>
           )}

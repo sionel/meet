@@ -4,14 +4,11 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import CreateMeetScreenPresenter from './CreateMeetScreenPresenter';
 import OrganizationScreen from './OrganizationScreen';
-// import OrganizationScreen from '../../components/Organization';
 
 import { MeetApi, OrganizationApi } from '../../services';
 
 import moment from 'moment';
 import { getT } from '../../utils/translateManager';
-
-// const hasNotch = DeviceInfo.hasNotch() && Platform.OS === 'ios';
 
 export default function CreateMeetScreenContainer(props: any) {
   const [switchAllSend, setSwitchAllSend] = useState(false);
@@ -19,7 +16,6 @@ export default function CreateMeetScreenContainer(props: any) {
   const [switchDelAlram, setSwitchDelAlram] = useState(false);
   const [selectMode, setSelectMode] = useState(false);
 
-  // const [organization, setorganization] = useState<any>({ company_no: -1 });
   const [employee, setEmployee] = useState([{}]);
 
   const [roomName, setRoomName] = useState('');
@@ -64,21 +60,10 @@ export default function CreateMeetScreenContainer(props: any) {
   const [sendMsgCnt, setSendMsgCnt] = useState(0);
   const [participantList, setParticipantList] = useState<any[]>([]);
   const [textLess2, setTextLess2] = useState(true);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const { auth } = useSelector((state: any) => state.user);
   const t = getT();
 
   const dispatch = useDispatch();
-
-  // const getOrganization = async () => {
-  //   const result = await OrganizationApi.getOrganizationTreeRequest(auth);
-  //   if (result.error) {
-  //     // Alert.alert('조직도', '조직도를 가져올 수 없습니다.');
-  //   } else {
-  //     const organization = result.resultData[0];
-  //     setorganization(organization);
-  //   }
-  // };
 
   const getAllEmployee = async () => {
     const result = await OrganizationApi.getOrganizationTreeAllEmployeeRequest(
@@ -88,8 +73,6 @@ export default function CreateMeetScreenContainer(props: any) {
       console.log('조직도를 가져올 수 없습니다.');
       // Alert.alert('조직도', '조직도를 가져올 수 없습니다.');
     } else {
-      // console.log(result);
-      
       const company = result;
 
       const hangleMapper = company.reduce((acc: any, i: any) => {
@@ -478,6 +461,7 @@ export default function CreateMeetScreenContainer(props: any) {
           setParticipantList={setParticipantList}
           listLng={listLng}
           setListLng={setListLng}
+          setRecents={setRecents}
         />
       ) : (
         <CreateMeetScreenPresenter

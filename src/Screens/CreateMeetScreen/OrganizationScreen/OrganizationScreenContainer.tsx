@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Animated, Easing } from 'react-native';
-import { useSelector } from 'react-redux';
+import { Alert, Animated, Easing } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../redux/configureStore';
 import { getT } from '../../../utils/translateManager';
 import { OrganizationApi } from '../../../services';
@@ -21,13 +21,17 @@ const OrganizationScreenContainer = (props: any) => {
     setParticipantList,
     setSelectMode,
     listLng,
-    setListLng
+    setListLng,
+    setRecents
   } = props;
 
   const [keyword, setKeyword] = useState('');
   const [openGroup, setOpenGroup] = useState({});
   const [searchedEmployee, setSearchedEmployee] = useState(employee);
   const [tabType, setTabType] = useState<'org' | 'contact' | 'exter'>('org');
+  const [contactType, setContactType] = useState<'one' | 'email' | 'sms'>(
+    'email'
+  );
   const [isDataLoading, setIsDataLoading] = useState(false);
   const [organizationEmployee, setOrganizationEmployee] = useState({});
   const [organization, setorganization] = useState<any>({ company_no: -1 });
@@ -45,6 +49,7 @@ const OrganizationScreenContainer = (props: any) => {
   const t = getT();
 
   const auth = useSelector((state: RootState) => state.user.auth);
+  const dispatch = useDispatch;
 
   //#region 조직도 초기화
   const getOrganizationTree = async () => {
@@ -149,24 +154,23 @@ const OrganizationScreenContainer = (props: any) => {
   const selectEmployee = (type: string, item: any) => {
     // 조직원 선택 시
     if (type === 'member') {
-        const newList: any[] = selectedEmployee.member;
-        let tmpList: any[] = [];
-        let idx = newList.findIndex((i: any) => {
-          if (item.user_no) return i.user_no === item.user_no;
-          else return i.address_service_no === item.address_service_no;
-        });
+      const newList: any[] = selectedEmployee.member;
+      let tmpList: any[] = [];
+      let idx = newList.findIndex((i: any) => {
+        if (item.user_no) return i.user_no === item.user_no;
+        else return i.address_service_no === item.address_service_no;
+      });
 
-        if (idx !== -1) {
-          tmpList = newList.filter((v, i) => i !== idx);
-        } else {
-          item.is_master = false;
-          newList.push(item);
-        }
-        setSelectedEmployee({
-          member: idx === -1 ? newList : tmpList,
-          group: selectedEmployee.group
-        });
-      
+      if (idx !== -1) {
+        tmpList = newList.filter((v, i) => i !== idx);
+      } else {
+        item.is_master = false;
+        newList.push(item);
+      }
+      setSelectedEmployee({
+        member: idx === -1 ? newList : tmpList,
+        group: selectedEmployee.group
+      });
     } else {
       // 조직 선택 시
       const newItem = JSON.parse(JSON.stringify(selectedEmployee.group));
@@ -215,6 +219,51 @@ const OrganizationScreenContainer = (props: any) => {
 
   const onClickCancel = () => {
     setSelectMode(false);
+  };
+
+  const validateExter = () => {
+    let value = inviteText;
+    let type = 'error';
+    let flag = false;
+    const numReg1 = /^\d{2,3}-\d{3,4}-\d{4}/;
+    const numReg2 = /^01\d{9,11}/;
+    const emailReg =
+      /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
+    if (inviteText.match(numReg1)) {
+      type = 'number';
+      flag = true;
+    } else if (inviteText.match(numReg2)) {
+      value =
+        value.length <= 10
+          ? value.replace(/(\d{3})(\d{3})(\d{3,4})/g, '$1-$2-$3')
+          : value.replace(/(\d{3})(\d{4})(\d{4})/g, '$1-$2-$3');
+      type = 'number';
+      flag = true;
+    } else if (inviteText.match(emailReg)) {
+      type = 'email';
+      flag = true;
+    }
+    
+    if (flag) {
+      setInvited([
+        ...invited,
+        {
+          type,
+          value
+        }
+      ]);
+      setRecents([...invited, {
+        type,
+        value
+      }]);
+      setInviteText('');
+    } else {
+      Alert.alert(
+        t('서식 오류'),
+        t('올바른 이메일 서식으로 입력해주세요.(aaaa@bbbb.com)')
+      );
+      setInviteText('');
+    }
   };
 
   //#region 직원목록 초기화
@@ -273,6 +322,9 @@ const OrganizationScreenContainer = (props: any) => {
       onClickCancel={onClickCancel}
       auth={auth}
       listLng={listLng}
+      contactType={contactType}
+      setContactType={setContactType}
+      validateExter={validateExter}
     />
   );
 };

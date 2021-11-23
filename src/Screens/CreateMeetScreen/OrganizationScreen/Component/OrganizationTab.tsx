@@ -9,7 +9,7 @@ import {
   Alert,
   SectionList,
   Text,
-  TextInput,
+  TextInput
 } from 'react-native';
 import { wehagoDummyImageURL, wehagoMainURL } from '../../../../utils';
 import CustomCheckBox from '../../../../components/renewal/CustomCheckBox';
@@ -17,6 +17,7 @@ import { getT } from '../../../../utils/translateManager';
 
 const ic_building = require('../../../../../assets/new/icons/ic_build.png');
 const ic_empty = require('../../../../../assets/new/icons/ic_empty.png');
+const ic_mail = require('../../../../../assets/new/icons/ic_mail.png');
 
 const OrganizationTab = (props: any) => {
   const {
@@ -33,7 +34,8 @@ const OrganizationTab = (props: any) => {
     inviteText,
     setInvited,
     setInviteText,
-    recents
+    recents,
+    validateExter
   } = props;
   const t = getT();
   return (
@@ -164,68 +166,7 @@ const OrganizationTab = (props: any) => {
           />
         ))) ||
         // 연락처
-        (tabType === 'contact' && (
-            <View style={{ flexDirection: 'row' }}>
-              <TouchableOpacity
-                activeOpacity={0.7}
-                //   onPress={() => setTabType('org')}
-                style={{
-                  flex: 1,
-                  height: 40,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  borderColor: tabType === 'org' ? '#1c90fb' : '#8c8c8c',
-                  borderBottomWidth: tabType === 'org' ? 2 : 1
-                }}
-              >
-                <Text
-                  style={{ color: tabType === 'org' ? '#1c90fb' : '#8c8c8c' }}
-                >
-                  {t('조직도')}
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                activeOpacity={0.7}
-                //   onPress={() => setTabType('contact')}
-                style={{
-                  flex: 1,
-                  height: 40,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  borderColor: tabType === 'contact' ? '#1c90fb' : '#8c8c8c',
-                  borderBottomWidth: tabType === 'contact' ? 2 : 1
-                }}
-              >
-                <Text
-                  style={{
-                    color: tabType === 'contact' ? '#1c90fb' : '#8c8c8c'
-                  }}
-                >
-                  연락처
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                activeOpacity={0.7}
-                //   onPress={() => setTabType('exter')}
-                style={{
-                  flex: 1,
-                  height: 40,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  borderColor: tabType === 'exter' ? '#1c90fb' : '#8c8c8c',
-                  borderBottomWidth: tabType === 'exter' ? 2 : 1
-                }}
-              >
-                <Text
-                  style={{
-                    color: tabType === 'exter' ? '#1c90fb' : '#8c8c8c'
-                  }}
-                >
-                  외부참여자
-                </Text>
-              </TouchableOpacity>
-            </View>
-          ) &&
+        (tabType === 'contact' &&
           (keyword === '' ? (
             <SectionList
               sections={contacts}
@@ -234,9 +175,6 @@ const OrganizationTab = (props: any) => {
                 <Text style={styles.category}>{section.title}</Text>
               )}
               renderItem={({ item, index, section }) => {
-                // test(item);
-                // console.log(contacts);
-
                 return (
                   <TouchableOpacity
                     onPress={() => selectEmployee('member', item)}
@@ -383,94 +321,138 @@ const OrganizationTab = (props: any) => {
         //   외부참여자
         (tabType === 'exter' && (
           <View style={{ flex: 1, justifyContent: 'flex-start' }}>
-            <Text style={{ marginHorizontal: 10, marginTop: 10 }}>
+            <Text style={{ marginHorizontal: 10, marginTop: 10, fontSize: 15 }}>
               {t('참여자 초대')}
             </Text>
-            <TextInput
+            <View
               style={{
-                margin: 10,
-                borderBottomWidth: 1,
-                borderBottomColor: '#ccc'
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center'
               }}
-              placeholder={t('초대할 사람의 이메일을 입력해주세요.')}
-              autoCompleteType={'email' || 'tel'}
-              onSubmitEditing={() => {
-                let value = inviteText;
-                let type = 'error';
-                let flag = false;
-                const numReg1 = /^\d{2,3}-\d{3,4}-\d{4}/;
-                const numReg2 = /^01\d{9,11}/;
-                const emailReg =
-                  /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
-                if (inviteText.match(numReg1)) {
-                  type = 'number';
-                  flag = true;
-                } else if (inviteText.match(numReg2)) {
-                  value =
-                    value.length <= 10
-                      ? value.replace(/(\d{3})(\d{3})(\d{3,4})/g, '$1-$2-$3')
-                      : value.replace(/(\d{3})(\d{4})(\d{4})/g, '$1-$2-$3');
-                  type = 'number';
-                  flag = true;
-                } else if (inviteText.match(emailReg)) {
-                  type = 'email';
-                  flag = true;
-                }
-                if (flag) {
-                  setInvited([
-                    ...invited,
-                    {
-                      type,
-                      value
-                    }
-                  ]);
-                  setInviteText('');
-                } else {
-                  Alert.alert(
-                    t('서식 오류'),
-                    t('전화번호 또는 이메일을 입력해주세요.')
-                  );
-                  setInviteText('');
-                }
-              }}
-              clearButtonMode={'always'}
-              onChangeText={setInviteText}
-              value={inviteText}
-            />
-            <View>
-              {recents.length ? (
-                <>
-                  <Text>{t('최근 초대한 참여자')}</Text>
-                  <FlatList
-                    data={recents}
-                    renderItem={({ index, item, separators }) => (
-                      <View style={{ flexDirection: 'row' }}>
-                        <Text>{item.type}</Text>
-                        <Text>{item.value}</Text>
-                      </View>
-                    )}
-                  />
-                </>
-              ) : (
-                <></>
-              )}
-            </View>
-            <View style={{ borderBottomWidth: 1, borderColor: '#ccc' }} />
-            <Text style={{ margin: 10 }}>{t('화상회의 참여자')}</Text>
-            <View style={{ borderBottomWidth: 1, borderColor: '#ccc' }} />
-            {invited.length ? (
-              <FlatList
-                data={invited}
-                renderItem={({ index, item, separators }) => {
-                  //   test(item);
-                  return (
-                    <View style={{ flexDirection: 'row' }}>
-                      <Text>{item.type}</Text>
-                      <Text>{item.value}</Text>
-                    </View>
-                  );
-                }}
+            >
+              <TextInput
+                style={[
+                  {
+                    margin: 10,
+                    borderBottomWidth: 1,
+                    borderBottomColor: '#ccc',
+                    width: '80%'
+                  },
+                  inviteText && { borderBottomColor: '#1c90fb' }
+                ]}
+                placeholder={t('초대할 사람의 이메일을 입력해주세요.')}
+                autoCapitalize={'none'}
+                autoCompleteType={'email' || 'tel'}
+                onSubmitEditing={() => validateExter()}
+                clearButtonMode={'always'}
+                onChangeText={setInviteText}
+                value={inviteText}
               />
+              <TouchableOpacity onPress={() => validateExter()}>
+                <Image
+                  source={ic_mail}
+                  style={{
+                    width: 24,
+                    height: 24,
+                    resizeMode: 'cover',
+                    backgroundColor: '#1c90fb',
+                    borderRadius: 10,
+                    margin: 10
+                  }}
+                />
+              </TouchableOpacity>
+            </View>
+            <View></View>
+            <View style={{ borderBottomWidth: 1, borderColor: '#ccc' }} />
+
+            {invited.length > 0 && (
+              <>
+                <View style={{ backgroundColor: '#f1f2f3' }}>
+                  <Text style={{ margin: 10, fontSize: 15 }}>
+                    {t('선택된 이메일')}
+                  </Text>
+                </View>
+                <FlatList
+                  showsVerticalScrollIndicator={false}
+                  bounces={false}
+                  data={invited}
+                  renderItem={({ item, index }) => {
+                    return (
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          padding: 10
+                        }}
+                      >
+                        {item.type === 'email' && (
+                          <View
+                            style={{
+                              backgroundColor: '#1c90fb',
+                              padding: 5,
+                              borderRadius: 20
+                            }}
+                          >
+                            <Image
+                              source={ic_mail}
+                              style={{
+                                width: 18,
+                                height: 18,
+                                resizeMode: 'cover'
+                              }}
+                            />
+                          </View>
+                        )}
+                        <Text style={{ padding: 10 }}>{item.value}</Text>
+                      </View>
+                    );
+                  }}
+                />
+              </>
+            )}
+            {recents.length ? (
+              <>
+                <View style={{ backgroundColor: '#f1f2f3' }}>
+                  <Text style={{ margin: 10, fontSize: 16 }}>
+                    {t('최근 초대한 이메일')}
+                  </Text>
+                </View>
+                <FlatList
+                  showsVerticalScrollIndicator={false}
+                  bounces={false}
+                  data={recents}
+                  renderItem={({ item, index }) => (
+                    <View
+                        style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          padding: 10
+                        }}
+                      >
+                        {item.type === 'email' && (
+                          <View
+                            style={{
+                              backgroundColor: '#1c90fb',
+                              padding: 5,
+                              borderRadius: 20
+                            }}
+                          >
+                            <Image
+                              source={ic_mail}
+                              style={{
+                                width: 18,
+                                height: 18,
+                                resizeMode: 'cover'
+                              }}
+                            />
+                          </View>
+                        )}
+                        <Text style={{ padding: 10 }}>{item.value}</Text>
+                      </View>
+                  )}
+                />
+              </>
             ) : (
               <View
                 style={{
@@ -479,16 +461,16 @@ const OrganizationTab = (props: any) => {
                   justifyContent: 'center'
                 }}
               >
-                {/* <Image
-                              source={require('../../../assets/emptySearch.png')}
-                              style={{
-                                width: Math.min(width, height) / 2,
-                                height: Math.min(width, height) / 2,
-                                resizeMode: 'contain'
-                              }}
-                            /> */}
+                <Image
+                  source={ic_empty}
+                  style={{
+                    resizeMode: 'contain',
+                    width: '43%',
+                    height: '43%'
+                  }}
+                />
                 <Text style={{ margin: 10 }}>
-                  {t('등록된 참여자가 없습니다.')}
+                  {t('최근 초대한 참여자가 없습니다.')}
                 </Text>
                 <Text style={{ textAlign: 'center' }}>
                   {t('초대할 참여자의 이메일을 입력해보세요.')}
