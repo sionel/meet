@@ -200,14 +200,14 @@ const HomeRouteStack = () => {
     ConferenceState: {
       screen: ConferenceStateScreen,
       navigationOptions: ({ navigation }) => ({
-        headerTitle: (
-          <RouteTitle
-            title={navigation.getScreenProps().t('option_conference')}
-          />
-        ),
-        headerLeft: <BackButton navigation={navigation} to={'Home'} />,
-        headerTintColor: '#fff',
-        headerStyle: commonStyle
+        // headerTitle: (
+        //   <RouteTitle
+        //     title={navigation.getScreenProps().t('option_conference')}
+        //   />
+        // ),
+        // headerLeft: <BackButton navigation={navigation} to={'Home'} />,
+        // headerTintColor: '#fff',
+        // headerStyle: commonStyle
       })
     }
   };

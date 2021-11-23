@@ -31,8 +31,9 @@ class ConferenceStateContainer extends React.Component {
     // 딥링크 웹 접근
     // 딥링크 이메일 접근
     // 참여코드 접근
-    const { params, auth, videoId, isLogin } = this.props;
+    const { params, auth, videoId, isLogin, navigation } = this.props;
     const { roomId, token, accesstype } = params;
+    const { id } = navigation.state.params;
     // let roomId;
     // let iscret = true; // 인증 비인증 묻는 것
     const iscret = isLogin;
@@ -42,8 +43,8 @@ class ConferenceStateContainer extends React.Component {
     //   roomId = params.roomId;
     // }
     let { conferenceState } = this.state;
-    this.roomId = videoId ? videoId : roomId;
-
+    this.roomId = videoId || roomId || id;
+    debugger;
     // let { auth } = this.props;
     // const access = await MeetApi.getMeetRoom(
     //   auth.AUTH_A_TOKEN,

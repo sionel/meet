@@ -20,16 +20,11 @@ const MainScreenContainer = (props: any) => {
     }
   });
 
-  const handleChangeMainState = (stateD: any) => {
-    setState({
-      ...state,
-      ...stateD
-    });
-  };
+
 
   return (
       <MainScreenPresenter 
-        {...{ handleChangeMainState, destination }}
+        {...{ destination }}
       />
   );
 };

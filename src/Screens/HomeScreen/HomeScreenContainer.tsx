@@ -134,16 +134,16 @@ export default function HomeScreenContainer(props: any) {
     ref.current.reservationConference = reservationConference;
   }, [reservationConference, finishedConference]);
 
-  useEffect(() => {
-    selectedRoomId &&
-      props.navigation.navigate('ConferenceState', {
-        item: {
-          roomId: selectedRoomId,
-          externalData: null,
-          from: 'meet'
-        }
-      });
-  }, [selectedRoomId]);
+  // useEffect(() => {
+  //   selectedRoomId &&
+  //     props.navigation.navigate('ConferenceState', {
+  //       item: {
+  //         roomId: selectedRoomId,
+  //         externalData: null,
+  //         from: 'meet'
+  //       }
+  //     });
+  // }, [selectedRoomId]);
 
   const _handleBackButton = () => {
     // if(this.props.navigation)
@@ -319,7 +319,15 @@ export default function HomeScreenContainer(props: any) {
             participants: uriList,
             isLock: !conference.is_public,
             goingMoreClick: () => _goingMoreClick(conference, isMaster),
-            enterConference: () => setRoomId(conference.room_id)
+            enterConference: () =>
+              _handleRedirect('ConferenceState', {
+                id: conference.room_id,
+                item: {
+                  roomId: conference.room_id,
+                  externalData: null,
+                  from: 'meet'
+                }
+              })
           };
           return data;
         })
@@ -629,20 +637,24 @@ export default function HomeScreenContainer(props: any) {
   };
 
   const createConference = () => {
-
     props.navigation.navigate('Create', {
-
       // onGetWetalkList: {
       //   roomId: selectedRoomId,
       //   externalData: null,
       //   from: 'meet'
       // }
     });
-  }
+  };
 
   // props.onRedirect('Create', {
   //   onGetWetalkList: props.onGetWetalkList
   // })
+  const _handleRedirect = (url: string, param: {}) => {
+    const { navigation } = props;
+    debugger;
+    navigation.navigate(url, param);
+  };
+
   const testFunc = () => {
     setTest(!test);
   };
