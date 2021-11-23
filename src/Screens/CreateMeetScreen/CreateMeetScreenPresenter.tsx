@@ -19,7 +19,7 @@ import { CustomIcon } from '../../components';
 
 import { wehagoMainURL, wehagoDummyImageURL } from '../../utils';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { last, parseInt } from 'lodash';
+import { add, last, parseInt } from 'lodash';
 import LinearGradient from 'react-native-linear-gradient';
 
 const ic_code = require('../../../assets/new/icons/ic_code.png');
@@ -486,10 +486,8 @@ const CreateMeetScreenPresenter = (props: any) => {
                       }
                     }
                   } else user_path = '';
-                  
 
                   const isSelected = item.is_master;
-
                   return (
                     <View style={styles.participantList}>
                       <View style={styles.profileView}>
@@ -529,32 +527,42 @@ const CreateMeetScreenPresenter = (props: any) => {
                         />
                       </View>
                       <View style={[styles.infoBox]}>
-                        <Text style={styles.name}>
-                          {item.user_name ? item.user_name : item.address_name}{' '}
+                        {!(item.value) && <Text style={styles.name}>
+                          {item.user_name
+                            ? item.user_name
+                            : item.address_name
+                            ? item.address_name
+                            : ''}{' '}
                           {item.rank_name
                             ? item.rank_name
-                            : item.position_rank_name}
-                        </Text>
+                            : item.position_rank_name
+                            ? item.position_rank_name
+                            : ''}
+                        </Text>}
                         <Text
                           numberOfLines={1}
                           ellipsizeMode="tail"
-                          style={styles.tree}
+                          style={[styles.tree, item.value && {fontSize: 16}]}
                         >
                           {user_path
                             ? user_path
-                            : item.emailinfolist[0].email_address}
+                            : item.address_service_no
+                            ? item.emailinfolist[0].email_address
+                            : item.value}
                         </Text>
                       </View>
                       <TouchableOpacity
                         style={[
                           styles.roleContainer,
                           isSelected && { borderColor: '#01acc1' },
-                          !item.user_no && { borderColor: '#000' }
+                          !item.user_no && { borderColor: '#fff' }
                         ]}
                         onPress={() => {
                           clickChangeRole(item);
                         }}
-                        disabled={item.user_no === auth.user_no}
+                        disabled={
+                          item.user_no === auth.user_no || !item.user_no
+                        }
                       >
                         {isSelected ? (
                           <>
@@ -581,9 +589,9 @@ const CreateMeetScreenPresenter = (props: any) => {
                           </>
                         ) : (
                           <>
-                            <Text style={styles.extText}>
+                            {/* <Text style={styles.extText}>
                               {t('외부참여자')}
-                            </Text>
+                            </Text> */}
                           </>
                         )}
                       </TouchableOpacity>
@@ -845,7 +853,7 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     letterSpacing: -0.22,
     color: '#000',
-    fontWeight: '800',
+    fontWeight: '800'
   },
   graybar1: {
     backgroundColor: '#F7F8FA',

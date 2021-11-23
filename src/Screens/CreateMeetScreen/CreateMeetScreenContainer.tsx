@@ -7,8 +7,11 @@ import OrganizationScreen from './OrganizationScreen';
 
 import { MeetApi, OrganizationApi } from '../../services';
 
+import { actionCreators as RecentsActions } from '../../redux/modules/recentsInvited';
+
 import moment from 'moment';
 import { getT } from '../../utils/translateManager';
+import { RootState } from '../../redux/configureStore';
 
 export default function CreateMeetScreenContainer(props: any) {
   const [switchAllSend, setSwitchAllSend] = useState(false);
@@ -28,8 +31,7 @@ export default function CreateMeetScreenContainer(props: any) {
     'none'
   );
 
-  const [invited, setInvited] = useState([]);
-  const [recents, setRecents] = useState([]);
+  const [invited, setInvited] = useState<any[]>([]);
   const [inviteText, setInviteText] = useState('');
   const [timeType, setTimeType] = useState('');
 
@@ -61,9 +63,14 @@ export default function CreateMeetScreenContainer(props: any) {
   const [participantList, setParticipantList] = useState<any[]>([]);
   const [textLess2, setTextLess2] = useState(true);
   const { auth } = useSelector((state: any) => state.user);
+  const { recents } = useSelector((state: RootState) => state.recents);
+
   const t = getT();
 
   const dispatch = useDispatch();
+
+  const setRecents = (recents: Object) =>
+    dispatch(RecentsActions.setRecents(recents));
 
   const getAllEmployee = async () => {
     const result = await OrganizationApi.getOrganizationTreeAllEmployeeRequest(
@@ -122,12 +129,29 @@ export default function CreateMeetScreenContainer(props: any) {
         // type에 따라 access_user에 받는게 다름
         // type: portal_id, email
         if (value.user_no !== auth.user_no) {
-          arr.push({
-            type: 'portal_id',
-            value: value.portal_id,
-            is_master: value.is_master,
-            user_name: value.user_name
-          });
+          if (value.user_no) {
+            arr.push({
+              type: 'portal_id',
+              value: value.portal_id,
+              is_master: value.is_master,
+              user_name: value.user_name
+            });
+          } else {
+            if (value.address_service_no) {
+              arr.push({
+                type: 'email',
+                value: value.emailinfolist[0].email_address,
+                is_master: value.is_master,
+                user_name: value.address_name
+              });
+            } else {
+              arr.push({
+                type: 'email',
+                value: value.value,
+                is_master: false
+              });
+            }
+          }
         }
       });
 
@@ -176,13 +200,15 @@ export default function CreateMeetScreenContainer(props: any) {
         };
       }
 
-      const result = await MeetApi.createMeetRoom(auth, params);
-      if (result) {
-        onHandleBack();
-        clearInput();
-      } else if (result.error) {
-        console.log('error : ', result.error);
-      }
+      console.log(params);
+
+      // const result = await MeetApi.createMeetRoom(auth, params);
+      // if (result) {
+      //   onHandleBack();
+      //   clearInput();
+      // } else if (result.error) {
+      //   console.log('error : ', result.error);
+      // }
     }
   };
 
@@ -437,8 +463,30 @@ export default function CreateMeetScreenContainer(props: any) {
   };
 
   const clickDeleteUser = (item: any) => {
-    const newList: any[] = selectedEmployee.member;
-    let idx = newList.findIndex((i: any) => i.user_no === item.user_no);
+    let newList: any[] = selectedEmployee.member;
+    let idx: number = 0;
+    if (item.user_no) {
+      idx = newList.findIndex((i: any) => i.user_no === item.user_no);
+    } else if (item.address_service_no) {
+      idx = newList.findIndex(
+        (i: any) => i.address_service_no === item.address_service_no
+      );
+    } else if (item.value) {
+      idx = newList.findIndex((i: any) => i.value === item.value);
+      const newinvitedList: { type: string; value: string }[] = invited;
+      const invitedIdx: number = newinvitedList.findIndex(
+        (i: any) => i.value === item.value
+      );
+
+      if (invitedIdx !== -1) {
+        const deletedList: any[] = newinvitedList.filter(
+          (v: any, i: number) => i !== invitedIdx
+        );
+        setInvited(deletedList);
+      }
+    } else {
+      console.log('error');
+    }
     const updateList: any[] = newList.filter((v, i) => i !== idx);
     setSelectedEmployee({ member: updateList, group: {} });
   };

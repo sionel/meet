@@ -38,6 +38,7 @@ const OrganizationScreenContainer = (props: any) => {
   const [contacts, setContacts] = useState<{ title: string; data: Object }[]>(
     []
   );
+  const [exterError, setExterError] = useState(false);
 
   const [rotate] = useState(new Animated.Value(0));
 
@@ -49,7 +50,6 @@ const OrganizationScreenContainer = (props: any) => {
   const t = getT();
 
   const auth = useSelector((state: RootState) => state.user.auth);
-  const dispatch = useDispatch;
 
   //#region 조직도 초기화
   const getOrganizationTree = async () => {
@@ -152,6 +152,15 @@ const OrganizationScreenContainer = (props: any) => {
 
   //#region 조직 / 조직원 클릭시
   const selectEmployee = (type: string, item: any) => {
+    let lng = selectedEmployee.member.length;
+    if(selectedEmployee.member.length > 49) {
+      Alert.alert(
+        t('초대가능 인원을 초과하였습니다.'),
+        t('참석자는 최대 50명을 넘을수 없습니다.')
+      );
+
+      return false;
+    }
     // 조직원 선택 시
     if (type === 'member') {
       const newList: any[] = selectedEmployee.member;
@@ -243,19 +252,28 @@ const OrganizationScreenContainer = (props: any) => {
       type = 'email';
       flag = true;
     }
-    
+
     if (flag) {
-      setInvited([
-        ...invited,
-        {
-          type,
-          value
-        }
-      ]);
-      setRecents([...invited, {
-        type,
-        value
-      }]);
+      const newList: { type: string; value: string }[] = invited;
+      const newList2: any[] = selectedEmployee.member;
+      let idx: number = newList.findIndex((i: any) => i.value === inviteText);
+
+      if (idx !== -1) {
+        setInvited([...invited]);
+        setExterError(true);
+      } else {
+        setInvited([
+          ...invited,
+          {
+            type,
+            value
+          }
+        ]);
+        newList2.push({ type, value });
+        setExterError(false);
+      }
+      setRecents({ type, value });
+      setSelectedEmployee({member: newList2, group:{}})
       setInviteText('');
     } else {
       Alert.alert(
@@ -263,6 +281,28 @@ const OrganizationScreenContainer = (props: any) => {
         t('올바른 이메일 서식으로 입력해주세요.(aaaa@bbbb.com)')
       );
       setInviteText('');
+    }
+  };
+
+  const recentAdd = (item: { type: string; value: string }) => {
+    const newList: { type: string; value: string }[] = invited;
+    const newList2: any[] = selectedEmployee.member;
+    let idx: number = newList.findIndex((i: any) => i.value === item.value);
+    let idx2: number = newList2.findIndex((i: any) => i.value == item.value);
+    if (idx !== -1) {
+      const deletedList: any[] = newList.filter(
+        (v: any, i: number) => i !== idx
+      );
+      const deletedList2: any[] = newList2.filter(
+        (v:any, i:number) => i !== idx2
+      )
+      setInvited([...deletedList]);
+      setSelectedEmployee({member:deletedList2, group:{}})
+    } else {
+      newList.push(item);
+      newList2.push(item);
+      setInvited([...newList]);
+      setSelectedEmployee({member:newList2, group:{}})
     }
   };
 
@@ -325,6 +365,8 @@ const OrganizationScreenContainer = (props: any) => {
       contactType={contactType}
       setContactType={setContactType}
       validateExter={validateExter}
+      exterError={exterError}
+      recentAdd={recentAdd}
     />
   );
 };

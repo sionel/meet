@@ -35,7 +35,9 @@ const OrganizationTab = (props: any) => {
     setInvited,
     setInviteText,
     recents,
-    validateExter
+    validateExter,
+    exterError,
+    recentAdd
   } = props;
   const t = getT();
   return (
@@ -363,7 +365,7 @@ const OrganizationTab = (props: any) => {
                 />
               </TouchableOpacity>
             </View>
-            <View></View>
+            {exterError && <Text style={{color:'#fc4c60', fontSize:12, padding: 10, paddingTop: -10, marginTop: -10}}>{t('이미 추가된 이메일입니다.')}</Text>}
             <View style={{ borderBottomWidth: 1, borderColor: '#ccc' }} />
 
             {invited.length > 0 && (
@@ -404,14 +406,14 @@ const OrganizationTab = (props: any) => {
                             />
                           </View>
                         )}
-                        <Text style={{ padding: 10 }}>{item.value}</Text>
+                        <Text style={{paddingLeft:10}}>{item.value}</Text>
                       </View>
                     );
                   }}
                 />
               </>
             )}
-            {recents.length ? (
+            {recents.length > 0 ? (
               <>
                 <View style={{ backgroundColor: '#f1f2f3' }}>
                   <Text style={{ margin: 10, fontSize: 16 }}>
@@ -422,35 +424,63 @@ const OrganizationTab = (props: any) => {
                   showsVerticalScrollIndicator={false}
                   bounces={false}
                   data={recents}
-                  renderItem={({ item, index }) => (
-                    <View
+                  renderItem={({ item, index }) => {
+                    return (
+                      <View
                         style={{
                           flexDirection: 'row',
+                          justifyContent: 'space-between',
                           alignItems: 'center',
                           padding: 10
                         }}
                       >
-                        {item.type === 'email' && (
-                          <View
-                            style={{
-                              backgroundColor: '#1c90fb',
-                              padding: 5,
-                              borderRadius: 20
-                            }}
-                          >
-                            <Image
-                              source={ic_mail}
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            alignItems: 'center'
+                          }}
+                        >
+                          {item.type === 'email' && (
+                            <View
                               style={{
-                                width: 18,
-                                height: 18,
-                                resizeMode: 'cover'
+                                backgroundColor: '#1c90fb',
+                                padding: 5,
+                                borderRadius: 20
                               }}
-                            />
-                          </View>
-                        )}
-                        <Text style={{ padding: 10 }}>{item.value}</Text>
+                            >
+                              <Image
+                                source={ic_mail}
+                                style={{
+                                  width: 18,
+                                  height: 18,
+                                  resizeMode: 'cover'
+                                }}
+                              />
+                            </View>
+                          )}
+                          <Text style={{ paddingLeft: 10 }}>{item.value}</Text>
+                        </View>
+                        <View
+                          style={{
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                          }}
+                        >
+                          <CustomCheckBox
+                            color="#ccc"
+                            onCheck={() => recentAdd(item)}
+                            checked={
+                              invited.findIndex(
+                                (i: any) => i.value === item.value
+                              ) !== -1
+                                ? true
+                                : false
+                            }
+                          />
+                        </View>
                       </View>
-                  )}
+                    );
+                  }}
                 />
               </>
             ) : (

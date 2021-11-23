@@ -58,7 +58,9 @@ const OrganizationScreenPresenter = (props: any) => {
     listLng,
     contactType,
     setContactType,
-    validateExter
+    validateExter,
+    exterError,
+    recentAdd
   } = props;
 
   const OrganizationFlatList = (
@@ -273,7 +275,12 @@ const OrganizationScreenPresenter = (props: any) => {
             {t('뒤로')}
           </Text>
         </TouchableOpacity>
-        <Text style={styles.TitleText}>{t('참석자 추가')}</Text>
+        <View style={{flexDirection:'row'}}>
+          <Text style={styles.TitleText}>{t('참석자 추가')}</Text>
+          <Text style={{ color: '#1c90fb', fontSize: 18, fontWeight: '600' }}>
+            {'  '}{selectedEmployee.member.length}
+          </Text>
+        </View>
         <TouchableOpacity onPress={() => participantListAdd()}>
           <Text style={styles.ft14N}>{t('추가')}</Text>
         </TouchableOpacity>
@@ -503,6 +510,8 @@ const OrganizationScreenPresenter = (props: any) => {
                 setInviteText={setInviteText}
                 recents={recents}
                 validateExter={validateExter}
+                exterError={exterError}
+                recentAdd={recentAdd}
               />
             </>
           )}

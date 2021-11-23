@@ -27,6 +27,7 @@ import deployed, { state as deployedState } from './modules/deployed';
 import screenShare, { state as screenShageState } from './modules/ScreenShare';
 import indicator, { state as indicatorState } from './modules/indicator';
 import orientation, { state as orientationState } from './modules/orientation';
+import recents, {state as recentsState} from './modules/recentsInvited';
 /**
  * middleware list
  */
@@ -57,6 +58,7 @@ export interface RootState {
   deployed: deployedState;
   orientation: orientationState;
   root: any;
+  recents: recentsState;
 }
 
 /**
@@ -65,7 +67,7 @@ export interface RootState {
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['user'],
+  whitelist: ['user', 'recents'],
   blacklist: [
     'local',
     'mainUser',
@@ -106,7 +108,8 @@ const reducer = persistCombineReducers(persistConfig, {
   screenShare,
   indicator,
   orientation,
-  root
+  root,
+  recents
 });
 
 /**
