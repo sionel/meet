@@ -15,7 +15,10 @@ export default function CreateScreenContainer(props: any) {
   const initSection: section = {
     data: [],
     title: '',
-    type: ''
+    type: '',
+    collapse: true,
+    height: new Animated.Value(0),
+    zIndex: 0
   };
   const t = getT();
 
@@ -134,22 +137,34 @@ create_room_suim
     const personalData: section = {
       data: personalList,
       title: `${t('create_room_oneonone')}(${personalList.length})`,
-      type: 'personal'
+      type: 'personal',
+      collapse: false,
+      height: new Animated.Value(54 * personalList.length),
+      zIndex: 1
     };
     const groupData: section = {
       data: groupList,
       title: `${t('create_room_group')}(${groupList.length})`,
-      type: 'group'
+      type: 'group',
+      collapse: false,
+      height: new Animated.Value(54 * groupList.length),
+      zIndex: 2
     };
     const semuData: section = {
       data: semuList,
       title: `${t('create_room_semu')}(${semuList.length})`,
-      type: 'semu'
+      type: 'semu',
+      collapse: false,
+      height: new Animated.Value(54 * semuList.length),
+      zIndex: 3
     };
     const suimData: section = {
       data: suimList,
       title: `${t('create_room_suim')}(${suimList.length})`,
-      type: 'suim'
+      type: 'suim',
+      collapse: false,
+      height: new Animated.Value(54 * suimList.length),
+      zIndex: 4
     };
 
     Promise.all([
@@ -160,6 +175,33 @@ create_room_suim
     ]).then(() => {
       setLoaded(true);
     });
+  };
+
+  const toggleCollpaseAnimation = (section: section) => {
+    debugger;
+    Animated.timing(section.height, {
+      toValue: !section.collapse ? 0 : section.data.length * 54,
+      useNativeDriver: false,
+      duration: 1000
+    }).start();
+
+    switch (section.type) {
+      case 'personal':
+        setPersonal({ ...section, collapse: !section.collapse });
+        break;
+      case 'group':
+        setGroup({ ...section, collapse: !section.collapse });
+        break;
+      case 'semu':
+        setSemu({ ...section, collapse: !section.collapse });
+        break;
+      case 'suim':
+        setSuim({ ...section, collapse: !section.collapse });
+        break;
+
+      default:
+        break;
+    }
   };
 
   return (
@@ -173,7 +215,8 @@ create_room_suim
         group,
         personal,
         semu,
-        suim
+        suim,
+        toggleCollpaseAnimation
       }}
     />
   );

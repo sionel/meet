@@ -7,7 +7,8 @@ import {
   SectionList,
   Animated,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  FlatList
 } from 'react-native';
 
 import {
@@ -25,7 +26,10 @@ import btnArrowDown from '../../../assets/buttons/btnArrowDown.png';
 export interface section {
   title: string;
   data: any[];
-  type: string;
+  type: 'personal' | 'group' | 'semu' | 'suim' | '';
+  collapse: boolean;
+  height: Animated.Value;
+  zIndex?: number;
 }
 
 interface createProps {
@@ -38,6 +42,7 @@ interface createProps {
   onRefresh: () => void;
   onClickBack: () => void;
   onClickHeader: () => void;
+  toggleCollpaseAnimation: (section: section) => void;
 }
 interface createPropsFalse {}
 
@@ -51,7 +56,8 @@ function CreateScreenPresenter(props: createProps) {
     semu,
     suim,
     onClickBack,
-    onClickHeader
+    onClickHeader,
+    toggleCollpaseAnimation
   } = props;
   const a = new Animated.Value(100);
   const t = getT();
@@ -115,8 +121,13 @@ function CreateScreenPresenter(props: createProps) {
               ({ section }) => (
                 <TouchableOpacity
                   activeOpacity={1}
-                  onPress={() => {}}
-                  style={{ flex: 1 }}
+                  onPress={() => {
+                    toggleCollpaseAnimation(section);
+                  }}
+                  style={{
+                    flex: 1,
+                    display: section.data.length > 0 ? 'flex' : 'none'
+                  }}
                 >
                   <View key={section.title} style={styles.sectionHeader}>
                     <Text style={styles.textStyle}>{section.title}</Text>
@@ -149,12 +160,31 @@ function CreateScreenPresenter(props: createProps) {
               //   <></>
               // )
             }
-            // renderSectionFooter={SectionFooter}
-            renderItem={({ item, index, section }) => (
-              <View>
-                <Text>{index}</Text>
-              </View>
-            )}
+            renderSectionFooter={({
+              section: { collapse, data, height, title, type, key }
+            }) => {
+              return (
+                <Animated.FlatList
+                  style={{ height }}
+                  data={data}
+                  renderItem={({ index, item, separators }) => {
+                    return (
+                      <TouchableOpacity
+                        style={{
+                          height: 54,
+                          overflow: 'hidden'
+                        }}
+                      >
+                        <View>
+                          <Text>{item.room_title}</Text>
+                        </View>
+                      </TouchableOpacity>
+                    );
+                  }}
+                />
+              );
+            }}
+            renderItem={() => <></>}
           />
         ) : (
           <Placeholder

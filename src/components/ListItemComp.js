@@ -114,6 +114,7 @@ const ListItemComp = props => {
           )}
         </View>
       </View>
+
       <View style={{ ...styles.textWrapper, paddingRight: '13%' }}>
         <Text style={{ ...styles.roomName }}>{props.title}</Text>
         {props.customLottie && (
@@ -143,6 +144,7 @@ const ListItemComp = props => {
           </View>
         )}
       </View>
+      
     </TouchableOpacity>
   );
 };

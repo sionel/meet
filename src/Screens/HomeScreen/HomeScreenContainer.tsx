@@ -240,10 +240,11 @@ export default function HomeScreenContainer(props: any) {
   };
 
   const _getConferences = () => {
-    MeetApi.getMeetRoomsList(auth).then(async result => {
+    MeetApi.getMeetRoomsList(auth).then(async result => {      
       const going: conference[] = result.filter(
         (conference: conference) => conference.is_started
       );
+      
       const goingList = await Promise.all(
         going.map(async conference => {
           const startTime = new Date(
@@ -266,18 +267,15 @@ export default function HomeScreenContainer(props: any) {
             auth,
             conference.room_id
           );
-
           const isMaster = connectingUser.filter(
             (user: any) => user.user === portalId
           )[0]?.is_master
             ? true
             : false;
           //진행중인 방에서는 내가 없을수 있으므로 ?를 붙임
-
           const sortedConnectingUserList = connectingUser.sort(
             (user: any, _user: any) => _user.is_master - user.is_master
           );
-
           const portalIdList = sortedConnectingUserList
             .map((user: any) => user.user)
             .filter((user: any) => user);
@@ -332,6 +330,8 @@ export default function HomeScreenContainer(props: any) {
           return data;
         })
       );
+     
+      
       setOngoingConference(goingList);
 
       // ========================================================================
@@ -339,24 +339,21 @@ export default function HomeScreenContainer(props: any) {
       const reservation: conference[] = result.filter(
         (conference: conference) => !conference.is_started
       );
-
       const reservationList = await Promise.all(
         reservation.map(async conference => {
           const accessUser = await MeetApi.getAccessUsers(
             auth,
             conference.room_id
           );
-
           const isMaster = accessUser.filter(
             (user: any) => user.user === portalId
-          )[0].is_master
+          )[0]?.is_master
             ? true
             : false;
 
           const sortedAccessUserList = accessUser.sort(
             (user: any, _user: any) => _user.is_master - user.is_master
           );
-
           const portalIdList = sortedAccessUserList
             .map((user: any) => user.user)
             .filter((user: any) => user);
@@ -516,13 +513,14 @@ export default function HomeScreenContainer(props: any) {
         auth,
         conference.room_id
       );
+      
       participants = participantInfoList
         .map(participant => ({
           image: participant.profile_url
             ? wehagoMainURL + participant.profile_url
             : wehagoDummyImageURL,
           name: participant.user_name,
-          status: participant.is_master
+          status: participant?.is_master
             ? 'master'
             : participant.user_type === 2
             ? 'extra'
@@ -536,7 +534,7 @@ export default function HomeScreenContainer(props: any) {
         auth,
         conference.room_id
       );
-
+      
       participants = accessUser
         .map(participant => ({
           image: participant.profile_url
@@ -592,7 +590,6 @@ export default function HomeScreenContainer(props: any) {
         .sort(a => {
           return a.status === 'master' ? -1 : 1;
         });
-
       users = conference.connecting_user;
       title = '회의 참석 인원';
     }
