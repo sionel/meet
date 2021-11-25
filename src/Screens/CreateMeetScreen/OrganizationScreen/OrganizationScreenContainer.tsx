@@ -1,9 +1,13 @@
 import React, { useState, useEffect, RefObject, useRef } from 'react';
 import { Alert, Animated, Easing } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { RootState } from '../../../redux/configureStore';
+import { actionCreators as RecentsActions } from '../../../redux/modules/recentsInvited';
+
 import { getT } from '../../../utils/translateManager';
 import { OrganizationApi } from '../../../services';
+
 import OrganizationScreenPresenter from './OrganizationScreenPresenter';
 import { values } from 'lodash';
 
@@ -19,10 +23,10 @@ const OrganizationScreenContainer = (props: any) => {
     // participantList,
     // setParticipantList,
     setSelectMode,
-    setRecents,
     organization,
     contacts,
-    isOrgDataLoaded
+    isOrgDataLoaded,
+    isTablet
   } = props;
 
   const [keyword, setKeyword] = useState('');
@@ -41,6 +45,8 @@ const OrganizationScreenContainer = (props: any) => {
   // );
   const [exterError, setExterError] = useState(false);
   const searchRef: RefObject<any> = useRef();
+  const sendEmailRef: RefObject<any> = useRef();
+  
 
   const [rotate] = useState(new Animated.Value(0));
 
@@ -51,8 +57,16 @@ const OrganizationScreenContainer = (props: any) => {
 
   const t = getT();
 
-  const auth = useSelector((state: RootState) => state.user.auth);
-  const { recents } = useSelector((state: RootState) => state.recents);
+  // const {auth} = useSelector((state: RootState) => state.user);
+  const { recents, auth, isHorizon } = useSelector((state: RootState) => ({
+    recents: state.recents.recents,
+    auth: state.user.auth,
+    isHorizon : state.orientation.isHorizon
+  }));
+
+  const dispatch = useDispatch();
+  const setRecents = (recents: Object) =>
+    dispatch(RecentsActions.setRecents(recents));
 
   //#region 검색 이벤트
   const doSearch = async () => {
@@ -297,6 +311,7 @@ const OrganizationScreenContainer = (props: any) => {
 
   const focusOut = () => {
     if (searchRef.current?.isFocused()) searchRef.current.blur();
+    else if(sendEmailRef.current?.isFocused()) sendEmailRef.current.blur();
   }
   return (
     <OrganizationScreenPresenter
@@ -333,6 +348,9 @@ const OrganizationScreenContainer = (props: any) => {
       exterError={exterError}
       searchRef={searchRef}
       focusOut={focusOut}
+      isTablet={isTablet}
+      isHorizon={isHorizon}
+      sendEmailRef={sendEmailRef}
     />
   );
 };

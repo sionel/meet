@@ -71,7 +71,9 @@ const CreateMeetScreenPresenter = (props: any) => {
     exitDateTime,
     clickChangeRole,
     clickDeleteUser,
-    selectedEmployee
+    selectedEmployee,
+    isHorizon,
+    isTablet
   } = props;
   const t = getT();
   const DatePickerComponent = (
@@ -86,17 +88,20 @@ const CreateMeetScreenPresenter = (props: any) => {
       selectedDayStyle={{ borderRadius: 5, backgroundColor: '#1c90fb' }}
       todayBackgroundColor="#febc2c"
       dayShape="square"
-      scaleFactor={370}
+      scaleFactor={isHorizon ? 740 : isTablet ? 450 : 370}
       onDateChange={onDateChange}
       selectYearTitle={t('년도 선택')}
       selectMonthTitle={''}
-      textStyle={{ fontSize: 14 }}
+      textStyle={{ fontSize: isTablet ? 18 : 14 }}
+      disabledDatesTextStyle={{ fontSize: isTablet ? 18 : 14 }}
+      previousTitleStyle={{paddingLeft: '19%'}}
+      nextTitleStyle={{paddingRight: '19%'}}
     />
   );
 
   return (
     <SafeAreaView style={styles.safeArea} onTouchStart={onFocusOut}>
-      <View style={styles.topTitle}>
+      <View style={[styles.topTitle, isHorizon && {paddingHorizontal: '17%'}]}>
         <TouchableOpacity onPress={onHandleBack}>
           <Text style={styles.ft14N}>{t('취소')}</Text>
         </TouchableOpacity>
@@ -108,7 +113,7 @@ const CreateMeetScreenPresenter = (props: any) => {
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity onPress={togglePublic} style={styles.privateContainer}>
+      <TouchableOpacity onPress={togglePublic} style={[styles.privateContainer, isHorizon && {paddingHorizontal: '17%'}]}>
         <LinearGradient
           end={{ x: 1, y: 1 }}
           start={{ x: 0, y: 0 }}
@@ -130,9 +135,9 @@ const CreateMeetScreenPresenter = (props: any) => {
         </View>
       </TouchableOpacity>
 
-      <View style={[{ backgroundColor: '#F7F8FA', height: 9 }]} />
+      <View style={[{ backgroundColor: '#F7F8FA', height: 9 }, isHorizon && {height: 6, marginHorizontal:'17%'}]} />
 
-      <View style={[{ backgroundColor: '#fff', height: '30%' }]}>
+      <View style={[{ backgroundColor: '#fff', height: '25%' }, isHorizon && {paddingHorizontal: '17%'}]}>
         <View style={styles.middleContainer}>
           <View style={styles.directionColTitle}>
             <Text style={styles.textHeader}>{t('회의명')}</Text>
@@ -165,7 +170,7 @@ const CreateMeetScreenPresenter = (props: any) => {
                   {t('두글자 이상 입력해주세요.')}
                 </Text>
               )}
-              <View style={{ flexDirection: 'row' }}>
+              <View style={styles.countContainer}>
                 <Text style={styles.ft12}>{roomNameCnt}</Text>
                 <Text style={styles.maxLength}>/20</Text>
               </View>
@@ -180,7 +185,8 @@ const CreateMeetScreenPresenter = (props: any) => {
               multiline
               style={[
                 styles.sendStyle,
-                sendMessage && { borderColor: '#1c90fb' }
+                sendMessage && { borderColor: '#1c90fb' },
+                isHorizon && {paddingTop: '1%'}
               ]}
               ref={sendMsgRef}
             />
@@ -192,10 +198,10 @@ const CreateMeetScreenPresenter = (props: any) => {
         </View>
       </View>
 
-      <View style={[{ backgroundColor: '#F7F8FA', height: 9 }]} />
+      <View style={[{ backgroundColor: '#F7F8FA', height: 9 }, isHorizon && {height: 6, marginHorizontal:'17%'}]} />
 
       <View
-        style={[styles.reserveContainer, switchReserve && { height: '15%' }]}
+        style={[styles.reserveContainer, switchReserve && { height: '15%' }, isHorizon && {paddingHorizontal: '17%'}]}
       >
         <View style={styles.rowContainer}>
           <Text style={[styles.ft14B, { fontSize: 15 }]}>{t('예약회의')}</Text>
@@ -224,7 +230,8 @@ const CreateMeetScreenPresenter = (props: any) => {
                     styles.datetimeBox,
                     datePicker === 'start' && {
                       borderColor: 'rgb(28, 144, 251)'
-                    }
+                    },
+                    isTablet && { width: '20%' }
                   ]}
                   onPress={() => {
                     openDatePicker('start');
@@ -246,7 +253,8 @@ const CreateMeetScreenPresenter = (props: any) => {
                     styles.datetimeBox,
                     timePicker === 'start' && {
                       borderColor: 'rgb(28, 144, 251)'
-                    }
+                    },
+                    isTablet && { width: '30%' }
                   ]}
                   onPress={() => {
                     openTimePicker('start');
@@ -281,9 +289,10 @@ const CreateMeetScreenPresenter = (props: any) => {
                 <TouchableOpacity
                   style={[
                     styles.datetimeBox,
-                    datePicker === 'end'
-                      ? { borderColor: 'rgb(28, 144, 251)' }
-                      : {}
+                    datePicker === 'end' && {
+                      borderColor: 'rgb(28, 144, 251)'
+                    },
+                    isTablet && { width: '20%' }
                   ]}
                   onPress={() => {
                     openDatePicker('end');
@@ -301,9 +310,10 @@ const CreateMeetScreenPresenter = (props: any) => {
                 <TouchableOpacity
                   style={[
                     styles.datetimeBox,
-                    timePicker === 'end'
-                      ? { borderColor: 'rgb(28, 144, 251)' }
-                      : {}
+                    timePicker === 'end' && {
+                      borderColor: 'rgb(28, 144, 251)'
+                    },
+                    isTablet && { width: '30%' }
                   ]}
                   onPress={() => {
                     openTimePicker('end');
@@ -384,9 +394,9 @@ const CreateMeetScreenPresenter = (props: any) => {
         )}
       </View>
 
-      <View style={[{ backgroundColor: '#F7F8FA', height: 9 }]} />
+      <View style={[{ backgroundColor: '#F7F8FA', height: 9 }, isHorizon && {height: 6, marginHorizontal:'17%'}]} />
 
-      <View style={styles.conferenceMember}>
+      <View style={[styles.conferenceMember, isHorizon && {paddingHorizontal: '17%'}]}>
         <View style={{ flexDirection: 'row' }}>
           <Text style={styles.ft14B}>{t('참석자')} </Text>
           <Text style={[styles.ft14B, { color: '#1c90fb' }]}>
@@ -402,10 +412,11 @@ const CreateMeetScreenPresenter = (props: any) => {
         </TouchableOpacity>
       </View>
 
-      <View style={styles.deleteAlram}>
+      <View style={[styles.deleteAlram, isHorizon && {marginHorizontal:'17%', paddingHorizontal: '0%'}]}>
         <View>
           <Text style={[styles.ft12, { letterSpacing: -0.18, lineHeight: 18 }]}>
-            {t('화상회의가 변경 또는 삭제될 경우, \n알림 이메일을 보냅니다.')}
+            {isHorizon ? t('화상회의가 변경 또는 삭제될 경우, 알림 이메일을 보냅니다.') : t('화상회의가 변경 또는 삭제될 경우, \n알림 이메일을 보냅니다.')}
+            
           </Text>
         </View>
 
@@ -421,30 +432,35 @@ const CreateMeetScreenPresenter = (props: any) => {
           <FlatList
             showsVerticalScrollIndicator={false}
             bounces={false}
-            contentContainerStyle={{
+            contentContainerStyle={[{
               flexGrow: 1,
               paddingHorizontal: '5%'
-            }}
+            }, isHorizon && {paddingHorizontal: '17%'}]}
             data={selectedEmployee.member}
             keyExtractor={(item, index) => String(index)}
             renderItem={({ item, index }: any) => {
-              let path: [] = [];
-              let user_path = '';
-              if (item.full_path) {
-                path = item.full_path.split('>');
-                for (let i = 1; i < path.length; i++) {
-                  if (i === path.length - 1) {
-                    user_path = user_path + path[i];
-                  } else {
-                    user_path = user_path + `${path[i]} | `;
-                  }
-                }
-              } else user_path = '';
+              // let path: [] = [];
+              // let user_path = '';
+              // if (item.full_path) {
+              //   path = item.full_path.split('>');
+              //   for (let i = 1; i < path.length; i++) {
+              //     if (i === path.length - 1) {
+              //       user_path = user_path + path[i];
+              //     } else {
+              //       user_path = user_path + `${path[i]} | `;
+              //     }
+              //   }
+              // } else user_path = '';
 
-              const isSelected = item.is_master;
+              const isMaster = item.is_master;
               return (
                 <View style={styles.participantList}>
-                  <View style={styles.profileView}>
+                  <View
+                    style={[
+                      styles.profileView,
+                      isTablet && { width: 46, height: 46 }
+                    ]}
+                  >
                     <View
                       style={[
                         styles.myView,
@@ -480,7 +496,7 @@ const CreateMeetScreenPresenter = (props: any) => {
                       resizeMode={'cover'}
                     />
                   </View>
-                  <View style={[styles.infoBox]}>
+                  <View style={[styles.infoBox, isHorizon && {width: '70%'}]}>
                     {!item.value && (
                       <Text style={styles.name}>
                         {item.user_name
@@ -500,8 +516,8 @@ const CreateMeetScreenPresenter = (props: any) => {
                       ellipsizeMode="tail"
                       style={[styles.tree, item.value && { fontSize: 16 }]}
                     >
-                      {user_path
-                        ? user_path
+                      {item.full_path
+                        ? item.full_path
                         : item.address_service_no
                         ? item.emailinfolist[0].email_address
                         : item.value}
@@ -510,19 +526,23 @@ const CreateMeetScreenPresenter = (props: any) => {
                   <TouchableOpacity
                     style={[
                       styles.roleContainer,
-                      isSelected && { borderColor: '#01acc1' },
-                      !item.user_no && { borderColor: '#fff' }
+                      isMaster && { borderColor: '#01acc1' },
+                      !item.user_no && { borderColor: '#fff' },
+                      isTablet && { width: 140 }
                     ]}
                     onPress={() => {
                       clickChangeRole(item);
                     }}
                     disabled={item.user_no === auth.user_no || !item.user_no}
                   >
-                    {isSelected ? (
+                    {isMaster ? (
                       <Fragment>
-                        <Text style={styles.maseterText}>{t('마스터')}</Text>
+                        <Text style={[styles.maseterText, isTablet && {fontSize: 14}]}>{t('마스터')}</Text>
                         <Image
-                          style={styles.icMaster}
+                          style={[
+                            styles.icMaster,
+                            isTablet && { width: 30, height: 30 }
+                          ]}
                           source={icMasterCircle}
                           resizeMode={'contain'}
                         />
@@ -530,12 +550,15 @@ const CreateMeetScreenPresenter = (props: any) => {
                     ) : item.user_no ? (
                       <Fragment>
                         <Image
-                          style={styles.icMaster}
+                          style={[
+                            styles.icMaster,
+                            isTablet && { width: 30, height: 30 }
+                          ]}
                           source={icAttdCircle}
                           resizeMode={'contain'}
                         />
 
-                        <Text style={styles.attendantText}>{t('참석자')}</Text>
+                        <Text style={[styles.attendantText, isTablet && {fontSize: 14}]}>{t('참석자')}</Text>
                       </Fragment>
                     ) : (
                       <Fragment>
@@ -553,7 +576,7 @@ const CreateMeetScreenPresenter = (props: any) => {
       </View>
 
       {(timePicker !== 'none' || datePicker !== 'none') && (
-        <View style={styles.bottomComponent}>
+        <View style={[styles.bottomComponent, isHorizon && {width:'66%', left: '17%'}]}>
           <View
             style={{
               flexDirection: 'row',
@@ -664,13 +687,14 @@ const styles = StyleSheet.create({
   directionColMessage: {
     flexDirection: 'column',
     paddingVertical: 5,
-    height: '65%'
+    height: '60%'
     // backgroundColor: 'red'
   },
   middleContainer: {
     height: '100%',
     justifyContent: 'space-between',
-    paddingHorizontal: '5%'
+    // paddingHorizontal: '5%',
+    paddingVertical: '1%'
     // height: '40%'
   },
   textHeader: {
@@ -683,7 +707,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: '3.5%',
     height: '67%',
     borderColor: '#E6E6E6',
-    fontSize: 14
+    fontSize: 14,
+    borderRadius: 10
   },
   sendStyle: {
     borderWidth: 1,
@@ -693,13 +718,15 @@ const styles = StyleSheet.create({
     letterSpacing: -0.28,
     borderColor: '#E6E6E6',
     fontSize: 14,
-    lineHeight: 20
+    lineHeight: 20,
+    borderRadius: 15
   },
   countContainer: {
     justifyContent: 'flex-end',
     alignItems: 'center',
     flexDirection: 'row',
-    marginTop: 2
+    marginTop: 2,
+    height:17
   },
   ft12: { fontSize: 12, color: '#000' },
   maxLength: {
@@ -728,8 +755,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingLeft: '5%',
-    paddingRight: '5%'
+    paddingHorizontal:'5%'
   },
   conferenceMember: {
     height: '6%',
@@ -766,7 +792,7 @@ const styles = StyleSheet.create({
     width: 14,
     height: 14
   },
-  icMaster: { width: '25%', height: 20 },
+  icMaster: { width: 20, height: 20 },
   roleContainer: {
     flexDirection: 'row',
     // backgroundColor: '#febc2c',
@@ -774,7 +800,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     justifyContent: 'space-evenly',
     alignItems: 'center',
-    width: '17%',
+    width: 61,
     borderRadius: 15
   },
   maseterText: {
@@ -813,7 +839,7 @@ const styles = StyleSheet.create({
     paddingBottom: '1%'
   },
   profileView: {
-    width: '12%',
+    width: 40,
     height: 40,
     position: 'relative',
     zIndex: 1

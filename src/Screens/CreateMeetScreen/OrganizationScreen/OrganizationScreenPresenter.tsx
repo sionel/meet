@@ -55,7 +55,10 @@ const OrganizationScreenPresenter = (props: any) => {
     exterError,
     recentAdd,
     searchRef,
-    focusOut
+    focusOut,
+    isTablet,
+    isHorizon,
+    sendEmailRef
   } = props;
 
   const OrganizationFlatList = (
@@ -94,7 +97,7 @@ const OrganizationScreenPresenter = (props: any) => {
             >
               <TouchableHighlight
                 disabled={item.user_no === auth.user_no}
-                style={{ flexDirection: 'row' }}
+                style={{ flexDirection: 'row'}}
                 underlayColor={'#e9f5ff'}
                 onPress={() => {
                   if (type === 'group') {
@@ -510,6 +513,9 @@ const OrganizationScreenPresenter = (props: any) => {
                 exterError={exterError}
                 recentAdd={recentAdd}
                 focusOut={focusOut}
+                isTablet={isTablet}
+                isHorizon={isHorizon}
+                sendEmailRef={sendEmailRef}
               />
             </Fragment>
           )}
@@ -657,11 +663,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderColor: '#8c8c8c',
-    borderBottomWidth: 1
+    borderBottomWidth: 2
   },
   selectedTab: {
     borderColor: '#1c90fb',
-    borderBottomWidth: 2
+    borderBottomWidth: 3
   }
 });
 

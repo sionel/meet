@@ -7,11 +7,10 @@ import OrganizationScreen from './OrganizationScreen';
 
 import { MeetApi, OrganizationApi } from '../../services';
 
-import { actionCreators as RecentsActions } from '../../redux/modules/recentsInvited';
-
 import moment from 'moment';
 import { getT } from '../../utils/translateManager';
 import { RootState } from '../../redux/configureStore';
+import deviceInfoModule from 'react-native-device-info';
 
 interface param {
   type: 'portal_id' | 'email';
@@ -28,9 +27,7 @@ export default function CreateMeetScreenContainer(props: any) {
   const [switchReserve, setSwitchReserve] = useState(false);
   const [switchDelAlram, setSwitchDelAlram] = useState(false);
   const [selectMode, setSelectMode] = useState(false);
-
   const [employee, setEmployee] = useState([{}]);
-
   const [roomName, setRoomName] = useState('');
   const [roomNameCnt, setRoomNameCnt] = useState(0);
   const [isPublic, setIsPublic] = useState(true);
@@ -40,11 +37,7 @@ export default function CreateMeetScreenContainer(props: any) {
   const [datePicker, setDatePicker] = useState<'none' | 'start' | 'end'>(
     'none'
   );
-
-  // const [invited, setInvited] = useState<any[]>([]);
-  // const [inviteText, setInviteText] = useState('');
   const [timeType, setTimeType] = useState('');
-
   const [startTime, setStartTime] = useState({
     date: '',
     time: '',
@@ -55,21 +48,16 @@ export default function CreateMeetScreenContainer(props: any) {
     time: '',
     current: new Date()
   });
-
   const [time, setTime] = useState(new Date());
   const [timeChangeDetect, setTimeChangeDetect] = useState(false);
   const [date, setDate] = useState(new Date());
-
-  const titleRef: RefObject<any> = useRef();
-  const sendMsgRef: RefObject<any> = useRef();
   const [selectedEmployee, setSelectedEmployee] = useState({
     member: [{}],
     group: {}
   });
-
   const [sendMessage, setSendMessage] = useState('');
   const [sendMsgCnt, setSendMsgCnt] = useState(0);
-  // const [participantList, setParticipantList] = useState<any[]>([]);
+
   const [textLess2, setTextLess2] = useState(true);
   const [isOrgDataLoaded, setIsOrgDataLoaded] = useState(false);
   const [organization, setorganization] = useState<any>({ company_no: -1 });
@@ -77,13 +65,21 @@ export default function CreateMeetScreenContainer(props: any) {
     []
   );
 
-  const { auth } = useSelector((state: any) => state.user);
+  // const [invited, setInvited] = useState<any[]>([]);
+  // const [inviteText, setInviteText] = useState('');
+  // const [participantList, setParticipantList] = useState<any[]>([]);
+
+  const titleRef: RefObject<any> = useRef();
+  const sendMsgRef: RefObject<any> = useRef();
+
+  const { auth, isHorizon } = useSelector((state: any) => ({
+    auth: state.user.auth,
+    isHorizon: state.orientation.isHorizon
+  }));
 
   const t = getT();
 
-  const dispatch = useDispatch();
-  const setRecents = (recents: Object) =>
-    dispatch(RecentsActions.setRecents(recents));
+  const isTablet = deviceInfoModule.isTablet() === true;
 
   const getAllEmployee = async () => {
     const result = await OrganizationApi.getOrganizationTreeAllEmployeeRequest(
@@ -352,11 +348,9 @@ export default function CreateMeetScreenContainer(props: any) {
     }
 
     let current = obj.current;
-    
+
     let today = moment(new Date()).add(29, 'minutes');
 
-    console.log(current);
-    
     if (current < today) {
       Alert.alert(
         t('시간 지정 오류'),
@@ -592,11 +586,11 @@ export default function CreateMeetScreenContainer(props: any) {
           // setInviteText={setInviteText}
           // participantList={participantList}
           // setParticipantList={setParticipantList}
-          setRecents={setRecents}
           organization={organization}
           isOrgDataLoaded={isOrgDataLoaded}
           contacts={contacts}
-        />
+          isTablet={isTablet}
+          />
       ) : (
         <CreateMeetScreenPresenter
           roomName={roomName}
@@ -641,6 +635,8 @@ export default function CreateMeetScreenContainer(props: any) {
           clickChangeRole={clickChangeRole}
           clickDeleteUser={clickDeleteUser}
           selectedEmployee={selectedEmployee}
+          isHorizon={isHorizon}
+          isTablet={isTablet}
         />
       )}
     </View>

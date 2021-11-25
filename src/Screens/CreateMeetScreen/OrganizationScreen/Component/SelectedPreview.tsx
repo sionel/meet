@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     height: 80,
     backgroundColor: '#f6f7f8',
     borderColor: '#ececec',
-    borderBottomWidth: 1
+    borderBottomWidth: 1,
   },
   profile: {
     alignItems: 'center',

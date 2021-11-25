@@ -37,7 +37,8 @@ const OrganizationTab = (props: any) => {
     recents,
     validateExter,
     exterError,
-    focusOut
+    focusOut,
+    sendEmailRef
   } = props;
   const t = getT();
   return (
@@ -72,7 +73,7 @@ const OrganizationTab = (props: any) => {
               alignItems: 'center',
               justifyContent: 'center'
             }}
-            onTouchStart={()=>focusOut()}
+            onTouchStart={() => focusOut()}
           >
             <Image source={ic_empty} style={styles.icEmpty45} />
             <Text>{t('검색결과가 존재하지 않습니다.')}</Text>
@@ -234,7 +235,7 @@ const OrganizationTab = (props: any) => {
                 alignItems: 'center',
                 justifyContent: 'center'
               }}
-              onTouchStart={()=>focusOut()}
+              onTouchStart={() => focusOut()}
             >
               <Image
                 source={ic_empty}
@@ -302,53 +303,63 @@ const OrganizationTab = (props: any) => {
           ))) ||
         //   외부참여자
         (tabType === 'exter' && (
-          <View style={{ flex: 1, justifyContent: 'flex-start' }}>
-            <View style={{paddingHorizontal: '5%', paddingVertical: '2%', height:'15%', flexDirection:'column', justifyContent:'space-between'}}>
-            <Text
-              style={{fontSize: 15}}
+          <View
+            style={{ flex: 1, justifyContent: 'flex-start' }}
+            onTouchStart={() => focusOut()}
+          >
+            <View
+              style={{
+                paddingHorizontal: '5%',
+                paddingVertical: '2%',
+                height: '15%',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                borderBottomWidth:2,
+                borderBottomColor:'#8c8c8c' 
+              }}
             >
-              {t('참여자 초대')}
-            </Text>
-            <View style={styles.rowView}>
-              <TextInput
-                style={[
-                  styles.emailText,
-                  inviteText && { borderBottomColor: '#1c90fb' }
-                ]}
-                placeholder={t('초대할 사람의 이메일을 입력해주세요.')}
-                autoCapitalize={'none'}
-                autoCompleteType={'email' || 'tel'}
-                onSubmitEditing={() => validateExter()}
-                clearButtonMode={'always'}
-                onChangeText={setInviteText}
-                value={inviteText}
-              />
-              <TouchableOpacity
-                style={{
-                  width: 40,
-                  height: 30,
-                  backgroundColor: '#1c90fb',
-                  borderRadius: 5,
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}
-                onPress={() => validateExter()}
-              >
-                <Image
-                  source={ic_mail}
-                  style={{
-                    width: 35,
-                    height: 25,
-                    resizeMode: 'cover'
-                  }}
+              <Text style={{ fontSize: 15 }}>{t('참여자 초대')}</Text>
+              <View style={styles.rowView}>
+                <TextInput
+                  style={[
+                    styles.emailText,
+                    inviteText && { borderColor: '#1c90fb' }
+                  ]}
+                  placeholder={t('초대할 사람의 이메일을 입력해주세요.')}
+                  autoCapitalize={'none'}
+                  autoCompleteType={'email' || 'tel'}
+                  onSubmitEditing={() => validateExter()}
+                  clearButtonMode={'always'}
+                  onChangeText={setInviteText}
+                  value={inviteText}
+                  ref={sendEmailRef}
                 />
-              </TouchableOpacity>
-            </View>
-            {exterError && (
-              <Text style={styles.emailError}>
-                {t('이미 추가된 이메일입니다.')}
-              </Text>
-            )}
+                <TouchableOpacity
+                  style={{
+                    width: 40,
+                    height: 30,
+                    backgroundColor: '#1c90fb',
+                    borderRadius: 5,
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                  onPress={() => validateExter()}
+                >
+                  <Image
+                    source={ic_mail}
+                    style={{
+                      width: 35,
+                      height: 25,
+                      resizeMode: 'cover'
+                    }}
+                  />
+                </TouchableOpacity>
+              </View>
+              {exterError && (
+                <Text style={styles.emailError}>
+                  {t('이미 추가된 이메일입니다.')}
+                </Text>
+              )}
             </View>
             {/* {invited.length > 0 && (
               <>
@@ -545,7 +556,7 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     width: '80%',
     height: 40,
-    paddingHorizontal:'3%',
+    paddingHorizontal: '3%'
   },
   emailError: {
     color: '#fc4c60',
