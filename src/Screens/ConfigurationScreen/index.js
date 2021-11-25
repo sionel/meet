@@ -13,15 +13,19 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchTopProps = dispatch => ({
-  onLogout: () => dispatch(UserActions.logout()),
+  onLogout: () => {
+    dispatch(UserActions.logout());
+    dispatch(RecentsActions.resetRecents());
+  },
   onSetInitialList: () => {
     dispatch(WetalkActions.setInitialList());
     dispatch(ConferenceActions.setInitialList());
   },
   onDestroyToken: () => dispatch(UserActions.token()),
   onToggleVisibleAppIntro: () => dispatch(UserActions.toggleVisibleAppIntro()),
-  setDestination: (destination) => dispatch(RootActions.setDestination(destination)),
-  resetRecents: () => dispatch(RecentsActions.resetRecents()),
+  setDestination: destination =>
+    dispatch(RootActions.setDestination(destination)),
+  // resetRecents: () => dispatch(RecentsActions.resetRecents())
 });
 
 export default connect(

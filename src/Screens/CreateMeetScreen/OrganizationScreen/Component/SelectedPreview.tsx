@@ -13,6 +13,7 @@ import { CustomIcon } from '../../../../components';
 import { wehagoDummyImageURL, wehagoMainURL } from '../../../../utils';
 
 const ic_cancel = require('../../../../../assets/new/icons/ic_cancel_w.png');
+const ic_mail = require('../../../../../assets/new/icons/ic_mail.png');
 
 const SelectedPreview = (props: any) => {
   const { selectedEmployee, auth, selectEmployee } = props;
@@ -27,11 +28,11 @@ const SelectedPreview = (props: any) => {
 
   const createFlatList = (data: any[], type: string) => (
     <FlatList
+      bounces={false}
       data={data}
       horizontal={true}
       keyExtractor={(item, index) => String(index)}
       renderItem={({ item, index }) => {
-        // console.log(item);
         return (
           <View style={styles.profile} key={index}>
             <TouchableOpacity
@@ -61,13 +62,17 @@ const SelectedPreview = (props: any) => {
                   </View>
                 ) : (
                   <Image
-                    source={{
-                      uri: item.profile_url
-                      ? wehagoMainURL + item.profile_url
-                      : item.profile_image
-                      ? wehagoMainURL + item.profile_image
-                      : wehagoDummyImageURL
-                    }}
+                    source={
+                      item.value
+                        ? ic_mail
+                        : {
+                            uri: item.profile_url
+                              ? wehagoMainURL + item.profile_url
+                              : item.profile_image
+                              ? wehagoMainURL + item.profile_image
+                              : wehagoDummyImageURL
+                          }
+                    }
                     style={{
                       width: 40,
                       height: 40,
@@ -110,6 +115,8 @@ const SelectedPreview = (props: any) => {
                       ? 'organization_name'
                       : item['user_name']
                       ? 'user_name'
+                      : item['value']
+                      ? 'value'
                       : 'address_name'
                   ]
                 }

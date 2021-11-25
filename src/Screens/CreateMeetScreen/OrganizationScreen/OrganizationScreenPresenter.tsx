@@ -2,12 +2,9 @@ import React from 'react';
 import {
   StyleSheet,
   View,
-  ScrollView,
   FlatList,
   Image,
   TouchableOpacity,
-  Alert,
-  SectionList,
   SafeAreaView,
   Text,
   TextInput,
@@ -17,7 +14,6 @@ import {
 } from 'react-native';
 import CustomCheckBox from '../../../components/renewal/CustomCheckBox';
 import { CustomIcon } from '../../../components';
-import { wehagoDummyImageURL, wehagoMainURL } from '../../../utils';
 import SelectedPreview from './Component/SelectedPreview';
 import OrganizationTab from './Component/OrganizationTab';
 
@@ -41,7 +37,6 @@ const OrganizationScreenPresenter = (props: any) => {
     openGroup,
     setOpenGroup,
     organization,
-    setSelectMode,
     selectEmployee,
     selectedEmployee,
     getOrganizationEmployeeTree,
@@ -275,10 +270,11 @@ const OrganizationScreenPresenter = (props: any) => {
             {t('뒤로')}
           </Text>
         </TouchableOpacity>
-        <View style={{flexDirection:'row'}}>
+        <View style={{ flexDirection: 'row' }}>
           <Text style={styles.TitleText}>{t('참석자 추가')}</Text>
           <Text style={{ color: '#1c90fb', fontSize: 18, fontWeight: '600' }}>
-            {'  '}{selectedEmployee.member.length}
+            {'  '}
+            {selectedEmployee.member.length}
           </Text>
         </View>
         <TouchableOpacity onPress={() => participantListAdd()}>
@@ -327,14 +323,10 @@ const OrganizationScreenPresenter = (props: any) => {
                 <TouchableOpacity
                   activeOpacity={0.7}
                   onPress={() => setTabType('org')}
-                  style={{
-                    flex: 1,
-                    height: 40,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    borderColor: tabType === 'org' ? '#1c90fb' : '#8c8c8c',
-                    borderBottomWidth: tabType === 'org' ? 2 : 1
-                  }}
+                  style={[
+                    styles.tabText,
+                    tabType === 'org' && styles.selectedTab
+                  ]}
                 >
                   <Text
                     style={{ color: tabType === 'org' ? '#1c90fb' : '#8c8c8c' }}
@@ -345,14 +337,10 @@ const OrganizationScreenPresenter = (props: any) => {
                 <TouchableOpacity
                   activeOpacity={0.7}
                   onPress={() => setTabType('contact')}
-                  style={{
-                    flex: 1,
-                    height: 40,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    borderColor: tabType === 'contact' ? '#1c90fb' : '#8c8c8c',
-                    borderBottomWidth: tabType === 'contact' ? 2 : 1
-                  }}
+                  style={[
+                    styles.tabText,
+                    tabType === 'contact' && styles.selectedTab
+                  ]}
                 >
                   <Text
                     style={{
@@ -365,14 +353,10 @@ const OrganizationScreenPresenter = (props: any) => {
                 <TouchableOpacity
                   activeOpacity={0.7}
                   onPress={() => setTabType('exter')}
-                  style={{
-                    flex: 1,
-                    height: 40,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    borderColor: tabType === 'exter' ? '#1c90fb' : '#8c8c8c',
-                    borderBottomWidth: tabType === 'exter' ? 2 : 1
-                  }}
+                  style={[
+                    styles.tabText,
+                    tabType === 'exter' && styles.selectedTab
+                  ]}
                 >
                   <Text
                     style={{
@@ -653,6 +637,18 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     width: 14,
     height: 14
+  },
+  tabText: {
+    flex: 1,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: '#8c8c8c',
+    borderBottomWidth: 1
+  },
+  selectedTab: {
+    borderColor: '#1c90fb',
+    borderBottomWidth: 2
   }
 });
 

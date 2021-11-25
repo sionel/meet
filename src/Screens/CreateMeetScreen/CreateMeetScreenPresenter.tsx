@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import {
   View,
   StyleSheet,
@@ -11,30 +11,23 @@ import {
 } from 'react-native';
 
 import DatePicker from 'react-native-date-picker';
-// import Autocomplete from 'react-native-autocomplete-input';
 import CalendarPicker from 'react-native-calendar-picker';
 
 import { getT } from '../../utils/translateManager';
-import { CustomIcon } from '../../components';
 
 import { wehagoMainURL, wehagoDummyImageURL } from '../../utils';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { add, last, parseInt } from 'lodash';
+// import { add, last, parseInt } from 'lodash';
 import LinearGradient from 'react-native-linear-gradient';
 
-const ic_code = require('../../../assets/new/icons/ic_code.png');
-const ic_lock = require('../../../assets/new/icons/ic_lock_w.png');
-const ic_person_plus = require('../../../assets/new/icons/ic_person_plus.png');
-// const ic_master = require('../../../assets/new/icons/ic_master.png');
-// const ic_person = require('../../../assets/new/icons/ic_person.png');
-const ic_cancel = require('../../../assets/new/icons/ic_cancel.png');
-const ic_cancel_w = require('../../../assets/new/icons/ic_cancel_w.png');
-const ic_check_black = require('../../../assets/new/icons/ic_check_black.png');
-const ic_master_circle = require('../../../assets/new/icons/ic_master_circle.png');
-const ic_attd_circle = require('../../../assets/new/icons/ic_attd_circle.png');
-
-// 알림 생성 칸이 있는데 이건 삭제
-// 왜냐 이 앱은 노티를 못보내기 때문
+const icCode = require('../../../assets/new/icons/ic_code.png');
+const icLock_W = require('../../../assets/new/icons/ic_lock_w.png');
+const icPersonPlus = require('../../../assets/new/icons/ic_person_plus.png');
+const icCancel_W = require('../../../assets/new/icons/ic_cancel_w.png');
+const icCancel = require('../../../assets/new/icons/ic_cancel.png');
+const icCheck = require('../../../assets/new/icons/ic_check.png');
+const icMasterCircle = require('../../../assets/new/icons/ic_master_circle.png');
+const icAttdCircle = require('../../../assets/new/icons/ic_attd_circle.png');
 
 const CreateMeetScreenPresenter = (props: any) => {
   const {
@@ -56,10 +49,8 @@ const CreateMeetScreenPresenter = (props: any) => {
     sendMessageChange,
     startConference,
     //신규Props
-    switchAllSend,
     switchReserve,
     switchDelAlram,
-    onSwitchAllSendChange,
     onSwitchReserveChange,
     onSwitchDelAlramChange,
     roomNameCnt,
@@ -70,7 +61,7 @@ const CreateMeetScreenPresenter = (props: any) => {
     time,
     setTime,
     auth,
-    participantList,
+    // participantList,
     textLess2,
     sendMsgRef,
     titleRef,
@@ -83,36 +74,17 @@ const CreateMeetScreenPresenter = (props: any) => {
     selectedEmployee
   } = props;
   const t = getT();
-
-  const TimePickerComponent = (
-    <View
-      style={{ marginTop: 20, justifyContent: 'center', alignItems: 'center' }}
-    >
-      <DatePicker
-        onDateChange={time => timeChange(time)}
-        mode={'time'}
-        date={
-          timeChangeDetect
-            ? time
-            : timeType === 'start'
-            ? startTime.current
-            : endTime.current
-        }
-      />
-    </View>
-  );
-
   const DatePickerComponent = (
     <CalendarPicker
       weekdays={['일', '월', '화', '수', '목', '금', '토']}
       months={['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']}
       previousTitle="<"
       nextTitle=">"
-      minDate={startTime.current}
+      minDate={new Date()}
       selectedStartDate={startTime.current}
       selectedDayTextColor="#fff"
       selectedDayStyle={{ borderRadius: 5, backgroundColor: '#1c90fb' }}
-      todayBackgroundColor="blue"
+      todayBackgroundColor="#febc2c"
       dayShape="square"
       scaleFactor={370}
       onDateChange={onDateChange}
@@ -124,8 +96,6 @@ const CreateMeetScreenPresenter = (props: any) => {
 
   return (
     <SafeAreaView style={styles.safeArea} onTouchStart={onFocusOut}>
-      {/* <ScrollView contentContainerStyle={[{ flex: 1, minHeight: 1000 }]}> */}
-
       <View style={styles.topTitle}>
         <TouchableOpacity onPress={onHandleBack}>
           <Text style={styles.ft14N}>{t('취소')}</Text>
@@ -137,15 +107,15 @@ const CreateMeetScreenPresenter = (props: any) => {
           </Text>
         </TouchableOpacity>
       </View>
+
       <TouchableOpacity onPress={togglePublic} style={styles.privateContainer}>
-        {/* <View style={styles.privateContainer}> */}
         <LinearGradient
           end={{ x: 1, y: 1 }}
           start={{ x: 0, y: 0 }}
           colors={isPublic ? ['#a460ff', '#5d5dff'] : ['#1cc8fb', '#1c90fb']}
           style={styles.codeContainer}
         >
-          <Image source={isPublic ? ic_code : ic_lock} style={styles.icCode} />
+          <Image source={isPublic ? icCode : icLock_W} style={styles.icCode} />
         </LinearGradient>
 
         <View style={styles.privateTextContainer}>
@@ -158,13 +128,13 @@ const CreateMeetScreenPresenter = (props: any) => {
               : t('지정된 참여자 이외엔 접속 불가능합니다.')}
           </Text>
         </View>
-        {/* </View> */}
       </TouchableOpacity>
-      <View style={[{ flex: 1, backgroundColor: '#fff' }]}>
-        <View style={[{ backgroundColor: '#F7F8FA', flex: 0.015 }]} />
-        <View style={{ backgroundColor: '#F7F8FA', flex: 0.02 }} />
+
+      <View style={[{ backgroundColor: '#F7F8FA', height: 9 }]} />
+
+      <View style={[{ backgroundColor: '#fff', height: '30%' }]}>
         <View style={styles.middleContainer}>
-          <View style={styles.directionCol}>
+          <View style={styles.directionColTitle}>
             <Text style={styles.textHeader}>{t('회의명')}</Text>
             <TextInput
               onChangeText={roomNameChange}
@@ -201,7 +171,7 @@ const CreateMeetScreenPresenter = (props: any) => {
               </View>
             </View>
           </View>
-          <View style={styles.directionCol}>
+          <View style={styles.directionColMessage}>
             <Text style={styles.textHeader}>{t('초대메세지')}</Text>
             <TextInput
               onChangeText={sendMessageChange}
@@ -222,147 +192,133 @@ const CreateMeetScreenPresenter = (props: any) => {
         </View>
       </View>
 
-      <View style={[{ flex: 1.4, backgroundColor: '#fff' }]}>
-        <View style={styles.graybar1} />
-        <View
-          style={[
-            styles.reserveContainer,
-            switchReserve && { flex: 0.6, marginTop: 5 }
-          ]}
-        >
-          <View
-            style={[
-              {
+      <View style={[{ backgroundColor: '#F7F8FA', height: 9 }]} />
+      <View
+        style={[
+          styles.reserveContainer,
+          switchReserve && { height: '15%'}
+        ]}
+      >
+        <View style={styles.rowContainer}>
+          <Text style={[styles.ft14B, {fontSize:15}]}>{t('예약회의')}</Text>
+          <Switch
+            onValueChange={onSwitchReserveChange}
+            value={switchReserve}
+            trackColor={{ false: '', true: '#1c90fb' }}
+          />
+        </View>
+        {switchReserve && (
+          <Fragment>
+            <View
+              style={{
                 flexDirection: 'row',
                 flex: 1,
-                alignItems: 'center',
-                justifyContent: 'space-between'
-              }
-            ]}
-          >
-            <Text style={styles.ft14B}>{t('예약회의')}</Text>
-            <Switch
-              onValueChange={onSwitchReserveChange}
-              value={switchReserve}
-              trackColor={{ false: '', true: '#1c90fb' }}
-            />
-          </View>
-          {switchReserve && (
-            <>
-              <View
-                style={{
+                justifyContent: 'space-between',
+                alignItems: 'center'
+              }}
+            >
+              <Text style={{ fontSize: 15 }}>{t('시작시간')}</Text>
+              <View style={{ flexDirection: 'row' }}>
+                <TouchableOpacity
+                  style={[
+                    styles.datetimeBox,
+                    datePicker === 'start' && {
+                      borderColor: 'rgb(28, 144, 251)'
+                    }
+                  ]}
+                  onPress={() => {
+                    openDatePicker('start');
+                  }}
+                >
+                  <Text
+                    style={
+                      datePicker === 'start' && {
+                        color: 'rgb(28, 144, 251)'
+                      }
+                    }
+                  >
+                    {`${startTime.date}`}
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={[
+                    styles.datetimeBox,
+                    timePicker === 'start' && {
+                      borderColor: 'rgb(28, 144, 251)'
+                    }
+                  ]}
+                  onPress={() => {
+                    openTimePicker('start');
+                  }}
+                >
+                  <Text
+                    style={
+                      timePicker === 'start' && {
+                        color: 'rgb(28, 144, 251)'
+                      }
+                    }
+                  >
+                    {`${startTime.time}`}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View
+              style={[
+                {
                   flexDirection: 'row',
                   flex: 1,
                   justifyContent: 'space-between',
                   alignItems: 'center'
-                }}
-              >
-                <Text style={{ fontSize: 15 }}>{t('시작시간')}</Text>
-                <View style={{ flexDirection: 'row' }}>
-                  <TouchableOpacity
-                    style={[
-                      styles.datetimeBox,
-                      datePicker === 'start' && {
-                        borderColor: 'rgb(28, 144, 251)'
-                      }
-                    ]}
-                    onPress={() => {
-                      openDatePicker('start');
-                    }}
+                }
+              ]}
+            >
+              <Text style={{ fontSize: 15 }}>{t('종료시간')}</Text>
+              <View style={{ flexDirection: 'row' }}>
+                <TouchableOpacity
+                  style={[
+                    styles.datetimeBox,
+                    datePicker === 'end'
+                      ? { borderColor: 'rgb(28, 144, 251)' }
+                      : {}
+                  ]}
+                  onPress={() => {
+                    openDatePicker('end');
+                  }}
+                >
+                  <Text
+                    style={
+                      datePicker === 'end' ? { color: 'rgb(28, 144, 251)' } : {}
+                    }
                   >
-                    <Text
-                      style={
-                        datePicker === 'start' && {
-                          color: 'rgb(28, 144, 251)'
-                        }
-                      }
-                    >
-                      {`${startTime.date}`}
-                    </Text>
-                  </TouchableOpacity>
+                    {`${endTime.date}`}
+                  </Text>
+                </TouchableOpacity>
 
-                  <TouchableOpacity
-                    style={[
-                      styles.datetimeBox,
-                      timePicker === 'start' && {
-                        borderColor: 'rgb(28, 144, 251)'
-                      }
-                    ]}
-                    onPress={() => {
-                      openTimePicker('start');
-                    }}
+                <TouchableOpacity
+                  style={[
+                    styles.datetimeBox,
+                    timePicker === 'end'
+                      ? { borderColor: 'rgb(28, 144, 251)' }
+                      : {}
+                  ]}
+                  onPress={() => {
+                    openTimePicker('end');
+                  }}
+                >
+                  <Text
+                    style={
+                      timePicker === 'end' ? { color: 'rgb(28, 144, 251)' } : {}
+                    }
                   >
-                    <Text
-                      style={
-                        timePicker === 'start' && {
-                          color: 'rgb(28, 144, 251)'
-                        }
-                      }
-                    >
-                      {`${startTime.time}`}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
+                    {`${endTime.time}`}
+                  </Text>
+                </TouchableOpacity>
               </View>
-              <View
-                style={[
-                  {
-                    flexDirection: 'row',
-                    flex: 1,
-                    justifyContent: 'space-between',
-                    alignItems: 'center'
-                  }
-                ]}
-              >
-                <Text style={{ fontSize: 15 }}>{t('종료시간')}</Text>
-                <View style={{ flexDirection: 'row' }}>
-                  <TouchableOpacity
-                    style={[
-                      styles.datetimeBox,
-                      datePicker === 'end'
-                        ? { borderColor: 'rgb(28, 144, 251)' }
-                        : {}
-                    ]}
-                    onPress={() => {
-                      openDatePicker('end');
-                    }}
-                  >
-                    <Text
-                      style={
-                        datePicker === 'end'
-                          ? { color: 'rgb(28, 144, 251)' }
-                          : {}
-                      }
-                    >
-                      {`${endTime.date}`}
-                    </Text>
-                  </TouchableOpacity>
+            </View>
 
-                  <TouchableOpacity
-                    style={[
-                      styles.datetimeBox,
-                      timePicker === 'end'
-                        ? { borderColor: 'rgb(28, 144, 251)' }
-                        : {}
-                    ]}
-                    onPress={() => {
-                      openTimePicker('end');
-                    }}
-                  >
-                    <Text
-                      style={
-                        timePicker === 'end'
-                          ? { color: 'rgb(28, 144, 251)' }
-                          : {}
-                      }
-                    >
-                      {`${endTime.time}`}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              {/* <View
+            {/* <View
                       style={[
                         {
                           flexDirection: 'row',
@@ -393,7 +349,7 @@ const CreateMeetScreenPresenter = (props: any) => {
                       {openDatePickerComponent('start')}
                     </View> */}
 
-              {/* <View
+            {/* <View
                       style={[
                         {
                           flexDirection: 'row',
@@ -422,225 +378,219 @@ const CreateMeetScreenPresenter = (props: any) => {
                     >
                       {openDatePickerComponent('end')}
                     </View> */}
-            </>
-          )}
-        </View>
-        <View style={styles.graybar1} />
-        <View style={[styles.botContainer]}>
-          <View
-            style={[styles.conferenceMember, switchReserve && { flex: 0.28 }]}
-          >
-            <View style={{ flexDirection: 'row' }}>
-              <Text style={styles.ft14B}>{t('참석자')} </Text>
-              <Text style={[styles.ft14B, { color: '#1c90fb' }]}>
-                {selectedEmployee.member.length}
-              </Text>
-            </View>
-            <TouchableOpacity
-              onPress={() => {
-                setSelectMode(true);
-              }}
-            >
-              <Image source={ic_person_plus} style={styles.icPersonPlus} />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.deleteAlram}>
-            <View>
-              <Text
-                style={[styles.ft12, { letterSpacing: -0.18, lineHeight: 18 }]}
-              >
-                {t(
-                  '화상회의가 변경 또는 삭제될 경우, \n알림 이메일을 보냅니다.'
-                )}
-              </Text>
-            </View>
-
-            <Switch
-              onValueChange={onSwitchDelAlramChange}
-              value={switchDelAlram}
-              trackColor={{ false: '', true: '#1c90fb' }}
-            />
-          </View>
-          <View style={{ flex: 1 }}>
-            {selectedEmployee.member[0].user_no !== undefined && (
-              <FlatList
-                showsVerticalScrollIndicator={false}
-                bounces={false}
-                contentContainerStyle={{
-                  flexGrow: 1,
-                  paddingLeft: '5%',
-                  paddingRight: '5%'
-                }}
-                data={selectedEmployee.member}
-                keyExtractor={(item, index) => String(index)}
-                renderItem={({ item, index }: any) => {
-                  let path: [] = [];
-                  let user_path = '';
-                  if (item.full_path) {
-                    path = item.full_path.split('>');
-                    for (let i = 1; i < path.length; i++) {
-                      if (i === path.length - 1) {
-                        user_path = user_path + path[i];
-                      } else {
-                        user_path = user_path + `${path[i]} | `;
-                      }
-                    }
-                  } else user_path = '';
-
-                  const isSelected = item.is_master;
-                  return (
-                    <View style={styles.participantList}>
-                      <View style={styles.profileView}>
-                        <View
-                          style={[
-                            styles.myView,
-                            item.user_no !== auth.user_no && {
-                              backgroundColor: '#1c90fb'
-                            }
-                          ]}
-                        >
-                          {item.user_no === auth.user_no ? (
-                            <Text style={styles.myText}>나</Text>
-                          ) : (
-                            <TouchableOpacity
-                              onPress={() => {
-                                clickDeleteUser(item);
-                              }}
-                            >
-                              <Image
-                                source={ic_cancel_w}
-                                style={styles.icCancelUser}
-                              />
-                            </TouchableOpacity>
-                          )}
-                        </View>
-                        <Image
-                          style={styles.profile}
-                          source={{
-                            uri: item.profile_url
-                              ? wehagoMainURL + item.profile_url
-                              : item.profile_image
-                              ? wehagoMainURL + item.profile_image
-                              : wehagoDummyImageURL
-                          }}
-                          resizeMode={'cover'}
-                        />
-                      </View>
-                      <View style={[styles.infoBox]}>
-                        {!(item.value) && <Text style={styles.name}>
-                          {item.user_name
-                            ? item.user_name
-                            : item.address_name
-                            ? item.address_name
-                            : ''}{' '}
-                          {item.rank_name
-                            ? item.rank_name
-                            : item.position_rank_name
-                            ? item.position_rank_name
-                            : ''}
-                        </Text>}
-                        <Text
-                          numberOfLines={1}
-                          ellipsizeMode="tail"
-                          style={[styles.tree, item.value && {fontSize: 16}]}
-                        >
-                          {user_path
-                            ? user_path
-                            : item.address_service_no
-                            ? item.emailinfolist[0].email_address
-                            : item.value}
-                        </Text>
-                      </View>
-                      <TouchableOpacity
-                        style={[
-                          styles.roleContainer,
-                          isSelected && { borderColor: '#01acc1' },
-                          !item.user_no && { borderColor: '#fff' }
-                        ]}
-                        onPress={() => {
-                          clickChangeRole(item);
-                        }}
-                        disabled={
-                          item.user_no === auth.user_no || !item.user_no
-                        }
-                      >
-                        {isSelected ? (
-                          <>
-                            <Text style={styles.maseterText}>
-                              {t('마스터')}
-                            </Text>
-                            <Image
-                              style={styles.icMaster}
-                              source={ic_master_circle}
-                              resizeMode={'contain'}
-                            />
-                          </>
-                        ) : item.user_no ? (
-                          <>
-                            <Image
-                              style={styles.icMaster}
-                              source={ic_attd_circle}
-                              resizeMode={'contain'}
-                            />
-
-                            <Text style={styles.attendantText}>
-                              {t('참석자')}
-                            </Text>
-                          </>
-                        ) : (
-                          <>
-                            {/* <Text style={styles.extText}>
-                              {t('외부참여자')}
-                            </Text> */}
-                          </>
-                        )}
-                      </TouchableOpacity>
-                    </View>
-                  );
-                }}
-              />
-            )}
-          </View>
-        </View>
+          </Fragment>
+        )}
       </View>
-      {/* </ScrollView> */}
-      {(timePicker !== 'none' || datePicker !== 'none') && (
-        <View
-          style={{
-            position: 'absolute',
-            backgroundColor: 'rgb(255,255,255)',
-            bottom: 0,
-            width: '100%',
-            height: '50%',
-            borderRadius: 20,
-            shadowRadius: 10,
-            shadowColor: '#aaa',
-            shadowOpacity: 10,
-            borderWidth: 1,
-            paddingBottom: '5%'
+      <View style={[{ backgroundColor: '#F7F8FA', height: 9 }]} />
+
+      <View style={styles.conferenceMember}>
+        <View style={{ flexDirection: 'row' }}>
+          <Text style={styles.ft14B}>{t('참석자')} </Text>
+          <Text style={[styles.ft14B, { color: '#1c90fb' }]}>
+            {selectedEmployee.member.length}
+          </Text>
+        </View>
+        <TouchableOpacity
+          onPress={() => {
+            setSelectMode(true);
           }}
         >
+          <Image source={icPersonPlus} style={styles.icPersonPlus} />
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.deleteAlram}>
+        <View>
+          <Text style={[styles.ft12, { letterSpacing: -0.18, lineHeight: 18 }]}>
+            {t('화상회의가 변경 또는 삭제될 경우, \n알림 이메일을 보냅니다.')}
+          </Text>
+        </View>
+
+        <Switch
+          onValueChange={onSwitchDelAlramChange}
+          value={switchDelAlram}
+          trackColor={{ false: '', true: '#1c90fb' }}
+        />
+      </View>
+
+      <View style={{ flex: 1 }}>
+        {selectedEmployee.member[0].user_no !== undefined && (
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            bounces={false}
+            contentContainerStyle={{
+              flexGrow: 1,
+              paddingHorizontal:'5%',
+            }}
+            data={selectedEmployee.member}
+            keyExtractor={(item, index) => String(index)}
+            renderItem={({ item, index }: any) => {
+              let path: [] = [];
+              let user_path = '';
+              if (item.full_path) {
+                path = item.full_path.split('>');
+                for (let i = 1; i < path.length; i++) {
+                  if (i === path.length - 1) {
+                    user_path = user_path + path[i];
+                  } else {
+                    user_path = user_path + `${path[i]} | `;
+                  }
+                }
+              } else user_path = '';
+
+              const isSelected = item.is_master;
+              return (
+                <View style={styles.participantList}>
+                  <View style={styles.profileView}>
+                    <View
+                      style={[
+                        styles.myView,
+                        item.user_no !== auth.user_no && {
+                          backgroundColor: '#1c90fb'
+                        }
+                      ]}
+                    >
+                      {item.user_no === auth.user_no ? (
+                        <Text style={styles.myText}>나</Text>
+                      ) : (
+                        <TouchableOpacity
+                          onPress={() => {
+                            clickDeleteUser(item);
+                          }}
+                        >
+                          <Image
+                            source={icCancel_W}
+                            style={styles.icCancelUser}
+                          />
+                        </TouchableOpacity>
+                      )}
+                    </View>
+                    <Image
+                      style={styles.profile}
+                      source={{
+                        uri: item.profile_url
+                          ? wehagoMainURL + item.profile_url
+                          : item.profile_image
+                          ? wehagoMainURL + item.profile_image
+                          : wehagoDummyImageURL
+                      }}
+                      resizeMode={'cover'}
+                    />
+                  </View>
+                  <View style={[styles.infoBox]}>
+                    {!item.value && (
+                      <Text style={styles.name}>
+                        {item.user_name
+                          ? item.user_name
+                          : item.address_name
+                          ? item.address_name
+                          : ''}{' '}
+                        {item.rank_name
+                          ? item.rank_name
+                          : item.position_rank_name
+                          ? item.position_rank_name
+                          : ''}
+                      </Text>
+                    )}
+                    <Text
+                      numberOfLines={1}
+                      ellipsizeMode="tail"
+                      style={[styles.tree, item.value && { fontSize: 16 }]}
+                    >
+                      {user_path
+                        ? user_path
+                        : item.address_service_no
+                        ? item.emailinfolist[0].email_address
+                        : item.value}
+                    </Text>
+                  </View>
+                  <TouchableOpacity
+                    style={[
+                      styles.roleContainer,
+                      isSelected && { borderColor: '#01acc1' },
+                      !item.user_no && { borderColor: '#fff' }
+                    ]}
+                    onPress={() => {
+                      clickChangeRole(item);
+                    }}
+                    disabled={item.user_no === auth.user_no || !item.user_no}
+                  >
+                    {isSelected ? (
+                      <>
+                        <Text style={styles.maseterText}>{t('마스터')}</Text>
+                        <Image
+                          style={styles.icMaster}
+                          source={icMasterCircle}
+                          resizeMode={'contain'}
+                        />
+                      </>
+                    ) : item.user_no ? (
+                      <>
+                        <Image
+                          style={styles.icMaster}
+                          source={icAttdCircle}
+                          resizeMode={'contain'}
+                        />
+
+                        <Text style={styles.attendantText}>{t('참석자')}</Text>
+                      </>
+                    ) : (
+                      <>
+                        {/* <Text style={styles.extText}>
+                              {t('외부참여자')}
+                            </Text> */}
+                      </>
+                    )}
+                  </TouchableOpacity>
+                </View>
+              );
+            }}
+          />
+        )}
+      </View>
+
+      {(timePicker !== 'none' || datePicker !== 'none') && (
+        <View style={styles.bottomComponent}>
           <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
               marginTop: '5%',
               marginBottom: '3%',
-              paddingLeft: '4%',
-              paddingRight: '4%'
+              paddingHorizontal: '4%'
             }}
           >
             <TouchableOpacity onPress={exitDateTime}>
-              <Image source={ic_cancel_w} style={styles.icCancel} />
+              <Image source={icCancel} style={styles.icCancel} />
             </TouchableOpacity>
 
             <TouchableOpacity onPress={onTimeConfirm}>
               {timePicker !== 'none' && (
-                <Image source={ic_check_black} style={styles.icCancel} />
+                <Image source={icCheck} style={styles.icCancel} />
               )}
             </TouchableOpacity>
           </View>
-          {timePicker !== 'none' && TimePickerComponent}
+          {timePicker !== 'none' && (
+            <View
+              style={{
+                marginTop: 20,
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+            >
+              <DatePicker
+                onDateChange={time => timeChange(time)}
+                mode={'time'}
+                date={
+                  timeChangeDetect
+                    ? time
+                    : timeType === 'start'
+                    ? startTime.current
+                    : endTime.current
+                }
+              />
+            </View>
+          )}
           {datePicker !== 'none' && DatePickerComponent}
         </View>
       )}
@@ -654,8 +604,7 @@ const styles = StyleSheet.create({
   },
   //상단
   topTitle: {
-    paddingLeft: '5%',
-    paddingRight: '5%',
+    paddingHorizontal: '5%',
     justifyContent: 'space-between',
     alignItems: 'center',
     flexDirection: 'row',
@@ -669,13 +618,11 @@ const styles = StyleSheet.create({
     color: '#000'
   },
   privateContainer: {
-    flex: 0.2,
-    paddingLeft: '5%',
-    paddingRight: '5%',
+    height: '8%',
+    paddingHorizontal: '5%',
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center'
-    // backgroundColor: 'blue'
   },
   privateTextContainer: {
     flexDirection: 'column',
@@ -690,15 +637,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: 'rgb(147,147,147)',
     fontWeight: '600'
-  },
-  alramContainer: {
-    flex: 0.17,
-    paddingLeft: '5%',
-    paddingRight: '5%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
-    // backgroundColor: 'green'
   },
   ft14N: {
     fontSize: 14,
@@ -716,35 +654,39 @@ const styles = StyleSheet.create({
     color: '#000'
   },
   //중단
-  directionCol: {
-    flexDirection: 'column'
+  directionColTitle: {
+    flexDirection: 'column',
+    height: '25%'
+  },
+  directionColMessage: {
+    flexDirection: 'column',
+    paddingVertical: 5,
+    height: '65%',
+    // backgroundColor: 'red'
   },
   middleContainer: {
-    flex: 1,
-    justifyContent: 'space-evenly',
-    paddingLeft: '5%',
-    paddingRight: '5%'
+    height: '100%',
+    justifyContent: 'space-between',
+    paddingHorizontal: '5%'
+    // height: '40%'
   },
   textHeader: {
     fontSize: 12,
-    marginBottom: 5,
+    marginVertical: 5,
     color: '#000'
   },
   roomNameStyle: {
     borderWidth: 1,
-    paddingLeft: '5%',
-    paddingRight: '5%',
-    height: 44,
+    paddingHorizontal: '3.5%',
+    height: '67%',
     borderColor: '#E6E6E6',
-    // #fc4c60
     fontSize: 14
   },
   sendStyle: {
     borderWidth: 1,
     paddingTop: '2%',
-    paddingLeft: '3.5%',
-    paddingRight: '3.5%',
-    height: 130,
+    paddingHorizontal: '3.5%',
+    height: '60%',
     letterSpacing: -0.28,
     borderColor: '#E6E6E6',
     fontSize: 14,
@@ -763,9 +705,9 @@ const styles = StyleSheet.create({
   },
   //예약회의
   reserveContainer: {
-    paddingLeft: '5%',
-    paddingRight: '5%',
-    flex: 0.2
+    paddingHorizontal: '5%',
+    paddingVertical: 5,
+    height: '6%'
   },
   datetimeBox: {
     fontSize: 15,
@@ -777,7 +719,7 @@ const styles = StyleSheet.create({
     flex: 1.4
   },
   deleteAlram: {
-    flex: 0.25,
+    height: '6%',
     backgroundColor: '#e9f5ff',
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -786,18 +728,17 @@ const styles = StyleSheet.create({
     paddingRight: '5%'
   },
   conferenceMember: {
-    flex: 0.2,
+    height: '6%',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingLeft: '5%',
-    paddingRight: '5%'
+    paddingHorizontal: '5%'
   },
-  //이미지(ic_code)
+  //이미지(icCode)
   codeContainer: {
     width: 32,
     height: 32,
-    borderRadius: 15,
+    borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -859,171 +800,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#F7F8FA',
     height: '2%'
   },
-  PMON: {
-    backgroundColor: 'white',
-    flex: 5.1,
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderTopStartRadius: 5,
-    borderBottomStartRadius: 5
-  },
-  AMON: {
-    backgroundColor: '#e6e6e6',
-    flex: 4.9,
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderTopEndRadius: 5,
-    borderBottomEndRadius: 5
-  },
-  //#region 이전 스타일
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    justifyContent: 'center',
-    position: 'relative',
-    alignItems: 'center'
-  },
-  createRoomContainer: {
-    width: '100%',
-    justifyContent: 'flex-start'
-  },
-  line: {
-    borderBottomWidth: 1.5,
-    borderBottomColor: '#ccc',
-    width: '100%'
-  },
-  publicContainer: {
-    backgroundColor: '#1C90FB',
-    padding: 15,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  },
-  publicTexts: {},
-  public: {
-    color: '#0df',
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 5
-  },
-  publicSubText: {
-    fontSize: 14
-  },
-  nameContainer: {
-    padding: 15,
-    alignItems: 'flex-start',
-    justifyContent: 'space-around'
-  },
-  conferenceName: {
-    fontSize: 16,
-    paddingVertical: 3
-  },
-  nameInput: {
-    // width:'100%',
-    fontSize: 16,
-    // borderBottomWidth:1,
-    // borderBottomColor:'#ccc',
-    paddingVertical: 3
-  },
-  necessary: {
-    position: 'absolute',
-    left: 54,
-    top: 6,
-    color: '#f00',
-    fontSize: 24
-  },
-  reservationContainer: {
-    padding: 15,
-    justifyContent: 'space-around',
-    alignItems: 'flex-start'
-  },
-  openReservation: {
-    width: '100%',
-    justifyContent: 'space-between',
-    alignItems: 'stretch'
-  },
-  reservationTexts: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  },
-  reservationTitle: {
-    fontSize: 16,
-    paddingVertical: 5
-  },
-  closeReservation: {
-    width: '100%',
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  },
-  reservationSubTitle: {
-    fontSize: 16,
-    paddingVertical: 5,
-    justifyContent: 'flex-start',
-    width: '100%'
-  },
-  timeContainer: {
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    marginVertical: 5,
-    alignItems: 'center',
-    height: 25
-  },
-  timeText: {
-    fontSize: 15,
-    width: '20%'
-  },
-
-  messageContainer: {
-    padding: 15
-  },
-  messageHeader: {
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  },
-  messageTitle: {
-    fontSize: 16,
-    paddingVertical: 5
-  },
-  messageByte: { flexDirection: 'row' },
-  nowByte: { color: '#1C90FB', fontWeight: 'bold' },
-  byteLimit: {},
-  message: { maxHeight: 150 },
-  participantsContainer: {
-    padding: 10
-  },
-  participantsHeader: {
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flexDirection: 'row'
-  },
-  participants: {
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-  participantsTitle: {
-    fontSize: 16,
-    paddingVertical: 5
-  },
-  count: {
-    color: '#1C90FB',
-    fontWeight: 'bold'
-  },
-  sendNotification: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginVertical: 20,
-    paddingVertical: 10,
-    paddingHorizontal: 3,
-    backgroundColor: '#eee',
-    width: '100%'
-  },
-  notiInfo: {},
   participantList: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -1078,13 +854,24 @@ const styles = StyleSheet.create({
     color: '#939393',
     fontWeight: '500'
   },
-  identity: {
-    width: '20%',
-    height: 30
+  bottomComponent: {
+    position: 'absolute',
+    backgroundColor: 'rgb(255,255,255)',
+    bottom: 0,
+    width: '100%',
+    height: '50%',
+    borderRadius: 20,
+    shadowRadius: 10,
+    shadowColor: '#aaa',
+    shadowOpacity: 10,
+    borderWidth: 1,
+    paddingBottom: '5%'
   },
-  delete: {
-    width: '10%',
-    height: 30
+  rowContainer: {
+    flexDirection: 'row',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'space-between'
   }
 });
 

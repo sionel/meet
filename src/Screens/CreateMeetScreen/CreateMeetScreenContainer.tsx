@@ -1,5 +1,5 @@
 import React, { RefObject, useEffect, useRef, useState } from 'react';
-import { GestureResponderEvent, View } from 'react-native';
+import { Alert, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import CreateMeetScreenPresenter from './CreateMeetScreenPresenter';
@@ -13,8 +13,18 @@ import moment from 'moment';
 import { getT } from '../../utils/translateManager';
 import { RootState } from '../../redux/configureStore';
 
+interface param {
+  type: 'portal_id' | 'email';
+  value: string;
+  is_master: boolean;
+  user_name: string;
+  cno: number;
+  user_no: number;
+}
+
+type PartialParam = Partial<param>;
+
 export default function CreateMeetScreenContainer(props: any) {
-  const [switchAllSend, setSwitchAllSend] = useState(false);
   const [switchReserve, setSwitchReserve] = useState(false);
   const [switchDelAlram, setSwitchDelAlram] = useState(false);
   const [selectMode, setSelectMode] = useState(false);
@@ -60,15 +70,15 @@ export default function CreateMeetScreenContainer(props: any) {
   const [listLng, setListLng] = useState(1);
   const [sendMessage, setSendMessage] = useState('');
   const [sendMsgCnt, setSendMsgCnt] = useState(0);
-  const [participantList, setParticipantList] = useState<any[]>([]);
+  // const [participantList, setParticipantList] = useState<any[]>([]);
   const [textLess2, setTextLess2] = useState(true);
+
   const { auth } = useSelector((state: any) => state.user);
   const { recents } = useSelector((state: RootState) => state.recents);
 
   const t = getT();
 
   const dispatch = useDispatch();
-
   const setRecents = (recents: Object) =>
     dispatch(RecentsActions.setRecents(recents));
 
@@ -121,10 +131,10 @@ export default function CreateMeetScreenContainer(props: any) {
     }
   };
 
-  const startConference = async () => {
+  // interface arrTypePatial 이부분 수정
+  const createConference = async () => {
     if (1 < roomName.length) {
-      let arr: any[] = [{}];
-      arr.pop();
+      let arr: PartialParam[] = [];
       Object.values(selectedEmployee.member).map((value: any) => {
         // type에 따라 access_user에 받는게 다름
         // type: portal_id, email
@@ -200,22 +210,47 @@ export default function CreateMeetScreenContainer(props: any) {
         };
       }
 
-      console.log(params);
-
-      // const result = await MeetApi.createMeetRoom(auth, params);
-      // if (result) {
-      //   onHandleBack();
-      //   clearInput();
-      // } else if (result.error) {
-      //   console.log('error : ', result.error);
-      // }
+      const result = await MeetApi.createMeetRoom(auth, params);
+      if (result) {
+        onHandleBack();
+        // clearInput();
+      } else if (result.error) {
+        console.log('error : ', result.error);
+      }
     }
   };
 
-  const clearInput = () => {
-    setRoomName('');
-    setSendMessage('');
-    if (switchReserve) {
+  // const clearInput = () => {
+  //   setRoomName('');
+  //   setSendMessage('');
+  //   if (switchReserve) {
+  //     setStartTime({
+  //       date: '',
+  //       time: '',
+  //       current: new Date()
+  //     });
+  //     setEndTime({
+  //       date: '',
+  //       time: '',
+  //       current: new Date()
+  //     });
+  //     setSwitchReserve(false);
+  //   }
+  //   setSwitchDelAlram(false);
+  // };
+
+  //예약회의 기본값 설정
+  const onSwitchReserveChange = (reserve: boolean) => {
+    if (reserve) {
+      let start_default = new Date();
+      start_default.setMinutes(start_default.getMinutes() + 30);
+
+      let end_default = new Date(start_default);
+      end_default.setHours(end_default.getHours() + 1);
+
+      setStartTime(getDate(start_default));
+      setEndTime(getDate(end_default));
+    } else {
       setStartTime({
         date: '',
         time: '',
@@ -226,10 +261,15 @@ export default function CreateMeetScreenContainer(props: any) {
         time: '',
         current: new Date()
       });
-      setSwitchReserve(false);
+      openDatePicker('none');
+      openTimePicker('none');
     }
-    setSwitchAllSend(false);
-    setSwitchDelAlram(false);
+
+    setSwitchReserve(!switchReserve);
+  };
+
+  const onSwitchDelAlramChange = () => {
+    setSwitchDelAlram(!switchDelAlram);
   };
 
   const togglePublic = () => {
@@ -267,44 +307,7 @@ export default function CreateMeetScreenContainer(props: any) {
         .padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`,
       current: date
     };
-
     return obj;
-  };
-
-  const onSwitchAllSendChange = () => {
-    setSwitchAllSend(!switchAllSend);
-  };
-
-  //예약회의 기본값 설정
-  const onSwitchReserveChange = (reserve: boolean) => {
-    if (reserve) {
-      let start_default = new Date();
-      start_default.setMinutes(start_default.getMinutes() + 30);
-
-      let end_default = new Date(start_default);
-      end_default.setHours(end_default.getHours() + 1);
-
-      setStartTime(getDate(start_default));
-      setEndTime(getDate(end_default));
-    } else {
-      setStartTime({
-        date: '',
-        time: '',
-        current: new Date()
-      });
-      setEndTime({
-        date: '',
-        time: '',
-        current: new Date()
-      });
-      openDatePicker('none');
-      openTimePicker('none');
-    }
-
-    setSwitchReserve(!switchReserve);
-  };
-  const onSwitchDelAlramChange = () => {
-    setSwitchDelAlram(!switchDelAlram);
   };
 
   const onDateChange = (date: any) => {
@@ -358,6 +361,15 @@ export default function CreateMeetScreenContainer(props: any) {
         date: startTime.date,
         current: start_DT
       });
+
+      if (startTime.current < new Date()) {
+        Alert.alert(
+          t('시간 지정 오류'),
+          t('시작 시간은 현재 시간이전으로 지정이 불가능합니다.')
+        );
+        setTime(new Date());
+        return false;
+      }
       obj = getDate(moment(startTime.current).add(1, 'hours').toDate());
       setEndTime(obj);
     } else if (timeType === 'end') {
@@ -369,6 +381,17 @@ export default function CreateMeetScreenContainer(props: any) {
         date: endTime.date,
         current: end_DT
       });
+
+      if (endTime.current < (new Date() && startTime.current)) {
+        Alert.alert(
+          t('시간 지정 오류'),
+          t('종료 시간은 현재 시간 또는 시작시간 이전으로 지정이 불가능합니다.')
+        );
+        setTime(moment(startTime.current).add(30, 'minutes').toDate());
+        setTimePicker('none');
+        setDatePicker(timePicker);
+        return false;
+      }
     }
 
     setTimePicker('none');
@@ -378,6 +401,7 @@ export default function CreateMeetScreenContainer(props: any) {
   useEffect(() => {
     setSelectMode(false);
     getAllEmployee();
+    //수정 : 회의 생성화면에서 조직도 미리 불러와야함. 로딩 구분값 필요
     setSelectedEmployee({
       member: [
         {
@@ -437,9 +461,11 @@ export default function CreateMeetScreenContainer(props: any) {
     updateList[idx].is_master = !updateList[idx].is_master;
 
     const roomMaster: any[] = updateList[0];
-    resList.push(roomMaster);
-
     const userList: any[] = updateList.filter((v: any, i: number) => i !== 0);
+    const partListUserNoOrderList: any[] = userList.sort((a: any, b: any) => {
+      return a.user_no - b.user_no;
+    });
+    // 수정 : 여기도 정렬문 삭제하고 필터문 한줄로 정리
 
     // 마스터권한 정렬
     // const masterList: any[] = userList.filter(
@@ -454,40 +480,38 @@ export default function CreateMeetScreenContainer(props: any) {
     //   (v: any, i) => v.is_master !== true
     // );
 
-    const partListUserNoOrderList: any[] = userList.sort((a: any, b: any) => {
-      return a.user_no - b.user_no;
-    });
+    resList.push(roomMaster);
     partListUserNoOrderList.map(v => resList.push(v));
-
     setSelectedEmployee({ member: resList, group: {} });
   };
 
   const clickDeleteUser = (item: any) => {
-    let newList: any[] = selectedEmployee.member;
+    let deletedList: any[] = selectedEmployee.member;
     let idx: number = 0;
+
     if (item.user_no) {
-      idx = newList.findIndex((i: any) => i.user_no === item.user_no);
+      idx = deletedList.findIndex((i: any) => i.user_no === item.user_no);
     } else if (item.address_service_no) {
-      idx = newList.findIndex(
+      idx = deletedList.findIndex(
         (i: any) => i.address_service_no === item.address_service_no
       );
     } else if (item.value) {
-      idx = newList.findIndex((i: any) => i.value === item.value);
-      const newinvitedList: { type: string; value: string }[] = invited;
-      const invitedIdx: number = newinvitedList.findIndex(
+      idx = deletedList.findIndex((i: any) => i.value === item.value);
+      const invitedList: { type: string; value: string }[] = invited;
+      const invitedIndex: number = invitedList.findIndex(
         (i: any) => i.value === item.value
       );
 
-      if (invitedIdx !== -1) {
-        const deletedList: any[] = newinvitedList.filter(
-          (v: any, i: number) => i !== invitedIdx
+      if (invitedIndex !== -1) {
+        const deletedList: any[] = invitedList.filter(
+          (v: any, i: number) => i !== invitedIndex
         );
-        setInvited(deletedList);
+        setInvited([...deletedList]);
       }
     } else {
       console.log('error');
     }
-    const updateList: any[] = newList.filter((v, i) => i !== idx);
+    const updateList: any[] = deletedList.filter((v, i) => i !== idx);
     setSelectedEmployee({ member: updateList, group: {} });
   };
 
@@ -505,8 +529,8 @@ export default function CreateMeetScreenContainer(props: any) {
           setSelectedEmployee={setSelectedEmployee}
           setInvited={setInvited}
           setInviteText={setInviteText}
-          participantList={participantList}
-          setParticipantList={setParticipantList}
+          // participantList={participantList}
+          // setParticipantList={setParticipantList}
           listLng={listLng}
           setListLng={setListLng}
           setRecents={setRecents}
@@ -518,7 +542,7 @@ export default function CreateMeetScreenContainer(props: any) {
           datePicker={datePicker}
           timePicker={timePicker}
           startTime={startTime}
-          endTime={endTime} // 여기서 시간 숫자인거 수정
+          endTime={endTime}
           sendMessage={sendMessage}
           sendMessageChange={sendMessageChange}
           setSelectMode={setSelectMode}
@@ -528,12 +552,10 @@ export default function CreateMeetScreenContainer(props: any) {
           setTimePicker={setTimePicker}
           openTimePicker={openTimePicker}
           openDatePicker={openDatePicker}
-          startConference={startConference}
+          createConference={createConference}
           //신규Props
-          switchAllSend={switchAllSend}
           switchReserve={switchReserve}
           switchDelAlram={switchDelAlram}
-          onSwitchAllSendChange={onSwitchAllSendChange}
           onSwitchReserveChange={onSwitchReserveChange}
           onSwitchDelAlramChange={onSwitchDelAlramChange}
           roomNameCnt={roomNameCnt}
@@ -544,7 +566,7 @@ export default function CreateMeetScreenContainer(props: any) {
           time={time}
           setTime={setTime}
           auth={auth}
-          participantList={participantList}
+          // participantList={participantList}
           textLess2={textLess2}
           timeType={timeType}
           sendMsgRef={sendMsgRef}

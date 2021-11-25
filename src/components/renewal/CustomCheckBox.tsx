@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, StyleSheet, TouchableOpacity, View, Text } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View, Text, Platform } from 'react-native';
 // import { Text } from '../StyledText';
 const chk_on = require('../../../assets/new/icons/color-check-wh_2x.png');
 
@@ -10,7 +10,7 @@ const CustomCheckBoxPresenter = (props: any) => {
     <TouchableOpacity
       onPress={onCheck}
       activeOpacity={0.7}
-      style={[styles.touchview, style]}
+      style={styles.touchview}
     >
       <View
         style={[
@@ -18,7 +18,7 @@ const CustomCheckBoxPresenter = (props: any) => {
           checked && { backgroundColor: 'rgb(28,144,251)' }
         ]}
       >
-        {checked && <Image source={chk_on} resizeMode={'contain'} />}
+        {checked && <Image source={chk_on} resizeMode={'contain'} style={[{width:16, height:16},style]} />}
       </View>
       <Text style={styles.chkboxText}>{text}</Text>
     </TouchableOpacity>
@@ -28,11 +28,12 @@ const CustomCheckBoxPresenter = (props: any) => {
 const styles = StyleSheet.create({
   touchview: {
     flexDirection: 'row',
-    alignSelf: 'flex-start'
+    alignSelf: 'flex-start',
+    justifyContent: 'flex-start',
   },
   container: {
-    width: 30,
-    height: 30,
+    width: 23,
+    height: 23,
     borderWidth: 1,
     alignContent: 'center',
     justifyContent: 'center',
@@ -41,8 +42,8 @@ const styles = StyleSheet.create({
   chkboxText: {
     fontSize: 14,
     color: 'rgb(51,51,51)',
-    lineHeight: 30,
-    paddingLeft: 5
+    lineHeight: Platform.OS === 'ios' ? 25 : 21,
+    paddingLeft: 5,
   }
 });
 

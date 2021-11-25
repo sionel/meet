@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Alert, Animated, Easing } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/configureStore';
 import { getT } from '../../../utils/translateManager';
 import { OrganizationApi } from '../../../services';
@@ -152,8 +152,7 @@ const OrganizationScreenContainer = (props: any) => {
 
   //#region 조직 / 조직원 클릭시
   const selectEmployee = (type: string, item: any) => {
-    let lng = selectedEmployee.member.length;
-    if(selectedEmployee.member.length > 49) {
+    if (selectedEmployee.member.length > 49) {
       Alert.alert(
         t('초대가능 인원을 초과하였습니다.'),
         t('참석자는 최대 50명을 넘을수 없습니다.')
@@ -163,23 +162,42 @@ const OrganizationScreenContainer = (props: any) => {
     }
     // 조직원 선택 시
     if (type === 'member') {
-      const newList: any[] = selectedEmployee.member;
+      const selectedList: any[] = selectedEmployee.member;
+      const invitedList: { type: string; value: string }[] = invited;
+
       let tmpList: any[] = [];
-      let idx = newList.findIndex((i: any) => {
+      let tmpList2: { type: string; value: string }[] = [];
+
+      let idx = selectedList.findIndex((i: any) => {
         if (item.user_no) return i.user_no === item.user_no;
-        else return i.address_service_no === item.address_service_no;
+        else if (item.address_service_no)
+          return i.address_service_no === item.address_service_no;
+        else return i.value === item.value;
       });
+      let idx2 = invitedList.findIndex((i: any) => i.value === item.value);
 
       if (idx !== -1) {
-        tmpList = newList.filter((v, i) => i !== idx);
+        tmpList = selectedList.filter((v, i) => i !== idx);
       } else {
         item.is_master = false;
-        newList.push(item);
+        selectedList.push(item);
       }
+
+      if (item.type) {
+        if (idx2 !== -1) {
+          tmpList2 = invitedList.filter((v, i) => i !== idx2);
+          setInvited([...tmpList2]);
+        } else {
+          invitedList.push(item);
+          setInvited([...invitedList]);
+        }
+      }
+
       setSelectedEmployee({
-        member: idx === -1 ? newList : tmpList,
+        member: idx === -1 ? selectedList : tmpList,
         group: selectedEmployee.group
       });
+
     } else {
       // 조직 선택 시
       const newItem = JSON.parse(JSON.stringify(selectedEmployee.group));
@@ -197,29 +215,25 @@ const OrganizationScreenContainer = (props: any) => {
   //#endregion
 
   const dataLoad = async () => {
-    await setIsDataLoading(true);
+    setIsDataLoading(true);
 
     await getOrganizationTree();
     await getContactsList();
 
-    await setIsDataLoading(false);
+    setIsDataLoading(false);
   };
 
   const participantListAdd = () => {
     setListLng(Object.keys(selectedEmployee.member).length);
-    const newList = selectedEmployee.member;
-    const roomMaster = newList[0];
-    // 방 생서 제외한 유저리스트 선언
-    const userList = newList.filter((v: any, i: number) => i !== 0);
-    // 참석자 넘겨줄 리스트 선언
+    const selectedList = selectedEmployee.member;
     const resList: any[] = [];
-    // 방생성자 정보 먼저 넘김
-    resList.push(roomMaster);
-
-    // 사번별 정렬된 리스트 선언
+    const roomMaster = selectedList[0];
+    const userList = selectedList.filter((v: any, i: number) => i !== 0);
     const userNoOrderList: any[] = userList.sort((a: any, b: any) => {
       return a.user_no - b.user_no;
     });
+
+    resList.push(roomMaster);
     userNoOrderList.map(value => resList.push(value));
 
     setSelectedEmployee({ member: resList, group: {} });
@@ -254,9 +268,9 @@ const OrganizationScreenContainer = (props: any) => {
     }
 
     if (flag) {
-      const newList: { type: string; value: string }[] = invited;
-      const newList2: any[] = selectedEmployee.member;
-      let idx: number = newList.findIndex((i: any) => i.value === inviteText);
+      const invitedList: { type: string; value: string }[] = invited;
+      const selectedList: any[] = selectedEmployee.member;
+      let idx: number = invitedList.findIndex((i: any) => i.value === inviteText);
 
       if (idx !== -1) {
         setInvited([...invited]);
@@ -269,11 +283,11 @@ const OrganizationScreenContainer = (props: any) => {
             value
           }
         ]);
-        newList2.push({ type, value });
+        selectedList.push({ type, value });
         setExterError(false);
       }
       setRecents({ type, value });
-      setSelectedEmployee({member: newList2, group:{}})
+      setSelectedEmployee({ member: selectedList, group: {} });
       setInviteText('');
     } else {
       Alert.alert(
@@ -284,27 +298,28 @@ const OrganizationScreenContainer = (props: any) => {
     }
   };
 
-  const recentAdd = (item: { type: string; value: string }) => {
-    const newList: { type: string; value: string }[] = invited;
-    const newList2: any[] = selectedEmployee.member;
-    let idx: number = newList.findIndex((i: any) => i.value === item.value);
-    let idx2: number = newList2.findIndex((i: any) => i.value == item.value);
-    if (idx !== -1) {
-      const deletedList: any[] = newList.filter(
-        (v: any, i: number) => i !== idx
-      );
-      const deletedList2: any[] = newList2.filter(
-        (v:any, i:number) => i !== idx2
-      )
-      setInvited([...deletedList]);
-      setSelectedEmployee({member:deletedList2, group:{}})
-    } else {
-      newList.push(item);
-      newList2.push(item);
-      setInvited([...newList]);
-      setSelectedEmployee({member:newList2, group:{}})
-    }
-  };
+  // const recentAdd = (item: { type: string; value: string }) => {
+  //   const newList: { type: string; value: string }[] = invited;
+  //   const newList2: any[] = selectedEmployee.member;
+
+  //   let idx: number = newList.findIndex((i: any) => i.value === item.value);
+  //   let idx2: number = newList2.findIndex((i: any) => i.value == item.value);
+  //   if (idx !== -1) {
+  //     const deletedList: any[] = newList.filter(
+  //       (v: any, i: number) => i !== idx
+  //     );
+  //     const deletedList2: any[] = newList2.filter(
+  //       (v: any, i: number) => i !== idx2
+  //     );
+  //     setInvited([...deletedList]);
+  //     setSelectedEmployee({ member: deletedList2, group: {} });
+  //   } else {
+  //     newList.push(item);
+  //     newList2.push(item);
+  //     setInvited([...newList]);
+  //     setSelectedEmployee({ member: newList2, group: {} });
+  //   }
+  // };
 
   //#region 직원목록 초기화
   useEffect(() => {
@@ -366,7 +381,6 @@ const OrganizationScreenContainer = (props: any) => {
       setContactType={setContactType}
       validateExter={validateExter}
       exterError={exterError}
-      recentAdd={recentAdd}
     />
   );
 };

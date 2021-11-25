@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../redux/configureStore';
 import { actionCreators as UserActions } from '../../../redux/modules/user';
 import { actionCreators as RootActions } from '../../../redux/modules/root';
+import { actionCreators as RecentsActions } from '../../../redux/modules/recentsInvited';
+
 import Orientation, {
   OrientationType,
   useDeviceOrientationChange
@@ -74,7 +76,10 @@ const LoginInputContainer = () => {
   const login = (auth: any, from: any, chk: boolean) => {
     dispatch(UserActions.login(auth, from, chk));
   };
-  const logout = () => dispatch(UserActions.logout());
+  const logout = () => {
+    dispatch(UserActions.logout());
+    dispatch(RecentsActions.resetRecents());
+  };
   const eventLog = (evnet: any) => dispatch(UserActions.eventLog(evnet));
   // const setAuth = (auth: any) => dispatch(UserActions.setAuth(auth));
   //

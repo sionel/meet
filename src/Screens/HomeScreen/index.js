@@ -10,6 +10,7 @@ import { actionCreators as ConferenceActions } from '../../redux/modules/confere
 import { actionCreators as AlertAcions } from '../../redux/modules/alert';
 import { actionCreators as DeployedAcions } from '../../redux/modules/deployed';
 import { actionCreators as RootActions } from '../../redux/modules/root';
+import { actionCreators as RecentsActions} from '../../redux/modules/recentsInvited';
 
 const mapStateToProps = state => {
   return {
@@ -29,7 +30,10 @@ const mapDispatchToProps = dispatch => ({
   // onLogin: user => dispatch(UserActions.login(user)),
   login: (auth, from, autoLogin) =>
     dispatch(UserActions.login(auth, from, autoLogin)),
-  onLogout: () => dispatch(UserActions.logout()),
+  onLogout: () => {
+    dispatch(UserActions.logout());
+    dispatch(RecentsActions.resetRecents());
+  },
   onDisconnect: () => dispatch(UserActions.disconnect()),
   // loginCheckRequest: (AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY, from) =>
   //   dispatch(

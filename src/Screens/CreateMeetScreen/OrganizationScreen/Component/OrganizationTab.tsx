@@ -36,8 +36,7 @@ const OrganizationTab = (props: any) => {
     setInviteText,
     recents,
     validateExter,
-    exterError,
-    recentAdd
+    exterError
   } = props;
   const t = getT();
   return (
@@ -75,11 +74,7 @@ const OrganizationTab = (props: any) => {
           >
             <Image
               source={ic_empty}
-              style={{
-                resizeMode: 'contain',
-                width: '45%',
-                height: '45%'
-              }}
+              style={styles.icEmpty45}
             />
             <Text>{t('검색결과가 존재하지 않습니다.')}</Text>
           </View>
@@ -108,13 +103,7 @@ const OrganizationTab = (props: any) => {
                         ? wehagoMainURL + item.profile_url
                         : wehagoDummyImageURL
                     }}
-                    style={{
-                      width: 40,
-                      height: 40,
-                      resizeMode: 'cover',
-                      borderRadius: 20,
-                      backgroundColor: '#ececec'
-                    }}
+                    style={styles.profileImg}
                   />
                   <View style={{ marginHorizontal: 10, flex: 1 }}>
                     <Text style={{ fontWeight: 'bold' }}>
@@ -156,6 +145,7 @@ const OrganizationTab = (props: any) => {
                               ? true
                               : false
                           }
+                          style={{ width: 18, height: 18 }}
                         />
                       </View>
                     ) : (
@@ -193,13 +183,7 @@ const OrganizationTab = (props: any) => {
                           ? wehagoMainURL + item.profile_image
                           : wehagoDummyImageURL
                       }}
-                      style={{
-                        width: 40,
-                        height: 40,
-                        resizeMode: 'cover',
-                        borderRadius: 20,
-                        backgroundColor: '#ececec'
-                      }}
+                      style={styles.profileImg}
                     />
                     <View style={{ marginHorizontal: 10, flex: 1 }}>
                       <Text style={{ fontWeight: 'bold' }}>
@@ -236,6 +220,7 @@ const OrganizationTab = (props: any) => {
                               ? true
                               : false
                           }
+                          style={{ width: 18, height: 18 }}
                         />
                       </View>
                     </View>
@@ -285,13 +270,7 @@ const OrganizationTab = (props: any) => {
                           ? wehagoMainURL + item.profile_image
                           : wehagoDummyImageURL
                       }}
-                      style={{
-                        width: 40,
-                        height: 40,
-                        resizeMode: 'cover',
-                        borderRadius: 20,
-                        backgroundColor: '#ececec'
-                      }}
+                      style={styles.profileImg}
                     />
                     <View style={{ marginHorizontal: 10, flex: 1 }}>
                       <Text style={{ fontWeight: 'bold' }}>
@@ -312,6 +291,7 @@ const OrganizationTab = (props: any) => {
                           checked={
                             selectedEmployee.member[item.user_no] ? true : false
                           }
+                          style={{ width: 18, height: 18 }}
                         />
                       </View>
                     </View>
@@ -327,20 +307,11 @@ const OrganizationTab = (props: any) => {
               {t('참여자 초대')}
             </Text>
             <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center'
-              }}
+              style={styles.rowView}
             >
               <TextInput
                 style={[
-                  {
-                    margin: 10,
-                    borderBottomWidth: 1,
-                    borderBottomColor: '#ccc',
-                    width: '80%'
-                  },
+                  styles.emailText,
                   inviteText && { borderBottomColor: '#1c90fb' }
                 ]}
                 placeholder={t('초대할 사람의 이메일을 입력해주세요.')}
@@ -351,21 +322,35 @@ const OrganizationTab = (props: any) => {
                 onChangeText={setInviteText}
                 value={inviteText}
               />
-              <TouchableOpacity onPress={() => validateExter()}>
+              <TouchableOpacity
+                style={{
+                  width: 40,
+                  height: 30,
+                  margin: 10,
+                  backgroundColor: '#1c90fb',
+                  borderRadius: 5,
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+                onPress={() => validateExter()}
+              >
                 <Image
                   source={ic_mail}
                   style={{
-                    width: 24,
-                    height: 24,
-                    resizeMode: 'cover',
-                    backgroundColor: '#1c90fb',
-                    borderRadius: 10,
-                    margin: 10
+                    width: 35,
+                    height: 25,
+                    resizeMode: 'cover'
                   }}
                 />
               </TouchableOpacity>
             </View>
-            {exterError && <Text style={{color:'#fc4c60', fontSize:12, padding: 10, paddingTop: -10, marginTop: -10}}>{t('이미 추가된 이메일입니다.')}</Text>}
+            {exterError && (
+              <Text
+                style={styles.emailError}
+              >
+                {t('이미 추가된 이메일입니다.')}
+              </Text>
+            )}
             <View style={{ borderBottomWidth: 1, borderColor: '#ccc' }} />
 
             {invited.length > 0 && (
@@ -379,14 +364,11 @@ const OrganizationTab = (props: any) => {
                   showsVerticalScrollIndicator={false}
                   bounces={false}
                   data={invited}
+                  keyExtractor={(item, index) => String(index)}
                   renderItem={({ item, index }) => {
                     return (
                       <View
-                        style={{
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                          padding: 10
-                        }}
+                        style={styles.selectedEmailRow}
                       >
                         {item.type === 'email' && (
                           <View
@@ -406,7 +388,7 @@ const OrganizationTab = (props: any) => {
                             />
                           </View>
                         )}
-                        <Text style={{paddingLeft:10}}>{item.value}</Text>
+                        <Text style={{ paddingLeft: 10 }}>{item.value}</Text>
                       </View>
                     );
                   }}
@@ -424,15 +406,11 @@ const OrganizationTab = (props: any) => {
                   showsVerticalScrollIndicator={false}
                   bounces={false}
                   data={recents}
+                  keyExtractor={(item, index) => String(index)}
                   renderItem={({ item, index }) => {
                     return (
                       <View
-                        style={{
-                          flexDirection: 'row',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                          padding: 10
-                        }}
+                        style={styles.recentRow}
                       >
                         <View
                           style={{
@@ -442,20 +420,9 @@ const OrganizationTab = (props: any) => {
                         >
                           {item.type === 'email' && (
                             <View
-                              style={{
-                                backgroundColor: '#1c90fb',
-                                padding: 5,
-                                borderRadius: 20
-                              }}
+                              style={styles.mailBg}
                             >
-                              <Image
-                                source={ic_mail}
-                                style={{
-                                  width: 18,
-                                  height: 18,
-                                  resizeMode: 'cover'
-                                }}
-                              />
+                              <Image source={ic_mail} style={styles.icMail18} />
                             </View>
                           )}
                           <Text style={{ paddingLeft: 10 }}>{item.value}</Text>
@@ -468,7 +435,7 @@ const OrganizationTab = (props: any) => {
                         >
                           <CustomCheckBox
                             color="#ccc"
-                            onCheck={() => recentAdd(item)}
+                            onCheck={() => selectEmployee('member', item)}
                             checked={
                               invited.findIndex(
                                 (i: any) => i.value === item.value
@@ -476,6 +443,7 @@ const OrganizationTab = (props: any) => {
                                 ? true
                                 : false
                             }
+                            style={{ width: 18, height: 18 }}
                           />
                         </View>
                       </View>
@@ -491,14 +459,7 @@ const OrganizationTab = (props: any) => {
                   justifyContent: 'center'
                 }}
               >
-                <Image
-                  source={ic_empty}
-                  style={{
-                    resizeMode: 'contain',
-                    width: '43%',
-                    height: '43%'
-                  }}
-                />
+                <Image source={ic_empty} style={styles.icEmpty} />
                 <Text style={{ margin: 10 }}>
                   {t('최근 초대한 참여자가 없습니다.')}
                 </Text>
@@ -545,6 +506,62 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     fontSize: 12,
     color: '#555555'
+  },
+  icEmpty: {
+    resizeMode: 'contain',
+    width: '43%',
+    height: '43%'
+  },
+  icEmpty45: {
+    resizeMode: 'contain',
+    width: '45%',
+    height: '45%'
+  },
+  icMail18: {
+    width: 18,
+    height: 18,
+    resizeMode: 'cover'
+  },
+  recentRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 10
+  },
+  mailBg: {
+    backgroundColor: '#1c90fb',
+    padding: 5,
+    borderRadius: 20
+  },
+  selectedEmailRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10
+  },
+  emailText: {
+    margin: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+    width: '80%'
+  },
+  emailError: {
+    color: '#fc4c60',
+    fontSize: 12,
+    padding: 10,
+    paddingTop: -10,
+    marginTop: -10
+  },
+  rowView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  profileImg: {
+    width: 40,
+    height: 40,
+    resizeMode: 'cover',
+    borderRadius: 20,
+    backgroundColor: '#ececec'
   }
 });
 
