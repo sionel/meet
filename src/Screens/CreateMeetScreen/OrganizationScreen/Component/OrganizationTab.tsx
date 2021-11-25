@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import {
   StyleSheet,
   View,
@@ -28,19 +28,20 @@ const OrganizationTab = (props: any) => {
     searchedEmployee,
     selectEmployee,
     auth,
-    invited,
     selectedEmployee,
     contacts,
     inviteText,
-    setInvited,
     setInviteText,
+    // invited,
+    // setInvited,
     recents,
     validateExter,
-    exterError
+    exterError,
+    focusOut
   } = props;
   const t = getT();
   return (
-    <>
+    <Fragment>
       {/* 조직도 */}
       {(tabType === 'org' &&
         (keyword === '' ? (
@@ -71,11 +72,9 @@ const OrganizationTab = (props: any) => {
               alignItems: 'center',
               justifyContent: 'center'
             }}
+            onTouchStart={()=>focusOut()}
           >
-            <Image
-              source={ic_empty}
-              style={styles.icEmpty45}
-            />
+            <Image source={ic_empty} style={styles.icEmpty45} />
             <Text>{t('검색결과가 존재하지 않습니다.')}</Text>
           </View>
         ) : (
@@ -149,7 +148,7 @@ const OrganizationTab = (props: any) => {
                         />
                       </View>
                     ) : (
-                      <></>
+                      <Fragment></Fragment>
                     )}
                   </View>
                 </TouchableOpacity>
@@ -235,6 +234,7 @@ const OrganizationTab = (props: any) => {
                 alignItems: 'center',
                 justifyContent: 'center'
               }}
+              onTouchStart={()=>focusOut()}
             >
               <Image
                 source={ic_empty}
@@ -244,7 +244,7 @@ const OrganizationTab = (props: any) => {
                   height: '45%'
                 }}
               />
-              <Text>{t('검색결과가 존재하지 않습니다.')}</Text>
+              <Text>{t('등록된 연락처가 없습니다.')}</Text>
             </View>
           ) : (
             <SectionList
@@ -303,12 +303,13 @@ const OrganizationTab = (props: any) => {
         //   외부참여자
         (tabType === 'exter' && (
           <View style={{ flex: 1, justifyContent: 'flex-start' }}>
-            <Text style={{ marginHorizontal: 10, marginTop: 10, fontSize: 15 }}>
+            <View style={{paddingHorizontal: '5%', paddingVertical: '2%', height:'15%', flexDirection:'column', justifyContent:'space-between'}}>
+            <Text
+              style={{fontSize: 15}}
+            >
               {t('참여자 초대')}
             </Text>
-            <View
-              style={styles.rowView}
-            >
+            <View style={styles.rowView}>
               <TextInput
                 style={[
                   styles.emailText,
@@ -326,7 +327,6 @@ const OrganizationTab = (props: any) => {
                 style={{
                   width: 40,
                   height: 30,
-                  margin: 10,
                   backgroundColor: '#1c90fb',
                   borderRadius: 5,
                   alignItems: 'center',
@@ -345,15 +345,12 @@ const OrganizationTab = (props: any) => {
               </TouchableOpacity>
             </View>
             {exterError && (
-              <Text
-                style={styles.emailError}
-              >
+              <Text style={styles.emailError}>
                 {t('이미 추가된 이메일입니다.')}
               </Text>
             )}
-            <View style={{ borderBottomWidth: 1, borderColor: '#ccc' }} />
-
-            {invited.length > 0 && (
+            </View>
+            {/* {invited.length > 0 && (
               <>
                 <View style={{ backgroundColor: '#f1f2f3' }}>
                   <Text style={{ margin: 10, fontSize: 15 }}>
@@ -394,11 +391,18 @@ const OrganizationTab = (props: any) => {
                   }}
                 />
               </>
-            )}
+            )} */}
             {recents.length > 0 ? (
-              <>
+              <Fragment>
+                <View style={{ borderBottomWidth: 1, borderColor: '#ccc' }} />
                 <View style={{ backgroundColor: '#f1f2f3' }}>
-                  <Text style={{ margin: 10, fontSize: 16 }}>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      paddingHorizontal: '5%',
+                      paddingVertical: '3%'
+                    }}
+                  >
                     {t('최근 초대한 이메일')}
                   </Text>
                 </View>
@@ -409,9 +413,7 @@ const OrganizationTab = (props: any) => {
                   keyExtractor={(item, index) => String(index)}
                   renderItem={({ item, index }) => {
                     return (
-                      <View
-                        style={styles.recentRow}
-                      >
+                      <View style={styles.recentRow}>
                         <View
                           style={{
                             flexDirection: 'row',
@@ -419,9 +421,7 @@ const OrganizationTab = (props: any) => {
                           }}
                         >
                           {item.type === 'email' && (
-                            <View
-                              style={styles.mailBg}
-                            >
+                            <View style={styles.mailBg}>
                               <Image source={ic_mail} style={styles.icMail18} />
                             </View>
                           )}
@@ -437,7 +437,7 @@ const OrganizationTab = (props: any) => {
                             color="#ccc"
                             onCheck={() => selectEmployee('member', item)}
                             checked={
-                              invited.findIndex(
+                              selectedEmployee.member.findIndex(
                                 (i: any) => i.value === item.value
                               ) !== -1
                                 ? true
@@ -450,7 +450,7 @@ const OrganizationTab = (props: any) => {
                     );
                   }}
                 />
-              </>
+              </Fragment>
             ) : (
               <View
                 style={{
@@ -470,7 +470,7 @@ const OrganizationTab = (props: any) => {
             )}
           </View>
         ))}
-    </>
+    </Fragment>
   );
 };
 
@@ -526,7 +526,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 10
+    paddingHorizontal: '5%',
+    paddingVertical: '2%'
   },
   mailBg: {
     backgroundColor: '#1c90fb',
@@ -539,22 +540,26 @@ const styles = StyleSheet.create({
     padding: 10
   },
   emailText: {
-    margin: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-    width: '80%'
+    // margin: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    width: '80%',
+    height: 40,
+    paddingHorizontal:'3%',
   },
   emailError: {
     color: '#fc4c60',
     fontSize: 12,
-    padding: 10,
+    paddingHorizontal: '5%',
     paddingTop: -10,
-    marginTop: -10
+    marginTop: -10,
+    paddingBottom: 10
   },
   rowView: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
+    borderColor: '#000'
   },
   profileImg: {
     width: 40,

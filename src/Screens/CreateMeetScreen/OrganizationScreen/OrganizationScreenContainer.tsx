@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, RefObject, useRef } from 'react';
 import { Alert, Animated, Easing } from 'react-native';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/configureStore';
@@ -12,33 +12,35 @@ const OrganizationScreenContainer = (props: any) => {
     employee,
     selectedEmployee,
     setSelectedEmployee,
-    invited,
-    recents,
-    setInvited,
-    inviteText,
-    setInviteText,
+    // invited,
+    // setInvited,
+    // inviteText,
+    // setInviteText,
     // participantList,
-    setParticipantList,
+    // setParticipantList,
     setSelectMode,
-    listLng,
-    setListLng,
-    setRecents
+    setRecents,
+    organization,
+    contacts,
+    isOrgDataLoaded
   } = props;
 
   const [keyword, setKeyword] = useState('');
   const [openGroup, setOpenGroup] = useState({});
   const [searchedEmployee, setSearchedEmployee] = useState(employee);
   const [tabType, setTabType] = useState<'org' | 'contact' | 'exter'>('org');
+  const [inviteText, setInviteText] = useState('');
   const [contactType, setContactType] = useState<'one' | 'email' | 'sms'>(
     'email'
   );
-  const [isDataLoading, setIsDataLoading] = useState(false);
+  // const [isDataLoading, setIsDataLoading] = useState(false);
   const [organizationEmployee, setOrganizationEmployee] = useState({});
-  const [organization, setorganization] = useState<any>({ company_no: -1 });
-  const [contacts, setContacts] = useState<{ title: string; data: Object }[]>(
-    []
-  );
+  // const [organization, setorganization] = useState<any>({ company_no: -1 });
+  // const [contacts, setContacts] = useState<{ title: string; data: Object }[]>(
+  //   []
+  // );
   const [exterError, setExterError] = useState(false);
+  const searchRef: RefObject<any> = useRef();
 
   const [rotate] = useState(new Animated.Value(0));
 
@@ -50,20 +52,7 @@ const OrganizationScreenContainer = (props: any) => {
   const t = getT();
 
   const auth = useSelector((state: RootState) => state.user.auth);
-
-  //#region 조직도 초기화
-  const getOrganizationTree = async () => {
-    const result = await OrganizationApi.getOrganizationTreeRequest(auth);
-    if (result.error) {
-      //   Alert.alert('조직도', '조직도를 가져올 수 없습니다.');
-      // 조직도 조회 안됨 에러 표현
-      // 생성화면으로 Back
-    } else {
-      const organization = result[0];
-      setorganization(organization);
-    }
-  };
-  //#endregion
+  const { recents } = useSelector((state: RootState) => state.recents);
 
   //#region 검색 이벤트
   const doSearch = async () => {
@@ -118,38 +107,6 @@ const OrganizationScreenContainer = (props: any) => {
   };
   //#endregion
 
-  //#region 연락처 조회
-  const getContactsList = async () => {
-    // 최적화 하려면 여기 코드를 상위로 옮기자
-    const result = await OrganizationApi.getContactsList(auth);
-    if (result.error || !result) {
-      //   Alert.alert('조직도', '조직도를 가져올 수 없습니다.');
-      console.log('연락처를 가져올 수 없습니다.');
-
-      //   props.navigation.pop();
-      // 생성하기 화면으로
-    } else {
-      const chocungList: { dataindex: number; word: string }[] =
-        result.chosungList;
-      const indexList: any[] = [];
-      type secction = { title: string; data: object[] }[];
-      let arr: secction = [];
-      chocungList.forEach(({ word }) => {
-        arr.push({ title: word, data: [] });
-        indexList.push(word);
-      });
-
-      const contactsList = [...result.contactsList];
-
-      contactsList.forEach(item => {
-        const index = indexList.indexOf(item.word);
-        arr[index].data.push(item);
-      });
-      setContacts(arr);
-    }
-  };
-  //#endregion
-
   //#region 조직 / 조직원 클릭시
   const selectEmployee = (type: string, item: any) => {
     if (selectedEmployee.member.length > 49) {
@@ -163,18 +120,13 @@ const OrganizationScreenContainer = (props: any) => {
     // 조직원 선택 시
     if (type === 'member') {
       const selectedList: any[] = selectedEmployee.member;
-      const invitedList: { type: string; value: string }[] = invited;
-
       let tmpList: any[] = [];
-      let tmpList2: { type: string; value: string }[] = [];
-
       let idx = selectedList.findIndex((i: any) => {
         if (item.user_no) return i.user_no === item.user_no;
         else if (item.address_service_no)
           return i.address_service_no === item.address_service_no;
         else return i.value === item.value;
       });
-      let idx2 = invitedList.findIndex((i: any) => i.value === item.value);
 
       if (idx !== -1) {
         tmpList = selectedList.filter((v, i) => i !== idx);
@@ -183,21 +135,23 @@ const OrganizationScreenContainer = (props: any) => {
         selectedList.push(item);
       }
 
-      if (item.type) {
-        if (idx2 !== -1) {
-          tmpList2 = invitedList.filter((v, i) => i !== idx2);
-          setInvited([...tmpList2]);
-        } else {
-          invitedList.push(item);
-          setInvited([...invitedList]);
-        }
-      }
-
       setSelectedEmployee({
         member: idx === -1 ? selectedList : tmpList,
         group: selectedEmployee.group
       });
 
+      // const invitedList: { type: string; value: string }[] = invited;
+      // let tmpList2: { type: string; value: string }[] = [];
+      // let idx2 = invitedList.findIndex((i: any) => i.value === item.value);
+      // if (item.type) {
+      //   if (idx2 !== -1) {
+      //     tmpList2 = invitedList.filter((v, i) => i !== idx2);
+      //     setInvited([...tmpList2]);
+      //   } else {
+      //     invitedList.push(item);
+      //     setInvited([...invitedList]);
+      //   }
+      // }
     } else {
       // 조직 선택 시
       const newItem = JSON.parse(JSON.stringify(selectedEmployee.group));
@@ -214,27 +168,15 @@ const OrganizationScreenContainer = (props: any) => {
   };
   //#endregion
 
-  const dataLoad = async () => {
-    setIsDataLoading(true);
-
-    await getOrganizationTree();
-    await getContactsList();
-
-    setIsDataLoading(false);
-  };
-
   const participantListAdd = () => {
-    setListLng(Object.keys(selectedEmployee.member).length);
     const selectedList = selectedEmployee.member;
     const resList: any[] = [];
-    const roomMaster = selectedList[0];
-    const userList = selectedList.filter((v: any, i: number) => i !== 0);
-    const userNoOrderList: any[] = userList.sort((a: any, b: any) => {
-      return a.user_no - b.user_no;
+
+    const partListUserNoOrderList: any[] = selectedList.sort((a: any, b: any) => {
+      return a.user_no === auth.user_no ? -1 : 1;
     });
 
-    resList.push(roomMaster);
-    userNoOrderList.map(value => resList.push(value));
+    partListUserNoOrderList.map(value => resList.push(value));
 
     setSelectedEmployee({ member: resList, group: {} });
     setSelectMode(false);
@@ -268,21 +210,26 @@ const OrganizationScreenContainer = (props: any) => {
     }
 
     if (flag) {
-      const invitedList: { type: string; value: string }[] = invited;
+      // const invitedList: { type: string; value: string }[] = invited;
+      // let idx: number = invitedList.findIndex(
+      //   (i: any) => i.value === inviteText
+      // );
       const selectedList: any[] = selectedEmployee.member;
-      let idx: number = invitedList.findIndex((i: any) => i.value === inviteText);
+      let idx: number = selectedList.findIndex(
+        (i: any) => i.value === inviteText
+      );
 
       if (idx !== -1) {
-        setInvited([...invited]);
+        // setInvited([...invited]);
         setExterError(true);
       } else {
-        setInvited([
-          ...invited,
-          {
-            type,
-            value
-          }
-        ]);
+        // setInvited([
+        //   ...invited,
+        //   {
+        //     type,
+        //     value
+        //   }
+        // ]);
         selectedList.push({ type, value });
         setExterError(false);
       }
@@ -331,7 +278,7 @@ const OrganizationScreenContainer = (props: any) => {
         easing: Easing.out(Easing.poly(1))
       })
     ).start();
-    dataLoad();
+    // dataLoad();
   }, []);
   //#endregion
 
@@ -347,6 +294,10 @@ const OrganizationScreenContainer = (props: any) => {
   }, [tabType]);
   //#endregion
 
+
+  const focusOut = () => {
+    if (searchRef.current?.isFocused()) searchRef.current.blur();
+  }
   return (
     <OrganizationScreenPresenter
       setSelectMode={setSelectMode}
@@ -362,25 +313,26 @@ const OrganizationScreenContainer = (props: any) => {
       openGroup={openGroup}
       setOpenGroup={setOpenGroup}
       organization={organization}
-      setorganization={setorganization}
+      // setorganization={setorganization}
       selectEmployee={selectEmployee}
       selectedEmployee={selectedEmployee}
       getOrganizationEmployeeTree={getOrganizationEmployeeTree}
       organizationEmployee={organizationEmployee}
-      invited={invited}
-      setInvited={setInvited}
+      // invited={invited}
+      // setInvited={setInvited}
       recents={recents}
-      isDataLoading={isDataLoading}
+      isOrgDataLoaded={isOrgDataLoaded}
       spin={spin}
       t={t}
       participantListAdd={participantListAdd}
       onClickCancel={onClickCancel}
       auth={auth}
-      listLng={listLng}
       contactType={contactType}
       setContactType={setContactType}
       validateExter={validateExter}
       exterError={exterError}
+      searchRef={searchRef}
+      focusOut={focusOut}
     />
   );
 };

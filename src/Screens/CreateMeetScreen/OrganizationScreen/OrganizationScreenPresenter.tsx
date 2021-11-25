@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import {
   StyleSheet,
   View,
@@ -41,21 +41,21 @@ const OrganizationScreenPresenter = (props: any) => {
     selectedEmployee,
     getOrganizationEmployeeTree,
     organizationEmployee,
-    invited,
-    setInvited,
+    // invited,
+    // setInvited,
     recents,
-    isDataLoading,
+    isOrgDataLoaded,
     spin,
     t,
     participantListAdd,
-    onClickCancel,
     auth,
-    listLng,
     contactType,
     setContactType,
     validateExter,
     exterError,
-    recentAdd
+    recentAdd,
+    searchRef,
+    focusOut
   } = props;
 
   const OrganizationFlatList = (
@@ -119,7 +119,7 @@ const OrganizationScreenPresenter = (props: any) => {
                   }
                 }}
               >
-                <>
+                <Fragment>
                   <View
                     style={[
                       styles.lineContainer,
@@ -213,7 +213,7 @@ const OrganizationScreenPresenter = (props: any) => {
                         />
                       </View>
                     )}
-                </>
+                </Fragment>
               </TouchableHighlight>
 
               {/* 자식 조직이 존재할 때 */}
@@ -255,7 +255,7 @@ const OrganizationScreenPresenter = (props: any) => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.topTitle}>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           disabled={Object.keys(selectedEmployee.member).length > listLng}
           onPress={() => onClickCancel()}
         >
@@ -269,21 +269,24 @@ const OrganizationScreenPresenter = (props: any) => {
           >
             {t('뒤로')}
           </Text>
-        </TouchableOpacity>
-        <View style={{ flexDirection: 'row' }}>
+        </TouchableOpacity> */}
+        <View style={{ flexDirection: 'row', width: '30%' }}>
           <Text style={styles.TitleText}>{t('참석자 추가')}</Text>
           <Text style={{ color: '#1c90fb', fontSize: 18, fontWeight: '600' }}>
             {'  '}
             {selectedEmployee.member.length}
           </Text>
         </View>
-        <TouchableOpacity onPress={() => participantListAdd()}>
-          <Text style={styles.ft14N}>{t('추가')}</Text>
+        <TouchableOpacity
+          onPress={() => participantListAdd()}
+          style={{ marginLeft: '27%' }}
+        >
+          <Text style={styles.ft14N}>{t('확인')}</Text>
         </TouchableOpacity>
       </View>
       <View style={{ backgroundColor: '#F7F8FA', flex: 0.005 }} />
 
-      {isDataLoading ? (
+      {isOrgDataLoaded ? (
         <View style={styles.dimmed}>
           <Animated.View
             style={{
@@ -312,7 +315,7 @@ const OrganizationScreenPresenter = (props: any) => {
               <CustomIcon name={'btnTnaviHomeNone'} size={36} />
             </View>
           ) : (
-            <>
+            <Fragment>
               {/* 선택된 조직/조직도 표시 */}
               <SelectedPreview
                 selectedEmployee={selectedEmployee}
@@ -322,7 +325,10 @@ const OrganizationScreenPresenter = (props: any) => {
               <View style={{ flexDirection: 'row' }}>
                 <TouchableOpacity
                   activeOpacity={0.7}
-                  onPress={() => setTabType('org')}
+                  onPress={() => {
+                    setTabType('org');
+                    focusOut();
+                  }}
                   style={[
                     styles.tabText,
                     tabType === 'org' && styles.selectedTab
@@ -336,7 +342,10 @@ const OrganizationScreenPresenter = (props: any) => {
                 </TouchableOpacity>
                 <TouchableOpacity
                   activeOpacity={0.7}
-                  onPress={() => setTabType('contact')}
+                  onPress={() => {
+                    setTabType('contact');
+                    focusOut();
+                  }}
                   style={[
                     styles.tabText,
                     tabType === 'contact' && styles.selectedTab
@@ -347,12 +356,15 @@ const OrganizationScreenPresenter = (props: any) => {
                       color: tabType === 'contact' ? '#1c90fb' : '#8c8c8c'
                     }}
                   >
-                    연락처
+                    {t('연락처')}
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   activeOpacity={0.7}
-                  onPress={() => setTabType('exter')}
+                  onPress={() => {
+                    setTabType('exter');
+                    focusOut();
+                  }}
                   style={[
                     styles.tabText,
                     tabType === 'exter' && styles.selectedTab
@@ -363,13 +375,13 @@ const OrganizationScreenPresenter = (props: any) => {
                       color: tabType === 'exter' ? '#1c90fb' : '#8c8c8c'
                     }}
                   >
-                    외부참여자
+                    {t('외부참여자')}
                   </Text>
                 </TouchableOpacity>
               </View>
 
               {/* {tabType === 'contact' && (
-                <>
+                <Fragment>
                   <View style={{ backgroundColor: '#F7F8FA', height: 15 }} />
                   <View style={{ flexDirection: 'row' }}>
                     <TouchableOpacity
@@ -435,7 +447,7 @@ const OrganizationScreenPresenter = (props: any) => {
                       </Text>
                     </TouchableOpacity>
                   </View>
-                </>
+                </Fragment>
               )} */}
               {tabType !== 'exter' ? (
                 <View
@@ -456,6 +468,7 @@ const OrganizationScreenPresenter = (props: any) => {
                       onSubmitEditing={() => {
                         doSearch();
                       }}
+                      ref={searchRef}
                     />
                     {keyword ? (
                       <TouchableOpacity onPress={() => setKeyword('')}>
@@ -486,18 +499,19 @@ const OrganizationScreenPresenter = (props: any) => {
                 searchedEmployee={searchedEmployee}
                 selectEmployee={selectEmployee}
                 auth={auth}
-                invited={invited}
+                // invited={invited}
                 selectedEmployee={selectedEmployee}
                 contacts={contacts}
                 inviteText={inviteText}
-                setInvited={setInvited}
+                // setInvited={setInvited}
                 setInviteText={setInviteText}
                 recents={recents}
                 validateExter={validateExter}
                 exterError={exterError}
                 recentAdd={recentAdd}
+                focusOut={focusOut}
               />
-            </>
+            </Fragment>
           )}
         </View>
       )}
@@ -518,9 +532,8 @@ const styles = StyleSheet.create({
     // width: '100%'
   },
   topTitle: {
-    paddingLeft: '5%',
-    paddingRight: '5%',
-    justifyContent: 'space-between',
+    paddingHorizontal: '5%',
+    justifyContent: 'flex-end',
     alignItems: 'center',
     flexDirection: 'row',
     width: '100%',

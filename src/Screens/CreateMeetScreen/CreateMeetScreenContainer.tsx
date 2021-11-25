@@ -41,8 +41,8 @@ export default function CreateMeetScreenContainer(props: any) {
     'none'
   );
 
-  const [invited, setInvited] = useState<any[]>([]);
-  const [inviteText, setInviteText] = useState('');
+  // const [invited, setInvited] = useState<any[]>([]);
+  // const [inviteText, setInviteText] = useState('');
   const [timeType, setTimeType] = useState('');
 
   const [startTime, setStartTime] = useState({
@@ -67,14 +67,17 @@ export default function CreateMeetScreenContainer(props: any) {
     group: {}
   });
 
-  const [listLng, setListLng] = useState(1);
   const [sendMessage, setSendMessage] = useState('');
   const [sendMsgCnt, setSendMsgCnt] = useState(0);
   // const [participantList, setParticipantList] = useState<any[]>([]);
   const [textLess2, setTextLess2] = useState(true);
+  const [isOrgDataLoaded, setIsOrgDataLoaded] = useState(false);
+  const [organization, setorganization] = useState<any>({ company_no: -1 });
+  const [contacts, setContacts] = useState<{ title: string; data: Object }[]>(
+    []
+  );
 
   const { auth } = useSelector((state: any) => state.user);
-  const { recents } = useSelector((state: RootState) => state.recents);
 
   const t = getT();
 
@@ -131,7 +134,6 @@ export default function CreateMeetScreenContainer(props: any) {
     }
   };
 
-  // interface arrTypePatial 이부분 수정
   const createConference = async () => {
     if (1 < roomName.length) {
       let arr: PartialParam[] = [];
@@ -312,17 +314,17 @@ export default function CreateMeetScreenContainer(props: any) {
 
   const onDateChange = (date: any) => {
     let obj = getDate(new Date(date));
-
+    let current = obj.current;
     if (timeType === 'start') {
-      obj.current.setHours(startTime.current.getHours());
-      obj.current.setMinutes(startTime.current.getMinutes());
+      current.setHours(startTime.current.getHours());
+      current.setMinutes(startTime.current.getMinutes());
       setStartTime({
         ...obj,
         time: startTime.time
       });
     } else if (timeType === 'end') {
-      obj.current.setHours(endTime.current.getHours());
-      obj.current.setMinutes(endTime.current.getMinutes());
+      current.setHours(endTime.current.getHours());
+      current.setMinutes(endTime.current.getMinutes());
       setEndTime({
         ...obj,
         time: endTime.time
@@ -341,6 +343,7 @@ export default function CreateMeetScreenContainer(props: any) {
   //시간 선택후 확인버튼 눌렀을때
   const onTimeConfirm = () => {
     let obj: any;
+
     if (timeChangeDetect) {
       obj = getDate(time);
     } else {
@@ -348,9 +351,33 @@ export default function CreateMeetScreenContainer(props: any) {
       else if (timeType === 'end') obj = getDate(endTime.current);
     }
 
+    let current = obj.current;
+    
+    let today = moment(new Date()).add(29, 'minutes');
+
+    console.log(current);
+    
+    if (current < today) {
+      Alert.alert(
+        t('시간 지정 오류'),
+        t('시작 시간, 종료시간은 현재 시간보다 30분 이후로 지정이 가능합니다.')
+      );
+      setTime(today.add(1, 'minutes').toDate());
+      return false;
+    } else if (current < startTime.current) {
+      Alert.alert(
+        t('시간 지정 오류'),
+        t('종료 시간은 시작 시간 이전으로 지정이 불가능합니다.')
+      );
+      setTime(moment(startTime.current).add(30, 'minutes').toDate());
+      setTimePicker('none');
+      setDatePicker(timePicker);
+      return false;
+    }
+
     let start_DT, end_DT;
-    let h = moment(obj.current).hours();
-    let m = moment(obj.current).minutes();
+    let h = moment(current).hours();
+    let m = moment(current).minutes();
 
     if (timeType === 'start') {
       startTime.current.setHours(h);
@@ -362,14 +389,6 @@ export default function CreateMeetScreenContainer(props: any) {
         current: start_DT
       });
 
-      if (startTime.current < new Date()) {
-        Alert.alert(
-          t('시간 지정 오류'),
-          t('시작 시간은 현재 시간이전으로 지정이 불가능합니다.')
-        );
-        setTime(new Date());
-        return false;
-      }
       obj = getDate(moment(startTime.current).add(1, 'hours').toDate());
       setEndTime(obj);
     } else if (timeType === 'end') {
@@ -381,27 +400,69 @@ export default function CreateMeetScreenContainer(props: any) {
         date: endTime.date,
         current: end_DT
       });
-
-      if (endTime.current < (new Date() && startTime.current)) {
-        Alert.alert(
-          t('시간 지정 오류'),
-          t('종료 시간은 현재 시간 또는 시작시간 이전으로 지정이 불가능합니다.')
-        );
-        setTime(moment(startTime.current).add(30, 'minutes').toDate());
-        setTimePicker('none');
-        setDatePicker(timePicker);
-        return false;
-      }
     }
 
     setTimePicker('none');
     setTimeChangeDetect(false);
   };
 
+  //조직도 초기화
+  const getOrganizationTree = async () => {
+    const result = await OrganizationApi.getOrganizationTreeRequest(auth);
+    if (result.error) {
+      //   Alert.alert('조직도', '조직도를 가져올 수 없습니다.');
+      // 조직도 조회 안됨 에러 표현
+      // 생성화면으로 Back
+    } else {
+      const organization = result[0];
+      setorganization(organization);
+    }
+  };
+
+  //연락처 조회
+  const getContactsList = async () => {
+    // 최적화 하려면 여기 코드를 상위로 옮기자
+    const result = await OrganizationApi.getContactsList(auth);
+    if (result.error || !result) {
+      //   Alert.alert('조직도', '조직도를 가져올 수 없습니다.');
+      console.log('연락처를 가져올 수 없습니다.');
+
+      //   props.navigation.pop();
+      // 생성하기 화면으로
+    } else {
+      const chocungList: { dataindex: number; word: string }[] =
+        result.chosungList;
+      const indexList: any[] = [];
+      type secction = { title: string; data: object[] }[];
+      let arr: secction = [];
+      chocungList.forEach(({ word }) => {
+        arr.push({ title: word, data: [] });
+        indexList.push(word);
+      });
+
+      const contactsList = [...result.contactsList];
+
+      contactsList.forEach(item => {
+        const index = indexList.indexOf(item.word);
+        arr[index].data.push(item);
+      });
+      setContacts(arr);
+    }
+  };
+
+  const dataLoad = async () => {
+    setIsOrgDataLoaded(true);
+
+    getAllEmployee();
+    await getOrganizationTree();
+    await getContactsList();
+
+    setIsOrgDataLoaded(false);
+  };
+
   useEffect(() => {
     setSelectMode(false);
-    getAllEmployee();
-    //수정 : 회의 생성화면에서 조직도 미리 불러와야함. 로딩 구분값 필요
+    dataLoad();
     setSelectedEmployee({
       member: [
         {
@@ -460,12 +521,17 @@ export default function CreateMeetScreenContainer(props: any) {
     );
     updateList[idx].is_master = !updateList[idx].is_master;
 
-    const roomMaster: any[] = updateList[0];
-    const userList: any[] = updateList.filter((v: any, i: number) => i !== 0);
-    const partListUserNoOrderList: any[] = userList.sort((a: any, b: any) => {
-      return a.user_no - b.user_no;
+    const partListUserNoOrderList: any[] = updateList.sort((a: any, b: any) => {
+      return a.user_no === auth.user_no ? -3 : b.is_master - a.is_master;
     });
-    // 수정 : 여기도 정렬문 삭제하고 필터문 한줄로 정리
+
+    partListUserNoOrderList.map(v => resList.push(v));
+    setSelectedEmployee({ member: resList, group: {} });
+
+    // const roomMaster: any[] = updateList[0];
+    // resList.push(roomMaster);
+
+    // const userList: any[] = updateList.filter((v: any, i: number) => i !== 0);
 
     // 마스터권한 정렬
     // const masterList: any[] = userList.filter(
@@ -479,10 +545,6 @@ export default function CreateMeetScreenContainer(props: any) {
     // const partList: any[] = userList.filter(
     //   (v: any, i) => v.is_master !== true
     // );
-
-    resList.push(roomMaster);
-    partListUserNoOrderList.map(v => resList.push(v));
-    setSelectedEmployee({ member: resList, group: {} });
   };
 
   const clickDeleteUser = (item: any) => {
@@ -497,17 +559,16 @@ export default function CreateMeetScreenContainer(props: any) {
       );
     } else if (item.value) {
       idx = deletedList.findIndex((i: any) => i.value === item.value);
-      const invitedList: { type: string; value: string }[] = invited;
-      const invitedIndex: number = invitedList.findIndex(
-        (i: any) => i.value === item.value
-      );
-
-      if (invitedIndex !== -1) {
-        const deletedList: any[] = invitedList.filter(
-          (v: any, i: number) => i !== invitedIndex
-        );
-        setInvited([...deletedList]);
-      }
+      // const invitedList: { type: string; value: string }[] = invited;
+      // const invitedIndex: number = invitedList.findIndex(
+      //   (i: any) => i.value === item.value
+      // );
+      // if (invitedIndex !== -1) {
+      //   const deletedList: any[] = invitedList.filter(
+      //     (v: any, i: number) => i !== invitedIndex
+      //   );
+      //   setInvited([...deletedList]);
+      // }
     } else {
       console.log('error');
     }
@@ -522,18 +583,19 @@ export default function CreateMeetScreenContainer(props: any) {
           {...props}
           employee={employee}
           selectedEmployee={selectedEmployee}
-          invited={invited}
-          recents={recents}
-          inviteText={inviteText}
+          // invited={invited}
+          // recents={recents}
+          // inviteText={inviteText}
           setSelectMode={setSelectMode}
           setSelectedEmployee={setSelectedEmployee}
-          setInvited={setInvited}
-          setInviteText={setInviteText}
+          // setInvited={setInvited}
+          // setInviteText={setInviteText}
           // participantList={participantList}
           // setParticipantList={setParticipantList}
-          listLng={listLng}
-          setListLng={setListLng}
           setRecents={setRecents}
+          organization={organization}
+          isOrgDataLoaded={isOrgDataLoaded}
+          contacts={contacts}
         />
       ) : (
         <CreateMeetScreenPresenter

@@ -47,7 +47,7 @@ const CreateMeetScreenPresenter = (props: any) => {
     // onSelectDate,
     // onSelectTime,
     sendMessageChange,
-    startConference,
+    createConference,
     //신규Props
     switchReserve,
     switchDelAlram,
@@ -88,7 +88,7 @@ const CreateMeetScreenPresenter = (props: any) => {
       dayShape="square"
       scaleFactor={370}
       onDateChange={onDateChange}
-      selectYearTitle={'년도 선택'}
+      selectYearTitle={t('년도 선택')}
       selectMonthTitle={''}
       textStyle={{ fontSize: 14 }}
     />
@@ -101,7 +101,7 @@ const CreateMeetScreenPresenter = (props: any) => {
           <Text style={styles.ft14N}>{t('취소')}</Text>
         </TouchableOpacity>
         <Text style={styles.TitleText}>{t('회의 생성하기')}</Text>
-        <TouchableOpacity disabled={textLess2} onPress={startConference}>
+        <TouchableOpacity disabled={textLess2} onPress={createConference}>
           <Text style={[styles.confirmText, !textLess2 && { color: '#000' }]}>
             {t('생성')}
           </Text>
@@ -193,14 +193,12 @@ const CreateMeetScreenPresenter = (props: any) => {
       </View>
 
       <View style={[{ backgroundColor: '#F7F8FA', height: 9 }]} />
+
       <View
-        style={[
-          styles.reserveContainer,
-          switchReserve && { height: '15%'}
-        ]}
+        style={[styles.reserveContainer, switchReserve && { height: '15%' }]}
       >
         <View style={styles.rowContainer}>
-          <Text style={[styles.ft14B, {fontSize:15}]}>{t('예약회의')}</Text>
+          <Text style={[styles.ft14B, { fontSize: 15 }]}>{t('예약회의')}</Text>
           <Switch
             onValueChange={onSwitchReserveChange}
             value={switchReserve}
@@ -218,7 +216,9 @@ const CreateMeetScreenPresenter = (props: any) => {
               }}
             >
               <Text style={{ fontSize: 15 }}>{t('시작시간')}</Text>
-              <View style={{ flexDirection: 'row' }}>
+              <View
+                style={{ flexDirection: 'row', justifyContent: 'flex-end' }}
+              >
                 <TouchableOpacity
                   style={[
                     styles.datetimeBox,
@@ -275,7 +275,9 @@ const CreateMeetScreenPresenter = (props: any) => {
               ]}
             >
               <Text style={{ fontSize: 15 }}>{t('종료시간')}</Text>
-              <View style={{ flexDirection: 'row' }}>
+              <View
+                style={{ flexDirection: 'row', justifyContent: 'flex-end' }}
+              >
                 <TouchableOpacity
                   style={[
                     styles.datetimeBox,
@@ -381,6 +383,7 @@ const CreateMeetScreenPresenter = (props: any) => {
           </Fragment>
         )}
       </View>
+
       <View style={[{ backgroundColor: '#F7F8FA', height: 9 }]} />
 
       <View style={styles.conferenceMember}>
@@ -420,7 +423,7 @@ const CreateMeetScreenPresenter = (props: any) => {
             bounces={false}
             contentContainerStyle={{
               flexGrow: 1,
-              paddingHorizontal:'5%',
+              paddingHorizontal: '5%'
             }}
             data={selectedEmployee.member}
             keyExtractor={(item, index) => String(index)}
@@ -516,16 +519,16 @@ const CreateMeetScreenPresenter = (props: any) => {
                     disabled={item.user_no === auth.user_no || !item.user_no}
                   >
                     {isSelected ? (
-                      <>
+                      <Fragment>
                         <Text style={styles.maseterText}>{t('마스터')}</Text>
                         <Image
                           style={styles.icMaster}
                           source={icMasterCircle}
                           resizeMode={'contain'}
                         />
-                      </>
+                      </Fragment>
                     ) : item.user_no ? (
-                      <>
+                      <Fragment>
                         <Image
                           style={styles.icMaster}
                           source={icAttdCircle}
@@ -533,13 +536,13 @@ const CreateMeetScreenPresenter = (props: any) => {
                         />
 
                         <Text style={styles.attendantText}>{t('참석자')}</Text>
-                      </>
+                      </Fragment>
                     ) : (
-                      <>
+                      <Fragment>
                         {/* <Text style={styles.extText}>
                               {t('외부참여자')}
                             </Text> */}
-                      </>
+                      </Fragment>
                     )}
                   </TouchableOpacity>
                 </View>
@@ -661,7 +664,7 @@ const styles = StyleSheet.create({
   directionColMessage: {
     flexDirection: 'column',
     paddingVertical: 5,
-    height: '65%',
+    height: '65%'
     // backgroundColor: 'red'
   },
   middleContainer: {
@@ -710,9 +713,10 @@ const styles = StyleSheet.create({
     height: '6%'
   },
   datetimeBox: {
+    width: '35%',
     fontSize: 15,
-    alignItems: 'center',
-    marginRight: 5
+    alignItems: 'flex-end'
+    // marginRight: 5,
   },
   //하단
   botContainer: {
@@ -859,7 +863,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgb(255,255,255)',
     bottom: 0,
     width: '100%',
-    height: '50%',
+    // height: '50%',
     borderRadius: 20,
     shadowRadius: 10,
     shadowColor: '#aaa',
