@@ -72,7 +72,20 @@ const ListItemComp = props => {
       displayUpdated = props.updated;
       break;
   }
-
+/*  
+title
+active
+disable
+updated
+onClick
+iconSize
+updated
+underline
+customStyle
+customLottie
+descriptionType
+room_profile_url
+*/
   // render
   return (
     <TouchableOpacity

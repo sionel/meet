@@ -134,22 +134,7 @@ export default function HomeScreenContainer(props: any) {
     ref.current.reservationConference = reservationConference;
   }, [reservationConference, finishedConference]);
 
-  // useEffect(() => {
-  //   selectedRoomId &&
-  //     props.navigation.navigate('ConferenceState', {
-  //       item: {
-  //         roomId: selectedRoomId,
-  //         externalData: null,
-  //         from: 'meet'
-  //       }
-  //     });
-  // }, [selectedRoomId]);
-
   const _handleBackButton = () => {
-    // if(this.props.navigation)
-    // if (!this.props.navigation.isFocused()) return false;
-    // this.props.navigation.closeDrawer();
-
     // 1000(1초) 안에 back 버튼을 한번 더 클릭 할 경우 앱 종료
     if (!ref.current.exitApp) {
       ToastAndroid.show('한번더 누르면 앱이 종료됩니다', ToastAndroid.SHORT);
@@ -206,7 +191,7 @@ export default function HomeScreenContainer(props: any) {
 
               let type;
               let value;
-              const uri = present.profile_url
+              const uri = present?.profile_url
                 ? wehagoMainURL + present.profile_url
                 : wehagoDummyImageURL;
 
@@ -240,11 +225,11 @@ export default function HomeScreenContainer(props: any) {
   };
 
   const _getConferences = () => {
-    MeetApi.getMeetRoomsList(auth).then(async result => {      
+    MeetApi.getMeetRoomsList(auth).then(async result => {
       const going: conference[] = result.filter(
         (conference: conference) => conference.is_started
       );
-      
+
       const goingList = await Promise.all(
         going.map(async conference => {
           const startTime = new Date(
@@ -299,12 +284,12 @@ export default function HomeScreenContainer(props: any) {
             const uri = present?.profile_url
               ? wehagoMainURL + present.profile_url
               : wehagoDummyImageURL;
-            if (participants.length <= 5) {
+            if (sortedPortalIdList.length <= 5) {
               type = 'string';
               value = uri;
             } else {
               type = prev.length < 4 ? 'string' : 'number';
-              value = prev.length < 4 ? uri : participants.length - 4;
+              value = prev.length < 4 ? uri : sortedPortalIdList.length - 4;
             }
 
             return [...prev, { type, value }];
@@ -330,11 +315,12 @@ export default function HomeScreenContainer(props: any) {
           return data;
         })
       );
-     
-      
+
       setOngoingConference(goingList);
 
-      // ========================================================================
+      // =====================================================================================================
+      // =====================================================================================================
+      // =====================================================================================================
 
       const reservation: conference[] = result.filter(
         (conference: conference) => !conference.is_started
@@ -345,18 +331,19 @@ export default function HomeScreenContainer(props: any) {
             auth,
             conference.room_id
           );
+
           const isMaster = accessUser.filter(
             (user: any) => user.user === portalId
           )[0]?.is_master
             ? true
             : false;
 
-          const sortedAccessUserList = accessUser.sort(
+          const sortedAccessUserList: any[] = accessUser.sort(
             (user: any, _user: any) => _user.is_master - user.is_master
           );
           const portalIdList = sortedAccessUserList
             .map((user: any) => user.user)
-            .filter((user: any) => user);
+            .filter((user: any) => user); 
 
           const participants: any[] = await MeetApi.getUserInfoList(
             auth,
@@ -364,28 +351,27 @@ export default function HomeScreenContainer(props: any) {
           );
 
           const sortedPortalIdList: any[] = portalIdList.map((id: any) => {
-            const item = participants.find(e => e.portal_id === id);
+            const item =
+              participants.find(e => e.portal_id === id) ||
+              sortedAccessUserList.find(e => e.user === id);
             return item;
           });
-
           const uriList = sortedPortalIdList.reduce<
             { type: string; value: string | number }[]
           >((prev, present) => {
             if (prev.length > 2) return prev;
-
             let type;
             let value;
-            const uri = present.profile_url
+            const uri = present?.profile_url
               ? wehagoMainURL + present.profile_url
               : wehagoDummyImageURL;
-            if (participants.length <= 3) {
+            if (sortedPortalIdList.length <= 3) {
               type = 'string';
               value = uri;
             } else {
               type = prev.length < 2 ? 'string' : 'number';
-              value = prev.length < 2 ? uri : participants.length - 2;
+              value = prev.length < 2 ? uri : sortedPortalIdList.length - 2;
             }
-
             return [...prev, { type, value }];
           }, []);
 
@@ -513,10 +499,10 @@ export default function HomeScreenContainer(props: any) {
         auth,
         conference.room_id
       );
-      
+
       participants = participantInfoList
         .map(participant => ({
-          image: participant.profile_url
+          image: participant?.profile_url
             ? wehagoMainURL + participant.profile_url
             : wehagoDummyImageURL,
           name: participant.user_name,
@@ -534,10 +520,10 @@ export default function HomeScreenContainer(props: any) {
         auth,
         conference.room_id
       );
-      
+
       participants = accessUser
         .map(participant => ({
-          image: participant.profile_url
+          image: participant?.profile_url
             ? wehagoMainURL + participant.profile_url
             : wehagoDummyImageURL,
           name: participant.user_name,
@@ -577,7 +563,7 @@ export default function HomeScreenContainer(props: any) {
 
       participants = participantInfoList
         .map(participant => ({
-          image: participant.profile_url
+          image: participant?.profile_url
             ? wehagoMainURL + participant.profile_url
             : wehagoDummyImageURL,
           name: participant.user_name,
@@ -609,23 +595,6 @@ export default function HomeScreenContainer(props: any) {
     });
   };
 
-  // const _enterConference = (roomId: string) => {
-  //   this._handleRedirect('Conference', {
-  // item: {
-  //   videoRoomId: conferenceId,
-  //   callType,
-  //   isCreator
-  // }
-  // });
-  // props.onRedirect('ConferenceState', {
-  //   item: {
-  //     roomId: item.room_id,
-  //     externalData: null,
-  //     from: 'meet'
-  //   }
-  // });
-  // setRoomId(roomId);
-  // };
   const _onClickOutside = () => {
     setBottomPopup({
       ...bottomPopup,
@@ -642,10 +611,6 @@ export default function HomeScreenContainer(props: any) {
       // }
     });
   };
-
-  // props.onRedirect('Create', {
-  //   onGetWetalkList: props.onGetWetalkList
-  // })
   const _handleRedirect = (url: string, param: {}) => {
     const { navigation } = props;
     debugger;

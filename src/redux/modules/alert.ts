@@ -11,12 +11,20 @@
   />
 */
 import { useStore } from 'react-redux';
+import { AnyAction } from 'redux';
 import { getT } from '../../utils/translateManager';
 // import { useTranslation } from 'react-i18next';
 
 const SET_ALERT = 'alert.SET_ALERT';
 const RESET_ALERT = 'alert.RESET_ALERT';
 
+export interface params {
+  title: string;
+  type: 1 | 2;
+  message: string;
+  onConfirm?: () => void;
+  onCencel?: () => void;
+}
 const initialState = {
   visible: false,
   title: '',
@@ -38,7 +46,7 @@ const initialState = {
  ]  
 */
 
-export default (state = initialState, action) => {
+export default (state = initialState, action: AnyAction) => {
   switch (action.type) {
     case SET_ALERT:
       return { ...action.payload };
@@ -57,16 +65,16 @@ const resetAlert = () => {
   };
 };
 
-const setAlert = params => {
+const setAlert = (params: params) => {
   const {
     title,
     type = 1,
     message,
-    onConfirm = () => {},
-    onCencel = () => {}
+    onConfirm = resetAlert,
+    onCencel = resetAlert
   } = params;
   let onClose = () => {};
-  let actions = [];
+  let actions: any = [];
   const t = getT();
 
   if (type === 1) {

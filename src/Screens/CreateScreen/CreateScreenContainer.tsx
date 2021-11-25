@@ -1,15 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Animated } from 'react-native';
 
-import { useDispatch, useSelector } from 'react-redux';
+import CreateScreenPresenter, { section } from './CreateScreenPresenter';
 
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/configureStore';
 
 import { WetalkApi } from '../../services';
+import { ConferenceApi } from '../../services';
+import { MeetApi } from '../../services';
 
-import CreateScreenPresenter, { section } from './CreateScreenPresenter';
+import {
+  actionCreators as AlertActions,
+  params as alertParam
+} from '../../redux/modules/alert';
 
 import { getT } from '../../utils/translateManager';
+import { wehagoDummyImageURL, wehagoMainURL } from '../../utils';
 
 export default function CreateScreenContainer(props: any) {
   const initSection: section = {
@@ -27,6 +34,10 @@ export default function CreateScreenContainer(props: any) {
   const [semu, setSemu] = useState<section>(initSection);
   const [suim, setSuim] = useState<section>(initSection);
   const [loaded, setLoaded] = useState(false);
+  const [indicatorFlag, setIndicatorFlag] = useState(false);
+  const [wetalkList, setWetalkList] = useState([]);
+  const [keyword, setKeyword] = useState('');
+  const [searchList, setSearchList] = useState([]);
 
   const { auth } = useSelector((state: RootState) => {
     const { auth } = state.user;
@@ -35,99 +46,44 @@ export default function CreateScreenContainer(props: any) {
     };
   });
 
-  //     const { auth, onSetWetalkList, onSetConferenceList } = this.props;
-  //     // 메신저조회 API
-
-  //     // 위톡방 기준 create 할때를 위해 위톡방 리스트를 가져 올 필요가 있음 그래서 살려둔 api
-  //     const wetalkList = await WetalkApi.getWetalkList(
-  //       auth.AUTH_A_TOKEN,
-  //       auth.AUTH_R_TOKEN,
-  //       auth.last_access_company_no,
-  //       auth.portal_id,
-  //       auth.HASH_KEY
-  //     );
-  //     onSetWetalkList(
-  //       wetalkList.resultData.video_room_list.sort((a, b) =>
-  //         a.send_timestamp < b.send_timestamp ? 1 : -1
-  //       )
-  //     );
-
-  //     if (wetalkList.errors) {
-  //       return this._handleAutoLogin();
-  //     }
-  //     // 실제 받아오는 화상회의 리스트
-  //     const cl = await MeetApi.getMeetRoomsList(
-  //       auth.AUTH_A_TOKEN,
-  //       auth.AUTH_R_TOKEN,
-  //       auth.last_access_company_no,
-  //       auth.portal_id,
-  //       auth.HASH_KEY
-  //     );
-  //     // 토큰만료시
-  //     if (cl) {
-  //       onSetConferenceList(
-  //         cl.resultData.sort((a, b) =>
-  //           a.start_date_time < b.start_date_time ? 1 : -1
-  //         )
-  //       );
-  //     }
-
-  //     this.setState({ refreshing: false });
-  //   };
-
   useEffect(() => {
     _getWetalkList();
   }, []);
+  useEffect(() => {
+    const list = searchList.length !== 0 ? searchList : wetalkList;
 
-  const onClickBack = () => {
-    props.navigation.goBack();
-  };
-  const onClickHeader = () => {};
-  const onRefresh = () => {};
-  const onSearch = () => {};
+    const customList = list.map((room: any) => {
+      const returnRoom = { ...room };
+      returnRoom.profile =
+        Object.keys(returnRoom).indexOf('room_profile_url') > 0 ? true : false;
+      if (returnRoom.profile) {
+        returnRoom.uri = returnRoom.room_profile_url
+          ? wehagoMainURL + returnRoom.room_profile_url
+          : wehagoDummyImageURL;
+      } else {
+        const title = returnRoom.room_title;
+        const split = title.split(/([\uD800-\uDBFF][\uDC00-\uDFFF])/);
+        returnRoom.first_char =
+          split[0] === title
+            ? split[0][0]
+            : split[0].lenth !== 0
+            ? split[0][0]
+            : '';
+      }
 
-  /* 
-  
-    const initSection: section = {
-    data: [],
-    height: 0,
-    length: 0,
-    title: '',
-    type: ''
-  };
-  
-                    //   () => {
-                    //   Animated.timing(new Animated.Value(section.height), {
-                    //     toValue:
-                    //       section.height === 0 ? 54 * section.data.length : 0,
-                    //     duration: 400,
-                    //     useNativeDriver: true
-                    //   }).start();
-                    // }
-                    new Animated.Value(54 * personalList.length)
-title: `${t('create_room_group')}(${groupList.length})`,
-//               data: groupList,
-//               length: groupList.length - 1,
-//               type: 'group'
-create_room_oneonone
-create_room_group
-create_room_semu
-create_room_suim
-  */
-  const _getWetalkList = async () => {
-    const { video_room_list } = await WetalkApi.getWetalkList(auth);
-    console.log(video_room_list);
+      return returnRoom;
+    });
 
-    const personalList = video_room_list.filter(
+    const personalList = customList.filter(
       (item: any) => item.room_type === '1' && item.is_video_access === 'F'
     );
-    const groupList = video_room_list.filter(
+    const groupList = customList.filter(
       (item: any) => item.room_type === '2' && item.is_video_access === 'F'
     );
-    const semuList = video_room_list.filter(
+    const semuList = customList.filter(
       (item: any) => item.room_type === '4' && item.is_video_access === 'F'
     );
-    const suimList = video_room_list.filter(
+    const suimList = customList.filter(
       (item: any) =>
         item.room_type === '5' &&
         item.is_video_access === 'F' &&
@@ -139,7 +95,7 @@ create_room_suim
       title: `${t('create_room_oneonone')}(${personalList.length})`,
       type: 'personal',
       collapse: false,
-      height: new Animated.Value(54 * personalList.length),
+      height: new Animated.Value(50 * personalList.length),
       zIndex: 1
     };
     const groupData: section = {
@@ -147,7 +103,7 @@ create_room_suim
       title: `${t('create_room_group')}(${groupList.length})`,
       type: 'group',
       collapse: false,
-      height: new Animated.Value(54 * groupList.length),
+      height: new Animated.Value(50 * groupList.length),
       zIndex: 2
     };
     const semuData: section = {
@@ -155,7 +111,7 @@ create_room_suim
       title: `${t('create_room_semu')}(${semuList.length})`,
       type: 'semu',
       collapse: false,
-      height: new Animated.Value(54 * semuList.length),
+      height: new Animated.Value(50 * semuList.length),
       zIndex: 3
     };
     const suimData: section = {
@@ -163,7 +119,7 @@ create_room_suim
       title: `${t('create_room_suim')}(${suimList.length})`,
       type: 'suim',
       collapse: false,
-      height: new Animated.Value(54 * suimList.length),
+      height: new Animated.Value(50 * suimList.length),
       zIndex: 4
     };
 
@@ -175,14 +131,26 @@ create_room_suim
     ]).then(() => {
       setLoaded(true);
     });
-  };
+  }, [wetalkList, searchList]);
+  useEffect(() => {
+    const wetalk = wetalkList.filter((item: any) =>
+      item.room_title.toLowerCase().includes(keyword.toLowerCase())
+    );
+    setSearchList(wetalk);
+  }, [keyword]);
 
-  const toggleCollpaseAnimation = (section: section) => {
-    debugger;
+  const dispatch = useDispatch();
+  const setAlert = (params: alertParam) =>
+    dispatch(AlertActions.setAlert(params));
+
+  const onClickBack = () => {
+    props.navigation.goBack();
+  };
+  const onClickHeader = (section: section) => {
     Animated.timing(section.height, {
-      toValue: !section.collapse ? 0 : section.data.length * 54,
+      toValue: !section.collapse ? 0 : section.data.length * 50,
       useNativeDriver: false,
-      duration: 1000
+      duration: 400
     }).start();
 
     switch (section.type) {
@@ -198,15 +166,189 @@ create_room_suim
       case 'suim':
         setSuim({ ...section, collapse: !section.collapse });
         break;
-
       default:
         break;
     }
   };
+  const onClickStartButton = (conference: any) => {
+    const message = t('alert_text_createroom');
+    const onConfirm = () => {
+      _createConferenceRoom(conference);
+    };
+    const title = t('alert_title_create');
+    const type = 1;
+    setAlert({ message, onConfirm, title, type });
+  };
+  const onRefresh = () => {
+    _getWetalkList();
+  };
+  const onSearch = (key: string) => {
+    setKeyword(key);
+  };
 
+  const _getWetalkList = async () => {
+    const { video_room_list } = await WetalkApi.getWetalkList(auth);
+    setWetalkList(video_room_list);
+  };
+
+  const _createConferenceRoom = async (conference: any) => {
+    console.log(conference);
+    setIndicatorFlag(true);
+    const { room_id } = conference;
+    const {
+      portal_id,
+      user_name,
+      last_access_company_no,
+      AUTH_A_TOKEN,
+      AUTH_R_TOKEN,
+      HASH_KEY,
+      employee_list,
+      cno
+    } = auth;
+    const company_code = employee_list.filter(
+      (e: any) => e.company_no == last_access_company_no
+    )[0].company_code;
+    const bodyData = [
+      room_id, // 방 id
+      portal_id, // 유저아이디
+      user_name, // 유저이름
+      last_access_company_no, // 회사번호
+      company_code, // 회사코드
+      AUTH_A_TOKEN, // 토큰
+      AUTH_R_TOKEN, // 토큰
+      HASH_KEY
+      // null
+    ];
+    const createResult = await ConferenceApi.create(...bodyData);
+    if (createResult.resultCode === 200) {
+      // 생성완료 메시지 보내기
+      const sendWetalkResult = await ConferenceApi.sendWetalk(
+        room_id,
+        createResult.resultData,
+        auth.last_access_company_no,
+        company_code,
+        auth.AUTH_A_TOKEN,
+        auth.AUTH_R_TOKEN,
+        auth.HASH_KEY
+      );
+
+      const videoRoomId = sendWetalkResult.resultData.chatList[0].mobile_key;
+
+      // 토큰받고
+      const roomToken = (await MeetApi.getMeetRoomToken(auth, videoRoomId))
+        .resultData;
+
+      let callType = 3;
+      let isCreator;
+      setIndicatorFlag(false);
+
+      // 대화방에 참여한다.
+      const { navigation } = props;
+      navigation.navigate('Home');
+      navigation.navigate('Setting', {
+        item: {
+          videoRoomId,
+          room_id,
+          roomType: 'meet',
+          roomToken,
+          callType,
+          isCreator
+        }
+      });
+    } else if (createResult.resultCode === 400) {
+      setIndicatorFlag(false);
+
+      const message = createResult.resultMsg;
+      const title = t('alert_title_fail');
+      const type = 1;
+      setAlert({ message, title, type });
+
+      // 이미 화상채팅방이 생성되어 있습니다. 대화방당 1개의 화상채팅방을 제공합니다
+    } else if (createResult.errors && createResult.errors.code === 'E002') {
+      setIndicatorFlag(false);
+      const message = t('alert_text_failcreate');
+      const title = t('alert_title_fail');
+      const type = 1;
+      setAlert({ message, title, type });
+    } else {
+      setIndicatorFlag(false);
+      const message = t('alert_text_failcreate');
+      const title = t('alert_title_fail');
+      const type = 1;
+      setAlert({ message, title, type });
+    }
+    //     let auth;
+    //     let company_code;
+    //     // 위하고에서 접속인지 아닌지 구분
+
+    //     const { selectedRoomId, selectedRoomName } = this.state;
+
+    //     auth = this.props.auth;
+    //     company_code = auth.employee_list.filter(
+    //       e => e.company_no == auth.last_access_company_no
+    //     )[0].company_code;
+    //     let createResult;
+
+    // const bodyData = [
+    //   selectedRoomId, // 방 id
+    //   auth.portal_id, // 유저아이디
+    //   auth.user_name, // 유저이름
+    //   auth.last_access_company_no, // 회사번호
+    //   company_code, // 회사코드
+    //   auth.AUTH_A_TOKEN, // 토큰
+    //   auth.AUTH_R_TOKEN, // 토큰
+    //   auth.HASH_KEY
+    //   // null
+    // ];
+
+    //     createResult = await ConferenceApi.create(...bodyData);
+    //     // 화상회의 생성가능여부 // 대화방 생성 or 참여 여부 결정
+    //     if (createResult.resultCode === 200) {
+    //       // 생성완료 메시지 보내기
+    //       const sendWetalkResult = await ConferenceApi.sendWetalk(
+    //         selectedRoomId,
+    //         createResult.resultData,
+    //         auth.last_access_company_no,
+    //         company_code,
+    //         auth.AUTH_A_TOKEN,
+    //         auth.AUTH_R_TOKEN,
+    //         auth.HASH_KEY
+    //       );
+    //       this.setState({ modal: false });
+
+    //       const videoRoomId = sendWetalkResult.resultData.chatList[0].mobile_key;
+
+    //       // 토큰받고
+    //       const roomToken = (await MeetApi.getMeetRoomToken(auth, videoRoomId))
+    //         .resultData;
+
+    //       let callType = 3;
+    //       let isCreator;
+
+    //       // 대화방에 참여한다.
+    //       this._handleRedirect('Setting', {
+    //         item: {
+    //           videoRoomId,
+    //           selectedRoomName,
+    //           roomType: 'meet',
+    //           roomToken,
+    //           callType,
+    //           isCreator
+    //         }
+    //       });
+    //     } else if (createResult.resultCode === 400) {
+    //       alert(createResult.resultMsg);
+    //       // 이미 화상채팅방이 생성되어 있습니다. 대화방당 1개의 화상채팅방을 제공합니다
+    //     } else if (createResult.errors && createResult.errors.code === 'E002') {
+    //       this._handleRefresh();
+    //     } else {
+    //       alert(this.t('alert_text_createfail'));
+    //     }
+  };
   return (
     <CreateScreenPresenter
       {...{
+        searchList,
         loaded,
         onClickBack,
         onClickHeader,
@@ -216,7 +358,8 @@ create_room_suim
         personal,
         semu,
         suim,
-        toggleCollpaseAnimation
+        indicatorFlag,
+        onClickStartButton
       }}
     />
   );

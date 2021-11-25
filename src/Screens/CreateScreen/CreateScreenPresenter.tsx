@@ -8,7 +8,8 @@ import {
   Animated,
   Image,
   TouchableOpacity,
-  FlatList
+  FlatList,
+  ActivityIndicator
 } from 'react-native';
 
 import {
@@ -33,21 +34,22 @@ export interface section {
 }
 
 interface createProps {
-  onSearch: () => void;
+  onSearch: (key: string) => void;
   group: section;
   personal: section;
   semu: section;
   suim: section;
   loaded: boolean;
+  indicatorFlag: boolean;
   onRefresh: () => void;
   onClickBack: () => void;
-  onClickHeader: () => void;
-  toggleCollpaseAnimation: (section: section) => void;
+  onClickHeader: (section: section) => void;
+  onClickStartButton: (conference: any) => void;
 }
-interface createPropsFalse {}
 
 function CreateScreenPresenter(props: createProps) {
   const {
+    indicatorFlag,
     onSearch,
     loaded,
     onRefresh,
@@ -57,36 +59,21 @@ function CreateScreenPresenter(props: createProps) {
     suim,
     onClickBack,
     onClickHeader,
-    toggleCollpaseAnimation
+    onClickStartButton
   } = props;
   const a = new Animated.Value(100);
   const t = getT();
-
-  // const SectionFooter = ({ section }) => {
-  // const items = section.data.map((item, index) => (
-  //   <ListItemComp
-  //     key={item.room_id}
-  //     title={item.room_title}
-  //     personnel={item.receiver_user_count}
-  //     updated={item.update_timestamp}
-  //     room_profile_url={item.room_profile_url}
-  //     lottie={false}
-  //     customLottie={true}
-  //     underline={index < section.length ? true : false}
-  //     active={item.is_video_access === 'T' ? true : false}
-  //     disable={
-  //       item.receiver_user_count === 1 && item.room_type === '1'
-  //         ? true
-  //         : false
-  //     }
-  //     onClick={() => props.onActivateModal(item.room_id, item.room_title)}
-  //   />
-  // ));
 
   return (
     <Fragment>
       <SafeAreaView style={styles.safeArea} />
       <SafeAreaView style={styles.container}>
+        <ActivityIndicator
+          animating={indicatorFlag}
+          size={'large'}
+          color={'#1c90fb'}
+          style={{ position: 'absolute', margin: '50%', zIndex: 10 }}
+        />
         <View style={styles.header}>
           <TouchableOpacity style={{ width: '10%' }} onPress={onClickBack}>
             <Image
@@ -112,71 +99,122 @@ function CreateScreenPresenter(props: createProps) {
         <SearchForm onChange={onSearch} />
         {loaded ? (
           <SectionList
+            refreshing={false}
+            onRefresh={onRefresh}
             keyExtractor={(item, index) => index.toString()}
-            // refreshing={false}
-            // onRefresh={props.onRefresh}
-            // style={[styles.listContainer]}
             sections={[group, personal, semu, suim]}
-            renderSectionHeader={
-              ({ section }) => (
-                <TouchableOpacity
-                  activeOpacity={1}
-                  onPress={() => {
-                    toggleCollpaseAnimation(section);
-                  }}
-                  style={{
-                    flex: 1,
-                    display: section.data.length > 0 ? 'flex' : 'none'
-                  }}
-                >
-                  <View key={section.title} style={styles.sectionHeader}>
-                    <Text style={styles.textStyle}>{section.title}</Text>
-                    <TouchableOpacity>
-                      <Image
-                        source={btnArrowDown}
-                        style={{ width: 20, height: 20 }}
-                      />
-                    </TouchableOpacity>
-                  </View>
+            renderSectionHeader={({ section }) => (
+              <TouchableOpacity
+                activeOpacity={1}
+                onPress={() => {
+                  onClickHeader(section);
+                }}
+                style={{
+                  flex: 1,
+                  display: section.data.length > 0 ? 'flex' : 'none',
+                  paddingHorizontal: 12,
+                  paddingVertical: 3,
+                  borderColor: 'rgba(0,0,0, 0.10)',
+                  backgroundColor: '#fff',
+                  borderWidth: 1,
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center'
+                }}
+              >
+                <Text style={styles.textStyle}>{section.title}</Text>
+                <TouchableOpacity>
+                  <Image
+                    source={btnArrowDown}
+                    style={{ width: 20, height: 20 }}
+                  />
                 </TouchableOpacity>
-              )
-              // section.data.length > 0 ? (
-              //   <SectionListHeader
-              //     title={section.title}
-              //     section={section}
-              //     collapse={true}
-              //     onPress={
-              //         () => {
-              //         Animated.timing(new Animated.Value(section.data.length), {
-              //           toValue:0,
-              //           //   section.height === 0 ? 54 * section.data.length : 0,
-              //           duration: 400,
-              //           useNativeDriver: true
-              //         }).start();
-              //       }
-              //     }
-              //   />
-              // ) : (
-              //   <></>
-              // )
-            }
-            renderSectionFooter={({
-              section: { collapse, data, height, title, type, key }
-            }) => {
+              </TouchableOpacity>
+            )}
+            renderSectionFooter={({ section: { data, height } }) => {
               return (
                 <Animated.FlatList
-                  style={{ height }}
+                  keyExtractor={(item, index) => index.toString()}
+                  initialNumToRender={20}
+                  style={{
+                    height,
+                    overflow: 'hidden',
+                    paddingVertical: 3,
+                    paddingHorizontal: 12
+                  }}
                   data={data}
-                  renderItem={({ index, item, separators }) => {
+                  renderItem={({
+                    item: { profile, uri, first_char, room_title },
+                    item
+                  }) => {
                     return (
                       <TouchableOpacity
                         style={{
-                          height: 54,
-                          overflow: 'hidden'
+                          height: 50,
+                          justifyContent: 'center',
+                          flexDirection: 'row',
+                          alignItems: 'center'
+                        }}
+                        onPress={() => {
+                          onClickStartButton(item);
                         }}
                       >
-                        <View>
-                          <Text>{item.room_title}</Text>
+                        <View
+                          style={{
+                            backgroundColor: '#c1c1c1',
+                            width: 40,
+                            height: 40,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            borderRadius: 25,
+                            marginVertical: 5,
+                            marginRight: 15
+                          }}
+                        >
+                          {profile ? (
+                            <Image
+                              source={{ uri: uri }}
+                              resizeMode={'cover'}
+                              style={{
+                                width: '100%',
+                                height: '100%',
+                                borderRadius: 25
+                              }}
+                            />
+                          ) : (
+                            <Text
+                              style={{
+                                fontSize: 15,
+                                fontFamily: 'DOUZONEText50'
+                              }}
+                            >
+                              {first_char}
+                            </Text>
+                          )}
+                        </View>
+                        <View style={{ flex: 1 }}>
+                          <Text>{room_title}</Text>
+                        </View>
+                        <View
+                          style={{
+                            width: 60,
+                            height: 30,
+                            borderRadius: 7,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            borderWidth: 1,
+                            borderColor: '#c1c1c1'
+                          }}
+                        >
+                          <Text
+                            style={{
+                              color: '#717171',
+                              fontSize: 12,
+                              fontFamily: 'DOUZONEText30'
+                            }}
+                          >
+                            {t('create_room_start')}
+                          </Text>
                         </View>
                       </TouchableOpacity>
                     );
@@ -184,7 +222,7 @@ function CreateScreenPresenter(props: createProps) {
                 />
               );
             }}
-            renderItem={() => <></>}
+            renderItem={() => <Fragment />}
           />
         ) : (
           <Placeholder
@@ -230,8 +268,6 @@ const styles = StyleSheet.create({
     paddingBottom: 3,
     fontSize: 11,
     lineHeight: 14,
-    // height: 14,
-    // fontWeight: 'bold',
     color: 'rgb(140, 140, 140)',
     fontFamily: 'DOUZONEText30'
   }
