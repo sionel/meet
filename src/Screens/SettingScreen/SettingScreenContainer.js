@@ -127,7 +127,6 @@ class SettingScreenContainer extends React.Component {
         await MeetApi.getMeetRoomTokenEmail(params.roomId, params.token, name)
       ).resultData;
     } else if (item?.params?.accesstype === 'joincode') {
-
       roomToken = (
         await MeetApi.getMeetRoomTokenJoincode(
           params.roomId,
@@ -138,15 +137,8 @@ class SettingScreenContainer extends React.Component {
       ).resultData;
     } else {
       // 토큰받고
-      roomToken = (
-        await MeetApi.getMeetRoomToken(
-          auth.AUTH_A_TOKEN,
-          auth.AUTH_R_TOKEN,
-          auth.HASH_KEY,
-          auth.last_access_company_no,
-          item.videoRoomId
-        )
-      ).resultData;
+      roomToken = (await MeetApi.getMeetRoomToken(auth, item.videoRoomId))
+        .resultData;
     }
     if (roomToken === '접근금지') {
       // wehago V 때문에 절차가 하나 늘어남

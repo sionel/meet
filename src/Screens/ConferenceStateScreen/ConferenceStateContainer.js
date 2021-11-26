@@ -31,8 +31,9 @@ class ConferenceStateContainer extends React.Component {
     // 딥링크 웹 접근
     // 딥링크 이메일 접근
     // 참여코드 접근
-    const { params, auth, videoId, isLogin } = this.props;
+    const { params, auth, videoId, isLogin, navigation } = this.props;
     const { roomId, token, accesstype } = params;
+    const { id } = navigation.state.params;
     // let roomId;
     // let iscret = true; // 인증 비인증 묻는 것
     const iscret = isLogin;
@@ -42,8 +43,8 @@ class ConferenceStateContainer extends React.Component {
     //   roomId = params.roomId;
     // }
     let { conferenceState } = this.state;
-    this.roomId = videoId ? videoId : roomId;
-
+    this.roomId = videoId || roomId || id;
+    debugger;
     // let { auth } = this.props;
     // const access = await MeetApi.getMeetRoom(
     //   auth.AUTH_A_TOKEN,
@@ -55,11 +56,11 @@ class ConferenceStateContainer extends React.Component {
 
     //email 접속종료후 roomId가 undefined여서 오류생겨서 let으로 변수 access선언
     let access;
-    if(this.roomId !== undefined) {
+    if (this.roomId !== undefined) {
       access = await MeetApi.getMeetRoomNoCert(this.roomId);
       this.roomName = access?.resultData?.name;
     }
-    
+
     if (!access) {
       // 종료된 방 또는 문제가 있을때
       conferenceState = 'deleted';
@@ -110,15 +111,8 @@ class ConferenceStateContainer extends React.Component {
         access.resultData;
       let accessUser = [];
       if (Object.keys(auth).length > 0) {
-        accessUser = (
-          await MeetApi.getAccessUsers(
-            auth.AUTH_A_TOKEN,
-            auth.AUTH_R_TOKEN,
-            auth.HASH_KEY,
-            auth.last_access_company_no,
-            this.roomId
-          )
-        ).resultData;
+        accessUser = (await MeetApi.getAccessUsers(auth, this.roomId))
+          .resultData;
       }
       this.setState({
         iscret,

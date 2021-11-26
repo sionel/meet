@@ -72,7 +72,20 @@ const ListItemComp = props => {
       displayUpdated = props.updated;
       break;
   }
-
+/*  
+title
+active
+disable
+updated
+onClick
+iconSize
+updated
+underline
+customStyle
+customLottie
+descriptionType
+room_profile_url
+*/
   // render
   return (
     <TouchableOpacity
@@ -114,6 +127,7 @@ const ListItemComp = props => {
           )}
         </View>
       </View>
+
       <View style={{ ...styles.textWrapper, paddingRight: '13%' }}>
         <Text style={{ ...styles.roomName }}>{props.title}</Text>
         {props.customLottie && (
@@ -143,6 +157,7 @@ const ListItemComp = props => {
           </View>
         )}
       </View>
+      
     </TouchableOpacity>
   );
 };

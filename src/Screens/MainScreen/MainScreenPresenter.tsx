@@ -7,14 +7,14 @@ import Deeplink2Navigation from '../../Navigations/Deeplink2Navigation';
 import LoginNavigation from '../../Navigations/LoginNavigation';
 import CompanySelect from '../../components/CompanySelect';
 import AppIntroSlide from '../../components/AppIntroSlide';
-import { View } from 'react-native';
+import { StatusBar, View } from 'react-native';
 
 const MainScreenPresenter = (props: any) => {
   
   const t = getT();
   // Orientation.unlockAllOrientations();
-  const { handleChangeMainState, destination } = props;
-  const screenProps = {handleChangeMainState, t};
+  const { destination } = props;
+  const screenProps = {t};
   switch (destination) {
     case 'Login':
       return <LoginNavigation screenProps={screenProps} />;
@@ -22,6 +22,7 @@ const MainScreenPresenter = (props: any) => {
     case 'List':
       return (
         <AppIntroSlide>
+          <StatusBar />
           <RootNavigation screenProps={screenProps} />
         </AppIntroSlide>
       );
