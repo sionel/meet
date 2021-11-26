@@ -1,3 +1,4 @@
+import { AnyAction } from 'redux';
 import { UserApi } from '../../services';
 
 const SET = 'deployed.SET';
@@ -13,8 +14,10 @@ const initialState: state = {
   deployedServices: ['wehago']
 };
 
-const reducer = (state = initialState, action) => {
-  switch (action.type) {
+const reducer: (state: state, action: AnyAction) => state = (
+  state = initialState,
+  action
+) => {  switch (action.type) {
     case SET:
       return {
         deployedServices: [...action.payload]
@@ -30,7 +33,7 @@ const reducer = (state = initialState, action) => {
 
 //#endregion Reducer
 
-const setDeployedServices = deployedServices => {
+const setDeployedServices = (deployedServices:any[]) => {
   return {
     type: SET,
     payload: deployedServices

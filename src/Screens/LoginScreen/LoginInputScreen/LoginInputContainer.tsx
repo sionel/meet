@@ -147,7 +147,7 @@ const LoginInputContainer = () => {
   const _handleHorizon = (orientation: OrientationType) => {
     if (orientation === 'LANDSCAPE-LEFT' || orientation === 'LANDSCAPE-RIGHT') {
       setIsHorizon(true);
-      Orientation.unlockAllOrientations();
+      // Orientation.unlockAllOrientations();
     } else if (
       orientation === 'PORTRAIT-UPSIDEDOWN' ||
       orientation === 'PORTRAIT'

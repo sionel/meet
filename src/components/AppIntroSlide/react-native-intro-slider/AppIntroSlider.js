@@ -50,12 +50,6 @@ export default class AppIntroSlider extends React.Component {
     activeIndex: 0
   };
 
-  componentDidMount() {
-    !isTablet && Orientation.lockToPortrait();
-  }
-  componentWillUnmount() {
-    Orientation.unlockAllOrientations();
-  }
   goToSlide = pageNum => {
     this.setState({ activeIndex: pageNum });
     this.flatList.scrollToOffset({ offset: pageNum * this.state.width });

@@ -275,8 +275,7 @@ const SplashScreenContainer = (props: any) => {
     */
     if (!url) return;
     let result: any = querystringParser(url);
-    console.log('RESULT : ', result);
-    console.log('AUTH : ', auth);
+    debugger
 
     // if(result.type === 'conference') {
     if (result.video_id) {
@@ -353,7 +352,7 @@ const SplashScreenContainer = (props: any) => {
     } else if (result.login_info === 'email') {
       //토근정보가 없을때
       let decoded = jwt_decode(result.token);
-
+      debugger
       /*
       email: "sadb0101@naver.com"
       exp: 1919234662

@@ -8,6 +8,7 @@ const SET_DESTINATION = 'root.SET_DESTINATION';
 const SET_PARAMS = 'root.SET_PARAMS';
 const SET_URL = 'root.SET_URL';
 const SET_VIDEO_ID = 'root.SET_VIDEO_ID';
+const SET_NETWORK = 'root.SET_NETWORK';
 
 export interface state {
   destination: string | null;
@@ -15,17 +16,19 @@ export interface state {
   loaded: boolean | null;
   url: string | undefined;
   videoId: '';
+  network: boolean;
 }
 
-export const rootinitialState:state = {
+export const rootinitialState: state = {
   destination: '',
   params: {},
   loaded: false,
   url: undefined,
   videoId: '',
+  network: true
 };
 
-export default function reducer(state:state = rootinitialState, action: any) {
+export default function reducer(state: state = rootinitialState, action: any) {
   switch (action.type) {
     case SET_LOADED:
       return _applySetLoaded(state, action);
@@ -37,10 +40,25 @@ export default function reducer(state:state = rootinitialState, action: any) {
       return _applySetUrl(state, action);
     case SET_VIDEO_ID:
       return _applySetVideoId(state, action);
+    case SET_NETWORK:
+      return _applySetNetwork(state, action);
     default:
       return state;
   }
 }
+
+const setNetwork = (network: boolean) => ({
+  type: SET_NETWORK,
+  network
+});
+
+const _applySetNetwork = (state: any, action: any) => {
+  const { network } = action;
+  return {
+    ...state,
+    network
+  };
+};
 
 const setLoaded = (loaded: boolean) => ({
   type: SET_LOADED,
@@ -54,10 +72,18 @@ const _applySetLoaded = (state: any, action: any) => {
     loaded
   };
 };
-const setVideoId = (videoId: string) => ({
-  type: SET_VIDEO_ID,
-  videoId
-});
+const setVideoId = (videoId: string): ThunkAction<void, RootState, unknown> => {
+  return dispatch => {
+    dispatch({
+      type: SET_VIDEO_ID,
+      videoId
+    });
+    dispatch({
+      type: 'conference.SET_ROOM_ID',
+      id: videoId
+    });
+  };
+};
 
 const _applySetVideoId = (state: any, action: any) => {
   const { videoId } = action;
@@ -67,16 +93,17 @@ const _applySetVideoId = (state: any, action: any) => {
   };
 };
 
-const setDestination = (destination: string) : ThunkAction<void, RootState, unknown> => {
+const setDestination = (
+  destination: string
+): ThunkAction<void, RootState, unknown> => {
   return (dispatch, getState) => {
-    const {videoId} = getState().root;
-    
+    const { videoId } = getState().root;
+
     dispatch({
       type: SET_DESTINATION,
       destination: videoId ? 'Setting' : destination
     });
-  }
-  
+  };
 };
 
 const _applySetDestination = (state: any, action: any) => {
@@ -89,7 +116,7 @@ const _applySetDestination = (state: any, action: any) => {
 
 const setParams = (params: {}) => ({
   type: SET_PARAMS,
-  params,
+  params
 });
 
 const _applySetParams = (state: any, action: any) => {
@@ -100,7 +127,7 @@ const _applySetParams = (state: any, action: any) => {
   };
 };
 
-const setUrl = (url: string|undefined) => ({
+const setUrl = (url: string | undefined) => ({
   type: SET_URL,
   url
 });
@@ -118,5 +145,6 @@ export const actionCreators = {
   setDestination,
   setParams,
   setUrl,
-  setVideoId
+  setVideoId,
+  setNetwork
 };

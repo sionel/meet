@@ -1,19 +1,13 @@
 import React from 'react';
-import {
-  Platform,
-  Image,
-  StyleSheet,
-  View,
-  ImageBackground
-} from 'react-native';
+import { Platform, Image, StyleSheet, View, StatusBar } from 'react-native';
 import { Text } from './StyledText';
 import { WEHAGO_TYPE } from '../../config';
 import { getT } from '../utils/translateManager';
 import Lottie from 'lottie-react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
-const patternTop = require('../../assets/new/patterns/bg_pattern_up.png');
-const patternBot = require('../../assets/new/patterns/bg_pattern_down.png');
+const patternTop = require('../../assets/new/patterns/splash_pattern_top.png');
+const patternBot = require('../../assets/new/patterns/splash_pattern_bottom.png');
 
 export default function Splash() {
   const t = getT();
@@ -21,9 +15,11 @@ export default function Splash() {
     <LinearGradient
       end={{ x: 0, y: 0 }}
       start={{ x: 0, y: 1 }}
-      colors={['#FCFDFF', '#F0F8FF']}
+      colors={['#FCFDFF', '#dbecfe']}
       style={[styles.container, styles.horizonContainer]}
     >
+      <StatusBar hidden={true} />
+
       <Lottie
         source={require('../../assets/new/lottie/splash/splash.json')}
         imageAssetsFolder={'images'}
@@ -33,7 +29,7 @@ export default function Splash() {
       <View style={styles.topImgView}>
         <Image source={patternTop} style={styles.topImg} />
       </View>
-      <View style={[styles.bottomImgView]}>
+      <View style={styles.bottomImgView}>
         <Image source={patternBot} style={styles.bottomImg} />
       </View>
     </LinearGradient>
@@ -92,7 +88,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     height: '100%',
-    alignItems: 'center'
+    alignItems: 'center',
   },
 
   horizonContainer: {
@@ -114,13 +110,13 @@ const styles = StyleSheet.create({
   bottomImgView: {
     position: 'absolute',
     left: 0,
-    bottom: '10%',
+    bottom: 0,
     zIndex: 2
   },
   bottomImg: {
     resizeMode: 'contain',
-    width: 260,
-    height: 82
+    width: 375,
+    height: 300
   }
   // topContainer: {
   //   flex: 1,

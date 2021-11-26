@@ -38,8 +38,11 @@ const LoginScreenPresenter = (props: any) => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
-      <StatusBar />
-      <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <StatusBar  barStyle={'dark-content'}/>
+      <KeyboardAwareScrollView
+        contentContainerStyle={{ flexGrow: 1 }}
+        onKeyboardDidHide={onFocusOutInput}
+      >
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           contentContainerStyle={{
@@ -88,9 +91,9 @@ const LoginScreenPresenter = (props: any) => {
                 <TextInput
                   style={[
                     styles.inputNumber,
-                    focusingNum === 0 && styles.focusAccent,
                     code.length >= 1 && styles.inputAccent,
-                    logging && styles.inputLogging
+                    logging && styles.inputLogging,
+                    focusingNum === 0 && styles.focusAccent
                   ]}
                   value={code ? code.slice(0, 1) : shadowCode.slice(0, 1)}
                   maxLength={1}
@@ -100,9 +103,9 @@ const LoginScreenPresenter = (props: any) => {
                 <TextInput
                   style={[
                     styles.inputNumber,
-                    focusingNum === 1 && styles.focusAccent,
                     code.length >= 2 && styles.inputAccent,
-                    logging && styles.inputLogging
+                    logging && styles.inputLogging,
+                    focusingNum === 1 && styles.focusAccent
                   ]}
                   value={code ? code.slice(1, 2) : shadowCode.slice(1, 2)}
                   maxLength={1}
@@ -112,9 +115,9 @@ const LoginScreenPresenter = (props: any) => {
                 <TextInput
                   style={[
                     styles.inputNumber,
-                    focusingNum === 2 && styles.focusAccent,
                     code.length >= 3 && styles.inputAccent,
-                    logging && styles.inputLogging
+                    logging && styles.inputLogging,
+                    focusingNum === 2 && styles.focusAccent
                   ]}
                   value={code ? code.slice(2, 3) : shadowCode.slice(2, 3)}
                   maxLength={1}
@@ -124,9 +127,9 @@ const LoginScreenPresenter = (props: any) => {
                 <TextInput
                   style={[
                     styles.inputNumber,
-                    focusingNum === 3 && styles.focusAccent,
                     code.length >= 4 && styles.inputAccent,
-                    logging && styles.inputLogging
+                    logging && styles.inputLogging,
+                    focusingNum === 3 && styles.focusAccent
                   ]}
                   value={code ? code.slice(3, 4) : shadowCode.slice(3, 4)}
                   maxLength={1}
@@ -136,9 +139,9 @@ const LoginScreenPresenter = (props: any) => {
                 <TextInput
                   style={[
                     styles.inputNumber,
-                    focusingNum === 4 && styles.focusAccent,
                     code.length >= 5 && styles.inputAccent,
-                    logging && styles.inputLogging
+                    logging && styles.inputLogging,
+                    focusingNum === 4 && styles.focusAccent
                   ]}
                   value={code ? code.slice(4, 5) : shadowCode.slice(4, 5)}
                   maxLength={1}
@@ -148,9 +151,9 @@ const LoginScreenPresenter = (props: any) => {
                 <TextInput
                   style={[
                     styles.inputNumber,
-                    focusingNum === 5 && styles.focusAccent,
                     code.length >= 6 && styles.inputAccent,
-                    logging && styles.inputLogging
+                    logging && styles.inputLogging,
+                    focusingNum === 5 && styles.focusAccent
                   ]}
                   value={code ? code.slice(5, 6) : shadowCode.slice(5, 6)}
                   maxLength={1}
@@ -184,9 +187,10 @@ const LoginScreenPresenter = (props: any) => {
                 >
                   <TouchableHighlight
                     activeOpacity={0.7}
-                    underlayColor={'transparent'}
+                    // underlayColor={'transparent'}
                     style={styles.loginBtnTouch}
                     onPress={LoginForWehago}
+                    underlayColor={'rgba(0,0,0,0.2)'}
                   >
                     <Text style={styles.loginBtnText}>
                       {t('renewal.login_wehagologin')}
@@ -232,7 +236,9 @@ const styles = StyleSheet.create({
   codeContainer: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    // backgroundColor:'red',
+    paddingHorizontal:10
   },
   bottomContainer: {
     flex: 1,
@@ -267,7 +273,7 @@ const styles = StyleSheet.create({
   //코드입력
   inputNumber: {
     backgroundColor: '#fff',
-    width: 44,
+    width: 34,
     height: 54,
     fontSize: 30,
     textAlign: 'center',
