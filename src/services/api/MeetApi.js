@@ -4,7 +4,7 @@
  * 참조 : http://wiki.duzon.com:8080/display/sky/3.+API
  */
 
-import {
+ import {
   isDev,
   meetURL,
   securityRequest,
@@ -57,7 +57,7 @@ export default {
       if (response.status !== 201) {
         throw response.resultCode;
       }
-      return response.json();
+      return { result } = response.json();
     } catch (err) {
       console.warn('1.createMeetRoom : ', err);
       return false;

@@ -113,7 +113,6 @@ class ConferenceStateContainer extends React.Component {
       if (Object.keys(auth).length > 0) {
         accessUser = (await MeetApi.getAccessUsers(auth, this.roomId))
           .resultData;
-      }
       this.setState({
         iscret,
         conferenceState,

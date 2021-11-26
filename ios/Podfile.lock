@@ -299,11 +299,15 @@ PODS:
     - React
   - react-native-calendar-events (1.6.4):
     - React
+  - react-native-date-picker (4.1.1):
+    - React-Core
   - react-native-keep-awake (4.0.0):
     - React
   - react-native-netinfo (4.1.5):
     - React
   - react-native-orientation-locker (1.3.1):
+    - React-Core
+  - react-native-safe-area-context (3.3.2):
     - React-Core
   - react-native-slider (3.0.3):
     - React
@@ -439,9 +443,11 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-background-timer (from `../node_modules/react-native-background-timer`)
   - react-native-calendar-events (from `../node_modules/react-native-calendar-events`)
+  - react-native-date-picker (from `../node_modules/react-native-date-picker`)
   - react-native-keep-awake (from `../node_modules/react-native-keep-awake`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-orientation-locker (from `../node_modules/react-native-orientation-locker/react-native-orientation-locker.podspec`)
+  - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
   - react-native-video (from `../node_modules/react-native-video/react-native-video.podspec`)
@@ -540,12 +546,16 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-background-timer"
   react-native-calendar-events:
     :path: "../node_modules/react-native-calendar-events"
+  react-native-date-picker:
+    :path: "../node_modules/react-native-date-picker"
   react-native-keep-awake:
     :path: "../node_modules/react-native-keep-awake"
   react-native-netinfo:
     :path: "../node_modules/@react-native-community/netinfo"
   react-native-orientation-locker:
     :path: "../node_modules/react-native-orientation-locker/react-native-orientation-locker.podspec"
+  react-native-safe-area-context:
+    :path: "../node_modules/react-native-safe-area-context"
   react-native-slider:
     :path: "../node_modules/@react-native-community/slider"
   react-native-splash-screen:
@@ -649,9 +659,11 @@ SPEC CHECKSUMS:
   React-jsinspector: 92ceee6c66dc19886289b52436ade7e020b89602
   react-native-background-timer: e0384ea2fa5a98f67f84f9c4dc274260ddd674ed
   react-native-calendar-events: ee9573e355711ac679e071be70789542431f4ce3
+  react-native-date-picker: 414fe8f73392bae030dc4efec39d743b5c5de283
   react-native-keep-awake: eba3137546b10003361b37c761f6c429b59814ae
   react-native-netinfo: 8d8db463bcc5db66a8ac5c48a7d86beb3b92f61a
   react-native-orientation-locker: 998c0744e26624407dac068c04c605b4af7304a2
+  react-native-safe-area-context: 5cf05f49df9d17261e40e518481f2e334c6cd4b5
   react-native-slider: b733e17fdd31186707146debf1f04b5d94aa1a93
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
   react-native-video: 1574074179ecaf6a9dd067116c8f31bf9fec15c8
@@ -685,6 +697,6 @@ SPEC CHECKSUMS:
   SDWebImageWebPCoder: 947093edd1349d820c40afbd9f42acb6cdecd987
   Yoga: 96b469c5e81ff51b917b92e8c3390642d4ded30c
 
-PODFILE CHECKSUM: a6b44f92a31ceaf0e7b283b498391ddc286e4cdc
+PODFILE CHECKSUM: 5f1f0072b295c16bcde445a94581957ca1ec7ef4
 
 COCOAPODS: 1.11.2

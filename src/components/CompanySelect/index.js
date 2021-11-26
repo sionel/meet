@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { actionCreators as UserActions } from '../../redux/modules/user';
 import { actionCreators as WetalkActions } from '../../redux/modules/wetalk';
 import { actionCreators as ConferenceActions } from '../../redux/modules/conference';
+import { actionCreators as RecentActions } from '../../redux/modules/recentsInvited';
 
 // map state to props
 const mapStateToProps = state => ({
@@ -15,10 +16,13 @@ const mapDispatchToProps = dispatch => {
   return {
     changeCompanyRequest: (auth, company) =>
       dispatch(UserActions.changeCompanyRequest(auth, company)),
-    onLogout: () => dispatch(UserActions.logout()),
+    onLogout: () => {
+      dispatch(UserActions.logout());
+      dispatch(RecentActions.resetRecents());
+    },
     onSetInitialList: () => {
-      dispatch(WetalkActions.setInitialList())
-      dispatch(ConferenceActions.setInitialList())
+      dispatch(WetalkActions.setInitialList());
+      dispatch(ConferenceActions.setInitialList());
     }
   };
 };

@@ -20,6 +20,7 @@ import { actionCreators as WedriveAcions } from '../../redux/modules/wedrive';
 import { actionCreators as AlertAcions } from '../../redux/modules/alert';
 import { actionCreators as IndicatorAcions } from '../../redux/modules/indicator';
 import { actionCreators as RootActions } from '../../redux/modules/root';
+import { actionCreators as RecentsActions } from '../../redux/modules/recentsInvited';
 
 // const iswehagov = WEHAGO_ENV === 'WEHAGOV';
 
@@ -67,7 +68,10 @@ const SplashScreenContainer = (props: any) => {
   const onLogin = (auth: any, from: any, autoLogin: boolean) =>
     dispatch(UserActions.login(auth, from, autoLogin));
   const onAgreement = () => dispatch(UserActions.agreement());
-  const onLogout = () => dispatch(UserActions.logout());
+  const onLogout = () => {
+    dispatch(UserActions.logout());
+    dispatch(RecentsActions.resetRecents());
+  };
   const setPermission = (permission: any) =>
     dispatch(UserActions.setPermission(permission));
   const setSharingMode = () => dispatch(DocumentShareActions.setSharingMode());

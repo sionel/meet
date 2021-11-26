@@ -90,6 +90,8 @@ target 'JitsiMeetSDK' do
     pod 'jail-monkey', :path => '../node_modules/jail-monkey'
     pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
     pod 'ReactNativeIncallManager', :path => '../node_modules/react-native-incall-manager'
+    pod 'react-native-date-picker', :path => '../node_modules/react-native-date-picker'
+    pod 'react-native-safe-area-context', :path => '../node_modules/react-native-safe-area-context'
 
   # Native pod dependencies
   #
