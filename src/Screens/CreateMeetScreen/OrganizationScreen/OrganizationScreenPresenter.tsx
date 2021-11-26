@@ -97,7 +97,7 @@ const OrganizationScreenPresenter = (props: any) => {
             >
               <TouchableHighlight
                 disabled={item.user_no === auth.user_no}
-                style={{ flexDirection: 'row'}}
+                style={{ flexDirection: 'row' }}
                 underlayColor={'#e9f5ff'}
                 onPress={() => {
                   if (type === 'group') {

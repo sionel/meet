@@ -223,6 +223,7 @@
       "servernoti_message_power_update": "더 새로워진 WEHAGO Meet을 만나보세요.\n\n신규 기능은 업데이트 이후 사용 가능합니다.",
       "alert_title_notion": "알림",
       "alert_title_error": "에러",
+      "alert_title_fail": "실패",
       "alert_title_login_fail": "로그인 실패",
       "alert_button_confirm": "확인",
       "alert_button_update": "업데이트",
