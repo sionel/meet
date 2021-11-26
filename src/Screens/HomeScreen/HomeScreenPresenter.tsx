@@ -58,6 +58,7 @@ const HomeScreenPresenter = (props: any) => {
     onClickSetting,
     companyName,
     userImg,
+    createTalkConference,
     createConference,
     enterInviteCode,
     bottomPopup,
@@ -103,7 +104,7 @@ const HomeScreenPresenter = (props: any) => {
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               style={styles.topButtons}
-              onPress={createConference}
+              onPress={createTalkConference}
             >
               <Image
                 source={icVideo}

@@ -603,6 +603,15 @@ export default function HomeScreenContainer(props: any) {
   };
 
   const createConference = () => {
+    props.navigation.navigate('CreateMeetRoom', {
+      // onGetWetalkList: {
+      //   roomId: selectedRoomId,
+      //   externalData: null,
+      //   from: 'meet'
+      // }
+    });
+  };
+  const createTalkConference = () => {
     props.navigation.navigate('Create', {
       // onGetWetalkList: {
       //   roomId: selectedRoomId,
@@ -634,9 +643,10 @@ export default function HomeScreenContainer(props: any) {
         companyName,
         bottomPopup,
         participantsList,
-        createConference,
+        createTalkConference,
         test,
-        setTest: testFunc
+        setTest: testFunc,
+        createConference
       }}
     />
   );

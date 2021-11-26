@@ -60,7 +60,7 @@ export default function AlertScreenPresenter(props: any) {
 
               {actions.length > 0 && (
                 <View style={styles.actions}>
-                  {actions.map((item, index) => {
+                  {actions.map((item: any, index: number) => {
                     if (!item.name || !item.action) return;
                     return (
                       <TouchableOpacity

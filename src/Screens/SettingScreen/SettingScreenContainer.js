@@ -46,7 +46,7 @@ class SettingScreenContainer extends React.Component {
   }
 
   componentWillUnmount() {
-    Orientation.unlockAllOrientations();
+    // Orientation.unlockAllOrientations();
     Orientation.removeOrientationListener(this._handleOrientation);
   }
 

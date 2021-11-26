@@ -17,6 +17,7 @@ import { actionCreators as AlertActions } from '../redux/modules/alert';
 import { actionCreators as UserActions } from '../redux/modules/user';
 import { actionCreators as RootActions } from '../redux/modules/root';
 import { actionCreators as DeployedActions } from '../redux/modules/deployed';
+import deviceInfoModule from 'react-native-device-info';
 
 export default function CustomProvider(props: any) {
   const { children } = props;
@@ -75,7 +76,6 @@ export default function CustomProvider(props: any) {
     _checkDeployedServices();
   }, [auth]);
   const _checkDeployedServices = () => {
-
     const isDeployedServices = ['wehago'];
     Promise.all([
       ServiceCheckApi.anotherServiceCheck(
@@ -109,22 +109,25 @@ export default function CustomProvider(props: any) {
     ]).then(res => {
       _setDeployedServices(isDeployedServices);
     });
-    
   };
 
   const _setOrientation = (orientation: OrientationType) => {
-    if (orientation === 'LANDSCAPE-LEFT') {
-      Orientation.lockToLandscapeLeft();
-    } else if (orientation === 'LANDSCAPE-RIGHT') {
-      Orientation.lockToLandscapeRight();
-    } else if (
-      orientation === 'PORTRAIT' ||
-      orientation === 'PORTRAIT-UPSIDEDOWN'
-    ) {
+    if (!deviceInfoModule.isTablet()) {
       Orientation.lockToPortrait();
-    }
+    } else {
+      if (orientation === 'LANDSCAPE-LEFT') {
+        Orientation.lockToLandscapeLeft();
+      } else if (orientation === 'LANDSCAPE-RIGHT') {
+        Orientation.lockToLandscapeRight();
+      } else if (
+        orientation === 'PORTRAIT' ||
+        orientation === 'PORTRAIT-UPSIDEDOWN'
+      ) {
+        Orientation.lockToPortrait();
+      }
 
-    dispatch(orientationAction.setOrientation(orientation));
+      dispatch(orientationAction.setOrientation(orientation));
+    }
   };
   const _loginCheckRequest = async () => {
     const { AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY } = auth;
