@@ -21,7 +21,7 @@ const ic_cancel = require('../../../../assets/new/icons/ic_cancel_w.png');
 
 const ic_arrow_up = require('../../../../assets/new/icons/ic_arrow_up.png');
 const ic_arrow_down = require('../../../../assets/new/icons/ic_arrow_down.png');
-const ic_person = require('../../../../assets/new/icons/ic_person.png');
+const ic_user = require('../../../../assets/new/icons/ic_user.png');
 
 const OrganizationScreenPresenter = (props: any) => {
   const {
@@ -146,8 +146,8 @@ const OrganizationScreenPresenter = (props: any) => {
                               ? ic_arrow_down
                               : ic_arrow_up
                             : isParentSelected || isSelected
-                            ? ic_person
-                            : ic_person
+                            ? ic_user
+                            : ic_user
                         }
                         style={{ width: 24, height: 24 }}
                       />
