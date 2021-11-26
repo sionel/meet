@@ -64,6 +64,7 @@ export default function CreateMeetScreenContainer(props: any) {
   const [contacts, setContacts] = useState<{ title: string; data: Object }[]>(
     []
   );
+  const [dateTimeSeleted, setDateTimeSeleted] = useState(false);
 
   // const [invited, setInvited] = useState<any[]>([]);
   // const [inviteText, setInviteText] = useState('');
@@ -280,6 +281,7 @@ export default function CreateMeetScreenContainer(props: any) {
     else {
       setDatePicker(type);
       setTimeType(type);
+      setDateTimeSeleted(true);
     }
   };
 
@@ -289,6 +291,7 @@ export default function CreateMeetScreenContainer(props: any) {
     else {
       setTimePicker(type);
       setTimeType(type);
+      setDateTimeSeleted(true);
     }
   };
 
@@ -397,6 +400,7 @@ export default function CreateMeetScreenContainer(props: any) {
     }
 
     setTimePicker('none');
+    setDateTimeSeleted(false);
     setTimeChangeDetect(false);
   };
 
@@ -493,8 +497,8 @@ export default function CreateMeetScreenContainer(props: any) {
   };
 
   const onFocusOut = () => {
-    if (sendMsgRef.current.isFocused()) sendMsgRef.current.blur();
-    else if (titleRef.current.isFocused()) titleRef.current.blur();
+    if (sendMsgRef.current?.isFocused()) sendMsgRef.current.blur();
+    else if (titleRef.current?.isFocused()) titleRef.current.blur();
   };
 
   const exitDateTime = () => {
@@ -504,6 +508,8 @@ export default function CreateMeetScreenContainer(props: any) {
     if (timePicker === 'start' || 'end') {
       setTimePicker('none');
     }
+
+    setDateTimeSeleted(false);
   };
 
   const clickChangeRole = (item: any) => {
@@ -590,7 +596,7 @@ export default function CreateMeetScreenContainer(props: any) {
           isOrgDataLoaded={isOrgDataLoaded}
           contacts={contacts}
           isTablet={isTablet}
-          />
+        />
       ) : (
         <CreateMeetScreenPresenter
           roomName={roomName}
@@ -637,6 +643,7 @@ export default function CreateMeetScreenContainer(props: any) {
           selectedEmployee={selectedEmployee}
           isHorizon={isHorizon}
           isTablet={isTablet}
+          dateTimeSeleted={dateTimeSeleted}
         />
       )}
     </View>
