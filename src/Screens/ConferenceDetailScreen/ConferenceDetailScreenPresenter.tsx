@@ -29,7 +29,7 @@ const icCheck = require('../../../assets/new/icons/ic_check.png');
 const icMasterCircle = require('../../../assets/new/icons/ic_master_circle.png');
 const icAttdCircle = require('../../../assets/new/icons/ic_attd_circle.png');
 
-const CreateMeetScreenPresenter = (props: any) => {
+const ConferenceDetailScreenPresenter = (props: any) => {
   const {
     roomName,
     isPublic,
@@ -74,7 +74,8 @@ const CreateMeetScreenPresenter = (props: any) => {
     selectedEmployee,
     isHorizon,
     isTablet,
-    dateTimeSeleted
+    dateTimeSeleted,
+    isNormal
   } = props;
   const t = getT();
   const DatePickerComponent = (
@@ -108,20 +109,21 @@ const CreateMeetScreenPresenter = (props: any) => {
         <Fragment>
           <View style={[styles.topTitle]}>
             <TouchableOpacity onPress={onHandleBack}>
-              <Text style={styles.ft14N}>{t('취소')}</Text>
+              <Text style={styles.ft14N}>{t('뒤로')}</Text>
             </TouchableOpacity>
-            <Text style={styles.TitleText}>{t('회의 생성하기')}</Text>
-            <TouchableOpacity disabled={textLess2} onPress={createConference}>
+            <Text style={styles.TitleText}>{t('회의상세보기')}</Text>
+            <TouchableOpacity disabled={isNormal} onPress={createConference}>
               <Text
-                style={[styles.confirmText, !textLess2 && { color: '#000' }]}
+                style={[styles.updateText, !textLess2 && { color: '#000' }, isNormal && {color : '#fff'}]}
               >
-                {t('생성')}
+                {t('수정')}
               </Text>
             </TouchableOpacity>
           </View>
 
           <TouchableOpacity
-            onPress={togglePublic}
+            // onPress={togglePublic}
+            activeOpacity={1}
             style={[styles.privateContainer]}
           >
             <LinearGradient
@@ -161,7 +163,7 @@ const CreateMeetScreenPresenter = (props: any) => {
             <View style={styles.middleContainer}>
               <View style={styles.directionColTitle}>
                 <Text style={styles.textHeader}>{t('회의명')}</Text>
-                <TextInput
+                {/* <TextInput
                   onChangeText={roomNameChange}
                   value={roomName}
                   maxLength={20}
@@ -171,8 +173,9 @@ const CreateMeetScreenPresenter = (props: any) => {
                     textLess2 && roomName && { borderColor: '#fc4c60' }
                   ]}
                   ref={titleRef}
-                />
-                <View
+                /> */}
+                <Text style={{fontSize:16, lineHeight:20, letterSpacing: -0.28}}>{roomName}</Text>
+                {/* <View
                   style={[
                     styles.countContainer,
                     textLess2 && roomName && { justifyContent: 'space-between' }
@@ -194,11 +197,11 @@ const CreateMeetScreenPresenter = (props: any) => {
                     <Text style={styles.ft12}>{roomNameCnt}</Text>
                     <Text style={styles.maxLength}>/20</Text>
                   </View>
-                </View>
+                </View> */}
               </View>
               <View style={styles.directionColMessage}>
                 <Text style={styles.textHeader}>{t('초대메세지')}</Text>
-                <TextInput
+                {/* <TextInput
                   onChangeText={sendMessageChange}
                   value={sendMessage}
                   maxLength={200}
@@ -209,11 +212,12 @@ const CreateMeetScreenPresenter = (props: any) => {
                     isHorizon && { paddingTop: '1%' }
                   ]}
                   ref={sendMsgRef}
-                />
-                <View style={styles.countContainer}>
+                /> */}
+                <Text>{sendMessage}</Text>
+                {/* <View style={styles.countContainer}>
                   <Text style={styles.ft12}>{sendMsgCnt}</Text>
                   <Text style={styles.maxLength}>/200</Text>
-                </View>
+                </View> */}
               </View>
             </View>
           </View>
@@ -228,21 +232,21 @@ const CreateMeetScreenPresenter = (props: any) => {
           <View
             style={[
               styles.reserveContainer,
-              switchReserve && { height: '15%' }
+              { height: '15%' }
             ]}
           >
-            <View style={styles.rowContainer}>
+            <View style={[styles.rowContainer, {justifyContent:'flex-start'}]}>
               <Text style={[styles.ft14B, { fontSize: 15 }]}>
                 {t('예약회의')}
               </Text>
-              <Switch
+              {/* <Switch
                 onValueChange={onSwitchReserveChange}
                 value={switchReserve}
                 trackColor={{ false: '', true: '#1c90fb' }}
-              />
+              /> */}
             </View>
-            {switchReserve && (
-              <Fragment>
+            {/* {switchReserve && (
+              <Fragment> */}
                 <View
                   style={{
                     flexDirection: 'row',
@@ -424,8 +428,8 @@ const CreateMeetScreenPresenter = (props: any) => {
                     >
                       {openDatePickerComponent('end')}
                     </View> */}
-              </Fragment>
-            )}
+              {/* </Fragment>
+            )} */}
           </View>
 
           <View
@@ -451,7 +455,7 @@ const CreateMeetScreenPresenter = (props: any) => {
             </TouchableOpacity>
           </View>
 
-          <View style={[styles.deleteAlram]}>
+          {/* <View style={[styles.deleteAlram]}>
             <View>
               <Text
                 style={[styles.ft12, { letterSpacing: -0.18, lineHeight: 18 }]}
@@ -471,174 +475,172 @@ const CreateMeetScreenPresenter = (props: any) => {
               value={switchDelAlram}
               trackColor={{ false: '', true: '#1c90fb' }}
             />
-          </View>
+          </View> */}
 
           <View style={{ flex: 1 }}>
-            {selectedEmployee.member[0].user_no !== undefined && (
-              <FlatList
-                showsVerticalScrollIndicator={false}
-                bounces={false}
-                contentContainerStyle={[
-                  {
-                    flexGrow: 1,
-                    paddingHorizontal: '5%'
-                  }
-                ]}
-                data={selectedEmployee.member}
-                keyExtractor={(item, index) => String(index)}
-                renderItem={({ item, index }: any) => {
-                  // let path: [] = [];
-                  // let user_path = '';
-                  // if (item.full_path) {
-                  //   path = item.full_path.split('>');
-                  //   for (let i = 1; i < path.length; i++) {
-                  //     if (i === path.length - 1) {
-                  //       user_path = user_path + path[i];
-                  //     } else {
-                  //       user_path = user_path + `${path[i]} | `;
-                  //     }
-                  //   }
-                  // } else user_path = '';
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              bounces={false}
+              contentContainerStyle={[
+                {
+                  flexGrow: 1,
+                  paddingHorizontal: '5%'
+                }
+              ]}
+              data={selectedEmployee.member}
+              keyExtractor={(item, index) => String(index)}
+              renderItem={({ item, index }: any) => {
+                // console.log(item);
 
-                  const isMaster = item.is_master;
-                  return (
-                    <View style={styles.participantList}>
+                // let path: [] = [];
+                // let user_path = '';
+                // if (item.full_path) {
+                //   path = item.full_path.split('>');
+                //   for (let i = 1; i < path.length; i++) {
+                //     if (i === path.length - 1) {
+                //       user_path = user_path + path[i];
+                //     } else {
+                //       user_path = user_path + `${path[i]} | `;
+                //     }
+                //   }
+                // } else user_path = '';
+
+                const isMaster = item.is_master;
+                return (
+                  <View style={styles.participantList}>
+                    <View
+                      style={[
+                        styles.profileView,
+                        isTablet && { width: 46, height: 46 }
+                      ]}
+                    >
                       <View
                         style={[
-                          styles.profileView,
-                          isTablet && { width: 46, height: 46 }
+                          styles.myView,
+                          item.user_no !== auth.user_no && {
+                            backgroundColor: '#1c90fb'
+                          }
                         ]}
                       >
-                        <View
-                          style={[
-                            styles.myView,
-                            item.user_no !== auth.user_no && {
-                              backgroundColor: '#1c90fb'
-                            }
-                          ]}
-                        >
-                          {item.user_no === auth.user_no ? (
-                            <Text style={styles.myText}>나</Text>
-                          ) : (
-                            <TouchableOpacity
-                              onPress={() => {
-                                clickDeleteUser(item);
-                              }}
-                            >
-                              <Image
-                                source={icCancel_W}
-                                style={styles.icCancelUser}
-                              />
-                            </TouchableOpacity>
-                          )}
-                        </View>
-                        <Image
-                          style={styles.profile}
-                          source={{
-                            uri: item.profile_url
-                              ? wehagoMainURL + item.profile_url
-                              : item.profile_image
-                              ? wehagoMainURL + item.profile_image
-                              : wehagoDummyImageURL
-                          }}
-                          resizeMode={'cover'}
-                        />
-                      </View>
-                      <View
-                        style={[styles.infoBox, isHorizon && { width: '70%' }]}
-                      >
-                        {!item.value && (
-                          <Text style={styles.name}>
-                            {item.user_name
-                              ? item.user_name
-                              : item.address_name
-                              ? item.address_name
-                              : ''}{' '}
-                            {item.rank_name
-                              ? item.rank_name
-                              : item.position_rank_name
-                              ? item.position_rank_name
-                              : ''}
-                          </Text>
-                        )}
-                        <Text
-                          numberOfLines={1}
-                          ellipsizeMode="tail"
-                          style={[styles.tree, item.value && { fontSize: 16 }]}
-                        >
-                          {item.full_path
-                            ? item.full_path
-                            : item.address_service_no
-                            ? item.emailinfolist[0].email_address
-                            : item.value}
-                        </Text>
-                      </View>
-                      <TouchableOpacity
-                        style={[
-                          styles.roleContainer,
-                          isMaster && { borderColor: '#01acc1' },
-                          !item.user_no && { borderColor: '#fff' },
-                          isTablet && { width: 140 }
-                        ]}
-                        onPress={() => {
-                          clickChangeRole(item);
-                        }}
-                        disabled={
-                          item.user_no === auth.user_no || !item.user_no
-                        }
-                      >
-                        {isMaster ? (
-                          <Fragment>
-                            <Text
-                              style={[
-                                styles.maseterText,
-                                isTablet && { fontSize: 14 }
-                              ]}
-                            >
-                              {t('마스터')}
-                            </Text>
-                            <Image
-                              style={[
-                                styles.icMaster,
-                                isTablet && { width: 30, height: 30 }
-                              ]}
-                              source={icMasterCircle}
-                              resizeMode={'contain'}
-                            />
-                          </Fragment>
-                        ) : item.user_no ? (
-                          <Fragment>
-                            <Image
-                              style={[
-                                styles.icMaster,
-                                isTablet && { width: 30, height: 30 }
-                              ]}
-                              source={icAttdCircle}
-                              resizeMode={'contain'}
-                            />
-
-                            <Text
-                              style={[
-                                styles.attendantText,
-                                isTablet && { fontSize: 14 }
-                              ]}
-                            >
-                              {t('참석자')}
-                            </Text>
-                          </Fragment>
+                        {item.user_no === auth.user_no ? (
+                          <Text style={styles.myText}>나</Text>
                         ) : (
-                          <Fragment>
-                            {/* <Text style={styles.extText}>
+                          <TouchableOpacity
+                            onPress={() => {
+                              clickDeleteUser(item);
+                            }}
+                          >
+                            <Image
+                              source={icCancel_W}
+                              style={styles.icCancelUser}
+                            />
+                          </TouchableOpacity>
+                        )}
+                      </View>
+                      <Image
+                        style={styles.profile}
+                        source={{
+                          uri: item.profile_url
+                            ? wehagoMainURL + item.profile_url
+                            : item.profile_image
+                            ? wehagoMainURL + item.profile_image
+                            : wehagoDummyImageURL
+                        }}
+                        resizeMode={'cover'}
+                      />
+                    </View>
+                    <View
+                      style={[styles.infoBox, isHorizon && { width: '70%' }]}
+                    >
+                      {!item.value && (
+                        <Text style={styles.name}>
+                          {item.user_name
+                            ? item.user_name
+                            : item.address_name
+                            ? item.address_name
+                            : ''}{' '}
+                          {item.rank_name
+                            ? item.rank_name
+                            : item.position_rank_name
+                            ? item.position_rank_name
+                            : ''}
+                        </Text>
+                      )}
+                      <Text
+                        numberOfLines={1}
+                        ellipsizeMode="tail"
+                        style={[styles.tree, item.value && { fontSize: 16 }]}
+                      >
+                        {item.full_path
+                          ? item.full_path
+                          : item.address_service_no
+                          ? item.emailinfolist[0].email_address
+                          : item.value}
+                      </Text>
+                    </View>
+                    <TouchableOpacity
+                      style={[
+                        styles.roleContainer,
+                        isMaster && { borderColor: '#01acc1' },
+                        !item.user_no && { borderColor: '#fff' },
+                        isTablet && { width: 140 }
+                      ]}
+                      onPress={() => {
+                        clickChangeRole(item);
+                      }}
+                      disabled={item.user_no === auth.user_no || !item.user_no}
+                    >
+                      {isMaster ? (
+                        <Fragment>
+                          <Text
+                            style={[
+                              styles.maseterText,
+                              isTablet && { fontSize: 14 }
+                            ]}
+                          >
+                            {t('마스터')}
+                          </Text>
+                          <Image
+                            style={[
+                              styles.icMaster,
+                              isTablet && { width: 30, height: 30 }
+                            ]}
+                            source={icMasterCircle}
+                            resizeMode={'contain'}
+                          />
+                        </Fragment>
+                      ) : item.user_no ? (
+                        <Fragment>
+                          <Image
+                            style={[
+                              styles.icMaster,
+                              isTablet && { width: 30, height: 30 }
+                            ]}
+                            source={icAttdCircle}
+                            resizeMode={'contain'}
+                          />
+
+                          <Text
+                            style={[
+                              styles.attendantText,
+                              isTablet && { fontSize: 14 }
+                            ]}
+                          >
+                            {t('참석자')}
+                          </Text>
+                        </Fragment>
+                      ) : (
+                        <Fragment>
+                          {/* <Text style={styles.extText}>
                               {t('외부참여자')}
                             </Text> */}
-                          </Fragment>
-                        )}
-                      </TouchableOpacity>
-                    </View>
-                  );
-                }}
-              />
-            )}
+                        </Fragment>
+                      )}
+                    </TouchableOpacity>
+                  </View>
+                );
+              }}
+            />
           </View>
         </Fragment>
       )}
@@ -743,10 +745,10 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     color: '#000'
   },
-  confirmText: {
+  updateText: {
     fontSize: 14,
     fontWeight: 'normal',
-    color: '#d3d3d3'
+    color: '#000'
   },
   ft14B: {
     fontSize: 14,
@@ -772,9 +774,10 @@ const styles = StyleSheet.create({
     // height: '40%'
   },
   textHeader: {
-    fontSize: 12,
-    marginVertical: 5,
-    color: '#000'
+    fontSize: 13,
+    marginVertical: 2,
+    // color: '#000'
+    color: '#939393'
   },
   roomNameStyle: {
     borderWidth: 1,
@@ -989,4 +992,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default CreateMeetScreenPresenter;
+export default ConferenceDetailScreenPresenter;

@@ -82,7 +82,8 @@ export default {
       if (response.status !== 200) {
         throw response.resultCode;
       }
-      return response.json();
+      const { resultData } = await response.json();
+      return resultData;
     } catch (err) {
       console.warn('2.getMeetRoom : ', err);
       return false;

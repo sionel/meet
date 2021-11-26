@@ -2,8 +2,8 @@ import React, { RefObject, useEffect, useRef, useState } from 'react';
 import { Alert, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
-import CreateMeetScreenPresenter from './CreateMeetScreenPresenter';
-import OrganizationScreen from './OrganizationScreen';
+import ConferenceDetailScreenPresenter from './ConferenceDetailScreenPresenter';
+import OrganizationScreen from '../CreateMeetScreen/OrganizationScreen';
 
 import { MeetApi, OrganizationApi } from '../../services';
 
@@ -22,6 +22,17 @@ interface param {
 }
 
 type PartialParam = Partial<param>;
+
+interface roomParam {
+    name:string,
+      is_public:boolean,
+      r_start_datetime:Date,
+      r_end_datetime:Date,
+      is_send_update_email:boolean,
+      invite_message:string,
+      access_user:any[],
+      error?:any
+}
 
 export default function CreateMeetScreenContainer(props: any) {
   const [switchReserve, setSwitchReserve] = useState(false);
@@ -58,31 +69,82 @@ export default function CreateMeetScreenContainer(props: any) {
   const [sendMessage, setSendMessage] = useState('');
   const [sendMsgCnt, setSendMsgCnt] = useState(0);
 
-  const [textLess2, setTextLess2] = useState(true);
+  const [textLess2, setTextLess2] = useState(false);
   const [isOrgDataLoaded, setIsOrgDataLoaded] = useState(false);
   const [organization, setorganization] = useState<any>({ company_no: -1 });
   const [contacts, setContacts] = useState<{ title: string; data: Object }[]>(
     []
   );
   const [dateTimeSeleted, setDateTimeSeleted] = useState(false);
+  const [isNormal, setIsNormal] = useState(true);
 
-  // const [invited, setInvited] = useState<any[]>([]);
-  // const [inviteText, setInviteText] = useState('');
-  // const [participantList, setParticipantList] = useState<any[]>([]);
 
   const titleRef: RefObject<any> = useRef();
   const sendMsgRef: RefObject<any> = useRef();
   const searchRef: RefObject<any> = useRef();
   const sendEmailRef: RefObject<any> = useRef();
 
-  const { auth, isHorizon } = useSelector((state: any) => ({
+  const { auth, isHorizon, roomId } = useSelector((state: any) => ({
     auth: state.user.auth,
-    isHorizon: state.orientation.isHorizon
+    isHorizon: state.orientation.isHorizon,
+    roomId: state.conference.roomId
   }));
 
   const t = getT();
 
   const isTablet = deviceInfoModule.isTablet() === true;
+
+  const _getReservationInfos = async (roomId: string) => {
+    const reservationInfos:roomParam = await MeetApi.getMeetRoom(auth, roomId);
+    if (reservationInfos.error) {
+      console.log('error', reservationInfos.error);
+    }
+
+    const {
+      name,
+      is_public,
+      r_start_datetime,
+      r_end_datetime,
+    //   is_send_update_email,
+      invite_message,
+      access_user
+    } = reservationInfos;
+
+    const startTime = getDate(moment(r_start_datetime).toDate());
+    const endTime = getDate(moment(r_end_datetime).toDate());
+    access_user.map((user: any) => {
+      if (user.value === auth.portal_id && user.is_master) setIsNormal(false); 
+    });
+
+    setRoomName(name);
+    setIsPublic(is_public);
+    setStartTime({
+      date: startTime.date,
+      time: startTime.time,
+      current: startTime.current
+    }); 
+    setEndTime({
+      date: endTime.date,
+      time: endTime.time,
+      current: endTime.current
+    });
+    // setSwitchDelAlram(is_send_update_email);
+    setSendMessage(invite_message); 
+  
+
+    // const portalIdList: string[] = accesUsers.map((user: any) => user.user);
+
+    // const participants = await MeetApi.getUserInfoList(auth, portalIdList);
+    // if (participants.error) {
+    //   console.log('error', participants.error);
+    // }
+    // console.log(participants);
+
+  
+    // console.log(combineParticipants);
+
+    // return accesUsers;
+  };
 
   const getAllEmployee = async () => {
     const result = await OrganizationApi.getOrganizationTreeAllEmployeeRequest(
@@ -211,13 +273,13 @@ export default function CreateMeetScreenContainer(props: any) {
         };
       }
 
-      const result = await MeetApi.createMeetRoom(auth, params);
-      if (result) {
-        onHandleBack();
-        // clearInput();
-      } else if (result.error) {
-        console.log('error : ', result.error);
-      }
+      //   const result = await MeetApi.updateMeetRoom(auth, params);
+      //   if (result) {
+      //     onHandleBack();
+      //     // clearInput();
+      //   } else if (result.error) {
+      //     console.log('error : ', result.error);
+      //   }
     }
   };
 
@@ -451,31 +513,23 @@ export default function CreateMeetScreenContainer(props: any) {
   };
 
   const dataLoad = async () => {
+    await _getReservationInfos(roomId);
     setIsOrgDataLoaded(true);
-
-    getAllEmployee();
-    await getOrganizationTree();
-    await getContactsList();
-
+    // setSelectedEmployee({
+    //   member: await reservationUsers(roomId),
+    //   group: {}
+    // });
+    if (roomId === '1') {
+      getAllEmployee();
+      await getOrganizationTree();
+      await getContactsList();
+    }
     setIsOrgDataLoaded(false);
   };
 
   useEffect(() => {
     setSelectMode(false);
     dataLoad();
-    setSelectedEmployee({
-      member: [
-        {
-          user_name: auth.user_name,
-          rank_name: auth.last_company.rank_name,
-          profile_url: auth.profile_url,
-          full_path: auth.last_company.full_path,
-          user_no: auth.user_no,
-          is_master: true
-        }
-      ],
-      group: {}
-    });
   }, []);
 
   const roomNameChange = (name: string) => {
@@ -502,7 +556,7 @@ export default function CreateMeetScreenContainer(props: any) {
     if (sendMsgRef.current?.isFocused()) sendMsgRef.current.blur();
     else if (titleRef.current?.isFocused()) titleRef.current.blur();
     else if (searchRef.current?.isFocused()) searchRef.current.blur();
-    else if(sendEmailRef.current?.isFocused()) sendEmailRef.current.blur();
+    else if (sendEmailRef.current?.isFocused()) sendEmailRef.current.blur();
   };
 
   const exitDateTime = () => {
@@ -610,7 +664,7 @@ export default function CreateMeetScreenContainer(props: any) {
           sendEmailRef={sendEmailRef}
         />
       ) : (
-        <CreateMeetScreenPresenter
+        <ConferenceDetailScreenPresenter
           roomName={roomName}
           isPublic={isPublic}
           datePicker={datePicker}
@@ -656,6 +710,7 @@ export default function CreateMeetScreenContainer(props: any) {
           isHorizon={isHorizon}
           isTablet={isTablet}
           dateTimeSeleted={dateTimeSeleted}
+          isNormal={isNormal}
         />
       )}
     </View>

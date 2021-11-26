@@ -107,7 +107,7 @@ export default function HomeScreenContainer(props: any) {
     });
 
   const dispatch = useDispatch();
-  const setRoomId = (id: string) => dispatch(ConferenceActions.setRoomId(id));
+  const _setRoomId = (id: string) => dispatch(ConferenceActions.setRoomId(id));
 
   useEffect(() => {
     _getConferences();
@@ -343,7 +343,7 @@ export default function HomeScreenContainer(props: any) {
           );
           const portalIdList = sortedAccessUserList
             .map((user: any) => user.user)
-            .filter((user: any) => user); 
+            .filter((user: any) => user);
 
           const participants: any[] = await MeetApi.getUserInfoList(
             auth,
@@ -383,8 +383,8 @@ export default function HomeScreenContainer(props: any) {
             users: uriList,
             roomId: conference.room_id,
             isPublic: conference.is_public,
-            reservationMoreClick: () =>
-              _reservationMoreClick(conference, isMaster)
+            reservationMoreClick: (roomId: string) =>
+              _reservationMoreClick(conference, isMaster, roomId)
           };
           return data;
         })
@@ -421,7 +421,13 @@ export default function HomeScreenContainer(props: any) {
     });
   };
 
-  const _reservationMoreClick = (conference: conference, isMaster: boolean) => {
+  const _reservationMoreClick = (
+    conference: conference,
+    isMaster: boolean,
+    roomId: string
+  ) => {
+    _setRoomId(roomId);
+
     const list = {
       name: '참석 예정자 명단',
       icon1: icUser,
@@ -432,7 +438,9 @@ export default function HomeScreenContainer(props: any) {
     const modify = {
       name: '예약정보 수정',
       icon1: icModify,
-      onClick: () => {}
+      onClick: () => {
+        conferenceDetail();
+      }
     };
     const copy = {
       name: '공유링크 복사',
@@ -611,6 +619,11 @@ export default function HomeScreenContainer(props: any) {
       // }
     });
   };
+
+  const conferenceDetail = () => {
+    props.navigation.navigate('ConferenceDetail', {});
+  };
+
   const createTalkConference = () => {
     props.navigation.navigate('Create', {
       // onGetWetalkList: {

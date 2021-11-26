@@ -26,7 +26,9 @@ const OrganizationScreenContainer = (props: any) => {
     organization,
     contacts,
     isOrgDataLoaded,
-    isTablet
+    isTablet,
+    searchRef,
+    sendEmailRef
   } = props;
 
   const [keyword, setKeyword] = useState('');
@@ -44,8 +46,7 @@ const OrganizationScreenContainer = (props: any) => {
   //   []
   // );
   const [exterError, setExterError] = useState(false);
-  const searchRef: RefObject<any> = useRef();
-  const sendEmailRef: RefObject<any> = useRef();
+
   
 
   const [rotate] = useState(new Animated.Value(0));

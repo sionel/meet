@@ -18,6 +18,8 @@ import AwardsScreen from '../Screens/ConfigurationScreen/subScreens/AwardsScreen
 import OpenSourceScreen from '../Screens/ConfigurationScreen/subScreens/OpenSourceScreen';
 import OpenSourceDetailScreen from '../Screens/ConfigurationScreen/subScreens/OpenSourceDetailScreen';
 import CreateScreen from '../Screens/CreateScreen';
+import CreateMeetScreen from '../Screens/CreateMeetScreen';
+import ConferenceDetail from '../Screens/ConferenceDetailScreen';
 import ConferenceStateScreen from '../Screens/ConferenceStateScreen';
 
 /** Components */
@@ -25,7 +27,7 @@ import RouteTitle from './RouteTitle';
 import DrawerContent from '../components/DrawerContent';
 import { WEHAGO_TYPE } from '../../config';
 import { getT } from '../utils/translateManager';
-import CreateMeetScreen from '../Screens/CreateMeetScreen';
+
 
 const commonStyle = {
   height: 53,
@@ -216,6 +218,13 @@ const HomeRouteStack = () => {
         header:null
       }),
       
+    },
+
+    ConferenceDetail: {
+      screen: ConferenceDetail,
+      navigationOptions: ({ navigation }) => ({
+        header:null
+      }),
     }
   };
 };

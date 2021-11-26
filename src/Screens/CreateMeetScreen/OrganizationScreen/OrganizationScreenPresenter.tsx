@@ -257,7 +257,7 @@ const OrganizationScreenPresenter = (props: any) => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <View style={styles.topTitle}>
+      <View style={[styles.topTitle]}>
         {/* <TouchableOpacity
           disabled={Object.keys(selectedEmployee.member).length > listLng}
           onPress={() => onClickCancel()}
@@ -282,7 +282,7 @@ const OrganizationScreenPresenter = (props: any) => {
         </View>
         <TouchableOpacity
           onPress={() => participantListAdd()}
-          style={{ marginLeft: '27%' }}
+          style={{ marginLeft: isHorizon ? '23%' : '27%' }}
         >
           <Text style={styles.ft14N}>{t('확인')}</Text>
         </TouchableOpacity>
@@ -530,7 +530,8 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     // backgroundColor: 'red',
-    justifyContent: 'flex-start'
+    justifyContent: 'flex-start',
+    backgroundColor:'#fff'
   },
   container: {
     flex: 1

@@ -38,7 +38,8 @@ const OrganizationTab = (props: any) => {
     validateExter,
     exterError,
     focusOut,
-    sendEmailRef
+    sendEmailRef,
+    isHorizon
   } = props;
   const t = getT();
   return (
@@ -311,56 +312,59 @@ const OrganizationTab = (props: any) => {
               style={{
                 paddingHorizontal: '5%',
                 paddingVertical: '2%',
-                height: '15%',
+                height: '20%',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
-                borderBottomWidth:2,
-                borderBottomColor:'#8c8c8c' 
+                borderBottomWidth: 2,
+                borderBottomColor: '#8c8c8c'
               }}
             >
               <Text style={{ fontSize: 15 }}>{t('참여자 초대')}</Text>
-              <View style={styles.rowView}>
-                <TextInput
-                  style={[
-                    styles.emailText,
-                    inviteText && { borderColor: '#1c90fb' }
-                  ]}
-                  placeholder={t('초대할 사람의 이메일을 입력해주세요.')}
-                  autoCapitalize={'none'}
-                  autoCompleteType={'email' || 'tel'}
-                  onSubmitEditing={() => validateExter()}
-                  clearButtonMode={'always'}
-                  onChangeText={setInviteText}
-                  value={inviteText}
-                  ref={sendEmailRef}
-                />
-                <TouchableOpacity
-                  style={{
-                    width: 40,
-                    height: 30,
-                    backgroundColor: '#1c90fb',
-                    borderRadius: 5,
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}
-                  onPress={() => validateExter()}
-                >
-                  <Image
-                    source={ic_mail}
-                    style={{
-                      width: 35,
-                      height: 25,
-                      resizeMode: 'cover'
-                    }}
+              <View style={{ flexDirection: 'column', height: 60 }}>
+                <View style={styles.rowView}>
+                  <TextInput
+                    style={[
+                      styles.emailText,
+                      inviteText && { borderColor: '#1c90fb' }
+                    ]}
+                    placeholder={t('초대할 사람의 이메일을 입력해주세요.')}
+                    autoCapitalize={'none'}
+                    autoCompleteType={'email' || 'tel'}
+                    onSubmitEditing={() => validateExter()}
+                    clearButtonMode={'always'}
+                    onChangeText={setInviteText}
+                    value={inviteText}
+                    ref={sendEmailRef}
                   />
-                </TouchableOpacity>
+                  <TouchableOpacity
+                    style={{
+                      width: 40,
+                      height: 30,
+                      backgroundColor: '#1c90fb',
+                      borderRadius: 5,
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}
+                    onPress={() => validateExter()}
+                  >
+                    <Image
+                      source={ic_mail}
+                      style={{
+                        width: 35,
+                        height: 25,
+                        resizeMode: 'cover'
+                      }}
+                    />
+                  </TouchableOpacity>
+                </View>
+                {exterError && (
+                  <Text style={styles.emailError}>
+                    {t('이미 추가된 이메일입니다.')}
+                  </Text>
+                )}
               </View>
-              {exterError && (
-                <Text style={styles.emailError}>
-                  {t('이미 추가된 이메일입니다.')}
-                </Text>
-              )}
             </View>
+
             {/* {invited.length > 0 && (
               <>
                 <View style={{ backgroundColor: '#f1f2f3' }}>
@@ -408,11 +412,14 @@ const OrganizationTab = (props: any) => {
                 <View style={{ borderBottomWidth: 1, borderColor: '#ccc' }} />
                 <View style={{ backgroundColor: '#f1f2f3' }}>
                   <Text
-                    style={{
-                      fontSize: 16,
-                      paddingHorizontal: '5%',
-                      paddingVertical: '3%'
-                    }}
+                    style={[
+                      {
+                        fontSize: 15,
+                        paddingHorizontal: '5%',
+                        paddingVertical: '3%'
+                      },
+                      isHorizon && { paddingVertical: '2%' }
+                    ]}
                   >
                     {t('최근 초대한 이메일')}
                   </Text>
@@ -424,7 +431,7 @@ const OrganizationTab = (props: any) => {
                   keyExtractor={(item, index) => String(index)}
                   renderItem={({ item, index }) => {
                     return (
-                      <View style={styles.recentRow}>
+                      <View style={[styles.recentRow, isHorizon && {paddingVertical: '1%'}]}>
                         <View
                           style={{
                             flexDirection: 'row',
@@ -537,7 +544,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: '5%',
+    paddingHorizontal: 5,
     paddingVertical: '2%'
   },
   mailBg: {
@@ -561,9 +568,9 @@ const styles = StyleSheet.create({
   emailError: {
     color: '#fc4c60',
     fontSize: 12,
-    paddingHorizontal: '5%',
+    paddingLeft: '1%',
     paddingTop: -10,
-    marginTop: -10,
+    // marginTop: -10,
     paddingBottom: 10
   },
   rowView: {
