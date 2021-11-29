@@ -13,6 +13,7 @@ interface ReservationCardProps {
   roomId: string;
   isPublic: boolean;
   reservationMoreClick: (roomId: string) => void;
+  isTablet: boolean;
 }
 
 export default function ConferenceBox(props: ReservationCardProps) {
@@ -24,26 +25,29 @@ export default function ConferenceBox(props: ReservationCardProps) {
     users,
     roomId,
     isPublic,
-    reservationMoreClick
+    reservationMoreClick,
+    isTablet
   } = props;
 
   return (
     <View
       style={{
-        width: '100%',
-        height: 100,
-        backgroundColor: '#fff',
+        // flex:0.45,
+        width: isTablet ? '48%' : '100%',
+        height: 120,
         borderRadius: 20,
+        backgroundColor: '#fff',
         borderColor: '#e6e6e6',
         borderWidth: 2,
-        marginVertical: 8,
-        padding: 14,
+        marginBottom: 15,
+        // marginHorizontal: 40,
+        padding: 20,
         flexDirection: 'row'
       }}
     >
       <View
         style={{
-          flex: 2,
+          flex: 1,
           alignItems: 'flex-start',
           justifyContent: 'center',
           marginRight: 10
@@ -80,16 +84,16 @@ export default function ConferenceBox(props: ReservationCardProps) {
       </View>
       <TouchableOpacity
         style={{
-          width: '35%',
+          width: 120,
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-between'
+          // backgroundColor:'#21f'
         }}
         onPress={() => reservationMoreClick(roomId)}
       >
         <View
           style={{
-            flex: 1,
             flexDirection: 'row',
             alignItems: 'center'
           }}

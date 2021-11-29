@@ -26,15 +26,16 @@ export default function ConferenceBox(props: conferenceBoxProps) {
   return (
     <View
       style={{
-        width: '100%',
-        height: 100,
-        backgroundColor: '#fff',
+        flex:0.5,
+        height:100,
         borderRadius: 20,
         borderColor: '#e6e6e6',
         borderWidth: 2,
-        marginVertical: 8,
-        padding: 14,
-        flexDirection: 'row'
+        backgroundColor:'#fff',
+        marginBottom: 15,
+        marginHorizontal: 10,
+        padding: 20,
+        flexDirection: 'row',
       }}
     >
       <View

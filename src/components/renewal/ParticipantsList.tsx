@@ -24,7 +24,9 @@ export interface participantsListProps {
   }[];
 }
 
-export default function ParticipantsList(props: participantsListProps) {
+export default function ParticipantsList(
+  props: participantsListProps & { isHorizon: boolean }
+) {
   const { onClose, participants, title } = props;
   return (
     <SafeAreaView style={{ zIndex: 1 }}>

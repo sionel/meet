@@ -26,7 +26,9 @@ interface BottomPopupProps {
   onClickOutside: () => void;
 }
 
-export default function BottomPopup(props: BottomPopupProps) {
+export default function BottomPopup(
+  props: BottomPopupProps & { isHorizon: boolean }
+) {
   const { title, contentList, onClickOutside } = props;
   return (
     <View

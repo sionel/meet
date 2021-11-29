@@ -19,6 +19,7 @@ import { actionCreators as UserActions } from '../../redux/modules/user';
 import { actionCreators as ConferenceActions } from '../../redux/modules/conference';
 
 import HomeScreenPresenter from './HomeScreenPresenter';
+import HomeScreenHorizonPresenter from './HomeScreenHorizonPresenter';
 import { wehagoDummyImageURL, wehagoMainURL } from '../../utils';
 
 import { content } from './Component/bottomPopup';
@@ -54,8 +55,11 @@ type conference = {
   is_started: boolean;
 };
 
-export default function HomeScreenContainer(props: any) {
+interface emptyData {
+  isEmpty: boolean;
+}
 
+export default function HomeScreenContainer(props: any) {
   const [test, setTest] = useState(false);
   const [indicator, setIndicator] = useState(true);
   const [ongoingConference, setOngoingConference] = useState<any[]>([]);
@@ -87,7 +91,6 @@ export default function HomeScreenContainer(props: any) {
   });
   const ref = useRef<any>({ reservationConference, exitApp: false });
 
-
   const {
     auth,
     userImg,
@@ -95,10 +98,12 @@ export default function HomeScreenContainer(props: any) {
     userName,
     portalId,
     selectedRoomId,
-    isLogin
+    isLogin,
+    isHorizon
   } = useSelector((state: RootState) => {
     const { auth } = state.user;
     const { roomId } = state.conference;
+    const { isHorizon } = state.orientation;
 
     return {
       auth: auth,
@@ -107,14 +112,15 @@ export default function HomeScreenContainer(props: any) {
       isLogin: state.user.isLogin,
       userImg: wehagoMainURL + auth.profile_url,
       companyName: auth?.last_company?.company_name_kr,
-      selectedRoomId: roomId
+      selectedRoomId: roomId,
+      isHorizon
     };
   });
 
   const dispatch = useDispatch();
   const _setRoomId = (id: string) => dispatch(ConferenceActions.setRoomId(id));
 
-  const isTablet = deviceInfoModule.isTablet()
+  const isTablet = deviceInfoModule.isTablet();
 
   useEffect(() => {
     _getConferences();
@@ -406,6 +412,7 @@ export default function HomeScreenContainer(props: any) {
         reservationList.length > 0
       )
         setHighlight('reservation');
+      // reservationList.push({isEmptty})
 
       setReservationConference(reservationList);
     });
@@ -653,7 +660,29 @@ export default function HomeScreenContainer(props: any) {
   const testFunc = () => {
     setTest(!test);
   };
-  return (
+  return isHorizon ? (
+    <HomeScreenHorizonPresenter
+      {...{
+        isTablet,
+        userName,
+        indicator,
+        ongoingConference,
+        reservationConference,
+        finishedConference,
+        highlight,
+        setHighlight,
+        userImg,
+        companyName,
+        bottomPopup,
+        participantsList,
+        createTalkConference,
+        test,
+        setTest: testFunc,
+        createConference,
+        isHorizon
+      }}
+    />
+  ) : (
     <HomeScreenPresenter
       {...{
         isTablet,
@@ -671,7 +700,8 @@ export default function HomeScreenContainer(props: any) {
         createTalkConference,
         test,
         setTest: testFunc,
-        createConference
+        createConference,
+        isHorizon
       }}
     />
   );
