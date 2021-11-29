@@ -3,7 +3,6 @@ import CompanySelectContainer from './CompanySelectContainer';
 import { connect } from 'react-redux';
 import { actionCreators as UserActions } from '../../redux/modules/user';
 import { actionCreators as WetalkActions } from '../../redux/modules/wetalk';
-import { actionCreators as ConferenceActions } from '../../redux/modules/conference';
 import { actionCreators as RecentActions } from '../../redux/modules/recentsInvited';
 
 // map state to props
@@ -22,7 +21,6 @@ const mapDispatchToProps = dispatch => {
     },
     onSetInitialList: () => {
       dispatch(WetalkActions.setInitialList());
-      dispatch(ConferenceActions.setInitialList());
     }
   };
 };

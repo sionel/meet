@@ -73,8 +73,8 @@ export default function CustomProvider(props: any) {
   }, [isLogin, network]);
 
   useEffect(() => {
-    _checkDeployedServices();
-  }, [auth]);
+    isLogin && _checkDeployedServices();
+  }, [auth,isLogin]);
   const _checkDeployedServices = () => {
     const isDeployedServices = ['wehago'];
     Promise.all([

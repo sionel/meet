@@ -5,7 +5,6 @@
 
 import { UserApi, ServiceCheckApi } from '../../services';
 import { actionCreators as wetalkActionCreators } from './wetalk';
-import { actionCreators as conferenceActionCreators } from './conference';
 
 const AGREEMENT = 'user.AGREEMENT';
 const LOGIN = 'user.LOGIN';
@@ -227,9 +226,7 @@ function changeCompanyRequest(auth, company) {
       // alert('회사변경 중 문제 발생');
       return checkResult;
     }
-
     dispatch(wetalkActionCreators.setInitialList());
-    dispatch(conferenceActionCreators.setInitialList());
     return dispatch(changeCompany(company));
   };
 }

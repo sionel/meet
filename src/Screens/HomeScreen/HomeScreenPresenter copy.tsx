@@ -43,21 +43,6 @@ const icKeyboard = require('../../../assets/new/icons/ic_keyboard.png');
 const icArrowDownBlack = require('../../../assets/new/icons/ic_arrow_down_black.png');
 const icChange = require('../../../assets/new/icons/ic_change.png');
 
-{/*
-<TouchableOpacity
-  style={{
-    position: 'absolute',
-    width: 100,
-    height: 100,
-    top: 250,
-    backgroundColor: '#1322fa',
-    zIndex: 9
-  }}
-  onPress={setTest}
-/>
-*/
-}
-
 const HomeScreenPresenter = (props: any) => {
   const {
     isTablet,
@@ -86,7 +71,6 @@ const HomeScreenPresenter = (props: any) => {
       <StatusBar barStyle={'dark-content'} backgroundColor={'#F7F8FA'} />
       <SafeAreaView style={styles.safeContainer}>
         {participantsList.show && <ParticipantsList {...participantsList} />}
-
         <View style={styles.header}>
           <Image
             source={loginLogo}
@@ -98,10 +82,19 @@ const HomeScreenPresenter = (props: any) => {
             <Image source={icSet} />
           </TouchableOpacity>
         </View>
-
+        {/* <TouchableOpacity
+          style={{
+            position: 'absolute',
+            width: 100,
+            height: 100,
+            top: 250,
+            backgroundColor: '#1322fa',
+            zIndex: 9
+          }}
+          onPress={setTest}
+        /> */}
         {/* 프로필, 이름 , 회사*/}
         <View style={styles.helloContainer}>
-
           <View style={styles.helloTextContainer}>
             <Image source={{ uri: userImg }} style={styles.settingImg} />
             <Text style={styles.name}>{userName}</Text>
@@ -110,7 +103,6 @@ const HomeScreenPresenter = (props: any) => {
               <Image source={icArrowDownBlack} style={styles.downArrow} />
             </TouchableOpacity>
           </View>
-
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               style={styles.topButtons}
@@ -147,7 +139,6 @@ const HomeScreenPresenter = (props: any) => {
             </TouchableOpacity>
           </View>
         </View>
-
         {/* 진행중인 화상회의 */}
         {ongoingConference.length > 0 && (
           <View style={styles.ongoingContainer}>
@@ -314,9 +305,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
-    paddingHorizontal: 40,
-    marginTop:10,
-    marginBottom:20,
+    paddingHorizontal: 40
   },
   logo: {
     flex: 1,
@@ -337,16 +326,14 @@ const styles = StyleSheet.create({
   downArrow: { width: 28, height: 28, borderRadius: 24 },
   helloContainer: {
     width: '100%',
-    // height: '22%',
+    height: '22%',
     paddingHorizontal: 40,
     justifyContent: 'space-between',
     alignItems: 'stretch',
-    marginBottom: 10,
-    backgroundColor:'#22a'
+    marginBottom: 10
   },
   helloTextContainer: {
-    // flex: 1,
-    height:'20%',
+    flex: 1,
     justifyContent: 'flex-start',
     flexDirection: 'row',
     alignItems: 'center',

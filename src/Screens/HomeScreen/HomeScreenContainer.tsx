@@ -16,13 +16,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/configureStore';
 
 import { actionCreators as UserActions } from '../../redux/modules/user';
-import { actionCreators as ConferenceActions } from '../../redux/modules/conference';
 
 import HomeScreenPresenter from './HomeScreenPresenter';
 import { wehagoDummyImageURL, wehagoMainURL } from '../../utils';
 
 import { content } from './Component/bottomPopup';
 import { participantsListProps } from '../../components/renewal/ParticipantsList';
+import deviceInfoModule from 'react-native-device-info';
 
 const icUser = require('../../../assets/new/icons/ic_user.png');
 const icModify = require('../../../assets/new/icons/ic_modify.png');
@@ -54,20 +54,17 @@ type conference = {
 };
 
 export default function HomeScreenContainer(props: any) {
+
   const [test, setTest] = useState(false);
   const [indicator, setIndicator] = useState(true);
   const [ongoingConference, setOngoingConference] = useState<any[]>([]);
-
   const [reservationConference, setReservationConference] = useState<any[]>([]);
-
   const [finishedConference, setFinishedConference] = useState<any[]>([]);
-
   const [highlight, setHighlight] = useState<'reservation' | 'finished' | null>(
     null
   );
   const [conferenceInterval, setConferenceInterval] =
     useState<NodeJS.Timeout>();
-
   const [bottomPopup, setBottomPopup] = useState<{
     show: boolean;
     contentList: content[];
@@ -79,7 +76,6 @@ export default function HomeScreenContainer(props: any) {
     title: '',
     onClickOutside: () => {}
   });
-
   const [participantsList, setParticipantsList] = useState<
     participantsListProps & { show: boolean }
   >({
@@ -88,26 +84,36 @@ export default function HomeScreenContainer(props: any) {
     title: '',
     show: false
   });
-
   const ref = useRef<any>({ reservationConference, exitApp: false });
 
-  const { auth, userImg, companyName, userName, portalId, selectedRoomId } =
-    useSelector((state: RootState) => {
-      const { auth } = state.user;
-      const { roomId } = state.conference;
 
-      return {
-        auth: auth,
-        userName: auth.user_name,
-        portalId: auth.portal_id,
-        userImg: wehagoMainURL + auth.profile_url,
-        companyName: auth.last_company.company_name_kr,
-        selectedRoomId: roomId
-      };
-    });
+  const {
+    auth,
+    userImg,
+    companyName,
+    userName,
+    portalId,
+    selectedRoomId,
+    isLogin
+  } = useSelector((state: RootState) => {
+    const { auth } = state.user;
+    const { roomId } = state.conference;
+
+    return {
+      auth: auth,
+      userName: auth.user_name,
+      portalId: auth.portal_id,
+      isLogin: state.user.isLogin,
+      userImg: wehagoMainURL + auth.profile_url,
+      companyName: auth?.last_company?.company_name_kr,
+      selectedRoomId: roomId
+    };
+  });
 
   const dispatch = useDispatch();
   const _setRoomId = (id: string) => dispatch(ConferenceActions.setRoomId(id));
+
+  const isTablet = deviceInfoModule.isTablet()
 
   useEffect(() => {
     _getConferences();
@@ -123,6 +129,10 @@ export default function HomeScreenContainer(props: any) {
       BackHandler.removeEventListener('hardwareBackPress', _handleBackButton);
     };
   }, []);
+
+  useEffect(() => {
+    !isLogin && conferenceInterval && clearInterval(conferenceInterval);
+  }, [isLogin]);
 
   useEffect(() => {
     const now = !reservationConference.length
@@ -645,6 +655,7 @@ export default function HomeScreenContainer(props: any) {
   return (
     <HomeScreenPresenter
       {...{
+        isTablet,
         userName,
         indicator,
         ongoingConference,
