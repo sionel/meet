@@ -20,6 +20,7 @@ import OpenSourceDetailScreen from '../Screens/ConfigurationScreen/subScreens/Op
 import CreateScreen from '../Screens/CreateScreen';
 import CreateMeetScreen from '../Screens/CreateMeetScreen';
 import ConferenceDetail from '../Screens/ConferenceDetailScreen';
+import ConferenceModify from '../Screens/ConferenceModifyScreen';
 import ConferenceStateScreen from '../Screens/ConferenceStateScreen';
 
 /** Components */
@@ -218,6 +219,13 @@ const HomeRouteStack = () => {
         header:null
       }),
       
+    },
+
+    ConferenceModify: {
+      screen: ConferenceModify,
+      navigationOptions: ({ navigation }) => ({
+        header:null
+      }),
     },
 
     ConferenceDetail: {

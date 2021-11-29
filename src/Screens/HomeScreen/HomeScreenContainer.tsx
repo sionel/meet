@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/configureStore';
 
 import { actionCreators as UserActions } from '../../redux/modules/user';
+import { actionCreators as ConferenceActions } from '../../redux/modules/conference';
 
 import HomeScreenPresenter from './HomeScreenPresenter';
 import { wehagoDummyImageURL, wehagoMainURL } from '../../utils';
@@ -449,7 +450,7 @@ export default function HomeScreenContainer(props: any) {
       name: '예약정보 수정',
       icon1: icModify,
       onClick: () => {
-        conferenceDetail();
+        conferenceModify();
       }
     };
     const copy = {
@@ -630,8 +631,8 @@ export default function HomeScreenContainer(props: any) {
     });
   };
 
-  const conferenceDetail = () => {
-    props.navigation.navigate('ConferenceDetail', {});
+  const conferenceModify = () => {
+    props.navigation.navigate('ConferenceModify', {});
   };
 
   const createTalkConference = () => {

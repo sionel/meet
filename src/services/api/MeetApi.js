@@ -124,7 +124,7 @@ export default {
   },
 
   // 3-3 화상회의방 수정
-  updateMeetRoom: async (auth, roomId) => {
+  updateMeetRoom: async (auth, roomId, param) => {
     const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
     const url = `${meetURL}/room?cno=${cno}&room=${roomId}`;
     const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
@@ -134,7 +134,10 @@ export default {
         headers: {
           'Content-Type': 'application/json',
           ...headers
-        }
+        },
+        body: JSON.stringify({
+          ...param
+        })
       };
 
       const response = await fetch(url, data);

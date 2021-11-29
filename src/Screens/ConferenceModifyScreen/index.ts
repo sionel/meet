@@ -1,0 +1,2 @@
+import ConferenceModifyScreenContainer from './ConferenceModifyScreenContainer';
+export default ConferenceModifyScreenContainer;

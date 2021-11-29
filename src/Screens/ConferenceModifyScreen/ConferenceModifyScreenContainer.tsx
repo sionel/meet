@@ -2,8 +2,8 @@ import React, { RefObject, useEffect, useRef, useState } from 'react';
 import { Alert, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
-import CreateMeetScreenPresenter from './CreateMeetScreenPresenter';
-import OrganizationScreen from './OrganizationScreen';
+import ConferenceModfiyScreenPresenter from './ConferenceModifyScreenPresenter';
+import OrganizationScreen from '../CreateMeetScreen/OrganizationScreen';
 
 import { MeetApi, OrganizationApi } from '../../services';
 
@@ -11,7 +11,7 @@ import moment from 'moment';
 import { getT } from '../../utils/translateManager';
 import { RootState } from '../../redux/configureStore';
 import deviceInfoModule from 'react-native-device-info';
-import { wehagoMainURL } from '../../utils';
+import { wehagoDummyImageURL, wehagoMainURL } from '../../utils';
 
 interface param {
   type: 'portal_id' | 'email';
@@ -24,13 +24,35 @@ interface param {
 
 type PartialParam = Partial<param>;
 
-export default function CreateMeetScreenContainer(props: any) {
-  const [switchReserve, setSwitchReserve] = useState(false);
+interface roomParam {
+  name: string;
+  is_public: boolean;
+  r_start_datetime: Date;
+  r_end_datetime: Date;
+  is_send_update_email: boolean;
+  invite_message: string;
+  error?: any;
+}
+
+interface userParam {
+  portal_id: string;
+  rank_name: string;
+  user_no: string;
+  user_name: string;
+  profile_url: string;
+  full_path: string;
+  user_type: string;
+  is_master: boolean;
+}
+
+export type PartialUserParam = Partial<userParam>;
+
+export default function ConferenceModfiyScreenContainer(props: any) {
+  const [switchReserve, setSwitchReserve] = useState(true);
   const [switchDelAlram, setSwitchDelAlram] = useState(false);
   const [selectMode, setSelectMode] = useState(false);
   const [employee, setEmployee] = useState([{}]);
   const [roomName, setRoomName] = useState('');
-
   const [isPublic, setIsPublic] = useState(true);
   const [timePicker, setTimePicker] = useState<'none' | 'start' | 'end'>(
     'none'
@@ -56,33 +78,125 @@ export default function CreateMeetScreenContainer(props: any) {
     member: [{}],
     group: {}
   });
+
+  const [unAccessEmployee, setUnAccessEmployee] = useState<
+    { type: string; value: string }[]
+  >([]);
+  const [masterEmployee, setMasterEmployee] = useState<string[]>([]);
+  const [unMasterEmployee, setUnMasterEmployee] = useState<string[]>([]);
+
   const [sendMessage, setSendMessage] = useState('');
 
-  const [textLess2, setTextLess2] = useState(true);
+  const [textLess2, setTextLess2] = useState(false);
   const [isOrgDataLoaded, setIsOrgDataLoaded] = useState(false);
   const [organization, setorganization] = useState<any>({ company_no: -1 });
   const [contacts, setContacts] = useState<{ title: string; data: Object }[]>(
     []
   );
   const [dateTimeSeleted, setDateTimeSeleted] = useState(false);
-
-  // const [invited, setInvited] = useState<any[]>([]);
-  // const [inviteText, setInviteText] = useState('');
-  // const [participantList, setParticipantList] = useState<any[]>([]);
+  // const [isNormal, setIsNormal] = useState(true);
 
   const titleRef: RefObject<any> = useRef();
   const sendMsgRef: RefObject<any> = useRef();
   const searchRef: RefObject<any> = useRef();
   const sendEmailRef: RefObject<any> = useRef();
 
-  const { auth, isHorizon } = useSelector((state: any) => ({
+  const { auth, isHorizon, roomId } = useSelector((state: any) => ({
     auth: state.user.auth,
-    isHorizon: state.orientation.isHorizon
+    isHorizon: state.orientation.isHorizon,
+    roomId: state.conference.roomId
   }));
 
   const t = getT();
 
   const isTablet = deviceInfoModule.isTablet() === true;
+
+  const _getReservationInfos = async (roomId: string) => {
+    const reservationInfos: roomParam = await MeetApi.getMeetRoom(auth, roomId);
+    if (reservationInfos.error) {
+      console.log('error', reservationInfos.error);
+    }
+
+    const accessUser = await MeetApi.getAccessUsers(auth, roomId);
+    if (accessUser.error) {
+      console.log('error', accessUser.error);
+    }
+
+    const sortedAccessUserList: any[] = accessUser.sort(
+      (user: any, _user: any) => _user.is_master - user.is_master
+    );
+
+    const portalIdList = sortedAccessUserList
+      .map((user: any) => user.user)
+      .filter((user: any) => user);
+
+    const participants = await MeetApi.getUserInfoList(auth, portalIdList);
+    if (participants.error) {
+      console.log('error', participants.error);
+    }
+
+    const sortedPortalIdList: any[] = portalIdList.map((id: any) => {
+      const item =
+        participants.find((e: any) => e.portal_id === id) ||
+        sortedAccessUserList.find(e => e.user === id);
+      return item;
+    });
+
+    const reservationUserInfos: any = await Promise.all(
+      sortedPortalIdList.map(async (user, i) => {
+        const data: PartialUserParam = {
+          portal_id: user.portal_id,
+          rank_name: user.rank_name,
+          user_no: user.user_no,
+          user_name: user.user_name ? user.user_name : user.user,
+          profile_url: user.profile_url
+            ? wehagoMainURL + user.profile_url
+            : wehagoDummyImageURL,
+          full_path: user.user_no
+            ? user.full_path_list[5].path
+            : user.user_name !== null
+            ? user.user
+            : '',
+          user_type: user.user_type === 2 ? 'ext' : 'org',
+          is_master: sortedAccessUserList[i].is_master
+        };
+        return data;
+      })
+    );
+
+    setSelectedEmployee({ member: reservationUserInfos, group: {} });
+
+    const {
+      name,
+      is_public,
+      r_start_datetime,
+      r_end_datetime,
+      is_send_update_email,
+      invite_message
+    } = reservationInfos;
+
+    const startTime = getDate(moment(r_start_datetime).toDate());
+    const endTime = getDate(moment(r_end_datetime).toDate());
+    // access_user.map((user: any) => {
+    //   if (user.value === auth.portal_id && user.is_master) setIsNormal(false);
+    // });
+
+    setRoomName(name);
+    setIsPublic(is_public);
+    setStartTime({
+      date: startTime.date,
+      time: startTime.time,
+      current: startTime.current
+    });
+    setEndTime({
+      date: endTime.date,
+      time: endTime.time,
+      current: endTime.current
+    });
+    setSwitchDelAlram(is_send_update_email);
+    setSendMessage(invite_message);
+    // return accesUsers;
+  };
 
   const getAllEmployee = async () => {
     const result = await OrganizationApi.getOrganizationTreeAllEmployeeRequest(
@@ -133,9 +247,10 @@ export default function CreateMeetScreenContainer(props: any) {
     }
   };
 
-  const createConference = async () => {
+  const modifyConference = async () => {
     if (1 < roomName.length) {
       let arr: PartialParam[] = [];
+
       selectedEmployee.member.map((value: any) => {
         // type에 따라 access_user에 받는게 다름
         // type: portal_id, email
@@ -184,10 +299,12 @@ export default function CreateMeetScreenContainer(props: any) {
         service_code: string;
         name: string;
         is_public: boolean;
-        access_user: any;
-        is_send_updated_email: boolean;
         is_reservation: boolean;
-        call_type: string;
+        access_user: any[];
+        unaccess_user?: any[];
+        master?: any[];
+        unmaster?: any[];
+        is_send_updated_email: boolean;
         invite_message: string;
         start_date_time?: any;
         end_date_time?: any;
@@ -195,10 +312,12 @@ export default function CreateMeetScreenContainer(props: any) {
         service_code: 'wehagomeet',
         name: roomName,
         is_public: isPublic,
-        access_user: arr,
-        is_send_updated_email: switchDelAlram,
         is_reservation: switchReserve,
-        call_type: '1',
+        access_user: arr,
+        unaccess_user: unAccessEmployee,
+        master: masterEmployee,
+        unmaster: unMasterEmployee,
+        is_send_updated_email: switchDelAlram,
         invite_message: sendMessage
       };
 
@@ -211,36 +330,14 @@ export default function CreateMeetScreenContainer(props: any) {
         };
       }
 
-      console.log(params);
-      
-      const result = await MeetApi.createMeetRoom(auth, params);
+      const result = await MeetApi.updateMeetRoom(auth, roomId, params);
       if (result) {
         onHandleBack();
-        // clearInput();
       } else if (result.error) {
         console.log('error : ', result.error);
       }
     }
   };
-
-  // const clearInput = () => {
-  //   setRoomName('');
-  //   setSendMessage('');
-  //   if (switchReserve) {
-  //     setStartTime({
-  //       date: '',
-  //       time: '',
-  //       current: new Date()
-  //     });
-  //     setEndTime({
-  //       date: '',
-  //       time: '',
-  //       current: new Date()
-  //     });
-  //     setSwitchReserve(false);
-  //   }
-  //   setSwitchDelAlram(false);
-  // };
 
   //예약회의 기본값 설정
   const onSwitchReserveChange = (reserve: boolean) => {
@@ -453,6 +550,7 @@ export default function CreateMeetScreenContainer(props: any) {
   };
 
   const dataLoad = async () => {
+    await _getReservationInfos(roomId);
     setIsOrgDataLoaded(true);
 
     getAllEmployee();
@@ -465,19 +563,6 @@ export default function CreateMeetScreenContainer(props: any) {
   useEffect(() => {
     setSelectMode(false);
     dataLoad();
-    setSelectedEmployee({
-      member: [
-        {
-          user_name: auth.user_name,
-          rank_name: auth.last_company.rank_name,
-          profile_url: wehagoMainURL +  auth.profile_url,
-          full_path: auth.last_company.full_path,
-          user_no: auth.user_no,
-          is_master: true
-        }
-      ],
-      group: {}
-    });
   }, []);
 
   const roomNameChange = (name: string) => {
@@ -502,7 +587,7 @@ export default function CreateMeetScreenContainer(props: any) {
     if (sendMsgRef.current?.isFocused()) sendMsgRef.current.blur();
     else if (titleRef.current?.isFocused()) titleRef.current.blur();
     else if (searchRef.current?.isFocused()) searchRef.current.blur();
-    else if(sendEmailRef.current?.isFocused()) sendEmailRef.current.blur();
+    else if (sendEmailRef.current?.isFocused()) sendEmailRef.current.blur();
   };
 
   const exitDateTime = () => {
@@ -516,68 +601,47 @@ export default function CreateMeetScreenContainer(props: any) {
     setDateTimeSeleted(false);
   };
 
-  const clickChangeRole = (item: any) => {
+  const clickChangeRole = (item: any, index: number) => {
     const resList: any[] = [];
-
     const updateList: any[] = selectedEmployee.member;
-    let idx: number = updateList.findIndex(
-      (i: any) => i.user_no === item.user_no
-    );
-    updateList[idx].is_master = !updateList[idx].is_master;
+    let updateMaster: string[] = [];
+
+    updateList[index].is_master = !updateList[index].is_master;
+    let masterUser = {
+      is_master: updateList[index].is_master,
+      portal_id: updateList[index].portal_id
+    };
+
+    updateMaster.push(masterUser.portal_id);
 
     const partListUserNoOrderList: any[] = updateList.sort((a: any, b: any) => {
       return a.user_no === auth.user_no ? -3 : b.is_master - a.is_master;
     });
-
     partListUserNoOrderList.map(v => resList.push(v));
     setSelectedEmployee({ member: resList, group: {} });
-
-    // const roomMaster: any[] = updateList[0];
-    // resList.push(roomMaster);
-
-    // const userList: any[] = updateList.filter((v: any, i: number) => i !== 0);
-
-    // 마스터권한 정렬
-    // const masterList: any[] = userList.filter(
-    //   (v: any, i) => v.is_master === true
-    // );
-    // const masterUserNoOrderList: any[] = masterList.sort((a: any, b: any) => {
-    //   return a.user_no - b.user_no;
-    // });
-    // masterUserNoOrderList.map(v => resList.push(v));
-
-    // const partList: any[] = userList.filter(
-    //   (v: any, i) => v.is_master !== true
-    // );
+    if (masterUser.is_master) {
+      setMasterEmployee(updateMaster);
+    } else {
+      setUnMasterEmployee(updateMaster);
+    }
   };
 
-  const clickDeleteUser = (item: any) => {
+  const clickDeleteUser = (item: any, index: number) => {
     let deletedList: any[] = selectedEmployee.member;
-    let idx: number = 0;
+    const deleteUser: PartialUserParam = deletedList.find(
+      e => e.portal_id === item.portal_id
+    );
+    const deleteAccessUsers: any[] = unAccessEmployee;
 
-    if (item.user_no) {
-      idx = deletedList.findIndex((i: any) => i.user_no === item.user_no);
-    } else if (item.address_service_no) {
-      idx = deletedList.findIndex(
-        (i: any) => i.address_service_no === item.address_service_no
-      );
-    } else if (item.value) {
-      idx = deletedList.findIndex((i: any) => i.value === item.value);
-      // const invitedList: { type: string; value: string }[] = invited;
-      // const invitedIndex: number = invitedList.findIndex(
-      //   (i: any) => i.value === item.value
-      // );
-      // if (invitedIndex !== -1) {
-      //   const deletedList: any[] = invitedList.filter(
-      //     (v: any, i: number) => i !== invitedIndex
-      //   );
-      //   setInvited([...deletedList]);
-      // }
-    } else {
-      console.log('error');
-    }
-    const updateList: any[] = deletedList.filter((v, i) => i !== idx);
+    //추후에 연락처나, 외부참여자 추가할때 type => email도 고려해서 짜야함.
+    deleteAccessUsers.push({
+      type: 'portal_id',
+      value: deleteUser.portal_id
+    });
+
+    const updateList: any[] = deletedList.filter((v, i) => i !== index);
     setSelectedEmployee({ member: updateList, group: {} });
+    setUnAccessEmployee(deleteAccessUsers);
   };
 
   return (
@@ -610,7 +674,7 @@ export default function CreateMeetScreenContainer(props: any) {
           sendEmailRef={sendEmailRef}
         />
       ) : (
-        <CreateMeetScreenPresenter
+        <ConferenceModfiyScreenPresenter
           roomName={roomName}
           isPublic={isPublic}
           datePicker={datePicker}
@@ -626,7 +690,7 @@ export default function CreateMeetScreenContainer(props: any) {
           setTimePicker={setTimePicker}
           openTimePicker={openTimePicker}
           openDatePicker={openDatePicker}
-          createConference={createConference}
+          modifyConference={modifyConference}
           //신규Props
           switchReserve={switchReserve}
           switchDelAlram={switchDelAlram}
@@ -654,6 +718,7 @@ export default function CreateMeetScreenContainer(props: any) {
           isHorizon={isHorizon}
           isTablet={isTablet}
           dateTimeSeleted={dateTimeSeleted}
+          // isNormal={isNormal}
         />
       )}
     </View>

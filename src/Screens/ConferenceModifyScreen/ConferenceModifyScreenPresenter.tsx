@@ -29,7 +29,7 @@ const icCheck = require('../../../assets/new/icons/ic_check.png');
 const icMasterCircle = require('../../../assets/new/icons/ic_master_circle.png');
 const icAttdCircle = require('../../../assets/new/icons/ic_attd_circle.png');
 
-const CreateMeetScreenPresenter = (props: any) => {
+const ConferenceModfiyScreenPresenter = (props: any) => {
   const {
     roomName,
     isPublic,
@@ -47,7 +47,7 @@ const CreateMeetScreenPresenter = (props: any) => {
     // onSelectDate,
     // onSelectTime,
     sendMessageChange,
-    createConference,
+    modifyConference,
     //신규Props
     switchReserve,
     switchDelAlram,
@@ -72,7 +72,8 @@ const CreateMeetScreenPresenter = (props: any) => {
     selectedEmployee,
     isHorizon,
     isTablet,
-    dateTimeSeleted
+    dateTimeSeleted,
+    isNormal
   } = props;
   const t = getT();
   const DatePickerComponent = (
@@ -106,20 +107,25 @@ const CreateMeetScreenPresenter = (props: any) => {
         <Fragment>
           <View style={[styles.topTitle]}>
             <TouchableOpacity onPress={onHandleBack}>
-              <Text style={styles.ft14N}>{t('취소')}</Text>
+              <Text style={styles.ft14N}>{t('뒤로')}</Text>
             </TouchableOpacity>
-            <Text style={styles.TitleText}>{t('회의 생성하기')}</Text>
-            <TouchableOpacity disabled={textLess2} onPress={createConference}>
+            <Text style={styles.TitleText}>{t('회의수정하기')}</Text>
+            <TouchableOpacity disabled={textLess2} onPress={modifyConference}>
               <Text
-                style={[styles.confirmText, !textLess2 && { color: '#000' }]}
+                style={[
+                  styles.updateText,
+                  !textLess2 && { color: '#000' }
+                  // isNormal && { color: '#fff' }
+                ]}
               >
-                {t('생성')}
+                {t('수정')}
               </Text>
             </TouchableOpacity>
           </View>
 
           <TouchableOpacity
             onPress={togglePublic}
+            activeOpacity={1}
             style={[styles.privateContainer]}
           >
             <LinearGradient
@@ -170,6 +176,7 @@ const CreateMeetScreenPresenter = (props: any) => {
                   ]}
                   ref={titleRef}
                 />
+                {/* <Text style={{fontSize:16, lineHeight:20, letterSpacing: -0.28}}>{roomName}</Text> */}
                 <View
                   style={[
                     styles.countContainer,
@@ -208,6 +215,7 @@ const CreateMeetScreenPresenter = (props: any) => {
                   ]}
                   ref={sendMsgRef}
                 />
+                {/* <Text>{sendMessage}</Text> */}
                 <View style={styles.countContainer}>
                   <Text style={styles.ft12}>{sendMessage.length}</Text>
                   <Text style={styles.maxLength}>/200</Text>
@@ -472,169 +480,148 @@ const CreateMeetScreenPresenter = (props: any) => {
           </View>
 
           <View style={{ flex: 1 }}>
-            {selectedEmployee.member[0].user_no !== undefined && (
-              <FlatList
-                showsVerticalScrollIndicator={false}
-                bounces={false}
-                contentContainerStyle={[
-                  {
-                    flexGrow: 1,
-                    paddingHorizontal: '5%'
-                  }
-                ]}
-                data={selectedEmployee.member}
-                keyExtractor={(item, index) => String(index)}
-                renderItem={({ item, index }: any) => {
-                  // let path: [] = [];
-                  // let user_path = '';
-                  // if (item.full_path) {
-                  //   path = item.full_path.split('>');
-                  //   for (let i = 1; i < path.length; i++) {
-                  //     if (i === path.length - 1) {
-                  //       user_path = user_path + path[i];
-                  //     } else {
-                  //       user_path = user_path + `${path[i]} | `;
-                  //     }
-                  //   }
-                  // } else user_path = '';
-
-                  const isMaster = item.is_master;
-                  return (
-                    <View style={styles.participantList}>
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              bounces={false}
+              contentContainerStyle={[
+                {
+                  flexGrow: 1,
+                  paddingHorizontal: '5%'
+                }
+              ]}
+              data={selectedEmployee.member}
+              keyExtractor={(item, index) => String(index)}
+              renderItem={({ item, index }: any) => {
+                
+                const isMaster = item.is_master;
+                return (
+                  <View style={styles.participantList}>
+                    <View
+                      style={[
+                        styles.profileView,
+                        isTablet && { width: 46, height: 46 }
+                      ]}
+                    >
                       <View
                         style={[
-                          styles.profileView,
-                          isTablet && { width: 46, height: 46 }
+                          styles.myView,
+                          item.user_no !== auth.user_no && {
+                            backgroundColor: '#1c90fb'
+                          }
                         ]}
                       >
-                        <View
-                          style={[
-                            styles.myView,
-                            item.user_no !== auth.user_no && {
-                              backgroundColor: '#1c90fb'
-                            }
-                          ]}
-                        >
-                          {item.user_no === auth.user_no ? (
-                            <Text style={styles.myText}>나</Text>
-                          ) : (
-                            <TouchableOpacity
-                              onPress={() => {
-                                clickDeleteUser(item);
-                              }}
-                            >
-                              <Image
-                                source={icCancel_W}
-                                style={styles.icCancelUser}
-                              />
-                            </TouchableOpacity>
-                          )}
-                        </View>
-                        <Image
-                          style={styles.profile}
-                          source={{
-                            uri: item.profile_url
-                              ? item.profile_url
-                              : wehagoDummyImageURL
-                          }}
-                          resizeMode={'cover'}
-                        />
-                      </View>
-                      <View
-                        style={[styles.infoBox, isHorizon && { width: '70%' }]}
-                      >
-                        {!item.value && (
-                          <Text style={styles.name}>
-                            {item.user_name
-                              ? item.user_name
-                              : item.address_name
-                              ? item.address_name
-                              : ''}{' '}
-                            {item.rank_name
-                              ? item.rank_name
-                              : item.position_rank_name
-                              ? item.position_rank_name
-                              : ''}
-                          </Text>
+                        {item.user_no === auth.user_no ? (
+                          <Text style={styles.myText}>나</Text>
+                        ) : (
+                          <TouchableOpacity
+                            onPress={() => {
+                              clickDeleteUser(item, index);
+                            }}
+                          >
+                            <Image
+                              source={icCancel_W}
+                              style={styles.icCancelUser}
+                            />
+                          </TouchableOpacity>
                         )}
+                      </View>
+                      <Image
+                        style={styles.profile}
+                        source={{
+                          uri: item.profile_url
+                        }}
+                        resizeMode={'cover'}
+                      />
+                    </View>
+                    <View
+                      style={[styles.infoBox, isHorizon && { width: '70%' }]}
+                    >
+                      {item.full_path !== '' ? (
+                        <Fragment>
+                          <Text style={styles.name}>
+                            {item.user_name} {item.rank_name ? item.rank_name : ''}
+                          </Text>
+                          <Text
+                            numberOfLines={1}
+                            ellipsizeMode="tail"
+                            style={styles.tree}
+                          >
+                            {item.full_path}
+                          </Text>
+                        </Fragment>
+                      ) : (
                         <Text
                           numberOfLines={1}
                           ellipsizeMode="tail"
-                          style={[styles.tree, item.value && { fontSize: 16 }]}
+                          style={[styles.tree, {fontSize: 15}]}
                         >
-                          {item.full_path
-                            ? item.full_path
-                            : item.address_service_no
-                            ? item.emailinfolist[0].email_address
-                            : item.value}
+                          {item.user_name}
                         </Text>
-                      </View>
-                      <TouchableOpacity
-                        style={[
-                          styles.roleContainer,
-                          isMaster && { borderColor: '#01acc1' },
-                          !item.user_no && { borderColor: '#fff' },
-                          isTablet && { width: 140 }
-                        ]}
-                        onPress={() => {
-                          clickChangeRole(item);
-                        }}
-                        disabled={
-                          item.user_no === auth.user_no || !item.user_no
-                        }
-                      >
-                        {isMaster ? (
-                          <Fragment>
-                            <Text
-                              style={[
-                                styles.maseterText,
-                                isTablet && { fontSize: 14 }
-                              ]}
-                            >
-                              {t('마스터')}
-                            </Text>
-                            <Image
-                              style={[
-                                styles.icMaster,
-                                isTablet && { width: 30, height: 30 }
-                              ]}
-                              source={icMasterCircle}
-                              resizeMode={'contain'}
-                            />
-                          </Fragment>
-                        ) : item.user_no ? (
-                          <Fragment>
-                            <Image
-                              style={[
-                                styles.icMaster,
-                                isTablet && { width: 30, height: 30 }
-                              ]}
-                              source={icAttdCircle}
-                              resizeMode={'contain'}
-                            />
+                      )}
+                    </View>
+                    <TouchableOpacity
+                      style={[
+                        styles.roleContainer,
+                        isMaster && { borderColor: '#01acc1' },
+                        !item.user_no && { borderColor: '#fff' },
+                        isTablet && { width: 140 }
+                      ]}
+                      onPress={() => {
+                        clickChangeRole(item, index);
+                      }}
+                      disabled={item.user_no === auth.user_no}
+                    >
+                      {isMaster ? (
+                        <Fragment>
+                          <Text
+                            style={[
+                              styles.maseterText,
+                              isTablet && { fontSize: 14 }
+                            ]}
+                          >
+                            {t('마스터')}
+                          </Text>
+                          <Image
+                            style={[
+                              styles.icMaster,
+                              isTablet && { width: 30, height: 30 }
+                            ]}
+                            source={icMasterCircle}
+                            resizeMode={'contain'}
+                          />
+                        </Fragment>
+                      ) : item.user_no ? (
+                        <Fragment>
+                          <Image
+                            style={[
+                              styles.icMaster,
+                              isTablet && { width: 30, height: 30 }
+                            ]}
+                            source={icAttdCircle}
+                            resizeMode={'contain'}
+                          />
 
-                            <Text
-                              style={[
-                                styles.attendantText,
-                                isTablet && { fontSize: 14 }
-                              ]}
-                            >
-                              {t('참석자')}
-                            </Text>
-                          </Fragment>
-                        ) : (
-                          <Fragment>
-                            {/* <Text style={styles.extText}>
+                          <Text
+                            style={[
+                              styles.attendantText,
+                              isTablet && { fontSize: 14 }
+                            ]}
+                          >
+                            {t('참석자')}
+                          </Text>
+                        </Fragment>
+                      ) : (
+                        <Fragment>
+                          {/* <Text style={styles.extText}>
                               {t('외부참여자')}
                             </Text> */}
-                          </Fragment>
-                        )}
-                      </TouchableOpacity>
-                    </View>
-                  );
-                }}
-              />
-            )}
+                        </Fragment>
+                      )}
+                    </TouchableOpacity>
+                  </View>
+                );
+              }}
+            />
           </View>
         </Fragment>
       )}
@@ -739,10 +726,10 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     color: '#000'
   },
-  confirmText: {
+  updateText: {
     fontSize: 14,
     fontWeight: 'normal',
-    color: '#d3d3d3'
+    color: '#ccc'
   },
   ft14B: {
     fontSize: 14,
@@ -768,9 +755,10 @@ const styles = StyleSheet.create({
     // height: '40%'
   },
   textHeader: {
-    fontSize: 12,
-    marginVertical: 5,
-    color: '#000'
+    fontSize: 13,
+    marginVertical: 2,
+    // color: '#000'
+    color: '#939393'
   },
   roomNameStyle: {
     borderWidth: 1,
@@ -985,4 +973,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default CreateMeetScreenPresenter;
+export default ConferenceModfiyScreenPresenter;

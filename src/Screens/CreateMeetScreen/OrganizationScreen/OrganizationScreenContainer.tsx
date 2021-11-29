@@ -10,6 +10,8 @@ import { OrganizationApi } from '../../../services';
 
 import OrganizationScreenPresenter from './OrganizationScreenPresenter';
 import { values } from 'lodash';
+import { wehagoDummyImageURL, wehagoMainURL } from '../../../utils';
+import { PartialUserParam } from '../../ConferenceModifyScreen/ConferenceModifyScreenContainer';
 
 const OrganizationScreenContainer = (props: any) => {
   const {
@@ -47,8 +49,6 @@ const OrganizationScreenContainer = (props: any) => {
   // );
   const [exterError, setExterError] = useState(false);
 
-  
-
   const [rotate] = useState(new Animated.Value(0));
 
   const spin = rotate.interpolate({
@@ -58,11 +58,10 @@ const OrganizationScreenContainer = (props: any) => {
 
   const t = getT();
 
-  // const {auth} = useSelector((state: RootState) => state.user);
   const { recents, auth, isHorizon } = useSelector((state: RootState) => ({
     recents: state.recents.recents,
     auth: state.user.auth,
-    isHorizon : state.orientation.isHorizon
+    isHorizon: state.orientation.isHorizon
   }));
 
   const dispatch = useDispatch();
@@ -144,10 +143,45 @@ const OrganizationScreenContainer = (props: any) => {
       });
 
       if (idx !== -1) {
-        tmpList = selectedList.filter((v, i) => i !== idx);
+        tmpList = selectedList
+          .filter((v, i) => i !== idx)
+          .map(user => {
+            const data: PartialUserParam = {
+              portal_id: user.portal_id,
+              rank_name: user.rank_name,
+              user_no: user.user_no,
+              user_name: user.user_name ? user.user_name : user.user,
+              profile_url: user.profile_url
+                ? user.profile_url
+                : wehagoDummyImageURL,
+              full_path: user.user_no
+                ? user.full_path
+                : user.user_name !== null
+                ? user.user
+                : '',
+              user_type: user.user_type === 2 ? 'ext' : 'org',
+              is_master: user.is_master
+            };
+            return data;
+          });
       } else {
         item.is_master = false;
-        selectedList.push(item);
+        selectedList.push({
+          portal_id: item.portal_id,
+          rank_name: item.rank_name,
+          user_no: item.user_no,
+          user_name: item.user_name ? item.user_name : item.user,
+          profile_url: item.profile_url
+            ? wehagoMainURL + item.profile_url
+            : wehagoDummyImageURL,
+          full_path: item.user_no
+            ? item.full_path
+            : item.user_name !== null
+            ? item.user
+            : '',
+          user_type: item.user_type === 2 ? 'ext' : 'org',
+          is_master: false
+        });
       }
 
       setSelectedEmployee({
@@ -187,9 +221,11 @@ const OrganizationScreenContainer = (props: any) => {
     const selectedList = selectedEmployee.member;
     const resList: any[] = [];
 
-    const partListUserNoOrderList: any[] = selectedList.sort((a: any, b: any) => {
-      return a.user_no === auth.user_no ? -1 : 1;
-    });
+    const partListUserNoOrderList: any[] = selectedList.sort(
+      (a: any, b: any) => {
+        return a.user_no === auth.user_no ? -1 : 1;
+      }
+    );
 
     partListUserNoOrderList.map(value => resList.push(value));
 
@@ -309,11 +345,10 @@ const OrganizationScreenContainer = (props: any) => {
   }, [tabType]);
   //#endregion
 
-
   const focusOut = () => {
     if (searchRef.current?.isFocused()) searchRef.current.blur();
-    else if(sendEmailRef.current?.isFocused()) sendEmailRef.current.blur();
-  }
+    else if (sendEmailRef.current?.isFocused()) sendEmailRef.current.blur();
+  };
   return (
     <OrganizationScreenPresenter
       setSelectMode={setSelectMode}

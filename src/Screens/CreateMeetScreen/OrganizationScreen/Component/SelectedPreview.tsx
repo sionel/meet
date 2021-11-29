@@ -19,7 +19,7 @@ const SelectedPreview = (props: any) => {
   const { selectedEmployee, auth, selectEmployee } = props;
 
   const group = selectedEmployee.group;
-  const member: any = selectedEmployee.member;
+  const member: any[] = selectedEmployee.member;
 
   if (Object.keys(group).length > 0)
     console.log('1wrjajs fhsjdgfhjksg hks dghkashgfjk');
@@ -33,6 +33,8 @@ const SelectedPreview = (props: any) => {
       horizontal={true}
       keyExtractor={(item, index) => String(index)}
       renderItem={({ item, index }) => {
+        // console.log(item);
+
         return (
           <View style={styles.profile} key={index}>
             <TouchableOpacity
@@ -67,10 +69,6 @@ const SelectedPreview = (props: any) => {
                         ? ic_mail
                         : {
                             uri: item.profile_url
-                              ? wehagoMainURL + item.profile_url
-                              : item.profile_image
-                              ? wehagoMainURL + item.profile_image
-                              : wehagoDummyImageURL
                           }
                     }
                     style={{
@@ -150,7 +148,7 @@ const styles = StyleSheet.create({
     height: 80,
     backgroundColor: '#f6f7f8',
     borderColor: '#ececec',
-    borderBottomWidth: 1,
+    borderBottomWidth: 1
   },
   profile: {
     alignItems: 'center',
