@@ -75,7 +75,6 @@ export default function ConferenceCard(props: cardProps) {
               fontSize: 20,
               fontWeight: 'bold',
               flex: 1
-              // backgroundColor: '#661'
             }}
             numberOfLines={1}
           >
@@ -205,9 +204,11 @@ export default function ConferenceCard(props: cardProps) {
 
 const styles = StyleSheet.create({
   container: {
-    marginHorizontal: 15,
+    width:290,
+    height:150,
+    marginRight: 20,
     marginBottom: 10,
-    backgroundColor: '#fff',
+    // backgroundColor: '#fff',
     borderRadius: 12,
     shadowColor: 'rgb(9,33,60)',
     shadowOpacity: 0.3,
@@ -217,7 +218,7 @@ const styles = StyleSheet.create({
     }
   },
   gradient: {
-    width: 300,
+    // width: 300,
     height: '100%',
     padding: 15,
     borderRadius: 12
