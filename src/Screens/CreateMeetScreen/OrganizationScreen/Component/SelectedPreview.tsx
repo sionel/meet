@@ -22,7 +22,7 @@ const SelectedPreview = (props: any) => {
   const member: any[] = selectedEmployee.member;
 
   if (Object.keys(group).length > 0)
-    console.log('1wrjajs fhsjdgfhjksg hks dghkashgfjk');
+    // console.log('1wrjajs fhsjdgfhjksg hks dghkashgfjk');
   // 선택된 데이터가 없을 시 return null
   if (Object.keys(group).length + Object.keys(member).length === 0) return null;
 
@@ -33,8 +33,6 @@ const SelectedPreview = (props: any) => {
       horizontal={true}
       keyExtractor={(item, index) => String(index)}
       renderItem={({ item, index }) => {
-        // console.log(item);
-
         return (
           <View style={styles.profile} key={index}>
             <TouchableOpacity

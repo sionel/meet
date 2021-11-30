@@ -454,7 +454,7 @@ export default function HomeScreenContainer(props: any) {
       }
     };
     const modify = {
-      name: '예약정보 수정',
+      name: '예약정보 보기',
       icon1: icModify,
       onClick: () => {
         conferenceModify();
@@ -480,7 +480,7 @@ export default function HomeScreenContainer(props: any) {
     const contentList = [];
 
     contentList.push(list);
-    isMaster && contentList.push(modify);
+    contentList.push(modify);
     contentList.push(copy);
 
     isMaster && contentList.push(cancle);

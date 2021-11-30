@@ -28,6 +28,8 @@ const icCancel = require('../../../assets/new/icons/ic_cancel.png');
 const icCheck = require('../../../assets/new/icons/ic_check.png');
 const icMasterCircle = require('../../../assets/new/icons/ic_master_circle.png');
 const icAttdCircle = require('../../../assets/new/icons/ic_attd_circle.png');
+const icModify = require('../../../assets/new/icons/ic_modify.png');
+const icBack = require('../../../assets/new/icons/ic_back.png');
 
 const ConferenceModfiyScreenPresenter = (props: any) => {
   const {
@@ -73,7 +75,9 @@ const ConferenceModfiyScreenPresenter = (props: any) => {
     isHorizon,
     isTablet,
     dateTimeSeleted,
-    isNormal
+    isNormal,
+    isAuth,
+    changeIsNormal
   } = props;
   const t = getT();
   const DatePickerComponent = (
@@ -107,25 +111,40 @@ const ConferenceModfiyScreenPresenter = (props: any) => {
         <Fragment>
           <View style={[styles.topTitle]}>
             <TouchableOpacity onPress={onHandleBack}>
-              <Text style={styles.ft14N}>{t('뒤로')}</Text>
+              <Image
+                source={icBack}
+                style={{ width: 24, height: 24 }}
+                resizeMode="cover"
+              />
+              {/* <Text style={styles.ft14N}>{t('뒤로')}</Text> */}
             </TouchableOpacity>
-            <Text style={styles.TitleText}>{t('회의수정하기')}</Text>
-            <TouchableOpacity disabled={textLess2} onPress={modifyConference}>
-              <Text
-                style={[
-                  styles.updateText,
-                  !textLess2 && { color: '#000' }
-                  // isNormal && { color: '#fff' }
-                ]}
-              >
-                {t('수정')}
-              </Text>
+            <Text style={styles.TitleText}>
+              {isNormal ? t('회의상세정보') : t('회의정보수정')}
+            </Text>
+            <TouchableOpacity
+              disabled={textLess2 || !isAuth}
+              onPress={isAuth ? isNormal ? changeIsNormal : modifyConference : ()=>{}}
+            >
+              {isAuth ? isNormal ? (
+                  <Image
+                    source={icModify}
+                    style={{ width: 24, height: 24 }}
+                    resizeMode="cover"
+                  />
+              ) : (
+                <Text
+                  style={[styles.updateText, !textLess2 && {color: '#000'}]}
+                >
+                  {t('수정')}
+                </Text>
+              ) : <Fragment />}
             </TouchableOpacity>
           </View>
 
           <TouchableOpacity
             onPress={togglePublic}
-            activeOpacity={1}
+            disabled={!isAuth || isNormal}
+            activeOpacity={isAuth ? 0.6 : 1}
             style={[styles.privateContainer]}
           >
             <LinearGradient
@@ -161,65 +180,93 @@ const ConferenceModfiyScreenPresenter = (props: any) => {
             ]}
           />
 
-          <View style={[{ backgroundColor: '#fff', height: '25%' }]}>
-            <View style={styles.middleContainer}>
+          <View
+            style={[{ backgroundColor: '#fff', height: '25%' }]}
+            pointerEvents={isNormal ? 'none' : 'auto'}
+          >
+            <View
+              style={[
+                styles.middleContainer,
+                isNormal && { justifyContent: 'space-evenly' }
+              ]}
+            >
               <View style={styles.directionColTitle}>
                 <Text style={styles.textHeader}>{t('회의명')}</Text>
-                <TextInput
-                  onChangeText={roomNameChange}
-                  value={roomName}
-                  maxLength={20}
-                  style={[
-                    styles.roomNameStyle,
-                    roomName && { borderColor: '#1c90fb' },
-                    textLess2 && roomName && { borderColor: '#fc4c60' }
-                  ]}
-                  ref={titleRef}
-                />
-                {/* <Text style={{fontSize:16, lineHeight:20, letterSpacing: -0.28}}>{roomName}</Text> */}
-                <View
-                  style={[
-                    styles.countContainer,
-                    textLess2 && roomName && { justifyContent: 'space-between' }
-                  ]}
-                >
-                  {textLess2 && roomName != '' && (
-                    <Text
-                      style={{
-                        color: '#fc4c60',
-                        fontSize: 12,
-                        lineHeight: 17,
-                        letterSpacing: -0.24
-                      }}
+                {isNormal ? (
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      lineHeight: 20,
+                      letterSpacing: -0.28
+                    }}
+                  >
+                    {roomName}
+                  </Text>
+                ) : (
+                  <Fragment>
+                    <TextInput
+                      onChangeText={roomNameChange}
+                      value={roomName}
+                      maxLength={20}
+                      style={[
+                        styles.roomNameStyle,
+                        roomName && { borderColor: '#1c90fb' },
+                        textLess2 && roomName && { borderColor: '#fc4c60' }
+                      ]}
+                      ref={titleRef}
+                    />
+                    <View
+                      style={[
+                        styles.countContainer,
+                        textLess2 &&
+                          roomName && { justifyContent: 'space-between' }
+                      ]}
                     >
-                      {t('두글자 이상 입력해주세요.')}
-                    </Text>
-                  )}
-                  <View style={styles.countContainer}>
-                    <Text style={styles.ft12}>{roomName.length}</Text>
-                    <Text style={styles.maxLength}>/20</Text>
-                  </View>
-                </View>
+                      {textLess2 && roomName != '' && (
+                        <Text
+                          style={{
+                            color: '#fc4c60',
+                            fontSize: 12,
+                            lineHeight: 17,
+                            letterSpacing: -0.24
+                          }}
+                        >
+                          {t('두글자 이상 입력해주세요.')}
+                        </Text>
+                      )}
+                      <View style={styles.countContainer}>
+                        <Text style={styles.ft12}>{roomName.length}</Text>
+                        <Text style={styles.maxLength}>/20</Text>
+                      </View>
+                    </View>
+                  </Fragment>
+                )}
               </View>
               <View style={styles.directionColMessage}>
                 <Text style={styles.textHeader}>{t('초대메세지')}</Text>
-                <TextInput
-                  onChangeText={sendMessageChange}
-                  value={sendMessage}
-                  maxLength={200}
-                  multiline
-                  style={[
-                    styles.sendStyle,
-                    sendMessage && { borderColor: '#1c90fb' },
-                    isHorizon && { paddingTop: '1%' }
-                  ]}
-                  ref={sendMsgRef}
-                />
-                {/* <Text>{sendMessage}</Text> */}
-                <View style={styles.countContainer}>
-                  <Text style={styles.ft12}>{sendMessage.length}</Text>
-                  <Text style={styles.maxLength}>/200</Text>
-                </View>
+
+                {isNormal ? (
+                  <Text>{sendMessage}</Text>
+                ) : (
+                  <Fragment>
+                    <TextInput
+                      onChangeText={sendMessageChange}
+                      value={sendMessage}
+                      maxLength={200}
+                      multiline
+                      style={[
+                        styles.sendStyle,
+                        sendMessage && { borderColor: '#1c90fb' },
+                        isHorizon && { paddingTop: '1%' }
+                      ]}
+                      ref={sendMsgRef}
+                    />
+                    <View style={styles.countContainer}>
+                      <Text style={styles.ft12}>{sendMessage.length}</Text>
+                      <Text style={styles.maxLength}>/200</Text>
+                    </View>
+                  </Fragment>
+                )}
               </View>
             </View>
           </View>
@@ -232,6 +279,7 @@ const ConferenceModfiyScreenPresenter = (props: any) => {
           />
 
           <View
+            pointerEvents={isNormal ? 'none' : 'auto'}
             style={[
               styles.reserveContainer,
               switchReserve && { height: '15%' }
@@ -241,11 +289,15 @@ const ConferenceModfiyScreenPresenter = (props: any) => {
               <Text style={[styles.ft14B, { fontSize: 15 }]}>
                 {t('예약회의')}
               </Text>
-              <Switch
-                onValueChange={onSwitchReserveChange}
-                value={switchReserve}
-                trackColor={{ false: '', true: '#1c90fb' }}
-              />
+              {isNormal ? (
+                <Fragment />
+              ) : (
+                <Switch
+                  onValueChange={onSwitchReserveChange}
+                  value={switchReserve}
+                  trackColor={{ false: '', true: '#1c90fb' }}
+                />
+              )}
             </View>
             {switchReserve && (
               <Fragment>
@@ -441,45 +493,59 @@ const ConferenceModfiyScreenPresenter = (props: any) => {
             ]}
           />
 
-          <View style={[styles.conferenceMember]}>
+          <View
+            style={[styles.conferenceMember]}
+            pointerEvents={isNormal ? 'none' : 'auto'}
+          >
             <View style={{ flexDirection: 'row' }}>
               <Text style={styles.ft14B}>{t('참석자')} </Text>
               <Text style={[styles.ft14B, { color: '#1c90fb' }]}>
                 {selectedEmployee.member.length}
               </Text>
             </View>
-            <TouchableOpacity
-              onPress={() => {
-                setSelectMode(true);
-              }}
-            >
-              <Image source={icPersonPlus} style={styles.icPersonPlus} />
-            </TouchableOpacity>
-          </View>
-
-          <View style={[styles.deleteAlram]}>
-            <View>
-              <Text
-                style={[styles.ft12, { letterSpacing: -0.18, lineHeight: 18 }]}
+            {isNormal ? (
+              <Fragment />
+            ) : (
+              <TouchableOpacity
+                onPress={() => {
+                  setSelectMode(true);
+                }}
               >
-                {isHorizon
-                  ? t(
-                      '화상회의가 변경 또는 삭제될 경우, 알림 이메일을 보냅니다.'
-                    )
-                  : t(
-                      '화상회의가 변경 또는 삭제될 경우, \n알림 이메일을 보냅니다.'
-                    )}
-              </Text>
-            </View>
-
-            <Switch
-              onValueChange={onSwitchDelAlramChange}
-              value={switchDelAlram}
-              trackColor={{ false: '', true: '#1c90fb' }}
-            />
+                <Image source={icPersonPlus} style={styles.icPersonPlus} />
+              </TouchableOpacity>
+            )}
           </View>
 
-          <View style={{ flex: 1 }}>
+          {isNormal ? (
+            <Fragment />
+          ) : (
+            <View style={[styles.deleteAlram]}>
+              <View>
+                <Text
+                  style={[
+                    styles.ft12,
+                    { letterSpacing: -0.18, lineHeight: 18 }
+                  ]}
+                >
+                  {isHorizon
+                    ? t(
+                        '화상회의가 변경 또는 삭제될 경우, 알림 이메일을 보냅니다.'
+                      )
+                    : t(
+                        '화상회의가 변경 또는 삭제될 경우, \n알림 이메일을 보냅니다.'
+                      )}
+                </Text>
+              </View>
+
+              <Switch
+                onValueChange={onSwitchDelAlramChange}
+                value={switchDelAlram}
+                trackColor={{ false: '', true: '#1c90fb' }}
+              />
+            </View>
+          )}
+
+          <View style={{ flex: 1}} pointerEvents={isNormal ? 'none' : 'auto'}>
             <FlatList
               showsVerticalScrollIndicator={false}
               bounces={false}
@@ -492,7 +558,6 @@ const ConferenceModfiyScreenPresenter = (props: any) => {
               data={selectedEmployee.member}
               keyExtractor={(item, index) => String(index)}
               renderItem={({ item, index }: any) => {
-                
                 const isMaster = item.is_master;
                 return (
                   <View style={styles.participantList}>
@@ -505,13 +570,20 @@ const ConferenceModfiyScreenPresenter = (props: any) => {
                       <View
                         style={[
                           styles.myView,
-                          item.user_no !== auth.user_no && {
-                            backgroundColor: '#1c90fb'
-                          }
+                          isNormal &&
+                            item.user_no !== auth.user_no && {
+                              backgroundColor: '#00ff0000'
+                            },
+                          !isNormal &&
+                            item.user_no !== auth.user_no && {
+                              backgroundColor: '#1c90fb'
+                            }
                         ]}
                       >
                         {item.user_no === auth.user_no ? (
                           <Text style={styles.myText}>나</Text>
+                        ) : isNormal ? (
+                          <Fragment />
                         ) : (
                           <TouchableOpacity
                             onPress={() => {
@@ -539,7 +611,8 @@ const ConferenceModfiyScreenPresenter = (props: any) => {
                       {item.full_path !== '' ? (
                         <Fragment>
                           <Text style={styles.name}>
-                            {item.user_name} {item.rank_name ? item.rank_name : ''}
+                            {item.user_name}{' '}
+                            {item.rank_name ? item.rank_name : ''}
                           </Text>
                           <Text
                             numberOfLines={1}
@@ -553,7 +626,7 @@ const ConferenceModfiyScreenPresenter = (props: any) => {
                         <Text
                           numberOfLines={1}
                           ellipsizeMode="tail"
-                          style={[styles.tree, {fontSize: 15}]}
+                          style={[styles.tree, { fontSize: 15 }]}
                         >
                           {item.user_name}
                         </Text>
@@ -570,6 +643,7 @@ const ConferenceModfiyScreenPresenter = (props: any) => {
                         clickChangeRole(item, index);
                       }}
                       disabled={item.user_no === auth.user_no}
+                      activeOpacity={isNormal ? 1 : 0.6}
                     >
                       {isMaster ? (
                         <Fragment>
@@ -692,7 +766,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     width: '100%',
-    height: '6%',
+    height: 50,
     backgroundColor: '#fff'
   },
   TitleText: {

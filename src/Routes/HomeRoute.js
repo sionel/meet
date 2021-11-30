@@ -19,7 +19,6 @@ import OpenSourceScreen from '../Screens/ConfigurationScreen/subScreens/OpenSour
 import OpenSourceDetailScreen from '../Screens/ConfigurationScreen/subScreens/OpenSourceDetailScreen';
 import CreateScreen from '../Screens/CreateScreen';
 import CreateMeetScreen from '../Screens/CreateMeetScreen';
-import ConferenceDetail from '../Screens/ConferenceDetailScreen';
 import ConferenceModify from '../Screens/ConferenceModifyScreen';
 import ConferenceStateScreen from '../Screens/ConferenceStateScreen';
 
@@ -28,7 +27,6 @@ import RouteTitle from './RouteTitle';
 import DrawerContent from '../components/DrawerContent';
 import { WEHAGO_TYPE } from '../../config';
 import { getT } from '../utils/translateManager';
-
 
 const commonStyle = {
   height: 53,
@@ -216,30 +214,22 @@ const HomeRouteStack = () => {
     CreateMeetRoom: {
       screen: CreateMeetScreen,
       navigationOptions: ({ navigation }) => ({
-        header:null
-      }),
-      
+        header: null
+      })
     },
 
     ConferenceModify: {
       screen: ConferenceModify,
       navigationOptions: ({ navigation }) => ({
-        header:null
-      }),
-    },
-
-    ConferenceDetail: {
-      screen: ConferenceDetail,
-      navigationOptions: ({ navigation }) => ({
-        header:null
-      }),
+        header: null
+      })
     }
   };
 };
 
 const HomeRoute = createStackNavigator(HomeRouteStack(), {
   cardStyle: { transparent: true },
-  headerMode:'none'
+  headerMode: 'none'
 });
 
 export default HomeRoute;

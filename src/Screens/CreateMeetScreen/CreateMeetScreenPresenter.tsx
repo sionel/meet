@@ -705,7 +705,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     width: '100%',
-    height: '6%',
+    height: 50,
     backgroundColor: '#fff'
   },
   TitleText: {

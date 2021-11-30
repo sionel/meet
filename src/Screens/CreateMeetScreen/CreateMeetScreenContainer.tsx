@@ -210,8 +210,6 @@ export default function CreateMeetScreenContainer(props: any) {
           end_date_time: end_time
         };
       }
-
-      console.log(params);
       
       const result = await MeetApi.createMeetRoom(auth, params);
       if (result) {
