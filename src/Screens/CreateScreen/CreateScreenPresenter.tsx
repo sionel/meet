@@ -135,7 +135,7 @@ function CreateScreenPresenter(props: createProps) {
               return (
                 <Animated.FlatList
                   keyExtractor={(item, index) => index.toString()}
-                  initialNumToRender={20}
+                  initialNumToRender={30}
                   style={{
                     height,
                     overflow: 'hidden',

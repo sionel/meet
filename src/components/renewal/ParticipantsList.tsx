@@ -40,7 +40,7 @@ export default function ParticipantsList(
       >
         <View
           style={{
-            height: '6%',
+            height: 50,
             flexDirection: 'row',
             alignItems: 'center'
           }}
@@ -64,7 +64,11 @@ export default function ParticipantsList(
             }}
           >
             <Text
-              style={{ fontSize: 20, marginHorizontal: 3, fontWeight: 'bold' }}
+              style={{
+                fontSize: 20,
+                marginHorizontal: 3,
+                fontWeight: 'bold'
+              }}
             >
               {title}
             </Text>
@@ -79,7 +83,13 @@ export default function ParticipantsList(
               {participants.length}
             </Text>
           </View>
-          <View style={{ marginRight: '3%', width: '10%', height: '100%' }} />
+          <View
+            style={{
+              marginRight: '3%',
+              width: '10%',
+              height: '100%'
+            }}
+          />
         </View>
         <FlatList
           keyExtractor={(item, index) => index.toString()}
@@ -92,17 +102,19 @@ export default function ParticipantsList(
                 style={{
                   // width: '100%',
                   flexDirection: 'row',
-                  height: 35,
-                  marginVertical: '2%',
+                  height: 70,
+                  paddingVertical: 10,
+                  // marginBottom:30,
                   marginHorizontal: '5%',
                   alignItems: 'center',
                   justifyContent: 'center'
                 }}
+                disabled={true}
               >
                 <Image
                   source={{ uri: item.image }}
                   resizeMode={'cover'}
-                  style={{ width: 35, height: 35, borderRadius: 35 }}
+                  style={{ width: 40, height: 40, borderRadius: 40 }}
                 />
                 <Text
                   style={{
