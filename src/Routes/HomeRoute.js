@@ -19,8 +19,9 @@ import OpenSourceScreen from '../Screens/ConfigurationScreen/subScreens/OpenSour
 import OpenSourceDetailScreen from '../Screens/ConfigurationScreen/subScreens/OpenSourceDetailScreen';
 import CreateScreen from '../Screens/CreateScreen';
 import CreateMeetScreen from '../Screens/CreateMeetScreen';
-import ConferenceModify from '../Screens/ConferenceModifyScreen';
+import ConferenceModifyScreen from '../Screens/ConferenceModifyScreen';
 import ConferenceStateScreen from '../Screens/ConferenceStateScreen';
+import InviteCodeScreen from '../Screens/InviteCodeScreen';
 
 /** Components */
 import RouteTitle from './RouteTitle';
@@ -219,7 +220,14 @@ const HomeRouteStack = () => {
     },
 
     ConferenceModify: {
-      screen: ConferenceModify,
+      screen: ConferenceModifyScreen,
+      navigationOptions: ({ navigation }) => ({
+        header: null
+      })
+    },
+
+    InviteCode: {
+      screen: InviteCodeScreen,
       navigationOptions: ({ navigation }) => ({
         header: null
       })

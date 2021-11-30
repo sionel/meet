@@ -13,7 +13,7 @@ import { RootState } from '../../redux/configureStore';
 import deviceInfoModule from 'react-native-device-info';
 import { wehagoDummyImageURL, wehagoMainURL } from '../../utils';
 
-interface param {
+interface accessUserParam {
   type: 'portal_id' | 'email';
   value: string;
   is_master: boolean;
@@ -22,9 +22,7 @@ interface param {
   user_no: number;
 }
 
-type PartialParam = Partial<param>;
-
-interface roomParam {
+interface roomInfoParam {
   name: string;
   is_public: boolean;
   portal_id: string;
@@ -35,10 +33,10 @@ interface roomParam {
   error?: any;
 }
 
-interface userParam {
+interface userInfoParam {
   portal_id: string;
   rank_name: string;
-  user_no: string;
+  user_no: number;
   user_name: string;
   profile_url: string;
   full_path: string;
@@ -46,15 +44,31 @@ interface userParam {
   is_master: boolean;
 }
 
-export type PartialUserParam = Partial<userParam>;
+interface roomModifyParam {
+  service_code: string;
+  name: string;
+  is_public: boolean;
+  is_reservation: boolean;
+  access_user: any[];
+  unaccess_user?: any[];
+  master?: any[];
+  unmaster?: any[];
+  is_send_updated_email: boolean;
+  invite_message: string;
+  start_date_time?: any;
+  end_date_time?: any;
+}
+
+type PartialAccessUserParam = Partial<accessUserParam>;
+export type PartialUserInfoParam = Partial<userInfoParam>;
 
 export default function ConferenceModfiyScreenContainer(props: any) {
+  const [isPublic, setIsPublic] = useState(true);
   const [switchReserve, setSwitchReserve] = useState(true);
   const [switchDelAlram, setSwitchDelAlram] = useState(false);
   const [selectMode, setSelectMode] = useState(false);
-  const [employee, setEmployee] = useState([{}]);
   const [roomName, setRoomName] = useState('');
-  const [isPublic, setIsPublic] = useState(true);
+  const [sendMessage, setSendMessage] = useState('');
   const [timePicker, setTimePicker] = useState<'none' | 'start' | 'end'>(
     'none'
   );
@@ -75,6 +89,7 @@ export default function ConferenceModfiyScreenContainer(props: any) {
   const [time, setTime] = useState(new Date());
   const [timeChangeDetect, setTimeChangeDetect] = useState(false);
   const [date, setDate] = useState(new Date());
+  const [employee, setEmployee] = useState([{}]);
   const [selectedEmployee, setSelectedEmployee] = useState({
     member: [{}],
     group: {}
@@ -85,8 +100,6 @@ export default function ConferenceModfiyScreenContainer(props: any) {
   >([]);
   const [masterEmployee, setMasterEmployee] = useState<string[]>([]);
   const [unMasterEmployee, setUnMasterEmployee] = useState<string[]>([]);
-
-  const [sendMessage, setSendMessage] = useState('');
 
   const [textLess2, setTextLess2] = useState(false);
   const [isOrgDataLoaded, setIsOrgDataLoaded] = useState(false);
@@ -114,13 +127,15 @@ export default function ConferenceModfiyScreenContainer(props: any) {
   const isTablet = deviceInfoModule.isTablet() === true;
 
   const _getReservationInfos = async (roomId: string) => {
-    const reservationInfos: roomParam = await MeetApi.getMeetRoom(auth, roomId);
+    const reservationInfos: roomInfoParam = await MeetApi.getMeetRoom(
+      auth,
+      roomId
+    );
     if (reservationInfos.error) {
       console.log('error', reservationInfos.error);
     }
 
-    if(reservationInfos.portal_id === auth.portal_id) setIsAuth(true);
-    
+    if (reservationInfos.portal_id === auth.portal_id) setIsAuth(true);
 
     const accessUser = await MeetApi.getAccessUsers(auth, roomId);
     if (accessUser.error) {
@@ -147,9 +162,9 @@ export default function ConferenceModfiyScreenContainer(props: any) {
       return item;
     });
 
-    const reservationUserInfos: any = await Promise.all(
+    const reservationUserInfos: PartialUserInfoParam[] = await Promise.all(
       sortedPortalIdList.map(async (user, i) => {
-        const data: PartialUserParam = {
+        const data: PartialUserInfoParam = {
           portal_id: user.portal_id,
           rank_name: user.rank_name,
           user_no: user.user_no,
@@ -183,8 +198,6 @@ export default function ConferenceModfiyScreenContainer(props: any) {
     const startTime = getDate(moment(r_start_datetime).toDate());
     const endTime = getDate(moment(r_end_datetime).toDate());
 
-    setRoomName(name);
-    setIsPublic(is_public);
     setStartTime({
       date: startTime.date,
       time: startTime.time,
@@ -195,7 +208,9 @@ export default function ConferenceModfiyScreenContainer(props: any) {
       time: endTime.time,
       current: endTime.current
     });
+    setIsPublic(is_public);
     setSwitchDelAlram(is_send_update_email);
+    setRoomName(name);
     setSendMessage(invite_message ? invite_message : '');
   };
 
@@ -250,11 +265,9 @@ export default function ConferenceModfiyScreenContainer(props: any) {
 
   const modifyConference = async () => {
     if (1 < roomName.length) {
-      let arr: PartialParam[] = [];
+      let arr: PartialAccessUserParam[] = [];
 
       selectedEmployee.member.map((value: any) => {
-        // type에 따라 access_user에 받는게 다름
-        // type: portal_id, email
         if (value.user_no !== auth.user_no) {
           if (value.user_no) {
             arr.push({
@@ -296,20 +309,7 @@ export default function ConferenceModfiyScreenContainer(props: any) {
         user_no: auth.user_no
       });
 
-      let params: {
-        service_code: string;
-        name: string;
-        is_public: boolean;
-        is_reservation: boolean;
-        access_user: any[];
-        unaccess_user?: any[];
-        master?: any[];
-        unmaster?: any[];
-        is_send_updated_email: boolean;
-        invite_message: string;
-        start_date_time?: any;
-        end_date_time?: any;
-      } = {
+      let params: roomModifyParam = {
         service_code: 'wehagomeet',
         name: roomName,
         is_public: isPublic,
@@ -330,7 +330,7 @@ export default function ConferenceModfiyScreenContainer(props: any) {
           end_date_time: end_time
         };
       }
-      
+
       const result = await MeetApi.updateMeetRoom(auth, roomId, params);
       if (result) {
         onHandleBack();
@@ -551,7 +551,6 @@ export default function ConferenceModfiyScreenContainer(props: any) {
   };
 
   const dataLoad = async () => {
-    await _getReservationInfos(roomId);
     setIsOrgDataLoaded(true);
 
     getAllEmployee();
@@ -563,6 +562,7 @@ export default function ConferenceModfiyScreenContainer(props: any) {
 
   useEffect(() => {
     setSelectMode(false);
+    _getReservationInfos(roomId);
     dataLoad();
   }, []);
 
@@ -604,7 +604,7 @@ export default function ConferenceModfiyScreenContainer(props: any) {
 
   const changeIsNormal = () => {
     setIsNormal(!isNormal);
-  }
+  };
 
   const clickChangeRole = (item: any, index: number) => {
     const resList: any[] = [];
@@ -635,7 +635,7 @@ export default function ConferenceModfiyScreenContainer(props: any) {
 
   const clickDeleteUser = (item: any, index: number) => {
     let deletedList: any[] = selectedEmployee.member;
-    const deleteUser: PartialUserParam = deletedList.find(
+    const deleteUser: PartialUserInfoParam = deletedList.find(
       e => e.portal_id === item.portal_id
     );
     const deleteAccessUsers: any[] = unAccessEmployee;

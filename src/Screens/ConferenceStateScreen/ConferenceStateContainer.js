@@ -33,7 +33,7 @@ class ConferenceStateContainer extends React.Component {
     // 참여코드 접근
     const { params, auth, videoId, isLogin, navigation } = this.props;
     const { roomId, token, accesstype } = params;
-    const { id } = navigation.state.params;
+    const { id } = navigation.state.params ? navigation.state.params : {id: undefined};
     // let roomId;
     // let iscret = true; // 인증 비인증 묻는 것
     const iscret = isLogin;
@@ -44,7 +44,7 @@ class ConferenceStateContainer extends React.Component {
     // }
     let { conferenceState } = this.state;
     this.roomId = videoId || roomId || id;
-    debugger;
+    // debugger;
     // let { auth } = this.props;
     // const access = await MeetApi.getMeetRoom(
     //   auth.AUTH_A_TOKEN,

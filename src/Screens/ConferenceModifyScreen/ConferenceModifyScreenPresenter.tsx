@@ -111,33 +111,38 @@ const ConferenceModfiyScreenPresenter = (props: any) => {
         <Fragment>
           <View style={[styles.topTitle]}>
             <TouchableOpacity onPress={onHandleBack}>
-              <Image
-                source={icBack}
-                style={{ width: 24, height: 24 }}
-                resizeMode="cover"
-              />
-              {/* <Text style={styles.ft14N}>{t('뒤로')}</Text> */}
+              <Image source={icBack} style={styles.img24} resizeMode="cover" />
             </TouchableOpacity>
             <Text style={styles.TitleText}>
               {isNormal ? t('회의상세정보') : t('회의정보수정')}
             </Text>
             <TouchableOpacity
               disabled={textLess2 || !isAuth}
-              onPress={isAuth ? isNormal ? changeIsNormal : modifyConference : ()=>{}}
+              onPress={
+                isAuth
+                  ? isNormal
+                    ? changeIsNormal
+                    : modifyConference
+                  : () => {}
+              }
             >
-              {isAuth ? isNormal ? (
+              {isAuth ? (
+                isNormal ? (
                   <Image
                     source={icModify}
-                    style={{ width: 24, height: 24 }}
+                    style={styles.img24}
                     resizeMode="cover"
                   />
+                ) : (
+                  <Text
+                    style={[styles.updateText, !textLess2 && { color: '#000' }]}
+                  >
+                    {t('수정')}
+                  </Text>
+                )
               ) : (
-                <Text
-                  style={[styles.updateText, !textLess2 && {color: '#000'}]}
-                >
-                  {t('수정')}
-                </Text>
-              ) : <Fragment />}
+                <Fragment />
+              )}
             </TouchableOpacity>
           </View>
 
@@ -173,15 +178,10 @@ const ConferenceModfiyScreenPresenter = (props: any) => {
             </View>
           </TouchableOpacity>
 
-          <View
-            style={[
-              { backgroundColor: '#F7F8FA', height: 9 },
-              isHorizon && { height: 6 }
-            ]}
-          />
+          <View style={[styles.graySplitBar, isHorizon && { height: 6 }]} />
 
           <View
-            style={[{ backgroundColor: '#fff', height: '25%' }]}
+            style={styles.roomContantContainer}
             pointerEvents={isNormal ? 'none' : 'auto'}
           >
             <View
@@ -271,12 +271,7 @@ const ConferenceModfiyScreenPresenter = (props: any) => {
             </View>
           </View>
 
-          <View
-            style={[
-              { backgroundColor: '#F7F8FA', height: 9 },
-              isHorizon && { height: 6 }
-            ]}
-          />
+          <View style={[styles.graySplitBar, isHorizon && { height: 6 }]} />
 
           <View
             pointerEvents={isNormal ? 'none' : 'auto'}
@@ -285,7 +280,7 @@ const ConferenceModfiyScreenPresenter = (props: any) => {
               switchReserve && { height: '15%' }
             ]}
           >
-            <View style={styles.rowContainer}>
+            <View style={styles.rowBetweenContainer}>
               <Text style={[styles.ft14B, { fontSize: 15 }]}>
                 {t('예약회의')}
               </Text>
@@ -301,14 +296,7 @@ const ConferenceModfiyScreenPresenter = (props: any) => {
             </View>
             {switchReserve && (
               <Fragment>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    flex: 1,
-                    justifyContent: 'space-between',
-                    alignItems: 'center'
-                  }}
-                >
+                <View style={styles.rowBetweenContainer}>
                   <Text style={{ fontSize: 15 }}>{t('시작시간')}</Text>
                   <View
                     style={{ flexDirection: 'row', justifyContent: 'flex-end' }}
@@ -360,16 +348,7 @@ const ConferenceModfiyScreenPresenter = (props: any) => {
                     </TouchableOpacity>
                   </View>
                 </View>
-                <View
-                  style={[
-                    {
-                      flexDirection: 'row',
-                      flex: 1,
-                      justifyContent: 'space-between',
-                      alignItems: 'center'
-                    }
-                  ]}
-                >
+                <View style={styles.rowBetweenContainer}>
                   <Text style={{ fontSize: 15 }}>{t('종료시간')}</Text>
                   <View
                     style={{ flexDirection: 'row', justifyContent: 'flex-end' }}
@@ -421,77 +400,11 @@ const ConferenceModfiyScreenPresenter = (props: any) => {
                     </TouchableOpacity>
                   </View>
                 </View>
-
-                {/* <View
-                      style={[
-                        {
-                          flexDirection: 'row',
-                          flex: 1,
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                          backgroundColor: 'rgb(255,255,255)'
-                        }
-                      ]}
-                    >
-                      <Text style={{ fontSize: 14, fontWeight: 'bold' }}>
-                        {t('시간')}
-                      </Text>
-                      <DatePicker
-                        date={startTime.current}
-                        mode={'time'}
-                        style={{ width: 150, height: 120 }}
-                      />
-                    </View>
-                    <View
-                      style={{
-                        flex: 2.7,
-                        paddingLeft: '5%',
-                        paddingRight: '5%',
-                        marginTop: '1%'
-                      }}
-                    >
-                      {openDatePickerComponent('start')}
-                    </View> */}
-
-                {/* <View
-                      style={[
-                        {
-                          flexDirection: 'row',
-                          flex: 1,
-                          justifyContent: 'space-between',
-                          alignItems: 'center'
-                        }
-                      ]}
-                    >
-                      <Text style={{ fontSize: 14, fontWeight: 'bold' }}>
-                        {t('시간')}
-                      </Text>
-                      <DatePicker
-                        date={endTime.current}
-                        mode={'time'}
-                        style={{ width: 150, height: 120 }}
-                      />
-                    </View>
-                    <View
-                      style={{
-                        flex: 2.7,
-                        paddingLeft: '5%',
-                        paddingRight: '5%',
-                        marginTop: '1%'
-                      }}
-                    >
-                      {openDatePickerComponent('end')}
-                    </View> */}
               </Fragment>
             )}
           </View>
 
-          <View
-            style={[
-              { backgroundColor: '#F7F8FA', height: 9 },
-              isHorizon && { height: 6 }
-            ]}
-          />
+          <View style={[styles.graySplitBar, isHorizon && { height: 6 }]} />
 
           <View
             style={[styles.conferenceMember]}
@@ -545,7 +458,7 @@ const ConferenceModfiyScreenPresenter = (props: any) => {
             </View>
           )}
 
-          <View style={{ flex: 1}} pointerEvents={isNormal ? 'none' : 'auto'}>
+          <View style={{ flex: 1 }} pointerEvents={isNormal ? 'none' : 'auto'}>
             <FlatList
               showsVerticalScrollIndicator={false}
               bounces={false}
@@ -811,6 +724,7 @@ const styles = StyleSheet.create({
     color: '#000'
   },
   //중단
+  roomContantContainer :{ backgroundColor: '#fff', height: '25%' },
   directionColTitle: {
     flexDirection: 'column',
     height: '25%'
@@ -924,6 +838,10 @@ const styles = StyleSheet.create({
     width: 14,
     height: 14
   },
+  img24: {
+    width: 24,
+    height: 24
+  },
   icMaster: { width: 20, height: 20 },
   roleContainer: {
     flexDirection: 'row',
@@ -1029,7 +947,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingBottom: '5%'
   },
-  rowContainer: {
+  rowBetweenContainer: {
     flexDirection: 'row',
     flex: 1,
     alignItems: 'center',
@@ -1044,7 +962,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.5)',
     justifyContent: 'center',
     alignItems: 'center'
-  }
+  },
+  graySplitBar: { backgroundColor: '#F7F8FA', height: 9 }
 });
 
 export default ConferenceModfiyScreenPresenter;

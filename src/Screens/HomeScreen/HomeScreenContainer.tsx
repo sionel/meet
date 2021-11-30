@@ -629,17 +629,15 @@ export default function HomeScreenContainer(props: any) {
   };
 
   const createConference = () => {
-    props.navigation.navigate('CreateMeetRoom', {
-      // onGetWetalkList: {
-      //   roomId: selectedRoomId,
-      //   externalData: null,
-      //   from: 'meet'
-      // }
-    });
+    _handleRedirect('CreateMeetRoom', {})
   };
 
+  const enterInviteCode = () => {
+    _handleRedirect('InviteCode', {});
+  }
+
   const conferenceModify = () => {
-    props.navigation.navigate('ConferenceModify', {});
+    _handleRedirect('ConferenceModify', {});
   };
 
   const createTalkConference = () => {
@@ -653,7 +651,7 @@ export default function HomeScreenContainer(props: any) {
   };
   const _handleRedirect = (url: string, param: {}) => {
     const { navigation } = props;
-    debugger;
+    // debugger;
     navigation.navigate(url, param);
   };
 
@@ -679,7 +677,8 @@ export default function HomeScreenContainer(props: any) {
         test,
         setTest: testFunc,
         createConference,
-        isHorizon
+        isHorizon,
+        enterInviteCode
       }}
     />
   ) : (
@@ -701,7 +700,8 @@ export default function HomeScreenContainer(props: any) {
         test,
         setTest: testFunc,
         createConference,
-        isHorizon
+        isHorizon,
+        enterInviteCode
       }}
     />
   );

@@ -20,20 +20,20 @@ const BackButton = () => {
   const _setDestination = destination =>
     dispatch(RootActions.setDestination(destination));
 
-  const { destination } = useSelector((state) => {
+  const { destination, isLogin } = useSelector((state) => {
     return {
-      destination: state.root.destination
+      destination: state.root.destination,
+      isLogin: state.user.isLogin
     }
   });
-
-  destination === 'Conference' || destination === 'Setting';
+  
   return (
     <TouchableOpacity
       onPress={() => {
         _setDestination(
-          destination === 'Conference' || destination === 'Setting'
-            ? 'Login'
-            : 'List'
+          (destination === 'Conference' || destination === 'Setting') && isLogin
+            ? 'List'
+            : 'Login'
         );
       }}
     >
@@ -60,6 +60,7 @@ const Deeplink1Navigation = createStackNavigator(
         headerStyle: commonStyle
       })
     },
+    
     Setting: {
       screen: SettingScreen,
       navigationOptions: ({ navigation }) => ({
