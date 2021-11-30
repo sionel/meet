@@ -1,2 +1,0 @@
-import ConferenceDetailScreenContainer from './ConferenceDetailScreenContainer';
-export default ConferenceDetailScreenContainer;

@@ -27,6 +27,7 @@ type PartialParam = Partial<param>;
 interface roomParam {
   name: string;
   is_public: boolean;
+  portal_id: string;
   r_start_datetime: Date;
   r_end_datetime: Date;
   is_send_update_email: boolean;
@@ -94,7 +95,8 @@ export default function ConferenceModfiyScreenContainer(props: any) {
     []
   );
   const [dateTimeSeleted, setDateTimeSeleted] = useState(false);
-  // const [isNormal, setIsNormal] = useState(true);
+  const [isNormal, setIsNormal] = useState(true);
+  const [isAuth, setIsAuth] = useState(false);
 
   const titleRef: RefObject<any> = useRef();
   const sendMsgRef: RefObject<any> = useRef();
@@ -116,6 +118,9 @@ export default function ConferenceModfiyScreenContainer(props: any) {
     if (reservationInfos.error) {
       console.log('error', reservationInfos.error);
     }
+
+    if(reservationInfos.portal_id === auth.portal_id) setIsAuth(true);
+    
 
     const accessUser = await MeetApi.getAccessUsers(auth, roomId);
     if (accessUser.error) {
@@ -177,9 +182,6 @@ export default function ConferenceModfiyScreenContainer(props: any) {
 
     const startTime = getDate(moment(r_start_datetime).toDate());
     const endTime = getDate(moment(r_end_datetime).toDate());
-    // access_user.map((user: any) => {
-    //   if (user.value === auth.portal_id && user.is_master) setIsNormal(false);
-    // });
 
     setRoomName(name);
     setIsPublic(is_public);
@@ -194,8 +196,7 @@ export default function ConferenceModfiyScreenContainer(props: any) {
       current: endTime.current
     });
     setSwitchDelAlram(is_send_update_email);
-    setSendMessage(invite_message);
-    // return accesUsers;
+    setSendMessage(invite_message ? invite_message : '');
   };
 
   const getAllEmployee = async () => {
@@ -329,7 +330,7 @@ export default function ConferenceModfiyScreenContainer(props: any) {
           end_date_time: end_time
         };
       }
-
+      
       const result = await MeetApi.updateMeetRoom(auth, roomId, params);
       if (result) {
         onHandleBack();
@@ -601,10 +602,15 @@ export default function ConferenceModfiyScreenContainer(props: any) {
     setDateTimeSeleted(false);
   };
 
+  const changeIsNormal = () => {
+    setIsNormal(!isNormal);
+  }
+
   const clickChangeRole = (item: any, index: number) => {
     const resList: any[] = [];
     const updateList: any[] = selectedEmployee.member;
-    let updateMaster: string[] = [];
+    let updateMaster: string[] = masterEmployee;
+    let updateUnMaster: string[] = unMasterEmployee;
 
     updateList[index].is_master = !updateList[index].is_master;
     let masterUser = {
@@ -612,17 +618,18 @@ export default function ConferenceModfiyScreenContainer(props: any) {
       portal_id: updateList[index].portal_id
     };
 
-    updateMaster.push(masterUser.portal_id);
-
     const partListUserNoOrderList: any[] = updateList.sort((a: any, b: any) => {
       return a.user_no === auth.user_no ? -3 : b.is_master - a.is_master;
     });
     partListUserNoOrderList.map(v => resList.push(v));
     setSelectedEmployee({ member: resList, group: {} });
+
     if (masterUser.is_master) {
+      updateMaster.push(masterUser.portal_id);
       setMasterEmployee(updateMaster);
     } else {
-      setUnMasterEmployee(updateMaster);
+      updateUnMaster.push(masterUser.portal_id);
+      setUnMasterEmployee(updateUnMaster);
     }
   };
 
@@ -718,7 +725,9 @@ export default function ConferenceModfiyScreenContainer(props: any) {
           isHorizon={isHorizon}
           isTablet={isTablet}
           dateTimeSeleted={dateTimeSeleted}
-          // isNormal={isNormal}
+          isNormal={isNormal}
+          isAuth={isAuth}
+          changeIsNormal={changeIsNormal}
         />
       )}
     </View>
