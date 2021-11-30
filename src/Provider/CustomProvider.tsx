@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Button } from 'react-native';
+
 import Alert from './Alert';
 import Indicator from './Indicator';
+import CompanyChange from './CompanyChange';
+
 import { useSelector, useDispatch } from 'react-redux';
 import Orientation, {
   OrientationType,
@@ -21,28 +24,31 @@ import deviceInfoModule from 'react-native-device-info';
 
 export default function CustomProvider(props: any) {
   const { children } = props;
-  const { alert, indicator, auth, isLogin, network } = useSelector(
-    (state: RootState) => {
+  const { alert, indicator, auth, isLogin, network, selectCompany, isHorizon } =
+    useSelector((state: RootState) => {
       const {
         alert,
         indicator,
+        selectCompany,
         user: { auth, isLogin },
-        root: { network }
+        root: { network },
+        orientation: { isHorizon }
       } = state;
-
       return {
         alert,
         indicator,
         auth,
         isLogin,
-        network
+        network,
+        selectCompany,
+        isHorizon
       };
-    }
-  );
+    });
   const t = getT();
 
   const { visible: alertVisible } = alert;
   const { visible: indicatorVisible } = indicator;
+  const { visible: selectCompanyVisible } = selectCompany;
 
   const dispatch = useDispatch();
   const _onLogout = () => dispatch(UserActions.logout());
@@ -74,8 +80,33 @@ export default function CustomProvider(props: any) {
 
   useEffect(() => {
     isLogin && _checkDeployedServices();
-  }, [auth,isLogin]);
-  const _checkDeployedServices = () => {
+  }, [auth, isLogin]);
+  const _checkDeployedServices = async () => {
+    // Promise.all([
+    //   ServiceCheckApi.serviceCheck(
+    //     auth,
+    //     'webrtc' // 구매여부 확인
+    //   )
+    // ])
+    // const isDeployWebrtc = await
+    const isDeploywebrtc = await ServiceCheckApi.serviceCheck(
+      auth,
+      'webrtc' // 배포여부 확인
+    );
+    // // 서비스 배포여부 조회
+    const isDeployWehagomeet = await ServiceCheckApi.serviceCheck(
+      auth,
+      'wehagomeet' // 배포여부 확인
+    );
+    debugger
+    
+    // const isDeploy = isDeployWehagomeet || isDeployWebrtc;
+    // setPermission(isDeploy);
+    // setParams({
+    //   accesstype: 'login'
+    // });
+    // setDestination(isDeploy ? 'List' : 'SelectCompany');
+
     const isDeployedServices = ['wehago'];
     Promise.all([
       ServiceCheckApi.anotherServiceCheck(
@@ -169,6 +200,7 @@ export default function CustomProvider(props: any) {
     <View style={{ flex: 1, zIndex: 9 }}>
       {alertVisible && <Alert />}
       {indicatorVisible && <Indicator />}
+      {selectCompanyVisible && <CompanyChange />}
       {children}
     </View>
   );

@@ -80,7 +80,8 @@ const HomeScreenPresenter = (props: any) => {
     enterInviteCode,
     bottomPopup,
     participantsList,
-    isHorizon
+    isHorizon,
+    onConpanyChange
   } = props;
   const t = getT();
   return (
@@ -115,7 +116,10 @@ const HomeScreenPresenter = (props: any) => {
           <View style={styles.helloTextContainer}>
             <Image source={{ uri: userImg }} style={styles.settingImg} />
             <Text style={styles.name}>{userName}</Text>
-            <TouchableOpacity style={styles.selectConpany}>
+            <TouchableOpacity
+              style={styles.selectConpany}
+              onPress={onConpanyChange}
+            >
               <Text style={styles.companyText}>{companyName}</Text>
               <Image
                 source={icArrowDownBlack}
@@ -340,7 +344,9 @@ const HomeScreenPresenter = (props: any) => {
             />
           )}
         </View>
-        {bottomPopup.show && <BottomPopup {...bottomPopup} isHorizon={isHorizon}/>}
+        {bottomPopup.show && (
+          <BottomPopup {...bottomPopup} isHorizon={isHorizon} />
+        )}
         {/* </View> */}
       </SafeAreaView>
     </Fragment>

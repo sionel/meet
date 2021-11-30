@@ -173,9 +173,6 @@ const companyStatusCheck = async (auth, company) => {
  */
 const serviceCheck = async (auth, type) => {
   try {
-    const isSP = auth.last_company.membership_code === 'SP';
-    if (!isSP) return true;
-
     const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY ,cno} = auth;
     const params = serialize({
       service_code: type,

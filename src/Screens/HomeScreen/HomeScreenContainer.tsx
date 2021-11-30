@@ -17,20 +17,23 @@ import { RootState } from '../../redux/configureStore';
 
 import { actionCreators as UserActions } from '../../redux/modules/user';
 import { actionCreators as ConferenceActions } from '../../redux/modules/conference';
+import { actionCreators as SelectCompanyActions } from '../../redux/modules/selectCompany';
 
 import HomeScreenPresenter from './HomeScreenPresenter';
 import HomeScreenHorizonPresenter from './HomeScreenHorizonPresenter';
-import { wehagoDummyImageURL, wehagoMainURL } from '../../utils';
-
 import { content } from './Component/bottomPopup';
 import { participantsListProps } from '../../components/renewal/ParticipantsList';
+import { wehagoDummyImageURL, wehagoMainURL } from '../../utils';
+
 import deviceInfoModule from 'react-native-device-info';
+import RNrestart from 'react-native-restart';
 
 const icUser = require('../../../assets/new/icons/ic_user.png');
 const icModify = require('../../../assets/new/icons/ic_modify.png');
 const icLink = require('../../../assets/new/icons/ic_link.png');
 const icCancel = require('../../../assets/new/icons/ic_cancel.png');
 const icInfo = require('../../../assets/new/icons/ic_info.png');
+const icCheckB = require('../../../assets/new/icons/ic_check_b.png');
 
 type conference = {
   room_id: string;
@@ -119,6 +122,9 @@ export default function HomeScreenContainer(props: any) {
 
   const dispatch = useDispatch();
   const _setRoomId = (id: string) => dispatch(ConferenceActions.setRoomId(id));
+  const _openCompany = () => dispatch(SelectCompanyActions.openCompany());
+  const changeCompanyRequest = (auth: any, company: any) =>
+    dispatch(UserActions.changeCompanyRequest(auth, company));
 
   const isTablet = deviceInfoModule.isTablet();
 
@@ -653,13 +659,54 @@ export default function HomeScreenContainer(props: any) {
   };
   const _handleRedirect = (url: string, param: {}) => {
     const { navigation } = props;
-    debugger;
     navigation.navigate(url, param);
+  };
+
+  const handleConpanyChange = () => {
+    _openCompany()
+    // const contentList = auth?.employee_list.map((company: any) => ({
+    //   name: company.company_name_kr,
+    //   onClick: () => {
+    //     String(company.company_no) !== String(auth.cno)
+    //       ? changeCompanyRequest(auth, {
+    //           company_no: company.company_no,
+    //           company_code: company.company_code
+    //         })
+    //       : _onClickOutside();
+    //   },
+    //   icon2: String(company.company_no) === String(auth.cno) ? icCheckB : null
+    // }));
+    // setBottomPopup({
+    //   onClickOutside: _onClickOutside,
+    //   contentList,
+    //   show: true,
+    //   title: '회사 선택'
+    // });
+
+    // const list = {
+    //   name: '참석자 명단',
+    //   icon1: icUser,
+    //   onClick: () => {
+    //     openParticipantsList('going', conference);
+    //   }
+    // };
+    // const copy = {
+    //   name: '공유링크 복사',
+    //   icon1: icLink,
+    //   onClick: () => {}
+    // };
+    // setBottomPopup({
+    //   onClickOutside: _onClickOutside,
+    //   contentList: [list, copy],
+    //   show: true,
+    //   title: conference.name
+    // });
   };
 
   const testFunc = () => {
     setTest(!test);
   };
+
   return isHorizon ? (
     <HomeScreenHorizonPresenter
       {...{
@@ -679,7 +726,8 @@ export default function HomeScreenContainer(props: any) {
         test,
         setTest: testFunc,
         createConference,
-        isHorizon
+        isHorizon,
+        onConpanyChange: handleConpanyChange
       }}
     />
   ) : (
@@ -701,7 +749,8 @@ export default function HomeScreenContainer(props: any) {
         test,
         setTest: testFunc,
         createConference,
-        isHorizon
+        isHorizon,
+        onConpanyChange: handleConpanyChange
       }}
     />
   );

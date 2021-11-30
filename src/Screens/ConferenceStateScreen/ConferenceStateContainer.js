@@ -44,7 +44,6 @@ class ConferenceStateContainer extends React.Component {
     // }
     let { conferenceState } = this.state;
     this.roomId = videoId || roomId || id;
-    debugger;
     // let { auth } = this.props;
     // const access = await MeetApi.getMeetRoom(
     //   auth.AUTH_A_TOKEN,

@@ -10,7 +10,8 @@ interface conferenceBoxProps {
   users: [];
   roomId: string;
   timeString: string;
-  finishedMoreClick: (roomId:string) => void;
+  finishedMoreClick: (roomId: string) => void;
+  isTablet: boolean;
 }
 
 export default function ConferenceBox(props: conferenceBoxProps) {
@@ -20,22 +21,22 @@ export default function ConferenceBox(props: conferenceBoxProps) {
     usageTime,
     users,
     roomId,
-    finishedMoreClick
+    finishedMoreClick,
+    isTablet
   } = props;
 
   return (
     <View
       style={{
-        flex:0.5,
-        height:100,
+        width: isTablet ? '48%' : '100%',
+        height: 100,
         borderRadius: 20,
         borderColor: '#e6e6e6',
         borderWidth: 2,
-        backgroundColor:'#fff',
+        backgroundColor: '#fff',
         marginBottom: 15,
-        marginHorizontal: 10,
         padding: 20,
-        flexDirection: 'row',
+        flexDirection: 'row'
       }}
     >
       <View
@@ -74,7 +75,7 @@ export default function ConferenceBox(props: conferenceBoxProps) {
           alignItems: 'center',
           justifyContent: 'space-between'
         }}
-        onPress={()=>finishedMoreClick(roomId)}
+        onPress={() => finishedMoreClick(roomId)}
       >
         <View
           style={{

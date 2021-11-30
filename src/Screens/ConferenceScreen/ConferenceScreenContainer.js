@@ -355,7 +355,6 @@ class ConferenceScreenContainer extends React.Component {
     user.videoTrack.dispose();
     user.audioTrack.dispose();
     resetVideoId();
-    debugger
     if (!isLogin) {
       // setLoaded(false);
       setParams({});

@@ -173,7 +173,6 @@ export default {
       return resultData;
     } catch (err) {
       console.log(err);
-      debugger;
       const errDetail = await err.json();
       console.warn('4.getMeetRoomsList : ', errDetail);
       return false;

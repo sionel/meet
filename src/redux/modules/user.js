@@ -231,50 +231,6 @@ function changeCompanyRequest(auth, company) {
   };
 }
 
-/**
- * tokenLogin : ACTION
- */
-// function tokenLogin(token, cno) {
-// 	alert('준비중입니다.');
-// 	// return;
-// 	const result = UserApi.check(token, cno);
-// 	console.log('tokenLogin : ', typeof result);
-
-// 	function retur(dispatch) {
-// 		dispatch({
-// 			type: TOKEN_LOGIN,
-// 			payload: {
-// 				token
-// 			}
-// 		});
-// 	};
-// };
-
-/**
- * applyTokenLogin
- */
-// function applyTokenLogin(state, action) {
-// 	return state;
-// };
-
-//#endregion
-
-//#region Reducer Functions
-
-/**
- * applyTest
- */
-// function applyTest(state, action) {
-// 	const { test } = action;
-// 	return {
-// 		...state,
-// 		test
-// 	};
-// };
-
-/**
- *
- */
 function applyChangeCompany(state, action) {
   const { company } = action;
 
@@ -285,7 +241,6 @@ function applyChangeCompany(state, action) {
       last_company: company,
       last_access_company_no: company.company_no
     }
-    // auth: newAuth
   };
 }
 
