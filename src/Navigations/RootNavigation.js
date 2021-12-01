@@ -1,5 +1,5 @@
 import React from 'react';
-import { createAppContainer, createStackNavigator } from 'react-navigation';
+// import { createAppContainer, createStackNavigator } from 'react-navigation';
 import MainNavigation from './MainNavigation';
 import ConferenceScreen from '../Screens/ConferenceScreen';
 import SettingScreen from '../Screens/SettingScreen';

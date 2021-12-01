@@ -9,6 +9,10 @@ export default function SplashScreenPresenter(props: {
   destination: any;
 }) {
   const { servernoti, loaded, children, destination } = props;
+  console.log(loaded);
+  console.log(children);
+  
+  
   if (servernoti) return <ServerNotiveCheck servernoti={servernoti} />;
   else return !loaded || !destination ? <Splash /> : children;
   // else return <Splash />

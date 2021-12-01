@@ -6,7 +6,7 @@
 import React from 'react';
 import { Image, TouchableOpacity, View } from 'react-native';
 
-import { createStackNavigator, createDrawerNavigator } from 'react-navigation';
+// import { createStackNavigator, createDrawerNavigator } from 'react-navigation';
 
 import CustomIcon from './../components/CustomIcon';
 

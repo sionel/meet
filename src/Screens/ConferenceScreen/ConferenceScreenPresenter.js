@@ -13,7 +13,7 @@ import { isWehagoV } from '../../utils';
 import WatingScreen from './WatingScreen';
 import ScreenShareIOS from './ScreenShare/ScreenShareIOS';
 import ScreenShareANDROID from './ScreenShare/ScreenShareANDROID';
-import { SafeAreaView } from 'react-navigation';
+// import { SafeAreaView } from 'react-navigation';
 /**
  * ConferenceScreenPresenter
  */

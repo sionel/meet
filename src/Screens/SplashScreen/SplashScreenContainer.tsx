@@ -21,6 +21,7 @@ import { actionCreators as AlertAcions } from '../../redux/modules/alert';
 import { actionCreators as IndicatorAcions } from '../../redux/modules/indicator';
 import { actionCreators as RootActions } from '../../redux/modules/root';
 import { actionCreators as RecentsActions } from '../../redux/modules/recentsInvited';
+import { StackNavigationState } from '@react-navigation/routers';
 
 // const iswehagov = WEHAGO_ENV === 'WEHAGOV';
 
@@ -34,6 +35,7 @@ const SplashScreenContainer = (props: any) => {
   const [notiIndex, setNotiIndex] = useState(0);
   const [first, setFirst] = useState(true);
   const t = getT();
+  const {navigation} = props;
 
   //#region  selector
   const {
@@ -202,13 +204,17 @@ const SplashScreenContainer = (props: any) => {
     //     res(true)
     //   }, 10000);
     // })
+    // console.log(navigation);
+    
     const result = await _handleCheckAutoLogin();
     if (result === 'success') {
       _setLoaded(true);
-      _setParams({
-        accesstype: 'login'
-      });
-      _setDestination('List');
+      // _setParams({
+      //   accesstype: 'login'
+      // });
+      // _setDestination('List');
+      navigation.navigate('Main',{accesstype: 'login'});
+
     } else if (result === 'dany') {
       _setLoaded(true);
       _setParams({});
@@ -217,11 +223,11 @@ const SplashScreenContainer = (props: any) => {
       if (result === 'autoLoginFalse') {
         if (auth !== {}) await UserApi.logoutRequest(auth);
       }
-
       onLogout();
       _setLoaded(true);
-      _setParams({});
-      _setDestination('Login');
+      // _setParams({});
+      // _setDestination('Login');
+      navigation.navigate('InviteCode');
     }
   }
 

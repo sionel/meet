@@ -92,7 +92,9 @@ target 'JitsiMeetSDK' do
     pod 'ReactNativeIncallManager', :path => '../node_modules/react-native-incall-manager'
     pod 'react-native-date-picker', :path => '../node_modules/react-native-date-picker'
     pod 'react-native-safe-area-context', :path => '../node_modules/react-native-safe-area-context'
-
+    pod 'RNCMaskedView', :path => '../node_modules/@react-native-community/masked-view'
+    pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
+    pod 'RNScreens', :path => '../node_modules/react-native-screens'
   # Native pod dependencies
   #
 

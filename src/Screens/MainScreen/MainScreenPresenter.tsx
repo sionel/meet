@@ -8,36 +8,36 @@ import LoginNavigation from '../../Navigations/LoginNavigation';
 import CompanySelect from '../../components/CompanySelect';
 import AppIntroSlide from '../../components/AppIntroSlide';
 import { StatusBar, View } from 'react-native';
+import RootNavigation_new from '../../Navigations/RootNavigation_new';
 
 const MainScreenPresenter = (props: any) => {
   
   const t = getT();
   // Orientation.unlockAllOrientations();
-  const { destination } = props;
   const screenProps = {t};
-  switch (destination) {
-    case 'Login':
-      return <LoginNavigation screenProps={screenProps} />;
+  // switch (destination) {
+  //   case 'Login':
+  //     return <LoginNavigation screenProps={screenProps} />;
 
-    case 'List':
-      return (
-        <AppIntroSlide>
-          <StatusBar />
-          <RootNavigation screenProps={screenProps} />
-        </AppIntroSlide>
-      );
+  //   case 'List':
+  //     return (
+  //       <AppIntroSlide>
+  //         <StatusBar />
+  //         <RootNavigation screenProps={screenProps} />
+  //       </AppIntroSlide>
+  //     );
 
-    case 'SelectCompany':
-      return <CompanySelect screenProps={screenProps} />;
+  //   case 'SelectCompany':
+  //     return <CompanySelect screenProps={screenProps} />;
 
-    case 'Setting':
-      return <Deeplink1Navigation screenProps={screenProps} />;
+  //   case 'Setting':
+  //     return <Deeplink1Navigation screenProps={screenProps} />;
 
-    case 'Conference':
-      return <Deeplink2Navigation screenProps={screenProps} />;
-  }
+  //   case 'Conference':
+  //     return <Deeplink2Navigation screenProps={screenProps} />;
+  // }
 
-  return <View />
+  return <RootNavigation_new />
 };
 
 export default MainScreenPresenter;
