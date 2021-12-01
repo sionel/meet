@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -20,6 +20,7 @@ const icCheckB = require('../../assets/new/icons/ic_check_b.png');
 
 //다국어
 export default function CompanyChange() {
+  const [prevAuth, setPrevAuth] = useState<any>(null);
   const { isHorizon, auth, contentList } = useSelector((state: RootState) => {
     const {
       user: { auth },
@@ -29,6 +30,7 @@ export default function CompanyChange() {
     const contentList = auth?.employee_list.map((company: any) => ({
       name: company.company_name_kr,
       onClick: () => {
+        debugger
         String(company.company_no) !== String(auth.cno)
           ? changeCompanyRequest(auth, {
               company_no: company.company_no,
@@ -54,7 +56,11 @@ export default function CompanyChange() {
     dispatch(userAction.changeCompanyRequest(auth, company));
 
   useEffect(() => {
-    RNrestart.Restart;
+    if (prevAuth === null) {
+      setPrevAuth(auth);
+    } else if (prevAuth.cno !== auth.cno) {
+      RNrestart.Restart();
+    }
   }, [auth]);
 
   return isHorizon ? (

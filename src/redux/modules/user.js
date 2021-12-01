@@ -222,18 +222,19 @@ function changeCompany(company) {
 function changeCompanyRequest(auth, company) {
   return async dispatch => {
     const checkResult = await UserApi.changeCompany(auth, company);
+    debugger
     if (checkResult.resultData !== 1) {
       // alert('회사변경 중 문제 발생');
       return checkResult;
     }
-    dispatch(wetalkActionCreators.setInitialList());
+    // dispatch(wetalkActionCreators.setInitialList());
     return dispatch(changeCompany(company));
   };
 }
 
 function applyChangeCompany(state, action) {
   const { company } = action;
-
+  debugger
   return {
     ...state,
     auth: {

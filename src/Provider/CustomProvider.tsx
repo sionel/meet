@@ -89,16 +89,15 @@ export default function CustomProvider(props: any) {
     //   )
     // ])
     // const isDeployWebrtc = await
-    const isDeploywebrtc = await ServiceCheckApi.serviceCheck(
-      auth,
-      'webrtc' // 배포여부 확인
-    );
-    // // 서비스 배포여부 조회
-    const isDeployWehagomeet = await ServiceCheckApi.serviceCheck(
-      auth,
-      'wehagomeet' // 배포여부 확인
-    );
-    debugger
+    // const isDeploywebrtc = await ServiceCheckApi.serviceCheck(
+    //   auth,
+    //   'webrtc' // 배포여부 확인
+    // );
+    // // // 서비스 배포여부 조회
+    // const isDeployWehagomeet = await ServiceCheckApi.serviceCheck(
+    //   auth,
+    //   'wehagomeet' // 배포여부 확인
+    // );
     
     // const isDeploy = isDeployWehagomeet || isDeployWebrtc;
     // setPermission(isDeploy);

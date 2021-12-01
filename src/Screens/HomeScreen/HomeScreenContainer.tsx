@@ -26,7 +26,7 @@ import { participantsListProps } from '../../components/renewal/ParticipantsList
 import { wehagoDummyImageURL, wehagoMainURL } from '../../utils';
 
 import deviceInfoModule from 'react-native-device-info';
-import RNrestart from 'react-native-restart';
+import RNrestart from 'react-native-restart'
 
 const icUser = require('../../../assets/new/icons/ic_user.png');
 const icModify = require('../../../assets/new/icons/ic_modify.png');
