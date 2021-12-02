@@ -25,6 +25,8 @@ import { wehagoDummyImageURL, wehagoMainURL } from '../../utils';
 import { content } from './Component/bottomPopup';
 import { participantsListProps } from '../../components/renewal/ParticipantsList';
 import deviceInfoModule from 'react-native-device-info';
+import { useNavigation } from '@react-navigation/native';
+import { MainNavigationProps } from '../../Navigations/MainStack';
 
 const icUser = require('../../../assets/new/icons/ic_user.png');
 const icModify = require('../../../assets/new/icons/ic_modify.png');
@@ -119,6 +121,8 @@ export default function HomeScreenContainer(props: any) {
 
   const dispatch = useDispatch();
   const _setRoomId = (id: string) => dispatch(ConferenceActions.setRoomId(id));
+
+  const { navigation, route }: MainNavigationProps<'Home'> = props;
 
   const isTablet = deviceInfoModule.isTablet();
 
@@ -320,14 +324,19 @@ export default function HomeScreenContainer(props: any) {
             isLock: !conference.is_public,
             goingMoreClick: () => _goingMoreClick(conference, isMaster),
             enterConference: () =>
-              _handleRedirect('ConferenceState', {
+              navigation.navigate('ConferenceStateView', {
                 id: conference.room_id,
-                item: {
-                  roomId: conference.room_id,
-                  externalData: null,
-                  from: 'meet'
-                }
+                externalData: null,
+                from: 'meet'
               })
+            // _handleRedirect('ConferenceState', {
+            //   id: conference.room_id,
+            //   item: {
+            //     roomId: conference.room_id,
+            //     externalData: null,
+            //     from: 'meet'
+            //   }
+            // })
           };
           return data;
         })
@@ -629,34 +638,37 @@ export default function HomeScreenContainer(props: any) {
   };
 
   const createConference = () => {
-    _handleRedirect('CreateMeetRoom', {})
+    navigation.navigate('DirectCreateConference');
   };
 
   const enterInviteCode = () => {
-    _handleRedirect('InviteCode', {});
-  }
+    navigation.navigate('InviteCode');
+  };
 
   const conferenceModify = () => {
-    _handleRedirect('ConferenceModify', {});
+    navigation.navigate('ModifyConference');
   };
 
   const createTalkConference = () => {
-    props.navigation.navigate('Create', {
-      // onGetWetalkList: {
-      //   roomId: selectedRoomId,
-      //   externalData: null,
-      //   from: 'meet'
-      // }
-    });
+    // props.navigation.navigate('Create', {
+    //   // onGetWetalkList: {
+    //   //   roomId: selectedRoomId,
+    //   //   externalData: null,
+    //   //   from: 'meet'
+    //   // }
+    // });
+    navigation.navigate('CreateConference');
   };
-  const _handleRedirect = (url: string, param: {}) => {
-    const { navigation } = props;
-    // debugger;
-    navigation.navigate(url, param);
-  };
+  // const _handleRedirect = (url: string, param: {}) => {
+  //   const { navigation } = props;
+  //   // debugger;
+  //   navigation.navigate(url, param);
+  // };
 
   const testFunc = () => {
-    setTest(!test);
+
+    //로그아웃
+    // setTest(!test);
   };
   return isHorizon ? (
     <HomeScreenHorizonPresenter

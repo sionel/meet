@@ -7,8 +7,12 @@ import { getT } from '../../utils/translateManager';
 import { useDispatch, useSelector } from 'react-redux';
 import deviceInfoModule from 'react-native-device-info';
 import { RootState } from '../../redux/configureStore';
+import { MainNavigationProps } from '../../Navigations/MainStack';
 
-const InvitedCodeScreenContainer = ({ navigation }: any) => {
+const InvitedCodeScreenContainer = ({
+  navigation,
+  route
+}: MainNavigationProps<'InviteCode'>) => {
   const [code, setCode] = useState('');
   const [shadowCode, setShadowCode] = useState('');
   const [joincodeErr, setJoincodeErr] = useState(false);
@@ -23,8 +27,6 @@ const InvitedCodeScreenContainer = ({ navigation }: any) => {
   }));
 
   const dispatch = useDispatch();
-  const _setParams = (params: {}) => dispatch(RootActions.setParams(params));
-  
 
   const t = getT();
   const isTablet: boolean = deviceInfoModule.isTablet();
@@ -57,7 +59,7 @@ const InvitedCodeScreenContainer = ({ navigation }: any) => {
     // V 고려해야할부분
     setLogging(true);
     const result = await MeetApi.searchJoincode(joincode);
-    
+
     if (!result) {
       setInputcodeErr(true);
       setFocusingNum(0);
@@ -65,16 +67,17 @@ const InvitedCodeScreenContainer = ({ navigation }: any) => {
       setFocusingNum(0);
       setInputcodeErr(true);
     } else {
-      _setParams({
-        accesstype: 'joincode',
-        roomId: result.resultData.room,
-        joincode
-      });
-      navigation.navigate('ConferenceState', {
+      // _setParams({
+      //   accesstype: 'joincode',
+      //   roomId: result.resultData.room,
+      //   joincode
+      // });
+      navigation.navigate('ConferenceStateView', {
         id: result.resultData.room,
+        accessType:'joincode',
+        joincode: joincode
       });
     }
-
   };
 
   const onFocusInput = () => {
@@ -84,10 +87,6 @@ const InvitedCodeScreenContainer = ({ navigation }: any) => {
 
   const onFocusingCode = () => {
     codeLineRef.current.focus();
-  };
-
-  const goLoginInput = () => {
-    navigation.navigate('LoginInput');
   };
 
   const onFocusOutInput = () => {
@@ -115,7 +114,6 @@ const InvitedCodeScreenContainer = ({ navigation }: any) => {
         isTablet,
         t,
         logging,
-        goLoginInput,
         shadowCode,
         handleClickBack
       }}

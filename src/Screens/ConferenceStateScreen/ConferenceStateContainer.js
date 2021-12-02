@@ -31,9 +31,11 @@ class ConferenceStateContainer extends React.Component {
     // 딥링크 웹 접근
     // 딥링크 이메일 접근
     // 참여코드 접근
-    const { params, auth, videoId, isLogin, navigation } = this.props;
-    const { roomId, token, accesstype } = params;
-    const { id } = navigation.state.params ? navigation.state.params : {id: undefined};
+
+    const { auth, videoId, isLogin, route:{params}} = this.props;
+    const {id} = params;
+    // debugger
+    // this.props.navigation.goBack()
     // let roomId;
     // let iscret = true; // 인증 비인증 묻는 것
     const iscret = isLogin;
@@ -43,7 +45,7 @@ class ConferenceStateContainer extends React.Component {
     //   roomId = params.roomId;
     // }
     let { conferenceState } = this.state;
-    this.roomId = videoId || roomId || id;
+    this.roomId = videoId || id;
     // debugger;
     // let { auth } = this.props;
     // const access = await MeetApi.getMeetRoom(
@@ -182,14 +184,16 @@ class ConferenceStateContainer extends React.Component {
     this.setState({ orientation: status ? 'horizontal' : 'vertical' });
   };
 
-  _handleRedirect = (url, param) => {
-    const { navigation } = this.props;
-    // 여기서 어디로 이동을 한다면 conference밖에 없고
-    // 네비게이션 특성상 홈으로 갔다가 가야함
-    navigation.navigate('Home');
-    navigation.navigate(url, param);
-  };
+  // _handleRedirect = (url, param) => {
+  //   const { navigation } = this.props;
+  //   // 여기서 어디로 이동을 한다면 conference밖에 없고
+  //   // 네비게이션 특성상 홈으로 갔다가 가야함
+  //   navigation.navigate('Home');
+  //   navigation.navigate(url, param);
+  // };
+
   _handleEnterConference = async (auth, roomId, iscret, params) => {
+    const {navigation} = this.props;
     let callType = 3;
     let isCreator;
 
@@ -206,16 +210,26 @@ class ConferenceStateContainer extends React.Component {
         conferenceState: conferenceState
       });
     } else {
-      this._handleRedirect('Setting', {
-        item: {
-          roomType: 'meet',
-          videoRoomId: roomId,
-          callType,
-          isCreator,
-          selectedRoomName: this.roomName,
-          params
-        }
+      // navigation.navigate('Home');
+      navigation.replace('SettingView', {
+        roomType: 'meet',
+        videoRoomId: roomId,
+        callType,
+        isCreator,
+        selectedRoomName: this.roomName,
+        params
       });
+
+      // this._handleRedirect('Setting', {
+      //   item: {
+      //     roomType: 'meet',
+      //     videoRoomId: roomId,
+      //     callType,
+      //     isCreator,
+      //     selectedRoomName: this.roomName,
+      //     params
+      //   }
+      // });
     }
   };
 }

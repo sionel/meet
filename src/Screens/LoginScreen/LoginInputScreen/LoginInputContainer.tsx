@@ -16,10 +16,14 @@ import Orientation, {
   useDeviceOrientationChange
 } from 'react-native-orientation-locker';
 import deviceInfoModule from 'react-native-device-info';
+import { LoginNavigationProps } from '../../../Navigations/LoginStack';
 
 // import { useTranslation } from 'react-i18next';
 
-const LoginInputContainer = () => {
+const LoginInputContainer = ({
+  navigation,
+  route
+}: LoginNavigationProps<'InputLogin'>) => {
   let _serviceCode: string;
   _serviceCode = Platform.OS === 'ios' ? 'wehagomeet' : 'meet';
 
@@ -65,14 +69,6 @@ const LoginInputContainer = () => {
   const dispatch = useDispatch();
   const setPermission = (permission: any) =>
     dispatch(UserActions.setPermission(permission));
-
-  const setLoaded = (loaded: boolean) =>
-    dispatch(RootActions.setLoaded(loaded));
-  const setDestination = (destination: string) =>
-    dispatch(RootActions.setDestination(destination));
-  const setParams = (params: {}) => dispatch(RootActions.setParams(params));
-  const setUrl = (url: string) => dispatch(RootActions.setUrl(url));
-
   const login = (auth: any, from: any, chk: boolean) => {
     dispatch(UserActions.login(auth, from, chk));
   };
@@ -115,17 +111,16 @@ const LoginInputContainer = () => {
       );
       const isDeploy = isDeployWehagomeet || isDeployWebrtc;
       setPermission(isDeploy);
-      setParams({
-        accesstype: 'login'
-      });
-      setDestination(isDeploy ? 'List' : 'SelectCompany');
-      
+      // setParams({
+      //   accesstype: 'login'
+      // });
+      navigation.reset({ routes: [{ name: 'MainStack' }] });
+      // (isDeploy ? 'List' : 'SelectCompany');
     } else if (statusCheck && statusCheck.code === 400) {
       const onClose = () => {
         _resetAlert();
-        setParams({accesstype: 'login'});
-        setDestination('SelectCompany');
-        
+        // setParams({accesstype: 'login'});
+        // setDestination('SelectCompany');
       };
       setAlertVisible({
         visible: true,
@@ -140,7 +135,7 @@ const LoginInputContainer = () => {
         ]
       });
     } else {
-      setDestination('SelectCompany');
+      // setDestination('SelectCompany');
     }
   };
 

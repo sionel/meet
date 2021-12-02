@@ -1,40 +1,70 @@
-import 'react-native-gesture-handler';
 import * as React from 'react';
-import { Text, View } from 'react-native';
-
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import {
+  createStackNavigator,
+  StackScreenProps
+} from '@react-navigation/stack';
 
-import SplashNavigation from './SplashNavigation_new';
-import LoginNavigation from './LoginNavigation_new';
-import MainNavigation from './MainNavigation_new';
-import SettingNavigation from './SettingNavigation_new';
-import ScreenStateNavigation from './ScreenStateNavigation_new';
-import ConferenceNavigation from './ConferenceNavigation_new';
+import SplashView from './SplashView';
+import LoginStack from './LoginStack';
+import MainStack from './MainStack';
+import SettingView from '../Screens/SettingScreen';
+import ConferenceStateView from '../Screens/ConferenceStateScreen';
+import ConferenceView from '../Screens/ConferenceScreen';
 
-type StackParamList = {
-  SplashNavigation: undefined;
-  LoginNavigation: undefined;
-  MainNavigation: undefined;
-  SettingNavigation: undefined;
-  ScreenStateNavigation: undefined;
-  ConferenceNavigation: undefined;
+export type MeetParamList = {
+  SplashView: undefined;
+  LoginStack: undefined;
+  MainStack: undefined;
+  SettingView: {
+    roomType?: string;
+    videoRoomId?: string;
+    callType?: number;
+    isCreator?: any;
+    selectedRoomName?: string;
+    params?: any;
+    accessType?: 'auth' | 'email' | 'joincode';
+    roomId?: string;
+    token?: null | string;
+  };
+  ConferenceStateView: {
+    id: string;
+    externalData?: string | null;
+    from?: string;
+    accessType?: 'auth' | 'email' | 'joincode';
+    joincode?: string;
+  };
+  ConferenceView: {
+    tracks: [];
+    roomToken: string;
+    name: string;
+    params: any;
+    accesstype: string;
+    externalUser: any;
+  };
 };
 
-const Stack = createStackNavigator<StackParamList>();
+export type MeetNavigationProps<T extends keyof MeetParamList> =
+  StackScreenProps<MeetParamList, T>;
 
-export default function RootNavigation_new(props: any) {
-  console.log(props);
-  
+const Stack = createStackNavigator();
+
+export default function RootNavigation_new() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="SplashNavigation">
-        <Stack.Screen name="SplashNavigation" component={SplashNavigation} options={{headerShown:false}} />
-        <Stack.Screen name="LoginNavigation" component={LoginNavigation} options={{headerShown:false}} />
-        <Stack.Screen name="MainNavigation" component={MainNavigation} options={{headerShown:false}} />
-        <Stack.Screen name="SettingNavigation" component={SettingNavigation} options={{headerShown:false}} />
-        <Stack.Screen name="ScreenStateNavigation" component={ScreenStateNavigation} options={{headerShown:false}} />
-        <Stack.Screen name="ConferenceNavigation" component={ConferenceNavigation} options={{headerShown:false}} />
+      <Stack.Navigator
+        initialRouteName="SplashView"
+        screenOptions={{ headerShown: false }}
+      >
+        <Stack.Screen name="SplashView" component={SplashView} />
+        <Stack.Screen name="LoginStack" component={LoginStack} />
+        <Stack.Screen name="MainStack" component={MainStack} />
+        <Stack.Screen
+          name="ConferenceStateView"
+          component={ConferenceStateView}
+        />
+        <Stack.Screen name="SettingView" component={SettingView} />
+        <Stack.Screen name="ConferenceView" component={ConferenceView} />
       </Stack.Navigator>
     </NavigationContainer>
   );

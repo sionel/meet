@@ -21,8 +21,7 @@ import { actionCreators as AlertAcions } from '../../redux/modules/alert';
 import { actionCreators as IndicatorAcions } from '../../redux/modules/indicator';
 import { actionCreators as RootActions } from '../../redux/modules/root';
 import { actionCreators as RecentsActions } from '../../redux/modules/recentsInvited';
-import { StackNavigationState } from '@react-navigation/routers';
-
+import { MeetNavigationProps } from '../../Navigations/RootNavigation_new';
 // const iswehagov = WEHAGO_ENV === 'WEHAGOV';
 
 // const JailMonkey =
@@ -30,12 +29,14 @@ import { StackNavigationState } from '@react-navigation/routers';
 //     ? require('jail-monkey').default
 //     : null;
 
-const SplashScreenContainer = (props: any) => {
+const SplashScreenContainer = ({
+  navigation,
+  route
+}: MeetNavigationProps<'SplashView'>) => {
   const [serverNoti, setServerNoti] = useState([]);
   const [notiIndex, setNotiIndex] = useState(0);
   const [first, setFirst] = useState(true);
   const t = getT();
-  const {navigation} = props;
 
   //#region  selector
   const {
@@ -83,8 +84,6 @@ const SplashScreenContainer = (props: any) => {
   const setIndicator = (message: any) =>
     dispatch(IndicatorAcions.setIndicator(message));
   const resetIndicator = () => dispatch(IndicatorAcions.resetIndicator());
-  const _setLoaded = (loaded: boolean) =>
-    dispatch(RootActions.setLoaded(loaded));
   const _setDestination = (destination: string) =>
     dispatch(RootActions.setDestination(destination));
   const _setParams = (params: {}) => dispatch(RootActions.setParams(params));
@@ -103,7 +102,7 @@ const SplashScreenContainer = (props: any) => {
   }, []);
 
   useEffect(() => {
-    if (!first ) {
+    if (!first) {
       if (url) _handleGetDeeplink(url);
       else _autoLoginChk();
     }
@@ -178,20 +177,16 @@ const SplashScreenContainer = (props: any) => {
     if (serverNoti.length === notiIndex + 1) {
       const result = await _handleCheckAutoLogin();
       if (result === 'success') {
-        _setLoaded(true);
-        _setParams({
-          accesstype: 'login'
-        });
-        _setDestination('List');
+        // _setParams({
+        //   accesstype: 'login'
+        // });
+        // _setDestination('List');
+        navigation.reset({ routes: [{ name: 'MainStack' }] });
       } else if (result === 'dany') {
-        _setLoaded(true);
-        _setParams({});
         _setDestination('SelectCompany');
       } else {
         onLogout();
-        _setLoaded(true);
-        _setParams({});
-        _setDestination('Login');
+        navigation.reset({ routes: [{ name: 'LoginStack' }] });
       }
     } else {
       setNotiIndex(notiIndex + 1);
@@ -204,30 +199,24 @@ const SplashScreenContainer = (props: any) => {
     //     res(true)
     //   }, 10000);
     // })
-    // console.log(navigation);
-    
+
     const result = await _handleCheckAutoLogin();
+
     if (result === 'success') {
-      _setLoaded(true);
       // _setParams({
       //   accesstype: 'login'
       // });
       // _setDestination('List');
-      navigation.navigate('Main',{accesstype: 'login'});
-
+      navigation.reset({ routes: [{ name: 'MainStack' }] });
     } else if (result === 'dany') {
-      _setLoaded(true);
-      _setParams({});
-      _setDestination('SelectCompany');
+      //회사선택 페이지 고려
+      // _setDestination('SelectCompany');
     } else {
       if (result === 'autoLoginFalse') {
         if (auth !== {}) await UserApi.logoutRequest(auth);
       }
       onLogout();
-      _setLoaded(true);
-      // _setParams({});
-      // _setDestination('Login');
-      navigation.navigate('InviteCode');
+      navigation.reset({ routes: [{ name: 'LoginStack' }] });
     }
   }
 
@@ -281,7 +270,7 @@ const SplashScreenContainer = (props: any) => {
     */
     if (!url) return;
     let result: any = querystringParser(url);
-    debugger
+    debugger;
 
     // if(result.type === 'conference') {
     if (result.video_id) {
@@ -289,11 +278,11 @@ const SplashScreenContainer = (props: any) => {
       // WEHAGO에서 계정 정보를 가지고 올때 이 분기랑 토큰이 있는 분기랑 둘다 접근함 문제가 없는건지 ?
       if (result.cno || isLogin) {
         _setVideoId(result.video_id);
-        _setLoaded(true);
-        _setDestination('Setting');
+        // _setDestination('Setting');
+        navigation.reset({ routes: [{ name: 'SettingView', params: {} }] });
       } else {
-        _setLoaded(true);
-        _setDestination('Login');
+        // _setDestination('Login');
+        navigation.reset({ routes: [{ name: 'LoginStack' }] });
       }
     }
     // 화상회의 요청인지 판별
@@ -358,7 +347,6 @@ const SplashScreenContainer = (props: any) => {
     } else if (result.login_info === 'email') {
       //토근정보가 없을때
       let decoded = jwt_decode(result.token);
-      debugger
       /*
       email: "sadb0101@naver.com"
       exp: 1919234662
@@ -366,13 +354,17 @@ const SplashScreenContainer = (props: any) => {
       room: "b15091c1-2acd-47f6-aa7c-6a94df0e5a17"
       sub: "video.wehago.com"
       */
-      _setLoaded(true);
-      _setParams({
+      // _setParams({
+      //   roomId: decoded.room,
+      //   accesstype: 'email',
+      //   token: result.token
+      // });
+      // _setDestination('Setting');
+      navigation.navigate('SettingView', {
+        accessType: 'email',
         roomId: decoded.room,
-        accesstype: 'email',
         token: result.token
       });
-      _setDestination('Setting');
     }
   };
 
@@ -397,13 +389,13 @@ const SplashScreenContainer = (props: any) => {
 
       const isDeploy = isDeployWehagomeet || isDeployWebrtc;
       setPermission(isDeploy);
-      _setLoaded(true);
-      _setParams({
-        accesstype: 'login'
-      });
+      // _setParams({
+      //   accesstype: 'login'
+      // });
+      //회사선택 페이지 필요함
+      navigation.reset({ routes: [{ name: 'MainStack' }] });
       _setDestination(isDeploy ? 'List' : 'SelectCompany');
     } else {
-      _setLoaded(true);
       _setDestination('SelectCompany');
     }
   };
@@ -498,14 +490,7 @@ const SplashScreenContainer = (props: any) => {
     }
   };
 
-  return (
-    <SplashScreenPresenter
-      servernoti={serverNoti[notiIndex]}
-      loaded={loaded}
-      children={props.children}
-      destination={destination}
-    />
-  );
+  return <SplashScreenPresenter servernoti={serverNoti[notiIndex]} />;
 };
 
 export default SplashScreenContainer;

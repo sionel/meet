@@ -7,8 +7,9 @@ import { getT } from '../../utils/translateManager';
 import { useDispatch, useSelector } from 'react-redux';
 import deviceInfoModule from 'react-native-device-info';
 import { RootState } from '../../redux/configureStore';
+import { LoginNavigationProps } from '../../Navigations/LoginStack';
 
-const LoginScreenContainer = ({ navigation }: any) => {
+const LoginScreenContainer = ({ navigation, route }: LoginNavigationProps<'InviteCode'>) => {
   const isIOS = Platform.OS === 'ios';
 
   const [code, setCode] = useState('');
@@ -73,13 +74,17 @@ const LoginScreenContainer = ({ navigation }: any) => {
       setFocusingNum(0);
       setInputcodeErr(true);
     } else {
-      _setLoaded(true);
-      _setParams({
-        accesstype: 'joincode',
+      // _setLoaded(true);
+      // _setParams({
+      //   accesstype: 'joincode',
+      //   roomId: result.resultData.room,
+      //   joincode
+      // });
+      // _setDestination('Setting');
+      navigation.navigate('SettingView', {
+        accessType: 'joincode',
         roomId: result.resultData.room,
-        joincode
       });
-      _setDestination('Setting');
     }
     // setLogging(true);
   };
@@ -94,7 +99,7 @@ const LoginScreenContainer = ({ navigation }: any) => {
   };
 
   const goLoginInput = () => {
-    navigation.navigate('LoginInput');
+    navigation.navigate('InputLogin');
   };
 
   const onFocusOutInput = () => {

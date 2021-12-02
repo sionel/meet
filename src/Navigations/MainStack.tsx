@@ -1,29 +1,34 @@
+import React from 'react';
 import {
-  StackNavigationProp,
-  createStackNavigator
+  createStackNavigator,
+  StackScreenProps,
 } from '@react-navigation/stack';
-import Main from '../Screens/MainScreen';
+import Home from '../Screens/HomeScreen';
 import CreateConference from '../Screens/CreateScreen';
 import DirectCreateConference from '../Screens/CreateMeetScreen';
 import ModifyConference from '../Screens/ConferenceModifyScreen';
 import InviteCode from '../Screens/InviteCodeScreen';
+import { MeetParamList } from './RootNavigation_new';
 
-type StackParamList = {
-  Main: undefined;
+type MainStackParamList = MeetParamList & {
+  Home: undefined;
   CreateConference: undefined;
   DirectCreateConference: undefined;
   ModifyConference: undefined;
-  InviteCode: undefined;
+  InviteCode:undefined;
 };
 
+export type MainNavigationProps <T extends keyof MainStackParamList> =
+StackScreenProps<MainStackParamList, T>;
 
-const Stack = createStackNavigator<StackParamList>();
 
-export default function MainNavigation_new() {
+const Stack = createStackNavigator<MainStackParamList>();
+
+export default function MainStack() {
 
   return (
-    <Stack.Navigator initialRouteName="Main" screenOptions={{headerShown: false}}>
-      <Stack.Screen name="Main" component={Main} />
+    <Stack.Navigator initialRouteName="Home" screenOptions={{headerShown: false}}>
+      <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="CreateConference" component={CreateConference} />
       <Stack.Screen name="DirectCreateConference" component={DirectCreateConference} />
       <Stack.Screen name="ModifyConference" component={ModifyConference} />

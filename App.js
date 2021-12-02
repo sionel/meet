@@ -12,6 +12,7 @@ import Splash from 'react-native-splash-screen';
 import { actionCreators } from './src/redux/modules/root';
 
 import CustomProvider from './src/Provider';
+import RootNavigation_new from './src/Navigations/RootNavigation_new';
 
 // import { io } from "socket.io-client";
 
@@ -25,15 +26,22 @@ function App(props) {
       dispatch(actionCreators.setUrl(event.url));
     });
     setT(props.t);
+
+    test()
   }, []);
 
+  // const test = async () =>{
+  //   console.log('a');
+  //   const a=  await Linking.canOpenURL('wehago://?')
+  //   console.log(a);
+  // } 
   useEffect(() => {
     dispatch(actionCreators.setLoaded(false));
     dispatch(actionCreators.setUrl(props?.url?.url));
     // dispatch(actionCreators.setUrl("com.wehago.meet://?login_info=email&type=conference&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ2aWRlby53ZWhhZ28uY29tIiwicm9vbSI6ImZiYjY2MTliLWFlMmYtNDE0MS05MmNjLTA3NWEyOTBkZWVjNyIsImVtYWlsIjoieWVvbmdpbDQ3NjRAbmF2ZXIuY29tIiwiaWF0IjoxNjM1NzQ3OTY3LCJleHAiOjE5NTExMDc5Njd9.O6UMML-qjav_-rkvLb-6tZvY-NYctt6Yxy0TF03gfxU&timeStamp=1635750152425"));
   }, [props.url]);
 
-  return <Main />;
+  return <RootNavigation_new />;
 }
 
 function AppWapper(props) {

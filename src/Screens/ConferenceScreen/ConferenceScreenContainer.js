@@ -225,7 +225,7 @@ class ConferenceScreenContainer extends React.Component {
   /** 대화방 참가 생성 */
   _joinConference = async () => {
     const {
-      navigation,
+      route:{params},
       auth,
       dispatch,
       joinConference,
@@ -234,7 +234,6 @@ class ConferenceScreenContainer extends React.Component {
       setMainUserNotExist,
       isLogin
     } = this.props;
-    const item = navigation.getParam('item');
     const {
       name,
       selectedRoomName,
@@ -242,7 +241,7 @@ class ConferenceScreenContainer extends React.Component {
       roomToken: token,
       externalUser,
       tracks
-    } = item;
+    } = params;
 
     this._conferenceManager = new ConferenceManager(
       dispatch,
@@ -338,11 +337,6 @@ class ConferenceScreenContainer extends React.Component {
       initParticipants,
       initMainUser,
       user,
-      destination,
-      setLoaded,
-      setDestination,
-      setParams,
-      setUrl,
       auth,
       isLogin,
       resetVideoId,
@@ -355,14 +349,15 @@ class ConferenceScreenContainer extends React.Component {
     user.videoTrack.dispose();
     user.audioTrack.dispose();
     resetVideoId();
-    debugger
     if (!isLogin) {
       // setLoaded(false);
-      setParams({});
-      setUrl(undefined);
-      setDestination('Login')
+      // setParams({});
+      // setUrl(undefined);
+      // setDestination('Login')
+      navigation.reset({ routes: [{ name: 'LoginStack' }] });
     } else {
-      destination === 'List' ? navigation.goBack() : setDestination('List')
+      navigation.reset({ routes: [{ name: 'Home' }] });
+      // destination === 'List' ? navigation.goBack() : setDestination('List')
     }
     this.setState({ connection: false, endCall: true });
   };

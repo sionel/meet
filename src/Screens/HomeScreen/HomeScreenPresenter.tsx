@@ -90,7 +90,17 @@ const HomeScreenPresenter = (props: any) => {
         {participantsList.show && (
           <ParticipantsList {...participantsList} isHorizon={isHorizon} />
         )}
-
+<TouchableOpacity
+  style={{
+    position: 'absolute',
+    width: 100,
+    height: 100,
+    top: 250,
+    backgroundColor: '#1322fa',
+    zIndex: 9
+  }}
+  onPress={setTest}
+/>
         <View
           style={[styles.header, { paddingHorizontal: isTablet ? 40 : 20 }]}
         >
