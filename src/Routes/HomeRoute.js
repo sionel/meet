@@ -124,14 +124,10 @@ const HomeRouteStack = () => {
 
     Configuration: {
       screen: ConfigurationScreen,
-      navigationOptions: ({ navigation }) => ({
-        headerTitle: (
-          <RouteTitle title={navigation.getScreenProps().t('option_setting')} />
-        ),
-        headerLeft: <BackButton navigation={navigation} to={'Home'} />,
-        headerTintColor: '#fff',
-        headerStyle: commonStyle
-      })
+      navigationOptions: {
+        
+        header: null,
+      }
     },
     Policy: {
       screen: PolicyScreen,

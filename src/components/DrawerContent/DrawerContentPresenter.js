@@ -99,7 +99,7 @@ export default function DrawerPresenter(props) {
           </View>
         </TouchableOpacity>
         {/* company */}
-        {true && (
+        {/* {true && (
           <View
             style={styles.company}
             onLayout={event =>
@@ -141,7 +141,7 @@ export default function DrawerPresenter(props) {
               <CustomIcon name={'btnExpandSmallNone'} size={12} />
             </TouchableOpacity>
           </View>
-        )}
+        )} */}
 
         {companyChange && (
           <CustomListModal

@@ -42,6 +42,8 @@ const icVideo = require('../../../assets/new/icons/ic_video.png');
 const icKeyboard = require('../../../assets/new/icons/ic_keyboard.png');
 const icArrowDownBlack = require('../../../assets/new/icons/ic_arrow_down_black.png');
 const icChange = require('../../../assets/new/icons/ic_change.png');
+const icEmptyConference = require('../../../assets/new/icons/ic_empty_conference.png');
+const icEmpty = require('../../../assets/new/icons/ic_empty.png');
 
 {
   /*
@@ -84,6 +86,7 @@ const HomeScreenPresenter = (props: any) => {
     onConpanyChange
   } = props;
   const t = getT();
+
   return (
     <Fragment>
       <StatusBar barStyle={'dark-content'} backgroundColor={'#F7F8FA'} />
@@ -102,7 +105,7 @@ const HomeScreenPresenter = (props: any) => {
           />
           <View style={{ flex: 1 }} />
           <TouchableOpacity style={styles.setting} onPress={onClickSetting}>
-            <Image source={icSet} />
+            <Image source={icSet} style={{ width: 25, height: 25 }} />
           </TouchableOpacity>
         </View>
 
@@ -188,7 +191,6 @@ const HomeScreenPresenter = (props: any) => {
                 {ongoingConference.length}
               </Text>
             </View>
-            {/* <View style={{ flex: 3 }}> */}
             <FlatList
               keyExtractor={(item, index) => index.toString()}
               horizontal={true}
@@ -204,150 +206,204 @@ const HomeScreenPresenter = (props: any) => {
               windowSize={2}
               showsHorizontalScrollIndicator={false}
             />
-            {/* </View> */}
           </View>
         )}
 
-        {/* 예약 회의  */}
-        <View
-          style={{
-            width: '100%',
-            flex: 1,
-            marginVertical: '2%',
-            paddingHorizontal: isTablet ? 40 : 20
-          }}
-        >
+        {ongoingConference.length === 0 &&
+        reservationConference.length === 0 &&
+        finishedConference.length === 0 ? (
           <View
             style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginBottom: 10
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center'
             }}
           >
-            {reservationConference.length > 0 && (
-              <TouchableOpacity
-                style={{ flexDirection: 'row' }}
-                onPress={() => {
-                  setHighlight('reservation');
-                }}
-              >
-                <Text
-                  style={[
-                    { color: '#939393', fontSize: 16, paddingRight: 5 },
-                    highlight === 'reservation' && {
-                      fontWeight: 'bold',
-                      color: '#000'
-                    }
-                  ]}
+            <Image
+              style={{ width: 150, height: 120 }}
+              source={icEmptyConference}
+              resizeMode={'contain'}
+            />
+            <Text
+              style={{
+                textAlign: 'center',
+                fontSize: 14,
+                letterSpacing: -0.21
+              }}
+            >
+              {
+                '진행중인 화상회의가 없습니다.\n회의생성을 통해 회의를 생성해보세요'
+              }
+            </Text>
+          </View>
+        ) : reservationConference.length === 0 &&
+          finishedConference.length === 0 ? (
+          <View
+            style={{
+              flex: 1,
+              marginVertical: '2%',
+              paddingHorizontal: isTablet ? 40 : 20
+            }}
+          >
+            <Text style={styles.goingText}>{'회의기록'}</Text>
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                flex: 1
+              }}
+            >
+              <Image
+                style={{ width: 150, height: 120 }}
+                source={icEmpty}
+                resizeMode={'contain'}
+              />
+              <Text>{'회의기록이 없습니다'}</Text>
+            </View>
+          </View>
+        ) : (
+          <View
+            style={{
+              width: '100%',
+              flex: 1,
+              marginVertical: '2%',
+              paddingHorizontal: isTablet ? 40 : 20
+              // backgroundColor: 'red'
+            }}
+          >
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginBottom: 10
+              }}
+            >
+              {reservationConference.length > 0 && (
+                <TouchableOpacity
+                  style={{ flexDirection: 'row' }}
+                  onPress={() => {
+                    setHighlight('reservation');
+                  }}
                 >
-                  {'예약회의'}
-                </Text>
-                <Text
-                  style={[
-                    { color: '#939393', fontSize: 16 },
-                    highlight === 'reservation' && {
-                      fontWeight: 'bold',
-                      color: '#1c90fb'
-                    }
-                  ]}
+                  <Text
+                    style={[
+                      { color: '#939393', fontSize: 16, paddingRight: 5 },
+                      highlight === 'reservation' && {
+                        fontWeight: 'bold',
+                        color: '#000'
+                      }
+                    ]}
+                  >
+                    {'예약회의'}
+                  </Text>
+                  <Text
+                    style={[
+                      { color: '#939393', fontSize: 16 },
+                      highlight === 'reservation' && {
+                        fontWeight: 'bold',
+                        color: '#1c90fb'
+                      }
+                    ]}
+                  >
+                    {reservationConference.length}
+                  </Text>
+                </TouchableOpacity>
+              )}
+              {reservationConference.length > 0 &&
+                finishedConference.length > 0 && (
+                  <View
+                    style={{
+                      borderWidth: 1,
+                      borderColor: '#aaa',
+                      height: '100%',
+                      marginHorizontal: 10
+                    }}
+                  />
+                )}
+              {finishedConference.length > 0 && (
+                <TouchableOpacity
+                  style={{ flexDirection: 'row' }}
+                  onPress={() => {
+                    setHighlight('finished');
+                  }}
                 >
-                  {reservationConference.length}
-                </Text>
-              </TouchableOpacity>
-            )}
-            {reservationConference.length > 0 && finishedConference.length > 0 && (
-              <View
-                style={{
-                  borderWidth: 1,
-                  borderColor: '#aaa',
-                  height: '100%',
-                  marginHorizontal: 10
+                  <Text
+                    style={[
+                      { color: '#939393', fontSize: 16, paddingRight: 5 },
+
+                      highlight === 'finished' && {
+                        fontWeight: 'bold',
+                        color: '#000'
+                      }
+                    ]}
+                  >
+                    {'회의기록'}
+                  </Text>
+                  <Text
+                    style={[
+                      { color: '#939393', fontSize: 16, paddingRight: 20 },
+                      highlight === 'finished' && {
+                        fontWeight: 'bold',
+                        color: '#1c90fb'
+                      }
+                    ]}
+                  >
+                    {finishedConference.length}
+                  </Text>
+                </TouchableOpacity>
+              )}
+            </View>
+            {isTablet ? (
+              <FlatList
+                numColumns={2}
+                keyExtractor={(item, index) => index.toString()}
+                data={
+                  highlight === 'reservation'
+                    ? reservationConference
+                    : finishedConference
+                }
+                columnWrapperStyle={{ justifyContent: 'space-between' }}
+                renderItem={data => {
+                  const { item } = data;
+
+                  return highlight === 'reservation' ? (
+                    <ReservationCard {...item} isTablet={isTablet} />
+                  ) : (
+                    // <FinishedCard {...{item}} />
+                    <FinishedCard {...item} isTablet={isTablet} />
+                  );
                 }}
+                showsVerticalScrollIndicator={false}
+              />
+            ) : (
+              <FlatList
+                numColumns={1}
+                keyExtractor={(item, index) => index.toString()}
+                data={
+                  highlight === 'reservation'
+                    ? reservationConference
+                    : finishedConference
+                }
+                // { isTablet && columnWrapperStyle={{ justifyContent: 'space-between' }}}
+                renderItem={data => {
+                  const { item } = data;
+
+                  return highlight === 'reservation' ? (
+                    <ReservationCard {...item} isTablet={isTablet} />
+                  ) : (
+                    // <FinishedCard {...{item}} />
+                    <FinishedCard {...item} isTablet={isTablet} />
+                  );
+                }}
+                showsVerticalScrollIndicator={false}
               />
             )}
-            {finishedConference.length > 0 && (
-              <TouchableOpacity
-                style={{ flexDirection: 'row' }}
-                onPress={() => {
-                  setHighlight('finished');
-                }}
-              >
-                <Text
-                  style={[
-                    { color: '#939393', fontSize: 16, paddingRight: 5 },
-
-                    highlight === 'finished' && {
-                      fontWeight: 'bold',
-                      color: '#000'
-                    }
-                  ]}
-                >
-                  {'회의기록'}
-                </Text>
-                <Text
-                  style={[
-                    { color: '#939393', fontSize: 16, paddingRight: 20 },
-                    highlight === 'finished' && {
-                      fontWeight: 'bold',
-                      color: '#1c90fb'
-                    }
-                  ]}
-                >
-                  {finishedConference.length}
-                </Text>
-              </TouchableOpacity>
-            )}
           </View>
-          {isTablet ? (
-            <FlatList
-              numColumns={2}
-              keyExtractor={(item, index) => index.toString()}
-              data={
-                highlight === 'reservation'
-                  ? reservationConference
-                  : finishedConference
-              }
-              columnWrapperStyle={{ justifyContent: 'space-between' }}
-              renderItem={data => {
-                const { item } = data;
+        )}
 
-                return highlight === 'reservation' ? (
-                  <ReservationCard {...item} isTablet={isTablet} />
-                ) : (
-                  // <FinishedCard {...{item}} />
-                  <FinishedCard {...item} isTablet={isTablet} />
-                );
-              }}
-              showsVerticalScrollIndicator={false}
-            />
-          ) : (
-            <FlatList
-              numColumns={1}
-              keyExtractor={(item, index) => index.toString()}
-              data={
-                highlight === 'reservation'
-                  ? reservationConference
-                  : finishedConference
-              }
-              // { isTablet && columnWrapperStyle={{ justifyContent: 'space-between' }}}
-              renderItem={data => {
-                const { item } = data;
-
-                return highlight === 'reservation' ? (
-                  <ReservationCard {...item} isTablet={isTablet} />
-                ) : (
-                  // <FinishedCard {...{item}} />
-                  <FinishedCard {...item} isTablet={isTablet} />
-                );
-              }}
-              showsVerticalScrollIndicator={false}
-            />
-          )}
-        </View>
         {bottomPopup.show && (
           <BottomPopup {...bottomPopup} isHorizon={isHorizon} />
         )}
-        {/* </View> */}
       </SafeAreaView>
     </Fragment>
   );
@@ -367,10 +423,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flexDirection: 'row',
     marginTop: 10,
-    marginBottom: 20
+    marginBottom: 0
   },
   logo: {
-    width: 200
+    width: 180
   },
   setting: {
     flexDirection: 'row-reverse',

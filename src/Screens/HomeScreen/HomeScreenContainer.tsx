@@ -26,7 +26,7 @@ import { participantsListProps } from '../../components/renewal/ParticipantsList
 import { wehagoDummyImageURL, wehagoMainURL } from '../../utils';
 
 import deviceInfoModule from 'react-native-device-info';
-import RNrestart from 'react-native-restart'
+import RNrestart from 'react-native-restart';
 
 const icUser = require('../../../assets/new/icons/ic_user.png');
 const icModify = require('../../../assets/new/icons/ic_modify.png');
@@ -242,7 +242,8 @@ export default function HomeScreenContainer(props: any) {
           })
         );
 
-        setFinishedConference(finishedConference);
+        // setFinishedConference(finishedConference);
+        setFinishedConference([]);
       }
     );
   };
@@ -340,6 +341,7 @@ export default function HomeScreenContainer(props: any) {
       );
 
       setOngoingConference(goingList);
+      // setOngoingConference([]);
 
       // =====================================================================================================
       // =====================================================================================================
@@ -420,7 +422,8 @@ export default function HomeScreenContainer(props: any) {
         setHighlight('reservation');
       // reservationList.push({isEmptty})
 
-      setReservationConference(reservationList);
+      // setReservationConference(reservationList);
+      setReservationConference([]);
     });
   };
 
@@ -663,7 +666,7 @@ export default function HomeScreenContainer(props: any) {
   };
 
   const handleConpanyChange = () => {
-    _openCompany()
+    _openCompany();
     // const contentList = auth?.employee_list.map((company: any) => ({
     //   name: company.company_name_kr,
     //   onClick: () => {
@@ -706,7 +709,9 @@ export default function HomeScreenContainer(props: any) {
   const testFunc = () => {
     setTest(!test);
   };
-
+  const handleClickSetting = () => {
+    props.navigation.navigate('Configuration');
+  };
   return isHorizon ? (
     <HomeScreenHorizonPresenter
       {...{
@@ -727,6 +732,7 @@ export default function HomeScreenContainer(props: any) {
         setTest: testFunc,
         createConference,
         isHorizon,
+        onClickSetting: handleClickSetting,
         onConpanyChange: handleConpanyChange
       }}
     />
@@ -750,6 +756,7 @@ export default function HomeScreenContainer(props: any) {
         setTest: testFunc,
         createConference,
         isHorizon,
+        onClickSetting: handleClickSetting,
         onConpanyChange: handleConpanyChange
       }}
     />
