@@ -10,12 +10,13 @@ import {
 
 import { getT } from '../../utils/translateManager';
 
-import { MeetApi, ServiceCheckApi } from '../../services';
+import { MeetApi, ServiceCheckApi, UserApi } from '../../services';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/configureStore';
 
 import { actionCreators as UserActions } from '../../redux/modules/user';
+import { actionCreators as RecentsActions } from '../../redux/modules/recentsInvited';
 import { actionCreators as ConferenceActions } from '../../redux/modules/conference';
 
 import HomeScreenPresenter from './HomeScreenPresenter';
@@ -665,9 +666,12 @@ export default function HomeScreenContainer(props: any) {
   //   navigation.navigate(url, param);
   // };
 
-  const testFunc = () => {
-
+  const testFunc = async () => {
     //로그아웃
+    await UserApi.logoutRequest(auth);
+    dispatch(UserActions.logout());
+    dispatch(RecentsActions.resetRecents());
+    navigation.reset({ routes: [{ name: 'LoginStack' }] });
     // setTest(!test);
   };
   return isHorizon ? (

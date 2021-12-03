@@ -32,8 +32,13 @@ class ConferenceStateContainer extends React.Component {
     // 딥링크 이메일 접근
     // 참여코드 접근
 
-    const { auth, videoId, isLogin, route:{params}} = this.props;
-    const {id} = params;
+    const {
+      auth,
+      videoId,
+      isLogin,
+      route: { params }
+    } = this.props;
+    const { id } = params;
     // debugger
     // this.props.navigation.goBack()
     // let roomId;
@@ -193,7 +198,7 @@ class ConferenceStateContainer extends React.Component {
   // };
 
   _handleEnterConference = async (auth, roomId, iscret, params) => {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
     let callType = 3;
     let isCreator;
 
@@ -213,11 +218,10 @@ class ConferenceStateContainer extends React.Component {
       // navigation.navigate('Home');
       navigation.replace('SettingView', {
         roomType: 'meet',
-        videoRoomId: roomId,
         callType,
         isCreator,
         selectedRoomName: this.roomName,
-        params
+        ...params
       });
 
       // this._handleRedirect('Setting', {

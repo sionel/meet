@@ -17,30 +17,33 @@ export type MeetParamList = {
   LoginStack: undefined;
   MainStack: undefined;
   SettingView: {
-    roomType?: string;
-    videoRoomId?: string;
-    callType?: number;
-    isCreator?: any;
-    selectedRoomName?: string;
-    params?: any;
     accessType?: 'auth' | 'email' | 'joincode';
-    roomId?: string;
+    callType?: number;
+    id?: string;
+    isCreator?: any;
+    joincode?: string;
+    roomType?: string;
+    selectedRoomName?: string;
     token?: null | string;
   };
   ConferenceStateView: {
-    id: string;
+    accessType?: 'auth' | 'email' | 'joincode';
     externalData?: string | null;
     from?: string;
-    accessType?: 'auth' | 'email' | 'joincode';
+    id: string;
     joincode?: string;
   };
   ConferenceView: {
-    tracks: [];
-    roomToken: string;
-    name: string;
-    params: any;
-    accesstype: string;
+    accessType: string;
+    callType: number;
     externalUser: any;
+    id: string;
+    isCreator?: any;
+    joincode: string;
+    name: string;
+    roomToken: string;
+    roomType?: string;
+    tracks: any;
   };
 };
 

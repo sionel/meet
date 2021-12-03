@@ -27,7 +27,7 @@ function App(props) {
     });
     setT(props.t);
 
-    test()
+    // test()
   }, []);
 
   // const test = async () =>{

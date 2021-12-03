@@ -9,7 +9,10 @@ import deviceInfoModule from 'react-native-device-info';
 import { RootState } from '../../redux/configureStore';
 import { LoginNavigationProps } from '../../Navigations/LoginStack';
 
-const LoginScreenContainer = ({ navigation, route }: LoginNavigationProps<'InviteCode'>) => {
+const LoginScreenContainer = ({
+  navigation,
+  route
+}: LoginNavigationProps<'InviteCode'>) => {
   const isIOS = Platform.OS === 'ios';
 
   const [code, setCode] = useState('');
@@ -81,9 +84,10 @@ const LoginScreenContainer = ({ navigation, route }: LoginNavigationProps<'Invit
       //   joincode
       // });
       // _setDestination('Setting');
-      navigation.navigate('SettingView', {
+      navigation.navigate('ConferenceStateView', {
         accessType: 'joincode',
-        roomId: result.resultData.room,
+        id: result.resultData.room,
+        joincode: joincode
       });
     }
     // setLogging(true);
@@ -105,7 +109,6 @@ const LoginScreenContainer = ({ navigation, route }: LoginNavigationProps<'Invit
   const onFocusOutInput = () => {
     // if (codeLineRef.current.isFocused()) codeLineRef.current.blur();
     setFocusingNum(-1);
-    
   };
 
   const LoginForWehago = () => {

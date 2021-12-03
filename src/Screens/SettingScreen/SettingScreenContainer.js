@@ -101,15 +101,19 @@ class SettingScreenContainer extends React.Component {
   };
 
   _handleConferenceEnter = async () => {
-    const { navigation, auth, webAuth, route:{params} } = this.props;
+    const {
+      navigation,
+      auth,
+      webAuth,
+      route: { params }
+    } = this.props;
     let { tracks, nameField } = this.state;
     let name;
-
 
     if (nameField) {
       name = this.state.name;
       if (!name) {
-        name = (await MeetApi.getExternalUserId(params.roomId)).resultData;
+        name = (await MeetApi.getExternalUserId(params.id)).resultData;
       }
     } else {
       name = webAuth?.user_name ? webAuth?.user_name : auth.user_name;
@@ -122,14 +126,14 @@ class SettingScreenContainer extends React.Component {
     const randomstring = uuidv4();
     const user = randomstring.substr(0, 8);
 
-    if (params?.accesstype === 'email') {
+    if (params?.accessType === 'email') {
       roomToken = (
-        await MeetApi.getMeetRoomTokenEmail(params.roomId, params.token, name)
+        await MeetApi.getMeetRoomTokenEmail(params.id, params.token, name)
       ).resultData;
-    } else if (params?.accesstype === 'joincode') {
+    } else if (params?.accessType === 'joincode') {
       roomToken = (
         await MeetApi.getMeetRoomTokenJoincode(
-          params.roomId,
+          params.id,
           params.joincode,
           name,
           user
@@ -137,8 +141,7 @@ class SettingScreenContainer extends React.Component {
       ).resultData;
     } else {
       // 토큰받고
-      roomToken = (await MeetApi.getMeetRoomToken(auth, params.videoRoomId))
-        .resultData;
+      roomToken = (await MeetApi.getMeetRoomToken(auth, params.id)).resultData;
     }
     if (roomToken === '접근금지') {
       // wehago V 때문에 절차가 하나 늘어남
@@ -157,7 +160,7 @@ class SettingScreenContainer extends React.Component {
               roomToken,
               name,
               ...params,
-              accesstype: params?.accesstype,
+              accessType: params?.accessType,
               externalUser: user
             }
           }
@@ -169,7 +172,7 @@ class SettingScreenContainer extends React.Component {
       //     roomToken,
       //     name,
       //     ...item,
-      //     accesstype: params?.accesstype,
+      //     accessType: params?.accesstype,
       //     externalUser: user
       //   }
       // });

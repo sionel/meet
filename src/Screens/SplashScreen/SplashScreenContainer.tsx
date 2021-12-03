@@ -362,7 +362,7 @@ const SplashScreenContainer = ({
       // _setDestination('Setting');
       navigation.navigate('SettingView', {
         accessType: 'email',
-        roomId: decoded.room,
+        id: decoded.room,
         token: result.token
       });
     }

@@ -7,7 +7,6 @@ const mapStatetoProps = state => {
     auth: state.user.auth,
     isLogin: state.user.isLogin,
     from: state.user.from,
-    params: state.root.params
   };
 };
 
