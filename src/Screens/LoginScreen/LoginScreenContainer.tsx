@@ -28,15 +28,6 @@ const LoginScreenContainer = ({
     isHorizon: state.orientation.isHorizon
   }));
 
-  const dispatch = useDispatch();
-
-  const _setLoaded = (loaded: boolean) =>
-    dispatch(RootActions.setLoaded(loaded));
-  const _setDestination = (destination: string) =>
-    dispatch(RootActions.setDestination(destination));
-  const _setParams = (params: {}) => dispatch(RootActions.setParams(params));
-  const _setUrl = (url: string) => dispatch(RootActions.setUrl(url));
-
   const t = getT();
   const isTablet: boolean = deviceInfoModule.isTablet();
 

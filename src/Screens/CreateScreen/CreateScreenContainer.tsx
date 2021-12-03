@@ -18,6 +18,8 @@ import {
 import { getT } from '../../utils/translateManager';
 import { wehagoDummyImageURL, wehagoMainURL } from '../../utils';
 
+import { MainNavigationProps } from '../../Navigations/MainStack';
+
 export default function CreateScreenContainer(props: any) {
   const initSection: section = {
     data: [],
@@ -243,18 +245,28 @@ export default function CreateScreenContainer(props: any) {
       setIndicatorFlag(false);
 
       // 대화방에 참여한다.
-      const { navigation } = props;
-      navigation.navigate('Home');
-      navigation.navigate('Setting', {
-        item: {
-          videoRoomId,
-          room_id,
-          roomType: 'meet',
-          roomToken,
-          callType,
-          isCreator
-        }
+      const { navigation }: MainNavigationProps<'CreateConference'> = props;
+      // navigation.navigate('Home');
+      //TODO: 화상대화 포인트이용해서 필요할경우 state
+      navigation.navigate('SettingView',{
+        accessType: 'auth',
+        // callType,
+        id: videoRoomId,
+        // isCreator,
+        roomType: 'meet',
       });
+
+
+      // navigation.navigate('Setting', {
+      //   item: {
+      //     id,
+      //     room_id,
+      //     roomType: 'meet',
+      //     roomToken,
+      //     callType,
+      //     isCreator
+      //   }
+      // });
     } else if (createResult.resultCode === 400) {
       setIndicatorFlag(false);
 

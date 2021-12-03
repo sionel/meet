@@ -3,15 +3,16 @@ import {
   createStackNavigator,
   StackScreenProps,
 } from '@react-navigation/stack';
-import Home from '../Screens/HomeScreen';
+// import Home from '../Screens/HomeScreen';
 import CreateConference from '../Screens/CreateScreen';
 import DirectCreateConference from '../Screens/CreateMeetScreen';
 import ModifyConference from '../Screens/ConferenceModifyScreen';
 import InviteCode from '../Screens/InviteCodeScreen';
+import HomeStack from './HomeStack';
 import { MeetParamList } from './RootNavigation_new';
 
 type MainStackParamList = MeetParamList & {
-  Home: undefined;
+  HomeStack: undefined;
   CreateConference: undefined;
   DirectCreateConference: undefined;
   ModifyConference: undefined;
@@ -27,8 +28,8 @@ const Stack = createStackNavigator<MainStackParamList>();
 export default function MainStack() {
 
   return (
-    <Stack.Navigator initialRouteName="Home" screenOptions={{headerShown: false}}>
-      <Stack.Screen name="Home" component={Home} />
+    <Stack.Navigator initialRouteName="HomeStack" screenOptions={{headerShown: false}}>
+      <Stack.Screen name="HomeStack" component={HomeStack} />
       <Stack.Screen name="CreateConference" component={CreateConference} />
       <Stack.Screen name="DirectCreateConference" component={DirectCreateConference} />
       <Stack.Screen name="ModifyConference" component={ModifyConference} />

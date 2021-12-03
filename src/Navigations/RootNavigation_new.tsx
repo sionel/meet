@@ -11,27 +11,26 @@ import MainStack from './MainStack';
 import SettingView from '../Screens/SettingScreen';
 import ConferenceStateView from '../Screens/ConferenceStateScreen';
 import ConferenceView from '../Screens/ConferenceScreen';
-
+// roomToken?: string;
 export type MeetParamList = {
   SplashView: undefined;
   LoginStack: undefined;
   MainStack: undefined;
-  SettingView: {
-    accessType?: 'auth' | 'email' | 'joincode';
-    callType?: number;
-    id?: string;
-    isCreator?: any;
-    joincode?: string;
-    roomType?: string;
-    selectedRoomName?: string;
-    token?: null | string;
-  };
   ConferenceStateView: {
-    accessType?: 'auth' | 'email' | 'joincode';
+    accessType: 'auth' | 'email' | 'joincode';
     externalData?: string | null;
     from?: string;
     id: string;
     joincode?: string;
+  };
+  SettingView: {
+    accessType: 'auth' | 'email' | 'joincode';
+    // callType?: number;
+    id: string;
+    // isCreator?: any;
+    // joincode?: string;
+    roomType?: string;
+    selectedRoomName?: string;
   };
   ConferenceView: {
     accessType: string;

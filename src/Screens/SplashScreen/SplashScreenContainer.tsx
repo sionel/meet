@@ -46,9 +46,9 @@ const SplashScreenContainer = ({
     updateNoti,
     autoLogin,
     isLogin,
-    loaded,
-    destination,
-    params,
+    // loaded,
+    // destination,
+    // params,
     url
   } = useSelector((state: RootState) => {
     return {
@@ -58,9 +58,9 @@ const SplashScreenContainer = ({
       updateNoti: state.user.updateNoti,
       autoLogin: state.user.autoLogin,
       isLogin: state.user.isLogin,
-      loaded: state.root.loaded,
-      destination: state.root.destination,
-      params: state.root.params,
+      // loaded: state.root.loaded,
+      // destination: state.root.destination,
+      // params: state.root.params,
       url: state.root.url
     };
   });
@@ -99,10 +99,15 @@ const SplashScreenContainer = ({
     setInitInfo();
     setSharingMode();
     _handleInit();
+    //  ios : 앱이 켜져있을때
+     Linking.addEventListener('url', event => {
+      _handleGetDeeplink(event.url);
+    });
+    
   }, []);
 
   useEffect(() => {
-    if (!first) {
+      if (!first) {
       if (url) _handleGetDeeplink(url);
       else _autoLoginChk();
     }
@@ -181,6 +186,7 @@ const SplashScreenContainer = ({
         //   accesstype: 'login'
         // });
         // _setDestination('List');
+        
         navigation.reset({ routes: [{ name: 'MainStack' }] });
       } else if (result === 'dany') {
         _setDestination('SelectCompany');
@@ -207,6 +213,7 @@ const SplashScreenContainer = ({
       //   accesstype: 'login'
       // });
       // _setDestination('List');
+      
       navigation.reset({ routes: [{ name: 'MainStack' }] });
     } else if (result === 'dany') {
       //회사선택 페이지 고려
@@ -270,8 +277,7 @@ const SplashScreenContainer = ({
     */
     if (!url) return;
     let result: any = querystringParser(url);
-    debugger;
-
+    
     // if(result.type === 'conference') {
     if (result.video_id) {
       // TODO: 컨퍼런스로 받았을때 이 분기 처리를 어떻게 해야할지 검토필요성 있음
@@ -279,7 +285,8 @@ const SplashScreenContainer = ({
       if (result.cno || isLogin) {
         _setVideoId(result.video_id);
         // _setDestination('Setting');
-        navigation.reset({ routes: [{ name: 'SettingView', params: {} }] });
+        // navigation.reset({ routes: [{ name: 'SettingView', params: {id: result.video_id} }] });
+        navigation.reset({ routes: [{ name: 'ConferenceStateView', params: {id: result.video_id} }] });
       } else {
         // _setDestination('Login');
         navigation.reset({ routes: [{ name: 'LoginStack' }] });
@@ -360,10 +367,10 @@ const SplashScreenContainer = ({
       //   token: result.token
       // });
       // _setDestination('Setting');
-      navigation.navigate('SettingView', {
+      navigation.navigate('ConferenceStateView', {
         accessType: 'email',
         id: decoded.room,
-        token: result.token
+        // token: result.token
       });
     }
   };
@@ -393,6 +400,7 @@ const SplashScreenContainer = ({
       //   accesstype: 'login'
       // });
       //회사선택 페이지 필요함
+      
       navigation.reset({ routes: [{ name: 'MainStack' }] });
       _setDestination(isDeploy ? 'List' : 'SelectCompany');
     } else {

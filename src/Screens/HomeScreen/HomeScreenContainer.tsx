@@ -122,8 +122,12 @@ export default function HomeScreenContainer(props: any) {
 
   const dispatch = useDispatch();
   const _setRoomId = (id: string) => dispatch(ConferenceActions.setRoomId(id));
+  const _handleLogout = () => {
+    dispatch(UserActions.logout());
+    dispatch(RecentsActions.resetRecents());
+  };
 
-  const { navigation, route }: MainNavigationProps<'Home'> = props;
+  const { navigation, route }: MainNavigationProps<'HomeStack'> = props;
 
   const isTablet = deviceInfoModule.isTablet();
 
@@ -328,7 +332,8 @@ export default function HomeScreenContainer(props: any) {
               navigation.navigate('ConferenceStateView', {
                 id: conference.room_id,
                 externalData: null,
-                from: 'meet'
+                from: 'meet',
+                accessType:'auth',
               })
             // _handleRedirect('ConferenceState', {
             //   id: conference.room_id,
@@ -668,9 +673,9 @@ export default function HomeScreenContainer(props: any) {
 
   const testFunc = async () => {
     //로그아웃
+
     await UserApi.logoutRequest(auth);
-    dispatch(UserActions.logout());
-    dispatch(RecentsActions.resetRecents());
+    _handleLogout();
     navigation.reset({ routes: [{ name: 'LoginStack' }] });
     // setTest(!test);
   };

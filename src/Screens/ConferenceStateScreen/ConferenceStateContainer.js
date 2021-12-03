@@ -39,7 +39,6 @@ class ConferenceStateContainer extends React.Component {
       route: { params }
     } = this.props;
     const { id } = params;
-    // debugger
     // this.props.navigation.goBack()
     // let roomId;
     // let iscret = true; // 인증 비인증 묻는 것
@@ -51,7 +50,6 @@ class ConferenceStateContainer extends React.Component {
     // }
     let { conferenceState } = this.state;
     this.roomId = videoId || id;
-    // debugger;
     // let { auth } = this.props;
     // const access = await MeetApi.getMeetRoom(
     //   auth.AUTH_A_TOKEN,
@@ -215,7 +213,6 @@ class ConferenceStateContainer extends React.Component {
         conferenceState: conferenceState
       });
     } else {
-      // navigation.navigate('Home');
       navigation.replace('SettingView', {
         roomType: 'meet',
         callType,
@@ -224,6 +221,7 @@ class ConferenceStateContainer extends React.Component {
         ...params
       });
 
+      // navigation.navigate('Home');
       // this._handleRedirect('Setting', {
       //   item: {
       //     roomType: 'meet',

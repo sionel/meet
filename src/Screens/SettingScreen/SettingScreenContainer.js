@@ -29,7 +29,6 @@ class SettingScreenContainer extends React.Component {
     // if (Platform.OS !== 'ios') {
     //   Orientation.lockToPortrait();
     // }
-    // debugger
     Orientation.getOrientation(orientation => {
       const status =
         orientation === 'LANDSCAPE' ||
