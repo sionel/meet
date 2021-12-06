@@ -6,12 +6,17 @@ import {
   StackScreenProps
 } from '@react-navigation/stack';
 
-import SplashView from './SplashView';
+// import SplashView from './SplashView';
 import LoginStack from './LoginStack';
 import MainStack from './MainStack';
 import SettingView from '../Screens/SettingScreen';
 import ConferenceStateView from '../Screens/ConferenceStateScreen';
 import ConferenceView from '../Screens/ConferenceScreen';
+
+import SplashView from '../Screens/SplashScreen';
+
+
+
 // roomToken?: string;
 export type MeetParamList = {
   SplashView: undefined;

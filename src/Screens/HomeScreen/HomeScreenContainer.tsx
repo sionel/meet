@@ -686,7 +686,7 @@ export default function HomeScreenContainer(props: any) {
 
 
   const handleClickSetting = () => {
-    props.navigation.navigate('Configuration');
+    navigation.navigate('Configuration');
   };
   return isHorizon ? (
     <HomeScreenHorizonPresenter

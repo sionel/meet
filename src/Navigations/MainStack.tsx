@@ -11,12 +11,15 @@ import InviteCode from '../Screens/InviteCodeScreen';
 import HomeStack from './HomeStack';
 import { MeetParamList } from './RootNavigation_new';
 
+import ConfigurationScreen from '../Screens/ConfigurationScreen';
+
 type MainStackParamList = MeetParamList & {
   HomeStack: undefined;
   CreateConference: undefined;
   DirectCreateConference: undefined;
   ModifyConference: undefined;
   InviteCode:undefined;
+  Configuration:undefined;
 };
 
 export type MainNavigationProps <T extends keyof MainStackParamList> =
@@ -34,6 +37,7 @@ export default function MainStack() {
       <Stack.Screen name="DirectCreateConference" component={DirectCreateConference} />
       <Stack.Screen name="ModifyConference" component={ModifyConference} />
       <Stack.Screen name="InviteCode" component={InviteCode} />
+      <Stack.Screen name="Configuration" component={ConfigurationScreen} />
     </Stack.Navigator>
   );
 }
