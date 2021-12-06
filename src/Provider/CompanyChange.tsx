@@ -1,35 +1,68 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
-  SafeAreaView,
-  Dimensions,
+  StyleSheet,
   TouchableOpacity,
   Image,
-  ImageSourcePropType,
+  Dimensions,
   FlatList
 } from 'react-native';
-// import {Text,TextInput} from '../../../components/StyledText';
+import RNrestart from 'react-native-restart';
+
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../redux/configureStore';
+import { actionCreators as selectCompanyAction } from '../redux/modules/selectCompany';
+import { actionCreators as userAction } from '../redux/modules/user';
 const { width, height } = Dimensions.get('window');
-const icPerson = require('../../../../assets/new/icons/ic_user.png');
 
-export interface content {
-  icon1?: ImageSourcePropType;
-  icon2?: ImageSourcePropType | null;
-  name: string;
-  onClick: () => void;
-}
+const icCheckB = require('../../assets/new/icons/ic_check_b.png');
 
-interface BottomPopupProps {
-  title: string;
-  contentList: content[];
-  onClickOutside: () => void;
-}
+//다국어
+export default function CompanyChange() {
+  const [prevAuth, setPrevAuth] = useState<any>(null);
+  const { isHorizon, auth, contentList } = useSelector((state: RootState) => {
+    const {
+      user: { auth },
+      orientation: { isHorizon }
+    } = state;
 
-export default function BottomPopup(
-  props: BottomPopupProps & { isHorizon: boolean }
-) {
-  const { title, contentList, onClickOutside, isHorizon } = props;
+    const contentList = auth?.employee_list.map((company: any) => ({
+      name: company.company_name_kr,
+      onClick: () => {
+        debugger
+        String(company.company_no) !== String(auth.cno)
+          ? changeCompanyRequest(auth, {
+              company_no: company.company_no,
+              company_code: company.company_code
+            })
+          : _closeCompany();
+      },
+      icon2: String(company.company_no) === String(auth.cno) ? icCheckB : null
+    }));
+
+    return {
+      isHorizon,
+      auth,
+      contentList
+    };
+  });
+
+  const dispatch = useDispatch();
+  const _closeCompany = () => {
+    dispatch(selectCompanyAction.closeCompany());
+  };
+  const changeCompanyRequest = (auth: any, company: any) =>
+    dispatch(userAction.changeCompanyRequest(auth, company));
+
+  useEffect(() => {
+    if (prevAuth === null) {
+      setPrevAuth(auth);
+    } else if (prevAuth.cno !== auth.cno) {
+      RNrestart.Restart();
+    }
+  }, [auth]);
+
   return isHorizon ? (
     <View
       style={{
@@ -37,11 +70,12 @@ export default function BottomPopup(
         width,
         height,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        zIndex: 2
       }}
     >
       <TouchableOpacity
-        onPress={onClickOutside}
+        onPress={_closeCompany}
         style={{
           position: 'absolute',
           width,
@@ -54,7 +88,7 @@ export default function BottomPopup(
         style={{
           width: '30%',
           backgroundColor: '#fff',
-          zIndex: 2,
+          zIndex: 3,
           borderRadius: 30
         }}
       >
@@ -73,7 +107,7 @@ export default function BottomPopup(
               fontFamily: 'DOUZONEText50'
             }}
           >
-            {title}
+            {'회사 변경'}
           </Text>
         </View>
         <FlatList
@@ -129,13 +163,14 @@ export default function BottomPopup(
         position: 'absolute',
         width,
         height,
-        backgroundColor: 'rgba(0,0,0,0.5)'
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        zIndex: 2
       }}
     >
       <TouchableOpacity
         style={{ flex: 1 }}
         activeOpacity={1}
-        onPress={onClickOutside}
+        onPress={_closeCompany}
       />
 
       <View
@@ -143,7 +178,8 @@ export default function BottomPopup(
           backgroundColor: '#fff',
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
-          maxHeight: 600
+          maxHeight: 600,
+          zIndex: 3
         }}
       >
         <View
@@ -163,7 +199,7 @@ export default function BottomPopup(
               fontFamily: 'DOUZONEText50'
             }}
           >
-            {title}
+            {'회사 선택'}
           </Text>
         </View>
         <FlatList

@@ -18,22 +18,26 @@ import { RootState } from '../../redux/configureStore';
 import { actionCreators as UserActions } from '../../redux/modules/user';
 import { actionCreators as RecentsActions } from '../../redux/modules/recentsInvited';
 import { actionCreators as ConferenceActions } from '../../redux/modules/conference';
+import { actionCreators as SelectCompanyActions } from '../../redux/modules/selectCompany';
 
 import HomeScreenPresenter from './HomeScreenPresenter';
 import HomeScreenHorizonPresenter from './HomeScreenHorizonPresenter';
-import { wehagoDummyImageURL, wehagoMainURL } from '../../utils';
-
 import { content } from './Component/bottomPopup';
 import { participantsListProps } from '../../components/renewal/ParticipantsList';
+import { wehagoDummyImageURL, wehagoMainURL } from '../../utils';
+
 import deviceInfoModule from 'react-native-device-info';
+
 import { useNavigation } from '@react-navigation/native';
 import { MainNavigationProps } from '../../Navigations/MainStack';
+import RNrestart from 'react-native-restart';
 
 const icUser = require('../../../assets/new/icons/ic_user.png');
 const icModify = require('../../../assets/new/icons/ic_modify.png');
 const icLink = require('../../../assets/new/icons/ic_link.png');
 const icCancel = require('../../../assets/new/icons/ic_cancel.png');
 const icInfo = require('../../../assets/new/icons/ic_info.png');
+const icCheckB = require('../../../assets/new/icons/ic_check_b.png');
 
 type conference = {
   room_id: string;
@@ -92,7 +96,11 @@ export default function HomeScreenContainer(props: any) {
     title: '',
     show: false
   });
-  const ref = useRef<any>({ reservationConference, exitApp: false });
+  const ref = useRef<any>({
+    reservationConference,
+    exitApp: false,
+    interval: null
+  });
 
   const {
     auth,
@@ -122,12 +130,18 @@ export default function HomeScreenContainer(props: any) {
 
   const dispatch = useDispatch();
   const _setRoomId = (id: string) => dispatch(ConferenceActions.setRoomId(id));
+  
   const _handleLogout = () => {
     dispatch(UserActions.logout());
     dispatch(RecentsActions.resetRecents());
   };
 
   const { navigation, route }: MainNavigationProps<'HomeStack'> = props;
+
+  const _openCompany = () => dispatch(SelectCompanyActions.openCompany());
+  const changeCompanyRequest = (auth: any, company: any) =>
+    dispatch(UserActions.changeCompanyRequest(auth, company));
+    
 
   const isTablet = deviceInfoModule.isTablet();
 
@@ -139,16 +153,14 @@ export default function HomeScreenContainer(props: any) {
     const reload = setInterval(() => {
       _getConferences();
     }, 15000);
+
+    ref.current.interval = reload;
     setConferenceInterval(reload);
     return () => {
-      conferenceInterval && clearInterval(conferenceInterval);
+      clearInterval(ref.current.interval);
       BackHandler.removeEventListener('hardwareBackPress', _handleBackButton);
     };
   }, []);
-
-  useEffect(() => {
-    !isLogin && conferenceInterval && clearInterval(conferenceInterval);
-  }, [isLogin]);
 
   useEffect(() => {
     const now = !reservationConference.length
@@ -246,6 +258,7 @@ export default function HomeScreenContainer(props: any) {
         );
 
         setFinishedConference(finishedConference);
+        // setFinishedConference([]);
       }
     );
   };
@@ -347,8 +360,8 @@ export default function HomeScreenContainer(props: any) {
           return data;
         })
       );
-
       setOngoingConference(goingList);
+      // setOngoingConference([]);
 
       // =====================================================================================================
       // =====================================================================================================
@@ -430,6 +443,7 @@ export default function HomeScreenContainer(props: any) {
       // reservationList.push({isEmptty})
 
       setReservationConference(reservationList);
+      // setReservationConference([]);
     });
   };
 
@@ -665,19 +679,14 @@ export default function HomeScreenContainer(props: any) {
     // });
     navigation.navigate('CreateConference');
   };
-  // const _handleRedirect = (url: string, param: {}) => {
-  //   const { navigation } = props;
-  //   // debugger;
-  //   navigation.navigate(url, param);
-  // };
 
-  const testFunc = async () => {
-    //로그아웃
+  const handleConpanyChange = () => {
+    _openCompany();
+  };
 
-    await UserApi.logoutRequest(auth);
-    _handleLogout();
-    navigation.reset({ routes: [{ name: 'LoginStack' }] });
-    // setTest(!test);
+
+  const handleClickSetting = () => {
+    props.navigation.navigate('Configuration');
   };
   return isHorizon ? (
     <HomeScreenHorizonPresenter
@@ -696,10 +705,10 @@ export default function HomeScreenContainer(props: any) {
         participantsList,
         createTalkConference,
         test,
-        setTest: testFunc,
         createConference,
         isHorizon,
-        enterInviteCode
+        enterInviteCode,
+        onConpanyChange: handleConpanyChange
       }}
     />
   ) : (
@@ -719,10 +728,11 @@ export default function HomeScreenContainer(props: any) {
         participantsList,
         createTalkConference,
         test,
-        setTest: testFunc,
         createConference,
         isHorizon,
-        enterInviteCode
+        enterInviteCode,
+        onClickSetting: handleClickSetting,
+        onConpanyChange: handleConpanyChange
       }}
     />
   );

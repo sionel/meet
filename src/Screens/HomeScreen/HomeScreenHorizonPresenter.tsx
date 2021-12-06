@@ -77,7 +77,8 @@ const HomeScreenPresenter = (props: any) => {
     enterInviteCode,
     bottomPopup,
     participantsList,
-    isHorizon
+    isHorizon,
+    onConpanyChange
   } = props;
   const t = getT();
   return (
@@ -129,7 +130,10 @@ const HomeScreenPresenter = (props: any) => {
               <Image source={icSet} />
             </TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.selectConpany}>
+          <TouchableOpacity
+            style={styles.selectConpany}
+            onPress={onConpanyChange}
+          >
             <Text style={styles.companyText}>{companyName}</Text>
             <Image
               source={icArrowDownBlack}

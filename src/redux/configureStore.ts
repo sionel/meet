@@ -29,6 +29,7 @@ import indicator, { state as indicatorState } from './modules/indicator';
 import orientation, { state as orientationState } from './modules/orientation';
 import root, { state as rootState } from './modules/root';
 import recents, {state as recentsState} from './modules/recentsInvited';
+import selectCompany, {state as selectCompanyState} from './modules/selectCompany';
 /**
  * middleware list
  */
@@ -60,6 +61,7 @@ export interface RootState {
   orientation: orientationState;
   root: rootState;
   recents: recentsState;
+  selectCompany: selectCompanyState;
 }
 
 /**
@@ -85,7 +87,8 @@ const persistConfig = {
     'ScreenShare',
     'indicator',
     'orientation',
-    'root'
+    'root',
+    'selectCompany'
   ]
 };
 
@@ -110,7 +113,8 @@ const reducer = persistCombineReducers(persistConfig, {
   indicator,
   orientation,
   root,
-  recents
+  recents,
+  selectCompany
 });
 
 /**

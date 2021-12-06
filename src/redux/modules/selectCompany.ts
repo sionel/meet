@@ -2,49 +2,44 @@ import { useStore } from 'react-redux';
 import { AnyAction } from 'redux';
 import { getT } from '../../utils/translateManager';
 
-const SET_INDICATOR = 'indicator.SET_INDICATOR';
-const RESET_INDICATOR = 'indicator.RESET_INDICATOR';
+const OPEN_COMPANY = 'selectCompany.OPEN_COMPANY';
+const CLOSE_COMPANY = 'selectCompany.CLOSE_COMPANY';
 
 export interface state {
   visible: boolean;
-  message: string;
 }
 
 const initialState: state = {
   visible: false,
-  message: ''
 };
 
-export default (state = initialState, action:AnyAction) => {
+export default (state = initialState, action: AnyAction) => {
   switch (action.type) {
-    case SET_INDICATOR:
+    case OPEN_COMPANY:
       return { ...action.payload };
-    case RESET_INDICATOR:
+    case CLOSE_COMPANY:
       return { ...initialState };
-    case 'TTTEST':
-      return;
     default:
       return state;
   }
 };
 
-const resetIndicator = () => {
+const closeCompany = () => {
   return {
-    type: RESET_INDICATOR
+    type: CLOSE_COMPANY
   };
 };
 
-const setIndicator = (message:string) => {
+const openCompany = () => {
   return {
-    type: SET_INDICATOR,
+    type: OPEN_COMPANY,
     payload: {
       visible: true,
-      message
     }
   };
 };
 
 export const actionCreators = {
-  setIndicator,
-  resetIndicator
+  openCompany,
+  closeCompany
 };

@@ -63,7 +63,8 @@ function reducer(state = initialState, action) {
         auth: {},
         isLogin: false,
         permission: false,
-        autoLogin: false
+        autoLogin: false,
+        from:''
       };
     case NETWORK_DISCONNECT:
       return { ...state, isLogin: false };
@@ -222,62 +223,19 @@ function changeCompany(company) {
 function changeCompanyRequest(auth, company) {
   return async dispatch => {
     const checkResult = await UserApi.changeCompany(auth, company);
+    debugger
     if (checkResult.resultData !== 1) {
       // alert('회사변경 중 문제 발생');
       return checkResult;
     }
-    dispatch(wetalkActionCreators.setInitialList());
+    // dispatch(wetalkActionCreators.setInitialList());
     return dispatch(changeCompany(company));
   };
 }
 
-/**
- * tokenLogin : ACTION
- */
-// function tokenLogin(token, cno) {
-// 	alert('준비중입니다.');
-// 	// return;
-// 	const result = UserApi.check(token, cno);
-// 	console.log('tokenLogin : ', typeof result);
-
-// 	function retur(dispatch) {
-// 		dispatch({
-// 			type: TOKEN_LOGIN,
-// 			payload: {
-// 				token
-// 			}
-// 		});
-// 	};
-// };
-
-/**
- * applyTokenLogin
- */
-// function applyTokenLogin(state, action) {
-// 	return state;
-// };
-
-//#endregion
-
-//#region Reducer Functions
-
-/**
- * applyTest
- */
-// function applyTest(state, action) {
-// 	const { test } = action;
-// 	return {
-// 		...state,
-// 		test
-// 	};
-// };
-
-/**
- *
- */
 function applyChangeCompany(state, action) {
   const { company } = action;
-
+  debugger
   return {
     ...state,
     auth: {
@@ -285,7 +243,6 @@ function applyChangeCompany(state, action) {
       last_company: company,
       last_access_company_no: company.company_no
     }
-    // auth: newAuth
   };
 }
 

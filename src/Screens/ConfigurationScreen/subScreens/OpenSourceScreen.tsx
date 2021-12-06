@@ -9,7 +9,7 @@ import {
 
 import { CustomIcon } from '../../../components';
 
-export default function OpenSourceScreen(props) {
+export default function OpenSourceScreen(props: any) {
   const config = [
     {
       title: '@react-native-community/async-storage',

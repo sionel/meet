@@ -98,9 +98,8 @@ export default function DrawerPresenter(props) {
             </Text>
           </View>
         </TouchableOpacity>
-
         {/* company */}
-        {user.member_type !== 1 && (
+        {/* {true && (
           <View
             style={styles.company}
             onLayout={event =>
@@ -122,7 +121,7 @@ export default function DrawerPresenter(props) {
                 size={18}
                 style={{ marginRight: 4 }}
               />
-              <Text>Space</Text>
+              <Text>{'Space'}</Text>
             </View>
             <TouchableOpacity
               style={{
@@ -137,12 +136,12 @@ export default function DrawerPresenter(props) {
                 ellipsizeMode={'tail'}
                 style={{ flex: 1, marginRight: 4, textAlign: 'right' }}
               >
-                {selectedCompany.company_name_kr}
+                {123123}
               </Text>
               <CustomIcon name={'btnExpandSmallNone'} size={12} />
             </TouchableOpacity>
           </View>
-        )}
+        )} */}
 
         {companyChange && (
           <CustomListModal

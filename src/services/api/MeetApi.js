@@ -154,7 +154,7 @@ export default {
   // 3-4 화상회의방 리스트 조회
   getMeetRoomsList: async auth => {
     const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
-
+    debugger
     const url = `${meetURL}/room/list?cno=${cno}`;
     const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
     try {
@@ -172,8 +172,6 @@ export default {
       const { resultData } = await response.json();
       return resultData;
     } catch (err) {
-      console.log(err);
-      // debugger;
       const errDetail = await err.json();
       console.warn('4.getMeetRoomsList : ', errDetail);
       return false;

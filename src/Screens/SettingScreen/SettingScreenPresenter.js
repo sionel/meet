@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import {
   StyleSheet,
   View,
@@ -6,7 +6,8 @@ import {
   Image,
   KeyboardAvoidingView,
   Text,
-  TextInput
+  TextInput,
+  SafeAreaView
 } from 'react-native';
 
 import ButtonCamera from '../../../assets/buttons/btn_vc_camera_on.png';
@@ -16,6 +17,8 @@ import ButtonMicOff from '../../../assets/buttons/btn_vc_mike_off.png';
 import { RTCView } from 'react-native-webrtc';
 import { getT } from '../../utils/translateManager';
 
+import icBack from '../../../assets/new/icons/ic_back_w.png';
+
 export default function SettingScreenPresenter({
   tracks,
   orientation,
@@ -24,209 +27,250 @@ export default function SettingScreenPresenter({
   onToggleVideo,
   onSetName,
   nameField,
-  buttonActive
+  buttonActive,
+  goBack
 }) {
   const t = getT();
   return (
-    <KeyboardAvoidingView
-      style={{
-        ...styles.container,
-        paddingHorizontal: orientation === 'horizontal' ? '20%' : 15,
-        paddingVertical: orientation === 'horizontal' ? 20 : 0
-      }}
-      behavior={'height'}
-    >
-      <TouchableOpacity style={{ flex: 1 }} activeOpacity={1}>
+    <Fragment>
+      <SafeAreaView style={{ flex: 0, backgroundColor: '#1c90fb' }} />
+      <SafeAreaView style={styles.container}>
         <View
           style={{
+            height: 50,
+            backgroundColor: '#1c90fb',
+            flexDirection: 'row',
+            paddingHorizontal: 20,
             justifyContent: 'center',
-            alignItems: 'center',
-            height: '100%',
-            flex: 1
-          }}
-        >
-          <Text style={{ fontSize: 17, color: '#000', paddingBottom: 10 }}>
-            {t('roomstate_setting_title')}
-          </Text>
-          <Text style={{ fontSize: 12, color: 'rgb(140,140,140)' }}>
-            {t('roomstate_setting_detail')}
-          </Text>
-        </View>
-        <View
-          style={{
-            // justifyContent: 'center',
-            alignItems: 'center',
-            // height: '100%',
-            flex: 3
-            // backgroundColor: '#158'
-          }}
-        >
-          <Text
-            style={{ fontSize: 14, color: 'rgb(51,51,51)', paddingBottom: 5 }}
-          >
-            {t('roomstate_setting_output')}
-          </Text>
-
-          <View
-            style={{
-              flex: 1,
-              width: '100%',
-              marginBottom: 20,
-              alignItems: 'center',
-              justifyContent: 'space-around',
-              flexDirection: 'row'
-            }}
-          >
-            {tracks && tracks[0] && !tracks[0]?.isMuted() && (
-              <RTCView
-                style={{
-                  // flex: 1,
-                  position: 'absolute',
-                  top: 0,
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  // height: '100%',
-                  backgroundColor: '#1D1D1D',
-                  zIndex: 0
-                }}
-                mirror={true}
-                // mirror={!isVideoReverse}
-                objectFit={'cover'}
-                streamURL={tracks[0]?.getOriginalStream().toURL()}
-                zOrder={1} // zOrder 는 [0, 1] 만 사용가능 (아마?)
-              />
-            )}
-            <View
-              style={{
-                position: 'absolute',
-                top: 0,
-                bottom: 0,
-                left: 0,
-                right: 0,
-                zIndex: 1,
-                backgroundColor: '#00000077'
-              }}
-            ></View>
-            <TouchableOpacity style={{ flex: 1 }}></TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                flex: 2,
-                alignItems: 'center',
-                zIndex: 2
-              }}
-              onPress={onToggleVideo}
-            >
-              <Image
-                source={
-                  tracks && tracks[0]?.isMuted()
-                    ? ButtonCameraOff
-                    : ButtonCamera
-                }
-                resizeMode={'contain'}
-                style={{
-                  width: 55,
-                  height: 55
-                }}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                flex: 2,
-                alignItems: 'center',
-                zIndex: 2
-              }}
-              onPress={onToggleAudio}
-            >
-              <Image
-                source={
-                  tracks && tracks[1]?.isMuted() ? ButtonMicOff : ButtonMic
-                }
-                resizeMode={'contain'}
-                style={{
-                  width: 55,
-                  height: 55
-                }}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity style={{ flex: 1 }}></TouchableOpacity>
-          </View>
-        </View>
-        {nameField && (
-          <View
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: '100%',
-              flex: 1
-            }}
-          >
-            <Text style={{ width: '100%', paddingLeft: 5 }}>
-              {t('roomstate_setting_name')}
-            </Text>
-            <TextInput
-              placeholder={t('roomstate_setting_setname')}
-              placeholderTextColor={'#999'}
-              style={{
-                borderColor: 'rgb(201,205,213)',
-                borderWidth: 1,
-                width: '100%',
-                height: 52,
-                marginVertical: 10,
-                paddingHorizontal: 5
-              }}
-              maxLength={20}
-              onChangeText={onSetName}
-              blurOnSubmit={true}
-            ></TextInput>
-            <Text
-              style={{
-                width: '100%',
-                paddingLeft: 5,
-                color: 'rgb(140,140,140)',
-                fontSize: 11
-              }}
-            >
-              {t('roomstate_setting_nameDefault')}
-            </Text>
-          </View>
-        )}
-        <View
-          style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '100%',
-            flex: 1
+            alignItems: 'center'
           }}
         >
           <TouchableOpacity
-            style={{
-              backgroundColor: buttonActive
-                ? 'rgb(28,144,251)'
-                : 'rgb(125,125,125)',
-              borderRadius: 110,
-              width: '80%',
-              height: 50,
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}
-            onPressOut={onConferenceEnter}
-            disabled={!buttonActive}
+            onPress={goBack}
           >
-            <Text
+            <Image
+              source={icBack}
+              resizeMode={'contain'}
+              style={{ width: 30 }}
+            />
+          </TouchableOpacity>
+          <Text
+            style={{
+              flex: 1,
+              textAlign: 'center',
+              fontSize: 18,
+              color: '#fff'
+            }}
+          >
+            {t('option_awards')}
+          </Text>
+          <View style={{ width: 30 }} />
+        </View> 
+        <KeyboardAvoidingView
+          style={{
+            ...styles.container,
+            paddingHorizontal: orientation === 'horizontal' ? '20%' : 15,
+            paddingVertical: orientation === 'horizontal' ? 20 : 0
+          }}
+          behavior={'height'}
+        >
+          <TouchableOpacity style={{ flex: 1 }} activeOpacity={1}>
+            <View
               style={{
-                fontSize: 15,
-                color: '#fff',
-                borderWidth: 0,
-                borderColor: '#fff'
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100%',
+                flex: 1
               }}
             >
-              {t('roomstate_setting_enter')}
-            </Text>
+              <Text style={{ fontSize: 17, color: '#000', paddingBottom: 10 }}>
+                {t('roomstate_setting_title')}
+              </Text>
+              <Text style={{ fontSize: 12, color: 'rgb(140,140,140)' }}>
+                {t('roomstate_setting_detail')}
+              </Text>
+            </View>
+            <View
+              style={{
+                // justifyContent: 'center',
+                alignItems: 'center',
+                // height: '100%',
+                flex: 3
+                // backgroundColor: '#158'
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 14,
+                  color: 'rgb(51,51,51)',
+                  paddingBottom: 5
+                }}
+              >
+                {t('roomstate_setting_output')}
+              </Text>
+
+              <View
+                style={{
+                  flex: 1,
+                  width: '100%',
+                  marginBottom: 20,
+                  alignItems: 'center',
+                  justifyContent: 'space-around',
+                  flexDirection: 'row'
+                }}
+              >
+                {tracks && tracks[0] && !tracks[0]?.isMuted() && (
+                  <RTCView
+                    style={{
+                      // flex: 1,
+                      position: 'absolute',
+                      top: 0,
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      // height: '100%',
+                      backgroundColor: '#1D1D1D',
+                      zIndex: 0
+                    }}
+                    mirror={true}
+                    // mirror={!isVideoReverse}
+                    objectFit={'cover'}
+                    streamURL={tracks[0]?.getOriginalStream().toURL()}
+                    zOrder={1} // zOrder 는 [0, 1] 만 사용가능 (아마?)
+                  />
+                )}
+                <View
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    zIndex: 1,
+                    backgroundColor: '#00000077'
+                  }}
+                ></View>
+                <TouchableOpacity style={{ flex: 1 }}></TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    flex: 2,
+                    alignItems: 'center',
+                    zIndex: 2
+                  }}
+                  onPress={onToggleVideo}
+                >
+                  <Image
+                    source={
+                      tracks && tracks[0]?.isMuted()
+                        ? ButtonCameraOff
+                        : ButtonCamera
+                    }
+                    resizeMode={'contain'}
+                    style={{
+                      width: 55,
+                      height: 55
+                    }}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    flex: 2,
+                    alignItems: 'center',
+                    zIndex: 2
+                  }}
+                  onPress={onToggleAudio}
+                >
+                  <Image
+                    source={
+                      tracks && tracks[1]?.isMuted() ? ButtonMicOff : ButtonMic
+                    }
+                    resizeMode={'contain'}
+                    style={{
+                      width: 55,
+                      height: 55
+                    }}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity style={{ flex: 1 }}></TouchableOpacity>
+              </View>
+            </View>
+            {nameField && (
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: '100%',
+                  flex: 1
+                }}
+              >
+                <Text style={{ width: '100%', paddingLeft: 5 }}>
+                  {t('roomstate_setting_name')}
+                </Text>
+                <TextInput
+                  placeholder={t('roomstate_setting_setname')}
+                  placeholderTextColor={'#999'}
+                  style={{
+                    borderColor: 'rgb(201,205,213)',
+                    borderWidth: 1,
+                    width: '100%',
+                    height: 52,
+                    marginVertical: 10,
+                    paddingHorizontal: 5
+                  }}
+                  maxLength={20}
+                  onChangeText={onSetName}
+                  blurOnSubmit={true}
+                ></TextInput>
+                <Text
+                  style={{
+                    width: '100%',
+                    paddingLeft: 5,
+                    color: 'rgb(140,140,140)',
+                    fontSize: 11
+                  }}
+                >
+                  {t('roomstate_setting_nameDefault')}
+                </Text>
+              </View>
+            )}
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100%',
+                flex: 1
+              }}
+            >
+              <TouchableOpacity
+                style={{
+                  backgroundColor: buttonActive
+                    ? 'rgb(28,144,251)'
+                    : 'rgb(125,125,125)',
+                  borderRadius: 110,
+                  width: '80%',
+                  height: 50,
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}
+                onPressOut={onConferenceEnter}
+                disabled={!buttonActive}
+              >
+                <Text
+                  style={{
+                    fontSize: 15,
+                    color: '#fff',
+                    borderWidth: 0,
+                    borderColor: '#fff'
+                  }}
+                >
+                  {t('roomstate_setting_enter')}
+                </Text>
+              </TouchableOpacity>
+            </View>
           </TouchableOpacity>
-        </View>
-      </TouchableOpacity>
-    </KeyboardAvoidingView>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </Fragment>
   );
 }
 const styles = StyleSheet.create({

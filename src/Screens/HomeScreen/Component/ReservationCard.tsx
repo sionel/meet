@@ -40,7 +40,6 @@ export default function ConferenceBox(props: ReservationCardProps) {
         borderColor: '#e6e6e6',
         borderWidth: 2,
         marginBottom: 15,
-        // marginHorizontal: 40,
         padding: 20,
         flexDirection: 'row'
       }}

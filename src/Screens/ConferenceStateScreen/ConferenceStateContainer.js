@@ -105,7 +105,6 @@ class ConferenceStateContainer extends React.Component {
         (changed.getMinutes() + '').padStart(2, '0')
       );
     };
-
     if (conferenceState === 'conference') {
       this._handleEnterConference(auth, this.roomId, iscret, params);
     } else if (conferenceState === 'reservationInfo') {

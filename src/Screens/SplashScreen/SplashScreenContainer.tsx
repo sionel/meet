@@ -277,7 +277,6 @@ const SplashScreenContainer = ({
     */
     if (!url) return;
     let result: any = querystringParser(url);
-    
     // if(result.type === 'conference') {
     if (result.video_id) {
       // TODO: 컨퍼런스로 받았을때 이 분기 처리를 어떻게 해야할지 검토필요성 있음
@@ -311,7 +310,7 @@ const SplashScreenContainer = ({
         mAuth_r_token,
         cno,
         mHASH_KEY,
-        'login',
+        'deepLink',
         true
       );
       if (info.errors) {
