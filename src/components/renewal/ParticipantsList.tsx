@@ -161,7 +161,6 @@ export default function ParticipantsList(
                   <View
                     style={{
                       height: '70%',
-                      width: '20%',
                       borderRadius: 35,
                       marginHorizontal: '5%',
                       backgroundColor: '#75b7cb',
@@ -172,7 +171,7 @@ export default function ParticipantsList(
                   >
                     <Text
                       style={{
-                        paddingHorizontal: 5,
+                        paddingHorizontal: 10,
                         color: '#fff',
                         fontSize: 14
                       }}

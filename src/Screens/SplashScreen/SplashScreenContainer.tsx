@@ -308,7 +308,7 @@ const SplashScreenContainer = (props: any) => {
         mAuth_r_token,
         cno,
         mHASH_KEY,
-        'login',
+        'deepLink',
         true
       );
       if (info.errors) {

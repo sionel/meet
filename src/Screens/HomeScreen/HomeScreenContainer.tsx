@@ -92,7 +92,11 @@ export default function HomeScreenContainer(props: any) {
     title: '',
     show: false
   });
-  const ref = useRef<any>({ reservationConference, exitApp: false });
+  const ref = useRef<any>({
+    reservationConference,
+    exitApp: false,
+    interval: null
+  });
 
   const {
     auth,
@@ -136,16 +140,14 @@ export default function HomeScreenContainer(props: any) {
     const reload = setInterval(() => {
       _getConferences();
     }, 15000);
+
+    ref.current.interval = reload;
     setConferenceInterval(reload);
     return () => {
-      conferenceInterval && clearInterval(conferenceInterval);
+      clearInterval(ref.current.interval);
       BackHandler.removeEventListener('hardwareBackPress', _handleBackButton);
     };
   }, []);
-
-  useEffect(() => {
-    !isLogin && conferenceInterval && clearInterval(conferenceInterval);
-  }, [isLogin]);
 
   useEffect(() => {
     const now = !reservationConference.length
@@ -242,8 +244,8 @@ export default function HomeScreenContainer(props: any) {
           })
         );
 
-        // setFinishedConference(finishedConference);
-        setFinishedConference([]);
+        setFinishedConference(finishedConference);
+        // setFinishedConference([]);
       }
     );
   };
@@ -339,7 +341,6 @@ export default function HomeScreenContainer(props: any) {
           return data;
         })
       );
-
       setOngoingConference(goingList);
       // setOngoingConference([]);
 
@@ -422,8 +423,8 @@ export default function HomeScreenContainer(props: any) {
         setHighlight('reservation');
       // reservationList.push({isEmptty})
 
-      // setReservationConference(reservationList);
-      setReservationConference([]);
+      setReservationConference(reservationList);
+      // setReservationConference([]);
     });
   };
 
@@ -667,43 +668,6 @@ export default function HomeScreenContainer(props: any) {
 
   const handleConpanyChange = () => {
     _openCompany();
-    // const contentList = auth?.employee_list.map((company: any) => ({
-    //   name: company.company_name_kr,
-    //   onClick: () => {
-    //     String(company.company_no) !== String(auth.cno)
-    //       ? changeCompanyRequest(auth, {
-    //           company_no: company.company_no,
-    //           company_code: company.company_code
-    //         })
-    //       : _onClickOutside();
-    //   },
-    //   icon2: String(company.company_no) === String(auth.cno) ? icCheckB : null
-    // }));
-    // setBottomPopup({
-    //   onClickOutside: _onClickOutside,
-    //   contentList,
-    //   show: true,
-    //   title: '회사 선택'
-    // });
-
-    // const list = {
-    //   name: '참석자 명단',
-    //   icon1: icUser,
-    //   onClick: () => {
-    //     openParticipantsList('going', conference);
-    //   }
-    // };
-    // const copy = {
-    //   name: '공유링크 복사',
-    //   icon1: icLink,
-    //   onClick: () => {}
-    // };
-    // setBottomPopup({
-    //   onClickOutside: _onClickOutside,
-    //   contentList: [list, copy],
-    //   show: true,
-    //   title: conference.name
-    // });
   };
 
   const testFunc = () => {

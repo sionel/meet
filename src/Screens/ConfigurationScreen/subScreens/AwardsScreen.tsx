@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import {
   StyleSheet,
   View,
@@ -6,130 +6,113 @@ import {
   Image,
   ScrollView,
   Linking,
-  Text
+  Text,
+  SafeAreaView
 } from 'react-native';
 import { getT } from '../../../utils/translateManager';
+import icBack from '../../../../assets/new/icons/ic_back_w.png';
 
-export default function AwardsScreen(props) {
-  const moveToSite = url => {
+export default function AwardsScreen(props: any) {
+  const moveToSite = (url: string) => {
     Linking.openURL(url);
   };
-  const t = getT()
+  const t = getT();
   return (
-    <View style={styles.container}>
-      <ScrollView style={styles.list}>
-        <View style={[styles.card, { marginTop: 15 }]}>
-          <Image
-            source={require('../../../../assets/logoCsap.png')}
-            style={styles.img}
-          />
-          <Text
-            style={{
-              fontFamily: 'DOUZONEText50',
-              fontSize: 16,
-              // fontWeight: 'bold',
-              marginTop: 20
-            }}
-          >
-            {t('option_auth')}
-          </Text>
-          <Text style={{ fontSize: 12, fontFamily: 'DOUZONEText30' }}>
-            {t('option_kisa')}
-          </Text>
-          <Text
-            style={{
-              fontFamily: 'DOUZONEText30',
-              fontSize: 12,
-              color: 'rgb(140,140,140)',
-              marginTop: 20
-            }}
-          >
-            {t('option_WEHAGOV')}
-          </Text>
-          <Text
-            style={{
-              fontFamily: 'DOUZONEText30',
-              fontSize: 12,
-              color: 'rgb(140,140,140)'
-            }}
-          >
-            2019.08.28~2024.08.27
-          </Text>
+    <Fragment>
+      <SafeAreaView style={{ flex: 0, backgroundColor: '#1c90fb' }} />
+      <SafeAreaView style={styles.container}>
+        <View
+          style={{
+            height: 50,
+            backgroundColor: '#1c90fb',
+            flexDirection: 'row',
+            paddingHorizontal: 20,
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}
+        >
           <TouchableOpacity
-            onPress={() =>
-              moveToSite('https://isms.kisa.or.kr/main/csap/intro/')
-            }
+            onPress={() => {
+              props.navigation.goBack();
+            }}
           >
-            <Text
-              style={{
-                fontFamily: 'DOUZONEText30',
-                marginTop: 20,
-                fontSize: 13,
-                color: 'rgb(39,67,222)'
-              }}
-            >
-              {t('option_to')}
-            </Text>
+            <Image
+              source={icBack}
+              resizeMode={'contain'}
+              style={{ width: 30 }}
+            />
           </TouchableOpacity>
+          <Text
+            style={{
+              flex: 1,
+              textAlign: 'center',
+              fontSize: 18,
+              color: '#fff'
+            }}
+          >
+            {t('option_awards')}
+          </Text>
+          <View style={{ width: 30 }} />
         </View>
-        {/* <View style={styles.card}>
-          <Image
-            source={require('../../../../assets/logoAppqward2019.png')}
-            style={styles.img}
-          />
-          <Text
-            style={{
-              fontFamily: 'DOUZONEText50',
-              fontSize: 16,
-              // fontWeight: 'bold',
-              marginTop: 20
-            }}
-          >
-            스마트앱 어워드 코리아 2019
-          </Text>
-          <Text style={{ fontFamily: 'DOUZONEText30', fontSize: 12 }}>
-            기능서비스부분 통합대상 수상
-          </Text>
-          <Text
-            style={{
-              fontFamily: 'DOUZONEText30',
-              fontSize: 12,
-              color: 'rgb(140,140,140)',
-              marginTop: 20
-            }}
-          >
-            서비스명: 더존 위하고 모바일
-          </Text>
-          <Text
-            style={{
-              fontFamily: 'DOUZONEText30',
-              fontSize: 12,
-              color: 'rgb(140,140,140)'
-            }}
-          >
-            수상기관: 더존비즈온
-          </Text>
-          <TouchableOpacity
-            onPress={() =>
-              moveToSite(
-                'http://www.i-award.or.kr/Smart/Assess/FinalCandidateView.aspx?REG_SEQNO=9188'
-              )
-            }
-          >
+
+        <ScrollView style={styles.list}>
+          <View style={[styles.card, { marginTop: 15 }]}>
+            <Image
+              source={require('../../../../assets/logoCsap.png')}
+              style={styles.img}
+            />
+            <Text
+              style={{
+                fontFamily: 'DOUZONEText50',
+                fontSize: 16,
+                // fontWeight: 'bold',
+                marginTop: 20
+              }}
+            >
+              {t('option_auth')}
+            </Text>
+            <Text style={{ fontSize: 12, fontFamily: 'DOUZONEText30' }}>
+              {t('option_kisa')}
+            </Text>
             <Text
               style={{
                 fontFamily: 'DOUZONEText30',
-                marginTop: 20,
-                fontSize: 13,
-                color: 'rgb(39,67,222)'
+                fontSize: 12,
+                color: 'rgb(140,140,140)',
+                marginTop: 20
               }}
             >
-              사이트바로가기
+              {t('option_WEHAGOV')}
             </Text>
-          </TouchableOpacity>
-        </View> */}
-      </ScrollView>
-    </View>
+            <Text
+              style={{
+                fontFamily: 'DOUZONEText30',
+                fontSize: 12,
+                color: 'rgb(140,140,140)'
+              }}
+            >
+              2019.08.28~2024.08.27
+            </Text>
+            <TouchableOpacity
+              onPress={() =>
+                moveToSite('https://isms.kisa.or.kr/main/csap/intro/')
+              }
+            >
+              <Text
+                style={{
+                  fontFamily: 'DOUZONEText30',
+                  marginTop: 20,
+                  fontSize: 13,
+                  color: 'rgb(39,67,222)'
+                }}
+              >
+                {t('option_to')}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    </Fragment>
   );
 }
 

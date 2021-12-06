@@ -63,10 +63,13 @@ class SettingScreenContainer extends React.Component {
         onToggleAudio={this._handleToggleAudio}
         onToggleVideo={this._handleToggleVideo}
         onSetName={this._handleSetName}
+        goBack={this._goBack}
       />
     );
   }
-
+  _goBack = () => {
+    this.props.navigation.goBack();
+  };
   _init = () => {
     // JitsiMeetJS 를 초기화 한다.
     JitsiMeetJS.init({

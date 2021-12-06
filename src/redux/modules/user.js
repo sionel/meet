@@ -63,7 +63,8 @@ function reducer(state = initialState, action) {
         auth: {},
         isLogin: false,
         permission: false,
-        autoLogin: false
+        autoLogin: false,
+        from:''
       };
     case NETWORK_DISCONNECT:
       return { ...state, isLogin: false };
