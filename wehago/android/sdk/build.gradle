@@ -96,6 +96,9 @@ dependencies {
     implementation project(':lottie-react-native')
     implementation project(':react-native-safe-area-context')
     implementation project(':react-native-date-picker')
+    implementation project(':react-native-masked-view')
+    implementation project(':react-native-reanimated')
+    implementation project(':react-native-screens')
 
 
 

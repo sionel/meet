@@ -403,9 +403,8 @@ PODS:
     - React-Core
   - RNReanimated (1.9.0):
     - React
-  - RNScreens (3.9.0):
+  - RNScreens (2.18.1):
     - React-Core
-    - React-RCTImage
   - RNSketchCanvas (0.8.0):
     - React
   - RNSVG (12.1.0):
@@ -707,7 +706,7 @@ SPEC CHECKSUMS:
   RNGoogleSignin: ad866d4c4af2651e36801dd3b7771d7715353499
   RNLocalize: 47e22ef8c36df1d572e42a87c8ae22e3fcf551dd
   RNReanimated: b5ccb50650ba06f6e749c7c329a1bc3ae0c88b43
-  RNScreens: 4d79118be80f79fa1f4aa131909a1d6e86280af3
+  RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
   RNSketchCanvas: 6939b18677cd1794151cc3d8eb5a0a2158a4a05b
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4

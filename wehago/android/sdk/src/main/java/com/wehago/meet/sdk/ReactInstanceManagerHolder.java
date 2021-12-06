@@ -207,6 +207,9 @@ class ReactInstanceManagerHolder {
                 new com.BV.LinearGradient.LinearGradientPackage(),
                 new com.th3rdwave.safeareacontext.SafeAreaContextPackage(),
                 new com.henninghall.date_picker.DatePickerPackage(),
+                new com.swmansion.reanimated.ReanimatedPackage(),
+                new com.swmansion.rnscreens.RNScreensPackage(),
+                new org.reactnative.maskedview.RNCMaskedViewPackage(),
                 new ReactPackageAdapter() {
                     @Override
                     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {

@@ -155,7 +155,7 @@ const CreateMeetScreenPresenter = (props: any) => {
             ]}
           />
 
-          <View style={[{ backgroundColor: '#fff', height: '25%' }]}>
+          <View style={[{ backgroundColor: '#fff', height: '30%' }]}>
             <View style={styles.middleContainer}>
               <View style={styles.directionColTitle}>
                 <Text style={styles.textHeader}>{t('회의명')}</Text>
@@ -775,7 +775,7 @@ const styles = StyleSheet.create({
   roomNameStyle: {
     borderWidth: 1,
     paddingHorizontal: '3.5%',
-    height: '67%',
+    height: 44,
     borderColor: '#E6E6E6',
     fontSize: 14,
     borderRadius: 10
@@ -784,7 +784,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingTop: '2%',
     paddingHorizontal: '3.5%',
-    height: '60%',
+    height: 84,
     letterSpacing: -0.28,
     borderColor: '#E6E6E6',
     fontSize: 14,

@@ -179,9 +179,20 @@ node_modules/react-native/ReactCommon/turbomodule/core/platform/ios/RCTTurboModu
 
 11. 안드로이드 빌드시 datepicker NumberPickerView 1.1.5 설치 오류
 
-node_modules/react-native-date-picker/android 
-build.gradle 에서 파일 하단 dependencies 안에 `implementation group: 'com.henninghall.android', name: 'NumberPickerView', version: '1.1.5'` 추가
+node_modules/react-native-date-picker/android/build.gradle에서
 
+implementation 'com.github.henninghall:numberpickerview:v1.1.5' => 
+implementation group: 'com.henninghall.android', name: 'NumberPickerView', version: '1.1.5' 
+
+
+12. 안드로이드 빌드할때 Cannot add task 'androidSourcesJar' as a task with that name already exists 오류
+
+node_modules/react-native-reanimated/android/build.gradle
+task androidSourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.srcDirs
+    include '**/*.java'
+} => 이부분 주석 처리
 ## 스토어 주소
 ios : https://itunes.apple.com/app/id1455726925?mt=8
 android : https://play.google.com/store/apps/details?id=com.wehago.meet
