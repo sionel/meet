@@ -6,7 +6,7 @@
 import React from 'react';
 import { Image, TouchableOpacity, View } from 'react-native';
 
-import { createStackNavigator, createDrawerNavigator } from 'react-navigation';
+// import { createStackNavigator, createDrawerNavigator } from 'react-navigation';
 
 import CustomIcon from './../components/CustomIcon';
 
@@ -15,10 +15,13 @@ import HomeScreen from '../Screens/HomeScreen';
 import ConfigurationScreen from '../Screens/ConfigurationScreen';
 import PolicyScreen from '../Screens/ConfigurationScreen/subScreens/PolicyScreen';
 import AwardsScreen from '../Screens/ConfigurationScreen/subScreens/AwardsScreen';
-import OpenSourceScreen from '../Screens/ConfigurationScreen/subScreens/OpenSourceScreen';
+import OpenSourceScreen from '../Screens/ConfigurationScreen/subScreens/OpenSourceScreen.tsx';
 import OpenSourceDetailScreen from '../Screens/ConfigurationScreen/subScreens/OpenSourceDetailScreen';
 import CreateScreen from '../Screens/CreateScreen';
+import CreateMeetScreen from '../Screens/CreateMeetScreen';
+import ConferenceModifyScreen from '../Screens/ConferenceModifyScreen';
 import ConferenceStateScreen from '../Screens/ConferenceStateScreen';
+import InviteCodeScreen from '../Screens/InviteCodeScreen';
 
 /** Components */
 import RouteTitle from './RouteTitle';
@@ -29,7 +32,7 @@ import { getT } from '../utils/translateManager';
 const commonStyle = {
   height: 53,
   color: '#fff',
-  backgroundColor: '#1C90FB',
+  backgroundColor: '#1C90FB'
 };
 const backBtn = require('../../assets/buttons/back_btn.png');
 
@@ -87,11 +90,11 @@ const HomeDrwawer = createDrawerNavigator(
   },
   {
     initialRouteName: 'Home',
-    drawerPosition: 'right',
+    // drawerPosition: 'right',
     overlayColor: '#00000090',
-    contentComponent: ({ navigation }) => (
-      <DrawerContent navigation={navigation} />
-    )
+    // contentComponent: ({ navigation }) => (
+    //   <DrawerContent navigation={navigation} />
+    // )
   }
 );
 
@@ -122,22 +125,16 @@ const HomeRouteStack = () => {
 
     Configuration: {
       screen: ConfigurationScreen,
-      navigationOptions: ({ navigation }) => ({
-        headerTitle: (
-          <RouteTitle title={navigation.getScreenProps().t('option_setting')} />
-        ),
-        headerLeft: <BackButton navigation={navigation} to={'Home'} />,
-        headerTintColor: '#fff',
-        headerStyle: commonStyle
-      })
+      navigationOptions: {
+        
+        header: null,
+      }
     },
     Policy: {
       screen: PolicyScreen,
       navigationOptions: ({ navigation }) => ({
         headerTitle: (
-          <RouteTitle
-            title={navigation.getScreenProps().t('option_legal')}
-          />
+          <RouteTitle title={navigation.getScreenProps().t('option_legal')} />
         ),
         headerLeft: <BackButton navigation={navigation} to={'Configuration'} />,
         headerTintColor: '#fff',
@@ -200,21 +197,43 @@ const HomeRouteStack = () => {
     ConferenceState: {
       screen: ConferenceStateScreen,
       navigationOptions: ({ navigation }) => ({
-        headerTitle: (
-          <RouteTitle
-            title={navigation.getScreenProps().t('option_conference')}
-          />
-        ),
-        headerLeft: <BackButton navigation={navigation} to={'Home'} />,
-        headerTintColor: '#fff',
-        headerStyle: commonStyle
+        // headerTitle: (
+        //   <RouteTitle
+        //     title={navigation.getScreenProps().t('option_conference')}
+        //   />
+        // ),
+        // headerLeft: <BackButton navigation={navigation} to={'Home'} />,
+        // headerTintColor: '#fff',
+        // headerStyle: commonStyle
+      })
+    },
+
+    CreateMeetRoom: {
+      screen: CreateMeetScreen,
+      navigationOptions: ({ navigation }) => ({
+        header: null
+      })
+    },
+
+    ConferenceModify: {
+      screen: ConferenceModifyScreen,
+      navigationOptions: ({ navigation }) => ({
+        header: null
+      })
+    },
+
+    InviteCode: {
+      screen: InviteCodeScreen,
+      navigationOptions: ({ navigation }) => ({
+        header: null
       })
     }
   };
 };
 
 const HomeRoute = createStackNavigator(HomeRouteStack(), {
-  cardStyle: { transparent: true }
+  cardStyle: { transparent: true },
+  headerMode: 'none'
 });
 
 export default HomeRoute;

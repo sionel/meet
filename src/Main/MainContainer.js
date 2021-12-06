@@ -4,7 +4,6 @@
  */
 import React, { Component } from 'react';
 import { View, SafeAreaView } from 'react-native';
-
 import MainPresenter from './MainPresenter';
 
 // 로그인 했을때 정보를 저장
@@ -14,40 +13,10 @@ import MainPresenter from './MainPresenter';
 class MainContainer extends Component {
   constructor(props) {
     super();
-    this.state = {
-      isLogin: false,
-      hasService: false,
-      url: null,
-      alert: {
-        visible: false,
-        type: 0,
-        description: '',
-        actions: [],
-        onClose: () => {}
-      }
-    };
   }
 
   render() {
-    const { params, destination, onChangeRootState, from } = this.props;
-    return (
-      <View style={{ flex: 1 }}>
-        <MainPresenter
-          params={params}
-          from={from}
-          destination={destination}
-          onChangeRootState={onChangeRootState}
-          onChangeMainState={this._handleChangeMainState}
-        />
-      </View>
-    );
+    return <MainPresenter />;
   }
-
-  _handleChangeMainState = state => {
-    this.setState({
-      ...this.state,
-      ...state
-    });
-  };
 }
 export default MainContainer;

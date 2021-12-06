@@ -177,7 +177,7 @@ const check = async (a_token, r_token, cno, HASH_KEY) => {
       headers
     });
     const responseJson = await response.json();
-
+    if(responseJson.errors) throw ( {...responseJson})
     const url2 = `${wehagoBaseURL}/common/user/userinfo?cno=${cno}&selected_company_no=${cno}`; // 유저 정보 (닉네임 가져오려고 굳이 이걸 불러야하나...)
     const headers2 = securityRequest(a_token, r_token, url2, HASH_KEY);
     const response2 = await fetch(url2, {
@@ -198,12 +198,12 @@ const check = async (a_token, r_token, cno, HASH_KEY) => {
     };
   } catch (errors) {
     console.warn('errors', errors);
-    if (errors.message === 'timeout') {
-      await new Promise(res => {
-        alert('네트워크가 불안정합니다.');
-      });
-    }
-    return { message: errors.message };
+    // if (errors.message === 'timeout') {
+    //   await new Promise(res => {
+    //     alert('네트워크가 불안정합니다.');
+    //   });
+    // }
+    return errors;
   }
 };
 

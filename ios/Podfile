@@ -88,8 +88,13 @@ target 'JitsiMeetSDK' do
     pod 'RNLocalize', :path => '../node_modules/react-native-localize'
     pod 'RNExitApp', :path => '../node_modules/react-native-exit-app'
     pod 'jail-monkey', :path => '../node_modules/jail-monkey'
+    pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
     pod 'ReactNativeIncallManager', :path => '../node_modules/react-native-incall-manager'
-
+    pod 'react-native-date-picker', :path => '../node_modules/react-native-date-picker'
+    pod 'react-native-safe-area-context', :path => '../node_modules/react-native-safe-area-context'
+    pod 'RNCMaskedView', :path => '../node_modules/@react-native-community/masked-view'
+    pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
+    pod 'RNScreens', :path => '../node_modules/react-native-screens'
   # Native pod dependencies
   #
 

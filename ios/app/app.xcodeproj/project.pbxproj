@@ -33,6 +33,9 @@
 		8AF6C8052702E683001F6494 /* ja.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 8AF6C8022702E683001F6494 /* ja.lproj */; };
 		8AF6C8062702E683001F6494 /* en.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 8AF6C8032702E683001F6494 /* en.lproj */; };
 		8AF6C8072702E683001F6494 /* ko.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 8AF6C8042702E683001F6494 /* ko.lproj */; };
+		8AFC07C22734B9DF00CC895F /* img_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 8AFC07BB2734B9DF00CC895F /* img_1.png */; };
+		8AFC07C32734B9DF00CC895F /* img_0.png in Resources */ = {isa = PBXBuildFile; fileRef = 8AFC07BC2734B9DF00CC895F /* img_0.png */; };
+		8AFC07C52734B9DF00CC895F /* splash.json in Resources */ = {isa = PBXBuildFile; fileRef = 8AFC07BE2734B9DF00CC895F /* splash.json */; };
 		9ED76A7D4CD14CF2833AD5D8 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 18E0E509A0794B61AE8D32CA /* Zocial.ttf */; };
 		B44361510E9344469689B522 /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 440A3B3E04824CBD89125EC7 /* FontAwesome5_Brands.ttf */; };
 		BA3F9908B5C9486BADBB5BDA /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 96D7E4D506C4437BA1F3B579 /* AntDesign.ttf */; };
@@ -48,6 +51,10 @@
 		F064381ADDF548409D9529CA /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1F6E4808E11241FD888B81CB /* Entypo.ttf */; };
 		FC190ABC6BA64E6F8A3057FE /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D070A209F4E44BB2B82F50B5 /* Ionicons.ttf */; };
 		FD246213C22A4AC29BA889AD /* DOUZONEText30.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4B3421C1BF50477C8F0F51A9 /* DOUZONEText30.ttf */; };
+		FDC834A82702E5B500FE6826 /* File.strings in Resources */ = {isa = PBXBuildFile; fileRef = FDC834A72702E5B500FE6826 /* File.strings */; };
+		FDC834AC2702E8CE00FE6826 /* ja.lproj in Resources */ = {isa = PBXBuildFile; fileRef = FDC834A92702E8CE00FE6826 /* ja.lproj */; };
+		FDC834AD2702E8CE00FE6826 /* en.lproj in Resources */ = {isa = PBXBuildFile; fileRef = FDC834AA2702E8CE00FE6826 /* en.lproj */; };
+		FDC834AE2702E8CE00FE6826 /* ko.lproj in Resources */ = {isa = PBXBuildFile; fileRef = FDC834AB2702E8CE00FE6826 /* ko.lproj */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -149,6 +156,9 @@
 		8AF6C8022702E683001F6494 /* ja.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ja.lproj; sourceTree = SOURCE_ROOT; };
 		8AF6C8032702E683001F6494 /* en.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = en.lproj; sourceTree = SOURCE_ROOT; };
 		8AF6C8042702E683001F6494 /* ko.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ko.lproj; sourceTree = SOURCE_ROOT; };
+		8AFC07BB2734B9DF00CC895F /* img_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = img_1.png; sourceTree = "<group>"; };
+		8AFC07BC2734B9DF00CC895F /* img_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = img_0.png; sourceTree = "<group>"; };
+		8AFC07BE2734B9DF00CC895F /* splash.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = splash.json; sourceTree = "<group>"; };
 		96D7E4D506C4437BA1F3B579 /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
 		99CF24157FF14692825B45C4 /* DOUZONEText10.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = DOUZONEText10.ttf; path = ../../assets/fonts/DOUZONEText10.ttf; sourceTree = "<group>"; };
 		9F891AAA22E2843EF91D9684 /* Pods-WehagoMeet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WehagoMeet.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-WehagoMeet/Pods-WehagoMeet.debug.xcconfig"; sourceTree = "<group>"; };
@@ -168,6 +178,10 @@
 		E5C97B62227A1EB400199214 /* JitsiMeetCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JitsiMeetCommands.swift; sourceTree = "<group>"; };
 		E7DCC18FC4D24C7A8FD342DD /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
 		FC040BBED70876444D89E91C /* Pods-JitsiMeet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JitsiMeet.release.xcconfig"; path = "../Pods/Target Support Files/Pods-JitsiMeet/Pods-JitsiMeet.release.xcconfig"; sourceTree = "<group>"; };
+		FDC834A72702E5B500FE6826 /* File.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = File.strings; sourceTree = "<group>"; };
+		FDC834A92702E8CE00FE6826 /* ja.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ja.lproj; sourceTree = SOURCE_ROOT; };
+		FDC834AA2702E8CE00FE6826 /* en.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = en.lproj; sourceTree = SOURCE_ROOT; };
+		FDC834AB2702E8CE00FE6826 /* ko.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ko.lproj; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -237,6 +251,9 @@
 		13B07FAE1A68108700A75B9A /* src */ = {
 			isa = PBXGroup;
 			children = (
+				FDC834AA2702E8CE00FE6826 /* en.lproj */,
+				FDC834A92702E8CE00FE6826 /* ja.lproj */,
+				FDC834AB2702E8CE00FE6826 /* ko.lproj */,
 				8AF6C8032702E683001F6494 /* en.lproj */,
 				8AF6C8022702E683001F6494 /* ja.lproj */,
 				8AF6C8042702E683001F6494 /* ko.lproj */,
@@ -252,6 +269,7 @@
 				0BBD021F212EB69D00CCB19F /* Types.h */,
 				0B412F1D1EDEE6E800B1A0A6 /* ViewController.h */,
 				0B412F1E1EDEE6E800B1A0A6 /* ViewController.m */,
+				FDC834A72702E5B500FE6826 /* File.strings */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -314,9 +332,37 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		8AFC07B32734B9DF00CC895F /* lottie */ = {
+			isa = PBXGroup;
+			children = (
+				8AFC07B42734B9DF00CC895F /* splash */,
+			);
+			name = lottie;
+			path = ../../assets/new/lottie;
+			sourceTree = "<group>";
+		};
+		8AFC07B42734B9DF00CC895F /* splash */ = {
+			isa = PBXGroup;
+			children = (
+				8AFC07BA2734B9DF00CC895F /* images */,
+				8AFC07BE2734B9DF00CC895F /* splash.json */,
+			);
+			path = splash;
+			sourceTree = "<group>";
+		};
+		8AFC07BA2734B9DF00CC895F /* images */ = {
+			isa = PBXGroup;
+			children = (
+				8AFC07BB2734B9DF00CC895F /* img_1.png */,
+				8AFC07BC2734B9DF00CC895F /* img_0.png */,
+			);
+			path = images;
+			sourceTree = "<group>";
+		};
 		D47546BBD5204D1592814307 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8AFC07B32734B9DF00CC895F /* lottie */,
 				96D7E4D506C4437BA1F3B579 /* AntDesign.ttf */,
 				1F6E4808E11241FD888B81CB /* Entypo.ttf */,
 				1CFDDA5CD9DE4E30A4AE33A8 /* EvilIcons.ttf */,
@@ -439,9 +485,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				0B412F211EDEE95300B1A0A6 /* Main.storyboard in Resources */,
+				FDC834AE2702E8CE00FE6826 /* ko.lproj in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				BA3F9908B5C9486BADBB5BDA /* AntDesign.ttf in Resources */,
+				8AFC07C52734B9DF00CC895F /* splash.json in Resources */,
 				F064381ADDF548409D9529CA /* Entypo.ttf in Resources */,
 				BAD296FC9C84493795D508FD /* EvilIcons.ttf in Resources */,
 				3BF721CD40E54E3DAEEA93E2 /* Feather.ttf in Resources */,
@@ -453,12 +501,17 @@
 				DD0B91E1C23E45A4A4876292 /* Foundation.ttf in Resources */,
 				8AF6C8072702E683001F6494 /* ko.lproj in Resources */,
 				FC190ABC6BA64E6F8A3057FE /* Ionicons.ttf in Resources */,
+				8AFC07C32734B9DF00CC895F /* img_0.png in Resources */,
 				5043A8A0282842B7AF0A0329 /* MaterialCommunityIcons.ttf in Resources */,
 				D52263BC69B44F169BF6E044 /* MaterialIcons.ttf in Resources */,
+				FDC834AC2702E8CE00FE6826 /* ja.lproj in Resources */,
 				8AF6C8062702E683001F6494 /* en.lproj in Resources */,
 				6EBB9C6A0D724BD49FDA16FB /* Octicons.ttf in Resources */,
+				8AFC07C22734B9DF00CC895F /* img_1.png in Resources */,
+				FDC834AD2702E8CE00FE6826 /* en.lproj in Resources */,
 				CFD9EA02141A442991401EC1 /* SimpleLineIcons.ttf in Resources */,
 				9ED76A7D4CD14CF2833AD5D8 /* Zocial.ttf in Resources */,
+				FDC834A82702E5B500FE6826 /* File.strings in Resources */,
 				1D9C556ECB7D4EBFBB12EBDB /* DOUZONEText10.ttf in Resources */,
 				FD246213C22A4AC29BA889AD /* DOUZONEText30.ttf in Resources */,
 				352C5A791AC3408180CBBD62 /* DOUZONEText50.ttf in Resources */,
@@ -645,7 +698,7 @@
 				CODE_SIGN_ENTITLEMENTS = app.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 8;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = BR6U9G47ZR;
 				ENABLE_BITCODE = NO;
@@ -655,7 +708,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 2.2.1;
+				MARKETING_VERSION = 2.3.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -676,7 +729,7 @@
 				CODE_SIGN_ENTITLEMENTS = app.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = BR6U9G47ZR;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = src/Info.plist;
@@ -685,7 +738,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 2.2.1;
+				MARKETING_VERSION = 2.3.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -710,7 +763,7 @@
 				CODE_SIGN_ENTITLEMENTS = "broadcast-extension/extension.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 8;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = BR6U9G47ZR;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -721,7 +774,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.2.1;
+				MARKETING_VERSION = 2.3.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.douzone.wehagomeet.broadcast;
@@ -748,7 +801,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 8;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = BR6U9G47ZR;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -759,7 +812,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.2.1;
+				MARKETING_VERSION = 2.3.0;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.douzone.wehagomeet.broadcast;
 				PRODUCT_NAME = "$(TARGET_NAME)";

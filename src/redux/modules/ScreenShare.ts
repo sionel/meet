@@ -35,7 +35,7 @@ const toggleScreenFlag = (): ThunkAction<void, RootState, unknown> => {
     });
   };
 };
-const _toggleScreenFlag = state => ({
+const _toggleScreenFlag = (state:state) => ({
   ...state,
   screenToggleFlag: !state.screenToggleFlag
 });
@@ -55,7 +55,7 @@ const setScreenFlag = (
     });
   };
 };
-const _setScreenFlag = (state, action) => ({
+const _setScreenFlag = (state:state, action:AnyAction) => ({
   ...state,
   isScreenShare: action.flag
 });

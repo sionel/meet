@@ -2,7 +2,9 @@ import { wehagoBaseURL, securityRequest } from '../../utils';
 import { getT } from '../../utils/translateManager';
 
 export default {
-  getWetalkList: async (a_token, r_token, cno, user_id, HASH_KEY) => {
+  getWetalkList: async auth => {
+    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, user_id, cno } = auth;
+
     /*
 		a_token: 인증토큰
 		cno: 회사코드
@@ -10,7 +12,7 @@ export default {
     */
     // alert(1);
     const url = `${wehagoBaseURL}/communication/rtc/rtc-room-list?user_id=${user_id}&cno=${cno}`;
-    const headers = securityRequest(a_token, r_token, url, HASH_KEY);
+    const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
     const t = getT();
     try {
       const data = {
@@ -21,10 +23,11 @@ export default {
         }
       };
       const response = await fetch(url, data);
-      return response.json();
+      const { resultData } = await response.json();
+      return resultData;
     } catch (err) {
-      alert(t('alert_text_problem_ocurred'));
-      return false;
+      // alert(t('alert_text_problem_ocurred'));
+      return { video_room_list: false };
     }
   },
 

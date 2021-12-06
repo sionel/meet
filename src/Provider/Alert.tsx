@@ -8,21 +8,21 @@ import {
   Platform
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../redux/configureStore';
 import { actionCreators } from '../redux/modules/alert';
 
-export default function AlertScreenPresenter(props) {
-  const { children } = props;
-  const alert = useSelector(state => state.alert);
-  
+export default function AlertScreenPresenter() {
+  const alert = useSelector((state: RootState) => state.alert);
+
   const { visible, title, message, actions, onClose } = alert;
-  
+
   const dispatch = useDispatch();
   const resetAlert = () => {
     dispatch(actionCreators.resetAlert());
   };
 
   return (
-    <View style={{ position:'absolute' , width:'100%' , height:'100%' }}>
+    <View style={{ position: 'absolute', width: '100%', height: '100%' }}>
       <Modal
         animationType={'fade'}
         transparent={true}
@@ -59,7 +59,7 @@ export default function AlertScreenPresenter(props) {
 
               {actions.length > 0 && (
                 <View style={styles.actions}>
-                  {actions.map((item, index) => {
+                  {actions.map((item: any, index: number) => {
                     if (!item.name || !item.action) return;
                     return (
                       <TouchableOpacity
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
   },
   alertContainer: {
     backgroundColor: '#fff',
-    maxWidth: '80%',
+    maxWidth: 350,
     minHeight: 30,
     padding: 12,
     borderRadius: 4,

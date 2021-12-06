@@ -2,7 +2,7 @@
  * Route INDEX
  */
 
-import { createAppContainer, createStackNavigator } from 'react-navigation';
+// import { createAppContainer, createStackNavigator } from 'react-navigation';
 
 // 화면을 index로 export해서 불러오면 인식하지 못함 -> 개별적으로 불러오면 해결
 // Home Route

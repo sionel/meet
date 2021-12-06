@@ -197,11 +197,19 @@ class ReactInstanceManagerHolder {
                 new org.wonday.orientation.OrientationPackage(),
                 new com.dylanvann.fastimage.FastImageViewPackage(),
                 new com.terrylinla.rnsketchcanvas.SketchCanvasPackage(),
+
                 new com.evanjmg.RNHomePressedPackage(),
                 new com.avishayil.rnrestart.ReactNativeRestartPackage(),
                 new com.github.wumke.RNExitApp.RNExitAppPackage(),
                 new com.zxcpoiu.incallmanager.InCallManagerPackage(),
+                new com.airbnb.android.react.lottie.LottiePackage(),
 
+                new com.BV.LinearGradient.LinearGradientPackage(),
+                new com.th3rdwave.safeareacontext.SafeAreaContextPackage(),
+                new com.henninghall.date_picker.DatePickerPackage(),
+                new com.swmansion.reanimated.ReanimatedPackage(),
+                new com.swmansion.rnscreens.RNScreensPackage(),
+                new org.reactnative.maskedview.RNCMaskedViewPackage(),
                 new ReactPackageAdapter() {
                     @Override
                     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {

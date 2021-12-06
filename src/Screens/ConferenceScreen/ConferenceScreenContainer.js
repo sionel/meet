@@ -24,6 +24,7 @@ import DeviceInfo from 'react-native-device-info';
 
 import { setConferenceManager } from '../../utils/ConferenceManager';
 import { getT } from '../../utils/translateManager';
+import { set } from 'lodash';
 
 const { PictureInPicture } = NativeModules;
 const { width, height } = Dimensions.get('window');
@@ -224,24 +225,23 @@ class ConferenceScreenContainer extends React.Component {
   /** 대화방 참가 생성 */
   _joinConference = async () => {
     const {
-      navigation,
+      route: { params },
       auth,
       dispatch,
       joinConference,
       changeMasterControlMode,
       setToastMessage,
-      setMainUserNotExist
+      setMainUserNotExist,
+      isLogin
     } = this.props;
-    const item = navigation.getParam('item');
     const {
       name,
       selectedRoomName,
-      videoRoomId: roomName,
+      id: roomName,
       roomToken: token,
-      accesstype,
       externalUser,
       tracks
-    } = item;
+    } = params;
 
     this._conferenceManager = new ConferenceManager(
       dispatch,
@@ -254,8 +254,7 @@ class ConferenceScreenContainer extends React.Component {
       profile_url: auth.profile_url ? auth.profile_url : '',
       userName: name,
       nickname: auth.nickname,
-      isExternalParticipant:
-        accesstype === 'email' || accesstype === 'joincode',
+      isExternalParticipant: !isLogin,
       externalUserId: externalUser,
       isMobile: true
     };
@@ -267,7 +266,7 @@ class ConferenceScreenContainer extends React.Component {
       sendCommandParams
     );
 
-    if (!joinResult) { 
+    if (!joinResult) {
       if (this._screen) {
         this.props.setAlert({
           type: 1,
@@ -337,8 +336,12 @@ class ConferenceScreenContainer extends React.Component {
       setIndicator,
       initParticipants,
       initMainUser,
-      user
+      user,
+      auth,
+      isLogin,
+      resetVideoId
     } = this.props;
+
     setIndicator();
     initParticipants();
     initMainUser();
@@ -346,19 +349,16 @@ class ConferenceScreenContainer extends React.Component {
     this._conferenceManager.dispose();
     user.videoTrack.dispose();
     user.audioTrack.dispose();
-
-    if (
-      // 딥링크로 들어온 두가지의 경우 login 창으로 보내버린다.
-      screenProps.destination === 'Conference' ||
-      screenProps.destination === 'Setting'
-    ) {
-      screenProps.onChangeRootState({
-        loaded: false,
-        url: undefined,
-        params: {}
-      });
+    resetVideoId();
+    if (!isLogin) {
+      // setLoaded(false);
+      // setParams({});
+      // setUrl(undefined);
+      // setDestination('Login')
+      navigation.reset({ routes: [{ name: 'LoginStack' }] });
     } else {
-      navigation.goBack();
+      navigation.reset({ routes: [{ name: 'MainStack' }] });
+      // destination === 'List' ? navigation.goBack() : setDestination('List')
     }
     this.setState({ connection: false, endCall: true });
   };

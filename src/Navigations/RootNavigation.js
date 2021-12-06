@@ -1,5 +1,5 @@
 import React from 'react';
-import { createAppContainer, createStackNavigator } from 'react-navigation';
+// import { createAppContainer, createStackNavigator } from 'react-navigation';
 import MainNavigation from './MainNavigation';
 import ConferenceScreen from '../Screens/ConferenceScreen';
 import SettingScreen from '../Screens/SettingScreen';
@@ -10,10 +10,9 @@ import RouteTitle from '../Routes/RouteTitle';
 const commonStyle = {
   height: 53,
   color: '#fff',
-  backgroundColor: '#1C90FB',
+  backgroundColor: '#1C90FB'
 };
 const backBtn = require('../../assets/buttons/back_btn.png');
-
 
 const BackButton = ({ navigation, to }) => {
   return (
@@ -55,14 +54,12 @@ const RootNavigation = createStackNavigator(
 
     Setting: {
       screen: SettingScreen,
-      navigationOptions: ({ navigation }) => ({
-        headerTitle: <RouteTitle title={navigation.getScreenProps().t('roomstate_setting_header')} />,
-        headerLeft: <BackButton navigation={navigation} to={'Main'} />,
-        headerTintColor: '#fff',
-        headerStyle: commonStyle
-      })
+      navigationOptions: {
+        header: null,
+        // headerLeft: null,
+        gesturesEnabled: false
+      }
     }
-
   },
   // initial
   {

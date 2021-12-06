@@ -5,6 +5,8 @@ PODS:
   - AppAuth/Core (1.4.0)
   - AppAuth/ExternalUserAgent (1.4.0)
   - boost-for-react-native (1.63.0)
+  - BVLinearGradient (2.5.6):
+    - React
   - CocoaLumberjack (3.5.3):
     - CocoaLumberjack/Core (= 3.5.3)
   - CocoaLumberjack/Core (3.5.3)
@@ -297,11 +299,15 @@ PODS:
     - React
   - react-native-calendar-events (1.6.4):
     - React
+  - react-native-date-picker (4.1.1):
+    - React-Core
   - react-native-keep-awake (4.0.0):
     - React
   - react-native-netinfo (4.1.5):
     - React
   - react-native-orientation-locker (1.3.1):
+    - React-Core
+  - react-native-safe-area-context (3.3.2):
     - React-Core
   - react-native-slider (3.0.3):
     - React
@@ -376,6 +382,8 @@ PODS:
     - React
   - RNCAsyncStorage (1.13.2):
     - React
+  - RNCMaskedView (0.1.11):
+    - React
   - RNDefaultPreference (1.4.2):
     - React
   - RNDeviceInfo (8.0.0):
@@ -392,6 +400,10 @@ PODS:
     - GoogleSignIn (~> 5.0.0)
     - React-Core
   - RNLocalize (2.0.2):
+    - React-Core
+  - RNReanimated (1.9.0):
+    - React
+  - RNScreens (2.18.1):
     - React-Core
   - RNSketchCanvas (0.8.0):
     - React
@@ -410,6 +422,7 @@ PODS:
   - Yoga (1.14.0)
 
 DEPENDENCIES:
+  - BVLinearGradient (from `../node_modules/react-native-linear-gradient`)
   - CocoaLumberjack (~> 3.5.3)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector/`)
@@ -436,9 +449,11 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-background-timer (from `../node_modules/react-native-background-timer`)
   - react-native-calendar-events (from `../node_modules/react-native-calendar-events`)
+  - react-native-date-picker (from `../node_modules/react-native-date-picker`)
   - react-native-keep-awake (from `../node_modules/react-native-keep-awake`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-orientation-locker (from `../node_modules/react-native-orientation-locker/react-native-orientation-locker.podspec`)
+  - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
   - react-native-video (from `../node_modules/react-native-video/react-native-video.podspec`)
@@ -457,6 +472,7 @@ DEPENDENCIES:
   - ReactNativeIncallManager (from `../node_modules/react-native-incall-manager`)
   - ReactNativePermissions (from `../node_modules/react-native-permissions`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
+  - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - RNDefaultPreference (from `../node_modules/react-native-default-preference`)
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNExitApp (from `../node_modules/react-native-exit-app`)
@@ -464,6 +480,8 @@ DEPENDENCIES:
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "RNGoogleSignin (from `../node_modules/@react-native-community/google-signin`)"
   - RNLocalize (from `../node_modules/react-native-localize`)
+  - RNReanimated (from `../node_modules/react-native-reanimated`)
+  - RNScreens (from `../node_modules/react-native-screens`)
   - "RNSketchCanvas (from `../node_modules/@terrylinla/react-native-sketch-canvas`)"
   - RNSVG (from `../node_modules/react-native-svg`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
@@ -497,6 +515,8 @@ SPEC REPOS:
     - SDWebImageWebPCoder
 
 EXTERNAL SOURCES:
+  BVLinearGradient:
+    :path: "../node_modules/react-native-linear-gradient"
   DoubleConversion:
     :podspec: "../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
   FBLazyVector:
@@ -535,12 +555,16 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-background-timer"
   react-native-calendar-events:
     :path: "../node_modules/react-native-calendar-events"
+  react-native-date-picker:
+    :path: "../node_modules/react-native-date-picker"
   react-native-keep-awake:
     :path: "../node_modules/react-native-keep-awake"
   react-native-netinfo:
     :path: "../node_modules/@react-native-community/netinfo"
   react-native-orientation-locker:
     :path: "../node_modules/react-native-orientation-locker/react-native-orientation-locker.podspec"
+  react-native-safe-area-context:
+    :path: "../node_modules/react-native-safe-area-context"
   react-native-slider:
     :path: "../node_modules/@react-native-community/slider"
   react-native-splash-screen:
@@ -577,6 +601,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-permissions"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
+  RNCMaskedView:
+    :path: "../node_modules/@react-native-community/masked-view"
   RNDefaultPreference:
     :path: "../node_modules/react-native-default-preference"
   RNDeviceInfo:
@@ -591,6 +617,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/google-signin"
   RNLocalize:
     :path: "../node_modules/react-native-localize"
+  RNReanimated:
+    :path: "../node_modules/react-native-reanimated"
+  RNScreens:
+    :path: "../node_modules/react-native-screens"
   RNSketchCanvas:
     :path: "../node_modules/@terrylinla/react-native-sketch-canvas"
   RNSVG:
@@ -605,6 +635,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
+  BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
   CocoaLumberjack: 2f44e60eb91c176d471fdba43b9e3eae6a721947
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
   FBLazyVector: ca7f56c8ff6cd8590f7a673d7903b06019805581
@@ -643,9 +674,11 @@ SPEC CHECKSUMS:
   React-jsinspector: 92ceee6c66dc19886289b52436ade7e020b89602
   react-native-background-timer: e0384ea2fa5a98f67f84f9c4dc274260ddd674ed
   react-native-calendar-events: ee9573e355711ac679e071be70789542431f4ce3
+  react-native-date-picker: 414fe8f73392bae030dc4efec39d743b5c5de283
   react-native-keep-awake: eba3137546b10003361b37c761f6c429b59814ae
   react-native-netinfo: 8d8db463bcc5db66a8ac5c48a7d86beb3b92f61a
   react-native-orientation-locker: 998c0744e26624407dac068c04c605b4af7304a2
+  react-native-safe-area-context: 5cf05f49df9d17261e40e518481f2e334c6cd4b5
   react-native-slider: b733e17fdd31186707146debf1f04b5d94aa1a93
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
   react-native-video: 1574074179ecaf6a9dd067116c8f31bf9fec15c8
@@ -664,6 +697,7 @@ SPEC CHECKSUMS:
   ReactNativeIncallManager: db7d5f5ae281a43d7179ba24875ff477dc47f229
   ReactNativePermissions: f0aec11433d43d45953c678b6982921d83ad94c8
   RNCAsyncStorage: bc2f81cc1df90c267ce9ed30bb2dbc93b945a8ee
+  RNCMaskedView: f127cd9652acfa31b91dcff613e07ba18b774db6
   RNDefaultPreference: 56a405ce61033ac77b95004dccd7ac54c2eb50d1
   RNDeviceInfo: 72ded653ce636b3f03571e90bed99309a714944e
   RNExitApp: 7d81855142a4d11eb75f4f06fdebf5a950d7aef2
@@ -671,6 +705,8 @@ SPEC CHECKSUMS:
   RNGestureHandler: 946a7691e41df61e2c4b1884deab41a4cdc3afff
   RNGoogleSignin: ad866d4c4af2651e36801dd3b7771d7715353499
   RNLocalize: 47e22ef8c36df1d572e42a87c8ae22e3fcf551dd
+  RNReanimated: b5ccb50650ba06f6e749c7c329a1bc3ae0c88b43
+  RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
   RNSketchCanvas: 6939b18677cd1794151cc3d8eb5a0a2158a4a05b
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
@@ -679,6 +715,6 @@ SPEC CHECKSUMS:
   SDWebImageWebPCoder: 947093edd1349d820c40afbd9f42acb6cdecd987
   Yoga: 96b469c5e81ff51b917b92e8c3390642d4ded30c
 
-PODFILE CHECKSUM: e2a4c0ffbda89549d8482d1c32ea15b8b32cc4eb
+PODFILE CHECKSUM: 8a7852d09d54185630815dca049ff85c6cea2e24
 
 COCOAPODS: 1.11.2

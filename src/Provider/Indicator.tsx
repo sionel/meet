@@ -2,9 +2,10 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { CustomIcon } from '../components';
+import { RootState } from '../redux/configureStore';
 
 export default function Indicator() {
-  const indicator = useSelector(state => state.indicator);
+  const indicator = useSelector((state: RootState) => state.indicator);
 
   const { visible, message } = indicator;
 
@@ -19,7 +20,7 @@ export default function Indicator() {
         right: 0,
         bottom: 0,
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'center'
       }}
     >
       <CustomIcon name={'loading'} size={100} />

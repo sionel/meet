@@ -1,4 +1,4 @@
-import { createAppContainer, createStackNavigator } from 'react-navigation';
+// import { createAppContainer, createStackNavigator } from 'react-navigation';
 import ConferenceScreen from '../Screens/ConferenceScreen';
 
 const Deeplink2Navigation = createStackNavigator(

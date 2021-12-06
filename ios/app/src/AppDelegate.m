@@ -14,12 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+#import <React/RCTLinkingManager.h>
 #import "AppDelegate.h"
 #import "FIRUtilities.h"
 #import "Types.h"
 #import "ViewController.h"
 #import <React/RCTLinkingManager.h>
+#import "Orientation.h"
 
 @import Firebase;
 @import JitsiMeetSDK;
@@ -109,6 +110,34 @@
   return [RCTLinkingManager application:application openURL:url options:options];
 }
 
+- (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
+  return [Orientation getOrientation];
+}
+// - (BOOL)application:(UIApplication *)app
+//             openURL:(NSURL *)url
+//             options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+
+//     // This shows up during a reload in development, skip it.
+//     // https://github.com/firebase/firebase-ios-sdk/issues/233
+//     if ([[url absoluteString] containsString:@"google/link/?dismiss=1&is_weak_match=1"]) {
+//         return NO;
+//     }
+
+//     NSURL *openUrl = url;
+
+//     if ([FIRUtilities appContainsRealServiceInfoPlist]) {
+//         // Process Firebase Dynamic Links
+//         FIRDynamicLink *dynamicLink = [[FIRDynamicLinks dynamicLinks] dynamicLinkFromCustomSchemeURL:url];
+//         NSURL *firebaseUrl = [FIRUtilities extractURL:dynamicLink];
+//         if (firebaseUrl != nil) {
+//             openUrl = firebaseUrl;
+//         }
+//     }
+
+//     return [[JitsiMeet sharedInstance] application:app
+//                                            openURL:openUrl
+//                                            options:options];
+// }
 
 // - (BOOL)application:(UIApplication *)app
 //             openURL:(NSURL *)url

@@ -5,14 +5,21 @@
 
 import { connect } from 'react-redux';
 import MainContainer from './MainContainer';
-// map state to props
-const mapStateToProps = state => ({
-  from: state.user.from
-});
 
-// map dispatch to props
-const mapDispatchToProps = dispatch => {
-  return {};
+import { actionCreators as rootActions } from '../redux/modules/root';
+// map state to props
+const mapStateToProps = (state) => {
+  const { from } = state.user;
+  const { loaded } = state.root;
+  
+  return {
+    from,
+    loaded
+  };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MainContainer);
+// map dispatch to props
+const mapDispatchToProps = (dispatch) => {
+};
+
+export default connect(mapStateToProps, '')(MainContainer);

@@ -31,20 +31,26 @@ class ConferenceStateContainer extends React.Component {
     // 딥링크 웹 접근
     // 딥링크 이메일 접근
     // 참여코드 접근
-    const { params } = this.props.screenProps;
-    let roomId;
-    let iscret = true; // 인증 비인증 묻는 것
-    if (params.accesstype === 'login' || params.accesstype === 'wehago') {
-      roomId = this.props.navigation.state.params.item.roomId;
-    } else if (params && Object.keys(params).length > 0) {
-      roomId = params.roomId;
-      iscret =
-        params.accesstype !== 'email' && params.accesstype !== 'joincode';
-    }
-    let { conferenceState } = this.state;
-    this.roomId = roomId;
 
-    let { auth } = this.props;
+    const {
+      auth,
+      videoId,
+      isLogin,
+      route: { params }
+    } = this.props;
+    const { id } = params;
+    // this.props.navigation.goBack()
+    // let roomId;
+    // let iscret = true; // 인증 비인증 묻는 것
+    const iscret = isLogin;
+    // if (params.accesstype === 'login' || params.accesstype === 'wehago') {
+    //   roomId = this.props.navigation.state.params.item.roomId;
+    // } else if (params && Object.keys(params).length > 0) {
+    //   roomId = params.roomId;
+    // }
+    let { conferenceState } = this.state;
+    this.roomId = videoId || id;
+    // let { auth } = this.props;
     // const access = await MeetApi.getMeetRoom(
     //   auth.AUTH_A_TOKEN,
     //   auth.AUTH_R_TOKEN,
@@ -52,8 +58,13 @@ class ConferenceStateContainer extends React.Component {
     //   roomId
     // );
     // this.roomName = access.resultData.name;
-    const access = await MeetApi.getMeetRoomNoCert(roomId);
-    this.roomName = access?.resultData?.name;
+
+    //email 접속종료후 roomId가 undefined여서 오류생겨서 let으로 변수 access선언
+    let access;
+    if (this.roomId !== undefined) {
+      access = await MeetApi.getMeetRoomNoCert(this.roomId);
+      this.roomName = access?.resultData?.name;
+    }
 
     if (!access) {
       // 종료된 방 또는 문제가 있을때
@@ -94,9 +105,8 @@ class ConferenceStateContainer extends React.Component {
         (changed.getMinutes() + '').padStart(2, '0')
       );
     };
-
     if (conferenceState === 'conference') {
-      this._handleEnterConference(auth, roomId, iscret, params);
+      this._handleEnterConference(auth, this.roomId, iscret, params);
     } else if (conferenceState === 'reservationInfo') {
       // 참석자 정보 받고
       // 시작시간 종료시간 컨버팅 하고
@@ -105,15 +115,8 @@ class ConferenceStateContainer extends React.Component {
         access.resultData;
       let accessUser = [];
       if (Object.keys(auth).length > 0) {
-        accessUser = (
-          await MeetApi.getAccessUsers(
-            auth.AUTH_A_TOKEN,
-            auth.AUTH_R_TOKEN,
-            auth.HASH_KEY,
-            auth.last_access_company_no,
-            roomId
-          )
-        ).resultData;
+        accessUser = (await MeetApi.getAccessUsers(auth, this.roomId))
+          .resultData;
       }
       this.setState({
         iscret,
@@ -131,7 +134,7 @@ class ConferenceStateContainer extends React.Component {
       const start = access.resultData.r_start_datetime;
 
       this.enterTimer = setTimeout(() => {
-        this._handleEnterConference(auth, roomId);
+        this._handleEnterConference(auth, this.roomId);
       }, start - now);
 
       this.setState({
@@ -183,14 +186,16 @@ class ConferenceStateContainer extends React.Component {
     this.setState({ orientation: status ? 'horizontal' : 'vertical' });
   };
 
-  _handleRedirect = (url, param) => {
-    const { navigation } = this.props;
-    // 여기서 어디로 이동을 한다면 conference밖에 없고
-    // 네비게이션 특성상 홈으로 갔다가 가야함
-    navigation.navigate('Home');
-    navigation.navigate(url, param);
-  };
+  // _handleRedirect = (url, param) => {
+  //   const { navigation } = this.props;
+  //   // 여기서 어디로 이동을 한다면 conference밖에 없고
+  //   // 네비게이션 특성상 홈으로 갔다가 가야함
+  //   navigation.navigate('Home');
+  //   navigation.navigate(url, param);
+  // };
+
   _handleEnterConference = async (auth, roomId, iscret, params) => {
+    const { navigation } = this.props;
     let callType = 3;
     let isCreator;
 
@@ -207,16 +212,25 @@ class ConferenceStateContainer extends React.Component {
         conferenceState: conferenceState
       });
     } else {
-      this._handleRedirect('Setting', {
-        item: {
-          roomType: 'meet',
-          videoRoomId: roomId,
-          callType,
-          isCreator,
-          selectedRoomName: this.roomName,
-          params
-        }
+      navigation.replace('SettingView', {
+        roomType: 'meet',
+        callType,
+        isCreator,
+        selectedRoomName: this.roomName,
+        ...params
       });
+
+      // navigation.navigate('Home');
+      // this._handleRedirect('Setting', {
+      //   item: {
+      //     roomType: 'meet',
+      //     videoRoomId: roomId,
+      //     callType,
+      //     isCreator,
+      //     selectedRoomName: this.roomName,
+      //     params
+      //   }
+      // });
     }
   };
 }

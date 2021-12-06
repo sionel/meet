@@ -44,6 +44,8 @@ include ':react-native-fast-image'
 project(':react-native-fast-image').projectDir = new File(rootProject.projectDir, '../../node_modules/react-native-fast-image/android')
 include ':react-native-sketch-canvas'
 project(':react-native-sketch-canvas').projectDir = new File(rootProject.projectDir, '../../node_modules/@terrylinla/react-native-sketch-canvas/android')
+include ':react-native-linear-gradient'
+project(':react-native-linear-gradient').projectDir = new File(rootProject.projectDir, '../../node_modules/react-native-linear-gradient/android')
 include ':react-native-home-pressed'
 project(':react-native-home-pressed').projectDir = new File(rootProject.projectDir,   '../../node_modules/react-native-home-pressed/android')
 include ':react-native-restart'
@@ -52,3 +54,15 @@ include ':react-native-exit-app'
 project(':react-native-exit-app').projectDir = new File(rootProject.projectDir, '../../node_modules/react-native-exit-app/android')
 include ':react-native-incall-manager'
 project(':react-native-incall-manager').projectDir = new File(rootProject.projectDir, '../../node_modules/react-native-incall-manager/android')
+include ':lottie-react-native'
+project(':lottie-react-native').projectDir = new File(rootProject.projectDir, '../../node_modules/lottie-react-native/src/android')
+include ':react-native-safe-area-context'
+project(':react-native-safe-area-context').projectDir = new File(rootProject.projectDir, '../../node_modules/react-native-safe-area-context/android')
+include ':react-native-date-picker'
+project(':react-native-date-picker').projectDir = new File(rootProject.projectDir, '../../node_modules/react-native-date-picker/android')
+include ':react-native-masked-view'
+project(':react-native-masked-view').projectDir = new File(rootProject.projectDir, '../../node_modules/@react-native-community/masked-view/android')
+include ':react-native-reanimated'
+project(':react-native-reanimated').projectDir = new File(rootProject.projectDir, '../../node_modules/react-native-reanimated/android')
+include ':react-native-screens'
+project(':react-native-screens').projectDir = new File(rootProject.projectDir, '../../node_modules/react-native-screens/android')
