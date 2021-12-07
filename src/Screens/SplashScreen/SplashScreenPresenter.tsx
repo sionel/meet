@@ -1,7 +1,5 @@
 import React from 'react';
 import { CustomAlert, ServerNotiveCheck, Splash } from '../../components';
-import RootNavigation_new from '../../Navigations/RootNavigation_new';
-import SplashNavigation_new from '../../Navigations/SplashView';
 import { getT } from '../../utils/translateManager';
 
 export default function SplashScreenPresenter(props: {

@@ -1,7 +1,7 @@
 import { RootState } from '../../redux/configureStore';
 import { wehagoBaseURL, serialize, createHeader } from '../../utils';
 
-const getOrganizationTreeRequest = async (auth: any) => {
+const getOrganizationTreeRequest = async (auth: any, signal: AbortSignal) => {
   const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
   try {
     const params = serialize({
@@ -15,7 +15,8 @@ const getOrganizationTreeRequest = async (auth: any) => {
     const header = createHeader({ AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, url });
     const data = {
       method: 'GET',
-      headers: { ...header, service: 'common' }
+      headers: { ...header, service: 'common' },
+      signal : signal
     };
     const response = await fetch(url, data);
     const { resultData } = await response.json();
@@ -57,7 +58,7 @@ const getOrganizationTreeEmployeeRequest = async (
   }
 };
 
-const getOrganizationTreeAllEmployeeRequest = async (auth: any) => {
+const getOrganizationTreeAllEmployeeRequest = async (auth: any, signal: AbortSignal) => {
   const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
   try {
     const params = serialize({
@@ -72,6 +73,7 @@ const getOrganizationTreeAllEmployeeRequest = async (auth: any) => {
     const header = createHeader({ AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, url });
     const data = {
       method: 'GET',
+      signal : signal,
       headers: Object.assign({}, header, {
         // 'client-id': 'communication2',
         // service: 'common'
@@ -87,7 +89,7 @@ const getOrganizationTreeAllEmployeeRequest = async (auth: any) => {
   }
 };
 
-const getContactsList = async (auth: any) => {
+const getContactsList = async (auth: any, signal: AbortSignal) => {
   const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
   try {
     // const params = {
@@ -112,6 +114,7 @@ const getContactsList = async (auth: any) => {
 
     const data: any = {
       method: 'POST',
+      signal : signal,
       headers,
       body: serialize(params)
       // body: JSON.stringify(params)

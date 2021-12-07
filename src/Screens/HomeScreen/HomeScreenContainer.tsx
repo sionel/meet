@@ -136,7 +136,7 @@ export default function HomeScreenContainer(props: any) {
     dispatch(RecentsActions.resetRecents());
   };
 
-  const { navigation, route }: MainNavigationProps<'HomeStack'> = props;
+  const { navigation, route }: MainNavigationProps<'MainStack'> = props;
 
   const _openCompany = () => dispatch(SelectCompanyActions.openCompany());
   const changeCompanyRequest = (auth: any, company: any) =>
@@ -686,7 +686,7 @@ export default function HomeScreenContainer(props: any) {
 
 
   const handleClickSetting = () => {
-    navigation.navigate('Configuration');
+    navigation.navigate('ConfigurationStack');
   };
   return isHorizon ? (
     <HomeScreenHorizonPresenter

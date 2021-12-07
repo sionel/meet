@@ -31,10 +31,7 @@ export type MeetParamList = {
   };
   SettingView: {
     accessType: 'auth' | 'email' | 'joincode';
-    // callType?: number;
     id: string;
-    // isCreator?: any;
-    // joincode?: string;
     roomType?: string;
     selectedRoomName?: string;
   };
@@ -55,25 +52,19 @@ export type MeetParamList = {
 export type MeetNavigationProps<T extends keyof MeetParamList> =
   StackScreenProps<MeetParamList, T>;
 
-const Stack = createStackNavigator();
+const RootStack = createStackNavigator();
 
-export default function RootNavigation_new() {
+export default function RootNavigation() {
   return (
     <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="SplashView"
-        screenOptions={{ headerShown: false }}
-      >
-        <Stack.Screen name="SplashView" component={SplashView} />
-        <Stack.Screen name="LoginStack" component={LoginStack} />
-        <Stack.Screen name="MainStack" component={MainStack} />
-        <Stack.Screen
-          name="ConferenceStateView"
-          component={ConferenceStateView}
-        />
-        <Stack.Screen name="SettingView" component={SettingView} />
-        <Stack.Screen name="ConferenceView" component={ConferenceView} />
-      </Stack.Navigator>
+      <RootStack.Navigator initialRouteName="SplashView" screenOptions={{ headerShown: false }} >
+        <RootStack.Screen name="SplashView" component={SplashView} />
+        <RootStack.Screen name="LoginStack" component={LoginStack} />
+        <RootStack.Screen name="MainStack" component={MainStack} />
+        <RootStack.Screen name="ConferenceStateView" component={ConferenceStateView} />
+        <RootStack.Screen name="SettingView" component={SettingView} />
+        <RootStack.Screen name="ConferenceView" component={ConferenceView} />
+      </RootStack.Navigator>
     </NavigationContainer>
   );
 }

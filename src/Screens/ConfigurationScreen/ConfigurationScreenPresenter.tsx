@@ -4,161 +4,120 @@ import {
   Text,
   SafeAreaView,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  StyleSheet
 } from 'react-native';
 
-import icBack from '../../../assets/new/icons/ic_back_w.png';
+// import icBack from '../../../assets/new/icons/ic_back_w.png';
 
 import icMenuInfo from '../../../assets/new/icons/ic_menu_info.png';
 import icMenuInfoLaw from '../../../assets/new/icons/ic_menu_info_law.png';
 import icMenuTrophy from '../../../assets/new/icons/ic_menu_trophy.png';
 import icMenuLogin from '../../../assets/new/icons/ic_menu_login.png';
 import icArrowRight from '../../../assets/new/icons/ic_arrow_right.png';
+import icBack from '../../../assets/new/icons/ic_back.png';
 
 interface propsTypes {
-  onRedirect: (destination: string) => void;
+  // onRedirect: (destination: string) => void;
   onLogout: () => void;
   goBack: () => void;
+  handleGoPolicy: () => void;
+  handleGoAwards: () => void;
+  handleGoOpenSource: () => void;
 }
 
 export default function ConfigurationScreenPresenter(props: propsTypes) {
-  const { onRedirect, onLogout, goBack } = props;
+  const {
+    onLogout,
+    goBack,
+    handleGoAwards,
+    handleGoOpenSource,
+    handleGoPolicy
+  } = props;
 
   return (
-    <Fragment>
-      <SafeAreaView style={{ flex: 0, backgroundColor: '#1c90fb' }} />
-      <SafeAreaView style={{ flex: 1 }}>
-        <View
-          style={{
-            height: 50,
-            backgroundColor: '#1c90fb',
-            flexDirection: 'row',
-            paddingHorizontal: 20,
-            justifyContent: 'center',
-            alignItems: 'center'
-          }}
-        >
-          <TouchableOpacity onPress={goBack}>
-            <Image
-              source={icBack}
-              resizeMode={'contain'}
-              style={{ width: 30 }}
-            />
-          </TouchableOpacity>
-          <Text
-            style={{
-              flex: 1,
-              textAlign: 'center',
-              fontSize: 18,
-              color: '#fff'
-            }}
-          >
-            {'기본 설정'}
-          </Text>
-          <View style={{ width: 30 }} />
+    // <Fragment>
+    //   <SafeAreaView style={{ flex: 0, backgroundColor: '#1c90fb' }} />
+    //   <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView>
+      <View style={[styles.topTitle]}>
+        <TouchableOpacity onPress={goBack}>
+          <Image
+            source={icBack}
+            style={{ width: 24, height: 24 }}
+            resizeMode="cover"
+          />
+        </TouchableOpacity>
+        <Text style={styles.HeaderTitleText}>기본 설정</Text>
+        <TouchableOpacity disabled={true}>
+          <Text style={styles.emptyText}>확인</Text>
+        </TouchableOpacity>
+      </View>
+      <View
+        style={{
+          flex: 1,
+          width: '100%'
+        }}
+      >
+        <View style={styles.menuText}>
+          <Image
+            source={icMenuInfo}
+            style={styles.imgStyle}
+            resizeMode={'contain'}
+          />
+          <Text style={{ flex: 1 }}> {'버전정보'} </Text>
+          <Text>{'2.3.0'}</Text>
         </View>
 
-        <View
-          style={{
-            flex: 1,
-            width: '100%'
-          }}
+        <TouchableOpacity
+          onPress={() => handleGoPolicy()}
+          style={styles.menuText}
         >
-          <View
-            style={{
-              height: 50,
-              paddingHorizontal: 15,
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              borderColor: '#d1d1d1',
-              borderBottomWidth: 1
-            }}
-          >
-            <Image
-              source={icMenuInfo}
-              style={{ width: 30, height: 25, marginRight: 15 }}
-              resizeMode={'contain'}
-            />
-            <Text style={{ flex: 1 }}> {'버전정보'} </Text>
-            <Text>{'2.3.0'}</Text>
-          </View>
+          <Image
+            source={icMenuInfoLaw}
+            style={styles.imgStyle}
+            resizeMode={'contain'}
+          />
+          <Text style={{ flex: 1 }}> {'이용약관 및 법률정보'} </Text>
+          <Image
+            source={icArrowRight}
+            style={styles.icRightArrow}
+            resizeMode={'contain'}
+          />
+        </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => onRedirect('Policy')}
-            style={{
-              height: 50,
-              paddingHorizontal: 15,
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              borderColor: '#d1d1d1',
-              borderBottomWidth: 1
-            }}
-          >
-            <Image
-              source={icMenuInfoLaw}
-              style={{ width: 30, height: 25, marginRight: 15 }}
-              resizeMode={'contain'}
-            />
-            <Text style={{ flex: 1 }}> {'이용약관 및 법률정보'} </Text>
-            <Image
-              source={icArrowRight}
-              style={{ width: 30, height: 25 }}
-              resizeMode={'contain'}
-            />
-          </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => handleGoAwards()}
+          style={styles.menuText}
+        >
+          <Image
+            source={icMenuTrophy}
+            style={styles.imgStyle}
+            resizeMode={'contain'}
+          />
+          <Text style={{ flex: 1 }}> {'수상 및 인증내역'} </Text>
+          <Image
+            source={icArrowRight}
+            style={styles.icRightArrow}
+            resizeMode={'contain'}
+          />
+        </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => onRedirect('Awards')}
-            style={{
-              height: 50,
-              paddingHorizontal: 15,
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              borderColor: '#d1d1d1',
-              borderBottomWidth: 1
-            }}
-          >
-            <Image
-              source={icMenuTrophy}
-              style={{ width: 30, height: 25, marginRight: 15 }}
-              resizeMode={'contain'}
-            />
-            <Text style={{ flex: 1 }}> {'수상 및 인증내역'} </Text>
-            <Image
-              source={icArrowRight}
-              style={{ width: 30, height: 25 }}
-              resizeMode={'contain'}
-            />
-          </TouchableOpacity>
+        <TouchableOpacity onPress={onLogout} style={styles.menuText}>
+          <Image
+            source={icMenuLogin}
+            style={styles.imgStyle}
+            resizeMode={'contain'}
+          />
+          <Text style={{ flex: 1 }}> {'로그아웃'} </Text>
+          <Image
+            source={icArrowRight}
+            style={styles.icRightArrow}
+            resizeMode={'contain'}
+          />
+        </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={onLogout}
-            style={{
-              height: 50,
-              paddingHorizontal: 15,
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              borderColor: '#d1d1d1',
-              borderBottomWidth: 1
-            }}
-          >
-            <Image
-              source={icMenuLogin}
-              style={{ width: 30, height: 25, marginRight: 15 }}
-              resizeMode={'contain'}
-            />
-            <Text style={{ flex: 1 }}> {'로그아웃'} </Text>
-            <Image
-              source={icArrowRight}
-              style={{ width: 30, height: 25 }}
-              resizeMode={'contain'}
-            />
-          </TouchableOpacity>
-          {/* <SectionList
+        {/* <SectionList
         sections={[{ title: t('option_system'), data: userConfig }]}
         renderItem={({ item }, index) => (
           <TouchableOpacity
@@ -187,11 +146,51 @@ export default function ConfigurationScreenPresenter(props: propsTypes) {
           }
         }
       /> */}
-        </View>
-      </SafeAreaView>
-    </Fragment>
+      </View>
+    </SafeAreaView>
+    //   </SafeAreaView>
+    // </Fragment>
   );
 }
+
+const styles = StyleSheet.create({
+  topTitle: {
+    paddingHorizontal: '5%',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
+    width: '100%',
+    height: 50,
+    borderColor: '#d1d1d1',
+    borderBottomWidth: 1
+    // backgroundColor: '#ececec'
+  },
+  HeaderTitleText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#000'
+  },
+  emptyText: {
+    fontSize: 14,
+    fontWeight: 'normal',
+    color: '#00ff0000'
+  },
+  menuText: {
+    height: 50,
+    paddingHorizontal: 15,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: '#d1d1d1',
+    borderBottomWidth: 1
+  },
+  imgStyle: {
+    width: 30,
+    height: 25,
+    marginRight: 15
+  },
+  icRightArrow: { width: 30, height: 25 }
+});
 
 // /**
 //  * ConfigurationScreenPresenter

@@ -5,17 +5,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/configureStore';
 
 import { actionCreators as UserActions } from '../../redux/modules/user';
-import { actionCreators as RootActions } from '../../redux/modules/root';
+// import { actionCreators as RootActions } from '../../redux/modules/root';
 import { actionCreators as DeployedAcions } from '../../redux/modules/deployed';
+import { actionCreators as RecentsActions } from '../../redux/modules/recentsInvited';
 
 import UserApi from '../../services/api/UserApi';
 
 import ConfigurationScreenPresenter from './ConfigurationScreenPresenter';
+import { ConfigurationNavigationProps } from '../../Navigations/ConfigurationStack';
 
 export default function ConfigurationScreenContainer(props: any) {
   const { auth, from, isHorizon } = useSelector((state: RootState) => {
     const { isHorizon } = state.orientation;
-
     return {
       auth: state.user.auth,
       from: state.user.from,
@@ -23,33 +24,47 @@ export default function ConfigurationScreenContainer(props: any) {
     };
   });
 
+  const { navigation, route }: ConfigurationNavigationProps<'Configuration'> =
+    props;
+
   const dispatch = useDispatch();
-  const _logout = () => dispatch(UserActions.logout());
-  const _setDestination = (destination: string) =>
-    dispatch(RootActions.setDestination(destination));
+  const _logout = () => {
+    dispatch(UserActions.logout());
+    dispatch(RecentsActions.resetRecents());
+  };
   const _resetDeployedServices = () =>
     dispatch(DeployedAcions.resetDeployedServices());
 
   const isTablet = deviceInfoModule.isTablet();
 
-  const _handleRedirect = (destination: string) => {
-    props.navigation.navigate(destination);
-  };
-
   const _handleLogout = () => {
     _logout();
-    _setDestination('Login');
     _resetDeployedServices();
     from === 'this' && UserApi.logoutRequest(auth);
+    navigation.reset({ routes: [{ name: 'LoginStack' }] });
   };
-  const _goBack= () => {
-    props.navigation.goBack()
-  }
+  const _goBack = () => {
+    navigation.goBack();
+  };
+
+  const handleGoPolicy = () => {
+    navigation.navigate('Policy');
+  };
+
+  const handleGoAwards = () => {
+    navigation.navigate('Awards');
+  };
+
+  const handleGoOpenSource = () => {
+    navigation.navigate('OpenSource');
+  };
   return (
     <ConfigurationScreenPresenter
-      onRedirect={_handleRedirect}
       onLogout={_handleLogout}
       goBack={_goBack}
+      handleGoPolicy={handleGoPolicy}
+      handleGoAwards={handleGoAwards}
+      handleGoOpenSource={handleGoOpenSource}
     />
   );
 }

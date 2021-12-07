@@ -17,7 +17,7 @@ import ButtonMicOff from '../../../assets/buttons/btn_vc_mike_off.png';
 import { RTCView } from 'react-native-webrtc';
 import { getT } from '../../utils/translateManager';
 
-import icBack from '../../../assets/new/icons/ic_back_w.png';
+import icBack from '../../../assets/new/icons/ic_back.png';
 
 export default function SettingScreenPresenter({
   tracks,
@@ -33,9 +33,22 @@ export default function SettingScreenPresenter({
   const t = getT();
   return (
     <Fragment>
-      <SafeAreaView style={{ flex: 0, backgroundColor: '#1c90fb' }} />
+      {/* <SafeAreaView style={{ flex: 0, backgroundColor: '#1c90fb' }} /> */}
       <SafeAreaView style={styles.container}>
-        <View
+        <View style={[styles.topTitle]}>
+          <TouchableOpacity onPress={goBack}>
+            <Image
+              source={icBack}
+              style={{ width: 24, height: 24 }}
+              resizeMode="cover"
+            />
+          </TouchableOpacity>
+          <Text style={styles.HeaderTitleText}>기본 설정</Text>
+          <TouchableOpacity disabled={true}>
+            <Text style={styles.emptyText}>확인</Text>
+          </TouchableOpacity>
+        </View>
+        {/* <View
           style={{
             height: 50,
             backgroundColor: '#1c90fb',
@@ -45,9 +58,7 @@ export default function SettingScreenPresenter({
             alignItems: 'center'
           }}
         >
-          <TouchableOpacity
-            onPress={goBack}
-          >
+          <TouchableOpacity onPress={goBack}>
             <Image
               source={icBack}
               resizeMode={'contain'}
@@ -65,7 +76,7 @@ export default function SettingScreenPresenter({
             {t('option_awards')}
           </Text>
           <View style={{ width: 30 }} />
-        </View> 
+        </View> */}
         <KeyboardAvoidingView
           style={{
             ...styles.container,
@@ -278,5 +289,26 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-around'
     // top: 80
+  },
+  topTitle: {
+    paddingHorizontal: '5%',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
+    width: '100%',
+    height: 50,
+    borderColor: '#d1d1d1',
+    borderBottomWidth: 1
+    // backgroundColor: '#ececec'
+  },
+  HeaderTitleText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#000'
+  },
+  emptyText: {
+    fontSize: 14,
+    fontWeight: 'normal',
+    color: '#00ff0000'
   }
 });

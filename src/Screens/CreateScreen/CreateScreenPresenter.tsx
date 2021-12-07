@@ -21,7 +21,7 @@ import {
 } from '../../components';
 import { getT } from '../../utils/translateManager';
 
-import icBack from '../../../assets/new/icons/ic_back_w.png';
+import icBack from '../../../assets/new/icons/ic_back.png';
 import btnArrowDown from '../../../assets/buttons/btnArrowDown.png';
 
 export interface section {
@@ -66,7 +66,7 @@ function CreateScreenPresenter(props: createProps) {
 
   return (
     <Fragment>
-      <SafeAreaView style={styles.safeArea} />
+      {/* <SafeAreaView style={styles.safeArea} /> */}
       <SafeAreaView style={styles.container}>
         <ActivityIndicator
           animating={indicatorFlag}
@@ -74,7 +74,22 @@ function CreateScreenPresenter(props: createProps) {
           color={'#1c90fb'}
           style={{ position: 'absolute', margin: '50%', zIndex: 10 }}
         />
-        <View style={styles.header}>
+        <View style={[styles.topTitle]}>
+          <TouchableOpacity onPress={onClickBack}>
+            <Image
+              source={icBack}
+              style={{ width: 24, height: 24 }}
+              resizeMode="cover"
+            />
+          </TouchableOpacity>
+          <Text style={styles.HeaderTitleText}>
+            {t('이용약관 및 법률정보')}
+          </Text>
+          <TouchableOpacity disabled={true}>
+            <Text style={styles.emptyText}>확인</Text>
+          </TouchableOpacity>
+        </View>
+        {/* <View style={styles.header}>
           <TouchableOpacity style={{ width: '10%' }} onPress={onClickBack}>
             <Image
               source={icBack}
@@ -95,7 +110,7 @@ function CreateScreenPresenter(props: createProps) {
             {'화상회의 생성하기'}
           </Text>
           <View style={{ width: '10%' }} />
-        </View>
+        </View> */}
         <SearchForm onChange={onSearch} />
         {loaded ? (
           <SectionList
@@ -270,6 +285,27 @@ const styles = StyleSheet.create({
     lineHeight: 14,
     color: 'rgb(140, 140, 140)',
     fontFamily: 'DOUZONEText30'
+  },
+  topTitle: {
+    paddingHorizontal: '5%',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
+    width: '100%',
+    height: 50,
+    borderColor: '#d1d1d1',
+    borderBottomWidth: 1
+    // backgroundColor: 'rgb(235,238,240)'
+  },
+  HeaderTitleText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#000'
+  },
+  emptyText: {
+    fontSize: 14,
+    fontWeight: 'normal',
+    color: '#00ff0000'
   }
 });
 

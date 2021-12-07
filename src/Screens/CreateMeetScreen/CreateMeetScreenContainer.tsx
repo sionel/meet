@@ -25,6 +25,11 @@ interface param {
 type PartialParam = Partial<param>;
 
 export default function CreateMeetScreenContainer(props: any) {
+  const { auth, isHorizon } = useSelector((state: any) => ({
+    auth: state.user.auth,
+    isHorizon: state.orientation.isHorizon
+  }));
+
   const [switchReserve, setSwitchReserve] = useState(false);
   const [switchDelAlram, setSwitchDelAlram] = useState(false);
   const [selectMode, setSelectMode] = useState(false);
@@ -53,7 +58,16 @@ export default function CreateMeetScreenContainer(props: any) {
   const [timeChangeDetect, setTimeChangeDetect] = useState(false);
   const [date, setDate] = useState(new Date());
   const [selectedEmployee, setSelectedEmployee] = useState({
-    member: [{}],
+    member: [
+      {
+        user_name: auth.user_name,
+        rank_name: auth.last_company.rank_name,
+        profile_url: wehagoMainURL +  auth.profile_url,
+        full_path: auth.last_company.full_path,
+        user_no: auth.user_no,
+        is_master: true
+      }
+    ],
     group: {}
   });
   const [sendMessage, setSendMessage] = useState('');
@@ -66,27 +80,18 @@ export default function CreateMeetScreenContainer(props: any) {
   );
   const [dateTimeSeleted, setDateTimeSeleted] = useState(false);
 
-  // const [invited, setInvited] = useState<any[]>([]);
-  // const [inviteText, setInviteText] = useState('');
-  // const [participantList, setParticipantList] = useState<any[]>([]);
-
   const titleRef: RefObject<any> = useRef();
   const sendMsgRef: RefObject<any> = useRef();
   const searchRef: RefObject<any> = useRef();
   const sendEmailRef: RefObject<any> = useRef();
 
-  const { auth, isHorizon } = useSelector((state: any) => ({
-    auth: state.user.auth,
-    isHorizon: state.orientation.isHorizon
-  }));
-
   const t = getT();
 
   const isTablet = deviceInfoModule.isTablet() === true;
 
-  const getAllEmployee = async () => {
+  const getAllEmployee = async (signal: AbortSignal) => {
     const result = await OrganizationApi.getOrganizationTreeAllEmployeeRequest(
-      auth
+      auth, signal
     );
     if (result.error) {
       console.log('조직도를 가져올 수 없습니다.');
@@ -132,6 +137,50 @@ export default function CreateMeetScreenContainer(props: any) {
       setEmployee(employee);
     }
   };
+
+    //조직도 초기화
+    const getOrganizationTree = async (signal: AbortSignal) => {
+      const result = await OrganizationApi.getOrganizationTreeRequest(auth, signal);
+      if (result.error) {
+        //   Alert.alert('조직도', '조직도를 가져올 수 없습니다.');
+        // 조직도 조회 안됨 에러 표현
+        // 생성화면으로 Back
+      } else {
+        const organization = result[0];
+        setorganization(organization);
+      }
+    };
+  
+    //연락처 초기화
+    const getContactsList = async (signal: AbortSignal) => {
+      // 최적화 하려면 여기 코드를 상위로 옮기자
+      const result = await OrganizationApi.getContactsList(auth, signal);
+      if (result.error || !result) {
+        //   Alert.alert('조직도', '조직도를 가져올 수 없습니다.');
+        console.log('연락처를 가져올 수 없습니다.');
+  
+        //   props.navigation.pop();
+        // 생성하기 화면으로
+      } else {
+        const chocungList: { dataindex: number; word: string }[] =
+          result.chosungList;
+        const indexList: any[] = [];
+        type secction = { title: string; data: object[] }[];
+        let arr: secction = [];
+        chocungList.forEach(({ word }) => {
+          arr.push({ title: word, data: [] });
+          indexList.push(word);
+        });
+  
+        const contactsList = [...result.contactsList];
+  
+        contactsList.forEach(item => {
+          const index = indexList.indexOf(item.word);
+          arr[index].data.push(item);
+        });
+        setContacts(arr);
+      }
+    };
 
   const createConference = async () => {
     if (1 < roomName.length) {
@@ -406,76 +455,22 @@ export default function CreateMeetScreenContainer(props: any) {
     setTimeChangeDetect(false);
   };
 
-  //조직도 초기화
-  const getOrganizationTree = async () => {
-    const result = await OrganizationApi.getOrganizationTreeRequest(auth);
-    if (result.error) {
-      //   Alert.alert('조직도', '조직도를 가져올 수 없습니다.');
-      // 조직도 조회 안됨 에러 표현
-      // 생성화면으로 Back
-    } else {
-      const organization = result[0];
-      setorganization(organization);
-    }
-  };
-
-  //연락처 조회
-  const getContactsList = async () => {
-    // 최적화 하려면 여기 코드를 상위로 옮기자
-    const result = await OrganizationApi.getContactsList(auth);
-    if (result.error || !result) {
-      //   Alert.alert('조직도', '조직도를 가져올 수 없습니다.');
-      console.log('연락처를 가져올 수 없습니다.');
-
-      //   props.navigation.pop();
-      // 생성하기 화면으로
-    } else {
-      const chocungList: { dataindex: number; word: string }[] =
-        result.chosungList;
-      const indexList: any[] = [];
-      type secction = { title: string; data: object[] }[];
-      let arr: secction = [];
-      chocungList.forEach(({ word }) => {
-        arr.push({ title: word, data: [] });
-        indexList.push(word);
-      });
-
-      const contactsList = [...result.contactsList];
-
-      contactsList.forEach(item => {
-        const index = indexList.indexOf(item.word);
-        arr[index].data.push(item);
-      });
-      setContacts(arr);
-    }
-  };
-
-  const dataLoad = async () => {
+  const dataLoad = async (signal: AbortSignal) => {
     setIsOrgDataLoaded(true);
-
-    getAllEmployee();
-    await getOrganizationTree();
-    await getContactsList();
-
+    await getAllEmployee(signal);
+    await getOrganizationTree(signal);
+    await getContactsList(signal);
     setIsOrgDataLoaded(false);
   };
 
   useEffect(() => {
+    const controller = new AbortController();
     setSelectMode(false);
-    dataLoad();
-    setSelectedEmployee({
-      member: [
-        {
-          user_name: auth.user_name,
-          rank_name: auth.last_company.rank_name,
-          profile_url: wehagoMainURL +  auth.profile_url,
-          full_path: auth.last_company.full_path,
-          user_no: auth.user_no,
-          is_master: true
-        }
-      ],
-      group: {}
-    });
+    const { signal } = controller;
+    dataLoad(signal);
+    return () => {
+      controller.abort();
+    }
   }, []);
 
   const roomNameChange = (name: string) => {

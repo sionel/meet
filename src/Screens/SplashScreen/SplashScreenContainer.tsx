@@ -21,7 +21,7 @@ import { actionCreators as AlertAcions } from '../../redux/modules/alert';
 import { actionCreators as IndicatorAcions } from '../../redux/modules/indicator';
 import { actionCreators as RootActions } from '../../redux/modules/root';
 import { actionCreators as RecentsActions } from '../../redux/modules/recentsInvited';
-import { MeetNavigationProps } from '../../Navigations/RootNavigation_new';
+import { MeetNavigationProps } from '../../Navigations/RootNavigation';
 // const iswehagov = WEHAGO_ENV === 'WEHAGOV';
 
 // const JailMonkey =

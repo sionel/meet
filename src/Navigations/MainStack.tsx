@@ -3,41 +3,41 @@ import {
   createStackNavigator,
   StackScreenProps,
 } from '@react-navigation/stack';
-// import Home from '../Screens/HomeScreen';
+
 import CreateConference from '../Screens/CreateScreen';
 import DirectCreateConference from '../Screens/CreateMeetScreen';
 import ModifyConference from '../Screens/ConferenceModifyScreen';
 import InviteCode from '../Screens/InviteCodeScreen';
-import HomeStack from './HomeStack';
-import { MeetParamList } from './RootNavigation_new';
+import Home from '../Screens/HomeScreen';
+import ConfigurationStack from './ConfigurationStack';
 
-import ConfigurationScreen from '../Screens/ConfigurationScreen';
+import { MeetParamList } from './RootNavigation';
 
 type MainStackParamList = MeetParamList & {
-  HomeStack: undefined;
+  Home: undefined;
   CreateConference: undefined;
   DirectCreateConference: undefined;
   ModifyConference: undefined;
   InviteCode:undefined;
-  Configuration:undefined;
+  ConfigurationStack:undefined;
 };
 
 export type MainNavigationProps <T extends keyof MainStackParamList> =
 StackScreenProps<MainStackParamList, T>;
 
 
-const Stack = createStackNavigator<MainStackParamList>();
+const MainStacks = createStackNavigator<MainStackParamList>();
 
 export default function MainStack() {
-
+  // debugger
   return (
-    <Stack.Navigator initialRouteName="HomeStack" screenOptions={{headerShown: false}}>
-      <Stack.Screen name="HomeStack" component={HomeStack} />
-      <Stack.Screen name="CreateConference" component={CreateConference} />
-      <Stack.Screen name="DirectCreateConference" component={DirectCreateConference} />
-      <Stack.Screen name="ModifyConference" component={ModifyConference} />
-      <Stack.Screen name="InviteCode" component={InviteCode} />
-      <Stack.Screen name="Configuration" component={ConfigurationScreen} />
-    </Stack.Navigator>
+    <MainStacks.Navigator initialRouteName="Home" screenOptions={{headerShown: false}}>
+      <MainStacks.Screen name="Home" component={Home} />
+      <MainStacks.Screen name="CreateConference" component={CreateConference} />
+      <MainStacks.Screen name="DirectCreateConference" component={DirectCreateConference} />
+      <MainStacks.Screen name="ModifyConference" component={ModifyConference} />
+      <MainStacks.Screen name="InviteCode" component={InviteCode} />
+      <MainStacks.Screen name="ConfigurationStack" component={ConfigurationStack} />
+    </MainStacks.Navigator>
   );
 }

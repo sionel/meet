@@ -1,14 +1,14 @@
 import React from 'react';
 import Orientation from 'react-native-orientation-locker';
 import { getT } from '../../utils/translateManager';
-import RootNavigation from '../..//Navigations/RootNavigation';
-import Deeplink1Navigation from '../../Navigations/Deeplink1Navigation';
-import Deeplink2Navigation from '../../Navigations/Deeplink2Navigation';
-import LoginNavigation from '../../Navigations/LoginNavigation';
+// import RootNavigation from '../..//Navigations/RootNavigation';
+// import Deeplink1Navigation from '../../Navigations/Deeplink1Navigation';
+// import Deeplink2Navigation from '../../Navigations/Deeplink2Navigation';
+// import LoginNavigation from '../../Navigations/LoginNavigation';
 import CompanySelect from '../../components/CompanySelect';
 import AppIntroSlide from '../../components/AppIntroSlide';
 import { StatusBar, View } from 'react-native';
-import RootNavigation_new from '../../Navigations/RootNavigation_new';
+import RootNavigation from '../../Navigations/RootNavigation';
 
 const MainScreenPresenter = (props: any) => {
   
@@ -37,7 +37,7 @@ const MainScreenPresenter = (props: any) => {
   //     return <Deeplink2Navigation screenProps={screenProps} />;
   // }
 
-  return <RootNavigation_new />
+  return <RootNavigation />
 };
 
 export default MainScreenPresenter;

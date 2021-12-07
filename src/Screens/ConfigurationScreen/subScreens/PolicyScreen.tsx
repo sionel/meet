@@ -17,10 +17,12 @@ import { WEHAGO_TYPE } from '../../../../config';
 import { getT } from '../../../utils/translateManager';
 import { RootState } from '../../../redux/configureStore';
 
-import icBack from '../../../../assets/new/icons/ic_back_w.png';
+import icBack from '../../../../assets/new/icons/ic_back.png';
+import icArrowRight from '../../../../assets/new/icons/ic_arrow_right.png';
+import { ConfigurationNavigationProps } from '../../../Navigations/ConfigurationStack';
 
 export default function PolicyScreen(props: any) {
-  const { navigation } = props;
+  const { navigation, route }: ConfigurationNavigationProps<'Policy'> = props;
   const auth = useSelector((state: RootState) => state.user['auth']);
   const membership = auth.last_company.membership_code;
   const t = getT();
@@ -53,67 +55,43 @@ export default function PolicyScreen(props: any) {
   };
 
   return (
-    <Fragment>
-      <SafeAreaView style={{ flex: 0, backgroundColor: '#1c90fb' }} />
-      <SafeAreaView style={styles.container}>
-        <View
-          style={{
-            height: 50,
-            backgroundColor: '#1c90fb',
-            flexDirection: 'row',
-            paddingHorizontal: 20,
-            justifyContent: 'center',
-            alignItems: 'center'
-          }}
-        >
+    <SafeAreaView style={styles.container}>
+      <View style={[styles.topTitle]}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Image
+            source={icBack}
+            style={{ width: 24, height: 24 }}
+            resizeMode="cover"
+          />
+        </TouchableOpacity>
+        <Text style={styles.HeaderTitleText}>{t('이용약관 및 법률정보')}</Text>
+        <TouchableOpacity disabled={true}>
+          <Text style={styles.emptyText}>확인</Text>
+        </TouchableOpacity>
+      </View>
+      <FlatList
+        data={Object.keys(config)}
+        keyExtractor={item => item}
+        renderItem={({ item }) => (
           <TouchableOpacity
-            onPress={() => {
-              props.navigation.goBack();
-            }}
+            activeOpacity={0.6}
+            onPress={config[item].action}
+            style={styles.columnContainer}
           >
-            <Image
-              source={icBack}
-              resizeMode={'contain'}
-              style={{ width: 30 }}
-            />
-          </TouchableOpacity>
-          <Text
-            style={{
-              flex: 1,
-              textAlign: 'center',
-              fontSize: 18,
-              color: '#fff'
-            }}
-          >
-            {'기본 설정'}
-          </Text>
-          <View style={{ width: 30 }} />
-        </View>
-
-        <FlatList
-          data={Object.keys(config)}
-          keyExtractor={item => item}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              activeOpacity={0.6}
-              onPress={config[item].action}
-              style={styles.columnContainer}
+            <Text
+              style={{
+                flex: 1,
+                fontFamily: 'DOUZONEText30',
+                marginHorizontal: 5
+              }}
             >
-              <Text
-                style={{
-                  flex: 1,
-                  fontFamily: 'DOUZONEText30',
-                  marginHorizontal: 5
-                }}
-              >
-                {config[item].title}
-              </Text>
-              {config[item].rightSide}
-            </TouchableOpacity>
-          )}
-        />
-      </SafeAreaView>
-    </Fragment>
+              {config[item].title}
+            </Text>
+            {config[item].rightSide}
+          </TouchableOpacity>
+        )}
+      />
+    </SafeAreaView>
   );
 }
 
@@ -127,7 +105,28 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderBottomWidth: 1,
-    borderBottomColor: '#ececec',
+    borderBottomColor: '#d1d1d1',
     paddingHorizontal: 10
+  },
+  topTitle: {
+    paddingHorizontal: '5%',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
+    width: '100%',
+    height: 50,
+    borderColor: '#d1d1d1',
+    borderBottomWidth: 1,
+    // backgroundColor: 'rgb(235,238,240)'
+  },
+  HeaderTitleText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#000'
+  },
+  emptyText: {
+    fontSize: 14,
+    fontWeight: 'normal',
+    color: '#00ff0000'
   }
 });

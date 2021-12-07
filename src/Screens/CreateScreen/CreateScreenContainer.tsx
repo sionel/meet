@@ -48,6 +48,8 @@ export default function CreateScreenContainer(props: any) {
     };
   });
 
+  const { navigation }: MainNavigationProps<'CreateConference'> = props;
+
   useEffect(() => {
     _getWetalkList();
   }, []);
@@ -146,7 +148,7 @@ export default function CreateScreenContainer(props: any) {
     dispatch(AlertActions.setAlert(params));
 
   const onClickBack = () => {
-    props.navigation.goBack();
+    navigation.goBack();
   };
   const onClickHeader = (section: section) => {
     Animated.timing(section.height, {
@@ -194,7 +196,6 @@ export default function CreateScreenContainer(props: any) {
   };
 
   const _createConferenceRoom = async (conference: any) => {
-    console.log(conference);
     setIndicatorFlag(true);
     const { room_id } = conference;
     const {
@@ -237,15 +238,14 @@ export default function CreateScreenContainer(props: any) {
       const videoRoomId = sendWetalkResult.resultData.chatList[0].mobile_key;
 
       // 토큰받고
-      const roomToken = (await MeetApi.getMeetRoomToken(auth, videoRoomId))
-        .resultData;
+      // const roomToken = (await MeetApi.getMeetRoomToken(auth, videoRoomId))
+      //   .resultData;
 
-      let callType = 3;
-      let isCreator;
+      // let callType = 3;
+      // let isCreator;
       setIndicatorFlag(false);
 
       // 대화방에 참여한다.
-      const { navigation }: MainNavigationProps<'CreateConference'> = props;
       // navigation.navigate('Home');
       //TODO: 화상대화 포인트이용해서 필요할경우 state
       navigation.navigate('SettingView',{
