@@ -98,7 +98,7 @@ export default function AwardsScreen(props: any) {
 AwardsScreen.defaultProps = {};
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
+  container: { flex: 1, backgroundColor:'rgb(235,238,240)' },
   img: {
     resizeMode: 'contain',
     width: 80,

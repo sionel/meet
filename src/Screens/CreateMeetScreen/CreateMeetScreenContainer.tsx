@@ -62,7 +62,7 @@ export default function CreateMeetScreenContainer(props: any) {
       {
         user_name: auth.user_name,
         rank_name: auth.last_company.rank_name,
-        profile_url: wehagoMainURL +  auth.profile_url,
+        profile_url: wehagoMainURL + auth.profile_url,
         full_path: auth.last_company.full_path,
         user_no: auth.user_no,
         is_master: true
@@ -91,10 +91,11 @@ export default function CreateMeetScreenContainer(props: any) {
 
   const getAllEmployee = async (signal: AbortSignal) => {
     const result = await OrganizationApi.getOrganizationTreeAllEmployeeRequest(
-      auth, signal
+      auth,
+      signal
     );
     if (result.error) {
-      console.log('조직도를 가져올 수 없습니다.');
+      console.log('조직정보를 가져올 수 없습니다.');
       // Alert.alert('조직도', '조직도를 가져올 수 없습니다.');
     } else {
       const company = result;
@@ -138,49 +139,53 @@ export default function CreateMeetScreenContainer(props: any) {
     }
   };
 
-    //조직도 초기화
-    const getOrganizationTree = async (signal: AbortSignal) => {
-      const result = await OrganizationApi.getOrganizationTreeRequest(auth, signal);
-      if (result.error) {
-        //   Alert.alert('조직도', '조직도를 가져올 수 없습니다.');
-        // 조직도 조회 안됨 에러 표현
-        // 생성화면으로 Back
-      } else {
-        const organization = result[0];
-        setorganization(organization);
-      }
-    };
-  
-    //연락처 초기화
-    const getContactsList = async (signal: AbortSignal) => {
-      // 최적화 하려면 여기 코드를 상위로 옮기자
-      const result = await OrganizationApi.getContactsList(auth, signal);
-      if (result.error || !result) {
-        //   Alert.alert('조직도', '조직도를 가져올 수 없습니다.');
-        console.log('연락처를 가져올 수 없습니다.');
-  
-        //   props.navigation.pop();
-        // 생성하기 화면으로
-      } else {
-        const chocungList: { dataindex: number; word: string }[] =
-          result.chosungList;
-        const indexList: any[] = [];
-        type secction = { title: string; data: object[] }[];
-        let arr: secction = [];
-        chocungList.forEach(({ word }) => {
-          arr.push({ title: word, data: [] });
-          indexList.push(word);
-        });
-  
-        const contactsList = [...result.contactsList];
-  
-        contactsList.forEach(item => {
-          const index = indexList.indexOf(item.word);
-          arr[index].data.push(item);
-        });
-        setContacts(arr);
-      }
-    };
+  //조직도 초기화
+  const getOrganizationTree = async (signal: AbortSignal) => {
+    const result = await OrganizationApi.getOrganizationTreeRequest(
+      auth,
+      signal
+    );
+    if (result.error) {
+      //   Alert.alert('조직도', '조직도를 가져올 수 없습니다.');
+      // 조직도 조회 안됨 에러 표현
+      console.log('조직도를 가져올 수 없습니다.');
+      // 생성화면으로 Back
+    } else {
+      const organization = result[0];
+      setorganization(organization);
+    }
+  };
+
+  //연락처 초기화
+  const getContactsList = async (signal: AbortSignal) => {
+    // 최적화 하려면 여기 코드를 상위로 옮기자
+    const result = await OrganizationApi.getContactsList(auth, signal);
+    if (result.error || !result) {
+      //   Alert.alert('조직도', '조직도를 가져올 수 없습니다.');
+      console.log('연락처를 가져올 수 없습니다.');
+
+      //   props.navigation.pop();
+      // 생성하기 화면으로
+    } else {
+      const chocungList: { dataindex: number; word: string }[] =
+        result.chosungList;
+      const indexList: any[] = [];
+      type secction = { title: string; data: object[] }[];
+      let arr: secction = [];
+      chocungList.forEach(({ word }) => {
+        arr.push({ title: word, data: [] });
+        indexList.push(word);
+      });
+
+      const contactsList = [...result.contactsList];
+
+      contactsList.forEach(item => {
+        const index = indexList.indexOf(item.word);
+        arr[index].data.push(item);
+      });
+      setContacts(arr);
+    }
+  };
 
   const createConference = async () => {
     if (1 < roomName.length) {
@@ -259,7 +264,7 @@ export default function CreateMeetScreenContainer(props: any) {
           end_date_time: end_time
         };
       }
-      
+
       const result = await MeetApi.createMeetRoom(auth, params);
       if (result) {
         onHandleBack();
@@ -465,12 +470,13 @@ export default function CreateMeetScreenContainer(props: any) {
 
   useEffect(() => {
     const controller = new AbortController();
-    setSelectMode(false);
+    // setSelectMode(false);
     const { signal } = controller;
     dataLoad(signal);
     return () => {
+      setIsOrgDataLoaded(false);
       controller.abort();
-    }
+    };
   }, []);
 
   const roomNameChange = (name: string) => {
@@ -495,7 +501,7 @@ export default function CreateMeetScreenContainer(props: any) {
     if (sendMsgRef.current?.isFocused()) sendMsgRef.current.blur();
     else if (titleRef.current?.isFocused()) titleRef.current.blur();
     else if (searchRef.current?.isFocused()) searchRef.current.blur();
-    else if(sendEmailRef.current?.isFocused()) sendEmailRef.current.blur();
+    else if (sendEmailRef.current?.isFocused()) sendEmailRef.current.blur();
   };
 
   const exitDateTime = () => {
