@@ -29,9 +29,9 @@ function ContentContainer(props: any) {
   //   speaker: 2,
   //   objectFit: 'contain',
 
-  // const [orientation, setOrientation] = useState<'vertical' | 'horizontal'>(
-  //   'vertical'
-  // );
+  const [orientation, setOrientation] = useState<'vertical' | 'horizontal'>(
+    'vertical'
+  );
   const [isVideoReverse, setIsVideoReverse] = useState(false);
   const [speaker, setSpeaker] = useState(2);
   const [objectFit, setObjectFit] = useState('contain');
@@ -44,16 +44,14 @@ function ContentContainer(props: any) {
     drawingMode,
     documentListMode,
     attributes,
-    localPipMode,
-    orientation
+    localPipMode
   } = useSelector((state: RootState) => {
     return {
       conferenceMode: state.local.conferenceMode,
-      drawingMode: state.documentShare.drawingMode,
-      documentListMode: state.documentShare.documentListMode,
+      drawingMode: state.mainUser.drawingMode,
+      documentListMode: state.mainUser.documentListMode,
       attributes: state.documentShare.attributes,
-      localPipMode: state.local.pipMode,
-      orientation: state.orientation.orientation
+      localPipMode: state.local.pipMode
     };
   });
 
@@ -75,12 +73,10 @@ function ContentContainer(props: any) {
     };
   }, []);
 
-  // useEffect(() => {
-  //   const m = getConferenceManager();
-  //   if (mainUser.id !== 'localUser') m?.setReceiverConstraints(mainUser.id);
-  // }, [mainUser]);
-
-
+  useEffect(() => {
+    const m = getConferenceManager();
+    if (mainUser.id !== 'localUser') m?.setReceiverConstraints(mainUser.id);
+  }, [mainUser]);
   const _handleSetRef = ref => {
     if (ref && RNBS !== ref) RNBS = ref;
   };
@@ -97,7 +93,7 @@ function ContentContainer(props: any) {
     const { width, height } = Dimensions.get('window');
     const currentOrientation = height > width ? 'vertical' : 'horizontal';
     if (orientation !== currentOrientation) {
-      // setOrientation(currentOrientation);
+      setOrientation(currentOrientation);
       setHeight(Math.max(width, height));
     }
   };
@@ -119,7 +115,7 @@ function ContentContainer(props: any) {
     }
   };
 
-  return attributes ? (
+  return props.attributes ? (
     <FileSharing
       {...props}
       height={height}
@@ -132,6 +128,7 @@ function ContentContainer(props: any) {
   ) : (
     <ContentPresenter
       {...{
+        orientation,
         isVideoReverse,
         speaker,
         objectFit,
@@ -145,7 +142,6 @@ function ContentContainer(props: any) {
         mainUser,
         conferenceMode
       }}
-      orientation={orientation}
       {...props}
       hasNotch={hasNotch}
       toggleConferenceMode={_toggleConferenceMode}

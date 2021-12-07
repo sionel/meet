@@ -25,6 +25,10 @@ const ConferenceScreenPresenter = props => {
   if (localPipMode !== pipMode) {
     dispatch({ type: 'local.CONFERENCE_PIP_MODE', pipMode });
   }
+  // console.log('ConferenceScreenPresenter');
+  // console.log(props.mainUser);
+  // console.log(props.connection);
+
   return (
     // <SafeAreaView style={{ flex: 1 }}>
       <View style={{ flex: 1 }}>

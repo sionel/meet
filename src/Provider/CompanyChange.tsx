@@ -30,7 +30,6 @@ export default function CompanyChange() {
     const contentList = auth?.employee_list.map((company: any) => ({
       name: company.company_name_kr,
       onClick: () => {
-        debugger
         String(company.company_no) !== String(auth.cno)
           ? changeCompanyRequest(auth, {
               company_no: company.company_no,
@@ -58,7 +57,7 @@ export default function CompanyChange() {
   useEffect(() => {
     if (prevAuth === null) {
       setPrevAuth(auth);
-    } else if (prevAuth.cno !== auth.cno) {
+    } else if (prevAuth.cno !== auth.last_access_company_no) {
       RNrestart.Restart();
     }
   }, [auth]);

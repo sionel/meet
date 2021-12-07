@@ -2,7 +2,7 @@
  * MainContainer
  * 최상위화면 컨테이너
  */
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { View, SafeAreaView } from 'react-native';
 import MainPresenter from './MainPresenter';
 

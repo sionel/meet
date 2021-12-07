@@ -88,6 +88,9 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.2.0'
     
+    implementation 'com.facebook.fresco:fresco:1.+'
+    implementation 'com.facebook.fresco:animated-gif:1.+'
+    
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
 
     if (!rootProject.ext.libreBuild) {

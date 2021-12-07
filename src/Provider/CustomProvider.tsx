@@ -196,7 +196,7 @@ export default function CustomProvider(props: any) {
 
   useDeviceOrientationChange(_setOrientation);
   return (
-    <View style={{ flex: 1, zIndex: 9 }}>
+    <View style={{ flex: 1,zIndex:9 }}>
       {alertVisible && <Alert />}
       {indicatorVisible && <Indicator />}
       {selectCompanyVisible && <CompanyChange />}

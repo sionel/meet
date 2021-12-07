@@ -13,13 +13,14 @@ import SettingView from '../Screens/SettingScreen';
 import ConferenceStateView from '../Screens/ConferenceStateScreen';
 import ConferenceView from '../Screens/ConferenceScreen';
 
+import SelectCompanyScreen from '../Screens/SelectCompanyScreen';
+
 import SplashView from '../Screens/SplashScreen';
-
-
 
 // roomToken?: string;
 export type MeetParamList = {
   SplashView: undefined;
+  SelectCompany: undefined;
   LoginStack: undefined;
   MainStack: undefined;
   ConferenceStateView: {
