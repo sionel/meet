@@ -501,11 +501,15 @@ const CreateMeetScreenPresenter = (props: any) => {
                   const isMaster = item.is_master;
                   return (
                     <View style={styles.participantList}>
-                      <View
+                      <TouchableOpacity
                         style={[
                           styles.profileView,
                           isTablet && { width: 46, height: 46 }
                         ]}
+                        onPress={() => {
+                          clickDeleteUser(item);
+                        }}
+                        disabled={item.user_no === auth.user_no}
                       >
                         <View
                           style={[
@@ -518,16 +522,10 @@ const CreateMeetScreenPresenter = (props: any) => {
                           {item.user_no === auth.user_no ? (
                             <Text style={styles.myText}>나</Text>
                           ) : (
-                            <TouchableOpacity
-                              onPress={() => {
-                                clickDeleteUser(item);
-                              }}
-                            >
-                              <Image
-                                source={icCancel_W}
-                                style={styles.icCancelUser}
-                              />
-                            </TouchableOpacity>
+                            <Image
+                              source={icCancel_W}
+                              style={styles.icCancelUser}
+                            />
                           )}
                         </View>
                         <Image
@@ -539,7 +537,7 @@ const CreateMeetScreenPresenter = (props: any) => {
                           }}
                           resizeMode={'cover'}
                         />
-                      </View>
+                      </TouchableOpacity>
                       <View
                         style={[styles.infoBox, isHorizon && { width: '70%' }]}
                       >

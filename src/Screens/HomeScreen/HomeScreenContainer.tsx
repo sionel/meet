@@ -130,18 +130,17 @@ export default function HomeScreenContainer(props: any) {
 
   const dispatch = useDispatch();
   const _setRoomId = (id: string) => dispatch(ConferenceActions.setRoomId(id));
-  
+
   const _handleLogout = () => {
     dispatch(UserActions.logout());
     dispatch(RecentsActions.resetRecents());
   };
 
-  const { navigation, route }: MainNavigationProps<'MainStack'> = props;
+  const { navigation }: MainNavigationProps<'MainStack'> = props;
 
   const _openCompany = () => dispatch(SelectCompanyActions.openCompany());
   const changeCompanyRequest = (auth: any, company: any) =>
     dispatch(UserActions.changeCompanyRequest(auth, company));
-    
 
   const isTablet = deviceInfoModule.isTablet();
 
@@ -346,7 +345,7 @@ export default function HomeScreenContainer(props: any) {
                 id: conference.room_id,
                 externalData: null,
                 from: 'meet',
-                accessType:'auth',
+                accessType: 'auth'
               })
             // _handleRedirect('ConferenceState', {
             //   id: conference.room_id,
@@ -503,7 +502,24 @@ export default function HomeScreenContainer(props: any) {
     const cancle = {
       name: '예약 취소',
       icon1: icCancel,
-      onClick: () => {}
+      onClick: async () => {
+        const result = await MeetApi.deleteConferenceRoom(
+          auth,
+          conference.room_id
+        );
+
+        if (result) {
+          setBottomPopup({
+            show: false,
+            contentList: [],
+            title: '',
+            onClickOutside: _onClickOutside
+          });
+          _getConferences();
+        } else {
+          console.log('예약 취소중에 오류가 발생했습니다.');
+        }
+      }
     };
 
     const contentList = [];
@@ -683,7 +699,6 @@ export default function HomeScreenContainer(props: any) {
   const handleConpanyChange = () => {
     _openCompany();
   };
-
 
   const handleClickSetting = () => {
     navigation.navigate('ConfigurationStack');

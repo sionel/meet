@@ -12,6 +12,7 @@ import { getT } from '../../utils/translateManager';
 import { RootState } from '../../redux/configureStore';
 import deviceInfoModule from 'react-native-device-info';
 import { wehagoDummyImageURL, wehagoMainURL } from '../../utils';
+import { MainNavigationProps } from '../../Navigations/MainStack';
 
 interface accessUserParam {
   type: 'portal_id' | 'email';
@@ -122,6 +123,8 @@ export default function ConferenceModfiyScreenContainer(props: any) {
     roomId: state.conference.roomId
   }));
 
+  const { navigation }: MainNavigationProps<'ModifyConference'> = props;
+
   const t = getT();
 
   const isTablet = deviceInfoModule.isTablet() === true;
@@ -214,9 +217,9 @@ export default function ConferenceModfiyScreenContainer(props: any) {
     setSendMessage(invite_message ? invite_message : '');
   };
 
-  const getAllEmployee = async () => {
+  const getAllEmployee = async (signal: AbortSignal) => {
     const result = await OrganizationApi.getOrganizationTreeAllEmployeeRequest(
-      auth
+      auth, signal
     );
     if (result.error) {
       console.log('조직도를 가져올 수 없습니다.');
@@ -507,8 +510,8 @@ export default function ConferenceModfiyScreenContainer(props: any) {
   };
 
   //조직도 초기화
-  const getOrganizationTree = async () => {
-    const result = await OrganizationApi.getOrganizationTreeRequest(auth);
+  const getOrganizationTree = async (signal: AbortSignal) => {
+    const result = await OrganizationApi.getOrganizationTreeRequest(auth, signal);
     if (result.error) {
       //   Alert.alert('조직도', '조직도를 가져올 수 없습니다.');
       // 조직도 조회 안됨 에러 표현
@@ -520,9 +523,9 @@ export default function ConferenceModfiyScreenContainer(props: any) {
   };
 
   //연락처 조회
-  const getContactsList = async () => {
+  const getContactsList = async (signal: AbortSignal) => {
     // 최적화 하려면 여기 코드를 상위로 옮기자
-    const result = await OrganizationApi.getContactsList(auth);
+    const result = await OrganizationApi.getContactsList(auth, signal);
     if (result.error || !result) {
       //   Alert.alert('조직도', '조직도를 가져올 수 없습니다.');
       console.log('연락처를 가져올 수 없습니다.');
@@ -550,21 +553,34 @@ export default function ConferenceModfiyScreenContainer(props: any) {
     }
   };
 
-  const dataLoad = async () => {
+  const dataLoad = (signal: AbortSignal) => {
     setIsOrgDataLoaded(true);
 
-    getAllEmployee();
-    await getOrganizationTree();
-    await getContactsList();
-
-    setIsOrgDataLoaded(false);
+    Promise.all([
+      getAllEmployee(signal),
+      getOrganizationTree(signal),
+      getContactsList(signal)
+    ]).then(()=>{
+      setIsOrgDataLoaded(false);
+    })
+    
   };
 
   useEffect(() => {
-    setSelectMode(false);
     _getReservationInfos(roomId);
-    dataLoad();
   }, []);
+
+  useEffect(() => {
+    if (!isNormal) {
+      const controller = new AbortController();
+      const { signal } = controller;
+      dataLoad(signal);
+      return () => {
+        setIsOrgDataLoaded(false);
+        controller.abort();
+      };
+    }
+  }, [isNormal])
 
   const roomNameChange = (name: string) => {
     let rn = name;
@@ -581,7 +597,7 @@ export default function ConferenceModfiyScreenContainer(props: any) {
   };
 
   const onHandleBack = () => {
-    props.navigation.goBack();
+    navigation.goBack();
   };
 
   const onFocusOut = () => {

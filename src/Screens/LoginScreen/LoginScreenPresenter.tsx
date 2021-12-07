@@ -42,6 +42,7 @@ const LoginScreenPresenter = (props: any) => {
       <KeyboardAwareScrollView
         contentContainerStyle={{ flexGrow: 1 }}
         onKeyboardDidHide={onFocusOutInput}
+        bounces={false}
       >
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
@@ -50,6 +51,7 @@ const LoginScreenPresenter = (props: any) => {
             minHeight: isHorizon && !isTablet ? 350 : 700
           }}
           keyboardShouldPersistTaps="never"
+          bounces={false}
         >
           <View
             style={[
