@@ -211,7 +211,7 @@
     "conference_wating_5": "회의 참여가 거절될 경우 입장을 재요청 할 수 있습니다.",
     "selectcompany_title_packnotpurchase": "화상회의팩 미구매 회사",
     "selectcompany_title_notpurchase": "화상회의 미구매 회사",
-    "selectcompany_message": "화상회의 서비스를 구매하지 않은 회사입니다.\n서시브 구매 후 이용하세요",
+    "selectcompany_message": "화상회의 서비스를 구매하지 않은 회사입니다.\n서비스 구매 후 이용하세요",
     "selectcompany_select": "회사 선택",
     "selectcompany_logout": "로그아웃",
     "common_exit": "종료",

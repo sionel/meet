@@ -176,8 +176,11 @@ const SplashScreenContainer = ({
         onLogout();
         navigation.reset({ routes: [{ name: 'LoginStack' }] });
       } else {
+        console.log('auth');
+        console.log(auth.last_access_company_no);
+        console.log(auth.last_company);
         const flag: any = await serviceCheck(auth);
-
+        console.log(flag);
         if (flag) {
           navigation.reset({ routes: [{ name: 'MainStack' }] });
         } else {
@@ -280,7 +283,7 @@ const SplashScreenContainer = ({
     // 회사 상태 조회 후 진행
     const statusCheck = await ServiceCheckApi.companyStatusCheck(
       auth,
-      auth.last_company
+      auth.last_access_company_no
     );
     // 이상이 없는 회사일 경우 로그인 정상 진행
     if (statusCheck && statusCheck.code === 200) {

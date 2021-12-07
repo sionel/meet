@@ -242,10 +242,13 @@ function changeCompanyRequest(auth, company) {
 
 function applyChangeCompany(state, action) {
   const { company } = action;
+  console.log('applyChangeCompany');
+  console.log(company);
   return {
     ...state,
     auth: {
       ...state.auth,
+      cno: company.company_no,
       last_company: company,
       last_access_company_no: company.company_no
     }
