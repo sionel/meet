@@ -13,13 +13,14 @@ import SettingView from '../Screens/SettingScreen';
 import ConferenceStateView from '../Screens/ConferenceStateScreen';
 import ConferenceView from '../Screens/ConferenceScreen';
 
+import SelectCompanyScreen from '../Screens/SelectCompanyScreen';
+
 import SplashView from '../Screens/SplashScreen';
-
-
 
 // roomToken?: string;
 export type MeetParamList = {
   SplashView: undefined;
+  SelectCompany: undefined;
   LoginStack: undefined;
   MainStack: undefined;
   ConferenceStateView: {
@@ -65,6 +66,7 @@ export default function RootNavigation_new() {
         screenOptions={{ headerShown: false }}
       >
         <Stack.Screen name="SplashView" component={SplashView} />
+        <Stack.Screen name="SelectCompany" component={SelectCompanyScreen} />
         <Stack.Screen name="LoginStack" component={LoginStack} />
         <Stack.Screen name="MainStack" component={MainStack} />
         <Stack.Screen

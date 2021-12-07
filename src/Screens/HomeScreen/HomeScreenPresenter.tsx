@@ -181,14 +181,13 @@ const HomeScreenPresenter = (props: any) => {
 
         {/* 진행중인 화상회의 */}
         {ongoingConference.length > 0 && (
-          <View
-            style={[
-              styles.ongoingContainer,
-              ,
-              { paddingHorizontal: isTablet ? 40 : 20 }
-            ]}
-          >
-            <View style={styles.goingTextContainer}>
+          <View style={styles.ongoingContainer}>
+            <View
+              style={[
+                styles.goingTextContainer,
+                { paddingHorizontal: isTablet ? 40 : 20 }
+              ]}
+            >
               <Text style={styles.goingText}>{'진행중인 화상회의'}</Text>
               <Text
                 style={[
@@ -411,7 +410,6 @@ const HomeScreenPresenter = (props: any) => {
           </View>
         )}
 
-
         {bottomPopup.show && (
           <BottomPopup {...bottomPopup} isHorizon={isHorizon} />
         )}
@@ -500,8 +498,7 @@ const styles = StyleSheet.create({
   ongoingContainer: {
     width: '100%',
     // height: '28%',
-    paddingVertical: 20,
-    paddingHorizontal: 40
+    paddingVertical: 20
   },
   goingTextContainer: {
     justifyContent: 'flex-start',

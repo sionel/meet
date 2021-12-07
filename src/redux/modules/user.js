@@ -64,7 +64,7 @@ function reducer(state = initialState, action) {
         isLogin: false,
         permission: false,
         autoLogin: false,
-        from:''
+        from: ''
       };
     case NETWORK_DISCONNECT:
       return { ...state, isLogin: false };
@@ -172,8 +172,16 @@ function sessionCheck(session = true) {
  * logout
  */
 function logout() {
-  return {
-    type: LOGOUT
+  return dispatch => {
+    dispatch({
+      type: LOGOUT
+    });
+    dispatch({
+      type: 'recentInvited.RESET_RECENTS'
+    });
+    dispatch({
+      type: 'deployed.RESET'
+    });
   };
 }
 
@@ -223,7 +231,6 @@ function changeCompany(company) {
 function changeCompanyRequest(auth, company) {
   return async dispatch => {
     const checkResult = await UserApi.changeCompany(auth, company);
-    debugger
     if (checkResult.resultData !== 1) {
       // alert('회사변경 중 문제 발생');
       return checkResult;
@@ -235,7 +242,6 @@ function changeCompanyRequest(auth, company) {
 
 function applyChangeCompany(state, action) {
   const { company } = action;
-  debugger
   return {
     ...state,
     auth: {

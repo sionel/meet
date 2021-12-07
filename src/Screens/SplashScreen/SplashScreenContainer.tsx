@@ -10,7 +10,6 @@ import { querystringParser } from '../../utils';
 import jwt_decode from 'jwt-decode';
 
 import { getT } from '../../utils/translateManager';
-import { getConferenceManager } from '../../utils/ConferenceManager';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/configureStore';
 
@@ -19,7 +18,6 @@ import { actionCreators as DocumentShareActions } from '../../redux/modules/docu
 import { actionCreators as WedriveAcions } from '../../redux/modules/wedrive';
 import { actionCreators as AlertAcions } from '../../redux/modules/alert';
 import { actionCreators as IndicatorAcions } from '../../redux/modules/indicator';
-import { actionCreators as RootActions } from '../../redux/modules/root';
 import { actionCreators as RecentsActions } from '../../redux/modules/recentsInvited';
 import { MeetNavigationProps } from '../../Navigations/RootNavigation_new';
 // const iswehagov = WEHAGO_ENV === 'WEHAGOV';
@@ -30,8 +28,7 @@ import { MeetNavigationProps } from '../../Navigations/RootNavigation_new';
 //     : null;
 
 const SplashScreenContainer = ({
-  navigation,
-  route
+  navigation
 }: MeetNavigationProps<'SplashView'>) => {
   const [serverNoti, setServerNoti] = useState([]);
   const [notiIndex, setNotiIndex] = useState(0);
@@ -39,38 +36,24 @@ const SplashScreenContainer = ({
   const t = getT();
 
   //#region  selector
-  const {
-    auth,
-    from,
-    permission,
-    updateNoti,
-    autoLogin,
-    isLogin,
-    // loaded,
-    // destination,
-    // params,
-    url
-  } = useSelector((state: RootState) => {
-    return {
-      auth: state.user.auth,
-      from: state.user.from,
-      permission: state.user.permission,
-      updateNoti: state.user.updateNoti,
-      autoLogin: state.user.autoLogin,
-      isLogin: state.user.isLogin,
-      // loaded: state.root.loaded,
-      // destination: state.root.destination,
-      // params: state.root.params,
-      url: state.root.url
-    };
-  });
+  const { auth, from, updateNoti, autoLogin, isLogin, url } = useSelector(
+    (state: RootState) => {
+      return {
+        auth: state.user.auth,
+        from: state.user.from,
+        updateNoti: state.user.updateNoti,
+        autoLogin: state.user.autoLogin,
+        isLogin: state.user.isLogin,
+        url: state.root.url
+      };
+    }
+  );
   //#endregion
 
   //#region  dispatch
   const dispatch = useDispatch();
   const onLogin = (auth: any, from: any, autoLogin: boolean) =>
     dispatch(UserActions.login(auth, from, autoLogin));
-  const onAgreement = () => dispatch(UserActions.agreement());
   const onLogout = () => {
     dispatch(UserActions.logout());
     dispatch(RecentsActions.resetRecents());
@@ -81,15 +64,6 @@ const SplashScreenContainer = ({
   const setInitInfo = () => dispatch(WedriveAcions.setInitInfo());
   const toggleUpdateNoti = () => dispatch(UserActions.toggleUpdateNoti());
   const setAlert = (params: any) => dispatch(AlertAcions.setAlert(params));
-  const setIndicator = (message: any) =>
-    dispatch(IndicatorAcions.setIndicator(message));
-  const resetIndicator = () => dispatch(IndicatorAcions.resetIndicator());
-  const _setDestination = (destination: string) =>
-    dispatch(RootActions.setDestination(destination));
-  const _setParams = (params: {}) => dispatch(RootActions.setParams(params));
-  const _setVideoId = (id: string) => dispatch(RootActions.setVideoId(id));
-  const _setUrl = (url: string | undefined) =>
-    dispatch(RootActions.setUrl(url));
   const eventLog = (event: any) => dispatch(UserActions.eventLog(event));
 
   //#endregion
@@ -100,22 +74,21 @@ const SplashScreenContainer = ({
     setSharingMode();
     _handleInit();
     //  ios : 앱이 켜져있을때
-     Linking.addEventListener('url', event => {
+    Linking.addEventListener('url', event => {
       _handleGetDeeplink(event.url);
     });
-    
   }, []);
 
   useEffect(() => {
-      if (!first) {
+    if (!first) {
       if (url) _handleGetDeeplink(url);
-      else _autoLoginChk();
+      else _handleCheckAutoLogin();
     }
   }, [url, first]);
 
   const _handleInit = async () => {
     // 버전 확인
-    _handleCheckVersion();
+    await _handleCheckVersion();
     // 노티 확인
     let servernoti: [] = [];
     servernoti = await _handleCheckNotice(servernoti);
@@ -180,84 +153,41 @@ const SplashScreenContainer = ({
 
   const _handleNextNotice = async () => {
     if (serverNoti.length === notiIndex + 1) {
-      const result = await _handleCheckAutoLogin();
-      if (result === 'success') {
-        // _setParams({
-        //   accesstype: 'login'
-        // });
-        // _setDestination('List');
-        
-        navigation.reset({ routes: [{ name: 'MainStack' }] });
-      } else if (result === 'dany') {
-        _setDestination('SelectCompany');
-      } else {
-        onLogout();
-        navigation.reset({ routes: [{ name: 'LoginStack' }] });
-      }
+      _handleCheckAutoLogin();
     } else {
       setNotiIndex(notiIndex + 1);
     }
   };
 
-  async function _autoLoginChk() {
-    // await new Promise((res)=>{
-    //   setTimeout(() => {
-    //     res(true)
-    //   }, 10000);
-    // })
-
-    const result = await _handleCheckAutoLogin();
-
-    if (result === 'success') {
-      // _setParams({
-      //   accesstype: 'login'
-      // });
-      // _setDestination('List');
-      
-      navigation.reset({ routes: [{ name: 'MainStack' }] });
-    } else if (result === 'dany') {
-      //회사선택 페이지 고려
-      // _setDestination('SelectCompany');
-    } else {
-      if (result === 'autoLoginFalse') {
-        if (auth !== {}) await UserApi.logoutRequest(auth);
-      }
-      onLogout();
-      navigation.reset({ routes: [{ name: 'LoginStack' }] });
-    }
-  }
-
   //자동로그인
   const _handleCheckAutoLogin = async () => {
     if (autoLogin) {
-      if (auth.AUTH_A_TOKEN) {
-        const result = await _loginCheckRequest(
-          auth.AUTH_A_TOKEN,
-          auth.AUTH_R_TOKEN,
-          auth.last_access_company_no,
-          auth.HASH_KEY,
-          from,
-          true
-        );
-        if (result.errors) {
-          _handleloginCheckError(result.errors);
-          return 'fail';
-        } else {
-          const flag: any = _handleOnLogin(auth);
-
-          if (flag) {
-            return 'success';
-          } else {
-            return 'dany';
-          }
-        }
+      const result = await _loginCheckRequest(
+        auth.AUTH_A_TOKEN,
+        auth.AUTH_R_TOKEN,
+        auth.last_access_company_no,
+        auth.HASH_KEY,
+        from,
+        true
+      );
+      if (result.errors) {
+        _handleloginCheckError(result.errors);
+        from === 'this' && UserApi.logoutRequest(auth);
+        onLogout();
+        navigation.reset({ routes: [{ name: 'LoginStack' }] });
       } else {
-        return 'fail';
+        const flag: any = await serviceCheck(auth);
+
+        if (flag) {
+          navigation.reset({ routes: [{ name: 'MainStack' }] });
+        } else {
+          navigation.reset({ routes: [{ name: 'SelectCompany' }] });
+        }
       }
     } else {
-      return 'autoLoginFalse';
+      onLogout();
+      navigation.reset({ routes: [{ name: 'LoginStack' }] });
     }
-    3;
   };
 
   //DeepLink로 접근
@@ -281,15 +211,20 @@ const SplashScreenContainer = ({
     if (result.video_id) {
       // TODO: 컨퍼런스로 받았을때 이 분기 처리를 어떻게 해야할지 검토필요성 있음
       // WEHAGO에서 계정 정보를 가지고 올때 이 분기랑 토큰이 있는 분기랑 둘다 접근함 문제가 없는건지 ?
-      if (result.cno || isLogin) {
-        _setVideoId(result.video_id);
-        // _setDestination('Setting');
-        // navigation.reset({ routes: [{ name: 'SettingView', params: {id: result.video_id} }] });
-        navigation.reset({ routes: [{ name: 'ConferenceStateView', params: {id: result.video_id} }] });
-      } else {
-        // _setDestination('Login');
-        navigation.reset({ routes: [{ name: 'LoginStack' }] });
-      }
+      navigation.reset({
+        routes: [
+          { name: 'ConferenceStateView', params: { id: result.video_id } }
+        ]
+      });
+      // if (result.cno || isLogin) {
+      //   navigation.reset({
+      //     routes: [
+      //       { name: 'ConferenceStateView', params: { id: result.video_id } }
+      //     ]
+      //   });
+      // } else { // 외부참여자
+      //   navigation.reset({ routes: [{ name: 'ConferenceStateView' }] });
+      // }
     }
     // 화상회의 요청인지 판별
     if (result.is_creater) {
@@ -299,7 +234,7 @@ const SplashScreenContainer = ({
         title: '오류',
         message: 'meet 앱에서 다시 접근 해주시길 바랍니다'
       });
-      return;
+      navigation.reset({ routes: [{ name: 'LoginStack' }] });
     } else if (result.mHASH_KEY && result.cno) {
       //토근정보가 있을때
       const { mHASH_KEY, mAuth_r_token, mAuth_a_token, cno } = result;
@@ -314,41 +249,15 @@ const SplashScreenContainer = ({
         true
       );
       if (info.errors) {
-        // TODO:
-        if (info.errors.code === 'E002') {
-          setAlert({
-            type: 1,
-            title: t('renewal.alert_title_login_fail'),
-            message: t('renewal.alert_text_duplicate_logout')
-          });
-        } else if (info.errors.status === '400') {
-          setAlert({
-            type: 1,
-            title: t('renewal.alert_title_login_fail'),
-            message: t('renewal.alert_text_login_info_error')
-          });
-        } else if (info.errors.status === '401') {
-          setAlert({
-            type: 1,
-            title: t('renewal.alert_title_login_fail'),
-            message: t('renewal.alert_text_no_right')
-          });
-        } else if (info.errors.message === 'timeout') {
-          setAlert({
-            type: 1,
-            title: t('renewal.alert_title_login_fail'),
-            message: t('renewal.alert_text_timeover')
-          });
-        } else {
-          setAlert({
-            type: 1,
-            title: t('renewal.alert_title_login_fail'),
-            message: t('renewal.alert_text_problem_ocurred')
-          });
-        }
-        return 'fail';
+        _handleloginCheckError(info.errors);
+        navigation.reset({ routes: [{ name: 'LoginStack' }] });
       } else {
-        _handleOnLogin(info);
+        const isDeploy = await serviceCheck(info);
+        if (isDeploy) {
+          navigation.reset({ routes: [{ name: 'MainStack' }] });
+        } else {
+          navigation.reset({ routes: [{ name: 'SelectCompany' }] });
+        }
       }
     } else if (result.login_info === 'email') {
       //토근정보가 없을때
@@ -360,21 +269,14 @@ const SplashScreenContainer = ({
       room: "b15091c1-2acd-47f6-aa7c-6a94df0e5a17"
       sub: "video.wehago.com"
       */
-      // _setParams({
-      //   roomId: decoded.room,
-      //   accesstype: 'email',
-      //   token: result.token
-      // });
-      // _setDestination('Setting');
       navigation.navigate('ConferenceStateView', {
         accessType: 'email',
-        id: decoded.room,
-        // token: result.token
+        id: decoded.room
       });
     }
   };
 
-  const _handleOnLogin = async (auth: any) => {
+  const serviceCheck = async (auth: any) => {
     // 회사 상태 조회 후 진행
     const statusCheck = await ServiceCheckApi.companyStatusCheck(
       auth,
@@ -392,18 +294,11 @@ const SplashScreenContainer = ({
         auth,
         'wehagomeet' // 배포여부 확인
       );
-
       const isDeploy = isDeployWehagomeet || isDeployWebrtc;
       setPermission(isDeploy);
-      // _setParams({
-      //   accesstype: 'login'
-      // });
-      //회사선택 페이지 필요함
-      
-      navigation.reset({ routes: [{ name: 'MainStack' }] });
-      _setDestination(isDeploy ? 'List' : 'SelectCompany');
+      return isDeploy;
     } else {
-      _setDestination('SelectCompany');
+      return false;
     }
   };
 
@@ -501,12 +396,3 @@ const SplashScreenContainer = ({
 };
 
 export default SplashScreenContainer;
-
-// const _resetAlert = () =>
-//   setAlertVisible({
-//     visible: false,
-//     description: '',
-//     onClose: () => {},
-//     actions: [],
-//     title: ''
-//   });
