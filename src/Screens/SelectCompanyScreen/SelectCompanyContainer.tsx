@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SelectCompanyPresenter from './SelectCompanyPresenter';
 import { RootState } from '../../redux/configureStore';
@@ -11,8 +11,27 @@ import { UserApi } from '../../services';
 
 const SelectCompanyContainer = (props: any) => {
   // const { handleChangeCompany } = props;
-  const dispatch = useDispatch();
+  const [prevAuth, setPrevAuth] = useState<any>(null);
 
+  const { from, auth, selectedCompany, employee_list } = useSelector(
+    (state: RootState) => {
+      const {
+        user: {
+          from,
+          auth,
+          auth: { last_company, employee_list }
+        }
+      } = state;
+      return {
+        from,
+        auth,
+        selectedCompany: last_company,
+        employee_list
+      };
+    }
+  );
+
+  const dispatch = useDispatch();
   const changeCompanyRequest = (
     auth: any,
     company: {
@@ -23,20 +42,14 @@ const SelectCompanyContainer = (props: any) => {
   const _logout = () => {
     dispatch(UserActions.logout());
   };
-  const { auth } = props;
 
-  const selectedCompany = auth.last_company;
-  const employee_list = auth.employee_list;
-  const {} = useSelector((state: RootState) => {
-    //  state.user['from']
-    //  state.user.from
-    debugger;
-    return {
-      //       from: state.user.from,
-      //       selectedCompany,
-      // employee_list
-    };
-  });
+  useEffect(() => {
+    if (prevAuth === null) {
+      setPrevAuth(auth);
+    } else if (prevAuth.cno !== auth.last_access_company_no) {
+      ReactNativeRestart.Restart();
+    }
+  }, [auth]);
 
   const handleChangeCompany = async (cno: number) => {
     const companyInfo = employee_list.find(
@@ -48,16 +61,12 @@ const SelectCompanyContainer = (props: any) => {
     };
 
     await changeCompanyRequest(auth, company);
-    ReactNativeRestart.Restart();
   };
 
   const onLogout = async () => {
-    // const from = props.from;
-    // dispatch(rootAction.setDestination('Login'));
-    // from === 'this' && (await UserApi.logoutRequest(auth));
+    from === 'this' && (await UserApi.logoutRequest(auth));
     _logout();
-    // props.onLogout();
-    // props.onSetInitialList();
+    props.onLogout();
   };
   return (
     <SelectCompanyPresenter
@@ -66,7 +75,7 @@ const SelectCompanyContainer = (props: any) => {
         selectedCompany,
         handleChangeCompany,
         onLogout,
-        // from
+        from
       }}
     />
   );
