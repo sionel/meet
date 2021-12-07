@@ -460,12 +460,17 @@ export default function CreateMeetScreenContainer(props: any) {
     setTimeChangeDetect(false);
   };
 
-  const dataLoad = async (signal: AbortSignal) => {
+  const dataLoad = (signal: AbortSignal) => {
     setIsOrgDataLoaded(true);
-    await getAllEmployee(signal);
-    await getOrganizationTree(signal);
-    await getContactsList(signal);
-    setIsOrgDataLoaded(false);
+
+    Promise.all([
+      getAllEmployee(signal),
+      getOrganizationTree(signal),
+      getContactsList(signal)
+    ]).then(()=>{
+      setIsOrgDataLoaded(false);
+    })
+    
   };
 
   useEffect(() => {
