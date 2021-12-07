@@ -130,7 +130,7 @@ export default function HomeScreenContainer(props: any) {
 
   const dispatch = useDispatch();
   const _setRoomId = (id: string) => dispatch(ConferenceActions.setRoomId(id));
-  
+
   const _handleLogout = () => {
     dispatch(UserActions.logout());
     dispatch(RecentsActions.resetRecents());
@@ -141,7 +141,6 @@ export default function HomeScreenContainer(props: any) {
   const _openCompany = () => dispatch(SelectCompanyActions.openCompany());
   const changeCompanyRequest = (auth: any, company: any) =>
     dispatch(UserActions.changeCompanyRequest(auth, company));
-    
 
   const isTablet = deviceInfoModule.isTablet();
 
@@ -346,7 +345,7 @@ export default function HomeScreenContainer(props: any) {
                 id: conference.room_id,
                 externalData: null,
                 from: 'meet',
-                accessType:'auth',
+                accessType: 'auth'
               })
             // _handleRedirect('ConferenceState', {
             //   id: conference.room_id,
@@ -658,7 +657,28 @@ export default function HomeScreenContainer(props: any) {
   };
 
   const createConference = () => {
-    navigation.navigate('DirectCreateConference');
+    // navigation.navigate('DirectCreateConference');
+
+    const chat = {
+      name: '메신저로 생성하기',
+      // icon1: icUser,
+      onClick: () => {
+        navigation.navigate('CreateConference');
+      }
+    };
+    const meet = {
+      name: '직접 입력하여 생성하기',
+      // icon1: icLink,
+      onClick: () => {
+        navigation.navigate('DirectCreateConference');
+      }
+    };
+    setBottomPopup({
+      onClickOutside: _onClickOutside,
+      contentList: [chat, meet],
+      show: true,
+      title: '화상회의 생성하기'
+    });
   };
 
   const enterInviteCode = () => {
@@ -670,20 +690,16 @@ export default function HomeScreenContainer(props: any) {
   };
 
   const createTalkConference = () => {
-    // props.navigation.navigate('Create', {
-    //   // onGetWetalkList: {
-    //   //   roomId: selectedRoomId,
-    //   //   externalData: null,
-    //   //   from: 'meet'
-    //   // }
-    // });
     navigation.navigate('CreateConference');
   };
+
+  // const createConference = () => {
+
+  // }
 
   const handleConpanyChange = () => {
     _openCompany();
   };
-
 
   const handleClickSetting = () => {
     navigation.navigate('ConfigurationStack');

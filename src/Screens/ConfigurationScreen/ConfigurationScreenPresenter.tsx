@@ -39,7 +39,7 @@ export default function ConfigurationScreenPresenter(props: propsTypes) {
     // <Fragment>
     //   <SafeAreaView style={{ flex: 0, backgroundColor: '#1c90fb' }} />
     //   <SafeAreaView style={{ flex: 1 }}>
-    <SafeAreaView>
+    <SafeAreaView style={{backgroundColor:'#F7F8FA'}}>
       <View style={[styles.topTitle]}>
         <TouchableOpacity onPress={goBack}>
           <Image
@@ -56,7 +56,8 @@ export default function ConfigurationScreenPresenter(props: propsTypes) {
       <View
         style={{
           flex: 1,
-          width: '100%'
+          width: '100%',
+          backgroundColor: '#F7F8FA'
         }}
       >
         <View style={styles.menuText}>
@@ -162,8 +163,8 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 50,
     borderColor: '#d1d1d1',
-    borderBottomWidth: 1
-    // backgroundColor: '#ececec'
+    borderBottomWidth: 1,
+    backgroundColor: '#F7F8FA'
   },
   HeaderTitleText: {
     fontSize: 18,
@@ -182,7 +183,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderColor: '#d1d1d1',
-    borderBottomWidth: 1
+    borderBottomWidth: 1,
+    backgroundColor: '#F7F8FA'
   },
   imgStyle: {
     width: 30,

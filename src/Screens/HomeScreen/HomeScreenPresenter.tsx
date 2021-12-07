@@ -44,6 +44,7 @@ const icArrowDownBlack = require('../../../assets/new/icons/ic_arrow_down_black.
 const icChange = require('../../../assets/new/icons/ic_change.png');
 const icEmptyConference = require('../../../assets/new/icons/ic_empty_conference.png');
 const icEmpty = require('../../../assets/new/icons/ic_empty.png');
+const icChat = require('../../../assets/new/icons/ic_chat_w.png');
 
 {
   /*
@@ -137,7 +138,7 @@ const HomeScreenPresenter = (props: any) => {
               <Image
                 source={icArrowDownBlack}
                 style={styles.downArrow}
-                resizeMode={'contain'}
+                resizeMode={'cover'}
               />
             </TouchableOpacity>
           </View>
@@ -145,7 +146,7 @@ const HomeScreenPresenter = (props: any) => {
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               style={styles.topButtons}
-              onPress={createTalkConference}
+              onPress={createConference}
             >
               <Image
                 source={icVideo}
@@ -154,7 +155,7 @@ const HomeScreenPresenter = (props: any) => {
               />
               <Text>{'회의생성'}</Text>
             </TouchableOpacity>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={styles.topButtons}
               onPress={createConference}
             >
@@ -164,7 +165,7 @@ const HomeScreenPresenter = (props: any) => {
                 resizeMode={'cover'}
               />
               <Text>{'회의일정'}</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <TouchableOpacity
               style={styles.topButtons}
               onPress={enterInviteCode}
@@ -448,7 +449,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   settingImg: { width: 30, height: 30, borderRadius: 24, marginRight: 10 },
-  downArrow: { width: 30, height: 30, borderRadius: 24 },
+  downArrow: { width: 25, height: 25},
   helloContainer: {
     width: '100%',
     justifyContent: 'space-between',
@@ -482,7 +483,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     backgroundColor: '#fff',
     borderColor: '#fff',
-    width: '30%',
+    width: '45%',
     height: 100,
     justifyContent: 'space-evenly',
     alignItems: 'center',
