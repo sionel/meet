@@ -22,7 +22,6 @@ import { RootState } from '../../redux/configureStore';
 
 import { MeetNavigationProps } from '../../Navigations/RootNavigation';
 
-
 export default function ConferenceStateContainer(props: any) {
   const { width, height } = Dimensions.get('window');
   const isTablet = DeviceInfo.isTablet();
@@ -33,9 +32,8 @@ export default function ConferenceStateContainer(props: any) {
   const [iscret, setIscret] = useState(false);
   const [start, setStart] = useState('');
   const [end, setEnd] = useState('');
-
   const [conferenceState, setConferenceState] = useState<
-    'conference' | 'deleted' | 'wating' | 'reservationInfo' | 'fullroom' | null
+    'deleted' | 'wating' | 'reservationInfo' | 'fullroom' | null
   >();
 
   let enterTimer: any = () => {};
@@ -65,51 +63,57 @@ export default function ConferenceStateContainer(props: any) {
     // 딥링크 웹 접근
     // 딥링크 이메일 접근
     // 참여코드 접근
-    _getConferenceState(id);
+
+    _getConferenceState();
     cycleAnimated();
     return () => {
       clearTimeout(enterTimer);
     };
   }, []);
 
-  const _getConferenceState = async (roomId: string) => {
+  const _getConferenceState = async () => {
     //email 접속종료후 roomId가 undefined여서 오류생겨서 let으로 변수 access선언
     let access;
-
-    if (roomId !== undefined) {
-      access = await MeetApi.getMeetRoomNoCert(roomId);
-      setRoomName(access?.resultData?.name);
+    let conferenceState;
+    if (id !== undefined) {
+      access = await MeetApi.getMeetRoomNoCert(id);
     }
 
     if (!access) {
       // 종료된 방 또는 문제가 있을때
-      setConferenceState('deleted');
+      conferenceState = 'deleted';
     } else {
-      if (access.resultData.r_start_datetime) {
+      setRoomName(access.name);
+
+      if (access.r_start_datetime) {
         // 예약방
+
         const now = new Date().getTime();
-        const start = access.resultData.r_start_datetime;
+        const start = access.r_start_datetime;
         if (start - now >= 1800000) {
           // 30분 이상 남음
           // 180만 밀리세컨 = 30분
-          setConferenceState('reservationInfo');
+          conferenceState = 'reservationInfo';
         } else if (start - now < 0) {
           // 이미 시작함
-          setConferenceState('conference');
+          conferenceState = 'conference';
         } else {
           // 30분 미만 남음
-          setConferenceState('wating');
+          conferenceState = 'wating';
         }
       } else {
         // 지금 실행 방
-        setConferenceState('conference');
+        conferenceState = 'conference';
       }
     }
 
-    _handleConferenceState(roomId, access);
+    _handleConferenceState(conferenceState, access);
   };
 
-  const _handleConferenceState = async (roomId: string, access: any) => {
+  const _handleConferenceState = async (
+    conferenceState: string,
+    access: any
+  ) => {
     const dateFormat = (date: any) => {
       let changed = new Date(date);
       return (
@@ -126,54 +130,66 @@ export default function ConferenceStateContainer(props: any) {
     };
 
     if (conferenceState === 'conference') {
-      _handleEnterConference(roomId, params);
+      _handleEnterConference(params);
     } else if (conferenceState === 'reservationInfo') {
       // 참석자 정보 받고
       // 시작시간 종료시간 컨버팅 하고
       // 페이지 이동
-      const { name, r_start_datetime, r_end_datetime, is_public } =
-        access.resultData;
+      const { name, r_start_datetime, r_end_datetime, is_public } = access;
       // let accessUser = [];
+
+
       if (Object.keys(auth).length > 0) {
-        setAccessUser((await MeetApi.getAccessUsers(auth, roomId)).resultData);
+        setAccessUser((await MeetApi.getAccessUsers(auth, id)).resultData);
       }
+
       setName(name);
       setStart(dateFormat(r_start_datetime));
       setEnd(dateFormat(r_end_datetime));
       setIsPublic(is_public);
       setIscret(isLogin);
+      setConferenceState('reservationInfo');
+
     } else if (conferenceState === 'wating') {
       // 날짜 변환하고
       // setTimeout 걸어줌
       const now = new Date().getTime();
       const start = access.resultData.r_start_datetime;
+
       enterTimer = setTimeout(() => {
-        _handleEnterConference(auth, roomId);
+        _handleEnterConference(params);
       }, start - now);
+
       setStart(start);
+      setConferenceState('wating');
+
     } else if (conferenceState === 'deleted') {
       setIscret(isLogin);
+      setConferenceState('deleted');
     }
   };
 
-  const _handleEnterConference = async (roomId: string, params: any) => {
+  const _handleEnterConference = async (params: any) => {
     // let callType = 3;
     // let isCreator;
 
     // 50명 체크는 여기서 하되 토큰받는 작업은 setting 페이지에서 함
     let count = 0;
 
-    count = (await MeetApi.getParticipantCount(roomId)).resultData;
+    count = await MeetApi.getParticipantCount(id);
+
     // 최대 참여인원 제한 (50명)
     if (count >= 50) {
       // 50명 초과 안내화면으로
       setConferenceState('fullroom');
     } else {
+      debugger;
       navigation.replace('SettingView', {
         roomType: 'meet',
         selectedRoomName: roomName,
         id: id,
-        accessType: params.accessType
+        accessType: params.accessType,
+        joincode: params.joincode
         // callType,
         // isCreator,
       });
@@ -193,7 +209,7 @@ export default function ConferenceStateContainer(props: any) {
 
   const handleClickBack = () => {
     navigation.goBack();
-  }
+  };
 
   return (
     <ConferenceStatePresenter

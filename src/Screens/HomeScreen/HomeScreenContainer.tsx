@@ -402,8 +402,8 @@ export default function HomeScreenContainer(props: any) {
             return data;
           })
         );
-        // setOngoingConference(goingList);
-        setOngoingConference([]);
+        setOngoingConference(goingList);
+        // setOngoingConference([]);
 
         // =====================================================================================================
         // =====================================================================================================

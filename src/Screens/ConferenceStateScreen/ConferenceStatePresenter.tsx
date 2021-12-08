@@ -13,10 +13,10 @@ import ReservationInfoScreen from './subScreens/ReservationInfoScreen';
 import FullroomScreen from './subScreens/FullroomScreen';
 import WatingScreen from './subScreens/WatingScreen';
 import DeletedScreen from './subScreens/DeletedScreen';
+import icBack from '../../../assets/new/icons/ic_back.png';
 
 export default function ConferenceStatePresenter(props: any) {
   const { conferenceState, spin, handleClickBack } = props;
-  const icBack = require('../../../assets/new/icons/ic_back.png');
 
   return (
     <SafeAreaView style={{ backgroundColor: '#f8f8fa' }}>
@@ -30,18 +30,16 @@ export default function ConferenceStatePresenter(props: any) {
           />
         </TouchableOpacity>
       </View>
-      {conferenceState === 'deleted' && (
-        <DeletedScreen {...props}></DeletedScreen>
-      )}
-      {conferenceState === 'reservationInfo' && (
-        <ReservationInfoScreen {...props}></ReservationInfoScreen>
-      )}
-      {conferenceState === 'wating' && <WatingScreen {...props}></WatingScreen>}
-      {conferenceState === 'fullroom' && (
-        <FullroomScreen {...props}></FullroomScreen>
-      )}
-      <View style={{ flex: 1 }}>
-        <View>
+      {conferenceState === 'deleted' ? (
+        <DeletedScreen {...props} />
+      ) : conferenceState === 'reservationInfo' ? (
+        <ReservationInfoScreen {...props} />
+      ) : conferenceState === 'wating' ? (
+        <WatingScreen {...props} />
+      ) : conferenceState === 'fullroom' ? (
+        <FullroomScreen {...props} />
+      ) : (
+        <View style={{ flex: 1 }}>
           <Animated.View
             style={{
               // flex: 1,
@@ -55,7 +53,7 @@ export default function ConferenceStatePresenter(props: any) {
             <CustomIcon name={'loading'} width={40} height={40} />
           </Animated.View>
         </View>
-      </View>
+      )}
     </SafeAreaView>
   );
 }

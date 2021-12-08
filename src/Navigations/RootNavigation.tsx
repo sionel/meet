@@ -35,6 +35,7 @@ export type MeetParamList = {
     id: string;
     roomType?: string;
     selectedRoomName?: string;
+    joincode?: string;
   };
   ConferenceView: {
     accessType: string;
