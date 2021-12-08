@@ -223,18 +223,18 @@ export function makeStyles(params) {
     monthText: {
       fontSize: 14*scaler,
       color: '#000',
-      alignSelf: 'center'
+      alignSelf: 'center',
     },
 
     monthsWrapper: {
       alignSelf: 'center',
       justifyContent: 'center',
-      width: containerWidth,
+      width: containerWidth
     },
 
     monthsRow: {
       flexDirection: 'row',
-      padding: 20*scaler,
+      padding: 10*scaler
     },
 
     yearHeaderMainText: {

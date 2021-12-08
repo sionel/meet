@@ -77,6 +77,7 @@ export default function HomeScreenContainer(props: any) {
   );
   const [finishIndex, setFinishIndex] = useState(0);
   const [month, setMonth] = useState(new Date().getMonth());
+  const [calendarView, setCalendarView] = useState(false)
   const [conferenceInterval, setConferenceInterval] =
     useState<NodeJS.Timeout>();
   const [bottomPopup, setBottomPopup] = useState<{
@@ -727,7 +728,10 @@ export default function HomeScreenContainer(props: any) {
   const handleClickSetting = () => {
     navigation.navigate('ConfigurationStack');
   };
-  const handleChangeMonth = () => {};
+  const handleChangeMonth = (month:number) => {
+    setMonth(month+1)
+    setCalendarView(false)
+  };
   return isHorizon ? (
     <HomeScreenHorizonPresenter
       {...{
@@ -750,6 +754,8 @@ export default function HomeScreenContainer(props: any) {
         enterInviteCode,
         onConpanyChange: handleConpanyChange,
         onChangeMonth: handleChangeMonth,
+        setCalendarView,
+        calendarView,
         month
       }}
     />
@@ -776,6 +782,8 @@ export default function HomeScreenContainer(props: any) {
         onClickSetting: handleClickSetting,
         onConpanyChange: handleConpanyChange,
         onChangeMonth: handleChangeMonth,
+        setCalendarView,
+        calendarView,
         month
       }}
     />

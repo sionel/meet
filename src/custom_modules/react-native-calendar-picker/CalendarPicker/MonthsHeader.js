@@ -1,19 +1,10 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  Platform,
-} from 'react-native';
+import { TouchableOpacity, Text, Platform } from 'react-native';
 import PropTypes from 'prop-types';
 import { stylePropType } from './localPropTypes';
 
 export default function MonthsHeader(props) {
-  const {
-    styles,
-    textStyle,
-    headingLevel,
-    title,
-  } = props;
+  const { styles, textStyle, headingLevel, title, onPressYear } = props;
 
   const accessibilityProps = { accessibilityRole: 'header' };
   if (Platform.OS === 'web') {
@@ -21,11 +12,9 @@ export default function MonthsHeader(props) {
   }
 
   return (
-    <View style={styles.headerWrapper}>
-      <Text style={[styles.monthsHeaderText, textStyle]}>
-        { title }
-      </Text>
-    </View>
+    <TouchableOpacity style={styles.headerWrapper} onPress={onPressYear}>
+      <Text style={[styles.monthsHeaderText, textStyle]}>{title}</Text>
+    </TouchableOpacity>
   );
 }
 
