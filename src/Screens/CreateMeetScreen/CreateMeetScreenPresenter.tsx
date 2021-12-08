@@ -12,8 +12,6 @@ import {
 
 import DatePicker from 'react-native-date-picker';
 import CalendarPicker from '../../custom_modules/react-native-calendar-picker/CalendarPicker';
-import CalendarPicker2 from 'react-native-calendar-picker';
-
 
 import { getT } from '../../utils/translateManager';
 
@@ -95,276 +93,264 @@ const CreateMeetScreenPresenter = (props: any) => {
       selectMonthTitle={t('년')}
       textStyle={{ fontSize: isTablet ? 18 : 14 }}
       disabledDatesTextStyle={{ fontSize: isTablet ? 18 : 14 }}
-      // previousTitleStyle={{marginRight: 20}}
-      // nextTitleStyle={{marginLeft: 20}}
     />
   );
 
   return (
-    <SafeAreaView style={styles.safeArea} onTouchStart={onFocusOut}>
-      {dateTimeSeleted ? (
-        <View style={styles.dimmed} />
-      ) : (
-        <Fragment>
-          <View style={[styles.topTitle]}>
-            <TouchableOpacity onPress={onHandleBack}>
-              <Text style={styles.ft14N}>{t('취소')}</Text>
-            </TouchableOpacity>
-            <Text style={styles.TitleText}>{t('회의 생성하기')}</Text>
-            <TouchableOpacity disabled={textLess2} onPress={createConference}>
-              <Text
-                style={[styles.confirmText, !textLess2 && { color: '#000' }]}
-              >
-                {t('생성')}
-              </Text>
-            </TouchableOpacity>
-          </View>
-
-          <TouchableOpacity
-            onPress={togglePublic}
-            style={[styles.privateContainer]}
-          >
-            <LinearGradient
-              end={{ x: 1, y: 1 }}
-              start={{ x: 0, y: 0 }}
-              colors={
-                isPublic ? ['#a460ff', '#5d5dff'] : ['#1cc8fb', '#1c90fb']
-              }
-              style={styles.codeContainer}
-            >
-              <Image
-                source={isPublic ? icCode : icLock_W}
-                style={styles.icCode}
-              />
-            </LinearGradient>
-
-            <View style={styles.privateTextContainer}>
-              <Text style={styles.privateMainText}>
-                {isPublic ? t('공개 회의') : t('비공개 회의')}
-              </Text>
-              <Text style={styles.privateSubText}>
-                {isPublic
-                  ? t('공유 URL과 참여코드를 통해 초대 및 입장이 가능합니다.')
-                  : t('지정된 참여자 이외엔 접속 불가능합니다.')}
-              </Text>
-            </View>
+    <Fragment>
+      <SafeAreaView style={styles.safeArea} onTouchStart={onFocusOut}>
+        <View style={[styles.topTitle]}>
+          <TouchableOpacity onPress={onHandleBack}>
+            <Text style={styles.ft14N}>{t('취소')}</Text>
           </TouchableOpacity>
+          <Text style={styles.TitleText}>{t('회의 생성하기')}</Text>
+          <TouchableOpacity disabled={textLess2} onPress={createConference}>
+            <Text style={[styles.confirmText, !textLess2 && { color: '#000' }]}>
+              {t('생성')}
+            </Text>
+          </TouchableOpacity>
+        </View>
 
-          <View
-            style={[
-              { backgroundColor: '#F7F8FA', height: 9 },
-              isHorizon && { height: 6 }
-            ]}
-          />
+        <TouchableOpacity
+          onPress={togglePublic}
+          style={[styles.privateContainer]}
+        >
+          <LinearGradient
+            end={{ x: 1, y: 1 }}
+            start={{ x: 0, y: 0 }}
+            colors={isPublic ? ['#a460ff', '#5d5dff'] : ['#1cc8fb', '#1c90fb']}
+            style={styles.codeContainer}
+          >
+            <Image
+              source={isPublic ? icCode : icLock_W}
+              style={styles.icCode}
+            />
+          </LinearGradient>
 
-          <View style={[{ backgroundColor: '#fff', height: '30%' }]}>
-            <View style={styles.middleContainer}>
-              <View style={styles.directionColTitle}>
-                <Text style={styles.textHeader}>{t('회의명')}</Text>
-                <TextInput
-                  onChangeText={roomNameChange}
-                  value={roomName}
-                  maxLength={20}
-                  style={[
-                    styles.roomNameStyle,
-                    roomName && { borderColor: '#1c90fb' },
-                    textLess2 && roomName && { borderColor: '#fc4c60' }
-                  ]}
-                  ref={titleRef}
-                />
-                <View
-                  style={[
-                    styles.countContainer,
-                    textLess2 && roomName && { justifyContent: 'space-between' }
-                  ]}
-                >
-                  {textLess2 && roomName != '' && (
-                    <Text
-                      style={{
-                        color: '#fc4c60',
-                        fontSize: 12,
-                        lineHeight: 17,
-                        letterSpacing: -0.24
-                      }}
-                    >
-                      {t('두글자 이상 입력해주세요.')}
-                    </Text>
-                  )}
-                  <View style={styles.countContainer}>
-                    <Text style={styles.ft12}>{roomName.length}</Text>
-                    <Text style={styles.maxLength}>/20</Text>
-                  </View>
+          <View style={styles.privateTextContainer}>
+            <Text style={styles.privateMainText}>
+              {isPublic ? t('공개 회의') : t('비공개 회의')}
+            </Text>
+            <Text style={styles.privateSubText}>
+              {isPublic
+                ? t('공유 URL과 참여코드를 통해 초대 및 입장이 가능합니다.')
+                : t('지정된 참여자 이외엔 접속 불가능합니다.')}
+            </Text>
+          </View>
+        </TouchableOpacity>
+
+        <View
+          style={[
+            { backgroundColor: '#F7F8FA', height: 9 },
+            isHorizon && { height: 6 }
+          ]}
+        />
+
+        <View style={[{ backgroundColor: '#fff', height: '30%' }]}>
+          <View style={styles.middleContainer}>
+            <View style={styles.directionColTitle}>
+              <Text style={styles.textHeader}>{t('회의명')}</Text>
+              <TextInput
+                onChangeText={roomNameChange}
+                value={roomName}
+                maxLength={20}
+                style={[
+                  styles.roomNameStyle,
+                  roomName && { borderColor: '#1c90fb' },
+                  textLess2 && roomName && { borderColor: '#fc4c60' }
+                ]}
+                ref={titleRef}
+              />
+              <View
+                style={[
+                  styles.countContainer,
+                  textLess2 && roomName && { justifyContent: 'space-between' }
+                ]}
+              >
+                {textLess2 && roomName != '' && (
+                  <Text
+                    style={{
+                      color: '#fc4c60',
+                      fontSize: 12,
+                      lineHeight: 17,
+                      letterSpacing: -0.24
+                    }}
+                  >
+                    {t('두글자 이상 입력해주세요.')}
+                  </Text>
+                )}
+                <View style={styles.countContainer}>
+                  <Text style={styles.ft12}>{roomName.length}</Text>
+                  <Text style={styles.maxLength}>/20</Text>
                 </View>
               </View>
-              <View style={styles.directionColMessage}>
-                <Text style={styles.textHeader}>{t('초대메세지')}</Text>
-                <TextInput
-                  onChangeText={sendMessageChange}
-                  value={sendMessage}
-                  maxLength={200}
-                  multiline
-                  style={[
-                    styles.sendStyle,
-                    sendMessage && { borderColor: '#1c90fb' },
-                    isHorizon && { paddingTop: '1%' }
-                  ]}
-                  ref={sendMsgRef}
-                />
-                <View style={styles.countContainer}>
-                  <Text style={styles.ft12}>{sendMessage.length}</Text>
-                  <Text style={styles.maxLength}>/200</Text>
-                </View>
+            </View>
+            <View style={styles.directionColMessage}>
+              <Text style={styles.textHeader}>{t('초대메세지')}</Text>
+              <TextInput
+                onChangeText={sendMessageChange}
+                value={sendMessage}
+                maxLength={200}
+                multiline
+                style={[
+                  styles.sendStyle,
+                  sendMessage && { borderColor: '#1c90fb' },
+                  isHorizon && { paddingTop: '1%' }
+                ]}
+                ref={sendMsgRef}
+              />
+              <View style={styles.countContainer}>
+                <Text style={styles.ft12}>{sendMessage.length}</Text>
+                <Text style={styles.maxLength}>/200</Text>
               </View>
             </View>
           </View>
+        </View>
 
-          <View
-            style={[
-              { backgroundColor: '#F7F8FA', height: 9 },
-              isHorizon && { height: 6 }
-            ]}
-          />
+        <View
+          style={[
+            { backgroundColor: '#F7F8FA', height: 9 },
+            isHorizon && { height: 6 }
+          ]}
+        />
 
-          <View
-            style={[
-              styles.reserveContainer,
-              switchReserve && { height: '15%' }
-            ]}
-          >
-            <View style={styles.rowContainer}>
-              <Text style={[styles.ft14B, { fontSize: 15 }]}>
-                {t('예약회의')}
-              </Text>
-              <Switch
-                onValueChange={onSwitchReserveChange}
-                value={switchReserve}
-                trackColor={{ false: '', true: '#1c90fb' }}
-              />
-            </View>
-            {switchReserve && (
-              <Fragment>
+        <View
+          style={[styles.reserveContainer, switchReserve && { height: '15%' }]}
+        >
+          <View style={styles.rowContainer}>
+            <Text style={[styles.ft14B, { fontSize: 15 }]}>
+              {t('예약회의')}
+            </Text>
+            <Switch
+              onValueChange={onSwitchReserveChange}
+              value={switchReserve}
+              trackColor={{ false: '', true: '#1c90fb' }}
+            />
+          </View>
+          {switchReserve && (
+            <Fragment>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  flex: 1,
+                  justifyContent: 'space-between',
+                  alignItems: 'center'
+                }}
+              >
+                <Text style={{ fontSize: 15 }}>{t('시작시간')}</Text>
                 <View
-                  style={{
+                  style={{ flexDirection: 'row', justifyContent: 'flex-end' }}
+                >
+                  <TouchableOpacity
+                    style={[
+                      styles.datetimeBox,
+                      datePicker === 'start' && {
+                        borderColor: 'rgb(28, 144, 251)'
+                      },
+                      isTablet && { width: '20%' }
+                    ]}
+                    onPress={() => {
+                      openDatePicker('start');
+                    }}
+                  >
+                    <Text
+                      style={
+                        datePicker === 'start' && {
+                          color: 'rgb(28, 144, 251)'
+                        }
+                      }
+                    >
+                      {`${startTime.date}`}
+                    </Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={[
+                      styles.datetimeBox,
+                      timePicker === 'start' && {
+                        borderColor: 'rgb(28, 144, 251)'
+                      },
+                      isTablet && { width: '30%' }
+                    ]}
+                    onPress={() => {
+                      openTimePicker('start');
+                    }}
+                  >
+                    <Text
+                      style={
+                        timePicker === 'start' && {
+                          color: 'rgb(28, 144, 251)'
+                        }
+                      }
+                    >
+                      {`${startTime.time}`}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+              <View
+                style={[
+                  {
                     flexDirection: 'row',
                     flex: 1,
                     justifyContent: 'space-between',
                     alignItems: 'center'
-                  }}
-                >
-                  <Text style={{ fontSize: 15 }}>{t('시작시간')}</Text>
-                  <View
-                    style={{ flexDirection: 'row', justifyContent: 'flex-end' }}
-                  >
-                    <TouchableOpacity
-                      style={[
-                        styles.datetimeBox,
-                        datePicker === 'start' && {
-                          borderColor: 'rgb(28, 144, 251)'
-                        },
-                        isTablet && { width: '20%' }
-                      ]}
-                      onPress={() => {
-                        openDatePicker('start');
-                      }}
-                    >
-                      <Text
-                        style={
-                          datePicker === 'start' && {
-                            color: 'rgb(28, 144, 251)'
-                          }
-                        }
-                      >
-                        {`${startTime.date}`}
-                      </Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                      style={[
-                        styles.datetimeBox,
-                        timePicker === 'start' && {
-                          borderColor: 'rgb(28, 144, 251)'
-                        },
-                        isTablet && { width: '30%' }
-                      ]}
-                      onPress={() => {
-                        openTimePicker('start');
-                      }}
-                    >
-                      <Text
-                        style={
-                          timePicker === 'start' && {
-                            color: 'rgb(28, 144, 251)'
-                          }
-                        }
-                      >
-                        {`${startTime.time}`}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
+                  }
+                ]}
+              >
+                <Text style={{ fontSize: 15 }}>{t('종료시간')}</Text>
                 <View
-                  style={[
-                    {
-                      flexDirection: 'row',
-                      flex: 1,
-                      justifyContent: 'space-between',
-                      alignItems: 'center'
-                    }
-                  ]}
+                  style={{ flexDirection: 'row', justifyContent: 'flex-end' }}
                 >
-                  <Text style={{ fontSize: 15 }}>{t('종료시간')}</Text>
-                  <View
-                    style={{ flexDirection: 'row', justifyContent: 'flex-end' }}
+                  <TouchableOpacity
+                    style={[
+                      styles.datetimeBox,
+                      datePicker === 'end' && {
+                        borderColor: 'rgb(28, 144, 251)'
+                      },
+                      isTablet && { width: '20%' }
+                    ]}
+                    onPress={() => {
+                      openDatePicker('end');
+                    }}
                   >
-                    <TouchableOpacity
-                      style={[
-                        styles.datetimeBox,
-                        datePicker === 'end' && {
-                          borderColor: 'rgb(28, 144, 251)'
-                        },
-                        isTablet && { width: '20%' }
-                      ]}
-                      onPress={() => {
-                        openDatePicker('end');
-                      }}
+                    <Text
+                      style={
+                        datePicker === 'end'
+                          ? { color: 'rgb(28, 144, 251)' }
+                          : {}
+                      }
                     >
-                      <Text
-                        style={
-                          datePicker === 'end'
-                            ? { color: 'rgb(28, 144, 251)' }
-                            : {}
-                        }
-                      >
-                        {`${endTime.date}`}
-                      </Text>
-                    </TouchableOpacity>
+                      {`${endTime.date}`}
+                    </Text>
+                  </TouchableOpacity>
 
-                    <TouchableOpacity
-                      style={[
-                        styles.datetimeBox,
-                        timePicker === 'end' && {
-                          borderColor: 'rgb(28, 144, 251)'
-                        },
-                        isTablet && { width: '30%' }
-                      ]}
-                      onPress={() => {
-                        openTimePicker('end');
-                      }}
+                  <TouchableOpacity
+                    style={[
+                      styles.datetimeBox,
+                      timePicker === 'end' && {
+                        borderColor: 'rgb(28, 144, 251)'
+                      },
+                      isTablet && { width: '30%' }
+                    ]}
+                    onPress={() => {
+                      openTimePicker('end');
+                    }}
+                  >
+                    <Text
+                      style={
+                        timePicker === 'end'
+                          ? { color: 'rgb(28, 144, 251)' }
+                          : {}
+                      }
                     >
-                      <Text
-                        style={
-                          timePicker === 'end'
-                            ? { color: 'rgb(28, 144, 251)' }
-                            : {}
-                        }
-                      >
-                        {`${endTime.time}`}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
+                      {`${endTime.time}`}
+                    </Text>
+                  </TouchableOpacity>
                 </View>
+              </View>
 
-                {/* <View
+              {/* <View
                       style={[
                         {
                           flexDirection: 'row',
@@ -395,7 +381,7 @@ const CreateMeetScreenPresenter = (props: any) => {
                       {openDatePickerComponent('start')}
                     </View> */}
 
-                {/* <View
+              {/* <View
                       style={[
                         {
                           flexDirection: 'row',
@@ -424,220 +410,215 @@ const CreateMeetScreenPresenter = (props: any) => {
                     >
                       {openDatePickerComponent('end')}
                     </View> */}
-              </Fragment>
-            )}
+            </Fragment>
+          )}
+        </View>
+
+        <View
+          style={[
+            { backgroundColor: '#F7F8FA', height: 9 },
+            isHorizon && { height: 6 }
+          ]}
+        />
+
+        <View style={[styles.conferenceMember]}>
+          <View style={{ flexDirection: 'row' }}>
+            <Text style={styles.ft14B}>{t('참석자')} </Text>
+            <Text style={[styles.ft14B, { color: '#1c90fb' }]}>
+              {selectedEmployee.member.length}
+            </Text>
           </View>
+          <TouchableOpacity
+            onPress={() => {
+              setSelectMode(true);
+            }}
+          >
+            <Image source={icPersonPlus} style={styles.icPersonPlus} />
+          </TouchableOpacity>
+        </View>
 
-          <View
-            style={[
-              { backgroundColor: '#F7F8FA', height: 9 },
-              isHorizon && { height: 6 }
-            ]}
-          />
-
-          <View style={[styles.conferenceMember]}>
-            <View style={{ flexDirection: 'row' }}>
-              <Text style={styles.ft14B}>{t('참석자')} </Text>
-              <Text style={[styles.ft14B, { color: '#1c90fb' }]}>
-                {selectedEmployee.member.length}
-              </Text>
-            </View>
-            <TouchableOpacity
-              onPress={() => {
-                setSelectMode(true);
-              }}
+        <View style={[styles.deleteAlram]}>
+          <View>
+            <Text
+              style={[styles.ft12, { letterSpacing: -0.18, lineHeight: 18 }]}
             >
-              <Image source={icPersonPlus} style={styles.icPersonPlus} />
-            </TouchableOpacity>
+              {isHorizon
+                ? t('화상회의가 변경 또는 삭제될 경우, 알림 이메일을 보냅니다.')
+                : t(
+                    '화상회의가 변경 또는 삭제될 경우, \n알림 이메일을 보냅니다.'
+                  )}
+            </Text>
           </View>
 
-          <View style={[styles.deleteAlram]}>
-            <View>
-              <Text
-                style={[styles.ft12, { letterSpacing: -0.18, lineHeight: 18 }]}
-              >
-                {isHorizon
-                  ? t(
-                      '화상회의가 변경 또는 삭제될 경우, 알림 이메일을 보냅니다.'
-                    )
-                  : t(
-                      '화상회의가 변경 또는 삭제될 경우, \n알림 이메일을 보냅니다.'
-                    )}
-              </Text>
-            </View>
+          <Switch
+            onValueChange={onSwitchDelAlramChange}
+            value={switchDelAlram}
+            trackColor={{ false: '', true: '#1c90fb' }}
+          />
+        </View>
 
-            <Switch
-              onValueChange={onSwitchDelAlramChange}
-              value={switchDelAlram}
-              trackColor={{ false: '', true: '#1c90fb' }}
-            />
-          </View>
+        <View style={{ flex: 1 }}>
+          {selectedEmployee.member[0].user_no !== undefined && (
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              bounces={false}
+              contentContainerStyle={[
+                {
+                  flexGrow: 1,
+                  paddingHorizontal: '5%'
+                }
+              ]}
+              data={selectedEmployee.member}
+              keyExtractor={(item, index) => String(index)}
+              renderItem={({ item, index }: any) => {
+                // let path: [] = [];
+                // let user_path = '';
+                // if (item.full_path) {
+                //   path = item.full_path.split('>');
+                //   for (let i = 1; i < path.length; i++) {
+                //     if (i === path.length - 1) {
+                //       user_path = user_path + path[i];
+                //     } else {
+                //       user_path = user_path + `${path[i]} | `;
+                //     }
+                //   }
+                // } else user_path = '';
 
-          <View style={{ flex: 1 }}>
-            {selectedEmployee.member[0].user_no !== undefined && (
-              <FlatList
-                showsVerticalScrollIndicator={false}
-                bounces={false}
-                contentContainerStyle={[
-                  {
-                    flexGrow: 1,
-                    paddingHorizontal: '5%'
-                  }
-                ]}
-                data={selectedEmployee.member}
-                keyExtractor={(item, index) => String(index)}
-                renderItem={({ item, index }: any) => {
-                  // let path: [] = [];
-                  // let user_path = '';
-                  // if (item.full_path) {
-                  //   path = item.full_path.split('>');
-                  //   for (let i = 1; i < path.length; i++) {
-                  //     if (i === path.length - 1) {
-                  //       user_path = user_path + path[i];
-                  //     } else {
-                  //       user_path = user_path + `${path[i]} | `;
-                  //     }
-                  //   }
-                  // } else user_path = '';
-
-                  const isMaster = item.is_master;
-                  return (
-                    <View style={styles.participantList}>
-                      <TouchableOpacity
-                        style={[
-                          styles.profileView,
-                          isTablet && { width: 46, height: 46 }
-                        ]}
-                        onPress={() => {
-                          clickDeleteUser(item);
-                        }}
-                        disabled={item.user_no === auth.user_no}
-                      >
-                        <View
-                          style={[
-                            styles.myView,
-                            item.user_no !== auth.user_no && {
-                              backgroundColor: '#1c90fb'
-                            }
-                          ]}
-                        >
-                          {item.user_no === auth.user_no ? (
-                            <Text style={styles.myText}>나</Text>
-                          ) : (
-                            <Image
-                              source={icCancel_W}
-                              style={styles.icCancelUser}
-                            />
-                          )}
-                        </View>
-                        <Image
-                          style={styles.profile}
-                          source={{
-                            uri: item.profile_url
-                              ? item.profile_url
-                              : wehagoDummyImageURL
-                          }}
-                          resizeMode={'cover'}
-                        />
-                      </TouchableOpacity>
+                const isMaster = item.is_master;
+                return (
+                  <View style={styles.participantList}>
+                    <TouchableOpacity
+                      style={[
+                        styles.profileView,
+                        isTablet && { width: 46, height: 46 }
+                      ]}
+                      onPress={() => {
+                        clickDeleteUser(item);
+                      }}
+                      disabled={item.user_no === auth.user_no}
+                    >
                       <View
-                        style={[styles.infoBox, isHorizon && { width: '70%' }]}
-                      >
-                        {!item.value && (
-                          <Text style={styles.name}>
-                            {item.user_name
-                              ? item.user_name
-                              : item.address_name
-                              ? item.address_name
-                              : ''}{' '}
-                            {item.rank_name
-                              ? item.rank_name
-                              : item.position_rank_name
-                              ? item.position_rank_name
-                              : ''}
-                          </Text>
-                        )}
-                        <Text
-                          numberOfLines={1}
-                          ellipsizeMode="tail"
-                          style={[styles.tree, item.value && { fontSize: 16 }]}
-                        >
-                          {item.full_path
-                            ? item.full_path
-                            : item.address_service_no
-                            ? item.emailinfolist[0].email_address
-                            : item.value}
-                        </Text>
-                      </View>
-                      <TouchableOpacity
                         style={[
-                          styles.roleContainer,
-                          isMaster && { borderColor: '#01acc1' },
-                          !item.user_no && { borderColor: '#fff' },
-                          isTablet && { width: 140 }
+                          styles.myView,
+                          item.user_no !== auth.user_no && {
+                            backgroundColor: '#1c90fb'
+                          }
                         ]}
-                        onPress={() => {
-                          clickChangeRole(item);
-                        }}
-                        disabled={
-                          item.user_no === auth.user_no || !item.user_no
-                        }
                       >
-                        {isMaster ? (
-                          <Fragment>
-                            <Text
-                              style={[
-                                styles.maseterText,
-                                isTablet && { fontSize: 14 }
-                              ]}
-                            >
-                              {t('마스터')}
-                            </Text>
-                            <Image
-                              style={[
-                                styles.icMaster,
-                                isTablet && { width: 30, height: 30 }
-                              ]}
-                              source={icMasterCircle}
-                              resizeMode={'contain'}
-                            />
-                          </Fragment>
-                        ) : item.user_no ? (
-                          <Fragment>
-                            <Image
-                              style={[
-                                styles.icMaster,
-                                isTablet && { width: 30, height: 30 }
-                              ]}
-                              source={icAttdCircle}
-                              resizeMode={'contain'}
-                            />
-
-                            <Text
-                              style={[
-                                styles.attendantText,
-                                isTablet && { fontSize: 14 }
-                              ]}
-                            >
-                              {t('참석자')}
-                            </Text>
-                          </Fragment>
+                        {item.user_no === auth.user_no ? (
+                          <Text style={styles.myText}>나</Text>
                         ) : (
-                          <Fragment>
-                            {/* <Text style={styles.extText}>
+                          <Image
+                            source={icCancel_W}
+                            style={styles.icCancelUser}
+                          />
+                        )}
+                      </View>
+                      <Image
+                        style={styles.profile}
+                        source={{
+                          uri: item.profile_url
+                            ? item.profile_url
+                            : wehagoDummyImageURL
+                        }}
+                        resizeMode={'cover'}
+                      />
+                    </TouchableOpacity>
+                    <View
+                      style={[styles.infoBox, isHorizon && { width: '70%' }]}
+                    >
+                      {!item.value && (
+                        <Text style={styles.name}>
+                          {item.user_name
+                            ? item.user_name
+                            : item.address_name
+                            ? item.address_name
+                            : ''}{' '}
+                          {item.rank_name
+                            ? item.rank_name
+                            : item.position_rank_name
+                            ? item.position_rank_name
+                            : ''}
+                        </Text>
+                      )}
+                      <Text
+                        numberOfLines={1}
+                        ellipsizeMode="tail"
+                        style={[styles.tree, item.value && { fontSize: 16 }]}
+                      >
+                        {item.full_path
+                          ? item.full_path
+                          : item.address_service_no
+                          ? item.emailinfolist[0].email_address
+                          : item.value}
+                      </Text>
+                    </View>
+                    <TouchableOpacity
+                      style={[
+                        styles.roleContainer,
+                        isMaster && { borderColor: '#01acc1' },
+                        !item.user_no && { borderColor: '#fff' },
+                        isTablet && { width: 140 }
+                      ]}
+                      onPress={() => {
+                        clickChangeRole(item);
+                      }}
+                      disabled={item.user_no === auth.user_no || !item.user_no}
+                    >
+                      {isMaster ? (
+                        <Fragment>
+                          <Text
+                            style={[
+                              styles.maseterText,
+                              isTablet && { fontSize: 14 }
+                            ]}
+                          >
+                            {t('마스터')}
+                          </Text>
+                          <Image
+                            style={[
+                              styles.icMaster,
+                              isTablet && { width: 30, height: 30 }
+                            ]}
+                            source={icMasterCircle}
+                            resizeMode={'contain'}
+                          />
+                        </Fragment>
+                      ) : item.user_no ? (
+                        <Fragment>
+                          <Image
+                            style={[
+                              styles.icMaster,
+                              isTablet && { width: 30, height: 30 }
+                            ]}
+                            source={icAttdCircle}
+                            resizeMode={'contain'}
+                          />
+
+                          <Text
+                            style={[
+                              styles.attendantText,
+                              isTablet && { fontSize: 14 }
+                            ]}
+                          >
+                            {t('참석자')}
+                          </Text>
+                        </Fragment>
+                      ) : (
+                        <Fragment>
+                          {/* <Text style={styles.extText}>
                               {t('외부참여자')}
                             </Text> */}
-                          </Fragment>
-                        )}
-                      </TouchableOpacity>
-                    </View>
-                  );
-                }}
-              />
-            )}
-          </View>
-        </Fragment>
-      )}
+                        </Fragment>
+                      )}
+                    </TouchableOpacity>
+                  </View>
+                );
+              }}
+            />
+          )}
+        </View>
+      </SafeAreaView>
 
       {(timePicker !== 'none' || datePicker !== 'none') && (
         <View
@@ -646,6 +627,7 @@ const CreateMeetScreenPresenter = (props: any) => {
             isHorizon && { width: '66%', left: '17%' }
           ]}
         >
+          <View style={{ flex: 1, backgroundColor: '#666', zIndex: 2 }}></View>
           <View
             style={{
               flexDirection: 'row',
@@ -689,7 +671,7 @@ const CreateMeetScreenPresenter = (props: any) => {
           {datePicker !== 'none' && DatePickerComponent}
         </View>
       )}
-    </SafeAreaView>
+    </Fragment>
   );
 };
 
@@ -956,9 +938,10 @@ const styles = StyleSheet.create({
   },
   bottomComponent: {
     position: 'absolute',
-    backgroundColor: 'rgb(255,255,255)',
+    backgroundColor: '#fff',
     bottom: 0,
     width: '100%',
+    height: '100%',
     borderRadius: 20,
     shadowRadius: 10,
     shadowColor: '#aaa',

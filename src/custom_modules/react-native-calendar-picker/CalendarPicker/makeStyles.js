@@ -224,7 +224,7 @@ export function makeStyles(params) {
       fontSize: 14*scaler,
       color: '#000',
       alignSelf: 'center',
-      paddingHorizontal: 30,
+      paddingHorizontal: 20,
     },
 
     monthsWrapper: {

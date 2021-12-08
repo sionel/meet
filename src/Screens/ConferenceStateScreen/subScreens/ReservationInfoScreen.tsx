@@ -8,16 +8,31 @@ import {
   Text,
   Image
 } from 'react-native';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../redux/configureStore';
 import { wehagoMainURL } from '../../../utils';
 import { getT } from '../../../utils/translateManager';
-export default function ReservationInfoScreen(props) {
+
+interface reservationInfo {
+  name: string;
+  accessUser: any[];
+  isPublic: boolean;
+  start: Date;
+  end: Date;
+  iscret: boolean;
+}
+
+export default function ReservationInfoScreen(props: reservationInfo) {
   const { name, accessUser, isPublic, start, end, iscret } = props;
   const t = getT();
+  const { isHorizon } = useSelector((state: RootState) => ({
+    isHorizon: state.orientation.isHorizon
+  }));
   return (
     <ScrollView
       style={{
         ...styles.container,
-        paddingHorizontal: props.orientation === 'horizontal' ? '20%' : 15
+        paddingHorizontal: isHorizon ? '20%' : 15
       }}
     >
       <View style={styles.enterInfo}>
@@ -34,9 +49,7 @@ export default function ReservationInfoScreen(props) {
         </View>
 
         <View style={styles.wrap}>
-          <Text style={styles.text2}>
-            {t('roomstate_reservation_name')}
-          </Text>
+          <Text style={styles.text2}>{t('roomstate_reservation_name')}</Text>
           <Text style={styles.text1}>{name}</Text>
         </View>
 
@@ -65,18 +78,16 @@ export default function ReservationInfoScreen(props) {
         </View>
 
         <View style={styles.wrap}>
-          <Text style={styles.text2}>
-            {t('roomstate_reservation_endtime')}
-          </Text>
+          <Text style={styles.text2}>{t('roomstate_reservation_endtime')}</Text>
           <Text style={styles.text1}>{end}</Text>
         </View>
       </View>
       {iscret ? (
         <>
           <View style={styles.Participant}>
-            <Text style={styles.text4}>{`${t(
-              'roomstate_reservation_info'
-            )} (${accessUser.length})`}</Text>
+            <Text style={styles.text4}>{`${t('roomstate_reservation_info')} (${
+              accessUser.length
+            })`}</Text>
           </View>
           <FlatList
             data={accessUser}
@@ -97,8 +108,7 @@ export default function ReservationInfoScreen(props) {
                                 uri: wehagoMainURL + profile_url
                               }
                             : {
-                                uri:
-                                  'https://static.wehago.com/imgs/common/no_profile.png'
+                                uri: 'https://static.wehago.com/imgs/common/no_profile.png'
                               }
                         }
                         resizeMode={'center'}

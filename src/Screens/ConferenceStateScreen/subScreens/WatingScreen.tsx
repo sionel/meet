@@ -1,23 +1,29 @@
 import React from 'react';
 import { StyleSheet, View, ScrollView, Image, Text } from 'react-native';
+import { useSelector } from 'react-redux';
 import waiting from '../../../../assets/wating.png';
+import { RootState } from '../../../redux/configureStore';
 import { getT } from '../../../utils/translateManager';
 
-export default function DeletedScreen(props) {
+export default function WatingScreen(props:{start:string, isTablet: boolean}) {
+  const { start } = props;
+  const { isHorizon } = useSelector((state: RootState) => ({
+    isHorizon: state.orientation.isHorizon
+  }));
   const content = () => {
     const t = getT();
     return (
       <View
         style={{
           ...styles.container,
-          paddingHorizontal: props.orientation === 'horizontal' ? '20%' : 15,
-          paddingVertical: props.orientation === 'horizontal' ? 20 : 0
+          paddingHorizontal: isHorizon ? '20%' : 15,
+          paddingVertical: isHorizon ? 20 : 0
         }}
       >
         <View
           style={{
-            height: props.orientation === 'horizontal' ? 260 : 500,
-            marginBottom: props.orientation === 'horizontal' ? 10 : 0,
+            height: isHorizon ? 260 : 500,
+            marginBottom: isHorizon ? 10 : 0,
             justifyContent: 'center',
             alignItems: 'center'
           }}
@@ -28,11 +34,13 @@ export default function DeletedScreen(props) {
             style={{ width: 200, height: 200 }}
           />
           <Text style={{ fontSize: 14, color: 'rgb(80,80,80)' }}>
-            {t('roomstate_delete_title')}
+            {t('roomstate_wating_title')}
           </Text>
-          <View style={{ fontSize: 12, paddingTop: 25 }}>
-            <Text style={{ textAlign: 'center', color: 'rgb(171,171,171)' }}>
-              {t('roomstate_delete_center')}
+          <View style={{paddingTop: 25 }}>
+            <Text style={{fontSize: 12, textAlign: 'center', color: 'rgb(171,171,171)' }}>
+              {t('roomstate_wating_thisroom')}
+              <Text style={{ color: 'rgb(28,144,251)' }}>{start}</Text>
+              {t('roomstate_wating_willstart')}
             </Text>
           </View>
         </View>
@@ -40,24 +48,31 @@ export default function DeletedScreen(props) {
           <View style={styles.line}>
             <Text style={styles.linedot}>{'\u2B24'}</Text>
             <Text style={{ fontSize: 12 }}>
-              {t('roomstate_delete_yet')}
+              {props.isTablet
+                ? `${t('roomstate_wating_modify')} ${t(
+                    'roomstate_wating_unable'
+                  )}`
+                : `${t('roomstate_wating_modify')}\n${t(
+                    'roomstate_wating_unable'
+                  )}`}
+            </Text>
+          </View>
+          <View style={styles.line}>
+            <Text style={styles.linedot}>{'\u2B24'}</Text>
+            <Text style={{ fontSize: 12 }}>
+              {t('roomstate_wating_master')}
             </Text>
           </View>
           <View style={styles.line}>
             <Text style={styles.linedot}>{'\u2B24'}</Text>
             <Text style={{ fontSize: 12 }}>
               {props.isTablet
-                ? t('roomstate_delete_cannot') +
-                  t('roomstate_delete_master')
-                : t('roomstate_delete_cannot') +
-                  '\n' +
-                  t('roomstate_delete_master')}
-            </Text>
-          </View>
-          <View style={styles.line}>
-            <Text style={styles.linedot}>{'\u2B24'}</Text>
-            <Text style={{ fontSize: 12 }}>
-              {t('roomstate_delete_another')}
+                ? `${t('roomstate_wating_continue')} ${t(
+                    'roomstate_wating_center'
+                  )}`
+                : `${t('roomstate_wating_continue')}\n${t(
+                    'roomstate_wating_center'
+                  )}`}
             </Text>
           </View>
         </View>
@@ -65,7 +80,7 @@ export default function DeletedScreen(props) {
     );
   };
 
-  return !props.isTablet && props.orientation === 'horizontal' ? (
+  return !props.isTablet && isHorizon ? (
     <ScrollView>{content()}</ScrollView>
   ) : (
     <View style={{ flex: 1 }}>{content()}</View>

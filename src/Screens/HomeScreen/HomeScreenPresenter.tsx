@@ -440,7 +440,6 @@ const HomeScreenPresenter = (props: any) => {
         {bottomPopup.show && (
           <BottomPopup {...bottomPopup} isHorizon={isHorizon} />
         )}
-
         {calendarView && (
           <CalendarPicker
             weekdays={['일', '월', '화', '수', '목', '금', '토']}
@@ -493,7 +492,7 @@ const HomeScreenPresenter = (props: any) => {
                 shadowColor: '#aaa',
                 shadowOpacity: 10,
                 borderWidth: 1,
-                paddingBottom: '5%'
+                paddingBottom: 50
               },
               isHorizon && { width: '66%', left: '17%' }
             ]}
@@ -550,9 +549,11 @@ const HomeScreenPresenter = (props: any) => {
               scaleFactor={isHorizon ? 740 : isTablet ? 450 : 370}
               onDateChange={onChangeMonth}
               selectYearTitle={t('년도 선택')}
-              selectMonthTitle={t('년')}
+              selectMonthTitle={''}
               textStyle={{ fontSize: isTablet ? 18 : 14 }}
               disabledDatesTextStyle={{ fontSize: isTablet ? 18 : 14 }}
+              previousTitleStyle={{ paddingLeft: '30%' }}
+              nextTitleStyle={{ paddingRight: '30%' }}
               calendarMode={'months'}
             />
           </View>
