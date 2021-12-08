@@ -127,7 +127,12 @@ const HomeScreenPresenter = (props: presenterProps) => {
   return (
     <Fragment>
       <StatusBar barStyle={'dark-content'} backgroundColor={'#F7F8FA'} />
-      <SafeAreaView style={{ flex: 0, backgroundColor: '#F7F8FA' }} />
+      <SafeAreaView
+        style={{
+          flex: 0,
+          backgroundColor: bottomPopup.show ? 'rgba(0,0,0,0.5)' : '#F7F8FA'
+        }}
+      />
       <View style={styles.safeContainer}>
         {participantsList.show && (
           <ParticipantsList {...participantsList} isHorizon={isHorizon} />

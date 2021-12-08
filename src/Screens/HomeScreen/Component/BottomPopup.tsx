@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import {
   View,
   Text,
@@ -36,92 +36,99 @@ export default function BottomPopup(
         position: 'absolute',
         width,
         height,
-        alignItems: 'center',
-        justifyContent: 'center'
+        backgroundColor: 'rgba(0,0,0,0.5)'
       }}
     >
-      <TouchableOpacity
-        onPress={onClickOutside}
+      <SafeAreaView
         style={{
-          position: 'absolute',
-          width,
-          height,
-          backgroundColor: 'rgba(0,0,0,0.5)'
-        }}
-        activeOpacity={1}
-      />
-      <View
-        style={{
-          width: '30%',
-          backgroundColor: '#fff',
-          zIndex: 2,
-          borderRadius: 30
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'center'
         }}
       >
+        <TouchableOpacity
+          onPress={onClickOutside}
+          style={{
+            position: 'absolute',
+            width,
+            height,
+            backgroundColor: 'rgba(0,0,0,0.5)'
+          }}
+          activeOpacity={1}
+        />
         <View
           style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-            paddingVertical: 20,
-            borderBottomWidth: 2,
-            borderBottomColor: '#d1d1d1'
+            width: '30%',
+            backgroundColor: '#fff',
+            zIndex: 2,
+            borderRadius: 30
           }}
         >
-          <Text
+          <View
             style={{
-              fontSize: 20,
-              fontFamily: 'DOUZONEText50'
+              justifyContent: 'center',
+              alignItems: 'center',
+              paddingVertical: 20,
+              borderBottomWidth: 2,
+              borderBottomColor: '#d1d1d1'
             }}
           >
-            {title}
-          </Text>
-        </View>
-        <FlatList
-          keyExtractor={(item, index) => index.toString()}
-          data={contentList}
-          renderItem={data => {
-            const { item } = data;
-            return (
-              <TouchableOpacity
-                style={{
-                  marginHorizontal: 20,
-                  marginVertical: 10,
-                  flexDirection: 'row',
-                  height: 40,
-                  alignItems: 'center'
-                }}
-                activeOpacity={0.3}
-                onPress={item.onClick}
-              >
-                {item.icon1 && (
-                  <Image
-                    source={item.icon1}
-                    resizeMode={'contain'}
-                    style={{ height: '80%', marginRight: 10 }}
-                  />
-                )}
-                <Text
+            <Text
+              style={{
+                fontSize: 20,
+                fontFamily: 'DOUZONEText50'
+              }}
+            >
+              {title}
+            </Text>
+          </View>
+          <FlatList
+            keyExtractor={(item, index) => index.toString()}
+            data={contentList}
+            renderItem={data => {
+              const { item } = data;
+              return (
+                <TouchableOpacity
                   style={{
-                    fontSize: 18,
-                    flex: 1,
-                    fontFamily: 'DOUZONEText30'
+                    marginHorizontal: 20,
+                    marginVertical: 10,
+                    flexDirection: 'row',
+                    height: 40,
+                    alignItems: 'center'
                   }}
-                  numberOfLines={1}
+                  activeOpacity={0.3}
+                  onPress={item.onClick}
                 >
-                  {item.name}
-                </Text>
-                {item.icon2 && (
-                  <Image
-                    source={item.icon2}
-                    resizeMode={'contain'}
-                    style={{ height: '80%' }}
-                  />
-                )}
-              </TouchableOpacity>
-            );
-          }}
-        />
-      </View>
+                  {item.icon1 && (
+                    <Image
+                      source={item.icon1}
+                      resizeMode={'contain'}
+                      style={{ height: '80%', marginRight: 10 }}
+                    />
+                  )}
+                  <Text
+                    style={{
+                      fontSize: 18,
+                      flex: 1,
+                      fontFamily: 'DOUZONEText30'
+                    }}
+                    numberOfLines={1}
+                  >
+                    {item.name}
+                  </Text>
+                  {item.icon2 && (
+                    <Image
+                      source={item.icon2}
+                      resizeMode={'contain'}
+                      style={{ height: '80%' }}
+                    />
+                  )}
+                </TouchableOpacity>
+              );
+            }}
+          />
+        </View>
+      </SafeAreaView>
     </View>
   ) : (
     <View
@@ -132,87 +139,93 @@ export default function BottomPopup(
         backgroundColor: 'rgba(0,0,0,0.5)'
       }}
     >
-      <TouchableOpacity
-        style={{ flex: 1 }}
-        activeOpacity={1}
-        onPress={onClickOutside}
-      />
-
-      <View
+      <SafeAreaView
         style={{
-          backgroundColor: '#fff',
-          borderTopLeftRadius: 20,
-          borderTopRightRadius: 20,
-          maxHeight: 600
+          flex: 1
         }}
       >
+        <TouchableOpacity
+          style={{ flex: 1 }}
+          activeOpacity={1}
+          onPress={onClickOutside}
+        />
+
         <View
           style={{
-            marginTop: 25,
-            marginBottom: 10,
-            paddingBottom: 10,
-            height: 40,
-            alignItems: 'center',
-            borderBottomWidth: 2,
-            borderColor: '#e6e6e6'
+            backgroundColor: '#fff',
+            borderTopLeftRadius: 20,
+            borderTopRightRadius: 20,
+            maxHeight: 600
           }}
         >
-          <Text
+          <View
             style={{
-              fontSize: 20,
-              fontFamily: 'DOUZONEText50'
+              marginTop: 25,
+              marginBottom: 10,
+              paddingBottom: 10,
+              height: 40,
+              alignItems: 'center',
+              borderBottomWidth: 2,
+              borderColor: '#e6e6e6'
             }}
           >
-            {title}
-          </Text>
-        </View>
-        <FlatList
-          keyExtractor={(item, index) => index.toString()}
-          data={contentList}
-          renderItem={data => {
-            const { item } = data;
-            return (
-              <TouchableOpacity
-                style={{
-                  marginHorizontal: 20,
-                  marginVertical: 8,
-                  flexDirection: 'row',
-                  height: 40,
-                  alignItems: 'center'
-                }}
-                activeOpacity={0.3}
-                onPress={item.onClick}
-              >
-                {item.icon1 && (
-                  <Image
-                    source={item.icon1}
-                    resizeMode={'contain'}
-                    style={{ height: '80%', marginRight: 10 }}
-                  />
-                )}
-                <Text
+            <Text
+              style={{
+                fontSize: 20,
+                fontFamily: 'DOUZONEText50'
+              }}
+            >
+              {title}
+            </Text>
+          </View>
+          <FlatList
+            keyExtractor={(item, index) => index.toString()}
+            data={contentList}
+            renderItem={data => {
+              const { item } = data;
+              return (
+                <TouchableOpacity
                   style={{
-                    fontSize: 18,
-                    flex: 1,
-                    fontFamily: 'DOUZONEText30'
+                    marginHorizontal: 20,
+                    marginVertical: 8,
+                    flexDirection: 'row',
+                    height: 40,
+                    alignItems: 'center'
                   }}
-                  numberOfLines={1}
+                  activeOpacity={0.3}
+                  onPress={item.onClick}
                 >
-                  {item.name}
-                </Text>
-                {item.icon2 && (
-                  <Image
-                    source={item.icon2}
-                    resizeMode={'contain'}
-                    style={{ height: '80%' }}
-                  />
-                )}
-              </TouchableOpacity>
-            );
-          }}
-        />
-        <View style={{ height: 20 }}></View>
-      </View>
+                  {item.icon1 && (
+                    <Image
+                      source={item.icon1}
+                      resizeMode={'contain'}
+                      style={{ height: '80%', marginRight: 10 }}
+                    />
+                  )}
+                  <Text
+                    style={{
+                      fontSize: 18,
+                      flex: 1,
+                      fontFamily: 'DOUZONEText30'
+                    }}
+                    numberOfLines={1}
+                  >
+                    {item.name}
+                  </Text>
+                  {item.icon2 && (
+                    <Image
+                      source={item.icon2}
+                      resizeMode={'contain'}
+                      style={{ height: '80%' }}
+                    />
+                  )}
+                </TouchableOpacity>
+              );
+            }}
+          />
+          <View style={{ height: 20 }}></View>
+        </View>
+      </SafeAreaView>
     </View>
   );
 }
