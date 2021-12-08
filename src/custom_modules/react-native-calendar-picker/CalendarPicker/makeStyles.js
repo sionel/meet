@@ -223,7 +223,8 @@ export function makeStyles(params) {
     monthText: {
       fontSize: 14*scaler,
       color: '#000',
-      alignSelf: 'center'
+      alignSelf: 'center',
+      paddingHorizontal: 30,
     },
 
     monthsWrapper: {

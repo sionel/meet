@@ -12,6 +12,8 @@ import {
 
 import DatePicker from 'react-native-date-picker';
 import CalendarPicker from '../../custom_modules/react-native-calendar-picker/CalendarPicker';
+import CalendarPicker2 from 'react-native-calendar-picker';
+
 
 import { getT } from '../../utils/translateManager';
 
@@ -90,7 +92,7 @@ const CreateMeetScreenPresenter = (props: any) => {
       width={isTablet ? 500 : 360}
       onDateChange={onDateChange}
       selectYearTitle={t('년도 선택')}
-      selectMonthTitle={'월 선택'}
+      selectMonthTitle={t('년')}
       textStyle={{ fontSize: isTablet ? 18 : 14 }}
       disabledDatesTextStyle={{ fontSize: isTablet ? 18 : 14 }}
       // previousTitleStyle={{marginRight: 20}}

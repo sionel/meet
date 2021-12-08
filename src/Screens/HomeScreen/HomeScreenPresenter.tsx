@@ -437,7 +437,7 @@ const HomeScreenPresenter = (props: any) => {
         {bottomPopup.show && (
           <BottomPopup {...bottomPopup} isHorizon={isHorizon} />
         )}
-        {true && (
+        {false && (
           <CalendarPicker
             weekdays={['일', '월', '화', '수', '목', '금', '토']}
             months={['1','2','3','4','5','6','7','8','9','10','11','12']}
