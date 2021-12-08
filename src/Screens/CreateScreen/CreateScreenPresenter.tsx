@@ -83,7 +83,7 @@ function CreateScreenPresenter(props: createProps) {
             />
           </TouchableOpacity>
           <Text style={styles.HeaderTitleText}>
-            {t('이용약관 및 법률정보')}
+            {t('메신저로 생성하기')}
           </Text>
           <TouchableOpacity disabled={true}>
             <Text style={styles.emptyText}>확인</Text>

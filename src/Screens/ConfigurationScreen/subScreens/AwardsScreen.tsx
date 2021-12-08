@@ -98,22 +98,22 @@ export default function AwardsScreen(props: any) {
 AwardsScreen.defaultProps = {};
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor:'rgb(235,238,240)' },
+  container: { flex: 1, backgroundColor:'#F7F8FA' },
   img: {
     resizeMode: 'contain',
     width: 80,
     height: 80
   },
   list: {
-    backgroundColor: 'rgb(235,238,240)'
+    backgroundColor: '#F7F8FA'
   },
   card: {
     height: 300,
     marginHorizontal: 15,
     marginBottom: 15,
-    backgroundColor: 'white',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: '#F7F8FA'
   },
   topTitle: {
     paddingHorizontal: '5%',
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     height: 50,
     borderColor: '#d1d1d1',
     borderBottomWidth: 1,
-    backgroundColor: 'rgb(235,238,240)'
+    backgroundColor: '#F7F8FA'
   },
   HeaderTitleText: {
     fontSize: 18,

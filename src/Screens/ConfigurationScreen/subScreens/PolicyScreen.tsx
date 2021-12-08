@@ -98,7 +98,7 @@ export default function PolicyScreen(props: any) {
 PolicyScreen.defaultProps = {};
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
+  container: { flex: 1, backgroundColor: '#F7F8FA' },
   columnContainer: {
     flexDirection: 'row',
     height: 50,
@@ -106,7 +106,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderBottomWidth: 1,
     borderBottomColor: '#d1d1d1',
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
+    backgroundColor: '#F7F8FA'
   },
   topTitle: {
     paddingHorizontal: '5%',
@@ -117,7 +118,7 @@ const styles = StyleSheet.create({
     height: 50,
     borderColor: '#d1d1d1',
     borderBottomWidth: 1,
-    // backgroundColor: 'rgb(235,238,240)'
+    backgroundColor: '#F7F8FA'
   },
   HeaderTitleText: {
     fontSize: 18,
