@@ -12,6 +12,7 @@ import { getT } from '../../utils/translateManager';
 import { RootState } from '../../redux/configureStore';
 import deviceInfoModule from 'react-native-device-info';
 import { wehagoMainURL } from '../../utils';
+import { MainNavigationProps } from '../../Navigations/MainStack';
 
 interface param {
   type: 'portal_id' | 'email';
@@ -29,6 +30,8 @@ export default function CreateMeetScreenContainer(props: any) {
     auth: state.user.auth,
     isHorizon: state.orientation.isHorizon
   }));
+
+  const { navigation }: MainNavigationProps<'DirectCreateConference'> = props;
 
   const [switchReserve, setSwitchReserve] = useState(false);
   const [switchDelAlram, setSwitchDelAlram] = useState(false);
@@ -499,7 +502,7 @@ export default function CreateMeetScreenContainer(props: any) {
   };
 
   const onHandleBack = () => {
-    props.navigation.goBack();
+    navigation.goBack();
   };
 
   const onFocusOut = () => {

@@ -246,7 +246,15 @@ const ConferenceModfiyScreenPresenter = (props: any) => {
                 <Text style={styles.textHeader}>{t('초대메세지')}</Text>
 
                 {isNormal ? (
-                  <Text>{sendMessage}</Text>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      lineHeight: 20,
+                      letterSpacing: -0.28
+                    }}
+                  >
+                    {sendMessage}
+                  </Text>
                 ) : (
                   <Fragment>
                     <TextInput
@@ -474,11 +482,15 @@ const ConferenceModfiyScreenPresenter = (props: any) => {
                 const isMaster = item.is_master;
                 return (
                   <View style={styles.participantList}>
-                    <View
+                    <TouchableOpacity
                       style={[
                         styles.profileView,
                         isTablet && { width: 46, height: 46 }
                       ]}
+                      onPress={() => {
+                        clickDeleteUser(item, index);
+                      }}
+                      disabled={item.user_no === auth.user_no}
                     >
                       <View
                         style={[
@@ -498,16 +510,10 @@ const ConferenceModfiyScreenPresenter = (props: any) => {
                         ) : isNormal ? (
                           <Fragment />
                         ) : (
-                          <TouchableOpacity
-                            onPress={() => {
-                              clickDeleteUser(item, index);
-                            }}
-                          >
-                            <Image
-                              source={icCancel_W}
-                              style={styles.icCancelUser}
-                            />
-                          </TouchableOpacity>
+                          <Image
+                            source={icCancel_W}
+                            style={styles.icCancelUser}
+                          />
                         )}
                       </View>
                       <Image
@@ -517,7 +523,7 @@ const ConferenceModfiyScreenPresenter = (props: any) => {
                         }}
                         resizeMode={'cover'}
                       />
-                    </View>
+                    </TouchableOpacity>
                     <View
                       style={[styles.infoBox, isHorizon && { width: '70%' }]}
                     >

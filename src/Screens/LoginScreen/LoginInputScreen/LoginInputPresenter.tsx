@@ -66,7 +66,7 @@ const LoginInputPresenter = (props: any) => {
         style={{ position:'absolute' , width:'100%' ,height:'100%'}}
       />
       <SafeAreaView style={{ flex: 1, backgroundColor: 'transparent' }}>
-        <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }} bounces={false}>
           <ScrollView
             contentInsetAdjustmentBehavior="automatic"
             contentContainerStyle={{
@@ -74,6 +74,7 @@ const LoginInputPresenter = (props: any) => {
               minHeight: isHorizon && !isTablet ? (captcha ? 590 : 375) : 750
             }}
             keyboardShouldPersistTaps="never"
+            bounces={false}
           >
             <LinearGradient
               end={{ x: 0, y: 0 }}

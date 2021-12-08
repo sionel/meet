@@ -139,7 +139,7 @@ export default function HomeScreenContainer(props: any) {
     dispatch(RecentsActions.resetRecents());
   };
 
-  const { navigation, route }: MainNavigationProps<'MainStack'> = props;
+  const { navigation }: MainNavigationProps<'MainStack'> = props;
 
   const _openCompany = () => dispatch(SelectCompanyActions.openCompany());
   const changeCompanyRequest = (auth: any, company: any) =>
@@ -526,7 +526,24 @@ export default function HomeScreenContainer(props: any) {
     const cancle = {
       name: '예약 취소',
       icon1: icCancel,
-      onClick: () => {}
+      onClick: async () => {
+        const result = await MeetApi.deleteConferenceRoom(
+          auth,
+          conference.room_id
+        );
+
+        if (result) {
+          setBottomPopup({
+            show: false,
+            contentList: [],
+            title: '',
+            onClickOutside: _onClickOutside
+          });
+          _getConferences();
+        } else {
+          console.log('예약 취소중에 오류가 발생했습니다.');
+        }
+      }
     };
 
     const contentList = [];

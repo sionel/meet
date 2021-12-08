@@ -45,6 +45,7 @@ const InvitedCodeScreenPresenter = (props: any) => {
       <KeyboardAwareScrollView
         contentContainerStyle={{ flexGrow: 1 }}
         onKeyboardDidHide={onFocusOutInput}
+        bounces={false}
       >
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
@@ -53,6 +54,7 @@ const InvitedCodeScreenPresenter = (props: any) => {
             minHeight: isHorizon && !isTablet ? 350 : 700
           }}
           keyboardShouldPersistTaps="never"
+          bounces={false}
         >
           <View style={[styles.topTitle]}>
             <TouchableOpacity onPress={handleClickBack}>

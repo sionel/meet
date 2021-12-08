@@ -265,6 +265,32 @@ export default {
   // 3-5 마스터 설정
   // 3-6 참가자 설정
   // 3-7 화상회의방 삭제
+  deleteConferenceRoom: async (auth, roomId) => {
+    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
+
+    const url = `${meetURL}/room/delete?cno=${cno}&room=${roomId}`;
+    const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
+
+    try {
+      const data = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          ...headers
+        }
+      };
+      const response = await fetch(url, data);
+      
+      if (response.status !== 204) {
+        throw response.resultCode;
+      } else {
+        return response.ok;
+      }
+    } catch (err) {
+      console.warn('7.deleteConferenceRoom : ', err);
+      return false;
+    }
+  },
   // 3-8 화상회의방 종료 리스트 조회
   // 3-9 화상회의방 참가자 허용 리스트 조회
   getAccessUsers: async (auth, roomId) => {
