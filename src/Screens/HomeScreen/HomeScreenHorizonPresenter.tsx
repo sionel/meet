@@ -18,6 +18,8 @@ import {
   FlatList
 } from 'react-native';
 
+import CalendarPicker from '../../custom_modules/react-native-calendar-picker';
+
 // import {
 //   ListItemComp,
 //   CustomAlert,
@@ -31,6 +33,7 @@ import FinishedCard from './Component/FinishedCard';
 import ReservationCard from './Component/ReservationCard';
 import BottomPopup from './Component/BottomPopup';
 import ParticipantsList from '../../components/renewal/ParticipantsList';
+import { presenterProps } from './HomeScreenPresenter';
 // import { Text } from '../../components/StyledText';
 const loginLogo = require('../../../assets/new/logos/logo.png');
 const icSet = require('../../../assets/new/icons/ic_set.png');
@@ -39,6 +42,7 @@ const icVideo = require('../../../assets/new/icons/ic_video.png');
 const icKeyboard = require('../../../assets/new/icons/ic_keyboard.png');
 const icArrowDownBlack = require('../../../assets/new/icons/ic_arrow_down_black.png');
 const icChange = require('../../../assets/new/icons/ic_change.png');
+const icCancel = require('../../../assets/new/icons/ic_cancel.png');
 
 {
   /*
@@ -56,35 +60,37 @@ const icChange = require('../../../assets/new/icons/ic_change.png');
  */
 }
 
-const HomeScreenPresenter = (props: any) => {
+const HomeScreenPresenter = (props: presenterProps) => {
   const {
     isTablet,
-    test,
-    setTest,
     userName,
-    indicator,
     ongoingConference,
     reservationConference,
     finishedConference,
     highlight,
     setHighlight,
-
     onClickSetting,
     companyName,
     userImg,
-    createTalkConference,
     createConference,
     enterInviteCode,
     bottomPopup,
     participantsList,
     isHorizon,
-    onConpanyChange
+    onConpanyChange,
+    onChangeMonth,
+    calendarView,
+    setCalendarView,
+    finishDate,
+    onEndReached,
+    finishCount
   } = props;
   const t = getT();
   return (
     <Fragment>
       <StatusBar barStyle={'dark-content'} backgroundColor={'#F7F8FA'} />
-      <SafeAreaView style={styles.safeContainer}>
+      <SafeAreaView style={{ flex: 0, backgroundColor: '#F7F8FA' }} />
+      <View style={styles.safeContainer}>
         {participantsList.show && (
           <ParticipantsList {...participantsList} isHorizon={isHorizon} />
         )}
@@ -177,6 +183,7 @@ const HomeScreenPresenter = (props: any) => {
             </TouchableOpacity>
           </View>
         </View>
+
         <View style={{ flex: 1, paddingVertical: 50 }}>
           {/* 진행중인 화상회의 */}
           {ongoingConference.length > 0 && (
@@ -217,12 +224,14 @@ const HomeScreenPresenter = (props: any) => {
               />
             </View>
           )}
+
           <View
             style={{
               width: '100%',
               flex: 1,
               marginVertical: '2%',
               paddingHorizontal: isTablet ? 40 : 20
+              // backgroundColor: 'red'
             }}
           >
             <View
@@ -233,38 +242,36 @@ const HomeScreenPresenter = (props: any) => {
               }}
             >
               {reservationConference.length > 0 && (
-                <TouchableOpacity
-                  style={{ flexDirection: 'row' }}
-                  onPress={() => {
-                    setHighlight('reservation');
-                  }}
-                >
-                  <Text
-                    style={[
-                      { color: '#939393', fontSize: 16, paddingRight: 5 },
-                      highlight === 'reservation' && {
-                        fontWeight: 'bold',
-                        color: '#000'
-                      }
-                    ]}
+                <Fragment>
+                  <TouchableOpacity
+                    style={{ flexDirection: 'row' }}
+                    onPress={() => {
+                      setHighlight('reservation');
+                    }}
                   >
-                    {'예약회의'}
-                  </Text>
-                  <Text
-                    style={[
-                      { color: '#939393', fontSize: 16 },
-                      highlight === 'reservation' && {
-                        fontWeight: 'bold',
-                        color: '#1c90fb'
-                      }
-                    ]}
-                  >
-                    {reservationConference.length}
-                  </Text>
-                </TouchableOpacity>
-              )}
-              {reservationConference.length > 0 &&
-                finishedConference.length > 0 && (
+                    <Text
+                      style={[
+                        { color: '#939393', fontSize: 16, paddingRight: 5 },
+                        highlight === 'reservation' && {
+                          fontWeight: 'bold',
+                          color: '#000'
+                        }
+                      ]}
+                    >
+                      {'예약회의'}
+                    </Text>
+                    <Text
+                      style={[
+                        { color: '#939393', fontSize: 16 },
+                        highlight === 'reservation' && {
+                          fontWeight: 'bold',
+                          color: '#1c90fb'
+                        }
+                      ]}
+                    >
+                      {reservationConference.length}
+                    </Text>
+                  </TouchableOpacity>
                   <View
                     style={{
                       borderWidth: 1,
@@ -273,8 +280,16 @@ const HomeScreenPresenter = (props: any) => {
                       marginHorizontal: 10
                     }}
                   />
-                )}
-              {finishedConference.length > 0 && (
+                </Fragment>
+              )}
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  flex: 1
+                }}
+              >
                 <TouchableOpacity
                   style={{ flexDirection: 'row' }}
                   onPress={() => {
@@ -295,70 +310,139 @@ const HomeScreenPresenter = (props: any) => {
                   </Text>
                   <Text
                     style={[
-                      { color: '#939393', fontSize: 16, paddingRight: 20 },
+                      {
+                        color: '#939393',
+                        fontSize: 16,
+                        paddingRight: 20
+                      },
                       highlight === 'finished' && {
                         fontWeight: 'bold',
                         color: '#1c90fb'
                       }
                     ]}
                   >
-                    {finishedConference.length}
+                    {finishCount}
                   </Text>
                 </TouchableOpacity>
-              )}
+                <TouchableOpacity
+                  onPress={() => setCalendarView(true)}
+                  style={{
+                    height: '100%',
+                    borderColor: '#939393',
+                    borderWidth: 1,
+                    padding: 5,
+                    borderRadius: 10
+                  }}
+                >
+                  <Text>{`${finishDate.getMonth() + 1}월`}</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-            {isTablet ? (
-              <FlatList
-                numColumns={2}
-                keyExtractor={(item, index) => index.toString()}
-                data={
-                  highlight === 'reservation'
-                    ? reservationConference
-                    : finishedConference
-                }
-                columnWrapperStyle={{ justifyContent: 'space-between' }}
-                renderItem={data => {
-                  const { item } = data;
+            <FlatList
+              numColumns={isTablet ? 2 : 1}
+              keyExtractor={(item, index) => index.toString()}
+              data={
+                highlight === 'reservation'
+                  ? reservationConference
+                  : finishedConference
+              }
+              renderItem={data => {
+                const { item } = data;
 
-                  return highlight === 'reservation' ? (
-                    <ReservationCard {...item} isTablet={isTablet} />
-                  ) : (
-                    // <FinishedCard {...{item}} />
-                    <FinishedCard {...item} isTablet={isTablet} />
-                  );
-                }}
-                showsVerticalScrollIndicator={false}
-              />
-            ) : (
-              <FlatList
-                numColumns={1}
-                keyExtractor={(item, index) => index.toString()}
-                data={
-                  highlight === 'reservation'
-                    ? reservationConference
-                    : finishedConference
-                }
-                // { isTablet && columnWrapperStyle={{ justifyContent: 'space-between' }}}
-                renderItem={data => {
-                  const { item } = data;
-
-                  return highlight === 'reservation' ? (
-                    <ReservationCard {...item} isTablet={isTablet} />
-                  ) : (
-                    // <FinishedCard {...{item}} />
-                    <FinishedCard {...item} isTablet={isTablet} />
-                  );
-                }}
-                showsVerticalScrollIndicator={false}
-              />
-            )}
+                return highlight === 'reservation' ? (
+                  <ReservationCard {...item} isTablet={isTablet} />
+                ) : (
+                  <FinishedCard {...item} isTablet={isTablet} />
+                );
+              }}
+              showsVerticalScrollIndicator={false}
+              onEndReached={onEndReached}
+              onEndReachedThreshold={1}
+              {...(isTablet && {
+                columnWrapperStyle: { justifyContent: 'space-between' }
+              })}
+            />
           </View>
         </View>
 
         {bottomPopup.show && (
           <BottomPopup {...bottomPopup} isHorizon={isHorizon} />
         )}
-      </SafeAreaView>
+      </View>
+      {calendarView && (
+        <View
+          style={{
+            position: 'absolute',
+            backgroundColor: 'rgb(255,255,255)',
+            bottom: 0,
+            width: '100%',
+            height: '100%',
+            borderRadius: 20,
+            shadowRadius: 10,
+            shadowColor: '#aaa',
+            shadowOpacity: 10,
+            borderWidth: 1,
+            paddingBottom: '5%'
+          }}
+        >
+          <View style={{ flex: 1, backgroundColor: '#666', zIndex: 2 }}></View>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginTop: '5%',
+              marginBottom: '3%',
+              paddingHorizontal: '4%'
+            }}
+          >
+            <TouchableOpacity
+              onPress={() => {
+                setCalendarView(false);
+              }}
+            >
+              <Image
+                source={icCancel}
+                style={{
+                  resizeMode: 'cover',
+                  width: 18,
+                  height: 18
+                }}
+              />
+            </TouchableOpacity>
+          </View>
+          <CalendarPicker
+            weekdays={['일', '월', '화', '수', '목', '금', '토']}
+            months={[
+              '1월',
+              '2월',
+              '3월',
+              '4월',
+              '5월',
+              '6월',
+              '7월',
+              '8월',
+              '9월',
+              '10월',
+              '11월',
+              '12월'
+            ]}
+            previousTitle="<"
+            nextTitle=">"
+            minDate={new Date('2020-01-01')}
+            // selectedStartDate={startTime.current}
+            selectedDayTextColor="#fff"
+            selectedDayStyle={{ borderRadius: 5, backgroundColor: '#1c90fb' }}
+            todayBackgroundColor="#febc2c"
+            dayShape="square"
+            onMonthChange={onChangeMonth}
+            selectYearTitle={t('년도 선택')}
+            selectMonthTitle={t('년')}
+            textStyle={{ fontSize: isTablet ? 18 : 14 }}
+            disabledDatesTextStyle={{ fontSize: isTablet ? 18 : 14 }}
+            calendarMode={'months'}
+          />
+        </View>
+      )}
     </Fragment>
   );
 };

@@ -31,8 +31,10 @@ import { getT } from '../../utils/translateManager';
 import ConferenceCard from './Component/ConferenceCard';
 import FinishedCard from './Component/FinishedCard';
 import ReservationCard from './Component/ReservationCard';
-import BottomPopup from './Component/BottomPopup';
-import ParticipantsList from '../../components/renewal/ParticipantsList';
+import BottomPopup, { content } from './Component/BottomPopup';
+import ParticipantsList, {
+  participantsListProps
+} from '../../components/renewal/ParticipantsList';
 // import ParticipantBox from '../ConferenceScreen/Content/BottomArea/SubVideoBox/ParticipantBox';
 
 // import { isWehagoV } from '../../utils';
@@ -65,23 +67,48 @@ const icCancel = require('../../../assets/new/icons/ic_cancel.png');
 */
 }
 
-const HomeScreenPresenter = (props: any) => {
+export interface presenterProps {
+  isTablet: boolean;
+  userName: string;
+  ongoingConference: any[];
+  reservationConference: any[];
+  finishedConference: any[];
+  highlight: 'reservation' | 'finished' | null;
+  setHighlight: (type: 'reservation' | 'finished') => void;
+  onClickSetting: () => void;
+  companyName: string;
+  userImg: string | undefined;
+  createConference: () => void;
+  enterInviteCode: () => void;
+  bottomPopup: {
+    show: boolean;
+    contentList: content[];
+    title: string;
+    onClickOutside: () => void;
+  };
+  participantsList: participantsListProps & { show: boolean };
+  isHorizon: boolean;
+  onConpanyChange: () => void;
+  onChangeMonth: (date: any) => void;
+  calendarView: boolean;
+  setCalendarView: (flag: boolean) => void;
+  finishDate: Date;
+  onEndReached: () => void;
+  finishCount: number;
+}
+
+const HomeScreenPresenter = (props: presenterProps) => {
   const {
     isTablet,
-    test,
-    setTest,
     userName,
-    indicator,
     ongoingConference,
     reservationConference,
     finishedConference,
     highlight,
     setHighlight,
-
     onClickSetting,
     companyName,
     userImg,
-    createTalkConference,
     createConference,
     enterInviteCode,
     bottomPopup,
@@ -89,30 +116,22 @@ const HomeScreenPresenter = (props: any) => {
     isHorizon,
     onConpanyChange,
     onChangeMonth,
-    month,
     calendarView,
-    setCalendarView
+    setCalendarView,
+    finishDate,
+    onEndReached,
+    finishCount
   } = props;
   const t = getT();
 
   return (
     <Fragment>
       <StatusBar barStyle={'dark-content'} backgroundColor={'#F7F8FA'} />
-      <SafeAreaView style={styles.safeContainer}>
+      <SafeAreaView style={{ flex: 0, backgroundColor: '#F7F8FA' }} />
+      <View style={styles.safeContainer}>
         {participantsList.show && (
           <ParticipantsList {...participantsList} isHorizon={isHorizon} />
         )}
-        {/* <TouchableOpacity
-          style={{
-            position: 'absolute',
-            width: 100,
-            height: 100,
-            top: 250,
-            backgroundColor: '#1322fa',
-            zIndex: 9
-          }}
-          onPress={setTest}
-        /> */}
         <View
           style={[styles.header, { paddingHorizontal: isTablet ? 40 : 20 }]}
         >
@@ -226,95 +245,24 @@ const HomeScreenPresenter = (props: any) => {
           </View>
         )}
 
-        {ongoingConference.length === 0 &&
-        reservationConference.length === 0 &&
-        finishedConference.length === 0 ? (
+        <View
+          style={{
+            width: '100%',
+            flex: 1,
+            marginVertical: '2%',
+            paddingHorizontal: isTablet ? 40 : 20
+            // backgroundColor: 'red'
+          }}
+        >
           <View
             style={{
-              flex: 1,
-              justifyContent: 'center',
-              alignItems: 'center'
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginBottom: 10
             }}
           >
-            <Image
-              style={{ width: 150, height: 120 }}
-              source={icEmptyConference}
-              resizeMode={'contain'}
-            />
-            <Text
-              style={{
-                textAlign: 'center',
-                fontSize: 14,
-                letterSpacing: -0.21
-              }}
-            >
-              {
-                '진행중인 화상회의가 없습니다.\n회의생성을 통해 회의를 생성해보세요'
-              }
-            </Text>
-          </View>
-        ) : reservationConference.length === 0 &&
-          finishedConference.length === 0 ? (
-          <View
-            style={{
-              flex: 1,
-              marginVertical: '2%',
-              paddingHorizontal: isTablet ? 40 : 20
-            }}
-          >
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center'
-              }}
-            >
-              <Text style={styles.goingText}>{'회의기록'}</Text>
-              <TouchableOpacity
-                onPress={() => setCalendarView(true)}
-                style={{
-                  height: '100%',
-                  borderColor: '#000',
-                  borderWidth: 1,
-                  padding: 5
-                }}
-              >
-                <Text>{`${month}월`}</Text>
-              </TouchableOpacity>
-            </View>
-            <View
-              style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                flex: 1
-              }}
-            >
-              <Image
-                style={{ width: 150, height: 120 }}
-                source={icEmpty}
-                resizeMode={'contain'}
-              />
-              <Text>{'회의기록이 없습니다'}</Text>
-            </View>
-          </View>
-        ) : (
-          <View
-            style={{
-              width: '100%',
-              flex: 1,
-              marginVertical: '2%',
-              paddingHorizontal: isTablet ? 40 : 20
-              // backgroundColor: 'red'
-            }}
-          >
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                marginBottom: 10
-              }}
-            >
-              {reservationConference.length > 0 && (
+            {reservationConference.length > 0 && (
+              <Fragment>
                 <TouchableOpacity
                   style={{ flexDirection: 'row' }}
                   onPress={() => {
@@ -344,118 +292,158 @@ const HomeScreenPresenter = (props: any) => {
                     {reservationConference.length}
                   </Text>
                 </TouchableOpacity>
-              )}
-              {reservationConference.length > 0 &&
-                finishedConference.length > 0 && (
-                  <View
-                    style={{
-                      borderWidth: 1,
-                      borderColor: '#aaa',
-                      height: '100%',
-                      marginHorizontal: 10
-                    }}
-                  />
-                )}
-              {finishedConference.length > 0 && (
-                <TouchableOpacity
-                  style={{ flexDirection: 'row' }}
-                  onPress={() => {
-                    setHighlight('finished');
+                <View
+                  style={{
+                    borderWidth: 1,
+                    borderColor: '#aaa',
+                    height: '100%',
+                    marginHorizontal: 10
                   }}
-                >
-                  <Text
-                    style={[
-                      { color: '#939393', fontSize: 16, paddingRight: 5 },
-
-                      highlight === 'finished' && {
-                        fontWeight: 'bold',
-                        color: '#000'
-                      }
-                    ]}
-                  >
-                    {'회의기록'}
-                  </Text>
-                  <Text
-                    style={[
-                      { color: '#939393', fontSize: 16, paddingRight: 20 },
-                      highlight === 'finished' && {
-                        fontWeight: 'bold',
-                        color: '#1c90fb'
-                      }
-                    ]}
-                  >
-                    {finishedConference.length}
-                  </Text>
-                </TouchableOpacity>
-              )}
-            </View>
-            {isTablet ? (
-              <FlatList
-                numColumns={2}
-                keyExtractor={(item, index) => index.toString()}
-                data={
-                  highlight === 'reservation'
-                    ? reservationConference
-                    : finishedConference
-                }
-                columnWrapperStyle={{ justifyContent: 'space-between' }}
-                renderItem={data => {
-                  const { item } = data;
-
-                  return highlight === 'reservation' ? (
-                    <ReservationCard {...item} isTablet={isTablet} />
-                  ) : (
-                    // <FinishedCard {...{item}} />
-                    <FinishedCard {...item} isTablet={isTablet} />
-                  );
-                }}
-                showsVerticalScrollIndicator={false}
-              />
-            ) : (
-              <FlatList
-                numColumns={1}
-                keyExtractor={(item, index) => index.toString()}
-                data={
-                  highlight === 'reservation'
-                    ? reservationConference
-                    : finishedConference
-                }
-                // { isTablet && columnWrapperStyle={{ justifyContent: 'space-between' }}}
-                renderItem={data => {
-                  const { item } = data;
-
-                  return highlight === 'reservation' ? (
-                    <ReservationCard {...item} isTablet={isTablet} />
-                  ) : (
-                    // <FinishedCard {...{item}} />
-                    <FinishedCard {...item} isTablet={isTablet} />
-                  );
-                }}
-                showsVerticalScrollIndicator={false}
-              />
+                />
+              </Fragment>
             )}
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                flex: 1
+              }}
+            >
+              <TouchableOpacity
+                style={{ flexDirection: 'row' }}
+                onPress={() => {
+                  setHighlight('finished');
+                }}
+              >
+                <Text
+                  style={[
+                    { color: '#939393', fontSize: 16, paddingRight: 5 },
+
+                    highlight === 'finished' && {
+                      fontWeight: 'bold',
+                      color: '#000'
+                    }
+                  ]}
+                >
+                  {'회의기록'}
+                </Text>
+                <Text
+                  style={[
+                    {
+                      color: '#939393',
+                      fontSize: 16,
+                      paddingRight: 20
+                    },
+                    highlight === 'finished' && {
+                      fontWeight: 'bold',
+                      color: '#1c90fb'
+                    }
+                  ]}
+                >
+                  {finishCount}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => setCalendarView(true)}
+                style={{
+                  height: '100%',
+                  borderColor: '#939393',
+                  borderWidth: 1,
+                  padding: 5,
+                  borderRadius: 10
+                }}
+              >
+                <Text>{`${finishDate.getMonth() + 1}월`}</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        )}
+          <FlatList
+            numColumns={isTablet ? 2 : 1}
+            keyExtractor={(item, index) => index.toString()}
+            data={
+              highlight === 'reservation'
+                ? reservationConference
+                : finishedConference
+            }
+            renderItem={data => {
+              const { item } = data;
+
+              return highlight === 'reservation' ? (
+                <ReservationCard {...item} isTablet={isTablet} />
+              ) : (
+                <FinishedCard {...item} isTablet={isTablet} />
+              );
+            }}
+            showsVerticalScrollIndicator={false}
+            onEndReached={onEndReached}
+            onEndReachedThreshold={1}
+            {...(isTablet && {
+              columnWrapperStyle: { justifyContent: 'space-between' }
+            })}
+          />
+        </View>
 
         {bottomPopup.show && (
           <BottomPopup {...bottomPopup} isHorizon={isHorizon} />
         )}
-        {calendarView && (
+      </View>
+      {calendarView && (
+        <View
+          style={{
+            position: 'absolute',
+            backgroundColor: 'rgb(255,255,255)',
+            bottom: 0,
+            width: '100%',
+            height: '100%',
+            borderRadius: 20,
+            shadowRadius: 10,
+            shadowColor: '#aaa',
+            shadowOpacity: 10,
+            borderWidth: 1,
+            paddingBottom: '5%'
+          }}
+        >
+          <View style={{ flex: 1, backgroundColor: '#666', zIndex: 2 }}></View>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginTop: '5%',
+              marginBottom: '3%',
+              paddingHorizontal: '4%'
+            }}
+          >
+            <TouchableOpacity
+              onPress={() => {
+                setCalendarView(false);
+              }}
+            >
+              <Image
+                source={icCancel}
+                style={{
+                  resizeMode: 'cover',
+                  width: 18,
+                  height: 18
+                }}
+              />
+            </TouchableOpacity>
+          </View>
           <CalendarPicker
             weekdays={['일', '월', '화', '수', '목', '금', '토']}
             months={[
-              '1',
-              '2',
-              '3',
-              '4',
-              '5',
-              '6',
-              '7',
-              '8',
-              '9',
-              '10',
-              '11',
-              '12'
+              '1월',
+              '2월',
+              '3월',
+              '4월',
+              '5월',
+              '6월',
+              '7월',
+              '8월',
+              '9월',
+              '10월',
+              '11월',
+              '12월'
             ]}
             previousTitle="<"
             nextTitle=">"
@@ -465,99 +453,15 @@ const HomeScreenPresenter = (props: any) => {
             selectedDayStyle={{ borderRadius: 5, backgroundColor: '#1c90fb' }}
             todayBackgroundColor="#febc2c"
             dayShape="square"
-            scaleFactor={isHorizon ? 740 : isTablet ? 450 : 370}
-            onDateChange={onChangeMonth}
+            onMonthChange={onChangeMonth}
             selectYearTitle={t('년도 선택')}
-            selectMonthTitle={''}
+            selectMonthTitle={t('년')}
             textStyle={{ fontSize: isTablet ? 18 : 14 }}
             disabledDatesTextStyle={{ fontSize: isTablet ? 18 : 14 }}
-            previousTitleStyle={{ paddingLeft: '30%' }}
-            nextTitleStyle={{ paddingRight: '30%' }}
             calendarMode={'months'}
           />
-        )}
-
-      </SafeAreaView>
-        {calendarView && (
-          <View
-            style={[
-              {
-                position: 'absolute',
-                backgroundColor: 'rgb(255,255,255)',
-                bottom: 0,
-                width: '100%',
-                height: '100%',
-                borderRadius: 20,
-                shadowRadius: 10,
-                shadowColor: '#aaa',
-                shadowOpacity: 10,
-                borderWidth: 1,
-                paddingBottom: 50
-              },
-              isHorizon && { width: '66%', left: '17%' }
-            ]}
-          >
-            <View style={{flex:1 , backgroundColor:'#666' , zIndex:2}}></View>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                marginTop: '5%',
-                marginBottom: '3%',
-                paddingHorizontal: '4%'
-              }}
-            >
-              <TouchableOpacity
-                onPress={() => {
-                  setCalendarView(false);
-                }}
-              >
-                <Image
-                  source={icCancel}
-                  style={{
-                    resizeMode: 'cover',
-                    width: 18,
-                    height: 18
-                  }}
-                />
-              </TouchableOpacity>
-            </View>
-            <CalendarPicker
-              weekdays={['일', '월', '화', '수', '목', '금', '토']}
-              months={[
-                '1',
-                '2',
-                '3',
-                '4',
-                '5',
-                '6',
-                '7',
-                '8',
-                '9',
-                '10',
-                '11',
-                '12'
-              ]}
-              previousTitle="<"
-              nextTitle=">"
-              minDate={new Date('2020-01-01')}
-              // selectedStartDate={startTime.current}
-              selectedDayTextColor="#fff"
-              selectedDayStyle={{ borderRadius: 5, backgroundColor: '#1c90fb' }}
-              todayBackgroundColor="#febc2c"
-              dayShape="square"
-              scaleFactor={isHorizon ? 740 : isTablet ? 450 : 370}
-              onDateChange={onChangeMonth}
-              selectYearTitle={t('년도 선택')}
-              selectMonthTitle={''}
-              textStyle={{ fontSize: isTablet ? 18 : 14 }}
-              disabledDatesTextStyle={{ fontSize: isTablet ? 18 : 14 }}
-              previousTitleStyle={{ paddingLeft: '30%' }}
-              nextTitleStyle={{ paddingRight: '30%' }}
-              calendarMode={'months'}
-            />
-          </View>
-        )}
+        </View>
+      )}
     </Fragment>
   );
 };

@@ -31,6 +31,7 @@ import deviceInfoModule from 'react-native-device-info';
 import { useNavigation } from '@react-navigation/native';
 import { MainNavigationProps } from '../../Navigations/MainStack';
 import RNrestart from 'react-native-restart';
+import moment from 'moment';
 
 const icUser = require('../../../assets/new/icons/ic_user.png');
 const icModify = require('../../../assets/new/icons/ic_modify.png');
@@ -72,11 +73,11 @@ export default function HomeScreenContainer(props: any) {
   const [ongoingConference, setOngoingConference] = useState<any[]>([]);
   const [reservationConference, setReservationConference] = useState<any[]>([]);
   const [finishedConference, setFinishedConference] = useState<any[]>([]);
+  const [finishCount, setFinishCount] = useState(0);
   const [highlight, setHighlight] = useState<'reservation' | 'finished' | null>(
     null
   );
   const [finishIndex, setFinishIndex] = useState(0);
-  const [month, setMonth] = useState(new Date().getMonth());
   const [finishDate, setFinishDate] = useState(new Date());
   const [calendarView, setCalendarView] = useState(false);
   const [conferenceInterval, setConferenceInterval] =
@@ -119,13 +120,14 @@ export default function HomeScreenContainer(props: any) {
     const { auth } = state.user;
     const { roomId } = state.conference;
     const { isHorizon } = state.orientation;
-
     return {
       auth: auth,
       userName: auth.user_name,
       portalId: auth.portal_id,
       isLogin: state.user.isLogin,
-      userImg: wehagoMainURL + auth.profile_url,
+      userImg: auth.profile_url
+        ? wehagoMainURL + auth.profile_url
+        : wehagoDummyImageURL,
       companyName: auth?.last_company?.company_name_kr,
       selectedRoomId: roomId,
       isHorizon
@@ -153,14 +155,15 @@ export default function HomeScreenContainer(props: any) {
     _getFinishedConferences();
     BackHandler.addEventListener('hardwareBackPress', _handleBackButton);
 
-    const reload = setInterval(() => {
-      _getConferences();
-    }, 15000);
+    // const reload = setInterval(() => {
+    //   _getConferences();
+    // }, 15000);
 
-    ref.current.interval = reload;
-    setConferenceInterval(reload);
+    // ref.current.interval = reload;
+    // setConferenceInterval(reload);
     return () => {
-      clearInterval(ref.current.interval);
+      clearTimeout(ref.current.time);
+      // clearInterval(ref.current.interval);
       BackHandler.removeEventListener('hardwareBackPress', _handleBackButton);
     };
   }, []);
@@ -171,9 +174,15 @@ export default function HomeScreenContainer(props: any) {
       : !finishedConference.length
       ? 'reservation'
       : highlight;
-    setHighlight(now);
+
+    highlight !== now && setHighlight(now);
     ref.current.reservationConference = reservationConference;
+    ref.current.finishedConference = finishedConference;
   }, [reservationConference, finishedConference]);
+
+  useEffect(() => {
+    _getFinishedConferences();
+  }, [finishDate, finishIndex]);
 
   const _handleBackButton = () => {
     // 1000(1초) 안에 back 버튼을 한번 더 클릭 할 경우 앱 종료
@@ -210,8 +219,9 @@ export default function HomeScreenContainer(props: any) {
       startDateString,
       endDateString,
       finishIndex,
-      10
+      16
     ).then(async result => {
+      setFinishCount(result.total);
       const finished = result.list;
       const conference = await Promise.all(
         finished.map(async (conference: any) => {
@@ -282,193 +292,208 @@ export default function HomeScreenContainer(props: any) {
         })
       );
 
-      // setFinishedConference([...finishedConference, ...conference]);
-      setFinishedConference([]);
+
+      if (
+        ref.current.finishedConference.length === 0 &&
+        conference.length > 0
+      )
+        setHighlight('finished');
+
+      setFinishedConference([...finishedConference, ...conference]);
+      // setFinishedConference([]);
     });
   };
 
   const _getConferences = () => {
-    MeetApi.getMeetRoomsList(auth).then(async result => {
-      const going: conference[] = result.filter(
-        (conference: conference) => conference.is_started
-      );
+    MeetApi.getMeetRoomsList(auth)
+      .then(async result => {
+        const going: conference[] = result.filter(
+          (conference: conference) => conference.is_started
+        );
 
-      const goingList = await Promise.all(
-        going.map(async conference => {
-          const startTime = new Date(
-            conference.start_date_time
-              ? conference.start_date_time
-              : conference.created_at
-          ).toLocaleTimeString('en');
-          const time = startTime.slice(-2) + ' ' + startTime.slice(0, 4);
-
-          const onMinte = Math.floor(
-            (new Date().getTime() -
-              (conference.start_date_time
+        const goingList = await Promise.all(
+          going.map(async conference => {
+            const startTime = new Date(
+              conference.start_date_time
                 ? conference.start_date_time
-                : conference.created_at)) /
-              1000 /
-              60
-          );
+                : conference.created_at
+            ).toLocaleTimeString('en');
+            const time = startTime.slice(-2) + ' ' + startTime.slice(0, 4);
 
-          const connectingUser = await MeetApi.getUserList(
-            auth,
-            conference.room_id
-          );
-          const isMaster = connectingUser.filter(
-            (user: any) => user.user === portalId
-          )[0]?.is_master
-            ? true
-            : false;
-          //진행중인 방에서는 내가 없을수 있으므로 ?를 붙임
-          const sortedConnectingUserList = connectingUser.sort(
-            (user: any, _user: any) => _user.is_master - user.is_master
-          );
-          const portalIdList = sortedConnectingUserList
-            .map((user: any) => user.user)
-            .filter((user: any) => user);
+            const onMinte = Math.floor(
+              (new Date().getTime() -
+                (conference.start_date_time
+                  ? conference.start_date_time
+                  : conference.created_at)) /
+                1000 /
+                60
+            );
 
-          const participants: any[] = await MeetApi.getUserInfoList(
-            auth,
-            portalIdList
-          );
+            const connectingUser = await MeetApi.getUserList(
+              auth,
+              conference.room_id
+            );
+            const isMaster = connectingUser.filter(
+              (user: any) => user.user === portalId
+            )[0]?.is_master
+              ? true
+              : false;
+            //진행중인 방에서는 내가 없을수 있으므로 ?를 붙임
+            const sortedConnectingUserList = connectingUser.sort(
+              (user: any, _user: any) => _user.is_master - user.is_master
+            );
+            const portalIdList = sortedConnectingUserList
+              .map((user: any) => user.user)
+              .filter((user: any) => user);
 
-          const sortedPortalIdList: any[] = portalIdList.map((id: any) => {
-            const item = participants.find(e => e.portal_id === id);
-            return item;
-          });
+            const participants: any[] = await MeetApi.getUserInfoList(
+              auth,
+              portalIdList
+            );
 
-          const uriList = sortedPortalIdList.reduce<
-            { type: string; value: string | number }[]
-          >((prev, present) => {
-            if (prev.length > 4) return prev;
-            let type;
-            let value;
-            const uri = present?.profile_url
-              ? wehagoMainURL + present.profile_url
-              : wehagoDummyImageURL;
-            if (sortedPortalIdList.length <= 5) {
-              type = 'string';
-              value = uri;
-            } else {
-              type = prev.length < 4 ? 'string' : 'number';
-              value = prev.length < 4 ? uri : sortedPortalIdList.length - 4;
-            }
+            const sortedPortalIdList: any[] = portalIdList.map((id: any) => {
+              const item = participants.find(e => e.portal_id === id);
+              return item;
+            });
 
-            return [...prev, { type, value }];
-          }, []);
+            const uriList = sortedPortalIdList.reduce<
+              { type: string; value: string | number }[]
+            >((prev, present) => {
+              if (prev.length > 4) return prev;
+              let type;
+              let value;
+              const uri = present?.profile_url
+                ? wehagoMainURL + present.profile_url
+                : wehagoDummyImageURL;
+              if (sortedPortalIdList.length <= 5) {
+                type = 'string';
+                value = uri;
+              } else {
+                type = prev.length < 4 ? 'string' : 'number';
+                value = prev.length < 4 ? uri : sortedPortalIdList.length - 4;
+              }
 
-          const data = {
-            conferenceName: conference.name,
-            time,
-            onMinte,
-            participants: uriList,
-            isLock: !conference.is_public,
-            goingMoreClick: () => _goingMoreClick(conference, isMaster),
-            enterConference: () =>
-              navigation.navigate('ConferenceStateView', {
-                id: conference.room_id,
-                externalData: null,
-                from: 'meet',
-                accessType: 'auth'
-              })
-            // _handleRedirect('ConferenceState', {
-            //   id: conference.room_id,
-            //   item: {
-            //     roomId: conference.room_id,
-            //     externalData: null,
-            //     from: 'meet'
-            //   }
-            // })
-          };
-          return data;
-        })
-      );
-      setOngoingConference(goingList);
-      // setOngoingConference([]);
+              return [...prev, { type, value }];
+            }, []);
 
-      // =====================================================================================================
-      // =====================================================================================================
-      // =====================================================================================================
+            const data = {
+              conferenceName: conference.name,
+              time,
+              onMinte,
+              participants: uriList,
+              isLock: !conference.is_public,
+              goingMoreClick: () => _goingMoreClick(conference, isMaster),
+              enterConference: () =>
+                navigation.navigate('ConferenceStateView', {
+                  id: conference.room_id,
+                  externalData: null,
+                  from: 'meet',
+                  accessType: 'auth'
+                })
+              // _handleRedirect('ConferenceState', {
+              //   id: conference.room_id,
+              //   item: {
+              //     roomId: conference.room_id,
+              //     externalData: null,
+              //     from: 'meet'
+              //   }
+              // })
+            };
+            return data;
+          })
+        );
+        // setOngoingConference(goingList);
+        setOngoingConference([]);
 
-      const reservation: conference[] = result.filter(
-        (conference: conference) => !conference.is_started
-      );
-      const reservationList = await Promise.all(
-        reservation.map(async conference => {
-          const accessUser = await MeetApi.getAccessUsers(
-            auth,
-            conference.room_id
-          );
+        // =====================================================================================================
+        // =====================================================================================================
+        // =====================================================================================================
 
-          const isMaster = accessUser.filter(
-            (user: any) => user.user === portalId
-          )[0]?.is_master
-            ? true
-            : false;
+        const reservation: conference[] = result.filter(
+          (conference: conference) => !conference.is_started
+        );
+        const reservationList = await Promise.all(
+          reservation.map(async conference => {
+            const accessUser = await MeetApi.getAccessUsers(
+              auth,
+              conference.room_id
+            );
 
-          const sortedAccessUserList: any[] = accessUser.sort(
-            (user: any, _user: any) => _user.is_master - user.is_master
-          );
-          const portalIdList = sortedAccessUserList
-            .map((user: any) => user.user)
-            .filter((user: any) => user);
+            const isMaster = accessUser.filter(
+              (user: any) => user.user === portalId
+            )[0]?.is_master
+              ? true
+              : false;
 
-          const participants: any[] = await MeetApi.getUserInfoList(
-            auth,
-            portalIdList
-          );
+            const sortedAccessUserList: any[] = accessUser.sort(
+              (user: any, _user: any) => _user.is_master - user.is_master
+            );
+            const portalIdList = sortedAccessUserList
+              .map((user: any) => user.user)
+              .filter((user: any) => user);
 
-          const sortedPortalIdList: any[] = portalIdList.map((id: any) => {
-            const item =
-              participants.find(e => e.portal_id === id) ||
-              sortedAccessUserList.find(e => e.user === id);
-            return item;
-          });
-          const uriList = sortedPortalIdList.reduce<
-            { type: string; value: string | number }[]
-          >((prev, present) => {
-            if (prev.length > 2) return prev;
-            let type;
-            let value;
-            const uri = present?.profile_url
-              ? wehagoMainURL + present.profile_url
-              : wehagoDummyImageURL;
-            if (sortedPortalIdList.length <= 3) {
-              type = 'string';
-              value = uri;
-            } else {
-              type = prev.length < 2 ? 'string' : 'number';
-              value = prev.length < 2 ? uri : sortedPortalIdList.length - 2;
-            }
-            return [...prev, { type, value }];
-          }, []);
+            const participants: any[] = await MeetApi.getUserInfoList(
+              auth,
+              portalIdList
+            );
 
-          const data = {
-            roomName: conference.name,
-            date: new Date(conference.r_start_date_time).toLocaleDateString(),
-            start: new Date(conference.r_start_date_time).toLocaleTimeString(),
-            end: new Date(conference.r_end_date_time).toLocaleTimeString(),
-            users: uriList,
-            roomId: conference.room_id,
-            isPublic: conference.is_public,
-            reservationMoreClick: (roomId: string) =>
-              _reservationMoreClick(conference, isMaster, roomId)
-          };
-          return data;
-        })
-      );
+            const sortedPortalIdList: any[] = portalIdList.map((id: any) => {
+              const item =
+                participants.find(e => e.portal_id === id) ||
+                sortedAccessUserList.find(e => e.user === id);
+              return item;
+            });
+            const uriList = sortedPortalIdList.reduce<
+              { type: string; value: string | number }[]
+            >((prev, present) => {
+              if (prev.length > 2) return prev;
+              let type;
+              let value;
+              const uri = present?.profile_url
+                ? wehagoMainURL + present.profile_url
+                : wehagoDummyImageURL;
+              if (sortedPortalIdList.length <= 3) {
+                type = 'string';
+                value = uri;
+              } else {
+                type = prev.length < 2 ? 'string' : 'number';
+                value = prev.length < 2 ? uri : sortedPortalIdList.length - 2;
+              }
+              return [...prev, { type, value }];
+            }, []);
 
-      if (
-        ref.current.reservationConference.length === 0 &&
-        reservationList.length > 0
-      )
-        setHighlight('reservation');
-      // reservationList.push({isEmptty})
+            const data = {
+              roomName: conference.name,
+              date: new Date(conference.r_start_date_time).toLocaleDateString(),
+              start: new Date(
+                conference.r_start_date_time
+              ).toLocaleTimeString(),
+              end: new Date(conference.r_end_date_time).toLocaleTimeString(),
+              users: uriList,
+              roomId: conference.room_id,
+              isPublic: conference.is_public,
+              reservationMoreClick: (roomId: string) =>
+                _reservationMoreClick(conference, isMaster, roomId)
+            };
+            return data;
+          })
+        );
 
-      // setReservationConference(reservationList);
-      setReservationConference([]);
-    });
+        if (
+          ref.current.reservationConference.length === 0 &&
+          reservationList.length > 0
+        )
+          setHighlight('reservation');
+
+        setReservationConference(reservationList);
+        // setReservationConference([]);
+      })
+      .then(() => {
+        const time = setTimeout(() => {
+          _getConferences();
+        }, 15000);
+        ref.current.time = time;
+      });
   };
 
   const _goingMoreClick = (conference: conference, isMaster: boolean) => {
@@ -746,73 +771,47 @@ export default function HomeScreenContainer(props: any) {
   const handleClickSetting = () => {
     navigation.navigate('ConfigurationStack');
   };
-  const handleChangeMonth = ({
-    month,
-    year
-  }: {
-    month: number;
-    year: number;
-  }) => {
-    const tmpDate = new Date(year+"-"+(month+1)+"-01")
-    debugger
-    // setMonth(month + 1);
+  const handleChangeMonth = (date: moment.Moment) => {
+    setFinishedConference([]);
+    setFinishIndex(0);
+    setFinishDate(date.toDate());
     setCalendarView(false);
   };
+  const handleEndReached = () => {
+    setFinishIndex(finishIndex + 10);
+  };
+
+  const presenterProps = {
+    isTablet,
+    userName,
+    indicator,
+    ongoingConference,
+    reservationConference,
+    finishedConference,
+    highlight,
+    setHighlight,
+    userImg,
+    companyName,
+    bottomPopup,
+    participantsList,
+    createTalkConference,
+    test,
+    createConference,
+    isHorizon,
+    enterInviteCode,
+    onConpanyChange: handleConpanyChange,
+    onChangeMonth: handleChangeMonth,
+    setCalendarView,
+    calendarView,
+    finishDate,
+    onEndReached: handleEndReached,
+    finishCount,
+    onClickSetting: handleClickSetting
+  };
   return isHorizon ? (
-    <HomeScreenHorizonPresenter
-      {...{
-        isTablet,
-        userName,
-        indicator,
-        ongoingConference,
-        reservationConference,
-        finishedConference,
-        highlight,
-        setHighlight,
-        userImg,
-        companyName,
-        bottomPopup,
-        participantsList,
-        createTalkConference,
-        test,
-        createConference,
-        isHorizon,
-        enterInviteCode,
-        onConpanyChange: handleConpanyChange,
-        onChangeMonth: handleChangeMonth,
-        setCalendarView,
-        calendarView,
-        month
-      }}
-    />
+    <HomeScreenHorizonPresenter {...presenterProps} />
   ) : (
-    <HomeScreenPresenter
-      {...{
-        isTablet,
-        userName,
-        indicator,
-        ongoingConference,
-        reservationConference,
-        finishedConference,
-        highlight,
-        setHighlight,
-        userImg,
-        companyName,
-        bottomPopup,
-        participantsList,
-        createTalkConference,
-        test,
-        createConference,
-        isHorizon,
-        enterInviteCode,
-        onClickSetting: handleClickSetting,
-        onConpanyChange: handleConpanyChange,
-        onChangeMonth: handleChangeMonth,
-        setCalendarView,
-        calendarView,
-        month
-      }}
-    />
+    <HomeScreenPresenter {...presenterProps} />
   );
 }
 
@@ -1276,3 +1275,4 @@ export default function HomeScreenContainer(props: any) {
 // }
 
 // export default HomeScreenContainer;
+//

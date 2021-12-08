@@ -367,27 +367,21 @@ export default class CalendarPicker extends Component {
   };
 
   handleOnSelectMonthYear = ({ month, year }) => {
-    debugger;
+    const currentYear = year;
+    const currentMonth = month;
+    const scrollableState = this.props.scrollable
+      ? {
+          ...this.createMonths(this.props, { currentYear, currentMonth })
+        }
+      : {};
 
-    if (this.props.calendarMode === 'months') {
-      this.props.onDateChange({ month, year });
-    } else {
-      const currentYear = year;
-      const currentMonth = month;
-      const scrollableState = this.props.scrollable
-        ? {
-            ...this.createMonths(this.props, { currentYear, currentMonth })
-          }
-        : {};
+    const extraState = {
+      renderMonthParams: { ...this.state.renderMonthParams, month, year },
+      currentView: this.props.calendarMode || 'days',
+      ...scrollableState
+    };
 
-      const extraState = {
-        renderMonthParams: { ...this.state.renderMonthParams, month, year },
-        currentView: 'days',
-        ...scrollableState
-      };
-
-      this.handleOnPressFinisher({ month, year, extraState });
-    }
+    this.handleOnPressFinisher({ month, year, extraState });
   };
 
   resetSelections = () => {
