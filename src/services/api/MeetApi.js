@@ -169,6 +169,7 @@ export default {
         throw response;
       }
       const { resultData } = await response.json();
+      debugger
       return resultData;
     } catch (err) {
       const errDetail = await err.json();
