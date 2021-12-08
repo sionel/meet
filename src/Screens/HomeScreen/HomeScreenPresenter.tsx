@@ -47,6 +47,7 @@ const icChange = require('../../../assets/new/icons/ic_change.png');
 const icEmptyConference = require('../../../assets/new/icons/ic_empty_conference.png');
 const icEmpty = require('../../../assets/new/icons/ic_empty.png');
 const icChat = require('../../../assets/new/icons/ic_chat_w.png');
+const icCancel = require('../../../assets/new/icons/ic_cancel.png');
 
 {
   /*
@@ -88,7 +89,9 @@ const HomeScreenPresenter = (props: any) => {
     isHorizon,
     onConpanyChange,
     onChangeMonth,
-    month
+    month,
+    calendarView,
+    setCalendarView
   } = props;
   const t = getT();
 
@@ -268,7 +271,7 @@ const HomeScreenPresenter = (props: any) => {
             >
               <Text style={styles.goingText}>{'회의기록'}</Text>
               <TouchableOpacity
-                onPress={onChangeMonth}
+                onPress={() => setCalendarView(true)}
                 style={{
                   height: '100%',
                   borderColor: '#000',
@@ -437,29 +440,125 @@ const HomeScreenPresenter = (props: any) => {
         {bottomPopup.show && (
           <BottomPopup {...bottomPopup} isHorizon={isHorizon} />
         )}
-        {false && (
+
+        {calendarView && (
           <CalendarPicker
             weekdays={['일', '월', '화', '수', '목', '금', '토']}
-            months={['1','2','3','4','5','6','7','8','9','10','11','12']}
+            months={[
+              '1',
+              '2',
+              '3',
+              '4',
+              '5',
+              '6',
+              '7',
+              '8',
+              '9',
+              '10',
+              '11',
+              '12'
+            ]}
             previousTitle="<"
             nextTitle=">"
+            minDate={new Date('2020-01-01')}
             // selectedStartDate={startTime.current}
             selectedDayTextColor="#fff"
             selectedDayStyle={{ borderRadius: 5, backgroundColor: '#1c90fb' }}
             todayBackgroundColor="#febc2c"
             dayShape="square"
             scaleFactor={isHorizon ? 740 : isTablet ? 450 : 370}
-            onDateChange={() => {}}
+            onDateChange={onChangeMonth}
             selectYearTitle={t('년도 선택')}
             selectMonthTitle={''}
             textStyle={{ fontSize: isTablet ? 18 : 14 }}
             disabledDatesTextStyle={{ fontSize: isTablet ? 18 : 14 }}
             previousTitleStyle={{ paddingLeft: '30%' }}
             nextTitleStyle={{ paddingRight: '30%' }}
-            currentView={'months'}
+            calendarMode={'months'}
           />
         )}
+
       </SafeAreaView>
+        {calendarView && (
+          <View
+            style={[
+              {
+                position: 'absolute',
+                backgroundColor: 'rgb(255,255,255)',
+                bottom: 0,
+                width: '100%',
+                height: '100%',
+                borderRadius: 20,
+                shadowRadius: 10,
+                shadowColor: '#aaa',
+                shadowOpacity: 10,
+                borderWidth: 1,
+                paddingBottom: '5%'
+              },
+              isHorizon && { width: '66%', left: '17%' }
+            ]}
+          >
+            <View style={{flex:1 , backgroundColor:'#666' , zIndex:2}}></View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                marginTop: '5%',
+                marginBottom: '3%',
+                paddingHorizontal: '4%'
+              }}
+            >
+              <TouchableOpacity
+                onPress={() => {
+                  setCalendarView(false);
+                }}
+              >
+                <Image
+                  source={icCancel}
+                  style={{
+                    resizeMode: 'cover',
+                    width: 18,
+                    height: 18
+                  }}
+                />
+              </TouchableOpacity>
+            </View>
+            <CalendarPicker
+              weekdays={['일', '월', '화', '수', '목', '금', '토']}
+              months={[
+                '1',
+                '2',
+                '3',
+                '4',
+                '5',
+                '6',
+                '7',
+                '8',
+                '9',
+                '10',
+                '11',
+                '12'
+              ]}
+              previousTitle="<"
+              nextTitle=">"
+              minDate={new Date('2020-01-01')}
+              // selectedStartDate={startTime.current}
+              selectedDayTextColor="#fff"
+              selectedDayStyle={{ borderRadius: 5, backgroundColor: '#1c90fb' }}
+              todayBackgroundColor="#febc2c"
+              dayShape="square"
+              scaleFactor={isHorizon ? 740 : isTablet ? 450 : 370}
+              onDateChange={onChangeMonth}
+              selectYearTitle={t('년도 선택')}
+              selectMonthTitle={''}
+              textStyle={{ fontSize: isTablet ? 18 : 14 }}
+              disabledDatesTextStyle={{ fontSize: isTablet ? 18 : 14 }}
+              previousTitleStyle={{ paddingLeft: '30%' }}
+              nextTitleStyle={{ paddingRight: '30%' }}
+              calendarMode={'months'}
+            />
+          </View>
+        )}
     </Fragment>
   );
 };

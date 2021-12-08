@@ -230,12 +230,12 @@ export function makeStyles(params) {
     monthsWrapper: {
       alignSelf: 'center',
       justifyContent: 'center',
-      width: containerWidth,
+      width: containerWidth
     },
 
     monthsRow: {
       flexDirection: 'row',
-      padding: 20*scaler,
+      padding: 10*scaler
     },
 
     yearHeaderMainText: {
