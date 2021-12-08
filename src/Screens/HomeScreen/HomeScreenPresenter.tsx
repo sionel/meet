@@ -550,11 +550,9 @@ const HomeScreenPresenter = (props: any) => {
               scaleFactor={isHorizon ? 740 : isTablet ? 450 : 370}
               onDateChange={onChangeMonth}
               selectYearTitle={t('년도 선택')}
-              selectMonthTitle={''}
+              selectMonthTitle={t('년')}
               textStyle={{ fontSize: isTablet ? 18 : 14 }}
               disabledDatesTextStyle={{ fontSize: isTablet ? 18 : 14 }}
-              previousTitleStyle={{ paddingLeft: '30%' }}
-              nextTitleStyle={{ paddingRight: '30%' }}
               calendarMode={'months'}
             />
           </View>

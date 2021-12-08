@@ -77,7 +77,8 @@ export default function HomeScreenContainer(props: any) {
   );
   const [finishIndex, setFinishIndex] = useState(0);
   const [month, setMonth] = useState(new Date().getMonth());
-  const [calendarView, setCalendarView] = useState(false)
+  const [finishDate, setFinishDate] = useState(new Date());
+  const [calendarView, setCalendarView] = useState(false);
   const [conferenceInterval, setConferenceInterval] =
     useState<NodeJS.Timeout>();
   const [bottomPopup, setBottomPopup] = useState<{
@@ -189,10 +190,10 @@ export default function HomeScreenContainer(props: any) {
     return true;
   };
   const _getFinishDate = () => {
-    const startDate = new Date(new Date(new Date().setMonth(month)).setDate(1));
-    const endDate = new Date(
-      new Date(new Date().setMonth(month + 1)).setDate(0)
-    );
+    const tmpDate = new Date(finishDate);
+    const startDate = new Date(tmpDate.setDate(1));
+    const endDate = new Date(tmpDate.setMonth(tmpDate.getMonth() + 1));
+
     const startDateString = `${startDate.getFullYear()}-${
       startDate.getMonth() + 1
     }-${startDate.getDate()}`;
@@ -745,9 +746,17 @@ export default function HomeScreenContainer(props: any) {
   const handleClickSetting = () => {
     navigation.navigate('ConfigurationStack');
   };
-  const handleChangeMonth = (month:number) => {
-    setMonth(month+1)
-    setCalendarView(false)
+  const handleChangeMonth = ({
+    month,
+    year
+  }: {
+    month: number;
+    year: number;
+  }) => {
+    const tmpDate = new Date(year+"-"+(month+1)+"-01")
+    debugger
+    // setMonth(month + 1);
+    setCalendarView(false);
   };
   return isHorizon ? (
     <HomeScreenHorizonPresenter

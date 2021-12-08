@@ -370,7 +370,7 @@ export default class CalendarPicker extends Component {
     debugger;
 
     if (this.props.calendarMode === 'months') {
-      this.props.onDateChange(month);
+      this.props.onDateChange({ month, year });
     } else {
       const currentYear = year;
       const currentMonth = month;
