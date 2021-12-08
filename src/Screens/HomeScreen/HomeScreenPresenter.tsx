@@ -18,6 +18,8 @@ import {
   FlatList
 } from 'react-native';
 
+import CalendarPicker from '../../custom_modules/react-native-calendar-picker';
+
 // import {
 //   ListItemComp,
 //   CustomAlert,
@@ -84,7 +86,9 @@ const HomeScreenPresenter = (props: any) => {
     bottomPopup,
     participantsList,
     isHorizon,
-    onConpanyChange
+    onConpanyChange,
+    onChangeMonth,
+    month
   } = props;
   const t = getT();
 
@@ -255,7 +259,26 @@ const HomeScreenPresenter = (props: any) => {
               paddingHorizontal: isTablet ? 40 : 20
             }}
           >
-            <Text style={styles.goingText}>{'회의기록'}</Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center'
+              }}
+            >
+              <Text style={styles.goingText}>{'회의기록'}</Text>
+              <TouchableOpacity
+                onPress={onChangeMonth}
+                style={{
+                  height: '100%',
+                  borderColor: '#000',
+                  borderWidth: 1,
+                  padding: 5
+                }}
+              >
+                <Text>{`${month}월`}</Text>
+              </TouchableOpacity>
+            </View>
             <View
               style={{
                 justifyContent: 'center',
@@ -414,6 +437,28 @@ const HomeScreenPresenter = (props: any) => {
         {bottomPopup.show && (
           <BottomPopup {...bottomPopup} isHorizon={isHorizon} />
         )}
+        {true && (
+          <CalendarPicker
+            weekdays={['일', '월', '화', '수', '목', '금', '토']}
+            months={['1','2','3','4','5','6','7','8','9','10','11','12']}
+            previousTitle="<"
+            nextTitle=">"
+            // selectedStartDate={startTime.current}
+            selectedDayTextColor="#fff"
+            selectedDayStyle={{ borderRadius: 5, backgroundColor: '#1c90fb' }}
+            todayBackgroundColor="#febc2c"
+            dayShape="square"
+            scaleFactor={isHorizon ? 740 : isTablet ? 450 : 370}
+            onDateChange={() => {}}
+            selectYearTitle={t('년도 선택')}
+            selectMonthTitle={''}
+            textStyle={{ fontSize: isTablet ? 18 : 14 }}
+            disabledDatesTextStyle={{ fontSize: isTablet ? 18 : 14 }}
+            previousTitleStyle={{ paddingLeft: '30%' }}
+            nextTitleStyle={{ paddingRight: '30%' }}
+            currentView={'months'}
+          />
+        )}
       </SafeAreaView>
     </Fragment>
   );
@@ -449,7 +494,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   settingImg: { width: 30, height: 30, borderRadius: 24, marginRight: 10 },
-  downArrow: { width: 25, height: 25},
+  downArrow: { width: 25, height: 25 },
   helloContainer: {
     width: '100%',
     justifyContent: 'space-between',

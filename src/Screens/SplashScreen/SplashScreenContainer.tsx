@@ -176,11 +176,7 @@ const SplashScreenContainer = ({
         onLogout();
         navigation.reset({ routes: [{ name: 'LoginStack' }] });
       } else {
-        console.log('auth');
-        console.log(auth.last_access_company_no);
-        console.log(auth.last_company);
         const flag: any = await serviceCheck(auth);
-        console.log(flag);
         if (flag) {
           navigation.reset({ routes: [{ name: 'MainStack' }] });
         } else {

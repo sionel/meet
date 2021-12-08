@@ -35,7 +35,8 @@ export default function ConferenceBox(props: conferenceBoxProps) {
         borderWidth: 2,
         backgroundColor: '#fff',
         marginBottom: 15,
-        padding: 20,
+        paddingHorizontal: 20,
+        paddingVertical: 10,
         flexDirection: 'row'
       }}
     >
@@ -63,14 +64,15 @@ export default function ConferenceBox(props: conferenceBoxProps) {
             flex: 1,
             alignItems: 'center',
             justifyContent: 'center'
+            // backgroundColor:'black'
           }}
         >
-          <Text>{timeString}</Text>
+          <Text style={{ height: '100%' }}>{timeString}</Text>
         </View>
       </View>
       <TouchableOpacity
         style={{
-          width: '35%',
+          width: 100,
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-between'
@@ -84,39 +86,45 @@ export default function ConferenceBox(props: conferenceBoxProps) {
             alignItems: 'center'
           }}
         >
-          {users.map((user: { type: string | number; value: string }) => {
-            return user.type === 'string' ? (
-              <Image
-                source={{
-                  uri: user.value
-                }}
-                resizeMode={'cover'}
-                style={{
-                  height: 30,
-                  width: 30,
-                  borderRadius: 30
-                }}
-              />
-            ) : (
-              <View
-                style={{
-                  backgroundColor: '#e9f5ff',
-                  height: 30,
-                  width: 30,
-                  borderRadius: 30,
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}
-              >
-                <Text>{'+' + user.value}</Text>
-              </View>
-            );
-          })}
+          {users.map(
+            (user: { type: string | number; value: string }, index) => {
+              return user.type === 'string' ? (
+                <Image
+                  source={{
+                    uri: user.value
+                  }}
+                  resizeMode={'cover'}
+                  style={{
+                    height: 30,
+                    width: 30,
+                    borderRadius: 30,
+                    right: index * 10,
+                    zIndex: -index
+                  }}
+                />
+              ) : (
+                <View
+                  style={{
+                    backgroundColor: '#e9f5ff',
+                    height: 30,
+                    width: 30,
+                    borderRadius: 30,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    right: index * 10,
+                    zIndex: -index
+                  }}
+                >
+                  <Text>{'+' + user.value}</Text>
+                </View>
+              );
+            }
+          )}
         </View>
         <Image
           source={icMore}
           resizeMode={'contain'}
-          style={{ height: 30, width: 30 }}
+          style={{ height: 25, width: 25 }}
         />
       </TouchableOpacity>
       {/* </View> */}

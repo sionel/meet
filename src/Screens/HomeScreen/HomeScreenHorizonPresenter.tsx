@@ -144,7 +144,7 @@ const HomeScreenPresenter = (props: any) => {
           <View style={{ flex: 1, justifyContent: 'center' }}>
             <TouchableOpacity
               style={styles.topButtons}
-              onPress={createTalkConference}
+              onPress={createConference}
             >
               <Image
                 source={icVideo}
@@ -153,7 +153,7 @@ const HomeScreenPresenter = (props: any) => {
               />
               <Text>{'회의생성'}</Text>
             </TouchableOpacity>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={styles.topButtons}
               onPress={createConference}
             >
@@ -163,7 +163,7 @@ const HomeScreenPresenter = (props: any) => {
                 resizeMode={'cover'}
               />
               <Text>{'회의일정'}</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <TouchableOpacity
               style={styles.topButtons}
               onPress={enterInviteCode}

@@ -75,6 +75,8 @@ export default function HomeScreenContainer(props: any) {
   const [highlight, setHighlight] = useState<'reservation' | 'finished' | null>(
     null
   );
+  const [finishIndex, setFinishIndex] = useState(0);
+  const [month, setMonth] = useState(new Date().getMonth());
   const [conferenceInterval, setConferenceInterval] =
     useState<NodeJS.Timeout>();
   const [bottomPopup, setBottomPopup] = useState<{
@@ -143,7 +145,7 @@ export default function HomeScreenContainer(props: any) {
     dispatch(UserActions.changeCompanyRequest(auth, company));
 
   const isTablet = deviceInfoModule.isTablet();
-
+  const today = new Date();
   useEffect(() => {
     _getConferences();
     _getFinishedConferences();
@@ -185,81 +187,102 @@ export default function HomeScreenContainer(props: any) {
     }
     return true;
   };
-
-  const _getFinishedConferences = () => {
-    MeetApi.getMeetFinished(auth, '2021-11-01', '2021-11-30', 0, 20).then(
-      async result => {
-        const finished = result.list;
-        const finishedConference = await Promise.all(
-          finished.map(async (conference: any) => {
-            const year = new Date(conference.start_date_time).getFullYear();
-            const month = new Date(conference.start_date_time).getMonth();
-            const day = new Date(conference.start_date_time).getDate();
-            const dateString = `${year}.${month}.${day}`;
-            const ampm = new Date(conference.start_date_time)
-              .toLocaleString('en')
-              .slice(-2);
-            const startTimeString = new Date(conference.start_date_time)
-              .toTimeString()
-              .slice(0, 5);
-            const endTimeString = new Date(conference.end_date_time)
-              .toTimeString()
-              .slice(0, 5);
-            const timeString = `${dateString}   ${startTimeString}${ampm} ~ ${endTimeString}${ampm}`;
-            const { hour, minutes } = conference.usage_time;
-            const usageTime = hour * 60 + minutes;
-            const users = conference.users;
-
-            const portalIdList = users
-              .map((user: any) => user.user)
-              .filter((user: any) => user);
-
-            const participants: any[] = await MeetApi.getUserInfoList(
-              auth,
-              portalIdList
-            );
-
-            participants.push(...users.filter((e: any) => e.user_type === 2));
-
-            const uriList = participants.reduce<
-              { type: string; value: string | number }[]
-            >((prev, present) => {
-              if (prev.length > 2) return prev;
-
-              let type;
-              let value;
-              const uri = present?.profile_url
-                ? wehagoMainURL + present.profile_url
-                : wehagoDummyImageURL;
-
-              if (participants.length <= 3) {
-                type = 'string';
-                value = uri;
-              } else {
-                type = prev.length < 2 ? 'string' : 'number';
-                value = prev.length < 2 ? uri : participants.length - 2;
-              }
-
-              return [...prev, { type, value }];
-            }, []);
-
-            const roomId = conference.t_room_id;
-            const data = {
-              conferenceName: conference.name,
-              timeString,
-              usageTime,
-              users: uriList,
-              roomId,
-              finishedMoreClick: () => _finishedMoreClick(conference)
-            };
-            return data;
-          })
-        );
-
-        setFinishedConference(finishedConference);
-        // setFinishedConference([]);
-      }
+  const _getFinishDate = () => {
+    const startDate = new Date(new Date(new Date().setMonth(month)).setDate(1));
+    const endDate = new Date(
+      new Date(new Date().setMonth(month + 1)).setDate(0)
     );
+    const startDateString = `${startDate.getFullYear()}-${
+      startDate.getMonth() + 1
+    }-${startDate.getDate()}`;
+    const endDateString = `${endDate.getFullYear()}-${
+      endDate.getMonth() + 1
+    }-${endDate.getDate()}`;
+
+    return { startDateString, endDateString };
+  };
+  const _getFinishedConferences = () => {
+    const { startDateString, endDateString } = _getFinishDate();
+    MeetApi.getMeetFinished(
+      auth,
+      startDateString,
+      endDateString,
+      finishIndex,
+      10
+    ).then(async result => {
+      const finished = result.list;
+      const conference = await Promise.all(
+        finished.map(async (conference: any) => {
+          const year = new Date(conference.start_date_time).getFullYear();
+          const month = new Date(conference.start_date_time).getMonth() + 1;
+          const day = new Date(conference.start_date_time)
+            .getDate()
+            .toString()
+            .padStart(2, '0');
+          const dateString = `${year}.${month}.${day}`;
+          const ampm = new Date(conference.start_date_time)
+            .toLocaleString('en')
+            .slice(-2);
+          const startTimeString = new Date(conference.start_date_time)
+            .toTimeString()
+            .slice(0, 5);
+          const endTimeString = new Date(conference.end_date_time)
+            .toTimeString()
+            .slice(0, 5);
+          const timeString = `${dateString}\n${startTimeString}${ampm} ~ ${endTimeString}${ampm}`;
+          const { hour, minutes } = conference.usage_time;
+          const usageTime = hour * 60 + minutes;
+          const users = conference.users;
+
+          const portalIdList = users
+            .map((user: any) => user.user)
+            .filter((user: any) => user);
+
+          const participants: any[] = await MeetApi.getUserInfoList(
+            auth,
+            portalIdList
+          );
+
+          participants.push(...users.filter((e: any) => e.user_type === 2));
+
+          const uriList = participants.reduce<
+            { type: string; value: string | number }[]
+          >((prev, present) => {
+            if (prev.length > 2) return prev;
+
+            let type;
+            let value;
+            const uri = present?.profile_url
+              ? wehagoMainURL + present.profile_url
+              : wehagoDummyImageURL;
+
+            if (participants.length <= 3) {
+              type = 'string';
+              value = uri;
+            } else {
+              type = prev.length < 2 ? 'string' : 'number';
+              value = prev.length < 2 ? uri : participants.length - 2;
+            }
+
+            return [...prev, { type, value }];
+          }, []);
+
+          const roomId = conference.t_room_id;
+          const data = {
+            conferenceName: conference.name,
+            timeString,
+            usageTime,
+            users: uriList,
+            roomId,
+            finishedMoreClick: () => _finishedMoreClick(conference)
+          };
+          return data;
+        })
+      );
+
+      // setFinishedConference([...finishedConference, ...conference]);
+      setFinishedConference([]);
+    });
   };
 
   const _getConferences = () => {
@@ -441,8 +464,8 @@ export default function HomeScreenContainer(props: any) {
         setHighlight('reservation');
       // reservationList.push({isEmptty})
 
-      setReservationConference(reservationList);
-      // setReservationConference([]);
+      // setReservationConference(reservationList);
+      setReservationConference([]);
     });
   };
 
@@ -704,6 +727,7 @@ export default function HomeScreenContainer(props: any) {
   const handleClickSetting = () => {
     navigation.navigate('ConfigurationStack');
   };
+  const handleChangeMonth = () => {};
   return isHorizon ? (
     <HomeScreenHorizonPresenter
       {...{
@@ -724,7 +748,9 @@ export default function HomeScreenContainer(props: any) {
         createConference,
         isHorizon,
         enterInviteCode,
-        onConpanyChange: handleConpanyChange
+        onConpanyChange: handleConpanyChange,
+        onChangeMonth: handleChangeMonth,
+        month
       }}
     />
   ) : (
@@ -748,7 +774,9 @@ export default function HomeScreenContainer(props: any) {
         isHorizon,
         enterInviteCode,
         onClickSetting: handleClickSetting,
-        onConpanyChange: handleConpanyChange
+        onConpanyChange: handleConpanyChange,
+        onChangeMonth: handleChangeMonth,
+        month
       }}
     />
   );
