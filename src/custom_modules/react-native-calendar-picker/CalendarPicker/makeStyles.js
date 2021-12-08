@@ -143,7 +143,7 @@ export function makeStyles(params) {
       flexDirection: 'row',
       alignItems: 'center',
       alignSelf: 'center',
-      justifyContent: 'space-between',
+      justifyContent:'space-around',
       width: containerWidth,
       padding: 5*scaler,
       paddingBottom: 3*scaler,

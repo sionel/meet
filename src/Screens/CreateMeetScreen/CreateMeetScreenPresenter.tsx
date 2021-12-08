@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 
 import DatePicker from 'react-native-date-picker';
-import CalendarPicker from 'react-native-calendar-picker';
+import CalendarPicker from '../../custom_modules/react-native-calendar-picker/CalendarPicker';
 
 import { getT } from '../../utils/translateManager';
 
@@ -87,14 +87,14 @@ const CreateMeetScreenPresenter = (props: any) => {
       selectedDayStyle={{ borderRadius: 5, backgroundColor: '#1c90fb' }}
       todayBackgroundColor="#febc2c"
       dayShape="square"
-      scaleFactor={isHorizon ? 740 : isTablet ? 450 : 370}
+      width={isTablet ? 500 : 360}
       onDateChange={onDateChange}
       selectYearTitle={t('년도 선택')}
-      selectMonthTitle={''}
+      selectMonthTitle={'월 선택'}
       textStyle={{ fontSize: isTablet ? 18 : 14 }}
       disabledDatesTextStyle={{ fontSize: isTablet ? 18 : 14 }}
-      previousTitleStyle={{ paddingLeft: '30%' }}
-      nextTitleStyle={{ paddingRight: '30%' }}
+      // previousTitleStyle={{marginRight: 20}}
+      // nextTitleStyle={{marginLeft: 20}}
     />
   );
 
@@ -957,13 +957,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgb(255,255,255)',
     bottom: 0,
     width: '100%',
-    // height: '50%',
     borderRadius: 20,
     shadowRadius: 10,
     shadowColor: '#aaa',
     shadowOpacity: 10,
     borderWidth: 1,
-    paddingBottom: '5%'
+    paddingBottom: 50
   },
   rowContainer: {
     flexDirection: 'row',
