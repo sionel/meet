@@ -386,7 +386,6 @@ export default function HomeScreenContainer(props: any) {
               enterConference: () =>
                 navigation.navigate('ConferenceStateView', {
                   id: conference.room_id,
-                  externalData: null,
                   from: 'meet',
                   accessType: 'auth'
                 })

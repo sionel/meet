@@ -216,6 +216,7 @@ const HomeScreenPresenter = (props: presenterProps) => {
                     <ConferenceCard
                       index={conference.index}
                       conference={conference.item}
+                      isHorizon={isHorizon}
                     />
                   );
                 }}
@@ -324,7 +325,8 @@ const HomeScreenPresenter = (props: presenterProps) => {
                     {finishCount}
                   </Text>
                 </TouchableOpacity>
-                <TouchableOpacity
+
+                {highlight === 'finished' && <TouchableOpacity
                   onPress={() => setCalendarView(true)}
                   style={{
                     height: '100%',
@@ -335,7 +337,7 @@ const HomeScreenPresenter = (props: presenterProps) => {
                   }}
                 >
                   <Text>{`${finishDate.getMonth() + 1}월`}</Text>
-                </TouchableOpacity>
+                </TouchableOpacity>}
               </View>
             </View>
             <FlatList
