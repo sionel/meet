@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, RefObject } from 'react';
 import {
   Image,
   StyleSheet,
@@ -19,17 +19,41 @@ import CustomAlert from '../../../components/CustomAlert';
 import { reduceRight } from '../../../../webpack.config';
 
 const loginLogo = require('../../../../assets/new/logos/logo.png');
-
 const user = require('../../../../assets/new/icons/ic_user.png');
 const lock = require('../../../../assets/new/icons/ic_lock_black.png');
 const loading = require('../../../../assets/new/icons/loadingIcon.png');
-
 const patternTop = require('../../../../assets/new/patterns/login_pattern_top.png');
 const patternBot = require('../../../../assets/new/patterns/login_pattern_bottom.png');
-
 const cancel = require('../../../../assets/new/icons/ic_cancel_fill.png');
 
-const LoginInputPresenter = (props: any) => {
+export interface PresenterProps {
+  userId: string;
+  password: string;
+  captchaInput: string;
+  errorMsg: string | null;
+  usernameRef: RefObject<any>;
+  passwordRef: RefObject<any>;
+  captchaRef: RefObject<any>;
+  clearId: () => void;
+  onCheck: () => void;
+  handleChangeCaptcha: () => void;
+  inputFocusOut: () => any;
+  onChangeId: (text: string) => void;
+  onChangePw: (text: string) => void;
+  loginchk: (userId: string, passwrod: string, captcha?: string) => any;
+  setCaptchaInput: (text: string) => void;
+  loginFailed: boolean;
+  logging: boolean;
+  isHorizon: boolean;
+  isTablet: boolean;
+  check: boolean;
+  spin: Animated.AnimatedInterpolation;
+  alertVisible: any;
+  captcha: any;
+  t: any;
+}
+
+const LoginInputPresenter = (props: PresenterProps) => {
   const {
     userId,
     onChangeId,
@@ -63,10 +87,13 @@ const LoginInputPresenter = (props: any) => {
         end={{ x: 0, y: 0 }}
         start={{ x: 0, y: 1 }}
         colors={['#FCFDFF', '#F0F8FF']}
-        style={{ position:'absolute' , width:'100%' ,height:'100%'}}
+        style={{ position: 'absolute', width: '100%', height: '100%' }}
       />
-      <SafeAreaView style={{ flex: 1, backgroundColor: 'transparent' }}>
-        <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }} bounces={false}>
+      <SafeAreaView style={styles.InputLoginSafeAreaView}>
+        <KeyboardAwareScrollView
+          contentContainerStyle={{ flexGrow: 1 }}
+          bounces={false}
+        >
           <ScrollView
             contentInsetAdjustmentBehavior="automatic"
             contentContainerStyle={{
@@ -120,7 +147,7 @@ const LoginInputPresenter = (props: any) => {
                   <View
                     style={[
                       styles.inputContainer,
-                      userId && { borderBottomColor: '#36d3fa' },
+                      userId !== '' && { borderBottomColor: '#36d3fa' },
                       loginFailed && { borderBottomColor: 'red' }
                     ]}
                   >
@@ -148,7 +175,7 @@ const LoginInputPresenter = (props: any) => {
                   <View
                     style={[
                       styles.inputContainer,
-                      password && { borderBottomColor: '#36d3fa' },
+                      password !== '' && { borderBottomColor: '#36d3fa' },
                       loginFailed && { borderBottomColor: 'red' }
                     ]}
                   >
@@ -204,7 +231,7 @@ const LoginInputPresenter = (props: any) => {
                           onPress={handleChangeCaptcha}
                           style={styles.captchaRefresh}
                         >
-                          <Text style={{ color: '#ababab' }}>
+                          <Text style={{ color: '#ababab',fontFamily: 'DOUZONEText30' }}>
                             {t('renewal.login_refresh')}
                           </Text>
                         </TouchableOpacity>
@@ -315,6 +342,7 @@ const LoginInputPresenter = (props: any) => {
 };
 
 const styles = StyleSheet.create({
+  InputLoginSafeAreaView: { flex: 1, backgroundColor: 'transparent' },
   //화면 방향에 따른 패딩
   container: {
     position: 'relative',
@@ -353,6 +381,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start'
   },
   captchaMessageText: {
+    fontFamily: 'DOUZONEText10',
     fontSize: 10,
     color: '#505050'
   },
@@ -400,13 +429,15 @@ const styles = StyleSheet.create({
     paddingVertical: Platform.OS === 'ios' ? 10 : 6,
     fontSize: 16,
     fontWeight: '200',
-    color: 'black'
+    color: '#333',
+    fontFamily: 'DOUZONEText30',
   },
   loginFailedText: {
-    color: 'red',
-    fontSize: 11,
+    color: '#FC5356',
+    fontSize: 13,
     top: '-2%',
-    alignSelf: 'flex-start'
+    alignSelf: 'flex-start',
+    fontFamily: 'DOUZONEText30',
   },
   //로그인버튼
   loginBtnGradation: {
@@ -426,7 +457,8 @@ const styles = StyleSheet.create({
   },
   loginBtnText: {
     color: '#fff',
-    fontSize: 16
+    fontSize: 16,
+    fontFamily: 'DOUZONEText30'
   },
   //저작권
   copyrightContainer: {
@@ -437,7 +469,8 @@ const styles = StyleSheet.create({
   },
   copyrightText: {
     color: 'rgb(147,147,147)',
-    fontSize: 11
+    fontSize: 11,
+    fontFamily: 'DOUZONEText30',
   },
   loadingAnimation: {
     alignItems: 'center',
@@ -488,7 +521,8 @@ const styles = StyleSheet.create({
   inputField: {
     paddingVertical: 8,
     color: '#333',
-    fontSize: 15
+    fontSize: 15,
+    fontFamily: 'DOUZONEText30'
   },
   errorMsg: {
     color: 'red'

@@ -1,35 +1,24 @@
 import React, { RefObject, useEffect, useState } from 'react';
-import { Animated, Easing, Platform } from 'react-native';
+import { Animated, Easing, Platform, TextInput } from 'react-native';
 import LoginInputPresenter from './LoginInputPresenter';
+
 import UserApi from '../../../services/api/LoginApi/UserApi';
 import { UserApi as UserApi2 } from '../../../services';
-import { getT } from '../../../utils/translateManager';
 import ServiceCheckApi from '../../../services/api/ServiceCheckApi';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../redux/configureStore';
 import { actionCreators as UserActions } from '../../../redux/modules/user';
 import { actionCreators as RootActions } from '../../../redux/modules/root';
 import { actionCreators as RecentsActions } from '../../../redux/modules/recentsInvited';
 
-import Orientation, {
-  OrientationType,
-  useDeviceOrientationChange
-} from 'react-native-orientation-locker';
+import { getT } from '../../../utils/translateManager';
 import deviceInfoModule from 'react-native-device-info';
 import { LoginNavigationProps } from '../../../Navigations/LoginStack';
 
-// import { useTranslation } from 'react-i18next';
-
 const LoginInputContainer = ({
-  navigation,
-  route
+  navigation
 }: LoginNavigationProps<'InputLogin'>) => {
-  let _serviceCode: string;
-  _serviceCode = Platform.OS === 'ios' ? 'wehagomeet' : 'meet';
-
-  const t = getT();
-  const isTablet = deviceInfoModule.isTablet() === true;
-
   const rotate = new Animated.Value(0);
   const spin = rotate.interpolate({
     inputRange: [0, 1],
@@ -43,7 +32,6 @@ const LoginInputContainer = ({
   const [logging, setLogging] = useState<boolean>(false);
   const [loginFailed, setLoginFailed] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const [isHorizon, setIsHorizon] = useState<boolean>(false);
   const [check, setCheck] = useState<boolean>(false);
   const [alertVisible, setAlertVisible] = useState({
     visible: false,
@@ -58,9 +46,10 @@ const LoginInputContainer = ({
   const captchaRef: RefObject<any> = React.useRef(null);
 
   //selector
-  const { auth } = useSelector((state: RootState) => {
+  const { auth, isHorizon } = useSelector((state: RootState) => {
     return {
-      auth: state.user.auth
+      auth: state.user.auth,
+      isHorizon: state.orientation.isHorizon
     };
   });
   //
@@ -80,6 +69,12 @@ const LoginInputContainer = ({
   // const setAuth = (auth: any) => dispatch(UserActions.setAuth(auth));
   //
 
+  let _serviceCode: string;
+  _serviceCode = Platform.OS === 'ios' ? 'wehagomeet' : 'meet';
+
+  const t = getT();
+  const isTablet = deviceInfoModule.isTablet() === true;
+
   useEffect(() => {
     let authR = auth;
     if (Object.keys(authR).length !== 0) {
@@ -87,9 +82,6 @@ const LoginInputContainer = ({
     }
   }, [auth]);
 
-  useDeviceOrientationChange((orientation: OrientationType) => {
-    _handleHorizon(orientation);
-  });
 
   const _handleCheckService = async (auth: any) => {
     const statusCheck = await ServiceCheckApi.companyStatusCheck(
@@ -111,11 +103,7 @@ const LoginInputContainer = ({
       );
       const isDeploy = isDeployWehagomeet || isDeployWebrtc;
       setPermission(isDeploy);
-      // setParams({
-      //   accesstype: 'login'
-      // });
       navigation.reset({ routes: [{ name: 'MainStack' }] });
-      // (isDeploy ? 'List' : 'SelectCompany');
     } else if (statusCheck && statusCheck.code === 400) {
       const onClose = () => {
         _resetAlert();
@@ -136,19 +124,6 @@ const LoginInputContainer = ({
       });
     } else {
       // setDestination('SelectCompany');
-    }
-  };
-
-  const _handleHorizon = (orientation: OrientationType) => {
-    if (orientation === 'LANDSCAPE-LEFT' || orientation === 'LANDSCAPE-RIGHT') {
-      setIsHorizon(true);
-      // Orientation.unlockAllOrientations();
-    } else if (
-      orientation === 'PORTRAIT-UPSIDEDOWN' ||
-      orientation === 'PORTRAIT'
-    ) {
-      setIsHorizon(false);
-      Orientation.lockToPortrait();
     }
   };
 
