@@ -12,8 +12,8 @@ import DeviceInfo from 'react-native-device-info';
 
 import ConferenceStatePresenter from './ConferenceStatePresenter';
 
-import { actionCreators as UserActions } from '../../redux/modules/user';
-import { actionCreators as WetalkActions } from '../../redux/modules/wetalk';
+// import { actionCreators as UserActions } from '../../redux/modules/user';
+// import { actionCreators as WetalkActions } from '../../redux/modules/wetalk';
 
 import { MeetApi } from '../../services';
 
@@ -33,8 +33,8 @@ export default function ConferenceStateContainer(props: any) {
   const [start, setStart] = useState('');
   const [end, setEnd] = useState('');
   const [conferenceState, setConferenceState] = useState<
-    'deleted' | 'wating' | 'reservationInfo' | 'fullroom' | null
-  >();
+    'deleted' | 'wating' | 'reservationInfo' | 'fullroom' | ''
+  >('');
 
   let enterTimer: any = () => {};
   const rotate = new Animated.Value(0);
@@ -183,7 +183,6 @@ export default function ConferenceStateContainer(props: any) {
       // 50명 초과 안내화면으로
       setConferenceState('fullroom');
     } else {
-      debugger;
       navigation.replace('SettingView', {
         roomType: 'meet',
         selectedRoomName: roomName,
@@ -221,6 +220,7 @@ export default function ConferenceStateContainer(props: any) {
       accessUser={accessUser}
       isPublic={isPublic}
       iscret={iscret}
+      isTablet={isTablet}
       handleClickBack={handleClickBack}
     />
   );

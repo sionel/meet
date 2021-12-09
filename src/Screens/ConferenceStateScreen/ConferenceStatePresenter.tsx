@@ -15,11 +15,25 @@ import WatingScreen from './subScreens/WatingScreen';
 import DeletedScreen from './subScreens/DeletedScreen';
 import icBack from '../../../assets/new/icons/ic_back.png';
 
-export default function ConferenceStatePresenter(props: any) {
+export interface presenterProps {
+  conferenceState: string;
+  spin: any;
+  start: string;
+  end: string;
+  name: string;
+  accessUser: any[];
+  isPublic: boolean;
+  iscret: boolean;
+  handleClickBack: () => void;
+  isTablet: boolean;
+}
+
+
+export default function ConferenceStatePresenter(props: presenterProps) {
   const { conferenceState, spin, handleClickBack } = props;
 
   return (
-    <SafeAreaView style={{ backgroundColor: '#f8f8fa' }}>
+    <SafeAreaView style={{ backgroundColor: '#f8f8fa', flex: 1 }}>
       <StatusBar barStyle={'dark-content'} />
       <View style={[styles.topTitle]}>
         <TouchableOpacity onPress={handleClickBack}>

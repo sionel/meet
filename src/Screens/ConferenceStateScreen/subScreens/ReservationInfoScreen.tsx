@@ -13,12 +13,12 @@ import { RootState } from '../../../redux/configureStore';
 import { wehagoMainURL } from '../../../utils';
 import { getT } from '../../../utils/translateManager';
 
-interface reservationInfo {
+export type reservationInfo = {
   name: string;
   accessUser: any[];
   isPublic: boolean;
-  start: Date;
-  end: Date;
+  start: string;
+  end: string;
   iscret: boolean;
 }
 

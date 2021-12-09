@@ -6,7 +6,7 @@ import { RootState } from '../../../redux/configureStore';
 import { getT } from '../../../utils/translateManager';
 
 export default function WatingScreen(props:{start:string, isTablet: boolean}) {
-  const { start } = props;
+  const { start, isTablet } = props;
   const { isHorizon } = useSelector((state: RootState) => ({
     isHorizon: state.orientation.isHorizon
   }));
@@ -48,7 +48,7 @@ export default function WatingScreen(props:{start:string, isTablet: boolean}) {
           <View style={styles.line}>
             <Text style={styles.linedot}>{'\u2B24'}</Text>
             <Text style={{ fontSize: 12 }}>
-              {props.isTablet
+              {isTablet
                 ? `${t('roomstate_wating_modify')} ${t(
                     'roomstate_wating_unable'
                   )}`
@@ -66,7 +66,7 @@ export default function WatingScreen(props:{start:string, isTablet: boolean}) {
           <View style={styles.line}>
             <Text style={styles.linedot}>{'\u2B24'}</Text>
             <Text style={{ fontSize: 12 }}>
-              {props.isTablet
+              {isTablet
                 ? `${t('roomstate_wating_continue')} ${t(
                     'roomstate_wating_center'
                   )}`
@@ -80,7 +80,7 @@ export default function WatingScreen(props:{start:string, isTablet: boolean}) {
     );
   };
 
-  return !props.isTablet && isHorizon ? (
+  return !isTablet && isHorizon ? (
     <ScrollView>{content()}</ScrollView>
   ) : (
     <View style={{ flex: 1 }}>{content()}</View>
