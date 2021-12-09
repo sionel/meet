@@ -21,6 +21,7 @@ interface cardProps {
     goingMoreClick: (roomId: string) => void;
     enterConference: (roomId: string) => void;
   };
+  isHorizon: boolean;
 }
 
 export default function ConferenceCard(props: cardProps) {
@@ -35,10 +36,10 @@ export default function ConferenceCard(props: cardProps) {
       isLock,
       goingMoreClick,
       enterConference
-    }
+    },
+    isHorizon
   } = props;
   const isTablet = deviceInfoModule.isTablet();
-
   const colors = [
     ['rgb(75,234,200)', 'rgb(34,172,204)'],
     ['rgb(74,198,252)', 'rgb(48,109,242)'],
@@ -47,7 +48,11 @@ export default function ConferenceCard(props: cardProps) {
   ];
 
   return (
-    <View style={{ paddingLeft: isTablet ? 40 : 20 }}>
+    <View
+      style={
+        isHorizon ? { paddingRight: 40 } : { paddingLeft: isTablet ? 40 : 20 }
+      }
+    >
       <TouchableOpacity
         activeOpacity={0.8}
         style={styles.container}

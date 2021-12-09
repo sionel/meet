@@ -10,13 +10,12 @@ const patternTop = require('../../assets/new/patterns/splash_pattern_top.png');
 const patternBot = require('../../assets/new/patterns/splash_pattern_bottom.png');
 
 export default function Splash() {
-  const t = getT();
   return (
     <LinearGradient
       end={{ x: 0, y: 0 }}
       start={{ x: 0, y: 1 }}
       colors={['#FCFDFF', '#dbecfe']}
-      style={[styles.container, styles.horizonContainer]}
+      style={styles.container}
     >
       <StatusBar hidden={true} />
 
@@ -33,54 +32,6 @@ export default function Splash() {
         <Image source={patternBot} style={styles.bottomImg} />
       </View>
     </LinearGradient>
-    // <ImageBackground
-    //   source={require('../../assets/bgIntroWehagoIphoneX_3x.png')}
-    //   style={{
-    //     flex: 1,
-    //     width: '100%',
-    //     height: '100%',
-    //     backgroundColor: '#379bd8',
-    //     alignItems: 'center'
-    //   }}
-    // >
-    //   <View style={styles.container}>
-    //     <View style={styles.topContainer}>
-    //       <Text
-    //         style={{
-    //           color: '#fff',
-    //           fontSize: 24
-    //         }}
-    //       >
-    //         {t('splash_first')}
-    //         <Text
-    //           style={{
-    //             fontSize: 24,
-    //             fontWeight: 'bold'
-    //           }}
-    //         >
-    //           {WEHAGO_TYPE} Meet
-    //         </Text>
-    //       </Text>
-    //     </View>
-
-    //     <View style={styles.middleContainer}>
-    //       <Image
-    //         source={require('../../assets/imgMeet.png')}
-    //         style={{ width: 180, height: 180 }}
-    //       />
-    //     </View>
-
-    //     <View style={styles.bottomContainer}>
-    //       <View
-    //         style={{
-    //           flexDirection: 'row',
-    //           alignItems: 'center',
-    //           justifyContent: 'center'
-    //         }}
-    //       ></View>
-    //     </View>
-    //   </View>
-    // </ImageBackground>
   );
 }
 const styles = StyleSheet.create({
@@ -89,9 +40,6 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     alignItems: 'center',
-  },
-
-  horizonContainer: {
     paddingLeft: '28%',
     paddingRight: '28%'
   },
