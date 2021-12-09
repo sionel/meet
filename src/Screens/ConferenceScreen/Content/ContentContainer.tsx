@@ -115,7 +115,7 @@ function ContentContainer(props: any) {
     }
   };
 
-  return props.attributes ? (
+  return attributes ? (
     <FileSharing
       {...props}
       height={height}

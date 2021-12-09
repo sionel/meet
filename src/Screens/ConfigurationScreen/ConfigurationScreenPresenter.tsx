@@ -67,7 +67,7 @@ export default function ConfigurationScreenPresenter(props: propsTypes) {
             resizeMode={'contain'}
           />
           <Text style={{ flex: 1 }}> {'버전정보'} </Text>
-          <Text>{'2.3.0'}</Text>
+          <Text>{'2.4.0'}</Text>
         </View>
 
         <TouchableOpacity

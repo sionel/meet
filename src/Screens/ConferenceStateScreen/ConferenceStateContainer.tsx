@@ -183,7 +183,6 @@ export default function ConferenceStateContainer(props: any) {
       // 50명 초과 안내화면으로
       setConferenceState('fullroom');
     } else {
-      debugger;
       navigation.replace('SettingView', {
         roomType: 'meet',
         selectedRoomName: roomName,
