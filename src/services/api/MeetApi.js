@@ -116,7 +116,8 @@ export default {
       if (response.status !== 200) {
         throw await response.json();
       }
-      return response.json();
+      const { resultData } = await response.json();
+      return resultData;
     } catch (err) {
       console.warn('3-2-2.getMeetRoomNoCert : ', err);
       return false;
@@ -718,7 +719,9 @@ export default {
       if (response.status !== 200) {
         throw response.resultCode;
       }
-      return response.json();
+      const { resultData } = await response.json();
+      // debugger
+      return resultData;
     } catch (err) {
       console.warn('27.getParticipantCount : ', err);
       return false;

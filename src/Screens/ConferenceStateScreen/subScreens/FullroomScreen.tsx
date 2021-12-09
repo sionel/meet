@@ -3,7 +3,7 @@ import { StyleSheet, View, ScrollView, Image, Text } from 'react-native';
 import waiting from '../../../../assets/wating.png';
 import { getT } from '../../../utils/translateManager';
 
-export default function FullroomScreen(props) {
+export default function FullroomScreen(props:any) {
   const content = () => {
     const t = getT();
     return (
@@ -30,8 +30,8 @@ export default function FullroomScreen(props) {
           <Text style={{ fontSize: 14, color: 'rgb(80,80,80)' }}>
             {t('roomstate_full_title')}
           </Text>
-          <View style={{ fontSize: 12, paddingTop: 25 }}>
-            <Text style={{ textAlign: 'center', color: 'rgb(171,171,171)' }}>
+          <View style={{paddingTop: 25 }}>
+            <Text style={{fontSize: 12, textAlign: 'center', color: 'rgb(171,171,171)' }}>
               {t('roomstate_full_master')}
             </Text>
           </View>
