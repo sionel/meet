@@ -47,11 +47,6 @@ export default function SettingScreenContainer(props: any) {
     _getSetting();
   }, []);
 
-  // useEffect(()=>{
-  //   debugger
-  //   tracks?.length && console.log( tracks[1].isMuted());
-    
-  // },[tracks])
   const _goBack = () => {
     navigation.goBack();
   };
@@ -124,7 +119,7 @@ export default function SettingScreenContainer(props: any) {
         await MeetApi.getMeetRoomTokenJoincode(
           params.id,
           params.joincode,
-          name,
+          tmpName,
           user
         )
       ).resultData;
@@ -171,7 +166,6 @@ export default function SettingScreenContainer(props: any) {
 
   const _handleToggleAudio = async () => {
     const audio = tracks && tracks[1];
-    debugger
     if (audio.isMuted()) {
       await audio.unmute();
     } else {
