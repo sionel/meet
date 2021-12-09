@@ -31,17 +31,19 @@ export type MeetParamList = {
       }
     | {
         accessType: 'joincode';
+        id: string;
         joincode?: string;
       };
 
   SettingView:
     | {
-        accessType: 'auth' | 'email';
+        accessType: 'auth';
         id: string;
         roomType?: string;
         selectedRoomName?: string;
       }
-    | { accessType: 'joincode'; joincode: string };
+    | { accessType: 'joincode'; id: string; joincode: string }
+    | { accessType: 'email'; id: string; token: string };
 
   ConferenceView: {
     accessType: string;

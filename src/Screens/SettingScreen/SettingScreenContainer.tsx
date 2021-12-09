@@ -1,35 +1,40 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Platform } from 'react-native';
 import SettingScreenPresenter from './SettingScreenPresenter';
 import JitsiMeetJS from '../../../jitsi/features/base/lib-jitsi-meet';
 import config from '../../utils/conference/config';
-import Orientation from 'react-native-orientation-locker';
-import { MeetApi } from '../../services';
 import { v4 as uuidv4 } from 'uuid';
 import { getT } from '../../utils/translateManager';
 
 import { actionCreators as AlertAcions } from '../../redux/modules/alert';
 import { RootState } from '../../redux/configureStore';
-import { MainNavigationProps } from '../../Navigations/MainStack';
 import { MeetNavigationProps } from '../../Navigations/RootNavigation';
+
+import { MeetApi } from '../../services';
 
 export default function SettingScreenContainer(props: any) {
   const [name, setName] = useState('');
   const [tracks, setTracks] = useState<any[] | null>([]);
   const [nameField, setNameField] = useState(false);
   const [buttonActive, setButtonActive] = useState(false);
-
-  const { auth, isLogin, from } = useSelector((state: RootState) => {
+  // const ref = useRef<any>({tracks:null});
+  //강제 업데이트
+  const [, updateState] = useState<undefined | {}>();
+  const forceUpdate = useCallback(()=> updateState({}), []);
+  const { auth, isLogin, from, isHorizon } = useSelector((state: RootState) => {
     return {
       auth: state.user.auth,
       isLogin: state.user.isLogin,
-      from: state.user.from
+      from: state.user.from,
+      isHorizon: state.orientation.isHorizon
     };
   });
 
-  const { navigation, route: { params } }: MeetNavigationProps<'SettingView'> = props;
+  const {
+    navigation,
+    route: { params }
+  }: MeetNavigationProps<'SettingView'> = props;
   const { webAuth } = props;
 
   const dispatch = useDispatch();
@@ -42,6 +47,11 @@ export default function SettingScreenContainer(props: any) {
     _getSetting();
   }, []);
 
+  // useEffect(()=>{
+  //   debugger
+  //   tracks?.length && console.log( tracks[1].isMuted());
+    
+  // },[tracks])
   const _goBack = () => {
     navigation.goBack();
   };
@@ -57,7 +67,7 @@ export default function SettingScreenContainer(props: any) {
 
   const _getSetting = async () => {
     let tracks = await _getTrack();
-
+    // ref.current.tracks = tracks
     setTracks(tracks ? tracks : null);
     setNameField(!isLogin);
     setButtonActive(tracks ? true : false);
@@ -148,6 +158,29 @@ export default function SettingScreenContainer(props: any) {
     }
   };
 
+  const _handleToggleVideo = async () => {
+    const video = tracks && tracks[0];
+    if (video.isMuted()) {
+      await video.unmute();
+    } else {
+      await video.mute();
+    }
+    forceUpdate();
+    setTracks(tracks);
+  };
+
+  const _handleToggleAudio = async () => {
+    const audio = tracks && tracks[1];
+    debugger
+    if (audio.isMuted()) {
+      await audio.unmute();
+    } else {
+      await audio.mute();
+    }
+    forceUpdate();
+    setTracks(tracks);
+  };
+
   return (
     <SettingScreenPresenter
       tracks={tracks}
@@ -156,8 +189,9 @@ export default function SettingScreenContainer(props: any) {
       onConferenceEnter={_handleConferenceEnter}
       onToggleAudio={_handleToggleAudio}
       onToggleVideo={_handleToggleVideo}
-      onSetName={_handleSetName}
+      setName={setName}
       goBack={_goBack}
+      isHorizon={isHorizon}
     />
   );
 }
