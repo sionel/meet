@@ -95,12 +95,7 @@ const HomeScreenPresenter = (props: presenterProps) => {
           <ParticipantsList {...participantsList} isHorizon={isHorizon} />
         )}
         <View
-          style={{
-            width: 250,
-            paddingHorizontal: 30,
-            borderRightWidth: 2,
-            borderRightColor: '#E6E6E6'
-          }}
+          style={styles.PadHorizonLeftContainter}
         >
           <Image
             source={loginLogo}
@@ -111,23 +106,11 @@ const HomeScreenPresenter = (props: presenterProps) => {
             }}
           />
           <View
-            style={{
-              marginTop: 30,
-              width: '100%',
-              height: 40,
-              flexDirection: 'row',
-              alignItems: 'center'
-            }}
+            style={styles.PadHorizonProfileView}
           >
             <Image
               source={{ uri: userImg }}
-              style={{
-                height: 40,
-                width: 40,
-                borderRadius: 20,
-                marginRight: 5,
-                backgroundColor: '#939393'
-              }}
+              style={styles.userImageView}
               resizeMode={'contain'}
             />
             <Text style={styles.name}>{userName}</Text>
@@ -157,7 +140,7 @@ const HomeScreenPresenter = (props: presenterProps) => {
                 style={styles.topButtonImg}
                 resizeMode={'cover'}
               />
-              <Text>{'회의생성'}</Text>
+              <Text style={styles.ImageText}>{'회의생성'}</Text>
             </TouchableOpacity>
             {/* <TouchableOpacity
               style={styles.topButtons}
@@ -179,7 +162,7 @@ const HomeScreenPresenter = (props: presenterProps) => {
                 style={styles.topButtonImg}
                 resizeMode={'cover'}
               />
-              <Text>{'참여코드'}</Text>
+              <Text style={styles.ImageText}>{'참여코드'}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -227,21 +210,12 @@ const HomeScreenPresenter = (props: presenterProps) => {
           )}
 
           <View
-            style={{
-              width: '100%',
-              flex: 1,
-              marginVertical: '2%',
-              paddingHorizontal: isTablet ? 40 : 20
-              // backgroundColor: 'red'
-            }}
+            style={[
+              styles.ConferenceListContainer,
+              { paddingHorizontal: isTablet ? 40 : 20 }
+            ]}
           >
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                marginBottom: 10
-              }}
-            >
+            <View style={styles.ConferenceListTitle}>
               {reservationConference.length > 0 && (
                 <Fragment>
                   <TouchableOpacity
@@ -252,35 +226,22 @@ const HomeScreenPresenter = (props: presenterProps) => {
                   >
                     <Text
                       style={[
-                        { color: '#939393', fontSize: 16, paddingRight: 5 },
-                        highlight === 'reservation' && {
-                          fontWeight: 'bold',
-                          color: '#000'
-                        }
+                        styles.UnFocusText,
+                        highlight === 'reservation' && styles.FocusText
                       ]}
                     >
                       {'예약회의'}
                     </Text>
                     <Text
                       style={[
-                        { color: '#939393', fontSize: 16 },
-                        highlight === 'reservation' && {
-                          fontWeight: 'bold',
-                          color: '#1c90fb'
-                        }
+                        styles.unFocusReCount,
+                        highlight === 'reservation' && styles.FocusReCount
                       ]}
                     >
                       {reservationConference.length}
                     </Text>
                   </TouchableOpacity>
-                  <View
-                    style={{
-                      borderWidth: 1,
-                      borderColor: '#aaa',
-                      height: '100%',
-                      marginHorizontal: 10
-                    }}
-                  />
+                  <View style={styles.GraySplitBar} />
                 </Fragment>
               )}
               <View
@@ -299,45 +260,36 @@ const HomeScreenPresenter = (props: presenterProps) => {
                 >
                   <Text
                     style={[
-                      { color: '#939393', fontSize: 16, paddingRight: 5 },
-
-                      highlight === 'finished' && {
-                        fontWeight: 'bold',
-                        color: '#000'
-                      }
+                      styles.UnFocusText,
+                      highlight === 'finished' && styles.FocusText
                     ]}
                   >
                     {'회의기록'}
                   </Text>
                   <Text
                     style={[
-                      {
-                        color: '#939393',
-                        fontSize: 16,
-                        paddingRight: 20
-                      },
-                      highlight === 'finished' && {
-                        fontWeight: 'bold',
-                        color: '#1c90fb'
-                      }
+                      styles.unFocusFinCount,
+                      highlight === 'finished' && styles.FocusFinCount
                     ]}
                   >
                     {finishCount}
                   </Text>
                 </TouchableOpacity>
 
-                {highlight === 'finished' && <TouchableOpacity
-                  onPress={() => setCalendarView(true)}
-                  style={{
-                    height: '100%',
-                    borderColor: '#939393',
-                    borderWidth: 1,
-                    padding: 5,
-                    borderRadius: 10
-                  }}
-                >
-                  <Text>{`${finishDate.getMonth() + 1}월`}</Text>
-                </TouchableOpacity>}
+                {highlight === 'finished' && (
+                  <TouchableOpacity
+                    onPress={() => setCalendarView(true)}
+                    style={{
+                      height: '100%',
+                      borderColor: '#939393',
+                      borderWidth: 1,
+                      padding: 5,
+                      borderRadius: 10
+                    }}
+                  >
+                    <Text>{`${finishDate.getMonth() + 1}월`}</Text>
+                  </TouchableOpacity>
+                )}
               </View>
             </View>
             <FlatList
@@ -473,7 +425,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row-reverse',
     alignItems: 'center'
   },
-  companyText: { fontSize: 15, textAlign: 'right' },
+  companyText: { fontSize: 13, textAlign: 'right',  fontFamily: 'DOUZONEText30'},
   selectConpany: {
     justifyContent: 'flex-start',
     flexDirection: 'row',
@@ -495,10 +447,11 @@ const styles = StyleSheet.create({
     // marginVertical: '1%',
   },
   name: {
-    fontSize: 23,
-    fontWeight: 'bold',
+    fontSize: 18,
+    color: '#333',
     marginRight: 10,
-    textAlign: 'center'
+    textAlign: 'center',
+    fontFamily: 'DOUZONEText50'
   },
   greeting: {
     fontSize: 20
@@ -541,7 +494,87 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingBottom: 20
   },
-  goingText: { fontSize: 16, fontWeight: 'bold', marginRight: 5 }
+  goingText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginRight: 5
+  },
+  UnFocusText: {
+    color: '#939393',
+    fontSize: 14,
+    fontFamily: 'DOUZONEText30',
+    paddingRight: 5
+  },
+  FocusText: {
+    color: '#000',
+    fontSize: 14,
+    fontFamily: 'DOUZONEText50'
+  },
+  unFocusFinCount: {
+    color: '#939393',
+    fontSize: 14,
+    fontFamily: 'DOUZONEText30',
+    paddingRight: 20
+  },
+  FocusFinCount: {
+    color: '#1c90fb',
+    fontSize: 14,
+    fontFamily: 'DOUZONEText50'
+  },
+  unFocusReCount: {
+    color: '#939393',
+    fontSize: 14,
+    fontFamily: 'DOUZONEText30'
+  },
+  FocusReCount: {
+    color: '#1c90fb',
+    fontSize: 14,
+    fontFamily: 'DOUZONEText30'
+  },
+  FinishedCotainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flex: 1
+  },
+  GraySplitBar: {
+    borderWidth: 1,
+    borderColor: '#aaa',
+    height: '100%',
+    marginHorizontal: 10
+  },
+  ConferenceListContainer: {
+    width: '100%',
+    flex: 1,
+    marginVertical: '2%'
+    // backgroundColor: 'red'
+  },
+  ConferenceListTitle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10
+  },
+  ImageText: { fontSize: 13, fontFamily: 'DOUZONEText30', color: '#333' },
+  PadHorizonLeftContainter: {
+    width: 250,
+    paddingHorizontal: 30,
+    borderRightWidth: 2,
+    borderRightColor: '#E6E6E6'
+  },
+  PadHorizonProfileView: {
+    marginTop: 30,
+    width: '100%',
+    height: 40,
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  userImageView: {
+    height: 40,
+    width: 40,
+    borderRadius: 20,
+    marginRight: 5,
+    backgroundColor: '#939393'
+  }
   // container: {
   //   flex: 1,
   //   backgroundColor: '#F7F8FA',
