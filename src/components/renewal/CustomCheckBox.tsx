@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
     color: 'rgb(51,51,51)',
     lineHeight: Platform.OS === 'ios' ? 25 : 21,
     paddingLeft: 5,
+    fontFamily: 'DOUZONEText30'
   }
 });
 

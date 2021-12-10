@@ -324,27 +324,16 @@ const HomeScreenPresenter = (props: presenterProps) => {
               >
                 <Text
                   style={[
-                    { color: '#939393', fontSize: 16, paddingRight: 5 },
-
-                    highlight === 'finished' && {
-                      fontWeight: 'bold',
-                      color: '#000'
-                    }
+                    styles.UnFocusfinished,
+                    highlight === 'finished' && styles.Focusfinished
                   ]}
                 >
                   {'회의기록'}
                 </Text>
                 <Text
                   style={[
-                    {
-                      color: '#939393',
-                      fontSize: 16,
-                      paddingRight: 20
-                    },
-                    highlight === 'finished' && {
-                      fontWeight: 'bold',
-                      color: '#1c90fb'
-                    }
+                    styles.unFocusCount,
+                    highlight === 'finished' && styles.FocusCount
                   ]}
                 >
                   {finishCount}
@@ -353,13 +342,7 @@ const HomeScreenPresenter = (props: presenterProps) => {
               {highlight === 'finished' && (
                 <TouchableOpacity
                   onPress={() => setCalendarView(true)}
-                  style={{
-                    height: '100%',
-                    borderColor: '#939393',
-                    borderWidth: 1,
-                    padding: 5,
-                    borderRadius: 10
-                  }}
+                  style={styles.monthTouchContainer}
                 >
                   <Text>{`${finishDate.getMonth() + 1}월`}</Text>
                 </TouchableOpacity>
@@ -398,29 +381,11 @@ const HomeScreenPresenter = (props: presenterProps) => {
       </View>
       {calendarView && (
         <View
-          style={{
-            position: 'absolute',
-            backgroundColor: 'rgb(255,255,255)',
-            bottom: 0,
-            width: '100%',
-            height: '100%',
-            borderRadius: 20,
-            shadowRadius: 10,
-            shadowColor: '#aaa',
-            shadowOpacity: 10,
-            borderWidth: 1,
-            paddingBottom: '5%'
-          }}
+          style={styles.calendarView}
         >
           <View style={{ flex: 1, backgroundColor: '#666', zIndex: 2 }}></View>
           <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginTop: '5%',
-              marginBottom: '3%',
-              paddingHorizontal: '4%'
-            }}
+            style={styles.calendarTopView}
           >
             <TouchableOpacity
               onPress={() => {
@@ -429,29 +394,26 @@ const HomeScreenPresenter = (props: presenterProps) => {
             >
               <Image
                 source={icCancel}
-                style={{
-                  resizeMode: 'cover',
-                  width: 18,
-                  height: 18
-                }}
+                resizeMode='cover'
+                style={styles.icCancel}
               />
             </TouchableOpacity>
           </View>
           <CalendarPicker
-            weekdays={['일', '월', '화', '수', '목', '금', '토']}
+            weekdays={[t('일'), t('월'), t('화'), t('수'), t('목'), t('금'), t('토')]}
             months={[
-              '1월',
-              '2월',
-              '3월',
-              '4월',
-              '5월',
-              '6월',
-              '7월',
-              '8월',
-              '9월',
-              '10월',
-              '11월',
-              '12월'
+              t('1월'),
+              t('2월'),
+              t('3월'),
+              t('4월'),
+              t('5월'),
+              t('6월'),
+              t('7월'),
+              t('8월'),
+              t('9월'),
+              t('10월'),
+              t('11월'),
+              t('12월')
             ]}
             previousTitle="<"
             nextTitle=">"
@@ -518,8 +480,8 @@ const styles = StyleSheet.create({
     // marginVertical: '1%',
   },
   name: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: 18,
+    fontFamily: 'DOUZONEText50',
     marginRight: 10,
     textAlign: 'center'
   },
@@ -562,7 +524,58 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingBottom: 20
   },
-  goingText: { fontSize: 16, fontWeight: 'bold', marginRight: 5 }
+  goingText: { fontSize: 16, fontWeight: 'bold', marginRight: 5 },
+  calendarTopView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: '5%',
+    marginBottom: '3%',
+    paddingHorizontal: '4%'
+  },
+  calendarView: {
+    position: 'absolute',
+    backgroundColor: 'rgb(255,255,255)',
+    bottom: 0,
+    width: '100%',
+    height: '100%',
+    borderRadius: 20,
+    shadowRadius: 10,
+    shadowColor: '#aaa',
+    shadowOpacity: 10,
+    borderWidth: 1,
+    paddingBottom: '5%'
+  },
+  monthTouchContainer: {
+    height: '100%',
+    borderColor: '#939393',
+    borderWidth: 1,
+    padding: 5,
+    borderRadius: 10
+  },
+  icCancel: {
+    width: 18,
+    height: 18
+  },
+  unFocusCount: {
+    color: '#939393',
+    fontSize: 16,
+    paddingRight: 20,
+    fontFamily: 'DOUZONEText30'
+  },
+  FocusCount: {
+    fontFamily: 'DOUZONEText50',
+    color: '#1c90fb'
+  },
+  UnFocusfinished: {
+    color: '#939393',
+    fontSize: 16,
+    paddingRight: 5,
+    fontFamily: 'DOUZONEText30'
+  },
+  Focusfinished: {
+    color: '#000',
+    fontFamily: 'DOUZONEText50'
+  }
   // container: {
   //   flex: 1,
   //   backgroundColor: '#F7F8FA',

@@ -10,17 +10,16 @@ import { RootState } from '../../redux/configureStore';
 import { LoginNavigationProps } from '../../Navigations/LoginStack';
 
 const LoginScreenContainer = ({
-  navigation,
-  route
+  navigation
 }: LoginNavigationProps<'InviteCode'>) => {
-  const isIOS = Platform.OS === 'ios';
-
   const [code, setCode] = useState('');
   const [shadowCode, setShadowCode] = useState('');
   const [joincodeErr, setJoincodeErr] = useState(false);
   const [inputcodeErr, setInputcodeErr] = useState(false);
   const [logging, setLogging] = useState(false);
   const [focusingNum, setFocusingNum] = useState(-1);
+
+  const isIOS = Platform.OS === 'ios';
 
   const codeLineRef: RefObject<any> = useRef();
 
@@ -31,6 +30,7 @@ const LoginScreenContainer = ({
   const t = getT();
   const isTablet: boolean = deviceInfoModule.isTablet();
 
+  //참여코드 입력시 정규식 체크하고 입력
   const changeInputcode = async (value: string) => {
     const regex = /^[0-9|a-f|A-F|]*$/;
     setInputcodeErr(false);
@@ -68,13 +68,6 @@ const LoginScreenContainer = ({
       setFocusingNum(0);
       setInputcodeErr(true);
     } else {
-      // _setLoaded(true);
-      // _setParams({
-      //   accesstype: 'joincode',
-      //   roomId: result.resultData.room,
-      //   joincode
-      // });
-      // _setDestination('Setting');
       navigation.navigate('ConferenceStateView', {
         accessType: 'joincode',
         id: result.resultData.room,
@@ -84,17 +77,15 @@ const LoginScreenContainer = ({
     // setLogging(true);
   };
 
+  //참여코드 포커스
   const onFocusInput = () => {
     setInputcodeErr(false);
     setFocusingNum(code.length);
   };
 
+  //뒤에 숨겨져 있는 INPUT 박스로 포커스를 넘김
   const onFocusingCode = () => {
     codeLineRef.current.focus();
-  };
-
-  const goLoginInput = () => {
-    navigation.navigate('InputLogin');
   };
 
   const onFocusOutInput = () => {
@@ -110,7 +101,7 @@ const LoginScreenContainer = ({
     const androidUrl = `wehago://app?name=${serviceCode}&login=true`;
 
     Linking.openURL(isIOS ? iosUrl : androidUrl).catch(err => {
-      goLoginInput();
+      navigation.navigate('InputLogin');
     });
   };
   return (
@@ -130,7 +121,6 @@ const LoginScreenContainer = ({
         isTablet,
         t,
         logging,
-        goLoginInput,
         shadowCode
       }}
     />

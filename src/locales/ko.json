@@ -252,7 +252,7 @@
       "login_code": "참여코드를 입력해주세요",
       "login_codemessage1": "공유받은 참여코드 입력 후",
       "login_codemessage2": "바로 회의에 참여해보세요.",
-      "text_incorrect_code_error": "대소문자(A~F), 숫자(0~9) 이외의 값은 입력할수 없습니다.",
+      "text_incorrect_code_error": "대소문자(A~F),숫자(0~9) 이외의 값은 입력할수 없습니다.",
       "text_nomatch_conference_error": "일치하는 회의가 없습니다. 확인 후 다시 입력해주세요.",
       "login_exceeded": "아이디 로그인 오류 횟수 초과",
       "login_prevent": "개인정보 도용으로 인해 발생할 수 있는 피해를 방지하고자",

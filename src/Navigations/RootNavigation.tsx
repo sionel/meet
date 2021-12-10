@@ -55,6 +55,7 @@ export type MeetParamList = {
     name: string;
     roomToken: string;
     roomType?: string;
+    selectedRoomName: string
     tracks: any;
   };
 };

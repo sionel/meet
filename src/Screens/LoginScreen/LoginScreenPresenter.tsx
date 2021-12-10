@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { RefObject } from 'react';
 import {
   StyleSheet,
   View,
@@ -17,7 +17,25 @@ import LinearGradient from 'react-native-linear-gradient';
 //mulLug
 //다국어 적용 안되어있음
 
-const LoginScreenPresenter = (props: any) => {
+export interface PresenterProps {
+  code: string;
+  focusingNum: number;
+  onFocusingCode: () => void;
+  changeInputcode: (text: string) => Promise<void>;
+  onFocusInput: () => void;
+  onFocusOutInput: () => void;
+  codeLineRef: RefObject<any>;
+  LoginForWehago: () => void;
+  joincodeErr: boolean;
+  inputcodeErr: boolean;
+  isHorizon: boolean;
+  isTablet: boolean;
+  t: any;
+  logging: boolean;
+  shadowCode: string;
+}
+
+const LoginScreenPresenter = (props: PresenterProps) => {
   const {
     code,
     focusingNum,
@@ -37,8 +55,8 @@ const LoginScreenPresenter = (props: any) => {
   } = props;
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
-      <StatusBar  barStyle={'dark-content'}/>
+    <SafeAreaView style={styles.LoginSafeAreaView}>
+      <StatusBar barStyle={'dark-content'} />
       <KeyboardAwareScrollView
         contentContainerStyle={{ flexGrow: 1 }}
         onKeyboardDidHide={onFocusOutInput}
@@ -56,7 +74,7 @@ const LoginScreenPresenter = (props: any) => {
           <View
             style={[
               styles.verContainer,
-              isHorizon && styles.horizonContainer, //가로
+              isHorizon && styles.horizonContainer, //모바일 && 가로
               isTablet && isHorizon && styles.horPadContainer, //태블릿 && 가로
               isTablet && !isHorizon && styles.verPadContainer //테블릿 && 세로
             ]}
@@ -167,11 +185,10 @@ const LoginScreenPresenter = (props: any) => {
               <Text
                 style={[
                   styles.ErrorText,
-                  Platform.OS === 'ios' && { height: 15 },
                   isHorizon && !isTablet && { top: '-4%' }
                 ]}
               >
-                {joincodeErr && t('renewal.text_incorrect_code_error')}
+                {joincodeErr && t('renewal.text_incorrect_code_error').substr(0,40)}
                 {inputcodeErr && t('renewal.text_nomatch_conference_error')}
               </Text>
 
@@ -189,7 +206,6 @@ const LoginScreenPresenter = (props: any) => {
                 >
                   <TouchableHighlight
                     activeOpacity={0.7}
-                    // underlayColor={'transparent'}
                     style={styles.loginBtnTouch}
                     onPress={LoginForWehago}
                     underlayColor={'rgba(0,0,0,0.2)'}
@@ -211,24 +227,25 @@ const LoginScreenPresenter = (props: any) => {
 };
 
 const styles = StyleSheet.create({
+  //로그인 SafeAreaView
+  LoginSafeAreaView: {
+    flex: 1,
+    backgroundColor: '#fff'
+  },
   //화면 방향에 따른 패딩
   verContainer: {
     flex: 1,
     backgroundColor: '#fff',
-    paddingLeft: '8%',
-    paddingRight: '8%'
+    paddingHorizontal: '8%'
   },
   horizonContainer: {
-    paddingLeft: '28%',
-    paddingRight: '28%'
+    paddingHorizontal: '28%'
   },
   horPadContainer: {
-    paddingLeft: '33%',
-    paddingRight: '33%'
+    paddingHorizontal: '33%'
   },
   verPadContainer: {
-    paddingLeft: '25%',
-    paddingRight: '25%'
+    paddingHorizontal: '25%'
   },
   //전체 레이아웃 컨테이너
   topContainer: {
@@ -240,7 +257,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     // backgroundColor:'red',
-    paddingHorizontal:10
+    paddingHorizontal: 10
   },
   bottomContainer: {
     flex: 1,
@@ -249,9 +266,9 @@ const styles = StyleSheet.create({
   //코드 입력 안내문
   textHead: {
     fontSize: 20,
-    fontWeight: 'bold',
     textAlign: 'center',
-    color: '#000'
+    color: '#000',
+    fontFamily:'DOUZONEText50'
   },
   // padTextHead: {
   //   fontSize: 28
@@ -261,13 +278,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '400',
     textAlign: 'center',
-    color: 'rgb(147,147,147)'
+    color: 'rgb(147,147,147)',
+    fontFamily:'DOUZONEText30'
   },
   textSub2: {
     fontSize: 16,
     fontWeight: '400',
     textAlign: 'center',
-    color: 'rgb(147,147,147)'
+    color: 'rgb(147,147,147)',
+    fontFamily:'DOUZONEText30'
   },
   // padTextSub: {
   //   fontSize: 22
@@ -284,7 +303,8 @@ const styles = StyleSheet.create({
     color: '#000',
     zIndex: 999,
     padding: 0,
-    borderBottomWidth: 4
+    borderBottomWidth: 4,
+    fontFamily:'DOUZONEText50'
   },
   focusAccent: {
     borderColor: '#0033ff',
@@ -315,7 +335,8 @@ const styles = StyleSheet.create({
   },
   loginBtnText: {
     color: '#fff',
-    fontSize: 16
+    fontSize: 16,
+    fontFamily:'DOUZONEText30'
   },
   none: {
     position: 'absolute',
@@ -327,8 +348,10 @@ const styles = StyleSheet.create({
   },
   ErrorText: {
     color: 'red',
-    top: '-9%',
-    fontSize: 13
+    top: '-9.5%',
+    fontSize: 13,
+    fontFamily:'DOUZONEText30',
+    paddingLeft: 10
   }
 });
 
