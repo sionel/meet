@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, RefObject } from 'react';
 import {
   StyleSheet,
   View,
@@ -23,7 +23,41 @@ const ic_arrow_up = require('../../../../assets/new/icons/ic_arrow_up.png');
 const ic_arrow_down = require('../../../../assets/new/icons/ic_arrow_down.png');
 const ic_user = require('../../../../assets/new/icons/ic_user.png');
 
-const OrganizationScreenPresenter = (props: any) => {
+interface PresenterProps {
+  keyword:string;
+  inviteText:string;
+  tabType:'org' | 'contact' | 'exter';
+  searchedEmployee:any[];
+  contacts:{title: string, data:{}}[];
+  selectedEmployee: any;
+  isOrgDataLoaded:boolean;
+  exterError:boolean;
+  isTablet:boolean;
+  isHorizon:boolean;
+  spin:Animated.AnimatedInterpolation;
+  searchRef:RefObject<any>;
+  sendEmailRef:RefObject<any>;
+  openGroup:any;
+  organization:any;
+  organizationEmployee:any;
+  recents:any;
+  t:any;
+  auth:any;
+  doSearch:() => void;
+  validateExter:() => void;
+  focusOut:() => void;
+  participantListAdd:() => void;
+  setTabType:(tap:'org' | 'contact' | 'exter') =>  void;
+  setKeyword:(keyword:string) => void;
+  setInviteText:(invite:string) => void;
+  setOpenGroup:(object:{}) => void;
+  selectEmployee:(type:string, item:any) => void;
+  getOrganizationEmployeeTree:(organization: number) => any;
+  // contactType:'one' | 'email' | 'sms';
+  // setContactType:(contactType:'one' | 'email' | 'sms') => void;
+}
+
+const OrganizationScreenPresenter = (props: PresenterProps) => {
   const {
     contacts,
     tabType,
@@ -49,11 +83,10 @@ const OrganizationScreenPresenter = (props: any) => {
     t,
     participantListAdd,
     auth,
-    contactType,
-    setContactType,
+
     validateExter,
     exterError,
-    recentAdd,
+
     searchRef,
     focusOut,
     isTablet,
@@ -185,7 +218,7 @@ const OrganizationScreenPresenter = (props: any) => {
                                   isParentSelected || isSelected
                                     ? '#fff'
                                     : '#1c90fb',
-                                fontWeight: 'bold'
+                                fontFamily: 'DOUZONEText30'
                               }}
                             >
                               {item.employee_count}
@@ -258,33 +291,23 @@ const OrganizationScreenPresenter = (props: any) => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={[styles.topTitle]}>
-        {/* <TouchableOpacity
-          disabled={Object.keys(selectedEmployee.member).length > listLng}
-          onPress={() => onClickCancel()}
-        >
-          <Text
-            style={[
-              styles.ft14N,
-              Object.keys(selectedEmployee.member).length > listLng && {
-                color: '#d3d3d3'
-              }
-            ]}
-          >
+        <TouchableOpacity disabled={true}>
+          <Text style={[styles.ft14N, { color: '#00ff0000' }]}>
             {t('뒤로')}
           </Text>
-        </TouchableOpacity> */}
-        <View style={{ flexDirection: 'row', width: '30%' }}>
+        </TouchableOpacity>
+        <View style={{ flexDirection: 'row' }}>
           <Text style={styles.TitleText}>{t('참석자 추가')}</Text>
-          <Text style={{ color: '#1c90fb', fontSize: 18, fontWeight: '600' }}>
+          <Text style={styles.participantsCount}>
             {'  '}
             {selectedEmployee.member.length}
           </Text>
         </View>
         <TouchableOpacity
           onPress={() => participantListAdd()}
-          style={{ marginLeft: isHorizon ? '23%' : '27%' }}
+          // style={{ marginLeft: isHorizon ? '23%' : '27%' }}
         >
-          <Text style={styles.ft14N}>{t('확인')}</Text>
+          <Text style={styles.ft14N}>{t('renewal.alert_button_confirm')}</Text>
         </TouchableOpacity>
       </View>
       <View style={{ backgroundColor: '#F7F8FA', flex: 0.005 }} />
@@ -338,7 +361,10 @@ const OrganizationScreenPresenter = (props: any) => {
                   ]}
                 >
                   <Text
-                    style={{ color: tabType === 'org' ? '#1c90fb' : '#8c8c8c' }}
+                    style={{
+                      color: tabType === 'org' ? '#1c90fb' : '#8c8c8c',
+                      fontFamily: 'DOUZONEText30'
+                    }}
                   >
                     {t('조직도')}
                   </Text>
@@ -356,7 +382,8 @@ const OrganizationScreenPresenter = (props: any) => {
                 >
                   <Text
                     style={{
-                      color: tabType === 'contact' ? '#1c90fb' : '#8c8c8c'
+                      color: tabType === 'contact' ? '#1c90fb' : '#8c8c8c',
+                      fontFamily: 'DOUZONEText30'
                     }}
                   >
                     {t('연락처')}
@@ -375,7 +402,8 @@ const OrganizationScreenPresenter = (props: any) => {
                 >
                   <Text
                     style={{
-                      color: tabType === 'exter' ? '#1c90fb' : '#8c8c8c'
+                      color: tabType === 'exter' ? '#1c90fb' : '#8c8c8c',
+                      fontFamily: 'DOUZONEText30'
                     }}
                   >
                     {t('외부참여자')}
@@ -511,7 +539,6 @@ const OrganizationScreenPresenter = (props: any) => {
                 recents={recents}
                 validateExter={validateExter}
                 exterError={exterError}
-                recentAdd={recentAdd}
                 focusOut={focusOut}
                 isTablet={isTablet}
                 isHorizon={isHorizon}
@@ -531,7 +558,7 @@ const styles = StyleSheet.create({
     flex: 1,
     // backgroundColor: 'red',
     justifyContent: 'flex-start',
-    backgroundColor:'#fff'
+    backgroundColor: '#fff'
   },
   container: {
     flex: 1
@@ -540,7 +567,7 @@ const styles = StyleSheet.create({
   },
   topTitle: {
     paddingHorizontal: '5%',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
     alignItems: 'center',
     flexDirection: 'row',
     width: '100%',
@@ -550,12 +577,17 @@ const styles = StyleSheet.create({
   TitleText: {
     color: '#000',
     fontSize: 18,
-    fontWeight: '600'
+    fontFamily: 'DOUZONEText50'
+  },
+  participantsCount: {
+    color: '#1c90fb',
+    fontSize: 18,
+    fontFamily: 'DOUZONEText50'
   },
   ft14N: {
     color: '#000',
     fontSize: 14,
-    fontWeight: 'normal'
+    fontFamily: 'DOUZONEText30'
   },
   dimmed: {
     position: 'absolute',
@@ -569,6 +601,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     color: '#dfdfdf',
+    fontFamily: 'DOUZONEText30',
     marginTop: 10
   },
   profile: {
@@ -602,7 +635,9 @@ const styles = StyleSheet.create({
   textStyle: {
     // flex: 1,
     // fontSize: 14,
-    color: '#000'
+    color: '#000',
+    fontSize: 14,
+    fontFamily: 'DOUZONEText30'
   },
   selectedItem: {
     backgroundColor: '#1C90FB',

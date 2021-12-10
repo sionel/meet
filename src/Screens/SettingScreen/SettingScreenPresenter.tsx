@@ -53,13 +53,13 @@ export default function SettingScreenPresenter(props: PresenterProps) {
           <TouchableOpacity onPress={goBack}>
             <Image
               source={icBack}
-              style={{ width: 24, height: 24 }}
+              style={styles.icBack}
               resizeMode="cover"
             />
           </TouchableOpacity>
           <Text style={styles.HeaderTitleText}>{roomName}</Text>
           <TouchableOpacity disabled={true}>
-            <Text style={styles.emptyText}>확인</Text>
+            <Text style={styles.emptyText}>{t('renewal.alert_button_confirm')}</Text>
           </TouchableOpacity>
         </View>
         <KeyboardAvoidingView
@@ -79,10 +79,10 @@ export default function SettingScreenPresenter(props: PresenterProps) {
                 flex: 1
               }}
             >
-              <Text style={{ fontSize: 17, color: '#000', paddingBottom: 10 }}>
+              <Text style={{ fontSize: 17, color: '#000', paddingBottom: 10, fontFamily: 'DOUZONEText30'}}>
                 {t('roomstate_setting_title')}
               </Text>
-              <Text style={{ fontSize: 12, color: 'rgb(140,140,140)' }}>
+              <Text style={{ fontSize: 12, color: 'rgb(140,140,140)', fontFamily: 'DOUZONEText30'}}>
                 {t('roomstate_setting_detail')}
               </Text>
             </View>
@@ -97,7 +97,8 @@ export default function SettingScreenPresenter(props: PresenterProps) {
                 style={{
                   fontSize: 14,
                   color: 'rgb(51,51,51)',
-                  paddingBottom: 5
+                  paddingBottom: 5,
+                  fontFamily: 'DOUZONEText30'
                 }}
               >
                 {t('roomstate_setting_output')}
@@ -188,12 +189,7 @@ export default function SettingScreenPresenter(props: PresenterProps) {
             </View>
             {nameField && (
               <View
-                style={{
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  height: '100%',
-                  flex: 1
-                }}
+                style={styles.nameFieldView}
               >
                 <Text style={{ width: '100%', paddingLeft: 5 }}>
                   {t('roomstate_setting_name')}
@@ -289,8 +285,18 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 14,
-    fontWeight: 'normal',
+    
     color: '#00ff0000'
+  },
+  icBack: { 
+    width: 24, 
+    height: 24 
+  },
+  nameFieldView: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
+    flex: 1
   }
 });
 

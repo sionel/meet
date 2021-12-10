@@ -351,7 +351,7 @@ const OrganizationScreenContainer = (props: any) => {
   };
   return (
     <OrganizationScreenPresenter
-      setSelectMode={setSelectMode}
+      // setSelectMode={setSelectMode}
       contacts={contacts}
       tabType={tabType}
       setTabType={setTabType}
@@ -364,22 +364,18 @@ const OrganizationScreenContainer = (props: any) => {
       openGroup={openGroup}
       setOpenGroup={setOpenGroup}
       organization={organization}
-      // setorganization={setorganization}
       selectEmployee={selectEmployee}
       selectedEmployee={selectedEmployee}
       getOrganizationEmployeeTree={getOrganizationEmployeeTree}
       organizationEmployee={organizationEmployee}
-      // invited={invited}
-      // setInvited={setInvited}
       recents={recents}
       isOrgDataLoaded={isOrgDataLoaded}
       spin={spin}
       t={t}
       participantListAdd={participantListAdd}
-      onClickCancel={onClickCancel}
       auth={auth}
-      contactType={contactType}
-      setContactType={setContactType}
+      // contactType={contactType}
+      // setContactType={setContactType}
       validateExter={validateExter}
       exterError={exterError}
       searchRef={searchRef}

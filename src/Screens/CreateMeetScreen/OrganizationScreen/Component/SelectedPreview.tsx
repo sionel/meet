@@ -69,28 +69,12 @@ const SelectedPreview = (props: any) => {
                             uri: item.profile_url
                           }
                     }
-                    style={{
-                      width: 40,
-                      height: 40,
-                      resizeMode: 'cover',
-                      borderRadius: 20,
-                      backgroundColor: '#ececec'
-                    }}
+                    style={styles.mailStyle}
                   />
                 )}
                 {item.user_no !== auth.user_no && (
                   <View
-                    style={{
-                      position: 'absolute',
-                      top: -2,
-                      right: -4,
-                      width: 14,
-                      height: 14,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      borderRadius: 7,
-                      backgroundColor: '#1c90fb'
-                    }}
+                    style={styles.cancelContainer}
                   >
                     <Image
                       source={ic_cancel}
@@ -103,7 +87,7 @@ const SelectedPreview = (props: any) => {
               <Text
                 numberOfLines={1}
                 ellipsizeMode={'tail'}
-                style={{ fontSize: 12 }}
+                style={styles.profileName}
               >
                 {
                   item[
@@ -157,6 +141,28 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  cancelContainer: {
+    position: 'absolute',
+    top: -2,
+    right: -4,
+    width: 14,
+    height: 14,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 7,
+    backgroundColor: '#1c90fb'
+  },
+  mailStyle: {
+    width: 40,
+    height: 40,
+    resizeMode: 'cover',
+    borderRadius: 20,
+    backgroundColor: '#ececec'
+  },
+  profileName: {
+    fontSize: 12,
+    fontFamily: 'DOUZONEText30'
   }
 });
 
