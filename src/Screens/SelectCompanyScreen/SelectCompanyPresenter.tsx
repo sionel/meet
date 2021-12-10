@@ -1,6 +1,5 @@
 import React from 'react';
 import { getT } from '../../utils/translateManager';
-import RootNavigation_new from '../../Navigations/RootNavigation_new';
 import {
   FlatList,
   Image,
@@ -13,7 +12,7 @@ import {
 
 import checkbox_login_on from '../../../assets/icons/loginIcon/checkbox_login_on.png';
 
-const MainScreenPresenter = (props: any) => {
+const SelectCompanyPresenter = (props: any) => {
   const { employee_list, selectedCompany, handleChangeCompany } = props;
   const t = getT();
   return (
@@ -71,7 +70,7 @@ const MainScreenPresenter = (props: any) => {
   );
 };
 
-export default MainScreenPresenter;
+export default SelectCompanyPresenter;
 
 const styles = StyleSheet.create({
   container: {
