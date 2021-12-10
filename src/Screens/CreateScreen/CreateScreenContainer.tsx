@@ -235,38 +235,21 @@ export default function CreateScreenContainer(props: any) {
         auth.HASH_KEY
       );
 
-      const videoRoomId = sendWetalkResult.resultData.chatList[0].mobile_key;
+      const { mobile_key: videoRoomId, room_title } =
+        sendWetalkResult.resultData.chatList[0];
 
       // 토큰받고
       // const roomToken = (await MeetApi.getMeetRoomToken(auth, videoRoomId))
       //   .resultData;
 
-      // let callType = 3;
-      // let isCreator;
       setIndicatorFlag(false);
-
-      // 대화방에 참여한다.
-      // navigation.navigate('Home');
       //TODO: 화상대화 포인트이용해서 필요할경우 state
-      navigation.navigate('SettingView',{
+      navigation.navigate('SettingView', {
         accessType: 'auth',
-        // callType,
         id: videoRoomId,
-        // isCreator,
-        roomType: 'meet',
+        selectedRoomName: room_title
       });
 
-
-      // navigation.navigate('Setting', {
-      //   item: {
-      //     id,
-      //     room_id,
-      //     roomType: 'meet',
-      //     roomToken,
-      //     callType,
-      //     isCreator
-      //   }
-      // });
     } else if (createResult.resultCode === 400) {
       setIndicatorFlag(false);
 

@@ -23,27 +23,34 @@ export type MeetParamList = {
   SelectCompany: undefined;
   LoginStack: undefined;
   MainStack: undefined;
-  ConferenceStateView:
+  ConferenceStateView: {
+    id: string;
+    selectedRoomName: string;
+  } & (
     | {
-        accessType: 'auth' | 'email';
+        accessType: 'auth';
         from?: string;
-        id: string;
       }
     | {
         accessType: 'joincode';
-        id: string;
-        joincode?: string;
-      };
+        joincode: string;
+      }
+    | {
+        accessType: 'email';
+        emailToken:string
+      }
+  );
 
-  SettingView:
+  SettingView: {
+    id: string;
+    selectedRoomName: string;
+  } & (
     | {
         accessType: 'auth';
-        id: string;
-        roomType?: string;
-        selectedRoomName?: string;
       }
-    | { accessType: 'joincode'; id: string; joincode: string }
-    | { accessType: 'email'; id: string; token: string };
+    | { accessType: 'joincode'; joincode: string }
+    | { accessType: 'email'; emailToken: string }
+  );
 
   ConferenceView: {
     accessType: string;
@@ -55,7 +62,7 @@ export type MeetParamList = {
     name: string;
     roomToken: string;
     roomType?: string;
-    selectedRoomName: string
+    selectedRoomName: string;
     tracks: any;
   };
 };

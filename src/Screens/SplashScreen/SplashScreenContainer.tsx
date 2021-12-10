@@ -259,9 +259,13 @@ const SplashScreenContainer = ({
       room: "b15091c1-2acd-47f6-aa7c-6a94df0e5a17"
       sub: "video.wehago.com"
       */
+      const { name } = await MeetApi.getMeetRoomNoCert(decoded.room);
+
       navigation.navigate('ConferenceStateView', {
         accessType: 'email',
-        id: decoded.room
+        id: decoded.room,
+        selectedRoomName: name,
+        emailToken: result.token
       });
     }
   };

@@ -20,18 +20,19 @@ import { getT } from '../../utils/translateManager';
 import icBack from '../../../assets/new/icons/ic_back.png';
 
 export interface PresenterProps {
-  tracks: [];
-  onConferenceEnter: () => {};
-  onToggleAudio: () => {};
-  onToggleVideo: () => {};
-  setName: () => {};
+  tracks: any[] | null;
+  onConferenceEnter: () => void;
+  onToggleAudio: () => void;
+  onToggleVideo: () => void;
+  setName: (name: string) => void;
   nameField: boolean;
   buttonActive: boolean;
-  goBack: () => {};
+  goBack: () => void;
   isHorizon: boolean;
+  roomName: string;
 }
 
-export default function SettingScreenPresenter(props: any) {
+export default function SettingScreenPresenter(props: PresenterProps) {
   const {
     tracks,
     onConferenceEnter,
@@ -41,10 +42,11 @@ export default function SettingScreenPresenter(props: any) {
     nameField,
     buttonActive,
     goBack,
-    isHorizon
+    isHorizon,
+    roomName
   } = props;
   const t = getT();
-  
+
   return (
     <Fragment>
       <SafeAreaView style={styles.container}>
@@ -56,7 +58,7 @@ export default function SettingScreenPresenter(props: any) {
               resizeMode="cover"
             />
           </TouchableOpacity>
-          <Text style={styles.HeaderTitleText}>기본 설정</Text>
+          <Text style={styles.HeaderTitleText}>{roomName}</Text>
           <TouchableOpacity disabled={true}>
             <Text style={styles.emptyText}>확인</Text>
           </TouchableOpacity>

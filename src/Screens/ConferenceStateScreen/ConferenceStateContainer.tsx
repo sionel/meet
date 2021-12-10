@@ -50,11 +50,11 @@ export default function ConferenceStateContainer(props: any) {
   }));
 
   const {
+    navigation,
     route: {
-      params: { id }
-    },
-    route: { params },
-    navigation
+      params: { id },
+      params
+    }
   }: MeetNavigationProps<'ConferenceStateView'> = props;
 
   useEffect(() => {
@@ -75,10 +75,7 @@ export default function ConferenceStateContainer(props: any) {
     //email 접속종료후 roomId가 undefined여서 오류생겨서 let으로 변수 access선언
     let access;
     let conferenceState;
-    if (id !== undefined) {
-      access = await MeetApi.getMeetRoomNoCert(id);
-    }
-
+    access = await MeetApi.getMeetRoomNoCert(id);
     if (!access) {
       // 종료된 방 또는 문제가 있을때
       conferenceState = 'deleted';
@@ -87,7 +84,6 @@ export default function ConferenceStateContainer(props: any) {
 
       if (access.r_start_datetime) {
         // 예약방
-
         const now = new Date().getTime();
         const start = access.r_start_datetime;
         if (start - now >= 1800000) {
@@ -106,7 +102,6 @@ export default function ConferenceStateContainer(props: any) {
         conferenceState = 'conference';
       }
     }
-
     _handleConferenceState(conferenceState, access);
   };
 
@@ -130,14 +125,12 @@ export default function ConferenceStateContainer(props: any) {
     };
 
     if (conferenceState === 'conference') {
-      _handleEnterConference(params);
+      _handleEnterConference();
     } else if (conferenceState === 'reservationInfo') {
       // 참석자 정보 받고
       // 시작시간 종료시간 컨버팅 하고
       // 페이지 이동
       const { name, r_start_datetime, r_end_datetime, is_public } = access;
-      // let accessUser = [];
-
 
       if (Object.keys(auth).length > 0) {
         setAccessUser((await MeetApi.getAccessUsers(auth, id)).resultData);
@@ -149,7 +142,6 @@ export default function ConferenceStateContainer(props: any) {
       setIsPublic(is_public);
       setIscret(isLogin);
       setConferenceState('reservationInfo');
-
     } else if (conferenceState === 'wating') {
       // 날짜 변환하고
       // setTimeout 걸어줌
@@ -157,19 +149,18 @@ export default function ConferenceStateContainer(props: any) {
       const start = access.resultData.r_start_datetime;
 
       enterTimer = setTimeout(() => {
-        _handleEnterConference(params);
+        _handleEnterConference();
       }, start - now);
 
       setStart(start);
       setConferenceState('wating');
-
     } else if (conferenceState === 'deleted') {
       setIscret(isLogin);
       setConferenceState('deleted');
     }
   };
 
-  const _handleEnterConference = async (params: any) => {
+  const _handleEnterConference = async () => {
     // let callType = 3;
     // let isCreator;
 
@@ -183,15 +174,36 @@ export default function ConferenceStateContainer(props: any) {
       // 50명 초과 안내화면으로
       setConferenceState('fullroom');
     } else {
-      navigation.replace('SettingView', {
-        roomType: 'meet',
-        selectedRoomName: roomName,
-        id: id,
-        accessType: params.accessType,
-        joincode: params.joincode
-        // callType,
-        // isCreator,
-      });
+      const { accessType, id, selectedRoomName } = params;
+      switch (accessType) {
+        case 'auth':
+          navigation.replace('SettingView', {
+            selectedRoomName,
+            accessType,
+            id
+          });
+          break;
+        case 'email':
+          const { emailToken } = params;
+          navigation.replace('SettingView', {
+            selectedRoomName,
+            accessType,
+            id,
+            emailToken
+          });
+          break;
+        case 'joincode':
+          const { joincode } = params;
+          navigation.replace('SettingView', {
+            selectedRoomName,
+            accessType,
+            id,
+            joincode
+          });
+          break;
+        default:
+          break;
+      }
     }
   };
 

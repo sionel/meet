@@ -292,11 +292,7 @@ export default function HomeScreenContainer(props: any) {
         })
       );
 
-
-      if (
-        ref.current.finishedConference.length === 0 &&
-        conference.length > 0
-      )
+      if (ref.current.finishedConference.length === 0 && conference.length > 0)
         setHighlight('finished');
 
       setFinishedConference([...finishedConference, ...conference]);
@@ -387,7 +383,8 @@ export default function HomeScreenContainer(props: any) {
                 navigation.navigate('ConferenceStateView', {
                   id: conference.room_id,
                   from: 'meet',
-                  accessType: 'auth'
+                  accessType: 'auth',
+                  selectedRoomName: conference.name
                 })
               // _handleRedirect('ConferenceState', {
               //   id: conference.room_id,

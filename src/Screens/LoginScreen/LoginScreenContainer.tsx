@@ -60,18 +60,21 @@ const LoginScreenContainer = ({
   const _goJoincode = async (joincode: string) => {
     // V 고려해야할부분
     setLogging(true);
-    const result = await MeetApi.searchJoincode(joincode);
-    if (!result) {
+    const resultData = await MeetApi.searchJoincode(joincode);
+
+    if (!resultData) {
       setInputcodeErr(true);
       setFocusingNum(0);
-    } else if (result.resultData.code === 'E00001') {
+    } else if (resultData.code === 'E00001') {
       setFocusingNum(0);
       setInputcodeErr(true);
     } else {
+      const {name} = await MeetApi.getMeetRoomNoCert(resultData.room);      
       navigation.navigate('ConferenceStateView', {
         accessType: 'joincode',
-        id: result.resultData.room,
-        joincode: joincode
+        id: resultData.room,
+        joincode: joincode,
+        selectedRoomName: name
       });
     }
     // setLogging(true);

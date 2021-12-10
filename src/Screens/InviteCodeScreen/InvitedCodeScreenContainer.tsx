@@ -26,8 +26,6 @@ const InvitedCodeScreenContainer = ({
     isHorizon: state.orientation.isHorizon
   }));
 
-  const dispatch = useDispatch();
-
   const t = getT();
   const isTablet: boolean = deviceInfoModule.isTablet();
 
@@ -63,19 +61,17 @@ const InvitedCodeScreenContainer = ({
     if (!result) {
       setInputcodeErr(true);
       setFocusingNum(0);
-    } else if (result.resultData.code === 'E00001') {
+    } else if (result.code === 'E00001') {
       setFocusingNum(0);
       setInputcodeErr(true);
     } else {
-      // _setParams({
-      //   accesstype: 'joincode',
-      //   roomId: result.resultData.room,
-      //   joincode
-      // });
+      const { name } = await MeetApi.getMeetRoomNoCert(result.room);
+
       navigation.navigate('ConferenceStateView', {
-        id: result.resultData.room,
-        accessType:'joincode',
-        joincode: joincode
+        id: result.room,
+        accessType: 'joincode',
+        joincode: joincode,
+        selectedRoomName: name
       });
     }
   };
@@ -90,7 +86,6 @@ const InvitedCodeScreenContainer = ({
   };
 
   const onFocusOutInput = () => {
-    // if (codeLineRef.current.isFocused()) codeLineRef.current.blur();
     setFocusingNum(-1);
   };
 

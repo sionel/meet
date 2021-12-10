@@ -22,11 +22,10 @@ export default function SettingScreenContainer(props: any) {
   //강제 업데이트
   const [, updateState] = useState<undefined | {}>();
   const forceUpdate = useCallback(()=> updateState({}), []);
-  const { auth, isLogin, from, isHorizon } = useSelector((state: RootState) => {
+  const { auth, isLogin, isHorizon } = useSelector((state: RootState) => {
     return {
       auth: state.user.auth,
       isLogin: state.user.isLogin,
-      from: state.user.from,
       isHorizon: state.orientation.isHorizon
     };
   });
@@ -112,7 +111,7 @@ export default function SettingScreenContainer(props: any) {
 
     if (params?.accessType === 'email') {
       roomToken = (
-        await MeetApi.getMeetRoomTokenEmail(params.id, params.token, name)
+        await MeetApi.getMeetRoomTokenEmail(params.id, params.emailToken, name)
       ).resultData;
     } else if (params?.accessType === 'joincode') {
       roomToken = (
@@ -175,6 +174,9 @@ export default function SettingScreenContainer(props: any) {
     setTracks(tracks);
   };
 
+  console.log('!@!@#!');
+  console.log(params);
+  
   return (
     <SettingScreenPresenter
       tracks={tracks}
@@ -186,6 +188,7 @@ export default function SettingScreenContainer(props: any) {
       setName={setName}
       goBack={_goBack}
       isHorizon={isHorizon}
+      roomName={params.selectedRoomName}
     />
   );
 }
