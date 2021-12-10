@@ -89,8 +89,7 @@ android/app/dropbox.key
 android/app/google-services.json
 ios/app/dropbox.key
 ios/app/GoogleService-Info.plist
-app/src/main/assets/index.android.bundle
-
+app/src/main/assets/index.*
 zzz/
 t.js
 .history
