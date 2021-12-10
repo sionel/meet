@@ -19,7 +19,7 @@ import { getT } from '../../utils/translateManager';
 
 import icBack from '../../../assets/new/icons/ic_back.png';
 
-export interface PresenterProps {
+interface PresenterProps {
   tracks: [];
   onConferenceEnter: () => {};
   onToggleAudio: () => {};

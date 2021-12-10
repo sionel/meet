@@ -140,7 +140,7 @@ const HomeScreenPresenter = (props: presenterProps) => {
                 style={styles.topButtonImg}
                 resizeMode={'cover'}
               />
-              <Text style={styles.ImageText}>{'회의생성'}</Text>
+              <Text style={styles.ImageText}>{t('회의생성')}</Text>
             </TouchableOpacity>
             {/* <TouchableOpacity
               style={styles.topButtons}
@@ -162,7 +162,7 @@ const HomeScreenPresenter = (props: presenterProps) => {
                 style={styles.topButtonImg}
                 resizeMode={'cover'}
               />
-              <Text style={styles.ImageText}>{'참여코드'}</Text>
+              <Text style={styles.ImageText}>{t('참여코드')}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -178,7 +178,7 @@ const HomeScreenPresenter = (props: presenterProps) => {
               ]}
             >
               <View style={styles.goingTextContainer}>
-                <Text style={styles.goingText}>{'진행중인 화상회의'}</Text>
+                <Text style={styles.goingText}>{t('진행중인 화상회의')}</Text>
                 <Text
                   style={[
                     styles.goingText,
@@ -230,7 +230,7 @@ const HomeScreenPresenter = (props: presenterProps) => {
                         highlight === 'reservation' && styles.FocusText
                       ]}
                     >
-                      {'예약회의'}
+                      {t('예약회의')}
                     </Text>
                     <Text
                       style={[
@@ -264,7 +264,7 @@ const HomeScreenPresenter = (props: presenterProps) => {
                       highlight === 'finished' && styles.FocusText
                     ]}
                   >
-                    {'회의기록'}
+                    {t('회의기록')}
                   </Text>
                   <Text
                     style={[
@@ -279,15 +279,9 @@ const HomeScreenPresenter = (props: presenterProps) => {
                 {highlight === 'finished' && (
                   <TouchableOpacity
                     onPress={() => setCalendarView(true)}
-                    style={{
-                      height: '100%',
-                      borderColor: '#939393',
-                      borderWidth: 1,
-                      padding: 5,
-                      borderRadius: 10
-                    }}
+                    style={styles.monthTouchContainer}
                   >
-                    <Text>{`${finishDate.getMonth() + 1}월`}</Text>
+                    <Text>{`${finishDate.getMonth() + 1}${t('renewal.common_month')}`}</Text>
                   </TouchableOpacity>
                 )}
               </View>
@@ -325,29 +319,11 @@ const HomeScreenPresenter = (props: presenterProps) => {
       </View>
       {calendarView && (
         <View
-          style={{
-            position: 'absolute',
-            backgroundColor: 'rgb(255,255,255)',
-            bottom: 0,
-            width: '100%',
-            height: '100%',
-            borderRadius: 20,
-            shadowRadius: 10,
-            shadowColor: '#aaa',
-            shadowOpacity: 10,
-            borderWidth: 1,
-            paddingBottom: '5%'
-          }}
+          style={styles.calendarView}
         >
           <View style={{ flex: 1, backgroundColor: '#666', zIndex: 2 }}></View>
           <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginTop: '5%',
-              marginBottom: '3%',
-              paddingHorizontal: '4%'
-            }}
+            style={styles.calendarTopView}
           >
             <TouchableOpacity
               onPress={() => {
@@ -356,29 +332,26 @@ const HomeScreenPresenter = (props: presenterProps) => {
             >
               <Image
                 source={icCancel}
-                style={{
-                  resizeMode: 'cover',
-                  width: 18,
-                  height: 18
-                }}
+                resizeMode='cover'
+                style={icCancel}
               />
             </TouchableOpacity>
           </View>
           <CalendarPicker
-            weekdays={['일', '월', '화', '수', '목', '금', '토']}
+            weekdays={[t('일'), t('월'), t('화'), t('수'), t('목'), t('금'), t('토')]}
             months={[
-              '1월',
-              '2월',
-              '3월',
-              '4월',
-              '5월',
-              '6월',
-              '7월',
-              '8월',
-              '9월',
-              '10월',
-              '11월',
-              '12월'
+              t('1월'),
+              t('2월'),
+              t('3월'),
+              t('4월'),
+              t('5월'),
+              t('6월'),
+              t('7월'),
+              t('8월'),
+              t('9월'),
+              t('10월'),
+              t('11월'),
+              t('12월')
             ]}
             previousTitle="<"
             nextTitle=">"
@@ -390,7 +363,7 @@ const HomeScreenPresenter = (props: presenterProps) => {
             dayShape="square"
             onMonthChange={onChangeMonth}
             selectYearTitle={t('년도 선택')}
-            selectMonthTitle={t('년')}
+            selectMonthTitle={t('renewal.common_year')}
             textStyle={{ fontSize: isTablet ? 18 : 14 }}
             disabledDatesTextStyle={{ fontSize: isTablet ? 18 : 14 }}
             calendarMode={'months'}
@@ -498,6 +471,37 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginRight: 5
+  },
+  calendarTopView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: '5%',
+    marginBottom: '3%',
+    paddingHorizontal: '4%'
+  },
+  calendarView: {
+    position: 'absolute',
+    backgroundColor: 'rgb(255,255,255)',
+    bottom: 0,
+    width: '100%',
+    height: '100%',
+    borderRadius: 20,
+    shadowRadius: 10,
+    shadowColor: '#aaa',
+    shadowOpacity: 10,
+    borderWidth: 1,
+    paddingBottom: '5%'
+  },
+  monthTouchContainer: {
+    height: '100%',
+    borderColor: '#939393',
+    borderWidth: 1,
+    padding: 5,
+    borderRadius: 10
+  },
+  icCancel: {
+    width: 18,
+    height: 18
   },
   UnFocusText: {
     color: '#939393',

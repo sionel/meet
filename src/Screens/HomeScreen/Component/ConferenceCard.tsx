@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import deviceInfoModule from 'react-native-device-info';
 
 import LinearGradient from 'react-native-linear-gradient';
+import { getT } from '../../../utils/translateManager';
 
 const icLockwhite = require('../../../../assets/new/icons/ic_lock_white.png');
 const icLive = require('../../../../assets/new/icons/ic_live.png');
@@ -39,6 +40,7 @@ export default function ConferenceCard(props: cardProps) {
     },
     isHorizon
   } = props;
+  const t = getT();
   const isTablet = deviceInfoModule.isTablet();
   const colors = [
     ['rgb(75,234,200)', 'rgb(34,172,204)'],
@@ -84,14 +86,14 @@ export default function ConferenceCard(props: cardProps) {
 
           <View style={styles.startTimeView}>
             <Text style={styles.timeText}>{time}</Text>
-            <Text style={styles.timeText}>{'시작'}</Text>
+            <Text style={styles.timeText}>{t('renewal.create_room_start')}</Text>
             <View style={styles.onGoingTimeView}>
               <Image
                 source={icClock}
                 resizeMode={'contain'}
                 style={styles.icClock}
               />
-              <Text style={styles.onGoingText}>{`${onMinte}분간 진행중`}</Text>
+              <Text style={styles.onGoingText}>{`${onMinte}${t('분간 진행중')}`}</Text>
             </View>
           </View>
 

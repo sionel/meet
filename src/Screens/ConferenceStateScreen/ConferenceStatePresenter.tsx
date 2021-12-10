@@ -15,7 +15,7 @@ import WatingScreen from './subScreens/WatingScreen';
 import DeletedScreen from './subScreens/DeletedScreen';
 import icBack from '../../../assets/new/icons/ic_back.png';
 
-export interface presenterProps {
+interface presenterProps {
   conferenceState: string;
   spin: any;
   start: string;

@@ -26,7 +26,7 @@ const patternTop = require('../../../../assets/new/patterns/login_pattern_top.pn
 const patternBot = require('../../../../assets/new/patterns/login_pattern_bottom.png');
 const cancel = require('../../../../assets/new/icons/ic_cancel_fill.png');
 
-export interface PresenterProps {
+interface PresenterProps {
   userId: string;
   password: string;
   captchaInput: string;
