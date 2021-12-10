@@ -13,7 +13,7 @@ import {
 import checkbox_login_on from '../../../assets/icons/loginIcon/checkbox_login_on.png';
 
 const SelectCompanyPresenter = (props: any) => {
-  const { employee_list, selectedCompany, handleChangeCompany } = props;
+  const { employee_list, selectedCompany, handleChangeCompany ,onLogout} = props;
   const t = getT();
   return (
     <View style={styles.container}>
@@ -22,7 +22,7 @@ const SelectCompanyPresenter = (props: any) => {
           <Text style={styles.titleText}>
             {t('selectcompany_title_notpurchase')}
           </Text>
-          <TouchableOpacity activeOpacity={0.5} onPress={() => {}}>
+          <TouchableOpacity activeOpacity={0.5} onPress={onLogout}>
             <Text style={{ color: '#1C90FB' }}>
               {t('selectcompany_logout')}
             </Text>
