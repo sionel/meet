@@ -11,7 +11,7 @@ import { OrganizationApi } from '../../../services';
 import OrganizationScreenPresenter from './OrganizationScreenPresenter';
 import { values } from 'lodash';
 import { wehagoDummyImageURL, wehagoMainURL } from '../../../utils';
-import { PartialUserParam } from '../../ConferenceModifyScreen/ConferenceModifyScreenContainer';
+import { PartialUserInfoParam } from '../../ConferenceModifyScreen/ConferenceModifyScreenContainer';
 
 const OrganizationScreenContainer = (props: any) => {
   const {
@@ -146,7 +146,7 @@ const OrganizationScreenContainer = (props: any) => {
         tmpList = selectedList
           .filter((v, i) => i !== idx)
           .map(user => {
-            const data: PartialUserParam = {
+            const data: PartialUserInfoParam = {
               portal_id: user.portal_id,
               rank_name: user.rank_name,
               user_no: user.user_no,
@@ -289,8 +289,8 @@ const OrganizationScreenContainer = (props: any) => {
       setInviteText('');
     } else {
       Alert.alert(
-        t('서식 오류'),
-        t('올바른 이메일 서식으로 입력해주세요.(aaaa@bbbb.com)')
+        t('양식 오류'),
+        t('올바른 이메일 양식으로 입력해주세요.(aaaa@bbbb.com)')
       );
       setInviteText('');
     }

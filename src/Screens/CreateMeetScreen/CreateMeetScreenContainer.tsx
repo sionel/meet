@@ -629,8 +629,8 @@ export default function CreateMeetScreenContainer(props: any) {
           setSelectMode={setSelectMode}
           roomNameChange={roomNameChange}
           togglePublic={togglePublic}
-          setDatePicker={setDatePicker}
-          setTimePicker={setTimePicker}
+          // setDatePicker={setDatePicker}
+          // setTimePicker={setTimePicker}
           openTimePicker={openTimePicker}
           openDatePicker={openDatePicker}
           createConference={createConference}
@@ -651,7 +651,7 @@ export default function CreateMeetScreenContainer(props: any) {
           sendMsgRef={sendMsgRef}
           titleRef={titleRef}
           onFocusOut={onFocusOut}
-          setTimeChangeDetect={setTimeChangeDetect}
+          // setTimeChangeDetect={setTimeChangeDetect}
           timeChangeDetect={timeChangeDetect}
           timeChange={timeChange}
           exitDateTime={exitDateTime}

@@ -72,19 +72,17 @@ function CreateScreenPresenter(props: createProps) {
           animating={indicatorFlag}
           size={'large'}
           color={'#1c90fb'}
-          style={{ position: 'absolute', margin: '50%', zIndex: 10 }}
+          style={styles.indicatoer}
         />
         <View style={[styles.topTitle]}>
           <TouchableOpacity onPress={onClickBack}>
             <Image
               source={icBack}
-              style={{ width: 24, height: 24 }}
+              style={styles.icBack}
               resizeMode="cover"
             />
           </TouchableOpacity>
-          <Text style={styles.HeaderTitleText}>
-            {t('메신저로 생성하기')}
-          </Text>
+          <Text style={styles.HeaderTitleText}>{t('메신저로 생성하기')}</Text>
           <TouchableOpacity disabled={true}>
             <Text style={styles.emptyText}>확인</Text>
           </TouchableOpacity>
@@ -124,24 +122,13 @@ function CreateScreenPresenter(props: createProps) {
                 onPress={() => {
                   onClickHeader(section);
                 }}
-                style={{
-                  flex: 1,
-                  display: section.data.length > 0 ? 'flex' : 'none',
-                  paddingHorizontal: 12,
-                  paddingVertical: 3,
-                  borderColor: 'rgba(0,0,0, 0.10)',
-                  backgroundColor: '#fff',
-                  borderWidth: 1,
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center'
-                }}
+                style={[styles.roomSectionRow, {display: section.data.length > 0 ? 'flex' : 'none',}]}
               >
                 <Text style={styles.textStyle}>{section.title}</Text>
                 <TouchableOpacity>
                   <Image
                     source={btnArrowDown}
-                    style={{ width: 20, height: 20 }}
+                    style={styles.icArrowDown}
                   />
                 </TouchableOpacity>
               </TouchableOpacity>
@@ -151,12 +138,7 @@ function CreateScreenPresenter(props: createProps) {
                 <Animated.FlatList
                   keyExtractor={(item, index) => index.toString()}
                   initialNumToRender={30}
-                  style={{
-                    height,
-                    overflow: 'hidden',
-                    paddingVertical: 3,
-                    paddingHorizontal: 12
-                  }}
+                  style={[styles.roomNameContainer, {height}]}
                   data={data}
                   renderItem={({
                     item: { profile, uri, first_char, room_title },
@@ -164,69 +146,36 @@ function CreateScreenPresenter(props: createProps) {
                   }) => {
                     return (
                       <TouchableOpacity
-                        style={{
-                          height: 50,
-                          justifyContent: 'center',
-                          flexDirection: 'row',
-                          alignItems: 'center'
-                        }}
+                        style={styles.roomNameRowTouch}
                         onPress={() => {
                           onClickStartButton(item);
                         }}
                       >
                         <View
-                          style={{
-                            backgroundColor: '#c1c1c1',
-                            width: 40,
-                            height: 40,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            borderRadius: 25,
-                            marginVertical: 5,
-                            marginRight: 15
-                          }}
+                          style={styles.roomNameRow}
                         >
                           {profile ? (
                             <Image
                               source={{ uri: uri }}
                               resizeMode={'cover'}
-                              style={{
-                                width: '100%',
-                                height: '100%',
-                                borderRadius: 25
-                              }}
+                              style={styles.userImage}
                             />
                           ) : (
                             <Text
-                              style={{
-                                fontSize: 15,
-                                fontFamily: 'DOUZONEText50'
-                              }}
+                              style={styles.roomFirstWord}
                             >
                               {first_char}
                             </Text>
                           )}
                         </View>
                         <View style={{ flex: 1 }}>
-                          <Text>{room_title}</Text>
+                          <Text style={{fontFamily: 'DOUZONEText30'}}>{room_title}</Text>
                         </View>
                         <View
-                          style={{
-                            width: 60,
-                            height: 30,
-                            borderRadius: 7,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            borderWidth: 1,
-                            borderColor: '#c1c1c1'
-                          }}
+                          style={styles.startButton}
                         >
                           <Text
-                            style={{
-                              color: '#717171',
-                              fontSize: 12,
-                              fontFamily: 'DOUZONEText30'
-                            }}
+                            style={styles.startText}
                           >
                             {t('create_room_start')}
                           </Text>
@@ -251,8 +200,19 @@ function CreateScreenPresenter(props: createProps) {
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 0, backgroundColor: '#1c90fb' },
-  container: { flex: 1, backgroundColor: '#fff' },
+  safeArea: {
+    flex: 0,
+    backgroundColor: '#1c90fb'
+  },
+  indicatoer: {
+    position: 'absolute',
+    margin: '50%',
+    zIndex: 10
+  },
+  container: {
+    flex: 1,
+    backgroundColor: '#fff'
+  },
   header: {
     width: '100%',
     height: '6%',
@@ -306,6 +266,69 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'normal',
     color: '#00ff0000'
+  },
+  icBack: {
+    width: 24,
+    height: 24
+  },
+  icArrowDown: {
+    width: 20,
+    height: 20
+  },
+  userImage: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 25
+  },
+  roomSectionRow: {
+    flex: 1,
+    paddingHorizontal: 12,
+    paddingVertical: 3,
+    borderColor: 'rgba(0,0,0, 0.10)',
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  roomNameContainer: {
+    overflow: 'hidden',
+    paddingVertical: 3,
+    paddingHorizontal: 12
+  },
+  roomNameRowTouch: {
+    height: 50,
+    justifyContent: 'center',
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  roomNameRow: {
+    backgroundColor: '#c1c1c1',
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 25,
+    marginVertical: 5,
+    marginRight: 15
+  },
+  roomFirstWord: {
+    fontSize: 15,
+    fontFamily: 'DOUZONEText50'
+  },
+  startButton: {
+    width: 60,
+    height: 30,
+    borderRadius: 7,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#c1c1c1'
+  },
+  startText: {
+    color: '#717171',
+    fontSize: 12,
+    fontFamily: 'DOUZONEText30'
   }
 });
 

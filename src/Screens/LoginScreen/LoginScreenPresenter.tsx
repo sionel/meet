@@ -17,22 +17,22 @@ import LinearGradient from 'react-native-linear-gradient';
 //mulLug
 //다국어 적용 안되어있음
 
-export interface PresenterProps {
+interface PresenterProps {
   code: string;
+  shadowCode: string;
   focusingNum: number;
   onFocusingCode: () => void;
-  changeInputcode: (text: string) => Promise<void>;
   onFocusInput: () => void;
   onFocusOutInput: () => void;
-  codeLineRef: RefObject<any>;
   LoginForWehago: () => void;
+  changeInputcode: (text: string) => Promise<void>;
   joincodeErr: boolean;
   inputcodeErr: boolean;
   isHorizon: boolean;
   isTablet: boolean;
-  t: any;
   logging: boolean;
-  shadowCode: string;
+  codeLineRef: RefObject<any>;
+  t: any;
 }
 
 const LoginScreenPresenter = (props: PresenterProps) => {
@@ -276,14 +276,12 @@ const styles = StyleSheet.create({
   textSub1: {
     paddingTop: 15,
     fontSize: 16,
-    fontWeight: '400',
     textAlign: 'center',
     color: 'rgb(147,147,147)',
     fontFamily:'DOUZONEText30'
   },
   textSub2: {
     fontSize: 16,
-    fontWeight: '400',
     textAlign: 'center',
     color: 'rgb(147,147,147)',
     fontFamily:'DOUZONEText30'

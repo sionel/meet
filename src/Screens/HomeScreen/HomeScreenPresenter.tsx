@@ -536,17 +536,6 @@ const styles = StyleSheet.create({
     width: 18,
     height: 18
   },
-  unFocusFinCount: {
-    color: '#939393',
-    fontSize: 14,
-    fontFamily: 'DOUZONEText30',
-    paddingRight: 20
-  },
-  FocusFinCount: {
-    color: '#1c90fb',
-    fontSize: 14,
-    fontFamily: 'DOUZONEText50'
-  },
   UnFocusText: {
     color: '#939393',
     fontSize: 14,
@@ -566,7 +555,18 @@ const styles = StyleSheet.create({
   FocusReCount: {
     color: '#1c90fb',
     fontSize: 14,
-    fontFamily: 'DOUZONEText30'
+    fontFamily: 'DOUZONEText50'
+  },
+  unFocusFinCount: {
+    color: '#939393',
+    fontSize: 14,
+    fontFamily: 'DOUZONEText30',
+    paddingRight: 20
+  },
+  FocusFinCount: {
+    color: '#1c90fb',
+    fontSize: 14,
+    fontFamily: 'DOUZONEText50'
   },
   FinishedCotainer: {
     flexDirection: 'row',
@@ -598,7 +598,7 @@ const styles = StyleSheet.create({
   },
   selectedMonth: {
     fontFamily:'DOUZONEText30', 
-    fontSize: 12,
+    fontSize: 11,
     color: '#333'
   }
   // container: {

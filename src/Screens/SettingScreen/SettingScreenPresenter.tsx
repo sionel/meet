@@ -18,8 +18,7 @@ import { RTCView } from 'react-native-webrtc';
 import { getT } from '../../utils/translateManager';
 
 import icBack from '../../../assets/new/icons/ic_back.png';
-
-export interface PresenterProps {
+interface PresenterProps {
   tracks: any[] | null;
   onConferenceEnter: () => void;
   onToggleAudio: () => void;

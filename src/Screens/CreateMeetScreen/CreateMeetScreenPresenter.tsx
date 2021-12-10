@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, RefObject } from 'react';
 import {
   View,
   StyleSheet,
@@ -19,6 +19,9 @@ import { wehagoMainURL, wehagoDummyImageURL } from '../../utils';
 import { SafeAreaView } from 'react-native-safe-area-context';
 // import { add, last, parseInt } from 'lodash';
 import LinearGradient from 'react-native-linear-gradient';
+import { RootState } from '../../redux/configureStore';
+import { length } from '../../../webpack.config';
+import { stubTrue } from 'lodash';
 
 const icCode = require('../../../assets/new/icons/ic_code.png');
 const icLock_W = require('../../../assets/new/icons/ic_lock_w.png');
@@ -29,7 +32,48 @@ const icCheck = require('../../../assets/new/icons/ic_check.png');
 const icMasterCircle = require('../../../assets/new/icons/ic_master_circle.png');
 const icAttdCircle = require('../../../assets/new/icons/ic_attd_circle.png');
 
-const CreateMeetScreenPresenter = (props: any) => {
+interface PresenterProps {
+  roomName: string;
+  timeType: string;
+  sendMessage: string;
+  timePicker: 'start' | 'end' | 'none';
+  datePicker: 'start' | 'end' | 'none';
+  time: Date;
+  startTime: { date: string; time: string; current: Date };
+  endTime: { date: string; time: string; current: Date };
+  selectedEmployee: { member: any[]; group: {} };
+  isPublic: boolean;
+  switchReserve: boolean;
+  switchDelAlram: boolean;
+  textLess2: boolean;
+  isHorizon: boolean;
+  isTablet: boolean;
+  dateTimeSeleted: boolean;
+  timeChangeDetect: boolean;
+  sendMsgRef: RefObject<any>;
+  titleRef: RefObject<any>;
+  auth: any;
+  createConference: () => void;
+  onHandleBack: () => void;
+  onTimeConfirm: () => void;
+  onFocusOut: () => void;
+  exitDateTime: () => void;
+  onSwitchDelAlramChange: () => void;
+  togglePublic: () => void;
+  onDateChange: (date: Date) => void;
+  setTime: (date: Date) => void;
+  clickChangeRole: (item: any) => void;
+  clickDeleteUser: (item: any) => void;
+  timeChange: (time: any) => void;
+  onSwitchReserveChange: (reserve: boolean) => void;
+  setSelectMode: (toggle: boolean) => void;
+  roomNameChange: (roomName: string) => void;
+  sendMessageChange: (msg: string) => void;
+  openDatePicker: (type: 'start' | 'end' | 'none') => void;
+  openTimePicker: (type: 'start' | 'end' | 'none') => void;
+}
+
+const CreateMeetScreenPresenter = (props: PresenterProps) => {
   const {
     roomName,
     isPublic,
@@ -75,10 +119,23 @@ const CreateMeetScreenPresenter = (props: any) => {
     dateTimeSeleted
   } = props;
   const t = getT();
-  const DatePickerComponent = (
+  const CalendarPickerComponent = (
     <CalendarPicker
-      weekdays={['일', '월', '화', '수', '목', '금', '토']}
-      months={['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']}
+      weekdays={[t('일'), t('월'), t('화'), t('수'), t('목'), t('금'), t('토')]}
+      months={[
+        t('1월'),
+        t('2월'),
+        t('3월'),
+        t('4월'),
+        t('5월'),
+        t('6월'),
+        t('7월'),
+        t('8월'),
+        t('9월'),
+        t('10월'),
+        t('11월'),
+        t('12월')
+      ]}
       previousTitle="<"
       nextTitle=">"
       minDate={new Date()}
@@ -101,9 +158,13 @@ const CreateMeetScreenPresenter = (props: any) => {
       <SafeAreaView style={styles.safeArea} onTouchStart={onFocusOut}>
         <View style={[styles.topTitle]}>
           <TouchableOpacity onPress={onHandleBack}>
-            <Text style={styles.ft14N}>{t('취소')}</Text>
+            <Text style={styles.ft14Dou30}>
+              {t('renewal.alert_button_cancel')}
+            </Text>
           </TouchableOpacity>
-          <Text style={styles.TitleText}>{t('회의 생성하기')}</Text>
+          <Text style={styles.TitleText}>
+            {t('renewal.main_create_conference')}
+          </Text>
           <TouchableOpacity disabled={textLess2} onPress={createConference}>
             <Text style={[styles.confirmText, !textLess2 && { color: '#000' }]}>
               {t('생성')}
@@ -156,26 +217,20 @@ const CreateMeetScreenPresenter = (props: any) => {
                 maxLength={20}
                 style={[
                   styles.roomNameStyle,
-                  roomName && { borderColor: '#1c90fb' },
-                  textLess2 && roomName && { borderColor: '#fc4c60' }
+                  roomName !== '' && { borderColor: '#1c90fb' },
+                  textLess2 && roomName !== '' && { borderColor: '#fc4c60' }
                 ]}
                 ref={titleRef}
               />
               <View
                 style={[
                   styles.countContainer,
-                  textLess2 && roomName && { justifyContent: 'space-between' }
+                  textLess2 &&
+                    roomName !== '' && { justifyContent: 'space-between' }
                 ]}
               >
                 {textLess2 && roomName != '' && (
-                  <Text
-                    style={{
-                      color: '#fc4c60',
-                      fontSize: 12,
-                      lineHeight: 17,
-                      letterSpacing: -0.24
-                    }}
-                  >
+                  <Text style={styles.lengthError}>
                     {t('두글자 이상 입력해주세요.')}
                   </Text>
                 )}
@@ -194,7 +249,7 @@ const CreateMeetScreenPresenter = (props: any) => {
                 multiline
                 style={[
                   styles.sendStyle,
-                  sendMessage && { borderColor: '#1c90fb' },
+                  sendMessage !== '' && { borderColor: '#1c90fb' },
                   isHorizon && { paddingTop: '1%' }
                 ]}
                 ref={sendMsgRef}
@@ -218,7 +273,7 @@ const CreateMeetScreenPresenter = (props: any) => {
           style={[styles.reserveContainer, switchReserve && { height: '15%' }]}
         >
           <View style={styles.rowContainer}>
-            <Text style={[styles.ft14B, { fontSize: 15 }]}>
+            <Text style={[styles.ft14Dou50, { fontSize: 15 }]}>
               {t('예약회의')}
             </Text>
             <Switch
@@ -229,15 +284,8 @@ const CreateMeetScreenPresenter = (props: any) => {
           </View>
           {switchReserve && (
             <Fragment>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  flex: 1,
-                  justifyContent: 'space-between',
-                  alignItems: 'center'
-                }}
-              >
-                <Text style={{ fontSize: 15 }}>{t('시작시간')}</Text>
+              <View style={styles.dateTimeRow}>
+                <Text style={styles.timeText}>{t('시작시간')}</Text>
                 <View
                   style={{ flexDirection: 'row', justifyContent: 'flex-end' }}
                 >
@@ -254,11 +302,12 @@ const CreateMeetScreenPresenter = (props: any) => {
                     }}
                   >
                     <Text
-                      style={
+                      style={[
+                        styles.datetimeText,
                         datePicker === 'start' && {
                           color: 'rgb(28, 144, 251)'
                         }
-                      }
+                      ]}
                     >
                       {`${startTime.date}`}
                     </Text>
@@ -277,28 +326,20 @@ const CreateMeetScreenPresenter = (props: any) => {
                     }}
                   >
                     <Text
-                      style={
+                      style={[
+                        styles.datetimeText,
                         timePicker === 'start' && {
                           color: 'rgb(28, 144, 251)'
                         }
-                      }
+                      ]}
                     >
                       {`${startTime.time}`}
                     </Text>
                   </TouchableOpacity>
                 </View>
               </View>
-              <View
-                style={[
-                  {
-                    flexDirection: 'row',
-                    flex: 1,
-                    justifyContent: 'space-between',
-                    alignItems: 'center'
-                  }
-                ]}
-              >
-                <Text style={{ fontSize: 15 }}>{t('종료시간')}</Text>
+              <View style={styles.dateTimeRow}>
+                <Text style={styles.timeText}>{t('종료시간')}</Text>
                 <View
                   style={{ flexDirection: 'row', justifyContent: 'flex-end' }}
                 >
@@ -315,11 +356,12 @@ const CreateMeetScreenPresenter = (props: any) => {
                     }}
                   >
                     <Text
-                      style={
+                      style={[
+                        styles.datetimeText,
                         datePicker === 'end'
                           ? { color: 'rgb(28, 144, 251)' }
                           : {}
-                      }
+                      ]}
                     >
                       {`${endTime.date}`}
                     </Text>
@@ -338,78 +380,18 @@ const CreateMeetScreenPresenter = (props: any) => {
                     }}
                   >
                     <Text
-                      style={
+                      style={[
+                        styles.datetimeText,
                         timePicker === 'end'
                           ? { color: 'rgb(28, 144, 251)' }
                           : {}
-                      }
+                      ]}
                     >
                       {`${endTime.time}`}
                     </Text>
                   </TouchableOpacity>
                 </View>
               </View>
-
-              {/* <View
-                      style={[
-                        {
-                          flexDirection: 'row',
-                          flex: 1,
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                          backgroundColor: 'rgb(255,255,255)'
-                        }
-                      ]}
-                    >
-                      <Text style={{ fontSize: 14, fontWeight: 'bold' }}>
-                        {t('시간')}
-                      </Text>
-                      <DatePicker
-                        date={startTime.current}
-                        mode={'time'}
-                        style={{ width: 150, height: 120 }}
-                      />
-                    </View>
-                    <View
-                      style={{
-                        flex: 2.7,
-                        paddingLeft: '5%',
-                        paddingRight: '5%',
-                        marginTop: '1%'
-                      }}
-                    >
-                      {openDatePickerComponent('start')}
-                    </View> */}
-
-              {/* <View
-                      style={[
-                        {
-                          flexDirection: 'row',
-                          flex: 1,
-                          justifyContent: 'space-between',
-                          alignItems: 'center'
-                        }
-                      ]}
-                    >
-                      <Text style={{ fontSize: 14, fontWeight: 'bold' }}>
-                        {t('시간')}
-                      </Text>
-                      <DatePicker
-                        date={endTime.current}
-                        mode={'time'}
-                        style={{ width: 150, height: 120 }}
-                      />
-                    </View>
-                    <View
-                      style={{
-                        flex: 2.7,
-                        paddingLeft: '5%',
-                        paddingRight: '5%',
-                        marginTop: '1%'
-                      }}
-                    >
-                      {openDatePickerComponent('end')}
-                    </View> */}
             </Fragment>
           )}
         </View>
@@ -423,8 +405,8 @@ const CreateMeetScreenPresenter = (props: any) => {
 
         <View style={[styles.conferenceMember]}>
           <View style={{ flexDirection: 'row' }}>
-            <Text style={styles.ft14B}>{t('참석자')} </Text>
-            <Text style={[styles.ft14B, { color: '#1c90fb' }]}>
+            <Text style={styles.ft14Dou50}>{t('참석자')} </Text>
+            <Text style={[styles.ft14Dou50, { color: '#1c90fb' }]}>
               {selectedEmployee.member.length}
             </Text>
           </View>
@@ -471,19 +453,6 @@ const CreateMeetScreenPresenter = (props: any) => {
               data={selectedEmployee.member}
               keyExtractor={(item, index) => String(index)}
               renderItem={({ item, index }: any) => {
-                // let path: [] = [];
-                // let user_path = '';
-                // if (item.full_path) {
-                //   path = item.full_path.split('>');
-                //   for (let i = 1; i < path.length; i++) {
-                //     if (i === path.length - 1) {
-                //       user_path = user_path + path[i];
-                //     } else {
-                //       user_path = user_path + `${path[i]} | `;
-                //     }
-                //   }
-                // } else user_path = '';
-
                 const isMaster = item.is_master;
                 return (
                   <View style={styles.participantList}>
@@ -506,7 +475,9 @@ const CreateMeetScreenPresenter = (props: any) => {
                         ]}
                       >
                         {item.user_no === auth.user_no ? (
-                          <Text style={styles.myText}>나</Text>
+                          <Text style={styles.myText}>
+                            {t('renewal.chatting_me')}
+                          </Text>
                         ) : (
                           <Image
                             source={icCancel_W}
@@ -573,12 +544,12 @@ const CreateMeetScreenPresenter = (props: any) => {
                               isTablet && { fontSize: 14 }
                             ]}
                           >
-                            {t('마스터')}
+                            {t('renewal.chatting_master')}
                           </Text>
                           <Image
                             style={[
                               styles.icMaster,
-                              isTablet && { width: 30, height: 30 }
+                              isTablet && styles.icTabletMaster
                             ]}
                             source={icMasterCircle}
                             resizeMode={'contain'}
@@ -589,7 +560,7 @@ const CreateMeetScreenPresenter = (props: any) => {
                           <Image
                             style={[
                               styles.icMaster,
-                              isTablet && { width: 30, height: 30 }
+                              isTablet && styles.icTabletMaster
                             ]}
                             source={icAttdCircle}
                             resizeMode={'contain'}
@@ -605,11 +576,7 @@ const CreateMeetScreenPresenter = (props: any) => {
                           </Text>
                         </Fragment>
                       ) : (
-                        <Fragment>
-                          {/* <Text style={styles.extText}>
-                              {t('외부참여자')}
-                            </Text> */}
-                        </Fragment>
+                        <Fragment></Fragment>
                       )}
                     </TouchableOpacity>
                   </View>
@@ -627,16 +594,8 @@ const CreateMeetScreenPresenter = (props: any) => {
             isHorizon && { width: '66%', left: '17%' }
           ]}
         >
-          <View style={{ flex: 1, backgroundColor: '#666', zIndex: 2 }}></View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginTop: '5%',
-              marginBottom: '3%',
-              paddingHorizontal: '4%'
-            }}
-          >
+          <View style={{ flex: 1, backgroundColor: '#666', zIndex: 2 }} />
+          <View style={styles.dateTimePickerHeader}>
             <TouchableOpacity onPress={exitDateTime}>
               <Image source={icCancel} style={styles.icCancel} />
             </TouchableOpacity>
@@ -648,13 +607,7 @@ const CreateMeetScreenPresenter = (props: any) => {
             </TouchableOpacity>
           </View>
           {timePicker !== 'none' && (
-            <View
-              style={{
-                marginTop: 20,
-                justifyContent: 'center',
-                alignItems: 'center'
-              }}
-            >
+            <View style={styles.timePickerView}>
               <DatePicker
                 onDateChange={time => timeChange(time)}
                 mode={'time'}
@@ -668,7 +621,7 @@ const CreateMeetScreenPresenter = (props: any) => {
               />
             </View>
           )}
-          {datePicker !== 'none' && DatePickerComponent}
+          {datePicker !== 'none' && CalendarPickerComponent}
         </View>
       )}
     </Fragment>
@@ -692,7 +645,7 @@ const styles = StyleSheet.create({
   },
   TitleText: {
     fontSize: 18,
-    fontWeight: '600',
+    fontFamily: 'DOUZONEText50',
     color: '#000'
   },
   privateContainer: {
@@ -708,27 +661,27 @@ const styles = StyleSheet.create({
   },
   privateMainText: {
     fontSize: 15,
-    fontWeight: 'bold',
+    fontFamily: 'DOUZONEText30',
     color: '#000'
   },
   privateSubText: {
     fontSize: 12,
     color: 'rgb(147,147,147)',
-    fontWeight: '600'
+    fontFamily: 'DOUZONEText30'
   },
-  ft14N: {
+  ft14Dou30: {
     fontSize: 14,
-    fontWeight: 'normal',
+    fontFamily: 'DOUZONEText30',
     color: '#000'
   },
   confirmText: {
     fontSize: 14,
-    fontWeight: 'normal',
+    fontFamily: 'DOUZONEText30',
     color: '#d3d3d3'
   },
-  ft14B: {
+  ft14Dou50: {
     fontSize: 14,
-    fontWeight: 'bold',
+    fontFamily: 'DOUZONEText50',
     color: '#000'
   },
   //중단
@@ -752,7 +705,8 @@ const styles = StyleSheet.create({
   textHeader: {
     fontSize: 12,
     marginVertical: 5,
-    color: '#000'
+    color: '#000',
+    fontFamily: 'DOUZONEText30'
   },
   roomNameStyle: {
     borderWidth: 1,
@@ -760,7 +714,8 @@ const styles = StyleSheet.create({
     height: 44,
     borderColor: '#E6E6E6',
     fontSize: 14,
-    borderRadius: 10
+    borderRadius: 10,
+    fontFamily: 'DOUZONEText30'
   },
   sendStyle: {
     borderWidth: 1,
@@ -780,10 +735,15 @@ const styles = StyleSheet.create({
     marginTop: 2,
     height: 17
   },
-  ft12: { fontSize: 12, color: '#000' },
+  ft12: {
+    fontSize: 12,
+    color: '#000',
+    fontFamily: 'DOUZONEText30'
+  },
   maxLength: {
     fontSize: 12,
-    color: '#939393'
+    color: '#939393',
+    fontFamily: 'DOUZONEText30'
   },
   //예약회의
   reserveContainer: {
@@ -793,9 +753,12 @@ const styles = StyleSheet.create({
   },
   datetimeBox: {
     width: '35%',
-    fontSize: 15,
     alignItems: 'flex-end'
     // marginRight: 5,
+  },
+  datetimeText: {
+    fontSize: 14,
+    fontFamily: 'DOUZONEText30'
   },
   //하단
   botContainer: {
@@ -844,7 +807,14 @@ const styles = StyleSheet.create({
     width: 14,
     height: 14
   },
-  icMaster: { width: 20, height: 20 },
+  icMaster: {
+    width: 20,
+    height: 20
+  },
+  icTabletMaster: {
+    width: 20,
+    height: 20
+  },
   roleContainer: {
     flexDirection: 'row',
     // backgroundColor: '#febc2c',
@@ -860,7 +830,7 @@ const styles = StyleSheet.create({
     lineHeight: 15,
     letterSpacing: -0.22,
     color: '#01acc1',
-    fontWeight: '800',
+    fontFamily: 'DOUZONEText50',
     paddingLeft: '5%'
   },
   attendantText: {
@@ -868,7 +838,7 @@ const styles = StyleSheet.create({
     lineHeight: 15,
     letterSpacing: -0.22,
     color: '#f49750',
-    fontWeight: '800',
+    fontFamily: 'DOUZONEText50',
     paddingRight: '5%'
   },
   extText: {
@@ -919,22 +889,22 @@ const styles = StyleSheet.create({
     fontSize: 10,
     lineHeight: 18,
     letterSpacing: -0.2,
-    fontWeight: 'bold'
+    fontFamily: 'DOUZONEText50'
   },
   name: {
-    fontWeight: '500',
-    fontSize: 15,
+    fontSize: 14,
     lineHeight: 15,
     letterSpacing: -0.3,
     paddingBottom: '0.5%',
-    color: '#000'
+    color: '#000',
+    fontFamily: 'DOUZONEText30'
   },
   tree: {
     fontSize: 12,
     lineHeight: 15,
     letterSpacing: -0.24,
     color: '#939393',
-    fontWeight: '500'
+    fontFamily: 'DOUZONEText30'
   },
   bottomComponent: {
     position: 'absolute',
@@ -963,6 +933,35 @@ const styles = StyleSheet.create({
     right: 0,
     backgroundColor: 'rgba(0,0,0,0.5)',
     justifyContent: 'center',
+    alignItems: 'center'
+  },
+  dateTimePickerHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: '5%',
+    marginBottom: '3%',
+    paddingHorizontal: '4%'
+  },
+  timePickerView: {
+    marginTop: 20,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  lengthError: {
+    color: '#fc4c60',
+    fontSize: 12,
+    lineHeight: 17,
+    letterSpacing: -0.24,
+    fontFamily: 'DOUZONEText30'
+  },
+  timeText: {
+    fontSize: 15,
+    fontFamily: 'DOUZONEText30'
+  },
+  dateTimeRow: {
+    flexDirection: 'row',
+    flex: 1,
+    justifyContent: 'space-between',
     alignItems: 'center'
   }
 });

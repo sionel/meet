@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { RefObject } from 'react';
 import {
   StyleSheet,
   View,
@@ -19,8 +19,25 @@ const icBack = require('../../../assets/new/icons/ic_back.png');
 
 //mulLug
 //다국어 적용 안되어있음
+interface PresenterProps {
+  code: string;
+  shadowCode: string;
+  focusingNum: number;
+  onFocusingCode: () => void;
+  onFocusInput: () => void;
+  onFocusOutInput: () => void;
+  handleClickBack:()=>void
+  changeInputcode: (text: string) => Promise<void>;
+  joincodeErr: boolean;
+  inputcodeErr: boolean;
+  isHorizon: boolean;
+  isTablet: boolean;
+  logging: boolean;
+  codeLineRef: RefObject<any>;
+  t: any;
+}
 
-const InvitedCodeScreenPresenter = (props: any) => {
+const InvitedCodeScreenPresenter = (props: PresenterProps) => {
   const {
     code,
     focusingNum,
@@ -40,7 +57,7 @@ const InvitedCodeScreenPresenter = (props: any) => {
   } = props;
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+    <SafeAreaView style={styles.LoginSafeAreaView}>
       <StatusBar  barStyle={'dark-content'}/>
       <KeyboardAwareScrollView
         contentContainerStyle={{ flexGrow: 1 }}
@@ -197,6 +214,10 @@ const InvitedCodeScreenPresenter = (props: any) => {
 };
 
 const styles = StyleSheet.create({
+  LoginSafeAreaView: {
+    flex: 1,
+    backgroundColor: '#fff'
+  },
   //화면 방향에 따른 패딩
   topTitle: {
     paddingHorizontal: '5%',
@@ -244,7 +265,7 @@ const styles = StyleSheet.create({
   //코드 입력 안내문
   textHead: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontFamily:'DOUZONEText50',
     textAlign: 'center',
     color: '#000'
   },
@@ -254,13 +275,13 @@ const styles = StyleSheet.create({
   textSub1: {
     paddingTop: 15,
     fontSize: 16,
-    fontWeight: '400',
+    fontFamily:'DOUZONEText30',
     textAlign: 'center',
     color: 'rgb(147,147,147)'
   },
   textSub2: {
     fontSize: 16,
-    fontWeight: '400',
+    fontFamily:'DOUZONEText30',
     textAlign: 'center',
     color: 'rgb(147,147,147)'
   },
@@ -279,7 +300,8 @@ const styles = StyleSheet.create({
     color: '#000',
     zIndex: 999,
     padding: 0,
-    borderBottomWidth: 4
+    borderBottomWidth: 4,
+    fontFamily:'DOUZONEText50'
   },
   focusAccent: {
     borderColor: '#0033ff',
@@ -310,7 +332,8 @@ const styles = StyleSheet.create({
   },
   loginBtnText: {
     color: '#fff',
-    fontSize: 16
+    fontSize: 16,
+    fontFamily:'DOUZONEText30'
   },
   none: {
     position: 'absolute',
@@ -324,7 +347,8 @@ const styles = StyleSheet.create({
     color: 'red',
     top: '-12%',
     fontSize: 13,
-    left: '2%'
+    fontFamily:'DOUZONEText30',
+    left: 10
   }
 });
 
