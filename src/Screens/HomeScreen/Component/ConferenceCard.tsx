@@ -64,105 +64,39 @@ export default function ConferenceCard(props: cardProps) {
           colors={colors[index % 4]}
           style={styles.gradient}
         >
-          <View
-            style={{
-              height: 30,
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginVertical: 3
-            }}
-          >
+          <View style={styles.titleView}>
             <Image
               source={icLive}
               resizeMode={'contain'}
-              style={{ width: 30, height: 30, marginRight: 5 }}
+              style={styles.icLive}
             />
-            <Text
-              style={{
-                color: '#fff',
-                fontSize: 20,
-                fontWeight: 'bold',
-                flex: 1
-              }}
-              numberOfLines={1}
-            >
+            <Text style={styles.titleText} numberOfLines={1}>
               {conferenceName}
             </Text>
             {isLock && (
               <Image
                 source={icLockwhite}
                 resizeMode={'contain'}
-                style={{ width: 30, height: 30, marginLeft: 10 }}
+                style={styles.icLockWhite}
               />
             )}
           </View>
 
-          <View
-            style={{
-              height: 30,
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginVertical: 3
-            }}
-          >
-            <Text
-              style={{
-                color: '#fff',
-                fontSize: 16,
-                marginRight: 5
-              }}
-            >
-              {time}
-            </Text>
-            <Text
-              style={{
-                color: '#fff',
-                fontSize: 16,
-                marginRight: 5
-              }}
-            >
-              {'시작'}
-            </Text>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                borderWidth: 1,
-                borderColor: '#fff',
-                borderRadius: 30,
-                paddingHorizontal: 5
-              }}
-            >
+          <View style={styles.startTimeView}>
+            <Text style={styles.timeText}>{time}</Text>
+            <Text style={styles.timeText}>{'시작'}</Text>
+            <View style={styles.onGoingTimeView}>
               <Image
                 source={icClock}
                 resizeMode={'contain'}
-                style={{ height: 12, width: 12, marginRight: 3 }}
+                style={styles.icClock}
               />
-              <Text
-                style={{
-                  color: '#fff',
-                  fontSize: 14
-                }}
-              >
-                {`${onMinte}분간 진행중`}
-              </Text>
+              <Text style={styles.onGoingText}>{`${onMinte}분간 진행중`}</Text>
             </View>
           </View>
 
-          <View
-            style={{
-              flex: 2,
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between'
-            }}
-          >
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center'
-              }}
-            >
+          <View style={styles.cardBotView}>
+            <View style={styles.profileImageList}>
               {participants.map(
                 (user: { type: string | number; value: string }) => {
                   return user.type === 'string' ? (
@@ -171,24 +105,11 @@ export default function ConferenceCard(props: cardProps) {
                         uri: user.value
                       }}
                       resizeMode={'cover'}
-                      style={{
-                        height: 40,
-                        width: 40,
-                        borderRadius: 40,
-                        marginRight: 5
-                      }}
+                      style={styles.userImage}
                     />
                   ) : (
                     <TouchableOpacity
-                      style={{
-                        backgroundColor: 'rgba(255,255,255,0.25)',
-                        height: 40,
-                        width: 40,
-                        borderRadius: 40,
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                        // zIndex: 10
-                      }}
+                      style={styles.noImage}
                       onPress={() => goingMoreClick(roomId)}
                     >
                       <Text>{'+' + user.value}</Text>
@@ -230,5 +151,82 @@ const styles = StyleSheet.create({
     height: '100%',
     padding: 15,
     borderRadius: 12
+  },
+  titleView: {
+    height: 30,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 3
+  },
+  titleText: {
+    color: '#fff',
+    fontSize: 18,
+    flex: 1,
+    fontFamily: 'DOUZONEText50'
+  },
+  startTimeView: {
+    height: 30,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 3
+  },
+  timeText: {
+    color: '#fff',
+    fontSize: 14,
+    marginRight: 5,
+    fontFamily: 'DOUZONEText30'
+  },
+  onGoingTimeView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#fff',
+    borderRadius: 30,
+    paddingHorizontal: 5
+  },
+  onGoingText: {
+    color: '#fff',
+    fontSize: 12,
+    fontFamily: 'DOUZONEText30'
+  },
+  cardBotView: {
+    flex: 2,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
+  profileImageList: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  icLive: {
+    width: 30,
+    height: 30,
+    marginRight: 5
+  },
+  icLockWhite: {
+    width: 30,
+    height: 30,
+    marginLeft: 10
+  },
+  icClock: {
+    height: 12,
+    width: 12,
+    marginRight: 3
+  },
+  userImage: {
+    height: 40,
+    width: 40,
+    borderRadius: 40,
+    marginRight: 5
+  },
+  noImage: {
+    backgroundColor: 'rgba(255,255,255,0.25)',
+    height: 40,
+    width: 40,
+    borderRadius: 40,
+    alignItems: 'center',
+    justifyContent: 'center'
+    // zIndex: 10
   }
 });

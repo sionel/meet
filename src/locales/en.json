@@ -247,7 +247,8 @@
       "login_preventAuto": "자동입력 방지문자",
       "login_login": "로그인",
       "login_incorrect": "아이디 또는 비밀번호가 올바르지 않습니다.",
-      "login_auto": "자동 로그인"
+      "login_auto": "자동 로그인",
+      "main_participants":"참석자 명단"
     }
   }
 }

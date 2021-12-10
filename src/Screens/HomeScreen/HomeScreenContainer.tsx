@@ -143,6 +143,7 @@ export default function HomeScreenContainer(props: any) {
   };
 
   const { navigation }: MainNavigationProps<'MainStack'> = props;
+  const t = getT();
 
   const _openCompany = () => dispatch(SelectCompanyActions.openCompany());
   const changeCompanyRequest = (auth: any, company: any) =>
@@ -187,7 +188,7 @@ export default function HomeScreenContainer(props: any) {
   const _handleBackButton = () => {
     // 1000(1초) 안에 back 버튼을 한번 더 클릭 할 경우 앱 종료
     if (!ref.current.exitApp) {
-      ToastAndroid.show('한번더 누르면 앱이 종료됩니다', ToastAndroid.SHORT);
+      ToastAndroid.show(t('한번더 누르면 앱이 종료됩니다'), ToastAndroid.SHORT);
       ref.current.exitApp = true;
       ref.current.timeout = setTimeout(() => {
         ref.current.exitApp = false;
@@ -292,11 +293,7 @@ export default function HomeScreenContainer(props: any) {
         })
       );
 
-
-      if (
-        ref.current.finishedConference.length === 0 &&
-        conference.length > 0
-      )
+      if (ref.current.finishedConference.length === 0 && conference.length > 0)
         setHighlight('finished');
 
       setFinishedConference([...finishedConference, ...conference]);
@@ -497,14 +494,14 @@ export default function HomeScreenContainer(props: any) {
 
   const _goingMoreClick = (conference: conference, isMaster: boolean) => {
     const list = {
-      name: '참석자 명단',
+      name: t('참석자 명단'),
       icon1: icUser,
       onClick: () => {
         openParticipantsList('going', conference);
       }
     };
     const copy = {
-      name: '공유링크 복사',
+      name: t('공유링크 복사'),
       icon1: icLink,
       onClick: () => {}
     };
@@ -524,32 +521,32 @@ export default function HomeScreenContainer(props: any) {
     _setRoomId(roomId);
 
     const list = {
-      name: '참석 예정자 명단',
+      name: t('참석 예정자 명단'),
       icon1: icUser,
       onClick: () => {
         openParticipantsList('reservation', conference);
       }
     };
     const modify = {
-      name: '예약정보 보기',
+      name: t('예약정보 보기'),
       icon1: icModify,
       onClick: () => {
         conferenceModify();
       }
     };
     const copy = {
-      name: '공유링크 복사',
+      name: t('공유링크 복사'),
       icon1: icLink,
       onClick: () => {
         Share.share({
-          title: '공유링크 복사',
+          title: t('공유링크 복사'),
           message: `https://video.wehago.com/video?room=${conference.room_id}`
           // url: `https://video.wehago.com/video?room=${conference.room_id}`
         });
       }
     };
     const cancle = {
-      name: '예약 취소',
+      name: t('예약 취소'),
       icon1: icCancel,
       onClick: async () => {
         const result = await MeetApi.deleteConferenceRoom(
@@ -588,7 +585,7 @@ export default function HomeScreenContainer(props: any) {
 
   const _finishedMoreClick = (conference: any) => {
     const list = {
-      name: '참석자 명단',
+      name: t('참석자 명단'),
       icon1: icUser,
       onClick: () => {
         openParticipantsList('finished', conference);
@@ -614,7 +611,7 @@ export default function HomeScreenContainer(props: any) {
     let title;
     let participants: { image: any; name: any; status: any }[] = [];
     if (type === 'going') {
-      title = '현재 참석자';
+      title = t('현재 참석자');
       const participantInfoList: any[] = await MeetApi.getUserList(
         auth,
         conference.room_id
@@ -657,7 +654,7 @@ export default function HomeScreenContainer(props: any) {
           return a.status === 'master' ? -1 : 1;
         });
       users = conference.connecting_user;
-      title = '참석 예정자';
+      title = t('참석 예정자');
     } else {
       const accessedUser: any[] = await MeetApi.getFinishedParticipant(
         auth,
@@ -697,7 +694,7 @@ export default function HomeScreenContainer(props: any) {
           return a.status === 'master' ? -1 : 1;
         });
       users = conference.connecting_user;
-      title = '회의 참석 인원';
+      title = t('회의 참석 인원');
     }
 
     const onClose = () => {
@@ -726,14 +723,14 @@ export default function HomeScreenContainer(props: any) {
     // navigation.navigate('DirectCreateConference');
 
     const chat = {
-      name: '메신저로 생성하기',
+      name: t('메신저로 생성하기'),
       // icon1: icUser,
       onClick: () => {
         navigation.navigate('CreateConference');
       }
     };
     const meet = {
-      name: '직접 입력하여 생성하기',
+      name: t('직접 입력하여 생성하기'),
       // icon1: icLink,
       onClick: () => {
         navigation.navigate('DirectCreateConference');
@@ -743,7 +740,7 @@ export default function HomeScreenContainer(props: any) {
       onClickOutside: _onClickOutside,
       contentList: [chat, meet],
       show: true,
-      title: '화상회의 생성하기'
+      title: t('화상회의 생성하기')
     });
   };
 

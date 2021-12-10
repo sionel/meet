@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 
 const icMore = require('../../../../assets/new/icons/ic_more.png');
 const icLockBlack = require('../../../../assets/new/icons/ic_lock_black.png');
@@ -31,27 +31,12 @@ export default function ConferenceBox(props: ReservationCardProps) {
 
   return (
     <View
-      style={{
+      style={
         // flex:0.45,
-        width: isTablet ? '48%' : '100%',
-        height: 120,
-        borderRadius: 20,
-        backgroundColor: '#fff',
-        borderColor: '#e6e6e6',
-        borderWidth: 2,
-        marginBottom: 15,
-        padding: 20,
-        flexDirection: 'row'
-      }}
+        [styles.cardView, { width: isTablet ? '48%' : '100%' }]
+      }
     >
-      <View
-        style={{
-          flex: 1,
-          alignItems: 'flex-start',
-          justifyContent: 'center',
-          marginRight: 10
-        }}
-      >
+      <View style={styles.cardLeftContents}>
         <View
           style={{
             flex: 1,
@@ -60,43 +45,28 @@ export default function ConferenceBox(props: ReservationCardProps) {
             width: '80%'
           }}
         >
-          <Text numberOfLines={1} style={{ fontSize: 20 }}>
+          <Text numberOfLines={1} style={styles.cardTitle}>
             {roomName}
           </Text>
           {!isPublic && (
             <Image
               source={icLockBlack}
               resizeMode={'contain'}
-              style={{ height: 20, width: 20 }}
+              style={styles.icLock}
             />
           )}
         </View>
-        <View
-          style={{
-            flex: 1,
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}
-        >
-          <Text>{date + '\n' + start + ' ~ ' + end}</Text>
+        <View style={styles.dateTimeView}>
+          <Text style={styles.dateTimeText}>
+            {date + '\n' + start + ' ~ ' + end}
+          </Text>
         </View>
       </View>
       <TouchableOpacity
-        style={{
-          width: 120,
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between'
-          // backgroundColor:'#21f'
-        }}
+        style={styles.cardRightView}
         onPress={() => reservationMoreClick(roomId)}
       >
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center'
-          }}
-        >
+        <View style={styles.profileImageList}>
           {users.map((user: { type: string | number; value: string }) => {
             return user.type === 'string' ? (
               <Image
@@ -104,35 +74,84 @@ export default function ConferenceBox(props: ReservationCardProps) {
                   uri: user.value
                 }}
                 resizeMode={'cover'}
-                style={{
-                  height: 30,
-                  width: 30,
-                  borderRadius: 30
-                }}
+                style={styles.profileImage}
               />
             ) : (
-              <View
-                style={{
-                  backgroundColor: '#e9f5ff',
-                  height: 30,
-                  width: 30,
-                  borderRadius: 30,
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}
-              >
+              <View style={styles.noImage}>
                 <Text>{'+' + user.value}</Text>
               </View>
             );
           })}
         </View>
 
-        <Image
-          source={icMore}
-          resizeMode={'contain'}
-          style={{ height: 30, width: 30 }}
-        />
+        <Image source={icMore} resizeMode={'contain'} style={styles.icMore} />
       </TouchableOpacity>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  icLock: {
+    height: 20,
+    width: 20
+  },
+  icMore: {
+    height: 30,
+    width: 30
+  },
+  cardView: {
+    height: 120,
+    borderRadius: 20,
+    backgroundColor: '#fff',
+    borderColor: '#e6e6e6',
+    borderWidth: 2,
+    marginBottom: 15,
+    padding: 20,
+    flexDirection: 'row'
+  },
+  cardLeftContents: {
+    flex: 1,
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    marginRight: 10
+  },
+  cardTitle: {
+    fontSize: 17,
+    color: '#333',
+    fontFamily: 'DOUZONEText30'
+  },
+  dateTimeView: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  dateTimeText: {
+    fontFamily: 'DOUZONEText30',
+    color: '#333'
+    // 예약회의 시간 표현에 따라 바뀔 예정
+  },
+  cardRightView: {
+    width: 120,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+    // backgroundColor:'#21f'
+  },
+  profileImageList: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  profileImage: {
+    height: 30,
+    width: 30,
+    borderRadius: 30
+  },
+  noImage: {
+    backgroundColor: '#e9f5ff',
+    height: 30,
+    width: 30,
+    borderRadius: 30,
+    alignItems: 'center',
+    justifyContent: 'center'
+  }
+});
