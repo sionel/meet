@@ -13,7 +13,7 @@ import SettingView from '../Screens/SettingScreen';
 import ConferenceStateView from '../Screens/ConferenceStateScreen';
 import ConferenceView from '../Screens/ConferenceScreen';
 
-import SelectCompanyScreen from '../Screens/SelectCompanyScreen';
+import SelectCompanyView from '../Screens/SelectCompanyScreen';
 
 import SplashView from '../Screens/SplashScreen';
 
@@ -81,6 +81,7 @@ export default function RootNavigation() {
         />
         <RootStack.Screen name="SettingView" component={SettingView} />
         <RootStack.Screen name="ConferenceView" component={ConferenceView} />
+        <RootStack.Screen name="SelectCompany" component={SelectCompanyView} />
       </RootStack.Navigator>
     </NavigationContainer>
   );

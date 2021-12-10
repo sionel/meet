@@ -215,15 +215,6 @@ const SplashScreenContainer = ({
           { name: 'ConferenceStateView', params: { id: result.video_id } }
         ]
       });
-      // if (result.cno || isLogin) {
-      //   navigation.reset({
-      //     routes: [
-      //       { name: 'ConferenceStateView', params: { id: result.video_id } }
-      //     ]
-      //   });
-      // } else { // 외부참여자
-      //   navigation.reset({ routes: [{ name: 'ConferenceStateView' }] });
-      // }
     }
     // 화상회의 요청인지 판별
     if (result.is_creater) {

@@ -8,8 +8,9 @@ import { actionCreators as RootAction } from '../../redux/modules/root';
 import { actionCreators as UserActions } from '../../redux/modules/user';
 
 import { UserApi } from '../../services';
+import { MeetNavigationProps } from '../../Navigations/RootNavigation';
 
-const SelectCompanyContainer = (props: any) => {
+const SelectCompanyContainer = ({navigation,route}: MeetNavigationProps<'SelectCompany'>) => {
   // const { handleChangeCompany } = props;
   const [prevAuth, setPrevAuth] = useState<any>(null);
 
@@ -66,7 +67,6 @@ const SelectCompanyContainer = (props: any) => {
   const onLogout = async () => {
     from === 'this' && (await UserApi.logoutRequest(auth));
     _logout();
-    props.onLogout();
   };
   return (
     <SelectCompanyPresenter
