@@ -77,7 +77,7 @@ const OrganizationTab = (props: any) => {
             onTouchStart={() => focusOut()}
           >
             <Image source={ic_empty} style={styles.icEmpty45} />
-            <Text>{t('검색결과가 존재하지 않습니다.')}</Text>
+            <Text style={styles.searchEmpty}>{t('검색결과가 존재하지 않습니다.')}</Text>
           </View>
         ) : (
           <SectionList
@@ -107,7 +107,7 @@ const OrganizationTab = (props: any) => {
                     style={styles.profileImg}
                   />
                   <View style={{ marginHorizontal: 10, flex: 1 }}>
-                    <Text style={{ fontWeight: 'bold' }}>
+                    <Text style={styles.orgMain}>
                       {item.user_name +
                         ' ' +
                         item.rank_name +
@@ -118,11 +118,7 @@ const OrganizationTab = (props: any) => {
                     <Text
                       numberOfLines={1}
                       ellipsizeMode={'tail'}
-                      style={{
-                        fontSize: 10,
-                        color: '#8c8c8c',
-                        marginTop: 5
-                      }}
+                      style={styles.orgSub}
                     >
                       {item.full_path}
                     </Text>
@@ -130,11 +126,7 @@ const OrganizationTab = (props: any) => {
                   <View style={{ marginLeft: 'auto', width: 30 }}>
                     {item.user_no !== auth.user_no ? (
                       <View
-                        style={{
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          paddingRight: 10
-                        }}
+                        style={styles.chkboxView}
                       >
                         <CustomCheckBox
                           color="#ccc"
@@ -187,28 +179,20 @@ const OrganizationTab = (props: any) => {
                       style={styles.profileImg}
                     />
                     <View style={{ marginHorizontal: 10, flex: 1 }}>
-                      <Text style={{ fontWeight: 'bold' }}>
+                      <Text style={{ fontFamily:'DOUZONEText50' }}>
                         {item.address_name}
                       </Text>
                       <Text
                         numberOfLines={1}
                         ellipsizeMode={'tail'}
-                        style={{
-                          fontSize: 13,
-                          color: '#8c8c8c',
-                          marginTop: 3
-                        }}
+                        style={styles.contactSub}
                       >
                         {item.emailinfolist[0].email_address}
                       </Text>
                     </View>
                     <View style={{ marginLeft: 'auto', width: 30 }}>
                       <View
-                        style={{
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          paddingRight: 10
-                        }}
+                        style={styles.chkboxView}
                       >
                         <CustomCheckBox
                           color="#ccc"
@@ -246,7 +230,7 @@ const OrganizationTab = (props: any) => {
                   height: '45%'
                 }}
               />
-              <Text>{t('등록된 연락처가 없습니다.')}</Text>
+              <Text style={styles.searchEmpty}>{t('등록된 연락처가 없습니다.')}</Text>
             </View>
           ) : (
             <SectionList
@@ -275,17 +259,13 @@ const OrganizationTab = (props: any) => {
                       style={styles.profileImg}
                     />
                     <View style={{ marginHorizontal: 10, flex: 1 }}>
-                      <Text style={{ fontWeight: 'bold' }}>
+                      <Text style={{ fontFamily: 'DOUZONEText30' }}>
                         {item.address_name}
                       </Text>
                     </View>
                     <View style={{ marginLeft: 'auto', width: 30 }}>
                       <View
-                        style={{
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          paddingRight: 10
-                        }}
+                        style={styles.chkboxView}
                       >
                         <CustomCheckBox
                           color="#ccc"
@@ -319,7 +299,7 @@ const OrganizationTab = (props: any) => {
                 borderBottomColor: '#8c8c8c'
               }}
             >
-              <Text style={{ fontSize: 15 }}>{t('참여자 초대')}</Text>
+              <Text style={styles.emailInviteView}>{t('참여자 초대')}</Text>
               <View style={{ flexDirection: 'column', height: 60 }}>
                 <View style={styles.rowView}>
                   <TextInput
@@ -412,12 +392,7 @@ const OrganizationTab = (props: any) => {
                 <View style={{ borderBottomWidth: 1, borderColor: '#ccc' }} />
                 <View style={{ backgroundColor: '#f1f2f3' }}>
                   <Text
-                    style={[
-                      {
-                        fontSize: 15,
-                        paddingHorizontal: '5%',
-                        paddingVertical: '3%'
-                      },
+                    style={[styles.recentemailText,
                       isHorizon && { paddingVertical: '2%' }
                     ]}
                   >
@@ -443,13 +418,10 @@ const OrganizationTab = (props: any) => {
                               <Image source={ic_mail} style={styles.icMail18} />
                             </View>
                           )}
-                          <Text style={{ paddingLeft: 10 }}>{item.value}</Text>
+                          <Text style={{ paddingLeft: 10, fontFamily: 'DOUZONEText30' }}>{item.value}</Text>
                         </View>
                         <View
-                          style={{
-                            justifyContent: 'center',
-                            alignItems: 'center'
-                          }}
+                          style={styles.chkboxView}
                         >
                           <CustomCheckBox
                             color="#ccc"
@@ -478,10 +450,10 @@ const OrganizationTab = (props: any) => {
                 }}
               >
                 <Image source={ic_empty} style={styles.icEmpty} />
-                <Text style={{ margin: 10 }}>
+                <Text style={{ margin: 10, fontFamily: 'DOUZONEText30' }}>
                   {t('최근 초대한 참여자가 없습니다.')}
                 </Text>
-                <Text style={{ textAlign: 'center' }}>
+                <Text style={{ textAlign: 'center', fontFamily: 'DOUZONEText30' }}>
                   {t('초대할 참여자의 이메일을 입력해보세요.')}
                 </Text>
               </View>
@@ -508,7 +480,8 @@ const styles = StyleSheet.create({
   textStyle: {
     // flex: 1,
     // fontSize: 14,
-    color: '#000'
+    color: '#000',
+    fontFamily: 'DOUZONEText30'
   },
   category: {
     flex: 1,
@@ -523,7 +496,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     fontSize: 12,
-    color: '#555555'
+    color: '#555555',
+    fontFamily: 'DOUZONEText30'
   },
   icEmpty: {
     resizeMode: 'contain',
@@ -563,7 +537,8 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     width: '80%',
     height: 40,
-    paddingHorizontal: '3%'
+    paddingHorizontal: '3%',
+    fontFamily: 'DOUZONEText30'
   },
   emailError: {
     color: '#fc4c60',
@@ -571,7 +546,8 @@ const styles = StyleSheet.create({
     paddingLeft: '1%',
     paddingTop: -10,
     // marginTop: -10,
-    paddingBottom: 10
+    paddingBottom: 10,
+    fontFamily: 'DOUZONEText30'
   },
   rowView: {
     flexDirection: 'row',
@@ -585,6 +561,37 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     borderRadius: 20,
     backgroundColor: '#ececec'
+  },
+  contactSub: {
+    fontSize: 13,
+    color: '#8c8c8c',
+    marginTop: 3,
+    fontFamily: 'DOUZONEText30'
+  },
+  searchEmpty: {fontFamily: 'DOUZONEText30'},
+  emailInviteView: { 
+    fontSize: 15, 
+    fontFamily: 'DOUZONEText30' 
+  },
+  recentemailText: {
+    fontSize: 15,
+    paddingHorizontal: '5%',
+    paddingVertical: '3%',
+    fontFamily: 'DOUZONEText30'
+  },
+  orgMain: {
+    fontFamily: 'DOUZONEText50' 
+  },
+  orgSub: {
+    fontFamily: 'DOUZONEText30',
+    fontSize: 10,
+    color: '#8c8c8c',
+    marginTop: 5
+  },
+  chkboxView: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingRight: 10
   }
 });
 
