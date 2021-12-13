@@ -125,8 +125,8 @@ const OrganizationScreenContainer = (props: any) => {
   const selectEmployee = (type: string, item: any) => {
     if (selectedEmployee.member.length > 49) {
       Alert.alert(
-        t('초대가능 인원을 초과하였습니다.'),
-        t('참석자는 최대 50명을 넘을수 없습니다.')
+        t('renewal.organization_invite_overcrowding_title'),
+        t('renewal.organization_invite_overcrowding_text')
       );
 
       return false;
@@ -289,8 +289,8 @@ const OrganizationScreenContainer = (props: any) => {
       setInviteText('');
     } else {
       Alert.alert(
-        t('양식 오류'),
-        t('올바른 이메일 양식으로 입력해주세요.(aaaa@bbbb.com)')
+        t('renewal.organization_form_error_title'),
+        t('renewal.organization_form_error_text')
       );
       setInviteText('');
     }

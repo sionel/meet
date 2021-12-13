@@ -60,7 +60,7 @@ interface PresenterProps {
   exitDateTime: () => void;
   onSwitchDelAlramChange: () => void;
   togglePublic: () => void;
-  onDateChange: (date: Date) => void;
+  onDateChange: (date: any) => void;
   setTime: (date: Date) => void;
   clickChangeRole: (item: any) => void;
   clickDeleteUser: (item: any) => void;
@@ -121,20 +121,28 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
   const t = getT();
   const CalendarPickerComponent = (
     <CalendarPicker
-      weekdays={[t('일'), t('월'), t('화'), t('수'), t('목'), t('금'), t('토')]}
+      weekdays={[
+        t('renewal.calendar_sun'),
+        t('renewal.calendar_mon'),
+        t('renewal.calendar_tue'),
+        t('renewal.calendar_wed'),
+        t('renewal.calendar_thur'),
+        t('renewal.calendar_fri'),
+        t('renewal.calendar_sat')
+      ]}
       months={[
-        t('1월'),
-        t('2월'),
-        t('3월'),
-        t('4월'),
-        t('5월'),
-        t('6월'),
-        t('7월'),
-        t('8월'),
-        t('9월'),
-        t('10월'),
-        t('11월'),
-        t('12월')
+        t('renewal.calendar_jan'),
+        t('renewal.calendar_feb'),
+        t('renewal.calendar_mar'),
+        t('renewal.calendar_apr'),
+        t('renewal.calendar_may'),
+        t('renewal.calendar_jun'),
+        t('renewal.calendar_jul'),
+        t('renewal.calendar_aug'),
+        t('renewal.calendar_sep'),
+        t('renewal.calendar_oct'),
+        t('renewal.calendar_nov'),
+        t('renewal.calendar_dec')
       ]}
       previousTitle="<"
       nextTitle=">"
@@ -146,8 +154,8 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
       dayShape="square"
       width={isTablet ? 500 : 360}
       onDateChange={onDateChange}
-      selectYearTitle={t('년도 선택')}
-      selectMonthTitle={t('년')}
+      selectYearTitle={t('renewal.main_select_year')}
+      selectMonthTitle={t('renewal.common_year')}
       textStyle={{ fontSize: isTablet ? 18 : 14 }}
       disabledDatesTextStyle={{ fontSize: isTablet ? 18 : 14 }}
     />
@@ -167,7 +175,7 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
           </Text>
           <TouchableOpacity disabled={textLess2} onPress={createConference}>
             <Text style={[styles.confirmText, !textLess2 && { color: '#000' }]}>
-              {t('생성')}
+              {t('renewal.direct_create')}
             </Text>
           </TouchableOpacity>
         </View>
@@ -190,12 +198,14 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
 
           <View style={styles.privateTextContainer}>
             <Text style={styles.privateMainText}>
-              {isPublic ? t('공개 회의') : t('비공개 회의')}
+              {isPublic
+                ? t('renewal.direct_create_public_conference')
+                : t('renewal.direct_create_private_conference')}
             </Text>
             <Text style={styles.privateSubText}>
               {isPublic
-                ? t('공유 URL과 참여코드를 통해 초대 및 입장이 가능합니다.')
-                : t('지정된 참여자 이외엔 접속 불가능합니다.')}
+                ? t('renewal.direct_create_update_alram1')
+                : t('renewal.direct_create_update_alram2')}
             </Text>
           </View>
         </TouchableOpacity>
@@ -210,7 +220,9 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
         <View style={[{ backgroundColor: '#fff', height: '30%' }]}>
           <View style={styles.middleContainer}>
             <View style={styles.directionColTitle}>
-              <Text style={styles.textHeader}>{t('회의명')}</Text>
+              <Text style={styles.textHeader}>
+                {t('renewal.direct_create_conferenceName')}
+              </Text>
               <TextInput
                 onChangeText={roomNameChange}
                 value={roomName}
@@ -231,7 +243,7 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
               >
                 {textLess2 && roomName != '' && (
                   <Text style={styles.lengthError}>
-                    {t('두글자 이상 입력해주세요.')}
+                    {t('renewal.direct_create_length_warning')}
                   </Text>
                 )}
                 <View style={styles.countContainer}>
@@ -241,7 +253,9 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
               </View>
             </View>
             <View style={styles.directionColMessage}>
-              <Text style={styles.textHeader}>{t('초대메세지')}</Text>
+              <Text style={styles.textHeader}>
+                {t('renewal.direct_create_inviteMessage')}
+              </Text>
               <TextInput
                 onChangeText={sendMessageChange}
                 value={sendMessage}
@@ -274,7 +288,7 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
         >
           <View style={styles.rowContainer}>
             <Text style={[styles.ft14Dou50, { fontSize: 15 }]}>
-              {t('예약회의')}
+              {t('renewal.main_reservation_conference')}
             </Text>
             <Switch
               onValueChange={onSwitchReserveChange}
@@ -285,7 +299,9 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
           {switchReserve && (
             <Fragment>
               <View style={styles.dateTimeRow}>
-                <Text style={styles.timeText}>{t('시작시간')}</Text>
+                <Text style={styles.timeText}>
+                  {t('renewal.roomstate_reservation_starttime')}
+                </Text>
                 <View
                   style={{ flexDirection: 'row', justifyContent: 'flex-end' }}
                 >
@@ -339,7 +355,9 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
                 </View>
               </View>
               <View style={styles.dateTimeRow}>
-                <Text style={styles.timeText}>{t('종료시간')}</Text>
+                <Text style={styles.timeText}>
+                  {t('renewal.roomstate_reservation_endtime')}
+                </Text>
                 <View
                   style={{ flexDirection: 'row', justifyContent: 'flex-end' }}
                 >
@@ -405,7 +423,9 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
 
         <View style={[styles.conferenceMember]}>
           <View style={{ flexDirection: 'row' }}>
-            <Text style={styles.ft14Dou50}>{t('참석자')} </Text>
+            <Text style={styles.ft14Dou50}>
+              {t('renewal.direct_create_participants')}{' '}
+            </Text>
             <Text style={[styles.ft14Dou50, { color: '#1c90fb' }]}>
               {selectedEmployee.member.length}
             </Text>
@@ -425,10 +445,8 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
               style={[styles.ft12, { letterSpacing: -0.18, lineHeight: 18 }]}
             >
               {isHorizon
-                ? t('화상회의가 변경 또는 삭제될 경우, 알림 이메일을 보냅니다.')
-                : t(
-                    '화상회의가 변경 또는 삭제될 경우, \n알림 이메일을 보냅니다.'
-                  )}
+                ? t('renewal.direct_create_update_alram1')
+                : t('renewal.direct_create_update_alram2')}
             </Text>
           </View>
 
@@ -572,7 +590,7 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
                               isTablet && { fontSize: 14 }
                             ]}
                           >
-                            {t('참석자')}
+                            {t('renewal.direct_create_participants')}
                           </Text>
                         </Fragment>
                       ) : (
@@ -596,11 +614,11 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
         >
           <View style={{ flex: 1, backgroundColor: '#666', zIndex: 2 }} />
           <View style={styles.dateTimePickerHeader}>
-            <TouchableOpacity onPress={exitDateTime}>
+            <TouchableOpacity onPress={exitDateTime} style={styles.icCancel}>
               <Image source={icCancel} style={styles.icCancel} />
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={onTimeConfirm}>
+            <TouchableOpacity onPress={onTimeConfirm} style={styles.icCancel}>
               {timePicker !== 'none' && (
                 <Image source={icCheck} style={styles.icCancel} />
               )}
@@ -812,8 +830,8 @@ const styles = StyleSheet.create({
     height: 20
   },
   icTabletMaster: {
-    width: 20,
-    height: 20
+    width: 30,
+    height: 30
   },
   roleContainer: {
     flexDirection: 'row',

@@ -82,7 +82,7 @@ function CreateScreenPresenter(props: createProps) {
               resizeMode="cover"
             />
           </TouchableOpacity>
-          <Text style={styles.HeaderTitleText}>{t('메신저로 생성하기')}</Text>
+          <Text style={styles.HeaderTitleText}>{t('renewal.main_create_messenger')}</Text>
           <TouchableOpacity disabled={true}>
             <Text style={styles.emptyText}>확인</Text>
           </TouchableOpacity>

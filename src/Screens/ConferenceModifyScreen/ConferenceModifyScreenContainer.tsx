@@ -709,8 +709,6 @@ export default function ConferenceModfiyScreenContainer(props: any) {
           setSelectMode={setSelectMode}
           roomNameChange={roomNameChange}
           togglePublic={togglePublic}
-          setDatePicker={setDatePicker}
-          setTimePicker={setTimePicker}
           openTimePicker={openTimePicker}
           openDatePicker={openDatePicker}
           modifyConference={modifyConference}
@@ -725,13 +723,11 @@ export default function ConferenceModfiyScreenContainer(props: any) {
           time={time}
           setTime={setTime}
           auth={auth}
-          // participantList={participantList}
           textLess2={textLess2}
           timeType={timeType}
           sendMsgRef={sendMsgRef}
           titleRef={titleRef}
           onFocusOut={onFocusOut}
-          setTimeChangeDetect={setTimeChangeDetect}
           timeChangeDetect={timeChangeDetect}
           timeChange={timeChange}
           exitDateTime={exitDateTime}

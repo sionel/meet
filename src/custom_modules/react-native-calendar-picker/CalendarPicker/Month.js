@@ -54,9 +54,9 @@ export default function Month(props) {
           style={{ padding: 10}}
         >
           <Text style={[styles.monthText, textStyle]}>{monthName}</Text>
-        </TouchableOpacity>
+        </TouchableOpacity >
       ) : (
-        <Text style={[textStyle, styles.disabledText]}>{monthName}</Text>
+        <Text style={[textStyle, styles.disabledMonthText]}>{monthName}</Text>
       )}
     </View>
   );

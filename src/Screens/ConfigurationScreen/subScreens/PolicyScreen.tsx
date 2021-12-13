@@ -22,7 +22,7 @@ import icArrowRight from '../../../../assets/new/icons/ic_arrow_right.png';
 import { ConfigurationNavigationProps } from '../../../Navigations/ConfigurationStack';
 
 export default function PolicyScreen(props: any) {
-  const { navigation, route }: ConfigurationNavigationProps<'Policy'> = props;
+  const { navigation }: ConfigurationNavigationProps<'Policy'> = props;
   const auth = useSelector((state: RootState) => state.user['auth']);
   const membership = auth.last_company.membership_code;
   const t = getT();
@@ -64,7 +64,7 @@ export default function PolicyScreen(props: any) {
             resizeMode="cover"
           />
         </TouchableOpacity>
-        <Text style={styles.HeaderTitleText}>{t('이용약관 및 법률정보')}</Text>
+        <Text style={styles.HeaderTitleText}>{t('renewal.option_legal')}</Text>
         <TouchableOpacity disabled={true}>
           <Text style={styles.emptyText}>확인</Text>
         </TouchableOpacity>
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
   },
   HeaderTitleText: {
     fontSize: 18,
-    fontWeight: '600',
+    fontFamily: 'DOUZONEText50',
     color: '#000'
   },
   emptyText: {

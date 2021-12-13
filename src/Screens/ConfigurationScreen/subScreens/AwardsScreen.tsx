@@ -18,7 +18,7 @@ export default function AwardsScreen(props: any) {
     Linking.openURL(url);
   };
   const t = getT();
-  const { navigation, route }: ConfigurationNavigationProps<'Awards'> = props;
+  const { navigation }: ConfigurationNavigationProps<'Awards'> = props;
   return (
     <SafeAreaView style={styles.container}>
       <View style={[styles.topTitle]}>
@@ -41,53 +41,16 @@ export default function AwardsScreen(props: any) {
             source={require('../../../../assets/logoCsap.png')}
             style={styles.img}
           />
-          <Text
-            style={{
-              fontFamily: 'DOUZONEText50',
-              fontSize: 16,
-              // fontWeight: 'bold',
-              marginTop: 20
-            }}
-          >
-            {t('option_auth')}
-          </Text>
-          <Text style={{ fontSize: 12, fontFamily: 'DOUZONEText30' }}>
-            {t('option_kisa')}
-          </Text>
-          <Text
-            style={{
-              fontFamily: 'DOUZONEText30',
-              fontSize: 12,
-              color: 'rgb(140,140,140)',
-              marginTop: 20
-            }}
-          >
-            {t('option_WEHAGOV')}
-          </Text>
-          <Text
-            style={{
-              fontFamily: 'DOUZONEText30',
-              fontSize: 12,
-              color: 'rgb(140,140,140)'
-            }}
-          >
-            2019.08.28~2024.08.27
-          </Text>
+          <Text style={styles.authText}>{t('option_auth')}</Text>
+          <Text style={styles.kisaText}>{t('option_kisa')}</Text>
+          <Text style={styles.wehagoVText}>{t('option_WEHAGOV')}</Text>
+          <Text style={styles.expDate}>2019.08.28~2024.08.27</Text>
           <TouchableOpacity
             onPress={() =>
               moveToSite('https://isms.kisa.or.kr/main/csap/intro/')
             }
           >
-            <Text
-              style={{
-                fontFamily: 'DOUZONEText30',
-                marginTop: 20,
-                fontSize: 13,
-                color: 'rgb(39,67,222)'
-              }}
-            >
-              {t('option_to')}
-            </Text>
+            <Text style={styles.linkStyle}>{t('option_to')}</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -98,7 +61,7 @@ export default function AwardsScreen(props: any) {
 AwardsScreen.defaultProps = {};
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor:'#F7F8FA' },
+  container: { flex: 1, backgroundColor: '#F7F8FA' },
   img: {
     resizeMode: 'contain',
     width: 80,
@@ -128,12 +91,38 @@ const styles = StyleSheet.create({
   },
   HeaderTitleText: {
     fontSize: 18,
-    fontWeight: '600',
+    fontFamily: 'DOUZONEText50',
     color: '#000'
   },
   emptyText: {
     fontSize: 14,
     fontWeight: 'normal',
     color: '#00ff0000'
+  },
+  authText: {
+    fontFamily: 'DOUZONEText50',
+    fontSize: 16,
+    marginTop: 20
+  },
+  kisaText: {
+    fontSize: 12,
+    fontFamily: 'DOUZONEText30'
+  },
+  wehagoVText: {
+    fontFamily: 'DOUZONEText30',
+    fontSize: 12,
+    color: 'rgb(140,140,140)',
+    marginTop: 20
+  },
+  expDate: {
+    fontFamily: 'DOUZONEText30',
+    fontSize: 12,
+    color: 'rgb(140,140,140)'
+  },
+  linkStyle: {
+    fontFamily: 'DOUZONEText30',
+    marginTop: 20,
+    fontSize: 13,
+    color: 'rgb(39,67,222)'
   }
 });

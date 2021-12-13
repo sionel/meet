@@ -93,7 +93,7 @@ export default function ConferenceCard(props: cardProps) {
                 resizeMode={'contain'}
                 style={styles.icClock}
               />
-              <Text style={styles.onGoingText}>{`${onMinte}${t('분간 진행중')}`}</Text>
+              <Text style={styles.onGoingText}>{`${onMinte}${t('renewal.main_minute_during')}`}</Text>
             </View>
           </View>
 

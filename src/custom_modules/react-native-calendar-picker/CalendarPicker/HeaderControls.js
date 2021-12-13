@@ -8,6 +8,7 @@ import {
 import PropTypes from 'prop-types';
 import { Utils } from './Utils';
 import Controls from './Controls';
+import { getT } from '../../../utils/translateManager';
 
 export default function HeaderControls(props) {
   const {
@@ -47,6 +48,8 @@ export default function HeaderControls(props) {
     accessibilityProps['aria-level'] = headingLevel;
   }
 
+  const t = getT();
+
   return (
     <View style={[styles.headerWrapper, headerWrapperStyle]}>
       <Controls
@@ -60,12 +63,12 @@ export default function HeaderControls(props) {
       <View style={[styles.monthYearHeaderWrapper,monthYearHeaderWrapperStyle]}>
         <TouchableOpacity onPress={onPressYear}>
           <Text style={[styles.yearHeaderMainText, textStyle, yearTitleStyle]}>
-            { year } {'년'}
+            { year } {t('renewal.common_year')}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={onPressMonth}>
           <Text style={[styles.monthHeaderMainText, textStyle, monthTitleStyle]} {...accessibilityProps}>
-            { monthName } {'월'}
+            { monthName } {t('renewal.common_month')}
           </Text>
         </TouchableOpacity>
       </View>

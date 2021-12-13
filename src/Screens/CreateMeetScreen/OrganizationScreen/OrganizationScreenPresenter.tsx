@@ -297,7 +297,7 @@ const OrganizationScreenPresenter = (props: PresenterProps) => {
           </Text>
         </TouchableOpacity>
         <View style={{ flexDirection: 'row' }}>
-          <Text style={styles.TitleText}>{t('참석자 추가')}</Text>
+          <Text style={styles.TitleText}>{t('renewal.organization_page_title')}</Text>
           <Text style={styles.participantsCount}>
             {'  '}
             {selectedEmployee.member.length}
@@ -324,7 +324,7 @@ const OrganizationScreenPresenter = (props: PresenterProps) => {
             <CustomIcon name={'loading'} size={48} />
           </Animated.View>
           <Text style={styles.loadingText}>
-            {'조직도를 불러오고 있습니다.'}
+            {t('renewal.organization_loading_messege')}
           </Text>
         </View>
       ) : (
@@ -366,7 +366,7 @@ const OrganizationScreenPresenter = (props: PresenterProps) => {
                       fontFamily: 'DOUZONEText30'
                     }}
                   >
-                    {t('조직도')}
+                    {t('renewal.organization_org')}
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -386,7 +386,7 @@ const OrganizationScreenPresenter = (props: PresenterProps) => {
                       fontFamily: 'DOUZONEText30'
                     }}
                   >
-                    {t('연락처')}
+                    {t('renewal.organization_contacts')}
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -406,7 +406,7 @@ const OrganizationScreenPresenter = (props: PresenterProps) => {
                       fontFamily: 'DOUZONEText30'
                     }}
                   >
-                    {t('외부참여자')}
+                    {t('renewal.organization_exter')}
                   </Text>
                 </TouchableOpacity>
               </View>

@@ -77,7 +77,7 @@ const OrganizationTab = (props: any) => {
             onTouchStart={() => focusOut()}
           >
             <Image source={ic_empty} style={styles.icEmpty45} />
-            <Text style={styles.searchEmpty}>{t('검색결과가 존재하지 않습니다.')}</Text>
+            <Text style={styles.searchEmpty}>{t('renewal.organization_org_empty')}</Text>
           </View>
         ) : (
           <SectionList
@@ -230,7 +230,7 @@ const OrganizationTab = (props: any) => {
                   height: '45%'
                 }}
               />
-              <Text style={styles.searchEmpty}>{t('등록된 연락처가 없습니다.')}</Text>
+              <Text style={styles.searchEmpty}>{t('renewal.organization_contacts_empty')}</Text>
             </View>
           ) : (
             <SectionList
@@ -299,7 +299,7 @@ const OrganizationTab = (props: any) => {
                 borderBottomColor: '#8c8c8c'
               }}
             >
-              <Text style={styles.emailInviteView}>{t('참여자 초대')}</Text>
+              <Text style={styles.emailInviteView}>{t('renewal.organization_email_invite')}</Text>
               <View style={{ flexDirection: 'column', height: 60 }}>
                 <View style={styles.rowView}>
                   <TextInput
@@ -307,7 +307,7 @@ const OrganizationTab = (props: any) => {
                       styles.emailText,
                       inviteText && { borderColor: '#1c90fb' }
                     ]}
-                    placeholder={t('초대할 사람의 이메일을 입력해주세요.')}
+                    placeholder={t('renewal.organization_eamil_input_placeholder')}
                     autoCapitalize={'none'}
                     autoCompleteType={'email' || 'tel'}
                     onSubmitEditing={() => validateExter()}
@@ -339,7 +339,7 @@ const OrganizationTab = (props: any) => {
                 </View>
                 {exterError && (
                   <Text style={styles.emailError}>
-                    {t('이미 추가된 이메일입니다.')}
+                    {t('renewal.organization_eamil_input_error')}
                   </Text>
                 )}
               </View>
@@ -396,7 +396,7 @@ const OrganizationTab = (props: any) => {
                       isHorizon && { paddingVertical: '2%' }
                     ]}
                   >
-                    {t('최근 초대한 이메일')}
+                    {t('renewal.organization_email_recent')}
                   </Text>
                 </View>
                 <FlatList
@@ -451,10 +451,10 @@ const OrganizationTab = (props: any) => {
               >
                 <Image source={ic_empty} style={styles.icEmpty} />
                 <Text style={{ margin: 10, fontFamily: 'DOUZONEText30' }}>
-                  {t('최근 초대한 참여자가 없습니다.')}
+                  {t('renewal.organization_email_recent_empty1')}
                 </Text>
                 <Text style={{ textAlign: 'center', fontFamily: 'DOUZONEText30' }}>
-                  {t('초대할 참여자의 이메일을 입력해보세요.')}
+                  {t('renewal.organization_email_recent_empty2')}
                 </Text>
               </View>
             )}

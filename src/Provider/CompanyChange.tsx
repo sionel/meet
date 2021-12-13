@@ -14,6 +14,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../redux/configureStore';
 import { actionCreators as selectCompanyAction } from '../redux/modules/selectCompany';
 import { actionCreators as userAction } from '../redux/modules/user';
+import { getT } from '../utils/translateManager';
 const { width, height } = Dimensions.get('window');
 
 const icCheckB = require('../../assets/new/icons/ic_check_b.png');
@@ -46,6 +47,8 @@ export default function CompanyChange() {
       contentList
     };
   });
+
+  const t = getT();
 
   const dispatch = useDispatch();
   const _closeCompany = () => {
@@ -106,7 +109,7 @@ export default function CompanyChange() {
               fontFamily: 'DOUZONEText50'
             }}
           >
-            {'회사 변경'}
+            {t('renewal.company_change')}
           </Text>
         </View>
         <FlatList
@@ -198,7 +201,7 @@ export default function CompanyChange() {
               fontFamily: 'DOUZONEText50'
             }}
           >
-            {'회사 선택'}
+            {t('renewal.company_select')}
           </Text>
         </View>
         <FlatList

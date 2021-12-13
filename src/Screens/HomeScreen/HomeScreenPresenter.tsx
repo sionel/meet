@@ -184,7 +184,9 @@ const HomeScreenPresenter = (props: presenterProps) => {
                 style={styles.topButtonImg}
                 resizeMode={'cover'}
               />
-              <Text style={styles.ImageText}>{t('회의생성')}</Text>
+              <Text style={styles.ImageText}>
+                {t('renewal.main_create_conference')}
+              </Text>
             </TouchableOpacity>
             {/* <TouchableOpacity
               style={styles.topButtons}
@@ -206,7 +208,9 @@ const HomeScreenPresenter = (props: presenterProps) => {
                 style={styles.topButtonImg}
                 resizeMode={'cover'}
               />
-              <Text style={styles.ImageText}>{t('참여코드')}</Text>
+              <Text style={styles.ImageText}>
+                {t('renewal.main_participation_code')}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -220,7 +224,9 @@ const HomeScreenPresenter = (props: presenterProps) => {
                 { paddingHorizontal: isTablet ? 40 : 20 }
               ]}
             >
-              <Text style={styles.goingText}>{t('진행중인 화상회의')}</Text>
+              <Text style={styles.goingText}>
+                {t('renewal.main_going_conference')}
+              </Text>
               <Text
                 style={[
                   styles.goingText,
@@ -272,7 +278,7 @@ const HomeScreenPresenter = (props: presenterProps) => {
                       highlight === 'reservation' && styles.FocusText
                     ]}
                   >
-                    {t('예약회의')}
+                    {t('renewal.main_reservation_conference')}
                   </Text>
                   <Text
                     style={[
@@ -299,7 +305,7 @@ const HomeScreenPresenter = (props: presenterProps) => {
                     highlight === 'finished' && styles.FocusText
                   ]}
                 >
-                  {t('회의기록')}
+                  {t('renewal.main_conference_record')}
                 </Text>
                 <Text
                   style={[
@@ -315,7 +321,9 @@ const HomeScreenPresenter = (props: presenterProps) => {
                   onPress={() => setCalendarView(true)}
                   style={styles.monthTouchContainer}
                 >
-                  <Text style={styles.selectedMonth}>{`${finishDate.getMonth() + 1}${t('renewal.common_month')}`}</Text>
+                  <Text style={styles.selectedMonth}>{`${
+                    finishDate.getMonth() + 1
+                  }${t('renewal.common_month')}`}</Text>
                 </TouchableOpacity>
               )}
             </View>
@@ -355,6 +363,7 @@ const HomeScreenPresenter = (props: presenterProps) => {
           <View style={{ flex: 1, backgroundColor: '#666', zIndex: 2 }}></View>
           <View style={styles.calendarTopView}>
             <TouchableOpacity
+              style={styles.icCancel}
               onPress={() => {
                 setCalendarView(false);
               }}
@@ -368,27 +377,27 @@ const HomeScreenPresenter = (props: presenterProps) => {
           </View>
           <CalendarPicker
             weekdays={[
-              t('일'),
-              t('월'),
-              t('화'),
-              t('수'),
-              t('목'),
-              t('금'),
-              t('토')
+              t('renewal.calendar_sun'),
+              t('renewal.calendar_mon'),
+              t('renewal.calendar_tue'),
+              t('renewal.calendar_wed'),
+              t('renewal.calendar_thur'),
+              t('renewal.calendar_fri'),
+              t('renewal.calendar_sat')
             ]}
             months={[
-              t('1월'),
-              t('2월'),
-              t('3월'),
-              t('4월'),
-              t('5월'),
-              t('6월'),
-              t('7월'),
-              t('8월'),
-              t('9월'),
-              t('10월'),
-              t('11월'),
-              t('12월')
+              t('renewal.calendar_jan'),
+              t('renewal.calendar_feb'),
+              t('renewal.calendar_mar'),
+              t('renewal.calendar_apr'),
+              t('renewal.calendar_may'),
+              t('renewal.calendar_jun'),
+              t('renewal.calendar_jul'),
+              t('renewal.calendar_aug'),
+              t('renewal.calendar_sep'),
+              t('renewal.calendar_oct'),
+              t('renewal.calendar_nov'),
+              t('renewal.calendar_dec')
             ]}
             previousTitle="<"
             nextTitle=">"
@@ -399,8 +408,8 @@ const HomeScreenPresenter = (props: presenterProps) => {
             todayBackgroundColor="#febc2c"
             dayShape="square"
             onMonthChange={onChangeMonth}
-            selectYearTitle={t('년도 선택')}
-            selectMonthTitle={t('년')}
+            selectYearTitle={t('renewal.main_select_year')}
+            selectMonthTitle={t('renewal.common_year')}
             textStyle={{ fontSize: isTablet ? 18 : 14 }}
             disabledDatesTextStyle={{ fontSize: isTablet ? 18 : 14 }}
             calendarMode={'months'}
@@ -504,7 +513,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingBottom: 20
   },
-  goingText: { fontSize: 16, fontWeight: 'bold', marginRight: 5 },
+  goingText: { 
+    fontSize: 16, 
+    fontFamily: 'DOUZONEText30',
+    marginRight: 5 
+  },
   calendarTopView: {
     flexDirection: 'row',
     justifyContent: 'space-between',

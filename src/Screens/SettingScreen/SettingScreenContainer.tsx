@@ -91,10 +91,10 @@ export default function SettingScreenContainer(props: any) {
 
   const _handleConferenceEnter = async () => {
     // let { tracks, nameField } = this.state;
-    let tmpName = name;
+    let tmpName;
 
     if (nameField) {
-      //   name = this.state.name;
+      tmpName = name;
       if (!tmpName) {
         tmpName = (await MeetApi.getExternalUserId(params.id)).resultData;
       }
@@ -141,7 +141,7 @@ export default function SettingScreenContainer(props: any) {
             params: {
               tracks,
               roomToken,
-              name,
+              name: tmpName,
               ...params,
               accessType: params?.accessType,
               externalUser: user
@@ -174,8 +174,8 @@ export default function SettingScreenContainer(props: any) {
     setTracks(tracks);
   };
 
-  console.log('!@!@#!');
-  console.log(params);
+  // console.log('!@!@#!');
+  // console.log(params);
   
   return (
     <SettingScreenPresenter

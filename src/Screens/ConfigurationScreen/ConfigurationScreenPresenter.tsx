@@ -16,6 +16,7 @@ import icMenuTrophy from '../../../assets/new/icons/ic_menu_trophy.png';
 import icMenuLogin from '../../../assets/new/icons/ic_menu_login.png';
 import icArrowRight from '../../../assets/new/icons/ic_arrow_right.png';
 import icBack from '../../../assets/new/icons/ic_back.png';
+import { getT } from '../../utils/translateManager';
 
 interface propsTypes {
   // onRedirect: (destination: string) => void;
@@ -35,6 +36,8 @@ export default function ConfigurationScreenPresenter(props: propsTypes) {
     handleGoPolicy
   } = props;
 
+  const t = getT();
+
   return (
     // <Fragment>
     //   <SafeAreaView style={{ flex: 0, backgroundColor: '#1c90fb' }} />
@@ -48,7 +51,7 @@ export default function ConfigurationScreenPresenter(props: propsTypes) {
             resizeMode="cover"
           />
         </TouchableOpacity>
-        <Text style={styles.HeaderTitleText}>기본 설정</Text>
+        <Text style={styles.HeaderTitleText}>{t('renewal.option_setting')}</Text>
         <TouchableOpacity disabled={true}>
           <Text style={styles.emptyText}>확인</Text>
         </TouchableOpacity>
@@ -66,8 +69,8 @@ export default function ConfigurationScreenPresenter(props: propsTypes) {
             style={styles.imgStyle}
             resizeMode={'contain'}
           />
-          <Text style={{ flex: 1 }}> {'버전정보'} </Text>
-          <Text>{'2.4.0'}</Text>
+          <Text style={styles.menuTextStyle}> {t('renewal.option_version')} </Text>
+          <Text style={{fontFamily:'DOUZONEText30'}}>{'2.4.0'}</Text>
         </View>
 
         <TouchableOpacity
@@ -79,7 +82,7 @@ export default function ConfigurationScreenPresenter(props: propsTypes) {
             style={styles.imgStyle}
             resizeMode={'contain'}
           />
-          <Text style={{ flex: 1 }}> {'이용약관 및 법률정보'} </Text>
+          <Text style={styles.menuTextStyle}> {t('renewal.option_legal')} </Text>
           <Image
             source={icArrowRight}
             style={styles.icRightArrow}
@@ -96,7 +99,7 @@ export default function ConfigurationScreenPresenter(props: propsTypes) {
             style={styles.imgStyle}
             resizeMode={'contain'}
           />
-          <Text style={{ flex: 1 }}> {'수상 및 인증내역'} </Text>
+          <Text style={styles.menuTextStyle}> {t('option_awards')} </Text>
           <Image
             source={icArrowRight}
             style={styles.icRightArrow}
@@ -110,7 +113,7 @@ export default function ConfigurationScreenPresenter(props: propsTypes) {
             style={styles.imgStyle}
             resizeMode={'contain'}
           />
-          <Text style={{ flex: 1 }}> {'로그아웃'} </Text>
+          <Text style={styles.menuTextStyle}> {t('renewal.option_logout')} </Text>
           <Image
             source={icArrowRight}
             style={styles.icRightArrow}
@@ -185,6 +188,10 @@ const styles = StyleSheet.create({
     borderColor: '#d1d1d1',
     borderBottomWidth: 1,
     backgroundColor: '#F7F8FA'
+  },
+  menuTextStyle: { 
+    flex: 1, 
+    fontFamily: 'DOUZONEText30' 
   },
   imgStyle: {
     width: 30,

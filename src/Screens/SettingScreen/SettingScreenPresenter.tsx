@@ -51,15 +51,13 @@ export default function SettingScreenPresenter(props: PresenterProps) {
       <SafeAreaView style={styles.container}>
         <View style={[styles.topTitle]}>
           <TouchableOpacity onPress={goBack}>
-            <Image
-              source={icBack}
-              style={styles.icBack}
-              resizeMode="cover"
-            />
+            <Image source={icBack} style={styles.icBack} resizeMode="cover" />
           </TouchableOpacity>
           <Text style={styles.HeaderTitleText}>{roomName}</Text>
           <TouchableOpacity disabled={true}>
-            <Text style={styles.emptyText}>{t('renewal.alert_button_confirm')}</Text>
+            <Text style={styles.emptyText}>
+              {t('renewal.alert_button_confirm')}
+            </Text>
           </TouchableOpacity>
         </View>
         <KeyboardAvoidingView
@@ -71,19 +69,12 @@ export default function SettingScreenPresenter(props: PresenterProps) {
           behavior={'height'}
         >
           <TouchableOpacity style={{ flex: 1 }} activeOpacity={1}>
-            <View
-              style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: '100%',
-                flex: 1
-              }}
-            >
-              <Text style={{ fontSize: 17, color: '#000', paddingBottom: 10, fontFamily: 'DOUZONEText30'}}>
-                {t('roomstate_setting_title')}
+            <View style={styles.settingTitleView}>
+              <Text style={styles.settingTitle}>
+                {t('renewal.roomstate_setting_title')}
               </Text>
-              <Text style={{ fontSize: 12, color: 'rgb(140,140,140)', fontFamily: 'DOUZONEText30'}}>
-                {t('roomstate_setting_detail')}
+              <Text style={styles.settingSubTitle}>
+                {t('renewal.roomstate_setting_detail')}
               </Text>
             </View>
             <View
@@ -93,39 +84,14 @@ export default function SettingScreenPresenter(props: PresenterProps) {
                 flex: 3
               }}
             >
-              <Text
-                style={{
-                  fontSize: 14,
-                  color: 'rgb(51,51,51)',
-                  paddingBottom: 5,
-                  fontFamily: 'DOUZONEText30'
-                }}
-              >
-                {t('roomstate_setting_output')}
+              <Text style={styles.settingOutputText}>
+                {t('renewal.roomstate_setting_output')}
               </Text>
 
-              <View
-                style={{
-                  flex: 1,
-                  width: '100%',
-                  marginBottom: 20,
-                  alignItems: 'center',
-                  justifyContent: 'space-around',
-                  flexDirection: 'row'
-                }}
-              >
+              <View style={styles.settingOutputView}>
                 {tracks && tracks[0] && !tracks[0]?.isMuted() && (
                   <RTCView
-                    style={{
-                      position: 'absolute',
-                      top: 0,
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-
-                      backgroundColor: '#1D1D1D',
-                      zIndex: 0
-                    }}
+                    style={styles.rctView}
                     mirror={true}
                     objectFit={'cover'}
                     streamURL={tracks[0]?.getOriginalStream().toURL()}
@@ -145,11 +111,7 @@ export default function SettingScreenPresenter(props: PresenterProps) {
                 ></View>
                 <TouchableOpacity style={{ flex: 1 }}></TouchableOpacity>
                 <TouchableOpacity
-                  style={{
-                    flex: 2,
-                    alignItems: 'center',
-                    zIndex: 2
-                  }}
+                  style={styles.toggleView}
                   onPress={onToggleVideo}
                 >
                   <Image
@@ -159,18 +121,11 @@ export default function SettingScreenPresenter(props: PresenterProps) {
                         : ButtonCamera
                     }
                     resizeMode={'contain'}
-                    style={{
-                      width: 55,
-                      height: 55
-                    }}
+                    style={styles.buttonImage}
                   />
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={{
-                    flex: 2,
-                    alignItems: 'center',
-                    zIndex: 2
-                  }}
+                  style={styles.toggleView}
                   onPress={onToggleAudio}
                 >
                   <Image
@@ -178,80 +133,45 @@ export default function SettingScreenPresenter(props: PresenterProps) {
                       tracks && tracks[1]?.isMuted() ? ButtonMicOff : ButtonMic
                     }
                     resizeMode={'contain'}
-                    style={{
-                      width: 55,
-                      height: 55
-                    }}
+                    style={styles.buttonImage}
                   />
                 </TouchableOpacity>
                 <TouchableOpacity style={{ flex: 1 }}></TouchableOpacity>
               </View>
             </View>
             {nameField && (
-              <View
-                style={styles.nameFieldView}
-              >
-                <Text style={{ width: '100%', paddingLeft: 5 }}>
-                  {t('roomstate_setting_name')}
+              <View style={styles.nameFieldView}>
+                <Text style={styles.settingUserNameTitle}>
+                  {t('renewal.roomstate_setting_name')}
                 </Text>
                 <TextInput
-                  placeholder={t('roomstate_setting_setname')}
+                  placeholder={t('renewal.roomstate_setting_setname')}
                   placeholderTextColor={'#999'}
-                  style={{
-                    borderColor: 'rgb(201,205,213)',
-                    borderWidth: 1,
-                    width: '100%',
-                    height: 52,
-                    marginVertical: 10,
-                    paddingHorizontal: 5
-                  }}
+                  style={styles.settingUserName}
                   maxLength={20}
                   onChangeText={setName}
                   blurOnSubmit={true}
                 ></TextInput>
-                <Text
-                  style={{
-                    width: '100%',
-                    paddingLeft: 5,
-                    color: 'rgb(140,140,140)',
-                    fontSize: 11
-                  }}
-                >
-                  {t('roomstate_setting_nameDefault')}
+                <Text style={styles.settingUserNameDafault}>
+                  {t('renewal.roomstate_setting_nameDefault')}
                 </Text>
               </View>
             )}
-            <View
-              style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: '100%',
-                flex: 1
-              }}
-            >
+            <View style={styles.settingRoomEnterView}>
               <TouchableOpacity
-                style={{
-                  backgroundColor: buttonActive
-                    ? 'rgb(28,144,251)'
-                    : 'rgb(125,125,125)',
-                  borderRadius: 110,
-                  width: '80%',
-                  height: 50,
-                  justifyContent: 'center',
-                  alignItems: 'center'
-                }}
+                style={[
+                  {
+                    backgroundColor: buttonActive
+                      ? 'rgb(28,144,251)'
+                      : 'rgb(125,125,125)'
+                  },
+                  styles.settingRoomEnterTouch
+                ]}
                 onPressOut={onConferenceEnter}
                 disabled={!buttonActive}
               >
-                <Text
-                  style={{
-                    fontSize: 15,
-                    color: '#fff',
-                    borderWidth: 0,
-                    borderColor: '#fff'
-                  }}
-                >
-                  {t('roomstate_setting_enter')}
+                <Text style={styles.settingRoomEnterText}>
+                  {t('renewal.roomstate_setting_enter')}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -280,23 +200,112 @@ const styles = StyleSheet.create({
   },
   HeaderTitleText: {
     fontSize: 18,
-    fontWeight: '600',
+    fontFamily: 'DOUZONEText50',
     color: '#000'
   },
   emptyText: {
     fontSize: 14,
-    
     color: '#00ff0000'
   },
-  icBack: { 
-    width: 24, 
-    height: 24 
+  icBack: {
+    width: 24,
+    height: 24
   },
   nameFieldView: {
     justifyContent: 'center',
     alignItems: 'center',
     height: '100%',
     flex: 1
+  },
+  settingTitle: {
+    fontSize: 17,
+    color: '#000',
+    paddingBottom: 10,
+    fontFamily: 'DOUZONEText50'
+  },
+  settingSubTitle: {
+    fontSize: 13,
+    color: 'rgb(140,140,140)',
+    fontFamily: 'DOUZONEText30'
+  },
+  settingTitleView: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
+    flex: 1
+  },
+  settingOutputText: {
+    fontSize: 14,
+    color: 'rgb(51,51,51)',
+    paddingBottom: 5,
+    fontFamily: 'DOUZONEText30'
+  },
+  settingOutputView: {
+    flex: 1,
+    width: '100%',
+    marginBottom: 20,
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    flexDirection: 'row'
+  },
+  rctView: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: '#1D1D1D',
+    zIndex: 0
+  },
+  buttonImage: {
+    width: 55,
+    height: 55
+  },
+  toggleView: {
+    flex: 2,
+    alignItems: 'center',
+    zIndex: 2
+  },
+  settingUserNameTitle: {
+    width: '100%',
+    paddingLeft: 5,
+    fontFamily: 'DOUZONEText30'
+  },
+  settingUserName: {
+    borderColor: 'rgb(201,205,213)',
+    borderWidth: 1,
+    width: '100%',
+    height: 52,
+    marginVertical: 10,
+    paddingHorizontal: 5,
+    fontFamily: 'DOUZONEText30'
+  },
+  settingUserNameDafault: {
+    width: '100%',
+    paddingLeft: 5,
+    color: 'rgb(140,140,140)',
+    fontSize: 11,
+    fontFamily: 'DOUZONEText30'
+  },
+  settingRoomEnterView: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
+    flex: 1
+  },
+  settingRoomEnterTouch: {
+    borderRadius: 110,
+    width: '80%',
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  settingRoomEnterText: {
+    fontSize: 16,
+    color: '#fff',
+    borderWidth: 0,
+    borderColor: '#fff',
+    fontFamily: 'DOUZONEText30'
   }
 });
 

@@ -186,6 +186,15 @@ export function makeStyles(params) {
       justifyContent: 'center'
     },
 
+    disabledMonthText: {
+      fontSize: 14*scaler,
+      color: '#BBBBBB',
+      alignSelf: 'center',
+      justifyContent: 'center',
+      paddingVertical: 10,
+      paddingHorizontal: 20
+    },
+
     selectedDisabledText: {
       fontSize: 14*scaler,
       color: '#DDDDDD',
