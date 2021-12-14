@@ -111,6 +111,7 @@ export default function ConferenceModfiyScreenContainer(props: any) {
   const [dateTimeSeleted, setDateTimeSeleted] = useState(false);
   const [isNormal, setIsNormal] = useState(true);
   const [isAuth, setIsAuth] = useState(false);
+  const [calendarError, setCalendarError] = useState(false);
 
   const titleRef: RefObject<any> = useRef();
   const sendMsgRef: RefObject<any> = useRef();
@@ -461,18 +462,19 @@ export default function ConferenceModfiyScreenContainer(props: any) {
 
     if (current < today) {
       Alert.alert(
-        t('시간 지정 오류'),
-        t('시작 시간, 종료시간은 현재 시간보다 30분 이후로 지정이 가능합니다.')
+        t('renewal.direct_time_set_error'),
+        t('renewal.direct_time_early_error')
       );
       setTime(today.add(1, 'minutes').toDate());
       return false;
     } else if (current < startTime.current) {
       Alert.alert(
-        t('시간 지정 오류'),
-        t('종료 시간은 시작 시간 이전으로 지정이 불가능합니다.')
+        t('renewal.direct_time_set_error'),
+        t('renewal.direct_time_before_error')
       );
       setTime(moment(startTime.current).add(30, 'minutes').toDate());
       setTimePicker('none');
+      setCalendarError(true);
       setDatePicker(timePicker);
       return false;
     }
@@ -502,6 +504,7 @@ export default function ConferenceModfiyScreenContainer(props: any) {
         date: endTime.date,
         current: end_DT
       });
+      setCalendarError(false);
     }
 
     setTimePicker('none');
@@ -740,6 +743,7 @@ export default function ConferenceModfiyScreenContainer(props: any) {
           isNormal={isNormal}
           isAuth={isAuth}
           changeIsNormal={changeIsNormal}
+          calendarError={calendarError}
         />
       )}
     </View>

@@ -82,6 +82,7 @@ export default function CreateMeetScreenContainer(props: any) {
     []
   );
   const [dateTimeSeleted, setDateTimeSeleted] = useState(false);
+  const [calendarError, setCalendarError] = useState(false);
 
   const titleRef: RefObject<any> = useRef();
   const sendMsgRef: RefObject<any> = useRef();
@@ -415,18 +416,19 @@ export default function CreateMeetScreenContainer(props: any) {
 
     if (current < today) {
       Alert.alert(
-        t('시간 지정 오류'),
-        t('시작 시간, 종료시간은 현재 시간보다 30분 이후로 지정이 가능합니다.')
+        t('renewal.direct_time_set_error'),
+        t('renewal.direct_time_early_error')
       );
       setTime(today.add(1, 'minutes').toDate());
       return false;
     } else if (current < startTime.current) {
       Alert.alert(
-        t('시간 지정 오류'),
-        t('종료 시간은 시작 시간 이전으로 지정이 불가능합니다.')
+        t('renewal.direct_time_set_error'),
+        t('renewal.direct_time_before_error')
       );
       setTime(moment(startTime.current).add(30, 'minutes').toDate());
       setTimePicker('none');
+      setCalendarError(true);
       setDatePicker(timePicker);
       return false;
     }
@@ -456,6 +458,7 @@ export default function CreateMeetScreenContainer(props: any) {
         date: endTime.date,
         current: end_DT
       });
+      setCalendarError(false);
     }
 
     setTimePicker('none');
@@ -629,8 +632,6 @@ export default function CreateMeetScreenContainer(props: any) {
           setSelectMode={setSelectMode}
           roomNameChange={roomNameChange}
           togglePublic={togglePublic}
-          // setDatePicker={setDatePicker}
-          // setTimePicker={setTimePicker}
           openTimePicker={openTimePicker}
           openDatePicker={openDatePicker}
           createConference={createConference}
@@ -643,15 +644,12 @@ export default function CreateMeetScreenContainer(props: any) {
           onDateChange={onDateChange}
           onTimeConfirm={onTimeConfirm}
           time={time}
-          setTime={setTime}
           auth={auth}
-          // participantList={participantList}
           textLess2={textLess2}
           timeType={timeType}
           sendMsgRef={sendMsgRef}
           titleRef={titleRef}
           onFocusOut={onFocusOut}
-          // setTimeChangeDetect={setTimeChangeDetect}
           timeChangeDetect={timeChangeDetect}
           timeChange={timeChange}
           exitDateTime={exitDateTime}
@@ -661,6 +659,7 @@ export default function CreateMeetScreenContainer(props: any) {
           isHorizon={isHorizon}
           isTablet={isTablet}
           dateTimeSeleted={dateTimeSeleted}
+          calendarError={calendarError}
         />
       )}
     </View>

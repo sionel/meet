@@ -50,6 +50,7 @@ interface PresenterProps {
   isTablet: boolean;
   dateTimeSeleted: boolean;
   timeChangeDetect: boolean;
+  calendarError: boolean;
   sendMsgRef: RefObject<any>;
   titleRef: RefObject<any>;
   auth: any;
@@ -61,7 +62,6 @@ interface PresenterProps {
   onSwitchDelAlramChange: () => void;
   togglePublic: () => void;
   onDateChange: (date: any) => void;
-  setTime: (date: Date) => void;
   clickChangeRole: (item: any) => void;
   clickDeleteUser: (item: any) => void;
   timeChange: (time: any) => void;
@@ -88,8 +88,6 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
     togglePublic,
     openTimePicker,
     openDatePicker,
-    // onSelectDate,
-    // onSelectTime,
     sendMessageChange,
     createConference,
     //신규Props
@@ -101,9 +99,7 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
     onDateChange,
     onTimeConfirm,
     time,
-    setTime,
     auth,
-    // participantList,
     textLess2,
     sendMsgRef,
     titleRef,
@@ -116,7 +112,8 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
     selectedEmployee,
     isHorizon,
     isTablet,
-    dateTimeSeleted
+    dateTimeSeleted,
+    calendarError
   } = props;
   const t = getT();
   const CalendarPickerComponent = (
@@ -204,8 +201,8 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
             </Text>
             <Text style={styles.privateSubText}>
               {isPublic
-                ? t('renewal.direct_create_update_alram1')
-                : t('renewal.direct_create_update_alram2')}
+                ? t('renewal.direct_create_public_guide')
+                : t('renewal.direct_create_private_guide')}
             </Text>
           </View>
         </TouchableOpacity>
@@ -614,15 +611,17 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
         >
           <View style={{ flex: 1, backgroundColor: '#666', zIndex: 2 }} />
           <View style={styles.dateTimePickerHeader}>
-            <TouchableOpacity onPress={exitDateTime} style={styles.icCancel}>
-              <Image source={icCancel} style={styles.icCancel} />
-            </TouchableOpacity>
+            {!calendarError && (
+              <TouchableOpacity onPress={exitDateTime} style={styles.icCancel}>
+                <Image source={icCancel} style={styles.icCancel} />
+              </TouchableOpacity>
+            )}
 
-            <TouchableOpacity onPress={onTimeConfirm} style={styles.icCancel}>
-              {timePicker !== 'none' && (
+            {timePicker !== 'none' && (
+              <TouchableOpacity onPress={onTimeConfirm} style={styles.icCancel}>
                 <Image source={icCheck} style={styles.icCancel} />
-              )}
-            </TouchableOpacity>
+              </TouchableOpacity>
+            )}
           </View>
           {timePicker !== 'none' && (
             <View style={styles.timePickerView}>

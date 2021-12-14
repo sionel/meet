@@ -49,6 +49,7 @@ interface PresenterProps {
   timeChangeDetect: boolean;
   isNormal: boolean;
   isAuth: boolean;
+  calendarError: boolean;
   sendMsgRef: RefObject<any>;
   titleRef: RefObject<any>;
   auth: any;
@@ -119,7 +120,8 @@ const ConferenceModfiyScreenPresenter = (props: PresenterProps) => {
     dateTimeSeleted,
     isNormal,
     isAuth,
-    changeIsNormal
+    changeIsNormal,
+    calendarError
   } = props;
   const t = getT();
   const DatePickerComponent = (
@@ -664,15 +666,17 @@ const ConferenceModfiyScreenPresenter = (props: PresenterProps) => {
         >
           <View style={{ flex: 1, backgroundColor: '#666', zIndex: 2 }} />
           <View style={styles.dateTimePickerHeader}>
-            <TouchableOpacity onPress={exitDateTime} style={styles.icCancel}>
-              <Image source={icCancel} style={styles.icCancel} />
-            </TouchableOpacity>
+          {!calendarError && (
+              <TouchableOpacity onPress={exitDateTime} style={styles.icCancel}>
+                <Image source={icCancel} style={styles.icCancel} />
+              </TouchableOpacity>
+            )}
 
-            <TouchableOpacity onPress={onTimeConfirm} style={styles.icCancel}>
-              {timePicker !== 'none' && (
+            {timePicker !== 'none' && (
+              <TouchableOpacity onPress={onTimeConfirm} style={styles.icCancel}>
                 <Image source={icCheck} style={styles.icCancel} />
-              )}
-            </TouchableOpacity>
+              </TouchableOpacity>
+            )}
           </View>
           {timePicker !== 'none' && (
             <View style={styles.timePickerView}>

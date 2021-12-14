@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   Image,
   TouchableOpacity,
+  TouchableHighlight,
   StyleSheet
 } from 'react-native';
 
@@ -42,7 +43,7 @@ export default function ConfigurationScreenPresenter(props: propsTypes) {
     // <Fragment>
     //   <SafeAreaView style={{ flex: 0, backgroundColor: '#1c90fb' }} />
     //   <SafeAreaView style={{ flex: 1 }}>
-    <SafeAreaView style={{backgroundColor:'#F7F8FA'}}>
+    <SafeAreaView style={{ backgroundColor: '#F7F8FA' }}>
       <View style={[styles.topTitle]}>
         <TouchableOpacity onPress={goBack}>
           <Image
@@ -51,14 +52,16 @@ export default function ConfigurationScreenPresenter(props: propsTypes) {
             resizeMode="cover"
           />
         </TouchableOpacity>
-        <Text style={styles.HeaderTitleText}>{t('renewal.option_setting')}</Text>
+        <Text style={styles.HeaderTitleText}>
+          {t('renewal.option_setting')}
+        </Text>
         <TouchableOpacity disabled={true}>
           <Text style={styles.emptyText}>확인</Text>
         </TouchableOpacity>
       </View>
       <View
         style={{
-          flex: 1,
+          // flex: 1,
           width: '100%',
           backgroundColor: '#F7F8FA'
         }}
@@ -69,8 +72,11 @@ export default function ConfigurationScreenPresenter(props: propsTypes) {
             style={styles.imgStyle}
             resizeMode={'contain'}
           />
-          <Text style={styles.menuTextStyle}> {t('renewal.option_version')} </Text>
-          <Text style={{fontFamily:'DOUZONEText30'}}>{'2.4.0'}</Text>
+          <Text style={styles.menuTextStyle}>
+            {' '}
+            {t('renewal.option_version')}{' '}
+          </Text>
+          <Text style={{ fontFamily: 'DOUZONEText30' }}>{'2.4.0'}</Text>
         </View>
 
         <TouchableOpacity
@@ -82,7 +88,7 @@ export default function ConfigurationScreenPresenter(props: propsTypes) {
             style={styles.imgStyle}
             resizeMode={'contain'}
           />
-          <Text style={styles.menuTextStyle}> {t('renewal.option_legal')} </Text>
+          <Text style={styles.menuTextStyle}>{t('renewal.option_legal')}</Text>
           <Image
             source={icArrowRight}
             style={styles.icRightArrow}
@@ -107,13 +113,16 @@ export default function ConfigurationScreenPresenter(props: propsTypes) {
           />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={onLogout} style={styles.menuText}>
+        <TouchableOpacity onPress={() => onLogout()} style={styles.menuText}>
           <Image
             source={icMenuLogin}
             style={styles.imgStyle}
             resizeMode={'contain'}
           />
-          <Text style={styles.menuTextStyle}> {t('renewal.option_logout')} </Text>
+          <Text style={styles.menuTextStyle}>
+            {' '}
+            {t('renewal.option_logout')}{' '}
+          </Text>
           <Image
             source={icArrowRight}
             style={styles.icRightArrow}
@@ -180,6 +189,8 @@ const styles = StyleSheet.create({
     color: '#00ff0000'
   },
   menuText: {
+    // width: '100%',
+    // flex: 1,
     height: 50,
     paddingHorizontal: 15,
     flexDirection: 'row',
@@ -188,10 +199,11 @@ const styles = StyleSheet.create({
     borderColor: '#d1d1d1',
     borderBottomWidth: 1,
     backgroundColor: '#F7F8FA'
+    // backgroundColor: 'red'
   },
-  menuTextStyle: { 
-    flex: 1, 
-    fontFamily: 'DOUZONEText30' 
+  menuTextStyle: {
+    flex: 1,
+    fontFamily: 'DOUZONEText30'
   },
   imgStyle: {
     width: 30,
