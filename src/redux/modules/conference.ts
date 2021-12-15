@@ -5,13 +5,16 @@ import { RootState } from '../configureStore';
 const SET_LIST = 'conference.SET_LIST';
 const SET_INITIAL_LIST = 'conference.SET_INITIAL_LIST';
 const SET_ROOM_ID = 'conference.SET_ROOM_ID';
+const SET_IS_CONFERENCE = 'conference.SET_IS_CONFERENCE';
 
 export interface state {
   roomId: string;
+  isConference: boolean;
 }
 
 const initialState: state = {
-  roomId: ''
+  roomId: '',
+  isConference: false
 };
 
 const reducer = (state = initialState, action: AnyAction) => {
@@ -22,6 +25,8 @@ const reducer = (state = initialState, action: AnyAction) => {
     //   return { ...state, list: [] };
     case SET_ROOM_ID:
       return _setRoomId(state, action);
+    case SET_IS_CONFERENCE:
+      return _setIsConference(state, action);
     default:
       return state;
   }
@@ -37,11 +42,21 @@ const _setRoomId = (state: state, action: AnyAction) => {
   return { ...state, roomId: action.id };
 };
 
+function setIsConference(isConference: boolean) {
+  return {
+    type: SET_IS_CONFERENCE,
+    isConference
+  };
+}
+const _setIsConference = (state: state, action: AnyAction) => {
+  return { ...state, isConference: action.isConference };
+};
+
 export const actionCreators = {
-  setRoomId
+  setRoomId,
+  setIsConference
 };
 export default reducer;
-
 
 // const SET_LIST = 'conference.SET_LIST';
 // const SET_INITIAL_LIST = 'conference.SET_INITIAL_LIST';

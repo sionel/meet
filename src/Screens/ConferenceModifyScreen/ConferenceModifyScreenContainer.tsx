@@ -1,5 +1,12 @@
 import React, { RefObject, useEffect, useRef, useState } from 'react';
-import { Alert, View } from 'react-native';
+import {
+  Alert,
+  GestureResponderEvent,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  ScrollView,
+  View
+} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import ConferenceModfiyScreenPresenter from './ConferenceModifyScreenPresenter';
@@ -43,6 +50,7 @@ interface userInfoParam {
   full_path: string;
   user_type: string;
   is_master: boolean;
+  direction: 'LEFT' | 'RIGHT' | 'NONE';
 }
 
 interface roomModifyParam {
@@ -117,6 +125,7 @@ export default function ConferenceModfiyScreenContainer(props: any) {
   const sendMsgRef: RefObject<any> = useRef();
   const searchRef: RefObject<any> = useRef();
   const sendEmailRef: RefObject<any> = useRef();
+  const scrollRef: RefObject<any> = useRef(null);
 
   const { auth, isHorizon, roomId } = useSelector((state: any) => ({
     auth: state.user.auth,
@@ -182,7 +191,8 @@ export default function ConferenceModfiyScreenContainer(props: any) {
             ? user.user
             : '',
           user_type: user.user_type === 2 ? 'ext' : 'org',
-          is_master: sortedAccessUserList[i].is_master
+          is_master: sortedAccessUserList[i].is_master,
+          direction: 'NONE'
         };
         return data;
       })
@@ -220,7 +230,8 @@ export default function ConferenceModfiyScreenContainer(props: any) {
 
   const getAllEmployee = async (signal: AbortSignal) => {
     const result = await OrganizationApi.getOrganizationTreeAllEmployeeRequest(
-      auth, signal
+      auth,
+      signal
     );
     if (result.error) {
       console.log('조직도를 가져올 수 없습니다.');
@@ -514,7 +525,10 @@ export default function ConferenceModfiyScreenContainer(props: any) {
 
   //조직도 초기화
   const getOrganizationTree = async (signal: AbortSignal) => {
-    const result = await OrganizationApi.getOrganizationTreeRequest(auth, signal);
+    const result = await OrganizationApi.getOrganizationTreeRequest(
+      auth,
+      signal
+    );
     if (result.error) {
       //   Alert.alert('조직도', '조직도를 가져올 수 없습니다.');
       // 조직도 조회 안됨 에러 표현
@@ -563,10 +577,9 @@ export default function ConferenceModfiyScreenContainer(props: any) {
       getAllEmployee(signal),
       getOrganizationTree(signal),
       getContactsList(signal)
-    ]).then(()=>{
+    ]).then(() => {
       setIsOrgDataLoaded(false);
-    })
-    
+    });
   };
 
   useEffect(() => {
@@ -583,7 +596,7 @@ export default function ConferenceModfiyScreenContainer(props: any) {
         controller.abort();
       };
     }
-  }, [isNormal])
+  }, [isNormal]);
 
   const roomNameChange = (name: string) => {
     let rn = name;
@@ -670,6 +683,36 @@ export default function ConferenceModfiyScreenContainer(props: any) {
     setUnAccessEmployee(deleteAccessUsers);
   };
 
+  const onHandleSwipe = (
+    event: NativeSyntheticEvent<NativeScrollEvent>,
+    index: number
+  ) => {
+    const direction = event.nativeEvent.contentOffset.x;
+    let directionList: any[] = selectedEmployee.member;
+    let bfDirection = directionList[index].direction;
+    const resList: any[] = [];
+
+    const beforeEvent = bfDirection === 'NONE' ? false : true;
+    console.log(bfDirection);
+
+    if (beforeEvent) return false;
+    else {
+      if (direction > 0) directionList[index].direction = 'RIGHT';
+      else directionList[index].direction = 'LEFT';
+
+      directionList.map(v => resList.push(v));
+      setSelectedEmployee({ member: resList, group: {} });
+    }
+  };
+
+  const onHandelResetSwipe = (e: GestureResponderEvent, index: number) => {
+    let directionList: any[] = selectedEmployee.member;
+    const resList: any[] = [];
+    directionList[index].direction = 'NONE';
+    directionList.map(v => resList.push(v));
+    setSelectedEmployee({ member: resList, group: {} });
+  };
+
   return (
     <View
       style={[
@@ -744,6 +787,9 @@ export default function ConferenceModfiyScreenContainer(props: any) {
           isAuth={isAuth}
           changeIsNormal={changeIsNormal}
           calendarError={calendarError}
+          onHandleSwipe={onHandleSwipe}
+          onHandelResetSwipe={onHandelResetSwipe}
+          scrollRef={scrollRef}
         />
       )}
     </View>

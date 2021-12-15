@@ -24,26 +24,36 @@ import deviceInfoModule from 'react-native-device-info';
 
 export default function CustomProvider(props: any) {
   const { children } = props;
-  const { alert, indicator, auth, isLogin, network, selectCompany, isHorizon } =
-    useSelector((state: RootState) => {
-      const {
-        alert,
-        indicator,
-        selectCompany,
-        user: { auth, isLogin },
-        root: { network },
-        orientation: { isHorizon }
-      } = state;
-      return {
-        alert,
-        indicator,
-        auth,
-        isLogin,
-        network,
-        selectCompany,
-        isHorizon
-      };
-    });
+  const {
+    alert,
+    indicator,
+    auth,
+    isLogin,
+    network,
+    selectCompany,
+    isHorizon,
+    isConference
+  } = useSelector((state: RootState) => {
+    const {
+      alert,
+      indicator,
+      selectCompany,
+      user: { auth, isLogin },
+      root: { network },
+      orientation: { isHorizon },
+      conference: { isConference }
+    } = state;
+    return {
+      alert,
+      indicator,
+      auth,
+      isLogin,
+      network,
+      selectCompany,
+      isHorizon,
+      isConference
+    };
+  });
   const t = getT();
 
   const { visible: alertVisible } = alert;
@@ -98,7 +108,7 @@ export default function CustomProvider(props: any) {
     //   auth,
     //   'wehagomeet' // 배포여부 확인
     // );
-    
+
     // const isDeploy = isDeployWehagomeet || isDeployWebrtc;
     // setPermission(isDeploy);
     // setParams({
@@ -142,7 +152,7 @@ export default function CustomProvider(props: any) {
   };
 
   const _setOrientation = (orientation: OrientationType) => {
-    if (!deviceInfoModule.isTablet()) {
+    if (!deviceInfoModule.isTablet() && !isConference) {
       Orientation.lockToPortrait();
     } else {
       if (orientation === 'LANDSCAPE-LEFT') {
@@ -196,7 +206,7 @@ export default function CustomProvider(props: any) {
 
   useDeviceOrientationChange(_setOrientation);
   return (
-    <View style={{ flex: 1,zIndex:9 }}>
+    <View style={{ flex: 1, zIndex: 9 }}>
       {alertVisible && <Alert />}
       {indicatorVisible && <Indicator />}
       {selectCompanyVisible && <CompanyChange />}

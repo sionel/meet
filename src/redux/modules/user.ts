@@ -3,6 +3,7 @@
  * user 스토어
  */
 
+import { AnyAction } from 'redux';
 import { UserApi, ServiceCheckApi } from '../../services';
 import { actionCreators as wetalkActionCreators } from './wetalk';
 
@@ -21,9 +22,24 @@ const NETWORK_DISCONNECT = 'user.NETWORK_DISCONNECT';
 const SESSION_CHECK = 'user.SESSION_CHECK';
 const SET_PERMISSION = 'user.SET_PERMISSION'; // 화상회의 생성 권한
 const TOGGLE_UPDATE_NOTI = 'user.TOGGLE_UPDATE_NOTI';
+
+// 화면 고정을 해제하기 위해 화상회의 뷰인지 체크
+const CONFERENCE = 'user.CONFERENCE';
 //#region Action Creators
 
 //#region initialState
+
+export interface state {
+  isLogin: boolean;
+  auth: any;
+  permission: boolean;
+  appIntro: boolean;
+  from: string;
+  log: any;
+  session: boolean;
+  updateNoti: boolean;
+  autoLogin: boolean;
+}
 
 const initialState = {
   isLogin: false,
@@ -41,7 +57,7 @@ const initialState = {
 
 //#region Reducer
 
-function reducer(state = initialState, action) {
+function reducer(state: state = initialState, action: AnyAction) {
   switch (action.type) {
     case AGREEMENT:
       return { ...state, permission: !state.permission };
@@ -99,8 +115,8 @@ function reducer(state = initialState, action) {
 /**
  * Event Log
  */
-function eventLog(event) {
-  return dispatch => {
+function eventLog(event: any) {
+  return (dispatch: any) => {
     dispatch({
       type: EVENT_LOG,
       event
@@ -108,7 +124,7 @@ function eventLog(event) {
   };
 }
 
-function applyEventLog(state, action) {
+function applyEventLog(state: state, action: AnyAction) {
   const newLog = {
     date: Date.now(),
     message: action.event
@@ -132,7 +148,7 @@ function agreement() {
 /**
  * login
  */
-function login(auth, from, autoLogin) {
+function login(auth: any, from: string, autoLogin: boolean) {
   return {
     type: LOGIN,
     auth,
@@ -172,7 +188,7 @@ function sessionCheck(session = true) {
  * logout
  */
 function logout() {
-  return dispatch => {
+  return (dispatch: any) => {
     dispatch({
       type: LOGOUT
     });
@@ -194,7 +210,7 @@ function disconnect() {
 /**
  * tokenTest
  */
-function token(auth) {
+function token(auth: any) {
   return {
     type: TOKEN,
     newToken: 100
@@ -204,7 +220,7 @@ function token(auth) {
 /**
  * 권한 설정
  */
-function setPermission(permission) {
+function setPermission(permission: any) {
   return {
     type: SET_PERMISSION,
     permission
@@ -221,15 +237,15 @@ function setPermission(permission) {
 /**
  * CHANGE_COMPANY
  */
-function changeCompany(company) {
+function changeCompany(company: any) {
   return {
     type: CHANGE_COMPANY,
     company
   };
 }
 
-function changeCompanyRequest(auth, company) {
-  return async dispatch => {
+function changeCompanyRequest(auth: any, company: any) {
+  return async (dispatch: any) => {
     const checkResult = await UserApi.changeCompany(auth, company);
     if (checkResult.resultData !== 1) {
       // alert('회사변경 중 문제 발생');
@@ -240,7 +256,7 @@ function changeCompanyRequest(auth, company) {
   };
 }
 
-function applyChangeCompany(state, action) {
+function applyChangeCompany(state: state, action: AnyAction) {
   const { company } = action;
   console.log('applyChangeCompany');
   console.log(company);
@@ -259,14 +275,14 @@ function applyChangeCompany(state, action) {
 
 //#region TOGGLE_VISIBLE_APPINTRO
 function toggleVisibleAppIntro() {
-  return dispatch => {
+  return (dispatch: any) => {
     dispatch({
       type: TOGGLE_VISIBLE_APPINTRO
     });
   };
 }
 
-function applyToggleVisibleAppIntro(state, action) {
+function applyToggleVisibleAppIntro(state: state, action: AnyAction) {
   const { appIntro } = state;
   return {
     ...state,

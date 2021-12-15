@@ -7,7 +7,6 @@ import {
   serialize,
   createHeader
 } from '../../../utils';
-import { getT } from '../../../utils/translateManager';
 
 const getIp = async () => {
   try {
@@ -125,119 +124,6 @@ const loginRequest = async (
   }
 };
 
-/**
- * logoutRequest
- * 로그아웃
- * @param auth
- */
-const logoutRequest = async auth => {
-  const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY } = auth;
-
-  try {
-    const url = `${wehagoBaseURL}/auth/logout`;
-    const headers = createHeader({ AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY });
-    const data = {
-      method: 'GET',
-      headers
-    };
-
-    const response = await fetch(url, data);
-    return response.resultData;
-  } catch (err) {
-    console.warn('err', err);
-    return false;
-  }
-};
-
-/**
- * userCheck
- * 로그인 및 사용자 정보 확인
- * @param AUTH_A_TOKEN
- * @param AUTH_R_TOKEN
- * @param cno String or Number
- * @param HASH_KEY
- */
-const userCheck = async (AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY) => {
-  try {
-    const url = `${wehagoBaseURL}/common/user/userinfo/detail?cno=${cno}`;
-    const headers = createHeader({ AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY });
-
-    const response = await fetch(url, { method: 'GET', headers }, false);
-    return response;
-  } catch (errors) {
-    console.warn('userCheck', errors);
-    return { errors };
-  }
-};
-const getUserInfo = async (auth, company, user_no) => {
-  const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY } = auth;
-  try {
-    const params = {
-      user_no: user_no,
-      cno: company.cno
-    };
-    const url = `${wehagoBaseURL}/common/user/userinfo/list?${serialize(
-      params
-    )}`;
-    const header = createHeader({ AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, url });
-    const data = {
-      method: 'GET',
-      headers: Object.assign({}, header, {
-        'Content-type': 'application/x-www-form-urlencoded'
-      })
-    };
-    const response = await fetch(url, data);
-
-    return response.resultData.find(item => item.company_no === company.cno);
-  } catch (err) {
-    console.warn('getUserInfo', err);
-    return {
-      error: err
-    };
-  }
-};
-/**
- * changeCompany
- * 회사 변경
- * @param auth
- * @param user_no String or Number
- * @param company
- */
-const changeCompany = async (auth, user_no, company) => {
-  const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, last_access_company_no } = auth;
-  const { company_no, company_code } = company;
-  const t = getT();
-  try {
-    const url = `${wehagoBaseURL}/common/layout/company-change`;
-    const headers = createHeader({ AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY });
-    const data = {
-      method: 'POST',
-      headers: {
-        ...headers,
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-      },
-      body: serialize({
-        user_no,
-        last_access_company_no: company_no,
-        login_browser: 'WEHAGO-APP',
-        login_os: Platform.OS,
-        login_device: Platform.OS,
-        login_ip: await getIp(),
-        cno: last_access_company_no,
-        ccode: company_code,
-        portal_member_no: ''
-      })
-    };
-
-    const response = await fetch(url, data);
-    if (response.resultCode === 200) return true;
-    else Alert.alert(t('alert_title_change'), t('alert_text_onemore'));
-  } catch (err) {
-    console.warn('changeCompany', err);
-    return false;
-  }
-};
-
 const serviceDeployCheck = async (auth, cno) => {
   const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY } = auth;
 
@@ -262,10 +148,126 @@ const serviceDeployCheck = async (auth, cno) => {
 };
 
 export default {
-  getUserInfo,
+  // getUserInfo,
   loginRequest,
-  logoutRequest,
-  userCheck,
-  changeCompany,
+  // logoutRequest,
+  // userCheck,
+  // changeCompany,
   serviceDeployCheck
 };
+
+
+/**
+ * logoutRequest
+ * 로그아웃
+ * @param auth
+ */
+// const logoutRequest = async auth => {
+//   const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY } = auth;
+
+//   try {
+//     const url = `${wehagoBaseURL}/auth/logout`;
+//     const headers = createHeader({ AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY });
+//     const data = {
+//       method: 'GET',
+//       headers
+//     };
+
+//     const response = await fetch(url, data);
+//     return response.resultData;
+//   } catch (err) {
+//     console.warn('err', err);
+//     return false;
+//   }
+// };
+
+/**
+ * userCheck
+ * 로그인 및 사용자 정보 확인
+ * @param AUTH_A_TOKEN
+ * @param AUTH_R_TOKEN
+ * @param cno String or Number
+ * @param HASH_KEY
+ */
+// const userCheck = async (AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY) => {
+//   try {
+//     const url = `${wehagoBaseURL}/common/user/userinfo/detail?cno=${cno}`;
+//     const headers = createHeader({ AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY });
+
+//     const response = await fetch(url, { method: 'GET', headers }, false);
+//     return response;
+//   } catch (errors) {
+//     console.warn('userCheck', errors);
+//     return { errors };
+//   }
+// };
+// const getUserInfo = async (auth, company, user_no) => {
+//   const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY } = auth;
+//   try {
+//     const params = {
+//       user_no: user_no,
+//       cno: company.cno
+//     };
+//     const url = `${wehagoBaseURL}/common/user/userinfo/list?${serialize(
+//       params
+//     )}`;
+//     const header = createHeader({ AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, url });
+//     const data = {
+//       method: 'GET',
+//       headers: Object.assign({}, header, {
+//         'Content-type': 'application/x-www-form-urlencoded'
+//       })
+//     };
+//     const response = await fetch(url, data);
+
+//     return response.resultData.find(item => item.company_no === company.cno);
+//   } catch (err) {
+//     console.warn('getUserInfo', err);
+//     return {
+//       error: err
+//     };
+//   }
+// };
+/**
+ * changeCompany
+ * 회사 변경
+ * @param auth
+ * @param user_no String or Number
+ * @param company
+ */
+// const changeCompany = async (auth, user_no, company) => {
+//   const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, last_access_company_no } = auth;
+//   const { company_no, company_code } = company;
+//   const t = getT();
+//   try {
+//     const url = `${wehagoBaseURL}/common/layout/company-change`;
+//     const headers = createHeader({ AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY });
+//     const data = {
+//       method: 'POST',
+//       headers: {
+//         ...headers,
+//         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+//       },
+//       body: serialize({
+//         user_no,
+//         last_access_company_no: company_no,
+//         login_browser: 'WEHAGO-APP',
+//         login_os: Platform.OS,
+//         login_device: Platform.OS,
+//         login_ip: await getIp(),
+//         cno: last_access_company_no,
+//         ccode: company_code,
+//         portal_member_no: ''
+//       })
+//     };
+
+//     const response = await fetch(url, data);
+//     if (response.resultCode === 200) return true;
+//     else Alert.alert(t('alert_title_change'), t('alert_text_onemore'));
+//   } catch (err) {
+//     console.warn('changeCompany', err);
+//     return false;
+//   }
+// };
+
+

@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import * as React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, NavigationState } from '@react-navigation/native';
 import {
   createStackNavigator,
   StackScreenProps
@@ -16,6 +16,8 @@ import ConferenceView from '../Screens/ConferenceScreen';
 import SelectCompanyView from '../Screens/SelectCompanyScreen';
 
 import SplashView from '../Screens/SplashScreen';
+import { useDispatch } from 'react-redux';
+import { actionCreators as ConferenceActions } from '../redux/modules/conference';
 
 // roomToken?: string;
 export type MeetParamList = {
@@ -37,7 +39,7 @@ export type MeetParamList = {
       }
     | {
         accessType: 'email';
-        emailToken:string
+        emailToken: string;
       }
   );
 
@@ -73,11 +75,21 @@ export type MeetNavigationProps<T extends keyof MeetParamList> =
 const RootStack = createStackNavigator();
 
 export default function RootNavigation() {
+  const dispatch = useDispatch();
+  const _setIsConference = (isConference: boolean) =>
+    dispatch(ConferenceActions.setIsConference(isConference));
+
+  const checkConference = (state: Readonly<NavigationState> | undefined) => {
+    const name = state?.routes[0].name;
+    if (name === 'ConferenceView') _setIsConference(true);
+    else _setIsConference(false);
+  };
+
   return (
-    <NavigationContainer>
+    <NavigationContainer onStateChange={checkConference}>
       <RootStack.Navigator
         initialRouteName="SplashView"
-        screenOptions={{ headerShown: false }}
+        screenOptions={{ headerShown: false }}        
       >
         <RootStack.Screen name="SplashView" component={SplashView} />
         <RootStack.Screen name="LoginStack" component={LoginStack} />

@@ -7,7 +7,11 @@ import {
   TouchableOpacity,
   FlatList,
   Image,
-  Switch
+  Switch,
+  ScrollView,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
+  GestureResponderEvent
 } from 'react-native';
 
 import DatePicker from 'react-native-date-picker';
@@ -16,6 +20,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { getT } from '../../utils/translateManager';
+import { useScrollToTop } from '@react-navigation/native';
 // import { add, last, parseInt } from 'lodash';
 
 const icCode = require('../../../assets/new/icons/ic_code.png');
@@ -52,6 +57,7 @@ interface PresenterProps {
   calendarError: boolean;
   sendMsgRef: RefObject<any>;
   titleRef: RefObject<any>;
+  scrollRef: RefObject<any>;
   auth: any;
   modifyConference: () => void;
   onHandleBack: () => void;
@@ -72,6 +78,11 @@ interface PresenterProps {
   sendMessageChange: (msg: string) => void;
   openDatePicker: (type: 'start' | 'end' | 'none') => void;
   openTimePicker: (type: 'start' | 'end' | 'none') => void;
+  onHandleSwipe: (
+    e: NativeSyntheticEvent<NativeScrollEvent>,
+    index: number
+  ) => void;
+  onHandelResetSwipe: (e: GestureResponderEvent, index: number) => void;
 }
 
 const ConferenceModfiyScreenPresenter = (props: PresenterProps) => {
@@ -121,7 +132,10 @@ const ConferenceModfiyScreenPresenter = (props: PresenterProps) => {
     isNormal,
     isAuth,
     changeIsNormal,
-    calendarError
+    calendarError,
+    onHandleSwipe,
+    onHandelResetSwipe,
+    scrollRef
   } = props;
   const t = getT();
   const DatePickerComponent = (
@@ -165,6 +179,8 @@ const ConferenceModfiyScreenPresenter = (props: PresenterProps) => {
       disabledDatesTextStyle={{ fontSize: isTablet ? 18 : 14 }}
     />
   );
+
+  useScrollToTop;
 
   return (
     <Fragment>
@@ -505,152 +521,193 @@ const ConferenceModfiyScreenPresenter = (props: PresenterProps) => {
           </View>
         )}
 
-        <View style={{ flex: 1 }} pointerEvents={isNormal ? 'none' : 'auto'}>
+        <View
+          style={{ flex: 1, paddingHorizontal: '5%' }}
+          pointerEvents={isNormal ? 'none' : 'auto'}
+        >
           <FlatList
             showsVerticalScrollIndicator={false}
             bounces={false}
-            contentContainerStyle={[
-              {
-                flexGrow: 1,
-                paddingHorizontal: '5%'
-              }
-            ]}
+            contentContainerStyle={{ flexGrow: 1 }}
             data={selectedEmployee.member}
             keyExtractor={(item, index) => String(index)}
             renderItem={({ item, index }: any) => {
               const isMaster = item.is_master;
               return (
-                <View style={styles.participantList}>
-                  <TouchableOpacity
-                    style={[
-                      styles.profileView,
-                      isTablet && { width: 46, height: 46 }
-                    ]}
-                    onPress={() => {
-                      clickDeleteUser(item, index);
-                    }}
-                    disabled={item.user_no === auth.user_no}
-                  >
-                    <View
+                <ScrollView
+                  horizontal
+                  onMomentumScrollBegin={(
+                    e: NativeSyntheticEvent<NativeScrollEvent>
+                  ) => onHandleSwipe(e, index)}
+                  showsHorizontalScrollIndicator={false}
+                  ref={scrollRef}
+                  scrollToOverflowEnabled={true}
+                  scrollsToTop={true}
+                >
+                  <View style={styles.participantList}>
+                    {item.direction === 'LEFT' && (
+                      <TouchableOpacity
+                        style={{
+                          backgroundColor: 'rgb(28,144,251)',
+                          width: 50,
+                          height: '100%',
+                          marginRight: 15
+                        }}
+                        onPress={(e: GestureResponderEvent) => {
+                          onHandelResetSwipe(e, index);
+                        }}
+                      ></TouchableOpacity>
+                    )}
+                    <TouchableOpacity
                       style={[
-                        styles.myView,
-                        isNormal &&
-                          item.user_no !== auth.user_no && {
-                            backgroundColor: '#00ff0000'
-                          },
-                        !isNormal &&
-                          item.user_no !== auth.user_no && {
-                            backgroundColor: '#1c90fb'
-                          }
+                        styles.profileView,
+                        isTablet && { width: 46, height: 46 }
                       ]}
-                    >
-                      {item.user_no === auth.user_no ? (
-                        <Text style={styles.myText}>
-                          {t('renewal.chatting_me')}
-                        </Text>
-                      ) : isNormal ? (
-                        <Fragment />
-                      ) : (
-                        <Image
-                          source={icCancel_W}
-                          style={styles.icCancelUser}
-                        />
-                      )}
-                    </View>
-                    <Image
-                      style={styles.profile}
-                      source={{
-                        uri: item.profile_url
+                      onPress={() => {
+                        clickDeleteUser(item, index);
                       }}
-                      resizeMode={'cover'}
-                    />
-                  </TouchableOpacity>
-                  <View style={[styles.infoBox, isHorizon && { width: '70%' }]}>
-                    {item.full_path !== '' ? (
-                      <Fragment>
-                        <Text style={styles.name}>
-                          {item.user_name}{' '}
-                          {item.rank_name ? item.rank_name : ''}
-                        </Text>
+                      disabled={item.user_no === auth.user_no}
+                    >
+                      <View
+                        style={[
+                          styles.myView,
+                          isNormal &&
+                            item.user_no !== auth.user_no && {
+                              backgroundColor: '#00ff0000'
+                            },
+                          !isNormal &&
+                            item.user_no !== auth.user_no && {
+                              backgroundColor: '#1c90fb'
+                            }
+                        ]}
+                      >
+                        {item.user_no === auth.user_no ? (
+                          <Text style={styles.myText}>
+                            {t('renewal.chatting_me')}
+                          </Text>
+                        ) : isNormal ? (
+                          <Fragment />
+                        ) : (
+                          <Image
+                            source={icCancel_W}
+                            style={styles.icCancelUser}
+                          />
+                        )}
+                      </View>
+                      <Image
+                        style={styles.profile}
+                        source={{
+                          uri: item.profile_url
+                        }}
+                        resizeMode={'cover'}
+                      />
+                    </TouchableOpacity>
+                    <View
+                      style={[styles.infoBox, isHorizon && { width: '70%' }]}
+                    >
+                      {item.full_path !== '' ? (
+                        <Fragment>
+                          <Text style={styles.name}>
+                            {item.user_name}{' '}
+                            {item.rank_name ? item.rank_name : ''}
+                          </Text>
+                          <Text
+                            numberOfLines={1}
+                            ellipsizeMode="tail"
+                            style={styles.tree}
+                          >
+                            {item.full_path}
+                          </Text>
+                        </Fragment>
+                      ) : (
                         <Text
                           numberOfLines={1}
                           ellipsizeMode="tail"
-                          style={styles.tree}
+                          style={[styles.tree, { fontSize: 15 }]}
                         >
-                          {item.full_path}
+                          {item.user_name}
                         </Text>
-                      </Fragment>
-                    ) : (
-                      <Text
-                        numberOfLines={1}
-                        ellipsizeMode="tail"
-                        style={[styles.tree, { fontSize: 15 }]}
-                      >
-                        {item.user_name}
-                      </Text>
-                    )}
-                  </View>
-                  <TouchableOpacity
-                    style={[
-                      styles.roleContainer,
-                      isMaster && { borderColor: '#01acc1' },
-                      !item.user_no && { borderColor: '#fff' },
-                      isTablet && { width: 140 }
-                    ]}
-                    onPress={() => {
-                      clickChangeRole(item, index);
-                    }}
-                    disabled={item.user_no === auth.user_no}
-                    activeOpacity={isNormal ? 1 : 0.6}
-                  >
-                    {isMaster ? (
-                      <Fragment>
-                        <Text
-                          style={[
-                            styles.maseterText,
-                            isTablet && { fontSize: 14 }
-                          ]}
-                        >
-                          {t('renewal.chatting_master')}
-                        </Text>
-                        <Image
-                          style={[
-                            styles.icMaster,
-                            isTablet && styles.icTabletMaster
-                          ]}
-                          source={icMasterCircle}
-                          resizeMode={'contain'}
-                        />
-                      </Fragment>
-                    ) : item.user_no ? (
-                      <Fragment>
-                        <Image
-                          style={[
-                            styles.icMaster,
-                            isTablet && styles.icTabletMaster
-                          ]}
-                          source={icAttdCircle}
-                          resizeMode={'contain'}
-                        />
+                      )}
+                    </View>
+                    <TouchableOpacity
+                      style={[
+                        styles.roleContainer,
+                        isMaster && { borderColor: '#01acc1' },
+                        !item.user_no && { borderColor: '#fff' },
+                        isTablet && { width: 140 }
+                      ]}
+                      onPress={() => {
+                        clickChangeRole(item, index);
+                      }}
+                      disabled={item.user_no === auth.user_no}
+                      activeOpacity={isNormal ? 1 : 0.6}
+                    >
+                      {isMaster ? (
+                        <Fragment>
+                          <Text
+                            style={[
+                              styles.maseterText,
+                              isTablet && { fontSize: 14 }
+                            ]}
+                          >
+                            {t('renewal.chatting_master')}
+                          </Text>
+                          <Image
+                            style={[
+                              styles.icMaster,
+                              isTablet && styles.icTabletMaster
+                            ]}
+                            source={icMasterCircle}
+                            resizeMode={'contain'}
+                          />
+                        </Fragment>
+                      ) : item.user_no ? (
+                        <Fragment>
+                          <Image
+                            style={[
+                              styles.icMaster,
+                              isTablet && styles.icTabletMaster
+                            ]}
+                            source={icAttdCircle}
+                            resizeMode={'contain'}
+                          />
 
-                        <Text
-                          style={[
-                            styles.attendantText,
-                            isTablet && { fontSize: 14 }
-                          ]}
-                        >
-                          {t('renewal.direct_create_participants')}
-                        </Text>
-                      </Fragment>
-                    ) : (
-                      <Fragment>
-                        {/* <Text style={styles.extText}>
+                          <Text
+                            style={[
+                              styles.attendantText,
+                              isTablet && { fontSize: 14 }
+                            ]}
+                          >
+                            {t('renewal.direct_create_participants')}
+                          </Text>
+                        </Fragment>
+                      ) : (
+                        <Fragment>
+                          {/* <Text style={styles.extText}>
                               {t('외부참여자')}
                             </Text> */}
-                      </Fragment>
+                        </Fragment>
+                      )}
+                    </TouchableOpacity>
+                    {item.direction === 'RIGHT' && (
+                      <TouchableOpacity
+                        style={{
+                          backgroundColor: 'rgb(252, 76, 96)',
+                          width: 50,
+                          height: '100%',
+                          marginLeft: 15
+                        }}
+                        onPress={(e: GestureResponderEvent) => {
+                          scrollRef.current?.scrollTo({
+                            y: 0,
+                            animated: true
+                          });
+                          onHandelResetSwipe(e, index);
+                        }}
+                      ></TouchableOpacity>
                     )}
-                  </TouchableOpacity>
-                </View>
+                  </View>
+                </ScrollView>
               );
             }}
           />
@@ -666,7 +723,7 @@ const ConferenceModfiyScreenPresenter = (props: PresenterProps) => {
         >
           <View style={{ flex: 1, backgroundColor: '#666', zIndex: 2 }} />
           <View style={styles.dateTimePickerHeader}>
-          {!calendarError && (
+            {!calendarError && (
               <TouchableOpacity onPress={exitDateTime} style={styles.icCancel}>
                 <Image source={icCancel} style={styles.icCancel} />
               </TouchableOpacity>
@@ -944,7 +1001,8 @@ const styles = StyleSheet.create({
   },
   participantList: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    // justifyContent: 'space-between',
+    flex: 1,
     alignItems: 'center',
     height: 56,
     paddingTop: '1%',
@@ -954,7 +1012,8 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     position: 'relative',
-    zIndex: 1
+    zIndex: 1,
+    marginRight: 10
   },
   profile: {
     flex: 1,
@@ -962,7 +1021,7 @@ const styles = StyleSheet.create({
     zIndex: 2
     // position: 'absolute',
   },
-  infoBox: { width: '67%' },
+  infoBox: { width: '47%' },
   myView: {
     width: 19,
     height: 16,
