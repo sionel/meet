@@ -95,6 +95,9 @@ class ConferenceScreenContainer extends React.Component {
 
   /** */
   componentDidUpdate(prevProps) {
+    if (prevProps.screenToggleFlag !== this.props.screenToggleFlag && !isIOS) {
+      this._handleChangeScreen();
+    }
     const { mainUserId, documentShare, list } = this.props;
     if (
       this._conferenceManager &&
@@ -146,12 +149,6 @@ class ConferenceScreenContainer extends React.Component {
       this.props.setSharingMode();
       this.connectFailCheck && clearInterval(this.connectFailCheck);
     } catch (error) {}
-  }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.screenToggleFlag !== this.props.screenToggleFlag && !isIOS) {
-      this._handleChangeScreen();
-    }
   }
   /**
    * render
@@ -297,6 +294,9 @@ class ConferenceScreenContainer extends React.Component {
       const master = await MeetApi.checkMasterControl(roomName);
       const id = master.resultData.videoseq;
       changeMasterControlMode(id);
+      const audioPolicy = this._conferenceManager.getAudioMuted();
+      this.props.changeAudioActive(!audioPolicy);
+
       setToastMessage(id ? this.t('toast_master_clton') : '');
       this.ExternalAPI.sendEvent(
         'CONFERENCE_JOINED',

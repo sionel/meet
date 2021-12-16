@@ -89,6 +89,13 @@ class ConferenceManager {
     else return false;
   };
 
+  getAudioMuted = () => {
+    return this._room.startAudioMuted
+  }
+
+
+  
+
   changeTrack = async (type, oldTrack) => {
     const newTrack = (
       await JitsiMeetJS.createLocalTracks({

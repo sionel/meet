@@ -63,8 +63,6 @@ function ContentContainer(props: any) {
   const setDocumentListMode = value =>
     dispatch(mainUserAction.setDocumentListMode(value));
 
-  let RNBS;
-
   useEffect(() => {
     _handleChangeSpeaker();
     Orientation.addOrientationListener(_setOrientation);
@@ -77,9 +75,6 @@ function ContentContainer(props: any) {
     const m = getConferenceManager();
     if (mainUser.id !== 'localUser') m?.setReceiverConstraints(mainUser.id);
   }, [mainUser]);
-  const _handleSetRef = ref => {
-    if (ref && RNBS !== ref) RNBS = ref;
-  };
 
   const _toggleConferenceMode = () => {
     if (conferenceMode === ConferenceModes.CONTROL) {
@@ -123,7 +118,6 @@ function ContentContainer(props: any) {
       orientation={orientation}
       hasNotch={hasNotch}
       onChangeSpeaker={_handleChangeSpeaker}
-      onSetRef={_handleSetRef}
     />
   ) : (
     <ContentPresenter
@@ -149,7 +143,6 @@ function ContentContainer(props: any) {
       onLayout={_setOrientation}
       onChangeSpeaker={_handleChangeSpeaker}
       // onChangeState={_handleChangeState}
-      onSetRef={_handleSetRef}
     />
   );
 }
