@@ -3,12 +3,9 @@ import {
   Alert,
   Animated,
   Dimensions,
-  Easing,
   GestureResponderEvent,
   NativeScrollEvent,
   NativeSyntheticEvent,
-  Platform,
-  ScrollView,
   View
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,7 +17,6 @@ import { MeetApi, OrganizationApi } from '../../services';
 
 import moment from 'moment';
 import { getT } from '../../utils/translateManager';
-import { RootState } from '../../redux/configureStore';
 import deviceInfoModule from 'react-native-device-info';
 import { wehagoDummyImageURL, wehagoMainURL } from '../../utils';
 import { MainNavigationProps } from '../../Navigations/MainStack';
@@ -131,8 +127,9 @@ export default function ConferenceModfiyScreenContainer(props: any) {
   const sendEmailRef: RefObject<any> = useRef();
   const scrollRef: any = useRef([]);
 
-  // const fadeValue = new Animated.Value(0);
-  // const aniWidth = new Animated.Value(0);
+  const fadeInValue = new Animated.Value(0);
+  const fadeOutValue = new Animated.Value(1);
+  
   const width = Dimensions.get('window').width;
   
   const { auth, isHorizon, roomId } = useSelector((state: any) => ({
@@ -590,22 +587,25 @@ export default function ConferenceModfiyScreenContainer(props: any) {
     });
   };
 
-  // const InitAnimated = () => {
-  //     Animated.timing(fadeValue, {
-  //       toValue: 1,
-  //       duration: 100,
-  //       useNativeDriver: true,
-  //     }).start();
-  //     Animated.timing(aniWidth, {
-  //       toValue: 50,
-  //       duration: 3000,
-  //       useNativeDriver: true,
-  //     }).start();
-  // };
+  const fadeInAnimated = () => {
+      Animated.timing(fadeInValue, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
+  };
+
+  const fadeOutAnimated = () => {
+    Animated.timing(fadeOutValue, {
+      toValue: 0,
+      duration: 1000,
+      useNativeDriver: true,
+    }).start();
+};
 
   useEffect(() => {
     _getReservationInfos(roomId);
-    // InitAnimated();
+    
   }, []);
 
   useEffect(() => {
@@ -810,12 +810,14 @@ export default function ConferenceModfiyScreenContainer(props: any) {
           isAuth={isAuth}
           changeIsNormal={changeIsNormal}
           calendarError={calendarError}
-          // onHandleSwipe={onHandleSwipe}
-          // onHandelResetSwipe={onHandelResetSwipe}
+          onHandleSwipe={onHandleSwipe}
+          onHandelResetSwipe={onHandelResetSwipe}
           scrollRef={scrollRef}
           width={width}
-          // fadeValue={fadeValue}
-          // aniWidth={aniWidth}
+          fadeInValue={fadeInValue}
+          fadeOutValue={fadeOutValue}
+          fadeInAnimated={fadeInAnimated}
+          fadeOutAnimated={fadeOutAnimated}
         />
       )}
     </View>

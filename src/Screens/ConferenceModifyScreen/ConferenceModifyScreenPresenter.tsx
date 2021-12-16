@@ -7,12 +7,12 @@ import {
   TouchableOpacity,
   FlatList,
   Image,
-  Switch
-  // ScrollView,
-  // NativeSyntheticEvent,
-  // NativeScrollEvent,
-  // GestureResponderEvent,
-  // Animated
+  Switch,
+  ScrollView,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
+  GestureResponderEvent,
+  Animated
 } from 'react-native';
 
 import DatePicker from 'react-native-date-picker';
@@ -63,8 +63,8 @@ interface PresenterProps {
   scrollRef: any;
   auth: any;
   width: number;
-  // fadeValue: any;
-  // aniWidth: any;
+  fadeInValue: any;
+  fadeOutValue: any;
   modifyConference: () => void;
   onHandleBack: () => void;
   onTimeConfirm: () => void;
@@ -84,11 +84,13 @@ interface PresenterProps {
   sendMessageChange: (msg: string) => void;
   openDatePicker: (type: 'start' | 'end' | 'none') => void;
   openTimePicker: (type: 'start' | 'end' | 'none') => void;
-  // onHandleSwipe: (
-  //   e: NativeSyntheticEvent<NativeScrollEvent>,
-  //   index: number
-  // ) => void;
-  // onHandelResetSwipe: (e: GestureResponderEvent, index: number) => void;
+  onHandleSwipe: (
+    e: NativeSyntheticEvent<NativeScrollEvent>,
+    index: number
+  ) => void;
+  onHandelResetSwipe: (e: GestureResponderEvent, index: number) => void;
+  fadeInAnimated: () => void;
+  fadeOutAnimated: () => void;
 }
 
 const ConferenceModfiyScreenPresenter = (props: PresenterProps) => {
@@ -139,12 +141,14 @@ const ConferenceModfiyScreenPresenter = (props: PresenterProps) => {
     isAuth,
     changeIsNormal,
     calendarError,
-    // onHandleSwipe,
-    // onHandelResetSwipe,
+    onHandleSwipe,
+    onHandelResetSwipe,
     scrollRef,
     width,
-    // fadeValue,
-    // aniWidth
+    fadeInValue,
+    fadeOutValue,
+    fadeInAnimated,
+    fadeOutAnimated
   } = props;
   const t = getT();
   const DatePickerComponent = (
@@ -188,8 +192,6 @@ const ConferenceModfiyScreenPresenter = (props: PresenterProps) => {
       disabledDatesTextStyle={{ fontSize: isTablet ? 18 : 14 }}
     />
   );
-
-  useScrollToTop;
 
   return (
     <Fragment>
@@ -552,33 +554,46 @@ const ConferenceModfiyScreenPresenter = (props: PresenterProps) => {
                 //   scrollEnabled={item.user_no !== auth.user_no}
                 //   onScrollEndDrag={(
                 //     e: NativeSyntheticEvent<NativeScrollEvent>
-                //   ) => onHandleSwipe(e, index)}
+                //   ) => {
+                //     onHandleSwipe(e, index);
+                //   }}
                 // >
                   <View
                     style={[styles.participantList, { width: width * 0.9 }]}
                   >
                     {/* {item.direction === 'LEFT' && (
-                      <View>
+                      <Animated.View
+                        onLayout={fadeInAnimated}
+                        style={{
+                          width: 50,
+                          marginRight: 15,
+                          opacity: item.direction !== 'NONE' ? fadeInValue : fadeOutValue
+                        }}
+                      >
                         <TouchableOpacity
                           style={{
                             backgroundColor: 'rgb(28,144,251)',
                             width: 50,
                             height: '100%',
-                            marginRight: 15,
+                            // marginRight: 15,
                             alignItems: 'center',
                             justifyContent: 'center'
                           }}
                           onPress={(e: GestureResponderEvent) => {
+                            // fadeOutAnimated();
                             onHandelResetSwipe(e, index);
                           }}
                         >
                           <Image
                             source={icUserW}
-                            style={{ width: 45, height: 45 }}
+                            style={{
+                              width: 45,
+                              height: 45
+                            }}
                             resizeMode="cover"
                           />
                         </TouchableOpacity>
-                      </View>
+                      </Animated.View>
                     )} */}
                     <TouchableOpacity
                       style={[
@@ -628,6 +643,7 @@ const ConferenceModfiyScreenPresenter = (props: PresenterProps) => {
                       style={styles.infoBox}
                       activeOpacity={1}
                       onPress={(e: GestureResponderEvent) => {
+                        fadeOutAnimated();
                         scrollRef.current[index]?.scrollTo({
                           x: 0,
                           animated: true
@@ -722,29 +738,39 @@ const ConferenceModfiyScreenPresenter = (props: PresenterProps) => {
                       )}
                     </TouchableOpacity>
                     {/* {item.direction === 'RIGHT' && (
-                      <TouchableOpacity
+                      <Animated.View
+                        onLayout={fadeInAnimated}
                         style={{
-                          backgroundColor: 'rgb(252, 76, 96)',
                           width: 50,
-                          height: '100%',
-                          marginLeft: 15,
-                          alignItems: 'center',
-                          justifyContent: 'center'
-                        }}
-                        onPress={(e: GestureResponderEvent) => {
-                          scrollRef.current[index]?.scrollTo({
-                            x: 0,
-                            animated: true
-                          });
-                          onHandelResetSwipe(e, index);
+                          marginRight: 15,
+                          opacity: item.direction !== 'NONE' ? fadeInValue : fadeOutValue
                         }}
                       >
-                        <Animated.Image
-                          source={icOut}
-                          style={{ width: 40, height: 40 }}
-                          resizeMode="cover"
-                        />
-                      </TouchableOpacity>
+                        <TouchableOpacity
+                          style={{
+                            backgroundColor: 'rgb(252, 76, 96)',
+                            width: 50,
+                            height: '100%',
+                            marginLeft: 15,
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                          }}
+                          onPress={(e: GestureResponderEvent) => {
+                            fadeOutAnimated();
+                            scrollRef.current[index]?.scrollTo({
+                              x: 0,
+                              animated: true
+                            });
+                            onHandelResetSwipe(e, index);
+                          }}
+                        >
+                          <Image
+                            source={icOut}
+                            style={{ width: 40, height: 40 }}
+                            resizeMode="cover"
+                          />
+                        </TouchableOpacity>
+                      </Animated.View>
                     )} */}
                   </View>
                 // </ScrollView>
@@ -1041,7 +1067,7 @@ const styles = StyleSheet.create({
   },
   participantList: {
     flexDirection: 'row',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     flex: 1,
     alignItems: 'center',
     height: 56,
@@ -1061,7 +1087,7 @@ const styles = StyleSheet.create({
     zIndex: 2
     // position: 'absolute',
   },
-  infoBox: { flex: 1 },
+  infoBox: { flex: 1, justifyContent: 'center' },
   myView: {
     width: 19,
     height: 16,
