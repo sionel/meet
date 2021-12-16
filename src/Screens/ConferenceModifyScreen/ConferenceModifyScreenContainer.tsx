@@ -1,9 +1,13 @@
-import React, { RefObject, useEffect, useRef, useState } from 'react';
+import React, { MutableRefObject, RefObject, useEffect, useRef, useState } from 'react';
 import {
   Alert,
+  Animated,
+  Dimensions,
+  Easing,
   GestureResponderEvent,
   NativeScrollEvent,
   NativeSyntheticEvent,
+  Platform,
   ScrollView,
   View
 } from 'react-native';
@@ -125,8 +129,12 @@ export default function ConferenceModfiyScreenContainer(props: any) {
   const sendMsgRef: RefObject<any> = useRef();
   const searchRef: RefObject<any> = useRef();
   const sendEmailRef: RefObject<any> = useRef();
-  const scrollRef: RefObject<any> = useRef(null);
+  const scrollRef: any = useRef([]);
 
+  // const fadeValue = new Animated.Value(0);
+  // const aniWidth = new Animated.Value(0);
+  const width = Dimensions.get('window').width;
+  
   const { auth, isHorizon, roomId } = useSelector((state: any) => ({
     auth: state.user.auth,
     isHorizon: state.orientation.isHorizon,
@@ -582,8 +590,22 @@ export default function ConferenceModfiyScreenContainer(props: any) {
     });
   };
 
+  // const InitAnimated = () => {
+  //     Animated.timing(fadeValue, {
+  //       toValue: 1,
+  //       duration: 100,
+  //       useNativeDriver: true,
+  //     }).start();
+  //     Animated.timing(aniWidth, {
+  //       toValue: 50,
+  //       duration: 3000,
+  //       useNativeDriver: true,
+  //     }).start();
+  // };
+
   useEffect(() => {
     _getReservationInfos(roomId);
+    // InitAnimated();
   }, []);
 
   useEffect(() => {
@@ -688,12 +710,13 @@ export default function ConferenceModfiyScreenContainer(props: any) {
     index: number
   ) => {
     const direction = event.nativeEvent.contentOffset.x;
+    // console.log(direction);
+    
     let directionList: any[] = selectedEmployee.member;
     let bfDirection = directionList[index].direction;
     const resList: any[] = [];
 
     const beforeEvent = bfDirection === 'NONE' ? false : true;
-    console.log(bfDirection);
 
     if (beforeEvent) return false;
     else {
@@ -787,9 +810,12 @@ export default function ConferenceModfiyScreenContainer(props: any) {
           isAuth={isAuth}
           changeIsNormal={changeIsNormal}
           calendarError={calendarError}
-          onHandleSwipe={onHandleSwipe}
-          onHandelResetSwipe={onHandelResetSwipe}
+          // onHandleSwipe={onHandleSwipe}
+          // onHandelResetSwipe={onHandelResetSwipe}
           scrollRef={scrollRef}
+          width={width}
+          // fadeValue={fadeValue}
+          // aniWidth={aniWidth}
         />
       )}
     </View>
