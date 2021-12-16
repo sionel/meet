@@ -29,13 +29,19 @@ export default function ParticipantsList(
 ) {
   const { onClose, participants, title } = props;
   return (
-    <SafeAreaView style={{ zIndex: 1 }}>
+    <SafeAreaView
+      style={{
+        zIndex: 2,
+        elevation: 2,
+        height: height,
+        width: width,
+        backgroundColor: '#F7F8FA',
+        position: 'absolute'
+      }}
+    >
       <View
         style={{
-          backgroundColor: '#F7F8FA',
-          height: height,
-          width: width,
-          position: 'absolute'
+          elevation: 1
         }}
       >
         <View

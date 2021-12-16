@@ -133,10 +133,8 @@ const HomeScreenPresenter = (props: presenterProps) => {
           backgroundColor: bottomPopup.show ? 'rgba(0,0,0,0.5)' : '#F7F8FA'
         }}
       />
+   
       <View style={styles.safeContainer}>
-        {participantsList.show && (
-          <ParticipantsList {...participantsList} isHorizon={isHorizon} />
-        )}
         <View
           style={[styles.header, { paddingHorizontal: isTablet ? 40 : 20 }]}
         >
@@ -358,6 +356,10 @@ const HomeScreenPresenter = (props: presenterProps) => {
           <BottomPopup {...bottomPopup} isHorizon={isHorizon} />
         )}
       </View>
+      {participantsList.show && (
+        <ParticipantsList {...participantsList} isHorizon={isHorizon} />
+      )}
+
       {calendarView && (
         <View style={styles.calendarView}>
           <View style={{ flex: 1, backgroundColor: '#666', zIndex: 2 }}></View>
@@ -424,7 +426,8 @@ const styles = StyleSheet.create({
   safeContainer: {
     flex: 1,
     backgroundColor: '#F7F8FA',
-    justifyContent: 'flex-start'
+    justifyContent: 'flex-start',
+    elevation: 1
     // alignItems: 'center',
   },
   header: {
@@ -513,10 +516,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingBottom: 20
   },
-  goingText: { 
-    fontSize: 16, 
+  goingText: {
+    fontSize: 16,
     fontFamily: 'DOUZONEText30',
-    marginRight: 5 
+    marginRight: 5
   },
   calendarTopView: {
     flexDirection: 'row',
@@ -604,13 +607,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 10
   },
-  ImageText: { 
-    fontSize: 13, 
-    fontFamily: 'DOUZONEText30', 
-    color: '#333' 
+  ImageText: {
+    fontSize: 13,
+    fontFamily: 'DOUZONEText30',
+    color: '#333'
   },
   selectedMonth: {
-    fontFamily:'DOUZONEText30', 
+    fontFamily: 'DOUZONEText30',
     fontSize: 11,
     color: '#333'
   }

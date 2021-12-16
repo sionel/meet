@@ -188,7 +188,10 @@ export default function HomeScreenContainer(props: any) {
   const _handleBackButton = () => {
     // 1000(1초) 안에 back 버튼을 한번 더 클릭 할 경우 앱 종료
     if (!ref.current.exitApp) {
-      ToastAndroid.show(t('renewal.toast_one_more_click_exit'), ToastAndroid.SHORT);
+      ToastAndroid.show(
+        t('renewal.toast_one_more_click_exit'),
+        ToastAndroid.SHORT
+      );
       ref.current.exitApp = true;
       ref.current.timeout = setTimeout(() => {
         ref.current.exitApp = false;
@@ -462,10 +465,12 @@ export default function HomeScreenContainer(props: any) {
             const data = {
               roomName: conference.name,
               date: new Date(conference.r_start_date_time).toLocaleDateString(),
-              start: new Date(
-                conference.r_start_date_time
-              ).toLocaleTimeString(),
-              end: new Date(conference.r_end_date_time).toLocaleTimeString(),
+              start: new Date(conference.r_start_date_time)
+                .toLocaleTimeString()
+                .slice(0, -3),
+              end: new Date(conference.r_end_date_time)
+                .toLocaleTimeString()
+                .slice(0, -3),
               users: uriList,
               roomId: conference.room_id,
               isPublic: conference.is_public,
