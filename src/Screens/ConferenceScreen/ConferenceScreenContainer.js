@@ -148,6 +148,7 @@ class ConferenceScreenContainer extends React.Component {
       // this._conferenceManager?.dispose();
       this.props.setSharingMode();
       this.connectFailCheck && clearInterval(this.connectFailCheck);
+      setConferenceManager(null)
     } catch (error) {}
   }
   /**

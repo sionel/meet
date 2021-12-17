@@ -18,6 +18,7 @@ import { RTCView } from 'react-native-webrtc';
 import { getT } from '../../utils/translateManager';
 
 import icBack from '../../../assets/new/icons/ic_back.png';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 interface PresenterProps {
   tracks: any[] | null;
   onConferenceEnter: () => void;
@@ -60,13 +61,13 @@ export default function SettingScreenPresenter(props: PresenterProps) {
             </Text>
           </TouchableOpacity>
         </View>
-        <KeyboardAvoidingView
-          style={{
+        <KeyboardAwareScrollView
+          contentContainerStyle={{
             ...styles.container,
             paddingHorizontal: isHorizon ? '20%' : 15,
             paddingVertical: isHorizon ? 20 : 0
           }}
-          behavior={'height'}
+          bounces={false}
         >
           <TouchableOpacity style={{ flex: 1 }} activeOpacity={1}>
             <View style={styles.settingTitleView}>
@@ -176,7 +177,7 @@ export default function SettingScreenPresenter(props: PresenterProps) {
               </TouchableOpacity>
             </View>
           </TouchableOpacity>
-        </KeyboardAvoidingView>
+        </KeyboardAwareScrollView>
       </SafeAreaView>
     </Fragment>
   );

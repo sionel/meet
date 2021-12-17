@@ -1,8 +1,15 @@
-import React, { MutableRefObject, RefObject, useEffect, useRef, useState } from 'react';
+import React, {
+  MutableRefObject,
+  RefObject,
+  useEffect,
+  useRef,
+  useState
+} from 'react';
 import {
   Alert,
   Animated,
   Dimensions,
+  Easing,
   GestureResponderEvent,
   NativeScrollEvent,
   NativeSyntheticEvent,
@@ -129,9 +136,9 @@ export default function ConferenceModfiyScreenContainer(props: any) {
 
   const fadeInValue = new Animated.Value(0);
   const fadeOutValue = new Animated.Value(1);
-  
+
   const width = Dimensions.get('window').width;
-  
+
   const { auth, isHorizon, roomId } = useSelector((state: any) => ({
     auth: state.user.auth,
     isHorizon: state.orientation.isHorizon,
@@ -588,24 +595,23 @@ export default function ConferenceModfiyScreenContainer(props: any) {
   };
 
   const fadeInAnimated = () => {
-      Animated.timing(fadeInValue, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true,
-      }).start();
+    Animated.timing(fadeInValue, {
+      toValue: 1,
+      duration: 50,
+      useNativeDriver: true
+    }).start();
   };
 
   const fadeOutAnimated = () => {
     Animated.timing(fadeOutValue, {
       toValue: 0,
-      duration: 1000,
-      useNativeDriver: true,
+      duration: 50,
+      useNativeDriver: true
     }).start();
-};
+  };
 
   useEffect(() => {
     _getReservationInfos(roomId);
-    
   }, []);
 
   useEffect(() => {
@@ -711,7 +717,7 @@ export default function ConferenceModfiyScreenContainer(props: any) {
   ) => {
     const direction = event.nativeEvent.contentOffset.x;
     // console.log(direction);
-    
+
     let directionList: any[] = selectedEmployee.member;
     let bfDirection = directionList[index].direction;
     const resList: any[] = [];

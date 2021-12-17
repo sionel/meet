@@ -20,6 +20,7 @@ import { actionCreators as AlertAcions } from '../../redux/modules/alert';
 import { actionCreators as IndicatorAcions } from '../../redux/modules/indicator';
 import { actionCreators as RecentsActions } from '../../redux/modules/recentsInvited';
 import { MeetNavigationProps } from '../../Navigations/RootNavigation';
+import { getConferenceManager } from '../../utils/ConferenceManager';
 // const iswehagov = WEHAGO_ENV === 'WEHAGOV';
 
 // const JailMonkey =
@@ -28,26 +29,30 @@ import { MeetNavigationProps } from '../../Navigations/RootNavigation';
 //     : null;
 
 const SplashScreenContainer = ({
-  navigation
+  navigation,
+  route
 }: MeetNavigationProps<'SplashView'>) => {
+  const { params } = route;
   const [serverNoti, setServerNoti] = useState([]);
   const [notiIndex, setNotiIndex] = useState(0);
   const [first, setFirst] = useState(true);
   const t = getT();
 
+  const deeplink = params?.deeplink;
+  
   //#region  selector
-  const { auth, from, updateNoti, autoLogin, isLogin, url } = useSelector(
-    (state: RootState) => {
+  const { auth, from, updateNoti, autoLogin, isLogin, url, isConference } =
+    useSelector((state: RootState) => {
       return {
         auth: state.user.auth,
         from: state.user.from,
         updateNoti: state.user.updateNoti,
         autoLogin: state.user.autoLogin,
         isLogin: state.user.isLogin,
-        url: state.root.url
+        url: state.root.url,
+        isConference: state.conference.isConference
       };
-    }
-  );
+    });
   //#endregion
 
   //#region  dispatch
@@ -73,20 +78,20 @@ const SplashScreenContainer = ({
     setInitInfo();
     setSharingMode();
     _handleInit();
-    //  ios : 앱이 켜져있을때
-    Linking.addEventListener('url', event => {
-      _handleGetDeeplink(event.url);
-    });
   }, []);
 
   useEffect(() => {
-    if (!first) {
-      if (url) _handleGetDeeplink(url);
-      else _handleCheckAutoLogin();
-    }
-  }, [url, first]);
 
-  const _handleInit = async () => {
+    if (!first) {
+      if (url) {
+        _handleGetDeeplink(url);
+      } else if (deeplink) {
+        _handleGetDeeplink(deeplink);
+      } else _handleCheckAutoLogin();
+      }
+    }, [url, first, deeplink]);
+    
+    const _handleInit = async () => {
     // 버전 확인
     await _handleCheckVersion();
     // 노티 확인
@@ -204,6 +209,9 @@ const SplashScreenContainer = ({
       video_id=a25f15cb-01d9-44cf-bafa-4b7122022cb3 // video chat id
       room_name=123 // talk방 이름
     */
+    // const m = getConferenceManager();
+    // debugger;
+
     if (!url) return;
     let result: any = querystringParser(url);
     // if(result.type === 'conference') {
