@@ -12,7 +12,8 @@ import {
   NativeSyntheticEvent,
   NativeScrollEvent,
   GestureResponderEvent,
-  Animated
+  Animated,
+  TextInputChangeEventData
 } from 'react-native';
 
 import DatePicker from 'react-native-date-picker';
@@ -57,6 +58,8 @@ interface PresenterProps {
   isNormal: boolean;
   isAuth: boolean;
   calendarError: boolean;
+  nameduplication: boolean;
+  isLoading: boolean;
   sendMsgRef: RefObject<any>;
   titleRef: RefObject<any>;
   scrollRef: any;
@@ -90,6 +93,9 @@ interface PresenterProps {
   onHandelResetSwipe: (e: GestureResponderEvent, index: number) => void;
   fadeInAnimated: () => void;
   fadeOutAnimated: () => void;
+  handleBlurTitleInput: (
+    e: NativeSyntheticEvent<TextInputChangeEventData>
+  ) => void;
 }
 
 const ConferenceModfiyScreenPresenter = (props: PresenterProps) => {
@@ -147,7 +153,10 @@ const ConferenceModfiyScreenPresenter = (props: PresenterProps) => {
     fadeInValue,
     fadeOutValue,
     fadeInAnimated,
-    fadeOutAnimated
+    fadeOutAnimated,
+    nameduplication,
+    isLoading,
+    handleBlurTitleInput
   } = props;
   const t = getT();
   const DatePickerComponent = (
@@ -219,7 +228,12 @@ const ConferenceModfiyScreenPresenter = (props: PresenterProps) => {
                 />
               ) : (
                 <Text
-                  style={[styles.updateText, !textLess2 && { color: '#000' }]}
+                  style={[
+                    styles.updateText,
+                    !textLess2 &&
+                      !nameduplication &&
+                      !isLoading && { color: '#000' }
+                  ]}
                 >
                   {t('renewal.conference_modify_button')}
                 </Text>
@@ -284,19 +298,21 @@ const ConferenceModfiyScreenPresenter = (props: PresenterProps) => {
                 <Fragment>
                   <TextInput
                     onChangeText={roomNameChange}
+                    onBlur={handleBlurTitleInput}
                     value={roomName}
                     maxLength={20}
                     style={[
                       styles.roomNameTextInputStyle,
                       roomName !== '' && { borderColor: '#1c90fb' },
-                      textLess2 && roomName !== '' && { borderColor: '#fc4c60' }
+                      (textLess2 || nameduplication) &&
+                        roomName !== '' && { borderColor: '#fc4c60' }
                     ]}
                     ref={titleRef}
                   />
                   <View
                     style={[
                       styles.countContainer,
-                      textLess2 &&
+                      (textLess2 || nameduplication) &&
                         roomName !== '' && { justifyContent: 'space-between' }
                     ]}
                   >
@@ -305,6 +321,13 @@ const ConferenceModfiyScreenPresenter = (props: PresenterProps) => {
                         {t('renewal.direct_create_length_warning')}
                       </Text>
                     )}
+
+                    {nameduplication && roomName != '' && (
+                      <Text style={styles.lengthError}>
+                        {t('중복되는 회의명입니다. 회의명 변경 후 생성하세요')}
+                      </Text>
+                    )}
+
                     <View style={styles.countContainer}>
                       <Text style={styles.ft12}>{roomName.length}</Text>
                       <Text style={styles.maxLength}>/20</Text>

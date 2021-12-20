@@ -7,7 +7,9 @@ import {
   TouchableOpacity,
   FlatList,
   Image,
-  Switch
+  Switch,
+  NativeSyntheticEvent,
+  TextInputChangeEventData
 } from 'react-native';
 
 import DatePicker from 'react-native-date-picker';
@@ -51,6 +53,8 @@ interface PresenterProps {
   dateTimeSeleted: boolean;
   timeChangeDetect: boolean;
   calendarError: boolean;
+  nameduplication: boolean;
+  isLoading: boolean;
   sendMsgRef: RefObject<any>;
   titleRef: RefObject<any>;
   auth: any;
@@ -71,6 +75,9 @@ interface PresenterProps {
   sendMessageChange: (msg: string) => void;
   openDatePicker: (type: 'start' | 'end' | 'none') => void;
   openTimePicker: (type: 'start' | 'end' | 'none') => void;
+  handleBlurTitleInput: (
+    e: NativeSyntheticEvent<TextInputChangeEventData>
+  ) => void;
 }
 
 const CreateMeetScreenPresenter = (props: PresenterProps) => {
@@ -113,7 +120,10 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
     isHorizon,
     isTablet,
     dateTimeSeleted,
-    calendarError
+    calendarError,
+    handleBlurTitleInput,
+    nameduplication,
+    isLoading
   } = props;
   const t = getT();
   const CalendarPickerComponent = (
@@ -157,7 +167,7 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
       disabledDatesTextStyle={{ fontSize: isTablet ? 18 : 14 }}
     />
   );
-
+  
   return (
     <Fragment>
       <SafeAreaView style={styles.safeArea} onTouchStart={onFocusOut}>
@@ -170,8 +180,18 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
           <Text style={styles.TitleText}>
             {t('renewal.main_create_conference')}
           </Text>
-          <TouchableOpacity disabled={textLess2} onPress={createConference}>
-            <Text style={[styles.confirmText, !textLess2 && { color: '#000' }]}>
+          <TouchableOpacity
+            disabled={textLess2 || nameduplication || isLoading}
+            onPress={createConference}
+          >
+            <Text
+              style={[
+                styles.confirmText,
+                !textLess2 &&
+                  !nameduplication &&
+                  !isLoading && { color: '#000' }
+              ]}
+            >
               {t('renewal.direct_create')}
             </Text>
           </TouchableOpacity>
@@ -222,19 +242,21 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
               </Text>
               <TextInput
                 onChangeText={roomNameChange}
+                onBlur={handleBlurTitleInput}
                 value={roomName}
                 maxLength={20}
                 style={[
                   styles.roomNameStyle,
                   roomName !== '' && { borderColor: '#1c90fb' },
-                  textLess2 && roomName !== '' && { borderColor: '#fc4c60' }
+                  (textLess2 || nameduplication) &&
+                    roomName !== '' && { borderColor: '#fc4c60' }
                 ]}
                 ref={titleRef}
               />
               <View
                 style={[
                   styles.countContainer,
-                  textLess2 &&
+                  (textLess2 || nameduplication) &&
                     roomName !== '' && { justifyContent: 'space-between' }
                 ]}
               >
@@ -243,6 +265,13 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
                     {t('renewal.direct_create_length_warning')}
                   </Text>
                 )}
+
+                {nameduplication && roomName != '' && (
+                  <Text style={styles.lengthError}>
+                    {t('중복되는 회의명입니다. 회의명 변경 후 생성하세요')}
+                  </Text>
+                )}
+
                 <View style={styles.countContainer}>
                   <Text style={styles.ft12}>{roomName.length}</Text>
                   <Text style={styles.maxLength}>/20</Text>

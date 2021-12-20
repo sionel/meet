@@ -1,5 +1,17 @@
-import React, { RefObject, useEffect, useRef, useState } from 'react';
-import { Alert, View } from 'react-native';
+import React, {
+  RefObject,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
+import {
+  Alert,
+  NativeSyntheticEvent,
+  TextInputChangeEventData,
+  View
+} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import CreateMeetScreenPresenter from './CreateMeetScreenPresenter';
@@ -13,6 +25,8 @@ import { RootState } from '../../redux/configureStore';
 import deviceInfoModule from 'react-native-device-info';
 import { wehagoMainURL } from '../../utils';
 import { MainNavigationProps } from '../../Navigations/MainStack';
+
+import _ from 'lodash';
 
 interface param {
   type: 'portal_id' | 'email';
@@ -83,12 +97,14 @@ export default function CreateMeetScreenContainer(props: any) {
   );
   const [dateTimeSeleted, setDateTimeSeleted] = useState(false);
   const [calendarError, setCalendarError] = useState(false);
+  const [nameList, setNameList] = useState<string[]>([]);
+  const [nameduplication, setNameDuplication] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const titleRef: RefObject<any> = useRef();
   const sendMsgRef: RefObject<any> = useRef();
   const searchRef: RefObject<any> = useRef();
   const sendEmailRef: RefObject<any> = useRef();
-
   const t = getT();
 
   const isTablet = deviceInfoModule.isTablet() === true;
@@ -192,89 +208,98 @@ export default function CreateMeetScreenContainer(props: any) {
   };
 
   const createConference = async () => {
-    if (1 < roomName.length) {
-      let arr: PartialParam[] = [];
-      selectedEmployee.member.map((value: any) => {
-        // type에 따라 access_user에 받는게 다름
-        // type: portal_id, email
-        if (value.user_no !== auth.user_no) {
-          if (value.user_no) {
-            arr.push({
-              type: 'portal_id',
-              value: value.portal_id,
-              is_master: value.is_master,
-              user_name: value.user_name
-            });
-          } else {
-            if (value.address_service_no) {
+    if (nameduplication) {
+      Alert.alert(t('회의명 중복'), t('회의명 변경 후 방 생성을 해주세요.'));
+      return;
+    } else {
+      if (1 < roomName.length) {
+        setIsLoading(true);
+        let arr: PartialParam[] = [];
+        selectedEmployee.member.map((value: any) => {
+          // type에 따라 access_user에 받는게 다름
+          // type: portal_id, email
+          if (value.user_no !== auth.user_no) {
+            if (value.user_no) {
               arr.push({
-                type: 'email',
-                value: value.emailinfolist[0].email_address,
+                type: 'portal_id',
+                value: value.portal_id,
                 is_master: value.is_master,
-                user_name: value.address_name
+                user_name: value.user_name
               });
             } else {
-              arr.push({
-                type: 'email',
-                value: value.value,
-                is_master: false
-              });
+              if (value.address_service_no) {
+                arr.push({
+                  type: 'email',
+                  value: value.emailinfolist[0].email_address,
+                  is_master: value.is_master,
+                  user_name: value.address_name
+                });
+              } else {
+                arr.push({
+                  type: 'email',
+                  value: value.value,
+                  is_master: false
+                });
+              }
             }
           }
-        }
-      });
+        });
 
-      let start_time = moment(parseInt(moment(startTime.current).format('x')));
-      let end_time = moment(parseInt(moment(endTime.current).format('x')));
+        let start_time = moment(
+          parseInt(moment(startTime.current).format('x'))
+        );
+        let end_time = moment(parseInt(moment(endTime.current).format('x')));
 
-      const { cno } = auth;
+        const { cno } = auth;
 
-      arr.unshift({
-        type: 'portal_id',
-        value: auth.portal_id,
-        is_master: true,
-        user_name: auth.user_name,
-        cno: cno,
-        user_no: auth.user_no
-      });
+        arr.unshift({
+          type: 'portal_id',
+          value: auth.portal_id,
+          is_master: true,
+          user_name: auth.user_name,
+          cno: cno,
+          user_no: auth.user_no
+        });
 
-      let params: {
-        service_code: string;
-        name: string;
-        is_public: boolean;
-        access_user: any;
-        is_send_updated_email: boolean;
-        is_reservation: boolean;
-        call_type: string;
-        invite_message: string;
-        start_date_time?: any;
-        end_date_time?: any;
-      } = {
-        service_code: 'wehagomeet',
-        name: roomName,
-        is_public: isPublic,
-        access_user: arr,
-        is_send_updated_email: switchDelAlram,
-        is_reservation: switchReserve,
-        call_type: '1',
-        invite_message: sendMessage
-      };
-
-      if (switchReserve) {
-        let object = params;
-        params = {
-          ...object,
-          start_date_time: start_time,
-          end_date_time: end_time
+        let params: {
+          service_code: string;
+          name: string;
+          is_public: boolean;
+          access_user: any;
+          is_send_updated_email: boolean;
+          is_reservation: boolean;
+          call_type: string;
+          invite_message: string;
+          start_date_time?: any;
+          end_date_time?: any;
+        } = {
+          service_code: 'wehagomeet',
+          name: roomName,
+          is_public: isPublic,
+          access_user: arr,
+          is_send_updated_email: switchDelAlram,
+          is_reservation: switchReserve,
+          call_type: '1',
+          invite_message: sendMessage
         };
-      }
 
-      const result = await MeetApi.createMeetRoom(auth, params);
-      if (result) {
-        onHandleBack();
-        // clearInput();
-      } else if (result.error) {
-        console.log('error : ', result.error);
+        if (switchReserve) {
+          let object = params;
+          params = {
+            ...object,
+            start_date_time: start_time,
+            end_date_time: end_time
+          };
+        }
+
+        const result = await MeetApi.createMeetRoom(auth, params);
+        setIsLoading(false);
+        if (result) {
+          onHandleBack();
+          // clearInput();
+        } else if (result.error) {
+          console.log('error : ', result.error);
+        }
       }
     }
   };
@@ -473,16 +498,30 @@ export default function CreateMeetScreenContainer(props: any) {
       getAllEmployee(signal),
       getOrganizationTree(signal),
       getContactsList(signal)
-    ]).then(()=>{
+    ]).then(() => {
       setIsOrgDataLoaded(false);
-    })
-    
+    });
+  };
+
+  const getRoomNames = async () => {
+    const roomNames = MeetApi.getMeetRoomsList(auth).then(async result => {
+      const going: any[] = result;
+      let nameList: string[] = [];
+      await Promise.all(
+        going.map(async conference => {
+          nameList.push(conference.name);
+        })
+      );
+      return nameList;
+    });
+
+    setNameList(await roomNames);
   };
 
   useEffect(() => {
     const controller = new AbortController();
-    // setSelectMode(false);
     const { signal } = controller;
+    getRoomNames();
     dataLoad(signal);
     return () => {
       setIsOrgDataLoaded(false);
@@ -499,6 +538,7 @@ export default function CreateMeetScreenContainer(props: any) {
     }
     setRoomName(rn);
   };
+
   const sendMessageChange = (content: string) => {
     let msg = content;
     setSendMessage(msg);
@@ -590,6 +630,15 @@ export default function CreateMeetScreenContainer(props: any) {
     setSelectedEmployee({ member: updateList, group: {} });
   };
 
+  const handleBlurTitleInput = (
+    e: NativeSyntheticEvent<TextInputChangeEventData>
+  ) => {
+    const { text } = e.nativeEvent;
+    const flag: boolean =
+      nameList.findIndex(value => value === text) === -1 ? false : true;
+    setNameDuplication(flag);
+  };
+
   return (
     <View
       style={[
@@ -660,6 +709,9 @@ export default function CreateMeetScreenContainer(props: any) {
           isTablet={isTablet}
           dateTimeSeleted={dateTimeSeleted}
           calendarError={calendarError}
+          handleBlurTitleInput={handleBlurTitleInput}
+          nameduplication={nameduplication}
+          isLoading={isLoading}
         />
       )}
     </View>

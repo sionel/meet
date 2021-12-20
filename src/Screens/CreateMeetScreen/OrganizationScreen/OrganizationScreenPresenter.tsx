@@ -369,7 +369,7 @@ const OrganizationScreenPresenter = (props: PresenterProps) => {
                     {t('renewal.organization_org')}
                   </Text>
                 </TouchableOpacity>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                   activeOpacity={0.7}
                   onPress={() => {
                     setTabType('contact');
@@ -408,7 +408,7 @@ const OrganizationScreenPresenter = (props: PresenterProps) => {
                   >
                     {t('renewal.organization_exter')}
                   </Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
               </View>
 
               {/* {tabType === 'contact' && (

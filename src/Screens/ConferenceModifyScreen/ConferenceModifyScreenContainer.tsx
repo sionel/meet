@@ -13,6 +13,7 @@ import {
   GestureResponderEvent,
   NativeScrollEvent,
   NativeSyntheticEvent,
+  TextInputChangeEventData,
   View
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -127,6 +128,9 @@ export default function ConferenceModfiyScreenContainer(props: any) {
   const [isNormal, setIsNormal] = useState(true);
   const [isAuth, setIsAuth] = useState(false);
   const [calendarError, setCalendarError] = useState(false);
+  const [nameList, setNameList] = useState<string[]>([]);
+  const [nameduplication, setNameDuplication] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const titleRef: RefObject<any> = useRef();
   const sendMsgRef: RefObject<any> = useRef();
@@ -291,78 +295,87 @@ export default function ConferenceModfiyScreenContainer(props: any) {
   };
 
   const modifyConference = async () => {
-    if (1 < roomName.length) {
-      let arr: PartialAccessUserParam[] = [];
+    if (nameduplication) {
+      Alert.alert(t('회의명 중복'), t('회의명 변경 후 방 생성을 해주세요.'));
+      return;
+    } else {
+      if (1 < roomName.length) {
+        setIsLoading(true);
+        let arr: PartialAccessUserParam[] = [];
 
-      selectedEmployee.member.map((value: any) => {
-        if (value.user_no !== auth.user_no) {
-          if (value.user_no) {
-            arr.push({
-              type: 'portal_id',
-              value: value.portal_id,
-              is_master: value.is_master,
-              user_name: value.user_name
-            });
-          } else {
-            if (value.address_service_no) {
+        selectedEmployee.member.map((value: any) => {
+          if (value.user_no !== auth.user_no) {
+            if (value.user_no) {
               arr.push({
-                type: 'email',
-                value: value.emailinfolist[0].email_address,
+                type: 'portal_id',
+                value: value.portal_id,
                 is_master: value.is_master,
-                user_name: value.address_name
+                user_name: value.user_name
               });
             } else {
-              arr.push({
-                type: 'email',
-                value: value.value,
-                is_master: false
-              });
+              if (value.address_service_no) {
+                arr.push({
+                  type: 'email',
+                  value: value.emailinfolist[0].email_address,
+                  is_master: value.is_master,
+                  user_name: value.address_name
+                });
+              } else {
+                arr.push({
+                  type: 'email',
+                  value: value.value,
+                  is_master: false
+                });
+              }
             }
           }
-        }
-      });
+        });
 
-      let start_time = moment(parseInt(moment(startTime.current).format('x')));
-      let end_time = moment(parseInt(moment(endTime.current).format('x')));
+        let start_time = moment(
+          parseInt(moment(startTime.current).format('x'))
+        );
+        let end_time = moment(parseInt(moment(endTime.current).format('x')));
 
-      const { cno } = auth;
+        const { cno } = auth;
 
-      arr.unshift({
-        type: 'portal_id',
-        value: auth.portal_id,
-        is_master: true,
-        user_name: auth.user_name,
-        cno: cno,
-        user_no: auth.user_no
-      });
+        arr.unshift({
+          type: 'portal_id',
+          value: auth.portal_id,
+          is_master: true,
+          user_name: auth.user_name,
+          cno: cno,
+          user_no: auth.user_no
+        });
 
-      let params: roomModifyParam = {
-        service_code: 'wehagomeet',
-        name: roomName,
-        is_public: isPublic,
-        is_reservation: switchReserve,
-        access_user: arr,
-        unaccess_user: unAccessEmployee,
-        master: masterEmployee,
-        unmaster: unMasterEmployee,
-        is_send_updated_email: switchDelAlram,
-        invite_message: sendMessage
-      };
-
-      if (switchReserve) {
-        let object = params;
-        params = {
-          ...object,
-          start_date_time: start_time,
-          end_date_time: end_time
+        let params: roomModifyParam = {
+          service_code: 'wehagomeet',
+          name: roomName,
+          is_public: isPublic,
+          is_reservation: switchReserve,
+          access_user: arr,
+          unaccess_user: unAccessEmployee,
+          master: masterEmployee,
+          unmaster: unMasterEmployee,
+          is_send_updated_email: switchDelAlram,
+          invite_message: sendMessage
         };
-      }
 
-      const result = await MeetApi.updateMeetRoom(auth, roomId, params);
-      if (result) {
-        onHandleBack();
-      } else if (result.error) {
-        console.log('error : ', result.error);
+        if (switchReserve) {
+          let object = params;
+          params = {
+            ...object,
+            start_date_time: start_time,
+            end_date_time: end_time
+          };
+        }
+
+        const result = await MeetApi.updateMeetRoom(auth, roomId, params);
+        setIsLoading(false);
+        if (result) {
+          onHandleBack();
+        } else if (result.error) {
+          console.log('error : ', result.error);
+        }
       }
     }
   };
@@ -582,6 +595,21 @@ export default function ConferenceModfiyScreenContainer(props: any) {
     }
   };
 
+  const getRoomNames = async () => {
+    const roomNames = MeetApi.getMeetRoomsList(auth).then(async result => {
+      const going: any[] = result;
+      let nameList: string[] = [];
+      await Promise.all(
+        going.map(async conference => {
+          nameList.push(conference.name);
+        })
+      );
+      return nameList;
+    });
+
+    setNameList(await roomNames);
+  };
+
   const dataLoad = (signal: AbortSignal) => {
     setIsOrgDataLoaded(true);
 
@@ -664,6 +692,7 @@ export default function ConferenceModfiyScreenContainer(props: any) {
 
   const changeIsNormal = () => {
     setIsNormal(!isNormal);
+    getRoomNames();
   };
 
   const clickChangeRole = (item: any, index: number) => {
@@ -741,6 +770,16 @@ export default function ConferenceModfiyScreenContainer(props: any) {
     directionList.map(v => resList.push(v));
     setSelectedEmployee({ member: resList, group: {} });
   };
+
+  const handleBlurTitleInput = (
+    e: NativeSyntheticEvent<TextInputChangeEventData>
+  ) => {
+    const { text } = e.nativeEvent;
+    const flag: boolean =
+      nameList.findIndex(value => value === text) === -1 ? false : true;
+    setNameDuplication(flag);
+  };
+
 
   return (
     <View
@@ -824,6 +863,9 @@ export default function ConferenceModfiyScreenContainer(props: any) {
           fadeOutValue={fadeOutValue}
           fadeInAnimated={fadeInAnimated}
           fadeOutAnimated={fadeOutAnimated}
+          nameduplication={nameduplication}
+          isLoading={isLoading}
+          handleBlurTitleInput={handleBlurTitleInput}
         />
       )}
     </View>

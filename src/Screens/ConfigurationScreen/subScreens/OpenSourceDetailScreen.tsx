@@ -9,6 +9,8 @@ export default function OpenSourceDetailScreen(props:any) {
     <WebView
       source={{ uri: url }}
       startInLoadingState={true}
+      javaScriptEnabled={true}
+      domStorageEnabled={true}
       renderLoading={() => <ActivityIndicator />}
     />
   );

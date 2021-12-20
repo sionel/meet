@@ -25,7 +25,9 @@
     "build-inhouse-abb": "cd ./wehago/android && sudo rm -rf build ./app/build ./sdk/build && sudo ./gradlew bundleRelease && cd ../..",
     "set-android": "~/Library/Android/sdk/platform-tools/adb -s R59M905GC8X reverse tcp:8081 tcp:8081",
     "get-android": "~/Library/Android/sdk/platform-tools/adb devices",
-    "device": "~/Library/Android/sdk/emulator/emulator @Nexus_5X_API_29"
+    "device": "~/Library/Android/sdk/emulator/emulator @Nexus_5X_API_29",
+    "clean:android": "cd ./wehago/android && sudo ./gradlew clean && cd ../../",
+    "clean:ios": "cd ios && sudo xcodebuild clean && cd ../"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "1.13.2",
