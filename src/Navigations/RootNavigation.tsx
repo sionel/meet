@@ -15,15 +15,16 @@ import ConferenceView from '../Screens/ConferenceScreen';
 import SelectCompanyView from '../Screens/SelectCompanyScreen';
 import SplashView from '../Screens/SplashScreen';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { actionCreators as ConferenceActions } from '../redux/modules/conference';
 
 import { Alert, Linking } from 'react-native';
+import { RootState } from '../redux/configureStore';
 
 // roomToken?: string;
 export type MeetParamList = {
   SplashView: {
-    deeplink? : string;
+    deeplink?: string;
   };
   SelectCompany: undefined;
   LoginStack: undefined;
@@ -81,35 +82,44 @@ export default function RootNavigation() {
   let nowStack = '';
   const navigationRef: RefObject<any> = React.createRef();
   const dispatch = useDispatch();
-  const _setIsConference = (isConference: boolean) =>
-    dispatch(ConferenceActions.setIsConference(isConference));
 
   const navigate = (name: string, params: any) => {
     navigationRef.current?.navigate(name, params);
   };
 
-  const checkConference = (state: Readonly<NavigationState> | undefined) => {
-    const name = state?.routes[0].name;
-    if (name === 'ConferenceView') {
-      _setIsConference(true);
-      nowStack = 'ConferenceView';
-    } else {
-      _setIsConference(false);
-    }
-  };
+  const { conferenceManager } = useSelector((state: RootState) => {
+    // if(state.conference.isConference){
+    //   navigate('ConferenceView',{})
+    // }
+    return {
+      conferenceManager: state.conference.conferenceManager
+    };
+  });
 
-  //  ios : 앱이 켜져있을때
+  // const checkConference = (state: Readonly<NavigationState> | undefined) => {
+  //   const name = state?.routes[0].name;
+  //   console.log(name);
+  //   if (name === 'ConferenceView') {
+  //     _setIsConference(true);
+  //     nowStack = 'ConferenceView';
+  //   } else {
+  //     _setIsConference(false);
+  //   }
+  // };
+
+
+  //  ios : 앱이 켜져있을때(딥링크)
   Linking.addEventListener('url', event => {
     if (nowStack === 'ConferenceView') {
       Alert.alert('이미 진행중인 화상회의가 있습니다.');
       return;
     } else {
-      navigate('SplashView', {deeplink: event.url});
+      navigate('SplashView', { deeplink: event.url });
     }
   });
 
   return (
-    <NavigationContainer ref={navigationRef} onStateChange={checkConference}>
+    <NavigationContainer ref={navigationRef}>
       <RootStack.Navigator
         initialRouteName="SplashView"
         screenOptions={{ headerShown: false }}

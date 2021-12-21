@@ -6,15 +6,18 @@ const SET_LIST = 'conference.SET_LIST';
 const SET_INITIAL_LIST = 'conference.SET_INITIAL_LIST';
 const SET_ROOM_ID = 'conference.SET_ROOM_ID';
 const SET_IS_CONFERENCE = 'conference.SET_IS_CONFERENCE';
+const SET_CONFERENCE_MANAGER = 'conference.SET_CONFERENCE_MANAGER';
 
 export interface state {
   roomId: string;
   isConference: boolean;
+  conferenceManager: any;
 }
 
 const initialState: state = {
   roomId: '',
-  isConference: false
+  isConference: false,
+  conferenceManager: null
 };
 
 const reducer = (state = initialState, action: AnyAction) => {
@@ -26,7 +29,10 @@ const reducer = (state = initialState, action: AnyAction) => {
     case SET_ROOM_ID:
       return _setRoomId(state, action);
     case SET_IS_CONFERENCE:
+  
       return _setIsConference(state, action);
+    case SET_CONFERENCE_MANAGER:
+      return _setConferenceManager(state, action);
     default:
       return state;
   }
@@ -52,9 +58,21 @@ const _setIsConference = (state: state, action: AnyAction) => {
   return { ...state, isConference: action.isConference };
 };
 
+
+function setConferenceManager(conferenceManager:any) {
+  return {
+    type: SET_CONFERENCE_MANAGER,
+    conferenceManager
+  };
+}
+const _setConferenceManager = (state: state, action: AnyAction) => {
+  return { ...state, conferenceManager: action.conferenceManager };
+};
+
 export const actionCreators = {
   setRoomId,
-  setIsConference
+  setIsConference,
+  setConferenceManager
 };
 export default reducer;
 

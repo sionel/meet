@@ -19,8 +19,10 @@ import { actionCreators as WedriveAcions } from '../../redux/modules/wedrive';
 import { actionCreators as AlertAcions } from '../../redux/modules/alert';
 import { actionCreators as IndicatorAcions } from '../../redux/modules/indicator';
 import { actionCreators as RecentsActions } from '../../redux/modules/recentsInvited';
+import { actionCreators as ConferenceActions } from '../../redux/modules/conference';
 import { MeetNavigationProps } from '../../Navigations/RootNavigation';
-import { getConferenceManager } from '../../utils/ConferenceManager';
+import RNRestart from 'react-native-restart';
+
 // const iswehagov = WEHAGO_ENV === 'WEHAGOV';
 
 // const JailMonkey =
@@ -39,20 +41,29 @@ const SplashScreenContainer = ({
   const t = getT();
 
   const deeplink = params?.deeplink;
-  
+
   //#region  selector
-  const { auth, from, updateNoti, autoLogin, isLogin, url, isConference } =
-    useSelector((state: RootState) => {
-      return {
-        auth: state.user.auth,
-        from: state.user.from,
-        updateNoti: state.user.updateNoti,
-        autoLogin: state.user.autoLogin,
-        isLogin: state.user.isLogin,
-        url: state.root.url,
-        isConference: state.conference.isConference
-      };
-    });
+  const {
+    auth,
+    from,
+    updateNoti,
+    autoLogin,
+    isLogin,
+    url,
+    isConference,
+    conferenceManager
+  } = useSelector((state: RootState) => {
+    return {
+      auth: state.user.auth,
+      from: state.user.from,
+      updateNoti: state.user.updateNoti,
+      autoLogin: state.user.autoLogin,
+      isLogin: state.user.isLogin,
+      url: state.root.url,
+      isConference: state.conference.isConference,
+      conferenceManager: state.conference.conferenceManager
+    };
+  });
   //#endregion
 
   //#region  dispatch
@@ -70,6 +81,8 @@ const SplashScreenContainer = ({
   const toggleUpdateNoti = () => dispatch(UserActions.toggleUpdateNoti());
   const setAlert = (params: any) => dispatch(AlertAcions.setAlert(params));
   const eventLog = (event: any) => dispatch(UserActions.eventLog(event));
+  const setIsConference = (flag: boolean) =>
+    dispatch(ConferenceActions.setIsConference(flag));
 
   //#endregion
 
@@ -81,17 +94,16 @@ const SplashScreenContainer = ({
   }, []);
 
   useEffect(() => {
-
     if (!first) {
       if (url) {
         _handleGetDeeplink(url);
       } else if (deeplink) {
         _handleGetDeeplink(deeplink);
       } else _handleCheckAutoLogin();
-      }
-    }, [url, first, deeplink]);
-    
-    const _handleInit = async () => {
+    }
+  }, [url, first, deeplink]);
+
+  const _handleInit = async () => {
     // 버전 확인
     await _handleCheckVersion();
     // 노티 확인
@@ -210,7 +222,7 @@ const SplashScreenContainer = ({
       room_name=123 // talk방 이름
     */
     // const m = getConferenceManager();
-    // debugger;
+    // console.log(m);
 
     if (!url) return;
     let result: any = querystringParser(url);

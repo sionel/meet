@@ -28,8 +28,10 @@ import screenShare, { state as screenShageState } from './modules/ScreenShare';
 import indicator, { state as indicatorState } from './modules/indicator';
 import orientation, { state as orientationState } from './modules/orientation';
 import root, { state as rootState } from './modules/root';
-import recents, {state as recentsState} from './modules/recentsInvited';
-import selectCompany, {state as selectCompanyState} from './modules/selectCompany';
+import recents, { state as recentsState } from './modules/recentsInvited';
+import selectCompany, {
+  state as selectCompanyState
+} from './modules/selectCompany';
 /**
  * middleware list
  */
@@ -70,7 +72,7 @@ export interface RootState {
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['user', 'recents'],
+  whitelist: ['user', 'recents', 'conference'],
   blacklist: [
     'local',
     'mainUser',
@@ -78,7 +80,6 @@ const persistConfig = {
     'wetalk',
     'wedrive',
     'documentShare',
-    'conference',
     'webUser',
     'master',
     'alert',

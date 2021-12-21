@@ -11,7 +11,8 @@ import {
   Platform,
   Dimensions,
   ToastAndroid,
-  NativeEventEmitter
+  NativeEventEmitter,
+  Alert
 } from 'react-native';
 import KeepAwake from 'react-native-keep-awake';
 
@@ -126,6 +127,13 @@ class ConferenceScreenContainer extends React.Component {
    */
   componentWillUnmount() {
     try {
+      const { isConference } = this.props;
+
+      // TODO: 안드로이드 액티비티가 1개여서 백그라운드에서 포그라운드로 넘어올때 App이 재시작됨으로 재시작 처리를 우선으로함
+      if (isConference) {
+        Alert.alert('허용되지 않은 접근', '앱이 재시작됩니다.');
+        setIsConference(false);
+      }
       this._screen = false;
       KeepAwake.deactivate();
       DeviceEventEmitter.removeListener(
@@ -148,7 +156,7 @@ class ConferenceScreenContainer extends React.Component {
       // this._conferenceManager?.dispose();
       this.props.setSharingMode();
       this.connectFailCheck && clearInterval(this.connectFailCheck);
-      setConferenceManager(null)
+      setConferenceManager(null);
     } catch (error) {}
   }
   /**
@@ -230,8 +238,10 @@ class ConferenceScreenContainer extends React.Component {
       changeMasterControlMode,
       setToastMessage,
       setMainUserNotExist,
-      isLogin
+      isLogin,
+      setIsConference
     } = this.props;
+
     const {
       name,
       selectedRoomName,
@@ -245,6 +255,7 @@ class ConferenceScreenContainer extends React.Component {
       dispatch,
       this._handleConferenceClose
     );
+    setIsConference(true);
 
     const sendCommandParams = {
       wehagoId: auth.portal_id,
@@ -340,7 +351,8 @@ class ConferenceScreenContainer extends React.Component {
       user,
       auth,
       isLogin,
-      resetVideoId
+      resetVideoId,
+      setIsConference
     } = this.props;
 
     setIndicator();
@@ -351,15 +363,12 @@ class ConferenceScreenContainer extends React.Component {
     user.videoTrack.dispose();
     user.audioTrack.dispose();
     resetVideoId();
+    setIsConference(false);
+
     if (!isLogin) {
-      // setLoaded(false);
-      // setParams({});
-      // setUrl(undefined);
-      // setDestination('Login')
       navigation.reset({ routes: [{ name: 'LoginStack' }] });
     } else {
       navigation.reset({ routes: [{ name: 'MainStack' }] });
-      // destination === 'List' ? navigation.goBack() : setDestination('List')
     }
     this.setState({ connection: false, endCall: true });
   };

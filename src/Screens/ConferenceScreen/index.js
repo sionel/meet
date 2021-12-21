@@ -10,6 +10,7 @@ import { actionCreators as ScreenShareAcions } from '../../redux/modules/ScreenS
 import { actionCreators as ParticipantsAcions } from '../../redux/modules/participants';
 import { actionCreators as indicatorAcionCreators } from '../../redux/modules/indicator';
 import { actionCreators as RootActions } from '../../redux/modules/root';
+import { actionCreators as ConferenceActions } from '../../redux/modules/conference';
 
 import _ from 'underscore';
 
@@ -34,10 +35,11 @@ const mapStateToProps = state => {
     },
     mainUser: { mainUserId },
     participants: { list },
-    user: { auth,isLogin },
+    user: { auth,isLogin},
     documentShare,
     screenShare: { isScreenShare, screenToggleFlag },
-    root: { destination }
+    root: { destination,url },
+    conference: {isConference}
   } = state;
 
   const mainUser = getMainUser(mainUserId, user, list);
@@ -58,7 +60,9 @@ const mapStateToProps = state => {
     isScreenShare,
     screenToggleFlag,
     destination,
-    isLogin
+    isLogin,
+    url,
+    isConference
   };
 };
 
@@ -92,6 +96,8 @@ const mapDispatchToProps = dispatch => {
     setParams: params => dispatch(RootActions.setParams(params)),
     setUrl: url => dispatch(RootActions.setUrl(url)),
     resetVideoId: () => dispatch(RootActions.setVideoId('')),
+    setIsConference:flag => dispatch(ConferenceActions.setIsConference(flag)),
+    setConferenceManager:manager =>dispatch(ConferenceActions.setConferenceManager(manager))
   };
 };
 
