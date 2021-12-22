@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, { RefObject } from 'react';
+import React, { RefObject, useEffect } from 'react';
 import { NavigationContainer, NavigationState } from '@react-navigation/native';
 import {
   createStackNavigator,
@@ -15,11 +15,11 @@ import ConferenceView from '../Screens/ConferenceScreen';
 import SelectCompanyView from '../Screens/SelectCompanyScreen';
 import SplashView from '../Screens/SplashScreen';
 
-import { useDispatch, useSelector } from 'react-redux';
-import { actionCreators as ConferenceActions } from '../redux/modules/conference';
-
 import { Alert, Linking } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/configureStore';
+
+import { actionCreators as ConferenceActions } from '../redux/modules/conference';
 
 // roomToken?: string;
 export type MeetParamList = {
@@ -78,35 +78,40 @@ export type MeetNavigationProps<T extends keyof MeetParamList> =
 
 const RootStack = createStackNavigator();
 
-export default function RootNavigation() {
+export default function RootNavigation(props: any) {
   let nowStack = '';
   const navigationRef: RefObject<any> = React.createRef();
   const dispatch = useDispatch();
+  const setIsConference = (flag: boolean) => {
+    dispatch(ConferenceActions.setIsConference(flag));
+  };
 
   const navigate = (name: string, params: any) => {
     navigationRef.current?.navigate(name, params);
   };
 
-  const { conferenceManager } = useSelector((state: RootState) => {
-    // if(state.conference.isConference){
-    //   navigate('ConferenceView',{})
-    // }
+  const { isConference } = useSelector((state: RootState) => {
     return {
-      conferenceManager: state.conference.conferenceManager
+      isConference: state.conference.isConference
     };
   });
 
-  // const checkConference = (state: Readonly<NavigationState> | undefined) => {
-  //   const name = state?.routes[0].name;
-  //   console.log(name);
-  //   if (name === 'ConferenceView') {
-  //     _setIsConference(true);
-  //     nowStack = 'ConferenceView';
-  //   } else {
-  //     _setIsConference(false);
-  //   }
-  // };
+  const checkConference = (state: Readonly<NavigationState> | undefined) => {
+    const name = state?.routes[0].name;
+    if (name === 'ConferenceView') nowStack = 'ConferenceView';
+    else nowStack = '';
+  };
 
+  useEffect(()=> {
+    if (isConference) {
+      Alert.alert('허용되지 않은 접근', '앱이 재시작됩니다.');
+      setIsConference(false);
+    }
+
+    if (props.url?.url) {
+      navigate('SplashView', { deeplink: props.url.url });
+    }
+  }, []);
 
   //  ios : 앱이 켜져있을때(딥링크)
   Linking.addEventListener('url', event => {
@@ -119,7 +124,7 @@ export default function RootNavigation() {
   });
 
   return (
-    <NavigationContainer ref={navigationRef}>
+    <NavigationContainer ref={navigationRef} onStateChange={checkConference}>
       <RootStack.Navigator
         initialRouteName="SplashView"
         screenOptions={{ headerShown: false }}

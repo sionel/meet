@@ -29,7 +29,6 @@ const reducer = (state = initialState, action: AnyAction) => {
     case SET_ROOM_ID:
       return _setRoomId(state, action);
     case SET_IS_CONFERENCE:
-  
       return _setIsConference(state, action);
     case SET_CONFERENCE_MANAGER:
       return _setConferenceManager(state, action);
@@ -58,8 +57,7 @@ const _setIsConference = (state: state, action: AnyAction) => {
   return { ...state, isConference: action.isConference };
 };
 
-
-function setConferenceManager(conferenceManager:any) {
+function setConferenceManager(conferenceManager: any) {
   return {
     type: SET_CONFERENCE_MANAGER,
     conferenceManager

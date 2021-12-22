@@ -95,13 +95,11 @@ const SplashScreenContainer = ({
 
   useEffect(() => {
     if (!first) {
-      if (url) {
-        _handleGetDeeplink(url);
-      } else if (deeplink) {
+      if (deeplink) {
         _handleGetDeeplink(deeplink);
       } else _handleCheckAutoLogin();
     }
-  }, [url, first, deeplink]);
+  }, [first, deeplink]);
 
   const _handleInit = async () => {
     // 버전 확인

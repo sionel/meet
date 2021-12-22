@@ -65,6 +65,7 @@ class ConferenceScreenContainer extends React.Component {
    */
   componentDidMount() {
     // const { navigation, auth, dispatch } = this.props;
+
     Platform.OS === 'android' &&
       AppState.addEventListener('change', this._handleAppStateChange);
 
@@ -96,6 +97,7 @@ class ConferenceScreenContainer extends React.Component {
 
   /** */
   componentDidUpdate(prevProps) {
+
     if (prevProps.screenToggleFlag !== this.props.screenToggleFlag && !isIOS) {
       this._handleChangeScreen();
     }
@@ -128,10 +130,8 @@ class ConferenceScreenContainer extends React.Component {
   componentWillUnmount() {
     try {
       const { isConference } = this.props;
-
       // TODO: 안드로이드 액티비티가 1개여서 백그라운드에서 포그라운드로 넘어올때 App이 재시작됨으로 재시작 처리를 우선으로함
       if (isConference) {
-        Alert.alert('허용되지 않은 접근', '앱이 재시작됩니다.');
         setIsConference(false);
       }
       this._screen = false;

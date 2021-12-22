@@ -7,7 +7,8 @@ import {
   KeyboardAvoidingView,
   Text,
   TextInput,
-  SafeAreaView
+  SafeAreaView,
+  Platform
 } from 'react-native';
 
 import ButtonCamera from '../../../assets/buttons/btn_vc_camera_on.png';
@@ -19,6 +20,7 @@ import { getT } from '../../utils/translateManager';
 
 import icBack from '../../../assets/new/icons/ic_back.png';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
 interface PresenterProps {
   tracks: any[] | null;
   onConferenceEnter: () => void;
@@ -50,6 +52,15 @@ export default function SettingScreenPresenter(props: PresenterProps) {
   return (
     <Fragment>
       <SafeAreaView style={styles.container}>
+      <KeyboardAwareScrollView
+          contentContainerStyle={{
+            ...styles.container
+          }}
+          bounces={false}
+          enableOnAndroid={true}
+          enableAutomaticScroll={Platform.OS === 'ios'}
+          extraHeight={90}
+        >
         <View style={[styles.topTitle]}>
           <TouchableOpacity onPress={goBack}>
             <Image source={icBack} style={styles.icBack} resizeMode="cover" />
@@ -61,15 +72,15 @@ export default function SettingScreenPresenter(props: PresenterProps) {
             </Text>
           </TouchableOpacity>
         </View>
-        <KeyboardAwareScrollView
-          contentContainerStyle={{
-            ...styles.container,
-            paddingHorizontal: isHorizon ? '20%' : 15,
-            paddingVertical: isHorizon ? 20 : 0
-          }}
-          bounces={false}
-        >
-          <TouchableOpacity style={{ flex: 1 }} activeOpacity={1}>
+        
+          <TouchableOpacity
+            style={{
+              flex: 1,
+              paddingHorizontal: isHorizon ? '20%' : 15,
+              paddingVertical: isHorizon ? 20 : 0
+            }}
+            activeOpacity={1}
+          >
             <View style={styles.settingTitleView}>
               <Text style={styles.settingTitle}>
                 {t('renewal.roomstate_setting_title')}
@@ -278,7 +289,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 52,
     marginVertical: 10,
-    paddingHorizontal: 5,
+    paddingHorizontal: 10,  
     fontFamily: 'DOUZONEText30'
   },
   settingUserNameDafault: {

@@ -24,15 +24,15 @@ function App(props) {
     setT(props.t);
   }, []);
 
-  useEffect(() => {
-    dispatch(actionCreators.setUrl(props?.url?.url));
-  //     ios : 앱이 꺼져있을때(딥링크)
-  // android : 앱이 꺼져있을때, 앱 켜져 있을때(딥링크)
+  // useEffect(() => {
+  //   dispatch(actionCreators.setUrl(props?.url?.url));
+  // //     ios : 앱이 꺼져있을때(딥링크)
+  // // android : 앱이 꺼져있을때, 앱 켜져 있을때(딥링크)
      
-    //  dispatch(actionCreators.setUrl("com.wehago.meet://?login_info=email&type=conference&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ2aWRlby53ZWhhZ28uY29tIiwicm9vbSI6ImZiYjY2MTliLWFlMmYtNDE0MS05MmNjLTA3NWEyOTBkZWVjNyIsImVtYWlsIjoieWVvbmdpbDQ3NjRAbmF2ZXIuY29tIiwiaWF0IjoxNjM1NzQ3OTY3LCJleHAiOjE5NTExMDc5Njd9.O6UMML-qjav_-rkvLb-6tZvY-NYctt6Yxy0TF03gfxU&timeStamp=1635750152425"));
-  }, [props.url]);
+  //   //  dispatch(actionCreators.setUrl("com.wehago.meet://?login_info=email&type=conference&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ2aWRlby53ZWhhZ28uY29tIiwicm9vbSI6ImZiYjY2MTliLWFlMmYtNDE0MS05MmNjLTA3NWEyOTBkZWVjNyIsImVtYWlsIjoieWVvbmdpbDQ3NjRAbmF2ZXIuY29tIiwiaWF0IjoxNjM1NzQ3OTY3LCJleHAiOjE5NTExMDc5Njd9.O6UMML-qjav_-rkvLb-6tZvY-NYctt6Yxy0TF03gfxU&timeStamp=1635750152425"));
+  // }, [props.url]);
 
-  return <RootNavigation />;
+  return <RootNavigation {...props} />;
 }
 
 // const test = async () =>{
