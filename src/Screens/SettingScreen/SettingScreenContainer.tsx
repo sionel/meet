@@ -22,6 +22,7 @@ export default function SettingScreenContainer(props: any) {
   //강제 업데이트
   const [, updateState] = useState<undefined | {}>();
   const forceUpdate = useCallback(()=> updateState({}), []);
+  const [isLoading, setIsLoading] = useState(false);
   const { auth, isLogin, isHorizon } = useSelector((state: RootState) => {
     return {
       auth: state.user.auth,
@@ -91,6 +92,7 @@ export default function SettingScreenContainer(props: any) {
 
   const _handleConferenceEnter = async () => {
     // let { tracks, nameField } = this.state;
+    setIsLoading(true);
     let tmpName;
 
     if (nameField) {
@@ -126,6 +128,7 @@ export default function SettingScreenContainer(props: any) {
       // 토큰받고
       roomToken = (await MeetApi.getMeetRoomToken(auth, params.id)).resultData;
     }
+    
     if (roomToken === '접근금지') {
       // wehago V 때문에 절차가 하나 늘어남
       setAlert({
@@ -150,6 +153,7 @@ export default function SettingScreenContainer(props: any) {
         ]
       });
     }
+    setIsLoading(false);
   };
 
   const _handleToggleVideo = async () => {
@@ -189,6 +193,7 @@ export default function SettingScreenContainer(props: any) {
       goBack={_goBack}
       isHorizon={isHorizon}
       roomName={params.selectedRoomName}
+      isLoading={isLoading}
     />
   );
 }

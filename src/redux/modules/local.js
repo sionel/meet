@@ -68,8 +68,8 @@ function reducer(state = initialState, action) {
       return applyToggleMuteVideo(state, action);
     case TOGGLE_CAMERA_FACING_MODE:
       return applyToggleCameraFacingMode(state, action);
-    case TOGGLE_CAMERA_FACING_MODE:
-      return applyToggleCameraFacingMode(state, action);
+    // case TOGGLE_CAMERA_FACING_MODE:
+    //   return applyToggleCameraFacingMode(state, action);
     case TOGGLE_MUTE_MIC:
       return applyToggleMuteMic(state, action);
     case TOGGLE_MUTE_SPEAKER:

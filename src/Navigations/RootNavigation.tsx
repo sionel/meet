@@ -103,11 +103,14 @@ export default function RootNavigation(props: any) {
   };
 
   useEffect(()=> {
+    // TODO: 안드로이드 액티비티가 1개이면서 위하고에서 백그라운드에서 포그라운드로 넘어올때 App이 재시작됨으로 재시작 처리를 우선으로함
     if (isConference) {
       Alert.alert('허용되지 않은 접근', '앱이 재시작됩니다.');
       setIsConference(false);
     }
 
+    // ios : 앱이 꺼져 있을때
+    // and : 앱 꺼져 있거나, 켜져 있을 때
     if (props.url?.url) {
       navigate('SplashView', { deeplink: props.url.url });
     }

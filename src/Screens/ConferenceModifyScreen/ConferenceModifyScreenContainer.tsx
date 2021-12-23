@@ -1,17 +1,9 @@
-import React, {
-  MutableRefObject,
-  RefObject,
-  useEffect,
-  useRef,
-  useState
-} from 'react';
+import React, { RefObject, useEffect, useRef, useState } from 'react';
 import {
   Alert,
   Animated,
   Dimensions,
   Easing,
-  GestureResponderEvent,
-  NativeScrollEvent,
   NativeSyntheticEvent,
   TextInputChangeEventData,
   View
@@ -136,10 +128,6 @@ export default function ConferenceModfiyScreenContainer(props: any) {
   const sendMsgRef: RefObject<any> = useRef();
   const searchRef: RefObject<any> = useRef();
   const sendEmailRef: RefObject<any> = useRef();
-  const scrollRef: any = useRef([]);
-
-  const fadeInValue = new Animated.Value(0);
-  const fadeOutValue = new Animated.Value(1);
 
   const width = Dimensions.get('window').width;
 
@@ -622,22 +610,6 @@ export default function ConferenceModfiyScreenContainer(props: any) {
     });
   };
 
-  const fadeInAnimated = () => {
-    Animated.timing(fadeInValue, {
-      toValue: 1,
-      duration: 50,
-      useNativeDriver: true
-    }).start();
-  };
-
-  const fadeOutAnimated = () => {
-    Animated.timing(fadeOutValue, {
-      toValue: 0,
-      duration: 50,
-      useNativeDriver: true
-    }).start();
-  };
-
   useEffect(() => {
     _getReservationInfos(roomId);
   }, []);
@@ -740,37 +712,6 @@ export default function ConferenceModfiyScreenContainer(props: any) {
     setUnAccessEmployee(deleteAccessUsers);
   };
 
-  const onHandleSwipe = (
-    event: NativeSyntheticEvent<NativeScrollEvent>,
-    index: number
-  ) => {
-    const direction = event.nativeEvent.contentOffset.x;
-    // console.log(direction);
-
-    let directionList: any[] = selectedEmployee.member;
-    let bfDirection = directionList[index].direction;
-    const resList: any[] = [];
-
-    const beforeEvent = bfDirection === 'NONE' ? false : true;
-
-    if (beforeEvent) return false;
-    else {
-      if (direction > 0) directionList[index].direction = 'RIGHT';
-      else directionList[index].direction = 'LEFT';
-
-      directionList.map(v => resList.push(v));
-      setSelectedEmployee({ member: resList, group: {} });
-    }
-  };
-
-  const onHandelResetSwipe = (e: GestureResponderEvent, index: number) => {
-    let directionList: any[] = selectedEmployee.member;
-    const resList: any[] = [];
-    directionList[index].direction = 'NONE';
-    directionList.map(v => resList.push(v));
-    setSelectedEmployee({ member: resList, group: {} });
-  };
-
   const handleBlurTitleInput = (
     e: NativeSyntheticEvent<TextInputChangeEventData>
   ) => {
@@ -779,7 +720,6 @@ export default function ConferenceModfiyScreenContainer(props: any) {
       nameList.findIndex(value => value === text) === -1 ? false : true;
     setNameDuplication(flag);
   };
-
 
   return (
     <View
@@ -855,14 +795,7 @@ export default function ConferenceModfiyScreenContainer(props: any) {
           isAuth={isAuth}
           changeIsNormal={changeIsNormal}
           calendarError={calendarError}
-          onHandleSwipe={onHandleSwipe}
-          onHandelResetSwipe={onHandelResetSwipe}
-          scrollRef={scrollRef}
           width={width}
-          fadeInValue={fadeInValue}
-          fadeOutValue={fadeOutValue}
-          fadeInAnimated={fadeInAnimated}
-          fadeOutAnimated={fadeOutAnimated}
           nameduplication={nameduplication}
           isLoading={isLoading}
           handleBlurTitleInput={handleBlurTitleInput}

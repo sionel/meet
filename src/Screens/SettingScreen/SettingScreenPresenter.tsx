@@ -32,6 +32,7 @@ interface PresenterProps {
   goBack: () => void;
   isHorizon: boolean;
   roomName: string;
+  isLoading: boolean;
 }
 
 export default function SettingScreenPresenter(props: PresenterProps) {
@@ -45,7 +46,8 @@ export default function SettingScreenPresenter(props: PresenterProps) {
     buttonActive,
     goBack,
     isHorizon,
-    roomName
+    roomName,
+    isLoading
   } = props;
   const t = getT();
 
@@ -173,14 +175,14 @@ export default function SettingScreenPresenter(props: PresenterProps) {
               <TouchableOpacity
                 style={[
                   {
-                    backgroundColor: buttonActive
+                    backgroundColor: buttonActive && !isLoading
                       ? 'rgb(28,144,251)'
                       : 'rgb(125,125,125)'
                   },
                   styles.settingRoomEnterTouch
                 ]}
                 onPressOut={onConferenceEnter}
-                disabled={!buttonActive}
+                disabled={!buttonActive || isLoading}
               >
                 <Text style={styles.settingRoomEnterText}>
                   {t('renewal.roomstate_setting_enter')}

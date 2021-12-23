@@ -216,3 +216,255 @@ const styles = StyleSheet.create({
 });
 
 export default UserListPresenter;
+
+
+{/* <FlatList
+            showsVerticalScrollIndicator={false}
+            bounces={true}
+            contentContainerStyle={{ flex: 1 }}
+            data={selectedEmployee.member}
+            keyExtractor={(item, index) => String(index)}
+            renderItem={({ item, index }: any) => {
+              const isMaster = item.is_master;
+
+              return (
+                <ScrollView
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  showsVerticalScrollIndicator={false}
+                  ref={el => (scrollRef.current[index] = el)}
+                  scrollEnabled={item.user_no !== auth.user_no}
+                  onScrollEndDrag={(
+                    e: NativeSyntheticEvent<NativeScrollEvent>
+                  ) => {
+                    onHandleSwipe(e, index);
+                  }}
+                >
+                  <View
+                    style={[styles.participantList, { width: width * 0.9 }]}
+                  >
+                    {item.direction === 'LEFT' && (
+                      <Animated.View
+                        onLayout={fadeInAnimated}
+                        style={{
+                          width: 50,
+                          marginRight: 15,
+                          opacity: 1,
+                          transform: [
+                            {
+                              translateX: fadeInValue.interpolate({
+                                inputRange: [0, 1],
+                                outputRange: [-50, 0]
+                              })
+                            }
+                          ]
+                        }}
+                      >
+                        <TouchableOpacity
+                          style={{
+                            backgroundColor: 'rgb(28,144,251)',
+                            width: 50,
+                            height: '100%',
+                            // marginRight: 15,
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                          }}
+                          onPress={(e: GestureResponderEvent) => {
+                            onHandelResetSwipe(e, index);
+                          }}
+                        >
+                          <Image
+                            source={icUserW}
+                            style={{
+                              width: 45,
+                              height: 45
+                            }}
+                            resizeMode="cover"
+                          />
+                        </TouchableOpacity>
+                      </Animated.View>
+                    )}
+                    <TouchableOpacity
+                      style={[
+                        styles.profileView,
+                        isTablet && { width: 46, height: 46 }
+                      ]}
+                      onPress={() => {
+                        clickDeleteUser(item, index);
+                      }}
+                      disabled={item.user_no === auth.user_no}
+                    >
+                      <View
+                        style={[
+                          styles.myView,
+                          isNormal &&
+                            item.user_no !== auth.user_no && {
+                              backgroundColor: '#00ff0000'
+                            },
+                          !isNormal &&
+                            item.user_no !== auth.user_no && {
+                              backgroundColor: '#1c90fb'
+                            }
+                        ]}
+                      >
+                        {item.user_no === auth.user_no ? (
+                          <Text style={styles.myText}>
+                            {t('renewal.chatting_me')}
+                          </Text>
+                        ) : isNormal ? (
+                          <Fragment />
+                        ) : (
+                          <Image
+                            source={icCancel_W}
+                            style={styles.icCancelUser}
+                          />
+                        )}
+                      </View>
+                      <Image
+                        style={styles.profile}
+                        source={{
+                          uri: item.profile_url
+                        }}
+                        resizeMode={'cover'}
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.infoBox}
+                      activeOpacity={1}
+                      onPress={(e: GestureResponderEvent) => {
+                        scrollRef.current[index]?.scrollTo({
+                          x: 0,
+                          animated: true
+                        });
+                        onHandelResetSwipe(e, index);
+                      }}
+                    >
+                      <View style={styles.infoBox}>
+                        {item.full_path !== '' ? (
+                          <Fragment>
+                            <Text style={styles.name}>
+                              {item.user_name}{' '}
+                              {item.rank_name ? item.rank_name : ''}
+                            </Text>
+                            <Text
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                              style={styles.tree}
+                            >
+                              {item.full_path}
+                            </Text>
+                          </Fragment>
+                        ) : (
+                          <Text
+                            numberOfLines={1}
+                            ellipsizeMode="tail"
+                            style={[styles.tree, { fontSize: 15 }]}
+                          >
+                            {item.user_name}
+                          </Text>
+                        )}
+                      </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={[
+                        styles.roleContainer,
+                        isMaster && { borderColor: '#01acc1' },
+                        !item.user_no && { borderColor: '#fff' },
+                        isTablet && { width: 140 }
+                      ]}
+                      onPress={() => {
+                        clickChangeRole(item, index);
+                      }}
+                      disabled={item.user_no === auth.user_no}
+                      activeOpacity={isNormal ? 1 : 0.6}
+                    >
+                      {isMaster ? (
+                        <Fragment>
+                          <Text
+                            style={[
+                              styles.maseterText,
+                              isTablet && { fontSize: 14 }
+                            ]}
+                          >
+                            {t('renewal.chatting_master')}
+                          </Text>
+                          <Image
+                            style={[
+                              styles.icMaster,
+                              isTablet && styles.icTabletMaster
+                            ]}
+                            source={icMasterCircle}
+                            resizeMode={'contain'}
+                          />
+                        </Fragment>
+                      ) : item.user_no ? (
+                        <Fragment>
+                          <Image
+                            style={[
+                              styles.icMaster,
+                              isTablet && styles.icTabletMaster
+                            ]}
+                            source={icAttdCircle}
+                            resizeMode={'contain'}
+                          />
+
+                          <Text
+                            style={[
+                              styles.attendantText,
+                              isTablet && { fontSize: 14 }
+                            ]}
+                          >
+                            {t('renewal.direct_create_participants')}
+                          </Text>
+                        </Fragment>
+                      ) : (
+                        <Fragment>
+                          <Text style={styles.extText}>
+                              {t('외부참여자')}
+                            </Text>
+                        </Fragment>
+                      )}
+                    </TouchableOpacity>
+                    {item.direction === 'RIGHT' && (
+                      <Animated.View
+                        onLayout={fadeInAnimated}
+                        style={{
+                          width: 50,
+                          marginRight: 15,
+                          opacity: 1,
+                          transform: [
+                            {
+                              translateX: fadeInValue.interpolate({
+                                inputRange: [0, 1],
+                                outputRange: [50, 0]
+                              })
+                            }
+                          ]
+                        }}
+                      >
+                        <TouchableOpacity
+                          style={{
+                            backgroundColor: 'rgb(252, 76, 96)',
+                            width: 50,
+                            height: '100%',
+                            marginLeft: 15,
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                          }}
+                          onPress={(e: GestureResponderEvent) => {
+                            clickDeleteUser(item, index);
+                          }}
+                        >
+                          <Image
+                            source={icOut}
+                            style={{ width: 40, height: 40 }}
+                            resizeMode="cover"
+                          />
+                        </TouchableOpacity>
+                      </Animated.View>
+                    )}
+                  </View>
+                </ScrollView>
+              );
+            }}
+          /> */}

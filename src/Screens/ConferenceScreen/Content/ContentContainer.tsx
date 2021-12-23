@@ -56,11 +56,11 @@ function ContentContainer(props: any) {
   });
 
   const dispatch = useDispatch();
-  const setConferenceMode = mode =>
+  const setConferenceMode = (mode: any) =>
     dispatch(localAction.setConferenceMode(mode));
-  const setDrawingMode = value =>
+  const setDrawingMode = (value: any) =>
     dispatch(mainUserAction.setDrawingMode(value));
-  const setDocumentListMode = value =>
+  const setDocumentListMode = (value: any) =>
     dispatch(mainUserAction.setDocumentListMode(value));
 
   useEffect(() => {

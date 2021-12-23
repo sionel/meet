@@ -15,7 +15,7 @@ import OverView from './OverView';
 import SimpleNoti from '../SimpleNoti';
 import { ConferenceModes } from '../../../utils/ConstantsBackup';
 import { RootState } from '../../../redux/configureStore';
-const ContentPresenter = props => {
+const ContentPresenter = (props: any) => {
   const {
     mainUser,
     callType,
