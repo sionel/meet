@@ -38,10 +38,9 @@ const SplashScreenContainer = ({
   const [serverNoti, setServerNoti] = useState([]);
   const [notiIndex, setNotiIndex] = useState(0);
   const [first, setFirst] = useState(true);
-  const t = getT();
-
   const deeplink = params?.deeplink;
-
+  const t = getT();
+  
   //#region  selector
   const {
     auth,
