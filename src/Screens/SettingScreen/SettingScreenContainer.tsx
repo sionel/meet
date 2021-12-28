@@ -21,7 +21,7 @@ export default function SettingScreenContainer(props: any) {
   // const ref = useRef<any>({tracks:null});
   //강제 업데이트
   const [, updateState] = useState<undefined | {}>();
-  const forceUpdate = useCallback(()=> updateState({}), []);
+  const forceUpdate = useCallback(() => updateState({}), []);
   const [isLoading, setIsLoading] = useState(false);
   const { auth, isLogin, isHorizon } = useSelector((state: RootState) => {
     return {
@@ -48,7 +48,15 @@ export default function SettingScreenContainer(props: any) {
   }, []);
 
   const _goBack = () => {
-    navigation.goBack();
+    if (navigation.canGoBack()) navigation.goBack();
+    else {
+      // 직접 URL주소를 통해서 들어왔을때 처리
+      if(auth.user_no) {
+        navigation.reset({ routes: [{ name: 'MainStack' }] });
+      } else {
+        navigation.reset({ routes: [{ name: 'LoginStack' }] });
+      }
+    }
   };
   const _jitsiInit = () => {
     // JitsiMeetJS 를 초기화 한다.
@@ -128,7 +136,7 @@ export default function SettingScreenContainer(props: any) {
       // 토큰받고
       roomToken = (await MeetApi.getMeetRoomToken(auth, params.id)).resultData;
     }
-    
+
     if (roomToken === '접근금지') {
       // wehago V 때문에 절차가 하나 늘어남
       setAlert({
@@ -180,7 +188,7 @@ export default function SettingScreenContainer(props: any) {
 
   // console.log('!@!@#!');
   // console.log(params);
-  
+
   return (
     <SettingScreenPresenter
       tracks={tracks}

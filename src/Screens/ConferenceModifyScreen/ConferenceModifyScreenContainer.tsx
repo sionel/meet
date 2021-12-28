@@ -123,6 +123,7 @@ export default function ConferenceModfiyScreenContainer(props: any) {
   const [nameList, setNameList] = useState<string[]>([]);
   const [nameduplication, setNameDuplication] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [rezInfoLoading, setRezInfoLoading] = useState(false);
 
   const titleRef: RefObject<any> = useRef();
   const sendMsgRef: RefObject<any> = useRef();
@@ -611,7 +612,9 @@ export default function ConferenceModfiyScreenContainer(props: any) {
   };
 
   useEffect(() => {
+    setRezInfoLoading(true);
     _getReservationInfos(roomId);
+    setRezInfoLoading(false);
   }, []);
 
   useEffect(() => {

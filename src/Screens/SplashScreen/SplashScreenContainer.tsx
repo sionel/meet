@@ -39,30 +39,20 @@ const SplashScreenContainer = ({
   const [notiIndex, setNotiIndex] = useState(0);
   const [first, setFirst] = useState(true);
   const deeplink = params?.deeplink;
+
   const t = getT();
-  
+
   //#region  selector
-  const {
-    auth,
-    from,
-    updateNoti,
-    autoLogin,
-    isLogin,
-    url,
-    isConference,
-    conferenceManager
-  } = useSelector((state: RootState) => {
-    return {
-      auth: state.user.auth,
-      from: state.user.from,
-      updateNoti: state.user.updateNoti,
-      autoLogin: state.user.autoLogin,
-      isLogin: state.user.isLogin,
-      url: state.root.url,
-      isConference: state.conference.isConference,
-      conferenceManager: state.conference.conferenceManager
-    };
-  });
+  const { auth, from, updateNoti, autoLogin } = useSelector(
+    (state: RootState) => {
+      return {
+        auth: state.user.auth,
+        from: state.user.from,
+        updateNoti: state.user.updateNoti,
+        autoLogin: state.user.autoLogin
+      };
+    }
+  );
   //#endregion
 
   //#region  dispatch
@@ -224,15 +214,6 @@ const SplashScreenContainer = ({
     if (!url) return;
     let result: any = querystringParser(url);
     // if(result.type === 'conference') {
-    if (result.video_id) {
-      // TODO: 컨퍼런스로 받았을때 이 분기 처리를 어떻게 해야할지 검토필요성 있음
-      // WEHAGO에서 계정 정보를 가지고 올때 이 분기랑 토큰이 있는 분기랑 둘다 접근함 문제가 없는건지 ?
-      navigation.reset({
-        routes: [
-          { name: 'ConferenceStateView', params: { id: result.video_id } }
-        ]
-      });
-    }
     // 화상회의 요청인지 판별
     if (result.is_creater) {
       // 오래된 딥링크 주소 차단
@@ -278,12 +259,47 @@ const SplashScreenContainer = ({
       */
       const { name } = await MeetApi.getMeetRoomNoCert(decoded.room);
 
-      navigation.navigate('ConferenceStateView', {
-        accessType: 'email',
-        id: decoded.room,
-        selectedRoomName: name,
-        emailToken: result.token
+      navigation.reset({
+        routes: [
+          {
+            name: 'ConferenceStateView',
+            params: {
+              accessType: 'email',
+              id: decoded.room,
+              selectedRoomName: name,
+              emailToken: result.token
+            }
+          }
+        ]
       });
+    } else if (result.video_id) {
+      // TODO: 컨퍼런스로 받았을때 이 분기 처리를 어떻게 해야할지 검토필요성 있음
+      // CASE: 해당 화상회의 URL을 통해서 직접 접속 했을 경우
+      // WEHAGO에서 계정 정보를 가지고 올때 이 분기랑 토큰이 있는 분기랑 둘다 접근함 문제가 없는건지 ?
+      if (auth.user_no) {
+        const { name } = await MeetApi.getMeetRoomNoCert(result.video_id);
+        navigation.reset({
+          routes: [
+            {
+              name: 'ConferenceStateView',
+              params: {
+                id: result.video_id,
+                accessType: 'auth',
+                selectedRoomName: name
+              }
+            }
+          ]
+        });
+      } else {
+        Alert.alert(t('비회원 접속'), t('참여코드를 입력해주시기 바랍니다.'));
+        navigation.reset({ routes: [{ name: 'LoginStack' }] });
+      }
+    } else {
+      if (!result.video_id) {
+        onLogout();
+        Alert.alert(t('비정상적인 접근입니다.'));
+        navigation.reset({ routes: [{ name: 'LoginStack' }] });
+      }
     }
   };
 

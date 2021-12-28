@@ -79,7 +79,7 @@ export type MeetNavigationProps<T extends keyof MeetParamList> =
 const RootStack = createStackNavigator();
 
 export default function RootNavigation(props: any) {
-  let nowStack = '';
+  // let nowStack = '';
   const navigationRef: RefObject<any> = React.createRef();
   const dispatch = useDispatch();
   const setIsConference = (flag: boolean) => {
@@ -96,46 +96,45 @@ export default function RootNavigation(props: any) {
     };
   });
 
-  const checkConference = (state: Readonly<NavigationState> | undefined) => {
-    const name = state?.routes[0].name;
-    if (name === 'ConferenceView') nowStack = 'ConferenceView';
-    else nowStack = '';
-  };
-
-  const _handleOpenURL = (event: any) => {
-    if (isConference) {
-      Alert.alert('이미 진행중인 화상회의가 있습니다.');
-      return;
-    } else {
-      navigate('SplashView', { deeplink: event.url });
-    }
-  };
+  // const checkConference = (state: Readonly<NavigationState> | undefined) => {
+  //   const name = state?.routes[0].name;
+  //   if (name === 'ConferenceView') nowStack = 'ConferenceView';
+  //   else nowStack = '';
+  // };
 
   useEffect(() => {
     // TODO: 안드로이드 액티비티가 1개이면서 위하고에서 백그라운드에서 포그라운드로 넘어올때 App이 재시작됨으로 재시작 처리를 우선으로함
+    // 위하고 측에서 딥링크 넘겨줄때 위하고 앱측에서 launchMode 방식에서 생기는 현상인거 같음.
     if (isConference) {
       Alert.alert('허용되지 않은 접근', '앱이 재시작됩니다.');
       setIsConference(false);
       return;
     }
 
-    if(props.url?.url) navigate('SplashView', { deeplink: props.url.url });
+    if (props.url?.url) navigate('SplashView', { deeplink: props.url.url });
 
     // 앱이 꺼져 있을때(딥링크)
     Linking.getInitialURL()
       .then(url => url && navigate('SplashView', { deeplink: url }))
       .catch(err => console.error('error ', err));
 
-    //  앱이 켜져있을때(딥링크)
-    Linking.addEventListener('url', _handleOpenURL);
-
-    return () => {
-      Linking.removeListener('url', _handleOpenURL);
-    };
+    // return () => {
+    //   Linking.removeListener('url', _handleOpenURL);
+    // };
   }, []);
 
+  //  앱이 켜져있을때(딥링크)
+  Linking.addEventListener('url', event => {
+    if (isConference) {
+      Alert.alert('이미 진행중인 화상회의가 있습니다.');
+      return;
+    } else {
+      navigate('SplashView', { deeplink: event.url });
+    }
+  });
+
   return (
-    <NavigationContainer ref={navigationRef} onStateChange={checkConference}>
+    <NavigationContainer ref={navigationRef}>
       <RootStack.Navigator
         initialRouteName="SplashView"
         screenOptions={{ headerShown: false }}
