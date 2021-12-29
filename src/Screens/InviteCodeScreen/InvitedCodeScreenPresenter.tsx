@@ -26,7 +26,7 @@ interface PresenterProps {
   onFocusingCode: () => void;
   onFocusInput: () => void;
   onFocusOutInput: () => void;
-  handleClickBack:()=>void
+  handleClickBack: () => void;
   changeInputcode: (text: string) => Promise<void>;
   joincodeErr: boolean;
   inputcodeErr: boolean;
@@ -58,13 +58,16 @@ const InvitedCodeScreenPresenter = (props: PresenterProps) => {
 
   return (
     <SafeAreaView style={styles.LoginSafeAreaView}>
-      <StatusBar  barStyle={'dark-content'}/>
+      <StatusBar barStyle={'dark-content'} />
       <KeyboardAwareScrollView
-        contentContainerStyle={{ flexGrow: 1 }}
+        contentContainerStyle={{ flex: 1 }}
         onKeyboardDidHide={onFocusOutInput}
         bounces={false}
+        enableOnAndroid={true}
+        enableAutomaticScroll={Platform.OS === 'ios'}
+        extraHeight={120}
       >
-        <ScrollView
+        {/* <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           contentContainerStyle={{
             flexGrow: 1,
@@ -72,142 +75,142 @@ const InvitedCodeScreenPresenter = (props: PresenterProps) => {
           }}
           keyboardShouldPersistTaps="never"
           bounces={false}
+        > */}
+        <View style={styles.topTitle}>
+          <TouchableOpacity onPress={handleClickBack}>
+            <Image
+              source={icBack}
+              style={{ width: 24, height: 24 }}
+              resizeMode="cover"
+            />
+          </TouchableOpacity>
+        </View>
+        <View
+          style={[
+            styles.verContainer,
+            isHorizon && styles.horizonContainer, //가로
+            isTablet && isHorizon && styles.horPadContainer, //태블릿 && 가로
+            isTablet && !isHorizon && styles.verPadContainer //테블릿 && 세로
+          ]}
         >
-          <View style={[styles.topTitle]}>
-            <TouchableOpacity onPress={handleClickBack}>
-              <Image
-                source={icBack}
-                style={{ width: 24, height: 24 }}
-                resizeMode="cover"
-              />
-            </TouchableOpacity>
-          </View>
-          <View
-            style={[
-              styles.verContainer,
-              isHorizon && styles.horizonContainer, //가로
-              isTablet && isHorizon && styles.horPadContainer, //태블릿 && 가로
-              isTablet && !isHorizon && styles.verPadContainer //테블릿 && 세로
-            ]}
+          <TouchableOpacity
+            style={{ flex: 1 }}
+            activeOpacity={1}
+            onPress={onFocusOutInput}
           >
-            <TouchableOpacity
-              style={{ flex: 1 }}
-              activeOpacity={1}
-              onPress={onFocusOutInput}
-            >
-              <View style={{ flex: 1 }} />
+            <View style={{ flex: 1 }} />
 
-              <View style={styles.topContainer}>
-                <Text style={styles.textHead}>{t('renewal.login_code')}</Text>
-                <Text style={styles.textSub1}>
-                  {t('renewal.login_codemessage1')}
-                </Text>
-                <Text style={styles.textSub2}>
-                  {t('renewal.login_codemessage2')}
-                </Text>
-              </View>
-              <View style={{ flex: 0.7 }} />
-              <View style={styles.codeContainer}>
-                <TextInput
-                  onChangeText={changeInputcode}
-                  onFocus={onFocusInput}
-                  value={code}
-                  style={styles.none}
-                  autoCapitalize="none"
-                  caretHidden={true}
-                  maxLength={6}
-                  editable={code.length === 6 ? false : true}
-                  ref={codeLineRef}
-                />
-                <TextInput
-                  style={[
-                    styles.inputNumber,
-                    code.length >= 1 && styles.inputAccent,
-                    logging && styles.inputLogging,
-                    focusingNum === 0 && styles.focusAccent
-                  ]}
-                  value={code ? code.slice(0, 1) : shadowCode.slice(0, 1)}
-                  maxLength={1}
-                  caretHidden={true}
-                  onFocus={onFocusingCode}
-                />
-                <TextInput
-                  style={[
-                    styles.inputNumber,
-                    code.length >= 2 && styles.inputAccent,
-                    logging && styles.inputLogging,
-                    focusingNum === 1 && styles.focusAccent
-                  ]}
-                  value={code ? code.slice(1, 2) : shadowCode.slice(1, 2)}
-                  maxLength={1}
-                  caretHidden={true}
-                  onFocus={onFocusingCode}
-                />
-                <TextInput
-                  style={[
-                    styles.inputNumber,
-                    code.length >= 3 && styles.inputAccent,
-                    logging && styles.inputLogging,
-                    focusingNum === 2 && styles.focusAccent
-                  ]}
-                  value={code ? code.slice(2, 3) : shadowCode.slice(2, 3)}
-                  maxLength={1}
-                  caretHidden={true}
-                  onFocus={onFocusingCode}
-                />
-                <TextInput
-                  style={[
-                    styles.inputNumber,
-                    code.length >= 4 && styles.inputAccent,
-                    logging && styles.inputLogging,
-                    focusingNum === 3 && styles.focusAccent
-                  ]}
-                  value={code ? code.slice(3, 4) : shadowCode.slice(3, 4)}
-                  maxLength={1}
-                  caretHidden={true}
-                  onFocus={onFocusingCode}
-                />
-                <TextInput
-                  style={[
-                    styles.inputNumber,
-                    code.length >= 5 && styles.inputAccent,
-                    logging && styles.inputLogging,
-                    focusingNum === 4 && styles.focusAccent
-                  ]}
-                  value={code ? code.slice(4, 5) : shadowCode.slice(4, 5)}
-                  maxLength={1}
-                  caretHidden={true}
-                  onFocus={onFocusingCode}
-                />
-                <TextInput
-                  style={[
-                    styles.inputNumber,
-                    code.length >= 6 && styles.inputAccent,
-                    logging && styles.inputLogging,
-                    focusingNum === 5 && styles.focusAccent
-                  ]}
-                  value={code ? code.slice(5, 6) : shadowCode.slice(5, 6)}
-                  maxLength={1}
-                  caretHidden={true}
-                  onFocus={onFocusingCode}
-                />
-              </View>
-
-              <Text
-                style={[
-                  styles.ErrorText,
-                  Platform.OS === 'ios' && { height: 15 },
-                  isHorizon && !isTablet && { top: '-4%' }
-                ]}
-              >
-                {joincodeErr && t('renewal.text_incorrect_code_error')}
-                {inputcodeErr && t('renewal.text_nomatch_conference_error')}
+            <View style={styles.topContainer}>
+              <Text style={styles.textHead}>{t('renewal.login_code')}</Text>
+              <Text style={styles.textSub1}>
+                {t('renewal.login_codemessage1')}
               </Text>
-              <View style={{ flex: 1 }} />
-              <View style={{ flex: 0.5 }} />
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
+              <Text style={styles.textSub2}>
+                {t('renewal.login_codemessage2')}
+              </Text>
+            </View>
+            <View style={{ flex: 0.7 }} />
+            <View style={styles.codeContainer}>
+              <TextInput
+                onChangeText={changeInputcode}
+                onFocus={onFocusInput}
+                value={code}
+                style={styles.none}
+                autoCapitalize="none"
+                caretHidden={true}
+                maxLength={6}
+                editable={code.length === 6 ? false : true}
+                ref={codeLineRef}
+              />
+              <TextInput
+                style={[
+                  styles.inputNumber,
+                  code.length >= 1 && styles.inputAccent,
+                  logging && styles.inputLogging,
+                  focusingNum === 0 && styles.focusAccent
+                ]}
+                value={code ? code.slice(0, 1) : shadowCode.slice(0, 1)}
+                maxLength={1}
+                caretHidden={true}
+                onFocus={onFocusingCode}
+              />
+              <TextInput
+                style={[
+                  styles.inputNumber,
+                  code.length >= 2 && styles.inputAccent,
+                  logging && styles.inputLogging,
+                  focusingNum === 1 && styles.focusAccent
+                ]}
+                value={code ? code.slice(1, 2) : shadowCode.slice(1, 2)}
+                maxLength={1}
+                caretHidden={true}
+                onFocus={onFocusingCode}
+              />
+              <TextInput
+                style={[
+                  styles.inputNumber,
+                  code.length >= 3 && styles.inputAccent,
+                  logging && styles.inputLogging,
+                  focusingNum === 2 && styles.focusAccent
+                ]}
+                value={code ? code.slice(2, 3) : shadowCode.slice(2, 3)}
+                maxLength={1}
+                caretHidden={true}
+                onFocus={onFocusingCode}
+              />
+              <TextInput
+                style={[
+                  styles.inputNumber,
+                  code.length >= 4 && styles.inputAccent,
+                  logging && styles.inputLogging,
+                  focusingNum === 3 && styles.focusAccent
+                ]}
+                value={code ? code.slice(3, 4) : shadowCode.slice(3, 4)}
+                maxLength={1}
+                caretHidden={true}
+                onFocus={onFocusingCode}
+              />
+              <TextInput
+                style={[
+                  styles.inputNumber,
+                  code.length >= 5 && styles.inputAccent,
+                  logging && styles.inputLogging,
+                  focusingNum === 4 && styles.focusAccent
+                ]}
+                value={code ? code.slice(4, 5) : shadowCode.slice(4, 5)}
+                maxLength={1}
+                caretHidden={true}
+                onFocus={onFocusingCode}
+              />
+              <TextInput
+                style={[
+                  styles.inputNumber,
+                  code.length >= 6 && styles.inputAccent,
+                  logging && styles.inputLogging,
+                  focusingNum === 5 && styles.focusAccent
+                ]}
+                value={code ? code.slice(5, 6) : shadowCode.slice(5, 6)}
+                maxLength={1}
+                caretHidden={true}
+                onFocus={onFocusingCode}
+              />
+            </View>
+
+            <Text
+              style={[
+                styles.ErrorText,
+                Platform.OS === 'ios' && { height: 15 },
+                isHorizon && !isTablet && { top: '-4%' }
+              ]}
+            >
+              {joincodeErr && t('renewal.text_incorrect_code_error')}
+              {inputcodeErr && t('renewal.text_nomatch_conference_error')}
+            </Text>
+            <View style={{ flex: 1 }} />
+            <View style={{ flex: 0.5 }} />
+          </TouchableOpacity>
+        </View>
+        {/* </ScrollView> */}
       </KeyboardAwareScrollView>
     </SafeAreaView>
   );
@@ -256,7 +259,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     // backgroundColor:'red',
-    paddingHorizontal:10
+    paddingHorizontal: 10
   },
   bottomContainer: {
     flex: 1,
@@ -265,7 +268,7 @@ const styles = StyleSheet.create({
   //코드 입력 안내문
   textHead: {
     fontSize: 20,
-    fontFamily:'DOUZONEText50',
+    fontFamily: 'DOUZONEText50',
     textAlign: 'center',
     color: '#000'
   },
@@ -275,13 +278,13 @@ const styles = StyleSheet.create({
   textSub1: {
     paddingTop: 15,
     fontSize: 16,
-    fontFamily:'DOUZONEText30',
+    fontFamily: 'DOUZONEText30',
     textAlign: 'center',
     color: 'rgb(147,147,147)'
   },
   textSub2: {
     fontSize: 16,
-    fontFamily:'DOUZONEText30',
+    fontFamily: 'DOUZONEText30',
     textAlign: 'center',
     color: 'rgb(147,147,147)'
   },
@@ -301,7 +304,7 @@ const styles = StyleSheet.create({
     zIndex: 999,
     padding: 0,
     borderBottomWidth: 4,
-    fontFamily:'DOUZONEText50'
+    fontFamily: 'DOUZONEText50'
   },
   focusAccent: {
     borderColor: '#0033ff',
@@ -333,11 +336,11 @@ const styles = StyleSheet.create({
   loginBtnText: {
     color: '#fff',
     fontSize: 16,
-    fontFamily:'DOUZONEText30'
+    fontFamily: 'DOUZONEText30'
   },
   none: {
     position: 'absolute',
-    bottom: 95,
+    bottom: -30,
     width: '100%',
     zIndex: 10,
     color: 'rgba(0,0,0,0)',
@@ -345,9 +348,9 @@ const styles = StyleSheet.create({
   },
   ErrorText: {
     color: 'red',
-    top: '-12%',
+    top: '-9%',
     fontSize: 13,
-    fontFamily:'DOUZONEText30',
+    fontFamily: 'DOUZONEText30',
     left: 10
   }
 });

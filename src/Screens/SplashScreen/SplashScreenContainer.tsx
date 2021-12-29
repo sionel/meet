@@ -21,7 +21,6 @@ import { actionCreators as IndicatorAcions } from '../../redux/modules/indicator
 import { actionCreators as RecentsActions } from '../../redux/modules/recentsInvited';
 import { actionCreators as ConferenceActions } from '../../redux/modules/conference';
 import { MeetNavigationProps } from '../../Navigations/RootNavigation';
-import RNRestart from 'react-native-restart';
 
 // const iswehagov = WEHAGO_ENV === 'WEHAGOV';
 

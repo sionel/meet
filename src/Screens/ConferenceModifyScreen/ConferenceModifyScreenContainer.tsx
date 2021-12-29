@@ -132,6 +132,13 @@ export default function ConferenceModfiyScreenContainer(props: any) {
 
   const width = Dimensions.get('window').width;
 
+  const [rotate] = useState(new Animated.Value(0));
+
+  const spin = rotate.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '360deg']
+  });
+
   const { auth, isHorizon, roomId } = useSelector((state: any) => ({
     auth: state.user.auth,
     isHorizon: state.orientation.isHorizon,
@@ -182,6 +189,9 @@ export default function ConferenceModfiyScreenContainer(props: any) {
 
     const reservationUserInfos: PartialUserInfoParam[] = await Promise.all(
       sortedPortalIdList.map(async (user, i) => {
+        console.log(user.full_path_list);
+        
+        const pathLng: number = user.full_path_list.length;
         const data: PartialUserInfoParam = {
           portal_id: user.portal_id,
           rank_name: user.rank_name,
@@ -191,7 +201,7 @@ export default function ConferenceModfiyScreenContainer(props: any) {
             ? wehagoMainURL + user.profile_url
             : wehagoDummyImageURL,
           full_path: user.user_no
-            ? user.full_path_list[5].path
+            ? user.full_path_list[pathLng-1].path
             : user.user_name !== null
             ? user.user
             : '',
@@ -202,7 +212,7 @@ export default function ConferenceModfiyScreenContainer(props: any) {
         return data;
       })
     );
-
+    
     setSelectedEmployee({ member: reservationUserInfos, group: {} });
 
     const {
@@ -612,6 +622,15 @@ export default function ConferenceModfiyScreenContainer(props: any) {
   };
 
   useEffect(() => {
+    Animated.loop(
+      Animated.timing(rotate, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: true,
+        easing: Easing.out(Easing.poly(1))
+      })
+    ).start();
+
     setRezInfoLoading(true);
     _getReservationInfos(roomId);
     setRezInfoLoading(false);
@@ -802,6 +821,8 @@ export default function ConferenceModfiyScreenContainer(props: any) {
           nameduplication={nameduplication}
           isLoading={isLoading}
           handleBlurTitleInput={handleBlurTitleInput}
+          rezInfoLoading={rezInfoLoading}
+          spin={spin}
         />
       )}
     </View>

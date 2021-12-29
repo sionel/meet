@@ -58,19 +58,13 @@ const LoginScreenPresenter = (props: PresenterProps) => {
     <SafeAreaView style={styles.LoginSafeAreaView}>
       <StatusBar barStyle={'dark-content'} />
       <KeyboardAwareScrollView
-        contentContainerStyle={{ flexGrow: 1 }}
+        contentContainerStyle={{ flex: 1 }}
         onKeyboardDidHide={onFocusOutInput}
         bounces={false}
+        enableOnAndroid={true}
+        enableAutomaticScroll={Platform.OS === 'ios'}
+        extraHeight={120}
       >
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          contentContainerStyle={{
-            flexGrow: 1,
-            minHeight: isHorizon && !isTablet ? 350 : 700
-          }}
-          keyboardShouldPersistTaps="never"
-          bounces={false}
-        >
           <View
             style={[
               styles.verContainer,
@@ -220,7 +214,6 @@ const LoginScreenPresenter = (props: PresenterProps) => {
               <View style={{ flex: 0.5 }} />
             </TouchableOpacity>
           </View>
-        </ScrollView>
       </KeyboardAwareScrollView>
     </SafeAreaView>
   );
@@ -338,7 +331,7 @@ const styles = StyleSheet.create({
   },
   none: {
     position: 'absolute',
-    bottom: 95,
+    bottom: -30,
     width: '100%',
     zIndex: 10,
     color: 'rgba(0,0,0,0)',
@@ -346,7 +339,7 @@ const styles = StyleSheet.create({
   },
   ErrorText: {
     color: 'red',
-    top: '-9.5%',
+    top: '-7.5%',
     fontSize: 13,
     fontFamily:'DOUZONEText30',
     paddingLeft: 10

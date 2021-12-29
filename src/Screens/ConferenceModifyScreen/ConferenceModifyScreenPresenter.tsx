@@ -22,6 +22,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { getT } from '../../utils/translateManager';
+import { CustomIcon } from '../../components';
 // import { add, last, parseInt } from 'lodash';
 
 const icCode = require('../../../assets/new/icons/ic_code.png');
@@ -60,10 +61,12 @@ interface PresenterProps {
   calendarError: boolean;
   nameduplication: boolean;
   isLoading: boolean;
+  rezInfoLoading: boolean;
   sendMsgRef: RefObject<any>;
   titleRef: RefObject<any>;
   auth: any;
   width: number;
+  spin: Animated.AnimatedInterpolation;
   modifyConference: () => void;
   onHandleBack: () => void;
   onTimeConfirm: () => void;
@@ -139,7 +142,9 @@ const ConferenceModfiyScreenPresenter = (props: PresenterProps) => {
     width,
     nameduplication,
     isLoading,
-    handleBlurTitleInput
+    handleBlurTitleInput,
+    rezInfoLoading,
+    spin
   } = props;
   const t = getT();
   const DatePickerComponent = (
@@ -227,467 +232,508 @@ const ConferenceModfiyScreenPresenter = (props: PresenterProps) => {
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity
-          onPress={togglePublic}
-          disabled={!isAuth || isNormal}
-          activeOpacity={isAuth ? 0.6 : 1}
-          style={[styles.privateContainer]}
-        >
-          <LinearGradient
-            end={{ x: 1, y: 1 }}
-            start={{ x: 0, y: 0 }}
-            colors={isPublic ? ['#a460ff', '#5d5dff'] : ['#1cc8fb', '#1c90fb']}
-            style={styles.codeContainer}
-          >
-            <Image
-              source={isPublic ? icCode : icLock_W}
-              style={styles.icCode}
-            />
-          </LinearGradient>
-
-          <View style={styles.privateTextContainer}>
-            <Text style={styles.privateMainText}>
-              {isPublic
-                ? t('renewal.direct_create_public_conference')
-                : t('renewal.direct_create_private_conference')}
-            </Text>
-            <Text style={styles.privateSubText}>
-              {isPublic
-                ? t('renewal.direct_create_public_guide')
-                : t('renewal.direct_create_private_guide')}
+        {rezInfoLoading ? (
+          <View style={styles.dimmed}>
+            <Animated.View
+              style={{
+                transform: [{ rotate: spin }],
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
+              <CustomIcon name={'loading'} size={48} />
+            </Animated.View>
+            <Text style={styles.loadingText}>
+              {t('예약정보를 불러오는중입니다.')}
             </Text>
           </View>
-        </TouchableOpacity>
+        ) : (
+          <Fragment>
+            <TouchableOpacity
+              onPress={togglePublic}
+              disabled={!isAuth || isNormal}
+              activeOpacity={isAuth ? 0.6 : 1}
+              style={[styles.privateContainer]}
+            >
+              <LinearGradient
+                end={{ x: 1, y: 1 }}
+                start={{ x: 0, y: 0 }}
+                colors={
+                  isPublic ? ['#a460ff', '#5d5dff'] : ['#1cc8fb', '#1c90fb']
+                }
+                style={styles.codeContainer}
+              >
+                <Image
+                  source={isPublic ? icCode : icLock_W}
+                  style={styles.icCode}
+                />
+              </LinearGradient>
 
-        <View style={[styles.graySplitBar, isHorizon && { height: 6 }]} />
+              <View style={styles.privateTextContainer}>
+                <Text style={styles.privateMainText}>
+                  {isPublic
+                    ? t('renewal.direct_create_public_conference')
+                    : t('renewal.direct_create_private_conference')}
+                </Text>
+                <Text style={styles.privateSubText}>
+                  {isPublic
+                    ? t('renewal.direct_create_public_guide')
+                    : t('renewal.direct_create_private_guide')}
+                </Text>
+              </View>
+            </TouchableOpacity>
 
-        <View
-          style={styles.roomContantContainer}
-          pointerEvents={isNormal ? 'none' : 'auto'}
-        >
-          <View
-            style={[
-              styles.middleContainer,
-              isNormal && { justifyContent: 'space-evenly' }
-            ]}
-          >
-            <View style={styles.directionColTitle}>
-              <Text style={styles.textHeader}>
-                {t('renewal.direct_create_conferenceName')}
-              </Text>
-              {isNormal ? (
-                <Text style={styles.roomNameTextStyle}>{roomName}</Text>
-              ) : (
-                <Fragment>
-                  <TextInput
-                    onChangeText={roomNameChange}
-                    onBlur={handleBlurTitleInput}
-                    value={roomName}
-                    maxLength={20}
-                    style={[
-                      styles.roomNameTextInputStyle,
-                      roomName !== '' && { borderColor: '#1c90fb' },
-                      (textLess2 || nameduplication) &&
-                        roomName !== '' && { borderColor: '#fc4c60' }
-                    ]}
-                    ref={titleRef}
+            <View style={[styles.graySplitBar, isHorizon && { height: 6 }]} />
+
+            <View
+              style={styles.roomContantContainer}
+              pointerEvents={isNormal ? 'none' : 'auto'}
+            >
+              <View
+                style={[
+                  styles.middleContainer,
+                  isNormal && { justifyContent: 'space-evenly' }
+                ]}
+              >
+                <View style={styles.directionColTitle}>
+                  <Text style={styles.textHeader}>
+                    {t('renewal.direct_create_conferenceName')}
+                  </Text>
+                  {isNormal ? (
+                    <Text style={styles.roomNameTextStyle}>{roomName}</Text>
+                  ) : (
+                    <Fragment>
+                      <TextInput
+                        onChangeText={roomNameChange}
+                        onBlur={handleBlurTitleInput}
+                        value={roomName}
+                        maxLength={20}
+                        style={[
+                          styles.roomNameTextInputStyle,
+                          roomName !== '' && { borderColor: '#1c90fb' },
+                          (textLess2 || nameduplication) &&
+                            roomName !== '' && { borderColor: '#fc4c60' }
+                        ]}
+                        ref={titleRef}
+                      />
+                      <View
+                        style={[
+                          styles.countContainer,
+                          (textLess2 || nameduplication) &&
+                            roomName !== '' && {
+                              justifyContent: 'space-between'
+                            }
+                        ]}
+                      >
+                        {textLess2 && roomName != '' && (
+                          <Text style={styles.lengthError}>
+                            {t('renewal.direct_create_length_warning')}
+                          </Text>
+                        )}
+
+                        {nameduplication && roomName != '' && (
+                          <Text style={styles.lengthError}>
+                            {t(
+                              '중복되는 회의명입니다. 회의명 변경 후 생성하세요'
+                            )}
+                          </Text>
+                        )}
+
+                        <View style={styles.countContainer}>
+                          <Text style={styles.ft12}>{roomName.length}</Text>
+                          <Text style={styles.maxLength}>/20</Text>
+                        </View>
+                      </View>
+                    </Fragment>
+                  )}
+                </View>
+                <View style={styles.directionColMessage}>
+                  <Text style={styles.textHeader}>
+                    {t('renewal.direct_create_inviteMessage')}
+                  </Text>
+
+                  {isNormal ? (
+                    <Text style={styles.sendTextStyle}>{sendMessage}</Text>
+                  ) : (
+                    <Fragment>
+                      <TextInput
+                        onChangeText={sendMessageChange}
+                        value={sendMessage}
+                        maxLength={200}
+                        multiline
+                        style={[
+                          styles.sendInputStyle,
+                          sendMessage !== '' && { borderColor: '#1c90fb' },
+                          isHorizon && { paddingTop: '1%' }
+                        ]}
+                        ref={sendMsgRef}
+                      />
+                      <View style={styles.countContainer}>
+                        <Text style={styles.ft12}>{sendMessage.length}</Text>
+                        <Text style={styles.maxLength}>/200</Text>
+                      </View>
+                    </Fragment>
+                  )}
+                </View>
+              </View>
+            </View>
+
+            <View style={[styles.graySplitBar, isHorizon && { height: 6 }]} />
+
+            <View
+              pointerEvents={isNormal ? 'none' : 'auto'}
+              style={[
+                styles.reserveContainer,
+                switchReserve && { height: '15%' }
+              ]}
+            >
+              <View style={styles.rowBetweenContainer}>
+                <Text style={[styles.ft14Dou50, { fontSize: 15 }]}>
+                  {t('renewal.direct_create_reservation_conference')}
+                </Text>
+                {isNormal ? (
+                  <Fragment />
+                ) : (
+                  <Switch
+                    onValueChange={onSwitchReserveChange}
+                    value={switchReserve}
+                    trackColor={{ false: '', true: '#1c90fb' }}
                   />
-                  <View
-                    style={[
-                      styles.countContainer,
-                      (textLess2 || nameduplication) &&
-                        roomName !== '' && { justifyContent: 'space-between' }
-                    ]}
-                  >
-                    {textLess2 && roomName != '' && (
-                      <Text style={styles.lengthError}>
-                        {t('renewal.direct_create_length_warning')}
-                      </Text>
-                    )}
+                )}
+              </View>
+              {switchReserve && (
+                <Fragment>
+                  <View style={styles.rowBetweenContainer}>
+                    <Text style={styles.timeText}>
+                      {t('renewal.roomstate_reservation_starttime')}
+                    </Text>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'flex-end'
+                      }}
+                    >
+                      <TouchableOpacity
+                        style={[
+                          styles.datetimeBox,
+                          datePicker === 'start' && {
+                            borderColor: 'rgb(28, 144, 251)'
+                          },
+                          isTablet && { width: '20%' }
+                        ]}
+                        onPress={() => {
+                          openDatePicker('start');
+                        }}
+                      >
+                        <Text
+                          style={[
+                            styles.datetimeText,
+                            datePicker === 'start' && {
+                              color: 'rgb(28, 144, 251)'
+                            }
+                          ]}
+                        >
+                          {`${startTime.date}`}
+                        </Text>
+                      </TouchableOpacity>
 
-                    {nameduplication && roomName != '' && (
-                      <Text style={styles.lengthError}>
-                        {t('중복되는 회의명입니다. 회의명 변경 후 생성하세요')}
-                      </Text>
-                    )}
+                      <TouchableOpacity
+                        style={[
+                          styles.datetimeBox,
+                          timePicker === 'start' && {
+                            borderColor: 'rgb(28, 144, 251)'
+                          },
+                          isTablet && { width: '30%' }
+                        ]}
+                        onPress={() => {
+                          openTimePicker('start');
+                        }}
+                      >
+                        <Text
+                          style={[
+                            styles.datetimeText,
+                            timePicker === 'start' && {
+                              color: 'rgb(28, 144, 251)'
+                            }
+                          ]}
+                        >
+                          {`${startTime.time}`}
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                  <View style={styles.rowBetweenContainer}>
+                    <Text style={styles.timeText}>
+                      {t('renewal.roomstate_reservation_endtime')}
+                    </Text>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'flex-end'
+                      }}
+                    >
+                      <TouchableOpacity
+                        style={[
+                          styles.datetimeBox,
+                          datePicker === 'end' && {
+                            borderColor: 'rgb(28, 144, 251)'
+                          },
+                          isTablet && { width: '20%' }
+                        ]}
+                        onPress={() => {
+                          openDatePicker('end');
+                        }}
+                      >
+                        <Text
+                          style={[
+                            styles.datetimeText,
+                            datePicker === 'end'
+                              ? { color: 'rgb(28, 144, 251)' }
+                              : {}
+                          ]}
+                        >
+                          {`${endTime.date}`}
+                        </Text>
+                      </TouchableOpacity>
 
-                    <View style={styles.countContainer}>
-                      <Text style={styles.ft12}>{roomName.length}</Text>
-                      <Text style={styles.maxLength}>/20</Text>
+                      <TouchableOpacity
+                        style={[
+                          styles.datetimeBox,
+                          timePicker === 'end' && {
+                            borderColor: 'rgb(28, 144, 251)'
+                          },
+                          isTablet && { width: '30%' }
+                        ]}
+                        onPress={() => {
+                          openTimePicker('end');
+                        }}
+                      >
+                        <Text
+                          style={[
+                            styles.datetimeText,
+                            timePicker === 'end'
+                              ? { color: 'rgb(28, 144, 251)' }
+                              : {}
+                          ]}
+                        >
+                          {`${endTime.time}`}
+                        </Text>
+                      </TouchableOpacity>
                     </View>
                   </View>
                 </Fragment>
               )}
             </View>
-            <View style={styles.directionColMessage}>
-              <Text style={styles.textHeader}>
-                {t('renewal.direct_create_inviteMessage')}
-              </Text>
 
+            <View style={[styles.graySplitBar, isHorizon && { height: 6 }]} />
+
+            <View
+              style={[styles.conferenceMember]}
+              pointerEvents={isNormal ? 'none' : 'auto'}
+            >
+              <View style={{ flexDirection: 'row' }}>
+                <Text style={styles.ft14Dou50}>
+                  {t('renewal.direct_create_participants')}{' '}
+                </Text>
+                <Text style={[styles.ft14Dou50, { color: '#1c90fb' }]}>
+                  {selectedEmployee.member.length}
+                </Text>
+              </View>
               {isNormal ? (
-                <Text style={styles.sendTextStyle}>{sendMessage}</Text>
+                <Fragment />
               ) : (
-                <Fragment>
-                  <TextInput
-                    onChangeText={sendMessageChange}
-                    value={sendMessage}
-                    maxLength={200}
-                    multiline
-                    style={[
-                      styles.sendInputStyle,
-                      sendMessage !== '' && { borderColor: '#1c90fb' },
-                      isHorizon && { paddingTop: '1%' }
-                    ]}
-                    ref={sendMsgRef}
-                  />
-                  <View style={styles.countContainer}>
-                    <Text style={styles.ft12}>{sendMessage.length}</Text>
-                    <Text style={styles.maxLength}>/200</Text>
-                  </View>
-                </Fragment>
+                <TouchableOpacity
+                  onPress={() => {
+                    setSelectMode(true);
+                  }}
+                >
+                  <Image source={icPersonPlus} style={styles.icPersonPlus} />
+                </TouchableOpacity>
               )}
             </View>
-          </View>
-        </View>
 
-        <View style={[styles.graySplitBar, isHorizon && { height: 6 }]} />
-
-        <View
-          pointerEvents={isNormal ? 'none' : 'auto'}
-          style={[styles.reserveContainer, switchReserve && { height: '15%' }]}
-        >
-          <View style={styles.rowBetweenContainer}>
-            <Text style={[styles.ft14Dou50, { fontSize: 15 }]}>
-              {t('renewal.direct_create_reservation_conference')}
-            </Text>
             {isNormal ? (
               <Fragment />
             ) : (
-              <Switch
-                onValueChange={onSwitchReserveChange}
-                value={switchReserve}
-                trackColor={{ false: '', true: '#1c90fb' }}
-              />
+              <View style={[styles.deleteAlram]}>
+                <View>
+                  <Text
+                    style={[
+                      styles.ft12,
+                      { letterSpacing: -0.18, lineHeight: 18 }
+                    ]}
+                  >
+                    {isHorizon
+                      ? t('renewal.direct_create_update_alram1')
+                      : t('renewal.direct_create_update_alram2')}
+                  </Text>
+                </View>
+
+                <Switch
+                  onValueChange={onSwitchDelAlramChange}
+                  value={switchDelAlram}
+                  trackColor={{ false: '', true: '#1c90fb' }}
+                />
+              </View>
             )}
-          </View>
-          {switchReserve && (
-            <Fragment>
-              <View style={styles.rowBetweenContainer}>
-                <Text style={styles.timeText}>
-                  {t('renewal.roomstate_reservation_starttime')}
-                </Text>
-                <View
-                  style={{ flexDirection: 'row', justifyContent: 'flex-end' }}
-                >
-                  <TouchableOpacity
-                    style={[
-                      styles.datetimeBox,
-                      datePicker === 'start' && {
-                        borderColor: 'rgb(28, 144, 251)'
-                      },
-                      isTablet && { width: '20%' }
-                    ]}
-                    onPress={() => {
-                      openDatePicker('start');
-                    }}
-                  >
-                    <Text
-                      style={[
-                        styles.datetimeText,
-                        datePicker === 'start' && {
-                          color: 'rgb(28, 144, 251)'
-                        }
-                      ]}
-                    >
-                      {`${startTime.date}`}
-                    </Text>
-                  </TouchableOpacity>
 
-                  <TouchableOpacity
-                    style={[
-                      styles.datetimeBox,
-                      timePicker === 'start' && {
-                        borderColor: 'rgb(28, 144, 251)'
-                      },
-                      isTablet && { width: '30%' }
-                    ]}
-                    onPress={() => {
-                      openTimePicker('start');
-                    }}
-                  >
-                    <Text
-                      style={[
-                        styles.datetimeText,
-                        timePicker === 'start' && {
-                          color: 'rgb(28, 144, 251)'
-                        }
-                      ]}
-                    >
-                      {`${startTime.time}`}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-              <View style={styles.rowBetweenContainer}>
-                <Text style={styles.timeText}>
-                  {t('renewal.roomstate_reservation_endtime')}
-                </Text>
-                <View
-                  style={{ flexDirection: 'row', justifyContent: 'flex-end' }}
-                >
-                  <TouchableOpacity
-                    style={[
-                      styles.datetimeBox,
-                      datePicker === 'end' && {
-                        borderColor: 'rgb(28, 144, 251)'
-                      },
-                      isTablet && { width: '20%' }
-                    ]}
-                    onPress={() => {
-                      openDatePicker('end');
-                    }}
-                  >
-                    <Text
-                      style={[
-                        styles.datetimeText,
-                        datePicker === 'end'
-                          ? { color: 'rgb(28, 144, 251)' }
-                          : {}
-                      ]}
-                    >
-                      {`${endTime.date}`}
-                    </Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    style={[
-                      styles.datetimeBox,
-                      timePicker === 'end' && {
-                        borderColor: 'rgb(28, 144, 251)'
-                      },
-                      isTablet && { width: '30%' }
-                    ]}
-                    onPress={() => {
-                      openTimePicker('end');
-                    }}
-                  >
-                    <Text
-                      style={[
-                        styles.datetimeText,
-                        timePicker === 'end'
-                          ? { color: 'rgb(28, 144, 251)' }
-                          : {}
-                      ]}
-                    >
-                      {`${endTime.time}`}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </Fragment>
-          )}
-        </View>
-
-        <View style={[styles.graySplitBar, isHorizon && { height: 6 }]} />
-
-        <View
-          style={[styles.conferenceMember]}
-          pointerEvents={isNormal ? 'none' : 'auto'}
-        >
-          <View style={{ flexDirection: 'row' }}>
-            <Text style={styles.ft14Dou50}>
-              {t('renewal.direct_create_participants')}{' '}
-            </Text>
-            <Text style={[styles.ft14Dou50, { color: '#1c90fb' }]}>
-              {selectedEmployee.member.length}
-            </Text>
-          </View>
-          {isNormal ? (
-            <Fragment />
-          ) : (
-            <TouchableOpacity
-              onPress={() => {
-                setSelectMode(true);
-              }}
+            <View
+              style={{ flex: 1, paddingHorizontal: '5%' }}
+              pointerEvents={isNormal ? 'none' : 'auto'}
             >
-              <Image source={icPersonPlus} style={styles.icPersonPlus} />
-            </TouchableOpacity>
-          )}
-        </View>
-
-        {isNormal ? (
-          <Fragment />
-        ) : (
-          <View style={[styles.deleteAlram]}>
-            <View>
-              <Text
-                style={[styles.ft12, { letterSpacing: -0.18, lineHeight: 18 }]}
-              >
-                {isHorizon
-                  ? t('renewal.direct_create_update_alram1')
-                  : t('renewal.direct_create_update_alram2')}
-              </Text>
-            </View>
-
-            <Switch
-              onValueChange={onSwitchDelAlramChange}
-              value={switchDelAlram}
-              trackColor={{ false: '', true: '#1c90fb' }}
-            />
-          </View>
-        )}
-
-        <View
-          style={{ flex: 1, paddingHorizontal: '5%' }}
-          pointerEvents={isNormal ? 'none' : 'auto'}
-        >
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            bounces={true}
-            contentContainerStyle={{ flex: 1 }}
-            data={selectedEmployee.member}
-            keyExtractor={(item, index) => String(index)}
-            renderItem={({ item, index }: any) => {
-              const isMaster = item.is_master;
-
-              return (
-                <View style={[styles.participantList, { width: width * 0.9 }]}>
-                  <TouchableOpacity
-                    style={[
-                      styles.profileView,
-                      isTablet && { width: 46, height: 46 }
-                    ]}
-                    onPress={() => {
-                      clickDeleteUser(item, index);
-                    }}
-                    disabled={item.user_no === auth.user_no}
-                  >
+              <FlatList
+                showsVerticalScrollIndicator={false}
+                bounces={true}
+                contentContainerStyle={{ flex: 1 }}
+                data={selectedEmployee.member}
+                keyExtractor={(item, index) => String(index)}
+                renderItem={({ item, index }: any) => {
+                  const isMaster = item.is_master;
+                  return (
                     <View
-                      style={[
-                        styles.myView,
-                        isNormal &&
-                          item.user_no !== auth.user_no && {
-                            backgroundColor: '#00ff0000'
-                          },
-                        !isNormal &&
-                          item.user_no !== auth.user_no && {
-                            backgroundColor: '#1c90fb'
-                          }
-                      ]}
+                      style={[styles.participantList, { width: width * 0.9 }]}
                     >
-                      {item.user_no === auth.user_no ? (
-                        <Text style={styles.myText}>
-                          {t('renewal.chatting_me')}
-                        </Text>
-                      ) : isNormal ? (
-                        <Fragment />
-                      ) : (
-                        <Image
-                          source={icCancel_W}
-                          style={styles.icCancelUser}
-                        />
-                      )}
-                    </View>
-                    <Image
-                      style={styles.profile}
-                      source={{
-                        uri: item.profile_url
-                      }}
-                      resizeMode={'cover'}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.infoBox} activeOpacity={1}>
-                    <View style={styles.infoBox}>
-                      {item.full_path !== '' ? (
-                        <Fragment>
-                          <Text style={styles.name}>
-                            {item.user_name}{' '}
-                            {item.rank_name ? item.rank_name : ''}
-                          </Text>
-                          <Text
-                            numberOfLines={1}
-                            ellipsizeMode="tail"
-                            style={styles.tree}
-                          >
-                            {item.full_path}
-                          </Text>
-                        </Fragment>
-                      ) : (
-                        <Text
-                          numberOfLines={1}
-                          ellipsizeMode="tail"
-                          style={[styles.tree, { fontSize: 15 }]}
-                        >
-                          {item.user_name}
-                        </Text>
-                      )}
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={[
-                      styles.roleContainer,
-                      isMaster && { borderColor: '#01acc1' },
-                      !item.user_no && { borderColor: '#fff' },
-                      isTablet && { width: 140 }
-                    ]}
-                    onPress={() => {
-                      clickChangeRole(item, index);
-                    }}
-                    disabled={item.user_no === auth.user_no}
-                    activeOpacity={isNormal ? 1 : 0.6}
-                  >
-                    {isMaster ? (
-                      <Fragment>
-                        <Text
+                      <TouchableOpacity
+                        style={[
+                          styles.profileView,
+                          isTablet && { width: 46, height: 46 }
+                        ]}
+                        onPress={() => {
+                          clickDeleteUser(item, index);
+                        }}
+                        disabled={item.user_no === auth.user_no}
+                      >
+                        <View
                           style={[
-                            styles.maseterText,
-                            isTablet && { fontSize: 14 }
+                            styles.myView,
+                            isNormal &&
+                              item.user_no !== auth.user_no && {
+                                backgroundColor: '#00ff0000'
+                              },
+                            !isNormal &&
+                              item.user_no !== auth.user_no && {
+                                backgroundColor: '#1c90fb'
+                              }
                           ]}
                         >
-                          {t('renewal.chatting_master')}
-                        </Text>
+                          {item.user_no === auth.user_no ? (
+                            <Text style={styles.myText}>
+                              {t('renewal.chatting_me')}
+                            </Text>
+                          ) : isNormal ? (
+                            <Fragment />
+                          ) : (
+                            <Image
+                              source={icCancel_W}
+                              style={styles.icCancelUser}
+                            />
+                          )}
+                        </View>
                         <Image
-                          style={[
-                            styles.icMaster,
-                            isTablet && styles.icTabletMaster
-                          ]}
-                          source={icMasterCircle}
-                          resizeMode={'contain'}
+                          style={styles.profile}
+                          source={{
+                            uri: item.profile_url
+                          }}
+                          resizeMode={'cover'}
                         />
-                      </Fragment>
-                    ) : item.user_no ? (
-                      <Fragment>
-                        <Image
-                          style={[
-                            styles.icMaster,
-                            isTablet && styles.icTabletMaster
-                          ]}
-                          source={icAttdCircle}
-                          resizeMode={'contain'}
-                        />
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={styles.infoBox}
+                        activeOpacity={1}
+                      >
+                        <View style={styles.infoBox}>
+                          {item.full_path !== '' ? (
+                            <Fragment>
+                              <Text style={styles.name}>
+                                {item.user_name}{' '}
+                                {item.rank_name ? item.rank_name : ''}
+                              </Text>
+                              <Text
+                                numberOfLines={1}
+                                ellipsizeMode="tail"
+                                style={styles.tree}
+                              >
+                                {item.full_path}
+                              </Text>
+                            </Fragment>
+                          ) : (
+                            <Text
+                              numberOfLines={1}
+                              ellipsizeMode="tail"
+                              style={[styles.tree, { fontSize: 15 }]}
+                            >
+                              {item.user_name}
+                            </Text>
+                          )}
+                        </View>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={[
+                          styles.roleContainer,
+                          isMaster && { borderColor: '#01acc1' },
+                          !item.user_no && { borderColor: '#fff' },
+                          isTablet && { width: 140 }
+                        ]}
+                        onPress={() => {
+                          clickChangeRole(item, index);
+                        }}
+                        disabled={item.user_no === auth.user_no}
+                        activeOpacity={isNormal ? 1 : 0.6}
+                      >
+                        {isMaster ? (
+                          <Fragment>
+                            <Text
+                              style={[
+                                styles.maseterText,
+                                isTablet && { fontSize: 14 }
+                              ]}
+                            >
+                              {t('renewal.chatting_master')}
+                            </Text>
+                            <Image
+                              style={[
+                                styles.icMaster,
+                                isTablet && styles.icTabletMaster
+                              ]}
+                              source={icMasterCircle}
+                              resizeMode={'contain'}
+                            />
+                          </Fragment>
+                        ) : item.user_no ? (
+                          <Fragment>
+                            <Image
+                              style={[
+                                styles.icMaster,
+                                isTablet && styles.icTabletMaster
+                              ]}
+                              source={icAttdCircle}
+                              resizeMode={'contain'}
+                            />
 
-                        <Text
-                          style={[
-                            styles.attendantText,
-                            isTablet && { fontSize: 14 }
-                          ]}
-                        >
-                          {t('renewal.direct_create_participants')}
-                        </Text>
-                      </Fragment>
-                    ) : (
-                      <Fragment>
-                        {/* <Text style={styles.extText}>
+                            <Text
+                              style={[
+                                styles.attendantText,
+                                isTablet && { fontSize: 14 }
+                              ]}
+                            >
+                              {t('renewal.direct_create_participants')}
+                            </Text>
+                          </Fragment>
+                        ) : (
+                          <Fragment>
+                            {/* <Text style={styles.extText}>
                               {t('외부참여자')}
                             </Text> */}
-                      </Fragment>
-                    )}
-                  </TouchableOpacity>
-                </View>
-              );
-            }}
-          />
-        </View>
+                          </Fragment>
+                        )}
+                      </TouchableOpacity>
+                    </View>
+                  );
+                }}
+              />
+            </View>
+          </Fragment>
+        )}
       </SafeAreaView>
 
       {(timePicker !== 'none' || datePicker !== 'none') && (
@@ -788,6 +834,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: 'DOUZONEText50',
     color: '#000'
+  },
+  loadingText: {
+    color: '#dfdfdf',
+    fontFamily: 'DOUZONEText30',
+    marginTop: 10
   },
   //중단
   roomContantContainer: { backgroundColor: '#fff', height: '25%' },
