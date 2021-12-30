@@ -43,7 +43,8 @@ dependencies {
     //noinspection GradleDynamicVersion
     api 'com.facebook.react:react-native:+'
     //noinspection GradleDynamicVersion
-    implementation 'org.webkit:android-jsc:+'
+    implementation 'org.webkit:android-jsc-intl:+'
+    // 'org.webkit:android-jsc:+'
 
     implementation 'com.dropbox.core:dropbox-core-sdk:3.0.8'
     implementation 'com.jakewharton.timber:timber:4.7.1'

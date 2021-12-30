@@ -317,11 +317,8 @@ export default function HomeScreenContainer(props: any) {
               conference.start_date_time
                 ? conference.start_date_time
                 : conference.created_at
-            ).toLocaleTimeString('en');
-            const time = startTime.slice(-2) + ' ' + (startTime.slice(1,2) === ':' ? startTime.slice(0, 4): startTime.slice(0,5));
-              console.log(startTime);
-              // console.log(time);
-              
+            ).toLocaleTimeString('en-US');
+            const time = startTime.slice(-2) + ' ' + (startTime.slice(1,2) === ':' ? startTime.slice(0, 4): startTime.slice(0,5));       
               
             const onMinte = Math.floor(
               (new Date().getTime() -

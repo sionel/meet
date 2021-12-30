@@ -78,17 +78,32 @@ export type MeetNavigationProps<T extends keyof MeetParamList> =
 
 const RootStack = createStackNavigator();
 
+const navigationRef: RefObject<any> = React.createRef();
+
+export const navigate = (name: string, params?: any) => {
+  navigationRef.current?.navigate(name, params);
+};
+
+export const navigateReset = (name: string, params?: any) => {
+  navigationRef.current?.reset({
+    routes: [
+      {
+        name,
+        params: { ...params }
+      }
+    ]
+  });
+}
+
 export default function RootNavigation(props: any) {
   // let nowStack = '';
-  const navigationRef: RefObject<any> = React.createRef();
+  
   const dispatch = useDispatch();
   const setIsConference = (flag: boolean) => {
     dispatch(ConferenceActions.setIsConference(flag));
   };
 
-  const navigate = (name: string, params: any) => {
-    navigationRef.current?.navigate(name, params);
-  };
+  
 
   const { isConference } = useSelector((state: RootState) => {
     return {

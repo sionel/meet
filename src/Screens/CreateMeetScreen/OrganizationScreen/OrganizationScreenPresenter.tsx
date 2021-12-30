@@ -297,7 +297,9 @@ const OrganizationScreenPresenter = (props: PresenterProps) => {
           </Text>
         </TouchableOpacity>
         <View style={{ flexDirection: 'row' }}>
-          <Text style={styles.TitleText}>{t('renewal.organization_page_title')}</Text>
+          <Text style={styles.TitleText}>
+            {t('renewal.organization_page_title')}
+          </Text>
           <Text style={styles.participantsCount}>
             {'  '}
             {selectedEmployee.member.length}
@@ -480,7 +482,7 @@ const OrganizationScreenPresenter = (props: PresenterProps) => {
                   </View>
                 </Fragment>
               )} */}
-              {tabType !== 'exter' ? (
+              {tabType !== 'exter' && (
                 <View
                   style={{
                     height: 36,
@@ -519,8 +521,6 @@ const OrganizationScreenPresenter = (props: PresenterProps) => {
                     </TouchableOpacity>
                   </View>
                 </View>
-              ) : (
-                <View></View>
               )}
               <OrganizationTab
                 tabType={tabType}

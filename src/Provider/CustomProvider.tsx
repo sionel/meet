@@ -21,6 +21,7 @@ import { actionCreators as UserActions } from '../redux/modules/user';
 import { actionCreators as RootActions } from '../redux/modules/root';
 import { actionCreators as DeployedActions } from '../redux/modules/deployed';
 import deviceInfoModule from 'react-native-device-info';
+import * as RootNavigation from '../Navigations/RootNavigation';
 
 export default function CustomProvider(props: any) {
   const { children } = props;
@@ -186,8 +187,8 @@ export default function CustomProvider(props: any) {
           title: t('renewal.alert_title_error'),
           message: t('renewal.alert_text_duplicate_logout'),
           onConfirm: () => {
-            _setDestination('Login');
             _onLogout();
+            RootNavigation.navigateReset('LoginStack');
           }
         });
       } else {
@@ -196,8 +197,8 @@ export default function CustomProvider(props: any) {
           title: t('renewal.alert_title_error'),
           message: t('renewal.alert_text_network_problem_ocurred'),
           onConfirm: () => {
-            _setDestination('Login');
             _onLogout();
+            RootNavigation.navigateReset('LoginStack');
           }
         });
       }
