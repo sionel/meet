@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SelectCompanyPresenter from './SelectCompanyPresenter';
 import { RootState } from '../../redux/configureStore';
-import ReactNativeRestart from 'react-native-restart';
+import RNRestart from 'react-native-restart';
 
 import { actionCreators as RootAction } from '../../redux/modules/root';
 import { actionCreators as UserActions } from '../../redux/modules/user';
@@ -48,7 +48,7 @@ const SelectCompanyContainer = ({navigation,route}: MeetNavigationProps<'SelectC
     if (prevAuth === null) {
       setPrevAuth(auth);
     } else if (prevAuth.cno !== auth.last_access_company_no) {
-      ReactNativeRestart.Restart();
+      RNRestart.Restart();
     }
   }, [auth]);
 
