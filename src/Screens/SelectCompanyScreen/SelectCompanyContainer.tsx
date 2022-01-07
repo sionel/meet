@@ -42,9 +42,13 @@ const SelectCompanyContainer = ({navigation,route}: MeetNavigationProps<'SelectC
   ) => dispatch(UserActions.changeCompanyRequest(auth, company));
   const _logout = () => {
     dispatch(UserActions.logout());
+    navigation.navigate('LoginStack');
   };
 
   useEffect(() => {
+    if(auth.user_no === undefined) {
+      return;
+    }
     if (prevAuth === null) {
       setPrevAuth(auth);
     } else if (prevAuth.cno !== auth.cno) {
