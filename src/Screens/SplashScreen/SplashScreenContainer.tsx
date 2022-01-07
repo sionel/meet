@@ -173,13 +173,15 @@ const SplashScreenContainer = ({
         from,
         true
       );
+
       if (result.errors) {
         _handleloginCheckError(result.errors);
-        from === 'this' && UserApi.logoutRequest(auth);
+        from === 'this' && UserApi.logoutRequest(result);
         onLogout();
         navigation.reset({ routes: [{ name: 'LoginStack' }] });
       } else {
-        const flag: any = await serviceCheck(auth);
+        const flag: any = await serviceCheck(result);
+
         if (flag) {
           navigation.reset({ routes: [{ name: 'MainStack' }] });
         } else {
@@ -306,7 +308,7 @@ const SplashScreenContainer = ({
     // 회사 상태 조회 후 진행
     const statusCheck = await ServiceCheckApi.companyStatusCheck(
       auth,
-      auth.last_access_company_no
+      auth.last_company
     );
     // 이상이 없는 회사일 경우 로그인 정상 진행
     if (statusCheck && statusCheck.code === 200) {
@@ -343,14 +345,15 @@ const SplashScreenContainer = ({
       cno,
       HASH_KEY
     );
-
     if (checkResult.resultCode === 200) {
       const userData = {
         // login api data
         AUTH_A_TOKEN,
         AUTH_R_TOKEN,
         HASH_KEY,
-        cno,
+        cno: checkResult.resultData.last_access_company_no
+          ? checkResult.resultData.last_access_company_no
+          : cno,
         // check api data
         user_no: checkResult.resultData.user_no,
         portal_id: checkResult.resultData.portal_id, // 아이디
@@ -375,7 +378,6 @@ const SplashScreenContainer = ({
       };
 
       await onLogin(userData, from, flag);
-
       return userData;
     } else {
       const result = checkResult.errors ? checkResult : { errors: checkResult };

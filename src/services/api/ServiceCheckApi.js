@@ -173,10 +173,10 @@ const companyStatusCheck = async (auth, company) => {
  */
 const serviceCheck = async (auth, type) => {
   try {
-    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY ,cno} = auth;
+    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
     const params = serialize({
       service_code: type,
-      cno
+      cno,
     });
     const urlType = '/common/company/deploy/whether/employee'; // 배포여부
     const url = `${wehagoBaseURL}${urlType}?${params}`;

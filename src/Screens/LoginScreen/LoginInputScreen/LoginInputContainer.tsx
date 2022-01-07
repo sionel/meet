@@ -86,7 +86,7 @@ const LoginInputContainer = ({
   const _handleCheckService = async (auth: any) => {
     const statusCheck = await ServiceCheckApi.companyStatusCheck(
       auth,
-      auth.last_access_company_no
+      auth.last_comapny
     );
     // 이상이 없는 회사일 경우 로그인 정상 진행
     if (statusCheck && statusCheck.code === 200) {
@@ -103,7 +103,11 @@ const LoginInputContainer = ({
       );
       const isDeploy = isDeployWehagomeet || isDeployWebrtc;
       setPermission(isDeploy);
-      navigation.reset({ routes: [{ name: 'MainStack' }] });
+      if (isDeploy) {
+        navigation.reset({ routes: [{ name: 'MainStack' }] });
+      } else {
+        navigation.reset({ routes: [{ name: 'SelectCompany' }] });
+      }
     } else if (statusCheck && statusCheck.code === 400) {
       const onClose = () => {
         _resetAlert();
@@ -429,7 +433,9 @@ const LoginInputContainer = ({
         AUTH_A_TOKEN,
         AUTH_R_TOKEN,
         HASH_KEY,
-        cno,
+        cno: checkResult.resultData.last_access_company_no
+          ? checkResult.resultData.last_access_company_no
+          : cno,
         // check api data
         user_no: checkResult.resultData.user_no,
         portal_id: checkResult.resultData.portal_id, // 아이디

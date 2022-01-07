@@ -258,8 +258,6 @@ function changeCompanyRequest(auth: any, company: any) {
 
 function applyChangeCompany(state: state, action: AnyAction) {
   const { company } = action;
-  console.log('applyChangeCompany');
-  console.log(company);
   return {
     ...state,
     auth: {

@@ -58,19 +58,9 @@ export default function CompanyChange() {
     dispatch(userAction.changeCompanyRequest(auth, company));
 
   useEffect(() => {
-    console.log('prevAuth?.cno');
-    console.log(prevAuth?.cno);
-
-    console.log('auth.cno');
-    console.log(auth.cno);
-
-    console.log('auth.last_access_company_no');
-    console.log(auth.last_access_company_no);
-
     if (prevAuth === null) {
       setPrevAuth(auth);
-    } else if (prevAuth.cno !== auth.last_access_company_no) {
-      console.log(11111);      
+    } else if (prevAuth.cno !== auth.cno) {      
       RNRestart.Restart();
     }
   }, [auth]);

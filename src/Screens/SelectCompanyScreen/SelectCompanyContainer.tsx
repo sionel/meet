@@ -47,7 +47,7 @@ const SelectCompanyContainer = ({navigation,route}: MeetNavigationProps<'SelectC
   useEffect(() => {
     if (prevAuth === null) {
       setPrevAuth(auth);
-    } else if (prevAuth.cno !== auth.last_access_company_no) {
+    } else if (prevAuth.cno !== auth.cno) {
       RNRestart.Restart();
     }
   }, [auth]);
@@ -68,6 +68,7 @@ const SelectCompanyContainer = ({navigation,route}: MeetNavigationProps<'SelectC
     from === 'this' && (await UserApi.logoutRequest(auth));
     _logout();
   };
+  
   return (
     <SelectCompanyPresenter
       {...{

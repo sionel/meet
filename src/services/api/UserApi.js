@@ -177,7 +177,7 @@ const check = async (a_token, r_token, cno, HASH_KEY) => {
       headers
     });
     const responseJson = await response.json();
-    if(responseJson.errors) throw ( {...responseJson})
+    if (responseJson.errors) throw { ...responseJson };
     const url2 = `${wehagoBaseURL}/common/user/userinfo?cno=${cno}&selected_company_no=${cno}`; // 유저 정보 (닉네임 가져오려고 굳이 이걸 불러야하나...)
     const headers2 = securityRequest(a_token, r_token, url2, HASH_KEY);
     const response2 = await fetch(url2, {
@@ -226,7 +226,7 @@ const changeCompany = async (auth, company) => {
       login_os:
         DeviceInfo.getSystemName() + ' ' + DeviceInfo.getSystemVersion(),
       login_ip: deviceIP,
-      cno: auth.last_access_company_no,
+      cno: company_no,
       ccode: company_code,
       portal_member_no: ''
     };
