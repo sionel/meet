@@ -189,8 +189,6 @@ export default function ConferenceModfiyScreenContainer(props: any) {
 
     const reservationUserInfos: PartialUserInfoParam[] = await Promise.all(
       sortedPortalIdList.map(async (user, i) => {
-        console.log(user.full_path_list);
-        
         const pathLng: number = user.full_path_list.length;
         const data: PartialUserInfoParam = {
           portal_id: user.portal_id,

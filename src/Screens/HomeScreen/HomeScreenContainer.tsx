@@ -313,6 +313,11 @@ export default function HomeScreenContainer(props: any) {
 
         const goingList = await Promise.all(
           going.map(async conference => {
+            //TODO: 회의 시작시간이 표현이 잘못되는 경우가 있음 확인필요.
+            // console.log('conference.created_at');
+            // console.log(conference.created_at);
+            // console.log(new Date(conference.created_at).toLocaleTimeString());
+
             const startTime = new Date(
               conference.start_date_time
                 ? conference.start_date_time

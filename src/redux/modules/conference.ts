@@ -1,5 +1,6 @@
 import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
+import ConferenceManager from '../../utils/conference/ConferenceManager';
 import { RootState } from '../configureStore';
 
 const SET_LIST = 'conference.SET_LIST';
@@ -11,7 +12,7 @@ const SET_CONFERENCE_MANAGER = 'conference.SET_CONFERENCE_MANAGER';
 export interface state {
   roomId: string;
   isConference: boolean;
-  conferenceManager: any;
+  conferenceManager: ConferenceManager | null;
 }
 
 const initialState: state = {
@@ -64,7 +65,10 @@ function setConferenceManager(conferenceManager: any) {
   };
 }
 const _setConferenceManager = (state: state, action: AnyAction) => {
-  return { ...state, conferenceManager: action.conferenceManager };
+  return { 
+    ...state, 
+    conferenceManager: action.conferenceManager 
+  };
 };
 
 export const actionCreators = {
