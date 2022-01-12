@@ -236,16 +236,25 @@ export default function HomeScreenContainer(props: any) {
             .toString()
             .padStart(2, '0');
           const dateString = `${year}.${month}.${day}`;
-          const ampm = new Date(conference.start_date_time)
-            .toLocaleString('en')
-            .slice(-2);
+          const ampmStart =
+            parseInt(
+              new Date(conference.start_date_time).toTimeString().slice(0, 2)
+            ) < 12
+              ? 'AM'
+              : 'PM';
           const startTimeString = new Date(conference.start_date_time)
             .toTimeString()
             .slice(0, 5);
+          const ampmEnd =
+            parseInt(
+              new Date(conference.end_date_time).toTimeString().slice(0, 2)
+            ) < 12
+              ? 'AM'
+              : 'PM';
           const endTimeString = new Date(conference.end_date_time)
             .toTimeString()
             .slice(0, 5);
-          const timeString = `${dateString}\n${startTimeString}${ampm} ~ ${endTimeString}${ampm}`;
+          const timeString = `${dateString}\n${startTimeString}${ampmStart} ~ ${endTimeString}${ampmEnd}`;
           const { hour, minutes } = conference.usage_time;
           const usageTime = hour * 60 + minutes;
           const users = conference.users;
@@ -313,18 +322,17 @@ export default function HomeScreenContainer(props: any) {
 
         const goingList = await Promise.all(
           going.map(async conference => {
-            //TODO: 회의 시작시간이 표현이 잘못되는 경우가 있음 확인필요.
-            // console.log('conference.created_at');
-            // console.log(conference.created_at);
-            // console.log(new Date(conference.created_at).toLocaleTimeString());
-
             const startTime = new Date(
               conference.start_date_time
                 ? conference.start_date_time
                 : conference.created_at
-            ).toLocaleTimeString('en-US');
-            const time = startTime.slice(-2) + ' ' + (startTime.slice(1,2) === ':' ? startTime.slice(0, 4): startTime.slice(0,5));       
-              
+            ).toTimeString();
+
+            const time =
+              parseInt(startTime.slice(0, 2)) < 12
+                ? 'AM'
+                : 'PM' + ' ' + startTime.slice(0, 5);
+
             const onMinte = Math.floor(
               (new Date().getTime() -
                 (conference.start_date_time
