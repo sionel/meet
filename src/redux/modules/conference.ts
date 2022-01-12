@@ -1,3 +1,4 @@
+import { useDispatch } from 'react-redux';
 import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import ConferenceManager from '../../utils/conference/ConferenceManager';
@@ -58,7 +59,7 @@ const _setIsConference = (state: state, action: AnyAction) => {
   return { ...state, isConference: action.isConference };
 };
 
-function setConferenceManager(conferenceManager: any) {
+function setConferenceManager(conferenceManager: ConferenceManager | null) {
   return {
     type: SET_CONFERENCE_MANAGER,
     conferenceManager

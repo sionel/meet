@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { actionCreators as localAction } from '../../../redux/modules/local';
 import { actionCreators as mainUserAction } from '../../../redux/modules/mainUser';
 import { RootState } from '../../../redux/configureStore';
-import { getConferenceManager } from '../../../utils/ConferenceManager';
+// import { getConferenceManager } from '../../../utils/ConferenceManager';
 
 const isIOS = Platform.OS === 'ios';
 const InCallManager = !isIOS && require('react-native-incall-manager').default;
@@ -44,14 +44,16 @@ function ContentContainer(props: any) {
     drawingMode,
     documentListMode,
     attributes,
-    localPipMode
+    localPipMode,
+    conferenceManager
   } = useSelector((state: RootState) => {
     return {
       conferenceMode: state.local.conferenceMode,
       drawingMode: state.mainUser.drawingMode,
       documentListMode: state.mainUser.documentListMode,
       attributes: state.documentShare.attributes,
-      localPipMode: state.local.pipMode
+      localPipMode: state.local.pipMode,
+      conferenceManager: state.conference.conferenceManager
     };
   });
 
@@ -72,7 +74,8 @@ function ContentContainer(props: any) {
   }, []);
 
   useEffect(() => {
-    const m = getConferenceManager();
+    //TODO: CONFERENCE MANAGER REDUX 
+    const m = conferenceManager;
     if (mainUser.id !== 'localUser') m?.setReceiverConstraints(mainUser.id);
   }, [mainUser]);
 

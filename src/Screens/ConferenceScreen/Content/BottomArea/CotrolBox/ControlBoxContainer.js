@@ -1,6 +1,6 @@
 import React from 'react';
 import ControlBoxPresenter from './ControlBoxPresenter';
-import { getConferenceManager } from '../../../../../utils/ConferenceManager';
+// import { getConferenceManager } from '../../../../../utils/ConferenceManager';
 import { getT } from '../../../../../utils/translateManager';
 class ControlBoxContainer extends React.Component {
   constructor(props) {
@@ -28,13 +28,15 @@ class ControlBoxContainer extends React.Component {
   }
 
   _handleToggleMic = () => {
-    let conferenceManager = getConferenceManager();
+    //TODO: CONFERENCE MANAGER REDUX
+    // let conferenceManager = getConferenceManager();
     const {
       isMasterControl,
       isAudioActive,
       isMuteMic,
       isMicRequest,
       name,
+      conferenceManager,
       setToastMessage,
       setMicRequest,
       toggleMuteMic

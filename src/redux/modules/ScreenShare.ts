@@ -18,6 +18,9 @@ const reducer: (state: state, action: AnyAction) => state = (
   state = initialState,
   action
 ) => {
+  console.log('screenToggleFlag');
+  console.log(state.screenToggleFlag);
+  
   switch (action.type) {
     case SET:
       return _setScreenFlag(state, action);

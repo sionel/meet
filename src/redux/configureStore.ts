@@ -5,7 +5,7 @@
 const env = process.env.NODE_ENV;
 
 import { applyMiddleware, createStore } from 'redux';
-import { persistStore, persistCombineReducers } from 'redux-persist';
+import { persistStore, persistCombineReducers, createTransform } from 'redux-persist';
 // import AsyncStorage from 'react-native-async-storage'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // import storage from 'redux-persist/lib/storage';
@@ -32,6 +32,8 @@ import recents, { state as recentsState } from './modules/recentsInvited';
 import selectCompany, {
   state as selectCompanyState
 } from './modules/selectCompany';
+
+import * as Flatted from 'flatted';
 /**
  * middleware list
  */
@@ -41,6 +43,11 @@ if (env === 'development') {
   // const { logger } = require('redux-logger');
   // middlewares.push(logger);
 }
+
+export const transformCircular = createTransform(
+  (inboundState, key) => Flatted.stringify(inboundState),
+  (outboundState, key) => Flatted.parse(outboundState),
+)
 
 export interface RootState {
   local: any;
@@ -90,7 +97,8 @@ const persistConfig = {
     'orientation',
     'root',
     'selectCompany'
-  ]
+  ],
+  transforms: [transformCircular]
 };
 
 /**

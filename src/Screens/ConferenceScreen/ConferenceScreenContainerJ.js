@@ -16,7 +16,7 @@ import {
 } from 'react-native';
 import KeepAwake from 'react-native-keep-awake';
 
-import ConferenceScreenPresenter from './ConferenceScreenPresenter';
+import ConferenceScreenPresenter from './ConferenceScreenPresenterJ';
 import EndCallMessage from './EndCallMessage';
 import ConferenceManager from '../../utils/conference/ConferenceManager';
 import MeetApi from '../../services/api/MeetApi';

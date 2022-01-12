@@ -19,7 +19,7 @@ import { RootState } from '../../redux/configureStore';
  * ConferenceScreenPresenter
  */
 const ConferenceScreenPresenter = (props:any) => {
-  const { pipMode } = props;
+  const { pipMode, mainUser, connection } = props;
 
   const dispatch = useDispatch();
   const localPipMode = useSelector((state:RootState) => state.local.pipMode);
@@ -27,7 +27,7 @@ const ConferenceScreenPresenter = (props:any) => {
     dispatch({ type: 'local.CONFERENCE_PIP_MODE', pipMode });
   }
   // console.log('ConferenceScreenPresenter');
-  // console.log(props.mainUser);
+  // console.log(props);
   // console.log(props.connection);
 
   return (
@@ -35,7 +35,7 @@ const ConferenceScreenPresenter = (props:any) => {
       <View style={{ flex: 1 }}>
         <SimpleNoti />
         {Platform.OS === 'ios' ? <ScreenShareIOS /> : <ScreenShareANDROID />}
-        {props.mainUser && props.connection ? (
+        {mainUser && connection ? (
           <Content
             mainUser={props.mainUser}
             callType={props.callType}

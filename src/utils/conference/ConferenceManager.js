@@ -30,7 +30,7 @@ class ConferenceManager {
     if (!ConferenceManager.instance) {
       // 싱글톤 변수 할당
       ConferenceManager.instance = this;
-    } else if (dispatch && endCall) {
+    } else if (dispatch || endCall) {
       ConferenceManager.instance._dispatch = dispatch;
       ConferenceManager.instance._endCall = endCall;
     }

@@ -17,7 +17,7 @@ import {
 } from 'react-native';
 import KeepAwake from 'react-native-keep-awake';
 
-import ConferenceScreenPresenter from './ConferenceScreenPresenterT';
+import ConferenceScreenPresenter from './ConferenceScreenPresenter';
 import EndCallMessage from './EndCallMessage';
 import ConferenceManager from '../../utils/conference/ConferenceManager';
 import MeetApi from '../../services/api/MeetApi';
@@ -73,7 +73,7 @@ const ConferenceScreenContainer = (
     user: { auth, isLogin },
     local: { user, externalAPIScope },
     screenShare: { isScreenShare, screenToggleFlag },
-    conference: { conferenceManager, isConference },
+    conference: { isConference, conferenceManager },
     list,
     mainUserId,
     documentShare
@@ -94,7 +94,7 @@ const ConferenceScreenContainer = (
     dispatch(LocalActions.toggleMuteVideo(muteState));
   const toggleMuteMicByMe = (micMute: any) =>
     dispatch(MasterActions.toggleMuteMicByMe(micMute));
-  const setConferenceManager = (manager: ConferenceManager | null) =>
+    const setConferenceManager = (manager: ConferenceManager | null) =>
     dispatch(ConferenceActions.setConferenceManager(manager));
   const setAlert = (params: any) => dispatch(AlertAcions.setAlert(params));
   const setIsConference = (flag: boolean) =>
@@ -121,6 +121,7 @@ const ConferenceScreenContainer = (
 
   let backTimeout: any = null;
   let timer: any = null;
+  // let conferenceManager: ConferenceManager | null = null;
 
   const getMainUser = (mainUserId: any, localUser: any, participants: any) => {
     if (!localUser) {
@@ -181,12 +182,14 @@ const ConferenceScreenContainer = (
         setSharingMode();
         // connectFailCheck && clearInterval(connectFailCheck);
         setConferenceManager(null);
+        conferenceManager?.dispose();
       } catch (error) {}
     };
   }, []);
 
   useEffect(() => {
     if (platform === 'android') {
+      console.log(1111);
       _handleChangeScreen();
     }
 
@@ -275,9 +278,8 @@ const ConferenceScreenContainer = (
       tracks
     } = params;
 
-    setConferenceManager(
-      new ConferenceManager(dispatch, _handleConferenceClose)
-    );
+    // conferenceManager = new ConferenceManager(dispatch, _handleConferenceClose);
+    // setConferenceManager(new ConferenceManager(dispatch, _handleConferenceClose));
 
     const sendCommandParams = {
       wehagoId: auth.portal_id,
@@ -289,14 +291,13 @@ const ConferenceScreenContainer = (
       externalUserId: externalUser,
       isMobile: true
     };
-
     const joinResult = await conferenceManager?.join(
       roomName,
       token,
       tracks,
       sendCommandParams
     );
-
+    
     if (!joinResult) {
       if (screen) {
         setAlert({
@@ -346,7 +347,7 @@ const ConferenceScreenContainer = (
       );
       setConnection(true);
       setSelectedRoomName(selectedRoomName);
-      conferenceManager && setConferenceManager(conferenceManager);
+      conferenceManager && setConferenceManager(new ConferenceManager(dispatch, _handleConferenceClose));
       setMainUserNotExist();
     }
   };
@@ -367,21 +368,15 @@ const ConferenceScreenContainer = (
   };
 
   const _handleConferenceClose = async () => {
-    // setIndicator();
     initParticipants();
     initMainUser();
-
-    conferenceManager?.dispose();
-    user.videoTrack.dispose();
-    user.audioTrack.dispose();
-    resetVideoId();
-    setIsConference(false);
-
     if (!isLogin) {
       navigation.reset({ routes: [{ name: 'LoginStack' }] });
     } else {
       navigation.reset({ routes: [{ name: 'MainStack' }] });
-    }
+    }    
+    resetVideoId();
+    setIsConference(false);
     setConnection(false);
     setEndCall(true);
   };
@@ -457,9 +452,9 @@ const ConferenceScreenContainer = (
       toggleMuteMicByMe(isMuteMic);
     }
   };
-  return endCall ? (
+  return !endCall ? (
     <ConferenceScreenPresenter
-      {...props}
+      mainUser={mainUser}
       connection={connection}
       callType={3}
       selectedRoomName={selectedRoomName}

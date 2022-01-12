@@ -7,11 +7,26 @@ import config from '../../utils/conference/config';
 import { v4 as uuidv4 } from 'uuid';
 import { getT } from '../../utils/translateManager';
 
-import { actionCreators as AlertAcions } from '../../redux/modules/alert';
-import { RootState } from '../../redux/configureStore';
-import { MeetNavigationProps } from '../../Navigations/RootNavigation';
-
 import { MeetApi } from '../../services';
+
+import { actionCreators as DocumentShareActions } from '../../redux/modules/documentShare';
+import { actionCreators as LocalActions } from '../../redux/modules/local';
+import { actionCreators as MasterActions } from '../../redux/modules/master';
+import { actionCreators as AlertAcions } from '../../redux/modules/alert';
+import { actionCreators as MainUserAcions } from '../../redux/modules/mainUser';
+import { actionCreators as ToastAcions } from '../../redux/modules/toast';
+import { actionCreators as ScreenShareAcions } from '../../redux/modules/ScreenShare';
+import { actionCreators as ParticipantsAcions } from '../../redux/modules/participants';
+import { actionCreators as indicatorAcionCreators } from '../../redux/modules/indicator';
+import { actionCreators as RootActions } from '../../redux/modules/root';
+import { actionCreators as ConferenceActions } from '../../redux/modules/conference';
+import { RootState } from '../../redux/configureStore';
+
+import { MeetNavigationProps } from '../../Navigations/RootNavigation';
+import ConferenceManager from '../../utils/conference/ConferenceManager';
+import ConferenceScreenContainer from '../ConferenceScreen/ConferenceScreenContainerJ';
+
+
 
 export default function SettingScreenContainer(props: any) {
   const [name, setName] = useState('');
@@ -23,11 +38,13 @@ export default function SettingScreenContainer(props: any) {
   const [, updateState] = useState<undefined | {}>();
   const forceUpdate = useCallback(() => updateState({}), []);
   const [isLoading, setIsLoading] = useState(false);
-  const { auth, isLogin, isHorizon } = useSelector((state: RootState) => {
+  const { auth, isLogin, isHorizon, user } = useSelector((state: RootState) => {
     return {
       auth: state.user.auth,
       isLogin: state.user.isLogin,
-      isHorizon: state.orientation.isHorizon
+      isHorizon: state.orientation.isHorizon,
+      conferenceManager : state.conference.conferenceManager,
+      user: state.local.user ,
     };
   });
 
@@ -39,7 +56,14 @@ export default function SettingScreenContainer(props: any) {
 
   const dispatch = useDispatch();
   const setAlert = (params: any) => dispatch(AlertAcions.setAlert(params));
-
+  const _setConferenceManager = (cofnManager: ConferenceManager) =>
+    dispatch(ConferenceActions.setConferenceManager(cofnManager));
+  const initMainUser = () => dispatch(MainUserAcions.initMainUser());
+  const initParticipants = () =>
+    dispatch(ParticipantsAcions.initParticipants());
+    const resetVideoId = () => dispatch(RootActions.setVideoId(''));
+    const setIsConference = (flag: boolean) =>
+    dispatch(ConferenceActions.setIsConference(flag));
   const t = getT();
 
   useEffect(() => {
@@ -101,6 +125,7 @@ export default function SettingScreenContainer(props: any) {
   const _handleConferenceEnter = async () => {
     // let { tracks, nameField } = this.state;
     setIsLoading(true);
+    _setConferenceManager(new ConferenceManager(dispatch));
     let tmpName;
 
     if (nameField) {

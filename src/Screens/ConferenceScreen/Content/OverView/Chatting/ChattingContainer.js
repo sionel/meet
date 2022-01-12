@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import ChattingPresenter from './ChattingPresenter';
-import ConferenceManager from '../../../../../utils/conference/ConferenceManager';
+// import ConferenceManager from '../../../../../utils/conference/ConferenceManager';
 
+//TODO: CONFERENCE MANAGER REDUX
 class ChattingContainer extends Component {
   constructor(props) {
     super(props);
 
-    this.conferenceManager = new ConferenceManager();
     this.scrollView = null;
     this.timeout = null;
     this.isEndScroll = true;
@@ -44,7 +44,8 @@ class ChattingContainer extends Component {
     return (
       <ChattingPresenter
         {...this.props}
-        {...this.state}
+        message={this.state.message}
+        cdm={this.state.cdm}
         onSetRef={this._handleSetRef}
         onChangeValue={this._handleChangeValue}
         onChangeState={this._handleChangeState}
@@ -67,9 +68,10 @@ class ChattingContainer extends Component {
 
   _handleSendTextMessage = () => {
     const { message } = this.state;
+    const { conferenceManager } = this.props;
     if (message && message.slice().replace(/(\s*)/g, '') !== '') {
       this.setState({ message: '' }, () => {
-        this.conferenceManager.sendTextMessage(message);
+        conferenceManager.sendTextMessage(message);
       });
     }
   };

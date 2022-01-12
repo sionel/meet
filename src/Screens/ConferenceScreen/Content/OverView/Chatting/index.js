@@ -6,7 +6,8 @@ import { actionCreators as localActions } from '../../../../../redux/modules/loc
 const mapStateToProps = state => ({
   messages: state.local.message,
   user: state.local.user,
-  list: state.participants.list
+  list: state.participants.list,
+  conferenceManager: state.conference.conferenceManager
 });
 
 // map dispatch to props

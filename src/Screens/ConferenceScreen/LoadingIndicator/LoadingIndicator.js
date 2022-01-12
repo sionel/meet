@@ -3,7 +3,7 @@ import { View, StyleSheet, Image, StatusBar } from "react-native";
 import CameraLoading from "./cameraLoading.gif";
 
 /**
- * ConferenceScreenPresenter
+ * LoadingIndicator
  */
 class LoadingIndicator extends Component {
   componentDidMount() {

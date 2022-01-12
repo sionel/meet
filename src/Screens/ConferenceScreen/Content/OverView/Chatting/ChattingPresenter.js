@@ -64,6 +64,7 @@ const ChattingPresenter = props => {
         )}
         <FlatList
           data={messages}
+          keyExtractor={(item,index) => index.toString()}
           renderItem={({ item, index }) => {
             if (!cdm && index === messages.length - 1) {
               // item 갯수가 많을 경우, 여기가 componentDidMount 보다 더 늦게 실행되기 때문에 state 를 변경해서 알려준다.
