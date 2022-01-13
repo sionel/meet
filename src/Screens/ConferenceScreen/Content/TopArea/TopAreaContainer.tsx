@@ -9,7 +9,7 @@ import { actionCreators as mainUserAction } from '../../../../redux/modules/main
 import { actionCreators as ScreenShareAction } from '../../../../redux/modules/ScreenShare';
 import { RootState } from '../../../../redux/configureStore';
 
-function TopAreaContainer(props) {
+function TopAreaContainer(props: any) {
   const { conferenceMode, memberType, deployedServices, isScreenShare } =
     useSelector((state: RootState) => {
       return {
@@ -22,9 +22,10 @@ function TopAreaContainer(props) {
   const dispatch = useDispatch();
   const toggleCameraFacingMode = () =>
     dispatch(localAction.toggleCameraFacingMode());
-  const toggleDocumentListMode = documentListMode =>
+  const toggleDocumentListMode = (documentListMode: any) =>
     dispatch(mainUserAction.setDocumentListMode(documentListMode));
-  const setScreenFlag = flag => dispatch(ScreenShareAction.setScreenFlag(flag));
+  const setScreenFlag = (flag: any) =>
+    dispatch(ScreenShareAction.setScreenFlag(flag));
   const toggleScreenFlag = () => dispatch(ScreenShareAction.toggleScreenFlag());
 
   const controlMode = conferenceMode === ConferenceModes.CONTROL;

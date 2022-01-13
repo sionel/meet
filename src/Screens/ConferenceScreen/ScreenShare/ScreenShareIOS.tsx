@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, findNodeHandle, NativeModules } from 'react-native';
 import { ScreenCapturePickerView } from 'react-native-webrtc';
 import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../../../redux/configureStore';
 
-export default function ScreenShareIOS(props) {
+export default function ScreenShareIOS(props: any) {
   const screenToggleFlag = useSelector(
-    state => state.screenShare['screenToggleFlag']
+    (state: RootState) => state.screenShare['screenToggleFlag']
   );
-  let _nativeComponent;
-  const _setNativeComponent = component => {
+  let _nativeComponent: any;
+  const _setNativeComponent = (component: any) => {
     _nativeComponent = component;
   };
 

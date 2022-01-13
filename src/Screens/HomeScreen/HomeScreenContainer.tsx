@@ -328,10 +328,8 @@ export default function HomeScreenContainer(props: any) {
                 : conference.created_at
             ).toTimeString();
 
-            const time =
-              parseInt(startTime.slice(0, 2)) < 12
-                ? 'AM'
-                : 'PM' + ' ' + startTime.slice(0, 5);
+            const ampm = parseInt(startTime.slice(0, 2)) < 12 ? 'AM' : 'PM'
+            const time = ampm + ' ' + startTime.slice(0, 5);
 
             const onMinte = Math.floor(
               (new Date().getTime() -
