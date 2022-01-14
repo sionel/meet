@@ -1,4 +1,4 @@
-import { wehagoBaseURL, serialize, securityRequest } from '../../utils';
+import { wehagoBaseURL, serialize, securityRequest, isDev } from '../../utils';
 import fetch from './Fetch';
 import { getT } from '../../utils/translateManager';
 /**
@@ -175,10 +175,12 @@ const serviceCheck = async (auth, type) => {
   try {
     const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
     const params = serialize({
-      service_code: type,
       cno,
     });
-    const urlType = '/common/company/deploy/whether/employee'; // 배포여부
+    // service_code: type,
+    const urlType = isDev
+      ? '/videodev/service/is-deploy'
+      : '/video/service/is-deploy'; // 배포여부
     const url = `${wehagoBaseURL}${urlType}?${params}`;
 
     const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
@@ -189,8 +191,10 @@ const serviceCheck = async (auth, type) => {
     });
 
     const responseJson = await response.json();
+    console.log(responseJson.resultData);
+    debugger
     if (responseJson.resultCode === 200) {
-      const hasService = responseJson.resultData['isServiceDeploy'] === 'T';
+      const hasService = responseJson.resultData === 'T';
       return hasService;
     } else {
       return false;
@@ -205,11 +209,13 @@ const anotherServiceCheck = async (auth, company, type) => {
   try {
     const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY } = auth;
     const params = serialize({
-      service_code: type,
       cno: company.company_no
-      // ccode: company.company_code
     });
-    const urlType = '/common/company/deploy/whether/employee'; // 배포여부
+    // service_code: type,
+    // ccode: company.company_code
+    const urlType = isDev
+      ? '/videodev/service/is-deploy'
+      : '/video/service/is-deploy'; // 배포여부
     const url = `${wehagoBaseURL}${urlType}?${params}`;
 
     const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
@@ -224,7 +230,7 @@ const anotherServiceCheck = async (auth, company, type) => {
 
     const responseJson = await response.json();
     if (responseJson.resultCode === 200) {
-      const hasService = responseJson.resultData['isServiceDeploy'] === 'T';
+      const hasService = responseJson.resultData === 'T';
       return hasService;
     } else {
       return false;
