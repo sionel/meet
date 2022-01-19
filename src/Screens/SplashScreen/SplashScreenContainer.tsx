@@ -42,13 +42,14 @@ const SplashScreenContainer = ({
   const t = getT();
 
   //#region  selector
-  const { auth, from, updateNoti, autoLogin } = useSelector(
+  const { auth, from, updateNoti, autoLogin, loginType } = useSelector(
     (state: RootState) => {
       return {
         auth: state.user.auth,
         from: state.user.from,
         updateNoti: state.user.updateNoti,
-        autoLogin: state.user.autoLogin
+        autoLogin: state.user.autoLogin,
+        loginType: state.user.loginType
       };
     }
   );
@@ -82,10 +83,26 @@ const SplashScreenContainer = ({
   }, []);
 
   useEffect(() => {
+    let t0 = Date.now();
     if (!first) {
       if (deeplink) {
         _handleGetDeeplink(deeplink);
       } else _handleCheckAutoLogin();
+    }
+    let t1 = Date.now();
+
+    if (t1 > t0 + 20000) {
+      let timeError = true;
+      Alert.alert('알림', '요청시간 초과오류', [
+        {
+          text: '확인',
+          onPress: () => {
+            navigation.reset({
+              routes: [{ name: loginType === 'wehago' ? 'InputLogin' : 'LoginStack' }]
+            });
+          }
+        }
+      ]);
     }
   }, [first, deeplink]);
 
@@ -180,9 +197,9 @@ const SplashScreenContainer = ({
         onLogout();
         navigation.reset({ routes: [{ name: 'LoginStack' }] });
       } else {
-        const flag: any = await serviceCheck(result);
+        const isDeploy: boolean = await serviceCheck(result);
 
-        if (flag) {
+        if (isDeploy) {
           navigation.reset({ routes: [{ name: 'MainStack' }] });
         } else {
           navigation.reset({ routes: [{ name: 'SelectCompany' }] });
@@ -228,25 +245,33 @@ const SplashScreenContainer = ({
       //토근정보가 있을때
       const { mHASH_KEY, mAuth_r_token, mAuth_a_token, cno } = result;
       onLogout();
-
-      const info = await _loginCheckRequest(
-        mAuth_a_token,
-        mAuth_r_token,
-        cno,
-        mHASH_KEY,
-        'deepLink',
-        true
-      );
-      if (info.errors) {
-        _handleloginCheckError(info.errors);
-        navigation.reset({ routes: [{ name: 'LoginStack' }] });
-      } else {
-        const isDeploy = await serviceCheck(info);
-        if (isDeploy) {
-          navigation.reset({ routes: [{ name: 'MainStack' }] });
+      if (mHASH_KEY !== 'null' && cno !== 'null') {
+        const info = await _loginCheckRequest(
+          mAuth_a_token,
+          mAuth_r_token,
+          cno,
+          mHASH_KEY,
+          'deepLink',
+          true
+        );
+        if (info.errors) {
+          _handleloginCheckError(info.errors);
+          navigation.reset({ routes: [{ name: 'LoginStack' }] });
         } else {
-          navigation.reset({ routes: [{ name: 'SelectCompany' }] });
+          const isDeploy: boolean = await serviceCheck(info);
+          if (isDeploy) {
+            navigation.reset({ routes: [{ name: 'MainStack' }] });
+          } else {
+            navigation.reset({ routes: [{ name: 'SelectCompany' }] });
+          }
         }
+      } else {
+        let alertText =
+          result.name === 'staffmanagment'
+            ? '나하고에서 먼저 로그인 해주세요'
+            : '비정상적인 접근입니다.';
+        Alert.alert(alertText);
+        navigation.reset({ routes: [{ name: 'LoginStack' }] });
       }
     } else if (result.login_info === 'email') {
       //토근정보가 없을때
@@ -312,17 +337,17 @@ const SplashScreenContainer = ({
     );
     // 이상이 없는 회사일 경우 로그인 정상 진행
     if (statusCheck && statusCheck.code === 200) {
-      // 서비스 구매여부 조회
-      const isDeployWebrtc = await ServiceCheckApi.serviceCheck(
-        auth,
-        'webrtc' // 구매여부 확인
-      );
       // 서비스 배포여부 조회
-      const isDeployWehagomeet = await ServiceCheckApi.serviceCheck(
-        auth,
-        'wehagomeet' // 배포여부 확인
-      );
-      const isDeploy = isDeployWehagomeet || isDeployWebrtc;
+      const isDeployWehagomeet = await ServiceCheckApi.serviceCheck(auth);
+      const isDeploy = isDeployWehagomeet;
+
+      // 서비스 구매여부 조회
+      // const isDeployWebrtc = await ServiceCheckApi.serviceCheck(
+      //   auth,
+      //   'webrtc'  구매여부 확인
+      // );
+      // 'wehagomeet' 배포여부 확인
+      // || isDeployWebrtc;
       setPermission(isDeploy);
       return isDeploy;
     } else {

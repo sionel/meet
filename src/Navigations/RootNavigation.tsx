@@ -15,11 +15,12 @@ import ConferenceView from '../Screens/ConferenceScreen';
 import SelectCompanyView from '../Screens/SelectCompanyScreen';
 import SplashView from '../Screens/SplashScreen';
 
-import { Alert, Linking } from 'react-native';
+import { Alert, AppState, AppStateStatus, Linking } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/configureStore';
 
 import { actionCreators as ConferenceActions } from '../redux/modules/conference';
+import { actionCreators as UserActions } from '../redux/modules/user';
 
 // roomToken?: string;
 export type MeetParamList = {
@@ -28,6 +29,7 @@ export type MeetParamList = {
   };
   SelectCompany: undefined;
   LoginStack: undefined;
+  InputLogin: undefined;
   MainStack: undefined;
   ConferenceStateView: {
     id: string;
@@ -93,21 +95,23 @@ export const navigateReset = (name: string, params?: any) => {
       }
     ]
   });
-}
+};
 
 export default function RootNavigation(props: any) {
   // let nowStack = '';
-  
+
   const dispatch = useDispatch();
   const setIsConference = (flag: boolean) => {
     dispatch(ConferenceActions.setIsConference(flag));
   };
+  const setLoginType = (loginType: string) => {
+    dispatch(UserActions.setLoginType(loginType));
+  };
 
-  
-
-  const { isConference } = useSelector((state: RootState) => {
+  const { isConference, isLogin } = useSelector((state: RootState) => {
     return {
-      isConference: state.conference.isConference
+      isConference: state.conference.isConference,
+      isLogin: state.user.isLogin
     };
   });
 
@@ -116,8 +120,21 @@ export default function RootNavigation(props: any) {
   //   if (name === 'ConferenceView') nowStack = 'ConferenceView';
   //   else nowStack = '';
   // };
+  const verifyCanOpenUrl = async () => {
+    let wehago = await Linking.canOpenURL('wehago://');
+    let nahago = await Linking.canOpenURL('staffmanagment://');
+    let loginType = wehago ? 'wehago' : nahago ? 'nahago' : 'none';
+    setLoginType(loginType);
+  };
+
+  const handleAppStateChange = async (nextAppState: AppStateStatus) => {
+    if (nextAppState === 'active') {
+      await verifyCanOpenUrl();
+    }
+  };
 
   useEffect(() => {
+    AppState.addEventListener('change', handleAppStateChange);
     // TODO: 안드로이드 액티비티가 1개이면서 위하고에서 백그라운드에서 포그라운드로 넘어올때 App이 재시작됨으로 재시작 처리를 우선으로함
     // 위하고 측에서 딥링크 넘겨줄때 위하고 앱측에서 launchMode 방식에서 생기는 현상인거 같음.
     if (isConference) {
@@ -125,6 +142,8 @@ export default function RootNavigation(props: any) {
       setIsConference(false);
       return;
     }
+
+    verifyCanOpenUrl();
 
     if (props.url?.url) navigate('SplashView', { deeplink: props.url.url });
 

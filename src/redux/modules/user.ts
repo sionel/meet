@@ -23,13 +23,14 @@ const SESSION_CHECK = 'user.SESSION_CHECK';
 const SET_PERMISSION = 'user.SET_PERMISSION'; // 화상회의 생성 권한
 const TOGGLE_UPDATE_NOTI = 'user.TOGGLE_UPDATE_NOTI';
 
-// 화면 고정을 해제하기 위해 화상회의 뷰인지 체크
-const CONFERENCE = 'user.CONFERENCE';
+// 나하고 관련 정책이나 버튼 식별을 위해 타입 체크 ( 위하고 or 나하고 )
+const SET_LOGIN_TYPE = 'user.SET_LOGIN_TYPE';
 //#region Action Creators
 
 //#region initialState
 
 export interface state {
+  loginType: string;
   isLogin: boolean;
   auth: any;
   permission: boolean;
@@ -42,6 +43,7 @@ export interface state {
 }
 
 const initialState = {
+  loginType: 'none',
   isLogin: false,
   auth: {},
   permission: false,
@@ -105,6 +107,8 @@ function reducer(state: state = initialState, action: AnyAction) {
       return { ...state, permission: action.permission };
     case TOGGLE_UPDATE_NOTI:
       return { ...state, updateNoti: !state.updateNoti };
+    case SET_LOGIN_TYPE:
+      return { ...state, loginType: action.loginType };
     default:
       return state;
   }
@@ -269,6 +273,13 @@ function applyChangeCompany(state: state, action: AnyAction) {
   };
 }
 
+function setLoginType(loginType: string) {
+  return {
+    type: SET_LOGIN_TYPE,
+    loginType
+  };
+}
+
 //#endregion Reducer Functions
 
 //#region TOGGLE_VISIBLE_APPINTRO
@@ -307,7 +318,8 @@ const actionCreators = {
   sessionCheck,
   setPermission,
   toggleUpdateNoti,
-  eventLog
+  eventLog,
+  setLoginType
   // setAuth
 };
 

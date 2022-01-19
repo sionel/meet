@@ -82,7 +82,6 @@ const LoginInputContainer = ({
     }
   }, [auth]);
 
-
   const _handleCheckService = async (auth: any) => {
     const statusCheck = await ServiceCheckApi.companyStatusCheck(
       auth,
@@ -90,18 +89,8 @@ const LoginInputContainer = ({
     );
     // 이상이 없는 회사일 경우 로그인 정상 진행
     if (statusCheck && statusCheck.code === 200) {
-      // 서비스 구매여부 조회
-      const isDeployWebrtc = await ServiceCheckApi.serviceCheck(
-        auth,
-        'webrtc' // 구매여부 확인
-      );
-
-      // 서비스 배포여부 조회
-      const isDeployWehagomeet = await ServiceCheckApi.serviceCheck(
-        auth,
-        'wehagomeet' // 배포여부 확인
-      );
-      const isDeploy = isDeployWehagomeet || isDeployWebrtc;
+      const isDeployWehagomeet = await ServiceCheckApi.serviceCheck(auth);
+      const isDeploy = isDeployWehagomeet;
       setPermission(isDeploy);
       if (isDeploy) {
         navigation.reset({ routes: [{ name: 'MainStack' }] });
