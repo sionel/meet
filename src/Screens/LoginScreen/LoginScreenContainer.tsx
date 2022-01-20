@@ -1,7 +1,7 @@
 import React, { RefObject, useEffect, useRef, useState } from 'react';
 import LoginScreenPresenter from './LoginScreenPresenter';
 import { MeetApi } from '../../services';
-import { Linking, Platform } from 'react-native';
+import { Alert, Linking, Platform } from 'react-native';
 import { actionCreators as RootActions } from '../../redux/modules/root';
 import { getT } from '../../utils/translateManager';
 import { useDispatch, useSelector } from 'react-redux';
@@ -23,8 +23,9 @@ const LoginScreenContainer = ({
 
   const codeLineRef: RefObject<any> = useRef();
 
-  const { isHorizon } = useSelector((state: RootState) => ({
-    isHorizon: state.orientation.isHorizon
+  const { isHorizon, loginType } = useSelector((state: RootState) => ({
+    isHorizon: state.orientation.isHorizon,
+    loginType: state.user.loginType
   }));
 
   const t = getT();
@@ -107,6 +108,14 @@ const LoginScreenContainer = ({
       navigation.navigate('InputLogin');
     });
   };
+
+  const handleLoginForNahago = () => {
+    const requestUrl = 'staffmanagment://app?name=meet&login=true';
+    Linking.openURL(requestUrl).catch(err => {
+      Alert.alert('나하고 앱 호출을 실패하였습니다.');
+    });
+  }
+
   return (
     <LoginScreenPresenter
       {...{
@@ -124,7 +133,9 @@ const LoginScreenContainer = ({
         isTablet,
         t,
         logging,
-        shadowCode
+        shadowCode,
+        loginType,
+        handleLoginForNahago
       }}
     />
   );

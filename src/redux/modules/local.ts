@@ -1,5 +1,8 @@
 import { ConferenceModes, FacingModes } from '../../utils/Constants';
 import { getConferenceManager } from '../../utils/ConferenceManager';
+import { AnyAction } from 'redux';
+import { ThunkAction } from 'redux-thunk';
+import { RootState } from '../configureStore';
 //#region Action Types
 
 // JOIN_CONFERENCE
@@ -38,6 +41,18 @@ const SET_TRACK = 'local.SET_TRACK';
 
 //#endregion Action Types
 
+export interface state {
+  user: any;
+  conferenceMode: string;
+  facingMode: string;
+  prevVolumn: any;
+  createdTime: number | null;
+  callType: string | null;
+  message: any[];
+  pipMode: boolean;
+  externalAPIScope: string;
+}
+
 //#region Initial State
 
 const initialState = {
@@ -56,18 +71,18 @@ const initialState = {
 
 //#region reducer
 
-function reducer(state = initialState, action) {
+function reducer(state = initialState, action: AnyAction) {
   switch (action.type) {
     case JOIN_CONFERENCE:
       return applyJoinConference(state, action);
     case LEAVE_CONFERENCE:
-      return applyLeaveConference(state, action);
+      return applyLeaveConference(state);
     case SET_CONFERENCE_MODE:
       return applySetConferenceMode(state, action);
     case TOGGLE_MUTE_VIDEO:
       return applyToggleMuteVideo(state, action);
     case TOGGLE_CAMERA_FACING_MODE:
-      return applyToggleCameraFacingMode(state, action);
+      return applyToggleCameraFacingMode(state);
     // case TOGGLE_CAMERA_FACING_MODE:
     //   return applyToggleCameraFacingMode(state, action);
     case TOGGLE_MUTE_MIC:
@@ -91,14 +106,14 @@ function reducer(state = initialState, action) {
 
 //#endregion
 
-function setTrack(track) {
+function setTrack(track: object) {
   return {
     type: SET_TRACK,
     track
   };
 }
 
-function applySetTrack(state, action) {
+function applySetTrack(state: state, action: AnyAction) {
   const { user } = state;
   user.videoTrack = action.track;
   user.isMuteVideo = action.track?.isMuted();
@@ -107,7 +122,9 @@ function applySetTrack(state, action) {
 
 //#region JOIN_CONFERENCE
 
-function joinConference(conferenceInfo) {
+function joinConference(
+  conferenceInfo: object
+): ThunkAction<void, RootState, unknown> {
   return (dispatch, getState) => {
     const { auth } = getState()['user'];
     dispatch({
@@ -118,7 +135,7 @@ function joinConference(conferenceInfo) {
   };
 }
 
-function applyJoinConference(state, action) {
+function applyJoinConference(state: state, action: AnyAction) {
   const { conferenceInfo } = action;
   const user = {
     id: 'localUser',
@@ -147,7 +164,7 @@ function applyJoinConference(state, action) {
 
 //#region LEAVE_CONFERENCE
 
-function leaveConference() {
+function leaveConference(): ThunkAction<void, RootState, unknown> {
   return dispatch => {
     dispatch({
       type: LEAVE_CONFERENCE
@@ -155,7 +172,7 @@ function leaveConference() {
   };
 }
 
-function applyLeaveConference(state) {
+function applyLeaveConference(state: state) {
   /** video/audio mute */
   // state.user.videoTrack.dispose();
   // state.user.audioTrack.dispose();
@@ -175,7 +192,9 @@ function applyLeaveConference(state) {
 
 //#region SET_CONFERENCE_MODE
 
-function setConferenceMode(conferenceMode) {
+function setConferenceMode(
+  conferenceMode: string
+): ThunkAction<void, RootState, unknown> {
   return dispatch => {
     dispatch({
       type: SET_CONFERENCE_MODE,
@@ -184,7 +203,7 @@ function setConferenceMode(conferenceMode) {
   };
 }
 
-function applySetConferenceMode(state, action) {
+function applySetConferenceMode(state: state, action: AnyAction) {
   const { conferenceMode } = action;
   return {
     ...state,
@@ -196,7 +215,9 @@ function applySetConferenceMode(state, action) {
 
 //#region TOGGLE_MUTE_VIDEO
 
-function toggleMuteVideo(videoMute) {
+function toggleMuteVideo(
+  videoMute: boolean
+): ThunkAction<void, RootState, unknown> {
   return dispatch => {
     dispatch({
       type: TOGGLE_MUTE_VIDEO,
@@ -205,7 +226,7 @@ function toggleMuteVideo(videoMute) {
   };
 }
 
-function applyToggleMuteVideo(state, action) {
+function applyToggleMuteVideo(state: state, action: AnyAction) {
   const { user } = state;
   const { videoMute } = action;
 
@@ -232,7 +253,7 @@ function applyToggleMuteVideo(state, action) {
 
 //#region TOGGLE_CAMERA_FACING_MODE
 
-function toggleCameraFacingMode() {
+function toggleCameraFacingMode(): ThunkAction<void, RootState, unknown> {
   return dispatch => {
     dispatch({
       type: TOGGLE_CAMERA_FACING_MODE
@@ -240,7 +261,7 @@ function toggleCameraFacingMode() {
   };
 }
 
-function applyToggleCameraFacingMode(state) {
+function applyToggleCameraFacingMode(state: state) {
   const { user, facingMode } = state;
   if (user && user.videoTrack) {
     user.videoTrack._switchCamera();
@@ -263,7 +284,7 @@ function applyToggleCameraFacingMode(state) {
 
 //#region TOGGLE_MUTE_MIC
 
-function toggleMuteMic(micMute) {
+function toggleMuteMic(micMute: any): ThunkAction<void, RootState, unknown> {
   return dispatch => {
     dispatch({
       type: TOGGLE_MUTE_MIC,
@@ -272,7 +293,7 @@ function toggleMuteMic(micMute) {
   };
 }
 
-function applyToggleMuteMic(state, action) {
+function applyToggleMuteMic(state: state, action: AnyAction) {
   const { user } = state;
   const { micMute } = action;
   if (user && user.audioTrack) {
@@ -300,8 +321,10 @@ function applyToggleMuteMic(state, action) {
 //#endregion TOGGLE_MUTE_MIC
 
 //#region TOGGLE_MUTE_SPEAKER
-
-function toggleMuteSpeaker(speakerMute) {
+//TODO: 현재 안쓰고 있음.
+function toggleMuteSpeaker(
+  speakerMute: any
+): ThunkAction<void, RootState, unknown> {
   return async dispatch => {
     dispatch({
       type: TOGGLE_MUTE_SPEAKER,
@@ -310,7 +333,7 @@ function toggleMuteSpeaker(speakerMute) {
   };
 }
 
-function applyToggleMuteSpeaker(state, action) {
+function applyToggleMuteSpeaker(state: state, action: AnyAction) {
   const { user } = state;
   const { speakerMute } = action;
   const currentMute =
@@ -328,7 +351,9 @@ function applyToggleMuteSpeaker(state, action) {
 
 //#region SET_CONFERENCE_CREATED_TIME
 
-function setConferenceCreatedTime(createdTime) {
+function setConferenceCreatedTime(
+  createdTime: number
+): ThunkAction<void, RootState, unknown> {
   return async dispatch => {
     dispatch({
       type: SET_CONFERENCE_CREATED_TIME,
@@ -337,7 +362,7 @@ function setConferenceCreatedTime(createdTime) {
   };
 }
 
-function applySetConferenceCreatedTime(state, action) {
+function applySetConferenceCreatedTime(state: state, action: AnyAction) {
   const { createdTime } = action;
   return {
     ...state,
@@ -348,7 +373,9 @@ function applySetConferenceCreatedTime(state, action) {
 //#endregion SET_CONFERENCE_CREATED_TIME
 
 //#region  CONFERENCE_MESSAGE_RECEIVED
-function receiceConferenceMessage(newMessage = null) {
+function receiceConferenceMessage(
+  newMessage = null
+): ThunkAction<void, RootState, unknown> {
   return async (dispatch, getState) => {
     dispatch({
       type: CONFERENCE_MESSAGE_RECEIVED,
@@ -358,7 +385,7 @@ function receiceConferenceMessage(newMessage = null) {
   };
 }
 
-function applySetConferenceMessage(state, action) {
+function applySetConferenceMessage(state: state, action: AnyAction) {
   const { newMessage, participants } = action;
   const { user } = state;
 
@@ -373,7 +400,7 @@ function applySetConferenceMessage(state, action) {
   let message_user =
     newMessage.user === user.cid
       ? user
-      : participants.find(participant => {
+      : participants.find((participant: any) => {
           return participant.id === newMessage.user;
         }) || { name: '(알수없음)' };
 
@@ -390,7 +417,7 @@ function applySetConferenceMessage(state, action) {
 }
 //#endregion
 
-function applySetConferencePIPMode(state, action) {
+function applySetConferencePIPMode(state: state, action: AnyAction) {
   const { pipMode } = action;
   return {
     ...state,

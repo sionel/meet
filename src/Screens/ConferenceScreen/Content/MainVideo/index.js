@@ -8,7 +8,8 @@ import { actionCreators as ScreenShareCreators } from '../../../../redux/modules
 const mapStateToProps = (state, ownProps) => {
   const {
     local: { createdTime },
-    screenShare: { isScreenShare }
+    screenShare: { isScreenShare },
+    root: { videoPolicy }
   } = state;
   const {
     mainUser,
@@ -21,7 +22,8 @@ const mapStateToProps = (state, ownProps) => {
     isMuteVideo,
     videoType: videoTrack && videoTrack.videoType,
     createdTime,
-    isScreenShare
+    isScreenShare,
+    videoPolicy
   };
 };
 

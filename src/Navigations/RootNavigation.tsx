@@ -108,10 +108,9 @@ export default function RootNavigation(props: any) {
     dispatch(UserActions.setLoginType(loginType));
   };
 
-  const { isConference, isLogin } = useSelector((state: RootState) => {
+  const { isConference } = useSelector((state: RootState) => {
     return {
-      isConference: state.conference.isConference,
-      isLogin: state.user.isLogin
+      isConference: state.conference.isConference
     };
   });
 

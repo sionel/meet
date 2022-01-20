@@ -328,11 +328,9 @@ export default function HomeScreenContainer(props: any) {
                 : conference.created_at
             ).toTimeString();
 
-            const time =
-              parseInt(startTime.slice(0, 2)) < 12
-                ? 'AM'
-                : 'PM' + ' ' + startTime.slice(0, 5);
-
+            const ampm = parseInt(startTime.slice(0, 2)) < 12 ? 'AM' : 'PM'
+            const time = ampm + ' ' + startTime.slice(0, 5);
+                
             const onMinte = Math.floor(
               (new Date().getTime() -
                 (conference.start_date_time
@@ -475,15 +473,19 @@ export default function HomeScreenContainer(props: any) {
               return [...prev, { type, value }];
             }, []);
 
+            const start = new Date(conference.r_start_date_time).toTimeString();
+            const sAmPm = parseInt(start.slice(0, 2)) < 12 ? 'AM' : 'PM'
+            const startTime = sAmPm + ' ' + start.slice(0, 5);
+
+            const end = new Date(conference.r_end_date_time).toTimeString();
+            const eAaPm = parseInt(end.slice(0, 2)) < 12 ? 'AM' : 'PM'
+            const endTime = eAaPm + ' ' + end.slice(0, 5);
+
             const data = {
               roomName: conference.name,
               date: new Date(conference.r_start_date_time).toLocaleDateString(),
-              start: new Date(conference.r_start_date_time)
-                .toLocaleTimeString()
-                .slice(0, -3),
-              end: new Date(conference.r_end_date_time)
-                .toLocaleTimeString()
-                .slice(0, -3),
+              start: startTime,
+              end: endTime,
               users: uriList,
               roomId: conference.room_id,
               isPublic: conference.is_public,

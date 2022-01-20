@@ -3,15 +3,13 @@ import { AppRegistry, Linking } from 'react-native';
 import { Provider, useDispatch } from 'react-redux';
 import { PersistGate } from 'redux-persist/es/integration/react';
 import configureStore from './src/redux/configureStore';
-import Main from './src/Main';
+import CustomProvider from './src/Provider';
+
 import { withTranslation } from 'react-i18next';
 import './src/locales/index';
 import { setT } from './src/utils/translateManager';
 
 import Splash from 'react-native-splash-screen';
-import { actionCreators } from './src/redux/modules/root';
-
-import CustomProvider from './src/Provider';
 import RootNavigation from './src/Navigations/RootNavigation';
 
 // import { io } from "socket.io-client";

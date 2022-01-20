@@ -51,6 +51,7 @@ export default function ConferenceBox(props: conferenceBoxProps) {
             (user: { type: string | number; value: string }, index) => {
               return user.type === 'string' ? (
                 <Image
+                  key={index}
                   source={{
                     uri: user.value
                   }}
@@ -62,6 +63,7 @@ export default function ConferenceBox(props: conferenceBoxProps) {
                 />
               ) : (
                 <View
+                  key={index}
                   style={[
                     styles.noImage,
                     { right: index * 10, zIndex: -index }

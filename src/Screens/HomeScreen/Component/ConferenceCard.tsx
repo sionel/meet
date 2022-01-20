@@ -100,9 +100,10 @@ export default function ConferenceCard(props: cardProps) {
           <View style={styles.cardBotView}>
             <View style={styles.profileImageList}>
               {participants.map(
-                (user: { type: string | number; value: string }) => {
+                (user: { type: string | number; value: string }, index) => {                
                   return user.type === 'string' ? (
                     <Image
+                      key={index}
                       source={{
                         uri: user.value
                       }}
@@ -111,6 +112,7 @@ export default function ConferenceCard(props: cardProps) {
                     />
                   ) : (
                     <TouchableOpacity
+                      key={index}
                       style={styles.noImage}
                       onPress={() => goingMoreClick(roomId)}
                     >

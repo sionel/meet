@@ -1,5 +1,9 @@
 //#region Action Types
 
+import { AnyAction } from 'redux';
+import { ThunkAction } from 'redux-thunk';
+import { RootState } from '../configureStore';
+
 // init 설정
 const INIT = 'mainUser.INIT';
 
@@ -18,6 +22,14 @@ const SET_SHARING_MODE = 'mainUser.SET_SHARING_MODE';
 
 //#endregion Action Types
 
+export interface state {
+  mainUserId: string | null;
+  drawingMode: any;
+  documentListMode: string[] | boolean;
+  sharingMode: object | boolean;
+  presenter: string | boolean;
+}
+
 //#region Initial State
 
 const initialState = {
@@ -32,7 +44,8 @@ const initialState = {
 
 //#region reducer
 
-function reducer(state = initialState, action) {
+function reducer(state = initialState, action: AnyAction) {
+  
   switch (action.type) {
     case INIT:
       return _initMainUser();
@@ -61,7 +74,7 @@ function _initMainUser() {
 }
 //#region SET_MAIN_USER
 
-function setMainUser(mainUserId) {
+function setMainUser(mainUserId:string): ThunkAction<void, RootState, unknown> {
   return dispatch => {
     dispatch({
       type: SET_MAIN_USER,
@@ -70,7 +83,7 @@ function setMainUser(mainUserId) {
   };
 }
 
-function applySetMainUser(state, action) {
+function applySetMainUser(state: state, action: AnyAction) {
   const { mainUserId } = action;
   return {
     ...state,
@@ -82,7 +95,7 @@ function applySetMainUser(state, action) {
 
 //#region SET_MAIN_USER_NOTEXIST
 
-function setMainUserNotExist() {
+function setMainUserNotExist(): ThunkAction<void, RootState, unknown> {
   return (dispatch, getState) => {
     if (!getState().mainUser.mainUserId) {
       dispatch({
@@ -92,7 +105,7 @@ function setMainUserNotExist() {
   };
 }
 
-function applySetMainUserNotExist(state) {
+function applySetMainUserNotExist(state: state) {
   return {
     ...state,
     mainUserId: 'localUser'
@@ -103,7 +116,7 @@ function applySetMainUserNotExist(state) {
 
 //#region SET_DRAWING_MODE
 
-function setDrawingMode(drawingMode) {
+function setDrawingMode(drawingMode: any): ThunkAction<void, RootState, unknown> {
   return dispatch => {
     dispatch({
       type: SET_DRAWING_MODE,
@@ -112,7 +125,7 @@ function setDrawingMode(drawingMode) {
   };
 }
 
-function applySetDrawingMode(state, action) {
+function applySetDrawingMode(state: state, action: AnyAction) {
   const { drawingMode } = action;
   return {
     ...state,
@@ -125,7 +138,7 @@ function applySetDrawingMode(state, action) {
 
 //#region SET_DOCUMENT_LIST_MODE
 
-function setDocumentListMode(documentListMode) {
+function setDocumentListMode(documentListMode: string[] | boolean): ThunkAction<void, RootState, unknown> {
   return dispatch => {
     dispatch({
       type: SET_DOCUMENT_LIST_MODE,
@@ -138,7 +151,7 @@ function setDocumentListMode(documentListMode) {
   };
 }
 
-function applySetDocumentListMode(state, action) {
+function applySetDocumentListMode(state: state, action: AnyAction) {
   const { documentListMode } = action;
   return {
     ...state,
@@ -156,7 +169,7 @@ function setSharingMode(
   page = 0,
   documentData = [],
   mode = null
-) {
+): ThunkAction<void, RootState, unknown> {
   return dispatch => {
     dispatch({
       type: SET_SHARING_MODE,
@@ -174,7 +187,7 @@ function setSharingMode(
   };
 }
 
-function applySetSharingMode(state, action) {
+function applySetSharingMode(state: state, action: AnyAction) {
   const { attributes, presenter } = action;
   return {
     ...state,

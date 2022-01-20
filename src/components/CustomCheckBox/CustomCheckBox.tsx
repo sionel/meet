@@ -3,10 +3,11 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
-  View
+  View,
+  Text
 } from 'react-native';
-import { Text } from '../StyledText';
-const chk_on = require('../../../assets/new/icons/color-check-wh_2x.png');
+// import { Text } from '../StyledText';
+const chk_on = require('../../../assets/new/icons/ic_check_wh.png');
 
 const CustomCheckBoxPresenter = (props: any) => {
   const { text, color, style, onCheck, checked } = props;
@@ -42,7 +43,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: 'rgb(51,51,51)',
     lineHeight: 30,
-    paddingLeft: 5
+    paddingLeft: 5,
+    fontFamily: 'DOUZONEText30'
   }
 });
 

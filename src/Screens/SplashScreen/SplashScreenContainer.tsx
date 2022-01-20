@@ -20,6 +20,7 @@ import { actionCreators as AlertAcions } from '../../redux/modules/alert';
 import { actionCreators as IndicatorAcions } from '../../redux/modules/indicator';
 import { actionCreators as RecentsActions } from '../../redux/modules/recentsInvited';
 import { actionCreators as ConferenceActions } from '../../redux/modules/conference';
+import { actionCreators as RootActions } from '../../redux/modules/root';
 import { MeetNavigationProps } from '../../Navigations/RootNavigation';
 
 // const iswehagov = WEHAGO_ENV === 'WEHAGOV';
@@ -70,8 +71,8 @@ const SplashScreenContainer = ({
   const toggleUpdateNoti = () => dispatch(UserActions.toggleUpdateNoti());
   const setAlert = (params: any) => dispatch(AlertAcions.setAlert(params));
   const eventLog = (event: any) => dispatch(UserActions.eventLog(event));
-  const setIsConference = (flag: boolean) =>
-    dispatch(ConferenceActions.setIsConference(flag));
+  const setVideoPolicy = (videoPolicy: string) =>
+  dispatch(RootActions.setVideoPolicy(videoPolicy));
 
   //#endregion
 
@@ -200,6 +201,7 @@ const SplashScreenContainer = ({
         const isDeploy: boolean = await serviceCheck(result);
 
         if (isDeploy) {
+          setVideoPolicy(loginType);
           navigation.reset({ routes: [{ name: 'MainStack' }] });
         } else {
           navigation.reset({ routes: [{ name: 'SelectCompany' }] });
@@ -260,6 +262,8 @@ const SplashScreenContainer = ({
         } else {
           const isDeploy: boolean = await serviceCheck(info);
           if (isDeploy) {
+            let videoPolicy = result.name === 'staffmanagment' ? 'nahago' : 'wehago';
+          setVideoPolicy(videoPolicy);
             navigation.reset({ routes: [{ name: 'MainStack' }] });
           } else {
             navigation.reset({ routes: [{ name: 'SelectCompany' }] });

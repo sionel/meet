@@ -1,6 +1,9 @@
 import { actionCreators as mainUserActionCreators } from './mainUser';
 import { actionCreators as localActionCreators } from './local';
 import MeetApi from '../../services/api/MeetApi';
+import { AnyAction } from 'redux';
+import { ThunkAction } from 'redux-thunk';
+import { RootState } from '../configureStore';
 //#region Action Types
 
 // 새참여자 회의 참가
@@ -33,7 +36,9 @@ const SET_KICK = 'participants.SET_KICK';
 //#endregion Action Types
 
 //#region Initial State
-
+export interface state {
+  list: any[]
+}
 const initialState = {
   list: []
 };
@@ -42,10 +47,13 @@ const initialState = {
 
 //#region reducer
 
-function reducer(state = initialState, action) {
+function reducer(state = initialState, action: AnyAction) {
+  console.log('state');
+  console.log(state);
+  
   switch (action.type) {
     case INIT:
-      return _initParticipants(state, action);
+      return _initParticipants();
     case JOIN_USER:
       return applyJoinUser(state, action);
     case LEFT_USER:
@@ -54,14 +62,14 @@ function reducer(state = initialState, action) {
       return applySetRemoteTrack(state, action);
     case UPDATE_MUTE_VIDEO:
       return applyUpdateMuteVideo(state, action);
-    case UPDATE_MUTE_AUDIO:
-      return applyUpdateMuteAudio(state, action);
+    // case UPDATE_MUTE_AUDIO:
+    //   return applyUpdateMuteAudio(state, action);
     case SET_USER_INFO:
       return applySetUserInfo(state, action);
     case SET_CHANGED_STATUS:
       return applyChangedStatus(state, action);
-    case SET_KICK:
-      return applySetKickFlag(state, action);
+    // case SET_KICK:
+    //   return applySetKickFlag(state, action);
     default:
       return state;
   }
@@ -79,7 +87,8 @@ function _initParticipants() {
 
 //#region JOIN_USER : 새로운 유저 참가
 
-function joinUser(user) {
+function joinUser(user: any): ThunkAction<void, RootState, unknown> {
+  
   return (dispatch, getState) => {
     const length = getState().participants.list.length;
     dispatch({
@@ -92,7 +101,7 @@ function joinUser(user) {
   };
 }
 
-function applyJoinUser(state, action) {
+function applyJoinUser(state: state, action: AnyAction) {
   const { user } = action;
   const list = state.list.slice(0);
   const participant = {
@@ -119,7 +128,8 @@ function applyJoinUser(state, action) {
  *
  * @param {*} userId
  */
-function changedStatus(userId, status) {
+function changedStatus(userId: string, status: any): ThunkAction<void, RootState, unknown> {
+  
   return dispatch => {
     dispatch({
       type: SET_CHANGED_STATUS,
@@ -130,7 +140,7 @@ function changedStatus(userId, status) {
     });
   };
 }
-function applyChangedStatus(state, action) {
+function applyChangedStatus(state: state, action: AnyAction) {
   const { userId, status } = action.payload;
   const userIndex = state.list.findIndex(u => u.id === userId);
   let newList = state.list.slice(0);
@@ -143,7 +153,8 @@ function applyChangedStatus(state, action) {
 
 //#region LEFT_USER : 새로운 유저 참가
 
-function leftUser(id) {
+function leftUser(id:string): ThunkAction<void, RootState, unknown> {
+  
   return (dispatch, getState) => {
     // 나가는 사람이 현재 메인이라면 메인을 변경
     const mainUser = getState().mainUser;
@@ -157,9 +168,9 @@ function leftUser(id) {
   };
 }
 
-function applyLeftUser(state, action) {
+function applyLeftUser(state: state, action: AnyAction) {
   const { id } = action;
-  const list = state.list.filter(participant => participant.id !== id);
+  const list = state.list.filter((participant:any) => participant.id !== id);
 
   return {
     ...state,
@@ -171,7 +182,8 @@ function applyLeftUser(state, action) {
 
 //#region SET_REMOTE_TRACK
 
-function setRemoteTrack(track) {
+function setRemoteTrack(track: any): ThunkAction<void, RootState, unknown> {
+  
   return dispatch => {
     dispatch({
       type: SET_REMOTE_TRACK,
@@ -180,11 +192,11 @@ function setRemoteTrack(track) {
   };
 }
 
-function applySetRemoteTrack(state, action) {
+function applySetRemoteTrack(state: state, action: AnyAction) {
   const { track } = action;
   const id = track.getParticipantId();
   const list = state.list.slice(0);
-  const findUser = list.find(user => user.id === id);
+  const findUser = list.find((user: any) => user.id === id);
   if (findUser) {
     const type = track.getType();
     if (type === 'video') {
@@ -204,7 +216,7 @@ function applySetRemoteTrack(state, action) {
 
 //#region UPDATE_MUTE_VIDEO
 
-function updateMuteVideo(track) {
+function updateMuteVideo(track: any): ThunkAction<void, RootState, unknown> {
   return dispatch => {
     dispatch({
       type: UPDATE_MUTE_VIDEO,
@@ -213,12 +225,12 @@ function updateMuteVideo(track) {
   };
 }
 
-function applyUpdateMuteVideo(state, action) {
+function applyUpdateMuteVideo(state: state, action: AnyAction) {
   const { track } = action;
   const list = state.list.slice(0);
 
   if (track.getType() === 'video') {
-    const findUser = list.find(user => {
+    const findUser = list.find((user:any) => {
       if (user.videoTrack && user.id === track.getParticipantId()) {
         return true;
       }
@@ -228,7 +240,7 @@ function applyUpdateMuteVideo(state, action) {
       findUser.isMuteVideo = track.isMuted();
     }
   } else if (track.getType() === 'audio') {
-    const findUser = list.find(user => {
+    const findUser = list.find((user: any) => {
       if (user.audioTrack && user.id === track.getParticipantId()) {
         return true;
       }
@@ -258,7 +270,7 @@ function applyUpdateMuteVideo(state, action) {
 //   };
 // }
 
-// function applyUpdateMuteAudio(state, action) {
+// function applyUpdateMuteAudio(state: state, action: AnyAction) {
 //   const { user } = action;
 //   const list = state.list.slice(0);
 
@@ -286,7 +298,8 @@ function applyUpdateMuteVideo(state, action) {
 
 //#region SET_USER_INFO
 
-function setUserInfo(id, info) {
+function setUserInfo(id: string, info: any): ThunkAction<void, RootState, unknown> {
+  
   return dispatch => {
     dispatch({
       type: SET_USER_INFO,
@@ -296,10 +309,10 @@ function setUserInfo(id, info) {
   };
 }
 
-function applySetUserInfo(state, action) {
+function applySetUserInfo(state: state, action: AnyAction) {
   const { id, info } = action;
   const list = state.list.slice(0);
-  const findUser = list.find(user => {
+  const findUser = list.find((user:any) => {
     // WEHAGO_ID로 sendCommand 받는데 이상한 로직에서도 받는게 있어서 중복처리 하려고 둔 로직
     if (user.id === id) {
       return true;

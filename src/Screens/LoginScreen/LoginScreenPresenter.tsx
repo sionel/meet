@@ -8,11 +8,15 @@ import {
   TextInput,
   Platform,
   SafeAreaView,
-  StatusBar
+  StatusBar,
+  Image
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import LinearGradient from 'react-native-linear-gradient';
+
+const nahagoLogo = require('../../../assets/new/logos/nahago_login.png');
+const wehagoLogo = require('../../../assets/new/logos/wehago_login.png');
 
 //mulLug
 //다국어 적용 안되어있음
@@ -33,6 +37,8 @@ interface PresenterProps {
   logging: boolean;
   codeLineRef: RefObject<any>;
   t: any;
+  loginType: string;
+  handleLoginForNahago: () => void;
 }
 
 const LoginScreenPresenter = (props: PresenterProps) => {
@@ -51,7 +57,9 @@ const LoginScreenPresenter = (props: PresenterProps) => {
     isTablet,
     t,
     logging,
-    shadowCode
+    shadowCode,
+    loginType,
+    handleLoginForNahago
   } = props;
 
   return (
@@ -192,23 +200,59 @@ const LoginScreenPresenter = (props: PresenterProps) => {
                   isTablet && { justifyContent: 'center' }
                 ]}
               >
-                <LinearGradient
-                  end={{ x: 0, y: 0.5 }}
-                  start={{ x: 1, y: 0.5 }}
-                  colors={['#3BBFF0', '#1C90FB']}
-                  style={styles.loginBtnGradation}
-                >
-                  <TouchableHighlight
-                    activeOpacity={0.7}
-                    style={styles.loginBtnTouch}
-                    onPress={LoginForWehago}
-                    underlayColor={'rgba(0,0,0,0.2)'}
+                {loginType === 'nahago' ? (
+                  <LinearGradient
+                    end={{ x: 0, y: 0.5 }}
+                    start={{ x: 1, y: 0.5 }}
+                    colors={['#3BBFF0', '#1C90FB']}
+                    style={styles.loginBtnGradation}
                   >
-                    <Text style={styles.loginBtnText}>
-                      {t('renewal.login_wehagologin')}
-                    </Text>
-                  </TouchableHighlight>
-                </LinearGradient>
+                    <TouchableHighlight
+                      activeOpacity={1}
+                      style={styles.loginBtnTouch}
+                      onPress={handleLoginForNahago}
+                      disabled={logging}
+                      underlayColor={'rgba(0,0,0,0.3)'}
+                    >
+                      <View style={styles.logoButtonView}>
+                        <Image
+                          source={nahagoLogo}
+                          style={styles.loginLogo}
+                          resizeMode="cover"
+                        />
+                        <Text style={styles.nahagoLoginBtnText}>
+                          {t('renewal.login_logo')}
+                        </Text>
+                      </View>
+                    </TouchableHighlight>
+                  </LinearGradient>
+                ) : (
+                  <LinearGradient
+                    end={{ x: 0, y: 0.5 }}
+                    start={{ x: 1, y: 0.5 }}
+                    colors={['#3BBFF0', '#1C90FB']}
+                    style={styles.loginBtnGradation}
+                  >
+                    <TouchableHighlight
+                      activeOpacity={1}
+                      style={styles.loginBtnTouch}
+                      disabled={logging}
+                      onPress={LoginForWehago}
+                      underlayColor={'rgba(0,0,0,0.2)'}
+                    >
+                      <View style={styles.logoButtonView}>
+                        <Image
+                          source={wehagoLogo}
+                          style={styles.loginLogo}
+                          resizeMode="cover"
+                        />
+                        <Text style={styles.loginBtnText}>
+                          {t('renewal.login_logo')}
+                        </Text>
+                      </View>
+                    </TouchableHighlight>
+                  </LinearGradient>
+                )}
               </View>
               <View style={{ flex: 1 }} />
               <View style={{ flex: 0.5 }} />
@@ -344,7 +388,21 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontFamily:'DOUZONEText30',
     paddingLeft: 10
-  }
+  },
+  logoButtonView: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  loginLogo: {
+    width: 89,
+    height: 18
+  },
+  nahagoLoginBtnText: {
+    color: '#fff',
+    fontSize: 16,
+    fontFamily: 'DOUZONEText30'
+  },
 });
 
 export default LoginScreenPresenter;

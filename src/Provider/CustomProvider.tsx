@@ -63,8 +63,6 @@ export default function CustomProvider(props: any) {
 
   const dispatch = useDispatch();
   const _onLogout = () => dispatch(UserActions.logout());
-  const _setDestination = (destination: string) =>
-    dispatch(RootActions.setDestination(destination));
   const _setNetwork = (flag: boolean) => dispatch(RootActions.setNetwork(flag));
   const _setAlert = (params: any) => dispatch(AlertActions.setAlert(params));
 

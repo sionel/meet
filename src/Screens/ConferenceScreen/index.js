@@ -91,10 +91,6 @@ const mapDispatchToProps = dispatch => {
     initParticipants: () => dispatch(ParticipantsAcions.initParticipants()),
     setIndicator: () =>
       dispatch(indicatorAcionCreators.setIndicator('화상회의 종료 중')),
-    setLoaded: loaded => dispatch(RootActions.setLoaded(loaded)),
-    setDestination: destination => dispatch(RootActions.setDestination(destination)),
-    setParams: params => dispatch(RootActions.setParams(params)),
-    setUrl: url => dispatch(RootActions.setUrl(url)),
     resetVideoId: () => dispatch(RootActions.setVideoId('')),
     setIsConference:flag => dispatch(ConferenceActions.setIsConference(flag)),
     setConferenceManager:manager =>dispatch(ConferenceActions.setConferenceManager(manager))

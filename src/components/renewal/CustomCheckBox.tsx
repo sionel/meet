@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image, StyleSheet, TouchableOpacity, View, Text, Platform } from 'react-native';
 // import { Text } from '../StyledText';
-const chk_on = require('../../../assets/new/icons/color-check-wh_2x.png');
+const chk_on = require('../../../assets/new/icons/ic_check_wh.png');
 
 const CustomCheckBoxPresenter = (props: any) => {
   const { text, color, style, onCheck, checked } = props;

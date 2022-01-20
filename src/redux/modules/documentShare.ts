@@ -1,12 +1,25 @@
 //#region Action Types
 
+import { AnyAction } from 'redux';
+import { ThunkAction } from 'redux-thunk';
+import { RootState } from '../configureStore';
+
 // 문서공유 모드
 const SET_DOCUMENT_LIST_MODE = 'documentShare.SET_DOCUMENT_LIST_MODE';
 const SET_SHARING_MODE = 'documentShare.SET_SHARING_MODE';
 const SET_DOCUMENT_PAGE = 'documentShare.SET_DOCUMENT_PAGE';
 const SET_DRAW_DATA = 'documentShare.SET_DRAW_DATA';
 
+// boolean 다 제거 해야할거 같음.
 //#endregion Action Types
+export interface state {
+  documentListMode: string[] | boolean;
+  attributes: object | boolean;
+  presenter: string | boolean;
+  page: number;
+  documentData: any[];
+  mode: string | null;
+}
 
 //#region Initial State
 
@@ -23,7 +36,7 @@ const initialState = {
 
 //#region reducer
 
-function reducer(state = initialState, action) {
+function reducer(state = initialState, action: AnyAction) {
   switch (action.type) {
     case SET_DOCUMENT_LIST_MODE:
       return applySetDocumentListMode(state, action);
@@ -42,7 +55,9 @@ function reducer(state = initialState, action) {
 
 //#region SET_DOCUMENT_LIST_MODE
 
-function setDocumentListMode(documentListMode) {
+function setDocumentListMode(
+  documentListMode: string[]
+): ThunkAction<void, RootState, unknown> {
   return dispatch => {
     dispatch({
       type: SET_DOCUMENT_LIST_MODE,
@@ -55,7 +70,7 @@ function setDocumentListMode(documentListMode) {
   };
 }
 
-function applySetDocumentListMode(state, action) {
+function applySetDocumentListMode(state: state, action: AnyAction) {
   const { documentListMode } = action;
   return {
     ...state,
@@ -72,7 +87,7 @@ function setSharingMode(
   page = 0,
   documentData = [],
   mode = null
-) {
+): ThunkAction<void, RootState, unknown> {
   return dispatch => {
     dispatch({
       type: SET_SHARING_MODE,
@@ -90,7 +105,7 @@ function setSharingMode(
   };
 }
 
-function applySetSharingMode(state, action) {
+function applySetSharingMode(state: state, action: AnyAction) {
   const { attributes, presenter, page, documentData, mode } = action;
   return {
     ...state,
@@ -107,7 +122,7 @@ function applySetSharingMode(state, action) {
 
 //#region SET_DOCUMENT_PAGE
 
-function setDocumentPage(page) {
+function setDocumentPage(page: number): ThunkAction<void, RootState, unknown> {
   return dispatch => {
     dispatch({
       type: SET_DOCUMENT_PAGE,
@@ -116,7 +131,7 @@ function setDocumentPage(page) {
   };
 }
 
-function applysetDocumentPage(state, action) {
+function applysetDocumentPage(state: state, action: AnyAction) {
   const { page } = action;
   return {
     ...state,
@@ -128,7 +143,10 @@ function applysetDocumentPage(state, action) {
 
 //#region SET_DRAW_DATA
 
-function setDrawData(documentData, selectResource) {
+function setDrawData(
+  documentData: object,
+  selectResource: number
+): ThunkAction<void, RootState, unknown> {
   return dispatch => {
     dispatch({
       type: SET_DRAW_DATA,
@@ -138,7 +156,7 @@ function setDrawData(documentData, selectResource) {
   };
 }
 
-function applysetDrawData(state, action) {
+function applysetDrawData(state: state, action: AnyAction) {
   const { documentData, page } = state;
   const { documentData: newData, selectResource } = action;
 
