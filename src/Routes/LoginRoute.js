@@ -4,9 +4,9 @@
 //  */
 
 // import { createStackNavigator, createAppContainer } from 'react-navigation';
-// // import LoginScreen from '../Screens/LoginScreen';
-// import LoginScreenPresenter from '../Screens/LoginScreen';
-// import LoginInputScreen from '../Screens/LoginScreen/LoginInputScreen';
+// // import LoginScreen from '@screens/LoginScreen';
+// import LoginScreenPresenter from '@screens/LoginScreen';
+// import LoginInputScreen from '@screens/LoginScreen/LoginInputScreen';
 
 // // 메인화면
 // export const LoginMain = createStackNavigator(

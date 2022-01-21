@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { getT } from '../../../../utils/translateManager';
+import { getT } from '@utils/translateManager';
 import OverViewPresenter from './OverViewPresenter';
 
 class OverViewContainer extends Component {

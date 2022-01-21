@@ -12,7 +12,7 @@
 */
 import { useStore } from 'react-redux';
 import { AnyAction } from 'redux';
-import { getT } from '../../utils/translateManager';
+import { getT } from '@utils/translateManager';
 // import { useTranslation } from 'react-i18next';
 
 const SET_ALERT = 'alert.SET_ALERT';

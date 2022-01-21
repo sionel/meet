@@ -2,7 +2,7 @@
  * test.js
  * 추후 삭제 요망
  */
-import { UserApi } from '../../services';
+import { UserApi } from '@services/index';
 
 const TEST = 'TEST';
 const POSTS = 'POSTS';

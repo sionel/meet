@@ -2,7 +2,6 @@ import React, { RefObject } from 'react';
 import {
   StyleSheet,
   View,
-  TouchableHighlight,
   TouchableOpacity,
   Text,
   TextInput,
@@ -11,11 +10,10 @@ import {
   StatusBar,
   Image
 } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import LinearGradient from 'react-native-linear-gradient';
 
-const icBack = require('../../../assets/new/icons/ic_back.png');
+
+const icBack = require('@assets/icons/ic_back.png');
 
 //mulLug
 //다국어 적용 안되어있음

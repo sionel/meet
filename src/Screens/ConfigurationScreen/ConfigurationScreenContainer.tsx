@@ -4,15 +4,15 @@ import deviceInfoModule from 'react-native-device-info';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/configureStore';
 
-import { actionCreators as UserActions } from '../../redux/modules/user';
-// import { actionCreators as RootActions } from '../../redux/modules/root';
-import { actionCreators as DeployedAcions } from '../../redux/modules/deployed';
-import { actionCreators as RecentsActions } from '../../redux/modules/recentsInvited';
+import { actionCreators as UserActions } from '@redux/user';
+// import { actionCreators as RootActions } from '@redux/root';
+import { actionCreators as DeployedAcions } from '@redux/deployed';
+import { actionCreators as RecentsActions } from '@redux/recentsInvited';
 
-import UserApi from '../../services/api/UserApi';
+import UserApi from '@services/api/UserApi';
 
 import ConfigurationScreenPresenter from './ConfigurationScreenPresenter';
-import { ConfigurationNavigationProps } from '../../Navigations/ConfigurationStack';
+import { ConfigurationNavigationProps } from '@navigations/ConfigurationStack';
 
 export default function ConfigurationScreenContainer(props: any) {
   const { auth, from, isHorizon } = useSelector((state: RootState) => {
@@ -82,7 +82,7 @@ export default function ConfigurationScreenContainer(props: any) {
 // import DeviceInfo from 'react-native-device-info';
 // import Orientation from 'react-native-orientation-locker';
 
-// import UserApi from '../../services/api/UserApi';
+// import UserApi from '@services/index/api/UserApi';
 
 // const hasNotch = DeviceInfo.hasNotch() && Platform.OS === 'ios';
 

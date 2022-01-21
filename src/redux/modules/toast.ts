@@ -3,7 +3,7 @@
 import { debounce } from 'lodash';
 import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
-import { getT } from '../../utils/translateManager';
+import { getT } from '@utils/translateManager';
 import { RootState } from '../configureStore';
 
 const TOAST_MESSAGE = 'master.TOAST_MESSAGE';

@@ -13,7 +13,7 @@ import TopArea from './TopArea';
 import BottomArea from './BottomArea';
 import OverView from './OverView';
 import SimpleNoti from '../SimpleNoti';
-import { ConferenceModes } from '../../../utils/ConstantsBackup';
+import { ConferenceModes } from '@utils/ConstantsBackup';
 import { RootState } from '../../../redux/configureStore';
 const ContentPresenter = (props: any) => {
   const {

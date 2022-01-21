@@ -17,14 +17,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import CreateMeetScreenPresenter from './CreateMeetScreenPresenter';
 import OrganizationScreen from './OrganizationScreen';
 
-import { MeetApi, OrganizationApi } from '../../services';
+import { MeetApi, OrganizationApi } from '@services/index';
 
 import moment from 'moment';
-import { getT } from '../../utils/translateManager';
+import { getT } from '@utils/translateManager';
 import { RootState } from '../../redux/configureStore';
 import deviceInfoModule from 'react-native-device-info';
-import { wehagoMainURL } from '../../utils';
-import { MainNavigationProps } from '../../Navigations/MainStack';
+import { wehagoMainURL } from '@utils/index';
+import { MainNavigationProps } from '@navigations/MainStack';
 
 import _ from 'lodash';
 

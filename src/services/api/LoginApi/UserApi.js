@@ -6,7 +6,7 @@ import {
   wehagoBaseURL0,
   serialize,
   createHeader
-} from '../../../utils';
+} from '@utils/index';
 
 const getIp = async () => {
   try {

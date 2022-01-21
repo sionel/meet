@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import ParticipantBoxContainer from "./ParticipantBoxContainer";
-import { actionCreators as mainUserActionCreators } from "../../../../../../redux/modules/mainUser";
+import { actionCreators as mainUserActionCreators } from "@redux/mainUser";
 
 const mapStateToProps = (state, ownProps) => {
   const {

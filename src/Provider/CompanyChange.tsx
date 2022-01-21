@@ -12,12 +12,12 @@ import RNRestart from 'react-native-restart';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../redux/configureStore';
-import { actionCreators as selectCompanyAction } from '../redux/modules/selectCompany';
-import { actionCreators as userAction } from '../redux/modules/user';
-import { getT } from '../utils/translateManager';
+import { actionCreators as selectCompanyAction } from '@redux/selectCompany';
+import { actionCreators as userAction } from '@redux/user';
+import { getT } from '@utils/translateManager';
 const { width, height } = Dimensions.get('window');
 
-const icCheckB = require('../../assets/new/icons/ic_check_b.png');
+const icCheckB = require('@assets/new/icons/ic_check_b.png');
 
 //다국어
 export default function CompanyChange() {

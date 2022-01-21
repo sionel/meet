@@ -9,15 +9,15 @@ import {
   StyleSheet
 } from 'react-native';
 
-// import icBack from '../../../assets/new/icons/ic_back_w.png';
+// import icBack from '@assets/icons/ic_back_w.png';
 
-import icMenuInfo from '../../../assets/new/icons/ic_menu_info.png';
-import icMenuInfoLaw from '../../../assets/new/icons/ic_menu_info_law.png';
-import icMenuTrophy from '../../../assets/new/icons/ic_menu_trophy.png';
-import icMenuLogin from '../../../assets/new/icons/ic_menu_login.png';
-import icArrowRight from '../../../assets/new/icons/ic_arrow_right.png';
-import icBack from '../../../assets/new/icons/ic_back.png';
-import { getT } from '../../utils/translateManager';
+import icMenuInfo from '@assets/icons/ic_menu_info.png';
+import icMenuInfoLaw from '@assets/icons/ic_menu_info_law.png';
+import icMenuTrophy from '@assets/icons/ic_menu_trophy.png';
+import icMenuLogin from '@assets/icons/ic_menu_login.png';
+import icArrowRight from '@assets/icons/ic_arrow_right.png';
+import icBack from '@assets/icons/ic_back.png';
+import { getT } from '@utils/translateManager';
 
 interface propsTypes {
   // onRedirect: (destination: string) => void;
@@ -225,9 +225,9 @@ const styles = StyleSheet.create({
 //   SectionList,
 //   TouchableOpacity
 // } from 'react-native';
-// import { CustomAlert, CustomIcon } from '../../components';
+// import { CustomAlert, CustomIcon } from '@components';
 // import { WEHAGO_ENV } from '../../../config';
-// import { getT } from '../../utils/translateManager';
+// import { getT } from '@utils/translateManager';
 
 // const ConfigurationScreenPresenter = props => {
 //   const t = getT();

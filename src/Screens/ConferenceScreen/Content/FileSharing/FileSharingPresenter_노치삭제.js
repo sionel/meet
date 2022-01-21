@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import DrawingSketch from '../DrawingSketch';
-import CustomButton from '../../../../components/CustomButton';
+import CustomButton from '../../@components/CustomButton';
 
 const isIOS = Platform.OS === 'ios';
 const hasNotch = DeviceInfo.hasNotch() && isIOS;

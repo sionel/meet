@@ -8,12 +8,12 @@ import {
   Text,
   StyleSheet
 } from 'react-native';
-import { CustomIcon } from '../../../../components';
+import { CustomIcon } from '@components/index';
 
-import { wehagoDummyImageURL, wehagoMainURL } from '../../../../utils';
+import { wehagoDummyImageURL, wehagoMainURL } from '@utils/index';
 
-const ic_cancel = require('../../../../../assets/new/icons/ic_cancel_w.png');
-const ic_mail = require('../../../../../assets/new/icons/ic_mail.png');
+const ic_cancel = require('@assets/icons/ic_cancel_w.png');
+const ic_mail = require('@assets/icons/ic_mail.png');
 
 const SelectedPreview = (props: any) => {
   const { selectedEmployee, auth, selectEmployee } = props;

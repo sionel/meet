@@ -1,9 +1,9 @@
 import React from 'react';
 import { StyleSheet, View, ScrollView, Image, Text } from 'react-native';
 import { useSelector } from 'react-redux';
-import waiting from '../../../../assets/wating.png';
+import waiting from '@oldassets/wating.png';
 import { RootState } from '../../../redux/configureStore';
-import { getT } from '../../../utils/translateManager';
+import { getT } from '@utils/translateManager';
 
 export default function WatingScreen(props:{start:string, isTablet: boolean}) {
   const { start, isTablet } = props;

@@ -11,17 +11,17 @@ import { Image, TouchableOpacity, View } from 'react-native';
 import CustomIcon from './../components/CustomIcon';
 
 /** Screens */
-import HomeScreen from '../Screens/HomeScreen';
-import ConfigurationScreen from '../Screens/ConfigurationScreen';
-import PolicyScreen from '../Screens/ConfigurationScreen/subScreens/PolicyScreen';
-import AwardsScreen from '../Screens/ConfigurationScreen/subScreens/AwardsScreen';
-import OpenSourceScreen from '../Screens/ConfigurationScreen/subScreens/OpenSourceScreen.tsx';
-import OpenSourceDetailScreen from '../Screens/ConfigurationScreen/subScreens/OpenSourceDetailScreen';
-import CreateScreen from '../Screens/CreateScreen';
-import CreateMeetScreen from '../Screens/CreateMeetScreen';
-import ConferenceModifyScreen from '../Screens/ConferenceModifyScreen';
-import ConferenceStateScreen from '../Screens/ConferenceStateScreen';
-import InviteCodeScreen from '../Screens/InviteCodeScreen';
+import HomeScreen from '@screens/HomeScreen';
+import ConfigurationScreen from '@screens/ConfigurationScreen';
+import PolicyScreen from '@screens/ConfigurationScreen/subScreens/PolicyScreen';
+import AwardsScreen from '@screens/ConfigurationScreen/subScreens/AwardsScreen';
+import OpenSourceScreen from '@screens/ConfigurationScreen/subScreens/OpenSourceScreen.tsx';
+import OpenSourceDetailScreen from '@screens/ConfigurationScreen/subScreens/OpenSourceDetailScreen';
+import CreateScreen from '@screens/CreateScreen';
+import CreateMeetScreen from '@screens/CreateMeetScreen';
+import ConferenceModifyScreen from '@screens/ConferenceModifyScreen';
+import ConferenceStateScreen from '@screens/ConferenceStateScreen';
+import InviteCodeScreen from '@screens/InviteCodeScreen';
 
 /** Components */
 import RouteTitle from './RouteTitle';

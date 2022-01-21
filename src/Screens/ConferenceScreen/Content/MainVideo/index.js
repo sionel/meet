@@ -2,8 +2,8 @@
 
 import { connect } from 'react-redux';
 import MainVideoContainer from './MainVideoContainer';
-// import { actionCreators as localActions } from '../../../../redux/modules/local';
-import { actionCreators as ScreenShareCreators } from '../../../../redux/modules/ScreenShare';
+// import { actionCreators as localActions } from '../../@redux/local';
+import { actionCreators as ScreenShareCreators } from '@redux/ScreenShare';
 
 const mapStateToProps = (state, ownProps) => {
   const {

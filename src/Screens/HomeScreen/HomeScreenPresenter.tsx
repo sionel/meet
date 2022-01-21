@@ -25,31 +25,31 @@ import CalendarPicker from '../../custom_modules/react-native-calendar-picker';
 //   CustomAlert,
 //   Placeholder,
 //   SectionListHeader
-// } from '../../components';
+// } from '@components';
 import AddButton from './AddButton';
-import { getT } from '../../utils/translateManager';
+import { getT } from '@utils/translateManager';
 import ConferenceCard from './Component/ConferenceCard';
 import FinishedCard from './Component/FinishedCard';
 import ReservationCard from './Component/ReservationCard';
 import BottomPopup, { content } from './Component/BottomPopup';
 import ParticipantsList, {
   participantsListProps
-} from '../../components/renewal/ParticipantsList';
+} from '@components/renewal/ParticipantsList';
 // import ParticipantBox from '../ConferenceScreen/Content/BottomArea/SubVideoBox/ParticipantBox';
 
-// import { isWehagoV } from '../../utils';
-// import { Text } from '../../components/StyledText';
-const loginLogo = require('../../../assets/new/logos/logo.png');
-const icSet = require('../../../assets/new/icons/ic_set.png');
-const icCalendar = require('../../../assets/new/icons/ic_calendar.png');
-const icVideo = require('../../../assets/new/icons/ic_video.png');
-const icKeyboard = require('../../../assets/new/icons/ic_keyboard.png');
-const icArrowDownBlack = require('../../../assets/new/icons/ic_arrow_down_black.png');
-const icChange = require('../../../assets/new/icons/ic_change.png');
-const icEmptyConference = require('../../../assets/new/icons/ic_empty_conference.png');
-const icEmpty = require('../../../assets/new/icons/ic_empty.png');
-const icChat = require('../../../assets/new/icons/ic_chat_w.png');
-const icCancel = require('../../../assets/new/icons/ic_cancel.png');
+// import { isWehagoV } from '@utils';
+// import { Text } from '@components/StyledText';
+const loginLogo = require('@assets/logos/logo.png');
+const icSet = require('@assets/icons/ic_set.png');
+const icCalendar = require('@assets/icons/ic_calendar.png');
+const icVideo = require('@assets/icons/ic_video.png');
+const icKeyboard = require('@assets/icons/ic_keyboard.png');
+const icArrowDownBlack = require('@assets/icons/ic_arrow_down_black.png');
+const icChange = require('@assets/icons/ic_change.png');
+const icEmptyConference = require('@assets/icons/ic_empty_conference.png');
+const icEmpty = require('@assets/icons/ic_empty.png');
+const icChat = require('@assets/icons/ic_chat_w.png');
+const icCancel = require('@assets/icons/ic_cancel.png');
 
 {
   /*

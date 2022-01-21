@@ -4,8 +4,8 @@ export default ConferenceStateContainer
 
 // import ConferenceStateContainer from './ConferenceStateContainer';
 // import { connect } from 'react-redux';
-// import { actionCreators as UserActions } from '../../redux/modules/user';
-// import { actionCreators as WetalkActions } from '../../redux/modules/wetalk';
+// import { actionCreators as UserActions } from '@redux/user';
+// import { actionCreators as WetalkActions } from '@redux/wetalk';
 
 // const mapStateToProps = state => ({
 //   auth: state.user.auth,

@@ -1,7 +1,7 @@
 import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import { result } from 'underscore';
-import { UserApi } from '../../services';
+import { UserApi } from '@services/index';
 import { RootState } from '../configureStore';
 const LOGIN = 'webUser.LOGIN';
 const LOGOUT = 'webUser.LOGOUT';

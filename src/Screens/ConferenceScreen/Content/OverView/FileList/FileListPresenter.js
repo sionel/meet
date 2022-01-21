@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   Platform
 } from 'react-native';
-import CustomIcon from '../../../../../components/CustomIcon';
+import CustomIcon from '@components/CustomIcon';
 
 const FileListPresenter = props => {
   const {

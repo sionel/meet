@@ -1,7 +1,7 @@
-import JitsiMeetJS from '../../../jitsi/features/base/lib-jitsi-meet';
+import JitsiMeetJS from '@jitsi/base/lib-jitsi-meet';
 import config from './config';
-import { getDrawingManager } from '../../utils';
-import DrawingMananger from '../../utils/DrawingManager';
+import { getDrawingManager } from '@utils/index';
+import DrawingMananger from '@utils/DrawingManager';
 
 // 위하고 아이디 커멘드 이름 정의
 const WEHAGO_ID = 'wehagoid';

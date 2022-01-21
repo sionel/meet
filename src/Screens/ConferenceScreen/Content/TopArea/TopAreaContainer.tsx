@@ -1,12 +1,12 @@
 import TopAreaPresenter from './TopAreaPresenter';
 import React from 'react';
 import { Platform } from 'react-native';
-import { ConferenceModes } from '../../../../utils/ConstantsBackup';
+import { ConferenceModes } from '@utils/ConstantsBackup';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { actionCreators as localAction } from '../../../../redux/modules/local';
-import { actionCreators as mainUserAction } from '../../../../redux/modules/mainUser';
-import { actionCreators as ScreenShareAction } from '../../../../redux/modules/ScreenShare';
+import { actionCreators as localAction } from '@redux/local';
+import { actionCreators as mainUserAction } from '@redux/mainUser';
+import { actionCreators as ScreenShareAction } from '@redux/ScreenShare';
 import { RootState } from '../../../../redux/configureStore';
 
 function TopAreaContainer(props) {

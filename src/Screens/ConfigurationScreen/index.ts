@@ -3,11 +3,11 @@ export default ConfigurationScreenContainer;
 
 // import ConfigurationScreenContainer from './ConfigurationScreenContainer';
 // import { connect } from 'react-redux';
-// import { actionCreators as UserActions } from '../../redux/modules/user';
-// import { actionCreators as WetalkActions } from '../../redux/modules/wetalk';
-// import { actionCreators as RootActions } from '../../redux/modules/root';
-// import { actionCreators as DeployedAcions } from '../../redux/modules/deployed';
-// import { actionCreators as RecentsActions} from '../../redux/modules/recentsInvited';
+// import { actionCreators as UserActions } from '@redux/user';
+// import { actionCreators as WetalkActions } from '@redux/wetalk';
+// import { actionCreators as RootActions } from '@redux/root';
+// import { actionCreators as DeployedAcions } from '@redux/deployed';
+// import { actionCreators as RecentsActions} from '@redux/recentsInvited';
 
 // const mapStateToProps = state => ({
 //   user: state.user.auth,

@@ -1,6 +1,6 @@
 // TODO: 이것도 있는지 확인하고 삭제해야함
 // import React from 'react';
-// import { WEHAGO_TYPE } from '../../utils';
+// import { WEHAGO_TYPE } from '@utils';
 
 // const slides = props => {
 //   return [

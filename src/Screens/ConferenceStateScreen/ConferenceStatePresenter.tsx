@@ -8,12 +8,12 @@ import {
   Image,
   TouchableOpacity
 } from 'react-native';
-import { CustomIcon } from '../../components';
+import { CustomIcon } from '@components/index';
 import ReservationInfoScreen from './subScreens/ReservationInfoScreen';
 import FullroomScreen from './subScreens/FullroomScreen';
 import WatingScreen from './subScreens/WatingScreen';
 import DeletedScreen from './subScreens/DeletedScreen';
-import icBack from '../../../assets/new/icons/ic_back.png';
+import icBack from '@assets/icons/ic_back.png';
 
 interface presenterProps {
   conferenceState: string;

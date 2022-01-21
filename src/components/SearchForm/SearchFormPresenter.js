@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import CustomIcon from '../CustomIcon';
-import { getT } from '../../utils/translateManager';
+import { getT } from '@utils/translateManager';
 const SafetyView = Platform.OS === 'ios' ? SafeAreaView : View;
 
 const SearchFormPresenter = props => {

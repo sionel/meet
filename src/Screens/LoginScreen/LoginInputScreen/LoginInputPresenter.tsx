@@ -13,18 +13,17 @@ import {
   Platform
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import CustomCheckBox from '../../../components/renewal/CustomCheckBox';
+import CustomCheckBox from '@components/renewal/CustomCheckBox';
 import LinearGradient from 'react-native-linear-gradient';
-import CustomAlert from '../../../components/CustomAlert';
-import { reduceRight } from '../../../../webpack.config';
+import CustomAlert from '@components/CustomAlert';
 
-const loginLogo = require('../../../../assets/new/logos/logo.png');
-const user = require('../../../../assets/new/icons/ic_user.png');
-const lock = require('../../../../assets/new/icons/ic_lock_black.png');
-const loading = require('../../../../assets/new/icons/loadingIcon.png');
-const patternTop = require('../../../../assets/new/patterns/login_pattern_top.png');
-const patternBot = require('../../../../assets/new/patterns/login_pattern_bottom.png');
-const cancel = require('../../../../assets/new/icons/ic_cancel_fill.png');
+const loginLogo = require('@assets/logos/logo.png');
+const user = require('@assets/icons/ic_user.png');
+const lock = require('@assets/icons/ic_lock_black.png');
+const loading = require('@assets/icons/loadingIcon.png');
+const patternTop = require('@assets/patterns/login_pattern_top.png');
+const patternBot = require('@assets/patterns/login_pattern_bottom.png');
+const cancel = require('@assets/icons/ic_cancel_fill.png');
 
 interface PresenterProps {
   userId: string;

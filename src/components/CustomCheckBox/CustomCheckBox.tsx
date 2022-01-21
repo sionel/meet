@@ -7,7 +7,7 @@ import {
   Text
 } from 'react-native';
 // import { Text } from '../StyledText';
-const chk_on = require('../../../assets/new/icons/ic_check_wh.png');
+const chk_on = require('@assets/icons/ic_check_wh.png');
 
 const CustomCheckBoxPresenter = (props: any) => {
   const { text, color, style, onCheck, checked } = props;

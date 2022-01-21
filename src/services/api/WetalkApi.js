@@ -1,5 +1,5 @@
-import { wehagoBaseURL, securityRequest } from '../../utils';
-import { getT } from '../../utils/translateManager';
+import { wehagoBaseURL, securityRequest } from '@utils/index';
+import { getT } from '@utils/translateManager';
 
 export default {
   getWetalkList: async auth => {

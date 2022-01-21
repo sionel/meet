@@ -11,12 +11,11 @@ import {
   StatusBar,
   Image
 } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import LinearGradient from 'react-native-linear-gradient';
 
-const nahagoLogo = require('../../../assets/new/logos/nahago_login.png');
-const wehagoLogo = require('../../../assets/new/logos/wehago_login.png');
+const nahagoLogo = require('@assets/logos/nahago_login.png');
+const wehagoLogo = require('@assets/logos/wehago_login.png');
 
 //mulLug
 //다국어 적용 안되어있음

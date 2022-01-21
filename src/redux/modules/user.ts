@@ -4,7 +4,7 @@
  */
 
 import { AnyAction } from 'redux';
-import { UserApi, ServiceCheckApi } from '../../services';
+import { UserApi, ServiceCheckApi } from '@services/index';
 import { actionCreators as wetalkActionCreators } from './wetalk';
 
 const AGREEMENT = 'user.AGREEMENT';

@@ -1,20 +1,20 @@
 import React, { RefObject, useEffect, useState } from 'react';
-import { Animated, Easing, Platform, TextInput } from 'react-native';
+import { Animated, Easing, Platform } from 'react-native';
 import LoginInputPresenter from './LoginInputPresenter';
 
-import UserApi from '../../../services/api/LoginApi/UserApi';
-import { UserApi as UserApi2 } from '../../../services';
-import ServiceCheckApi from '../../../services/api/ServiceCheckApi';
+import UserApi from '@services/api/LoginApi/UserApi';
+import { UserApi as UserApi2 } from '@services/index';
+import ServiceCheckApi from '@services/api/ServiceCheckApi';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../redux/configureStore';
-import { actionCreators as UserActions } from '../../../redux/modules/user';
-import { actionCreators as RootActions } from '../../../redux/modules/root';
-import { actionCreators as RecentsActions } from '../../../redux/modules/recentsInvited';
+import { actionCreators as UserActions } from '@redux/user';
+// import { actionCreators as RootActions } from '@redux/root';
+import { actionCreators as RecentsActions } from '@redux/recentsInvited';
 
-import { getT } from '../../../utils/translateManager';
+import { getT } from '@utils/translateManager';
 import deviceInfoModule from 'react-native-device-info';
-import { LoginNavigationProps } from '../../../Navigations/LoginStack';
+import { LoginNavigationProps } from '@navigations/LoginStack';
 
 const LoginInputContainer = ({
   navigation

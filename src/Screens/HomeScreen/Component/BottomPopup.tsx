@@ -10,9 +10,9 @@ import {
   FlatList,
   StyleSheet
 } from 'react-native';
-// import {Text,TextInput} from '../../../components/StyledText';
+// import {Text,TextInput} from '../@components/StyledText';
 const { width, height } = Dimensions.get('window');
-const icPerson = require('../../../../assets/new/icons/ic_user.png');
+const icPerson = require('@assets/icons/ic_user.png');
 
 export interface content {
   icon1?: ImageSourcePropType;

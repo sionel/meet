@@ -18,13 +18,13 @@ import KeepAwake from 'react-native-keep-awake';
 
 import ConferenceScreenPresenter from './ConferenceScreenPresenter';
 import EndCallMessage from './EndCallMessage';
-import ConferenceManager from '../../utils/conference/ConferenceManager';
-import MeetApi from '../../services/api/MeetApi';
+import ConferenceManager from '@utils/conference/ConferenceManager';
+import MeetApi from '@services/index/api/MeetApi';
 import Orientation from 'react-native-orientation-locker';
 import DeviceInfo from 'react-native-device-info';
 
-import { setConferenceManager } from '../../utils/ConferenceManager';
-import { getT } from '../../utils/translateManager';
+import { setConferenceManager } from '@utils/ConferenceManager';
+import { getT } from '@utils/translateManager';
 import { set } from 'lodash';
 
 const { PictureInPicture } = NativeModules;

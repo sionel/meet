@@ -1,7 +1,7 @@
 import React from 'react';
 import ControlBoxPresenter from './ControlBoxPresenter';
-import { getConferenceManager } from '../../../../../utils/ConferenceManager';
-import { getT } from '../../../../../utils/translateManager';
+import { getConferenceManager } from '@utils/ConferenceManager';
+import { getT } from '@utils/translateManager';
 class ControlBoxContainer extends React.Component {
   constructor(props) {
     super(props);

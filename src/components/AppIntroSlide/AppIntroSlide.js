@@ -11,7 +11,7 @@ import DeviceInfo from 'react-native-device-info';
 import AppIntroSlider from './react-native-intro-slider/AppIntroSlider';
 import { WEHAGO_TYPE } from '../../../config';
 
-import { getT } from '../../utils/translateManager';
+import { getT } from '@utils/translateManager';
 import * as RNLocalize from 'react-native-localize';
 
 const { height } = Dimensions.get('window');

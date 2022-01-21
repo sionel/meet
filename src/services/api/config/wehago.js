@@ -1,4 +1,4 @@
-import { wehagoMainURL, wehagoBaseURL } from '../../../utils';
+import { wehagoMainURL, wehagoBaseURL } from '@utils/index';
 /**
  * config
  * 기본(wehago) 관련 설정입니다.

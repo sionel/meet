@@ -4,11 +4,11 @@ import {
   StackScreenProps,
 } from '@react-navigation/stack';
 
-import CreateConference from '../Screens/CreateScreen';
-import DirectCreateConference from '../Screens/CreateMeetScreen';
-import ModifyConference from '../Screens/ConferenceModifyScreen';
-import InviteCode from '../Screens/InviteCodeScreen';
-import Home from '../Screens/HomeScreen';
+import CreateConference from '@screens/CreateScreen';
+import DirectCreateConference from '@screens/CreateMeetScreen';
+import ModifyConference from '@screens/ConferenceModifyScreen';
+import InviteCode from '@screens/InviteCodeScreen';
+import Home from '@screens/HomeScreen';
 import ConfigurationStack from './ConfigurationStack';
 
 import { MeetParamList } from './RootNavigation';

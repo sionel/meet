@@ -1,8 +1,8 @@
 // import { connect } from 'react-redux';
 import TopAreaContainer from './TopAreaContainer';
-// import { actionCreators as localActionCreators } from '../../../../redux/modules/local';
-// import { actionCreators as mainUserActionCreators } from '../../../../redux/modules/mainUser';
-// import { actionCreators as ScreenShareCreators } from '../../../../redux/modules/ScreenShare';
+// import { actionCreators as localActionCreators } from '../../@redux/local';
+// import { actionCreators as mainUserActionCreators } from '../../@redux/mainUser';
+// import { actionCreators as ScreenShareCreators } from '../../@redux/ScreenShare';
 
 // const mapStateToProps = state => {
 //   const {

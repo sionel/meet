@@ -11,14 +11,14 @@ import {
   Platform
 } from 'react-native';
 
-import ButtonCamera from '../../../assets/buttons/btn_vc_camera_on.png';
-import ButtonCameraOff from '../../../assets/buttons/btn_vc_camera_off.png';
-import ButtonMic from '../../../assets/buttons/btn_vc_mike_on.png';
-import ButtonMicOff from '../../../assets/buttons/btn_vc_mike_off.png';
+import ButtonCamera from '@oldassets/buttons/btn_vc_camera_on.png';
+import ButtonCameraOff from '@oldassets/buttons/btn_vc_camera_off.png';
+import ButtonMic from '@oldassets/buttons/btn_vc_mike_on.png';
+import ButtonMicOff from '@oldassets/buttons/btn_vc_mike_off.png';
 import { RTCView } from 'react-native-webrtc';
-import { getT } from '../../utils/translateManager';
+import { getT } from '@utils/translateManager';
 
-import icBack from '../../../assets/new/icons/ic_back.png';
+import icBack from '@aseets/icons/ic_back.png';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 interface PresenterProps {

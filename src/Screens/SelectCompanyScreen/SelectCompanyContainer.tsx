@@ -4,11 +4,11 @@ import SelectCompanyPresenter from './SelectCompanyPresenter';
 import { RootState } from '../../redux/configureStore';
 import RNRestart from 'react-native-restart';
 
-import { actionCreators as RootAction } from '../../redux/modules/root';
-import { actionCreators as UserActions } from '../../redux/modules/user';
+import { actionCreators as RootAction } from '@redux/root';
+import { actionCreators as UserActions } from '@redux/user';
 
-import { UserApi } from '../../services';
-import { MeetNavigationProps } from '../../Navigations/RootNavigation';
+import { UserApi } from '@services/index';
+import { MeetNavigationProps } from '@navigations/RootNavigation';
 
 const SelectCompanyContainer = ({navigation,route}: MeetNavigationProps<'SelectCompany'>) => {
   // const { handleChangeCompany } = props;

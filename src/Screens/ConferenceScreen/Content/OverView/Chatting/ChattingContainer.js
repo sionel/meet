@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ChattingPresenter from './ChattingPresenter';
-import ConferenceManager from '../../../../../utils/conference/ConferenceManager';
+import ConferenceManager from '@utils/conference/ConferenceManager';
 
 class ChattingContainer extends Component {
   constructor(props) {

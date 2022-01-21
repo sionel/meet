@@ -11,13 +11,13 @@ import {
   Text,
   TextInput
 } from 'react-native';
-import { wehagoDummyImageURL, wehagoMainURL } from '../../../../utils';
-import CustomCheckBox from '../../../../components/renewal/CustomCheckBox';
-import { getT } from '../../../../utils/translateManager';
+import { wehagoDummyImageURL, wehagoMainURL } from '@utils/index';
+import CustomCheckBox from '@components/renewal/CustomCheckBox';
+import { getT } from '@utils/translateManager';
 
-const ic_building = require('../../../../../assets/new/icons/ic_build.png');
-const ic_empty = require('../../../../../assets/new/icons/ic_empty.png');
-const ic_mail = require('../../../../../assets/new/icons/ic_mail.png');
+const ic_building = require('@assets/icons/ic_build.png');
+const ic_empty = require('@assets/icons/ic_empty.png');
+const ic_mail = require('@assets/icons/ic_mail.png');
 
 const OrganizationTab = (props: any) => {
   const {

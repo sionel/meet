@@ -3,7 +3,7 @@
  **/
 import JitsiMeetJS, {
   JitsiConnectionEvents
-} from '../../../jitsi/features/base/lib-jitsi-meet';
+} from '@jitsi/base/lib-jitsi-meet';
 import config from './config';
 
 class Connection {

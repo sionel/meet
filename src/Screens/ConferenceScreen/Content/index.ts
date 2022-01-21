@@ -1,8 +1,8 @@
 // import { connect } from 'react-redux';
 import ContentContainer from './ContentContainer';
-// import { actionCreators as localActions } from '../../../redux/modules/local';
-// import { actionCreators as mainUserActions } from '../../../redux/modules/mainUser';
-// import { actionCreators as DocumentShareActions } from '../../../redux/modules/documentShare';
+// import { actionCreators as localActions } from '../@redux/local';
+// import { actionCreators as mainUserActions } from '../@redux/mainUser';
+// import { actionCreators as DocumentShareActions } from '../@redux/documentShare';
 
 // const mapStateToProps = (state, ownProps) => {
 // 	const { local: { conferenceMode } } = state;

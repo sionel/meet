@@ -9,7 +9,7 @@ import {
   StyleSheet,
   Platform
 } from 'react-native';
-import { getT } from '../../../../../utils/translateManager';
+import { getT } from '@utils/translateManager';
 const isIOS = Platform.OS === 'ios';
 
 const ChattingPresenter = props => {

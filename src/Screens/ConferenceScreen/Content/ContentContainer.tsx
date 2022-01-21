@@ -2,16 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { Dimensions, NativeModules, Platform } from 'react-native';
 import ContentPresenter from './ContentPresenter';
 import FileSharing from './FileSharing';
-import { ConferenceModes } from '../../../utils/Constants';
+import { ConferenceModes } from '@utils/Constants';
 import DeviceInfo from 'react-native-device-info';
 import Orientation from 'react-native-orientation-locker';
 import _ from 'underscore';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { actionCreators as localAction } from '../../../redux/modules/local';
-import { actionCreators as mainUserAction } from '../../../redux/modules/mainUser';
+import { actionCreators as localAction } from '@redux/local';
+import { actionCreators as mainUserAction } from '@redux/mainUser';
 import { RootState } from '../../../redux/configureStore';
-import { getConferenceManager } from '../../../utils/ConferenceManager';
+import { getConferenceManager } from '@utils/ConferenceManager';
 
 const isIOS = Platform.OS === 'ios';
 const InCallManager = !isIOS && require('react-native-incall-manager').default;

@@ -1,8 +1,8 @@
 import React from 'react';
 import { BackHandler, NativeModules, ToastAndroid ,findNodeHandle,NativeEventEmitter} from 'react-native';
 import MainVideoPresenter from './MainVideoPresenter';
-import { getT } from '../../../../utils/translateManager';
-import { getConferenceManager } from '../../../../utils/ConferenceManager';
+import { getT } from '@utils/translateManager';
+import { getConferenceManager } from '@utils/ConferenceManager';
 
 const { PictureInPicture } = NativeModules;
 

@@ -27,7 +27,7 @@ const setsessionId = (id: string) => {
     id
   };
 };
-const _setsessionId = (state, action) => ({
+const _setsessionId = (state: state, action: AnyAction) => ({
   ...state,
   sessionId: action.id
 });

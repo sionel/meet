@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
 import ControlBoxContainer from './ControlBoxContainer';
-import { actionCreators as localActionCreators } from '../../../../../redux/modules/local';
-import { actionCreators as masterActionCreators } from '../../../../../redux/modules/master';
-import { actionCreators as toastActionCreators } from '../../../../../redux/modules/toast';
+import { actionCreators as localActionCreators } from '@redux/local';
+import { actionCreators as masterActionCreators } from '@redux/master';
+import { actionCreators as toastActionCreators } from '@redux/toast';
 
 const mapStateToProps = state => {
   const { local, master, screenShare } = state;

@@ -1,21 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { TouchableOpacity, Image, StyleSheet } from 'react-native';
-import buttonTalk from '../../../assets/buttons/btn_tnavi_talk_none.png';
-import buttonSetting from '../../../assets/buttons/btn_tnavi_setting_none.png';
-import buttonDocshare from '../../../assets/buttons/btn_tnavi_docshare_none.png';
-// import buttonToggleScreen from '../../../assets/buttons/btn_tnavi_swscreen_none.png';
-import buttonToggleScreen from '../../../assets/buttons/btnTnaviSwscreenNone_3x.png';
-import buttonReverseVideo from '../../../assets/buttons/btn_video_reverse.png';
-import buttonPen from '../../../assets/buttons/btn_pen.png';
-import buttonZoomIn from '../../../assets/buttons/zoom_in.png';
-import buttonZoomOut from '../../../assets/buttons/zoom_out.png';
-import buttonDocShare from '../../../assets/buttons/doc_share_3x.png';
-import buttonClose from '../../../assets/buttons/btnTnaviCloseNone_3x.png';
-import btnArrowUp from '../../../assets/buttons/btnArrowUp.png';
-import btnArrowDown from '../../../assets/buttons/btnArrowDown.png';
-import btnUserList from '../../../assets/buttons/btn_tnavi_person_none.png';
-import icoScreenShagre from '../../../assets/icons/icoScreenShagre.png';
+import buttonTalk from '@oldassets/buttons/btn_tnavi_talk_none.png';
+import buttonSetting from '@oldassets/buttons/btn_tnavi_setting_none.png';
+import buttonDocshare from '@oldassets/buttons/btn_tnavi_docshare_none.png';
+// import buttonToggleScreen from '@oldassets/buttons/btn_tnavi_swscreen_none.png';
+import buttonToggleScreen from '@oldassets/buttons/btnTnaviSwscreenNone_3x.png';
+import buttonReverseVideo from '@oldassets/buttons/btn_video_reverse.png';
+import buttonPen from '@oldassets/buttons/btn_pen.png';
+import buttonZoomIn from '@oldassets/buttons/zoom_in.png';
+import buttonZoomOut from '@oldassets/buttons/zoom_out.png';
+import buttonDocShare from '@oldassets/buttons/doc_share_3x.png';
+import buttonClose from '@oldassets/buttons/btnTnaviCloseNone_3x.png';
+import btnArrowUp from '@oldassets/buttons/btnArrowUp.png';
+import btnArrowDown from '@oldassets/buttons/btnArrowDown.png';
+import btnUserList from '@oldassets/buttons/btn_tnavi_person_none.png';
+import icoScreenShagre from '@oldassets/icons/icoScreenShagre.png';
 
 /**
  * CustomButtonPresenter

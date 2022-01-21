@@ -7,12 +7,12 @@ export default HomeScreenContainer;
 
 // import HomeScreenContainer from './HomeScreenContainer';
 // import { connect } from 'react-redux';
-// import { actionCreators as UserActions } from '../../redux/modules/user';
-// import { actionCreators as WetalkActions } from '../../redux/modules/wetalk';
-// import { actionCreators as ConferenceActions } from '../../redux/modules/conference';
-// import { actionCreators as AlertAcions } from '../../redux/modules/alert';
-// import { actionCreators as DeployedAcions } from '../../redux/modules/deployed';
-// import { actionCreators as RootActions } from '../../redux/modules/root';
+// import { actionCreators as UserActions } from '@redux/user';
+// import { actionCreators as WetalkActions } from '@redux/wetalk';
+// import { actionCreators as ConferenceActions } from '@redux/conference';
+// import { actionCreators as AlertAcions } from '@redux/alert';
+// import { actionCreators as DeployedAcions } from '@redux/deployed';
+// import { actionCreators as RootActions } from '@redux/root';
 
 // const mapStateToProps = state => {
 //   return {

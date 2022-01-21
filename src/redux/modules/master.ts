@@ -2,7 +2,7 @@
 
 import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
-import MeetApi from '../../services/api/MeetApi';
+import MeetApi from '@services/api/MeetApi';
 import { RootState } from '../configureStore';
 
 //#region Action.type

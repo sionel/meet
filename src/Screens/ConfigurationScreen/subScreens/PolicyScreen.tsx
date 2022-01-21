@@ -11,15 +11,15 @@ import {
 } from 'react-native';
 
 import { useSelector } from 'react-redux';
-import { CustomIcon } from '../../../components';
-import { wehagoMainURL } from '../../../utils';
+import { CustomIcon } from '@components/index';
+import { wehagoMainURL } from '@utils/index';
 import { WEHAGO_TYPE } from '../../../../config';
-import { getT } from '../../../utils/translateManager';
+import { getT } from '@utils/translateManager';
 import { RootState } from '../../../redux/configureStore';
 
-import icBack from '../../../../assets/new/icons/ic_back.png';
-import icArrowRight from '../../../../assets/new/icons/ic_arrow_right.png';
-import { ConfigurationNavigationProps } from '../../../Navigations/ConfigurationStack';
+import icBack from '@assets/icons/ic_back.png';
+import icArrowRight from '@assets/icons/ic_arrow_right.png';
+import { ConfigurationNavigationProps } from '@navigations/ConfigurationStack';
 
 export default function PolicyScreen(props: any) {
   const { navigation }: ConfigurationNavigationProps<'Policy'> = props;

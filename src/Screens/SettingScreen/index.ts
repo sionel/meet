@@ -1,7 +1,7 @@
 import SettingScreenContainer from './SettingScreenContainer';
 export default SettingScreenContainer;
 // import { connect } from 'react-redux';
-// import { actionCreators as AlertAcions } from '../../redux/modules/alert';
+// import { actionCreators as AlertAcions } from '@redux/alert';
 
 // const mapStatetoProps = state => {
 //   return {

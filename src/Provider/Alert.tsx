@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../redux/configureStore';
-import { actionCreators } from '../redux/modules/alert';
+import { actionCreators } from '@redux/alert';
 
 export default function AlertScreenPresenter() {
   const alert = useSelector((state: RootState) => state.alert);

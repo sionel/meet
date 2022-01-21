@@ -9,11 +9,11 @@ import {
   TouchableOpacity,
   TouchableHighlight
 } from 'react-native';
-import waiting from '../../../assets/wating.png';
-import { CustomIcon } from '../../components';
-import { getT } from '../../utils/translateManager';
+import waiting from '@oldassets/wating.png';
+import { CustomIcon } from '@components/index';
+import { getT } from '@utils/translateManager';
 
-const backBtn = require('../../../assets/buttons/back_btn.png');
+const backBtn = require('@oldassets/buttons/back_btn.png');
 
 export default function WatingScreen(props) {
   const { start } = props;

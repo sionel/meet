@@ -10,7 +10,7 @@ import CustomAlert from '../CustomAlert';
 import CustomIcon from '../CustomIcon';
 
 import { Text } from '../StyledText';
-import { getT } from '../../utils/translateManager';
+import { getT } from '@utils/translateManager';
 
 export default function CompanySelectPresenter(props) {
   const {

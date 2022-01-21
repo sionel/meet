@@ -2,10 +2,10 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import CompanySelectPresenter from './CompanySelectPresenter';
-import UserApi from '../../services/api/UserApi';
+import UserApi from '@services/index/api/UserApi';
 
 import RNrestart from 'react-native-restart';
-import { actionCreators } from '../../redux/modules/root';
+import { actionCreators } from '@redux/root';
 
 export default function CompanySelectContainer(props) {
   // const { handleChangeCompany } = props;

@@ -5,7 +5,7 @@
 import React, { Component, Fragment } from 'react';
 // import { View } from 'react-native';
 import { SketchCanvas } from '@terrylinla/react-native-sketch-canvas';
-import DrawingManager from '../../../../../utils/DrawingManager';
+import DrawingManager from '@utils/DrawingManager';
 
 class DrawingBoard extends Component {
   constructor(props) {

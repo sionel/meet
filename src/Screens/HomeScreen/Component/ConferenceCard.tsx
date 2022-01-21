@@ -3,12 +3,12 @@ import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import deviceInfoModule from 'react-native-device-info';
 
 import LinearGradient from 'react-native-linear-gradient';
-import { getT } from '../../../utils/translateManager';
+import { getT } from '@utils/translateManager';
 
-const icLockwhite = require('../../../../assets/new/icons/ic_lock_white.png');
-const icLive = require('../../../../assets/new/icons/ic_live.png');
-const icClock = require('../../../../assets/new/icons/ic_clock.png');
-const icMoreWhite = require('../../../../assets/new/icons/ic_more_w.png');
+const icLockwhite = require('@assets/icons/ic_lock_white.png');
+const icLive = require('@assets/icons/ic_live.png');
+const icClock = require('@assets/icons/ic_clock.png');
+const icMoreWhite = require('@assets/icons/ic_more_w.png');
 
 interface cardProps {
   index: number;

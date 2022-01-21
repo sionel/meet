@@ -2,16 +2,16 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import SettingScreenPresenter from './SettingScreenPresenter';
-import JitsiMeetJS from '../../../jitsi/features/base/lib-jitsi-meet';
-import config from '../../utils/conference/config';
+import JitsiMeetJS from '@jitsi/base/lib-jitsi-meet';
+import config from '@utils/conference/config';
 import { v4 as uuidv4 } from 'uuid';
-import { getT } from '../../utils/translateManager';
+import { getT } from '@utils/translateManager';
 
-import { actionCreators as AlertAcions } from '../../redux/modules/alert';
+import { actionCreators as AlertAcions } from '@redux/alert';
 import { RootState } from '../../redux/configureStore';
-import { MeetNavigationProps } from '../../Navigations/RootNavigation';
+import { MeetNavigationProps } from '@navigations/RootNavigation';
 
-import { MeetApi } from '../../services';
+import { MeetApi } from '@services/index';
 
 export default function SettingScreenContainer(props: any) {
   const [name, setName] = useState('');

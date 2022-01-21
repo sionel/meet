@@ -9,13 +9,13 @@ import {
 } from 'react-native';
 import { RTCView } from 'react-native-webrtc';
 // import DeviceInfo from 'react-native-device-info';
-// import ButtonCameraOff from '../../../../../../../assets/buttons/btn_vc_camera_off.png';
-import ButtonCameraOff from '../../../../../../../assets/icons/speaker/ico-camera-bl-off_2x.png';
-// import imgCharacter01 from '../../../../assets/icons/imgCharacter01_2x.png';
-import imgCharacter01 from '../../../../../../../assets/icons/imgCharacter01_2x.png';
-import imgCharacter02 from '../../../../../../../assets/icons/imgCharacter02_2x.png';
-import imgCharacter03 from '../../../../../../../assets/icons/imgCharacter03_2x.png';
-import CustomIcon from '../../../../../../components/CustomIcon';
+// import ButtonCameraOff from '../../../../@oldassets/buttons/btn_vc_camera_off.png';
+import ButtonCameraOff from '@oldassets/icons/speaker/ico-camera-bl-off_2x.png';
+// import imgCharacter01 from '../@oldassets/icons/imgCharacter01_2x.png';
+import imgCharacter01 from '@oldassets/icons/imgCharacter01_2x.png';
+import imgCharacter02 from '@oldassets/icons/imgCharacter02_2x.png';
+import imgCharacter03 from '@oldassets/icons/imgCharacter03_2x.png';
+import CustomIcon from '@components/CustomIcon';
 
 // const apiLevel = DeviceInfo.getAPILevel();
 const canUseStream = true;

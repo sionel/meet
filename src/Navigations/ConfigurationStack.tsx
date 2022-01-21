@@ -4,10 +4,10 @@ import {
   StackScreenProps,
 } from '@react-navigation/stack';
 
-import Configuration from '../Screens/ConfigurationScreen';
-import Awards from '../Screens/ConfigurationScreen/subScreens/AwardsScreen';
-import OpenSource from '../Screens/ConfigurationScreen/subScreens/OpenSourceScreen';
-import Policy from '../Screens/ConfigurationScreen/subScreens/PolicyScreen';
+import Configuration from '@screens/ConfigurationScreen';
+import Awards from '@screens/ConfigurationScreen/subScreens/AwardsScreen';
+import OpenSource from '@screens/ConfigurationScreen/subScreens/OpenSourceScreen';
+import Policy from '@screens/ConfigurationScreen/subScreens/PolicyScreen';
 import { MeetParamList } from './RootNavigation';
 
 type ConfigurationStackParamList = MeetParamList & {

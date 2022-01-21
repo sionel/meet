@@ -11,7 +11,7 @@
   wehagoBaseURL0,
   wehagoBaseURL,
   serialize
-} from '../../utils';
+} from '@utils/index';
 import * as CryptoJS from 'crypto-js';
 import { v4 as uuidv4 } from 'uuid';
 

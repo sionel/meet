@@ -17,7 +17,7 @@ import {
   // wehago
   wehagoMainURL,
   wehagoDummyImageURL
-} from '../../utils';
+} from '@utils';
 
 export default function DrawerPresenter(props) {
   const {

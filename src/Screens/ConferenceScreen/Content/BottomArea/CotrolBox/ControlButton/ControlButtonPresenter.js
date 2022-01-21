@@ -1,15 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { TouchableOpacity, Image, StyleSheet } from "react-native";
-import ButtonMic from "../../../../../../../assets/buttons/btn_vc_mike_on.png";
-import ButtonCamera from "../../../../../../../assets/buttons/btn_vc_camera_on.png";
-import ButtonSpeakerOn1 from "../../../../../../../assets/buttons/btn_speaker_turnon.png";
-// import ButtonSpeaker from "../../../../../../../assets/buttons/btn_vc_speaker_on.png";
-import ButtonEndCall from "../../../../../../../assets/buttons/btn_vc_endcall_none.png";
-import ButtonMicOff from "../../../../../../../assets/buttons/btn_vc_mike_off.png";
-import ButtonCameraOff from "../../../../../../../assets/buttons/btn_vc_camera_off.png";
-import ButtonSpeakerOff2 from "../../../../../../../assets/buttons/btn_speaker_turnoff.png";
-// import ButtonSpeakerOff from "../../../../../../../assets/buttons/btn_vc_speaker_off.png";
+import ButtonMic from "@oldassets/buttons/btn_vc_mike_on.png";
+import ButtonCamera from "@oldassets/buttons/btn_vc_camera_on.png";
+import ButtonSpeakerOn1 from "@oldassets/buttons/btn_speaker_turnon.png";
+// import ButtonSpeaker from "@oldassets/buttons/btn_vc_speaker_on.png";
+import ButtonEndCall from "@oldassets/buttons/btn_vc_endcall_none.png";
+import ButtonMicOff from "@oldassets/buttons/btn_vc_mike_off.png";
+import ButtonCameraOff from "@oldassets/buttons/btn_vc_camera_off.png";
+import ButtonSpeakerOff2 from "@oldassets/buttons/btn_speaker_turnoff.png";
+// import ButtonSpeakerOff from "@oldassets/buttons/btn_vc_speaker_off.png";
 
 /**
  * ControlButtonPresenter

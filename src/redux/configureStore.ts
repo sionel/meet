@@ -10,28 +10,28 @@ import { persistStore, persistCombineReducers } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // import storage from 'redux-persist/lib/storage';
 import thunk from 'redux-thunk';
-import local from './modules/local';
-import mainUser from './modules/mainUser';
-import participants from './modules/participants';
-import user from './modules/user';
-import wetalk from './modules/wetalk';
-import wedrive from './modules/wedrive';
-import documentShare from './modules/documentShare';
-import conference, { state as conferenceState } from './modules/conference';
-import webUser from './modules/webUser';
-import master from './modules/master';
-import alert from './modules/alert';
-import toast from './modules/toast';
-// import root from './modules/root';
-import deployed, { state as deployedState } from './modules/deployed';
-import screenShare, { state as screenShageState } from './modules/ScreenShare';
-import indicator, { state as indicatorState } from './modules/indicator';
-import orientation, { state as orientationState } from './modules/orientation';
-import root, { state as rootState } from './modules/root';
-import recents, { state as recentsState } from './modules/recentsInvited';
+import local from '@redux/local';
+import mainUser from '@redux/mainUser';
+import participants from '@redux/participants';
+import user from '@redux/user';
+import wetalk from '@redux/wetalk';
+import wedrive from '@redux/wedrive';
+import documentShare from '@redux/documentShare';
+import conference, { state as conferenceState } from '@redux/conference';
+import webUser from '@redux/webUser';
+import master from '@redux/master';
+import alert from '@redux/alert';
+import toast from '@redux/toast';
+// import root from '@redux/root';
+import deployed, { state as deployedState } from '@redux/deployed';
+import screenShare, { state as screenShageState } from '@redux/ScreenShare';
+import indicator, { state as indicatorState } from '@redux/indicator';
+import orientation, { state as orientationState } from '@redux/orientation';
+import root, { state as rootState } from '@redux/root';
+import recents, { state as recentsState } from '@redux/recentsInvited';
 import selectCompany, {
   state as selectCompanyState
-} from './modules/selectCompany';
+} from '@redux/selectCompany';
 /**
  * middleware list
  */

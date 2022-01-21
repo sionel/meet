@@ -7,8 +7,8 @@ export default CreateMeetScreenContainer;
 
 //import { connect } from 'react-redux';
 // actions
-//import { actionCreators as UserActions } from '../../redux/modules/user';
-//import { actionCreators as WetalkActions } from '../../redux/modules/wetalk';
+//import { actionCreators as UserActions } from '@redux/user';
+//import { actionCreators as WetalkActions } from '@redux/wetalk';
 
 /**
  * Connect - State to Props

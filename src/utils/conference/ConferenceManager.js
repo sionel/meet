@@ -1,23 +1,24 @@
 /**
  * 화상회의
  **/
-import JitsiMeetJS from '../../../jitsi/features/base/lib-jitsi-meet';
+import JitsiMeetJS from '@jitsi/base/lib-jitsi-meet';
 import config from './config';
 import Connection from './Connection';
 import ConferenceConnector from './ConferenceConnector';
-import { actionCreators as localActionCreators } from '../../redux/modules/local';
-import { actionCreators as mainUserActionCreators } from '../../redux/modules/mainUser';
-import { actionCreators as participantsAcionCreators } from '../../redux/modules/participants';
-import { actionCreators as DocumentShareAcionCreators } from '../../redux/modules/documentShare';
-import { actionCreators as WedriveAcionCreators } from '../../redux/modules/wedrive';
-import { actionCreators as masterAcionCreators } from '../../redux/modules/master';
-import { actionCreators as toastAcionCreators } from '../../redux/modules/toast';
-import { actionCreators as alertAcionCreators } from '../../redux/modules/alert';
-import { actionCreators as indicatorAcionCreators } from '../../redux/modules/indicator';
-import { MeetApi } from '../../services';
-import { getT } from '../../utils/translateManager';
+import { actionCreators as localActionCreators } from '@redux/local';
+import { actionCreators as mainUserActionCreators } from '@redux/mainUser';
+import { actionCreators as participantsAcionCreators } from '@redux/participants';
+import { actionCreators as DocumentShareAcionCreators } from '@redux/documentShare';
+import { actionCreators as WedriveAcionCreators } from '@redux/wedrive';
+import { actionCreators as masterAcionCreators } from '@redux/master';
+import { actionCreators as toastAcionCreators } from '@redux/toast';
+import { actionCreators as alertAcionCreators } from '@redux/alert';
+import { actionCreators as indicatorAcionCreators } from '@redux/indicator';
+import { MeetApi } from '@services/index';
+import { getT } from '@utils/translateManager';
 import { isWehagoV } from '..';
 import { v4 as uuidv4 } from 'uuid';
+
 /**
  * ConferenceManager 화상회의 접속을 총괄하는 매니저
  */

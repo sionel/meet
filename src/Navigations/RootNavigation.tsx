@@ -1,5 +1,7 @@
 import 'react-native-gesture-handler';
 import React, { RefObject, useEffect } from 'react';
+import { Alert, AppState, AppStateStatus, Linking } from 'react-native';
+
 import { NavigationContainer, NavigationState } from '@react-navigation/native';
 import {
   createStackNavigator,
@@ -9,18 +11,17 @@ import {
 // import SplashView from './SplashView';
 import LoginStack from './LoginStack';
 import MainStack from './MainStack';
-import SettingView from '../Screens/SettingScreen';
-import ConferenceStateView from '../Screens/ConferenceStateScreen';
-import ConferenceView from '../Screens/ConferenceScreen';
-import SelectCompanyView from '../Screens/SelectCompanyScreen';
-import SplashView from '../Screens/SplashScreen';
+import SettingView from '@screens/SettingScreen';
+import ConferenceStateView from '@screens/ConferenceStateScreen';
+import ConferenceView from '@screens/ConferenceScreen';
+import SelectCompanyView from '@screens/SelectCompanyScreen';
+import SplashView from '@screens/SplashScreen';
 
-import { Alert, AppState, AppStateStatus, Linking } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+
 import { RootState } from '../redux/configureStore';
-
-import { actionCreators as ConferenceActions } from '../redux/modules/conference';
-import { actionCreators as UserActions } from '../redux/modules/user';
+import { useDispatch, useSelector } from 'react-redux';
+import { actionCreators as ConferenceActions } from '@redux/conference';
+import { actionCreators as UserActions } from '@redux/user';
 
 // roomToken?: string;
 export type MeetParamList = {

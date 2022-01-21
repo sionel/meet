@@ -12,15 +12,15 @@ import DeviceInfo from 'react-native-device-info';
 
 import ConferenceStatePresenter from './ConferenceStatePresenter';
 
-// import { actionCreators as UserActions } from '../../redux/modules/user';
-// import { actionCreators as WetalkActions } from '../../redux/modules/wetalk';
+// import { actionCreators as UserActions } from '@redux/user';
+// import { actionCreators as WetalkActions } from '@redux/wetalk';
 
-import { MeetApi } from '../../services';
+import { MeetApi } from '@services/index';
 
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/configureStore';
 
-import { MeetNavigationProps } from '../../Navigations/RootNavigation';
+import { MeetNavigationProps } from '@navigations/RootNavigation';
 
 export default function ConferenceStateContainer(props: any) {
   const { width, height } = Dimensions.get('window');

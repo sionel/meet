@@ -1,9 +1,9 @@
 import CompanySelectContainer from './CompanySelectContainer';
 
 import { connect } from 'react-redux';
-import { actionCreators as UserActions } from '../../redux/modules/user';
-import { actionCreators as WetalkActions } from '../../redux/modules/wetalk';
-import { actionCreators as RecentActions } from '../../redux/modules/recentsInvited';
+import { actionCreators as UserActions } from '@redux/user';
+import { actionCreators as WetalkActions } from '@redux/wetalk';
+import { actionCreators as RecentActions } from '@redux/recentsInvited';
 
 // map state to props
 const mapStateToProps = state => ({

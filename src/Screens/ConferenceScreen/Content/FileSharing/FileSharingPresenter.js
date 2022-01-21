@@ -14,10 +14,10 @@ import { useSelector } from 'react-redux';
 import FastImage from 'react-native-fast-image';
 
 import DrawingSketch from '../DrawingSketch';
-import CustomButton from '../../../../components/CustomButton';
-import CustomAlert from '../../../../components/CustomAlert';
+import CustomButton from '@components/CustomButton';
+import CustomAlert from '@components/CustomAlert';
 import OverView from '../OverView';
-import { getT } from '../../../../utils/translateManager';
+import { getT } from '@utils/translateManager';
 
 const SafetyView = Platform.OS === 'ios' ? SafeAreaView : View;
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');

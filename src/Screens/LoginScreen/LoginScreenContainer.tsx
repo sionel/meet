@@ -1,13 +1,13 @@
 import React, { RefObject, useEffect, useRef, useState } from 'react';
 import LoginScreenPresenter from './LoginScreenPresenter';
-import { MeetApi } from '../../services';
+import { MeetApi } from '@services/index';
 import { Alert, Linking, Platform } from 'react-native';
-import { actionCreators as RootActions } from '../../redux/modules/root';
-import { getT } from '../../utils/translateManager';
+import { actionCreators as RootActions } from '@redux/root';
+import { getT } from '@utils/translateManager';
 import { useDispatch, useSelector } from 'react-redux';
 import deviceInfoModule from 'react-native-device-info';
 import { RootState } from '../../redux/configureStore';
-import { LoginNavigationProps } from '../../Navigations/LoginStack';
+import { LoginNavigationProps } from '@navigations/LoginStack';
 
 const LoginScreenContainer = ({
   navigation

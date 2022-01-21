@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import DrawerContentPresenter from './DrawerContentPresenter';
 import CustomIcon from '../CustomIcon';
-import UserApi from '../../services/api/LoginApi/UserApi';
+import UserApi from '@services/index/api/LoginApi/UserApi';
 
 export default function DrawerContainer(props) {
   const {

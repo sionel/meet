@@ -18,11 +18,11 @@ import {
   Placeholder,
   CustomAlert,
   SectionListHeader
-} from '../../components';
-import { getT } from '../../utils/translateManager';
+} from '@components/index';
+import { getT } from '@utils/translateManager';
 
-import icBack from '../../../assets/new/icons/ic_back.png';
-import btnArrowDown from '../../../assets/buttons/btnArrowDown.png';
+import icBack from '@assets/icons/ic_back.png';
+import btnArrowDown from '@oldassets/buttons/btnArrowDown.png';
 
 export interface section {
   title: string;
@@ -349,9 +349,9 @@ export default CreateScreenPresenter;
 //   Placeholder,
 //   CustomAlert,
 //   SectionListHeader
-// } from '../../components';
+// } from '@components';
 
-// import { getT } from '../../utils/translateManager';
+// import { getT } from '@utils/translateManager';
 
 // const CreateScreenPresenter = props => {
 //   const personalList = props.list.filter(

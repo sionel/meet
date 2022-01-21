@@ -1,5 +1,5 @@
 import React from 'react';
-import { getT } from '../../utils/translateManager';
+import { getT } from '@utils/translateManager';
 import {
   FlatList,
   Image,
@@ -10,7 +10,7 @@ import {
   View
 } from 'react-native';
 
-import checkbox_login_on from '../../../assets/icons/loginIcon/checkbox_login_on.png';
+import checkbox_login_on from '@oldassets/icons/loginIcon/checkbox_login_on.png';
 
 const SelectCompanyPresenter = (props: any) => {
   const { employee_list, selectedCompany, handleChangeCompany ,onLogout} = props;

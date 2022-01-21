@@ -1,7 +1,7 @@
 import React from 'react';
 import CotrolBox from './CotrolBox';
 import SubVideoBox from './SubVideoBox';
-import { ConferenceModes } from '../../../../utils/Constants';
+import { ConferenceModes } from '@utils/Constants';
 
 /**
  * BottomAreaBoxPresenter

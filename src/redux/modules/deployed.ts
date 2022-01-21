@@ -1,5 +1,5 @@
 import { AnyAction } from 'redux';
-import { UserApi } from '../../services';
+import { UserApi } from '@services/index';
 
 const SET = 'deployed.SET';
 const RESET = 'deployed.RESET';

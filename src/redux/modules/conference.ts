@@ -1,6 +1,6 @@
 import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
-import ConferenceManager from '../../utils/conference/ConferenceManager';
+import ConferenceManager from '@utils/conference/ConferenceManager';
 import { RootState } from '../configureStore';
 
 const SET_LIST = 'conference.SET_LIST';

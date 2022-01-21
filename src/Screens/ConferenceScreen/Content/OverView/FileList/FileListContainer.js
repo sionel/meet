@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import FileListPresenter from './FileListPresenter';
-import { getT } from '../../../../../utils/translateManager';
+import { getT } from '@utils/translateManager';
 class FileListContainer extends Component {
   constructor(props) {
     super(props);

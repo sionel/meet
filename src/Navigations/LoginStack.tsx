@@ -3,8 +3,8 @@ import {
   createStackNavigator,
   StackScreenProps,
 } from '@react-navigation/stack';
-import InviteCode from '../Screens/LoginScreen';
-import InputLogin from '../Screens/LoginScreen/LoginInputScreen';
+import InviteCode from '@screens/LoginScreen';
+import InputLogin from '@screens/LoginScreen/LoginInputScreen';
 import { MeetParamList } from './RootNavigation';
 
 type LoginStackParamList = MeetParamList & {

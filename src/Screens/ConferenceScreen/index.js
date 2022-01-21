@@ -1,16 +1,16 @@
 import { connect } from 'react-redux';
 import ConferenceScreenContainer from './ConferenceScreenContainer';
-import { actionCreators as DocumentShareActions } from '../../redux/modules/documentShare';
-import { actionCreators as LocalActions } from '../../redux/modules/local';
-import { actionCreators as MasterActions } from '../../redux/modules/master';
-import { actionCreators as AlertAcions } from '../../redux/modules/alert';
-import { actionCreators as MainUserAcions } from '../../redux/modules/mainUser';
-import { actionCreators as ToastAcions } from '../../redux/modules/toast';
-import { actionCreators as ScreenShareAcions } from '../../redux/modules/ScreenShare';
-import { actionCreators as ParticipantsAcions } from '../../redux/modules/participants';
-import { actionCreators as indicatorAcionCreators } from '../../redux/modules/indicator';
-import { actionCreators as RootActions } from '../../redux/modules/root';
-import { actionCreators as ConferenceActions } from '../../redux/modules/conference';
+import { actionCreators as DocumentShareActions } from '@redux/documentShare';
+import { actionCreators as LocalActions } from '@redux/local';
+import { actionCreators as MasterActions } from '@redux/master';
+import { actionCreators as AlertAcions } from '@redux/alert';
+import { actionCreators as MainUserAcions } from '@redux/mainUser';
+import { actionCreators as ToastAcions } from '@redux/toast';
+import { actionCreators as ScreenShareAcions } from '@redux/ScreenShare';
+import { actionCreators as ParticipantsAcions } from '@redux/participants';
+import { actionCreators as indicatorAcionCreators } from '@redux/indicator';
+import { actionCreators as RootActions } from '@redux/root';
+import { actionCreators as ConferenceActions } from '@redux/conference';
 
 import _ from 'underscore';
 

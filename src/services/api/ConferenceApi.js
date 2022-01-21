@@ -1,5 +1,5 @@
-import { wehagoBaseURL, securityRequest, serialize } from '../../utils';
-import { getT } from '../../utils/translateManager';
+import { wehagoBaseURL, securityRequest, serialize } from '@utils/index';
+import { getT } from '@utils/translateManager';
 export default {
   create: async (
     room_id,

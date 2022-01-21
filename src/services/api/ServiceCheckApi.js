@@ -1,6 +1,6 @@
-import { wehagoBaseURL, serialize, securityRequest, isDev } from '../../utils';
+import { wehagoBaseURL, serialize, securityRequest, isDev } from '@utils';
 import fetch from './Fetch';
-import { getT } from '../../utils/translateManager';
+import { getT } from '@utils/translateManager';
 /**
  * 회사 설정 및 미납 여부 확인
  * @param {*} last_access_company 회사 정보

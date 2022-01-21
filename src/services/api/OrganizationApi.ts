@@ -1,5 +1,5 @@
 import { RootState } from '../../redux/configureStore';
-import { wehagoBaseURL, serialize, createHeader } from '../../utils';
+import { wehagoBaseURL, serialize, createHeader } from '@utils/index';
 
 const getOrganizationTreeRequest = async (auth: any, signal: AbortSignal) => {
   const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;

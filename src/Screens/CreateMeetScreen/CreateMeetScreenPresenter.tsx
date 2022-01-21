@@ -15,9 +15,9 @@ import {
 import DatePicker from 'react-native-date-picker';
 import CalendarPicker from '../../custom_modules/react-native-calendar-picker/CalendarPicker';
 
-import { getT } from '../../utils/translateManager';
+import { getT } from '@utils/translateManager';
 
-import { wehagoMainURL, wehagoDummyImageURL } from '../../utils';
+import { wehagoMainURL, wehagoDummyImageURL } from '@utils/index';
 import { SafeAreaView } from 'react-native-safe-area-context';
 // import { add, last, parseInt } from 'lodash';
 import LinearGradient from 'react-native-linear-gradient';
@@ -25,14 +25,14 @@ import { RootState } from '../../redux/configureStore';
 import { length } from '../../../webpack.config';
 import { stubTrue } from 'lodash';
 
-const icCode = require('../../../assets/new/icons/ic_code.png');
-const icLock_W = require('../../../assets/new/icons/ic_lock_w.png');
-const icPersonPlus = require('../../../assets/new/icons/ic_person_plus.png');
-const icCancel_W = require('../../../assets/new/icons/ic_cancel_w.png');
-const icCancel = require('../../../assets/new/icons/ic_cancel.png');
-const icCheck = require('../../../assets/new/icons/ic_check.png');
-const icMasterCircle = require('../../../assets/new/icons/ic_master_circle.png');
-const icAttdCircle = require('../../../assets/new/icons/ic_attd_circle.png');
+const icCode = require('@assets/icons/ic_code.png');
+const icLock_W = require('@assets/icons/ic_lock_w.png');
+const icPersonPlus = require('@assets/icons/ic_person_plus.png');
+const icCancel_W = require('@assets/icons/ic_cancel_w.png');
+const icCancel = require('@assets/icons/ic_cancel.png');
+const icCheck = require('@assets/icons/ic_check.png');
+const icMasterCircle = require('@assets/icons/ic_master_circle.png');
+const icAttdCircle = require('@assets/icons/ic_attd_circle.png');
 
 interface PresenterProps {
   roomName: string;

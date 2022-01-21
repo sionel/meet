@@ -1,5 +1,5 @@
 import React from 'react';
-import { CustomAlert, ServerNotiveCheck, Splash } from '../../components';
+import { CustomAlert, ServerNotiveCheck, Splash } from '@components/index';
 import { getT } from '../../utils/translateManager';
 
 export default function SplashScreenPresenter(props: {

@@ -8,37 +8,37 @@ import {
   Share
 } from 'react-native';
 
-import { getT } from '../../utils/translateManager';
+import { getT } from '@utils/translateManager';
 
-import { MeetApi, ServiceCheckApi, UserApi } from '../../services';
+import { MeetApi, ServiceCheckApi, UserApi } from '@services/index';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/configureStore';
 
-import { actionCreators as UserActions } from '../../redux/modules/user';
-import { actionCreators as RecentsActions } from '../../redux/modules/recentsInvited';
-import { actionCreators as ConferenceActions } from '../../redux/modules/conference';
-import { actionCreators as SelectCompanyActions } from '../../redux/modules/selectCompany';
+import { actionCreators as UserActions } from '@redux/user';
+import { actionCreators as RecentsActions } from '@redux/recentsInvited';
+import { actionCreators as ConferenceActions } from '@redux/conference';
+import { actionCreators as SelectCompanyActions } from '@redux/selectCompany';
 
 import HomeScreenPresenter from './HomeScreenPresenter';
 import HomeScreenHorizonPresenter from './HomeScreenHorizonPresenter';
 import { content } from './Component/bottomPopup';
-import { participantsListProps } from '../../components/renewal/ParticipantsList';
-import { wehagoDummyImageURL, wehagoMainURL } from '../../utils';
+import { participantsListProps } from '@components/renewal/ParticipantsList';
+import { wehagoDummyImageURL, wehagoMainURL } from '@utils/index';
 
 import deviceInfoModule from 'react-native-device-info';
 
 import { useNavigation } from '@react-navigation/native';
-import { MainNavigationProps } from '../../Navigations/MainStack';
+import { MainNavigationProps } from '@navigations/MainStack';
 import RNrestart from 'react-native-restart';
 import moment from 'moment';
 
-const icUser = require('../../../assets/new/icons/ic_user.png');
-const icModify = require('../../../assets/new/icons/ic_modify.png');
-const icLink = require('../../../assets/new/icons/ic_link.png');
-const icCancel = require('../../../assets/new/icons/ic_cancel.png');
-const icInfo = require('../../../assets/new/icons/ic_info.png');
-const icCheckB = require('../../../assets/new/icons/ic_check_b.png');
+const icUser = require('@assets/icons/ic_user.png');
+const icModify = require('@assets/icons/ic_modify.png');
+const icLink = require('@assets/icons/ic_link.png');
+const icCancel = require('@assets/icons/ic_cancel.png');
+const icInfo = require('@assets/icons/ic_info.png');
+const icCheckB = require('@assets/icons/ic_check_b.png');
 
 type conference = {
   room_id: string;
@@ -849,10 +849,10 @@ export default function HomeScreenContainer(props: any) {
 // import HomeScreenPresenter from './HomeScreenPresenter';
 
 // // service
-// import { WetalkApi, MeetApi, ServiceCheckApi, UserApi } from '../../services';
-// import { querystringParser, isWehagoV } from '../../utils';
+// import { WetalkApi, MeetApi, ServiceCheckApi, UserApi } from '@services/index';
+// import { querystringParser, isWehagoV } from '@utils';
 
-// import { getT } from '../../utils/translateManager';
+// import { getT } from '@utils/translateManager';
 // const hasNotch = DeviceInfo.hasNotch() && Platform.OS === 'ios';
 
 // class HomeScreenContainer extends Component {

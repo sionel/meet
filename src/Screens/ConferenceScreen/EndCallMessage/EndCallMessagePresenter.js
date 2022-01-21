@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Image, Text, Dimensions, TouchableOpacity } from 'react-native';
-import { CustomIcon } from '../../../components';
+import { CustomIcon } from '@components/index';
 
 const { height, width } = Dimensions.get('window');
 

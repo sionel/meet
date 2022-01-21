@@ -7,7 +7,7 @@
 
 import { AnyAction } from 'redux';
 
-// import { UserApi } from '../../services';
+// import { UserApi } from '@services/index';
 
 const SET_LIST = 'wetalk.SET_LIST';
 const SET_INITIAL_LIST = 'wetalk.SET_INITIAL_LIST';

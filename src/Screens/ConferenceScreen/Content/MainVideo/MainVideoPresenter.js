@@ -10,16 +10,16 @@ import {
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { RTCView, ScreenCapturePickerView } from 'react-native-webrtc';
-import ButtonCameraOff from '../../../../../assets/buttons/btn_vc_camera_off.png';
-import ButtonCameraOff2 from '../../../../../assets/icons/icoCameraWhLargeOff_2x.png';
-import imgCharacter01 from '../../../../../assets/icons/imgCharacter01_2x.png';
-import imgCharacter02 from '../../../../../assets/icons/imgCharacter02_2x.png';
-import imgCharacter03 from '../../../../../assets/icons/imgCharacter03_2x.png';
-// import ProfileImage from '../../../../../assets/smapleImages/nnn.jpg';
-import ProfileImage from '../../../../../assets/icons/imgVcNophoto_2x.png';
-// import ProfileImage from '../../../../../assets/smapleImages/nnn2.png';
-import { wehagoMainURL } from '../../../../utils';
-import { CustomIcon } from '../../../../components';
+import ButtonCameraOff from '@oldassets/buttons/btn_vc_camera_off.png';
+import ButtonCameraOff2 from '@oldassets/icons/icoCameraWhLargeOff_2x.png';
+import imgCharacter01 from '@oldassets/icons/imgCharacter01_2x.png';
+import imgCharacter02 from '@oldassets/icons/imgCharacter02_2x.png';
+import imgCharacter03 from '@oldassets/icons/imgCharacter03_2x.png';
+// import ProfileImage from '@oldassets/smapleImages/nnn.jpg';
+import ProfileImage from '@oldassets/icons/imgVcNophoto_2x.png';
+// import ProfileImage from '@oldassets/smapleImages/nnn2.png';
+import { wehagoMainURL } from '@utils/index';
+import { CustomIcon } from '@components/index';
 
 const { height, width } = Dimensions.get('window');
 

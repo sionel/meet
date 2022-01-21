@@ -12,16 +12,16 @@ import {
   Animated,
   TouchableHighlight
 } from 'react-native';
-import CustomCheckBox from '../../../components/renewal/CustomCheckBox';
-import { CustomIcon } from '../../../components';
+import CustomCheckBox from '@components/renewal/CustomCheckBox';
+import { CustomIcon } from '@components/index';
 import SelectedPreview from './Component/SelectedPreview';
 import OrganizationTab from './Component/OrganizationTab';
 
-const ic_cancel = require('../../../../assets/new/icons/ic_cancel_w.png');
+const ic_cancel = require('@assets/icons/ic_cancel_w.png');
 
-const ic_arrow_up = require('../../../../assets/new/icons/ic_arrow_up.png');
-const ic_arrow_down = require('../../../../assets/new/icons/ic_arrow_down.png');
-const ic_user = require('../../../../assets/new/icons/ic_user.png');
+const ic_arrow_up = require('@assets/icons/ic_arrow_up.png');
+const ic_arrow_down = require('@assets/icons/ic_arrow_down.png');
+const ic_user = require('@assets/icons/ic_user.png');
 
 interface PresenterProps {
   keyword:string;

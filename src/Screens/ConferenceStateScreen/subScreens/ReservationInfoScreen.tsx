@@ -10,8 +10,8 @@ import {
 } from 'react-native';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/configureStore';
-import { wehagoMainURL } from '../../../utils';
-import { getT } from '../../../utils/translateManager';
+import { wehagoMainURL } from '@utils/index';
+import { getT } from '@utils/translateManager';
 
 export type reservationInfo = {
   name: string;

@@ -1,6 +1,6 @@
 import { useStore } from 'react-redux';
 import { AnyAction } from 'redux';
-import { getT } from '../../utils/translateManager';
+import { getT } from '@utils/translateManager';
 
 const SET_INDICATOR = 'indicator.SET_INDICATOR';
 const RESET_INDICATOR = 'indicator.RESET_INDICATOR';

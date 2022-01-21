@@ -1,6 +1,6 @@
 import { actionCreators as mainUserActionCreators } from './mainUser';
 import { actionCreators as localActionCreators } from './local';
-import MeetApi from '../../services/api/MeetApi';
+import MeetApi from '@services/api/MeetApi';
 import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import { RootState } from '../configureStore';

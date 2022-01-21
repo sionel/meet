@@ -9,9 +9,9 @@ import {
   ScrollView,
   Platform
 } from 'react-native';
-import CustomIcon from '../../../../../components/CustomIcon';
-import { wehagoMainURL } from '../../../../../utils';
-import { getT } from '../../../../../utils/translateManager';
+import CustomIcon from '@components/CustomIcon';
+import { wehagoMainURL } from '@utils/index';
+import { getT } from '@utils/translateManager';
 
 const UserListPresenter = props => {
   const {

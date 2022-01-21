@@ -13,8 +13,8 @@ import DeviceInfo from 'react-native-device-info';
 import Chatting from './Chatting';
 import FileList from './FileList';
 import UserList from './UserList';
-import CustomButton from '../../../../components/CustomButton';
-import { getT } from '../../../../utils/translateManager';
+import CustomButton from '@components/CustomButton';
+import { getT } from '@utils/translateManager';
 
 const isTablet = DeviceInfo.isTablet();
 const hasNotch = DeviceInfo.hasNotch();

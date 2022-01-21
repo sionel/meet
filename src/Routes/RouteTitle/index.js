@@ -4,7 +4,7 @@
 
 import RouteTitleContainer from './RouteTitleContainer';
 import { connect } from 'react-redux';
-import { actionCreators as UserActions } from '../../redux/modules/user';
+import { actionCreators as UserActions } from '@redux/user';
 
 const mapStateToProps = state => ({
 	auth: state.user.auth

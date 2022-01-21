@@ -1,6 +1,6 @@
 import { useStore } from 'react-redux';
 import { AnyAction } from 'redux';
-import { getT } from '../../utils/translateManager';
+import { getT } from '@utils/translateManager';
 
 const OPEN_COMPANY = 'selectCompany.OPEN_COMPANY';
 const CLOSE_COMPANY = 'selectCompany.CLOSE_COMPANY';

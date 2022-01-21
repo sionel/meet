@@ -21,22 +21,22 @@ import CalendarPicker from 'react-native-calendar-picker';
 import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { getT } from '../../utils/translateManager';
-import { CustomIcon } from '../../components';
+import { getT } from '@utils/translateManager';
+import { CustomIcon } from '@components/index';
 // import { add, last, parseInt } from 'lodash';
 
-const icCode = require('../../../assets/new/icons/ic_code.png');
-const icLock_W = require('../../../assets/new/icons/ic_lock_w.png');
-const icPersonPlus = require('../../../assets/new/icons/ic_person_plus.png');
-const icCancel_W = require('../../../assets/new/icons/ic_cancel_w.png');
-const icCancel = require('../../../assets/new/icons/ic_cancel.png');
-const icCheck = require('../../../assets/new/icons/ic_check.png');
-const icMasterCircle = require('../../../assets/new/icons/ic_master_circle.png');
-const icAttdCircle = require('../../../assets/new/icons/ic_attd_circle.png');
-const icModify = require('../../../assets/new/icons/ic_modify.png');
-const icBack = require('../../../assets/new/icons/ic_back.png');
-const icOut = require('../../../assets/new/icons/ic_out.png');
-const icUserW = require('../../../assets/new/icons/ic_user_w.png');
+const icCode = require('@assets/icons/ic_code.png');
+const icLock_W = require('@assets/icons/ic_lock_w.png');
+const icPersonPlus = require('@assets/icons/ic_person_plus.png');
+const icCancel_W = require('@assets/icons/ic_cancel_w.png');
+const icCancel = require('@assets/icons/ic_cancel.png');
+const icCheck = require('@assets/icons/ic_check.png');
+const icMasterCircle = require('@assets/icons/ic_master_circle.png');
+const icAttdCircle = require('@assets/icons/ic_attd_circle.png');
+const icModify = require('@assets/icons/ic_modify.png');
+const icBack = require('@assets/icons/ic_back.png');
+const icOut = require('@assets/icons/ic_out.png');
+const icUserW = require('@assets/icons/ic_user_w.png');
 
 interface PresenterProps {
   roomName: string;

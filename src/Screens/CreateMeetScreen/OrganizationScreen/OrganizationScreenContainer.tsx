@@ -3,14 +3,14 @@ import { Alert, Animated, Easing } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { RootState } from '../../../redux/configureStore';
-import { actionCreators as RecentsActions } from '../../../redux/modules/recentsInvited';
+import { actionCreators as RecentsActions } from '@redux/recentsInvited';
 
-import { getT } from '../../../utils/translateManager';
-import { OrganizationApi } from '../../../services';
+import { getT } from '@utils/translateManager';
+import { OrganizationApi } from '@services/index';
 
 import OrganizationScreenPresenter from './OrganizationScreenPresenter';
 import { values } from 'lodash';
-import { wehagoDummyImageURL, wehagoMainURL } from '../../../utils';
+import { wehagoDummyImageURL, wehagoMainURL } from '@utils/index';
 import { PartialUserInfoParam } from '../../ConferenceModifyScreen/ConferenceModifyScreenContainer';
 
 const OrganizationScreenContainer = (props: any) => {

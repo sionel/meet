@@ -8,7 +8,7 @@ import {
 import PropTypes from 'prop-types';
 import { Utils } from './Utils';
 import Controls from './Controls';
-import { getT } from '../../../utils/translateManager';
+import { getT } from '@utils/translateManager';
 
 export default function HeaderControls(props) {
   const {

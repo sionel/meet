@@ -1,7 +1,7 @@
 import UserListContainer from './UserListContainer';
 import { connect } from 'react-redux';
-import { actionCreators as localActionCreators } from '../../../../../redux/modules/local';
-import { actionCreators as participantsActionCreators } from '../../../../../redux/modules/participants';
+import { actionCreators as localActionCreators } from '@redux/local';
+import { actionCreators as participantsActionCreators } from '@redux/participants';
 
 // map state to props
 const mapStateToProps = state => {

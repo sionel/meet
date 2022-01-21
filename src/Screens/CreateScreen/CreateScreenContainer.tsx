@@ -6,19 +6,19 @@ import CreateScreenPresenter, { section } from './CreateScreenPresenter';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/configureStore';
 
-import { WetalkApi } from '../../services';
-import { ConferenceApi } from '../../services';
-import { MeetApi } from '../../services';
+import { WetalkApi, ConferenceApi, MeetApi } from '@services/index';
+// import { ConferenceApi } from '@services/index';
+// import { MeetApi } from '@services/index';
 
 import {
   actionCreators as AlertActions,
   params as alertParam
-} from '../../redux/modules/alert';
+} from '@redux/alert';
 
-import { getT } from '../../utils/translateManager';
-import { wehagoDummyImageURL, wehagoMainURL } from '../../utils';
+import { getT } from '@utils/translateManager';
+import { wehagoDummyImageURL, wehagoMainURL } from '@utils/index';
 
-import { MainNavigationProps } from '../../Navigations/MainStack';
+import { MainNavigationProps } from '@navigations/MainStack';
 
 export default function CreateScreenContainer(props: any) {
   const initSection: section = {
@@ -297,13 +297,13 @@ export default function CreateScreenContainer(props: any) {
 // import { StatusBar, Platform, View } from 'react-native';
 
 // import CreateScreenPresenter from './CreateScreenPresenter';
-// import { ConferenceApi } from '../../services';
-// import { MeetApi } from '../../services';
+// import { ConferenceApi } from '@services/index';
+// import { MeetApi } from '@services/index';
 // import { NavigationEvents } from 'react-navigation';
 
 // import DeviceInfo from 'react-native-device-info';
 // import Orientation from 'react-native-orientation-locker';
-// import { getT } from '../../utils/translateManager';
+// import { getT } from '@utils/translateManager';
 
 // const hasNotch = DeviceInfo.hasNotch() && Platform.OS === 'ios';
 

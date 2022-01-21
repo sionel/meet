@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 
-const icMore = require('../../../../assets/new/icons/ic_more.png');
-const icLockBlack = require('../../../../assets/new/icons/ic_lock_black.png');
+const icMore = require('@assets/icons/ic_more.png');
+const icLockBlack = require('@assets/icons/ic_lock_black.png');
 
 interface ReservationCardProps {
   roomName: string;

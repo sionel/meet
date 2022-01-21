@@ -7,7 +7,7 @@ import {
   securityRequest,
   serialize,
   _createSignature
-} from '../../utils';
+} from '@utils/index';
 
 import FetchCancel from 'react-native-cancelable-fetch';
 

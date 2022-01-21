@@ -1,7 +1,7 @@
 /**
  * wedrive.js
  */
-import { WedriveApi } from '../../services';
+import { WedriveApi } from '@services/index';
 //TODO: abort 하려고 사용중인거 같은데 type 버전도 없고
 // 라이브러리개발이 5년전임
 import FetchCancel from 'react-native-cancelable-fetch';
@@ -34,7 +34,7 @@ const setStatusLoading = (status: string) => {
   };
 };
 
-const setInitInfo = (initInfo: any) => {
+const setInitInfo = (initInfo?: any) => {
 
   const data = initInfo || {
     status: 'INIT',

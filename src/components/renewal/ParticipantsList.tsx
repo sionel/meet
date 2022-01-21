@@ -9,8 +9,8 @@ import {
   TouchableOpacity
 } from 'react-native';
 
-import icBack from '../../../assets/new/icons/ic_back.png';
-import icMaster from '../../../assets/new/icons/ic_master.png';
+import icBack from '@assets/icons/ic_back.png';
+import icMaster from '@assets/icons/ic_master.png';
 
 const { height, width } = Dimensions.get('window');
 

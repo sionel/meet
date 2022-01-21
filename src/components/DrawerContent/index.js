@@ -1,8 +1,8 @@
 // import DrawerContent from './DrawerContent';
 import DrawerContent from './DrawerContent';
 import { connect } from 'react-redux';
-import { actionCreators as UserActions } from '../../redux/modules/user';
-import { actionCreators as AlertActions } from '../../redux/modules/alert';
+import { actionCreators as UserActions } from '@redux/user';
+import { actionCreators as AlertActions } from '@redux/alert';
 
 // map state to props
 const mapStateToProps = state => ({

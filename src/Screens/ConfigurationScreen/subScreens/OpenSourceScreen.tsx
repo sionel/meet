@@ -7,7 +7,7 @@ import {
   Text
 } from 'react-native';
 
-import { CustomIcon } from '../../../components';
+import { CustomIcon } from '@components/index';
 
 export default function OpenSourceScreen(props: any) {
   const config = [

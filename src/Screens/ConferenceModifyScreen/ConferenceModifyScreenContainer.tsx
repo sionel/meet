@@ -13,13 +13,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import ConferenceModfiyScreenPresenter from './ConferenceModifyScreenPresenter';
 import OrganizationScreen from '../CreateMeetScreen/OrganizationScreen';
 
-import { MeetApi, OrganizationApi } from '../../services';
+import { MeetApi, OrganizationApi } from '@services/index';
 
 import moment from 'moment';
-import { getT } from '../../utils/translateManager';
+import { getT } from '@utils/translateManager';
 import deviceInfoModule from 'react-native-device-info';
-import { wehagoDummyImageURL, wehagoMainURL } from '../../utils';
-import { MainNavigationProps } from '../../Navigations/MainStack';
+import { wehagoDummyImageURL, wehagoMainURL } from '@utils/index';
+import { MainNavigationProps } from '@navigations/MainStack';
 
 interface accessUserParam {
   type: 'portal_id' | 'email';

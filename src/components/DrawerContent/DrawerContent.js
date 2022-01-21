@@ -9,19 +9,19 @@ import {
   StyleSheet
 } from 'react-native';
 import { useSelector } from 'react-redux';
-import { UserApi } from '../../services';
+import { UserApi } from '@services/index';
 
-import btnWehago from '../../../assets/icons/shortcut/ico_service_wehago.png'; // 위하고
-import btnRs10 from '../../../assets/icons/shortcut/ico_service_remote.png'; // rs10
-import btnWedrive from '../../../assets/icons/shortcut/ico_service_wedrive.png'; // 위드라이브
-import btnAtr from '../../../assets/icons/shortcut/ico_service_atr.png'; // 근태관리
-import btnElecapproval from '../../../assets/icons/shortcut/ico_service_elecapproval.png'; // 전자결재
-import btnFax from '../../../assets/icons/shortcut/ico_service_fax.png'; // 팩스
+import btnWehago from '@oldassets/icons/shortcut/ico_service_wehago.png'; // 위하고
+import btnRs10 from '@oldassets/icons/shortcut/ico_service_remote.png'; // rs10
+import btnWedrive from '@oldassets/icons/shortcut/ico_service_wedrive.png'; // 위드라이브
+import btnAtr from '@oldassets/icons/shortcut/ico_service_atr.png'; // 근태관리
+import btnElecapproval from '@oldassets/icons/shortcut/ico_service_elecapproval.png'; // 전자결재
+import btnFax from '@oldassets/icons/shortcut/ico_service_fax.png'; // 팩스
 
 import DrawerContentContainer from './DrawerContentContainer';
 import CustomIcon from '../CustomIcon';
 import { WEHAGO_ENV } from '../../../config';
-import { getT } from '../../utils/translateManager';
+import { getT } from '@utils/translateManager';
 import RNrestart from 'react-native-restart';
 
 export default function DrawerContent(props) {

@@ -1,8 +1,8 @@
 import OverViewContainer from './OverViewContainer';
 import { connect } from 'react-redux';
-import { actionCreators as WedriveActions } from '../../../../redux/modules/wedrive';
-import { actionCreators as mainUserActions } from '../../../../redux/modules/mainUser';
-import { actionCreators as DocumentShareActions } from '../../../../redux/modules/documentShare';
+import { actionCreators as WedriveActions } from '@redux/wedrive';
+import { actionCreators as mainUserActions } from '@redux/mainUser';
+import { actionCreators as DocumentShareActions } from '@redux/documentShare';
 
 // map state to props
 const mapStateToProps = state => ({

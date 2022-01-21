@@ -1,7 +1,7 @@
 // import React from 'react';
 import AppIntroSlide from './AppIntroSlide';
 import { connect } from 'react-redux';
-import { actionCreators as UserActions } from '../../redux/modules/user';
+import { actionCreators as UserActions } from '@redux/user';
 
 // map state to props
 const mapStateToProps = state => ({

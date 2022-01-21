@@ -9,7 +9,7 @@ import { Platform, View, TouchableOpacity } from 'react-native';
 import LoadingIndicator from './LoadingIndicator';
 import Content from './Content';
 import SimpleNoti from './SimpleNoti';
-import { isWehagoV } from '../../utils';
+import { isWehagoV } from '@utils/index';
 import WatingScreen from './WatingScreen';
 import ScreenShareIOS from './ScreenShare/ScreenShareIOS';
 import ScreenShareANDROID from './ScreenShare/ScreenShareANDROID';

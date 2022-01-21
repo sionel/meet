@@ -9,9 +9,9 @@ import {
   Text,
   SafeAreaView
 } from 'react-native';
-import { getT } from '../../../utils/translateManager';
-import icBack from '../../../../assets/new/icons/ic_back.png';
-import { ConfigurationNavigationProps } from '../../../Navigations/ConfigurationStack';
+import { getT } from '@utils/translateManager';
+import icBack from '@assets/icons/ic_back.png';
+import { ConfigurationNavigationProps } from '@navigations/ConfigurationStack';
 
 export default function AwardsScreen(props: any) {
   const moveToSite = (url: string) => {
@@ -38,7 +38,7 @@ export default function AwardsScreen(props: any) {
       <ScrollView style={styles.list}>
         <View style={[styles.card, { marginTop: 15 }]}>
           <Image
-            source={require('../../../../assets/logoCsap.png')}
+            source={require('@oldassets/logoCsap.png')}
             style={styles.img}
           />
           <Text style={styles.authText}>{t('option_auth')}</Text>

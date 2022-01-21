@@ -1,13 +1,15 @@
 import React, { RefObject, useEffect, useRef, useState } from 'react';
-import InvitedCodeScreenPresenter from './InvitedCodeScreenPresenter';
-import { MeetApi } from '../../services';
-import { Linking, Platform } from 'react-native';
-import { actionCreators as RootActions } from '../../redux/modules/root';
-import { getT } from '../../utils/translateManager';
-import { useDispatch, useSelector } from 'react-redux';
-import deviceInfoModule from 'react-native-device-info';
+
+import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/configureStore';
-import { MainNavigationProps } from '../../Navigations/MainStack';
+import { MainNavigationProps } from '@navigations/MainStack';
+
+import { getT } from '@utils/translateManager';
+import deviceInfoModule from 'react-native-device-info';
+
+import { MeetApi } from '@services/index';
+
+import InvitedCodeScreenPresenter from './InvitedCodeScreenPresenter';
 
 const InvitedCodeScreenContainer = ({
   navigation,

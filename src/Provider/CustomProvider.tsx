@@ -10,18 +10,18 @@ import Orientation, {
   OrientationType,
   useDeviceOrientationChange
 } from 'react-native-orientation-locker';
-import { actionCreators as orientationAction } from '../redux/modules/orientation';
+import { actionCreators as orientationAction } from '@redux/orientation';
 import { RootState } from '../redux/configureStore';
 import { UserApi, ServiceCheckApi } from '../services';
 
-import { getT } from '../utils/translateManager';
+import { getT } from '@utils/translateManager';
 
-import { actionCreators as AlertActions } from '../redux/modules/alert';
-import { actionCreators as UserActions } from '../redux/modules/user';
-import { actionCreators as RootActions } from '../redux/modules/root';
-import { actionCreators as DeployedActions } from '../redux/modules/deployed';
+import { actionCreators as AlertActions } from '@redux/alert';
+import { actionCreators as UserActions } from '@redux/user';
+import { actionCreators as RootActions } from '@redux/root';
+import { actionCreators as DeployedActions } from '@redux/deployed';
 import deviceInfoModule from 'react-native-device-info';
-import * as RootNavigation from '../Navigations/RootNavigation';
+import * as RootNavigation from '@navigations/RootNavigation';
 
 export default function CustomProvider(props: any) {
   const { children } = props;

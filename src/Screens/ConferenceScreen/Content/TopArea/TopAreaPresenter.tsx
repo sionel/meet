@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import CustomButton from '../../../../components/CustomButton';
+import CustomButton from '@components/CustomButton';
 import _ from 'underscore';
-// import icMore from '../../../../../assets/new/ic_more.png'
-// import icMore from '../../../../../assets/new/ic_more.png';
+// import icMore from '../@assets/ic_more.png'
+// import icMore from '../@assets/ic_more.png';
 
 type propsType = {
   talkButton: boolean;

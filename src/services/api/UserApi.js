@@ -11,7 +11,7 @@ import {
   securityRequest,
   _createSignature,
   serialize
-} from '../../utils';
+} from '@utils/index';
 const tempBaseUrl = `https://jsonplaceholder.typicode.com`;
 // import { UserApi } from '../index';
 import CryptoJS from 'crypto-js';

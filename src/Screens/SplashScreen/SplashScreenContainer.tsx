@@ -2,26 +2,26 @@ import React, { Component, useEffect, useState } from 'react';
 import { Platform, Linking, BackHandler, Alert } from 'react-native';
 import SplashScreenPresenter from './SplashScreenPresenter';
 import { WEHAGO_ENV } from '../../../config';
-import { MeetApi, ServiceCheckApi } from '../../services';
-import { UserApi } from '../../services';
+import { MeetApi, ServiceCheckApi } from '@services/index';
+import { UserApi } from '@services/index';
 import RNExitApp from 'react-native-exit-app';
 
-import { querystringParser } from '../../utils';
+import { querystringParser } from '@utils/index';
 import jwt_decode from 'jwt-decode';
 
-import { getT } from '../../utils/translateManager';
+import { getT } from '@utils/translateManager';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/configureStore';
 
-import { actionCreators as UserActions } from '../../redux/modules/user';
-import { actionCreators as DocumentShareActions } from '../../redux/modules/documentShare';
-import { actionCreators as WedriveAcions } from '../../redux/modules/wedrive';
-import { actionCreators as AlertAcions } from '../../redux/modules/alert';
-import { actionCreators as IndicatorAcions } from '../../redux/modules/indicator';
-import { actionCreators as RecentsActions } from '../../redux/modules/recentsInvited';
-import { actionCreators as ConferenceActions } from '../../redux/modules/conference';
-import { actionCreators as RootActions } from '../../redux/modules/root';
-import { MeetNavigationProps } from '../../Navigations/RootNavigation';
+import { actionCreators as UserActions } from '@redux/user';
+import { actionCreators as DocumentShareActions } from '@redux/documentShare';
+import { actionCreators as WedriveAcions } from '@redux/wedrive';
+import { actionCreators as AlertAcions } from '@redux/alert';
+import { actionCreators as IndicatorAcions } from '@redux/indicator';
+import { actionCreators as RecentsActions } from '@redux/recentsInvited';
+import { actionCreators as ConferenceActions } from '@redux/conference';
+import { actionCreators as RootActions } from '@redux/root';
+import { MeetNavigationProps } from '@navigations/RootNavigation';
 
 // const iswehagov = WEHAGO_ENV === 'WEHAGOV';
 

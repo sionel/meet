@@ -20,8 +20,8 @@ import DrawingBoard from './DrawingBoard';
 import DeviceInfo from 'react-native-device-info';
 import Slider from '@react-native-community/slider';
 // import { Slider } from 'react-native';
-import CustomIcon from './../../../../components/CustomIcon';
-import { getT } from '../../../../utils/translateManager';
+import CustomIcon from '@components/CustomIcon';
+import { getT } from '@utils/translateManager';
 
 const isIOS = Platform.OS === 'ios';
 const hasNotch = DeviceInfo.hasNotch() && isIOS;
