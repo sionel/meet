@@ -2,7 +2,12 @@
  * wedrive.js
  */
 import { WedriveApi } from '../../services';
+//TODO: abort 하려고 사용중인거 같은데 type 버전도 없고
+// 라이브러리개발이 5년전임
 import FetchCancel from 'react-native-cancelable-fetch';
+import { AnyAction } from 'redux';
+import { ThunkAction } from 'redux-thunk';
+import { RootState } from '../configureStore';
 
 const SET_LOADING_STATUS = 'wedrive.SET_LOADING_STATUS';
 
@@ -13,14 +18,24 @@ const UPDATE_FILE_LIST_UPDATE = 'wedrive.UPDATE_FILE_LIST_UPDATE';
 
 //#region Action Creators
 
-const setStatusLoading = status => {
+export interface state {
+  status: string;
+  TokenID: string | null;
+  storageList: any[];
+  fileInfo: any[];
+  temp: any[];
+}
+
+const setStatusLoading = (status: string) => {
+
   return {
     type: SET_LOADING_STATUS,
     status
   };
 };
 
-const setInitInfo = initInfo => {
+const setInitInfo = (initInfo: any) => {
+
   const data = initInfo || {
     status: 'INIT',
     TokenID: null,
@@ -34,14 +49,16 @@ const setInitInfo = initInfo => {
   };
 };
 
-const setFileList = storageList => {
+const setFileList = (storageList: any[]) => {
+
   return {
     type: SET_FILE_LIST,
     storageList
   };
 };
 
-const updateFileList = (storageList, directory) => {
+const updateFileList = (storageList: any[], directory: any) => {
+
   return {
     type: UPDATE_FILE_LIST_UPDATE,
     storageList,
@@ -49,7 +66,8 @@ const updateFileList = (storageList, directory) => {
   };
 };
 
-const setFileInfo = fileInfo => {
+const setFileInfo = (fileInfo: any[]) => {
+
   return {
     type: SET_FILE_INFO,
     fileInfo
@@ -59,7 +77,7 @@ const setFileInfo = fileInfo => {
 /**
  * applys
  */
-const applySetStatusLoading = (state, action) => {
+const applySetStatusLoading = (state: state, action: AnyAction) => {
   const { status } = action;
   return {
     ...state,
@@ -67,7 +85,7 @@ const applySetStatusLoading = (state, action) => {
   };
 };
 
-const applyInitInfo = (state, action) => {
+const applyInitInfo = (state: state, action: AnyAction) => {
   const { initInfo } = action;
   return {
     ...state,
@@ -75,7 +93,7 @@ const applyInitInfo = (state, action) => {
   };
 };
 
-const applyFileList = (state, action) => {
+const applyFileList = (state: state, action: AnyAction) => {
   const { storageList } = action;
   return {
     ...state,
@@ -83,7 +101,7 @@ const applyFileList = (state, action) => {
   };
 };
 
-const applyUpdateFileList = (state, action) => {
+const applyUpdateFileList = (state: state, action: AnyAction) => {
   const { storageList: list, directory } = action;
 
   let newList = list.slice(0);
@@ -104,7 +122,7 @@ const applyUpdateFileList = (state, action) => {
   };
 };
 
-const applyFileInfo = (state, action) => {
+const applyFileInfo = (state: state, action: AnyAction) => {
   const { fileInfo } = action;
   return {
     ...state,
@@ -126,7 +144,8 @@ const initialState = {
 
 //#region Reducer
 
-reducer = (state = initialState, action) => {
+const reducer = (state = initialState, action: AnyAction) => {
+  
   switch (action.type) {
     case SET_LOADING_STATUS:
       return applySetStatusLoading(state, action);
@@ -148,7 +167,11 @@ reducer = (state = initialState, action) => {
 /**
  * initInfoRequest
  */
-const initInfoRequest = (authData, last_access_company_no) => {
+const initInfoRequest = (
+  authData: any,
+  last_access_company_no: number
+): ThunkAction<void, RootState, unknown> => {
+
   return async dispatch => {
     await dispatch(setStatusLoading('LOADING'));
 
@@ -178,7 +201,11 @@ const initInfoRequest = (authData, last_access_company_no) => {
 /**
  * getFileListRequest
  */
-const getFileListRequest = (authData, TokenID) => {
+const getFileListRequest = (
+  authData: any,
+  TokenID: string
+): ThunkAction<void, RootState, unknown> => {
+
   return async dispatch => {
     await dispatch(setStatusLoading('LOADING'));
     const fileListResult = await WedriveApi.getList(authData, TokenID);
@@ -187,7 +214,7 @@ const getFileListRequest = (authData, TokenID) => {
 
     if (fileListResult.resultList) {
       // 이름 순으로 정렬
-      const sortedList = await fileListResult.resultList.sort((a, b) => {
+      const sortedList = await fileListResult.resultList.sort((a: any, b: any) => {
         if (a.directory) return -1;
         if (b.directory) return 1;
         return a.fileName > b.fileName ? 1 : -1;
@@ -204,7 +231,11 @@ const getFileListRequest = (authData, TokenID) => {
 /**
  * getFileInfoRequest
  */
-const getFileInfoRequest = (authData, fileData) => {
+const getFileInfoRequest = (
+  authData: any,
+  fileData: any
+): ThunkAction<void, RootState, unknown> => {
+  
   return async dispatch => {
     await dispatch(setStatusLoading('FILE_LOADING'));
     const fileListResult = await WedriveApi.getFileInfo(authData, fileData);
@@ -222,7 +253,11 @@ const getFileInfoRequest = (authData, fileData) => {
 /**
  * getDirectoryInfoRequest
  */
-const getDirectoryInfoRequest = (authData, directory) => {
+const getDirectoryInfoRequest = (
+  authData: any,
+  directory: any
+): ThunkAction<void, RootState, unknown> => {
+
   return async dispatch => {
     await dispatch(setStatusLoading('LOADING'));
 
@@ -234,7 +269,7 @@ const getDirectoryInfoRequest = (authData, directory) => {
     await dispatch(setStatusLoading('FINISH'));
 
     if (fileListResult.resultList) {
-      const sortedList = await fileListResult.resultList.sort((a, b) => {
+      const sortedList = await fileListResult.resultList.sort((a: any, b: any) => {
         if (a.directory) return -1;
         if (b.directory) return 1;
         return a.fileName > b.fileName ? 1 : -1;
@@ -246,7 +281,9 @@ const getDirectoryInfoRequest = (authData, directory) => {
   };
 };
 
-const cancelLoadDocument = requestName => {
+const cancelLoadDocument = (
+  requestName: any
+): ThunkAction<void, RootState, unknown> => {
   return async dispatch => {
     FetchCancel.abort(requestName);
     await dispatch(setStatusLoading('CANCELED'));

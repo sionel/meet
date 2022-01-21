@@ -48,9 +48,6 @@ const initialState = {
 //#region reducer
 
 function reducer(state = initialState, action: AnyAction) {
-  console.log('state');
-  console.log(state);
-  
   switch (action.type) {
     case INIT:
       return _initParticipants();

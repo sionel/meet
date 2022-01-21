@@ -1,16 +1,25 @@
 //#region Toast
 
 import { debounce } from 'lodash';
+import { AnyAction } from 'redux';
+import { ThunkAction } from 'redux-thunk';
 import { getT } from '../../utils/translateManager';
+import { RootState } from '../configureStore';
 
 const TOAST_MESSAGE = 'master.TOAST_MESSAGE';
+
+export interface state {
+  toggleFlag: boolean;
+  toastMessage: string;
+}
 
 const initialState = {
   toggleFlag: false,
   toastMessage: ''
 };
 
-function reducer(state = initialState, action) {
+function reducer(state = initialState, action:AnyAction) {
+  
   switch (action.type) {
     case TOAST_MESSAGE:
       return {
@@ -23,14 +32,16 @@ function reducer(state = initialState, action) {
   }
 }
 
-function setToastMessage(toastMessage) {
+function setToastMessage(toastMessage: string) {
+  
   return {
     type: TOAST_MESSAGE,
     toastMessage
   };
 }
 
-function kickMessage(targetName) {
+function kickMessage(targetName: string): ThunkAction<void, RootState, unknown> {
+  
   return (dispath, getState) => {
     const t = getT();
     const toastMessage = targetName + t('toast_master_whobenned')

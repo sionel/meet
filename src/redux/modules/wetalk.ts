@@ -1,7 +1,11 @@
 /**
- * user
- * user 스토어
+ * wetalk
+ * wetalk 스토어
  */
+
+//TODO: 현재 사용되는 부분이 없는 스토어
+
+import { AnyAction } from 'redux';
 
 // import { UserApi } from '../../services';
 
@@ -13,7 +17,7 @@ const SET_INITIAL_LIST = 'wetalk.SET_INITIAL_LIST';
 /**
  * setList
  */
-setList = list => {
+const setList = (list: any) => {
   return {
     type: SET_LIST,
     list
@@ -23,7 +27,7 @@ setList = list => {
 /**
  * setInitialList
  */
-setInitialList = () => {
+const setInitialList = () => {
   return {
     type: SET_INITIAL_LIST
   };
@@ -33,6 +37,10 @@ setInitialList = () => {
 
 //#region initialState
 
+export interface state {
+  list: any[];
+}
+
 const initialState = {
   list: []
 };
@@ -41,7 +49,7 @@ const initialState = {
 
 //#region Reducer
 
-const reducer = (state = initialState, action) => {
+const reducer = (state = initialState, action: AnyAction) => {
   switch (action.type) {
     case SET_LIST:
       return { ...state, list: action.list };
