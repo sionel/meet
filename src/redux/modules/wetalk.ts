@@ -3,7 +3,7 @@
  * wetalk 스토어
  */
 
-//TODO: 현재 사용되는 부분이 없는 스토어
+//TODO: 현재 사용되는 부분이 없는 스토어임.
 
 import { AnyAction } from 'redux';
 
