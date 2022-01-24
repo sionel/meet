@@ -7,7 +7,7 @@ const RESET = 'deployed.RESET';
 //#region Action Creators
 
 export interface state {
-  deployedServices: any[];
+  deployedServices: string[];
 }
 
 const initialState: state = {
@@ -16,8 +16,9 @@ const initialState: state = {
 
 const reducer: (state: state, action: AnyAction) => state = (
   state = initialState,
-  action
-) => {  switch (action.type) {
+  action: AnyAction
+) => {
+  switch (action.type) {
     case SET:
       return {
         deployedServices: [...action.payload]
@@ -33,7 +34,7 @@ const reducer: (state: state, action: AnyAction) => state = (
 
 //#endregion Reducer
 
-const setDeployedServices = (deployedServices:any[]) => {
+const setDeployedServices = (deployedServices: string[]) => {
   return {
     type: SET,
     payload: deployedServices

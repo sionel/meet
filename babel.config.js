@@ -6,7 +6,7 @@ module.exports = {
     [
       'module-resolver',
       {
-        cwd: 'bablerc',
+        cwd: '.',
         extensions: [
           '.js',
           '.jsx',

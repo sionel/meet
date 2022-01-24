@@ -21,7 +21,7 @@ const TOGGLE_MUTE_VIDEO = 'local.TOGGLE_MUTE_VIDEO';
 const TOGGLE_MUTE_MIC = 'local.TOGGLE_MUTE_MIC';
 
 // TOGGLE_MUTE_SPEAKER
-const TOGGLE_MUTE_SPEAKER = 'local.TOGGLE_MUTE_SPEAKER';
+// const TOGGLE_MUTE_SPEAKER = 'local.TOGGLE_MUTE_SPEAKER';
 
 // TOGGLE_CAMERA_FACING_MODE
 const TOGGLE_CAMERA_FACING_MODE = 'local.TOGGLE_CAMERA_FACING_MODE';
@@ -87,8 +87,8 @@ function reducer(state = initialState, action: AnyAction) {
     //   return applyToggleCameraFacingMode(state, action);
     case TOGGLE_MUTE_MIC:
       return applyToggleMuteMic(state, action);
-    case TOGGLE_MUTE_SPEAKER:
-      return applyToggleMuteSpeaker(state, action);
+    // case TOGGLE_MUTE_SPEAKER:
+    //   return applyToggleMuteSpeaker(state, action);
     case SET_CONFERENCE_CREATED_TIME:
       return applySetConferenceCreatedTime(state, action);
     case CONFERENCE_MESSAGE_RECEIVED:
@@ -106,7 +106,7 @@ function reducer(state = initialState, action: AnyAction) {
 
 //#endregion
 
-function setTrack(track: object) {
+function setTrack(track: any) {
   return {
     type: SET_TRACK,
     track
@@ -296,6 +296,7 @@ function toggleMuteMic(micMute: any): ThunkAction<void, RootState, unknown> {
 function applyToggleMuteMic(state: state, action: AnyAction) {
   const { user } = state;
   const { micMute } = action;
+  
   if (user && user.audioTrack) {
     const currentMute =
       typeof micMute === 'undefined' ? user.isMuteMic : !micMute;
@@ -322,30 +323,33 @@ function applyToggleMuteMic(state: state, action: AnyAction) {
 
 //#region TOGGLE_MUTE_SPEAKER
 //TODO: 현재 안쓰고 있음.
-function toggleMuteSpeaker(
-  speakerMute: any
-): ThunkAction<void, RootState, unknown> {
-  return async dispatch => {
-    dispatch({
-      type: TOGGLE_MUTE_SPEAKER,
-      speakerMute
-    });
-  };
-}
+// function toggleMuteSpeaker(
+//   speakerMute: any
+// ): ThunkAction<void, RootState, unknown> {
+// 
+// 
+  
+//   return async dispatch => {
+//     dispatch({
+//       type: TOGGLE_MUTE_SPEAKER,
+//       speakerMute
+//     });
+//   };
+// }
 
-function applyToggleMuteSpeaker(state: state, action: AnyAction) {
-  const { user } = state;
-  const { speakerMute } = action;
-  const currentMute =
-    typeof speakerMute === 'undefined' ? !user.isMuteSpeaker : !speakerMute;
-  return {
-    ...state,
-    user: {
-      ...user,
-      isMuteSpeaker: currentMute
-    }
-  };
-}
+// function applyToggleMuteSpeaker(state: state, action: AnyAction) {
+//   const { user } = state;
+//   const { speakerMute } = action;
+//   const currentMute =
+//     typeof speakerMute === 'undefined' ? !user.isMuteSpeaker : !speakerMute;
+//   return {
+//     ...state,
+//     user: {
+//       ...user,
+//       isMuteSpeaker: currentMute
+//     }
+//   };
+// }
 
 //#endregion TOGGLE_MUTE_SPEAKER
 
@@ -432,7 +436,7 @@ export const actionCreators = {
   toggleMuteVideo,
   toggleCameraFacingMode,
   toggleMuteMic,
-  toggleMuteSpeaker,
+  // toggleMuteSpeaker,
   setConferenceCreatedTime,
   receiceConferenceMessage,
   setTrack

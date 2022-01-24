@@ -192,7 +192,6 @@ function applyToggleMuteMicMaster(state: state, action: AnyAction) {
 //#region TOGGLE_MUTE_MIC_BY_ME
 //TODO: 어디서 사용하는지 파악이 안됨.
 function toggleMuteMicByMe(micMute: any): ThunkAction<void, RootState, unknown> {
-  
   return (dispatch, getState, extraArgument) => {
     const user = getState()['local']['user'];
     dispatch({
@@ -204,9 +203,6 @@ function toggleMuteMicByMe(micMute: any): ThunkAction<void, RootState, unknown> 
 }
 
 function applyToggleMuteMicByMe(state: state, action: AnyAction) {
-  console.log('state1111');
-  console.log(state);
-  
   const { user } = state;
   const { micMute } = action;
   if (user && user.audioTrack) {

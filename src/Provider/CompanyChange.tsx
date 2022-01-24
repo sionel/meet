@@ -17,7 +17,7 @@ import { actionCreators as userAction } from '@redux/user';
 import { getT } from '@utils/translateManager';
 const { width, height } = Dimensions.get('window');
 
-const icCheckB = require('@assets/new/icons/ic_check_b.png');
+const icCheckB = require('@assets/icons/ic_check_b.png');
 
 //다국어
 export default function CompanyChange() {

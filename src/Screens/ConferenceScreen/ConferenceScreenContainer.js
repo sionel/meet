@@ -19,7 +19,7 @@ import KeepAwake from 'react-native-keep-awake';
 import ConferenceScreenPresenter from './ConferenceScreenPresenter';
 import EndCallMessage from './EndCallMessage';
 import ConferenceManager from '@utils/conference/ConferenceManager';
-import MeetApi from '@services/index/api/MeetApi';
+import MeetApi from '@services/api/MeetApi';
 import Orientation from 'react-native-orientation-locker';
 import DeviceInfo from 'react-native-device-info';
 
@@ -303,9 +303,9 @@ class ConferenceScreenContainer extends React.Component {
 
       const master = await MeetApi.checkMasterControl(roomName);
       const id = master.resultData.videoseq;
+      const audioPolicy = master.resultData.audio_active;
       changeMasterControlMode(id);
-      const audioPolicy = this._conferenceManager.getAudioMuted();
-      this.props.changeAudioActive(!audioPolicy);
+      this.props.changeAudioActive(id ? !audioPolicy : audioTrack.isMuted());
 
       setToastMessage(id ? this.t('toast_master_clton') : '');
       this.ExternalAPI.sendEvent(

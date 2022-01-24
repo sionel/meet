@@ -14,7 +14,7 @@ const SET_DRAW_DATA = 'documentShare.SET_DRAW_DATA';
 //#endregion Action Types
 export interface state {
   documentListMode: string[] | boolean;
-  attributes: object | boolean;
+  attributes: any;
   presenter: string | boolean;
   page: number;
   documentData: any[];

@@ -10,7 +10,7 @@ import './src/locales/index';
 import { setT } from './src/utils/translateManager';
 
 import Splash from 'react-native-splash-screen';
-import RootNavigation from './src/Navigations/RootNavigation';
+import RootNavigation from '@navigations/RootNavigation';
 
 // import { io } from "socket.io-client";
 

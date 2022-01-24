@@ -18,7 +18,7 @@ import ButtonMicOff from '@oldassets/buttons/btn_vc_mike_off.png';
 import { RTCView } from 'react-native-webrtc';
 import { getT } from '@utils/translateManager';
 
-import icBack from '@aseets/icons/ic_back.png';
+import icBack from '@assets/icons/ic_back.png';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 interface PresenterProps {
