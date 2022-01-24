@@ -389,10 +389,11 @@ class ConferenceScreenContainer extends React.Component {
         // 비디오 off
         this.props.toggleMuteVideo(true);
       }
-    } else if (this._appState !== 'active' && nextAppState === 'active') {
-      // active 시 video 설정 원래대로
-      this.props.toggleMuteVideo(this._conferenceState.isMuteVideo);
-    }
+    } 
+    // else if (this._appState !== 'active' && nextAppState === 'active') {
+    //   active 시 video 설정 원래대로
+    //   this.props.toggleMuteVideo(this._conferenceState.isMuteVideo);
+    // }
 
     this._appState = nextAppState;
     if (nextAppState === 'active') {
@@ -400,9 +401,6 @@ class ConferenceScreenContainer extends React.Component {
       this.props.toggleMuteVideo(this._conferenceState.isMuteVideo);
 
       if (!isIOS) {
-        // mic 설정 원래대로
-        this.props.toggleMuteMicByMe(this._conferenceState.isMuteMic);
-
         if (this._backTimeout) {
           clearTimeout(this._backTimeout);
         }
@@ -434,9 +432,10 @@ class ConferenceScreenContainer extends React.Component {
     ToastAndroid.show(this.t('toast_micwilloff'), ToastAndroid.LONG);
 
     this._backTimeout = setTimeout(() => {
-      this.props.toggleMuteMicByMe(true); // mic mute
+      this.props.toggleMuteMic(true); // mic mute
       ToastAndroid.show(this.t('toast_micoff'), ToastAndroid.SHORT);
     }, 7500);
+      // this.props.toggleMuteMicByMe(true); 
   };
 
   /**
@@ -506,11 +505,13 @@ class ConferenceScreenContainer extends React.Component {
   };
 
   _handleToggleMic = () => {
+    console.log('event@@@@@@@@@@@');
     if (this.props.isMuteMic) {
       this._conferenceManager.requestAttention(this.props.user_name);
     } else {
       this._conferenceManager.stopAttention(this.props.user_name);
-      this.props.toggleMuteMicByMe();
+      // this.props.toggleMuteMic();
+      // this.props.toggleMuteMicByMe();
     }
   };
 }

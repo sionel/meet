@@ -77,7 +77,7 @@ const mapDispatchToProps = dispatch => {
     changeAudioActive: flag => dispatch(MasterActions.changeAudioActive(flag)),
     changeMasterControlMode: flag =>
       dispatch(MasterActions.changeMasterControlMode(flag)),
-    toggleMuteMicByMe: () => dispatch(MasterActions.toggleMuteMicByMe()),
+    // toggleMuteMicByMe: (muteState) => dispatch(MasterActions.toggleMuteMicByMe(muteState)),
     setAlert: params => dispatch(AlertAcions.setAlert(params)),
     joinConference: params => dispatch(LocalActions.joinConference(params)),
     setTrack: track => dispatch(LocalActions.setTrack(track)),

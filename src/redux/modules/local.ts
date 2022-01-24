@@ -231,20 +231,33 @@ function applyToggleMuteVideo(state: state, action: AnyAction) {
   const { videoMute } = action;
 
   if (user && user.videoTrack) {
-    const currentMute =
-      typeof videoMute === 'undefined' ? user.isMuteVideo : !videoMute;
-    if (currentMute) {
-      user.videoTrack.unmute();
-    } else {
-      user.videoTrack.mute();
-    }
-    return {
-      ...state,
-      user: {
-        ...user,
-        isMuteVideo: !currentMute
+    if (typeof videoMute !== 'undefined') {
+      if (videoMute) {
+        user.videoTrack.mute();
+      } else {
+        user.videoTrack.unmute();
       }
-    };
+      return {
+        ...state,
+        user: {
+          ...user,
+          isMuteVideo: user.isMuteVideo
+        }
+      };
+    } else {
+      if (user.isMuteVideo) {
+        user.videoTrack.unmute();
+      } else {
+        user.videoTrack.mute();
+      }
+      return {
+        ...state,
+        user: {
+          ...user,
+          isMuteVideo: !user.isMuteVideo
+        }
+      };
+    }
   }
   return state;
 }
@@ -296,7 +309,7 @@ function toggleMuteMic(micMute: any): ThunkAction<void, RootState, unknown> {
 function applyToggleMuteMic(state: state, action: AnyAction) {
   const { user } = state;
   const { micMute } = action;
-  
+
   if (user && user.audioTrack) {
     const currentMute =
       typeof micMute === 'undefined' ? user.isMuteMic : !micMute;
@@ -314,9 +327,7 @@ function applyToggleMuteMic(state: state, action: AnyAction) {
     };
   }
 
-  return {
-    ...state
-  };
+  return state;
 }
 
 //#endregion TOGGLE_MUTE_MIC
@@ -326,9 +337,9 @@ function applyToggleMuteMic(state: state, action: AnyAction) {
 // function toggleMuteSpeaker(
 //   speakerMute: any
 // ): ThunkAction<void, RootState, unknown> {
-// 
-// 
-  
+//
+//
+
 //   return async dispatch => {
 //     dispatch({
 //       type: TOGGLE_MUTE_SPEAKER,

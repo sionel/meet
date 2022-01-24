@@ -36,8 +36,42 @@ const SET_KICK = 'participants.SET_KICK';
 //#endregion Action Types
 
 //#region Initial State
+
+interface MobileInfoType {
+  companyFullpath: string;
+  externalUserId: string;
+  isExternalParticipant: string;
+  isMobile: string;
+  profile_url: string;
+  userName: string;
+  wehagoId: string;
+}
+
+interface WebInfoType {
+  avatar: string;
+  companyFullpath: string;
+  host: string;
+  is_screen: string;
+  userIdentificationCode: string;
+  userName: string;
+  user_contact: string;
+  user_email: string;
+  wehagoId: string;
+}
+
+interface ParticipantsTypes {
+  audioTrack: any;
+  id: string;
+  isKicked: boolean;
+  isLocal: boolean;
+  isMuteVideo: boolean;
+  isMuteAudio?: boolean;
+  name: string;
+  userInfo: any;
+  videoTrack: any;
+}
 export interface state {
-  list: any[]
+  list: ParticipantsTypes[];
 }
 const initialState = {
   list: []
@@ -85,7 +119,6 @@ function _initParticipants() {
 //#region JOIN_USER : 새로운 유저 참가
 
 function joinUser(user: any): ThunkAction<void, RootState, unknown> {
-  
   return (dispatch, getState) => {
     const length = getState().participants.list.length;
     dispatch({
@@ -125,8 +158,11 @@ function applyJoinUser(state: state, action: AnyAction) {
  *
  * @param {*} userId
  */
-function changedStatus(userId: string, status: any): ThunkAction<void, RootState, unknown> {
-  
+//TODO: 현재 사용 안하고 있음.
+function changedStatus(
+  userId: string,
+  status: any
+): ThunkAction<void, RootState, unknown> {
   return dispatch => {
     dispatch({
       type: SET_CHANGED_STATUS,
@@ -150,8 +186,7 @@ function applyChangedStatus(state: state, action: AnyAction) {
 
 //#region LEFT_USER : 새로운 유저 참가
 
-function leftUser(id:string): ThunkAction<void, RootState, unknown> {
-  
+function leftUser(id: string): ThunkAction<void, RootState, unknown> {
   return (dispatch, getState) => {
     // 나가는 사람이 현재 메인이라면 메인을 변경
     const mainUser = getState().mainUser;
@@ -167,7 +202,7 @@ function leftUser(id:string): ThunkAction<void, RootState, unknown> {
 
 function applyLeftUser(state: state, action: AnyAction) {
   const { id } = action;
-  const list = state.list.filter((participant:any) => participant.id !== id);
+  const list = state.list.filter((participant: any) => participant.id !== id);
 
   return {
     ...state,
@@ -180,7 +215,6 @@ function applyLeftUser(state: state, action: AnyAction) {
 //#region SET_REMOTE_TRACK
 
 function setRemoteTrack(track: any): ThunkAction<void, RootState, unknown> {
-  
   return dispatch => {
     dispatch({
       type: SET_REMOTE_TRACK,
@@ -227,7 +261,7 @@ function applyUpdateMuteVideo(state: state, action: AnyAction) {
   const list = state.list.slice(0);
 
   if (track.getType() === 'video') {
-    const findUser = list.find((user:any) => {
+    const findUser = list.find((user: ParticipantsTypes) => {
       if (user.videoTrack && user.id === track.getParticipantId()) {
         return true;
       }
@@ -237,7 +271,7 @@ function applyUpdateMuteVideo(state: state, action: AnyAction) {
       findUser.isMuteVideo = track.isMuted();
     }
   } else if (track.getType() === 'audio') {
-    const findUser = list.find((user: any) => {
+    const findUser = list.find((user: ParticipantsTypes) => {
       if (user.audioTrack && user.id === track.getParticipantId()) {
         return true;
       }
@@ -295,8 +329,10 @@ function applyUpdateMuteVideo(state: state, action: AnyAction) {
 
 //#region SET_USER_INFO
 
-function setUserInfo(id: string, info: any): ThunkAction<void, RootState, unknown> {
-  
+function setUserInfo(
+  id: string,
+  info: MobileInfoType | WebInfoType
+): ThunkAction<void, RootState, unknown> {
   return dispatch => {
     dispatch({
       type: SET_USER_INFO,
@@ -309,7 +345,7 @@ function setUserInfo(id: string, info: any): ThunkAction<void, RootState, unknow
 function applySetUserInfo(state: state, action: AnyAction) {
   const { id, info } = action;
   const list = state.list.slice(0);
-  const findUser = list.find((user:any) => {
+  const findUser = list.find((user: ParticipantsTypes) => {
     // WEHAGO_ID로 sendCommand 받는데 이상한 로직에서도 받는게 있어서 중복처리 하려고 둔 로직
     if (user.id === id) {
       return true;

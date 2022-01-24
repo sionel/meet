@@ -57,8 +57,8 @@ function reducer(state = initialState, action: AnyAction) {
 
     case TOGGLE_MUTE_MIC_MASTER:
       return applyToggleMuteMicMaster(state, action);
-    case TOGGLE_MUTE_MIC_BY_ME:
-      return applyToggleMuteMicByMe(state, action);
+    // case TOGGLE_MUTE_MIC_BY_ME:
+    //   return applyToggleMuteMicByMe(state, action);
     case SPEEK_REQUEST:
       return applyToggleMicRequest(state, action);
     default:
@@ -189,44 +189,41 @@ function applyToggleMuteMicMaster(state: state, action: AnyAction) {
 
 //#endregion
 
+//TODO: AND & BACKGROUD 마이크 음소거인데 local Redux에도 동일한 함수가 있어서 주석처리 !
 //#region TOGGLE_MUTE_MIC_BY_ME
-//TODO: 어디서 사용하는지 파악이 안됨.
-function toggleMuteMicByMe(micMute: any): ThunkAction<void, RootState, unknown> {
-  return (dispatch, getState, extraArgument) => {
-    const user = getState()['local']['user'];
-    dispatch({
-      type: TOGGLE_MUTE_MIC_BY_ME,
-      micMute,
-      user
-    });
-  };
-}
+// function toggleMuteMicByMe(micMute: any): ThunkAction<void, RootState, unknown> {
+//   return (dispatch, getState, extraArgument) => {
+//     const user = getState()['local']['user'];
+//     dispatch({
+//       type: TOGGLE_MUTE_MIC_BY_ME,
+//       micMute,
+//       user
+//     });
+//   };
+// }
 
-function applyToggleMuteMicByMe(state: state, action: AnyAction) {
-  const { user } = state;
-  const { micMute } = action;
-  if (user && user.audioTrack) {
-    const currentMute =
-      typeof micMute === 'undefined' ? user.isMuteMic : !micMute;
-    if (currentMute) {
-      user.audioTrack.unmute();
-    } else {
-      user.audioTrack.mute();
-    }
-    return {
-      ...state,
-      user: {
-        ...user,
-        isMuteMic: !currentMute
-      }
-    };
-  }
-
-  return {
-    ...state
-  };
-}
-
+// function applyToggleMuteMicByMe(state: state, action: AnyAction) {
+//   const { micMute, user } = action;
+//   if (user && user.audioTrack) {
+//     const currentMute =
+//       typeof micMute === 'undefined' ? user.isMuteMic : !micMute;
+//     if (currentMute) {
+//       user.audioTrack.unmute();
+//     } else {
+//       user.audioTrack.mute();
+//     }
+//     return {
+//       ...state,
+//       user: {
+//         ...user,
+//         isMuteMic: !currentMute
+//       }
+//     };
+//   }
+//   return {
+//     ...state
+//   };
+// }
 //#endregion
 
 //#region SPEEK_REQUEST
@@ -253,7 +250,7 @@ export const actionCreators = {
   changeMasterControlMode,
   changeAudioActive,
   changeMuteMicMaster,
-  toggleMuteMicByMe,
+  // toggleMuteMicByMe,
   setMicRequest,
   noWhereMaster
 };
