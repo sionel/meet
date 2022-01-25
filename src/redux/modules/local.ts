@@ -41,6 +41,13 @@ const SET_TRACK = 'local.SET_TRACK';
 
 //#endregion Action Types
 
+interface ConferenceType {
+  audioTrack: any;
+  cid: string;
+  name: string;
+  videoTrack: any;
+}
+
 export interface state {
   user: any;
   conferenceMode: string;
@@ -123,7 +130,7 @@ function applySetTrack(state: state, action: AnyAction) {
 //#region JOIN_CONFERENCE
 
 function joinConference(
-  conferenceInfo: object
+  conferenceInfo: ConferenceType
 ): ThunkAction<void, RootState, unknown> {
   return (dispatch, getState) => {
     const { auth } = getState()['user'];
@@ -174,8 +181,8 @@ function leaveConference(): ThunkAction<void, RootState, unknown> {
 
 function applyLeaveConference(state: state) {
   /** video/audio mute */
-  // state.user.videoTrack.dispose();
-  // state.user.audioTrack.dispose();
+  state.user.videoTrack.dispose();
+  state.user.audioTrack.dispose();
   const user = null;
   return {
     ...state,
@@ -297,7 +304,9 @@ function applyToggleCameraFacingMode(state: state) {
 
 //#region TOGGLE_MUTE_MIC
 
-function toggleMuteMic(micMute: any): ThunkAction<void, RootState, unknown> {
+function toggleMuteMic(
+  micMute: boolean
+): ThunkAction<void, RootState, unknown> {
   return dispatch => {
     dispatch({
       type: TOGGLE_MUTE_MIC,
@@ -367,7 +376,7 @@ function applyToggleMuteMic(state: state, action: AnyAction) {
 //#region SET_CONFERENCE_CREATED_TIME
 
 function setConferenceCreatedTime(
-  createdTime: number
+  createdTime: number | null
 ): ThunkAction<void, RootState, unknown> {
   return async dispatch => {
     dispatch({

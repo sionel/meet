@@ -45,7 +45,6 @@ const initialState = {
 //#region reducer
 
 function reducer(state = initialState, action: AnyAction) {
-  
   switch (action.type) {
     case INIT:
       return _initMainUser();
@@ -53,8 +52,8 @@ function reducer(state = initialState, action: AnyAction) {
       return applySetMainUser(state, action);
     case SET_MAIN_USER_NOTEXIST:
       return applySetMainUserNotExist(state);
-    case SET_DRAWING_MODE:
-      return applySetDrawingMode(state, action);
+    // case SET_DRAWING_MODE:
+    //   return applySetDrawingMode(state, action);
     case SET_DOCUMENT_LIST_MODE:
       return applySetDocumentListMode(state, action);
     case SET_SHARING_MODE:
@@ -74,7 +73,9 @@ function _initMainUser() {
 }
 //#region SET_MAIN_USER
 
-function setMainUser(mainUserId:string): ThunkAction<void, RootState, unknown> {
+function setMainUser(
+  mainUserId: string
+): ThunkAction<void, RootState, unknown> {
   return dispatch => {
     dispatch({
       type: SET_MAIN_USER,
@@ -115,30 +116,34 @@ function applySetMainUserNotExist(state: state) {
 //#endregion
 
 //#region SET_DRAWING_MODE
+//TODO: 어디서 사용하고 있는지 파악이 안됨.
+// function setDrawingMode(drawingMode: any): ThunkAction<void, RootState, unknown> {
+//   console.log('drawingMode : ', drawingMode);
 
-function setDrawingMode(drawingMode: any): ThunkAction<void, RootState, unknown> {
-  return dispatch => {
-    dispatch({
-      type: SET_DRAWING_MODE,
-      drawingMode
-    });
-  };
-}
+//   return dispatch => {
+//     dispatch({
+//       type: SET_DRAWING_MODE,
+//       drawingMode
+//     });
+//   };
+// }
 
-function applySetDrawingMode(state: state, action: AnyAction) {
-  const { drawingMode } = action;
-  return {
-    ...state,
-    // drawingMode: !state.drawingMode
-    drawingMode: drawingMode
-  };
-}
+// function applySetDrawingMode(state: state, action: AnyAction) {
+//   const { drawingMode } = action;
+//   return {
+//     ...state,
+//     // drawingMode: !state.drawingMode
+//     drawingMode: drawingMode
+//   };
+// }
 
 //#endregion
 
 //#region SET_DOCUMENT_LIST_MODE
 
-function setDocumentListMode(documentListMode: string[] | boolean): ThunkAction<void, RootState, unknown> {
+function setDocumentListMode(
+  documentListMode: string[] | boolean
+): ThunkAction<void, RootState, unknown> {
   return dispatch => {
     dispatch({
       type: SET_DOCUMENT_LIST_MODE,
@@ -202,7 +207,7 @@ function applySetSharingMode(state: state, action: AnyAction) {
 export const actionCreators = {
   setMainUser,
   setMainUserNotExist,
-  setDrawingMode,
+  // setDrawingMode,
   setDocumentListMode,
   setSharingMode,
   initMainUser

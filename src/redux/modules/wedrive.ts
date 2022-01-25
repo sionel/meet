@@ -18,6 +18,34 @@ const UPDATE_FILE_LIST_UPDATE = 'wedrive.UPDATE_FILE_LIST_UPDATE';
 
 //#region Action Creators
 
+interface fileInfo {
+  bizId: string;
+  bizShareFolder: boolean;
+  createDate: string;
+  directory: boolean;
+  favorite: boolean;
+  fileCount: number;
+  fileName: string;
+  fileUniqueKey: string;
+  fileVersion: number;
+  folderCount: number;
+  lastModifyDate: string;
+  lastModifyUser: string;
+  level: number;
+  lock: boolean;
+  memo: boolean;
+  mimeType: string;
+  parentFileUniqueKey: string;
+  path: string;
+  shareFolder: boolean;
+  size: number;
+  subDirectory: boolean;
+  thumbNailPath: string;
+  updateUserViewPath: boolean;
+  uploadDate: string;
+  uploadUser: string;
+}
+
 export interface state {
   status: string;
   TokenID: string | null;
@@ -27,15 +55,13 @@ export interface state {
 }
 
 const setStatusLoading = (status: string) => {
-
   return {
     type: SET_LOADING_STATUS,
     status
   };
 };
 
-const setInitInfo = (initInfo?: any) => {
-
+const setInitInfo = (initInfo?: Partial<state>) => {
   const data = initInfo || {
     status: 'INIT',
     TokenID: null,
@@ -49,8 +75,7 @@ const setInitInfo = (initInfo?: any) => {
   };
 };
 
-const setFileList = (storageList: any[]) => {
-
+const setFileList = (storageList: fileInfo[]) => {
   return {
     type: SET_FILE_LIST,
     storageList
@@ -58,7 +83,6 @@ const setFileList = (storageList: any[]) => {
 };
 
 const updateFileList = (storageList: any[], directory: any) => {
-
   return {
     type: UPDATE_FILE_LIST_UPDATE,
     storageList,
@@ -67,7 +91,6 @@ const updateFileList = (storageList: any[], directory: any) => {
 };
 
 const setFileInfo = (fileInfo: any[]) => {
-
   return {
     type: SET_FILE_INFO,
     fileInfo
@@ -145,7 +168,6 @@ const initialState = {
 //#region Reducer
 
 const reducer = (state = initialState, action: AnyAction) => {
-  
   switch (action.type) {
     case SET_LOADING_STATUS:
       return applySetStatusLoading(state, action);
@@ -171,7 +193,6 @@ const initInfoRequest = (
   authData: any,
   last_access_company_no: number
 ): ThunkAction<void, RootState, unknown> => {
-
   return async dispatch => {
     await dispatch(setStatusLoading('LOADING'));
 
@@ -205,7 +226,6 @@ const getFileListRequest = (
   authData: any,
   TokenID: string
 ): ThunkAction<void, RootState, unknown> => {
-
   return async dispatch => {
     await dispatch(setStatusLoading('LOADING'));
     const fileListResult = await WedriveApi.getList(authData, TokenID);
@@ -214,11 +234,13 @@ const getFileListRequest = (
 
     if (fileListResult.resultList) {
       // 이름 순으로 정렬
-      const sortedList = await fileListResult.resultList.sort((a: any, b: any) => {
-        if (a.directory) return -1;
-        if (b.directory) return 1;
-        return a.fileName > b.fileName ? 1 : -1;
-      });
+      const sortedList = await fileListResult.resultList.sort(
+        (a: any, b: any) => {
+          if (a.directory) return -1;
+          if (b.directory) return 1;
+          return a.fileName > b.fileName ? 1 : -1;
+        }
+      );
 
       return dispatch(setFileList(sortedList));
     } else {
@@ -235,7 +257,6 @@ const getFileInfoRequest = (
   authData: any,
   fileData: any
 ): ThunkAction<void, RootState, unknown> => {
-  
   return async dispatch => {
     await dispatch(setStatusLoading('FILE_LOADING'));
     const fileListResult = await WedriveApi.getFileInfo(authData, fileData);
@@ -257,7 +278,6 @@ const getDirectoryInfoRequest = (
   authData: any,
   directory: any
 ): ThunkAction<void, RootState, unknown> => {
-
   return async dispatch => {
     await dispatch(setStatusLoading('LOADING'));
 
@@ -269,11 +289,13 @@ const getDirectoryInfoRequest = (
     await dispatch(setStatusLoading('FINISH'));
 
     if (fileListResult.resultList) {
-      const sortedList = await fileListResult.resultList.sort((a: any, b: any) => {
-        if (a.directory) return -1;
-        if (b.directory) return 1;
-        return a.fileName > b.fileName ? 1 : -1;
-      });
+      const sortedList = await fileListResult.resultList.sort(
+        (a: any, b: any) => {
+          if (a.directory) return -1;
+          if (b.directory) return 1;
+          return a.fileName > b.fileName ? 1 : -1;
+        }
+      );
       return dispatch(updateFileList(sortedList, directory));
     } else {
       return fileListResult;

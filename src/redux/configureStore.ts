@@ -37,10 +37,10 @@ import selectCompany, {
  */
 const middlewares = [thunk];
 
-if (env === 'development') {
-  // const { logger } = require('redux-logger');
-  // middlewares.push(logger);
-}
+// if (env === 'development') {
+//   const { logger } = require('redux-logger');
+//   middlewares.push(logger);
+// }
 
 export interface RootState {
   local: any;

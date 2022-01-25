@@ -21,6 +21,7 @@ function reducer(state: state = initialState, action: AnyAction) {
   }
 }
 
+//TODO: 조직도에 이메일 초대부분 추후 수정 예정
 const setRecents = (recent: Object) => {
   return {
     type: SET_RECENTS,
@@ -37,13 +38,13 @@ const _setRecents = (state: state, action: any) => {
     fixList.push(recent);
     return {
       ...state,
-      recents : fixList
+      recents: fixList
     };
   } else {
     recentList.push(recent);
     return {
       ...state,
-      recents : recentList
+      recents: recentList
     };
   }
 };
@@ -54,7 +55,10 @@ const resetRecents = () => {
   };
 };
 
-const _resetRecents = (state: state, action: any) => ({ ...state, recents: []});
+const _resetRecents = (state: state, action: any) => ({
+  ...state,
+  recents: []
+});
 
 export const actionCreators = {
   setRecents,

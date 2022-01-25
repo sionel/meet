@@ -348,7 +348,8 @@ class ConferenceScreenContainer extends React.Component {
       user,
       isLogin,
       resetVideoId,
-      setIsConference
+      setIsConference,
+      setConferenceCreatedTime
       // auth,
       // screenProps,
     } = this.props;
@@ -362,7 +363,7 @@ class ConferenceScreenContainer extends React.Component {
     user.audioTrack.dispose();
     resetVideoId();
     setIsConference(false);
-
+    setConferenceCreatedTime(null);
     if (!isLogin) {
       navigation.reset({ routes: [{ name: 'LoginStack' }] });
     } else {

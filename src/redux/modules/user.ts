@@ -6,6 +6,8 @@
 import { AnyAction } from 'redux';
 import { UserApi, ServiceCheckApi } from '@services/index';
 import { actionCreators as wetalkActionCreators } from './wetalk';
+import { ThunkAction } from 'redux-thunk';
+import { RootState } from '../configureStore';
 
 const AGREEMENT = 'user.AGREEMENT';
 const LOGIN = 'user.LOGIN';
@@ -28,7 +30,30 @@ const SET_LOGIN_TYPE = 'user.SET_LOGIN_TYPE';
 //#region Action Creators
 
 //#region initialState
+interface companyInfo {
+  company_code: string;
+  company_no: number;
+}
 
+export interface authInfo {
+  AUTH_A_TOKEN: string;
+  AUTH_R_TOKEN: string;
+  HASH_KEY: string;
+  cno: number;
+  employee_list: any[];
+  last_access_company_no: number;
+  last_company: any;
+  member_type: number;
+  membership_code: string;
+  nickname: null;
+  portal_id: string;
+  profile_url: null;
+  user_contact: string;
+  user_default_email: string;
+  user_email: string;
+  user_name: string;
+  user_no: number;
+}
 export interface state {
   loginType: string;
   isLogin: boolean;
@@ -152,7 +177,7 @@ function agreement() {
 /**
  * login
  */
-function login(auth: any, from: string, autoLogin: boolean) {
+function login(auth: authInfo, from: string, autoLogin: boolean) {
   return {
     type: LOGIN,
     auth,
@@ -191,8 +216,8 @@ function sessionCheck(session = true) {
 /**
  * logout
  */
-function logout() {
-  return (dispatch: any) => {
+function logout():ThunkAction<void, RootState, unknown> {
+  return (dispatch) => {
     dispatch({
       type: LOGOUT
     });
@@ -224,7 +249,7 @@ function token(auth: any) {
 /**
  * 권한 설정
  */
-function setPermission(permission: any) {
+function setPermission(permission: boolean) {
   return {
     type: SET_PERMISSION,
     permission
@@ -241,15 +266,15 @@ function setPermission(permission: any) {
 /**
  * CHANGE_COMPANY
  */
-function changeCompany(company: any) {
+function changeCompany(company: companyInfo) {
   return {
     type: CHANGE_COMPANY,
     company
   };
 }
 
-function changeCompanyRequest(auth: any, company: any) {
-  return async (dispatch: any) => {
+function changeCompanyRequest(auth: authInfo, company: companyInfo): ThunkAction<void, RootState, unknown> {
+  return async (dispatch) => {
     const checkResult = await UserApi.changeCompany(auth, company);
     if (checkResult.resultData !== 1) {
       // alert('회사변경 중 문제 발생');
@@ -283,8 +308,8 @@ function setLoginType(loginType: string) {
 //#endregion Reducer Functions
 
 //#region TOGGLE_VISIBLE_APPINTRO
-function toggleVisibleAppIntro() {
-  return (dispatch: any) => {
+function toggleVisibleAppIntro():ThunkAction<void, RootState, unknown> {
+  return (dispatch) => {
     dispatch({
       type: TOGGLE_VISIBLE_APPINTRO
     });
