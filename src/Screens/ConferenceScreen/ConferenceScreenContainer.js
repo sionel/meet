@@ -303,9 +303,11 @@ class ConferenceScreenContainer extends React.Component {
 
       const master = await MeetApi.checkMasterControl(roomName);
       const id = master.resultData.videoseq;
+      const audioPolicy = master.resultData.audio_active;
+
       changeMasterControlMode(id);
-      const audioPolicy = this._conferenceManager.getAudioMuted();
-      this.props.changeAudioActive(!audioPolicy);
+
+      this.props.changeAudioActive(id ? !audioPolicy : audioTrack.isMuted());
 
       setToastMessage(id ? this.t('toast_master_clton') : '');
       this.ExternalAPI.sendEvent(
@@ -348,7 +350,8 @@ class ConferenceScreenContainer extends React.Component {
       user,
       isLogin,
       resetVideoId,
-      setIsConference
+      setIsConference,
+      setConferenceCreatedTime
       // auth,
       // screenProps,
     } = this.props;
@@ -362,6 +365,7 @@ class ConferenceScreenContainer extends React.Component {
     user.audioTrack.dispose();
     resetVideoId();
     setIsConference(false);
+    setConferenceCreatedTime(null);
 
     if (!isLogin) {
       navigation.reset({ routes: [{ name: 'LoginStack' }] });

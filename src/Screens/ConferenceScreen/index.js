@@ -93,7 +93,8 @@ const mapDispatchToProps = dispatch => {
       dispatch(indicatorAcionCreators.setIndicator('화상회의 종료 중')),
     resetVideoId: () => dispatch(RootActions.setVideoId('')),
     setIsConference:flag => dispatch(ConferenceActions.setIsConference(flag)),
-    setConferenceManager:manager =>dispatch(ConferenceActions.setConferenceManager(manager))
+    setConferenceManager:manager =>dispatch(ConferenceActions.setConferenceManager(manager)),
+    setConferenceCreatedTime:(createdTime) => dispatch(LocalActions.setConferenceCreatedTime(createdTime))
   };
 };
 

@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { getT } from '../../utils/translateManager';
 
 import { actionCreators as AlertAcions } from '../../redux/modules/alert';
+import { actionCreators as LocalActions } from '../../redux/modules/local';
 import { RootState } from '../../redux/configureStore';
 import { MeetNavigationProps } from '../../Navigations/RootNavigation';
 
@@ -39,6 +40,7 @@ export default function SettingScreenContainer(props: any) {
 
   const dispatch = useDispatch();
   const setAlert = (params: any) => dispatch(AlertAcions.setAlert(params));
+  const setConferenceCreatedTime = (createdTime: number | null) => dispatch(LocalActions.setConferenceCreatedTime(createdTime))
 
   const t = getT();
 
@@ -145,6 +147,7 @@ export default function SettingScreenContainer(props: any) {
         message: t('renewal.alert_text_waiting')
       });
     } else {
+      setConferenceCreatedTime(params.createdTime);
       navigation.reset({
         routes: [
           {

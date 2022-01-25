@@ -352,7 +352,7 @@ function applyToggleMuteSpeaker(state: state, action: AnyAction) {
 //#region SET_CONFERENCE_CREATED_TIME
 
 function setConferenceCreatedTime(
-  createdTime: number
+  createdTime: number | null
 ): ThunkAction<void, RootState, unknown> {
   return async dispatch => {
     dispatch({
