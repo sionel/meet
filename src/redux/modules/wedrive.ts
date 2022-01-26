@@ -34,7 +34,7 @@ const setStatusLoading = (status: string) => {
   };
 };
 
-const setInitInfo = (initInfo: any) => {
+const setInitInfo = (initInfo?: any) => {
 
   const data = initInfo || {
     status: 'INIT',

@@ -52,7 +52,6 @@ export type MeetParamList = {
   SettingView: {
     id: string;
     selectedRoomName: string;
-    createdTime: number | null;
   } & (
     | {
         accessType: 'auth';

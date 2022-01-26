@@ -147,7 +147,6 @@ export default function SettingScreenContainer(props: any) {
         message: t('renewal.alert_text_waiting')
       });
     } else {
-      setConferenceCreatedTime(params.createdTime);
       navigation.reset({
         routes: [
           {

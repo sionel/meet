@@ -93,7 +93,6 @@ const SplashScreenContainer = ({
     let t1 = Date.now();
 
     if (t1 > t0 + 20000) {
-      let timeError = true;
       Alert.alert('알림', '요청시간 초과오류', [
         {
           text: '확인',
@@ -274,8 +273,14 @@ const SplashScreenContainer = ({
           result.name === 'staffmanagment'
             ? '나하고에서 먼저 로그인 해주세요'
             : '비정상적인 접근입니다.';
-        Alert.alert(alertText);
-        navigation.reset({ routes: [{ name: 'LoginStack' }] });
+        Alert.alert('알림', alertText, [
+          {
+            text: '확인',
+            onPress: () => {
+              navigation.reset({ routes: [{ name: 'LoginStack' }] });
+            }
+          }
+        ]);
       }
     } else if (result.login_info === 'email') {
       //토근정보가 없을때
@@ -321,14 +326,26 @@ const SplashScreenContainer = ({
           ]
         });
       } else {
-        Alert.alert(t('비회원 접속'), t('참여코드를 입력해주시기 바랍니다.'));
-        navigation.reset({ routes: [{ name: 'LoginStack' }] });
+        Alert.alert(t('비회원 접속'), t('참여코드를 입력해주시기 바랍니다.'), [
+          {
+            text: '확인',
+            onPress: () => {
+              navigation.reset({ routes: [{ name: 'LoginStack' }] });
+            }
+          }
+        ]);
       }
     } else {
       if (!result.video_id) {
         onLogout();
-        Alert.alert(t('비정상적인 접근입니다.'));
-        navigation.reset({ routes: [{ name: 'LoginStack' }] });
+        Alert.alert(t('알림'), t('비정상적인 접근입니다.'), [
+          {
+            text: '확인',
+            onPress: () => {
+              navigation.reset({ routes: [{ name: 'LoginStack' }] });
+            }
+          }
+        ]);
       }
     }
   };
