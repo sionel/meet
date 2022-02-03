@@ -8,6 +8,7 @@ import { UserApi, ServiceCheckApi } from '@services/index';
 import { actionCreators as wetalkActionCreators } from './wetalk';
 import { ThunkAction } from 'redux-thunk';
 import { RootState } from '../configureStore';
+import { isSuccess } from '@services/types';
 
 const AGREEMENT = 'user.AGREEMENT';
 const LOGIN = 'user.LOGIN';
@@ -30,8 +31,9 @@ const SET_LOGIN_TYPE = 'user.SET_LOGIN_TYPE';
 //#region Action Creators
 
 //#region initialState
-interface companyInfo {
-  company_code: string;
+
+export interface companyParamInfo {
+  company_code: number;
   company_no: number;
 }
 
@@ -45,9 +47,9 @@ export interface authInfo {
   last_company: any;
   member_type: number;
   membership_code: string;
-  nickname: null;
+  nickname: string | null;
   portal_id: string;
-  profile_url: null;
+  profile_url: string | null;
   user_contact: string;
   user_default_email: string;
   user_email: string;
@@ -266,19 +268,21 @@ function setPermission(permission: boolean) {
 /**
  * CHANGE_COMPANY
  */
-function changeCompany(company: companyInfo) {
+function changeCompany(company: companyParamInfo) {
   return {
     type: CHANGE_COMPANY,
     company
   };
 }
 
-function changeCompanyRequest(auth: authInfo, company: companyInfo): ThunkAction<void, RootState, unknown> {
+function changeCompanyRequest(auth: authInfo, company: companyParamInfo): ThunkAction<void, RootState, unknown> {
   return async (dispatch) => {
     const checkResult = await UserApi.changeCompany(auth, company);
-    if (checkResult.resultData !== 1) {
-      // alert('회사변경 중 문제 발생');
-      return checkResult;
+    if(isSuccess(checkResult)) {
+      if (checkResult.resultData !== 1) {
+        // alert('회사변경 중 문제 발생');
+        return checkResult;
+      }
     }
     // dispatch(wetalkActionCreators.setInitialList());
     return dispatch(changeCompany(company));

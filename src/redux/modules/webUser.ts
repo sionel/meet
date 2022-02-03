@@ -3,6 +3,7 @@ import { ThunkAction } from 'redux-thunk';
 import { result } from 'underscore';
 import { UserApi } from '@services/index';
 import { RootState } from '../configureStore';
+import { isSuccess } from '@services/types';
 const LOGIN = 'webUser.LOGIN';
 const LOGOUT = 'webUser.LOGOUT';
 
@@ -40,7 +41,7 @@ function loginCheckRequestWeb(
       HASH_KEY
     );
     // alert(JSON.stringify(checkResult));
-    if (checkResult.resultCode === 200) {
+    if (isSuccess(checkResult)) {
       const userData = {
         // login api data
         AUTH_A_TOKEN,
@@ -65,15 +66,14 @@ function loginCheckRequestWeb(
             )[0]
           : checkResult.resultData.employee_list[0], // last_access_company_no가 비어있는 상태로 올 수 있어서 null이 뜬다면 리스트중 첫번째 인덱스로 처리
         member_type: checkResult.resultData.member_type, // 0: 일반회원, 1: 개인회원
-        nickname: checkResult.nickname
+        // nickname: checkResult.nickname
       };
       //TODO: 이 함수 사용하는 부분이 없어서 처리가 어려움.
-      dispatch(login(userData));
+      dispatch(login());
       return checkResult;
     } else {
-      const result = checkResult.errors ? checkResult : { errors: checkResult };
-      dispatch(eventLog(result));
-      return result;
+      // const { errors } = checkResult;
+      // eventLog(errors);
     }
   };
 }

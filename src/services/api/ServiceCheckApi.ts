@@ -1,11 +1,15 @@
-import { wehagoBaseURL, serialize, securityRequest, isDev } from '@utils';
-import fetch from './Fetch';
+import { wehagoBaseURL, serialize, securityRequest, isDev } from '@utils/index';
+import Axios from './Axios';
 import { getT } from '@utils/translateManager';
+import { isSuccess, Res } from '@services/types';
+import { apiAuthInfo, companyInfo } from './types';
+import { authInfo } from '@redux/user';
 /**
  * 회사 설정 및 미납 여부 확인
  * @param {*} last_access_company 회사 정보
  */
-const checkStatusType = ({ company_state, employee_status, step }) => {
+const checkStatusType = (last_company: any) => {
+ const { company_state, employee_status, step } = last_company;
   const t = getT();
   if (typeof step === 'number') {
     if (step === 6) {
@@ -87,54 +91,56 @@ const checkStatusType = ({ company_state, employee_status, step }) => {
  * @param {*} auth
  * @param {*} company
  */
-const checkPurchaseTEdge = async (auth, company) => {
-  try {
-    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY } = auth;
-    const params = serialize({
-      cno: company.company_no,
-      service_code: 'al'
-    });
+const checkPurchaseTEdge = async (auth: apiAuthInfo, company: companyInfo) => {
+  // try {
+  const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY } = auth;
+  const params = serialize({
+    cno: company.company_no,
+    service_code: 'al'
+  });
 
-    const urlType = '/common/company/service/purchase/check?' + params;
-    const url = `${wehagoBaseURL}${urlType}`;
+  const urlType = '/common/company/service/purchase/check?' + params;
+  const url = `${wehagoBaseURL}${urlType}`;
 
-    const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
+  const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
 
-    const response = await fetch(url, {
-      method: 'GET',
-      headers
-    });
+  const response = await Axios<{ is_service_purchase: string }>(url, {
+    method: 'GET',
+    headers
+  });
 
-    const responseJson = await response.json();
-
-    if (responseJson.resultData.is_service_purchase === 'T') return true;
+  if (isSuccess(response)) {
+    if (response.resultData.is_service_purchase === 'T') return true;
     else return false;
-  } catch (err) {
-    console.log('err', err);
-    return false;
+  } else {
+    throw response;
   }
+
+  //   if (responseJson.resultData.is_service_purchase === 'T') return true;
+  //   else return false;
+  // } catch (err) {
+  //   console.log('err', err);
+  //   return false;
+  // }
 };
 
-const checkMembership = async (AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno) => {
+const checkMembership = async (auth: authInfo) => {
+  const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
   const url = `${wehagoBaseURL}common/market/membership?cno=${cno}`;
   const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
-  try {
-    const data = {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        ...headers
-      }
-    };
-    const response = await fetch(url, data);
-
-    if (response.status !== 200) {
-      throw response.resultCode;
+  const data = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      ...headers
     }
-    return response.json();
-  } catch (err) {
-    console.warn('checkMembership : ', err);
-    return false;
+  };
+  const response = await Axios(url, data);
+
+  if (isSuccess(response)) {
+    return response;
+  } else {
+    throw response;
   }
 };
 
@@ -143,16 +149,19 @@ const checkMembership = async (AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno) => {
  * @param {any} auth
  * @param {any} company
  */
-const companyStatusCheck = async (auth, company) => {
+const companyStatusCheck = async (auth: apiAuthInfo, company: companyInfo) => {  
   const isTEdge = auth.last_company.membership_code === 'WE';
+  const t = getT();
 
   if (isTEdge) {
     // TEdge 미납 여부 확인
     const isPurchase = await checkPurchaseTEdge(auth, company);
+    console.log(isPurchase);
+    
     if (isPurchase) {
-      // return {
-      //   code: 200
-      // };
+      return {
+        code: 200
+      };
     } else {
       return {
         code: 400,
@@ -171,68 +180,68 @@ const companyStatusCheck = async (auth, company) => {
  * @param {any} company
  * @param {string} type P: 구매, D: 배포
  */
-const serviceCheck = async (auth) => {
-  try {
-    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
-    const params = serialize({
-      cno
-    });
-    const urlType = isDev
+const serviceCheck = async (auth: apiAuthInfo) => {
+  const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
+  const params = serialize({
+    cno
+  });
+  const urlType = isDev
     ? '/videodev/service/is-deploy'
     : '/video/service/is-deploy'; // 배포여부
-    const url = `${wehagoBaseURL}${urlType}?${params}`;
+  const url = `${wehagoBaseURL}${urlType}?${params}`;
 
-    const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
+  const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
 
-    const response = await fetch(url, {
-      method: 'GET',
-      headers
-    });
+  const response = await Axios(url, {
+    method: 'GET',
+    headers
+  });
 
-    const responseJson = await response.json();
-    if (responseJson.resultCode === 200) {
-      const hasService = responseJson.resultData === 'T';
+  if (isSuccess(response)) {
+    if (response.resultCode === 200) {
+      const hasService = response.resultData === 'T';
       return hasService;
     } else {
       return false;
     }
-  } catch (err) {
-    console.warn('serviceCheck : ', err);
-    return false;
+  } else {
+    throw response;
   }
 };
 
-const anotherServiceCheck = async (auth, company, type) => {
-  try {
-    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY } = auth;
-    const params = serialize({
-      service_code: type,
-      cno: company.company_no
-      // ccode: company.company_code
-    });
-    const urlType = '/common/company/deploy/whether/employee'; // 배포여부
-    const url = `${wehagoBaseURL}${urlType}?${params}`;
+const anotherServiceCheck = async (
+  auth: apiAuthInfo,
+  company: companyInfo,
+  type: string
+) => {
+  const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY } = auth;
+  const params = serialize({
+    service_code: type,
+    cno: company.company_no
+    // ccode: company.company_code
+  });
+  const urlType = '/video/service/is-service-deploy'; // 배포여부
+  const url = `${wehagoBaseURL}${urlType}?${params}`;
 
-    const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
+  const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
 
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        ...headers
-      }
-    });
+  const response = await Axios<{ isServiceDeploy: string }>(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      ...headers
+    }
+  });
 
-    const responseJson = await response.json();
-    if (responseJson.resultCode === 200) {
-      const hasService = responseJson.resultData['isServiceDeploy'] === 'T';
+  if (isSuccess(response)) {
+    if (response.resultCode === 200) {
+      const hasService = response.resultData['isServiceDeploy'] === 'T';
       return hasService;
     } else {
       return false;
     }
-  } catch (err) {
-    console.warn('serviceCheck : ', err);
-    return false;
+  } else {
+    throw response;
   }
 };
 

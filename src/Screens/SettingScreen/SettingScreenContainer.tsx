@@ -40,7 +40,6 @@ export default function SettingScreenContainer(props: any) {
 
   const dispatch = useDispatch();
   const setAlert = (params: any) => dispatch(AlertAcions.setAlert(params));
-  const setConferenceCreatedTime = (createdTime: number | null) => dispatch(LocalActions.setConferenceCreatedTime(createdTime));
 
   const t = getT();
 
@@ -147,7 +146,6 @@ export default function SettingScreenContainer(props: any) {
         message: t('renewal.alert_text_waiting')
       });
     } else {
-      setConferenceCreatedTime(params.createdTime);
       navigation.reset({
         routes: [
           {

@@ -37,7 +37,6 @@ export default function ConferenceStateContainer(props: any) {
   >('');
 
   let enterTimer: any = () => {};
-  let createdTime: number | null;
   const rotate = new Animated.Value(0);
   const spin = rotate.interpolate({
     inputRange: [0, 1],
@@ -82,7 +81,6 @@ export default function ConferenceStateContainer(props: any) {
       conferenceState = 'deleted';
     } else {
       setRoomName(access.name);
-      createdTime = access?.start_datetime;
       
       if (access.r_start_datetime) {
         // 예약방
@@ -182,8 +180,7 @@ export default function ConferenceStateContainer(props: any) {
           navigation.replace('SettingView', {
             selectedRoomName,
             accessType,
-            id,
-            createdTime
+            id
           });
           break;
         case 'email':
@@ -192,8 +189,7 @@ export default function ConferenceStateContainer(props: any) {
             selectedRoomName,
             accessType,
             id,
-            emailToken,
-            createdTime
+            emailToken
           });
           break;
         case 'joincode':
@@ -202,8 +198,7 @@ export default function ConferenceStateContainer(props: any) {
             selectedRoomName,
             accessType,
             id,
-            joincode,
-            createdTime
+            joincode
           });
           break;
         default:

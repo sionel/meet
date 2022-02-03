@@ -9,6 +9,7 @@ import { actionCreators as UserActions } from '@redux/user';
 
 import { UserApi } from '@services/index';
 import { MeetNavigationProps } from '@navigations/RootNavigation';
+import { apiAuthInfo } from '@services/api/types';
 
 const SelectCompanyContainer = ({navigation,route}: MeetNavigationProps<'SelectCompany'>) => {
   // const { handleChangeCompany } = props;
@@ -34,7 +35,7 @@ const SelectCompanyContainer = ({navigation,route}: MeetNavigationProps<'SelectC
 
   const dispatch = useDispatch();
   const changeCompanyRequest = (
-    auth: any,
+    auth: apiAuthInfo,
     company: {
       company_no: number;
       company_code: number;

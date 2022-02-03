@@ -199,7 +199,7 @@ export default function ConferenceModfiyScreenContainer(props: any) {
             ? wehagoMainURL + user.profile_url
             : wehagoDummyImageURL,
           full_path: user.user_no
-            ? user.full_path_list[pathLng-1].path
+            ? user.full_path_list[pathLng - 1].path
             : user.user_name !== null
             ? user.user
             : '',
@@ -210,7 +210,7 @@ export default function ConferenceModfiyScreenContainer(props: any) {
         return data;
       })
     );
-    
+
     setSelectedEmployee({ member: reservationUserInfos, group: {} });
 
     const {
@@ -496,20 +496,34 @@ export default function ConferenceModfiyScreenContainer(props: any) {
     if (current < today) {
       Alert.alert(
         t('renewal.direct_time_set_error'),
-        t('renewal.direct_time_early_error')
+        t('renewal.direct_time_early_error'),
+        [
+          {
+            text: '확인',
+            onPress: () => {
+              setTime(today.add(1, 'minutes').toDate());
+              return false;
+            }
+          }
+        ]
       );
-      setTime(today.add(1, 'minutes').toDate());
-      return false;
     } else if (current < startTime.current) {
       Alert.alert(
         t('renewal.direct_time_set_error'),
-        t('renewal.direct_time_before_error')
+        t('renewal.direct_time_before_error'),
+        [
+          {
+            text: '확인',
+            onPress: () => {
+              setTime(moment(startTime.current).add(30, 'minutes').toDate());
+              setTimePicker('none');
+              setCalendarError(true);
+              setDatePicker(timePicker);
+              return false;
+            }
+          }
+        ]
       );
-      setTime(moment(startTime.current).add(30, 'minutes').toDate());
-      setTimePicker('none');
-      setCalendarError(true);
-      setDatePicker(timePicker);
-      return false;
     }
 
     let start_DT, end_DT;

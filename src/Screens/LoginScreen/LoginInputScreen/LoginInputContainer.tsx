@@ -15,6 +15,7 @@ import { actionCreators as RecentsActions } from '@redux/recentsInvited';
 import { getT } from '@utils/translateManager';
 import deviceInfoModule from 'react-native-device-info';
 import { LoginNavigationProps } from '@navigations/LoginStack';
+import { isSuccess } from '@services/types';
 
 const LoginInputContainer = ({
   navigation
@@ -416,7 +417,7 @@ const LoginInputContainer = ({
       HASH_KEY
     );
 
-    if (checkResult.resultCode === 200) {
+    if (isSuccess(checkResult)) {
       const userData = {
         // login api data
         AUTH_A_TOKEN,
@@ -444,7 +445,7 @@ const LoginInputContainer = ({
             )[0]
           : checkResult.resultData.employee_list[0], // last_access_company_no가 비어있는 상태로 올 수 있어서 null이 뜬다면 리스트중 첫번째 인덱스로 처리
         member_type: checkResult.resultData.member_type, // 0: 일반회원, 1: 개인회원
-        nickname: checkResult.nickname,
+        nickname: checkResult.resultData.nickname,
         membership_code: checkResult.resultData.employee_list[0].membership_code
       };
       login(userData, from, check);

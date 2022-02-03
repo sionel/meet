@@ -13,8 +13,9 @@ import RNRestart from 'react-native-restart';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../redux/configureStore';
 import { actionCreators as selectCompanyAction } from '@redux/selectCompany';
-import { actionCreators as userAction } from '@redux/user';
+import { actionCreators as userAction, authInfo, companyParamInfo } from '@redux/user';
 import { getT } from '@utils/translateManager';
+import { companyInfo } from '@services/api/types';
 const { width, height } = Dimensions.get('window');
 
 const icCheckB = require('@assets/icons/ic_check_b.png');
@@ -28,7 +29,7 @@ export default function CompanyChange() {
       orientation: { isHorizon }
     } = state;
 
-    const contentList = auth?.employee_list.map((company: any) => ({
+    const contentList = auth?.employee_list.map((company: companyInfo) => ({
       name: company.company_name_kr,
       onClick: () => {
         String(company.company_no) !== String(auth.cno)
@@ -54,7 +55,7 @@ export default function CompanyChange() {
   const _closeCompany = () => {
     dispatch(selectCompanyAction.closeCompany());
   };
-  const changeCompanyRequest = (auth: any, company: any) =>
+  const changeCompanyRequest = (auth: authInfo, company: companyParamInfo) =>
     dispatch(userAction.changeCompanyRequest(auth, company));
 
   useEffect(() => {

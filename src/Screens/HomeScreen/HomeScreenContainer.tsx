@@ -15,7 +15,7 @@ import { MeetApi, ServiceCheckApi, UserApi } from '@services/index';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/configureStore';
 
-import { actionCreators as UserActions } from '@redux/user';
+import { actionCreators as UserActions, authInfo, companyParamInfo } from '@redux/user';
 import { actionCreators as RecentsActions } from '@redux/recentsInvited';
 import { actionCreators as ConferenceActions } from '@redux/conference';
 import { actionCreators as SelectCompanyActions } from '@redux/selectCompany';
@@ -146,7 +146,7 @@ export default function HomeScreenContainer(props: any) {
   const t = getT();
 
   const _openCompany = () => dispatch(SelectCompanyActions.openCompany());
-  const changeCompanyRequest = (auth: any, company: any) =>
+  const changeCompanyRequest = (auth: authInfo, company: companyParamInfo) =>
     dispatch(UserActions.changeCompanyRequest(auth, company));
 
   const isTablet = deviceInfoModule.isTablet();

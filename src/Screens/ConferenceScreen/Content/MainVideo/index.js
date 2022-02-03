@@ -9,6 +9,7 @@ const mapStateToProps = (state, ownProps) => {
   const {
     local: { createdTime },
     screenShare: { isScreenShare },
+    user: { auth, loginType },
     root: { videoPolicy }
   } = state;
   const {
@@ -23,7 +24,9 @@ const mapStateToProps = (state, ownProps) => {
     videoType: videoTrack && videoTrack.videoType,
     createdTime,
     isScreenShare,
-    videoPolicy
+    videoPolicy,
+    auth,
+    loginType
   };
 };
 

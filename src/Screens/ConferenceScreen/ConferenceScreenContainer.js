@@ -316,7 +316,33 @@ class ConferenceScreenContainer extends React.Component {
         this.props.externalAPIScope
       );
       this.setState({ connection: true, selectedRoomName });
+      let roomInfo = auth.cno
+        ? await MeetApi.getMeetRoom(auth, roomName)
+        : await MeetApi.getMeetRoomNoCert(roomName);
+      let { start_datetime } = roomInfo.resultData;
+      let cnt = 0;
+      while (!start_datetime) {
+        roomInfo = auth.cno
+          ? await MeetApi.getMeetRoom(auth, roomName)
+          : await MeetApi.getMeetRoomNoCert(roomName);
+        start_datetime = roomInfo.resultData.start_datetime;
+        cnt = cnt + 1;
+        cnt > 80 &&
+          Alert.alert(
+            '네트연결 지연',
+            '네트연결 상태가 좋지 않습니다. 회의에 재입장 해주세요.',
+            [
+              {
+                text: '확인',
+                onPress: () => {
+                  this._handleConferenceClose();
+                }
+              }
+            ]
+          );
+      }
       setConferenceManager(this._conferenceManager);
+      setConferenceCreatedTime(start_datetime);
       setMainUserNotExist();
     }
   };

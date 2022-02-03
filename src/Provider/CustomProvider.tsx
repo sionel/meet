@@ -22,6 +22,7 @@ import { actionCreators as RootActions } from '@redux/root';
 import { actionCreators as DeployedActions } from '@redux/deployed';
 import deviceInfoModule from 'react-native-device-info';
 import * as RootNavigation from '@navigations/RootNavigation';
+import { isSuccess } from '@services/types';
 
 export default function CustomProvider(props: any) {
   const { children } = props;
@@ -177,28 +178,31 @@ export default function CustomProvider(props: any) {
       cno,
       HASH_KEY
     );
-    // console.log(checkResult);
-    if (checkResult.errors) {
-      if (checkResult.errors.code === 'E002') {
-        _setAlert({
-          type: 1,
-          title: t('renewal.alert_title_error'),
-          message: t('renewal.alert_text_duplicate_logout'),
-          onConfirm: () => {
-            _onLogout();
-            RootNavigation.navigateReset('LoginStack');
-          }
-        });
-      } else {
-        _setAlert({
-          type: 1,
-          title: t('renewal.alert_title_error'),
-          message: t('renewal.alert_text_network_problem_ocurred'),
-          onConfirm: () => {
-            _onLogout();
-            RootNavigation.navigateReset('LoginStack');
-          }
-        });
+
+    if (!isSuccess(checkResult)) {
+      const { errors } = checkResult;
+      if (errors) {
+        if (errors.code === 'E002') {
+          _setAlert({
+            type: 1,
+            title: t('renewal.alert_title_error'),
+            message: t('renewal.alert_text_duplicate_logout'),
+            onConfirm: () => {
+              _onLogout();
+              RootNavigation.navigateReset('LoginStack');
+            }
+          });
+        } else {
+          _setAlert({
+            type: 1,
+            title: t('renewal.alert_title_error'),
+            message: t('renewal.alert_text_network_problem_ocurred'),
+            onConfirm: () => {
+              _onLogout();
+              RootNavigation.navigateReset('LoginStack');
+            }
+          });
+        }
       }
     }
   };

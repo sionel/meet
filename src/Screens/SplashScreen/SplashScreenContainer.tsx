@@ -22,6 +22,8 @@ import { actionCreators as RecentsActions } from '@redux/recentsInvited';
 import { actionCreators as ConferenceActions } from '@redux/conference';
 import { actionCreators as RootActions } from '@redux/root';
 import { MeetNavigationProps } from '@navigations/RootNavigation';
+import { isSuccess } from '@services/types';
+import { errorType } from '@services/api/types';
 
 // const iswehagov = WEHAGO_ENV === 'WEHAGOV';
 
@@ -72,7 +74,7 @@ const SplashScreenContainer = ({
   const setAlert = (params: any) => dispatch(AlertAcions.setAlert(params));
   const eventLog = (event: any) => dispatch(UserActions.eventLog(event));
   const setVideoPolicy = (videoPolicy: string) =>
-  dispatch(RootActions.setVideoPolicy(videoPolicy));
+    dispatch(RootActions.setVideoPolicy(videoPolicy));
 
   //#endregion
 
@@ -93,13 +95,14 @@ const SplashScreenContainer = ({
     let t1 = Date.now();
 
     if (t1 > t0 + 20000) {
-      let timeError = true;
       Alert.alert('알림', '요청시간 초과오류', [
         {
           text: '확인',
           onPress: () => {
             navigation.reset({
-              routes: [{ name: loginType === 'wehago' ? 'InputLogin' : 'LoginStack' }]
+              routes: [
+                { name: loginType === 'wehago' ? 'InputLogin' : 'LoginStack' }
+              ]
             });
           }
         }
@@ -192,14 +195,8 @@ const SplashScreenContainer = ({
         true
       );
 
-      if (result.errors) {
-        _handleloginCheckError(result.errors);
-        from === 'this' && UserApi.logoutRequest(result);
-        onLogout();
-        navigation.reset({ routes: [{ name: 'LoginStack' }] });
-      } else {
+      if (result) {
         const isDeploy: boolean = await serviceCheck(result);
-
         if (isDeploy) {
           setVideoPolicy(loginType);
           navigation.reset({ routes: [{ name: 'MainStack' }] });
@@ -229,10 +226,11 @@ const SplashScreenContainer = ({
       room_name=123 // talk방 이름
     */
     // const m = getConferenceManager();
-    // console.log(m);
 
     if (!url) return;
     let result: any = querystringParser(url);
+    console.log(result);
+    
     // if(result.type === 'conference') {
     // 화상회의 요청인지 판별
     if (result.is_creater) {
@@ -256,14 +254,11 @@ const SplashScreenContainer = ({
           'deepLink',
           true
         );
-        if (info.errors) {
-          _handleloginCheckError(info.errors);
-          navigation.reset({ routes: [{ name: 'LoginStack' }] });
-        } else {
+
+        if (info) {
           const isDeploy: boolean = await serviceCheck(info);
           if (isDeploy) {
-            let videoPolicy = result.name === 'staffmanagment' ? 'nahago' : 'wehago';
-          setVideoPolicy(videoPolicy);
+            setVideoPolicy(loginType);
             navigation.reset({ routes: [{ name: 'MainStack' }] });
           } else {
             navigation.reset({ routes: [{ name: 'SelectCompany' }] });
@@ -274,8 +269,14 @@ const SplashScreenContainer = ({
           result.name === 'staffmanagment'
             ? '나하고에서 먼저 로그인 해주세요'
             : '비정상적인 접근입니다.';
-        Alert.alert(alertText);
-        navigation.reset({ routes: [{ name: 'LoginStack' }] });
+        Alert.alert('알림', alertText, [
+          {
+            text: '확인',
+            onPress: () => {
+              navigation.reset({ routes: [{ name: 'LoginStack' }] });
+            }
+          }
+        ]);
       }
     } else if (result.login_info === 'email') {
       //토근정보가 없을때
@@ -321,14 +322,26 @@ const SplashScreenContainer = ({
           ]
         });
       } else {
-        Alert.alert(t('비회원 접속'), t('참여코드를 입력해주시기 바랍니다.'));
-        navigation.reset({ routes: [{ name: 'LoginStack' }] });
+        Alert.alert(t('비회원 접속'), t('참여코드를 입력해주시기 바랍니다.'), [
+          {
+            text: '확인',
+            onPress: () => {
+              navigation.reset({ routes: [{ name: 'LoginStack' }] });
+            }
+          }
+        ]);
       }
     } else {
       if (!result.video_id) {
         onLogout();
-        Alert.alert(t('비정상적인 접근입니다.'));
-        navigation.reset({ routes: [{ name: 'LoginStack' }] });
+        Alert.alert(t('알림'), t('비정상적인 접근입니다.'), [
+          {
+            text: '확인',
+            onPress: () => {
+              navigation.reset({ routes: [{ name: 'LoginStack' }] });
+            }
+          }
+        ]);
       }
     }
   };
@@ -344,14 +357,6 @@ const SplashScreenContainer = ({
       // 서비스 배포여부 조회
       const isDeployWehagomeet = await ServiceCheckApi.serviceCheck(auth);
       const isDeploy = isDeployWehagomeet;
-
-      // 서비스 구매여부 조회
-      // const isDeployWebrtc = await ServiceCheckApi.serviceCheck(
-      //   auth,
-      //   'webrtc'  구매여부 확인
-      // );
-      // 'wehagomeet' 배포여부 확인
-      // || isDeployWebrtc;
       setPermission(isDeploy);
       return isDeploy;
     } else {
@@ -374,7 +379,8 @@ const SplashScreenContainer = ({
       cno,
       HASH_KEY
     );
-    if (checkResult.resultCode === 200) {
+
+    if (isSuccess(checkResult)) {
       const userData = {
         // login api data
         AUTH_A_TOKEN,
@@ -402,20 +408,24 @@ const SplashScreenContainer = ({
             )[0]
           : checkResult.resultData.employee_list[0], // last_access_company_no가 비어있는 상태로 올 수 있어서 null이 뜬다면 리스트중 첫번째 인덱스로 처리
         member_type: checkResult.resultData.member_type, // 0: 일반회원, 1: 개인회원
-        nickname: checkResult.nickname,
+        // nickname: checkResult.resultData.nickname, // 닉네임 api 따로 빼서 해야할거같음
         membership_code: checkResult.resultData.employee_list[0].membership_code
       };
 
       await onLogin(userData, from, flag);
       return userData;
     } else {
-      const result = checkResult.errors ? checkResult : { errors: checkResult };
-      eventLog(result);
-      return result;
+      console.log('error !');
+      const { errors } = checkResult;
+      eventLog(errors);
+      _handleloginCheckError(errors);
+      from === 'this' && UserApi.logoutRequest(auth);
+      onLogout();
+      navigation.reset({ routes: [{ name: 'LoginStack' }] });
     }
   };
 
-  const _handleloginCheckError = (errors: any) => {
+  const _handleloginCheckError = (errors: errorType) => {
     if (errors.code === 'E002') {
       setAlert({
         type: 1,
@@ -434,7 +444,7 @@ const SplashScreenContainer = ({
         title: t('renewal.alert_title_login_fail'),
         message: t('renewal.alert_text_no_right')
       });
-    } else if (errors.message === 'timeout') {
+    } else if (errors.message === '500') {
       setAlert({
         type: 1,
         title: t('renewal.alert_title_login_fail'),

@@ -20,18 +20,22 @@ class MainVideoContainer extends React.Component {
   }
 
   componentDidMount() {
-    const { videoPolicy } = this.props;
+    const { videoPolicy, loginType } = this.props;
     this._timer = setInterval(() => {
-      let time = Math.floor((Date.now() - this.props.createdTime) / 1000);
-      time > 0 && this.setState({ time });
-
-      if (videoPolicy === 'nahago' && time >= 3600) {
-        this.props.setAlert({
-          title: '회의 종료',
-          type: 1,
-          message: '회의시간 60분이 지나 회의가 종료됩니다.',
-          onConfirm: this.props.onClose
-        });
+      if (this.props.createdTime) {
+        let time = Math.floor((Date.now() - this.props.createdTime) / 1000);
+        time > 0 && this.setState({ time });
+        if (
+          (videoPolicy === 'nahago' || loginType === 'nahago') &&
+          time >= 3600
+        ) {
+          this.props.setAlert({
+            title: '회의 종료',
+            type: 1,
+            message: '회의시간이 60분 지나 회의가 종료됩니다.',
+            onConfirm: this.props.onClose
+          });
+        }
       }
       
     }, 500);

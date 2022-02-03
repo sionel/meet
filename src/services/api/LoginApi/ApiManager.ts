@@ -1,5 +1,17 @@
-export async function ApiManager(url, options, alert = true) {
-  const response = await Promise.race([
+import { Res } from "@services/types";
+
+type options = {
+  method: string;
+  headers: {};
+  body?: string;
+}
+
+export async function ApiManager<T>(
+  url: string,
+  options: options,
+  alert = true
+): Promise<Res<T>> {
+  const response: any = await Promise.race([
     fetch(url, options),
     new Promise((_, reject) => {
       setTimeout(() => {
@@ -9,6 +21,8 @@ export async function ApiManager(url, options, alert = true) {
     })
   ]);
   const responseJson = await response.json();
+  console.log(responseJson);
+  
   return responseJson;
 }
 
