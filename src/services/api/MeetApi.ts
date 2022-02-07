@@ -274,11 +274,10 @@ export default {
       }
     };
     const response = await Axios(url, data);
-
-    if (isSuccess(response)) {
+    if (!isSuccess(response)) {
+      console.warn('7.deleteConferenceRoom : ', response);
       return response;
     } else {
-      console.warn('7.deleteConferenceRoom : ', response);
       return response;
     }
   },
@@ -813,8 +812,8 @@ export default {
     const response = await Axios(url, data);
     if (isSuccess(response)) {
       return response;
-    } else {
-      if (response.errors.status === 404) {
+    } else { 
+      if (response.resultCode === 404) {
         return { resultData: { count: 0 } };
       } else {
         console.warn('???.checkMasterList : ', response);
