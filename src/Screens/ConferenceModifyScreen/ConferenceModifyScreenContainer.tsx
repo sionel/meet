@@ -20,6 +20,12 @@ import { getT } from '@utils/translateManager';
 import deviceInfoModule from 'react-native-device-info';
 import { wehagoDummyImageURL, wehagoMainURL } from '@utils/index';
 import { MainNavigationProps } from '@navigations/MainStack';
+import {
+  conference,
+  roomDetailData,
+  roomModifyParam
+} from '@services/api/types';
+import { isSuccess } from '@services/types';
 
 interface accessUserParam {
   type: 'portal_id' | 'email';
@@ -28,17 +34,6 @@ interface accessUserParam {
   user_name: string;
   cno: number;
   user_no: number;
-}
-
-interface roomInfoParam {
-  name: string;
-  is_public: boolean;
-  portal_id: string;
-  r_start_datetime: Date;
-  r_end_datetime: Date;
-  is_send_update_email: boolean;
-  invite_message: string;
-  error?: any;
 }
 
 interface userInfoParam {
@@ -51,21 +46,6 @@ interface userInfoParam {
   user_type: string;
   is_master: boolean;
   direction: 'LEFT' | 'RIGHT' | 'NONE';
-}
-
-interface roomModifyParam {
-  service_code: string;
-  name: string;
-  is_public: boolean;
-  is_reservation: boolean;
-  access_user: any[];
-  unaccess_user?: any[];
-  master?: any[];
-  unmaster?: any[];
-  is_send_updated_email: boolean;
-  invite_message: string;
-  start_date_time?: any;
-  end_date_time?: any;
 }
 
 type PartialAccessUserParam = Partial<accessUserParam>;
@@ -152,93 +132,100 @@ export default function ConferenceModfiyScreenContainer(props: any) {
   const isTablet = deviceInfoModule.isTablet() === true;
 
   const _getReservationInfos = async (roomId: string) => {
-    const reservationInfos: roomInfoParam = await MeetApi.getMeetRoom(
-      auth,
-      roomId
-    );
-    if (reservationInfos.error) {
-      console.log('error', reservationInfos.error);
+    const reservationResult = await MeetApi.getMeetRoom(auth, roomId);
+
+    if (isSuccess(reservationResult)) {
+      const { resultData: reservationInfos } = reservationResult;
+      if (reservationInfos.portal_id === auth.portal_id) setIsAuth(true);
+
+      let accessUser: any[] = [];
+      const getAccessUsersResult = await MeetApi.getAccessUsers(auth, roomId);
+
+      if (isSuccess(getAccessUsersResult)) {
+        accessUser = getAccessUsersResult.resultData;
+      }
+
+      const sortedAccessUserList: any[] = accessUser.sort(
+        (user: any, _user: any) => _user.is_master - user.is_master
+      );
+
+      const portalIdList = sortedAccessUserList
+        .map((user: any) => user.user)
+        .filter((user: any) => user);
+
+      const participantsResult = await MeetApi.getUserInfoList(
+        auth,
+        portalIdList
+      );
+      let participants: any[];
+      if (isSuccess(participantsResult)) {
+        participants = participantsResult.resultData;
+      } else {
+        console.log('error', participantsResult.errors);
+      }
+
+      const sortedPortalIdList: any[] = portalIdList.map((id: any) => {
+        const item =
+          participants.find((e: any) => e.portal_id === id) ||
+          sortedAccessUserList.find(e => e.user === id);
+        return item;
+      });
+
+      const reservationUserInfos: PartialUserInfoParam[] = await Promise.all(
+        sortedPortalIdList.map(async (user, i) => {
+          const pathLng: number = user.full_path_list.length;
+          const data: PartialUserInfoParam = {
+            portal_id: user.portal_id,
+            rank_name: user.rank_name,
+            user_no: user.user_no,
+            user_name: user.user_name ? user.user_name : user.user,
+            profile_url: user.profile_url
+              ? wehagoMainURL + user.profile_url
+              : wehagoDummyImageURL,
+            full_path: user.user_no
+              ? user.full_path_list[pathLng - 1].path
+              : user.user_name !== null
+              ? user.user
+              : '',
+            user_type: user.user_type === 2 ? 'ext' : 'org',
+            is_master: sortedAccessUserList[i].is_master,
+            direction: 'NONE'
+          };
+          return data;
+        })
+      );
+
+      setSelectedEmployee({ member: reservationUserInfos, group: {} });
+
+      const {
+        name,
+        is_public,
+        r_start_datetime,
+        r_end_datetime,
+        is_send_update_email,
+        invite_message
+      } = reservationInfos;
+
+      const startTime = getDate(moment(r_start_datetime).toDate());
+      const endTime = getDate(moment(r_end_datetime).toDate());
+
+      setStartTime({
+        date: startTime.date,
+        time: startTime.time,
+        current: startTime.current
+      });
+      setEndTime({
+        date: endTime.date,
+        time: endTime.time,
+        current: endTime.current
+      });
+      setIsPublic(is_public);
+      setSwitchDelAlram(is_send_update_email);
+      setRoomName(name);
+      setSendMessage(invite_message ? invite_message : '');
+    } else {
+      console.warn('erros : ', reservationResult.errors);
     }
-
-    if (reservationInfos.portal_id === auth.portal_id) setIsAuth(true);
-
-    const accessUser = await MeetApi.getAccessUsers(auth, roomId);
-    if (accessUser.error) {
-      console.log('error', accessUser.error);
-    }
-
-    const sortedAccessUserList: any[] = accessUser.sort(
-      (user: any, _user: any) => _user.is_master - user.is_master
-    );
-
-    const portalIdList = sortedAccessUserList
-      .map((user: any) => user.user)
-      .filter((user: any) => user);
-
-    const participants = await MeetApi.getUserInfoList(auth, portalIdList);
-    if (participants.error) {
-      console.log('error', participants.error);
-    }
-
-    const sortedPortalIdList: any[] = portalIdList.map((id: any) => {
-      const item =
-        participants.find((e: any) => e.portal_id === id) ||
-        sortedAccessUserList.find(e => e.user === id);
-      return item;
-    });
-
-    const reservationUserInfos: PartialUserInfoParam[] = await Promise.all(
-      sortedPortalIdList.map(async (user, i) => {
-        const pathLng: number = user.full_path_list.length;
-        const data: PartialUserInfoParam = {
-          portal_id: user.portal_id,
-          rank_name: user.rank_name,
-          user_no: user.user_no,
-          user_name: user.user_name ? user.user_name : user.user,
-          profile_url: user.profile_url
-            ? wehagoMainURL + user.profile_url
-            : wehagoDummyImageURL,
-          full_path: user.user_no
-            ? user.full_path_list[pathLng - 1].path
-            : user.user_name !== null
-            ? user.user
-            : '',
-          user_type: user.user_type === 2 ? 'ext' : 'org',
-          is_master: sortedAccessUserList[i].is_master,
-          direction: 'NONE'
-        };
-        return data;
-      })
-    );
-
-    setSelectedEmployee({ member: reservationUserInfos, group: {} });
-
-    const {
-      name,
-      is_public,
-      r_start_datetime,
-      r_end_datetime,
-      is_send_update_email,
-      invite_message
-    } = reservationInfos;
-
-    const startTime = getDate(moment(r_start_datetime).toDate());
-    const endTime = getDate(moment(r_end_datetime).toDate());
-
-    setStartTime({
-      date: startTime.date,
-      time: startTime.time,
-      current: startTime.current
-    });
-    setEndTime({
-      date: endTime.date,
-      time: endTime.time,
-      current: endTime.current
-    });
-    setIsPublic(is_public);
-    setSwitchDelAlram(is_send_update_email);
-    setRoomName(name);
-    setSendMessage(invite_message ? invite_message : '');
   };
 
   const getAllEmployee = async (signal: AbortSignal) => {
@@ -368,10 +355,10 @@ export default function ConferenceModfiyScreenContainer(props: any) {
 
         const result = await MeetApi.updateMeetRoom(auth, roomId, params);
         setIsLoading(false);
-        if (result) {
+        if (isSuccess(result)) {
           onHandleBack();
-        } else if (result.error) {
-          console.log('error : ', result.error);
+        } else {
+          console.warn('3.updateMeetRoom : ', result.errors);
         }
       }
     }
@@ -608,14 +595,19 @@ export default function ConferenceModfiyScreenContainer(props: any) {
 
   const getRoomNames = async () => {
     const roomNames = MeetApi.getMeetRoomsList(auth).then(async result => {
-      const going: any[] = result;
-      let nameList: string[] = [];
-      await Promise.all(
-        going.map(async conference => {
-          nameList.push(conference.name);
-        })
-      );
-      return nameList;
+      if (isSuccess(result)) {
+        const going: conference[] = result.resultData;
+        let nameList: string[] = [];
+        await Promise.all(
+          going.map(async conference => {
+            nameList.push(conference.name);
+          })
+        );
+        return nameList;
+      } else {
+        //error
+        return [];
+      }
     });
 
     setNameList(await roomNames);

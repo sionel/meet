@@ -19,6 +19,7 @@ import { getT } from '@utils/translateManager';
 import { wehagoDummyImageURL, wehagoMainURL } from '@utils/index';
 
 import { MainNavigationProps } from '@navigations/MainStack';
+import { isSuccess } from '@services/types';
 
 export default function CreateScreenContainer(props: any) {
   const initSection: section = {
@@ -37,9 +38,9 @@ export default function CreateScreenContainer(props: any) {
   const [suim, setSuim] = useState<section>(initSection);
   const [loaded, setLoaded] = useState(false);
   const [indicatorFlag, setIndicatorFlag] = useState(false);
-  const [wetalkList, setWetalkList] = useState([]);
+  const [wetalkList, setWetalkList] = useState<any[]>([]);
   const [keyword, setKeyword] = useState('');
-  const [searchList, setSearchList] = useState([]);
+  const [searchList, setSearchList] = useState<any[]>([]);
 
   const { auth } = useSelector((state: RootState) => {
     const { auth } = state.user;
@@ -191,7 +192,16 @@ export default function CreateScreenContainer(props: any) {
   };
 
   const _getWetalkList = async () => {
-    const { video_room_list } = await WetalkApi.getWetalkList(auth);
+    let video_room_list: any[] = [];
+    const getWetalkList = await WetalkApi.getWetalkList(auth);
+    
+    if(isSuccess(getWetalkList)) {
+      video_room_list = getWetalkList.resultData.video_room_list;
+    } else {
+      //error
+      video_room_list = [];
+    }
+    
     setWetalkList(video_room_list);
   };
 
@@ -211,7 +221,7 @@ export default function CreateScreenContainer(props: any) {
     const company_code = employee_list.filter(
       (e: any) => e.company_no == last_access_company_no
     )[0].company_code;
-    const bodyData = [
+    const bodyData = {
       room_id, // 방 id
       portal_id, // 유저아이디
       user_name, // 유저이름
@@ -221,9 +231,10 @@ export default function CreateScreenContainer(props: any) {
       AUTH_R_TOKEN, // 토큰
       HASH_KEY
       // null
-    ];
-    const createResult = await ConferenceApi.create(...bodyData);
-    if (createResult.resultCode === 200) {
+    };
+    const createResult = await ConferenceApi.create(bodyData);
+
+    if (isSuccess(createResult)) {
       // 생성완료 메시지 보내기
       const sendWetalkResult = await ConferenceApi.sendWetalk(
         room_id,
@@ -236,7 +247,7 @@ export default function CreateScreenContainer(props: any) {
       );
 
       const { mobile_key: videoRoomId, room_title } =
-        sendWetalkResult.resultData.chatList[0];
+        isSuccess(sendWetalkResult) && sendWetalkResult.resultData.chatList[0];
 
       // 토큰받고
       // const roomToken = (await MeetApi.getMeetRoomToken(auth, videoRoomId))
@@ -249,28 +260,29 @@ export default function CreateScreenContainer(props: any) {
         id: videoRoomId,
         selectedRoomName: room_title
       });
-
-    } else if (createResult.resultCode === 400) {
-      setIndicatorFlag(false);
-
-      const message = createResult.resultMsg;
-      const title = t('alert_title_fail');
-      const type = 1;
-      setAlert({ message, title, type });
-
-      // 이미 화상채팅방이 생성되어 있습니다. 대화방당 1개의 화상채팅방을 제공합니다
-    } else if (createResult.errors && createResult.errors.code === 'E002') {
-      setIndicatorFlag(false);
-      const message = t('alert_text_failcreate');
-      const title = t('alert_title_fail');
-      const type = 1;
-      setAlert({ message, title, type });
     } else {
-      setIndicatorFlag(false);
-      const message = t('alert_text_failcreate');
-      const title = t('alert_title_fail');
-      const type = 1;
-      setAlert({ message, title, type });
+      if (createResult.resultCode === 400) {
+        setIndicatorFlag(false);
+
+        const { message } = createResult.errors;
+        const title = t('alert_title_fail');
+        const type = 1;
+        setAlert({ message, title, type });
+
+        // 이미 화상채팅방이 생성되어 있습니다. 대화방당 1개의 화상채팅방을 제공합니다
+      } else if (createResult.errors && createResult.errors.code === 'E002') {
+        setIndicatorFlag(false);
+        const message = t('alert_text_failcreate');
+        const title = t('alert_title_fail');
+        const type = 1;
+        setAlert({ message, title, type });
+      } else {
+        setIndicatorFlag(false);
+        const message = t('alert_text_failcreate');
+        const title = t('alert_title_fail');
+        const type = 1;
+        setAlert({ message, title, type });
+      }
     }
   };
   return (

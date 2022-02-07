@@ -21,6 +21,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/configureStore';
 
 import { MeetNavigationProps } from '@navigations/RootNavigation';
+import { isSuccess } from '@services/types';
 
 export default function ConferenceStateContainer(props: any) {
   const { width, height } = Dimensions.get('window');
@@ -73,15 +74,19 @@ export default function ConferenceStateContainer(props: any) {
 
   const _getConferenceState = async () => {
     //email 접속종료후 roomId가 undefined여서 오류생겨서 let으로 변수 access선언
+    const noCertResult = await MeetApi.getMeetRoomNoCert(id);
     let access;
     let conferenceState;
-    access = await MeetApi.getMeetRoomNoCert(id);
+    if (isSuccess(noCertResult)) {
+      access = noCertResult.resultData;
+    }
+
     if (!access) {
       // 종료된 방 또는 문제가 있을때
       conferenceState = 'deleted';
     } else {
       setRoomName(access.name);
-      
+
       if (access.r_start_datetime) {
         // 예약방
         const now = new Date().getTime();
@@ -131,9 +136,14 @@ export default function ConferenceStateContainer(props: any) {
       // 시작시간 종료시간 컨버팅 하고
       // 페이지 이동
       const { name, r_start_datetime, r_end_datetime, is_public } = access;
+      let accessUser: any[] = [];
+      const getAccessUsersResult = await MeetApi.getAccessUsers(auth, id);
 
+      if (isSuccess(getAccessUsersResult)) {
+        accessUser = getAccessUsersResult.resultData;
+      }
       if (Object.keys(auth).length > 0) {
-        setAccessUser((await MeetApi.getAccessUsers(auth, id)).resultData);
+        setAccessUser(accessUser);
       }
 
       setName(name);
@@ -166,8 +176,11 @@ export default function ConferenceStateContainer(props: any) {
 
     // 50명 체크는 여기서 하되 토큰받는 작업은 setting 페이지에서 함
     let count = 0;
-
-    count = await MeetApi.getParticipantCount(id);
+    const getParticipantCount = await MeetApi.getParticipantCount(id);
+    if(isSuccess(getParticipantCount)) {
+      count = getParticipantCount.resultData;
+    }
+    
 
     // 최대 참여인원 제한 (50명)
     if (count >= 50) {

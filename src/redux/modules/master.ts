@@ -4,6 +4,7 @@ import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import MeetApi from '@services/api/MeetApi';
 import { RootState } from '../configureStore';
+import { isSuccess } from '@services/types';
 
 //#region Action.type
 
@@ -71,13 +72,17 @@ function checkMasterList(token: string): ThunkAction<void, RootState, unknown> {
   
   return async dispatch => {
     const result = await MeetApi.getMasterList(token);
-    if (!result) {
+    let masterList: any[] = [];
+    if (isSuccess(result)) {
+      masterList = result.resultData.reduce((a: any[], b:any) => {
+        a.push(b.user);
+        return a;
+      }, []);
+    } else {
+
     }
 
-    const masterList = result.resultData.reduce((a: any[], b:any) => {
-      a.push(b.user);
-      return a;
-    }, []);
+    
     dispatch({
       type: UPDATE_MASTER_LIST,
       masterList

@@ -78,6 +78,77 @@ export interface companyInfo {
 export interface errorType {
     code: string;
     message: string;
-    status?: string;
+    status?: any;
 }
 
+export interface createApiParmas {
+  service_code: string;
+  name: string;
+  is_public: boolean;
+  access_user: any;
+  is_send_updated_email: boolean;
+  is_reservation: boolean;
+  call_type: string;
+  invite_message: string;
+  start_date_time?: any;
+  end_date_time?: any;
+} 
+
+export interface roomDetailData {
+  name: string;
+  is_public: boolean;
+  portal_id: string;
+  r_start_datetime: number;
+  r_end_datetime: number;
+  is_send_update_email: boolean;
+  invite_message: string;
+  error?: any;
+}
+export interface roomModifyParam {
+  service_code: string;
+  name: string;
+  is_public: boolean;
+  is_reservation: boolean;
+  access_user: any[];
+  unaccess_user?: any[];
+  master?: any[];
+  unmaster?: any[];
+  is_send_updated_email: boolean;
+  invite_message: string;
+  start_date_time?: any;
+  end_date_time?: any;
+}
+
+export type conference = {
+  room_id: string;
+  name: string;
+  portal_id: string;
+  cno: number;
+  is_public: boolean;
+  connecting_user_count: any;
+  register_user_count: any;
+  connecting_user: any[];
+  access_user: any[];
+  created_at: any;
+  start_date_time: any;
+  end_date_time: any;
+  r_start_date_time: any;
+  r_end_date_time: any;
+  communication_key: any;
+  schedule_key: any;
+  calendar_subject: any;
+  calendar_color: any;
+  calendar_no: any;
+  is_started: boolean;
+};
+
+export type conferenceCreateParams = {
+  room_id: string; // 방 id
+  portal_id: string; // 유저아이디
+  user_name: string; // 유저이름
+  last_access_company_no: string; // 회사번호
+  company_code: string; // 회사코드
+  AUTH_A_TOKEN: string; // 토큰
+  AUTH_R_TOKEN: string; // 토큰
+  HASH_KEY: string;
+};

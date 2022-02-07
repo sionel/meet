@@ -13,6 +13,7 @@ import { RootState } from '../../redux/configureStore';
 import { MeetNavigationProps } from '@navigations/RootNavigation';
 
 import { MeetApi } from '@services/index';
+import { isSuccess } from '@services/types';
 
 export default function SettingScreenContainer(props: any) {
   const [name, setName] = useState('');
@@ -52,7 +53,7 @@ export default function SettingScreenContainer(props: any) {
     if (navigation.canGoBack()) navigation.goBack();
     else {
       // 직접 URL주소를 통해서 들어왔을때 처리
-      if(auth.user_no) {
+      if (auth.user_no) {
         navigation.reset({ routes: [{ name: 'MainStack' }] });
       } else {
         navigation.reset({ routes: [{ name: 'LoginStack' }] });
@@ -107,7 +108,10 @@ export default function SettingScreenContainer(props: any) {
     if (nameField) {
       tmpName = name;
       if (!tmpName) {
-        tmpName = (await MeetApi.getExternalUserId(params.id)).resultData;
+        const getExternalUserId = await MeetApi.getExternalUserId(params.id);
+        if(isSuccess(getExternalUserId)) {
+          tmpName = getExternalUserId.resultData;
+        }
       }
     } else {
       tmpName = webAuth?.user_name ? webAuth?.user_name : auth.user_name;
@@ -121,21 +125,30 @@ export default function SettingScreenContainer(props: any) {
     const user = randomstring.substr(0, 8);
 
     if (params?.accessType === 'email') {
-      roomToken = (
-        await MeetApi.getMeetRoomTokenEmail(params.id, params.emailToken, name)
-      ).resultData;
+      const getMeetRoomTokenEmail = await MeetApi.getMeetRoomTokenEmail(
+        params.id,
+        params.emailToken,
+        name
+      );
+      if (isSuccess(getMeetRoomTokenEmail)) {
+        roomToken = getMeetRoomTokenEmail.resultData;
+      }
     } else if (params?.accessType === 'joincode') {
-      roomToken = (
-        await MeetApi.getMeetRoomTokenJoincode(
-          params.id,
-          params.joincode,
-          tmpName,
-          user
-        )
-      ).resultData;
+      const getMeetRoomTokenJoincode = await MeetApi.getMeetRoomTokenJoincode(
+        params.id,
+        params.joincode,
+        tmpName,
+        user
+      );
+      if (isSuccess(getMeetRoomTokenJoincode)) {
+        roomToken = getMeetRoomTokenJoincode.resultData;
+      }
     } else {
       // 토큰받고
-      roomToken = (await MeetApi.getMeetRoomToken(auth, params.id)).resultData;
+      const getMeetRoomToken = await MeetApi.getMeetRoomToken(auth, params.id);
+      if (isSuccess(getMeetRoomToken)) {
+        roomToken = getMeetRoomToken.resultData;
+      }
     }
 
     if (roomToken === '접근금지') {

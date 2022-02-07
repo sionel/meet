@@ -8,13 +8,26 @@ import {
   serialize,
   _createSignature
 } from '@utils/index';
+import axios from 'axios';
 
 import FetchCancel from 'react-native-cancelable-fetch';
 
+interface authDataType {
+  AUTH_A_TOKEN: string;
+  AUTH_R_TOKEN: string;
+  HASH_KEY: string;
+  portalID: string;
+  last_access_company_no: string;
+}
 /**
  * getWedriveToken
  */
-const getToken = async (a_token, r_token, HASH_KEY, portalID) => {
+const getToken = async (
+  a_token: string,
+  r_token: string,
+  HASH_KEY: string,
+  portalID: string
+) => {
   try {
     const url = `${wehagoBaseURL}/WeDriveStorage/services/login`;
     const headers = securityRequest(a_token, r_token, url, HASH_KEY);
@@ -46,7 +59,7 @@ const getToken = async (a_token, r_token, HASH_KEY, portalID) => {
 /**
  * wedrive file list 조회
  */
-const getList = async (authData, TokenID) => {
+const getList = async (authData:authDataType, TokenID:string) => {
   try {
     const url = `${wehagoBaseURL}/WeDriveStorage/services/login`;
     const headers = securityRequest(
@@ -82,7 +95,7 @@ const getList = async (authData, TokenID) => {
 /**
  * wedrive file 상세정보
  */
-const getFileInfo = async (authData, fileInfo, isFullPreview = 'false') => {
+const getFileInfo = async (authData:authDataType, fileInfo:any, isFullPreview = 'false') => {
   try {
     const url = `${wehagoBaseURL}/ObjectStorageCommon/services/common`;
     const headers = securityRequest(
@@ -106,10 +119,10 @@ const getFileInfo = async (authData, fileInfo, isFullPreview = 'false') => {
         isFullPreview
       })
     };
-
+    
     return FetchCancel(url, data, 'getFileInfo')
-      .then(response => response.json())
-      .then(responseJson => {
+      .then((response:Response) => response.json())
+      .then((responseJson:any) => {
         if (
           responseJson.resultList &&
           responseJson.resultList[0].isFullPreview === false
@@ -123,7 +136,7 @@ const getFileInfo = async (authData, fileInfo, isFullPreview = 'false') => {
           // ) {
           //   // 썸네일 생성이 실패한 경우 재생성 요청 (현재 API 미개발 상태)
           //   console.log(2, fileInfo, responseJson);
-          //   return setRemakeThumbNail(authData, fileInfo);
+          //   return setRemakeThumbNail(authData:authDataType, fileInfo);
           // return responseJson;
         } else return responseJson;
       });
@@ -138,66 +151,66 @@ const getFileInfo = async (authData, fileInfo, isFullPreview = 'false') => {
 };
 
 // (현재 API 미개발 상태)
-const setRemakeThumbNail = async (authData, fileInfo) => {
-  try {
-    const url = `${wehagoBaseURL}/ObjectStorageCommon/services/login`;
-    const headers = securityRequest(
-      authData.AUTH_A_TOKEN,
-      authData.AUTH_R_TOKEN,
-      url,
-      authData.HASH_KEY
-    );
-    const bodyData = {
-      fileName: fileInfo.FileName,
-      bucketName: 'undefined',
-      ext: fileInfo.Ext,
-      cno: fileInfo.cno,
-      thumbNailPath: '',
-      isWedrive: true,
-      isConvert: true
-      // ...fileInfo,
-      // BucketType: 'C',
-      // BucketName: 'undefined',
-      // ServiceKey: '',
-      // ServiceCode: 'wedrive',
-      // cno: fileInfo.cno,
-      // target_cno: fileInfo.cno,
-      // FileName: fileInfo.FileName,
-      // Ext: fileInfo.Ext,
-      // TokenID: fileInfo.TokenID, // wedrive token
-      // isWedrive: true,
-      // MakeThumbNailType: 'ml'
-    };
-    const data = {
-      method: 'POST',
-      headers: {
-        ...headers,
-        // Accept: 'application/json',
-        'Content-Type': 'application/json',
-        method: 'setRemakeThumbNail',
-        service: 'thumbImageService'
-      },
-      body: serialize(bodyData)
-    };
-    console.log('bodyData', bodyData, data);
+// const setRemakeThumbNail = async (authData:authDataType, fileInfo:any) => {
+//   try {
+//     const url = `${wehagoBaseURL}/ObjectStorageCommon/services/login`;
+//     const headers = securityRequest(
+//       authData.AUTH_A_TOKEN,
+//       authData.AUTH_R_TOKEN,
+//       url,
+//       authData.HASH_KEY
+//     );
+//     const bodyData = {
+//       fileName: fileInfo.FileName,
+//       bucketName: 'undefined',
+//       ext: fileInfo.Ext,
+//       cno: fileInfo.cno,
+//       thumbNailPath: '',
+//       isWedrive: true,
+//       isConvert: true
+//       // ...fileInfo,
+//       // BucketType: 'C',
+//       // BucketName: 'undefined',
+//       // ServiceKey: '',
+//       // ServiceCode: 'wedrive',
+//       // cno: fileInfo.cno,
+//       // target_cno: fileInfo.cno,
+//       // FileName: fileInfo.FileName,
+//       // Ext: fileInfo.Ext,
+//       // TokenID: fileInfo.TokenID, // wedrive token
+//       // isWedrive: true,
+//       // MakeThumbNailType: 'ml'
+//     };
+//     const data = {
+//       method: 'POST',
+//       headers: {
+//         ...headers,
+//         // Accept: 'application/json',
+//         'Content-Type': 'application/json',
+//         method: 'setRemakeThumbNail',
+//         service: 'thumbImageService'
+//       },
+//       body: serialize(bodyData)
+//     };
+//     console.log('bodyData', bodyData, data);
 
-    return FetchCancel(url, data, 'getFileInfo')
-      .then(response => response.json())
-      .then(responseJson => {
-        console.log('responseJson11', responseJson);
-        alert(responseJson.serverMsg);
-        return responseJson;
-      });
-  } catch (err) {
-    console.warn(err);
-    return err;
-  }
-};
+//     return FetchCancel(url, data, 'getFileInfo')
+//       .then(response => response.json())
+//       .then(responseJson => {
+//         console.log('responseJson11', responseJson);
+//         alert(responseJson.serverMsg);
+//         return responseJson;
+//       });
+//   } catch (err) {
+//     console.warn(err);
+//     return err;
+//   }
+// };
 
 /**
  * wedrive directory 상세정보
  */
-const getDirectoryInfo = async (authData, directory) => {
+const getDirectoryInfo = async (authData:authDataType, directory:any) => {
   try {
     const url = `${wehagoBaseURL}/WeDriveStorage/services/login`;
     const headers = securityRequest(

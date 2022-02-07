@@ -9,7 +9,7 @@
 //   ]);
 // }
 import { Res } from '@services/types';
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 
 type options = {
   method: string;

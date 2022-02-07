@@ -16,6 +16,7 @@ import { getT } from '@utils/translateManager';
 import deviceInfoModule from 'react-native-device-info';
 import { LoginNavigationProps } from '@navigations/LoginStack';
 import { isSuccess } from '@services/types';
+import { apiAuthInfo } from '@services/api/types';
 
 const LoginInputContainer = ({
   navigation
@@ -70,7 +71,7 @@ const LoginInputContainer = ({
   // const setAuth = (auth: any) => dispatch(UserActions.setAuth(auth));
   //
 
-  let _serviceCode: string;
+  let _serviceCode: 'wehagomeet' | 'meet';
   _serviceCode = Platform.OS === 'ios' ? 'wehagomeet' : 'meet';
 
   const t = getT();
@@ -83,10 +84,10 @@ const LoginInputContainer = ({
     }
   }, [auth]);
 
-  const _handleCheckService = async (auth: any) => {
+  const _handleCheckService = async (auth: apiAuthInfo) => {
     const statusCheck = await ServiceCheckApi.companyStatusCheck(
       auth,
-      auth.last_comapny
+      auth.last_company
     );
     // 이상이 없는 회사일 경우 로그인 정상 진행
     if (statusCheck && statusCheck.code === 200) {
@@ -107,7 +108,7 @@ const LoginInputContainer = ({
       setAlertVisible({
         visible: true,
         title: t('renewal.alert_title_notion'),
-        description: statusCheck.message,
+        description: statusCheck.message ? statusCheck.message : '',
         onClose,
         actions: [
           {
@@ -166,6 +167,7 @@ const LoginInputContainer = ({
       captcha,
       access_pass
     );
+    
     const tempPw = password.slice();
     setLogging(false);
     setPassword('');
@@ -220,89 +222,93 @@ const LoginInputContainer = ({
       // }
 
       // 로그인 성공 시
+      // if (isSuccess(getAuth)) {
       const auth = getAuth.resultData;
       _loginApiRequest(auth);
+      // }
     } else {
       // 로그인 실패
       captcha && setCaptcha(_getTransactionId());
-      if (getAuth.resultCode === 401) {
-        captcha && setErrorMsg(getAuth.resultMsg);
-        const onClose = () => {
+      if (!isSuccess(getAuth)) {
+        if (getAuth.resultCode === 401) {
+          captcha && setErrorMsg(getAuth.errors.message);
+          const onClose = () => {
+            _resetAlert();
+          };
           _resetAlert();
-        };
-        _resetAlert();
-        setAlertVisible({
-          visible: true,
-          title: t('renewal.alert_title_login_fail'),
-          description: t('renewal.alert_text_incorrect_id'),
-          onClose,
-          actions: [
-            {
-              name: t('renewal.alert_button_confirm'),
-              action: onClose
-            }
-          ]
-        });
+          setAlertVisible({
+            visible: true,
+            title: t('renewal.alert_title_login_fail'),
+            description: t('renewal.alert_text_incorrect_id'),
+            onClose,
+            actions: [
+              {
+                name: t('renewal.alert_button_confirm'),
+                action: onClose
+              }
+            ]
+          });
 
-        setLoginFailed(true);
-      } else if (getAuth.resultCode === 403) {
-        setLoginFailed(true);
-        setCaptcha(_getTransactionId());
-        const onClose = () => {
+          setLoginFailed(true);
+        } else if (getAuth.resultCode === 403) {
+          setLoginFailed(true);
+          setCaptcha(_getTransactionId());
+          const onClose = () => {
+            _resetAlert();
+          };
           _resetAlert();
-        };
-        _resetAlert();
-        setAlertVisible({
-          visible: true,
-          title: t('renewal.alert_title_login_fail'),
-          description: t('renewal.alert_text_five'),
-          onClose,
-          actions: [
-            {
-              name: t('renewal.alert_button_confirm'),
-              action: onClose
-            }
-          ]
-        });
-      } else if (getAuth.resultCode === 406) {
-        const onClose = () => {
+          setAlertVisible({
+            visible: true,
+            title: t('renewal.alert_title_login_fail'),
+            description: t('renewal.alert_text_five'),
+            onClose,
+            actions: [
+              {
+                name: t('renewal.alert_button_confirm'),
+                action: onClose
+              }
+            ]
+          });
+        } else if (getAuth.resultCode === 406) {
+          const onClose = () => {
+            _resetAlert();
+          };
           _resetAlert();
-        };
-        _resetAlert();
-        setAlertVisible({
-          visible: true,
-          title: t('renewal.alert_title_limit'),
-          description: t('renewal.alert_text_unable'),
-          onClose,
-          actions: [
-            {
-              name: t('renewal.alert_button_confirm'),
-              action: onClose
-            }
-          ]
-        });
-      } else {
-        const onClose = () => {
+          setAlertVisible({
+            visible: true,
+            title: t('renewal.alert_title_limit'),
+            description: t('renewal.alert_text_unable'),
+            onClose,
+            actions: [
+              {
+                name: t('renewal.alert_button_confirm'),
+                action: onClose
+              }
+            ]
+          });
+        } else {
+          const onClose = () => {
+            _resetAlert();
+          };
           _resetAlert();
-        };
-        _resetAlert();
-        setAlertVisible({
-          visible: true,
-          title: t('renewal.alert_title_login_fail'),
-          description: t('renewal.alert_text_login_fail'),
-          onClose,
-          actions: [
-            {
-              name: t('renewal.alert_button_confirm'),
-              action: onClose
-            }
-          ]
-        });
+          setAlertVisible({
+            visible: true,
+            title: t('renewal.alert_title_login_fail'),
+            description: t('renewal.alert_text_login_fail'),
+            onClose,
+            actions: [
+              {
+                name: t('renewal.alert_button_confirm'),
+                action: onClose
+              }
+            ]
+          });
+        }
       }
     }
   };
 
-  const _loginApiRequest = async (auth: any) => {
+  const _loginApiRequest = async (auth: apiAuthInfo) => {
     const result = await _loginCheckRequest(
       auth.AUTH_A_TOKEN,
       auth.AUTH_R_TOKEN,
@@ -310,7 +316,8 @@ const LoginInputContainer = ({
       auth.HASH_KEY,
       'this'
     );
-    if (result.errors) {
+
+    if (!isSuccess(result)) {
       if (result.errors.code === 'E002') {
         const onClose = () => {
           _resetAlert();
@@ -451,9 +458,8 @@ const LoginInputContainer = ({
       login(userData, from, check);
       return checkResult;
     } else {
-      const result = checkResult.errors ? checkResult : { errors: checkResult };
-      eventLog(result);
-      return result;
+      eventLog(checkResult);
+      return checkResult;
     }
   };
 

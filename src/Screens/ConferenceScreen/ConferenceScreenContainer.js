@@ -237,7 +237,8 @@ class ConferenceScreenContainer extends React.Component {
       setToastMessage,
       setMainUserNotExist,
       isLogin,
-      setIsConference
+      setIsConference,
+      setConferenceCreatedTime
     } = this.props;
 
     const {

@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import deviceInfoModule from 'react-native-device-info';
 import { RootState } from '../../redux/configureStore';
 import { LoginNavigationProps } from '@navigations/LoginStack';
+import { isSuccess } from '@services/types';
 
 const LoginScreenContainer = ({
   navigation
@@ -61,24 +62,32 @@ const LoginScreenContainer = ({
   const _goJoincode = async (joincode: string) => {
     // V 고려해야할부분
     setLogging(true);
-    const resultData = await MeetApi.searchJoincode(joincode);
+    const searchJoincode = await MeetApi.searchJoincode(joincode);
+    let result: any;
 
-    if (!resultData) {
-      setInputcodeErr(true);
-      setFocusingNum(0);
-    } else if (resultData.code === 'E00001') {
-      setFocusingNum(0);
-      setInputcodeErr(true);
+    if (isSuccess(searchJoincode)) {
+      result = searchJoincode.resultData;
+      if (result.code === 'E00001') {
+        setFocusingNum(0);
+        setInputcodeErr(true);
+        return;
+      }
+      const codeResult = await MeetApi.getMeetRoomNoCert(result.room);
+      if (isSuccess(codeResult)) {
+        const { name } = codeResult.resultData;
+        navigation.navigate('ConferenceStateView', {
+          id: result.room,
+          accessType: 'joincode',
+          joincode: joincode,
+          selectedRoomName: name
+        });
+      } else {
+        //error
+      }
     } else {
-      const {name} = await MeetApi.getMeetRoomNoCert(resultData.room);      
-      navigation.navigate('ConferenceStateView', {
-        accessType: 'joincode',
-        id: resultData.room,
-        joincode: joincode,
-        selectedRoomName: name
-      });
+      setFocusingNum(0);
+      setInputcodeErr(true);
     }
-    // setLogging(true);
   };
 
   //참여코드 포커스
@@ -114,7 +123,7 @@ const LoginScreenContainer = ({
     Linking.openURL(requestUrl).catch(err => {
       Alert.alert('나하고 앱 호출을 실패하였습니다.');
     });
-  }
+  };
 
   return (
     <LoginScreenPresenter

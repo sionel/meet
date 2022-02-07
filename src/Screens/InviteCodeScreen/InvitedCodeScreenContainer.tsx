@@ -10,6 +10,7 @@ import deviceInfoModule from 'react-native-device-info';
 import { MeetApi } from '@services/index';
 
 import InvitedCodeScreenPresenter from './InvitedCodeScreenPresenter';
+import { isSuccess } from '@services/types';
 
 const InvitedCodeScreenContainer = ({
   navigation,
@@ -58,23 +59,31 @@ const InvitedCodeScreenContainer = ({
   const _goJoincode = async (joincode: string) => {
     // V 고려해야할부분
     setLogging(true);
-    const result = await MeetApi.searchJoincode(joincode);
+    const searchJoincode = await MeetApi.searchJoincode(joincode);
+    let result: any;
 
-    if (!result) {
-      setInputcodeErr(true);
-      setFocusingNum(0);
-    } else if (result.code === 'E00001') {
-      setFocusingNum(0);
-      setInputcodeErr(true);
+    if (isSuccess(searchJoincode)) {
+      result = searchJoincode.resultData;
+      if (result.code === 'E00001') {
+        setFocusingNum(0);
+        setInputcodeErr(true);
+        return;
+      }
+      const codeResult = await MeetApi.getMeetRoomNoCert(result.room);
+      if (isSuccess(codeResult)) {
+        const { name } = codeResult.resultData;
+        navigation.navigate('ConferenceStateView', {
+          id: result.room,
+          accessType: 'joincode',
+          joincode: joincode,
+          selectedRoomName: name
+        });
+      } else {
+        //error
+      }
     } else {
-      const { name } = await MeetApi.getMeetRoomNoCert(result.room);
-
-      navigation.navigate('ConferenceStateView', {
-        id: result.room,
-        accessType: 'joincode',
-        joincode: joincode,
-        selectedRoomName: name
-      });
+      setFocusingNum(0);
+      setInputcodeErr(true);
     }
   };
 

@@ -15,7 +15,11 @@ import { MeetApi, ServiceCheckApi, UserApi } from '@services/index';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/configureStore';
 
-import { actionCreators as UserActions, authInfo, companyParamInfo } from '@redux/user';
+import {
+  actionCreators as UserActions,
+  authInfo,
+  companyParamInfo
+} from '@redux/user';
 import { actionCreators as RecentsActions } from '@redux/recentsInvited';
 import { actionCreators as ConferenceActions } from '@redux/conference';
 import { actionCreators as SelectCompanyActions } from '@redux/selectCompany';
@@ -32,6 +36,8 @@ import { useNavigation } from '@react-navigation/native';
 import { MainNavigationProps } from '@navigations/MainStack';
 import RNrestart from 'react-native-restart';
 import moment from 'moment';
+import { isSuccess } from '@services/types';
+import { conference } from '@services/api/types';
 
 const icUser = require('@assets/icons/ic_user.png');
 const icModify = require('@assets/icons/ic_modify.png');
@@ -39,29 +45,6 @@ const icLink = require('@assets/icons/ic_link.png');
 const icCancel = require('@assets/icons/ic_cancel.png');
 const icInfo = require('@assets/icons/ic_info.png');
 const icCheckB = require('@assets/icons/ic_check_b.png');
-
-type conference = {
-  room_id: string;
-  name: string;
-  portal_id: string;
-  cno: number;
-  is_public: boolean;
-  connecting_user_count: any;
-  register_user_count: any;
-  connecting_user: any[];
-  access_user: any[];
-  created_at: any;
-  start_date_time: any;
-  end_date_time: any;
-  r_start_date_time: any;
-  r_end_date_time: any;
-  communication_key: any;
-  schedule_key: any;
-  calendar_subject: any;
-  calendar_color: any;
-  calendar_no: any;
-  is_started: boolean;
-};
 
 interface emptyData {
   isEmpty: boolean;
@@ -224,285 +207,323 @@ export default function HomeScreenContainer(props: any) {
       endDateString,
       finishIndex,
       16
-    ).then(async result => {
-      setFinishCount(result.total);
-      const finished = result.list;
-      const conference = await Promise.all(
-        finished.map(async (conference: any) => {
-          const year = new Date(conference.start_date_time).getFullYear();
-          const month = new Date(conference.start_date_time).getMonth() + 1;
-          const day = new Date(conference.start_date_time)
-            .getDate()
-            .toString()
-            .padStart(2, '0');
-          const dateString = `${year}.${month}.${day}`;
-          const ampmStart =
-            parseInt(
-              new Date(conference.start_date_time).toTimeString().slice(0, 2)
-            ) < 12
-              ? 'AM'
-              : 'PM';
-          const startTimeString = new Date(conference.start_date_time)
-            .toTimeString()
-            .slice(0, 5);
-          const ampmEnd =
-            parseInt(
-              new Date(conference.end_date_time).toTimeString().slice(0, 2)
-            ) < 12
-              ? 'AM'
-              : 'PM';
-          const endTimeString = new Date(conference.end_date_time)
-            .toTimeString()
-            .slice(0, 5);
-          const timeString = `${dateString}\n${startTimeString}${ampmStart} ~ ${endTimeString}${ampmEnd}`;
-          const { hour, minutes } = conference.usage_time;
-          const usageTime = hour * 60 + minutes;
-          const users = conference.users;
+    ).then(async result2 => {
+      if (isSuccess(result2)) {
+        const result = result2.resultData;
+        setFinishCount(result.total);
+        const finished = result.list;
+        const conference = await Promise.all(
+          finished.map(async (conference: any) => {
+            const year = new Date(conference.start_date_time).getFullYear();
+            const month = new Date(conference.start_date_time).getMonth() + 1;
+            const day = new Date(conference.start_date_time)
+              .getDate()
+              .toString()
+              .padStart(2, '0');
+            const dateString = `${year}.${month}.${day}`;
+            const ampmStart =
+              parseInt(
+                new Date(conference.start_date_time).toTimeString().slice(0, 2)
+              ) < 12
+                ? 'AM'
+                : 'PM';
+            const startTimeString = new Date(conference.start_date_time)
+              .toTimeString()
+              .slice(0, 5);
+            const ampmEnd =
+              parseInt(
+                new Date(conference.end_date_time).toTimeString().slice(0, 2)
+              ) < 12
+                ? 'AM'
+                : 'PM';
+            const endTimeString = new Date(conference.end_date_time)
+              .toTimeString()
+              .slice(0, 5);
+            const timeString = `${dateString}\n${startTimeString}${ampmStart} ~ ${endTimeString}${ampmEnd}`;
+            const { hour, minutes } = conference.usage_time;
+            const usageTime = hour * 60 + minutes;
+            const users = conference.users;
 
-          const portalIdList = users
-            .map((user: any) => user.user)
-            .filter((user: any) => user);
+            const portalIdList = users
+              .map((user: any) => user.user)
+              .filter((user: any) => user);
+            const participantsResult = await MeetApi.getUserInfoList(
+              auth,
+              portalIdList
+            );
+            let participants: any[] = [];
 
-          const participants: any[] = await MeetApi.getUserInfoList(
-            auth,
-            portalIdList
-          );
-
-          participants.push(...users.filter((e: any) => e.user_type === 2));
-
-          const uriList = participants.reduce<
-            { type: string; value: string | number }[]
-          >((prev, present) => {
-            if (prev.length > 2) return prev;
-
-            let type;
-            let value;
-            const uri = present?.profile_url
-              ? wehagoMainURL + present.profile_url
-              : wehagoDummyImageURL;
-
-            if (participants.length <= 3) {
-              type = 'string';
-              value = uri;
-            } else {
-              type = prev.length < 2 ? 'string' : 'number';
-              value = prev.length < 2 ? uri : participants.length - 2;
+            if (isSuccess(participantsResult)) {
+              participants = participantsResult.resultData;
             }
 
-            return [...prev, { type, value }];
-          }, []);
+            participants.push(...users.filter((e: any) => e.user_type === 2));
 
-          const roomId = conference.t_room_id;
-          const data = {
-            conferenceName: conference.name,
-            timeString,
-            usageTime,
-            users: uriList,
-            roomId,
-            finishedMoreClick: () => _finishedMoreClick(conference)
-          };
-          return data;
-        })
-      );
-
-      if (ref.current.finishedConference.length === 0 && conference.length > 0)
-        setHighlight('finished');
-
-      setFinishedConference([...finishedConference, ...conference]);
-      // setFinishedConference([]);
-    });
-  };
-
-  const _getConferences = () => {
-    MeetApi.getMeetRoomsList(auth)
-      .then(async result => {
-        const going: conference[] = result.filter(
-          (conference: conference) => conference.is_started
-        );
-
-        const goingList = await Promise.all(
-          going.map(async conference => {
-            const startTime = new Date(
-              conference.start_date_time
-                ? conference.start_date_time
-                : conference.created_at
-            ).toTimeString();
-
-            const ampm = parseInt(startTime.slice(0, 2)) < 12 ? 'AM' : 'PM'
-            const time = ampm + ' ' + startTime.slice(0, 5);
-                
-            const onMinte = Math.floor(
-              (new Date().getTime() -
-                (conference.start_date_time
-                  ? conference.start_date_time
-                  : conference.created_at)) /
-                1000 /
-                60
-            );
-
-            const connectingUser = await MeetApi.getUserList(
-              auth,
-              conference.room_id
-            );
-            const isMaster = connectingUser.filter(
-              (user: any) => user.user === portalId
-            )[0]?.is_master
-              ? true
-              : false;
-            //진행중인 방에서는 내가 없을수 있으므로 ?를 붙임
-            const sortedConnectingUserList = connectingUser.sort(
-              (user: any, _user: any) => _user.is_master - user.is_master
-            );
-            const portalIdList = sortedConnectingUserList
-              .map((user: any) => user.user)
-              .filter((user: any) => user);
-
-            const participants: any[] = await MeetApi.getUserInfoList(
-              auth,
-              portalIdList
-            );
-
-            const sortedPortalIdList: any[] = portalIdList.map((id: any) => {
-              const item = participants.find(e => e.portal_id === id);
-              return item;
-            });
-
-            const uriList = sortedPortalIdList.reduce<
-              { type: string; value: string | number }[]
-            >((prev, present) => {
-              if (prev.length > 4) return prev;
-              let type;
-              let value;
-              const uri = present?.profile_url
-                ? wehagoMainURL + present.profile_url
-                : wehagoDummyImageURL;
-              if (sortedPortalIdList.length <= 5) {
-                type = 'string';
-                value = uri;
-              } else {
-                type = prev.length < 4 ? 'string' : 'number';
-                value = prev.length < 4 ? uri : sortedPortalIdList.length - 4;
-              }
-
-              return [...prev, { type, value }];
-            }, []);
-
-            const data = {
-              conferenceName: conference.name,
-              time,
-              onMinte,
-              participants: uriList,
-              isLock: !conference.is_public,
-              goingMoreClick: () => _goingMoreClick(conference, isMaster),
-              enterConference: () =>
-                navigation.navigate('ConferenceStateView', {
-                  id: conference.room_id,
-                  from: 'meet',
-                  accessType: 'auth',
-                  selectedRoomName: conference.name
-                })
-              // _handleRedirect('ConferenceState', {
-              //   id: conference.room_id,
-              //   item: {
-              //     roomId: conference.room_id,
-              //     externalData: null,
-              //     from: 'meet'
-              //   }
-              // })
-            };
-            return data;
-          })
-        );
-        setOngoingConference(goingList);
-        // setOngoingConference([]);
-
-        // =====================================================================================================
-        // =====================================================================================================
-        // =====================================================================================================
-
-        const reservation: conference[] = result.filter(
-          (conference: conference) => !conference.is_started
-        );
-        const reservationList = await Promise.all(
-          reservation.map(async conference => {
-            const accessUser = await MeetApi.getAccessUsers(
-              auth,
-              conference.room_id
-            );
-
-            const isMaster = accessUser.filter(
-              (user: any) => user.user === portalId
-            )[0]?.is_master
-              ? true
-              : false;
-
-            const sortedAccessUserList: any[] = accessUser.sort(
-              (user: any, _user: any) => _user.is_master - user.is_master
-            );
-            const portalIdList = sortedAccessUserList
-              .map((user: any) => user.user)
-              .filter((user: any) => user);
-
-            const participants: any[] = await MeetApi.getUserInfoList(
-              auth,
-              portalIdList
-            );
-
-            const sortedPortalIdList: any[] = portalIdList.map((id: any) => {
-              const item =
-                participants.find(e => e.portal_id === id) ||
-                sortedAccessUserList.find(e => e.user === id);
-              return item;
-            });
-            const uriList = sortedPortalIdList.reduce<
+            const uriList = participants.reduce<
               { type: string; value: string | number }[]
             >((prev, present) => {
               if (prev.length > 2) return prev;
+
               let type;
               let value;
               const uri = present?.profile_url
                 ? wehagoMainURL + present.profile_url
                 : wehagoDummyImageURL;
-              if (sortedPortalIdList.length <= 3) {
+
+              if (participants.length <= 3) {
                 type = 'string';
                 value = uri;
               } else {
                 type = prev.length < 2 ? 'string' : 'number';
-                value = prev.length < 2 ? uri : sortedPortalIdList.length - 2;
+                value = prev.length < 2 ? uri : participants.length - 2;
               }
+
               return [...prev, { type, value }];
             }, []);
 
-            const start = new Date(conference.r_start_date_time).toTimeString();
-            const sAmPm = parseInt(start.slice(0, 2)) < 12 ? 'AM' : 'PM'
-            const startTime = sAmPm + ' ' + start.slice(0, 5);
-
-            const end = new Date(conference.r_end_date_time).toTimeString();
-            const eAaPm = parseInt(end.slice(0, 2)) < 12 ? 'AM' : 'PM'
-            const endTime = eAaPm + ' ' + end.slice(0, 5);
-
+            const roomId = conference.t_room_id;
             const data = {
-              roomName: conference.name,
-              date: new Date(conference.r_start_date_time).toLocaleDateString(),
-              start: startTime,
-              end: endTime,
+              conferenceName: conference.name,
+              timeString,
+              usageTime,
               users: uriList,
-              roomId: conference.room_id,
-              isPublic: conference.is_public,
-              reservationMoreClick: (roomId: string) =>
-                _reservationMoreClick(conference, isMaster, roomId)
+              roomId,
+              finishedMoreClick: () => _finishedMoreClick(conference)
             };
             return data;
           })
         );
 
         if (
-          ref.current.reservationConference.length === 0 &&
-          reservationList.length > 0
+          ref.current.finishedConference.length === 0 &&
+          conference.length > 0
         )
-          setHighlight('reservation');
+          setHighlight('finished');
 
-        setReservationConference(reservationList);
+        setFinishedConference([...finishedConference, ...conference]);
+      }
+
+      // setFinishedConference([]);
+    });
+  };
+
+  const _getConferences = () => {
+    MeetApi.getMeetRoomsList(auth)
+      .then(async result2 => {
+        if (isSuccess(result2)) {
+          const result = result2.resultData;
+          const going: conference[] = result.filter(
+            (conference: conference) => conference.is_started
+          );
+
+          const goingList = await Promise.all(
+            going.map(async conference => {
+              const startTime = new Date(
+                conference.start_date_time
+                  ? conference.start_date_time
+                  : conference.created_at
+              ).toTimeString();
+
+              const ampm = parseInt(startTime.slice(0, 2)) < 12 ? 'AM' : 'PM';
+              const time = ampm + ' ' + startTime.slice(0, 5);
+
+              const onMinte = Math.floor(
+                (new Date().getTime() -
+                  (conference.start_date_time
+                    ? conference.start_date_time
+                    : conference.created_at)) /
+                  1000 /
+                  60
+              );
+
+              let connectingUser: any[] = [];
+              const getUserListResult = await MeetApi.getUserList(
+                auth,
+                conference.room_id
+              );
+              if (isSuccess(getUserListResult)) {
+                connectingUser = getUserListResult.resultData;
+              }
+
+              const isMaster = connectingUser.filter(
+                (user: any) => user.user === portalId
+              )[0]?.is_master
+                ? true
+                : false;
+              //진행중인 방에서는 내가 없을수 있으므로 ?를 붙임
+              const sortedConnectingUserList = connectingUser.sort(
+                (user: any, _user: any) => _user.is_master - user.is_master
+              );
+              const portalIdList = sortedConnectingUserList
+                .map((user: any) => user.user)
+                .filter((user: any) => user);
+
+              const participantsResult = await MeetApi.getUserInfoList(
+                auth,
+                portalIdList
+              );
+              let participants: any[] = [];
+
+              if (isSuccess(participantsResult)) {
+                participants = participantsResult.resultData;
+              }
+
+              const sortedPortalIdList: any[] = portalIdList.map((id: any) => {
+                const item = participants.find(e => e.portal_id === id);
+                return item;
+              });
+
+              const uriList = sortedPortalIdList.reduce<
+                { type: string; value: string | number }[]
+              >((prev, present) => {
+                if (prev.length > 4) return prev;
+                let type;
+                let value;
+                const uri = present?.profile_url
+                  ? wehagoMainURL + present.profile_url
+                  : wehagoDummyImageURL;
+                if (sortedPortalIdList.length <= 5) {
+                  type = 'string';
+                  value = uri;
+                } else {
+                  type = prev.length < 4 ? 'string' : 'number';
+                  value = prev.length < 4 ? uri : sortedPortalIdList.length - 4;
+                }
+
+                return [...prev, { type, value }];
+              }, []);
+
+              const data = {
+                conferenceName: conference.name,
+                time,
+                onMinte,
+                participants: uriList,
+                isLock: !conference.is_public,
+                goingMoreClick: () => _goingMoreClick(conference, isMaster),
+                enterConference: () =>
+                  navigation.navigate('ConferenceStateView', {
+                    id: conference.room_id,
+                    from: 'meet',
+                    accessType: 'auth',
+                    selectedRoomName: conference.name
+                  })
+                // _handleRedirect('ConferenceState', {
+                //   id: conference.room_id,
+                //   item: {
+                //     roomId: conference.room_id,
+                //     externalData: null,
+                //     from: 'meet'
+                //   }
+                // })
+              };
+              return data;
+            })
+          );
+          setOngoingConference(goingList);
+          // setOngoingConference([]);
+
+          // =====================================================================================================
+          // =====================================================================================================
+          // =====================================================================================================
+
+          const reservation: conference[] = result.filter(
+            (conference: conference) => !conference.is_started
+          );
+          const reservationList = await Promise.all(
+            reservation.map(async conference => {
+              let accessUser: any[] = [];
+              const getAccessUsersResult = await MeetApi.getAccessUsers(
+                auth,
+                conference.room_id
+              );
+
+              if (isSuccess(getAccessUsersResult)) {
+                accessUser = getAccessUsersResult.resultData;
+              }
+
+              const isMaster = accessUser.filter(
+                (user: any) => user.user === portalId
+              )[0]?.is_master
+                ? true
+                : false;
+
+              const sortedAccessUserList: any[] = accessUser.sort(
+                (user: any, _user: any) => _user.is_master - user.is_master
+              );
+              const portalIdList = sortedAccessUserList
+                .map((user: any) => user.user)
+                .filter((user: any) => user);
+
+              const participantsResult = await MeetApi.getUserInfoList(
+                auth,
+                portalIdList
+              );
+              let participants: any[] = [];
+
+              if (isSuccess(participantsResult)) {
+                participants = participantsResult.resultData;
+              }
+
+              const sortedPortalIdList: any[] = portalIdList.map((id: any) => {
+                const item =
+                  participants.find(e => e.portal_id === id) ||
+                  sortedAccessUserList.find(e => e.user === id);
+                return item;
+              });
+              const uriList = sortedPortalIdList.reduce<
+                { type: string; value: string | number }[]
+              >((prev, present) => {
+                if (prev.length > 2) return prev;
+                let type;
+                let value;
+                const uri = present?.profile_url
+                  ? wehagoMainURL + present.profile_url
+                  : wehagoDummyImageURL;
+                if (sortedPortalIdList.length <= 3) {
+                  type = 'string';
+                  value = uri;
+                } else {
+                  type = prev.length < 2 ? 'string' : 'number';
+                  value = prev.length < 2 ? uri : sortedPortalIdList.length - 2;
+                }
+                return [...prev, { type, value }];
+              }, []);
+
+              const start = new Date(
+                conference.r_start_date_time
+              ).toTimeString();
+              const sAmPm = parseInt(start.slice(0, 2)) < 12 ? 'AM' : 'PM';
+              const startTime = sAmPm + ' ' + start.slice(0, 5);
+
+              const end = new Date(conference.r_end_date_time).toTimeString();
+              const eAaPm = parseInt(end.slice(0, 2)) < 12 ? 'AM' : 'PM';
+              const endTime = eAaPm + ' ' + end.slice(0, 5);
+
+              const data = {
+                roomName: conference.name,
+                date: new Date(
+                  conference.r_start_date_time
+                ).toLocaleDateString(),
+                start: startTime,
+                end: endTime,
+                users: uriList,
+                roomId: conference.room_id,
+                isPublic: conference.is_public,
+                reservationMoreClick: (roomId: string) =>
+                  _reservationMoreClick(conference, isMaster, roomId)
+              };
+              return data;
+            })
+          );
+
+          if (
+            ref.current.reservationConference.length === 0 &&
+            reservationList.length > 0
+          )
+            setHighlight('reservation');
+
+          setReservationConference(reservationList);
+        }
         // setReservationConference([]);
       })
       .then(() => {
@@ -575,7 +596,7 @@ export default function HomeScreenContainer(props: any) {
           conference.room_id
         );
 
-        if (result) {
+        if (isSuccess(result)) {
           setBottomPopup({
             show: false,
             contentList: [],
@@ -584,6 +605,7 @@ export default function HomeScreenContainer(props: any) {
           });
           _getConferences();
         } else {
+          console.warn('7.deleteConferenceRoom : ', result.errors);
           console.log('예약 취소중에 오류가 발생했습니다.');
         }
       }
@@ -633,10 +655,14 @@ export default function HomeScreenContainer(props: any) {
     let participants: { image: any; name: any; status: any }[] = [];
     if (type === 'going') {
       title = t('renewal.main_now_participants');
-      const participantInfoList: any[] = await MeetApi.getUserList(
+      let participantInfoList: any[] = [];
+      const getUserListResult = await MeetApi.getUserList(
         auth,
         conference.room_id
       );
+      if (isSuccess(getUserListResult)) {
+        participantInfoList = getUserListResult.resultData;
+      }
 
       participants = participantInfoList
         .map(participant => ({
@@ -654,10 +680,15 @@ export default function HomeScreenContainer(props: any) {
           return a.status === 'master' ? -1 : 1;
         });
     } else if (type === 'reservation') {
-      const accessUser: any[] = await MeetApi.getAccessUsers(
+      let accessUser: any[] = [];
+      const getAccessUsersResult = await MeetApi.getAccessUsers(
         auth,
         conference.room_id
       );
+
+      if (isSuccess(getAccessUsersResult)) {
+        accessUser = getAccessUsersResult.resultData;
+      }
 
       participants = accessUser
         .map(participant => ({
@@ -677,18 +708,28 @@ export default function HomeScreenContainer(props: any) {
       users = conference.connecting_user;
       title = t('renewal.main_excepted_participants');
     } else {
-      const accessedUser: any[] = await MeetApi.getFinishedParticipant(
+      let accessedUser: any[] = [];
+      const getFinishedParticipant = await MeetApi.getFinishedParticipant(
         auth,
         conference.t_room_id
       );
+      if (isSuccess(getFinishedParticipant)) {
+        accessedUser = getFinishedParticipant.resultData;
+      }
 
       const portalIdList = accessedUser
         .map((user: any) => user.user)
         .filter((user: any) => user);
-      const participantInfoList: any[] = await MeetApi.getUserInfoList(
+
+      const participantsResult = await MeetApi.getUserInfoList(
         auth,
         portalIdList
       );
+      let participantInfoList: any[] = [];
+
+      if (isSuccess(participantsResult)) {
+        participantInfoList = participantsResult.resultData;
+      }
 
       const extraUser = accessedUser
         .filter((e: any) => e.user_type === 2)

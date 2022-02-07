@@ -170,18 +170,20 @@ export default function CustomProvider(props: any) {
     }
   };
   const _loginCheckRequest = async () => {
-    const { AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY } = auth;
+    if (auth) {
+      const { AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY } = auth;
 
-    const checkResult = await UserApi.check(
-      AUTH_A_TOKEN,
-      AUTH_R_TOKEN,
-      cno,
-      HASH_KEY
-    );
+      const checkResult = await UserApi.check(
+        AUTH_A_TOKEN,
+        AUTH_R_TOKEN,
+        cno,
+        HASH_KEY
+      );    
 
-    if (!isSuccess(checkResult)) {
-      const { errors } = checkResult;
-      if (errors) {
+      if (!isSuccess(checkResult)) {
+        const { errors } = checkResult;
+        console.log('provider_login_certify_error');
+
         if (errors.code === 'E002') {
           _setAlert({
             type: 1,

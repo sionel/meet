@@ -9,10 +9,7 @@ interface SuccessRes<T> extends BaseRes {
 }
 
 interface ErrorRes extends BaseRes {
-  errors: {
-    code: string;
-    message: string;
-  };
+  errors: errorType
 }
 
 export type Res<T> = SuccessRes<T> | ErrorRes;
@@ -20,6 +17,8 @@ export type Res<T> = SuccessRes<T> | ErrorRes;
 export const isSuccess = <T>(res: Res<T>): res is SuccessRes<T> => {
   switch (res.resultCode) {
     case 200:
+    case 201:
+    case 204:
       return true;
     default:
       return false;

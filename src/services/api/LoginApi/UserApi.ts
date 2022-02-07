@@ -1,5 +1,5 @@
 import * as CryptoJS from 'crypto-js';
-import { Platform, Alert } from 'react-native';
+import { Platform, Alert, PlatformOSType } from 'react-native';
 import fetch from './ApiManager';
 import {
   wehagoBaseURL,
@@ -7,10 +7,13 @@ import {
   serialize,
   createHeader
 } from '@utils/index';
+import { apiAuthInfo } from '../types';
+import Axios from '../Axios';
+import { isSuccess } from '@services/types';
 
 const getIp = async () => {
   try {
-    let login_ip = await fetch('https://api.ipify.org?format=json');
+    let login_ip = await fetch('https://api.ipify.org?format=json', {});
     // login_ip = await login_ip.json();
     return login_ip.ip;
   } catch (error) {
@@ -22,7 +25,7 @@ const getIp = async () => {
  * getToken
  * @param {String} accessUrl
  */
-const getToken = async accessUrl => {
+const getToken = async (accessUrl: string) => {
   try {
     const url = `${wehagoBaseURL0}/get_token/?url=${accessUrl}`;
     const data = {
@@ -39,7 +42,7 @@ const getToken = async accessUrl => {
   }
 };
 
-const getRK = async userPw => {
+const getRK = async (userPw: string): Promise<any> => {
   try {
     const date = new Date().getTime();
     const url = `/auth/login/rk/?rand=${date}`;
@@ -80,51 +83,51 @@ const getRK = async userPw => {
  * @param userPw
  */
 const loginRequest = async (
-  userId,
-  userPw,
-  service_code,
+  userId: string,
+  userPw: string,
+  service_code: 'wehagomeet' | 'meet',
   captcha = false,
-  access_pass
+  access_pass: string | null
 ) => {
-  try {
-    const { encPw, key } = await getRK(userPw);
-    const date = new Date().getTime(); // January 1, 1970 로 부터의 시간 (밀리초)
-    const url = captcha
-      ? '/auth/login/exceed'
-      : `/auth/login/mobile?timestamp=${date}`;
-    const getTokenResult = await getToken(url);
-    const encText = url + getTokenResult.cur_date + getTokenResult.token;
-    // NOTE 토큰 -> SHA256 -> Base64 String
-    const hashText = CryptoJS.SHA256(encText);
-    const signature = CryptoJS.enc.Base64.stringify(hashText);
-    const data = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        signature: signature
-      },
-      body: serialize({
-        access_type: service_code,
-        access_pass: access_pass,
-        random_key: key,
-        portal_id: userId,
-        portal_password: encPw,
-        login_os: Platform.OS,
-        login_device: Platform.OS,
-        login_ip: await getIp(),
-        login_browser: 'WEHAGO-APP',
-        login_type: 'MOBILE'
-      })
-    };
+  const { encPw, key } = await getRK(userPw);
+  const date = new Date().getTime(); // January 1, 1970 로 부터의 시간 (밀리초)
+  const url = captcha
+    ? '/auth/login/exceed'
+    : `/auth/login/mobile?timestamp=${date}`;
+  const getTokenResult = await getToken(url);
+  const encText = url + getTokenResult.cur_date + getTokenResult.token;
+  // NOTE 토큰 -> SHA256 -> Base64 String
+  const hashText = CryptoJS.SHA256(encText);
+  const signature = CryptoJS.enc.Base64.stringify(hashText);
+  const data = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+      signature: signature
+    },
+    body: serialize({
+      access_type: service_code,
+      access_pass: access_pass,
+      random_key: key,
+      portal_id: userId,
+      portal_password: encPw,
+      login_os: Platform.OS,
+      login_device: Platform.OS,
+      login_ip: await getIp(),
+      login_browser: 'WEHAGO-APP',
+      login_type: 'MOBILE'
+    })
+  };
 
-    const response = await fetch(`${wehagoBaseURL0}${url}`, data);
+  const response = await Axios(`${wehagoBaseURL0}${url}`, data);
+  if (isSuccess(response)) {
     return response;
-  } catch (err) {
-    return { resultCode: null, resultMsg: err };
+  } else {
+    return response;
   }
 };
 
-const serviceDeployCheck = async (auth, cno) => {
+const serviceDeployCheck = async (auth: apiAuthInfo, cno: string) => {
   const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY } = auth;
 
   try {
@@ -151,5 +154,3 @@ export default {
   loginRequest,
   serviceDeployCheck
 };
-
-

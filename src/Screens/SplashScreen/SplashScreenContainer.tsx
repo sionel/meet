@@ -128,7 +128,12 @@ const SplashScreenContainer = ({
   const _handleCheckVersion = async () => {
     const os = Platform.OS;
     const majorVersion = 13;
-    const result = await MeetApi.checkVersion(os, majorVersion);
+
+    let result: any;
+    const checkVersion = await MeetApi.checkVersion(os, majorVersion); 
+    if(isSuccess(checkVersion)) {
+      result = checkVersion;
+    }
     if (!result.resultData.update || result.resultData.dev_mode) return [];
     const title = t('renewal.servernoti_title_update');
     const message = t('renewal.servernoti_message_power_update');
@@ -151,11 +156,17 @@ const SplashScreenContainer = ({
   };
 
   const _handleCheckNotice = async (noti: any) => {
-    const result = await MeetApi.checkNotice();
-    if (!result) return [];
+    let result: any[] = [];
+    const checkNotice = await MeetApi.checkNotice(); 
+    if(isSuccess(checkNotice)) {
+      result = checkNotice.resultData;
+    } else {
+      return [];
+    }
+    // if (!result) return [];
     // 확인코드 :101
     // 강제종료 코드 : 102
-    result.resultData.forEach((e: any) => {
+    result.forEach((e: any) => {
       if (!e.dev_mode) {
         e.buttons = [
           {
@@ -171,7 +182,7 @@ const SplashScreenContainer = ({
         ];
       }
     });
-    noti = noti.concat(result.resultData);
+    noti = noti.concat(result);
     return noti;
   };
 
@@ -229,8 +240,7 @@ const SplashScreenContainer = ({
 
     if (!url) return;
     let result: any = querystringParser(url);
-    console.log(result);
-    
+
     // if(result.type === 'conference') {
     // 화상회의 요청인지 판별
     if (result.is_creater) {
@@ -288,39 +298,52 @@ const SplashScreenContainer = ({
       room: "b15091c1-2acd-47f6-aa7c-6a94df0e5a17"
       sub: "video.wehago.com"
       */
-      const { name } = await MeetApi.getMeetRoomNoCert(decoded.room);
+      const emailResult = await MeetApi.getMeetRoomNoCert(decoded.room);
 
-      navigation.reset({
-        routes: [
-          {
-            name: 'ConferenceStateView',
-            params: {
-              accessType: 'email',
-              id: decoded.room,
-              selectedRoomName: name,
-              emailToken: result.token
-            }
-          }
-        ]
-      });
-    } else if (result.video_id) {
-      // TODO: 컨퍼런스로 받았을때 이 분기 처리를 어떻게 해야할지 검토필요성 있음
-      // CASE: 해당 화상회의 URL을 통해서 직접 접속 했을 경우
-      // WEHAGO에서 계정 정보를 가지고 올때 이 분기랑 토큰이 있는 분기랑 둘다 접근함 문제가 없는건지 ?
-      if (auth.user_no) {
-        const { name } = await MeetApi.getMeetRoomNoCert(result.video_id);
+      if (isSuccess(emailResult)) {
+        const { name } = emailResult.resultData;
+
         navigation.reset({
           routes: [
             {
               name: 'ConferenceStateView',
               params: {
-                id: result.video_id,
-                accessType: 'auth',
-                selectedRoomName: name
+                accessType: 'email',
+                id: decoded.room,
+                selectedRoomName: name,
+                emailToken: result.token
               }
             }
           ]
         });
+      } else {
+        //error
+      }
+    } else if (result.video_id) {
+      // TODO: 컨퍼런스로 받았을때 이 분기 처리를 어떻게 해야할지 검토필요성 있음
+      // CASE: 해당 화상회의 URL을 통해서 직접 접속 했을 경우
+      // WEHAGO에서 계정 정보를 가지고 올때 이 분기랑 토큰이 있는 분기랑 둘다 접근함 문제가 없는건지 ?
+      if (auth.user_no) {
+        const linkResult = await MeetApi.getMeetRoomNoCert(result.video_id);
+
+        if(isSuccess(linkResult)) {
+          const { name } = linkResult.resultData;
+
+          navigation.reset({
+            routes: [
+              {
+                name: 'ConferenceStateView',
+                params: {
+                  id: result.video_id,
+                  accessType: 'auth',
+                  selectedRoomName: name
+                }
+              }
+            ]
+          });
+        } else {
+          //error
+        }
       } else {
         Alert.alert(t('비회원 접속'), t('참여코드를 입력해주시기 바랍니다.'), [
           {
@@ -415,7 +438,6 @@ const SplashScreenContainer = ({
       await onLogin(userData, from, flag);
       return userData;
     } else {
-      console.log('error !');
       const { errors } = checkResult;
       eventLog(errors);
       _handleloginCheckError(errors);

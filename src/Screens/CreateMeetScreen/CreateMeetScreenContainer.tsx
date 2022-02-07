@@ -27,6 +27,8 @@ import { wehagoMainURL } from '@utils/index';
 import { MainNavigationProps } from '@navigations/MainStack';
 
 import _ from 'lodash';
+import { conference, createApiParmas } from '@services/api/types';
+import { isSuccess } from '@services/types';
 
 interface param {
   type: 'portal_id' | 'email';
@@ -261,18 +263,7 @@ export default function CreateMeetScreenContainer(props: any) {
           user_no: auth.user_no
         });
 
-        let params: {
-          service_code: string;
-          name: string;
-          is_public: boolean;
-          access_user: any;
-          is_send_updated_email: boolean;
-          is_reservation: boolean;
-          call_type: string;
-          invite_message: string;
-          start_date_time?: any;
-          end_date_time?: any;
-        } = {
+        let params: createApiParmas = {
           service_code: 'wehagomeet',
           name: roomName,
           is_public: isPublic,
@@ -294,11 +285,15 @@ export default function CreateMeetScreenContainer(props: any) {
 
         const result = await MeetApi.createMeetRoom(auth, params);
         setIsLoading(false);
-        if (result) {
+        if (isSuccess(result)) {
           onHandleBack();
           // clearInput();
-        } else if (result.error) {
-          console.log('error : ', result.error);
+        } else {
+          console.log('error : ', result);
+          Alert.alert(
+            '알림',
+            '회의 생성중에 오류가 생겼습니다. 관리자에게 문의 해주세요'
+          );
         }
       }
     }
@@ -519,14 +514,19 @@ export default function CreateMeetScreenContainer(props: any) {
 
   const getRoomNames = async () => {
     const roomNames = MeetApi.getMeetRoomsList(auth).then(async result => {
-      const going: any[] = result;
-      let nameList: string[] = [];
-      await Promise.all(
-        going.map(async conference => {
-          nameList.push(conference.name);
-        })
-      );
-      return nameList;
+      if (isSuccess(result)) {
+        const going: conference[] = result.resultData;
+        let nameList: string[] = [];
+        await Promise.all(
+          going.map(async conference => {
+            nameList.push(conference.name);
+          })
+        );
+        return nameList;
+      } else {
+        //error
+        return [];
+      }
     });
 
     setNameList(await roomNames);
