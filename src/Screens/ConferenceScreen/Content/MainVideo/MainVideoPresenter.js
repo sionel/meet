@@ -15,6 +15,7 @@ import ButtonCameraOff2 from '@oldassets/icons/icoCameraWhLargeOff_2x.png';
 import imgCharacter01 from '@oldassets/icons/imgCharacter01_2x.png';
 import imgCharacter02 from '@oldassets/icons/imgCharacter02_2x.png';
 import imgCharacter03 from '@oldassets/icons/imgCharacter03_2x.png';
+
 // import ProfileImage from '@oldassets/smapleImages/nnn.jpg';
 import ProfileImage from '@oldassets/icons/imgVcNophoto_2x.png';
 // import ProfileImage from '@oldassets/smapleImages/nnn2.png';

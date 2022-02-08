@@ -223,7 +223,7 @@ function applySetConferenceMode(state: state, action: AnyAction) {
 //#region TOGGLE_MUTE_VIDEO
 
 function toggleMuteVideo(
-  videoMute: boolean
+  videoMute?: boolean
 ): ThunkAction<void, RootState, unknown> {
   return dispatch => {
     dispatch({
@@ -305,7 +305,7 @@ function applyToggleCameraFacingMode(state: state) {
 //#region TOGGLE_MUTE_MIC
 
 function toggleMuteMic(
-  micMute: boolean
+  micMute?: boolean
 ): ThunkAction<void, RootState, unknown> {
   return dispatch => {
     dispatch({

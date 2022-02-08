@@ -1,16 +1,17 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import {
   View,
   StyleSheet,
   TouchableOpacity,
   StatusBar,
-  Dimensions
+  Dimensions,
+  SafeAreaView
 } from 'react-native';
 import { useSelector } from 'react-redux';
 
-import MainVideo from './MainVideo';
+import MainView from './RenwalContent/MainView';
 import TopArea from './TopArea';
-import BottomArea from './BottomArea';
+import BottomArea from './RenwalContent/BottomArea';
 import OverView from './OverView';
 import SimpleNoti from '../SimpleNoti';
 import { ConferenceModes } from '@utils/ConstantsBackup';
@@ -27,113 +28,124 @@ const ContentPresenter = (props: any) => {
     createdTime,
     orientation,
     onClose,
-    localPipMode
+    localPipMode,
+    toggleConferenceMode
   } = props;
 
   // const localPipMode = useSelector((state: RootState) => state.local.pipMode);
   const hideStatusbar = orientation === 'horizontal';
   return (
-    <View style={styles.container} onLayout={props.onLayout}>
-      <StatusBar
-        barStyle="light-content"
-        backgroundColor={'#000'}
-        hidden={hideStatusbar}
-      />
-      <TouchableOpacity
-        style={{ flex: 1 }}
-        onPress={props.toggleConferenceMode}
-        activeOpacity={1}
-      >
-        <MainVideo
-          mainUser={mainUser}
-          callType={callType}
-          selectedRoomName={selectedRoomName}
-          isVideoReverse={isVideoReverse}
-          // orientation={props.orientation}
-          // onPress={props.toggleConferenceMode}
-          orientation={props.orientation}
-          hasNotch={props.hasNotch}
-          objectFit={props.objectFit}
-          drawing={drawingMode}
-          conferenceMode={conferenceMode}
-          createdTime={createdTime}
-          onClose={onClose}
-        />
-      </TouchableOpacity>
-      {/* END MAIN VIDEO 영역 */}
-
-      {/* START 싱단 영역 */}
-      {!localPipMode && conferenceMode === ConferenceModes.CONTROL && (
-        <View
-          style={[
-            styles.topArea,
-            props.orientation === 'vertical'
-              ? [styles.topAreaVertical, { top: props.hasNotch ? 47 : 27 }]
-              : [styles.topAreaHorizontal, { left: props.hasNotch ? 35 : 20 }]
-          ]}
-        >
-          {Number(callType) !== 2 && !drawingMode && (
-            <TopArea
-              callType={Number(callType)}
-              orientation={props.orientation}
-              drawing={props.drawingMode}
-              sharing={props.attributes}
-              onReverseVideo={props.onReverseVideo}
-              onChangeState={props.onChangeState}
-              onChangeDrawing={props.setSharingMode}
-              objectFit={props.objectFit}
-              onChangeDrawingMode={props.onChangeDrawingMode}
-            />
-          )}
-        </View>
-      )}
-      {/* END 싱단 영역 */}
-
-      {/* START 하단 영역 */}
-      {/* {!drawingMode && ( */}
+    <TouchableOpacity
+      style={{ flex: 1 }}
+      onPress={toggleConferenceMode}
+      activeOpacity={1}
+    >
+      <MainView mainUser={props.mainUser} onClose={props.onClose} />
       {!localPipMode && (
-        <View
-          style={[
-            styles.bottomArea,
-            props.orientation === 'vertical'
-              ? styles.bottomAreaVertical
-              : styles.bottomAreaHorizontal
-          ]}
-        >
-          <BottomArea
-            onClose={props.onClose}
-            onChangeSpeaker={props.onChangeSpeaker}
-            orientation={props.orientation}
-            callType={callType}
-            speaker={speaker}
-            onChangeMicMaster={props.onChangeMicMaster}
-          />
-        </View>
+        <BottomArea {...props} />
       )}
-      {/* )} */}
-      {/* END 하단 영역 */}
+    </TouchableOpacity>
+    // <View style={styles.container} onLayout={props.onLayout}>
+    //   <StatusBar
+    //     barStyle="light-content"
+    //     backgroundColor={'#000'}
+    //     hidden={hideStatusbar}
+    //   />
+    //   <TouchableOpacity
+    //     style={{ flex: 1 }}
+    //     onPress={props.toggleConferenceMode}
+    //     activeOpacity={1}
+    //   >
+    //     <MainVideo
+    //       mainUser={mainUser}
+    //       callType={callType}
+    //       selectedRoomName={selectedRoomName}
+    //       isVideoReverse={isVideoReverse}
+    //       // orientation={props.orientation}
+    //       // onPress={props.toggleConferenceMode}
+    //       orientation={props.orientation}
+    //       hasNotch={props.hasNotch}
+    //       objectFit={props.objectFit}
+    //       drawing={drawingMode}
+    //       conferenceMode={conferenceMode}
+    //       createdTime={createdTime}
+    //       onClose={onClose}
+    //     />
+    //   </TouchableOpacity>
+    //   {/* END MAIN VIDEO 영역 */}
 
-      {/* OverView 영역 */}
-      {props.documentListMode && !localPipMode && (
-        <OverView
-          mode={props.documentListMode}
-          defaultMode={props.documentListMode[0]}
-          orientation={props.orientation}
-          speaker={props.speaker}
-          onChangeSharingMode={props.onChangeSharingMode}
-          onChangeSpeaker={props.onChangeSpeaker}
-        />
-      )}
-      {/* <TouchableOpacity
-        style={{
-          position: 'absolute',
-          width: '100%',
-          height: '100%',
-          top: 100,
-          backgroundColor: 'rgba(10,255,10,0.8)'
-        }}
-      /> */}
-    </View>
+    //   {/* START 싱단 영역 */}
+    //   {!localPipMode && conferenceMode === ConferenceModes.CONTROL && (
+    //     <View
+    //       style={[
+    //         styles.topArea,
+    //         props.orientation === 'vertical'
+    //           ? [styles.topAreaVertical, { top: props.hasNotch ? 47 : 27 }]
+    //           : [styles.topAreaHorizontal, { left: props.hasNotch ? 35 : 20 }]
+    //       ]}
+    //     >
+    //       {Number(callType) !== 2 && !drawingMode && (
+    //         <TopArea
+    //           callType={Number(callType)}
+    //           orientation={props.orientation}
+    //           drawing={props.drawingMode}
+    //           sharing={props.attributes}
+    //           onReverseVideo={props.onReverseVideo}
+    //           onChangeState={props.onChangeState}
+    //           onChangeDrawing={props.setSharingMode}
+    //           objectFit={props.objectFit}
+    //           onChangeDrawingMode={props.onChangeDrawingMode}
+    //         />
+    //       )}
+    //     </View>
+    //   )}
+    //   {/* END 싱단 영역 */}
+
+    //   {/* START 하단 영역 */}
+    //   {/* {!drawingMode && ( */}
+    //   {!localPipMode && (
+    //     <View
+    //       style={[
+    //         styles.bottomArea,
+    //         props.orientation === 'vertical'
+    //           ? styles.bottomAreaVertical
+    //           : styles.bottomAreaHorizontal
+    //       ]}
+    //     >
+    //       <BottomArea
+    //         onClose={props.onClose}
+    //         onChangeSpeaker={props.onChangeSpeaker}
+    //         orientation={props.orientation}
+    //         callType={callType}
+    //         speaker={speaker}
+    //         onChangeMicMaster={props.onChangeMicMaster}
+    //       />
+    //     </View>
+    //   )}
+    //   {/* )} */}
+    //   {/* END 하단 영역 */}
+
+    //   {/* OverView 영역 */}
+    //   {props.documentListMode && !localPipMode && (
+    //     <OverView
+    //       mode={props.documentListMode}
+    //       defaultMode={props.documentListMode[0]}
+    //       orientation={props.orientation}
+    //       speaker={props.speaker}
+    //       onChangeSharingMode={props.onChangeSharingMode}
+    //       onChangeSpeaker={props.onChangeSpeaker}
+    //     />
+    //   )}
+    //   {/* <TouchableOpacity
+    //     style={{
+    //       position: 'absolute',
+    //       width: '100%',
+    //       height: '100%',
+    //       top: 100,
+    //       backgroundColor: 'rgba(10,255,10,0.8)'
+    //     }}
+    //   /> */}
+    // </View>
   );
 };
 
@@ -174,25 +186,6 @@ const styles = StyleSheet.create({
   },
   middleArea: {
     flex: 9
-  },
-  bottomArea: {
-    position: 'absolute',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center'
-    // zIndex: 9
-  },
-  bottomAreaVertical: {
-    bottom: '5%',
-    left: 0,
-    right: 0,
-    flexDirection: 'row'
-  },
-  bottomAreaHorizontal: {
-    right: '5%',
-    top: 0,
-    bottom: 0,
-    flexDirection: 'column'
   }
 });
 

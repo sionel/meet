@@ -27,9 +27,10 @@ import { setConferenceManager } from '@utils/ConferenceManager';
 import { getT } from '@utils/translateManager';
 import { set } from 'lodash';
 
-const { PictureInPicture } = NativeModules;
+const { PictureInPicture, AudioMode } = NativeModules;
 const { width, height } = Dimensions.get('window');
 const isIOS = Platform.OS === 'ios';
+const InCallManager = !isIOS && require('react-native-incall-manager').default;
 
 const isTablet = DeviceInfo.isTablet();
 
@@ -196,6 +197,7 @@ class ConferenceScreenContainer extends React.Component {
   //     isDesktopSharing: !isDesktopSharing
   //   });
   // };
+
   _handleChangeScreen = async () => {
     const { isScreenShare, setScreenFlag, toggleMuteVideo } = this.props;
     const newTrackType = isScreenShare ? 'video' : 'desktop';
