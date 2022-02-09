@@ -10,15 +10,21 @@ import { actionCreators as ScreenShareAction } from '../../../../redux/modules/S
 import { RootState } from '../../../../redux/configureStore';
 
 function TopAreaContainer(props) {
-  const { conferenceMode, memberType, deployedServices, isScreenShare } =
-    useSelector((state: RootState) => {
-      return {
-        conferenceMode: state.local.conferenceMode,
-        memberType: state.user.auth.member_type,
-        deployedServices: state.deployed.deployedServices,
-        isScreenShare: state.screenShare.isScreenShare
-      };
-    });
+  const {
+    conferenceMode,
+    memberType,
+    deployedServices,
+    isScreenShare,
+    membershipName
+  } = useSelector((state: RootState) => {
+    return {
+      conferenceMode: state.local.conferenceMode,
+      memberType: state.user.auth.member_type,
+      deployedServices: state.deployed.deployedServices,
+      isScreenShare: state.screenShare.isScreenShare,
+      membershipName: state.user.auth?.last_company?.membership_name
+    };
+  });
   const dispatch = useDispatch();
   const toggleCameraFacingMode = () =>
     dispatch(localAction.toggleCameraFacingMode());
@@ -31,7 +37,9 @@ function TopAreaContainer(props) {
   const talkButton = props.callType === 3;
   const penButton = true;
   const docShareButton =
-    memberType !== 1 && deployedServices.includes('wedrive');
+    membershipName !== 'T EDGE' &&
+    memberType !== 1 &&
+    deployedServices.includes('wedrive');
   const screenShareButton = Platform.OS === 'ios' ? !Platform.isPad : true;
   const switchButton = !isScreenShare;
   const reverseButton = !isScreenShare;

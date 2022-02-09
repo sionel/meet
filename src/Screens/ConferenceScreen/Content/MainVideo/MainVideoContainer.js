@@ -20,7 +20,7 @@ class MainVideoContainer extends React.Component {
   }
 
   componentDidMount() {
-    const { videoPolicy } = this.props;
+    const { videoPolicy, loginType } = this.props;
     this._timer = setInterval(() => {
       if (this.props.createdTime) {
         let time = Math.floor((Date.now() - this.props.createdTime) / 1000);

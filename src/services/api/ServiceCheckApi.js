@@ -210,7 +210,7 @@ const anotherServiceCheck = async (auth, company, type) => {
       cno: company.company_no
       // ccode: company.company_code
     });
-    const urlType = '/common/company/deploy/whether/employee'; // 배포여부
+    const urlType = '/video/service/is-service-deploy'; // 배포여부
     const url = `${wehagoBaseURL}${urlType}?${params}`;
 
     const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
