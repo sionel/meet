@@ -6,7 +6,8 @@ import {
   Image,
   SafeAreaView,
   StyleSheet,
-  View
+  View,
+  Text
 } from 'react-native';
 import { RTCView } from 'react-native-webrtc';
 import LinearGradient from 'react-native-linear-gradient';
@@ -17,9 +18,11 @@ type MainPresenterProps = {
   isMuteVideo: boolean;
   stream: any;
   videoType: any;
-  //   isVideoReverse: any;
+  isVideoReverse: boolean;
   drawing: any;
   localPipMode: any;
+  objectFit: any;
+  mainUser: any;
 };
 
 const MainPresenter = (props: MainPresenterProps) => {
@@ -27,22 +30,58 @@ const MainPresenter = (props: MainPresenterProps) => {
     isMuteVideo,
     stream,
     videoType,
-    // isVideoReverse,
+    isVideoReverse,
     drawing,
-    localPipMode
+    localPipMode,
+    objectFit,
+    mainUser
   } = props;
+
+  const muteView = (
+    <View
+      style={{
+        position: 'absolute',
+        top: '45%',
+        height: 41,
+        left: 0,
+        right: 0,
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 4
+      }}
+    >
+      <Text
+        style={{
+          backgroundColor: '#F15F5F',
+          padding: 10,
+          color: '#fff',
+          textAlign: 'center',
+          fontSize: 14,
+          fontFamily: 'DOUZONEText50'
+        }}
+      >
+        {`네트워크가 불안정해요 :(`}
+      </Text>
+    </View>
+  );
+  
 
   //zindex:0
   return !isMuteVideo && stream && !drawing ? (
     <RTCView
       style={styles.RTCVideo}
-      mirror={videoType !== 'desktop'}
-      //   && !isVideoReverse}
-      objectFit={'cover'}
+      mirror={videoType !== 'desktop' && !isVideoReverse}
+      objectFit={
+        localPipMode
+          ? 'cover'
+          : videoType === undefined
+          ? 'contain'
+          : objectFit
+      }
       streamURL={stream.toURL()}
       zOrder={0} // zOrder 는 [0, 1] 만 사용가능 (아마?)
     />
-  ) : (
+  ) : mainUser.status === 'interrupted' ?  muteView : (
     <LinearGradient
       start={{ x: 0.5, y: 0.3 }}
       end={{ x: 0.5, y: 0 }}
@@ -70,7 +109,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     position: 'absolute',
-    display: 'flex',
+    // display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     top: 0,

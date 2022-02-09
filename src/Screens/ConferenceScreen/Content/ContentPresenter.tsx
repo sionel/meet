@@ -10,7 +10,7 @@ import {
 import { useSelector } from 'react-redux';
 
 import MainView from './RenwalContent/MainView';
-import TopArea from './TopArea';
+import TopArea from './RenwalContent/TopArea';
 import BottomArea from './RenwalContent/BottomArea';
 import OverView from './OverView';
 import SimpleNoti from '../SimpleNoti';
@@ -29,9 +29,11 @@ const ContentPresenter = (props: any) => {
     orientation,
     onClose,
     localPipMode,
-    toggleConferenceMode
+    toggleConferenceMode,
+    objectFit,
+    elapsedTime
   } = props;
-
+  
   // const localPipMode = useSelector((state: RootState) => state.local.pipMode);
   const hideStatusbar = orientation === 'horizontal';
   return (
@@ -40,10 +42,23 @@ const ContentPresenter = (props: any) => {
       onPress={toggleConferenceMode}
       activeOpacity={1}
     >
-      <MainView mainUser={props.mainUser} onClose={props.onClose} />
-      {!localPipMode && (
-        <BottomArea {...props} />
+      {!localPipMode && Number(callType) !== 2 && !drawingMode && (
+        <TopArea
+          callType={Number(callType)}
+          onReverseVideo={props.onReverseVideo}
+          onChangeDrawing={props.setSharingMode}
+          onChangeDrawingMode={props.onChangeDrawingMode}
+          mainUser={props.mainUser}
+          elapsedTime={elapsedTime}
+        />
       )}
+      <MainView
+        mainUser={props.mainUser}
+        onClose={props.onClose}
+        isVideoReverse={isVideoReverse}
+        objectFit={objectFit}
+      />
+      {!localPipMode && <BottomArea {...props} />}
     </TouchableOpacity>
     // <View style={styles.container} onLayout={props.onLayout}>
     //   <StatusBar

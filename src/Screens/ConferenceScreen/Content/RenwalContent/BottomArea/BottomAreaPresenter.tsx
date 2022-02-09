@@ -18,7 +18,7 @@ import { ConferenceModes } from '@utils/Constants';
 import ParticipantBox from './ParticipantBox';
 
 type BottomAreaProps = {
-  orientation: any;
+  orientation: 'horizontal' | 'vertical';
   callType: number;
   speaker: number;
   isScreenShare: boolean;
@@ -56,44 +56,49 @@ const BottomAreaPresenter = (props: BottomAreaProps) => {
     list
   } = props;
 
-  console.log('conferenceMode : ', conferenceMode);
-
   return (
-    <View style={[styles.bottomArea, { left: 0, right: 0, bottom: '5%', flexDirection:'column' }]}>
-      {(conferenceMode === ConferenceModes.NORMAL || isScreenShare) && (
-        <ScrollView
-          horizontal={orientation === 'vertical'}
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={[
-            styles.scrollView,
-            list.length === 0 ? { margin: 0, padding: 0 } : {}
-          ]}
-          //   onMomentumScrollEnd={props.moveScroll}
-          //   onScrollEndDrag={props.moveScroll}
-          scrollEventThrottle={0} // ios전용 이벤트를 얼마나 발생할지에 대한 빈도 0-16 16하면 디게많이 발생
-        >
-          {user && mainUserId !== user.id ? (
-            <ParticipantBox
-              key={user.id}
-              user={user}
-              videoTrack={user.videoTrack}
-              isSelect={mainUserId === user.id}
-            />
-          ) : null}
-          {list.map(
-            (participant: any) =>
-              mainUserId !== participant.id && (
+    <View
+      style={[
+        styles.bottomArea,
+        { left: 0, right: 0, bottom: '5%', flexDirection: 'column' }
+      ]}
+    >
+      {Number(callType) === 2
+        ? null
+        : (conferenceMode === ConferenceModes.NORMAL || isScreenShare) && (
+            <ScrollView
+              horizontal={orientation === 'vertical'}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={[
+                styles.scrollView,
+                list.length === 0 ? { margin: 0, padding: 0 } : {}
+              ]}
+              //   onMomentumScrollEnd={props.moveScroll}
+              //   onScrollEndDrag={props.moveScroll}
+              scrollEventThrottle={0} // ios전용 이벤트를 얼마나 발생할지에 대한 빈도 0-16 16하면 디게많이 발생
+            >
+              {user && mainUserId !== user.id ? (
                 <ParticipantBox
-                  key={participant.id}
-                  user={participant}
-                  isSelect={mainUserId === participant.id}
+                  key={user.id}
+                  user={user}
+                  videoTrack={user.videoTrack}
+                  isSelect={mainUserId === user.id}
                 />
-              )
+              ) : null}
+              {list.map(
+                (participant: any) =>
+                  mainUserId !== participant.id && (
+                    <ParticipantBox
+                      key={participant.id}
+                      user={participant}
+                      isSelect={mainUserId === participant.id}
+                    />
+                  )
+              )}
+            </ScrollView>
           )}
-        </ScrollView>
-      )}
       <View
-      style={{flexDirection:'row'}}
+        style={{ flexDirection: 'row' }}
         // style={[
         //   styles.bottomArea,
         //   orientation === 'vertical'

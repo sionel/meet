@@ -319,10 +319,12 @@ class ConferenceScreenContainer extends React.Component {
         this.props.externalAPIScope
       );
       this.setState({ connection: true, selectedRoomName });
+
       let roomInfo = auth.cno
         ? await MeetApi.getMeetRoom(auth, roomName)
         : await MeetApi.getMeetRoomNoCert(roomName);
       let { start_datetime } = roomInfo.resultData;
+
       let cnt = 0;
       while (!start_datetime) {
         roomInfo = auth.cno
@@ -419,7 +421,7 @@ class ConferenceScreenContainer extends React.Component {
         // 비디오 off
         this.props.toggleMuteVideo(true);
       }
-    } 
+    }
     // else if (this._appState !== 'active' && nextAppState === 'active') {
     //   active 시 video 설정 원래대로
     //   this.props.toggleMuteVideo(this._conferenceState.isMuteVideo);
@@ -465,7 +467,7 @@ class ConferenceScreenContainer extends React.Component {
       this.props.toggleMuteMic(true); // mic mute
       ToastAndroid.show(this.t('toast_micoff'), ToastAndroid.SHORT);
     }, 7500);
-      // this.props.toggleMuteMicByMe(true); 
+    // this.props.toggleMuteMicByMe(true);
   };
 
   /**

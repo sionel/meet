@@ -10,11 +10,14 @@ const { PictureInPicture } = NativeModules;
 type MainContainerProps = {
   mainUser: any;
   onClose: () => void;
+  isVideoReverse: boolean;
+  objectFit: any
 };
 
 const MainContainer = (props: MainContainerProps) => {
   const [exitContent, setExitContent] = useState(false);
   const t = getT();
+
   let timeout: ReturnType<typeof setTimeout>,
     timer: ReturnType<typeof setInterval>;
 
@@ -39,11 +42,18 @@ const MainContainer = (props: MainContainerProps) => {
 
   const {
     mainUser: { videoTrack, isMuteVideo },
-    onClose
+    onClose,
+    isVideoReverse,
+    objectFit,
+    mainUser
   } = props;
+
+
 
   const stream = !isMuteVideo && videoTrack && videoTrack.getOriginalStream();
   const videoType = videoTrack && videoTrack.videoType;
+
+  
 
   useEffect(() => {
     // timer = setInterval(() => {
@@ -113,9 +123,11 @@ const MainContainer = (props: MainContainerProps) => {
       isMuteVideo={isMuteVideo}
       stream={stream}
       videoType={videoType}
-      // isVideoReverse={isVideoReverse}
+      isVideoReverse={isVideoReverse}
       drawing={drawingMode}
       localPipMode={localPipMode}
+      objectFit={objectFit}
+      mainUser={mainUser}
     />
   );
 };

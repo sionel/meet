@@ -19,7 +19,6 @@ type BottomAreaProps = {
 
 const BottomAreaContainer = (props: BottomAreaProps) => {
   const t = getT();
-
   //#region SELELTOR
   const {
     conferenceMode,
@@ -32,9 +31,11 @@ const BottomAreaContainer = (props: BottomAreaProps) => {
     name,
     user,
     mainUserId,
-    list
+    list,
+    orientation
   } = useSelector((state: RootState) => {
-    const { local, screenShare, master, mainUser, participants } = state;
+    const { local, screenShare, master, mainUser, participants, orientation } =
+      state;
     return {
       conferenceMode: local.conferenceMode,
       isMuteMic: local.user.isMuteMic,
@@ -46,7 +47,8 @@ const BottomAreaContainer = (props: BottomAreaProps) => {
       isScreenShare: screenShare.isScreenShare,
       user: local.user,
       mainUserId: mainUser.mainUserId,
-      list: participants.list
+      list: participants.list,
+      orientation: orientation.orientation
     };
   });
   //#endregion
@@ -88,7 +90,7 @@ const BottomAreaContainer = (props: BottomAreaProps) => {
   };
   return (
     <BottomAreaPresenter
-      orientation={props.orientation}
+      orientation={orientation}
       callType={props.callType}
       speaker={props.speaker}
       onChangeSpeaker={props.onChangeSpeaker}

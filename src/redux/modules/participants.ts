@@ -59,7 +59,7 @@ interface WebInfoType {
   wehagoId: string;
 }
 
-interface ParticipantsTypes {
+export interface ParticipantsTypes {
   audioTrack: any;
   id: string;
   isKicked: boolean;
@@ -69,6 +69,7 @@ interface ParticipantsTypes {
   name: string;
   userInfo: any;
   videoTrack: any;
+  isMaster?: boolean;
 }
 export interface state {
   list: ParticipantsTypes[];
@@ -133,11 +134,12 @@ function joinUser(user: any): ThunkAction<void, RootState, unknown> {
 
 function applyJoinUser(state: state, action: AnyAction) {
   const { user } = action;
+  console.log(user.getId());
   const list = state.list.slice(0);
   const participant = {
     id: user.getId(),
     isLocal: false,
-    name: user.getDisplayName(),
+    name: user.getDisplayName(user.getId()),
     isMuteVideo: false,
     videoTrack: null,
     audioTrack: null,

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Dimensions, NativeModules, Platform } from 'react-native';
+import { Alert, Dimensions, NativeModules, Platform } from 'react-native';
 import ContentPresenter from './ContentPresenter';
 import FileSharing from './FileSharing';
 import { ConferenceModes } from '@utils/Constants';
@@ -34,9 +34,10 @@ function ContentContainer(props: any) {
   );
   const [isVideoReverse, setIsVideoReverse] = useState(false);
   const [speaker, setSpeaker] = useState(2);
-  const [objectFit, setObjectFit] = useState('contain');
+  const [objectFit, setObjectFit] = useState('cover');
   const [height, setHeight] = useState(Dimensions.get('window').height);
-  const { mainUser } = props;
+  const [elapsedTime, setElapsedTime] = useState(0);
+  const { mainUser, onClose, createdTime } = props;
   const { videoTrack, isMuteVideo } = mainUser;
   // const localPipMode = useSelector((state: RootState) => state.local.pipMode);
   const {
@@ -44,14 +45,19 @@ function ContentContainer(props: any) {
     drawingMode,
     documentListMode,
     attributes,
-    localPipMode
+    localPipMode,
+    videoPolicy,
+    loginType
   } = useSelector((state: RootState) => {
+    const { local, mainUser, documentShare, root, user, conference } = state;
     return {
-      conferenceMode: state.local.conferenceMode,
-      drawingMode: state.mainUser.drawingMode,
-      documentListMode: state.mainUser.documentListMode,
-      attributes: state.documentShare.attributes,
-      localPipMode: state.local.pipMode
+      conferenceMode: local.conferenceMode,
+      localPipMode: local.pipMode,
+      drawingMode: mainUser.drawingMode,
+      documentListMode: mainUser.documentListMode,
+      attributes: documentShare.attributes,
+      videoPolicy: root.videoPolicy,
+      loginType: user.loginType
     };
   });
 
@@ -65,11 +71,29 @@ function ContentContainer(props: any) {
 
   useEffect(() => {
     _handleChangeSpeaker();
-    Orientation.addOrientationListener(_setOrientation);
+    const _timer = setInterval(() => {
+      if (createdTime) {
+        let time = Math.floor((Date.now() - createdTime) / 1000);
+        time > 0 && setElapsedTime(time);
+        if (
+          (videoPolicy === 'nahago' || loginType === 'nahago') &&
+          time >= 3600
+        ) {
+          Alert.alert('회의 종료', '회의시간이 60분 지나 회의가 종료됩니다.', [
+            {
+              text: '확인',
+              onPress: () => {
+                onClose();
+              }
+            }
+          ]);
+        }
+      }
+    }, 500);
     return () => {
-      Orientation.removeOrientationListener(_setOrientation);
+      _timer && clearInterval(_timer);
     };
-  }, []);
+  }, [createdTime]);
 
   useEffect(() => {
     const m = getConferenceManager();
@@ -84,14 +108,14 @@ function ContentContainer(props: any) {
     }
   };
 
-  const _setOrientation = () => {
-    const { width, height } = Dimensions.get('window');
-    const currentOrientation = height > width ? 'vertical' : 'horizontal';
-    if (orientation !== currentOrientation) {
-      setOrientation(currentOrientation);
-      setHeight(Math.max(width, height));
-    }
-  };
+  // const _setOrientation = () => {
+  //   const { width, height } = Dimensions.get('window');
+  //   const currentOrientation = height > width ? 'vertical' : 'horizontal';
+  //   if (orientation !== currentOrientation) {
+  //     setOrientation(currentOrientation);
+  //     setHeight(Math.max(width, height));
+  //   }
+  // };
 
   const _handleReverseVideo = _.throttle(() => {
     setIsVideoReverse(!isVideoReverse);
@@ -140,8 +164,9 @@ function ContentContainer(props: any) {
       hasNotch={hasNotch}
       toggleConferenceMode={_toggleConferenceMode}
       onReverseVideo={_handleReverseVideo}
-      onLayout={_setOrientation}
+      // onLayout={_setOrientation}
       onChangeSpeaker={_handleChangeSpeaker}
+      elapsedTime={elapsedTime}
       // onChangeState={_handleChangeState}
     />
   );

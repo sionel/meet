@@ -71,11 +71,13 @@ const ParticipantBoxPresenter = (props: ParticipantBoxProps) => {
       style={styles.container}
       onPress={() => setMainUser(user.id)}
     >
-      <View style={styles.videoArea}>{content}</View>
-      <View style={styles.nameArea}>
-        <Text ellipsizeMode="tail" numberOfLines={1} style={styles.name}>
-          {getUserName(user)}
-        </Text>
+      <View style={styles.videoArea}>
+        {content}
+        <View style={styles.nameArea}>
+          <Text ellipsizeMode="tail" numberOfLines={1} style={styles.name}>
+            {getUserName(user)}
+          </Text>
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -86,19 +88,22 @@ const styles = StyleSheet.create({
     width: 104,
     height: 120,
     display: 'flex',
-    marginHorizontal: 10
+    marginHorizontal: 10,
+    marginBottom: 12
     // marginLeft: 10
   },
   videoArea: {
     flex: 1,
     width: 104,
     height: 120,
-    backgroundColor: '#707070',
+    // backgroundColor: '#707070',
     borderWidth: 0,
+    borderRadius: 6,
     // borderWidth: 3,
     // borderColor: 'rgba(255, 255, 255, 0.5)',
     // borderRadius: 50,
-    overflow: 'hidden'
+    overflow: 'hidden',
+    flexDirection:'column'
   },
   videoAreaSelected: {
     borderWidth: 3,
@@ -107,12 +112,11 @@ const styles = StyleSheet.create({
   video: {
     flex: 1,
     // opacity: 1,
-    backgroundColor: 'rgb(102, 104, 106)',
+    backgroundColor: 'rgb(187,197,208)',
     justifyContent: 'center',
     alignItems: 'center',
     width: 104,
     height: 120,
-    borderRadius: 6,
     // borderWidth: 1,
     // borderColor: 'rgb(102, 104, 106)'
   },
@@ -121,16 +125,21 @@ const styles = StyleSheet.create({
     fontSize: 32
   },
   nameArea: {
-    display: 'flex',
-    height: 20,
-    justifyContent: 'flex-end',
-    alignItems: 'center'
+    position: 'absolute',
+    // display: 'flex',
+    width: '100%',
+    height: 24,
+    bottom: 0,
+    alignItems:'center',
+    justifyContent:'center',
+    backgroundColor:'rgba(0,0,0,0.2)',
   },
   name: {
-    width: 90,
-    textAlign: 'center',
+    // width: 90,
+    // textAlign: 'center',
     color: '#fff',
-    fontFamily: 'DOUZONEText30'
+    fontFamily: 'DOUZONEText30',
+    fontSize: 12
   },
   imageCameraOff: {
     width: '100%',

@@ -8,8 +8,6 @@ const ParticipantBoxContainer = (props: {
   isSelect: any;
   videoTrack?: any;
 }) => {
-    console.log('boxProps : ', props);
-    
   const { user } = props;
   const { isMuteVideo } = user;
   const videoTrack = props.videoTrack ? props.videoTrack : user.videoTrack;

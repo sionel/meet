@@ -61,6 +61,7 @@ const ConferenceScreenPresenter = props => {
           onChangeSharingMode={props.onChangeSharingMode}
           onChangeDocumentPage={props.onChangeDocumentPage}
           onChangeMicMaster={props.onChangeMicMaster}
+          createdTime={props.createdTime}
         />
       ) : isWehagoV ? (
         <WatingScreen orientation={props.orientation} onClose={props.onClose} />

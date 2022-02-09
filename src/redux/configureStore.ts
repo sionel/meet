@@ -10,27 +10,27 @@ import { persistStore, persistCombineReducers } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // import storage from 'redux-persist/lib/storage';
 import thunk from 'redux-thunk';
-import local, { state as localState } from '@redux/local';
-import mainUser, { state as mainUserState } from '@redux/mainUser';
+import local, { state as LocalState } from '@redux/local';
+import mainUser, { state as MainUserState } from '@redux/mainUser';
 import participants, {state as ParticipantsState} from '@redux/participants';
-import user from '@redux/user';
+import user, {state as UserState} from '@redux/user';
 import wetalk from '@redux/wetalk';
 import wedrive from '@redux/wedrive';
 import documentShare from '@redux/documentShare';
-import conference, { state as conferenceState } from '@redux/conference';
+import conference, { state as ConferenceState } from '@redux/conference';
 import webUser from '@redux/webUser';
-import master, { state as masterState } from '@redux/master';
+import master, { state as MasterState } from '@redux/master';
 import alert from '@redux/alert';
 import toast from '@redux/toast';
 // import root from '@redux/root';
-import deployed, { state as deployedState } from '@redux/deployed';
-import screenShare, { state as screenShageState } from '@redux/ScreenShare';
-import indicator, { state as indicatorState } from '@redux/indicator';
-import orientation, { state as orientationState } from '@redux/orientation';
-import root, { state as rootState } from '@redux/root';
-import recents, { state as recentsState } from '@redux/recentsInvited';
+import deployed, { state as DeployedState } from '@redux/deployed';
+import screenShare, { state as ScreenShageState } from '@redux/ScreenShare';
+import indicator, { state as IndicatorState } from '@redux/indicator';
+import orientation, { state as OrientationState } from '@redux/orientation';
+import root, { state as RootStates } from '@redux/root';
+import recents, { state as RecentsState } from '@redux/recentsInvited';
 import selectCompany, {
-  state as selectCompanyState
+  state as SelectCompanyState
 } from '@redux/selectCompany';
 /**
  * middleware list
@@ -43,27 +43,27 @@ const middlewares = [thunk];
 // }
 
 export interface RootState {
-  local: localState;
-  user: any;
-  mainUser: mainUserState;
+  local: LocalState;
+  user: UserState;
+  mainUser: MainUserState;
   participants: ParticipantsState;
   wetalk: any;
   wedrive: any;
   documentShare: any;
-  conference: conferenceState;
+  conference: ConferenceState;
   webUser: any;
-  master: masterState;
+  master: MasterState;
   toast: any;
   loginInfo: any;
   alert: any;
-  screenShare: screenShageState;
+  screenShare: ScreenShageState;
   record: any;
-  indicator: indicatorState;
-  deployed: deployedState;
-  orientation: orientationState;
-  root: rootState;
-  recents: recentsState;
-  selectCompany: selectCompanyState;
+  indicator: IndicatorState;
+  deployed: DeployedState;
+  orientation: OrientationState;
+  root: RootStates;
+  recents: RecentsState;
+  selectCompany: SelectCompanyState;
 }
 
 /**
