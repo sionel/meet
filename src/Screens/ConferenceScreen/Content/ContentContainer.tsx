@@ -12,6 +12,13 @@ import { actionCreators as localAction } from '@redux/local';
 import { actionCreators as mainUserAction } from '@redux/mainUser';
 import { RootState } from '../../../redux/configureStore';
 import { getConferenceManager } from '@utils/ConferenceManager';
+import { ConferenceBotPopupContent } from './RenwalContent/Component/BottomPopup';
+
+export type ConferenceBottomPopupProps = {
+  show: boolean;
+  contentList: ConferenceBotPopupContent[];
+  title: string;
+};
 
 const isIOS = Platform.OS === 'ios';
 const InCallManager = !isIOS && require('react-native-incall-manager').default;
@@ -32,11 +39,18 @@ function ContentContainer(props: any) {
   const [orientation, setOrientation] = useState<'vertical' | 'horizontal'>(
     'vertical'
   );
+  const [isMultipleView, setIsMultipleView] = useState(false);
   const [isVideoReverse, setIsVideoReverse] = useState(false);
   const [speaker, setSpeaker] = useState(2);
   const [objectFit, setObjectFit] = useState('cover');
   const [height, setHeight] = useState(Dimensions.get('window').height);
   const [elapsedTime, setElapsedTime] = useState(0);
+  const [bottomPopup, setBottomPopup] = useState<ConferenceBottomPopupProps>({
+    show: false,
+    contentList: [],
+    title: ''
+  });
+
   const { mainUser, onClose, createdTime } = props;
   const { videoTrack, isMuteVideo } = mainUser;
   // const localPipMode = useSelector((state: RootState) => state.local.pipMode);
@@ -47,17 +61,26 @@ function ContentContainer(props: any) {
     attributes,
     localPipMode,
     videoPolicy,
-    loginType
+    loginType,
+    participants,
+    user,
+    auth,
+    masters
   } = useSelector((state: RootState) => {
-    const { local, mainUser, documentShare, root, user, conference } = state;
+    const { local, mainUser, documentShare, root, user, participants, master } =
+      state;
     return {
       conferenceMode: local.conferenceMode,
       localPipMode: local.pipMode,
+      user: local.user,
       drawingMode: mainUser.drawingMode,
       documentListMode: mainUser.documentListMode,
       attributes: documentShare.attributes,
       videoPolicy: root.videoPolicy,
-      loginType: user.loginType
+      loginType: user.loginType,
+      auth: user.auth,
+      participants: participants.list,
+      masters: master.masterList
     };
   });
 
@@ -68,6 +91,20 @@ function ContentContainer(props: any) {
   //   dispatch(mainUserAction.setDrawingMode(value));
   const setDocumentListMode = (value: any) =>
     dispatch(mainUserAction.setDocumentListMode(value));
+
+  let userList = participants.slice(0);
+  userList.unshift({
+    ...user,
+    userInfo: {
+      profile_url: auth.profile_url,
+      wehagoId: auth.portal_id,
+      userName: auth.user_name,
+      nickname: auth.nickname
+    }
+  });
+  userList.forEach((user: any) => {
+    user.isMaster = masters.includes(user?.userInfo?.wehagoId);
+  });
 
   useEffect(() => {
     _handleChangeSpeaker();
@@ -105,6 +142,13 @@ function ContentContainer(props: any) {
       setConferenceMode(ConferenceModes.NORMAL);
     } else {
       setConferenceMode(ConferenceModes.CONTROL);
+    }
+
+    if (bottomPopup.show) {
+      setBottomPopup({
+        ...bottomPopup,
+        show: false
+      });
     }
   };
 
@@ -168,6 +212,11 @@ function ContentContainer(props: any) {
       onChangeSpeaker={_handleChangeSpeaker}
       elapsedTime={elapsedTime}
       // onChangeState={_handleChangeState}
+      bottomPopup={bottomPopup}
+      handleBottomPopup={setBottomPopup}
+      userList={userList}
+      isMultipleView={isMultipleView}
+      setIsMultipleView={setIsMultipleView}
     />
   );
 }

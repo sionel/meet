@@ -6,9 +6,12 @@ import ParticipantBoxPresenter from './ParticipantBoxPresenter';
 const ParticipantBoxContainer = (props: {
   user: any;
   isSelect: any;
+  isMultipleView: boolean;
+  index?: number;
+  multiViewHeight?: number;
   videoTrack?: any;
 }) => {
-  const { user } = props;
+  const { user, isMultipleView, multiViewHeight, index } = props;
   const { isMuteVideo } = user;
   const videoTrack = props.videoTrack ? props.videoTrack : user.videoTrack;
 
@@ -43,6 +46,9 @@ const ParticipantBoxContainer = (props: {
       character={character}
       setMainUser={setMainUser}
       getUserName={getUserName}
+      isMultipleView={isMultipleView}
+      multiViewHeight={multiViewHeight}
+      index={index}
     />
   );
 };

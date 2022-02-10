@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { getConferenceManager } from '@utils/ConferenceManager';
 import { getT } from '@utils/translateManager';
 import BottomAreaPresenter from './BottomAreaPresenter';
@@ -7,6 +7,7 @@ import { RootState } from 'src/redux/configureStore';
 import { actionCreators as localActionCreators } from '@redux/local';
 import { actionCreators as masterActionCreators } from '@redux/master';
 import { actionCreators as toastActionCreators } from '@redux/toast';
+import { ParticipantsTypes } from '@redux/participants';
 
 type BottomAreaProps = {
   orientation: any;
@@ -15,6 +16,9 @@ type BottomAreaProps = {
   onClose: () => void;
   onChangeSpeaker: () => void;
   onChangeMicMaster: () => void;
+  userList: ParticipantsTypes[];
+  isMultipleView: boolean;
+  setIsMultipleView: () => void;
 };
 
 const BottomAreaContainer = (props: BottomAreaProps) => {
@@ -106,6 +110,9 @@ const BottomAreaContainer = (props: BottomAreaProps) => {
       user={user}
       mainUserId={mainUserId}
       list={list}
+      userList={props.userList}
+      isMultipleView={props.isMultipleView}
+      setIsMultipleView={props.setIsMultipleView}
     />
   );
 };

@@ -5,7 +5,8 @@ import {
   Text,
   StyleSheet,
   Image,
-  Platform
+  Platform,
+  Dimensions
 } from 'react-native';
 import { RTCView } from 'react-native-webrtc';
 import imgCharacter01 from '@assets/icons/img_character_man.png';
@@ -15,6 +16,8 @@ import CustomIcon from '@components/CustomIcon';
 
 // const apiLevel = DeviceInfo.getAPILevel();
 const canUseStream = true;
+const { width } = Dimensions.get('window');
+const multiWidth = width * 0.425;
 // (Platform.OS === 'android' && apiLevel >= 26) || Platform.OS === 'ios';
 
 type ParticipantBoxProps = {
@@ -24,21 +27,38 @@ type ParticipantBoxProps = {
   character: string;
   setMainUser: (id: string) => void;
   getUserName: (user: any) => string;
+  isMultipleView: boolean;
+  multiViewHeight: any;
+  index: any;
 };
 
 /**
  * ContentPresenter
  */
 const ParticipantBoxPresenter = (props: ParticipantBoxProps) => {
-  const { videoTrack, user, isMuteVideo, setMainUser, getUserName, character } =
-    props;
+  const {
+    videoTrack,
+    user,
+    isMuteVideo,
+    setMainUser,
+    getUserName,
+    character,
+    isMultipleView,
+    multiViewHeight,
+    index
+  } = props;
   const stream = videoTrack && videoTrack.getOriginalStream();
 
   const content = canUseStream ? (
     stream && !isMuteVideo ? (
-      <View style={styles.video}>
+      <View
+        style={[
+          styles.video,
+          isMultipleView && { width: multiWidth, height: (multiViewHeight - 10) / 2 }
+        ]}
+      >
         <RTCView
-          style={styles.video}
+          style={styles.rtcSize}
           mirror={false}
           objectFit={'cover'}
           streamURL={stream.toURL()}
@@ -46,7 +66,12 @@ const ParticipantBoxPresenter = (props: ParticipantBoxProps) => {
         />
       </View>
     ) : (
-      <View style={styles.video}>
+      <View
+        style={[
+          styles.video,
+          isMultipleView && { width: multiWidth, height: (multiViewHeight - 10) / 2 }
+        ]}
+      >
         <Image
           source={
             character === 'jessie'
@@ -68,10 +93,23 @@ const ParticipantBoxPresenter = (props: ParticipantBoxProps) => {
 
   return (
     <TouchableOpacity
-      style={styles.container}
+      style={[
+        styles.container,
+        isMultipleView && {
+          width: multiWidth,
+          height: (multiViewHeight - 10) / 2,
+          marginHorizontal: 0
+        },
+        index / 2 === 0 && { marginRight: 10 }
+      ]}
       onPress={() => setMainUser(user.id)}
     >
-      <View style={styles.videoArea}>
+      <View
+        style={[
+          styles.videoArea,
+          isMultipleView && { width: multiWidth, height: (multiViewHeight - 10) / 2 }
+        ]}
+      >
         {content}
         <View style={styles.nameArea}>
           <Text ellipsizeMode="tail" numberOfLines={1} style={styles.name}>
@@ -90,7 +128,11 @@ const styles = StyleSheet.create({
     display: 'flex',
     marginHorizontal: 10,
     marginBottom: 12
-    // marginLeft: 10
+  },
+  multiViewContainer: {
+    display: 'flex',
+    flex: 1,
+    marginBottom: 12
   },
   videoArea: {
     flex: 1,
@@ -103,7 +145,7 @@ const styles = StyleSheet.create({
     // borderColor: 'rgba(255, 255, 255, 0.5)',
     // borderRadius: 50,
     overflow: 'hidden',
-    flexDirection:'column'
+    flexDirection: 'column'
   },
   videoAreaSelected: {
     borderWidth: 3,
@@ -116,7 +158,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: 104,
-    height: 120,
+    height: 120
     // borderWidth: 1,
     // borderColor: 'rgb(102, 104, 106)'
   },
@@ -130,9 +172,9 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 24,
     bottom: 0,
-    alignItems:'center',
-    justifyContent:'center',
-    backgroundColor:'rgba(0,0,0,0.2)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,0.2)'
   },
   name: {
     // width: 90,
@@ -142,6 +184,10 @@ const styles = StyleSheet.create({
     fontSize: 12
   },
   imageCameraOff: {
+    width: '100%',
+    height: '100%'
+  },
+  rtcSize: {
     width: '100%',
     height: '100%'
   }

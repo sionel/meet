@@ -23,6 +23,7 @@ type MainPresenterProps = {
   localPipMode: any;
   objectFit: any;
   mainUser: any;
+  isMultipleView: boolean;
 };
 
 const MainPresenter = (props: MainPresenterProps) => {
@@ -34,7 +35,8 @@ const MainPresenter = (props: MainPresenterProps) => {
     drawing,
     localPipMode,
     objectFit,
-    mainUser
+    mainUser,
+    isMultipleView
   } = props;
 
   const muteView = (
@@ -64,24 +66,23 @@ const MainPresenter = (props: MainPresenterProps) => {
       </Text>
     </View>
   );
-  
 
   //zindex:0
-  return !isMuteVideo && stream && !drawing ? (
+  return isMultipleView ? (
+    <View style={{ width: '100%', height: '100%', backgroundColor: '#000' }} />
+  ) : !isMuteVideo && stream && !drawing ? (
     <RTCView
       style={styles.RTCVideo}
       mirror={videoType !== 'desktop' && !isVideoReverse}
       objectFit={
-        localPipMode
-          ? 'cover'
-          : videoType === undefined
-          ? 'contain'
-          : objectFit
+        localPipMode ? 'cover' : videoType === undefined ? 'contain' : objectFit
       }
       streamURL={stream.toURL()}
       zOrder={0} // zOrder 는 [0, 1] 만 사용가능 (아마?)
     />
-  ) : mainUser.status === 'interrupted' ?  muteView : (
+  ) : mainUser.status === 'interrupted' ? (
+    muteView
+  ) : (
     <LinearGradient
       start={{ x: 0.5, y: 0.3 }}
       end={{ x: 0.5, y: 0 }}

@@ -12,6 +12,8 @@ type MainContainerProps = {
   onClose: () => void;
   isVideoReverse: boolean;
   objectFit: any
+  isMultipleView: boolean;
+  setIsMultipleView: () => void;
 };
 
 const MainContainer = (props: MainContainerProps) => {
@@ -45,7 +47,8 @@ const MainContainer = (props: MainContainerProps) => {
     onClose,
     isVideoReverse,
     objectFit,
-    mainUser
+    mainUser,
+    isMultipleView
   } = props;
 
 
@@ -128,6 +131,7 @@ const MainContainer = (props: MainContainerProps) => {
       localPipMode={localPipMode}
       objectFit={objectFit}
       mainUser={mainUser}
+      isMultipleView={isMultipleView}
     />
   );
 };

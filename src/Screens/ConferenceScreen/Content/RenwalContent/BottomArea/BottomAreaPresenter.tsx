@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import {
+  Dimensions,
   Image,
   ScrollView,
   StyleSheet,
@@ -16,6 +17,8 @@ import icMicOff from '@assets/icons/ic_mic_off.png';
 import icCallEnd from '@assets/icons/ic_call_end.png';
 import { ConferenceModes } from '@utils/Constants';
 import ParticipantBox from './ParticipantBox';
+import { FlatList } from 'react-native-gesture-handler';
+import { ParticipantsTypes } from '@redux/participants';
 
 type BottomAreaProps = {
   orientation: 'horizontal' | 'vertical';
@@ -33,11 +36,15 @@ type BottomAreaProps = {
   toggleMuteMic: () => void;
   user: any;
   mainUserId: any;
-  list: any;
+  list: ParticipantsTypes[];
+  userList: ParticipantsTypes[];
+  isMultipleView: boolean;
+  setIsMultipleView: any;
 };
 
 const isTablet = deviceInfoModule.isTablet();
-
+const { width, height } = Dimensions.get('window');
+const multiViewHeight = height - height * 0.25;
 const BottomAreaPresenter = (props: BottomAreaProps) => {
   const {
     callType,
@@ -53,8 +60,13 @@ const BottomAreaPresenter = (props: BottomAreaProps) => {
     orientation,
     user,
     mainUserId,
-    list
+    list,
+    userList,
+    isMultipleView,
+    setIsMultipleView
   } = props;
+
+  // console.log('userList : ', userList);
 
   return (
     <View
@@ -66,36 +78,86 @@ const BottomAreaPresenter = (props: BottomAreaProps) => {
       {Number(callType) === 2
         ? null
         : (conferenceMode === ConferenceModes.NORMAL || isScreenShare) && (
-            <ScrollView
-              horizontal={orientation === 'vertical'}
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={[
-                styles.scrollView,
-                list.length === 0 ? { margin: 0, padding: 0 } : {}
-              ]}
-              //   onMomentumScrollEnd={props.moveScroll}
-              //   onScrollEndDrag={props.moveScroll}
-              scrollEventThrottle={0} // ios전용 이벤트를 얼마나 발생할지에 대한 빈도 0-16 16하면 디게많이 발생
-            >
-              {user && mainUserId !== user.id ? (
-                <ParticipantBox
-                  key={user.id}
-                  user={user}
-                  videoTrack={user.videoTrack}
-                  isSelect={mainUserId === user.id}
+            <Fragment>
+              <TouchableOpacity
+                style={{
+                  width: 100,
+                  height: 20,
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}
+                onPress={() => setIsMultipleView(!isMultipleView)}
+              >
+                <View
+                  style={{
+                    width: 52,
+                    height: 5,
+                    borderRadius: 3,
+                    backgroundColor: '#fff'
+                  }}
                 />
-              ) : null}
-              {list.map(
-                (participant: any) =>
-                  mainUserId !== participant.id && (
+              </TouchableOpacity>
+              {isMultipleView ? (
+                <FlatList
+                  data={userList}
+                  windowSize={6}
+                  numColumns={2}
+                  style={{
+                    // paddingLeft: '5%',
+                    flex: 1,
+                    height: multiViewHeight
+                  }}
+                  renderItem={({ item, index }) => {
+                    const { length } = list;
+                    return length > -1 ? (
+                      <ParticipantBox
+                        key={item.id}
+                        index={index}
+                        user={item}
+                        videoTrack={item.videoTrack}
+                        isSelect={mainUserId === item.id}
+                        isMultipleView={true}
+                        multiViewHeight={multiViewHeight}
+                      />
+                    ) : null;
+                  }}
+                />
+              ) : (
+                <ScrollView
+                  horizontal={orientation === 'vertical'}
+                  showsHorizontalScrollIndicator={false}
+                  style={{ marginTop: 16 }}
+                  contentContainerStyle={[
+                    styles.scrollView,
+                    list.length === 0 ? { margin: 0, padding: 0 } : {}
+                  ]}
+                  //   onMomentumScrollEnd={props.moveScroll}
+                  //   onScrollEndDrag={props.moveScroll}
+                  scrollEventThrottle={0} // ios전용 이벤트를 얼마나 발생할지에 대한 빈도 0-16 16하면 디게많이 발생
+                >
+                  {user && mainUserId !== user.id ? (
                     <ParticipantBox
-                      key={participant.id}
-                      user={participant}
-                      isSelect={mainUserId === participant.id}
+                      key={user.id}
+                      user={user}
+                      videoTrack={user.videoTrack}
+                      isSelect={mainUserId === user.id}
+                      isMultipleView={false}
                     />
-                  )
+                  ) : null}
+                  {list.map(
+                    (participant: any) =>
+                      mainUserId !== participant.id && (
+                        <ParticipantBox
+                          key={participant.id}
+                          user={participant}
+                          isSelect={mainUserId === participant.id}
+                          isMultipleView={false}
+                        />
+                      )
+                  )}
+                </ScrollView>
               )}
-            </ScrollView>
+            </Fragment>
           )}
       <View
         style={{ flexDirection: 'row' }}

@@ -297,6 +297,8 @@ PODS:
   - React-jsinspector (0.61.5-jitsi.2)
   - react-native-background-timer (2.4.0):
     - React
+  - react-native-blur (0.8.0):
+    - React
   - react-native-calendar-events (1.6.4):
     - React
   - react-native-date-picker (4.1.1):
@@ -448,6 +450,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-background-timer (from `../node_modules/react-native-background-timer`)
+  - "react-native-blur (from `../node_modules/@react-native-community/blur`)"
   - react-native-calendar-events (from `../node_modules/react-native-calendar-events`)
   - react-native-date-picker (from `../node_modules/react-native-date-picker`)
   - react-native-keep-awake (from `../node_modules/react-native-keep-awake`)
@@ -553,6 +556,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   react-native-background-timer:
     :path: "../node_modules/react-native-background-timer"
+  react-native-blur:
+    :path: "../node_modules/@react-native-community/blur"
   react-native-calendar-events:
     :path: "../node_modules/react-native-calendar-events"
   react-native-date-picker:
@@ -673,6 +678,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 67106691c60030ec888d7cbbc4f48a3168e27a02
   React-jsinspector: 92ceee6c66dc19886289b52436ade7e020b89602
   react-native-background-timer: 029c606b3fd6dd476b153e177c518b6ade4c169f
+  react-native-blur: cad4d93b364f91e7b7931b3fa935455487e5c33c
   react-native-calendar-events: cafbac5457a0dc449e3fb407814b2091b7f259be
   react-native-date-picker: 414fe8f73392bae030dc4efec39d743b5c5de283
   react-native-keep-awake: afad8a51dfef9fe9655a6344771be32c8596d774
@@ -715,6 +721,6 @@ SPEC CHECKSUMS:
   SDWebImageWebPCoder: 947093edd1349d820c40afbd9f42acb6cdecd987
   Yoga: 96b469c5e81ff51b917b92e8c3390642d4ded30c
 
-PODFILE CHECKSUM: 8a7852d09d54185630815dca049ff85c6cea2e24
+PODFILE CHECKSUM: a84c40ee8d37623ac3e081e8ee1496d19fd1ab2b
 
 COCOAPODS: 1.11.2

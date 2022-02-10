@@ -95,6 +95,7 @@ target 'JitsiMeetSDK' do
     pod 'RNCMaskedView', :path => '../node_modules/@react-native-community/masked-view'
     pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
     pod 'RNScreens', :path => '../node_modules/react-native-screens'
+    pod 'react-native-blur', :path => '../node_modules/@react-native-community/blur'
   # Native pod dependencies
   #
 

@@ -6,6 +6,16 @@ import { actionCreators as ScreenShareAction } from '@redux/ScreenShare';
 import { RootState } from 'src/redux/configureStore';
 import TopAreaPresenter from './TopAreaPresenter';
 import { Alert, Platform } from 'react-native';
+import { ConferenceBottomPopupProps } from '../../ContentContainer';
+import { getT } from '@utils/translateManager';
+
+import icDocument from '@assets/icons/ic_document.png';
+import icHand from '@assets/icons/ic_hand.png';
+import icRecord from '@assets/icons/ic_record.png';
+import icSketch from '@assets/icons/ic_sketch.png';
+import icWrite from '@assets/icons/ic_write.png';
+import { participantsListProps } from '@components/renewal/ParticipantsList';
+import { ParticipantsTypes } from '@redux/participants';
 
 type TopAreaContainerProps = {
   callType: number;
@@ -14,11 +24,27 @@ type TopAreaContainerProps = {
   onChangeDrawingMode: () => void;
   mainUser: any;
   elapsedTime: number;
+  handleBottomPopup: React.Dispatch<
+    React.SetStateAction<ConferenceBottomPopupProps>
+  >;
+  bottomPopup: ConferenceBottomPopupProps;
+  userList: ParticipantsTypes[];
+  isMultipleView: boolean;
+  setIsMultipleView: () => void;
 };
 
 const TopAreaContainer = (props: TopAreaContainerProps) => {
+  const t = getT();
   const [isMainUserMaster, setIsMainUserMaster] = useState(false);
-  const { callType, mainUser, elapsedTime } = props;
+  const {
+    callType,
+    mainUser,
+    elapsedTime,
+    bottomPopup,
+    handleBottomPopup,
+    userList,
+    isMultipleView
+  } = props;
   const {
     conferenceMode,
     user,
@@ -73,6 +99,61 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
   const switchButton = !isScreenShare;
   const reverseButton = !isScreenShare;
 
+  useEffect(() => {
+    userList.find(v => {
+      if (v.id === mainUser.id) {
+        v.isMaster === true
+          ? setIsMainUserMaster(true)
+          : setIsMainUserMaster(false);
+      }
+    });
+  }, [mainUser.id]);
+
+  const onExitPopup = () => {
+    handleBottomPopup({
+      ...bottomPopup,
+      show: false
+    });
+  };
+
+  const handdleMoreClick = () => {
+    if (bottomPopup.show) {
+      onExitPopup();
+    } else {
+      const sketch = {
+        icon1: icSketch,
+        name: t('스케치'),
+        onClick: () => {}
+      };
+      const document = {
+        icon1: icDocument,
+        name: t('문서공유'),
+        onClick: () => {}
+      };
+      const hand = {
+        icon1: icHand,
+        name: t('발언권'),
+        onClick: () => {}
+      };
+      const record = {
+        icon1: icRecord,
+        name: t('회의녹화'),
+        onClick: () => {}
+      };
+      const write = {
+        icon1: icWrite,
+        name: t('자동 회의록'),
+        onClick: () => {}
+      };
+
+      handleBottomPopup({
+        contentList: [sketch, document, hand, record, write],
+        show: true,
+        title: t('더보기')
+      });
+    }
+  };
+
   const second2String = (second: number) => {
     let hours: any = Math.floor(second / 3600);
     let minutes: any = Math.floor((second - hours * 3600) / 60);
@@ -89,38 +170,7 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
     }
     return hours + ':' + minutes + ':' + seconds;
   };
-
   let time = second2String(elapsedTime);
-  let userList = participants.slice(0);
-
-//   console.log(userList);
-  
-
-  userList.unshift({
-    ...user,
-    userInfo: {
-      profile_url: auth.profile_url,
-      wehagoId: auth.portal_id,
-      userName: auth.user_name,
-      nickname: auth.nickname
-    }
-  });
-
-  userList.forEach((user: any) => {
-    user.isMaster = masters.includes(user?.userInfo?.wehagoId);
-  });
-
-  useEffect(() => {
-    //   console.log('mainUser1 : ', mainUser);
-      
-    userList.find(v => {
-      if(v.id === mainUser.id) {
-          v.isMaster === true
-            ? setIsMainUserMaster(true)
-            : setIsMainUserMaster(false);
-      }
-    });
-  }, [mainUser.id]);
 
   return (
     <TopAreaPresenter
@@ -140,6 +190,8 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
       mainUser={mainUser}
       elapsedTime={time}
       isMaster={isMainUserMaster}
+      handdleMoreClick={handdleMoreClick}
+      isMultipleView={isMultipleView}
     />
   );
 };

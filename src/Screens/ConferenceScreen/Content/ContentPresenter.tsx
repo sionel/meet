@@ -16,7 +16,38 @@ import OverView from './OverView';
 import SimpleNoti from '../SimpleNoti';
 import { ConferenceModes } from '@utils/ConstantsBackup';
 import { RootState } from '../../../redux/configureStore';
-const ContentPresenter = (props: any) => {
+import { ConferenceBottomPopupProps } from './ContentContainer';
+import BottomPopup from './RenwalContent/Component/BottomPopup';
+import { ParticipantsTypes } from '@redux/participants';
+
+type ContentPresenterProps = {
+  mainUser: any;
+  callType: any;
+  selectedRoomName: any;
+  isVideoReverse: any;
+  speaker: any;
+  drawingMode: any;
+  conferenceMode: any;
+  createdTime: any;
+  orientation: any;
+  onClose: any;
+  localPipMode: any;
+  toggleConferenceMode: any;
+  objectFit: any;
+  elapsedTime: any;
+  bottomPopup: ConferenceBottomPopupProps;
+  handleBottomPopup: any;
+  onReverseVideo: any;
+  setSharingMode: any;
+  onChangeDrawingMode: any;
+  onChangeSpeaker: () => void;
+  onChangeMicMaster: () => void;
+  userList: ParticipantsTypes[];
+  isMultipleView: boolean;
+  setIsMultipleView: () => void;
+};
+
+const ContentPresenter = (props: ContentPresenterProps) => {
   const {
     mainUser,
     callType,
@@ -31,9 +62,14 @@ const ContentPresenter = (props: any) => {
     localPipMode,
     toggleConferenceMode,
     objectFit,
-    elapsedTime
+    elapsedTime,
+    bottomPopup,
+    handleBottomPopup,
+    userList,
+    isMultipleView,
+    setIsMultipleView
   } = props;
-  
+
   // const localPipMode = useSelector((state: RootState) => state.local.pipMode);
   const hideStatusbar = orientation === 'horizontal';
   return (
@@ -50,6 +86,11 @@ const ContentPresenter = (props: any) => {
           onChangeDrawingMode={props.onChangeDrawingMode}
           mainUser={props.mainUser}
           elapsedTime={elapsedTime}
+          handleBottomPopup={handleBottomPopup}
+          bottomPopup={bottomPopup}
+          userList={userList}
+          isMultipleView={isMultipleView}
+          setIsMultipleView={setIsMultipleView}
         />
       )}
       <MainView
@@ -57,8 +98,11 @@ const ContentPresenter = (props: any) => {
         onClose={props.onClose}
         isVideoReverse={isVideoReverse}
         objectFit={objectFit}
+        isMultipleView={isMultipleView}
+        setIsMultipleView={setIsMultipleView}
       />
       {!localPipMode && <BottomArea {...props} />}
+      {bottomPopup.show && <BottomPopup {...bottomPopup}/>}
     </TouchableOpacity>
     // <View style={styles.container} onLayout={props.onLayout}>
     //   <StatusBar
