@@ -31,6 +31,7 @@ type TopAreaContainerProps = {
   userList: ParticipantsTypes[];
   isMultipleView: boolean;
   setIsMultipleView: () => void;
+  selectedRoomName: string
 };
 
 const TopAreaContainer = (props: TopAreaContainerProps) => {
@@ -43,7 +44,8 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
     bottomPopup,
     handleBottomPopup,
     userList,
-    isMultipleView
+    isMultipleView,
+    selectedRoomName
   } = props;
   const {
     conferenceMode,
@@ -171,7 +173,7 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
     return hours + ':' + minutes + ':' + seconds;
   };
   let time = second2String(elapsedTime);
-
+  
   return (
     <TopAreaPresenter
       talkButton={talkButton}
@@ -192,6 +194,7 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
       isMaster={isMainUserMaster}
       handdleMoreClick={handdleMoreClick}
       isMultipleView={isMultipleView}
+      selectedRoomName={selectedRoomName}
     />
   );
 };

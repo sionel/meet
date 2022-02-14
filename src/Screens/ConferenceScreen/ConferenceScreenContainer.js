@@ -252,6 +252,8 @@ class ConferenceScreenContainer extends React.Component {
       tracks
     } = params;
 
+    console.log('params' , params);
+
     this._conferenceManager = new ConferenceManager(
       dispatch,
       this._handleConferenceClose

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -6,29 +6,38 @@ import {
   StyleSheet,
   Image,
   Platform,
-  Dimensions
+  Dimensions,
+  TouchableHighlight
 } from 'react-native';
 import { RTCView } from 'react-native-webrtc';
 import imgCharacter01 from '@assets/icons/img_character_man.png';
 import imgCharacter02 from '@assets/icons/img_character_woman.png';
 import imgCharacter03 from '@assets/icons/img_character_woman2.png';
+import icMaster from '@assets/icons/ic_master.png';
+import icMicOn from '@assets/icons/ic_mic_on.png';
+import icMicOff from '@assets/icons/ic_mic_off.png';
+
 import CustomIcon from '@components/CustomIcon';
+import { ParticipantsTypes } from '@redux/participants';
+import { getT } from '@utils/translateManager';
 
 // const apiLevel = DeviceInfo.getAPILevel();
 const canUseStream = true;
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 const multiWidth = width * 0.425;
+const multiViewContainer = height * 0.75;
+
 // (Platform.OS === 'android' && apiLevel >= 26) || Platform.OS === 'ios';
 
 type ParticipantBoxProps = {
   videoTrack: any;
-  user: any;
+  user: ParticipantsTypes;
   isMuteVideo: boolean;
   character: string;
   setMainUser: (id: string) => void;
   getUserName: (user: any) => string;
   isMultipleView: boolean;
-  multiViewHeight: any;
+  handleTouchView: () => void;
   index: any;
 };
 
@@ -44,19 +53,20 @@ const ParticipantBoxPresenter = (props: ParticipantBoxProps) => {
     getUserName,
     character,
     isMultipleView,
-    multiViewHeight,
+    handleTouchView,
     index
   } = props;
+
+  const t = getT();
   const stream = videoTrack && videoTrack.getOriginalStream();
+  const multiViewHeight = (multiViewContainer * 0.95) / 2;
+  const multiView = { width: multiWidth, height: multiViewHeight };
+
+  // console.log('user : ', user);
 
   const content = canUseStream ? (
     stream && !isMuteVideo ? (
-      <View
-        style={[
-          styles.video,
-          isMultipleView && { width: multiWidth, height: (multiViewHeight - 10) / 2 }
-        ]}
-      >
+      <View style={[styles.video, isMultipleView && multiView]}>
         <RTCView
           style={styles.rtcSize}
           mirror={false}
@@ -66,12 +76,7 @@ const ParticipantBoxPresenter = (props: ParticipantBoxProps) => {
         />
       </View>
     ) : (
-      <View
-        style={[
-          styles.video,
-          isMultipleView && { width: multiWidth, height: (multiViewHeight - 10) / 2 }
-        ]}
-      >
+      <View style={[styles.video, isMultipleView && multiView]}>
         <Image
           source={
             character === 'jessie'
@@ -97,24 +102,119 @@ const ParticipantBoxPresenter = (props: ParticipantBoxProps) => {
         styles.container,
         isMultipleView && {
           width: multiWidth,
-          height: (multiViewHeight - 10) / 2,
+          height: multiViewHeight,
           marginHorizontal: 0
         },
         index / 2 === 0 && { marginRight: 10 }
       ]}
-      onPress={() => setMainUser(user.id)}
+      onPress={handleTouchView}
     >
-      <View
-        style={[
-          styles.videoArea,
-          isMultipleView && { width: multiWidth, height: (multiViewHeight - 10) / 2 }
-        ]}
+      <View style={[styles.videoArea, isMultipleView && multiView]}>
+      {isMultipleView && <View
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          width: '100%',
+          height: 36,
+          paddingHorizontal: '5%',
+          zIndex: 3,
+          paddingVertical: '5%'
+        }}
       >
+        <TouchableHighlight
+          style={{
+            width: 29,
+            height: 29,
+            borderRadius: 14.5,
+            backgroundColor: '#03030333',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}
+        >
+          <Image
+            source={user.isMuteMic ? icMicOff : icMicOn}
+            resizeMode={'cover'}
+            style={{ width: 20, height: 20 }}
+          />
+        </TouchableHighlight>
+      </View>}
         {content}
         <View style={styles.nameArea}>
-          <Text ellipsizeMode="tail" numberOfLines={1} style={styles.name}>
-            {getUserName(user)}
-          </Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            {isMultipleView && (
+              <Fragment>
+                {user.isLocal && (
+                  <View
+                    style={{
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: 32,
+                      height: 29,
+                      backgroundColor: '#6767f7',
+                      borderRadius: 14
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontFamily: 'DOUZONEText50',
+                        color: '#fff',
+                        fontSize: 13
+                      }}
+                    >
+                      {t('나')}
+                    </Text>
+                  </View>
+                )}
+                {user.userInfo?.isExternalParticipant === 'true' && (
+                  <View
+                    style={{
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: 37,
+                      height: 29,
+                      backgroundColor: '#75b7cb',
+                      borderRadius: 14
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontFamily: 'DOUZONEText50',
+                        color: '#fff',
+                        fontSize: 13
+                      }}
+                    >
+                      {t('외부')}
+                    </Text>
+                  </View>
+                )}
+                {user.isMaster && (
+                  <View
+                    style={{
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: 29,
+                      height: 29,
+                      borderRadius: 14.5,
+                      backgroundColor: '#febc2c',
+                      marginLeft: 2
+                    }}
+                  >
+                    <Image
+                      source={icMaster}
+                      resizeMode={'cover'}
+                      style={{ width: 20, height: 20 }}
+                    />
+                  </View>
+                )}
+              </Fragment>
+            )}
+
+            <Text ellipsizeMode="tail" numberOfLines={1} style={styles.name}>
+              {getUserName(user)}
+            </Text>
+          </View>
         </View>
       </View>
     </TouchableOpacity>
@@ -127,23 +227,14 @@ const styles = StyleSheet.create({
     height: 120,
     display: 'flex',
     marginHorizontal: 10,
-    marginBottom: 12
-  },
-  multiViewContainer: {
-    display: 'flex',
-    flex: 1,
-    marginBottom: 12
+    marginVertical: '2%'
   },
   videoArea: {
     flex: 1,
     width: 104,
     height: 120,
-    // backgroundColor: '#707070',
     borderWidth: 0,
     borderRadius: 6,
-    // borderWidth: 3,
-    // borderColor: 'rgba(255, 255, 255, 0.5)',
-    // borderRadius: 50,
     overflow: 'hidden',
     flexDirection: 'column'
   },
@@ -153,14 +244,11 @@ const styles = StyleSheet.create({
   },
   video: {
     flex: 1,
-    // opacity: 1,
     backgroundColor: 'rgb(187,197,208)',
     justifyContent: 'center',
     alignItems: 'center',
     width: 104,
     height: 120
-    // borderWidth: 1,
-    // borderColor: 'rgb(102, 104, 106)'
   },
   profile: {
     color: '#DDD',
@@ -168,20 +256,18 @@ const styles = StyleSheet.create({
   },
   nameArea: {
     position: 'absolute',
-    // display: 'flex',
     width: '100%',
-    height: 24,
+    height: '15%',
     bottom: 0,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'rgba(0,0,0,0.2)'
   },
   name: {
-    // width: 90,
-    // textAlign: 'center',
     color: '#fff',
     fontFamily: 'DOUZONEText30',
-    fontSize: 12
+    fontSize: 15,
+    marginLeft: 2
   },
   imageCameraOff: {
     width: '100%',

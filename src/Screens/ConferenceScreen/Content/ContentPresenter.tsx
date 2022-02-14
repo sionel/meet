@@ -91,6 +91,7 @@ const ContentPresenter = (props: ContentPresenterProps) => {
           userList={userList}
           isMultipleView={isMultipleView}
           setIsMultipleView={setIsMultipleView}
+          selectedRoomName={selectedRoomName}
         />
       )}
       <MainView
@@ -102,7 +103,7 @@ const ContentPresenter = (props: ContentPresenterProps) => {
         setIsMultipleView={setIsMultipleView}
       />
       {!localPipMode && <BottomArea {...props} />}
-      {bottomPopup.show && <BottomPopup {...bottomPopup}/>}
+      {bottomPopup.show && <BottomPopup {...bottomPopup} />}
     </TouchableOpacity>
     // <View style={styles.container} onLayout={props.onLayout}>
     //   <StatusBar

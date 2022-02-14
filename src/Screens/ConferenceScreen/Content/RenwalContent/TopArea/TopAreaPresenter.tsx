@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import {
   Image,
   StyleSheet,
@@ -32,6 +32,7 @@ type TopAreaPresenterProps = {
   isMaster: boolean;
   handdleMoreClick: () => void;
   isMultipleView: boolean;
+  selectedRoomName: string;
 };
 
 const TopAreaPresenter = (props: TopAreaPresenterProps) => {
@@ -53,115 +54,133 @@ const TopAreaPresenter = (props: TopAreaPresenterProps) => {
     elapsedTime,
     isMaster,
     handdleMoreClick,
-    isMultipleView
+    isMultipleView,
+    selectedRoomName
   } = props;
 
-  // console.log('isMaster : ', isMaster);
-
-  // console.log('userList : ', userList);
-  // console.log('mainUser2 : ', mainUser);
 
   return (
     <View style={styles.topContainer}>
-      <View style={styles.topRow}>
-        <View>
+      <View style={[styles.topRow, isMultipleView && {justifyContent:'space-between'}]}>
+        <View style={{ justifyContent: 'flex-start' }}>
           <Text style={styles.timeText}>
             {elapsedTime !== '00:00:00' ? elapsedTime : ''}
           </Text>
         </View>
-        <View style={{ flexDirection: 'row' }}>
-          {/* 유저리스트 */}
-          {penButton && (
-            <TouchableHighlight
-              style={styles.topMenuIcon}
-              underlayColor="rgba(112,112,112,0.5)"
-              onPress={() => toggleDocumentListMode(['USERLIST'])}
-            >
-              <Image
-                source={icUserW}
-                resizeMode={'cover'}
-                style={styles.iconSize}
-              />
-            </TouchableHighlight>
-          )}
-          {/* 채팅 */}
-          {talkButton && (
-            <TouchableHighlight
-              style={styles.topMenuIcon}
-              underlayColor="rgba(112,112,112,0.5)"
-              onPress={() => toggleDocumentListMode(['CHATTING'])}
-            >
-              <Image
-                source={icChatW}
-                resizeMode={'cover'}
-                style={styles.iconSize}
-              />
-            </TouchableHighlight>
-          )}
 
-          {
-            docShareButton && null
-            // <CustomButton
-            //   name="docShare"
-            //   width={28}
-            //   height={28}
-            //   areaWidth={42}
-            //   areaHeight={36}
-            //   onPress={_.throttle(() => toggleDocumentListMode(['FILELIST']), 500)}
-            // />
-          }
-          {
+        {isMultipleView ? (
+          <Fragment>
+            <View style={{alignItems:'center'}}>
+              <Text
+                style={{
+                  fontFamily: 'DOUZONEText50',
+                  fontSize: 18,
+                  color: '#fff'
+                }}
+              >
+                {selectedRoomName}
+              </Text>
+            </View>
+            <View style={{alignItems:'flex-end'}}>
+              <TouchableHighlight
+                style={styles.moreClickView}
+                underlayColor="rgba(112,112,112,0.5)"
+                onPress={handdleMoreClick}
+              >
+                <Image
+                  source={icMoreW}
+                  resizeMode={'cover'}
+                  style={styles.iconSize}
+                />
+              </TouchableHighlight>
+            </View>
+          </Fragment>
+        ) : (
+          <View style={{ flexDirection: 'row' }}>
+            {penButton && (
+              <TouchableHighlight
+                style={styles.topMenuIcon}
+                underlayColor="rgba(112,112,112,0.5)"
+                onPress={() => toggleDocumentListMode(['USERLIST'])}
+              >
+                <Image
+                  source={icUserW}
+                  resizeMode={'cover'}
+                  style={styles.iconSize}
+                />
+              </TouchableHighlight>
+            )}
+            {talkButton && (
+              <TouchableHighlight
+                style={styles.topMenuIcon}
+                underlayColor="rgba(112,112,112,0.5)"
+                onPress={() => toggleDocumentListMode(['CHATTING'])}
+              >
+                <Image
+                  source={icChatW}
+                  resizeMode={'cover'}
+                  style={styles.iconSize}
+                />
+              </TouchableHighlight>
+            )}
+            {/* docShareButton && null
+             <CustomButton
+               name="docShare"
+               width={28}
+               height={28}
+               areaWidth={42}
+               areaHeight={36}
+               onPress={_.throttle(() => toggleDocumentListMode(['FILELIST']), 500)}
+             />
+
             screenShareButton && null
-            // <CustomButton
-            //   name="icoScreenShagre"
-            //   width={28}
-            //   height={28}
-            //   areaWidth={42}
-            //   areaHeight={36}
-            //   onPress={toggleScreenFlag}
-            // />
-          }
-          {/* 카메라 전면, 후면모드 */}
-          {switchButton && (
+             <CustomButton
+               name="icoScreenShagre"
+               width={28}
+               height={28}
+               areaWidth={42}
+               areaHeight={36}
+               onPress={toggleScreenFlag}
+             /> */}
+            {switchButton && (
+              <TouchableHighlight
+                style={styles.topMenuIcon}
+                underlayColor="rgba(112,112,112,0.5)"
+                onPress={toggleCameraFacingMode}
+              >
+                <Image
+                  source={icChangeW}
+                  resizeMode={'cover'}
+                  style={styles.iconSize}
+                />
+              </TouchableHighlight>
+            )}
+            {reverseButton && (
+              <TouchableHighlight
+                style={styles.topMenuIcon}
+                underlayColor="rgba(112,112,112,0.5)"
+                onPress={onReverseVideo}
+              >
+                <Image
+                  source={icInvertW}
+                  resizeMode={'cover'}
+                  style={styles.iconSize}
+                />
+              </TouchableHighlight>
+            )}
             <TouchableHighlight
-              style={styles.topMenuIcon}
+              style={styles.moreClickView}
               underlayColor="rgba(112,112,112,0.5)"
-              onPress={toggleCameraFacingMode}
+              onPress={handdleMoreClick}
             >
               <Image
-                source={icChangeW}
+                source={icMoreW}
                 resizeMode={'cover'}
                 style={styles.iconSize}
               />
             </TouchableHighlight>
-          )}
-          {/* 화면 좌우반전 */}
-          {reverseButton && (
-            <TouchableHighlight
-              style={styles.topMenuIcon}
-              underlayColor="rgba(112,112,112,0.5)"
-              onPress={onReverseVideo}
-            >
-              <Image
-                source={icInvertW}
-                resizeMode={'cover'}
-                style={styles.iconSize}
-              />
-            </TouchableHighlight>
-          )}
-          {/* 더보기 */}
-          <TouchableHighlight
-            style={styles.moreClickView}
-            underlayColor="rgba(112,112,112,0.5)"
-            onPress={handdleMoreClick}
-          >
-            <Image
-              source={icMoreW}
-              resizeMode={'cover'}
-              style={styles.iconSize}
-            />
-          </TouchableHighlight>
-        </View>
+          </View>
+        )}
       </View>
       {!isMultipleView && (
         <View style={styles.mainUserNameView}>
@@ -194,7 +213,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     marginHorizontal: '5%',
-    height: 48,
+    height: 48
   },
   timeText: {
     fontSize: 14,

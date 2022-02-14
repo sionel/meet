@@ -43,8 +43,8 @@ type BottomAreaProps = {
 };
 
 const isTablet = deviceInfoModule.isTablet();
-const { width, height } = Dimensions.get('window');
-const multiViewHeight = height - height * 0.25;
+const { height } = Dimensions.get('window');
+
 const BottomAreaPresenter = (props: BottomAreaProps) => {
   const {
     callType,
@@ -66,7 +66,7 @@ const BottomAreaPresenter = (props: BottomAreaProps) => {
     setIsMultipleView
   } = props;
 
-  // console.log('userList : ', userList);
+  const multiViewHeight = height * 0.75;
 
   return (
     <View
@@ -117,7 +117,7 @@ const BottomAreaPresenter = (props: BottomAreaProps) => {
                         videoTrack={item.videoTrack}
                         isSelect={mainUserId === item.id}
                         isMultipleView={true}
-                        multiViewHeight={multiViewHeight}
+                        setIsMultipleView={setIsMultipleView}
                       />
                     ) : null;
                   }}
@@ -126,13 +126,10 @@ const BottomAreaPresenter = (props: BottomAreaProps) => {
                 <ScrollView
                   horizontal={orientation === 'vertical'}
                   showsHorizontalScrollIndicator={false}
-                  style={{ marginTop: 16 }}
                   contentContainerStyle={[
                     styles.scrollView,
                     list.length === 0 ? { margin: 0, padding: 0 } : {}
                   ]}
-                  //   onMomentumScrollEnd={props.moveScroll}
-                  //   onScrollEndDrag={props.moveScroll}
                   scrollEventThrottle={0} // ios전용 이벤트를 얼마나 발생할지에 대한 빈도 0-16 16하면 디게많이 발생
                 >
                   {user && mainUserId !== user.id ? (

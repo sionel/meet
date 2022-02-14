@@ -138,10 +138,10 @@ function ContentContainer(props: any) {
   }, [mainUser]);
 
   const _toggleConferenceMode = () => {
-    if (conferenceMode === ConferenceModes.CONTROL) {
-      setConferenceMode(ConferenceModes.NORMAL);
+    if (conferenceMode === ConferenceModes.CONTROL ) {
+      !isMultipleView && setConferenceMode(ConferenceModes.NORMAL);
     } else {
-      setConferenceMode(ConferenceModes.CONTROL);
+      !isMultipleView && setConferenceMode(ConferenceModes.CONTROL);
     }
 
     if (bottomPopup.show) {
