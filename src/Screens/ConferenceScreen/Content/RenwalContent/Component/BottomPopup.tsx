@@ -13,16 +13,19 @@ import {
 import { BlurView } from '@react-native-community/blur';
 const { width, height } = Dimensions.get('window');
 
-export interface ConferenceBotPopupContent {
+export type ConferenceBotPopupContent = {
   icon1: ImageSourcePropType;
   name: string;
   onClick: () => void;
+} | {
+  content? : string;
 }
 
 interface BottomPopupProps {
+  popupType: 'NORMAL' | 'PROFILE' | 'USERLIST'
   title: string;
   contentList: ConferenceBotPopupContent[];
-}
+} 
 
 export default function BottomPopup(
   props: BottomPopupProps

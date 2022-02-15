@@ -18,6 +18,7 @@ export type ConferenceBottomPopupProps = {
   show: boolean;
   contentList: ConferenceBotPopupContent[];
   title: string;
+  popupType: 'NORMAL' | 'PROFILE' | 'USERLIST';
 };
 
 const isIOS = Platform.OS === 'ios';
@@ -48,7 +49,8 @@ function ContentContainer(props: any) {
   const [bottomPopup, setBottomPopup] = useState<ConferenceBottomPopupProps>({
     show: false,
     contentList: [],
-    title: ''
+    title: '',
+    popupType: 'NORMAL'
   });
 
   const { mainUser, onClose, createdTime } = props;

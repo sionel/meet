@@ -31,7 +31,7 @@ const multiViewContainer = height * 0.75;
 
 type ParticipantBoxProps = {
   videoTrack: any;
-  user: ParticipantsTypes;
+  user: ParticipantsTypes & {isMuteMic? : boolean};
   isMuteVideo: boolean;
   character: string;
   setMainUser: (id: string) => void;
@@ -61,6 +61,7 @@ const ParticipantBoxPresenter = (props: ParticipantBoxProps) => {
   const stream = videoTrack && videoTrack.getOriginalStream();
   const multiViewHeight = (multiViewContainer * 0.95) / 2;
   const multiView = { width: multiWidth, height: multiViewHeight };
+  const isMuteMic = user.isLocal ? user.isMuteMic : user.audioTrack.muted;
 
   // console.log('user : ', user);
 
@@ -110,36 +111,41 @@ const ParticipantBoxPresenter = (props: ParticipantBoxProps) => {
       onPress={handleTouchView}
     >
       <View style={[styles.videoArea, isMultipleView && multiView]}>
-      {isMultipleView && <View
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          width: '100%',
-          height: 36,
-          paddingHorizontal: '5%',
-          zIndex: 3,
-          paddingVertical: '5%'
-        }}
-      >
-        <TouchableHighlight
-          style={{
-            width: 29,
-            height: 29,
-            borderRadius: 14.5,
-            backgroundColor: '#03030333',
-            justifyContent: 'center',
-            alignItems: 'center'
-          }}
-        >
-          <Image
-            source={user.isMuteMic ? icMicOff : icMicOn}
-            resizeMode={'cover'}
-            style={{ width: 20, height: 20 }}
-          />
-        </TouchableHighlight>
-      </View>}
+        {isMultipleView && (
+          <View
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              width: '100%',
+              height: 36,
+              paddingHorizontal: '5%',
+              zIndex: 3,
+              paddingVertical: '5%'
+            }}
+          >
+            <TouchableHighlight
+              style={{
+                width: 29,
+                height: 29,
+                borderRadius: 14.5,
+                backgroundColor: '#03030333',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+            >
+              <Image
+                source={isMuteMic ? icMicOff : icMicOn}
+                resizeMode={'cover'}
+                style={[
+                  { width: 20, height: 20 },
+                  isMuteMic && { opacity: 0.5 }
+                ]}
+              />
+            </TouchableHighlight>
+          </View>
+        )}
         {content}
         <View style={styles.nameArea}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>

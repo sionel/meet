@@ -118,6 +118,19 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
     });
   };
 
+  const handdleUserListClick = () => {
+    if (bottomPopup.show) {
+      onExitPopup();
+    } else {
+      handleBottomPopup({
+        contentList: userList,
+        show: true,
+        title: t('참석자 리스트'),
+        popupType: 'USERLIST'
+      });
+    }
+  }
+
   const handdleMoreClick = () => {
     if (bottomPopup.show) {
       onExitPopup();
@@ -151,7 +164,8 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
       handleBottomPopup({
         contentList: [sketch, document, hand, record, write],
         show: true,
-        title: t('더보기')
+        title: t('더보기'),
+        popupType: 'NORMAL'
       });
     }
   };

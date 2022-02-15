@@ -58,10 +58,14 @@ const TopAreaPresenter = (props: TopAreaPresenterProps) => {
     selectedRoomName
   } = props;
 
-
   return (
     <View style={styles.topContainer}>
-      <View style={[styles.topRow, isMultipleView && {justifyContent:'space-between'}]}>
+      <View
+        style={[
+          styles.topRow,
+          isMultipleView && { justifyContent: 'space-between' }
+        ]}
+      >
         <View style={{ justifyContent: 'flex-start' }}>
           <Text style={styles.timeText}>
             {elapsedTime !== '00:00:00' ? elapsedTime : ''}
@@ -70,7 +74,7 @@ const TopAreaPresenter = (props: TopAreaPresenterProps) => {
 
         {isMultipleView ? (
           <Fragment>
-            <View style={{alignItems:'center'}}>
+            <View style={{ alignItems: 'center' }}>
               <Text
                 style={{
                   fontFamily: 'DOUZONEText50',
@@ -81,7 +85,7 @@ const TopAreaPresenter = (props: TopAreaPresenterProps) => {
                 {selectedRoomName}
               </Text>
             </View>
-            <View style={{alignItems:'flex-end'}}>
+            <View style={{ alignItems: 'flex-end' }}>
               <TouchableHighlight
                 style={styles.moreClickView}
                 underlayColor="rgba(112,112,112,0.5)"
@@ -97,19 +101,18 @@ const TopAreaPresenter = (props: TopAreaPresenterProps) => {
           </Fragment>
         ) : (
           <View style={{ flexDirection: 'row' }}>
-            {penButton && (
-              <TouchableHighlight
-                style={styles.topMenuIcon}
-                underlayColor="rgba(112,112,112,0.5)"
-                onPress={() => toggleDocumentListMode(['USERLIST'])}
-              >
-                <Image
-                  source={icUserW}
-                  resizeMode={'cover'}
-                  style={styles.iconSize}
-                />
-              </TouchableHighlight>
-            )}
+            <TouchableHighlight
+              style={styles.topMenuIcon}
+              underlayColor="rgba(112,112,112,0.5)"
+              onPress={() => toggleDocumentListMode(['USERLIST'])}
+            >
+              <Image
+                source={icUserW}
+                resizeMode={'cover'}
+                style={styles.iconSize}
+              />
+            </TouchableHighlight>
+
             {talkButton && (
               <TouchableHighlight
                 style={styles.topMenuIcon}

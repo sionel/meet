@@ -156,7 +156,7 @@ const companyStatusCheck = async (auth: apiAuthInfo, company: companyInfo) => {
   if (isTEdge) {
     // TEdge 미납 여부 확인
     const isPurchase = await checkPurchaseTEdge(auth, company);
-    console.log(isPurchase);
+    // console.log(isPurchase);
     
     if (isPurchase) {
       return {
