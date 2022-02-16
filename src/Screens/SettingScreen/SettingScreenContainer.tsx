@@ -41,6 +41,7 @@ export default function SettingScreenContainer(props: any) {
 
   const dispatch = useDispatch();
   const setAlert = (params: any) => dispatch(AlertAcions.setAlert(params));
+  const setConferenceExpireTime = (expireTime: number | null) => dispatch(LocalActions.setConferenceExpireTime(expireTime));
 
   const t = getT();
 
@@ -159,6 +160,11 @@ export default function SettingScreenContainer(props: any) {
         message: t('renewal.alert_text_waiting')
       });
     } else {
+      const getExpireTime = await MeetApi.getExpireTime(auth, params.id);
+      if(isSuccess(getExpireTime)) {
+        console.log(getExpireTime.resultData.expire_time);
+        setConferenceExpireTime(getExpireTime.resultData.expire_time)
+      }
       navigation.reset({
         routes: [
           {

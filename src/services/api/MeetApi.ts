@@ -325,7 +325,7 @@ export default {
     if (isSuccess(response)) {
       return response;
     } else {
-      console.warn('10.getMeetRoomsList : ', response);
+      console.warn('10.getParticipant : ', response);
       return response;
     }
   },
@@ -752,6 +752,29 @@ export default {
       console.warn('31.getMasterList : ', response);
       return response;
     }
+  },
+
+  getExpireTime: async (auth:apiAuthInfo, roomId:string) => {
+    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY } = auth;
+    const url = `${meetURL}/room/expire-time?room=${roomId}`;
+    const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
+    
+      const data = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          ...headers
+        }
+      };
+
+      const response = await Axios<any>(url, data);
+
+      if (isSuccess(response)) {
+        return response;
+      } else {
+        console.warn('??.getExpireTime : ', response);
+        return response;
+      }
   },
 
   // 넘버링 없음 이름없는 외부참여자 아이디 가져오기

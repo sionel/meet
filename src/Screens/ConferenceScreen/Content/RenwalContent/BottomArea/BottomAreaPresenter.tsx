@@ -19,6 +19,7 @@ import { ConferenceModes } from '@utils/Constants';
 import ParticipantBox from './ParticipantBox';
 import { FlatList } from 'react-native-gesture-handler';
 import { ParticipantsTypes } from '@redux/participants';
+import { ConferenceBottomPopupProps } from '../../ContentContainer';
 
 type BottomAreaProps = {
   orientation: 'horizontal' | 'vertical';
@@ -40,6 +41,7 @@ type BottomAreaProps = {
   userList: ParticipantsTypes[];
   isMultipleView: boolean;
   setIsMultipleView: any;
+  bottomPopup: ConferenceBottomPopupProps;
 };
 
 const isTablet = deviceInfoModule.isTablet();
@@ -63,7 +65,8 @@ const BottomAreaPresenter = (props: BottomAreaProps) => {
     list,
     userList,
     isMultipleView,
-    setIsMultipleView
+    setIsMultipleView,
+    bottomPopup
   } = props;
 
   const multiViewHeight = height * 0.75;
@@ -86,7 +89,7 @@ const BottomAreaPresenter = (props: BottomAreaProps) => {
                   justifyContent: 'center',
                   alignItems: 'center'
                 }}
-                onPress={() => setIsMultipleView(!isMultipleView)}
+                onPress={() => !bottomPopup.show && setIsMultipleView(!isMultipleView)}
               >
                 <View
                   style={{

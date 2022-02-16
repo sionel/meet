@@ -41,7 +41,7 @@ const ParticipantBoxContainer = (props: {
 
   const handleTouchView = () => { 
       setMainUser(user.id);
-      isMultipleView &&  setIsMultipleView && setIsMultipleView(false);
+      isMultipleView && setIsMultipleView && setIsMultipleView(false);
   }
 
   return (

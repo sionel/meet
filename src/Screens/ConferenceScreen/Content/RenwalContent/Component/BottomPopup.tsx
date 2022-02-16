@@ -8,30 +8,35 @@ import {
   ImageSourcePropType,
   FlatList,
   StyleSheet,
-  TouchableHighlight
+  TouchableHighlight,
+  ScrollView,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
+  Animated,
+  GestureResponderEvent
 } from 'react-native';
 import { BlurView } from '@react-native-community/blur';
+import { ParticipantsTypes } from '@redux/participants';
+import UserList from '../TopArea/UserList';
 const { width, height } = Dimensions.get('window');
 
 export type ConferenceBotPopupContent = {
   icon1: ImageSourcePropType;
   name: string;
   onClick: () => void;
-} | {
-  content? : string;
-}
+};
 
-interface BottomPopupProps {
-  popupType: 'NORMAL' | 'PROFILE' | 'USERLIST'
+type BottomPopupProps = {
   title: string;
-  contentList: ConferenceBotPopupContent[];
-} 
+  popupType: 'NORMAL' | 'USERLIST';
+  contentList: ConferenceBotPopupContent[] | any;
+};
 
 export default function BottomPopup(
   props: BottomPopupProps
   // & { isHorizon: boolean }
 ) {
-  const { title, contentList } = props;
+  const { title, contentList, popupType } = props;
   // const { isHorizon } = props;
   return (
     <BlurView style={styles.botVerPopContainer} blurAmount={50}>
@@ -39,35 +44,37 @@ export default function BottomPopup(
         <View style={styles.verHeaderConatainer}>
           <Text style={styles.headerText}>{title}</Text>
         </View>
-        <FlatList
-          keyExtractor={(item, index) => index.toString()}
-          data={contentList}
-          bounces={false}
-          renderItem={data => {
-            const { item } = data;
-            return (
-              <TouchableHighlight
-                style={[styles.verMenuRow]}
-                activeOpacity={0.9}
-                underlayColor="rgba(214,255,239,0.1)"
-                onPress={item.onClick}
-              >
-                <View style={styles.verMenuRowView}>
-                  {item.icon1 && (
-                    <Image
-                      source={item.icon1}
-                      resizeMode={'contain'}
-                      style={styles.frontIcon}
-                    />
-                  )}
-                  <Text style={styles.menuText} numberOfLines={1}>
-                    {item.name}
-                  </Text>
-                </View>
-              </TouchableHighlight>
-            );
-          }}
-        />
+        {popupType === 'NORMAL' && (
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            keyExtractor={(item, index) => index.toString()}
+            data={contentList}
+            renderItem={({ item }) => {
+              return (
+                <TouchableHighlight
+                  style={[styles.verMenuRow]}
+                  activeOpacity={0.9}
+                  underlayColor="rgba(214,255,239,0.1)"
+                  onPress={item.onClick}
+                >
+                  <View style={styles.verMenuRowView}>
+                    {item.icon1 && (
+                      <Image
+                        source={item.icon1}
+                        resizeMode={'contain'}
+                        style={styles.frontIcon}
+                      />
+                    )}
+                    <Text style={styles.menuText} numberOfLines={1}>
+                      {item.name}
+                    </Text>
+                  </View>
+                </TouchableHighlight>
+              );
+            }}
+          />
+        )}
+        {popupType === 'USERLIST' && <UserList contentList={contentList} />}
         <View style={{ height: 20 }}></View>
       </View>
     </BlurView>

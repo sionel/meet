@@ -70,6 +70,7 @@ export interface ParticipantsTypes {
   userInfo: any;
   videoTrack: any;
   isMaster?: boolean;
+  direction?: 'LEFT' | 'RIGHT' | 'NONE';
 }
 export interface state {
   list: ParticipantsTypes[];
@@ -134,7 +135,8 @@ function joinUser(user: any): ThunkAction<void, RootState, unknown> {
 
 function applyJoinUser(state: state, action: AnyAction) {
   const { user } = action;
-  console.log(user.getId());
+  // console.log('user : ', user);
+  
   const list = state.list.slice(0);
   const participant = {
     id: user.getId(),

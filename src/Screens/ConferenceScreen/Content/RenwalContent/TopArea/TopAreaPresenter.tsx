@@ -31,6 +31,7 @@ type TopAreaPresenterProps = {
   elapsedTime: string;
   isMaster: boolean;
   handdleMoreClick: () => void;
+  handdleUserListClick: () => void;
   isMultipleView: boolean;
   selectedRoomName: string;
 };
@@ -54,6 +55,7 @@ const TopAreaPresenter = (props: TopAreaPresenterProps) => {
     elapsedTime,
     isMaster,
     handdleMoreClick,
+    handdleUserListClick,
     isMultipleView,
     selectedRoomName
   } = props;
@@ -104,7 +106,7 @@ const TopAreaPresenter = (props: TopAreaPresenterProps) => {
             <TouchableHighlight
               style={styles.topMenuIcon}
               underlayColor="rgba(112,112,112,0.5)"
-              onPress={() => toggleDocumentListMode(['USERLIST'])}
+              onPress={handdleUserListClick}
             >
               <Image
                 source={icUserW}

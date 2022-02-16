@@ -29,6 +29,9 @@ const TOGGLE_CAMERA_FACING_MODE = 'local.TOGGLE_CAMERA_FACING_MODE';
 // SET_CONFERENCE_CREATED_TIME
 const SET_CONFERENCE_CREATED_TIME = 'local.SET_CONFERENCE_CREATED_TIME';
 
+// SET_CONFERENCE_EXPIRE_TIME
+const SET_CONFERENCE_EXPIRE_TIME = 'local.SET_CONFERENCE_EXPIRE_TIME';
+
 // CONFERENCE_MESSAGE_RECEIVED
 const CONFERENCE_MESSAGE_RECEIVED = 'local.CONFERENCE_MESSAGE_RECEIVED';
 
@@ -54,6 +57,7 @@ export interface state {
   facingMode: string;
   prevVolumn: any;
   createdTime: number | null;
+  expireTime: number | null;
   callType: string | null;
   message: any[];
   pipMode: boolean;
@@ -68,6 +72,7 @@ const initialState = {
   facingMode: FacingModes.FRONT,
   prevVolumn: null,
   createdTime: null,
+  expireTime: null,
   callType: null,
   message: [],
   pipMode: false,
@@ -98,6 +103,8 @@ function reducer(state = initialState, action: AnyAction) {
     //   return applyToggleMuteSpeaker(state, action);
     case SET_CONFERENCE_CREATED_TIME:
       return applySetConferenceCreatedTime(state, action);
+    case SET_CONFERENCE_EXPIRE_TIME:
+      return applySetConferenceExpireTime(state, action);
     case CONFERENCE_MESSAGE_RECEIVED:
       return applySetConferenceMessage(state, action);
     case CONFERENCE_PIP_MODE:
@@ -396,6 +403,30 @@ function applySetConferenceCreatedTime(state: state, action: AnyAction) {
 
 //#endregion SET_CONFERENCE_CREATED_TIME
 
+//#region SET_CONFERENCE_EXPIRE_TIME
+
+function setConferenceExpireTime(
+  expireTime: number | null
+): ThunkAction<void, RootState, unknown> {
+  // debugger
+  return async dispatch => {
+    dispatch({
+      type: SET_CONFERENCE_EXPIRE_TIME,
+      expireTime
+    });
+  };
+}
+
+function applySetConferenceExpireTime(state: state, action: AnyAction) {
+  const { expireTime } = action;
+  return {
+    ...state,
+    expireTime: expireTime
+  };
+}
+
+//#endregion SET_CONFERENCE_EXPIRE_TIME
+
 //#region  CONFERENCE_MESSAGE_RECEIVED
 function receiceConferenceMessage(
   newMessage = null
@@ -458,6 +489,7 @@ export const actionCreators = {
   toggleMuteMic,
   // toggleMuteSpeaker,
   setConferenceCreatedTime,
+  setConferenceExpireTime,
   receiceConferenceMessage,
   setTrack
 };

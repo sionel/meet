@@ -61,7 +61,11 @@ const ParticipantBoxPresenter = (props: ParticipantBoxProps) => {
   const stream = videoTrack && videoTrack.getOriginalStream();
   const multiViewHeight = (multiViewContainer * 0.95) / 2;
   const multiView = { width: multiWidth, height: multiViewHeight };
-  const isMuteMic = user.isLocal ? user.isMuteMic : user.audioTrack.muted;
+  const isMuteMic = user.isLocal
+    ? user.isMuteMic
+    : user.audioTrack === null
+    ? true
+    : user.audioTrack?.muted;
 
   // console.log('user : ', user);
 

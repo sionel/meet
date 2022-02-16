@@ -13,13 +13,22 @@ import { actionCreators as mainUserAction } from '@redux/mainUser';
 import { RootState } from '../../../redux/configureStore';
 import { getConferenceManager } from '@utils/ConferenceManager';
 import { ConferenceBotPopupContent } from './RenwalContent/Component/BottomPopup';
+import { MeetApi } from '@services/index';
+import { ParticipantsTypes } from '@redux/participants';
 
 export type ConferenceBottomPopupProps = {
   show: boolean;
-  contentList: ConferenceBotPopupContent[];
   title: string;
-  popupType: 'NORMAL' | 'PROFILE' | 'USERLIST';
-};
+} & (
+  | {
+      popupType: 'NORMAL';
+      contentList: ConferenceBotPopupContent[];
+    }
+  | {
+      popupType: 'USERLIST';
+      contentList: ParticipantsTypes[];
+    }
+);
 
 const isIOS = Platform.OS === 'ios';
 const InCallManager = !isIOS && require('react-native-incall-manager').default;
@@ -67,13 +76,15 @@ function ContentContainer(props: any) {
     participants,
     user,
     auth,
-    masters
+    masters,
+    expireTime
   } = useSelector((state: RootState) => {
     const { local, mainUser, documentShare, root, user, participants, master } =
       state;
     return {
       conferenceMode: local.conferenceMode,
       localPipMode: local.pipMode,
+      expireTime: local.expireTime,
       user: local.user,
       drawingMode: mainUser.drawingMode,
       documentListMode: mainUser.documentListMode,
@@ -94,6 +105,8 @@ function ContentContainer(props: any) {
   const setDocumentListMode = (value: any) =>
     dispatch(mainUserAction.setDocumentListMode(value));
 
+  // console.log('auth : ', auth);
+
   let userList = participants.slice(0);
   userList.unshift({
     ...user,
@@ -101,9 +114,11 @@ function ContentContainer(props: any) {
       profile_url: auth.profile_url,
       wehagoId: auth.portal_id,
       userName: auth.user_name,
-      nickname: auth.nickname
+      nickname: auth.nickname,
+      full_path: auth.last_company.full_path
     }
   });
+
   userList.forEach((user: any) => {
     user.isMaster = masters.includes(user?.userInfo?.wehagoId);
   });
@@ -111,13 +126,12 @@ function ContentContainer(props: any) {
   useEffect(() => {
     _handleChangeSpeaker();
     const _timer = setInterval(() => {
+      let nowTime = Date.now();
       if (createdTime) {
         let time = Math.floor((Date.now() - createdTime) / 1000);
+
         time > 0 && setElapsedTime(time);
-        if (
-          (videoPolicy === 'nahago' || loginType === 'nahago') &&
-          time >= 3600
-        ) {
+        if (expireTime !== null && nowTime >= expireTime) {
           Alert.alert('회의 종료', '회의시간이 60분 지나 회의가 종료됩니다.', [
             {
               text: '확인',
@@ -140,17 +154,17 @@ function ContentContainer(props: any) {
   }, [mainUser]);
 
   const _toggleConferenceMode = () => {
-    if (conferenceMode === ConferenceModes.CONTROL ) {
-      !isMultipleView && setConferenceMode(ConferenceModes.NORMAL);
-    } else {
-      !isMultipleView && setConferenceMode(ConferenceModes.CONTROL);
-    }
-
     if (bottomPopup.show) {
       setBottomPopup({
         ...bottomPopup,
         show: false
       });
+    } else {
+      if (conferenceMode === ConferenceModes.CONTROL) {
+        !isMultipleView && setConferenceMode(ConferenceModes.NORMAL);
+      } else {
+        !isMultipleView && setConferenceMode(ConferenceModes.CONTROL);
+      }
     }
   };
 

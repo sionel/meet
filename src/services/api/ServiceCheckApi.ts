@@ -1,4 +1,4 @@
-import { wehagoBaseURL, serialize, securityRequest, isDev } from '@utils/index';
+import { wehagoBaseURL, serialize, securityRequest, isDev, meetURL } from '@utils/index';
 import Axios from './Axios';
 import { getT } from '@utils/translateManager';
 import { isSuccess, Res } from '@services/types';
@@ -185,10 +185,8 @@ const serviceCheck = async (auth: apiAuthInfo) => {
   const params = serialize({
     cno
   });
-  const urlType = isDev
-    ? '/videodev/service/is-deploy'
-    : '/video/service/is-deploy'; // 배포여부
-  const url = `${wehagoBaseURL}${urlType}?${params}`;
+  const urlType = '/service/is-deploy'; // 배포여부
+  const url = `${meetURL}${urlType}?${params}`;
 
   const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
 
@@ -220,8 +218,8 @@ const anotherServiceCheck = async (
     cno: company.company_no
     // ccode: company.company_code
   });
-  const urlType = '/video/service/is-service-deploy'; // 배포여부
-  const url = `${wehagoBaseURL}${urlType}?${params}`;
+  const urlType = '/service/is-service-deploy'; // 배포여부
+  const url = `${meetURL}${urlType}?${params}`;
 
   const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
 

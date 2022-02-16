@@ -8,6 +8,7 @@ import { actionCreators as localActionCreators } from '@redux/local';
 import { actionCreators as masterActionCreators } from '@redux/master';
 import { actionCreators as toastActionCreators } from '@redux/toast';
 import { ParticipantsTypes } from '@redux/participants';
+import { ConferenceBottomPopupProps } from '../../ContentContainer';
 
 type BottomAreaProps = {
   orientation: any;
@@ -19,6 +20,7 @@ type BottomAreaProps = {
   userList: ParticipantsTypes[];
   isMultipleView: boolean;
   setIsMultipleView: () => void;
+  bottomPopup: ConferenceBottomPopupProps;
 };
 
 const BottomAreaContainer = (props: BottomAreaProps) => {
@@ -113,6 +115,7 @@ const BottomAreaContainer = (props: BottomAreaProps) => {
       userList={props.userList}
       isMultipleView={props.isMultipleView}
       setIsMultipleView={props.setIsMultipleView}
+      bottomPopup={props.bottomPopup}
     />
   );
 };

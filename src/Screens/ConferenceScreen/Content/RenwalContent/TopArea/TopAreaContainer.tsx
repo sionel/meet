@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { actionCreators as localAction } from '@redux/local';
 import { actionCreators as mainUserAction } from '@redux/mainUser';
 import { actionCreators as ScreenShareAction } from '@redux/ScreenShare';
 import { RootState } from 'src/redux/configureStore';
 import TopAreaPresenter from './TopAreaPresenter';
-import { Alert, Platform } from 'react-native';
+import { Platform } from 'react-native';
 import { ConferenceBottomPopupProps } from '../../ContentContainer';
 import { getT } from '@utils/translateManager';
 
@@ -14,7 +14,6 @@ import icHand from '@assets/icons/ic_hand.png';
 import icRecord from '@assets/icons/ic_record.png';
 import icSketch from '@assets/icons/ic_sketch.png';
 import icWrite from '@assets/icons/ic_write.png';
-import { participantsListProps } from '@components/renewal/ParticipantsList';
 import { ParticipantsTypes } from '@redux/participants';
 
 type TopAreaContainerProps = {
@@ -31,7 +30,7 @@ type TopAreaContainerProps = {
   userList: ParticipantsTypes[];
   isMultipleView: boolean;
   setIsMultipleView: () => void;
-  selectedRoomName: string
+  selectedRoomName: string;
 };
 
 const TopAreaContainer = (props: TopAreaContainerProps) => {
@@ -58,7 +57,8 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
     deployedServices,
     isScreenShare,
     orientation,
-    masters
+    masters,
+    expireTime
   } = useSelector((state: RootState) => {
     const {
       local,
@@ -73,6 +73,7 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
     return {
       conferenceMode: local.conferenceMode,
       user: local.user,
+      expireTime: local.expireTime,
       participants: participants.list,
       videoPolicy: root.videoPolicy,
       loginType: user.loginType,
@@ -95,8 +96,7 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
 
   const talkButton = callType === 3;
   const penButton = true;
-  const docShareButton =
-    memberType !== 1 && deployedServices.includes('wedrive');
+  const docShareButton = !expireTime && deployedServices.includes('wedrive');
   const screenShareButton = Platform.OS === 'ios' ? !Platform.isPad : true;
   const switchButton = !isScreenShare;
   const reverseButton = !isScreenShare;
@@ -129,7 +129,7 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
         popupType: 'USERLIST'
       });
     }
-  }
+  };
 
   const handdleMoreClick = () => {
     if (bottomPopup.show) {
@@ -187,7 +187,7 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
     return hours + ':' + minutes + ':' + seconds;
   };
   let time = second2String(elapsedTime);
-  
+
   return (
     <TopAreaPresenter
       talkButton={talkButton}
@@ -209,6 +209,7 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
       handdleMoreClick={handdleMoreClick}
       isMultipleView={isMultipleView}
       selectedRoomName={selectedRoomName}
+      handdleUserListClick={handdleUserListClick}
     />
   );
 };
