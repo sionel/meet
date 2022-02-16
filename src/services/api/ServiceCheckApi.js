@@ -1,4 +1,4 @@
-import { wehagoBaseURL, serialize, securityRequest, isDev } from '../../utils';
+import { wehagoBaseURL, serialize, securityRequest, isDev, meetURL } from '../../utils';
 import fetch from './Fetch';
 import { getT } from '../../utils/translateManager';
 /**
@@ -177,10 +177,8 @@ const serviceCheck = async (auth) => {
     const params = serialize({
       cno
     });
-    const urlType = isDev
-    ? '/videodev/service/is-deploy'
-    : '/video/service/is-deploy'; // 배포여부
-    const url = `${wehagoBaseURL}${urlType}?${params}`;
+    const urlType = '/service/is-deploy'; // 배포여부
+    const url = `${meetURL}${urlType}?${params}`;
 
     const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
 
@@ -210,8 +208,8 @@ const anotherServiceCheck = async (auth, company, type) => {
       cno: company.company_no
       // ccode: company.company_code
     });
-    const urlType = '/video/service/is-service-deploy'; // 배포여부
-    const url = `${wehagoBaseURL}${urlType}?${params}`;
+    const urlType = '/service/is-service-deploy'; // 배포여부
+    const url = `${meetURL}${urlType}?${params}`;
 
     const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
 

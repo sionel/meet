@@ -799,6 +799,30 @@ export default {
     }
   },
 
+  getExpireTime: async (auth, roomId) => {
+    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY } = auth;
+    const url = `${meetURL}/room/expire-time?room=${roomId}`;
+    const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
+    try {
+      const data = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          ...headers
+        }
+      };
+
+      const response = await fetch(url, data);
+      if (response.status !== 200) {
+        throw response.resultCode;
+      }
+      return response.json();
+    } catch (err) {
+      console.warn('??.getExpireTime : ', err);
+      return false;
+    }
+  },
+
   // 넘버링 없음 이름없는 외부참여자 아이디 가져오기
   getExternalUserId: async roomId => {
     let url = '';

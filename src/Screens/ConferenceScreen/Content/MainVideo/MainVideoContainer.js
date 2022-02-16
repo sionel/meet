@@ -20,15 +20,14 @@ class MainVideoContainer extends React.Component {
   }
 
   componentDidMount() {
-    const { videoPolicy, loginType } = this.props;
+    const { expireTime } = this.props;
     this._timer = setInterval(() => {
       if (this.props.createdTime) {
+        let nowTime = Date.now();
         let time = Math.floor((Date.now() - this.props.createdTime) / 1000);
+
         time > 0 && this.setState({ time });
-        if (
-          (videoPolicy === 'nahago' || loginType === 'nahago') &&
-          time >= 3600
-        ) {
+        if (expireTime !== null && nowTime >= expireTime) {
           this.props.setAlert({
             title: '회의 종료',
             type: 1,

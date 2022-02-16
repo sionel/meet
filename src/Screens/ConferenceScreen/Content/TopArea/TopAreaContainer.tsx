@@ -9,37 +9,35 @@ import { actionCreators as mainUserAction } from '../../../../redux/modules/main
 import { actionCreators as ScreenShareAction } from '../../../../redux/modules/ScreenShare';
 import { RootState } from '../../../../redux/configureStore';
 
-function TopAreaContainer(props) {
+function TopAreaContainer(props:any) {
   const {
     conferenceMode,
     memberType,
     deployedServices,
     isScreenShare,
-    membershipName
+    expireTime
   } = useSelector((state: RootState) => {
     return {
       conferenceMode: state.local.conferenceMode,
       memberType: state.user.auth.member_type,
       deployedServices: state.deployed.deployedServices,
       isScreenShare: state.screenShare.isScreenShare,
-      membershipName: state.user.auth?.last_company?.membership_name
+      expireTime: state.local.expireTime,
     };
   });
+  
   const dispatch = useDispatch();
   const toggleCameraFacingMode = () =>
     dispatch(localAction.toggleCameraFacingMode());
-  const toggleDocumentListMode = documentListMode =>
+  const toggleDocumentListMode = (documentListMode:any) =>
     dispatch(mainUserAction.setDocumentListMode(documentListMode));
-  const setScreenFlag = flag => dispatch(ScreenShareAction.setScreenFlag(flag));
+  const setScreenFlag = (flag:any) => dispatch(ScreenShareAction.setScreenFlag(flag));
   const toggleScreenFlag = () => dispatch(ScreenShareAction.toggleScreenFlag());
 
   const controlMode = conferenceMode === ConferenceModes.CONTROL;
   const talkButton = props.callType === 3;
   const penButton = true;
-  const docShareButton =
-    membershipName !== 'T EDGE' &&
-    memberType !== 1 &&
-    deployedServices.includes('wedrive');
+  const docShareButton = !expireTime && deployedServices.includes('wedrive');
   const screenShareButton = Platform.OS === 'ios' ? !Platform.isPad : true;
   const switchButton = !isScreenShare;
   const reverseButton = !isScreenShare;
