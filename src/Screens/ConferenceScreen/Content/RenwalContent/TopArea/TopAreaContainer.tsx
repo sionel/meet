@@ -131,6 +131,23 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
     }
   };
 
+  const handdleChattingClick = () => {
+    if (bottomPopup.show) {
+      handleBottomPopup({
+        ...bottomPopup,
+        popupType: 'NORMAL',
+        show: false
+      });
+    } else {
+      handleBottomPopup({
+        contentList: [],
+        show: true,
+        title: t(''),
+        popupType: 'CHATTING'
+      });
+    }
+  }
+
   const handdleMoreClick = () => {
     if (bottomPopup.show) {
       onExitPopup();
@@ -210,6 +227,7 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
       isMultipleView={isMultipleView}
       selectedRoomName={selectedRoomName}
       handdleUserListClick={handdleUserListClick}
+      handdleChattingClick={handdleChattingClick}
     />
   );
 };

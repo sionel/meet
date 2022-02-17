@@ -15,20 +15,14 @@ import { getConferenceManager } from '@utils/ConferenceManager';
 import { ConferenceBotPopupContent } from './RenwalContent/Component/BottomPopup';
 import { MeetApi } from '@services/index';
 import { ParticipantsTypes } from '@redux/participants';
+import { getT } from '@utils/translateManager';
 
 export type ConferenceBottomPopupProps = {
   show: boolean;
   title: string;
-} & (
-  | {
-      popupType: 'NORMAL';
-      contentList: ConferenceBotPopupContent[];
-    }
-  | {
-      popupType: 'USERLIST';
-      contentList: ParticipantsTypes[];
-    }
-);
+  popupType: 'NORMAL' | 'USERLIST' | 'PROFILE' | 'CHATTING';
+  contentList: ConferenceBotPopupContent[] | any;
+};
 
 const isIOS = Platform.OS === 'ios';
 const InCallManager = !isIOS && require('react-native-incall-manager').default;
@@ -45,7 +39,7 @@ function ContentContainer(props: any) {
   //   isVideoReverse: false,
   //   speaker: 2,
   //   objectFit: 'contain',
-
+  const t = getT();
   const [orientation, setOrientation] = useState<'vertical' | 'horizontal'>(
     'vertical'
   );
@@ -115,7 +109,9 @@ function ContentContainer(props: any) {
       wehagoId: auth.portal_id,
       userName: auth.user_name,
       nickname: auth.nickname,
-      full_path: auth.last_company.full_path
+      companyFullpath: auth.last_company.full_path,
+      user_email: auth.user_default_email,
+      user_contact: auth.user_contact
     }
   });
 
@@ -155,10 +151,18 @@ function ContentContainer(props: any) {
 
   const _toggleConferenceMode = () => {
     if (bottomPopup.show) {
-      setBottomPopup({
-        ...bottomPopup,
-        show: false
-      });
+      if (bottomPopup.popupType === 'CHATTING') {
+        setBottomPopup({
+          ...bottomPopup,
+          popupType: 'NORMAL',
+          show: false
+        });
+      } else {
+        setBottomPopup({
+          ...bottomPopup,
+          show: false
+        });
+      }
     } else {
       if (conferenceMode === ConferenceModes.CONTROL) {
         !isMultipleView && setConferenceMode(ConferenceModes.NORMAL);
@@ -166,6 +170,15 @@ function ContentContainer(props: any) {
         !isMultipleView && setConferenceMode(ConferenceModes.CONTROL);
       }
     }
+  };
+
+  const handelProfieBackButton = () => {
+    setBottomPopup({
+      ...bottomPopup,
+      contentList: userList,
+      title: t('참석자리스트'),
+      popupType: 'USERLIST'
+    });
   };
 
   // const _setOrientation = () => {
@@ -233,6 +246,7 @@ function ContentContainer(props: any) {
       userList={userList}
       isMultipleView={isMultipleView}
       setIsMultipleView={setIsMultipleView}
+      handelProfieBackButton={handelProfieBackButton}
     />
   );
 }

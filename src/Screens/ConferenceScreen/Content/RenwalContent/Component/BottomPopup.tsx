@@ -1,24 +1,21 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import {
   View,
   Text,
   Dimensions,
-  TouchableOpacity,
   Image,
   ImageSourcePropType,
   FlatList,
   StyleSheet,
-  TouchableHighlight,
-  ScrollView,
-  NativeSyntheticEvent,
-  NativeScrollEvent,
-  Animated,
-  GestureResponderEvent
+  TouchableHighlight
 } from 'react-native';
 import { BlurView } from '@react-native-community/blur';
-import { ParticipantsTypes } from '@redux/participants';
 import UserList from '../TopArea/UserList';
-const { width, height } = Dimensions.get('window');
+import Chatting from '../TopArea/Chatting';
+import Profile from '../TopArea/UserList/Profile';
+import { ConferenceBottomPopupProps } from '../../ContentContainer';
+
+import icBackW from '@assets/icons/ic_back_w.png';
 
 export type ConferenceBotPopupContent = {
   icon1: ImageSourcePropType;
@@ -28,21 +25,59 @@ export type ConferenceBotPopupContent = {
 
 type BottomPopupProps = {
   title: string;
-  popupType: 'NORMAL' | 'USERLIST';
+  popupType: 'NORMAL' | 'USERLIST' | 'PROFILE' | 'CHATTING';
   contentList: ConferenceBotPopupContent[] | any;
+  bottomPopup: ConferenceBottomPopupProps;
+  handleBottomPopup: React.Dispatch<
+    React.SetStateAction<ConferenceBottomPopupProps>
+  >;
+  handelProfieBackButton: () => void;
 };
+
+const { width, height } = Dimensions.get('window');
 
 export default function BottomPopup(
   props: BottomPopupProps
   // & { isHorizon: boolean }
 ) {
-  const { title, contentList, popupType } = props;
+  const {
+    title,
+    contentList,
+    popupType,
+    bottomPopup,
+    handleBottomPopup,
+    handelProfieBackButton
+  } = props;
+  // console.log('height : ', height);
+
   // const { isHorizon } = props;
-  return (
+  return popupType === 'CHATTING' ? (
+    <Chatting />
+  ) : (
     <BlurView style={styles.botVerPopContainer} blurAmount={50}>
       <View style={{ backgroundColor: 'rgba(0,0,0,0.4)' }}>
-        <View style={styles.verHeaderConatainer}>
+        <View
+          style={[
+            styles.verHeaderConatainer,
+            popupType === 'PROFILE'
+              ? { justifyContent: 'space-between' }
+              : { justifyContent: 'center' }
+          ]}
+        >
+          {popupType === 'PROFILE' && (
+            <TouchableHighlight
+              activeOpacity={0.5}
+              onPress={handelProfieBackButton}
+              style={{ width: 35 }}
+              underlayColor="transparent"
+            >
+              <Image source={icBackW} style={{ width: 24, height: 24 }} />
+            </TouchableHighlight>
+          )}
           <Text style={styles.headerText}>{title}</Text>
+          {popupType === 'PROFILE' && (
+            <View style={{ width: 24, height: 24 }}></View>
+          )}
         </View>
         {popupType === 'NORMAL' && (
           <FlatList
@@ -74,8 +109,15 @@ export default function BottomPopup(
             }}
           />
         )}
-        {popupType === 'USERLIST' && <UserList contentList={contentList} />}
-        <View style={{ height: 20 }}></View>
+        {popupType === 'USERLIST' && (
+          <UserList
+            contentList={contentList}
+            bottomPopup={bottomPopup}
+            handleBottomPopup={handleBottomPopup}
+          />
+        )}
+        {popupType === 'PROFILE' && <Profile content={contentList} />}
+        <View style={{ height: height * 0.05 }}></View>
       </View>
     </BlurView>
   );
@@ -101,10 +143,11 @@ const styles = StyleSheet.create({
   verHeaderConatainer: {
     marginTop: 16,
     height: 48,
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
     borderBottomWidth: 1,
-    borderColor: 'rgba(255,255,255,0.12)'
+    borderColor: 'rgba(255,255,255,0.12)',
+    paddingHorizontal: 16
   },
   verMenuRow: {
     height: 48
@@ -148,52 +191,3 @@ const styles = StyleSheet.create({
     color: '#fff'
   }
 });
-
-// isHorizon ? (
-//   <View style={styles.botPopContainer}>
-//     <SafeAreaView style={styles.popupSafeAreaView}>
-//       <TouchableOpacity
-//         onPress={onClickOutside}
-//         style={styles.outsideTouch}
-//         activeOpacity={1}
-//       />
-//       <View style={styles.botPopupContainer}>
-//         <View style={styles.headerConatainer}>
-//           <Text style={styles.headerText}>{title}</Text>
-//         </View>
-//         <FlatList
-//           keyExtractor={(item, index) => index.toString()}
-//           data={contentList}
-//           renderItem={data => {
-//             const { item } = data;
-//             return (
-//               <TouchableOpacity
-//                 style={styles.menuRow}
-//                 activeOpacity={0.3}
-//                 onPress={item.onClick}
-//               >
-//                 {item.icon1 && (
-//                   <Image
-//                     source={item.icon1}
-//                     resizeMode={'contain'}
-//                     style={styles.frontIcon}
-//                   />
-//                 )}
-//                 <Text style={styles.menuText} numberOfLines={1}>
-//                   {item.name}
-//                 </Text>
-//                 {item.icon2 && (
-//                   <Image
-//                     source={item.icon2}
-//                     resizeMode={'contain'}
-//                     style={{ height: '80%' }}
-//                   />
-//                 )}
-//               </TouchableOpacity>
-//             );
-//           }}
-//         />
-//       </View>
-//     </SafeAreaView>
-//   </View>
-// ) :

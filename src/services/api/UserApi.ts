@@ -180,7 +180,18 @@ const check = async (
     headers
   });
 
+  const url2 = `${wehagoBaseURL}/common/user/userinfo?cno=${cno}&selected_company_no=${cno}`; // 유저 정보 (닉네임 가져오려고 굳이 이걸 불러야하나...)
+  const headers2 = securityRequest(a_token, r_token, url2, HASH_KEY);
+  const response2 = await Axios<any[]>(url2, {
+    method: 'GET',
+    headers: headers2
+  });
+
   if (isSuccess(response)) {
+    if(isSuccess(response2)) {
+      let nickname = response2.resultData[0].nickname;
+      response.resultData.nickname = nickname;
+    }
     return response;
   } else {
     return response;

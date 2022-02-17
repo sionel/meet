@@ -32,6 +32,7 @@ type TopAreaPresenterProps = {
   isMaster: boolean;
   handdleMoreClick: () => void;
   handdleUserListClick: () => void;
+  handdleChattingClick: () => void;
   isMultipleView: boolean;
   selectedRoomName: string;
 };
@@ -56,6 +57,7 @@ const TopAreaPresenter = (props: TopAreaPresenterProps) => {
     isMaster,
     handdleMoreClick,
     handdleUserListClick,
+    handdleChattingClick,
     isMultipleView,
     selectedRoomName
   } = props;
@@ -119,7 +121,7 @@ const TopAreaPresenter = (props: TopAreaPresenterProps) => {
               <TouchableHighlight
                 style={styles.topMenuIcon}
                 underlayColor="rgba(112,112,112,0.5)"
-                onPress={() => toggleDocumentListMode(['CHATTING'])}
+                onPress={handdleChattingClick}
               >
                 <Image
                   source={icChatW}

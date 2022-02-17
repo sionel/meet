@@ -45,6 +45,7 @@ type ContentPresenterProps = {
   userList: ParticipantsTypes[];
   isMultipleView: boolean;
   setIsMultipleView: () => void;
+  handelProfieBackButton: () => void;
 };
 
 const ContentPresenter = (props: ContentPresenterProps) => {
@@ -67,7 +68,8 @@ const ContentPresenter = (props: ContentPresenterProps) => {
     handleBottomPopup,
     userList,
     isMultipleView,
-    setIsMultipleView
+    setIsMultipleView,
+    handelProfieBackButton
   } = props;
 
   // const localPipMode = useSelector((state: RootState) => state.local.pipMode);
@@ -103,7 +105,14 @@ const ContentPresenter = (props: ContentPresenterProps) => {
         setIsMultipleView={setIsMultipleView}
       />
       {!localPipMode && <BottomArea {...props} />}
-      {bottomPopup.show && <BottomPopup {...bottomPopup} />}
+      {bottomPopup.show && (
+        <BottomPopup
+          {...bottomPopup}
+          handleBottomPopup={handleBottomPopup}
+          bottomPopup={bottomPopup}
+          handelProfieBackButton={handelProfieBackButton}
+        />
+      )}
     </TouchableOpacity>
     // <View style={styles.container} onLayout={props.onLayout}>
     //   <StatusBar
