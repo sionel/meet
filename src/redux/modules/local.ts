@@ -150,7 +150,7 @@ function joinConference(
 }
 
 function applyJoinConference(state: state, action: AnyAction) {
-  const { conferenceInfo } = action;
+  const { conferenceInfo, auth } = action;
   const user = {
     id: 'localUser',
     cid: conferenceInfo.cid,
@@ -164,7 +164,8 @@ function applyJoinConference(state: state, action: AnyAction) {
     userInfo: {
       isLocal: true,
       userName: conferenceInfo.name,
-      nickname: conferenceInfo.nickname
+      nickname: auth.nickname,
+      profile_url: auth.profile_url === "" ? undefined :  auth.profile_url
     }
   };
   return {
@@ -451,6 +452,9 @@ function applySetConferenceMessage(state: state, action: AnyAction) {
     };
   }
 
+  // console.log('participants : ', participants);
+  
+
   const list = state.message.slice(0);
   let message_user =
     newMessage.user === user.cid
@@ -458,6 +462,9 @@ function applySetConferenceMessage(state: state, action: AnyAction) {
       : participants.find((participant: any) => {
           return participant.id === newMessage.user;
         }) || { name: '(알수없음)' };
+
+  // console.log('message_user : ', message_user);
+  
 
   list.push({
     ...newMessage,

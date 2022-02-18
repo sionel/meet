@@ -88,12 +88,12 @@ const UserListPresenter = (props: UserListPresenter) => {
             showsVerticalScrollIndicator={false}
             ref={el => (scrollRef.current[index] = el)}
             // scrollEnabled={item.user_no !== auth.user_no}
-            onScroll={(e: NativeSyntheticEvent<NativeScrollEvent>) => {
-              onHandleSwipe(e, index);
-            }}
-            // onScrollEndDrag={(e: NativeSyntheticEvent<NativeScrollEvent>) => {
+            // onScroll={(e: NativeSyntheticEvent<NativeScrollEvent>) => {
             //   onHandleSwipe(e, index);
             // }}
+            onScrollEndDrag={(e: NativeSyntheticEvent<NativeScrollEvent>) => {
+              onHandleSwipe(e, index);
+            }}
           >
             <View
               style={[

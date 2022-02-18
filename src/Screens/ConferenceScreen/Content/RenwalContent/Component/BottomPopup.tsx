@@ -124,12 +124,6 @@ export default function BottomPopup(
 }
 
 const styles = StyleSheet.create({
-  botPopContainer: {
-    position: 'absolute',
-    width,
-    height,
-    backgroundColor: 'rgb(0,0,0)'
-  },
   botVerPopContainer: {
     position: 'absolute',
     left: 0,

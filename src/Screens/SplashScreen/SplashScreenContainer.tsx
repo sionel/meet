@@ -404,7 +404,6 @@ const SplashScreenContainer = ({
     );
 
     if (isSuccess(checkResult)) {
-      console.log(checkResult);
       const userData = {
         // login api data
         AUTH_A_TOKEN,

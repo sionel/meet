@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Alert, Dimensions, NativeModules, Platform } from 'react-native';
 import ContentPresenter from './ContentPresenter';
 import FileSharing from './FileSharing';
@@ -39,6 +39,7 @@ function ContentContainer(props: any) {
   //   isVideoReverse: false,
   //   speaker: 2,
   //   objectFit: 'contain',
+  const viewRef: any = useRef();
   const t = getT();
   const [orientation, setOrientation] = useState<'vertical' | 'horizontal'>(
     'vertical'
@@ -119,6 +120,9 @@ function ContentContainer(props: any) {
     user.isMaster = masters.includes(user?.userInfo?.wehagoId);
   });
 
+  // console.log('userList : ', userList);
+  
+
   useEffect(() => {
     _handleChangeSpeaker();
     const _timer = setInterval(() => {
@@ -149,14 +153,16 @@ function ContentContainer(props: any) {
     if (mainUser.id !== 'localUser') m?.setReceiverConstraints(mainUser.id);
   }, [mainUser]);
 
-  const _toggleConferenceMode = () => {
+  const _toggleConferenceMode = (e:any) => {
+    // console.log(e.current);
+    // console.log(viewRef.current.viewConfig);
     if (bottomPopup.show) {
       if (bottomPopup.popupType === 'CHATTING') {
-        setBottomPopup({
-          ...bottomPopup,
-          popupType: 'NORMAL',
-          show: false
-        });
+        // setBottomPopup({
+        //   ...bottomPopup,
+        //   popupType: 'NORMAL',
+        //   show: false
+        // });
       } else {
         setBottomPopup({
           ...bottomPopup,
@@ -247,6 +253,7 @@ function ContentContainer(props: any) {
       isMultipleView={isMultipleView}
       setIsMultipleView={setIsMultipleView}
       handelProfieBackButton={handelProfieBackButton}
+      viewRef={viewRef}
     />
   );
 }

@@ -46,6 +46,7 @@ type ContentPresenterProps = {
   isMultipleView: boolean;
   setIsMultipleView: () => void;
   handelProfieBackButton: () => void;
+  viewRef: any;
 };
 
 const ContentPresenter = (props: ContentPresenterProps) => {
@@ -69,16 +70,28 @@ const ContentPresenter = (props: ContentPresenterProps) => {
     userList,
     isMultipleView,
     setIsMultipleView,
-    handelProfieBackButton
+    handelProfieBackButton,
+    viewRef
   } = props;
 
   // const localPipMode = useSelector((state: RootState) => state.local.pipMode);
   const hideStatusbar = orientation === 'horizontal';
   return (
-    <TouchableOpacity
-      style={{ flex: 1 }}
-      onPress={toggleConferenceMode}
-      activeOpacity={1}
+    <View
+      style={{
+        backgroundColor: 'blue',
+        flex: 1,
+        position: 'absolute',
+        zIndex: 1,
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0
+      }}
+      ref={el => (viewRef.current = el)}
+      onTouchEnd={toggleConferenceMode}
+      // onPress={toggleConferenceMode}
+      // activeOpacity={1}
     >
       {!localPipMode && Number(callType) !== 2 && !drawingMode && (
         <TopArea
@@ -113,7 +126,7 @@ const ContentPresenter = (props: ContentPresenterProps) => {
           handelProfieBackButton={handelProfieBackButton}
         />
       )}
-    </TouchableOpacity>
+    </View>
     // <View style={styles.container} onLayout={props.onLayout}>
     //   <StatusBar
     //     barStyle="light-content"

@@ -26,48 +26,43 @@ const ChattingContainer = () => {
 
   useEffect(() => {
     let timeout: number | NodeJS.Timeout = setTimeout(() => {});
-
-    if (
-      (messages.length > 0 &&
-        messages[messages.length - 1].user === user.cid) ||
-      messages.length === 0
-    ) {
-      if (scrollRef && scrollRef.scrollToEnd) {
+    // console.log(scrollRef.current);
+    
+    if (messages.length > 0) {
+      if (scrollRef) {
         if (timeout) clearTimeout(timeout);
-        timeout = setTimeout(() => {
-          scrollRef.scrollToEnd();
+        timeout = setTimeout(() => {         
+          scrollRef.current.scrollToEnd();
         }, 0);
       }
     } else if (isEndScroll) {
       if (timeout) clearTimeout(timeout);
       timeout = setTimeout(() => {
-        scrollRef.scrollToEnd();
+        scrollRef.current.scrollToEnd();
       }, 0);
     }
     return () => {
       typeof timeout === 'number' && clearTimeout(timeout);
     };
-  }, [messages, cdm]);
+  }, [messages, cdm, keyboardShow]);
 
   useEffect(() => {
-    Keyboard.addListener('keyboardDidShow', (e) => handdleKeyboardShow(e));
-    Keyboard.addListener('keyboardDidHide', (e) => handdleKeyboardHide(e));
+    Keyboard.addListener('keyboardDidShow', () => handdleKeyboardShow());
+    Keyboard.addListener('keyboardDidHide', () => handdleKeyboardHide());
 
     return () => {
-      Keyboard.removeListener('keyboardDidShow', (e) => handdleKeyboardShow(e));
-      Keyboard.removeListener('keyboardDidHide', (e) => handdleKeyboardHide(e));
+      Keyboard.removeListener('keyboardDidShow', () => handdleKeyboardShow());
+      Keyboard.removeListener('keyboardDidHide', () => handdleKeyboardHide());
     };
   }, []);
 
-  const handdleKeyboardShow = (e: any) => {
-    setKeyboardHeight(e.endCoordinates.height);
+  const handdleKeyboardShow = () => {
     setKeyboardShow(true);
-  }
+  };
 
-  const handdleKeyboardHide = (e: any) => {
-    setKeyboardHeight(0);
-    setKeyboardShow(false)
-  }
+  const handdleKeyboardHide = () => {
+    setKeyboardShow(false);
+  };
 
   const _handleSendTextMessage = () => {
     if (myMessage && myMessage.slice().replace(/(\s*)/g, '') !== '') {
