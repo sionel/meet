@@ -21,7 +21,7 @@ type TopAreaPresenterProps = {
   switchButton: boolean;
   reverseButton: boolean;
   orientation: 'horizontal' | 'vertical';
-  onChangeDrawingMode: () => void;
+  onChangeDrawingMode: (value: any) => void;
   toggleDocumentListMode: Function;
   toggleScreenFlag: () => void;
   toggleCameraFacingMode: () => void;
@@ -35,6 +35,7 @@ type TopAreaPresenterProps = {
   handdleChattingClick: () => void;
   isMultipleView: boolean;
   selectedRoomName: string;
+  messageCount: number;
 };
 
 const TopAreaPresenter = (props: TopAreaPresenterProps) => {
@@ -59,7 +60,8 @@ const TopAreaPresenter = (props: TopAreaPresenterProps) => {
     handdleUserListClick,
     handdleChattingClick,
     isMultipleView,
-    selectedRoomName
+    selectedRoomName,
+    messageCount
   } = props;
 
   return (
@@ -123,23 +125,48 @@ const TopAreaPresenter = (props: TopAreaPresenterProps) => {
                 underlayColor="rgba(112,112,112,0.5)"
                 onPress={handdleChattingClick}
               >
-                <Image
-                  source={icChatW}
-                  resizeMode={'cover'}
-                  style={styles.iconSize}
-                />
+                <View
+                  style={{
+                    width: 40,
+                    height: 40,
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                  }}
+                >
+                  <Image
+                    source={icChatW}
+                    resizeMode={'cover'}
+                    style={styles.iconSize}
+                  />
+                  {messageCount > 0 && (
+                    <View
+                      style={{
+                        position: 'absolute',
+                        top: 0,
+                        right: 0,
+                        backgroundColor: '#1c90fb',
+                        width: 18,
+                        height: 18,
+                        borderRadius: 9,
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}
+                    >
+                      <Text
+                        style={{
+                          color: '#fff',
+                          fontFamily: 'DOUZONEText50',
+                          fontSize: 10
+                        }}
+                      >
+                        {messageCount}
+                      </Text>
+                    </View>
+                  )}
+                </View>
               </TouchableHighlight>
             )}
-            {/* docShareButton && null
-             <CustomButton
-               name="docShare"
-               width={28}
-               height={28}
-               areaWidth={42}
-               areaHeight={36}
-               onPress={_.throttle(() => toggleDocumentListMode(['FILELIST']), 500)}
-             />
-
+            {/* 
             screenShareButton && null
              <CustomButton
                name="icoScreenShagre"
@@ -212,6 +239,7 @@ const styles = StyleSheet.create({
     right: 0,
     top: '5%',
     zIndex: 1,
+    elevation: 1,
     flexDirection: 'column',
     justifyContent: 'center'
   },
@@ -229,18 +257,18 @@ const styles = StyleSheet.create({
     fontFamily: 'DOUZONEText50'
   },
   topMenuIcon: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    marginHorizontal: 10,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    // marginHorizontal: 6,
     justifyContent: 'center',
     alignItems: 'center'
   },
   moreClickView: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    marginLeft: 10,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginLeft: -2,
     justifyContent: 'center',
     alignItems: 'center'
   },

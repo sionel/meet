@@ -24,6 +24,8 @@ type BottomAreaProps = {
 };
 
 const BottomAreaContainer = (props: BottomAreaProps) => {
+  // console.log(props);
+  
   const t = getT();
   //#region SELELTOR
   const {
@@ -71,7 +73,7 @@ const BottomAreaContainer = (props: BottomAreaProps) => {
 
   const _handleToggleMic = () => {
     let conferenceManager = getConferenceManager();
-
+    
     if (isMasterControl) {
       if (isAudioActive) {
         // 참가자는 마스터가 제어중일때 오디오가 꺼져있으면 직접 컨트롤 할 수 없음
@@ -108,7 +110,7 @@ const BottomAreaContainer = (props: BottomAreaProps) => {
       isMuteVideo={isMuteVideo}
       handleToggleMic={_handleToggleMic}
       toggleMuteVideo={toggleMuteVideo}
-      toggleMuteMic={toggleMuteMic}
+      // toggleMuteMic={toggleMuteMic}
       user={user}
       mainUserId={mainUserId}
       list={list}

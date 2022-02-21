@@ -7,6 +7,7 @@ import { RootState } from 'src/redux/configureStore';
 import TopAreaPresenter from './TopAreaPresenter';
 import { Platform } from 'react-native';
 import { ConferenceBottomPopupProps } from '../../ContentContainer';
+import _ from 'underscore';
 import { getT } from '@utils/translateManager';
 
 import icDocument from '@assets/icons/ic_document.png';
@@ -20,7 +21,7 @@ type TopAreaContainerProps = {
   callType: number;
   onReverseVideo: () => void;
   onChangeDrawing: () => void;
-  onChangeDrawingMode: () => void;
+  onChangeDrawingMode: (value: any) => void;
   mainUser: any;
   elapsedTime: number;
   handleBottomPopup: React.Dispatch<
@@ -36,6 +37,7 @@ type TopAreaContainerProps = {
 const TopAreaContainer = (props: TopAreaContainerProps) => {
   const t = getT();
   const [isMainUserMaster, setIsMainUserMaster] = useState(false);
+  const [messageCount, setMessageCount] = useState(0);
   const {
     callType,
     mainUser,
@@ -44,7 +46,8 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
     handleBottomPopup,
     userList,
     isMultipleView,
-    selectedRoomName
+    selectedRoomName,
+    onChangeDrawingMode
   } = props;
   const {
     conferenceMode,
@@ -58,7 +61,8 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
     isScreenShare,
     orientation,
     masters,
-    expireTime
+    expireTime,
+    message
   } = useSelector((state: RootState) => {
     const {
       local,
@@ -82,7 +86,8 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
       deployedServices: deployed.deployedServices,
       isScreenShare: screenShare.isScreenShare,
       orientation: orientation.orientation,
-      masters: master.masterList
+      masters: master.masterList,
+      message: local.message
     };
   });
   const dispatch = useDispatch();
@@ -110,6 +115,19 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
       }
     });
   }, [mainUser.id]);
+
+  useEffect(() => {
+    let count = 0;
+    message.forEach(list => {
+      if (!list.isRead) {
+        count = count + 1;
+      }
+    });
+    if (bottomPopup.popupType === 'CHATTING') {
+      count = count - 1;
+    }
+    setMessageCount(count);
+  }, [message.length]);
 
   const onExitPopup = () => {
     handleBottomPopup({
@@ -145,8 +163,9 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
         title: t(''),
         popupType: 'CHATTING'
       });
+      setMessageCount(0);
     }
-  }
+  };
 
   const handdleMoreClick = () => {
     if (bottomPopup.show) {
@@ -155,12 +174,12 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
       const sketch = {
         icon1: icSketch,
         name: t('스케치'),
-        onClick: () => {}
+        onClick: () => onChangeDrawingMode(true)
       };
       const document = {
         icon1: icDocument,
         name: t('문서공유'),
-        onClick: () => {}
+        onClick: () => toggleDocumentListMode(['FILELIST'])
       };
       const hand = {
         icon1: icHand,
@@ -228,6 +247,7 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
       selectedRoomName={selectedRoomName}
       handdleUserListClick={handdleUserListClick}
       handdleChattingClick={handdleChattingClick}
+      messageCount={messageCount}
     />
   );
 };

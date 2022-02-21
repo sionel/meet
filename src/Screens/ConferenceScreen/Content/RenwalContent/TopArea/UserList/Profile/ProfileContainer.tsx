@@ -1,6 +1,6 @@
 import { ParticipantsTypes } from '@redux/participants';
 import { ConferenceBottomPopupProps } from '@screens/ConferenceScreen/Content/ContentContainer';
-import React from 'react';
+import React, { useEffect } from 'react';
 import ProfilePresenter from './ProfilePresenter';
 
 type ProfileContainer = {

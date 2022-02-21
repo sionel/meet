@@ -38,6 +38,7 @@ const ConferenceScreenPresenter = props => {
       style={{
         position: 'absolute',
         zIndex: 0,
+        elevation: 0,
         top: 0,
         bottom: 0,
         left: 0,
@@ -47,7 +48,7 @@ const ConferenceScreenPresenter = props => {
       }}
     >
       <StatusBar barStyle={'light-content'} />
-      {/* <SimpleNoti /> */}
+      <SimpleNoti />
       {Platform.OS === 'ios' ? <ScreenShareIOS /> : <ScreenShareANDROID />}
       {props.mainUser && props.connection ? (
         <Content

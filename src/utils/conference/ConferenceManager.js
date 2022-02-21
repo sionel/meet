@@ -352,7 +352,8 @@ class ConferenceManager {
     const message = {
       user,
       text,
-      date: new Date().toISOString()
+      date: new Date().toISOString(),
+      isRead: false
     };
     this._dispatch(localActionCreators.receiceConferenceMessage(message));
   };
@@ -414,12 +415,12 @@ class ConferenceManager {
     const { name: targetName, id: targetId } = JSON.parse(targetInfo);
     const myId = this._room.myUserId();
     if (myId === targetId) {
-      const message = masterName + this.t('toast_master_ibenned');
+      const message = `${masterName} 님이 ${targetName} 님을 \n화상회의방에서 추방하였습니다.`
       this._endCall();
       this._dispatch(
         alertAcionCreators.setAlert({
           type: 1,
-          title: this.t('alert_title_notion'),
+          title: 'alert_kick',
           message
         })
       );

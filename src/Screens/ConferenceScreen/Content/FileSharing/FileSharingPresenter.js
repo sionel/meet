@@ -66,7 +66,7 @@ const FileSharingPresenter = props => {
           ? props.attributes.fileName
           : props.selectedRoomName}
       </Text>
-      <CustomButton
+      {/* <CustomButton
         name={'talk'}
         onPress={() => props.setDocumentListMode(['CHATTING', 'USERLIST'])}
         style={{ margin: 0 }}
@@ -74,7 +74,7 @@ const FileSharingPresenter = props => {
         height={28}
         areaWidth={42}
         areaHeight={32}
-      />
+      /> */}
     </View>
   );
 

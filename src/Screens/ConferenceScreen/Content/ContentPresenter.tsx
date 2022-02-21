@@ -1,24 +1,13 @@
 import React, { Fragment } from 'react';
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  StatusBar,
-  Dimensions,
-  SafeAreaView
-} from 'react-native';
-import { useSelector } from 'react-redux';
+import { View, StyleSheet } from 'react-native';
 
 import MainView from './RenwalContent/MainView';
 import TopArea from './RenwalContent/TopArea';
 import BottomArea from './RenwalContent/BottomArea';
-import OverView from './OverView';
-import SimpleNoti from '../SimpleNoti';
-import { ConferenceModes } from '@utils/ConstantsBackup';
-import { RootState } from '../../../redux/configureStore';
 import { ConferenceBottomPopupProps } from './ContentContainer';
 import BottomPopup from './RenwalContent/Component/BottomPopup';
 import { ParticipantsTypes } from '@redux/participants';
+import OverView from './OverView';
 
 type ContentPresenterProps = {
   mainUser: any;
@@ -46,7 +35,9 @@ type ContentPresenterProps = {
   isMultipleView: boolean;
   setIsMultipleView: () => void;
   handelProfieBackButton: () => void;
-  viewRef: any;
+  setIsPopupTouch: any;
+  documentListMode: any;
+  onChangeSharingMode: any;
 };
 
 const ContentPresenter = (props: ContentPresenterProps) => {
@@ -71,7 +62,7 @@ const ContentPresenter = (props: ContentPresenterProps) => {
     isMultipleView,
     setIsMultipleView,
     handelProfieBackButton,
-    viewRef
+    setIsPopupTouch
   } = props;
 
   // const localPipMode = useSelector((state: RootState) => state.local.pipMode);
@@ -79,16 +70,14 @@ const ContentPresenter = (props: ContentPresenterProps) => {
   return (
     <View
       style={{
-        backgroundColor: 'blue',
-        flex: 1,
         position: 'absolute',
-        zIndex: 1,
+        zIndex: 0,
+        elevation: 0,
         top: 0,
         bottom: 0,
         left: 0,
         right: 0
       }}
-      ref={el => (viewRef.current = el)}
       onTouchEnd={toggleConferenceMode}
       // onPress={toggleConferenceMode}
       // activeOpacity={1}
@@ -124,6 +113,18 @@ const ContentPresenter = (props: ContentPresenterProps) => {
           handleBottomPopup={handleBottomPopup}
           bottomPopup={bottomPopup}
           handelProfieBackButton={handelProfieBackButton}
+          setIsPopupTouch={setIsPopupTouch}
+        />
+      )}
+      {/* OverView 영역 */}
+      {props.documentListMode && !localPipMode && (
+        <OverView
+          mode={props.documentListMode}
+          defaultMode={props.documentListMode[0]}
+          orientation={props.orientation}
+          speaker={props.speaker}
+          onChangeSharingMode={props.onChangeSharingMode}
+          onChangeSpeaker={props.onChangeSpeaker}
         />
       )}
     </View>

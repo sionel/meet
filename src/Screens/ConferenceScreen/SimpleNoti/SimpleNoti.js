@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     top: 150,
     left: 10,
     right: 10,
-    zIndex: 10
+    zIndex: 5
   },
   noti: {
     fontSize: 15,

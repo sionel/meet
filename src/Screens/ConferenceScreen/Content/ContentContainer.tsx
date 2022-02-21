@@ -1,10 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Alert, Dimensions, NativeModules, Platform } from 'react-native';
+import {
+  Alert,
+  Dimensions,
+  GestureResponderEvent,
+  NativeModules,
+  Platform
+} from 'react-native';
 import ContentPresenter from './ContentPresenter';
 import FileSharing from './FileSharing';
 import { ConferenceModes } from '@utils/Constants';
 import DeviceInfo from 'react-native-device-info';
-import Orientation from 'react-native-orientation-locker';
 import _ from 'underscore';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,8 +18,6 @@ import { actionCreators as mainUserAction } from '@redux/mainUser';
 import { RootState } from '../../../redux/configureStore';
 import { getConferenceManager } from '@utils/ConferenceManager';
 import { ConferenceBotPopupContent } from './RenwalContent/Component/BottomPopup';
-import { MeetApi } from '@services/index';
-import { ParticipantsTypes } from '@redux/participants';
 import { getT } from '@utils/translateManager';
 
 export type ConferenceBottomPopupProps = {
@@ -29,17 +32,9 @@ const InCallManager = !isIOS && require('react-native-incall-manager').default;
 
 const { AudioMode } = NativeModules;
 const hasNotch = DeviceInfo.hasNotch() && isIOS;
+const { width, height } = Dimensions.get('window');
 
 function ContentContainer(props: any) {
-  // state = {
-  //   orientation:
-  //     Dimensions.get('window').height > Dimensions.get('window').width
-  //       ? 'vertical'
-  //       : 'horizontal',
-  //   isVideoReverse: false,
-  //   speaker: 2,
-  //   objectFit: 'contain',
-  const viewRef: any = useRef();
   const t = getT();
   const [orientation, setOrientation] = useState<'vertical' | 'horizontal'>(
     'vertical'
@@ -56,6 +51,8 @@ function ContentContainer(props: any) {
     title: '',
     popupType: 'NORMAL'
   });
+  const [isPopupTouch, setIsPopupTouch] = useState(false);
+  // console.log(props);
 
   const { mainUser, onClose, createdTime } = props;
   const { videoTrack, isMuteVideo } = mainUser;
@@ -121,7 +118,6 @@ function ContentContainer(props: any) {
   });
 
   // console.log('userList : ', userList);
-  
 
   useEffect(() => {
     _handleChangeSpeaker();
@@ -153,27 +149,24 @@ function ContentContainer(props: any) {
     if (mainUser.id !== 'localUser') m?.setReceiverConstraints(mainUser.id);
   }, [mainUser]);
 
-  const _toggleConferenceMode = (e:any) => {
-    // console.log(e.current);
-    // console.log(viewRef.current.viewConfig);
+  const _toggleConferenceMode = (e: any) => {
+    const bottomTouch = e.nativeEvent.pageY > height * 0.7;
+
     if (bottomPopup.show) {
       if (bottomPopup.popupType === 'CHATTING') {
-        // setBottomPopup({
-        //   ...bottomPopup,
-        //   popupType: 'NORMAL',
-        //   show: false
-        // });
+        //채팅버튼 눌렀을 경우
       } else {
-        setBottomPopup({
-          ...bottomPopup,
-          show: false
-        });
+        !isPopupTouch &&
+          setBottomPopup({
+            ...bottomPopup,
+            show: false
+          });
       }
-    } else {
+    } else if (!bottomTouch && !isMultipleView) {
       if (conferenceMode === ConferenceModes.CONTROL) {
-        !isMultipleView && setConferenceMode(ConferenceModes.NORMAL);
+        setConferenceMode(ConferenceModes.NORMAL);
       } else {
-        !isMultipleView && setConferenceMode(ConferenceModes.CONTROL);
+        setConferenceMode(ConferenceModes.CONTROL);
       }
     }
   };
@@ -185,16 +178,8 @@ function ContentContainer(props: any) {
       title: t('참석자리스트'),
       popupType: 'USERLIST'
     });
+    setIsPopupTouch(false);
   };
-
-  // const _setOrientation = () => {
-  //   const { width, height } = Dimensions.get('window');
-  //   const currentOrientation = height > width ? 'vertical' : 'horizontal';
-  //   if (orientation !== currentOrientation) {
-  //     setOrientation(currentOrientation);
-  //     setHeight(Math.max(width, height));
-  //   }
-  // };
 
   const _handleReverseVideo = _.throttle(() => {
     setIsVideoReverse(!isVideoReverse);
@@ -212,6 +197,8 @@ function ContentContainer(props: any) {
         InCallManager.setSpeakerphoneOn(speaker == 2);
     }
   };
+
+  // console.log('attributes : ', attributes);
 
   return attributes ? (
     <FileSharing
@@ -253,7 +240,7 @@ function ContentContainer(props: any) {
       isMultipleView={isMultipleView}
       setIsMultipleView={setIsMultipleView}
       handelProfieBackButton={handelProfieBackButton}
-      viewRef={viewRef}
+      setIsPopupTouch={setIsPopupTouch}
     />
   );
 }

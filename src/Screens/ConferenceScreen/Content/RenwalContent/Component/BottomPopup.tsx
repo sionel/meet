@@ -15,6 +15,8 @@ import Chatting from '../TopArea/Chatting';
 import Profile from '../TopArea/UserList/Profile';
 import { ConferenceBottomPopupProps } from '../../ContentContainer';
 
+import _ from 'underscore';
+
 import icBackW from '@assets/icons/ic_back_w.png';
 
 export type ConferenceBotPopupContent = {
@@ -32,6 +34,7 @@ type BottomPopupProps = {
     React.SetStateAction<ConferenceBottomPopupProps>
   >;
   handelProfieBackButton: () => void;
+  setIsPopupTouch: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const { width, height } = Dimensions.get('window');
@@ -46,7 +49,8 @@ export default function BottomPopup(
     popupType,
     bottomPopup,
     handleBottomPopup,
-    handelProfieBackButton
+    handelProfieBackButton,
+    setIsPopupTouch
   } = props;
   // console.log('height : ', height);
 
@@ -55,7 +59,10 @@ export default function BottomPopup(
     <Chatting />
   ) : (
     <BlurView style={styles.botVerPopContainer} blurAmount={50}>
-      <View style={{ backgroundColor: 'rgba(0,0,0,0.4)' }}>
+      <View
+        style={{ backgroundColor: 'rgba(0,0,0,0.4)' }}
+        onTouchStart={() => popupType !== 'NORMAL' && setIsPopupTouch(true)}
+      >
         <View
           style={[
             styles.verHeaderConatainer,
@@ -85,12 +92,20 @@ export default function BottomPopup(
             keyExtractor={(item, index) => index.toString()}
             data={contentList}
             renderItem={({ item }) => {
+
               return (
                 <TouchableHighlight
                   style={[styles.verMenuRow]}
                   activeOpacity={0.9}
                   underlayColor="rgba(214,255,239,0.1)"
-                  onPress={item.onClick}
+                  onPress={_.throttle(() => {
+                    item.onClick();
+                    handleBottomPopup({
+                      ...bottomPopup,
+                      popupType: 'NORMAL',
+                      show: false
+                    });
+                  }, 500)}
                 >
                   <View style={styles.verMenuRowView}>
                     {item.icon1 && (
@@ -114,6 +129,7 @@ export default function BottomPopup(
             contentList={contentList}
             bottomPopup={bottomPopup}
             handleBottomPopup={handleBottomPopup}
+            setIsPopupTouch={setIsPopupTouch}
           />
         )}
         {popupType === 'PROFILE' && <Profile content={contentList} />}

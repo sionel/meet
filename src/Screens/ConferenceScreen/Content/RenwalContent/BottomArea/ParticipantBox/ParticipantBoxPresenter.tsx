@@ -26,6 +26,7 @@ const canUseStream = true;
 const { width, height } = Dimensions.get('window');
 const multiWidth = width * 0.425;
 const multiViewContainer = height * 0.75;
+const { OS } = Platform;
 
 // (Platform.OS === 'android' && apiLevel >= 26) || Platform.OS === 'ios';
 
@@ -77,7 +78,7 @@ const ParticipantBoxPresenter = (props: ParticipantBoxProps) => {
           mirror={false}
           objectFit={'cover'}
           streamURL={stream.toURL()}
-          zOrder={1} // zOrder 는 [0, 1] 만 사용가능 (아마?)
+          zOrder={2} // zOrder 는 [0, 1] 만 사용가능 (아마?)
         />
       </View>
     ) : (
@@ -125,8 +126,9 @@ const ParticipantBoxPresenter = (props: ParticipantBoxProps) => {
               width: '100%',
               height: 36,
               paddingHorizontal: '5%',
+              paddingVertical: '5%',
               zIndex: 3,
-              paddingVertical: '5%'
+              elevation: 3
             }}
           >
             <TouchableHighlight
@@ -151,7 +153,7 @@ const ParticipantBoxPresenter = (props: ParticipantBoxProps) => {
           </View>
         )}
         {content}
-        <View style={styles.nameArea}>
+        <View style={[styles.nameArea, OS ==='android' && {bottom: 10}]}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             {isMultipleView && (
               <Fragment>
@@ -246,7 +248,7 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     borderRadius: 6,
     overflow: 'hidden',
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   videoAreaSelected: {
     borderWidth: 3,
@@ -267,7 +269,7 @@ const styles = StyleSheet.create({
   nameArea: {
     position: 'absolute',
     width: '100%',
-    height: '15%',
+    height: '20%',
     bottom: 0,
     alignItems: 'center',
     justifyContent: 'center',

@@ -42,6 +42,8 @@ const SET_EXTERNAL = 'local.SET_EXTERNAL';
 
 const SET_TRACK = 'local.SET_TRACK';
 
+const INIT_MESSAGE_COUNT = 'local.INIT_MESSAGE_COUNT';
+
 //#endregion Action Types
 
 interface ConferenceType {
@@ -113,6 +115,8 @@ function reducer(state = initialState, action: AnyAction) {
       return { ...state, externalAPIScope: action.externalAPIScope };
     case SET_TRACK:
       return applySetTrack(state, action);
+    case INIT_MESSAGE_COUNT:
+      return applyInitMessageCount(state, action);
     default:
       return state;
   }
@@ -165,7 +169,7 @@ function applyJoinConference(state: state, action: AnyAction) {
       isLocal: true,
       userName: conferenceInfo.name,
       nickname: auth.nickname,
-      profile_url: auth.profile_url === "" ? undefined :  auth.profile_url
+      profile_url: auth.profile_url === '' ? undefined : auth.profile_url
     }
   };
   return {
@@ -453,7 +457,6 @@ function applySetConferenceMessage(state: state, action: AnyAction) {
   }
 
   // console.log('participants : ', participants);
-  
 
   const list = state.message.slice(0);
   let message_user =
@@ -464,7 +467,6 @@ function applySetConferenceMessage(state: state, action: AnyAction) {
         }) || { name: '(알수없음)' };
 
   // console.log('message_user : ', message_user);
-  
 
   list.push({
     ...newMessage,
@@ -478,6 +480,25 @@ function applySetConferenceMessage(state: state, action: AnyAction) {
   };
 }
 //#endregion
+
+function initMessageCount() {
+  return {
+    type: INIT_MESSAGE_COUNT
+  };
+}
+
+function applyInitMessageCount(state: state, action: AnyAction) {
+  const { message } = state;
+  const list = message.slice(0);
+  list.forEach(newList => {
+    newList.isRead = true;
+  });
+
+  return {
+    ...state,
+    message: list
+  };
+}
 
 function applySetConferencePIPMode(state: state, action: AnyAction) {
   const { pipMode } = action;
@@ -498,7 +519,8 @@ export const actionCreators = {
   setConferenceCreatedTime,
   setConferenceExpireTime,
   receiceConferenceMessage,
-  setTrack
+  setTrack,
+  initMessageCount
 };
 
 export default reducer;

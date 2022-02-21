@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import ChattingPresenter from './ChattingPresenter';
 import ConferenceManager from '@utils/conference/ConferenceManager';
-import { useSelector } from 'react-redux';
+import { actionCreators as localAction } from '@redux/local';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'src/redux/configureStore';
 import { Keyboard } from 'react-native';
 
@@ -22,16 +23,18 @@ const ChattingContainer = () => {
     };
   });
 
+  const dispatch = useDispatch();
+  const initMessageCount = () => dispatch(localAction.initMessageCount());
+
   let conferenceManager = new ConferenceManager();
 
   useEffect(() => {
     let timeout: number | NodeJS.Timeout = setTimeout(() => {});
-    // console.log(scrollRef.current);
-    
+
     if (messages.length > 0) {
       if (scrollRef) {
         if (timeout) clearTimeout(timeout);
-        timeout = setTimeout(() => {         
+        timeout = setTimeout(() => {
           scrollRef.current.scrollToEnd();
         }, 0);
       }
@@ -41,10 +44,15 @@ const ChattingContainer = () => {
         scrollRef.current.scrollToEnd();
       }, 0);
     }
+
     return () => {
       typeof timeout === 'number' && clearTimeout(timeout);
     };
   }, [messages, cdm, keyboardShow]);
+
+  useEffect(() => {
+    initMessageCount();
+  }, [messages.length])
 
   useEffect(() => {
     Keyboard.addListener('keyboardDidShow', () => handdleKeyboardShow());

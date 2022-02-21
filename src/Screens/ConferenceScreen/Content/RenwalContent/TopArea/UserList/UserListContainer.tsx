@@ -17,11 +17,13 @@ type UserListContainer = {
   handleBottomPopup: React.Dispatch<
     React.SetStateAction<ConferenceBottomPopupProps>
   >;
+  setIsPopupTouch: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const UserListContainer = (props: UserListContainer) => {
   const t = getT();
-  const { contentList, bottomPopup, handleBottomPopup } = props;
+  const { contentList, bottomPopup, handleBottomPopup, setIsPopupTouch } =
+    props;
   const [swipeList, setSwipeList] = useState<SwipeList[]>([]);
   const scrollRef: any = useRef([]);
 
@@ -33,7 +35,7 @@ export const UserListContainer = (props: UserListContainer) => {
 
     setSwipeList(userList);
   }, [contentList]);
-  
+
   const fadeInValue = new Animated.Value(0);
 
   const fadeInAnimated = () => {
@@ -88,6 +90,7 @@ export const UserListContainer = (props: UserListContainer) => {
     directionList[index].direction = 'NONE';
     directionList.map(v => resList.push(v));
     setSwipeList(resList);
+    setIsPopupTouch(false);
   };
 
   return (

@@ -67,4 +67,4 @@ project(':react-native-reanimated').projectDir = new File(rootProject.projectDir
 include ':react-native-screens'
 project(':react-native-screens').projectDir = new File(rootProject.projectDir, '../../node_modules/react-native-screens/android')
 include ':react-native-blur'
-project(':react-native-screens').projectDir = new File(rootProject.projectDir, '../../node_modules/@react-native-community/blur/android')
+project(':react-native-blur').projectDir = new File(rootProject.projectDir, '../../node_modules/@react-native-community/blur/android')

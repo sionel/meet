@@ -5,11 +5,16 @@ import {
   StyleSheet,
   TouchableOpacity,
   Modal,
-  Platform
+  Platform,
+  Image,
+  Button
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../redux/configureStore';
 import { actionCreators } from '@redux/alert';
+import { BlurView } from '@react-native-community/blur';
+
+import icOut from '@assets/icons/ic_out.png';
 
 export default function AlertScreenPresenter() {
   const alert = useSelector((state: RootState) => state.alert);
@@ -21,7 +26,7 @@ export default function AlertScreenPresenter() {
     dispatch(actionCreators.resetAlert());
   };
 
-  return (
+  return title !== 'alert_kick' ? (
     <View style={{ position: 'absolute', width: '100%', height: '100%' }}>
       <Modal
         animationType={'fade'}
@@ -81,6 +86,73 @@ export default function AlertScreenPresenter() {
         </TouchableOpacity>
       </Modal>
     </View>
+  ) : (
+    <BlurView
+      blurAmount={50}
+      style={{
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        zIndex: 10,
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}
+    >
+      <View
+        style={{
+          backgroundColor: '#fff',
+          width: 268,
+          height: 302,
+          borderRadius: 14,
+          alignItems: 'center'
+        }}
+      >
+        <Image
+          source={icOut}
+          style={{ width: 48, height: 48, marginTop: 40 }}
+        />
+        <Text
+          style={{
+            fontFamily: 'DOUZONEText50',
+            fontSize: 16,
+            color: '#000',
+            marginTop: 30,
+            marginBottom: 18
+          }}
+        >{`추방되었습니다.`}</Text>
+        <Text
+          style={{
+            fontFamily: 'DOUZONEText30',
+            fontSize: 13,
+            color: '#333333'
+          }}
+        >
+          {message}
+        </Text>
+        <TouchableOpacity
+          style={{
+            backgroundColor: '#1c90fb',
+            width: 236,
+            height: 48,
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: 24,
+            marginVertical: 30
+          }}
+          onPress={resetAlert}
+        >
+          <Text
+            style={{
+              fontFamily: 'DOUZONEText50',
+              fontSize: 14,
+              color: '#fff'
+            }}
+          >
+            {`확인`}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </BlurView>
   );
 }
 /**

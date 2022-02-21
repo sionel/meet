@@ -34,7 +34,6 @@ type BottomAreaProps = {
   onChangeMicMaster: () => void;
   handleToggleMic: () => void;
   toggleMuteVideo: () => void;
-  toggleMuteMic: () => void;
   user: any;
   mainUserId: any;
   list: ParticipantsTypes[];
@@ -53,8 +52,8 @@ const BottomAreaPresenter = (props: BottomAreaProps) => {
     speaker,
     isMuteVideo,
     toggleMuteVideo,
+    handleToggleMic,
     isMuteMic,
-    toggleMuteMic,
     isScreenShare,
     onChangeSpeaker,
     onClose,
@@ -69,168 +68,169 @@ const BottomAreaPresenter = (props: BottomAreaProps) => {
     bottomPopup
   } = props;
 
+  // console.log('props : ', props);
+
   const multiViewHeight = height * 0.75;
 
-  return (
-    bottomPopup.popupType === 'CHATTING' ? null : (
-      <View
-        style={[
-          styles.bottomArea,
-          { left: 0, right: 0, bottom: '5%', flexDirection: 'column' }
-        ]}
-      >
-        {Number(callType) === 2
-          ? null
-          : (conferenceMode === ConferenceModes.NORMAL || isScreenShare) && (
-              <Fragment>
-                <TouchableOpacity
+  return bottomPopup.popupType === 'CHATTING' ? null : (
+    <View
+      style={[
+        styles.bottomArea,
+        { left: 0, right: 0, bottom: '5%', flexDirection: 'column' }
+      ]}
+    >
+      {Number(callType) === 2
+        ? null
+        : (conferenceMode === ConferenceModes.NORMAL || isScreenShare) && (
+            <Fragment>
+              <TouchableOpacity
+                style={{
+                  width: 100,
+                  height: 20,
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}
+                onPress={() => {
+                  !bottomPopup.show && setIsMultipleView(!isMultipleView);
+                  console.log(2222);
+                }}
+              >
+                <View
                   style={{
-                    width: 100,
-                    height: 20,
-                    justifyContent: 'center',
-                    alignItems: 'center'
+                    width: 52,
+                    height: 5,
+                    borderRadius: 3,
+                    backgroundColor: '#fff'
                   }}
-                  onPress={() =>
-                    !bottomPopup.show && setIsMultipleView(!isMultipleView)
-                  }
-                >
-                  <View
-                    style={{
-                      width: 52,
-                      height: 5,
-                      borderRadius: 3,
-                      backgroundColor: '#fff'
-                    }}
-                  />
-                </TouchableOpacity>
-                {isMultipleView ? (
-                  <FlatList
-                    data={userList}
-                    windowSize={6}
-                    numColumns={2}
-                    style={{
-                      // paddingLeft: '5%',
-                      flex: 1,
-                      height: multiViewHeight
-                    }}
-                    renderItem={({ item, index }) => {
-                      const { length } = list;
-                      return length > -1 ? (
-                        <ParticipantBox
-                          key={item.id}
-                          index={index}
-                          user={item}
-                          videoTrack={item.videoTrack}
-                          isSelect={mainUserId === item.id}
-                          isMultipleView={true}
-                          setIsMultipleView={setIsMultipleView}
-                        />
-                      ) : null;
-                    }}
-                  />
-                ) : (
-                  <ScrollView
-                    horizontal={orientation === 'vertical'}
-                    showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={[
-                      styles.scrollView,
-                      list.length === 0 ? { margin: 0, padding: 0 } : {}
-                    ]}
-                    scrollEventThrottle={0} // ios전용 이벤트를 얼마나 발생할지에 대한 빈도 0-16 16하면 디게많이 발생
-                  >
-                    {user && mainUserId !== user.id ? (
+                />
+              </TouchableOpacity>
+              {isMultipleView ? (
+                <FlatList
+                  data={userList}
+                  windowSize={6}
+                  numColumns={2}
+                  style={{
+                    // paddingLeft: '5%',
+                    flex: 1,
+                    height: multiViewHeight
+                  }}
+                  renderItem={({ item, index }) => {
+                    const { length } = list;
+                    return length > -1 ? (
                       <ParticipantBox
-                        key={user.id}
-                        user={user}
-                        videoTrack={user.videoTrack}
-                        isSelect={mainUserId === user.id}
-                        isMultipleView={false}
+                        key={item.id}
+                        index={index}
+                        user={item}
+                        videoTrack={item.videoTrack}
+                        isSelect={mainUserId === item.id}
+                        isMultipleView={true}
+                        setIsMultipleView={setIsMultipleView}
                       />
-                    ) : null}
-                    {list.map(
-                      (participant: any) =>
-                        mainUserId !== participant.id && (
-                          <ParticipantBox
-                            key={participant.id}
-                            user={participant}
-                            isSelect={mainUserId === participant.id}
-                            isMultipleView={false}
-                          />
-                        )
-                    )}
-                  </ScrollView>
-                )}
-              </Fragment>
-            )}
-        <View
-          style={{ flexDirection: 'row' }}
-          // style={[
-          //   styles.bottomArea,
-          //   orientation === 'vertical'
-          //     ? styles.bottomAreaVertical
-          //     : styles.bottomAreaHorizontal
-          // ]}
-        >
-          {/* 스피커 */}
-          {!isTablet && (
-            <TouchableOpacity
-              style={styles.bottonTouch}
-              onPressOut={onChangeSpeaker}
-            >
-              <Image
-                source={speaker == 2 ? icSpeakerOff : icSpeakerOn}
-                style={styles.buttonImage}
-                resizeMode={'cover'}
-              />
-            </TouchableOpacity>
+                    ) : null;
+                  }}
+                />
+              ) : (
+                <ScrollView
+                  horizontal={orientation === 'vertical'}
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={[
+                    styles.scrollView,
+                    list.length === 0 ? { margin: 0, padding: 0 } : {}
+                  ]}
+                  scrollEventThrottle={0} // ios전용 이벤트를 얼마나 발생할지에 대한 빈도 0-16 16하면 디게많이 발생
+                >
+                  {user && mainUserId !== user.id ? (
+                    <ParticipantBox
+                      key={user.id}
+                      user={user}
+                      videoTrack={user.videoTrack}
+                      isSelect={mainUserId === user.id}
+                      isMultipleView={false}
+                    />
+                  ) : null}
+                  {list.map(
+                    (participant: any) =>
+                      mainUserId !== participant.id && (
+                        <ParticipantBox
+                          key={participant.id}
+                          user={participant}
+                          isSelect={mainUserId === participant.id}
+                          isMultipleView={false}
+                        />
+                      )
+                  )}
+                </ScrollView>
+              )}
+            </Fragment>
           )}
-          {/* 마이크 */}
+      <View
+        style={{ flexDirection: 'row' }}
+        // style={[
+        //   styles.bottomArea,
+        //   orientation === 'vertical'
+        //     ? styles.bottomAreaVertical
+        //     : styles.bottomAreaHorizontal
+        // ]}
+      >
+        {/* 스피커 */}
+        {!isTablet && (
           <TouchableOpacity
             style={styles.bottonTouch}
-            onPressOut={toggleMuteMic}
+            onPressOut={onChangeSpeaker}
           >
             <Image
-              source={isMuteMic ? icMicOff : icMicOn}
+              source={speaker == 2 ? icSpeakerOff : icSpeakerOn}
               style={styles.buttonImage}
               resizeMode={'cover'}
             />
           </TouchableOpacity>
-          {/* 카메라 */}
-          {Number(callType) !== 2 && !isScreenShare && (
-            <TouchableOpacity
-              style={styles.bottonTouch}
-              onPressOut={toggleMuteVideo}
-            >
-              <Image
-                source={isMuteVideo ? icVideoOff : icVideoOn}
-                style={styles.buttonImage}
-                resizeMode={'cover'}
-              />
-            </TouchableOpacity>
-          )}
-          {isScreenShare && (
-            <TouchableOpacity style={styles.bottonTouch} onPress={() => {}}>
-              <Image
-                source={icVideoOff}
-                style={styles.buttonImage}
-                resizeMode={'cover'}
-              />
-            </TouchableOpacity>
-          )}
-          {/* 회의종료 */}
+        )}
+        {/* 마이크 */}
+        <TouchableOpacity
+          style={styles.bottonTouch}
+          onPressOut={handleToggleMic}
+        >
+          <Image
+            source={isMuteMic ? icMicOff : icMicOn}
+            style={styles.buttonImage}
+            resizeMode={'cover'}
+          />
+        </TouchableOpacity>
+        {/* 카메라 */}
+        {Number(callType) !== 2 && !isScreenShare && (
           <TouchableOpacity
-            style={[styles.bottonTouch, { backgroundColor: '#ef5334' }]}
-            onPressOut={onClose}
+            style={styles.bottonTouch}
+            onPressOut={toggleMuteVideo}
           >
             <Image
-              source={icCallEnd}
+              source={isMuteVideo ? icVideoOff : icVideoOn}
               style={styles.buttonImage}
               resizeMode={'cover'}
             />
           </TouchableOpacity>
-        </View>
+        )}
+        {isScreenShare && (
+          <TouchableOpacity style={styles.bottonTouch} onPress={() => {}}>
+            <Image
+              source={icVideoOff}
+              style={styles.buttonImage}
+              resizeMode={'cover'}
+            />
+          </TouchableOpacity>
+        )}
+        {/* 회의종료 */}
+        <TouchableOpacity
+          style={[styles.bottonTouch, { backgroundColor: '#ef5334' }]}
+          onPressOut={onClose}
+        >
+          <Image
+            source={icCallEnd}
+            style={styles.buttonImage}
+            resizeMode={'cover'}
+          />
+        </TouchableOpacity>
       </View>
-    )
+    </View>
   );
 };
 
@@ -253,7 +253,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    zIndex: 1
+    zIndex: 1,
+    elevation: 1
   },
   bottomAreaVertical: {
     bottom: '5%',

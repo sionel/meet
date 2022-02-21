@@ -66,10 +66,22 @@ const MainPresenter = (props: MainPresenterProps) => {
       </Text>
     </View>
   );
+ 
 
   //zindex:0
   return isMultipleView ? (
-    <View style={{ width: '100%', height: '100%', backgroundColor: '#000' }} />
+    <View
+      style={{
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        zIndex: 0,
+        elevation: 0,
+        backgroundColor: '#000'
+      }}
+    />
   ) : !isMuteVideo && stream && !drawing ? (
     <RTCView
       style={styles.RTCVideo}
@@ -102,23 +114,26 @@ const MainPresenter = (props: MainPresenterProps) => {
 const styles = StyleSheet.create({
   RTCVideo: {
     position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    zIndex: 0,
-    backgroundColor: '#000'
-  },
-  imageContainer: {
-    position: 'absolute',
-    // display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     top: 0,
     bottom: 0,
     left: 0,
     right: 0,
-    zIndex: 0
+    zIndex: 0,
+    elevation: 0,
+    backgroundColor: '#000'
+  },
+  imageContainer: {
+    position: 'absolute',
+    justifyContent: 'center',
+    alignItems: 'center',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 0,
+    elevation: 0
   }
 });
 

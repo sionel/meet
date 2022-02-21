@@ -55,9 +55,9 @@ const ChattingPresenter = (props: any) => {
 
   return (
     <Fragment>
-      <View style={{ flex: 1 }} />
+      <View style={{ flex: 0.3 }} />
       <KeyboardAvoidingView
-        style={[styles.container, keyboardShow && { flex: 2.8 }]}
+        style={[styles.container]}
         behavior={'padding'}
       >
         <ScrollView
@@ -83,7 +83,7 @@ const ChattingPresenter = (props: any) => {
           }}
         >
           {messages.length === 0 && (
-            <View style={{ flex: 1, alignItems: 'center', paddingBottom: 30 }}>
+            <View style={{ flex: 1, alignItems: 'center',paddingBottom: 30 }}>
               <Text style={{ color: '#fff', fontFamily: 'DOUZONEText30' }}>
                 {t('chatting_nochat')}
               </Text>
@@ -91,28 +91,13 @@ const ChattingPresenter = (props: any) => {
           )}
           <View>
             <FlatList
-              ref={scrollRef}
-              showsVerticalScrollIndicator={false}
-              onScrollBeginDrag={setIsEndScroll(false)}
-              onScrollEndDrag={({ nativeEvent }) => {
-                if (nativeEvent.targetContentOffset) {
-                  const contentOffsetY = isIOS
-                    ? nativeEvent.targetContentOffset.y
-                    : nativeEvent.contentOffset.y; // 현재 스크롤 좌표
-                  const layoutMeasurementHeight =
-                    nativeEvent.layoutMeasurement.height; // 자식의 단일 component 높이
-                  const contentSizeHeight = nativeEvent.contentSize.height; // 전체 component 높이
-                  const isOverScroll =
-                    contentOffsetY + layoutMeasurementHeight + 2 >
-                    contentSizeHeight; // + 2 은 오차계산
-                  setIsEndScroll(isOverScroll);
-                }
-              }}
               bounces={false}
               data={messages}
               keyExtractor={(item, index) => String(index)}
               contentContainerStyle={{ flexGrow: 1 }}
               renderItem={({ item, index }) => {
+                // console.log(item);
+                
                 if (!cdm && index === messages.length - 1) {
                   setCdm(true);
                 }
@@ -123,65 +108,27 @@ const ChattingPresenter = (props: any) => {
                   : wehagoDummyImageURL;
 
                 return (
-                  <View
-                    style={{
-                      alignItems: 'flex-start',
-                      marginBottom: 5,
-                      width: '90%'
-                    }}
-                  >
+                  <View style={styles.chatContainer}>
                     <View
                       style={[
-                        {
-                          flexDirection: 'row',
-                          borderTopLeftRadius: 15,
-                          borderTopRightRadius: 15,
-                          borderBottomRightRadius: 15,
-                          backgroundColor: 'rgba(0,0,0,0.4)'
-                        },
+                        styles.normalChatView,
                         localUser && { backgroundColor: '#1c90fb' }
                       ]}
                     >
-                      <View
-                        style={{
-                          marginLeft: 16,
-                          marginRight: 8,
-                          marginVertical: 8
-                        }}
-                      >
+                      <View style={styles.chatProfileView}>
                         <Image
                           source={{ uri: profileUrl }}
-                          style={{ width: 32, height: 32, borderRadius: 16 }}
+                          style={styles.chatProfile}
+                          resizeMode="cover"
                         />
                       </View>
-                      <View
-                        style={{
-                          marginVertical: 8,
-                          paddingRight: 16,
-                          maxWidth: '90%'
-                        }}
-                      >
-                        <Text
-                          style={{
-                            fontFamily: 'DOUZONEText50',
-                            fontSize: 10,
-                            color: 'rgba(255,255,255,0.5)'
-                          }}
-                        >
+                      <View style={styles.chatTextView}>
+                        <Text style={styles.userName}>
                           {item.name}
                           {localUser && `(나)`}
                         </Text>
 
-                        <Text
-                          style={{
-                            fontFamily: 'DOUZONEText30',
-                            fontSize: 12,
-                            color: 'rgba(255,255,255,0.87)',
-                            flex: 1
-                          }}
-                        >
-                          {item.text}
-                        </Text>
+                        <Text style={styles.chatText}>{item.text}</Text>
                       </View>
                     </View>
                   </View>
@@ -202,32 +149,21 @@ const ChattingPresenter = (props: any) => {
               onChangeText={text => setMyMessage(text)}
               selectionColor="#fff"
               autoCapitalize="none"
-              style={{
-                lineHeight: 20,
-                fontSize: 13,
-                fontFamily: 'DOUZONEText30',
-                flex: 1,
-                paddingHorizontal: 12,
-                paddingVertical: 11,
-                color: '#fff'
-              }}
+              style={styles.chatInput}
             />
             <TouchableOpacity
-              style={{
-                width: 30,
-                height: 30,
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: 14,
-                margin: 5,
-                backgroundColor:
-                  myMessage.length > 0 ? '#1c90fb' : 'rgba(255,255,255,0.3)'
-              }}
+              style={[
+                styles.sendImageContainer,
+                {
+                  backgroundColor:
+                    myMessage.length > 0 ? '#1c90fb' : 'rgba(255,255,255,0.3)'
+                }
+              ]}
               onPressOut={onSendTextMessage}
             >
               <Image
                 source={myMessage.length > 0 ? icSendW : icSend}
-                style={{ width: 15, height: 15 }}
+                style={styles.sendImage}
                 resizeMode="cover"
               />
             </TouchableOpacity>
@@ -243,6 +179,44 @@ const styles = StyleSheet.create({
     // maxHeight: height * 0.5,
     flex: 1,
     paddingHorizontal: width * 0.04
+  },
+  chatContainer: {
+    alignItems: 'flex-start',
+    marginBottom: 5,
+    width: '90%'
+  },
+  normalChatView: {
+    flexDirection: 'row',
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+    borderBottomRightRadius: 15,
+    backgroundColor: 'rgba(0,0,0,0.4)'
+  },
+  chatProfileView: {
+    marginLeft: 16,
+    marginRight: 8,
+    marginVertical: 8
+  },
+  chatProfile: {
+    width: 32,
+    height: 32,
+    borderRadius: 16
+  },
+  userName: {
+    fontFamily: 'DOUZONEText50',
+    fontSize: 10,
+    color: 'rgba(255,255,255,0.5)'
+  },
+  chatTextView: {
+    marginVertical: 8,
+    paddingRight: 16,
+    maxWidth: '90%'
+  },
+  chatText: {
+    fontFamily: 'DOUZONEText30',
+    fontSize: 12,
+    color: 'rgba(255,255,255,0.87)',
+    flex: 1
   },
   inputArea: {
     width: '100%',
@@ -262,7 +236,25 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.1)',
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.3)'
-  }
+  },
+  chatInput: {
+    lineHeight: 20,
+    fontSize: 13,
+    fontFamily: 'DOUZONEText30',
+    flex: 1,
+    paddingHorizontal: 12,
+    paddingVertical: 11,
+    color: '#fff'
+  },
+  sendImageContainer: {
+    width: 30,
+    height: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 14,
+    margin: 5
+  },
+  sendImage: { width: 15, height: 15 }
 });
 
 export default ChattingPresenter;
