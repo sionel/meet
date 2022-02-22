@@ -78,7 +78,7 @@ const ParticipantBoxPresenter = (props: ParticipantBoxProps) => {
           mirror={false}
           objectFit={'cover'}
           streamURL={stream.toURL()}
-          zOrder={2} // zOrder 는 [0, 1] 만 사용가능 (아마?)
+          zOrder={0} // zOrder 는 [0, 1] 만 사용가능 (아마?)
         />
       </View>
     ) : (
@@ -153,7 +153,7 @@ const ParticipantBoxPresenter = (props: ParticipantBoxProps) => {
           </View>
         )}
         {content}
-        <View style={[styles.nameArea, OS ==='android' && {bottom: 10}]}>
+        <View style={[styles.nameArea, OS ==='android' && !isMultipleView && {bottom: 10}]}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             {isMultipleView && (
               <Fragment>
@@ -273,7 +273,9 @@ const styles = StyleSheet.create({
     bottom: 0,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(0,0,0,0.2)'
+    backgroundColor: 'rgba(0,0,0,0.2)',
+    zIndex: 3,
+    elevation: 3
   },
   name: {
     color: '#fff',

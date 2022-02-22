@@ -146,6 +146,7 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     zIndex: 2,
+    elevation: 2,
     width: '100%',
     maxHeight: height * 0.62,
     borderRadius: 10

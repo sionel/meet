@@ -32,7 +32,6 @@ const InCallManager = !isIOS && require('react-native-incall-manager').default;
 
 const { AudioMode } = NativeModules;
 const hasNotch = DeviceInfo.hasNotch() && isIOS;
-const { width, height } = Dimensions.get('window');
 
 function ContentContainer(props: any) {
   const t = getT();
@@ -45,6 +44,8 @@ function ContentContainer(props: any) {
   const [objectFit, setObjectFit] = useState('cover');
   const [height, setHeight] = useState(Dimensions.get('window').height);
   const [elapsedTime, setElapsedTime] = useState(0);
+  const [limitedTime, setLimitedTime] = useState(3600000);
+
   const [bottomPopup, setBottomPopup] = useState<ConferenceBottomPopupProps>({
     show: false,
     contentList: [],
@@ -63,8 +64,6 @@ function ContentContainer(props: any) {
     documentListMode,
     attributes,
     localPipMode,
-    videoPolicy,
-    loginType,
     participants,
     user,
     auth,
@@ -107,7 +106,9 @@ function ContentContainer(props: any) {
       wehagoId: auth.portal_id,
       userName: auth.user_name,
       nickname: auth.nickname,
-      companyFullpath: auth.last_company.full_path,
+      companyFullpath: auth?.last_company?.full_path
+        ? auth.last_company.full_path
+        : '외부참여자',
       user_email: auth.user_default_email,
       user_contact: auth.user_contact
     }
@@ -122,20 +123,23 @@ function ContentContainer(props: any) {
   useEffect(() => {
     _handleChangeSpeaker();
     const _timer = setInterval(() => {
-      let nowTime = Date.now();
       if (createdTime) {
-        let time = Math.floor((Date.now() - createdTime) / 1000);
+        if (expireTime !== null) {
+          let limitTime = limitedTime - 500;
+          let remainTime = Math.floor(limitTime / 1000);
 
-        time > 0 && setElapsedTime(time);
-        if (expireTime !== null && nowTime >= expireTime) {
-          Alert.alert('회의 종료', '회의시간이 60분 지나 회의가 종료됩니다.', [
-            {
-              text: '확인',
-              onPress: () => {
-                onClose();
-              }
-            }
-          ]);
+          setElapsedTime(remainTime);
+          setLimitedTime(limitTime);
+
+          if (limitTime < 500) {
+            onClose();
+            Alert.alert('회의 종료', '회의시간이 60분 지나 회의가 종료됩니다.');
+          }
+        } else {
+          let nowTime = Date.now();
+          let normalTime = Math.floor((nowTime - createdTime) / 1000);
+
+          normalTime > 0 && setElapsedTime(normalTime);
         }
       }
     }, 500);
@@ -149,26 +153,38 @@ function ContentContainer(props: any) {
     if (mainUser.id !== 'localUser') m?.setReceiverConstraints(mainUser.id);
   }, [mainUser]);
 
-  const _toggleConferenceMode = (e: any) => {
-    const bottomTouch = e.nativeEvent.pageY > height * 0.7;
+  useEffect(() => {
+    isMultipleView && setConferenceMode(ConferenceModes.NORMAL);
+  }, [isMultipleView]);
 
-    if (bottomPopup.show) {
-      if (bottomPopup.popupType === 'CHATTING') {
-        //채팅버튼 눌렀을 경우
-      } else {
-        !isPopupTouch &&
-          setBottomPopup({
-            ...bottomPopup,
-            show: false
-          });
-      }
-    } else if (!bottomTouch && !isMultipleView) {
-      if (conferenceMode === ConferenceModes.CONTROL) {
-        setConferenceMode(ConferenceModes.NORMAL);
-      } else {
-        setConferenceMode(ConferenceModes.CONTROL);
+  const _toggleConferenceMode = (e: any) => {
+    // if (isIOS) {
+    if (!isMultipleView) {
+      if (bottomPopup.show) {
+        if (bottomPopup.popupType === 'CHATTING') {
+          //채팅버튼 눌렀을 경우
+        } else {
+          !isPopupTouch &&
+            setBottomPopup({
+              ...bottomPopup,
+              show: false
+            });
+        }
+      } else if (!isMultipleView) {
+        if (conferenceMode === ConferenceModes.CONTROL) {
+          setConferenceMode(ConferenceModes.NORMAL);
+        } else {
+          setConferenceMode(ConferenceModes.CONTROL);
+        }
       }
     }
+    // } else {
+    //   if (conferenceMode === ConferenceModes.CONTROL) {
+    //     setConferenceMode(ConferenceModes.NORMAL);
+    //   } else {
+    //     setConferenceMode(ConferenceModes.CONTROL);
+    //   }
+    // }
   };
 
   const handelProfieBackButton = () => {
@@ -241,6 +257,8 @@ function ContentContainer(props: any) {
       setIsMultipleView={setIsMultipleView}
       handelProfieBackButton={handelProfieBackButton}
       setIsPopupTouch={setIsPopupTouch}
+      limitedTime={limitedTime}
+      setLimitedTime={setLimitedTime}
     />
   );
 }

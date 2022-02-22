@@ -19,7 +19,7 @@ export const isSuccess = <T>(res: Res<T>): res is SuccessRes<T> => {
     case 200:
     case 201:
     case 204:
-    case undefined:
+    // case undefined:
       return true;
     default:
       return false;

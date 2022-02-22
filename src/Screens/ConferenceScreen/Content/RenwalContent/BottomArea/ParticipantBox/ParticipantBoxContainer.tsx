@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { actionCreators as mainUserActionCreators } from '@redux/mainUser';
 import ParticipantBoxPresenter from './ParticipantBoxPresenter';
@@ -10,7 +10,7 @@ const ParticipantBoxContainer = (props: {
   isMultipleView: boolean;
   index?: number;
   videoTrack?: any;
-  setIsMultipleView? : (flag : boolean)=> void;
+  setIsMultipleView?: (flag: boolean) => void;
 }) => {
   const { user, isMultipleView, index, setIsMultipleView } = props;
   const { isMuteVideo } = user;
@@ -39,10 +39,10 @@ const ParticipantBoxContainer = (props: {
     } else return user.name;
   };
 
-  const handleTouchView = () => { 
-      setMainUser(user.id);
-      isMultipleView && setIsMultipleView && setIsMultipleView(false);
-  }
+  const handleTouchView = () => {
+    setMainUser(user.id);
+    isMultipleView && setIsMultipleView && setIsMultipleView(false);
+  };
 
   return (
     <ParticipantBoxPresenter

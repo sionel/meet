@@ -38,6 +38,7 @@ type ContentPresenterProps = {
   setIsPopupTouch: any;
   documentListMode: any;
   onChangeSharingMode: any;
+  // limitedTime: number;
 };
 
 const ContentPresenter = (props: ContentPresenterProps) => {
@@ -62,7 +63,8 @@ const ContentPresenter = (props: ContentPresenterProps) => {
     isMultipleView,
     setIsMultipleView,
     handelProfieBackButton,
-    setIsPopupTouch
+    setIsPopupTouch,
+    // limitedTime
   } = props;
 
   // const localPipMode = useSelector((state: RootState) => state.local.pipMode);
@@ -79,8 +81,6 @@ const ContentPresenter = (props: ContentPresenterProps) => {
         right: 0
       }}
       onTouchEnd={toggleConferenceMode}
-      // onPress={toggleConferenceMode}
-      // activeOpacity={1}
     >
       {!localPipMode && Number(callType) !== 2 && !drawingMode && (
         <TopArea
@@ -96,6 +96,7 @@ const ContentPresenter = (props: ContentPresenterProps) => {
           isMultipleView={isMultipleView}
           setIsMultipleView={setIsMultipleView}
           selectedRoomName={selectedRoomName}
+          // limitedTime={limitedTime}
         />
       )}
       <MainView

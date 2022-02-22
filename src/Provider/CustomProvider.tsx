@@ -34,13 +34,14 @@ export default function CustomProvider(props: any) {
     network,
     selectCompany,
     isHorizon,
-    isConference
+    isConference,
+    loginType
   } = useSelector((state: RootState) => {
     const {
       alert,
       indicator,
       selectCompany,
-      user: { auth, isLogin },
+      user: { auth, isLogin, loginType },
       root: { network },
       orientation: { isHorizon },
       conference: { isConference }
@@ -53,7 +54,8 @@ export default function CustomProvider(props: any) {
       network,
       selectCompany,
       isHorizon,
-      isConference
+      isConference,
+      loginType
     };
   });
   const t = getT();
@@ -178,7 +180,7 @@ export default function CustomProvider(props: any) {
         AUTH_R_TOKEN,
         cno,
         HASH_KEY
-      );    
+      );
 
       if (!isSuccess(checkResult)) {
         const { errors } = checkResult;
@@ -188,7 +190,10 @@ export default function CustomProvider(props: any) {
           _setAlert({
             type: 1,
             title: t('renewal.alert_title_error'),
-            message: t('renewal.alert_text_duplicate_logout'),
+            message:
+              loginType === 'nahago'
+                ? t('renewal.alert_text_duplicate_logout2')
+                : t('renewal.alert_text_duplicate_logout'),
             onConfirm: () => {
               _onLogout();
               RootNavigation.navigateReset('LoginStack');

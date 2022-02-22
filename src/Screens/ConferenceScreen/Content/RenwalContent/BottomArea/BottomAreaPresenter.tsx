@@ -68,7 +68,8 @@ const BottomAreaPresenter = (props: BottomAreaProps) => {
     bottomPopup
   } = props;
 
-  // console.log('props : ', props);
+  // console.log(conferenceMode);
+  
 
   const multiViewHeight = height * 0.75;
 
@@ -92,7 +93,6 @@ const BottomAreaPresenter = (props: BottomAreaProps) => {
                 }}
                 onPress={() => {
                   !bottomPopup.show && setIsMultipleView(!isMultipleView);
-                  console.log(2222);
                 }}
               >
                 <View

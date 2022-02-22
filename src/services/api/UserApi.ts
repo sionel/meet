@@ -188,9 +188,11 @@ const check = async (
   });
 
   if (isSuccess(response)) {
-    if(isSuccess(response2)) {
-      let nickname = response2.resultData[0].nickname;
+    if (isSuccess(response2)) {
+      let nickname = response2?.resultData[0]?.nickname;
       response.resultData.nickname = nickname;
+    } else {
+      return response2;
     }
     return response;
   } else {

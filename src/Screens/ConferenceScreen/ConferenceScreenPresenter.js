@@ -5,12 +5,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import {
-  Platform,
-  View,
-  StatusBar,
-  SafeAreaView
-} from 'react-native';
+import { Platform, View, StatusBar, SafeAreaView } from 'react-native';
 import LoadingIndicator from './LoadingIndicator';
 import Content from './Content';
 import SimpleNoti from './SimpleNoti';
@@ -42,12 +37,16 @@ const ConferenceScreenPresenter = props => {
         top: 0,
         bottom: 0,
         left: 0,
-        right: 0,
+        right: 0
         // paddingBottom: Math.max(insets.bottom, 16),
         // paddingTop: Math.max(insets.top, 16)
       }}
     >
-      <StatusBar barStyle={'light-content'} />
+      {Platform.OS === 'ios' && <StatusBar barStyle={'light-content'} />}
+      {Platform.OS === 'android' && (
+        <StatusBar backgroundColor="transparent" translucent={true} />
+      )}
+
       <SimpleNoti />
       {Platform.OS === 'ios' ? <ScreenShareIOS /> : <ScreenShareANDROID />}
       {props.mainUser && props.connection ? (
@@ -69,7 +68,7 @@ const ConferenceScreenPresenter = props => {
       ) : (
         <LoadingIndicator />
       )}
-    </View >
+    </View>
   );
 };
 

@@ -438,6 +438,7 @@ const SplashScreenContainer = ({
       await onLogin(userData, from, flag);
       return userData;
     } else {
+      
       const { errors } = checkResult;
       eventLog(errors);
       _handleloginCheckError(errors);
@@ -452,7 +453,7 @@ const SplashScreenContainer = ({
       setAlert({
         type: 1,
         title: t('renewal.alert_title_login_fail'),
-        message: t('renewal.alert_text_duplicate_logout')
+        message: loginType === 'nahago' ? t('renewal.alert_text_duplicate_logout2') : t('renewal.alert_text_duplicate_logout')
       });
     } else if (errors.status === '400') {
       setAlert({

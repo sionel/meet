@@ -24,6 +24,7 @@ type TopAreaContainerProps = {
   onChangeDrawingMode: (value: any) => void;
   mainUser: any;
   elapsedTime: number;
+  // limitedTime: number;
   handleBottomPopup: React.Dispatch<
     React.SetStateAction<ConferenceBottomPopupProps>
   >;
@@ -42,6 +43,7 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
     callType,
     mainUser,
     elapsedTime,
+    // limitedTime,
     bottomPopup,
     handleBottomPopup,
     userList,
@@ -222,6 +224,7 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
     }
     return hours + ':' + minutes + ':' + seconds;
   };
+
   let time = second2String(elapsedTime);
 
   return (
