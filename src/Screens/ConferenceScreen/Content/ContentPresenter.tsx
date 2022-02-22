@@ -27,7 +27,9 @@ const ContentPresenter = (props: any) => {
     createdTime,
     orientation,
     onClose,
-    localPipMode
+    localPipMode,
+    limitedTime,
+    setLimitedTime
   } = props;
 
   // const localPipMode = useSelector((state: RootState) => state.local.pipMode);
@@ -58,6 +60,8 @@ const ContentPresenter = (props: any) => {
           conferenceMode={conferenceMode}
           createdTime={createdTime}
           onClose={onClose}
+          limitedTime={limitedTime}
+          setLimitedTime={setLimitedTime}
         />
       </TouchableOpacity>
       {/* END MAIN VIDEO 영역 */}

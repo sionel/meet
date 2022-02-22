@@ -38,6 +38,8 @@ function ContentContainer(props: any) {
   const [height, setHeight] = useState(Dimensions.get('window').height);
   const { mainUser } = props;
   const { videoTrack, isMuteVideo } = mainUser;
+  const [limitedTime, setLimitedTime] = useState(3600000);
+
   // const localPipMode = useSelector((state: RootState) => state.local.pipMode);
   const {
     conferenceMode,
@@ -142,6 +144,8 @@ function ContentContainer(props: any) {
       onReverseVideo={_handleReverseVideo}
       onLayout={_setOrientation}
       onChangeSpeaker={_handleChangeSpeaker}
+      limitedTime={limitedTime}
+      setLimitedTime={setLimitedTime}
       // onChangeState={_handleChangeState}
     />
   );

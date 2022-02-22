@@ -12,7 +12,7 @@ class MainVideoContainer extends React.Component {
     this.state = {
       time:
         Date.now() - this.props.createdTime > 0
-          ? Math.floor((Date.now() - this.props.createdTime) / 1000)
+          ? Math.floor(this.props.expireTime !== null ? ((this.props.limitedTime - 500) / 1000) : ((Date.now() - this.props.createdTime) / 1000))
           : 0,
       pipMode: false
     };
@@ -22,18 +22,23 @@ class MainVideoContainer extends React.Component {
   componentDidMount() {
     const { expireTime } = this.props;
     this._timer = setInterval(() => {
-      if (this.props.createdTime) {
-        let nowTime = Date.now();
-        let time = Math.floor((Date.now() - this.props.createdTime) / 1000);
+      if (createdTime) {
+        if (expireTime !== null) {
+          let limitTime = this.props.limitedTime - 500;
+          let remainTime = Math.floor(limitTime / 1000);
+          
+          this.setState({ time: remainTime });
+          this.props.setLimitedTime(limitTime);
 
-        time > 0 && this.setState({ time });
-        if (expireTime !== null && nowTime >= expireTime) {
-          this.props.setAlert({
-            title: '회의 종료',
-            type: 1,
-            message: '회의시간이 60분 지나 회의가 종료됩니다.',
-            onConfirm: this.props.onClose
-          });
+          if (limitTime < 500) {
+            this.props.onClose();
+            Alert.alert('회의 종료', '회의시간이 60분 지나 회의가 종료됩니다.');
+          }
+        } else {
+          let nowTime = Date.now();
+          let normalTime = Math.floor((nowTime - createdTime) / 1000);
+
+          this.state.time > 0 && this.setState({ time: normalTime });
         }
       }
     }, 500);

@@ -50,7 +50,7 @@ export interface state {
   facingMode: string;
   prevVolumn: any;
   createdTime: number | null;
-  expireTime: number | null,
+  expireTime: number | null;
   callType: string | null;
   message: any[];
   pipMode: boolean;
