@@ -7,7 +7,8 @@ import {
   ImageSourcePropType,
   FlatList,
   StyleSheet,
-  TouchableHighlight
+  TouchableHighlight,
+  Platform
 } from 'react-native';
 import { BlurView } from '@react-native-community/blur';
 import UserList from '../TopArea/UserList';
@@ -52,15 +53,17 @@ export default function BottomPopup(
     handelProfieBackButton,
     setIsPopupTouch
   } = props;
-  // console.log('height : ', height);
+  const { OS } = Platform;
 
-  // const { isHorizon } = props;
   return popupType === 'CHATTING' ? (
     <Chatting />
   ) : (
-    <BlurView style={styles.botVerPopContainer} blurAmount={50}>
+    <BlurView style={styles.botVerPopContainer} overlayColor="rgba(0,0,0,0.1)">
       <View
-        style={{ backgroundColor: 'rgba(0,0,0,0.4)' }}
+        style={{
+          backgroundColor: 'rgba(0,0,0,0.4)',
+          paddingBottom: OS === 'ios' ? height * 0.05 : height * 0.03
+        }}
         onTouchStart={() => popupType !== 'NORMAL' && setIsPopupTouch(true)}
       >
         <View
@@ -92,7 +95,6 @@ export default function BottomPopup(
             keyExtractor={(item, index) => index.toString()}
             data={contentList}
             renderItem={({ item }) => {
-
               return (
                 <TouchableHighlight
                   style={[styles.verMenuRow]}
@@ -133,7 +135,6 @@ export default function BottomPopup(
           />
         )}
         {popupType === 'PROFILE' && <Profile content={contentList} />}
-        <View style={{ height: height * 0.05 }}></View>
       </View>
     </BlurView>
   );
@@ -147,9 +148,8 @@ const styles = StyleSheet.create({
     bottom: 0,
     zIndex: 2,
     elevation: 2,
-    width: '100%',
-    maxHeight: height * 0.62,
-    borderRadius: 10
+    flex: 1,
+    maxHeight: height * 0.62
   },
   verHeaderConatainer: {
     marginTop: 16,
@@ -169,12 +169,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start'
-  },
-  botPopupContainer: {
-    width: '30%',
-    backgroundColor: '#fff',
-    zIndex: 2,
-    borderRadius: 30
   },
   headerConatainer: {
     justifyContent: 'center',

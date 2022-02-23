@@ -18,11 +18,10 @@ import { ParticipantsTypes } from '@redux/participants';
 import icTrans from '@assets/icons/ic_translator.png';
 import icSend from '@assets/icons/ic_send.png';
 import icSendW from '@assets/icons/ic_send_w.png';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { wehagoMainURL, wehagoDummyImageURL } from '@utils/index';
 
-const isIOS = Platform.OS === 'ios';
-const { width, height } = Dimensions.get('window');
+
+const { width, height } = Dimensions.get('screen');
 
 const ChattingPresenter = (props: any) => {
   const {
@@ -39,6 +38,11 @@ const ChattingPresenter = (props: any) => {
     keyboardHeight
   } = props;
 
+  const { OS } = Platform;
+  // console.log(OS);
+  // console.log(myMessage.length);
+  
+  
   const t = getT();
   /**
    * 닉네임 표기 방법
@@ -53,128 +57,160 @@ const ChattingPresenter = (props: any) => {
     } else return user.name;
   };
 
+  // console.log(useHeaderHeight());
+  // console.log(myMessage);
+
+  // console.log(myMessage.substring(0,1));
+  
+
   return (
-    <Fragment>
-      <View style={{ flex: 0.3 }} />
-      <KeyboardAvoidingView
-        style={[styles.container]}
-        behavior={'padding'}
-      >
-        <ScrollView
-          ref={el => (scrollRef.current = el)}
-          showsVerticalScrollIndicator={false}
-          // style={{ backgroundColor: 'red' }}
-          scrollEnabled={true}
-          contentContainerStyle={{ flexGrow: 1 }}
-          onScrollBeginDrag={setIsEndScroll(false)}
-          onScrollEndDrag={({ nativeEvent }) => {
-            if (nativeEvent.targetContentOffset) {
-              const contentOffsetY = isIOS
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={OS === 'ios' ? 'padding' : 'height'}
+      enabled={true}
+    >
+      {/* <View style={styles.container}> */}
+      <View style={[{ flex: 1.3 }]} />
+      <ScrollView
+        ref={el => (scrollRef.current = el)}
+        showsVerticalScrollIndicator={false}
+        scrollEnabled={true}
+        style={{ flex: 1 }}
+        contentContainerStyle={{ flexGrow: 1 }}
+        onScrollBeginDrag={setIsEndScroll(false)}
+        onScrollEndDrag={({ nativeEvent }) => {
+          if (nativeEvent.targetContentOffset) {
+            const contentOffsetY =
+              OS === 'ios'
                 ? nativeEvent.targetContentOffset.y
                 : nativeEvent.contentOffset.y; // 현재 스크롤 좌표
-              const layoutMeasurementHeight =
-                nativeEvent.layoutMeasurement.height; // 자식의 단일 component 높이
-              const contentSizeHeight = nativeEvent.contentSize.height; // 전체 component 높이
-              const isOverScroll =
-                contentOffsetY + layoutMeasurementHeight + 2 >
-                contentSizeHeight; // + 2 은 오차계산
-              setIsEndScroll(isOverScroll);
+            const layoutMeasurementHeight =
+              nativeEvent.layoutMeasurement.height; // 자식의 단일 component 높이
+            const contentSizeHeight = nativeEvent.contentSize.height; // 전체 component 높이
+            const isOverScroll =
+              contentOffsetY + layoutMeasurementHeight + 2 > contentSizeHeight; // + 2 은 오차계산
+            setIsEndScroll(isOverScroll);
+          }
+        }}
+      >
+        {messages.length === 0 && (
+          <View style={{ flex: 1, alignItems: 'center', paddingBottom: 30 }}>
+            <Text style={{ color: '#fff', fontFamily: 'DOUZONEText30' }}>
+              {t('chatting_nochat')}
+            </Text>
+          </View>
+        )}
+        <FlatList
+          bounces={false}
+          data={messages}
+          keyExtractor={(item, index) => String(index)}
+          renderItem={({ item, index }) => {
+            // console.log(item);
+
+            if (!cdm && index === messages.length - 1) {
+              setCdm(true);
             }
-          }}
-        >
-          {messages.length === 0 && (
-            <View style={{ flex: 1, alignItems: 'center',paddingBottom: 30 }}>
-              <Text style={{ color: '#fff', fontFamily: 'DOUZONEText30' }}>
-                {t('chatting_nochat')}
-              </Text>
-            </View>
-          )}
-          <View>
-            <FlatList
-              bounces={false}
-              data={messages}
-              keyExtractor={(item, index) => String(index)}
-              contentContainerStyle={{ flexGrow: 1 }}
-              renderItem={({ item, index }) => {
-                // console.log(item);
-                
-                if (!cdm && index === messages.length - 1) {
-                  setCdm(true);
-                }
-                const localUser = user.cid === item.user;
-                const { userInfo, text } = item;
-                const profileUrl = userInfo.profile_url
-                  ? wehagoMainURL + userInfo.profile_url
-                  : wehagoDummyImageURL;
+            const localUser = user.cid === item.user;
+            const { userInfo } = item;
+            const profileUrl = userInfo.profile_url
+              ? wehagoMainURL + userInfo.profile_url
+              : wehagoDummyImageURL;
+            const userName = item.name ? item.name : userInfo.userName;
 
-                return (
-                  <View style={styles.chatContainer}>
-                    <View
-                      style={[
-                        styles.normalChatView,
-                        localUser && { backgroundColor: '#1c90fb' }
-                      ]}
-                    >
-                      <View style={styles.chatProfileView}>
-                        <Image
-                          source={{ uri: profileUrl }}
-                          style={styles.chatProfile}
-                          resizeMode="cover"
-                        />
-                      </View>
-                      <View style={styles.chatTextView}>
-                        <Text style={styles.userName}>
-                          {item.name}
-                          {localUser && `(나)`}
-                        </Text>
-
-                        <Text style={styles.chatText}>{item.text}</Text>
-                      </View>
-                    </View>
+            return (
+              <View style={styles.chatContainer}>
+                <View
+                  style={[
+                    styles.normalChatView,
+                    localUser && { backgroundColor: '#1c90fb' }
+                  ]}
+                >
+                  <View style={styles.chatProfileView}>
+                    <Image
+                      source={{ uri: profileUrl }}
+                      style={styles.chatProfile}
+                      resizeMode="cover"
+                    />
                   </View>
-                );
-              }}
-            />
-          </View>
-        </ScrollView>
-        <View style={styles.inputArea}>
-          <TouchableOpacity style={{ marginRight: 4 }}>
-            <Image source={icTrans} style={{ width: 24, height: 24 }} />
-          </TouchableOpacity>
+                  <View style={styles.chatTextView}>
+                    <Text style={styles.userName}>
+                      {userName}
+                      {localUser && `(나)`}
+                    </Text>
 
-          <View style={styles.textArea}>
-            <TextInput
-              multiline={true}
-              value={myMessage}
-              onChangeText={text => setMyMessage(text)}
-              selectionColor="#fff"
-              autoCapitalize="none"
-              style={styles.chatInput}
+                    <Text style={styles.chatText}>{item.text}</Text>
+                  </View>
+                </View>
+              </View>
+            );
+          }}
+        />
+      </ScrollView>
+      <View
+        style={[
+          styles.inputArea,
+          Platform.OS === 'ios' && { marginBottom: 20 }
+        ]}
+      >
+        <TouchableOpacity style={{ marginRight: 4 }}>
+          <Image source={icTrans} style={{ width: 24, height: 24 }} />
+        </TouchableOpacity>
+
+        <View style={styles.textArea}>
+          <TextInput
+            multiline={true}
+            value={myMessage}
+            selectionColor="#fff"
+            autoCapitalize="none"
+            style={styles.chatInput}
+            onChangeText={text => setMyMessage(text)}
+            onFocus={() => {
+              OS === 'android' && setMyMessage(' ');
+            }}
+          />
+          <TouchableOpacity
+            style={[
+              styles.sendImageContainer,
+              OS === 'android' && {
+                backgroundColor:
+                  myMessage.substring(0, 1) === '' ||
+                  (myMessage.length === 1 && myMessage.substring(0, 2) === ' ')
+                    ? 'rgba(255,255,255,0.3)'
+                    : '#1c90fb'
+              },
+              OS === 'ios' && {
+                backgroundColor:
+                  myMessage.length > 0 ? '#1c90fb' : 'rgba(255,255,255,0.3)'
+              }
+            ]}
+            onPressOut={onSendTextMessage}
+          >
+            <Image
+              source={myMessage.length > 0 ? icSendW : icSend}
+              style={styles.sendImage}
+              resizeMode="cover"
             />
-            <TouchableOpacity
-              style={[
-                styles.sendImageContainer,
-                {
-                  backgroundColor:
-                    myMessage.length > 0 ? '#1c90fb' : 'rgba(255,255,255,0.3)'
-                }
-              ]}
-              onPressOut={onSendTextMessage}
-            >
-              <Image
-                source={myMessage.length > 0 ? icSendW : icSend}
-                style={styles.sendImage}
-                resizeMode="cover"
-              />
-            </TouchableOpacity>
-          </View>
+          </TouchableOpacity>
         </View>
-      </KeyboardAvoidingView>
-    </Fragment>
+      </View>
+      <View style={{ backgroundColor: 'red' }}>
+        <TextInput style={styles.none} value={myMessage} />
+      </View>
+      {/* </View> */}
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
+  none: {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    height: 30,
+    zIndex: 10,
+    color: 'red',
+    fontSize: 1
+  },
   container: {
     // maxHeight: height * 0.5,
     flex: 1,
@@ -224,8 +260,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-start',
-    marginBottom: height * 0.04
+    justifyContent: 'space-between',
+    marginBottom: 30
   },
   textArea: {
     flexDirection: 'row',
@@ -238,13 +274,14 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255,255,255,0.3)'
   },
   chatInput: {
-    lineHeight: 20,
+    // lineHeight: 15,
     fontSize: 13,
     fontFamily: 'DOUZONEText30',
     flex: 1,
     paddingHorizontal: 12,
     paddingVertical: 11,
-    color: '#fff'
+    color: '#fff',
+    textDecorationColor: '#fff'
   },
   sendImageContainer: {
     width: 30,

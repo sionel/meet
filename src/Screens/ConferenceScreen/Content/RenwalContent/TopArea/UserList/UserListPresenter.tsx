@@ -7,14 +7,15 @@ import {
   GestureResponderEvent,
   Image,
   NativeScrollEvent,
-  NativeSyntheticEvent,
-  ScrollView,
+  NativeTouchEvent,
   StyleSheet,
   Text,
   TouchableHighlight,
   TouchableOpacity,
   View
 } from 'react-native';
+
+import { ScrollView } from 'react-native-gesture-handler';
 
 import { wehagoMainURL, wehagoDummyImageURL } from '@utils/index';
 import icUserW from '@assets/icons/ic_user_w3.png';
@@ -24,14 +25,12 @@ import icMicOn from '@assets/icons/ic_mic_on.png';
 import icMicOff from '@assets/icons/ic_mic_off.png';
 import { getT } from '@utils/translateManager';
 import { ConferenceBottomPopupProps } from '@screens/ConferenceScreen/Content/ContentContainer';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 
 const { width, height } = Dimensions.get('window');
 
 type UserListPresenter = {
-  onHandleSwipe: (
-    e: NativeSyntheticEvent<NativeScrollEvent>,
-    i: number
-  ) => void;
+  onHandleSwipe: (e: NativeScrollEvent, i: number) => void;
   onHandelResetSwipe: (e: GestureResponderEvent, i: number) => void;
   // clickDeleteUser: () => void;
   scrollRef: any;
@@ -61,6 +60,7 @@ const UserListPresenter = (props: UserListPresenter) => {
       bounces={true}
       contentContainerStyle={{ flex: 1 }}
       data={swipeList}
+      scrollEnabled={false}
       keyExtractor={(item, index) => String(index)}
       renderItem={({ item, index }: any) => {
         // console.log('item : ', item);
@@ -82,19 +82,20 @@ const UserListPresenter = (props: UserListPresenter) => {
         const { userName } = userInfo;
 
         return (
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            showsVerticalScrollIndicator={false}
+          <Swipeable
             ref={el => (scrollRef.current[index] = el)}
-            // scrollEnabled={item.user_no !== auth.user_no}
-            // onScroll={(e: NativeSyntheticEvent<NativeScrollEvent>) => {
-            //   onHandleSwipe(e, index);
-            // }}
-            onScrollEndDrag={(e: NativeSyntheticEvent<NativeScrollEvent>) => {
-              onHandleSwipe(e, index);
+            onSwipeableLeftOpen={() => {
+              console.log(11111);
             }}
           >
+            {/* <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            ref={el => (scrollRef.current[index] = el)}
+            onScrollEndDrag={({ nativeEvent }) =>
+              onHandleSwipe(nativeEvent, index)
+            }
+          > */}
             <View
               style={[
                 styles.itemBox,
@@ -147,7 +148,13 @@ const UserListPresenter = (props: UserListPresenter) => {
                   </TouchableOpacity>
                 </Animated.View>
               )}
-              <View style={{flexDirection:'row', alignItems:'center'}}>
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: 'row',
+                  alignItems: 'center'
+                }}
+              >
                 <View style={{ width: 40, height: 40 }}>
                   {item.isLocal && (
                     <View style={styles.myTextView}>
@@ -233,7 +240,7 @@ const UserListPresenter = (props: UserListPresenter) => {
                         {
                           translateX: fadeInValue.interpolate({
                             inputRange: [0, 1],
-                            outputRange: [56, 0]
+                            outputRange: [width * 0.17, 0]
                           })
                         }
                       ]
@@ -256,7 +263,8 @@ const UserListPresenter = (props: UserListPresenter) => {
                 </Animated.View>
               )}
             </View>
-          </ScrollView>
+            {/* </ScrollView>*/}
+          </Swipeable>
         );
       }}
     />
@@ -280,7 +288,7 @@ const styles = StyleSheet.create({
     opacity: 1
   },
   rightSideAniStyle: {
-    width: 70,
+    width: width * 0.19,
     opacity: 1
   },
   infoBoxView: {
@@ -317,6 +325,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: '#6767f7',
     zIndex: 3,
+    elevation: 3,
     justifyContent: 'center',
     alignItems: 'center'
   },

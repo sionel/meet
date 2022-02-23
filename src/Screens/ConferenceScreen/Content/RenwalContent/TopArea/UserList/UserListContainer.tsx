@@ -4,9 +4,11 @@ import { getT } from '@utils/translateManager';
 import React, { Component, useEffect, useRef, useState } from 'react';
 import {
   Animated,
+  Dimensions,
   GestureResponderEvent,
   NativeScrollEvent,
-  NativeSyntheticEvent
+  NativeSyntheticEvent,
+  NativeTouchEvent
 } from 'react-native';
 import UserListPresenter from './UserListPresenter';
 
@@ -26,6 +28,7 @@ export const UserListContainer = (props: UserListContainer) => {
     props;
   const [swipeList, setSwipeList] = useState<SwipeList[]>([]);
   const scrollRef: any = useRef([]);
+  const halfWidth = Math.floor(Dimensions.get('screen').width / 2);
 
   useEffect(() => {
     let userList = contentList.slice(0);
@@ -63,10 +66,14 @@ export const UserListContainer = (props: UserListContainer) => {
   };
 
   const onHandleSwipe = (
-    event: NativeSyntheticEvent<NativeScrollEvent>,
+    nativeEvent: NativeScrollEvent,
     index: number
   ) => {
-    const direction = event.nativeEvent.contentOffset.x;
+
+    console.log(11111);
+    console.log(nativeEvent);
+    
+    const direction = nativeEvent.contentOffset.x;
 
     let directionList: SwipeList[] = contentList;
     let bfDirection = directionList[index].direction;

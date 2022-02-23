@@ -4,7 +4,7 @@ import ConferenceManager from '@utils/conference/ConferenceManager';
 import { actionCreators as localAction } from '@redux/local';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'src/redux/configureStore';
-import { Keyboard } from 'react-native';
+import { Keyboard, Platform } from 'react-native';
 
 const ChattingContainer = () => {
   const [myMessage, setMyMessage] = useState('');
@@ -14,7 +14,7 @@ const ChattingContainer = () => {
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   const scrollRef: any = useRef();
-
+  const { OS } = Platform;
   const { messages, user } = useSelector((state: RootState) => {
     const { local } = state;
     return {
@@ -52,7 +52,7 @@ const ChattingContainer = () => {
 
   useEffect(() => {
     initMessageCount();
-  }, [messages.length])
+  }, [messages.length]);
 
   useEffect(() => {
     Keyboard.addListener('keyboardDidShow', () => handdleKeyboardShow());
@@ -75,7 +75,9 @@ const ChattingContainer = () => {
   const _handleSendTextMessage = () => {
     if (myMessage && myMessage.slice().replace(/(\s*)/g, '') !== '') {
       setMyMessage('');
-      conferenceManager.sendTextMessage(myMessage);
+      OS === 'android' && myMessage.substring(0, 1) === ' '
+        ? conferenceManager.sendTextMessage(myMessage.substring(2))
+        : conferenceManager.sendTextMessage(myMessage);
     }
   };
 
