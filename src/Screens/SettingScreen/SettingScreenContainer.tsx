@@ -160,9 +160,8 @@ export default function SettingScreenContainer(props: any) {
         message: t('renewal.alert_text_waiting')
       });
     } else {
-      const getExpireTime = await MeetApi.getExpireTime(auth, params.id);
+      const getExpireTime = await MeetApi.getExpireTime(params.id);
       if(isSuccess(getExpireTime)) {
-        console.log(getExpireTime.resultData.expire_time);
         setConferenceExpireTime(getExpireTime.resultData.expire_time)
       }
       navigation.reset({

@@ -754,27 +754,33 @@ export default {
     }
   },
 
-  getExpireTime: async (auth:apiAuthInfo, roomId:string) => {
-    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY } = auth;
-    const url = `${meetURL}/room/expire-time?room=${roomId}`;
-    const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
-    
-      const data = {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          ...headers
-        }
-      };
+  getExpireTime: async (roomId: string) => {
+    let url = '';
+    let signature;
 
-      const response = await Axios<any>(url, data);
+    const accsessUrl = `/video/room/expire-time?room=${roomId}`;
+    const token = await getToken(accsessUrl);
+    const encText = accsessUrl + token.cur_date + token.token;
+    const hashText = CryptoJS.SHA256(encText);
+    signature = CryptoJS.enc.Base64.stringify(hashText);
+    url = `${wehagoBaseURL0}${accsessUrl}`;
 
-      if (isSuccess(response)) {
-        return response;
-      } else {
-        console.warn('??.getExpireTime : ', response);
-        return response;
+    const data = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        signature
       }
+    };
+
+    const response = await Axios<any>(url, data);
+
+    if (isSuccess(response)) {
+      return response;
+    } else {
+      console.warn('??.getExpireTime : ', response);
+      return response;
+    }
   },
 
   // 넘버링 없음 이름없는 외부참여자 아이디 가져오기
@@ -835,7 +841,7 @@ export default {
     const response = await Axios(url, data);
     if (isSuccess(response)) {
       return response;
-    } else { 
+    } else {
       if (response.resultCode === 404) {
         return { resultData: { count: 0 } };
       } else {

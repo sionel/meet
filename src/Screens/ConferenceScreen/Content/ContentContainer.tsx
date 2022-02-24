@@ -4,6 +4,7 @@ import {
   Dimensions,
   GestureResponderEvent,
   NativeModules,
+  NativeTouchEvent,
   Platform
 } from 'react-native';
 import ContentPresenter from './ContentPresenter';
@@ -33,6 +34,8 @@ const InCallManager = !isIOS && require('react-native-incall-manager').default;
 const { AudioMode } = NativeModules;
 const hasNotch = DeviceInfo.hasNotch() && isIOS;
 
+const { height: screenHeight } = Dimensions.get('screen');
+
 function ContentContainer(props: any) {
   const t = getT();
   const [orientation, setOrientation] = useState<'vertical' | 'horizontal'>(
@@ -53,7 +56,6 @@ function ContentContainer(props: any) {
     popupType: 'NORMAL'
   });
   const [isPopupTouch, setIsPopupTouch] = useState(false);
-  // console.log(props);
 
   const { mainUser, onClose, createdTime } = props;
   const { videoTrack, isMuteVideo } = mainUser;
@@ -68,7 +70,8 @@ function ContentContainer(props: any) {
     user,
     auth,
     masters,
-    expireTime
+    expireTime,
+    isLogin
   } = useSelector((state: RootState) => {
     const { local, mainUser, documentShare, root, user, participants, master } =
       state;
@@ -83,6 +86,7 @@ function ContentContainer(props: any) {
       videoPolicy: root.videoPolicy,
       loginType: user.loginType,
       auth: user.auth,
+      isLogin: user.isLogin,
       participants: participants.list,
       masters: master.masterList
     };
@@ -108,9 +112,11 @@ function ContentContainer(props: any) {
       nickname: auth.nickname,
       companyFullpath: auth?.last_company?.full_path
         ? auth.last_company.full_path
-        : '외부참여자',
+        : undefined,
       user_email: auth.user_default_email,
-      user_contact: auth.user_contact
+      user_contact: auth.user_contact,
+      isExternalParticipant: `${!isLogin}`,
+      isMobile: true
     }
   });
 
@@ -157,8 +163,8 @@ function ContentContainer(props: any) {
     isMultipleView && setConferenceMode(ConferenceModes.NORMAL);
   }, [isMultipleView]);
 
-  const _toggleConferenceMode = (e: any) => {
-    // if (isIOS) {
+  const _toggleConferenceMode = (e: NativeTouchEvent) => {
+    const { pageY } = e;
     if (!isMultipleView) {
       if (bottomPopup.show) {
         if (bottomPopup.popupType === 'CHATTING') {
@@ -170,7 +176,8 @@ function ContentContainer(props: any) {
               show: false
             });
         }
-      } else if (!isMultipleView) {
+      } else if (screenHeight * 0.15 > pageY) {
+      } else {
         if (conferenceMode === ConferenceModes.CONTROL) {
           setConferenceMode(ConferenceModes.NORMAL);
         } else {
@@ -178,13 +185,6 @@ function ContentContainer(props: any) {
         }
       }
     }
-    // } else {
-    //   if (conferenceMode === ConferenceModes.CONTROL) {
-    //     setConferenceMode(ConferenceModes.NORMAL);
-    //   } else {
-    //     setConferenceMode(ConferenceModes.CONTROL);
-    //   }
-    // }
   };
 
   const handelProfieBackButton = () => {

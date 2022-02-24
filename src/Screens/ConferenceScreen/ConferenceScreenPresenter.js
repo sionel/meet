@@ -31,13 +31,7 @@ const ConferenceScreenPresenter = props => {
   return (
     <View
       style={{
-        position: 'absolute',
-        zIndex: 0,
-        elevation: 0,
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right: 0
+        flex: 1
         // paddingBottom: Math.max(insets.bottom, 16),
         // paddingTop: Math.max(insets.top, 16)
       }}

@@ -11,12 +11,13 @@ import { setT } from './src/utils/translateManager';
 
 import Splash from 'react-native-splash-screen';
 import RootNavigation from '@navigations/RootNavigation';
+import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
 
 // import { io } from "socket.io-client";
 
 function App(props) {
   const dispatch = useDispatch();
-  
+
   useEffect(() => {
     Splash.hide();
     setT(props.t);
@@ -26,7 +27,7 @@ function App(props) {
   //   dispatch(actionCreators.setUrl(props?.url?.url));
   // //     ios : 앱이 꺼져있을때(딥링크)
   // // android : 앱이 꺼져있을때, 앱 켜져 있을때(딥링크)
-     
+
   //   //  dispatch(actionCreators.setUrl("com.wehago.meet://?login_info=email&type=conference&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ2aWRlby53ZWhhZ28uY29tIiwicm9vbSI6ImZiYjY2MTliLWFlMmYtNDE0MS05MmNjLTA3NWEyOTBkZWVjNyIsImVtYWlsIjoieWVvbmdpbDQ3NjRAbmF2ZXIuY29tIiwiaWF0IjoxNjM1NzQ3OTY3LCJleHAiOjE5NTExMDc5Njd9.O6UMML-qjav_-rkvLb-6tZvY-NYctt6Yxy0TF03gfxU&timeStamp=1635750152425"));
   // }, [props.url]);
 
@@ -56,4 +57,5 @@ function AppWapper(props) {
     </Provider>
   );
 }
+// gestureHandlerRootHOC()
 AppRegistry.registerComponent('App', () => withTranslation()(AppWapper));

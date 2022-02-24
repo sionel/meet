@@ -3,11 +3,9 @@ import React, { Component, Fragment } from 'react';
 import {
   Animated,
   Dimensions,
-  FlatList,
   GestureResponderEvent,
   Image,
-  NativeScrollEvent,
-  NativeTouchEvent,
+  Platform,
   StyleSheet,
   Text,
   TouchableHighlight,
@@ -15,56 +13,42 @@ import {
   View
 } from 'react-native';
 
-import { ScrollView } from 'react-native-gesture-handler';
-
 import { wehagoMainURL, wehagoDummyImageURL } from '@utils/index';
 import icUserW from '@assets/icons/ic_user_w3.png';
 import icMaster from '@assets/icons/ic_master.png';
 import icOut from '@assets/icons/ic_out_w.png';
 import icMicOn from '@assets/icons/ic_mic_on.png';
 import icMicOff from '@assets/icons/ic_mic_off.png';
+import icHandW from '@assets/icons/ic_hand_w.png';
 import { getT } from '@utils/translateManager';
-import { ConferenceBottomPopupProps } from '@screens/ConferenceScreen/Content/ContentContainer';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 
-const { width, height } = Dimensions.get('window');
+import { FlatList, gestureHandlerRootHOC } from 'react-native-gesture-handler';
+
+const { width } = Dimensions.get('window');
+const rightSwipeWidth = Platform.OS === 'ios' ? width * 0.185 : width * 0.175;
+const leftSwipeWidth = width * 0.3;
 
 type UserListPresenter = {
-  onHandleSwipe: (e: NativeScrollEvent, i: number) => void;
-  onHandelResetSwipe: (e: GestureResponderEvent, i: number) => void;
-  // clickDeleteUser: () => void;
-  scrollRef: any;
-  fadeInAnimated: () => void;
-  fadeInValue: Animated.Value;
-  swipeList: ParticipantsTypes[];
+  userList: ParticipantsTypes[];
+  isMasterControl: any;
+  swipeRef: any;
   handelProfileTouch: (item: ParticipantsTypes) => void;
 };
 
-const UserListPresenter = (props: UserListPresenter) => {
-  const {
-    onHandleSwipe,
-    onHandelResetSwipe,
-    // clickDeleteUser,
-    scrollRef,
-    fadeInAnimated,
-    fadeInValue,
-    swipeList,
-    handelProfileTouch
-  } = props;
+const UserListPresenter = gestureHandlerRootHOC((props: UserListPresenter) => {
+  const { userList, isMasterControl, handelProfileTouch, swipeRef } = props;
 
   const t = getT();
 
   return (
     <FlatList
-      showsVerticalScrollIndicator={false}
-      bounces={true}
-      contentContainerStyle={{ flex: 1 }}
-      data={swipeList}
-      scrollEnabled={false}
+      contentContainerStyle={{ flexGrow: 1 }}
+      data={userList}
       keyExtractor={(item, index) => String(index)}
       renderItem={({ item, index }: any) => {
         // console.log('item : ', item);
-
+        
         const { isMaster, userInfo } = item;
         // 마이크음소거여부
         const isMuteMic = item.isLocal
@@ -79,197 +63,191 @@ const UserListPresenter = (props: UserListPresenter) => {
           ? wehagoMainURL + userInfo.profile_url
           : wehagoDummyImageURL;
         // 이름
-        const { userName } = userInfo;
+        const userName = item.name ? item.name : userInfo.userName;
+
+        const renderLeftActions = (
+          progress: any,
+          dragX: Animated.AnimatedInterpolation
+        ) => {
+          const trans = dragX.interpolate({
+            inputRange: [0, leftSwipeWidth / 2, leftSwipeWidth],
+            outputRange: [-leftSwipeWidth, -(leftSwipeWidth / 2), 0]
+          });
+
+          return (
+            <Animated.View
+              style={[
+                styles.leftSwipeView,
+                {
+                  transform: [
+                    {
+                      translateX: trans
+                    }
+                  ]
+                }
+              ]}
+            >
+              <TouchableOpacity
+                style={styles.userTouchView}
+                activeOpacity={0.2}
+                onPress={(e: GestureResponderEvent) => {
+                  handelProfileTouch(item);
+                }}
+              >
+                <Image
+                  source={icUserW}
+                  style={styles.imageSize}
+                  resizeMode="cover"
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.masterTouchView}
+                activeOpacity={0.2}
+                onPress={() => swipeRef.current[index].close()}
+              >
+                <Image
+                  source={icMaster}
+                  style={styles.imageSize}
+                  resizeMode="cover"
+                />
+              </TouchableOpacity>
+            </Animated.View>
+          );
+        };
+
+        const renderRightActions = (
+          progress: any,
+          dragX: Animated.AnimatedInterpolation
+        ) => {
+          const trans = dragX.interpolate({
+            inputRange: [-rightSwipeWidth, 0],
+            outputRange: [0, rightSwipeWidth]
+          });
+
+          return (
+            <Animated.View
+              style={[
+                styles.rightSwipeView,
+                {
+                  transform: [
+                    {
+                      translateX: trans
+                    }
+                  ]
+                }
+              ]}
+            >
+              <TouchableOpacity
+                style={styles.kickView}
+                activeOpacity={0.2}
+                onPress={() => swipeRef.current[index].close()}
+              >
+                <Image
+                  source={icOut}
+                  style={styles.imageSize}
+                  resizeMode="cover"
+                />
+              </TouchableOpacity>
+            </Animated.View>
+          );
+        };
 
         return (
           <Swipeable
-            ref={el => (scrollRef.current[index] = el)}
-            onSwipeableLeftOpen={() => {
-              console.log(11111);
-            }}
+            ref={el => (swipeRef.current[index] = el)}
+            renderLeftActions={renderLeftActions}
+            renderRightActions={renderRightActions}
+            // onSwipeableLeftOpen={() => console.log('left!!!')}
+            // onSwipeableRightOpen={() => console.log('right!!!')}
           >
-            {/* <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            ref={el => (scrollRef.current[index] = el)}
-            onScrollEndDrag={({ nativeEvent }) =>
-              onHandleSwipe(nativeEvent, index)
-            }
-          > */}
-            <View
-              style={[
-                styles.itemBox,
-                item.direction !== 'NONE' && { paddingHorizontal: 0 }
-              ]}
-            >
-              {item.direction === 'LEFT' && (
-                <Animated.View
-                  onLayout={fadeInAnimated}
-                  style={[
-                    styles.leftSideAniStyle,
-                    {
-                      transform: [
-                        {
-                          translateX: fadeInValue.interpolate({
-                            inputRange: [0, 1],
-                            outputRange: [-100, 0]
-                          })
-                        }
-                      ]
-                    }
-                  ]}
-                >
-                  <TouchableOpacity
-                    style={styles.userTouchView}
-                    onPress={(e: GestureResponderEvent) => {
-                      handelProfileTouch(item);
-                      onHandelResetSwipe(e, index);
-                    }}
-                    activeOpacity={0.2}
-                  >
-                    <Image
-                      source={icUserW}
-                      style={styles.imageSize}
-                      resizeMode="cover"
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={styles.masterTouchView}
-                    onPress={(e: GestureResponderEvent) => {
-                      onHandelResetSwipe(e, index);
-                    }}
-                    activeOpacity={0.2}
-                  >
-                    <Image
-                      source={icMaster}
-                      style={styles.imageSize}
-                      resizeMode="cover"
-                    />
-                  </TouchableOpacity>
-                </Animated.View>
-              )}
-              <View
-                style={{
-                  flex: 1,
-                  flexDirection: 'row',
-                  alignItems: 'center'
-                }}
-              >
-                <View style={{ width: 40, height: 40 }}>
-                  {item.isLocal && (
-                    <View style={styles.myTextView}>
-                      <Text style={styles.myText}>
-                        {t('renewal.chatting_me')}
-                      </Text>
-                    </View>
-                  )}
-                  <Image
-                    style={styles.profileSize}
-                    source={{
-                      uri: profileUrl
-                    }}
-                    resizeMode={'cover'}
-                  />
-                </View>
-                <TouchableHighlight
-                  style={styles.infoBoxView}
-                  activeOpacity={1}
-                  // onPress={(e: GestureResponderEvent) => {
-                  //   scrollRef.current[index]?.scrollTo({
-                  //     x: 0,
-                  //     animated: true
-                  //   });
-                  //   onHandelResetSwipe(e, index);
-                  // }}
-                  // underlayColor="transparent"
-                >
-                  <View style={styles.infoBox}>
-                    <Fragment>
-                      <Text style={styles.nameText}>{userName}</Text>
-                      <Text
-                        numberOfLines={1}
-                        ellipsizeMode="tail"
-                        style={styles.treeText}
-                      >
-                        {fullPath}
-                      </Text>
-                    </Fragment>
+            <View style={styles.userRow}>
+              <View style={{ width: 40, height: 40 }}>
+                {item.isLocal && (
+                  <View style={styles.myTextView}>
+                    <Text style={styles.myText}>
+                      {t('renewal.chatting_me')}
+                    </Text>
                   </View>
-                </TouchableHighlight>
-                <View
-                  style={[
-                    styles.roleView,
-                    isMaster && { backgroundColor: '#febc2c' },
-                    userInfo?.isExternalParticipant === 'true' && {
-                      backgroundColor: '#75b7cb'
-                    }
-                    // && { backgroundColor: '#1c90fb'}
-                  ]}
-                >
-                  {isMaster && (
-                    <Fragment>
-                      <Image
-                        style={{ width: 14, height: 14, marginRight: '5%' }}
-                        source={icMaster}
-                        resizeMode={'contain'}
-                      />
-                      <Text style={styles.roleText}>
-                        {t('renewal.chatting_master')}
-                      </Text>
-                    </Fragment>
-                  )}
-                </View>
-                <TouchableHighlight style={styles.micView}>
-                  <Image
-                    source={isMuteMic ? icMicOff : icMicOn}
-                    resizeMode={'cover'}
-                    style={[
-                      { width: 17, height: 17 },
-                      isMuteMic && { opacity: 0.5 }
-                    ]}
-                  />
-                </TouchableHighlight>
+                )}
+                <Image
+                  style={styles.profileSize}
+                  source={{
+                    uri: profileUrl
+                  }}
+                  resizeMode={'cover'}
+                />
               </View>
-              {item.direction === 'RIGHT' && (
-                <Animated.View
-                  onLayout={fadeInAnimated}
-                  style={[
-                    styles.rightSideAniStyle,
-                    {
-                      transform: [
-                        {
-                          translateX: fadeInValue.interpolate({
-                            inputRange: [0, 1],
-                            outputRange: [width * 0.17, 0]
-                          })
-                        }
-                      ]
-                    }
-                  ]}
-                >
-                  <TouchableOpacity
-                    style={styles.kickView}
-                    activeOpacity={0.2}
-                    onPress={(e: GestureResponderEvent) => {
-                      onHandelResetSwipe(e, index);
-                    }}
+
+              <View style={styles.infoBox}>
+                <Text style={styles.nameText}>{userName}</Text>
+                {fullPath && (
+                  <Text
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                    style={styles.treeText}
                   >
+                    {fullPath}
+                  </Text>
+                )}
+              </View>
+
+              <View
+                style={[
+                  styles.roleView,
+                  isMaster && { backgroundColor: '#febc2c' },
+                  userInfo?.isExternalParticipant === 'true' && {
+                    backgroundColor: '#75b7cb'
+                  },
+                  !isMaster &&
+                    isMasterControl &&
+                    !isMuteMic && { backgroundColor: '#1c90fb' }
+                ]}
+              >
+                {isMaster && (
+                  <Fragment>
                     <Image
-                      source={icOut}
-                      style={styles.imageSize}
-                      resizeMode="cover"
+                      style={{ width: 14, height: 14, marginRight: '5%' }}
+                      source={icMaster}
+                      resizeMode={'contain'}
                     />
-                  </TouchableOpacity>
-                </Animated.View>
-              )}
+                    <Text style={styles.roleText}>
+                      {t('renewal.chatting_master')}
+                    </Text>
+                  </Fragment>
+                )}
+                {userInfo?.isExternalParticipant === 'true' && (
+                  <Text style={styles.roleText}>
+                    {t('renewal.chatting_external')}
+                  </Text>
+                )}
+                {!isMaster && isMasterControl && !isMuteMic && (
+                  <Fragment>
+                    <Image
+                      style={{ width: 14, height: 14, marginRight: '5%' }}
+                      source={icHandW}
+                      resizeMode={'contain'}
+                    />
+                    <Text style={styles.roleText}>{t('발언중')}</Text>
+                  </Fragment>
+                )}
+              </View>
+              <TouchableHighlight style={styles.micView}>
+                <Image
+                  source={isMuteMic ? icMicOff : icMicOn}
+                  resizeMode={'cover'}
+                  style={[
+                    { width: 17, height: 17 },
+                    isMuteMic && { opacity: 0.5 }
+                  ]}
+                />
+              </TouchableHighlight>
             </View>
-            {/* </ScrollView>*/}
           </Swipeable>
         );
       }}
     />
   );
-};
+});
 
 const styles = StyleSheet.create({
   itemBox: {
@@ -280,27 +258,29 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     paddingHorizontal: 16
   },
-  leftSideAniStyle: {
+  userRow: {
+    flex: 1,
     flexDirection: 'row',
-    width: 112,
-    height: '100%',
-    marginRight: 15,
-    opacity: 1
+    alignItems: 'center',
+    height: 56,
+    marginHorizontal: 16,
+    paddingVertical: 8
   },
-  rightSideAniStyle: {
-    width: width * 0.19,
-    opacity: 1
+  leftSwipeView: {
+    flexDirection: 'row',
+    width: leftSwipeWidth
+    // marginRight: 15
   },
-  infoBoxView: {
-    width: width * 0.51,
-    height: 34,
-    marginLeft: 8,
-    marginRight: 16
+  rightSwipeView: {
+    width: rightSwipeWidth,
+    opacity: 1
   },
   infoBox: {
     width: width * 0.51,
     height: 34,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    marginLeft: 8,
+    marginRight: 16
   },
   userTouchView: {
     backgroundColor: 'rgba(255,255,255,0.8)',

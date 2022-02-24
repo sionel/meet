@@ -6,9 +6,7 @@ import {
   Dimensions,
   Platform,
   TouchableOpacity,
-  ScrollView,
-  FlatList,
-  SafeAreaView
+  StatusBar
 } from 'react-native';
 import { useSelector } from 'react-redux';
 import FastImage from 'react-native-fast-image';
@@ -18,11 +16,12 @@ import CustomButton from '@components/CustomButton';
 import CustomAlert from '@components/CustomAlert';
 import OverView from '../OverView';
 import { getT } from '@utils/translateManager';
+import { gestureHandlerRootHOC, ScrollView, FlatList } from 'react-native-gesture-handler';
 
-const SafetyView = Platform.OS === 'ios' ? SafeAreaView : View;
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+const { width, height } = Dimensions.get('screen');
 
-const FileSharingPresenter = props => {
+const FileSharingPresenter = gestureHandlerRootHOC((props) => {
   const {
     orientation,
     showTool,
@@ -181,90 +180,89 @@ const FileSharingPresenter = props => {
     );
   }
 
+  // console.log(useHeaderHeight());
+
   return (
     <Fragment>
-      <SafetyView
-        style={{ flex: 1, backgroundColor: '#000', position: 'relative' }}
-      >
-        <View style={styles.container}>
-          {!localPipMode && (
-            <View style={styles.headerTitle}>
-              {showTool && headerTitle}
-              {resources.length > 0 && preView}
+      <StatusBar barStyle={'dark-content'} />
+      <View style={[styles.container, Platform.OS ==='ios' && {marginBottom: height * 0.05}]}>
+        {!localPipMode && (
+          <View style={styles.headerTitle}>
+            {showTool && headerTitle}
+            {resources.length > 0 && preView}
 
-              {resources.length > 0 && (
-                <CustomButton
-                  name={showPreView ? 'btnArrowUp' : 'btnArrowDown'}
-                  onPress={() => onChangeState('showPreView')}
-                  style={{ padding: 0, margin: 0 }}
-                  width={24}
-                  height={24}
-                  areaWidth={24}
-                  areaHeight={24}
-                />
-              )}
-            </View>
-          )}
-
-          <View
-            style={[
-              styles.mainArea,
-              {
-                paddingLeft: 0,
-                paddingRight: 0
-              }
-            ]}
-          >
-            {props.isLoading ? (
-              <View
-                style={{
-                  flex: 1,
-                  alignContent: 'center',
-                  justifyContent: 'center'
-                }}
-              >
-                <Text
-                  style={{ fontFamily: 'DOUZONEText30', textAlign: 'center' }}
-                >
-                  {localPipMode ? t('meet_back') : t('meet_storage')}
-                </Text>
-              </View>
-            ) : (
-              <View
-                style={[
-                  styles.mainContainer,
-                  orientation === 'vertical'
-                    ? styles.mainContainerVertical
-                    : styles.mainContainerHorizontal
-                ]}
-                onLayout={event => {
-                  props.onChangeState('viewSize', {
-                    viewWidth: event.nativeEvent.layout.width,
-                    viewHeight: event.nativeEvent.layout.height
-                  });
-                }}
-              >
-                <DrawingSketch
-                  viewWidth={props.viewWidth}
-                  viewHeight={props.viewHeight}
-                  image={resources[page]}
-                  imgList={imgList}
-                  imageSize={props.imageSize}
-                  showTool={showTool}
-                  presenter={presenter}
-                  orientation={orientation}
-                  mode={mode}
-                  onChangeShowToolState={onChangeState}
-                  onChangeDrawing={props.setDrawingMode}
-                  onSetDrawingData={props.onSetDrawingData}
-                  onChangePage={props.onChangePage}
-                  hasNotch={props.hasNotch}
-                />
-              </View>
+            {resources.length > 0 && (
+              <CustomButton
+                name={showPreView ? 'btnArrowUp' : 'btnArrowDown'}
+                onPress={() => onChangeState('showPreView')}
+                style={{ padding: 0, margin: 0 }}
+                width={24}
+                height={24}
+                areaWidth={24}
+                areaHeight={24}
+              />
             )}
           </View>
+        )}
+
+        <View
+          style={[
+            styles.mainArea,
+            {
+              paddingLeft: 0,
+              paddingRight: 0
+            }
+          ]}
+        >
+          {props.isLoading ? (
+            <View
+              style={{
+                flex: 1,
+                alignContent: 'center',
+                justifyContent: 'center'
+              }}
+            >
+              <Text
+                style={{ fontFamily: 'DOUZONEText30', textAlign: 'center' }}
+              >
+                {localPipMode ? t('meet_back') : t('meet_storage')}
+              </Text>
+            </View>
+          ) : (
+            <View
+              style={[
+                styles.mainContainer,
+                orientation === 'vertical'
+                  ? styles.mainContainerVertical
+                  : styles.mainContainerHorizontal
+              ]}
+              onLayout={event => {
+                props.onChangeState('viewSize', {
+                  viewWidth: event.nativeEvent.layout.width,
+                  viewHeight: event.nativeEvent.layout.height
+                });
+              }}
+            >
+              <DrawingSketch
+                viewWidth={props.viewWidth}
+                viewHeight={props.viewHeight}
+                image={resources[page]}
+                imgList={imgList}
+                imageSize={props.imageSize}
+                showTool={showTool}
+                presenter={presenter}
+                orientation={orientation}
+                mode={mode}
+                onChangeShowToolState={onChangeState}
+                onChangeDrawing={props.setDrawingMode}
+                onSetDrawingData={props.onSetDrawingData}
+                onChangePage={props.onChangePage}
+                hasNotch={props.hasNotch}
+              />
+            </View>
+          )}
         </View>
-      </SafetyView>
+      </View>
 
       {props.documentListMode && !localPipMode && (
         <OverView
@@ -296,13 +294,12 @@ const FileSharingPresenter = props => {
       )}
     </Fragment>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: '100%',
-    height: '100%',
+    marginTop: Platform.OS === 'ios' ? height * 0.05 : height * 0.055,
     backgroundColor: 'rgb(242, 242, 242)'
   },
   headerTitle: {

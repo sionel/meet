@@ -70,7 +70,6 @@ export interface ParticipantsTypes {
   userInfo: any;
   videoTrack: any;
   isMaster?: boolean;
-  direction?: 'LEFT' | 'RIGHT' | 'NONE';
 }
 export interface state {
   list: ParticipantsTypes[];

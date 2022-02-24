@@ -36,8 +36,8 @@ const OverViewPresenter = props => {
   const t = getT();
   const ViewComponent = () => {
     switch (view) {
-      case 'CHATTING':
-        return <Chatting />;
+      // case 'CHATTING':
+      //   return <Chatting />;
       case 'USERLIST':
         return <UserList speaker={speaker} onChangeSpeaker={onChangeSpeaker} />;
       case 'FILELIST':
@@ -138,13 +138,13 @@ const OverViewPresenter = props => {
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    zIndex: 11,
+    zIndex: 5,
     top: 100,
     bottom: 0,
     left: 0,
     width: '100%',
     // height: '100%',
-    backgroundColor: 'transparent'
+    backgroundColor: '#000'
   },
   topArea: {
     // height: '50%',

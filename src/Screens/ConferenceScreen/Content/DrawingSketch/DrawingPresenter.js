@@ -10,10 +10,10 @@ import {
   TouchableOpacity,
   Button,
   Platform,
-  Dimensions,
-  ScrollView,
-  FlatList
+  Dimensions
 } from 'react-native';
+
+import { ScrollView, FlatList } from 'react-native-gesture-handler';
 import { useSelector } from 'react-redux';
 
 import DrawingBoard from './DrawingBoard';
@@ -279,7 +279,7 @@ const DrawingPresenter = props => {
           horizontal={true}
           pagingEnabled={true}
           showsHorizontalScrollIndicator={false}
-          //scrollEnabled={스캐치 활성화시 false}
+          scrollEnabled={!palette}
           onLayout={e => {
             // console.log('onLayout', props.page);
             props.onScrollViewIsOnLayout();
@@ -314,6 +314,7 @@ const DrawingPresenter = props => {
           <FlatList
             data={props.imgList}
             horizontal={true}
+            scrollEnabled={!palette}
             renderItem={({ item }) => (
               <View
                 style={{

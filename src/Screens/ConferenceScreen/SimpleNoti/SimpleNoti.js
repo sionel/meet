@@ -1,9 +1,11 @@
 // 확장성을 고려해봤지만 관리가 쉽게끔 그냥 여기서 전부 처리하는게 나아보임
 
 import React, { useState, useEffect, useRef } from 'react';
-import { View, StyleSheet, Animated, Text } from 'react-native';
+import { View, StyleSheet, Animated, Text, Dimensions } from 'react-native';
 
 import { useSelector, useDispatch } from 'react-redux';
+
+const {width, height} = Dimensions.get('screen');
 export default function SimpleNoti() {
   const toggleFlag = useSelector(state => state.toast['toggleFlag']);
   const toastMessage = useSelector(state => state.toast['toastMessage']);
@@ -66,7 +68,7 @@ export default function SimpleNoti() {
   }, [toggleFlag]);
 
   return (
-    <Animated.View
+    message ? <Animated.View
       style={[
         styles.container,
         {
@@ -76,10 +78,10 @@ export default function SimpleNoti() {
     >
       {/* <View style={[styles.container, { opacity: fadeAnimation }]}> */}
       <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-        {!!message && <Text style={styles.noti}>{message}</Text>}
+        <Text style={styles.noti}>{message}</Text>
       </View>
       {/* </View> */}
-    </Animated.View>
+    </Animated.View> : null
   );
   // ) : (
   //   <></>
@@ -88,15 +90,23 @@ export default function SimpleNoti() {
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    top: 150,
-    left: 10,
-    right: 10,
-    zIndex: 5
+    flex: 1,
+    height: 48,
+    borderRadius: 10,
+    left: 0,
+    right: 0,
+    bottom: height * 0.7,
+    backgroundColor: 'rgba(0,0,0,0.75)',
+    elevation: 4,
+    zIndex: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: width * 0.04
   },
   noti: {
-    fontSize: 15,
-    alignItems: 'center',
-    backgroundColor: '#01a680',
-    padding: 10
+    fontFamily: 'DOUZONEText30',
+    fontSize: 13,
+    lineHeight: 21,
+    color: '#fff'
   }
 });
