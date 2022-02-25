@@ -39,10 +39,6 @@ const ChattingPresenter = (props: any) => {
   } = props;
 
   const { OS } = Platform;
-  // console.log(OS);
-  // console.log(myMessage.length);
-  
-  
   const t = getT();
   /**
    * 닉네임 표기 방법
@@ -56,11 +52,6 @@ const ChattingPresenter = (props: any) => {
       } else return user.userInfo.userName;
     } else return user.name;
   };
-
-  // console.log(useHeaderHeight());
-  // console.log(myMessage);
-
-  // console.log(myMessage.substring(0,1));
   
 
   return (
@@ -105,7 +96,6 @@ const ChattingPresenter = (props: any) => {
           data={messages}
           keyExtractor={(item, index) => String(index)}
           renderItem={({ item, index }) => {
-            // console.log(item);
 
             if (!cdm && index === messages.length - 1) {
               setCdm(true);

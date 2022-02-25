@@ -180,8 +180,6 @@ const FileSharingPresenter = gestureHandlerRootHOC((props) => {
     );
   }
 
-  // console.log(useHeaderHeight());
-
   return (
     <Fragment>
       <StatusBar barStyle={'dark-content'} />
@@ -308,6 +306,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     zIndex: 10,
+    elevation: 10,
     alignItems: 'center'
   },
   topArea: {

@@ -15,6 +15,7 @@ import icHand from '@assets/icons/ic_hand.png';
 import icRecord from '@assets/icons/ic_record.png';
 import icSketch from '@assets/icons/ic_sketch.png';
 import icWrite from '@assets/icons/ic_write.png';
+import icoScreenShagre from '@oldassets/icons/icoScreenShagre.png';
 import { ParticipantsTypes } from '@redux/participants';
 
 type TopAreaContainerProps = {
@@ -24,7 +25,6 @@ type TopAreaContainerProps = {
   onChangeDrawingMode: (value: any) => void;
   mainUser: any;
   elapsedTime: number;
-  // limitedTime: number;
   handleBottomPopup: React.Dispatch<
     React.SetStateAction<ConferenceBottomPopupProps>
   >;
@@ -43,7 +43,6 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
     callType,
     mainUser,
     elapsedTime,
-    // limitedTime,
     bottomPopup,
     handleBottomPopup,
     userList,
@@ -53,16 +52,9 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
   } = props;
   const {
     conferenceMode,
-    user,
-    participants,
-    videoPolicy,
-    loginType,
-    memberType,
-    auth,
     deployedServices,
     isScreenShare,
     orientation,
-    masters,
     expireTime,
     message
   } = useSelector((state: RootState) => {
@@ -97,8 +89,6 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
     dispatch(localAction.toggleCameraFacingMode());
   const toggleDocumentListMode = (documentListMode: string[]) =>
     dispatch(mainUserAction.setDocumentListMode(documentListMode));
-  const setScreenFlag = (flag: boolean) =>
-    dispatch(ScreenShareAction.setScreenFlag(flag));
   const toggleScreenFlag = () => dispatch(ScreenShareAction.toggleScreenFlag());
 
   const talkButton = callType === 3;
@@ -183,24 +173,29 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
         name: t('문서공유'),
         onClick: () => toggleDocumentListMode(['FILELIST'])
       };
-      const hand = {
-        icon1: icHand,
-        name: t('발언권'),
-        onClick: () => {}
+      const share = {
+        icon1: icoScreenShagre,
+        name: t('화면공유'),
+        onClick: () => toggleScreenFlag()
       };
-      const record = {
-        icon1: icRecord,
-        name: t('회의녹화'),
-        onClick: () => {}
-      };
-      const write = {
-        icon1: icWrite,
-        name: t('자동 회의록'),
-        onClick: () => {}
-      };
+      // const hand = {
+      //   icon1: icHand,
+      //   name: t('발언권'),
+      //   onClick: () => {}
+      // };
+      // const record = {
+      //   icon1: icRecord,
+      //   name: t('회의녹화'),
+      //   onClick: () => {}
+      // };
+      // const write = {
+      //   icon1: icWrite,
+      //   name: t('자동 회의록'),
+      //   onClick: () => {}
+      // };
 
       handleBottomPopup({
-        contentList: [sketch, document, hand, record, write],
+        contentList: [sketch, document, share],
         show: true,
         title: t('더보기'),
         popupType: 'NORMAL'
@@ -238,7 +233,6 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
       orientation={orientation}
       onChangeDrawingMode={props.onChangeDrawingMode}
       toggleDocumentListMode={toggleDocumentListMode}
-      toggleScreenFlag={toggleScreenFlag}
       toggleCameraFacingMode={toggleCameraFacingMode}
       onReverseVideo={props.onReverseVideo}
       conferenceMode={conferenceMode}

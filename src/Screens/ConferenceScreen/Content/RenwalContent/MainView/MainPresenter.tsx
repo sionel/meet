@@ -7,10 +7,13 @@ import {
   SafeAreaView,
   StyleSheet,
   View,
-  Text
+  Text,
+  TouchableOpacity
 } from 'react-native';
 import { RTCView } from 'react-native-webrtc';
 import LinearGradient from 'react-native-linear-gradient';
+
+import icoScreenShagre from '@oldassets/icons/icoScreenShagre.png';
 
 const { height, width } = Dimensions.get('screen');
 
@@ -24,6 +27,8 @@ type MainPresenterProps = {
   objectFit: any;
   mainUser: any;
   isMultipleView: boolean;
+  isScreenShare: boolean;
+  toggleScreenFlag: ()=>void;
 };
 
 const MainPresenter = (props: MainPresenterProps) => {
@@ -36,7 +41,9 @@ const MainPresenter = (props: MainPresenterProps) => {
     localPipMode,
     objectFit,
     mainUser,
-    isMultipleView
+    isMultipleView,
+    isScreenShare,
+    toggleScreenFlag
   } = props;
 
   const muteView = (
@@ -66,10 +73,68 @@ const MainPresenter = (props: MainPresenterProps) => {
       </Text>
     </View>
   );
- 
 
   //zindex:0
-  return isMultipleView ? (
+  return isScreenShare ? (
+    <View
+      style={{
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        backgroundColor: '#000',
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}
+    >
+      <Image source={icoScreenShagre} style={{width: 70, height: 70}} resizeMode={'cover'}/>
+      <Text
+        style={{
+          textAlign: 'center',
+          fontSize: 20,
+          fontWeight: 'bold',
+          marginVertical: 20,
+          color: 'white'
+        }}
+      >
+        {'화면을 공유 중 입니다.'}
+      </Text>
+      <Text
+        style={{
+          textAlign: 'center',
+          fontSize: 15,
+          fontWeight: 'bold',
+          color: 'white'
+        }}
+      >
+        {'현재 참석자들이 알림을 포함한 모든화면을\n확인할 수 있습니다'}
+      </Text>
+      <TouchableOpacity
+        style={{
+          width: 200,
+          marginVertical: 40,
+          backgroundColor: 'red',
+          height: 50,
+          alignItems: 'center',
+          justifyContent: 'center',
+          borderRadius: 50
+        }}
+        onPress={toggleScreenFlag}
+      >
+        <Text
+          style={{
+            textAlign: 'center',
+            fontSize: 18,
+            fontWeight: 'bold',
+            color: 'white'
+          }}
+        >
+          {'공유중지'}
+        </Text>
+      </TouchableOpacity>
+    </View>
+  ) : isMultipleView ? (
     <View
       style={{
         position: 'absolute',

@@ -5,7 +5,8 @@ import {
   GestureResponderEvent,
   NativeModules,
   NativeTouchEvent,
-  Platform
+  Platform,
+  Share
 } from 'react-native';
 import ContentPresenter from './ContentPresenter';
 import FileSharing from './FileSharing';
@@ -20,6 +21,13 @@ import { RootState } from '../../../redux/configureStore';
 import { getConferenceManager } from '@utils/ConferenceManager';
 import { ConferenceBotPopupContent } from './RenwalContent/Component/BottomPopup';
 import { getT } from '@utils/translateManager';
+
+import icOrganizationW from '@assets/icons/ic_organization_w.png';
+import icMailW from '@assets/icons/ic_mail_w.png';
+import icPhoneW from '@assets/icons/ic_phone_w.png';
+import icShareW from '@assets/icons/ic_share_w.png';
+import icLinkW from '@assets/icons/ic_link_w.png';
+import icCodeW from '@assets/icons/ic_code.png';
 
 export type ConferenceBottomPopupProps = {
   show: boolean;
@@ -160,15 +168,16 @@ function ContentContainer(props: any) {
   }, [mainUser]);
 
   useEffect(() => {
-    isMultipleView && setConferenceMode(ConferenceModes.NORMAL);
+    isMultipleView && setConferenceMode(ConferenceModes.CONTROL);
   }, [isMultipleView]);
 
-  const _toggleConferenceMode = (e: NativeTouchEvent) => {
-    const { pageY } = e;
+  const _toggleConferenceMode = (NativeTouchEvent: NativeTouchEvent) => {
+    const { pageY } = NativeTouchEvent;
+
     if (!isMultipleView) {
       if (bottomPopup.show) {
         if (bottomPopup.popupType === 'CHATTING') {
-          //채팅버튼 눌렀을 경우
+          // 채팅버튼 눌렀을 경우
         } else {
           !isPopupTouch &&
             setBottomPopup({
@@ -177,6 +186,9 @@ function ContentContainer(props: any) {
             });
         }
       } else if (screenHeight * 0.15 > pageY) {
+        // 상단버튼
+      } else if (screenHeight * 0.84 < pageY) {
+        // 하단버튼
       } else {
         if (conferenceMode === ConferenceModes.CONTROL) {
           setConferenceMode(ConferenceModes.NORMAL);
@@ -195,6 +207,109 @@ function ContentContainer(props: any) {
       popupType: 'USERLIST'
     });
     setIsPopupTouch(false);
+  };
+
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        url: 'https://www.google.com'
+      });
+
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      console.warn(error);
+    }
+  };
+
+  const onSms = async () => {
+    try {
+      const result = await Share.share(
+        {
+          message: 'https://www.google.com'
+        },
+        {
+          excludedActivityTypes: [
+            'com.apple.UIKit.activity.PostToFacebook',
+            'com.apple.UIKit.activity.PostToTwitter',
+            'com.apple.UIKit.activity.Mail',
+            'com.apple.UIKit.activity.Print',
+            'com.apple.UIKit.activity.CopyToPasteboard',
+            'com.apple.UIKit.activity.AssignToContact',
+            'com.apple.UIKit.activity.SaveToCameraRoll',
+            'com.apple.UIKit.activity.AddToReadingList',
+            'com.apple.UIKit.activity.PostToFlickr',
+            'com.apple.UIKit.activity.PostToVimeo',
+            'com.apple.UIKit.activity.PostToTencentWeibo',
+            'com.apple.UIKit.activity.AirDrop',
+            'com.apple.UIKit.activity.OpenInIBooks',
+            'com.apple.UIKit.activity.MarkupAsPDF',
+            'com.apple.reminders.RemindersEditorExtension', //Reminders
+            'com.apple.mobilenotes.SharingExtension', // Notes
+            'com.apple.mobileslideshow.StreamShareService'
+          ]
+        }
+      );
+
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      console.warn(error);
+    }
+  };
+
+  const handdlePersonPlus = () => {
+    const organization = {
+      icon1: icOrganizationW,
+      name: t('조직도로 초대하기'),
+      onClick: () => {}
+    };
+    const email = {
+      icon1: icMailW,
+      name: t('이메일로 초대하기'),
+      onClick: () => {}
+    };
+    const phone = {
+      icon1: icPhoneW,
+      name: t('SMS로 초대하기'),
+      onClick: () => onSms()
+    };
+    const share = {
+      icon1: icShareW,
+      name: t('공유하기'),
+      onClick: () => onShare()
+    };
+    const link = {
+      icon1: icLinkW,
+      name: t('공유링크 복사하기'),
+      onClick: () => {}
+    };
+    const code = {
+      icon1: icCodeW,
+      name: t('참여코드 복사하기'),
+      onClick: () => {}
+    };
+
+    setBottomPopup({
+      contentList: [organization, email, phone, share, link, code],
+      show: true,
+      title: t('참석자 초대'),
+      popupType: 'NORMAL'
+    });
   };
 
   const _handleReverseVideo = _.throttle(() => {
@@ -259,6 +374,7 @@ function ContentContainer(props: any) {
       setIsPopupTouch={setIsPopupTouch}
       limitedTime={limitedTime}
       setLimitedTime={setLimitedTime}
+      handdlePersonPlus={handdlePersonPlus}
     />
   );
 }

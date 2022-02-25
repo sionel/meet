@@ -3,6 +3,7 @@ import { errorType } from "./api/types";
 
 interface BaseRes {
   resultCode: number;
+  resultMsg: string;
 }
 interface SuccessRes<T> extends BaseRes {
   resultData: T;

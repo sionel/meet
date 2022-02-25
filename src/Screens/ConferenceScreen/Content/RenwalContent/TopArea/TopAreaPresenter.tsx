@@ -23,7 +23,6 @@ type TopAreaPresenterProps = {
   orientation: 'horizontal' | 'vertical';
   onChangeDrawingMode: (value: any) => void;
   toggleDocumentListMode: Function;
-  toggleScreenFlag: () => void;
   toggleCameraFacingMode: () => void;
   onReverseVideo: () => void;
   conferenceMode: string;
@@ -49,7 +48,6 @@ const TopAreaPresenter = (props: TopAreaPresenterProps) => {
     orientation,
     onChangeDrawingMode,
     toggleDocumentListMode,
-    toggleScreenFlag,
     toggleCameraFacingMode,
     onReverseVideo,
     conferenceMode,
@@ -166,16 +164,6 @@ const TopAreaPresenter = (props: TopAreaPresenterProps) => {
                 </View>
               </TouchableHighlight>
             )}
-            {/* 
-            screenShareButton && null
-             <CustomButton
-               name="icoScreenShagre"
-               width={28}
-               height={28}
-               areaWidth={42}
-               areaHeight={36}
-               onPress={toggleScreenFlag}
-             /> */}
             {switchButton && (
               <TouchableHighlight
                 style={styles.topMenuIcon}
@@ -260,7 +248,6 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    // marginHorizontal: 6,
     justifyContent: 'center',
     alignItems: 'center'
   },

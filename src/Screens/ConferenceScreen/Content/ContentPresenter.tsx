@@ -38,6 +38,7 @@ type ContentPresenterProps = {
   setIsPopupTouch: any;
   documentListMode: any;
   onChangeSharingMode: any;
+  handdlePersonPlus: () => void;
   // limitedTime: number;
 };
 
@@ -63,7 +64,8 @@ const ContentPresenter = (props: ContentPresenterProps) => {
     isMultipleView,
     setIsMultipleView,
     handelProfieBackButton,
-    setIsPopupTouch
+    setIsPopupTouch,
+    handdlePersonPlus
   } = props;
 
   // const localPipMode = useSelector((state: RootState) => state.local.pipMode);
@@ -115,6 +117,7 @@ const ContentPresenter = (props: ContentPresenterProps) => {
           bottomPopup={bottomPopup}
           handelProfieBackButton={handelProfieBackButton}
           setIsPopupTouch={setIsPopupTouch}
+          handdlePersonPlus={handdlePersonPlus}
         />
       )}
       {/* OverView 영역 */}

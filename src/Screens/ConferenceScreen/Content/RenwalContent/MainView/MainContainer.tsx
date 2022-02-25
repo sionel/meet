@@ -1,8 +1,9 @@
 import { getT } from '@utils/translateManager';
 import React, { useEffect, useState } from 'react';
 import { BackHandler, NativeModules, ToastAndroid } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'src/redux/configureStore';
+import { actionCreators as ScreenShareCreators } from '@redux/ScreenShare';
 import MainPresenter from './MainPresenter';
 
 const { PictureInPicture } = NativeModules;
@@ -29,18 +30,23 @@ const MainContainer = (props: MainContainerProps) => {
     loginType,
     createdTime,
     localPipMode,
-    drawingMode
+    drawingMode,
+    isScreenShare
   } = useSelector((state: RootState) => {
-    const { root, user, local, mainUser } = state;
+    const { root, user, local, mainUser, screenShare } = state;
     return {
       videoPolicy: root.videoPolicy,
       auth: user.auth,
       loginType: user.loginType,
       createdTime: local.createdTime,
       localPipMode: local.pipMode,
-      drawingMode: mainUser.drawingMode
+      drawingMode: mainUser.drawingMode,
+      isScreenShare: screenShare.isScreenShare
     };
   });
+
+  const dispatch = useDispatch();
+  const toggleScreenFlag = () => dispatch(ScreenShareCreators.toggleScreenFlag());
 
   const {
     mainUser: { videoTrack, isMuteVideo },
@@ -51,33 +57,10 @@ const MainContainer = (props: MainContainerProps) => {
     isMultipleView
   } = props;
 
-
-
   const stream = !isMuteVideo && videoTrack && videoTrack.getOriginalStream();
   const videoType = videoTrack && videoTrack.videoType;
 
-  
-
   useEffect(() => {
-    // timer = setInterval(() => {
-    //   if (createdTime) {
-    //     let time = Math.floor((Date.now() - createdTime) / 1000);
-    //     time > 0 && setState({ time });
-    //     if (
-    //       (videoPolicy === 'nahago' || loginType === 'nahago') &&
-    //       time >= 3600
-    //     ) {
-    //       setAlert({
-    //         title: '회의 종료',
-    //         type: 1,
-    //         message: '회의시간이 60분 지나 회의가 종료됩니다.',
-    //         onConfirm: props.onClose
-    //       });
-    //     }
-    //   }
-
-    // }, 500);
-
     BackHandler.addEventListener('hardwareBackPress', _handleBackButton);
 
     return () => {
@@ -132,6 +115,8 @@ const MainContainer = (props: MainContainerProps) => {
       objectFit={objectFit}
       mainUser={mainUser}
       isMultipleView={isMultipleView}
+      isScreenShare={isScreenShare}
+      toggleScreenFlag={toggleScreenFlag}
     />
   );
 };

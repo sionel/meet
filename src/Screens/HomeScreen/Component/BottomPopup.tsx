@@ -8,9 +8,11 @@ import {
   Image,
   ImageSourcePropType,
   FlatList,
-  StyleSheet
+  StyleSheet,
+  Platform
 } from 'react-native';
 // import {Text,TextInput} from '../@components/StyledText';
+const { OS } = Platform;
 const { width, height } = Dimensions.get('window');
 const icPerson = require('@assets/icons/ic_user.png');
 
@@ -91,7 +93,14 @@ export default function BottomPopup(
           onPress={onClickOutside}
         />
 
-        <View style={styles.botVerPopupContainer}>
+        <View
+          style={[
+            styles.botVerPopupContainer,
+            OS === 'ios' && {
+              marginBottom: 10
+            }
+          ]}
+        >
           <View style={styles.verHeaderConatainer}>
             <Text style={styles.headerText}>{title}</Text>
           </View>

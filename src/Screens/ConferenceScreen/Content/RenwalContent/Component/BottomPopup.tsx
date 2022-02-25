@@ -19,6 +19,7 @@ import { ConferenceBottomPopupProps } from '../../ContentContainer';
 import _ from 'underscore';
 
 import icBackW from '@assets/icons/ic_back_w.png';
+import icPersonPlusW from '@assets/icons/ic_person_plus_w.png';
 
 export type ConferenceBotPopupContent = {
   icon1: ImageSourcePropType;
@@ -36,6 +37,7 @@ type BottomPopupProps = {
   >;
   handelProfieBackButton: () => void;
   setIsPopupTouch: React.Dispatch<React.SetStateAction<boolean>>;
+  handdlePersonPlus: () => void;
 };
 
 const { width, height } = Dimensions.get('window');
@@ -51,9 +53,12 @@ export default function BottomPopup(
     bottomPopup,
     handleBottomPopup,
     handelProfieBackButton,
-    setIsPopupTouch
+    setIsPopupTouch,
+    handdlePersonPlus
   } = props;
+
   const { OS } = Platform;
+
 
   return popupType === 'CHATTING' ? (
     <Chatting />
@@ -69,11 +74,12 @@ export default function BottomPopup(
         <View
           style={[
             styles.verHeaderConatainer,
-            popupType === 'PROFILE'
+            popupType === 'PROFILE' || popupType === 'USERLIST'
               ? { justifyContent: 'space-between' }
               : { justifyContent: 'center' }
           ]}
         >
+          {popupType === 'USERLIST' && <View style={styles.size24} />}
           {popupType === 'PROFILE' && (
             <TouchableHighlight
               activeOpacity={0.5}
@@ -81,12 +87,22 @@ export default function BottomPopup(
               style={{ width: 35 }}
               underlayColor="transparent"
             >
-              <Image source={icBackW} style={{ width: 24, height: 24 }} />
+              <Image source={icBackW} style={styles.size24} />
             </TouchableHighlight>
           )}
           <Text style={styles.headerText}>{title}</Text>
           {popupType === 'PROFILE' && (
-            <View style={{ width: 24, height: 24 }}></View>
+            <View style={styles.size24} />
+          )}
+          {popupType === 'USERLIST' && (
+            <TouchableHighlight
+              activeOpacity={0.5}
+              onPress={handdlePersonPlus}
+              style={{ width: 35 }}
+              underlayColor="transparent"
+            >
+              <Image source={icPersonPlusW} style={styles.size24} />
+            </TouchableHighlight>
           )}
         </View>
         {popupType === 'NORMAL' && (
@@ -107,7 +123,7 @@ export default function BottomPopup(
                       popupType: 'NORMAL',
                       show: false
                     });
-                  }, 500)}
+                  }, 750)}
                 >
                   <View style={styles.verMenuRowView}>
                     {item.icon1 && (
@@ -194,5 +210,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: 'DOUZONEText30',
     color: '#fff'
-  }
+  },
+  size24: { width: 24, height: 24 }
 });

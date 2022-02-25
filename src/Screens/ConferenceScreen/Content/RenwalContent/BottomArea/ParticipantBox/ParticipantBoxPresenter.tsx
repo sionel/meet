@@ -60,15 +60,13 @@ const ParticipantBoxPresenter = (props: ParticipantBoxProps) => {
 
   const t = getT();
   const stream = videoTrack && videoTrack.getOriginalStream();
-  const multiViewHeight = (multiViewContainer * 0.95) / 2;
+  const multiViewHeight = (multiViewContainer * 0.9) / 2;
   const multiView = { width: multiWidth, height: multiViewHeight };
   const isMuteMic = user.isLocal
     ? user.isMuteMic
     : user.audioTrack === null
     ? true
     : user.audioTrack?.muted;
-
-  // console.log('user : ', user);
 
   const content = canUseStream ? (
     stream && !isMuteVideo ? (
@@ -274,8 +272,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'rgba(0,0,0,0.2)',
-    zIndex: 3,
-    elevation: 3
+    // zIndex: 3,
+    // elevation: 3
   },
   name: {
     color: '#fff',

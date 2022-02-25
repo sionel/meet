@@ -42,10 +42,12 @@ export default function CreateScreenContainer(props: any) {
   const [keyword, setKeyword] = useState('');
   const [searchList, setSearchList] = useState<any[]>([]);
 
-  const { auth } = useSelector((state: RootState) => {
+  const { auth, alert} = useSelector((state: RootState) => {
     const { auth } = state.user;
+    const { alert } = state;
     return {
-      auth
+      auth,
+      alert
     };
   });
 
@@ -53,7 +55,7 @@ export default function CreateScreenContainer(props: any) {
 
   useEffect(() => {
     _getWetalkList();
-  }, []);
+  }, [alert]);
   useEffect(() => {
     const list = searchList.length !== 0 ? searchList : wetalkList;
 
@@ -194,14 +196,14 @@ export default function CreateScreenContainer(props: any) {
   const _getWetalkList = async () => {
     let video_room_list: any[] = [];
     const getWetalkList = await WetalkApi.getWetalkList(auth);
-    
-    if(isSuccess(getWetalkList)) {
+
+    if (isSuccess(getWetalkList)) {
       video_room_list = getWetalkList.resultData.video_room_list;
     } else {
       //error
       video_room_list = [];
     }
-    
+
     setWetalkList(video_room_list);
   };
 
@@ -246,12 +248,16 @@ export default function CreateScreenContainer(props: any) {
         auth.HASH_KEY
       );
 
-      const { mobile_key: videoRoomId, room_title, room_type, receiver_users } =
-        isSuccess(sendWetalkResult) && sendWetalkResult.resultData.chatList[0];
+      const {
+        mobile_key: videoRoomId,
+        room_title,
+        room_type,
+        receiver_users
+      } = isSuccess(sendWetalkResult) &&
+      sendWetalkResult.resultData.chatList[0];
 
       let receiverUserName = receiver_users[1].user_name;
       let selectedRoom = room_title ? room_title : receiverUserName;
-        
 
       // 토큰받고
       // const roomToken = (await MeetApi.getMeetRoomToken(auth, videoRoomId))
@@ -262,14 +268,14 @@ export default function CreateScreenContainer(props: any) {
       navigation.navigate('SettingView', {
         accessType: 'auth',
         id: videoRoomId,
-        selectedRoomName: selectedRoom 
+        selectedRoomName: selectedRoom
       });
     } else {
       if (createResult.resultCode === 400) {
         setIndicatorFlag(false);
 
-        const { message } = createResult.errors;
-        const title = t('alert_title_fail');
+        const { resultMsg: message } = createResult;
+        const title = t('renewal.alert_title_fail');
         const type = 1;
         setAlert({ message, title, type });
 
@@ -277,13 +283,13 @@ export default function CreateScreenContainer(props: any) {
       } else if (createResult.errors && createResult.errors.code === 'E002') {
         setIndicatorFlag(false);
         const message = t('alert_text_failcreate');
-        const title = t('alert_title_fail');
+        const title = t('renewal.alert_title_fail');
         const type = 1;
         setAlert({ message, title, type });
       } else {
         setIndicatorFlag(false);
         const message = t('alert_text_failcreate');
-        const title = t('alert_title_fail');
+        const title = t('renewal.alert_title_fail');
         const type = 1;
         setAlert({ message, title, type });
       }

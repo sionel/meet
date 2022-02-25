@@ -154,7 +154,7 @@ export default function CustomProvider(props: any) {
   };
 
   const _setOrientation = (orientation: OrientationType) => {
-    if (!deviceInfoModule.isTablet() && !isConference) {
+    if (!deviceInfoModule.isTablet() || !isConference) {
       Orientation.lockToPortrait();
     } else {
       if (orientation === 'LANDSCAPE-LEFT') {

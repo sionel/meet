@@ -1,7 +1,9 @@
 import React, { Fragment } from 'react';
 import {
+  Animated,
   Dimensions,
   Image,
+  Platform,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
@@ -44,7 +46,7 @@ type BottomAreaProps = {
 };
 
 const isTablet = deviceInfoModule.isTablet();
-const { height } = Dimensions.get('window');
+const { width, height } = Dimensions.get('screen');
 
 const BottomAreaPresenter = (props: BottomAreaProps) => {
   const {
@@ -68,10 +70,7 @@ const BottomAreaPresenter = (props: BottomAreaProps) => {
     bottomPopup
   } = props;
 
-  // console.log(conferenceMode);
-  
-
-  const multiViewHeight = height * 0.75;
+  const multiViewHeight = Platform.OS === 'ios' ? height * 0.7 : height * 0.65;
 
   return bottomPopup.popupType === 'CHATTING' ? null : (
     <View
@@ -82,36 +81,39 @@ const BottomAreaPresenter = (props: BottomAreaProps) => {
     >
       {Number(callType) === 2
         ? null
-        : (conferenceMode === ConferenceModes.NORMAL || isScreenShare) && (
+        : (conferenceMode === ConferenceModes.CONTROL ||
+          !isScreenShare) && (
             <Fragment>
+              {/* <PanGestureHandler
+            onHandlerStateChange={({ nativeEvent }) => {
+              const { velocityY, state, numberOfPointers } = nativeEvent;
+              if (velocityY !== 0 && (state > 4 || numberOfPointers === 0)) {
+                !bottomPopup.show && setIsMultipleView(!isMultipleView);
+              } else {
+              }
+            }}
+            onGestureEvent={onPanGestureEvent}
+          /> */}
+
               <TouchableOpacity
-                style={{
-                  width: 100,
-                  height: 20,
-                  justifyContent: 'center',
-                  alignItems: 'center'
-                }}
+                style={styles.multiViewTouch}
                 onPress={() => {
                   !bottomPopup.show && setIsMultipleView(!isMultipleView);
                 }}
               >
-                <View
-                  style={{
-                    width: 52,
-                    height: 5,
-                    borderRadius: 3,
-                    backgroundColor: '#fff'
-                  }}
-                />
+                <View style={styles.multiViewBar}></View>
               </TouchableOpacity>
+
               {isMultipleView ? (
                 <FlatList
                   data={userList}
                   windowSize={6}
                   numColumns={2}
                   style={{
+                    marginTop: 10,
                     // paddingLeft: '5%',
                     flex: 1,
+                    marginBottom : Platform.OS === 'ios' ? 10 : 0,
                     height: multiViewHeight
                   }}
                   renderItem={({ item, index }) => {
@@ -163,15 +165,7 @@ const BottomAreaPresenter = (props: BottomAreaProps) => {
               )}
             </Fragment>
           )}
-      <View
-        style={{ flexDirection: 'row' }}
-        // style={[
-        //   styles.bottomArea,
-        //   orientation === 'vertical'
-        //     ? styles.bottomAreaVertical
-        //     : styles.bottomAreaHorizontal
-        // ]}
-      >
+      <View style={{ flexDirection: 'row' }}>
         {/* 스피커 */}
         {!isTablet && (
           <TouchableOpacity
@@ -273,6 +267,18 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'center',
     flex: 1
+  },
+  multiViewTouch: {
+    width: width * 0.15,
+    height: height * 0.02,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  multiViewBar: {
+    width: width * 0.15,
+    height: height * 0.01,
+    borderRadius: 3,
+    backgroundColor: '#fff'
   }
 });
 
