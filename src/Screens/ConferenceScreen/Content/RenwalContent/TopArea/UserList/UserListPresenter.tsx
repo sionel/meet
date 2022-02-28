@@ -25,6 +25,9 @@ import Swipeable from 'react-native-gesture-handler/Swipeable';
 
 import { FlatList, gestureHandlerRootHOC } from 'react-native-gesture-handler';
 
+import Device from 'react-native-device-info';
+
+const isPad = Device.isTablet();
 const { width } = Dimensions.get('window');
 const rightSwipeWidth = Platform.OS === 'ios' ? width * 0.185 : width * 0.175;
 const leftSwipeWidth = width * 0.3;
@@ -41,6 +44,8 @@ const UserListPresenter = gestureHandlerRootHOC((props: UserListPresenter) => {
 
   const t = getT();
 
+  // console.log(rightSwipeWidth);
+
   return (
     <FlatList
       contentContainerStyle={{ flexGrow: 1 }}
@@ -48,7 +53,7 @@ const UserListPresenter = gestureHandlerRootHOC((props: UserListPresenter) => {
       keyExtractor={(item, index) => String(index)}
       renderItem={({ item, index }: any) => {
         // console.log('item : ', item);
-        
+
         const { isMaster, userInfo } = item;
         // 마이크음소거여부
         const isMuteMic = item.isLocal
@@ -69,10 +74,15 @@ const UserListPresenter = gestureHandlerRootHOC((props: UserListPresenter) => {
           progress: any,
           dragX: Animated.AnimatedInterpolation
         ) => {
-          const trans = dragX.interpolate({
-            inputRange: [0, leftSwipeWidth / 2, leftSwipeWidth],
-            outputRange: [-leftSwipeWidth, -(leftSwipeWidth / 2), 0]
-          });
+          const trans = isPad
+            ? dragX.interpolate({
+                inputRange: [0, 56, 112],
+                outputRange: [-112, -56, 0]
+              })
+            : dragX.interpolate({
+                inputRange: [0, leftSwipeWidth / 2, leftSwipeWidth],
+                outputRange: [-leftSwipeWidth, -(leftSwipeWidth / 2), 0]
+              });
 
           return (
             <Animated.View
@@ -119,10 +129,15 @@ const UserListPresenter = gestureHandlerRootHOC((props: UserListPresenter) => {
           progress: any,
           dragX: Animated.AnimatedInterpolation
         ) => {
-          const trans = dragX.interpolate({
-            inputRange: [-rightSwipeWidth, 0],
-            outputRange: [0, rightSwipeWidth]
-          });
+          const trans = isPad
+            ? dragX.interpolate({
+                inputRange: [-40, 0],
+                outputRange: [0, 40]
+              })
+            : dragX.interpolate({
+                inputRange: [-rightSwipeWidth, 0],
+                outputRange: [0, rightSwipeWidth]
+              });
 
           return (
             <Animated.View
@@ -268,15 +283,15 @@ const styles = StyleSheet.create({
   },
   leftSwipeView: {
     flexDirection: 'row',
-    width: leftSwipeWidth
+    width: isPad ? 112 : leftSwipeWidth
     // marginRight: 15
   },
   rightSwipeView: {
-    width: rightSwipeWidth,
+    width: isPad ? 56 : rightSwipeWidth,
     opacity: 1
   },
   infoBox: {
-    width: width * 0.51,
+    flex: 1,
     height: 34,
     justifyContent: 'center',
     marginLeft: 8,

@@ -5,7 +5,7 @@ import { actionCreators as mainUserAction } from '@redux/mainUser';
 import { actionCreators as ScreenShareAction } from '@redux/ScreenShare';
 import { RootState } from 'src/redux/configureStore';
 import TopAreaPresenter from './TopAreaPresenter';
-import { Platform } from 'react-native';
+import { GestureResponderEvent, Platform } from 'react-native';
 import { ConferenceBottomPopupProps } from '../../ContentContainer';
 import _ from 'underscore';
 import { getT } from '@utils/translateManager';
@@ -128,7 +128,7 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
     });
   };
 
-  const handdleUserListClick = () => {
+  const handdleUserListClick = (e:GestureResponderEvent) => {
     if (bottomPopup.show) {
       onExitPopup();
     } else {

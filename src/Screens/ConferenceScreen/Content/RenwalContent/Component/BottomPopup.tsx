@@ -21,6 +21,10 @@ import _ from 'underscore';
 import icBackW from '@assets/icons/ic_back_w.png';
 import icPersonPlusW from '@assets/icons/ic_person_plus_w.png';
 
+import Device from 'react-native-device-info'
+
+const isPad = Device.isTablet();
+
 export type ConferenceBotPopupContent = {
   icon1: ImageSourcePropType;
   name: string;
@@ -63,11 +67,11 @@ export default function BottomPopup(
   return popupType === 'CHATTING' ? (
     <Chatting />
   ) : (
-    <BlurView style={styles.botVerPopContainer} overlayColor="rgba(0,0,0,0.1)">
+    <BlurView style={styles.botVerPopContainer} overlayColor="rgba(0,0,0,0.01)">
       <View
         style={{
           backgroundColor: 'rgba(0,0,0,0.4)',
-          paddingBottom: OS === 'ios' ? height * 0.05 : height * 0.03
+          paddingBottom: isPad ? 10 : OS === 'ios' ? height * 0.05 : height * 0.03
         }}
         onTouchStart={() => popupType !== 'NORMAL' && setIsPopupTouch(true)}
       >
@@ -157,7 +161,7 @@ export default function BottomPopup(
 }
 
 const styles = StyleSheet.create({
-  botVerPopContainer: {
+  botVerPopContainer: !isPad ? {
     position: 'absolute',
     left: 0,
     right: 0,
@@ -165,6 +169,15 @@ const styles = StyleSheet.create({
     zIndex: 2,
     elevation: 2,
     flex: 1,
+    maxHeight: height * 0.62
+  } : {
+    position: 'absolute',
+    right: 0,
+    top: '10%',
+    zIndex: 2,
+    elevation: 2,
+    flex: 1,
+    width: 300,
     maxHeight: height * 0.62
   },
   verHeaderConatainer: {

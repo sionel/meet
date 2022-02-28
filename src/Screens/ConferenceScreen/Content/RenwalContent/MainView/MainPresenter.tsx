@@ -14,8 +14,10 @@ import { RTCView } from 'react-native-webrtc';
 import LinearGradient from 'react-native-linear-gradient';
 
 import icoScreenShagre from '@oldassets/icons/icoScreenShagre.png';
+import Device from 'react-native-device-info';
 
 const { height, width } = Dimensions.get('screen');
+const isTablet = Device.isTablet();
 
 type MainPresenterProps = {
   isMuteVideo: boolean;
@@ -152,7 +154,7 @@ const MainPresenter = (props: MainPresenterProps) => {
       style={styles.RTCVideo}
       mirror={videoType !== 'desktop' && !isVideoReverse}
       objectFit={
-        localPipMode ? 'cover' : videoType === undefined ? 'contain' : objectFit
+        localPipMode || isTablet ? 'cover' : videoType === undefined ? 'contain' : objectFit
       }
       streamURL={stream.toURL()}
       zOrder={0} // zOrder 는 [0, 1] 만 사용가능 (아마?)
@@ -167,7 +169,7 @@ const MainPresenter = (props: MainPresenterProps) => {
       style={styles.imageContainer}
     >
       {!drawing && (
-        <Image source={icMan1} style={{ width: '100%', height: '100%' }} />
+        <Image source={icMan1} style={{ width: '100%', height: '150%' }} resizeMode={'contain'}/>
       )}
     </LinearGradient>
   );

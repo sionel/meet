@@ -1,17 +1,26 @@
 import React, { Fragment } from 'react';
 import {
+  Dimensions,
+  GestureResponderEvent,
   Image,
   StyleSheet,
   Text,
+  TouchableOpacity,
   TouchableHighlight,
   View
 } from 'react-native';
+
+// import {TouchableHighlight, TouchableOpacity} from 'react-native-gesture-handler'
 import icUserW from '@assets/icons/ic_user_w2.png';
 import icChatW from '@assets/icons/ic_chat_w.png';
 import icChangeW from '@assets/icons/ic_change_w2.png';
 import icInvertW from '@assets/icons/ic_invert_w.png';
 import icMoreW from '@assets/icons/ic_more_w.png';
 import icMaster from '@assets/icons/ic_master.png';
+import deviceInfoModule from 'react-native-device-info';
+
+const isPad = deviceInfoModule.isTablet();
+const { height, width } = Dimensions.get('screen');
 
 type TopAreaPresenterProps = {
   talkButton: boolean;
@@ -30,7 +39,7 @@ type TopAreaPresenterProps = {
   elapsedTime: string;
   isMaster: boolean;
   handdleMoreClick: () => void;
-  handdleUserListClick: () => void;
+  handdleUserListClick: (e:GestureResponderEvent) => void;
   handdleChattingClick: () => void;
   isMultipleView: boolean;
   selectedRoomName: string;
@@ -64,21 +73,29 @@ const TopAreaPresenter = (props: TopAreaPresenterProps) => {
 
   return (
     <View style={styles.topContainer}>
-      <View
-        style={[
-          styles.topRow,
-          isMultipleView && { justifyContent: 'space-between' }
-        ]}
-      >
-        <View style={{ justifyContent: 'flex-start' }}>
+      <View style={styles.topRow}>
+        <View>
           <Text style={styles.timeText}>
             {elapsedTime !== '00:00:00' ? elapsedTime : ''}
           </Text>
         </View>
 
+        {!isMultipleView && isPad && (
+          <View style={styles.mainUserNamePadView}>
+            {isMaster && (
+              <Image
+                source={icMaster}
+                resizeMode={'cover'}
+                style={{ width: 18, height: 18, marginRight: 4 }}
+              />
+            )}
+            <Text style={styles.name}>{mainUser.userInfo?.userName}</Text>
+          </View>
+        )}
+
         {isMultipleView ? (
           <Fragment>
-            <View style={{ alignItems: 'center' }}>
+            <View style={{ marginRight: width * 0.03 }}>
               <Text
                 style={{
                   fontFamily: 'DOUZONEText50',
@@ -89,7 +106,7 @@ const TopAreaPresenter = (props: TopAreaPresenterProps) => {
                 {selectedRoomName}
               </Text>
             </View>
-            <View style={{ alignItems: 'flex-end' }}>
+            <View>
               <TouchableHighlight
                 style={styles.moreClickView}
                 underlayColor="rgba(112,112,112,0.5)"
@@ -104,7 +121,7 @@ const TopAreaPresenter = (props: TopAreaPresenterProps) => {
             </View>
           </Fragment>
         ) : (
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <TouchableHighlight
               style={styles.topMenuIcon}
               underlayColor="rgba(112,112,112,0.5)"
@@ -204,7 +221,7 @@ const TopAreaPresenter = (props: TopAreaPresenterProps) => {
           </View>
         )}
       </View>
-      {!isMultipleView && (
+      {!isMultipleView && !isPad && (
         <View style={styles.mainUserNameView}>
           {isMaster && (
             <Image
@@ -227,16 +244,16 @@ const styles = StyleSheet.create({
     right: 0,
     top: '5%',
     zIndex: 1,
-    elevation: 1,
-    flexDirection: 'column',
-    justifyContent: 'center'
+    elevation: 1
   },
   topRow: {
+    display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
     flexDirection: 'row',
-    marginHorizontal: '5%',
+    marginHorizontal: 30,
     height: 48
+    // backgroundColor:'red'
   },
   timeText: {
     fontSize: 14,
@@ -271,6 +288,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row'
+  },
+  mainUserNamePadView: {
+    paddingHorizontal: 15,
+    height: 32,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    flexDirection: 'row',
+    marginRight: -width * 0.16
   },
   name: {
     color: '#fff',

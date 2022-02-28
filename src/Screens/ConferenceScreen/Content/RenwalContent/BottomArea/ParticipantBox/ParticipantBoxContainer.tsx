@@ -1,43 +1,52 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { actionCreators as mainUserActionCreators } from '@redux/mainUser';
 import ParticipantBoxPresenter from './ParticipantBoxPresenter';
 import { ParticipantsTypes } from '@redux/participants';
+import { RootState } from 'src/redux/configureStore';
+import { Dimensions, Platform } from 'react-native';
+import deviceInfoModule from 'react-native-device-info';
+
+const isTablet = deviceInfoModule.isTablet();
 
 const ParticipantBoxContainer = (props: {
   user: ParticipantsTypes;
   isSelect: any;
   isMultipleView: boolean;
+  width: number;
+  height: number;
   index?: number;
   videoTrack?: any;
   setIsMultipleView?: (flag: boolean) => void;
 }) => {
-  const { user, isMultipleView, index, setIsMultipleView } = props;
+  const { user, isMultipleView, index, setIsMultipleView, width, height } =
+    props;
   const { isMuteVideo } = user;
   const videoTrack = props.videoTrack ? props.videoTrack : user.videoTrack;
+
+  const { orientation } = useSelector((state: RootState) => state.orientation);
+
+  const dispatch = useDispatch();
+  const setMainUser = (id: string) =>
+    dispatch(mainUserActionCreators.setMainUser(id));
+
+  const multiWidth = isTablet
+    ? orientation === 'horizontal'
+      ? width * 0.47
+      : width * 0.46
+    : width * 0.425;
+  const multiViewHeight = isTablet
+    ? orientation === 'horizontal'
+      ? (height * 0.55) / 2
+      : (height * 0.65) / 2
+    : Platform.OS === 'ios' ? (height * 0.67) / 2 : (height * 0.61) / 2;
+  const multiView = { width: multiWidth, height: multiViewHeight };
 
   let character = '';
   if (user?.userInfo?.avatar) {
     character = JSON.parse(user?.userInfo?.avatar)?.value;
   }
   character = isMuteVideo ? 'jangok' : character;
-
-  const dispatch = useDispatch();
-  const setMainUser = (id: string) =>
-    dispatch(mainUserActionCreators.setMainUser(id));
-
-  /**
-   * 닉네임 표기 방법
-   * 닉네임(이름) > 이름
-   * @param {*} user
-   */
-  const getUserName = (user: any) => {
-    if (user.userInfo) {
-      if (user.userInfo.nickname) {
-        return user.userInfo.nickname + '(' + user.userInfo.userName + ')';
-      } else return user.userInfo.userName;
-    } else return user.name;
-  };
 
   const handleTouchView = () => {
     setMainUser(user.id);
@@ -51,10 +60,11 @@ const ParticipantBoxContainer = (props: {
       isMuteVideo={isMuteVideo}
       character={character}
       setMainUser={setMainUser}
-      getUserName={getUserName}
       isMultipleView={isMultipleView}
       index={index}
       handleTouchView={handleTouchView}
+      multiView={multiView}
+      orientation={orientation}
     />
   );
 };

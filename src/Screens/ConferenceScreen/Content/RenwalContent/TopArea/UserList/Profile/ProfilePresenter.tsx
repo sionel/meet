@@ -7,6 +7,9 @@ import { wehagoMainURL, wehagoDummyImageURL } from '@utils/index';
 import icMail from '@assets/icons/ic_mail.png';
 import icCall from '@assets/icons/ic_call.png';
 
+import Device from 'react-native-device-info'
+
+const isPad = Device.isTablet();
 const { width, height } = Dimensions.get('window');
 
 type ProfilePresenter = {
@@ -82,12 +85,13 @@ const styles = StyleSheet.create({
     fontFamily: 'DOUZONEText30',
     fontSize: 12,
     color: '#939393',
-    marginTop: height * 0.01
+    marginTop: height * 0.01,
+    textAlign: 'center'
   },
   bottomContainer: {
     flexDirection: 'column',
     justifyContent: 'flex-start',
-    paddingHorizontal: width * 0.05
+    paddingHorizontal: isPad ? 15 : width * 0.05
   },
   rowCenter: {
     flexDirection: 'row',
@@ -101,7 +105,7 @@ const styles = StyleSheet.create({
     marginRight: width * 0.02,
     marginVertical: height * 0.01,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   imageSize: {
     width: 18,

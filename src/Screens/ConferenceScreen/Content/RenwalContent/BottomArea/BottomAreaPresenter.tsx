@@ -43,10 +43,11 @@ type BottomAreaProps = {
   isMultipleView: boolean;
   setIsMultipleView: any;
   bottomPopup: ConferenceBottomPopupProps;
+  width: number;
+  height: number;
 };
 
 const isTablet = deviceInfoModule.isTablet();
-const { width, height } = Dimensions.get('screen');
 
 const BottomAreaPresenter = (props: BottomAreaProps) => {
   const {
@@ -67,10 +68,10 @@ const BottomAreaPresenter = (props: BottomAreaProps) => {
     userList,
     isMultipleView,
     setIsMultipleView,
-    bottomPopup
+    bottomPopup,
+    width,
+    height
   } = props;
-
-  const multiViewHeight = Platform.OS === 'ios' ? height * 0.7 : height * 0.65;
 
   return bottomPopup.popupType === 'CHATTING' ? null : (
     <View
@@ -81,8 +82,8 @@ const BottomAreaPresenter = (props: BottomAreaProps) => {
     >
       {Number(callType) === 2
         ? null
-        : (conferenceMode === ConferenceModes.CONTROL ||
-          !isScreenShare) && (
+        : conferenceMode === ConferenceModes.CONTROL &&
+          !isScreenShare && (
             <Fragment>
               {/* <PanGestureHandler
             onHandlerStateChange={({ nativeEvent }) => {
@@ -111,10 +112,9 @@ const BottomAreaPresenter = (props: BottomAreaProps) => {
                   numColumns={2}
                   style={{
                     marginTop: 10,
-                    // paddingLeft: '5%',
                     flex: 1,
-                    marginBottom : Platform.OS === 'ios' ? 10 : 0,
-                    height: multiViewHeight
+                    marginBottom: Platform.OS === 'ios' ? 10 : 0,
+                    height: Platform.OS === 'ios' ? height * 0.7 : height * 0.65
                   }}
                   renderItem={({ item, index }) => {
                     const { length } = list;
@@ -127,13 +127,15 @@ const BottomAreaPresenter = (props: BottomAreaProps) => {
                         isSelect={mainUserId === item.id}
                         isMultipleView={true}
                         setIsMultipleView={setIsMultipleView}
+                        width={width}
+                        height={height}
                       />
                     ) : null;
                   }}
                 />
               ) : (
                 <ScrollView
-                  horizontal={orientation === 'vertical'}
+                  horizontal={true}
                   showsHorizontalScrollIndicator={false}
                   contentContainerStyle={[
                     styles.scrollView,
@@ -148,6 +150,8 @@ const BottomAreaPresenter = (props: BottomAreaProps) => {
                       videoTrack={user.videoTrack}
                       isSelect={mainUserId === user.id}
                       isMultipleView={false}
+                      width={width}
+                      height={height}
                     />
                   ) : null}
                   {list.map(
@@ -158,6 +162,8 @@ const BottomAreaPresenter = (props: BottomAreaProps) => {
                           user={participant}
                           isSelect={mainUserId === participant.id}
                           isMultipleView={false}
+                          width={width}
+                          height={height}
                         />
                       )
                   )}
@@ -165,7 +171,7 @@ const BottomAreaPresenter = (props: BottomAreaProps) => {
               )}
             </Fragment>
           )}
-      <View style={{ flexDirection: 'row' }}>
+      <View style={{ flexDirection: 'row', marginTop: 24 }}>
         {/* 스피커 */}
         {!isTablet && (
           <TouchableOpacity
@@ -269,16 +275,31 @@ const styles = StyleSheet.create({
     flex: 1
   },
   multiViewTouch: {
-    width: width * 0.15,
-    height: height * 0.02,
+    width: 120,
+    height: 12,
     justifyContent: 'center',
     alignItems: 'center'
   },
   multiViewBar: {
-    width: width * 0.15,
-    height: height * 0.01,
+    width: 80,
+    height: 8,
     borderRadius: 3,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
+    elevation: 2,
+    ...Platform.select({
+      ios: {
+        shadowColor: 'rgb(50, 50, 50)',
+        shadowOpacity: 0.5,
+        shadowRadius: 5,
+        shadowOffset: {
+          height: -1,
+          width: 0
+        }
+      },
+      android: {
+        elevation: 3
+      }
+    })
   }
 });
 

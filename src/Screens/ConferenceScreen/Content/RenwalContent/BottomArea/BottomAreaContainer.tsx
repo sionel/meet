@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getConferenceManager } from '@utils/ConferenceManager';
 import { getT } from '@utils/translateManager';
 import BottomAreaPresenter from './BottomAreaPresenter';
@@ -9,6 +9,11 @@ import { actionCreators as masterActionCreators } from '@redux/master';
 import { actionCreators as toastActionCreators } from '@redux/toast';
 import { ParticipantsTypes } from '@redux/participants';
 import { ConferenceBottomPopupProps } from '../../ContentContainer';
+import { Dimensions, Platform } from 'react-native';
+import deviceInfoModule from 'react-native-device-info';
+
+const isTablet = deviceInfoModule.isTablet();
+const { width, height } = Dimensions.get('screen');
 
 type BottomAreaProps = {
   orientation: any;
@@ -24,9 +29,11 @@ type BottomAreaProps = {
 };
 
 const BottomAreaContainer = (props: BottomAreaProps) => {
-  // console.log(props);
-  
   const t = getT();
+
+  const [width, setWidth] = useState(Dimensions.get('screen').width);
+  const [height, setHeight] = useState(Dimensions.get('screen').height);
+
   //#region SELELTOR
   const {
     conferenceMode,
@@ -73,7 +80,7 @@ const BottomAreaContainer = (props: BottomAreaProps) => {
 
   const _handleToggleMic = () => {
     let conferenceManager = getConferenceManager();
-    
+
     if (isMasterControl) {
       if (isAudioActive) {
         // 참가자는 마스터가 제어중일때 오디오가 꺼져있으면 직접 컨트롤 할 수 없음
@@ -96,6 +103,20 @@ const BottomAreaContainer = (props: BottomAreaProps) => {
       toggleMuteMic();
     }
   };
+
+  useEffect(() => {
+    const updateLayout = () => {
+      setWidth(Dimensions.get('screen').width);
+      setHeight(Dimensions.get('screen').height);
+    };
+
+    Dimensions.addEventListener('change', updateLayout);
+
+    return () => {
+      Dimensions.removeEventListener('change', updateLayout);
+    };
+  });
+
   return (
     <BottomAreaPresenter
       orientation={orientation}
@@ -118,6 +139,9 @@ const BottomAreaContainer = (props: BottomAreaProps) => {
       isMultipleView={props.isMultipleView}
       setIsMultipleView={props.setIsMultipleView}
       bottomPopup={props.bottomPopup}
+      // multiViewH={multiViewH}
+      width={width}
+      height={height}
     />
   );
 };

@@ -79,9 +79,10 @@ function ContentContainer(props: any) {
     auth,
     masters,
     expireTime,
-    isLogin
+    isLogin,
+    isScreenShare
   } = useSelector((state: RootState) => {
-    const { local, mainUser, documentShare, root, user, participants, master } =
+    const { local, mainUser, documentShare, root, user, participants, master, screenShare } =
       state;
     return {
       conferenceMode: local.conferenceMode,
@@ -96,7 +97,8 @@ function ContentContainer(props: any) {
       auth: user.auth,
       isLogin: user.isLogin,
       participants: participants.list,
-      masters: master.masterList
+      masters: master.masterList,
+      isScreenShare: screenShare.isScreenShare,
     };
   });
 
@@ -111,22 +113,39 @@ function ContentContainer(props: any) {
   // console.log('auth : ', auth);
 
   let userList = participants.slice(0);
-  userList.unshift({
-    ...user,
-    userInfo: {
-      profile_url: auth.profile_url,
-      wehagoId: auth.portal_id,
-      userName: auth.user_name,
-      nickname: auth.nickname,
-      companyFullpath: auth?.last_company?.full_path
-        ? auth.last_company.full_path
-        : undefined,
-      user_email: auth.user_default_email,
-      user_contact: auth.user_contact,
-      isExternalParticipant: `${!isLogin}`,
-      isMobile: true
-    }
-  });
+
+  // if(auth === '{}')
+
+  // console.log(user);
+  
+  
+  if(auth.portal_id) {
+    userList.unshift({
+      ...user,
+      userInfo: {
+        profile_url: auth.profile_url,
+        wehagoId: auth.portal_id,
+        userName: auth.user_name,
+        nickname: auth.nickname,
+        companyFullpath: auth?.last_company?.full_path
+          ? auth.last_company.full_path
+          : undefined,
+        user_email: auth.user_default_email,
+        user_contact: auth.user_contact,
+        isExternalParticipant: `${!isLogin}`,
+        isMobile: true
+      }
+    });
+  } else {
+    userList.unshift({
+      ...user,
+      userInfo: {
+        userName: user.name,
+        isMobile: true,
+        isExternalParticipant: `${!isLogin}`,
+      }
+    });
+  }
 
   userList.forEach((user: any) => {
     user.isMaster = masters.includes(user?.userInfo?.wehagoId);
@@ -172,7 +191,7 @@ function ContentContainer(props: any) {
   }, [isMultipleView]);
 
   const _toggleConferenceMode = (NativeTouchEvent: NativeTouchEvent) => {
-    const { pageY } = NativeTouchEvent;
+    const { pageY } = NativeTouchEvent;      
 
     if (!isMultipleView) {
       if (bottomPopup.show) {

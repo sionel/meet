@@ -6,7 +6,6 @@ import {
   StyleSheet,
   Image,
   Platform,
-  Dimensions,
   TouchableHighlight
 } from 'react-native';
 import { RTCView } from 'react-native-webrtc';
@@ -20,26 +19,24 @@ import icMicOff from '@assets/icons/ic_mic_off.png';
 import CustomIcon from '@components/CustomIcon';
 import { ParticipantsTypes } from '@redux/participants';
 import { getT } from '@utils/translateManager';
+import deviceInfoModule from 'react-native-device-info';
 
-// const apiLevel = DeviceInfo.getAPILevel();
 const canUseStream = true;
-const { width, height } = Dimensions.get('window');
-const multiWidth = width * 0.425;
-const multiViewContainer = height * 0.75;
-const { OS } = Platform;
+const isTablet = deviceInfoModule.isTablet();
 
-// (Platform.OS === 'android' && apiLevel >= 26) || Platform.OS === 'ios';
+const { OS } = Platform;
 
 type ParticipantBoxProps = {
   videoTrack: any;
-  user: ParticipantsTypes & {isMuteMic? : boolean};
+  user: ParticipantsTypes & { isMuteMic?: boolean };
   isMuteVideo: boolean;
   character: string;
   setMainUser: (id: string) => void;
-  getUserName: (user: any) => string;
   isMultipleView: boolean;
   handleTouchView: () => void;
   index: any;
+  multiView: { width: number, height: number}
+  orientation: 'vertical' | 'horizontal'
 };
 
 /**
@@ -51,17 +48,17 @@ const ParticipantBoxPresenter = (props: ParticipantBoxProps) => {
     user,
     isMuteVideo,
     setMainUser,
-    getUserName,
     character,
     isMultipleView,
     handleTouchView,
-    index
+    index,
+    multiView,
+    orientation
   } = props;
 
   const t = getT();
   const stream = videoTrack && videoTrack.getOriginalStream();
-  const multiViewHeight = (multiViewContainer * 0.9) / 2;
-  const multiView = { width: multiWidth, height: multiViewHeight };
+
   const isMuteMic = user.isLocal
     ? user.isMuteMic
     : user.audioTrack === null
@@ -90,7 +87,7 @@ const ParticipantBoxPresenter = (props: ParticipantBoxProps) => {
               : imgCharacter01
           }
           resizeMode={'cover'}
-          style={styles.imageCameraOff}
+          style={[styles.imageCameraOff, orientation === 'horizontal' && isMultipleView && {width: '50%'}]}
         />
       </View>
     )
@@ -100,16 +97,28 @@ const ParticipantBoxPresenter = (props: ParticipantBoxProps) => {
     </View>
   );
 
+  /**
+   * 닉네임 표기 방법
+   * 닉네임(이름) > 이름
+   * @param {*} user
+   */
+  const getUserName = (user: any) => {
+    if (user.userInfo) {
+      if (user.userInfo.nickname) {
+        return user.userInfo.nickname + '(' + user.userInfo.userName + ')';
+      } else return user.userInfo.userName;
+    } else return user.name;
+  };
+
   return (
     <TouchableOpacity
       style={[
         styles.container,
         isMultipleView && {
-          width: multiWidth,
-          height: multiViewHeight,
+          ...multiView,
           marginHorizontal: 0
         },
-        index / 2 === 0 && { marginRight: 10 }
+        index % 2 === 0 && { marginRight: 10 }
       ]}
       onPress={handleTouchView}
     >
@@ -151,7 +160,13 @@ const ParticipantBoxPresenter = (props: ParticipantBoxProps) => {
           </View>
         )}
         {content}
-        <View style={[styles.nameArea, OS ==='android' && !isMultipleView && {bottom: 10}]}>
+        <View
+          style={[
+            styles.nameArea,
+            isMultipleView && {height: '15%'},
+            OS === 'android' && !isMultipleView && { bottom: 10 }
+          ]}
+        >
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             {isMultipleView && (
               <Fragment>
@@ -246,7 +261,7 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     borderRadius: 6,
     overflow: 'hidden',
-    flexDirection: 'column',
+    flexDirection: 'column'
   },
   videoAreaSelected: {
     borderWidth: 3,
@@ -257,7 +272,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgb(187,197,208)',
     justifyContent: 'center',
     alignItems: 'center',
-    width: 104,
+    width: 105,
     height: 120
   },
   profile: {
@@ -267,13 +282,11 @@ const styles = StyleSheet.create({
   nameArea: {
     position: 'absolute',
     width: '100%',
-    height: '20%',
+    height: isTablet ? '25%' : '20%',
     bottom: 0,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(0,0,0,0.2)',
-    // zIndex: 3,
-    // elevation: 3
+    backgroundColor: 'rgba(0,0,0,0.2)'
   },
   name: {
     color: '#fff',
