@@ -1,5 +1,5 @@
 import { ParticipantsTypes } from '@redux/participants';
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment, MutableRefObject } from 'react';
 import {
   Animated,
   Dimensions,
@@ -34,8 +34,8 @@ const leftSwipeWidth = width * 0.3;
 
 type UserListPresenter = {
   userList: ParticipantsTypes[];
-  isMasterControl: any;
-  swipeRef: any;
+  isMasterControl: boolean;
+  swipeRef: MutableRefObject<any>;
   handelProfileTouch: (item: ParticipantsTypes) => void;
 };
 

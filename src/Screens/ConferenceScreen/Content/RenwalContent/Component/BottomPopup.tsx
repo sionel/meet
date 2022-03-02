@@ -21,7 +21,7 @@ import _ from 'underscore';
 import icBackW from '@assets/icons/ic_back_w.png';
 import icPersonPlusW from '@assets/icons/ic_person_plus_w.png';
 
-import Device from 'react-native-device-info'
+import Device from 'react-native-device-info';
 
 const isPad = Device.isTablet();
 
@@ -63,15 +63,24 @@ export default function BottomPopup(
 
   const { OS } = Platform;
 
-
   return popupType === 'CHATTING' ? (
     <Chatting />
   ) : (
-    <BlurView style={styles.botVerPopContainer} overlayColor="rgba(0,0,0,0.01)">
+    <BlurView
+      style={[
+        styles.botVerPopContainer,
+        title === '더보기' && isPad && { right: 40 }
+      ]}
+      overlayColor="rgba(0,0,0,0.01)"
+    >
       <View
         style={{
           backgroundColor: 'rgba(0,0,0,0.4)',
-          paddingBottom: isPad ? 10 : OS === 'ios' ? height * 0.05 : height * 0.03
+          paddingBottom: isPad
+            ? 10
+            : OS === 'ios'
+            ? height * 0.05
+            : height * 0.03
         }}
         onTouchStart={() => popupType !== 'NORMAL' && setIsPopupTouch(true)}
       >
@@ -95,9 +104,7 @@ export default function BottomPopup(
             </TouchableHighlight>
           )}
           <Text style={styles.headerText}>{title}</Text>
-          {popupType === 'PROFILE' && (
-            <View style={styles.size24} />
-          )}
+          {popupType === 'PROFILE' && <View style={styles.size24} />}
           {popupType === 'USERLIST' && (
             <TouchableHighlight
               activeOpacity={0.5}
@@ -161,25 +168,27 @@ export default function BottomPopup(
 }
 
 const styles = StyleSheet.create({
-  botVerPopContainer: !isPad ? {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    zIndex: 2,
-    elevation: 2,
-    flex: 1,
-    maxHeight: height * 0.62
-  } : {
-    position: 'absolute',
-    right: 0,
-    top: '10%',
-    zIndex: 2,
-    elevation: 2,
-    flex: 1,
-    width: 300,
-    maxHeight: height * 0.62
-  },
+  botVerPopContainer: !isPad
+    ? {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: 2,
+        elevation: 2,
+        flex: 1,
+        maxHeight: height * 0.62
+      }
+    : {
+        position: 'absolute',
+        right: 60,
+        top: '10%',
+        zIndex: 2,
+        elevation: 2,
+        flex: 1,
+        width: 300,
+        maxHeight: height * 0.62
+      },
   verHeaderConatainer: {
     marginTop: 16,
     height: 48,

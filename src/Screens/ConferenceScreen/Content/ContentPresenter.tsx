@@ -107,7 +107,6 @@ const ContentPresenter = (props: ContentPresenterProps) => {
         isVideoReverse={isVideoReverse}
         objectFit={objectFit}
         isMultipleView={isMultipleView}
-        setIsMultipleView={setIsMultipleView}
       />
       {!localPipMode && <BottomArea {...props} />}
       {bottomPopup.show && (

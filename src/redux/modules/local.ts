@@ -3,6 +3,7 @@ import { getConferenceManager } from '@utils/ConferenceManager';
 import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import { RootState } from '../configureStore';
+import { MobileInfoType, WebInfoType } from './participants';
 //#region Action Types
 
 // JOIN_CONFERENCE
@@ -53,6 +54,15 @@ interface ConferenceType {
   videoTrack: any;
 }
 
+type message = {
+  user: string;
+  text: string;
+  date: string;
+  isRead: boolean;
+  name: string;
+  userInfo: MobileInfoType | WebInfoType;
+}
+
 export interface state {
   user: any;
   conferenceMode: string;
@@ -61,7 +71,7 @@ export interface state {
   createdTime: number | null;
   expireTime: number | null;
   callType: string | null;
-  message: any[];
+  message: message[];
   pipMode: boolean;
   externalAPIScope: string;
 }
@@ -85,7 +95,7 @@ const initialState = {
 
 //#region reducer
 
-function reducer(state = initialState, action: AnyAction) {
+function reducer(state = initialState, action: AnyAction) { 
   switch (action.type) {
     case JOIN_CONFERENCE:
       return applyJoinConference(state, action);

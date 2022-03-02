@@ -753,6 +753,30 @@ export default {
       return response;
     }
   },
+  // 3-46 접속코드 검색
+  getJoincode: async (
+    auth: apiAuthInfo,
+    roomId: string,
+  ) => {
+    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
+    const url = `${meetURL}/joincode/session?room=${roomId}&cno=${cno}`;
+    const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
+    const data = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        ...headers
+      }
+    };
+
+    const response = await Axios<string>(url, data);
+    if (isSuccess(response)) {
+      return response;
+    } else {
+      console.warn('3-46.getJoincode : ', response);
+      return response;
+    }
+  },
 
   getExpireTime: async (roomId: string) => {
     let url = '';

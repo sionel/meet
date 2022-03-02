@@ -384,6 +384,8 @@ PODS:
     - React
   - RNCAsyncStorage (1.13.2):
     - React
+  - RNCClipboard (1.8.5):
+    - React-Core
   - RNCMaskedView (0.1.11):
     - React
   - RNDefaultPreference (1.4.2):
@@ -475,6 +477,7 @@ DEPENDENCIES:
   - ReactNativeIncallManager (from `../node_modules/react-native-incall-manager`)
   - ReactNativePermissions (from `../node_modules/react-native-permissions`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
+  - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - RNDefaultPreference (from `../node_modules/react-native-default-preference`)
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
@@ -606,6 +609,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-permissions"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
+  RNCClipboard:
+    :path: "../node_modules/@react-native-clipboard/clipboard"
   RNCMaskedView:
     :path: "../node_modules/@react-native-community/masked-view"
   RNDefaultPreference:
@@ -703,6 +708,7 @@ SPEC CHECKSUMS:
   ReactNativeIncallManager: a840ef75640518065742a893e6c6ff98ee820039
   ReactNativePermissions: f3beb8871251594a8ea2c6b19a3f8252d5c7379d
   RNCAsyncStorage: 05bae7ecfab1cbd5441993f1ca098f7c3b3f8d0e
+  RNCClipboard: cc054ad1e8a33d2a74cd13e565588b4ca928d8fd
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNDefaultPreference: 1f8133ec0bc0f9453cdada578564ba1ef551fb44
   RNDeviceInfo: 87d2d175c760f6bcf58acd036f887e8b2392802c
@@ -721,6 +727,6 @@ SPEC CHECKSUMS:
   SDWebImageWebPCoder: 947093edd1349d820c40afbd9f42acb6cdecd987
   Yoga: 96b469c5e81ff51b917b92e8c3390642d4ded30c
 
-PODFILE CHECKSUM: a84c40ee8d37623ac3e081e8ee1496d19fd1ab2b
+PODFILE CHECKSUM: 271b50d433837e7dd035cd64692887e48aebc3b3
 
 COCOAPODS: 1.11.2

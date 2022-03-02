@@ -2,10 +2,12 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { View, StyleSheet, Animated, Text, Dimensions } from 'react-native';
-
+import deviceInfoModule from 'react-native-device-info';
 import { useSelector, useDispatch } from 'react-redux';
 
-const {width, height} = Dimensions.get('screen');
+const isPad = deviceInfoModule.isTablet();
+const { width, height } = Dimensions.get('screen');
+
 export default function SimpleNoti() {
   const toggleFlag = useSelector(state => state.toast['toggleFlag']);
   const toastMessage = useSelector(state => state.toast['toastMessage']);
@@ -67,12 +69,17 @@ export default function SimpleNoti() {
     );
   }, [toggleFlag]);
 
-  return (
-    message ? <Animated.View
+  return message ? (
+    <Animated.View
       style={[
         styles.container,
         {
           opacity: fadeAnimation // Bind opacity to animated value
+        },
+        isPad && {
+          bottom: height * 0.3,
+          width: 343,
+          marginHorizontal: (width - 343) / 2
         }
       ]}
     >
@@ -81,8 +88,8 @@ export default function SimpleNoti() {
         <Text style={styles.noti}>{message}</Text>
       </View>
       {/* </View> */}
-    </Animated.View> : null
-  );
+    </Animated.View>
+  ) : null;
   // ) : (
   //   <></>
   // );

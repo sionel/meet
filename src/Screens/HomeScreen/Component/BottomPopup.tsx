@@ -11,7 +11,10 @@ import {
   StyleSheet,
   Platform
 } from 'react-native';
+import deviceInfoModule from 'react-native-device-info';
 // import {Text,TextInput} from '../@components/StyledText';
+
+const isPad = deviceInfoModule.isTablet();
 const { OS } = Platform;
 const { width, height } = Dimensions.get('window');
 const icPerson = require('@assets/icons/ic_user.png');
@@ -33,7 +36,7 @@ export default function BottomPopup(
   props: BottomPopupProps & { isHorizon: boolean }
 ) {
   const { title, contentList, onClickOutside, isHorizon } = props;
-  return isHorizon ? (
+  return isHorizon || isPad ? (
     <View style={styles.botPopContainer}>
       <SafeAreaView style={styles.popupSafeAreaView}>
         <TouchableOpacity

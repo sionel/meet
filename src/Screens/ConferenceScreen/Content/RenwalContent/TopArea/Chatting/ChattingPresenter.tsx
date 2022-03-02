@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, MutableRefObject } from 'react';
 import {
   // ScrollView,
   FlatList,
@@ -10,7 +10,9 @@ import {
   Platform,
   Dimensions,
   Image,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  NativeSyntheticEvent,
+  NativeScrollEvent
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { getT } from '@utils/translateManager';
@@ -19,11 +21,24 @@ import icTrans from '@assets/icons/ic_translator.png';
 import icSend from '@assets/icons/ic_send.png';
 import icSendW from '@assets/icons/ic_send_w.png';
 import { wehagoMainURL, wehagoDummyImageURL } from '@utils/index';
+import deviceInfoModule from 'react-native-device-info';
 
+const isPad = deviceInfoModule.isTablet();
 
-const { width, height } = Dimensions.get('screen');
+type ChattingPresenterProps = {
+  cdm: boolean;
+  user: any;
+  messages: any[];
+  myMessage: string;
+  onSendTextMessage: () => void;
+  scrollRef: MutableRefObject<any>;
+  setIsEndScroll: any;
+  setCdm: React.Dispatch<React.SetStateAction<boolean>>;
+  setMyMessage: React.Dispatch<React.SetStateAction<string>>;
+  isHorizon: boolean;
+};
 
-const ChattingPresenter = (props: any) => {
+const ChattingPresenter = (props: ChattingPresenterProps) => {
   const {
     cdm,
     user,
@@ -34,8 +49,7 @@ const ChattingPresenter = (props: any) => {
     setIsEndScroll,
     setCdm,
     setMyMessage,
-    keyboardShow,
-    keyboardHeight
+    isHorizon
   } = props;
 
   const { OS } = Platform;
@@ -52,11 +66,10 @@ const ChattingPresenter = (props: any) => {
       } else return user.userInfo.userName;
     } else return user.name;
   };
-  
 
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+      style={[styles.container, isPad && { width: isHorizon ? '36%' : '49%' }]}
       behavior={OS === 'ios' ? 'padding' : 'height'}
       enabled={true}
     >
@@ -96,7 +109,6 @@ const ChattingPresenter = (props: any) => {
           data={messages}
           keyExtractor={(item, index) => String(index)}
           renderItem={({ item, index }) => {
-
             if (!cdm && index === messages.length - 1) {
               setCdm(true);
             }
@@ -204,7 +216,7 @@ const styles = StyleSheet.create({
   container: {
     // maxHeight: height * 0.5,
     flex: 1,
-    paddingHorizontal: width * 0.04
+    paddingHorizontal: 16
   },
   chatContainer: {
     alignItems: 'flex-start',

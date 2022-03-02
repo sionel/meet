@@ -67,9 +67,10 @@ export default function ConferenceBox(props: ReservationCardProps) {
         onPress={() => reservationMoreClick(roomId)}
       >
         <View style={styles.profileImageList}>
-          {users.map((user: { type: string | number; value: string }) => {
+          {users.map((user: { type: string | number; value: string }, index) => {     
             return user.type === 'string' ? (
               <Image
+                key={index}
                 source={{
                   uri: user.value
                 }}

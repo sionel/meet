@@ -15,8 +15,6 @@ import LinearGradient from 'react-native-linear-gradient';
 
 import icoScreenShagre from '@oldassets/icons/icoScreenShagre.png';
 import Device from 'react-native-device-info';
-
-const { height, width } = Dimensions.get('screen');
 const isTablet = Device.isTablet();
 
 type MainPresenterProps = {
@@ -25,8 +23,8 @@ type MainPresenterProps = {
   videoType: any;
   isVideoReverse: boolean;
   drawing: any;
-  localPipMode: any;
-  objectFit: any;
+  localPipMode: boolean;
+  objectFit: 'cover' | 'contain';
   mainUser: any;
   isMultipleView: boolean;
   isScreenShare: boolean;

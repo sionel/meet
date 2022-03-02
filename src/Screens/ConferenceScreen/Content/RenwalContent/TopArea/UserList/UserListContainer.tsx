@@ -1,7 +1,7 @@
 import { ParticipantsTypes } from '@redux/participants';
 import { ConferenceBottomPopupProps } from '@screens/ConferenceScreen/Content/ContentContainer';
 import { getT } from '@utils/translateManager';
-import React, { useEffect, useState } from 'react';
+import React, { MutableRefObject, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/configureStore';
 import UserListPresenter from './UserListPresenter';
@@ -20,7 +20,7 @@ export const UserListContainer = (props: UserListContainer) => {
   const { contentList, bottomPopup, handleBottomPopup, setIsPopupTouch } =
     props;
 
-  const swipeRef = React.useRef([]);
+  const swipeRef: MutableRefObject<any> = React.useRef([]);
 
   const { isMasterControl } = useSelector((state: RootState) => {
     const { master } = state;

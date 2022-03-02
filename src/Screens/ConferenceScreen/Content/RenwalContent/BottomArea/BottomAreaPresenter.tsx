@@ -41,7 +41,7 @@ type BottomAreaProps = {
   list: ParticipantsTypes[];
   userList: ParticipantsTypes[];
   isMultipleView: boolean;
-  setIsMultipleView: any;
+  setIsMultipleView: React.Dispatch<React.SetStateAction<boolean>>;
   bottomPopup: ConferenceBottomPopupProps;
   width: number;
   height: number;

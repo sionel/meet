@@ -3,24 +3,25 @@ import {
   Alert,
   Dimensions,
   GestureResponderEvent,
+  Linking,
   NativeModules,
   NativeTouchEvent,
   Platform,
   Share
 } from 'react-native';
+
 import ContentPresenter from './ContentPresenter';
 import FileSharing from './FileSharing';
-import { ConferenceModes } from '@utils/Constants';
+import { ConferenceBotPopupContent } from './RenwalContent/Component/BottomPopup';
+import Clipboard from '@react-native-clipboard/clipboard';
 import DeviceInfo from 'react-native-device-info';
 import _ from 'underscore';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { actionCreators as localAction } from '@redux/local';
 import { actionCreators as mainUserAction } from '@redux/mainUser';
+import { actionCreators as toastActionCreators } from '@redux/toast';
 import { RootState } from '../../../redux/configureStore';
-import { getConferenceManager } from '@utils/ConferenceManager';
-import { ConferenceBotPopupContent } from './RenwalContent/Component/BottomPopup';
-import { getT } from '@utils/translateManager';
 
 import icOrganizationW from '@assets/icons/ic_organization_w.png';
 import icMailW from '@assets/icons/ic_mail_w.png';
@@ -28,6 +29,12 @@ import icPhoneW from '@assets/icons/ic_phone_w.png';
 import icShareW from '@assets/icons/ic_share_w.png';
 import icLinkW from '@assets/icons/ic_link_w.png';
 import icCodeW from '@assets/icons/ic_code.png';
+
+import { getConferenceManager } from '@utils/ConferenceManager';
+import { getT } from '@utils/translateManager';
+import { ConferenceModes } from '@utils/Constants';
+import { MeetApi } from '@services/index';
+import { isSuccess } from '@services/types';
 
 export type ConferenceBottomPopupProps = {
   show: boolean;
@@ -64,8 +71,11 @@ function ContentContainer(props: any) {
     popupType: 'NORMAL'
   });
   const [isPopupTouch, setIsPopupTouch] = useState(false);
+  // console.log('props : ', props);
 
-  const { mainUser, onClose, createdTime } = props;
+  const { mainUser, onClose, createdTime, id: roomId } = props;
+  // console.log(roomId);
+
   const { videoTrack, isMuteVideo } = mainUser;
   // const localPipMode = useSelector((state: RootState) => state.local.pipMode);
   const {
@@ -82,8 +92,16 @@ function ContentContainer(props: any) {
     isLogin,
     isScreenShare
   } = useSelector((state: RootState) => {
-    const { local, mainUser, documentShare, root, user, participants, master, screenShare } =
-      state;
+    const {
+      local,
+      mainUser,
+      documentShare,
+      root,
+      user,
+      participants,
+      master,
+      screenShare
+    } = state;
     return {
       conferenceMode: local.conferenceMode,
       localPipMode: local.pipMode,
@@ -98,28 +116,21 @@ function ContentContainer(props: any) {
       isLogin: user.isLogin,
       participants: participants.list,
       masters: master.masterList,
-      isScreenShare: screenShare.isScreenShare,
+      isScreenShare: screenShare.isScreenShare
     };
   });
 
   const dispatch = useDispatch();
   const setConferenceMode = (mode: any) =>
     dispatch(localAction.setConferenceMode(mode));
-  // const setDrawingMode = (value: any) =>
-  //   dispatch(mainUserAction.setDrawingMode(value));
   const setDocumentListMode = (value: any) =>
     dispatch(mainUserAction.setDocumentListMode(value));
-
-  // console.log('auth : ', auth);
+  const setToastMessage = (msg: string) =>
+    dispatch(toastActionCreators.setToastMessage(msg));
 
   let userList = participants.slice(0);
 
-  // if(auth === '{}')
-
-  // console.log(user);
-  
-  
-  if(auth.portal_id) {
+  if (auth.portal_id) {
     userList.unshift({
       ...user,
       userInfo: {
@@ -142,7 +153,7 @@ function ContentContainer(props: any) {
       userInfo: {
         userName: user.name,
         isMobile: true,
-        isExternalParticipant: `${!isLogin}`,
+        isExternalParticipant: `${!isLogin}`
       }
     });
   }
@@ -191,7 +202,7 @@ function ContentContainer(props: any) {
   }, [isMultipleView]);
 
   const _toggleConferenceMode = (NativeTouchEvent: NativeTouchEvent) => {
-    const { pageY } = NativeTouchEvent;      
+    const { pageY } = NativeTouchEvent;
 
     if (!isMultipleView) {
       if (bottomPopup.show) {
@@ -222,21 +233,34 @@ function ContentContainer(props: any) {
     setBottomPopup({
       ...bottomPopup,
       contentList: userList,
-      title: t('참석자리스트'),
+      title: t('참석자 리스트'),
       popupType: 'USERLIST'
     });
     setIsPopupTouch(false);
   };
 
-  const onShare = async () => {
+  const handleEmail = async () => {
+    Linking.openURL(`mailto:?body=https://video.wehago.com/video?room=${roomId}`) 
+  };
+
+  const handleSms = async () => {
+    const SMSDivider: string = Platform.OS === 'android' ? '?' : '&';
+    Linking.openURL(
+      `sms:${SMSDivider}body=https://video.wehago.com/video?room=${roomId}`
+    );
+  };
+
+  const handleShare = async () => {
     try {
       const result = await Share.share({
-        url: 'https://www.google.com'
+        title: '링크 공유',
+        message: `https://video.wehago.com/video?room=${roomId}`
       });
 
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
           // shared with activity type of result.activityType
+          console.log(result.activityType);
         } else {
           // shared
         }
@@ -248,46 +272,22 @@ function ContentContainer(props: any) {
     }
   };
 
-  const onSms = async () => {
-    try {
-      const result = await Share.share(
-        {
-          message: 'https://www.google.com'
-        },
-        {
-          excludedActivityTypes: [
-            'com.apple.UIKit.activity.PostToFacebook',
-            'com.apple.UIKit.activity.PostToTwitter',
-            'com.apple.UIKit.activity.Mail',
-            'com.apple.UIKit.activity.Print',
-            'com.apple.UIKit.activity.CopyToPasteboard',
-            'com.apple.UIKit.activity.AssignToContact',
-            'com.apple.UIKit.activity.SaveToCameraRoll',
-            'com.apple.UIKit.activity.AddToReadingList',
-            'com.apple.UIKit.activity.PostToFlickr',
-            'com.apple.UIKit.activity.PostToVimeo',
-            'com.apple.UIKit.activity.PostToTencentWeibo',
-            'com.apple.UIKit.activity.AirDrop',
-            'com.apple.UIKit.activity.OpenInIBooks',
-            'com.apple.UIKit.activity.MarkupAsPDF',
-            'com.apple.reminders.RemindersEditorExtension', //Reminders
-            'com.apple.mobilenotes.SharingExtension', // Notes
-            'com.apple.mobileslideshow.StreamShareService'
-          ]
-        }
-      );
+  const handleLinkCopy = async () => {
+    Clipboard.setString(`https://video.wehago.com/video?room=${roomId}`);
+    //다국어 필요
+    setToastMessage(t('공유링크가 복사되었습니다.'));
+  };
 
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-          // shared with activity type of result.activityType
-        } else {
-          // shared
-        }
-      } else if (result.action === Share.dismissedAction) {
-        // dismissed
-      }
-    } catch (error) {
-      console.warn(error);
+  const handleJoincodeCopy = async () => {
+    let joincode;
+    const getJoincode = await MeetApi.getJoincode(auth, roomId);
+    if (isSuccess(getJoincode)) {
+      joincode = getJoincode.resultData;
+      Clipboard.setString(joincode);
+      //다국어 필요
+      setToastMessage(t('참여코드가 복사되었습니다.'));
+    } else {
+      console.warn('3-46 getJoincode : ', getJoincode.errors);
     }
   };
 
@@ -300,31 +300,31 @@ function ContentContainer(props: any) {
     const email = {
       icon1: icMailW,
       name: t('이메일로 초대하기'),
-      onClick: () => {}
+      onClick: () => handleEmail()
     };
     const phone = {
       icon1: icPhoneW,
       name: t('SMS로 초대하기'),
-      onClick: () => onSms()
+      onClick: () => handleSms()
     };
     const share = {
       icon1: icShareW,
       name: t('공유하기'),
-      onClick: () => onShare()
+      onClick: () => handleShare()
     };
     const link = {
       icon1: icLinkW,
       name: t('공유링크 복사하기'),
-      onClick: () => {}
+      onClick: () => handleLinkCopy()
     };
     const code = {
       icon1: icCodeW,
       name: t('참여코드 복사하기'),
-      onClick: () => {}
+      onClick: () => handleJoincodeCopy()
     };
 
     setBottomPopup({
-      contentList: [organization, email, phone, share, link, code],
+      contentList: [email, phone, share, link, code],
       show: true,
       title: t('참석자 초대'),
       popupType: 'NORMAL'

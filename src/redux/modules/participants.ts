@@ -37,7 +37,7 @@ const SET_KICK = 'participants.SET_KICK';
 
 //#region Initial State
 
-interface MobileInfoType {
+export interface MobileInfoType {
   companyFullpath: string;
   externalUserId: string;
   isExternalParticipant: string;
@@ -47,7 +47,7 @@ interface MobileInfoType {
   wehagoId: string;
 }
 
-interface WebInfoType {
+export interface WebInfoType {
   avatar: string;
   companyFullpath: string;
   host: string;

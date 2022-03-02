@@ -17,6 +17,7 @@ import icSketch from '@assets/icons/ic_sketch.png';
 import icWrite from '@assets/icons/ic_write.png';
 import icoScreenShagre from '@oldassets/icons/icoScreenShagre.png';
 import { ParticipantsTypes } from '@redux/participants';
+import deviceInfoModule from 'react-native-device-info';
 
 type TopAreaContainerProps = {
   callType: number;
@@ -34,6 +35,8 @@ type TopAreaContainerProps = {
   setIsMultipleView: () => void;
   selectedRoomName: string;
 };
+
+const isPad = deviceInfoModule.isTablet();
 
 const TopAreaContainer = (props: TopAreaContainerProps) => {
   const t = getT();
@@ -128,7 +131,7 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
     });
   };
 
-  const handdleUserListClick = (e:GestureResponderEvent) => {
+  const handdleUserListClick = (e: GestureResponderEvent) => {
     if (bottomPopup.show) {
       onExitPopup();
     } else {
@@ -194,12 +197,19 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
       //   onClick: () => {}
       // };
 
-      handleBottomPopup({
-        contentList: [sketch, document, share],
-        show: true,
-        title: t('더보기'),
-        popupType: 'NORMAL'
-      });
+      isPad
+        ? handleBottomPopup({
+            contentList: [sketch, document],
+            show: true,
+            title: t('더보기'),
+            popupType: 'NORMAL'
+          })
+        : handleBottomPopup({
+            contentList: [sketch, document, share],
+            show: true,
+            title: t('더보기'),
+            popupType: 'NORMAL'
+          });
     }
   };
 
@@ -225,17 +235,10 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
   return (
     <TopAreaPresenter
       talkButton={talkButton}
-      penButton={penButton}
-      docShareButton={docShareButton}
-      screenShareButton={screenShareButton}
       switchButton={switchButton}
       reverseButton={reverseButton}
-      orientation={orientation}
-      onChangeDrawingMode={props.onChangeDrawingMode}
-      toggleDocumentListMode={toggleDocumentListMode}
       toggleCameraFacingMode={toggleCameraFacingMode}
       onReverseVideo={props.onReverseVideo}
-      conferenceMode={conferenceMode}
       mainUser={mainUser}
       elapsedTime={time}
       isMaster={isMainUserMaster}

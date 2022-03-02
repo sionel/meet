@@ -24,7 +24,7 @@ type BottomAreaProps = {
   onChangeMicMaster: () => void;
   userList: ParticipantsTypes[];
   isMultipleView: boolean;
-  setIsMultipleView: () => void;
+  setIsMultipleView: React.Dispatch<React.SetStateAction<boolean>>;
   bottomPopup: ConferenceBottomPopupProps;
 };
 

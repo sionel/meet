@@ -27,7 +27,7 @@ const ConferenceScreenPresenter = props => {
   if (localPipMode !== pipMode) {
     dispatch({ type: 'local.CONFERENCE_PIP_MODE', pipMode });
   }
-
+  
   return (
     <View
       style={{
@@ -56,6 +56,7 @@ const ConferenceScreenPresenter = props => {
           onChangeDocumentPage={props.onChangeDocumentPage}
           onChangeMicMaster={props.onChangeMicMaster}
           createdTime={props.createdTime}
+          {...props.route.params}
         />
       ) : isWehagoV ? (
         <WatingScreen orientation={props.orientation} onClose={props.onClose} />

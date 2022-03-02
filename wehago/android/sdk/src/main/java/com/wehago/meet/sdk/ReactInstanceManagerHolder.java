@@ -211,6 +211,7 @@ class ReactInstanceManagerHolder {
                 new com.swmansion.rnscreens.RNScreensPackage(),
                 new org.reactnative.maskedview.RNCMaskedViewPackage(),
                 new com.cmcewen.blurview.BlurViewPackage(),
+                new com.reactnativecommunity.clipboard.ClipboardPackage(),
                 new ReactPackageAdapter() {
                     @Override
                     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
 import ChattingPresenter from './ChattingPresenter';
 import ConferenceManager from '@utils/conference/ConferenceManager';
 import { actionCreators as localAction } from '@redux/local';
@@ -11,15 +11,15 @@ const ChattingContainer = () => {
   const [cdm, setCdm] = useState(false);
   const [isEndScroll, setIsEndScroll] = useState(true);
   const [keyboardShow, setKeyboardShow] = useState(false);
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
 
-  const scrollRef: any = useRef();
+  const scrollRef: MutableRefObject<any> = useRef();
   const { OS } = Platform;
-  const { messages, user } = useSelector((state: RootState) => {
-    const { local } = state;
+  const { messages, user, isHorizon } = useSelector((state: RootState) => {
+    const { local, orientation } = state;
     return {
       messages: local.message,
-      user: local.user
+      user: local.user,
+      isHorizon: orientation.isHorizon
     };
   });
 
@@ -92,8 +92,7 @@ const ChattingContainer = () => {
       setMyMessage={setMyMessage}
       user={user}
       messages={messages}
-      keyboardShow={keyboardShow}
-      keyboardHeight={keyboardHeight}
+      isHorizon={isHorizon}
     />
   );
 };

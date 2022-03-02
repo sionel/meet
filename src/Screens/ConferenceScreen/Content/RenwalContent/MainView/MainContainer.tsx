@@ -12,9 +12,8 @@ type MainContainerProps = {
   mainUser: any;
   onClose: () => void;
   isVideoReverse: boolean;
-  objectFit: any
+  objectFit: 'cover' | 'contain';
   isMultipleView: boolean;
-  setIsMultipleView: () => void;
 };
 
 const MainContainer = (props: MainContainerProps) => {
@@ -24,29 +23,20 @@ const MainContainer = (props: MainContainerProps) => {
   let timeout: ReturnType<typeof setTimeout>,
     timer: ReturnType<typeof setInterval>;
 
-  const {
-    videoPolicy,
-    auth,
-    loginType,
-    createdTime,
-    localPipMode,
-    drawingMode,
-    isScreenShare
-  } = useSelector((state: RootState) => {
-    const { root, user, local, mainUser, screenShare } = state;
-    return {
-      videoPolicy: root.videoPolicy,
-      auth: user.auth,
-      loginType: user.loginType,
-      createdTime: local.createdTime,
-      localPipMode: local.pipMode,
-      drawingMode: mainUser.drawingMode,
-      isScreenShare: screenShare.isScreenShare
-    };
-  });
+  const { localPipMode, drawingMode, isScreenShare } = useSelector(
+    (state: RootState) => {
+      const { local, mainUser, screenShare } = state;
+      return {
+        localPipMode: local.pipMode,
+        drawingMode: mainUser.drawingMode,
+        isScreenShare: screenShare.isScreenShare
+      };
+    }
+  );
 
   const dispatch = useDispatch();
-  const toggleScreenFlag = () => dispatch(ScreenShareCreators.toggleScreenFlag());
+  const toggleScreenFlag = () =>
+    dispatch(ScreenShareCreators.toggleScreenFlag());
 
   const {
     mainUser: { videoTrack, isMuteVideo },

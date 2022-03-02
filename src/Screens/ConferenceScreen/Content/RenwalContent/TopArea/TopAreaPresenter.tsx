@@ -24,17 +24,10 @@ const { height, width } = Dimensions.get('screen');
 
 type TopAreaPresenterProps = {
   talkButton: boolean;
-  penButton: boolean;
-  docShareButton: boolean;
-  screenShareButton: boolean;
   switchButton: boolean;
   reverseButton: boolean;
-  orientation: 'horizontal' | 'vertical';
-  onChangeDrawingMode: (value: any) => void;
-  toggleDocumentListMode: Function;
   toggleCameraFacingMode: () => void;
   onReverseVideo: () => void;
-  conferenceMode: string;
   mainUser: any;
   elapsedTime: string;
   isMaster: boolean;
@@ -49,17 +42,10 @@ type TopAreaPresenterProps = {
 const TopAreaPresenter = (props: TopAreaPresenterProps) => {
   const {
     talkButton,
-    penButton,
-    docShareButton,
-    screenShareButton,
     switchButton,
     reverseButton,
-    orientation,
-    onChangeDrawingMode,
-    toggleDocumentListMode,
     toggleCameraFacingMode,
     onReverseVideo,
-    conferenceMode,
     mainUser,
     elapsedTime,
     isMaster,
