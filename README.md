@@ -193,6 +193,15 @@ task androidSourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
     include '**/*.java'
 } => 이부분 주석 처리
+
+13. xcode 아카이브 할 때'iOS main.jsbundle does not exists' 오류
+
+node_modules/react-native/scripts/react-native-xcode.sh 상단에
+
+추가 * export PATH="$PATH:/opt/homebrew/bin"
+export NODE_BINARY=node *
+참조 : https://github.com/facebook/react-native/issues/25522
+
 ## 스토어 주소
 ios : https://itunes.apple.com/app/id1455726925?mt=8
 android : https://play.google.com/store/apps/details?id=com.wehago.meet

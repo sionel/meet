@@ -375,7 +375,8 @@
       "option_system": "시스템",
       "option_conference": "화상회의",
       "company_change":"회사 변경",
-      "company_select":"회사 선택"
+      "company_select":"회사 선택",
+      "login_logo":"로 시작하기"
     }
   }
 }

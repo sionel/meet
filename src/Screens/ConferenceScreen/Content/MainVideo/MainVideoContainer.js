@@ -20,24 +20,26 @@ class MainVideoContainer extends React.Component {
   }
 
   componentDidMount() {
-    const { expireTime } = this.props;
     this._timer = setInterval(() => {
-      if (createdTime) {
-        if (expireTime !== null) {
+      if (this.props.createdTime) {
+        if (this.props.expireTime !== null) {
           let limitTime = this.props.limitedTime - 500;
           let remainTime = Math.floor(limitTime / 1000);
           
           this.setState({ time: remainTime });
           this.props.setLimitedTime(limitTime);
 
-          if (limitTime < 500) {
+          if (limitTime < 3540000) {
             this.props.onClose();
             Alert.alert('회의 종료', '회의시간이 60분 지나 회의가 종료됩니다.');
           }
+          // if (limitTime < 500) {
+          //   this.props.onClose();
+          //   Alert.alert('회의 종료', '회의시간이 60분 지나 회의가 종료됩니다.');
+          // }
         } else {
           let nowTime = Date.now();
-          let normalTime = Math.floor((nowTime - createdTime) / 1000);
-
+          let normalTime = Math.floor((nowTime - this.props.createdTime) / 1000);
           this.state.time > 0 && this.setState({ time: normalTime });
         }
       }
