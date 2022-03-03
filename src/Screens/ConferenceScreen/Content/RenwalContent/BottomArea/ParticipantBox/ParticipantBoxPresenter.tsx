@@ -81,9 +81,9 @@ const ParticipantBoxPresenter = (props: ParticipantBoxProps) => {
         <Image
           source={
             character === 'jessie'
-              ? imgCharacter03
-              : character === 'suzy'
               ? imgCharacter02
+              : character === 'suzy'
+              ? imgCharacter03
               : imgCharacter01
           }
           resizeMode={'cover'}

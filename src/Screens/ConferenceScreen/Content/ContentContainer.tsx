@@ -73,7 +73,7 @@ function ContentContainer(props: any) {
   const [isPopupTouch, setIsPopupTouch] = useState(false);
   // console.log('props : ', props);
 
-  const { mainUser, onClose, createdTime, id: roomId } = props;
+  const { mainUser, onClose, createdTime, id: roomId, avatar } = props;
   // console.log(roomId);
 
   const { videoTrack, isMuteVideo } = mainUser;
@@ -129,6 +129,9 @@ function ContentContainer(props: any) {
     dispatch(toastActionCreators.setToastMessage(msg));
 
   let userList = participants.slice(0);
+  
+  // console.log(participants);
+  
 
   if (auth.portal_id) {
     userList.unshift({
@@ -144,7 +147,8 @@ function ContentContainer(props: any) {
         user_email: auth.user_default_email,
         user_contact: auth.user_contact,
         isExternalParticipant: `${!isLogin}`,
-        isMobile: true
+        isMobile: true,
+        avatar: avatar
       }
     });
   } else {
@@ -153,7 +157,8 @@ function ContentContainer(props: any) {
       userInfo: {
         userName: user.name,
         isMobile: true,
-        isExternalParticipant: `${!isLogin}`
+        isExternalParticipant: `${!isLogin}`,
+        avatar: avatar
       }
     });
   }
@@ -239,14 +244,16 @@ function ContentContainer(props: any) {
     setIsPopupTouch(false);
   };
 
-  const handleEmail = async () => {
-    Linking.openURL(`mailto:?body=https://video.wehago.com/video?room=${roomId}`) 
+  const handleEmail = () => {
+    Linking.openURL(
+      `mailto:?subject=&body=https://video.wehago.com/video?room%3D${roomId}`
+    );
   };
 
-  const handleSms = async () => {
-    const SMSDivider: string = Platform.OS === 'android' ? '?' : '&';
+  const handleSms = () => {
+    const Divider: string = isIOS ? '&' : '?';
     Linking.openURL(
-      `sms:${SMSDivider}body=https://video.wehago.com/video?room=${roomId}`
+      `sms:${Divider}body=https://video.wehago.com/video?room=${roomId}`
     );
   };
 
@@ -260,7 +267,6 @@ function ContentContainer(props: any) {
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
           // shared with activity type of result.activityType
-          console.log(result.activityType);
         } else {
           // shared
         }
@@ -272,7 +278,7 @@ function ContentContainer(props: any) {
     }
   };
 
-  const handleLinkCopy = async () => {
+  const handleLinkCopy = () => {
     Clipboard.setString(`https://video.wehago.com/video?room=${roomId}`);
     //다국어 필요
     setToastMessage(t('공유링크가 복사되었습니다.'));

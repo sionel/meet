@@ -134,7 +134,7 @@ function joinUser(user: any): ThunkAction<void, RootState, unknown> {
 
 function applyJoinUser(state: state, action: AnyAction) {
   const { user } = action;
-  // console.log('user : ', user);
+  console.log('user : ', user);
   
   const list = state.list.slice(0);
   const participant = {
@@ -347,6 +347,8 @@ function setUserInfo(
 
 function applySetUserInfo(state: state, action: AnyAction) {
   const { id, info } = action;
+  console.log('info : ', info);
+  
   const list = state.list.slice(0);
   const findUser = list.find((user: ParticipantsTypes) => {
     // WEHAGO_ID로 sendCommand 받는데 이상한 로직에서도 받는게 있어서 중복처리 하려고 둔 로직

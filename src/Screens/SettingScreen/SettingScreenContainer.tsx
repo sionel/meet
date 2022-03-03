@@ -174,12 +174,15 @@ export default function SettingScreenContainer(props: any) {
               name: tmpName,
               ...params,
               accessType: params?.accessType,
-              externalUser: user
+              externalUser: user,
+              avatar: '{"label":"기본 제공 캐릭터3","value":"jessie"}'
             }
           }
         ]
       });
     }
+    // 2. suzy
+    // 1. jangok
     setIsLoading(false);
   };
 

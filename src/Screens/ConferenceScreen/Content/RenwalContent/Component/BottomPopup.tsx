@@ -45,7 +45,6 @@ type BottomPopupProps = {
 };
 
 const { width, height } = Dimensions.get('window');
-
 export default function BottomPopup(
   props: BottomPopupProps
   // & { isHorizon: boolean }
@@ -71,7 +70,7 @@ export default function BottomPopup(
         styles.botVerPopContainer,
         title === '더보기' && isPad && { right: 40 }
       ]}
-      overlayColor="rgba(0,0,0,0.01)"
+      overlayColor="rgba(255,255,255,0.01)"
     >
       <View
         style={{

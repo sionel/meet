@@ -249,7 +249,8 @@ class ConferenceScreenContainer extends React.Component {
       id: roomName,
       roomToken: token,
       externalUser,
-      tracks
+      tracks,
+      avatar
     } = params;
 
     this._conferenceManager = new ConferenceManager(
@@ -265,7 +266,8 @@ class ConferenceScreenContainer extends React.Component {
       nickname: auth.nickname,
       isExternalParticipant: !isLogin,
       externalUserId: externalUser,
-      isMobile: true
+      isMobile: true,
+      avatar: avatar
     };
 
     const joinResult = await this._conferenceManager.join(
@@ -301,7 +303,8 @@ class ConferenceScreenContainer extends React.Component {
         cid: userId,
         name,
         videoTrack,
-        audioTrack
+        audioTrack,
+        avatar
       });
 
       const master = await MeetApi.checkMasterControl(roomName);

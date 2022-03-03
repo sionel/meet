@@ -70,6 +70,17 @@ const MainContainer = (props: MainContainerProps) => {
     return true;
   };
 
+  // console.log('mainUser : ', mainUser);
+  
+  
+  
+  let character = '';
+  if (mainUser?.userInfo?.avatar) {
+    character = JSON.parse(mainUser?.userInfo?.avatar)?.value;
+  } else {
+    character = isMuteVideo ? 'jangok' : character;
+  }
+
   const _handleEnterPIPMode = (type: string) => {
     PictureInPicture.enterPictureInPicture().catch(() => {
       // Picture-in-Picture not supported
@@ -107,6 +118,7 @@ const MainContainer = (props: MainContainerProps) => {
       isMultipleView={isMultipleView}
       isScreenShare={isScreenShare}
       toggleScreenFlag={toggleScreenFlag}
+      character={character}
     />
   );
 };

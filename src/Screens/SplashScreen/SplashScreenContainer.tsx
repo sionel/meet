@@ -239,8 +239,12 @@ const SplashScreenContainer = ({
     // const m = getConferenceManager();
 
     if (!url) return;
+    console.log('url : ', url);
+    
+    
     let result: any = querystringParser(url);
-
+    console.log('result: ', result);
+    
     // if(result.type === 'conference') {
     // 화상회의 요청인지 판별
     if (result.is_creater) {

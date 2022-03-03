@@ -270,7 +270,7 @@ class ConferenceConnector {
     // 위하고 접속 아이디 및 정보 가져오기
     this._room.addCommandListener(WEHAGO_ID, user => {
       const id = user.value;
-
+      console.log('user : ', user);
       this._handlers.SET_USER_INFO(id, user.attributes);
       //
     });

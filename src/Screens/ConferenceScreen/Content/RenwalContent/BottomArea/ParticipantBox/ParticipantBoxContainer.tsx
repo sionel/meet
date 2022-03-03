@@ -21,6 +21,8 @@ const ParticipantBoxContainer = (props: {
 }) => {
   const { user, isMultipleView, index, setIsMultipleView, width, height } =
     props;
+
+  
   const { isMuteVideo } = user;
   const videoTrack = props.videoTrack ? props.videoTrack : user.videoTrack;
 
@@ -39,15 +41,17 @@ const ParticipantBoxContainer = (props: {
     ? orientation === 'horizontal'
       ? (height * 0.55) / 2
       : (height * 0.65) / 2
-    : Platform.OS === 'ios' ? (height * 0.67) / 2 : (height * 0.61) / 2;
+    : Platform.OS === 'ios'
+    ? (height * 0.67) / 2
+    : (height * 0.61) / 2;
   const multiView = { width: multiWidth, height: multiViewHeight };
 
   let character = '';
   if (user?.userInfo?.avatar) {
     character = JSON.parse(user?.userInfo?.avatar)?.value;
+  } else {
+    character = isMuteVideo ? 'jangok' : character;
   }
-  character = isMuteVideo ? 'jangok' : character;
-
   const handleTouchView = () => {
     setMainUser(user.id);
     isMultipleView && setIsMultipleView && setIsMultipleView(false);

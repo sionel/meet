@@ -1,6 +1,9 @@
 import React, { Fragment } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import icMan1 from '@assets/icons/ic_man1.png';
+import icWoman1 from '@assets/icons/ic_woman1.png';
+import icWoman2 from '@assets/icons/ic_woman2.png';
+
 import {
   Dimensions,
   Image,
@@ -29,6 +32,7 @@ type MainPresenterProps = {
   isMultipleView: boolean;
   isScreenShare: boolean;
   toggleScreenFlag: ()=>void;
+  character: string;
 };
 
 const MainPresenter = (props: MainPresenterProps) => {
@@ -43,7 +47,8 @@ const MainPresenter = (props: MainPresenterProps) => {
     mainUser,
     isMultipleView,
     isScreenShare,
-    toggleScreenFlag
+    toggleScreenFlag,
+    character
   } = props;
 
   const muteView = (
@@ -167,7 +172,11 @@ const MainPresenter = (props: MainPresenterProps) => {
       style={styles.imageContainer}
     >
       {!drawing && (
-        <Image source={icMan1} style={{ width: '100%', height: '150%' }} resizeMode={'contain'}/>
+        <Image source={character === 'jessie'
+        ? icWoman1
+        : character === 'suzy'
+        ? icWoman2
+        : icMan1} style={{ width: '100%', height: '150%' }} resizeMode={'contain'}/>
       )}
     </LinearGradient>
   );

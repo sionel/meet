@@ -52,6 +52,7 @@ interface ConferenceType {
   cid: string;
   name: string;
   videoTrack: any;
+  avatar: string;
 }
 
 type message = {
@@ -179,7 +180,8 @@ function applyJoinConference(state: state, action: AnyAction) {
       isLocal: true,
       userName: conferenceInfo.name,
       nickname: auth.nickname,
-      profile_url: auth.profile_url === '' ? undefined : auth.profile_url
+      profile_url: auth.profile_url === '' ? undefined : auth.profile_url,
+      avatar: conferenceInfo.avatar
     }
   };
   return {
