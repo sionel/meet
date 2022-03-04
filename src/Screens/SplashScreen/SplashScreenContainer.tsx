@@ -130,8 +130,8 @@ const SplashScreenContainer = ({
     const majorVersion = 13;
 
     let result: any;
-    const checkVersion = await MeetApi.checkVersion(os, majorVersion); 
-    if(isSuccess(checkVersion)) {
+    const checkVersion = await MeetApi.checkVersion(os, majorVersion);
+    if (isSuccess(checkVersion)) {
       result = checkVersion;
     }
     if (!result.resultData.update || result.resultData.dev_mode) return [];
@@ -157,8 +157,8 @@ const SplashScreenContainer = ({
 
   const _handleCheckNotice = async (noti: any) => {
     let result: any[] = [];
-    const checkNotice = await MeetApi.checkNotice(); 
-    if(isSuccess(checkNotice)) {
+    const checkNotice = await MeetApi.checkNotice();
+    if (isSuccess(checkNotice)) {
       result = checkNotice.resultData;
     } else {
       return [];
@@ -239,12 +239,11 @@ const SplashScreenContainer = ({
     // const m = getConferenceManager();
 
     if (!url) return;
-    console.log('url : ', url);
-    
-    
+    // console.log('url : ', url);
+
     let result: any = querystringParser(url);
-    console.log('result: ', result);
-    
+    // console.log('result: ', result);
+
     // if(result.type === 'conference') {
     // 화상회의 요청인지 판별
     if (result.is_creater) {
@@ -257,7 +256,7 @@ const SplashScreenContainer = ({
       navigation.reset({ routes: [{ name: 'LoginStack' }] });
     } else if (result.mHASH_KEY && result.cno) {
       //토근정보가 있을때
-      const { mHASH_KEY, mAuth_r_token, mAuth_a_token, cno } = result;
+      const { mHASH_KEY, mAuth_r_token, mAuth_a_token, cno, video_id } = result;
       onLogout();
       if (mHASH_KEY !== 'null' && cno !== 'null') {
         const info = await _loginCheckRequest(
@@ -274,6 +273,20 @@ const SplashScreenContainer = ({
           if (isDeploy) {
             setVideoPolicy(loginType);
             navigation.reset({ routes: [{ name: 'MainStack' }] });
+            if (video_id) {
+              const getMeetRoom = await MeetApi.getMeetRoom(auth, video_id);
+              if (isSuccess(getMeetRoom)) {
+                const { name } = getMeetRoom.resultData;
+                navigation.navigate('ConferenceStateView', {
+                  id: result.video_id,
+                  accessType: 'auth',
+                  selectedRoomName: name
+                });
+              } else {
+                console.warn('getMeetRoom : ', getMeetRoom.errors);
+                
+              }
+            }
           } else {
             navigation.reset({ routes: [{ name: 'SelectCompany' }] });
           }
@@ -330,7 +343,7 @@ const SplashScreenContainer = ({
       if (auth.user_no) {
         const linkResult = await MeetApi.getMeetRoomNoCert(result.video_id);
 
-        if(isSuccess(linkResult)) {
+        if (isSuccess(linkResult)) {
           const { name } = linkResult.resultData;
 
           navigation.reset({
@@ -442,7 +455,6 @@ const SplashScreenContainer = ({
       await onLogin(userData, from, flag);
       return userData;
     } else {
-      
       const { errors } = checkResult;
       eventLog(errors);
       _handleloginCheckError(errors);
@@ -457,7 +469,10 @@ const SplashScreenContainer = ({
       setAlert({
         type: 1,
         title: t('renewal.alert_title_login_fail'),
-        message: loginType === 'nahago' ? t('renewal.alert_text_duplicate_logout2') : t('renewal.alert_text_duplicate_logout')
+        message:
+          loginType === 'nahago'
+            ? t('renewal.alert_text_duplicate_logout2')
+            : t('renewal.alert_text_duplicate_logout')
       });
     } else if (errors.status === '400') {
       setAlert({

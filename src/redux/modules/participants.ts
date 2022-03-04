@@ -134,7 +134,6 @@ function joinUser(user: any): ThunkAction<void, RootState, unknown> {
 
 function applyJoinUser(state: state, action: AnyAction) {
   const { user } = action;
-  console.log('user : ', user);
   
   const list = state.list.slice(0);
   const participant = {
@@ -232,7 +231,7 @@ function applySetRemoteTrack(state: state, action: AnyAction) {
   const list = state.list.slice(0);
   const findUser = list.find((user: any) => user.id === id);
   if (findUser) {
-    const type = track.getType();
+    const type = track?.getType();
     if (type === 'video') {
       findUser.videoTrack = track;
       findUser.isMuteVideo = track.isMuted();
@@ -263,7 +262,7 @@ function applyUpdateMuteVideo(state: state, action: AnyAction) {
   const { track } = action;
   const list = state.list.slice(0);
 
-  if (track.getType() === 'video') {
+  if (track?.getType() === 'video') {
     const findUser = list.find((user: ParticipantsTypes) => {
       if (user.videoTrack && user.id === track.getParticipantId()) {
         return true;
@@ -347,7 +346,6 @@ function setUserInfo(
 
 function applySetUserInfo(state: state, action: AnyAction) {
   const { id, info } = action;
-  console.log('info : ', info);
   
   const list = state.list.slice(0);
   const findUser = list.find((user: ParticipantsTypes) => {

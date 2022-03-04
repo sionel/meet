@@ -298,7 +298,9 @@ class ConferenceScreenContainer extends React.Component {
       setIsConference(true);
 
       const videoTrack = tracks.find(track => track.getType() === 'video');
+      // console.log('videoTrack : ', videoTrack);
       const audioTrack = tracks.find(track => track.getType() === 'audio');
+      console.log('audioTrack : ', audioTrack);
       joinConference({
         cid: userId,
         name,

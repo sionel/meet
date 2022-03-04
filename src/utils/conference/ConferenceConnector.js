@@ -101,6 +101,7 @@ class ConferenceConnector {
    */
   connect = (connection, roomName, tracks, attributes) => {
     return new Promise(async (resolve, reject) => {
+      console.log(3333);
       // 참여할 room object 생성
       this._room = this._createRoom(connection, roomName);
       // 이벤트 연결
@@ -238,6 +239,7 @@ class ConferenceConnector {
 
     // 비디오 Mute 변경
     this._room.on(conferenceEvents.TRACK_MUTE_CHANGED, track => {
+      console.log(4444);
       if (track.getType() === 'video') {
         this._handlers.VIDEO_MUTE_CHANGED(track);
       }
@@ -270,7 +272,6 @@ class ConferenceConnector {
     // 위하고 접속 아이디 및 정보 가져오기
     this._room.addCommandListener(WEHAGO_ID, user => {
       const id = user.value;
-      console.log('user : ', user);
       this._handlers.SET_USER_INFO(id, user.attributes);
       //
     });

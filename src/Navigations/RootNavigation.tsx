@@ -17,11 +17,12 @@ import ConferenceView from '@screens/ConferenceScreen';
 import SelectCompanyView from '@screens/SelectCompanyScreen';
 import SplashView from '@screens/SplashScreen';
 
-
 import { RootState } from '../redux/configureStore';
 import { useDispatch, useSelector } from 'react-redux';
 import { actionCreators as ConferenceActions } from '@redux/conference';
 import { actionCreators as UserActions } from '@redux/user';
+import { MeetApi } from '@services/index';
+import { querystringParser } from '@utils/index';
 
 // roomToken?: string;
 export type MeetParamList = {
@@ -109,9 +110,10 @@ export default function RootNavigation(props: any) {
     dispatch(UserActions.setLoginType(loginType));
   };
 
-  const { isConference } = useSelector((state: RootState) => {
+  const { isConference, auth } = useSelector((state: RootState) => {
     return {
-      isConference: state.conference.isConference
+      isConference: state.conference.isConference,
+      auth: state.user.auth
     };
   });
 
@@ -155,17 +157,37 @@ export default function RootNavigation(props: any) {
     // return () => {
     //   Linking.removeListener('url', _handleOpenURL);
     // };
-  }, []);
+    // 앱이 이미 실행중일때(딥링크)
+    Linking.addEventListener('url', async ({ url }) => {
+      let { name } = navigationRef.current.getCurrentRoute();
+      console.log('앱이 이미 실행중일때(딥링크)');
+      if (name === 'ConferenceView') {
+        Alert.alert('경고', '이미 진행중인 회의가 있습니다.');
+        let result: any = querystringParser(url);
+        const { video_id } = result;
+        await MeetApi.deleteConferenceRoom(auth, video_id);
+        return;
+      } else {
+        navigate('SplashView', { deeplink: url });
+      }
+    });
 
-  //  앱이 켜져있을때(딥링크)
-  Linking.addEventListener('url', event => {
-    if (isConference) {
-      Alert.alert('이미 진행중인 화상회의가 있습니다.');
-      return;
-    } else {
-      navigate('SplashView', { deeplink: event.url });
-    }
-  });
+    return () => {
+      Linking.removeEventListener('url', async ({ url }) => {
+        let { name } = navigationRef.current.getCurrentRoute();
+        console.log('앱이 이미 실행중일때(딥링크)');
+        if (name === 'ConferenceView') {
+          Alert.alert('경고', '이미 진행중인 회의가 있습니다.');
+          let result: any = querystringParser(url);
+          const { video_id } = result;
+          await MeetApi.deleteConferenceRoom(auth, video_id);
+          return;
+        } else {
+          navigate('SplashView', { deeplink: url });
+        }
+      });
+    };
+  }, []);
 
   return (
     <NavigationContainer ref={navigationRef}>

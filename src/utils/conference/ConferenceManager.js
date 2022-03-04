@@ -85,7 +85,9 @@ class ConferenceManager {
       tracks,
       attributes
     );
+    console.log(111);
     this.tracks = tracks;
+    console.log(222);
     if (this._room) return true;
     else return false;
   };
@@ -216,6 +218,7 @@ class ConferenceManager {
    * 대화방에 참여자의 트랙이 추가되면 호출된다.
    */
   _addRemoteTrack = track => {
+    console.log('track : ', track);
     this._dispatch(participantsAcionCreators.setRemoteTrack(track));
   };
 
@@ -224,6 +227,7 @@ class ConferenceManager {
    * 카메라 또는 오디오(마이크)가 온/오프되면 발생한다.
    */
   _videoMutedChanged = track => {
+    console.log('track : ', track);
     this._dispatch(participantsAcionCreators.updateMuteVideo(track));
   };
 

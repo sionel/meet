@@ -54,7 +54,7 @@ export default function SettingScreenPresenter(props: PresenterProps) {
   return (
     <Fragment>
       <SafeAreaView style={styles.container}>
-      <KeyboardAwareScrollView
+        <KeyboardAwareScrollView
           contentContainerStyle={{
             ...styles.container
           }}
@@ -63,18 +63,18 @@ export default function SettingScreenPresenter(props: PresenterProps) {
           enableAutomaticScroll={Platform.OS === 'ios'}
           extraHeight={90}
         >
-        <View style={[styles.topTitle]}>
-          <TouchableOpacity onPress={goBack}>
-            <Image source={icBack} style={styles.icBack} resizeMode="cover" />
-          </TouchableOpacity>
-          <Text style={styles.HeaderTitleText}>{roomName}</Text>
-          <TouchableOpacity disabled={true}>
-            <Text style={styles.emptyText}>
-              {t('renewal.alert_button_confirm')}
-            </Text>
-          </TouchableOpacity>
-        </View>
-        
+          <View style={[styles.topTitle]}>
+            <TouchableOpacity onPress={goBack}>
+              <Image source={icBack} style={styles.icBack} resizeMode="cover" />
+            </TouchableOpacity>
+            <Text style={styles.HeaderTitleText}>{roomName}</Text>
+            <TouchableOpacity disabled={true}>
+              <Text style={styles.emptyText}>
+                {t('renewal.alert_button_confirm')}
+              </Text>
+            </TouchableOpacity>
+          </View>
+
           <TouchableOpacity
             style={{
               flex: 1,
@@ -120,37 +120,66 @@ export default function SettingScreenPresenter(props: PresenterProps) {
                     left: 0,
                     right: 0,
                     zIndex: 1,
-                    backgroundColor: '#00000077'
+                    backgroundColor:
+                      tracks && tracks[0] && tracks[0]?.isMuted()
+                        ? '#000'
+                        : '#00000077'
                   }}
-                ></View>
-                <TouchableOpacity style={{ flex: 1 }}></TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.toggleView}
-                  onPress={onToggleVideo}
+                />
+                <View style={{ flexDirection: 'row' }}>
+                  <TouchableOpacity
+                    style={[styles.toggleView, { marginRight: 16 }]}
+                    onPress={onToggleVideo}
+                  >
+                    <Image
+                      source={
+                        tracks && tracks[0]?.isMuted()
+                          ? ButtonCameraOff
+                          : ButtonCamera
+                      }
+                      resizeMode={'contain'}
+                      style={styles.buttonImage}
+                    />
+                  </TouchableOpacity>
+                </View>
+                <View
+                  style={{
+                    position: 'absolute',
+                    bottom: '5%',
+                    zIndex: 2,
+                    paddingHorizontal: '35%',
+                    flexDirection: 'row'
+                  }}
                 >
-                  <Image
-                    source={
-                      tracks && tracks[0]?.isMuted()
-                        ? ButtonCameraOff
-                        : ButtonCamera
-                    }
-                    resizeMode={'contain'}
-                    style={styles.buttonImage}
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.toggleView}
-                  onPress={onToggleAudio}
-                >
-                  <Image
-                    source={
-                      tracks && tracks[1]?.isMuted() ? ButtonMicOff : ButtonMic
-                    }
-                    resizeMode={'contain'}
-                    style={styles.buttonImage}
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity style={{ flex: 1 }}></TouchableOpacity>
+                  <TouchableOpacity
+                    style={[styles.toggleView, { marginRight: 16 }]}
+                    onPress={onToggleVideo}
+                  >
+                    <Image
+                      source={
+                        tracks && tracks[0]?.isMuted()
+                          ? ButtonCameraOff
+                          : ButtonCamera
+                      }
+                      resizeMode={'contain'}
+                      style={styles.buttonImage}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.toggleView}
+                    onPress={onToggleAudio}
+                  >
+                    <Image
+                      source={
+                        tracks && tracks[1]?.isMuted()
+                          ? ButtonMicOff
+                          : ButtonMic
+                      }
+                      resizeMode={'contain'}
+                      style={styles.buttonImage}
+                    />
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
             {nameField && (
@@ -175,9 +204,10 @@ export default function SettingScreenPresenter(props: PresenterProps) {
               <TouchableOpacity
                 style={[
                   {
-                    backgroundColor: buttonActive && !isLoading
-                      ? 'rgb(28,144,251)'
-                      : 'rgb(125,125,125)'
+                    backgroundColor:
+                      buttonActive && !isLoading
+                        ? 'rgb(28,144,251)'
+                        : 'rgb(125,125,125)'
                   },
                   styles.settingRoomEnterTouch
                 ]}
@@ -258,9 +288,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     marginBottom: 20,
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    flexDirection: 'row'
+    justifyContent: 'center'
   },
   rctView: {
     position: 'absolute',
@@ -272,13 +300,13 @@ const styles = StyleSheet.create({
     zIndex: 0
   },
   buttonImage: {
-    width: 55,
-    height: 55
+    width: 48,
+    height: 48
   },
   toggleView: {
-    flex: 2,
-    alignItems: 'center',
-    zIndex: 2
+    width: 48,
+    height: 48,
+    borderRadius: 24
   },
   settingUserNameTitle: {
     width: '100%',
@@ -291,7 +319,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 52,
     marginVertical: 10,
-    paddingHorizontal: 10,  
+    paddingHorizontal: 10,
     fontFamily: 'DOUZONEText30'
   },
   settingUserNameDafault: {
