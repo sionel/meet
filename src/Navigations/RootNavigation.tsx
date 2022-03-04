@@ -21,6 +21,10 @@ import { RootState } from '../redux/configureStore';
 
 import { actionCreators as ConferenceActions } from '../redux/modules/conference';
 import { actionCreators as UserActions } from '../redux/modules/user';
+import { querystringParser } from '../utils';
+import { JitsiConferenceErrors } from '../../jitsi/features/base/lib-jitsi-meet';
+import { getConferenceManager } from '../utils/ConferenceManager';
+import { MeetApi } from '../services';
 
 // roomToken?: string;
 export type MeetParamList = {
@@ -99,30 +103,36 @@ export const navigateReset = (name: string, params?: any) => {
 
 export default function RootNavigation(props: any) {
   // let nowStack = '';
-
+  let cnt = 0;
   const dispatch = useDispatch();
   const setIsConference = (flag: boolean) => {
     dispatch(ConferenceActions.setIsConference(flag));
+  };
+  const setConferenceManager = (state: string) => {
+    dispatch(ConferenceActions.setConferenceManager(state));
   };
   const setLoginType = (loginType: string) => {
     dispatch(UserActions.setLoginType(loginType));
   };
 
-  const { isConference } = useSelector((state: RootState) => {
+  const { isConference, auth } = useSelector((state: RootState) => {
     return {
+      auth: state.user.auth,
       isConference: state.conference.isConference
     };
   });
 
-  // const checkConference = (state: Readonly<NavigationState> | undefined) => {
-  //   const name = state?.routes[0].name;
-  //   if (name === 'ConferenceView') nowStack = 'ConferenceView';
-  //   else nowStack = '';
-  // };
   const verifyCanOpenUrl = async () => {
     let wehago = await Linking.canOpenURL('wehago://');
     let nahago = await Linking.canOpenURL('staffmanagment://');
     let loginType = wehago ? 'wehago' : nahago ? 'nahago' : 'none';
+    Alert.alert(
+      '앱 설치여부',
+      `위하고 : ${wehago ? '설치' : '미설치'}\n 나하고 : ${
+        nahago ? '설치' : '미설치'
+      }`
+    );
+
     setLoginType(loginType);
   };
 
@@ -134,37 +144,48 @@ export default function RootNavigation(props: any) {
 
   useEffect(() => {
     AppState.addEventListener('change', handleAppStateChange);
-    // TODO: 안드로이드 액티비티가 1개이면서 위하고에서 백그라운드에서 포그라운드로 넘어올때 App이 재시작됨으로 재시작 처리를 우선으로함
-    // 위하고 측에서 딥링크 넘겨줄때 위하고 앱측에서 launchMode 방식에서 생기는 현상인거 같음.
+    // TODO: 안드로이드 => 리액트 네이티브가 액티비티가 1개라서 위하고에서 Meet으로 올때 App이 재시작됨
+    // 위하고 측에서 딥링크 넘겨줄때 위하고 앱측에서 launchMode 방식에서 생기는 현상인거 같음 ?
     if (isConference) {
       Alert.alert('허용되지 않은 접근', '앱이 재시작됩니다.');
       setIsConference(false);
       return;
     }
 
+    //나하고 설치여부 확인
     verifyCanOpenUrl();
 
-    if (props.url?.url) navigate('SplashView', { deeplink: props.url.url });
+    if (props.url?.url) {
+      console.log('딥링크 인데 Linking 분기 안탐');
+      navigate('SplashView', { deeplink: props.url.url });
+    }
 
     // 앱이 꺼져 있을때(딥링크)
     Linking.getInitialURL()
-      .then(url => url && navigate('SplashView', { deeplink: url }))
+      .then(url => {
+        console.log('앱이 꺼져 있을때(딥링크)');
+        url && navigate('SplashView', { deeplink: url });
+      })
       .catch(err => console.error('error ', err));
 
-    // return () => {
-    //   Linking.removeListener('url', _handleOpenURL);
-    // };
-  }, []);
+    // 앱이 이미 실행중일때(딥링크)
+    Linking.addEventListener('url', async ({ url }) => {
+      let { name } = navigationRef.current.getCurrentRoute();
+      console.log('앱이 이미 실행중일때(딥링크)');
+      if (name === 'ConferenceView') {
+        Alert.alert('경고', '이미 진행중인 회의가 있습니다.');
+        let result: any = querystringParser(url);
+        const {video_id} = result;
+        await MeetApi.deleteConferenceRoom(auth, video_id);
 
-  //  앱이 켜져있을때(딥링크)
-  Linking.addEventListener('url', event => {
-    if (isConference) {
-      Alert.alert('이미 진행중인 화상회의가 있습니다.');
-      return;
-    } else {
-      navigate('SplashView', { deeplink: event.url });
-    }
-  });
+        return;
+      } else {
+        navigate('SplashView', { deeplink: url });
+      }
+    });
+
+    return () => {};
+  }, []);
 
   return (
     <NavigationContainer ref={navigationRef}>

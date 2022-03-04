@@ -1,5 +1,11 @@
 import React from 'react';
-import { BackHandler, NativeModules, ToastAndroid ,findNodeHandle,NativeEventEmitter} from 'react-native';
+import {
+  BackHandler,
+  NativeModules,
+  ToastAndroid,
+  findNodeHandle,
+  NativeEventEmitter
+} from 'react-native';
 import MainVideoPresenter from './MainVideoPresenter';
 import { getT } from '../../../../utils/translateManager';
 import { getConferenceManager } from '../../../../utils/ConferenceManager';
@@ -11,8 +17,12 @@ class MainVideoContainer extends React.Component {
     super(props);
     this.state = {
       time:
-        Date.now() - this.props.createdTime > 0
-          ? Math.floor(this.props.expireTime !== null ? ((this.props.limitedTime - 500) / 1000) : ((Date.now() - this.props.createdTime) / 1000))
+        Date.now() - props.createdTime > 0
+          ? Math.floor(
+              props.expireTime !== null
+                ? (props.limitedTime - 500) / 1000
+                : (Date.now() - props.createdTime) / 1000
+            )
           : 0,
       pipMode: false
     };
@@ -25,7 +35,7 @@ class MainVideoContainer extends React.Component {
         if (this.props.expireTime !== null) {
           let limitTime = this.props.limitedTime - 500;
           let remainTime = Math.floor(limitTime / 1000);
-          
+
           this.setState({ time: remainTime });
           this.props.setLimitedTime(limitTime);
 
@@ -39,12 +49,14 @@ class MainVideoContainer extends React.Component {
           // }
         } else {
           let nowTime = Date.now();
-          let normalTime = Math.floor((nowTime - this.props.createdTime) / 1000);
-          this.state.time > 0 && this.setState({ time: normalTime });
+          let normalTime = Math.floor(
+            (nowTime - this.props.createdTime) / 1000
+          );
+          Date.now() - this.props.createdTime > 0 &&
+            this.setState({ time: normalTime });
         }
       }
     }, 500);
-
 
     BackHandler.addEventListener('hardwareBackPress', this._handleBackButton);
   }

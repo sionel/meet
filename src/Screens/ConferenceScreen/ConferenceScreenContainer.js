@@ -64,8 +64,6 @@ class ConferenceScreenContainer extends React.Component {
    * componentDidMount
    */
   componentDidMount() {
-    // const { navigation, auth, dispatch } = this.props;
-
     Platform.OS === 'android' &&
       AppState.addEventListener('change', this._handleAppStateChange);
 
@@ -100,7 +98,11 @@ class ConferenceScreenContainer extends React.Component {
     if (prevProps.screenToggleFlag !== this.props.screenToggleFlag && !isIOS) {
       this._handleChangeScreen();
     }
-    const { mainUserId, documentShare, list } = this.props;
+    const {
+      mainUserId,
+      documentShare,
+      list
+    } = this.props;
     if (
       this._conferenceManager &&
       mainUserId &&
@@ -128,10 +130,6 @@ class ConferenceScreenContainer extends React.Component {
    */
   componentWillUnmount() {
     try {
-      const { isConference } = this.props;
-      if (isConference) {
-        setIsConference(false);
-      }
       this._screen = false;
       KeepAwake.deactivate();
       DeviceEventEmitter.removeListener(
@@ -291,8 +289,6 @@ class ConferenceScreenContainer extends React.Component {
 
       const userId = this._conferenceManager.getMyId();
       MeetApi.enterMeetRoom(token, userId, name);
-      setIsConference(true);
-
       const videoTrack = tracks.find(track => track.getType() === 'video');
       const audioTrack = tracks.find(track => track.getType() === 'audio');
       joinConference({
@@ -346,6 +342,7 @@ class ConferenceScreenContainer extends React.Component {
       }
       setConferenceManager(this._conferenceManager);
       setConferenceCreatedTime(start_datetime);
+      setIsConference(true);
       setMainUserNotExist();
     }
   };
@@ -378,7 +375,8 @@ class ConferenceScreenContainer extends React.Component {
       isLogin,
       resetVideoId,
       setIsConference,
-      setConferenceCreatedTime
+      setConferenceCreatedTime,
+      setConferenceManager
       // auth,
       // screenProps,
     } = this.props;
@@ -392,6 +390,7 @@ class ConferenceScreenContainer extends React.Component {
     user.audioTrack.dispose();
     resetVideoId();
     setIsConference(false);
+    // setConferenceManager('');
     setConferenceCreatedTime(null);
 
     if (!isLogin) {

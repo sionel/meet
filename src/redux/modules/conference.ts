@@ -12,13 +12,13 @@ const SET_CONFERENCE_MANAGER = 'conference.SET_CONFERENCE_MANAGER';
 export interface state {
   roomId: string;
   isConference: boolean;
-  conferenceManager: ConferenceManager | null;
+  conferenceManager: ''
 }
 
 const initialState: state = {
   roomId: '',
   isConference: false,
-  conferenceManager: null
+  conferenceManager: ''
 };
 
 const reducer = (state = initialState, action: AnyAction) => {

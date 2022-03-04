@@ -72,7 +72,7 @@ const SplashScreenContainer = ({
   const setAlert = (params: any) => dispatch(AlertAcions.setAlert(params));
   const eventLog = (event: any) => dispatch(UserActions.eventLog(event));
   const setVideoPolicy = (videoPolicy: string) =>
-  dispatch(RootActions.setVideoPolicy(videoPolicy));
+    dispatch(RootActions.setVideoPolicy(videoPolicy));
 
   //#endregion
 
@@ -98,7 +98,9 @@ const SplashScreenContainer = ({
           text: '확인',
           onPress: () => {
             navigation.reset({
-              routes: [{ name: loginType === 'wehago' ? 'InputLogin' : 'LoginStack' }]
+              routes: [
+                { name: loginType === 'wehago' ? 'InputLogin' : 'LoginStack' }
+              ]
             });
           }
         }
@@ -244,7 +246,7 @@ const SplashScreenContainer = ({
       navigation.reset({ routes: [{ name: 'LoginStack' }] });
     } else if (result.mHASH_KEY && result.cno) {
       //토근정보가 있을때
-      const { mHASH_KEY, mAuth_r_token, mAuth_a_token, cno } = result;
+      const { mHASH_KEY, mAuth_r_token, mAuth_a_token, cno, video_id } = result;
       onLogout();
       if (mHASH_KEY !== 'null' && cno !== 'null') {
         const info = await _loginCheckRequest(
@@ -261,9 +263,19 @@ const SplashScreenContainer = ({
         } else {
           const isDeploy: boolean = await serviceCheck(info);
           if (isDeploy) {
-            let videoPolicy = result.name === 'staffmanagment' ? 'nahago' : 'wehago';
-          setVideoPolicy(videoPolicy);
+            let videoPolicy =
+              result.name === 'staffmanagment' ? 'nahago' : 'wehago';
+            setVideoPolicy(videoPolicy);
+
             navigation.reset({ routes: [{ name: 'MainStack' }] });
+            if (video_id) {
+              const { name } = await MeetApi.getMeetRoom(auth, video_id);
+              navigation.navigate('ConferenceStateView', {
+                id: result.video_id,
+                accessType: 'auth',
+                selectedRoomName: name
+              });
+            }
           } else {
             navigation.reset({ routes: [{ name: 'SelectCompany' }] });
           }

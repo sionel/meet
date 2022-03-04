@@ -177,7 +177,6 @@ export default function CustomProvider(props: any) {
       cno,
       HASH_KEY
     );
-    // console.log(checkResult);
     if (checkResult.errors) {
       if (checkResult.errors.code === 'E002') {
         _setAlert({
