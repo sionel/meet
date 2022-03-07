@@ -62,7 +62,7 @@ type message = {
   isRead: boolean;
   name: string;
   userInfo: MobileInfoType | WebInfoType;
-}
+};
 
 export interface state {
   user: any;
@@ -96,7 +96,7 @@ const initialState = {
 
 //#region reducer
 
-function reducer(state = initialState, action: AnyAction) { 
+function reducer(state = initialState, action: AnyAction) {
   switch (action.type) {
     case JOIN_CONFERENCE:
       return applyJoinConference(state, action);
@@ -174,7 +174,7 @@ function applyJoinConference(state: state, action: AnyAction) {
     videoTrack: conferenceInfo.videoTrack,
     audioTrack: conferenceInfo.audioTrack,
     isMuteMic: conferenceInfo.audioTrack.isMuted(),
-    isMuteVideo: conferenceInfo.videoTrack.isMuted(),
+    isMuteVideo: conferenceInfo?.videoTrack?.isMuted(),
     isMuteSpeaker: false,
     userInfo: {
       isLocal: true,
@@ -205,8 +205,9 @@ function leaveConference(): ThunkAction<void, RootState, unknown> {
 
 function applyLeaveConference(state: state) {
   /** video/audio mute */
-  state.user.videoTrack.dispose();
-  state.user.audioTrack.dispose();
+  const { videoTrack, audioTrack } = state.user;
+  videoTrack && videoTrack.dispose();
+  audioTrack.dispose();
   const user = null;
   return {
     ...state,

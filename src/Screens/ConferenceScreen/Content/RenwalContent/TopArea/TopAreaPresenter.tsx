@@ -37,6 +37,7 @@ type TopAreaPresenterProps = {
   isMultipleView: boolean;
   selectedRoomName: string;
   messageCount: number;
+  isHorizon: boolean; 
 };
 
 const TopAreaPresenter = (props: TopAreaPresenterProps) => {
@@ -54,7 +55,8 @@ const TopAreaPresenter = (props: TopAreaPresenterProps) => {
     handdleChattingClick,
     isMultipleView,
     selectedRoomName,
-    messageCount
+    messageCount,
+    isHorizon
   } = props;
 
   return (
@@ -67,7 +69,7 @@ const TopAreaPresenter = (props: TopAreaPresenterProps) => {
         </View>
 
         {!isMultipleView && isPad && (
-          <View style={styles.mainUserNamePadView}>
+          <View style={[styles.mainUserNamePadView, !isHorizon && {marginHorizontal: '45%'}]}>
             {isMaster && (
               <Image
                 source={icMaster}
@@ -276,13 +278,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   mainUserNamePadView: {
-    paddingHorizontal: 15,
+    marginHorizontal: '46%',
     height: 32,
     backgroundColor: 'rgba(255,255,255,0.2)',
-    justifyContent: 'flex-end',
     alignItems: 'center',
+    justifyContent: 'center',
     flexDirection: 'row',
-    marginRight: -width * 0.16
+    position: 'absolute',
   },
   name: {
     color: '#fff',

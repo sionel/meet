@@ -180,6 +180,7 @@ class ConferenceScreenContainer extends React.Component {
         onChangeMicMaster={this._handleToggleMic}
         isDeployedServices={this.state.isDeployedServices}
         toggleScreenFlag={this.props.toggleScreenFlag}
+        handleKickuser={this._handleKickUser}
       />
     ) : (
       <EndCallMessage
@@ -298,9 +299,8 @@ class ConferenceScreenContainer extends React.Component {
       setIsConference(true);
 
       const videoTrack = tracks.find(track => track.getType() === 'video');
-      // console.log('videoTrack : ', videoTrack);
       const audioTrack = tracks.find(track => track.getType() === 'audio');
-      console.log('audioTrack : ', audioTrack);
+
       joinConference({
         cid: userId,
         name,
@@ -551,6 +551,10 @@ class ConferenceScreenContainer extends React.Component {
       // this.props.toggleMuteMicByMe();
     }
   };
+
+  _handleKickUser = id => {
+    this._conferenceManager._kickUser(id);
+  }
 }
 
 export default ConferenceScreenContainer;

@@ -13,18 +13,37 @@ type UserListContainer = {
     React.SetStateAction<ConferenceBottomPopupProps>
   >;
   setIsPopupTouch: React.Dispatch<React.SetStateAction<boolean>>;
+  handleKickUser: (id: string) => void;
 };
 
 export const UserListContainer = (props: UserListContainer) => {
   const t = getT();
-  const { contentList, bottomPopup, handleBottomPopup, setIsPopupTouch } =
-    props;
+  const {
+    contentList,
+    bottomPopup,
+    handleBottomPopup,
+    setIsPopupTouch,
+    handleKickUser
+  } = props;
 
+  const [isRoomMaster, setIsRoomMaster] = useState(false);
   const swipeRef: MutableRefObject<any> = React.useRef([]);
 
-  const { isMasterControl } = useSelector((state: RootState) => {
-    const { master } = state;
-    return { isMasterControl: master.isMasterControl };
+  const { isMasterControl, masters, userID } = useSelector(
+    (state: RootState) => {
+      const { master, user } = state;
+      return {
+        isMasterControl: master.isMasterControl,
+        masters: master.masterList,
+        userID: user.auth.portal_id
+      };
+    }
+  );
+
+  useEffect(() => {
+    let master = masters.find(id => id === userID);
+    setIsRoomMaster(master ? true : false);
+    return () => {};
   });
 
   const handelProfileTouch = (item: ParticipantsTypes) => {
@@ -42,13 +61,15 @@ export const UserListContainer = (props: UserListContainer) => {
       console.log('해당 유저의 프로필 정보를 찾을수 없음');
     }
   };
-  
+
   return (
     <UserListPresenter
       userList={contentList}
       isMasterControl={isMasterControl}
       swipeRef={swipeRef}
       handelProfileTouch={handelProfileTouch}
+      handleKickUser={handleKickUser}
+      isRoomMaster={isRoomMaster}
     />
   );
 };

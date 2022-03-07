@@ -156,6 +156,7 @@ public class JitsiMeetActivityDelegate {
      * @param intent {@code Intent} instance which was received.
      */
     public static void onNewIntent(Intent intent) {
+        JitsiMeetLogger.i("onNewIntent", intent);
         ReactInstanceManager reactInstanceManager
             = ReactInstanceManagerHolder.getReactInstanceManager();
 

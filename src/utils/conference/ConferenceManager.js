@@ -85,19 +85,14 @@ class ConferenceManager {
       tracks,
       attributes
     );
-    console.log(111);
     this.tracks = tracks;
-    console.log(222);
     if (this._room) return true;
     else return false;
   };
 
   getAudioMuted = () => {
-    return this._room.startAudioMuted
-  }
-
-
-  
+    return this._room.startAudioMuted;
+  };
 
   changeTrack = async (type, oldTrack) => {
     const newTrack = (
@@ -143,6 +138,7 @@ class ConferenceManager {
   _createHandlers = () => {
     const handler = {
       JOIN_USER: this._joinUser,
+      KICK_USER: this._kickUser,
       LEFT_USER: this._leftUser,
       ADD_REMOTE_TRACK: this._addRemoteTrack,
       VIDEO_MUTE_CHANGED: this._videoMutedChanged,
@@ -193,6 +189,10 @@ class ConferenceManager {
     this._dispatch(masterAcionCreators.checkMasterList(this._roomToken));
   };
 
+  _kickUser = id => {
+    this._dispatch(participantsAcionCreators.kickUser(id))
+  }
+
   /**
    * LEFT_USER
    * 대화방에 참여자가 나가면 호출된다.
@@ -218,7 +218,6 @@ class ConferenceManager {
    * 대화방에 참여자의 트랙이 추가되면 호출된다.
    */
   _addRemoteTrack = track => {
-    console.log('track : ', track);
     this._dispatch(participantsAcionCreators.setRemoteTrack(track));
   };
 
@@ -227,7 +226,6 @@ class ConferenceManager {
    * 카메라 또는 오디오(마이크)가 온/오프되면 발생한다.
    */
   _videoMutedChanged = track => {
-    console.log('track : ', track);
     this._dispatch(participantsAcionCreators.updateMuteVideo(track));
   };
 
@@ -419,7 +417,7 @@ class ConferenceManager {
     const { name: targetName, id: targetId } = JSON.parse(targetInfo);
     const myId = this._room.myUserId();
     if (myId === targetId) {
-      const message = `${masterName} 님이 ${targetName} 님을 \n화상회의방에서 추방하였습니다.`
+      const message = `${masterName} 님이 ${targetName} 님을 \n화상회의방에서 추방하였습니다.`;
       this._endCall();
       this._dispatch(
         alertAcionCreators.setAlert({

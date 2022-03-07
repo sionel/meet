@@ -330,7 +330,7 @@
       "roomstate_setting_name": "이름 설정",
       "roomstate_setting_setname": "대화방에서 사용할 이름을 설정해주세요.",
       "roomstate_setting_nameDefault": "입력하지 않을 경우, 기본값이 적용됩니다.(최대 20자 설정가능)",
-      "roomstate_setting_enter": "화상대화 참여",
+      "roomstate_setting_enter": "화상회의 참여",
       "common_year": "년",
       "common_month": "월",
       "common_day": "일",

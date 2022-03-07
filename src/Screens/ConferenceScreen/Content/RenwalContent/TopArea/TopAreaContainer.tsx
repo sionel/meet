@@ -57,7 +57,7 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
     conferenceMode,
     deployedServices,
     isScreenShare,
-    orientation,
+    isHorizon,
     expireTime,
     message
   } = useSelector((state: RootState) => {
@@ -82,7 +82,7 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
       auth: user.auth,
       deployedServices: deployed.deployedServices,
       isScreenShare: screenShare.isScreenShare,
-      orientation: orientation.orientation,
+      isHorizon: orientation.isHorizon,
       masters: master.masterList,
       message: local.message
     };
@@ -97,7 +97,7 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
   const talkButton = callType === 3;
   const penButton = true;
   const docShareButton = !expireTime && deployedServices.includes('wedrive');
-  const screenShareButton = Platform.OS === 'ios' ? !Platform.isPad : true;
+  const screenShareButton = Platform.OS === 'ios' ? !isPad : true;
   const switchButton = !isScreenShare;
   const reverseButton = !isScreenShare;
 
@@ -248,6 +248,7 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
       handdleUserListClick={handdleUserListClick}
       handdleChattingClick={handdleChattingClick}
       messageCount={messageCount}
+      isHorizon={isHorizon}
     />
   );
 };

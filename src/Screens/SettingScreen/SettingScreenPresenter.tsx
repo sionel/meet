@@ -11,15 +11,23 @@ import {
   Platform
 } from 'react-native';
 
-import ButtonCamera from '@oldassets/buttons/btn_vc_camera_on.png';
-import ButtonCameraOff from '@oldassets/buttons/btn_vc_camera_off.png';
-import ButtonMic from '@oldassets/buttons/btn_vc_mike_on.png';
-import ButtonMicOff from '@oldassets/buttons/btn_vc_mike_off.png';
+import icVideoOn from '@assets/icons/ic_video_on.png';
+import icVideoOff from '@assets/icons/ic_video_off.png';
+import icMicOn from '@assets/icons/ic_mic_on.png';
+import icMicOff from '@assets/icons/ic_mic_off.png';
+import icCharacter1 from '@assets/icons/ic_setting_man.png';
+import icCharacter2 from '@assets/icons/ic_setting_jessie.png';
+import icCharacter3 from '@assets/icons/ic_setting_suzy.png';
+import icCheckW from '@assets/icons/ic_check_wh.png';
 import { RTCView } from 'react-native-webrtc';
 import { getT } from '@utils/translateManager';
 
 import icBack from '@assets/icons/ic_back.png';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import LinearGradient from 'react-native-linear-gradient';
+import deviceInfoModule from 'react-native-device-info';
+
+const isPad = deviceInfoModule.isTablet();
 
 interface PresenterProps {
   tracks: any[] | null;
@@ -33,6 +41,8 @@ interface PresenterProps {
   isHorizon: boolean;
   roomName: string;
   isLoading: boolean;
+  selectedToon: 'jangok' | 'suzy' | 'jessie';
+  setSelectedToon: (toon: 'jangok' | 'suzy' | 'jessie') => void;
 }
 
 export default function SettingScreenPresenter(props: PresenterProps) {
@@ -47,7 +57,9 @@ export default function SettingScreenPresenter(props: PresenterProps) {
     goBack,
     isHorizon,
     roomName,
-    isLoading
+    isLoading,
+    selectedToon,
+    setSelectedToon
   } = props;
   const t = getT();
 
@@ -78,7 +90,7 @@ export default function SettingScreenPresenter(props: PresenterProps) {
           <TouchableOpacity
             style={{
               flex: 1,
-              paddingHorizontal: isHorizon ? '20%' : 15,
+              paddingHorizontal: isPad ? isHorizon ? '32%' : '25%' : 15,
               paddingVertical: isHorizon ? 20 : 0
             }}
             activeOpacity={1}
@@ -94,8 +106,7 @@ export default function SettingScreenPresenter(props: PresenterProps) {
             <View
               style={{
                 alignItems: 'center',
-
-                flex: 3
+                flex: isPad ? isHorizon ? 3 : 1.5 : 3
               }}
             >
               <Text style={styles.settingOutputText}>
@@ -113,53 +124,98 @@ export default function SettingScreenPresenter(props: PresenterProps) {
                   />
                 )}
                 <View
-                  style={{
+                  style={[{
                     position: 'absolute',
                     top: 0,
                     bottom: 0,
                     left: 0,
                     right: 0,
                     zIndex: 1,
+                    elevation: 1,
                     backgroundColor:
                       tracks && tracks[0] && tracks[0]?.isMuted()
                         ? '#000'
                         : '#00000077'
-                  }}
+                  }, isPad && {borderRadius: 15}]}
                 />
-                <View style={{ flexDirection: 'row' }}>
+                {tracks && tracks[0] && tracks[0]?.isMuted() && (
+                  <View style={styles.toonRow}>
+                    <TouchableOpacity
+                      style={[styles.characterView, { marginRight: 10 }]}
+                      onPressOut={() => setSelectedToon('jangok')}
+                    >
+                      <Image
+                        source={icCharacter1}
+                        resizeMode={'cover'}
+                        style={[
+                          styles.characterImage,
+                          selectedToon === 'jangok' && { opacity: 0.8 }
+                        ]}
+                      />
+                      {selectedToon === 'jangok' && (
+                        <View style={styles.characterCheckVeiw}>
+                          <Image
+                            source={icCheckW}
+                            resizeMode={'cover'}
+                            style={styles.icCheck}
+                          />
+                        </View>
+                      )}
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={[styles.characterView, { marginRight: 10 }]}
+                      onPressOut={() => setSelectedToon('jessie')}
+                    >
+                      <Image
+                        source={icCharacter2}
+                        resizeMode={'cover'}
+                        style={[
+                          styles.characterImage,
+                          selectedToon === 'jessie' && { opacity: 0.8 }
+                        ]}
+                      />
+                      {selectedToon === 'jessie' && (
+                        <View style={styles.characterCheckVeiw}>
+                          <Image
+                            source={icCheckW}
+                            resizeMode={'cover'}
+                            style={styles.icCheck}
+                          />
+                        </View>
+                      )}
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.characterView}
+                      onPressOut={() => setSelectedToon('suzy')}
+                    >
+                      <Image
+                        source={icCharacter3}
+                        resizeMode={'cover'}
+                        style={[
+                          styles.characterImage,
+                          selectedToon === 'suzy' && { opacity: 0.8 }
+                        ]}
+                      />
+                      {selectedToon === 'suzy' && (
+                        <View style={styles.characterCheckVeiw}>
+                          <Image
+                            source={icCheckW}
+                            resizeMode={'cover'}
+                            style={styles.icCheck}
+                          />
+                        </View>
+                      )}
+                    </TouchableOpacity>
+                  </View>
+                )}
+                <View style={styles.buttonImageView}>
                   <TouchableOpacity
                     style={[styles.toggleView, { marginRight: 16 }]}
-                    onPress={onToggleVideo}
+                    onPress={onToggleAudio}
                   >
                     <Image
                       source={
-                        tracks && tracks[0]?.isMuted()
-                          ? ButtonCameraOff
-                          : ButtonCamera
-                      }
-                      resizeMode={'contain'}
-                      style={styles.buttonImage}
-                    />
-                  </TouchableOpacity>
-                </View>
-                <View
-                  style={{
-                    position: 'absolute',
-                    bottom: '5%',
-                    zIndex: 2,
-                    paddingHorizontal: '35%',
-                    flexDirection: 'row'
-                  }}
-                >
-                  <TouchableOpacity
-                    style={[styles.toggleView, { marginRight: 16 }]}
-                    onPress={onToggleVideo}
-                  >
-                    <Image
-                      source={
-                        tracks && tracks[0]?.isMuted()
-                          ? ButtonCameraOff
-                          : ButtonCamera
+                        tracks && tracks[1]?.isMuted() ? icMicOff : icMicOn
                       }
                       resizeMode={'contain'}
                       style={styles.buttonImage}
@@ -167,13 +223,11 @@ export default function SettingScreenPresenter(props: PresenterProps) {
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={styles.toggleView}
-                    onPress={onToggleAudio}
+                    onPress={onToggleVideo}
                   >
                     <Image
                       source={
-                        tracks && tracks[1]?.isMuted()
-                          ? ButtonMicOff
-                          : ButtonMic
+                        tracks && tracks[0]?.isMuted() ? icVideoOff : icVideoOn
                       }
                       resizeMode={'contain'}
                       style={styles.buttonImage}
@@ -200,24 +254,28 @@ export default function SettingScreenPresenter(props: PresenterProps) {
                 </Text>
               </View>
             )}
+
             <View style={styles.settingRoomEnterView}>
-              <TouchableOpacity
-                style={[
-                  {
-                    backgroundColor:
-                      buttonActive && !isLoading
-                        ? 'rgb(28,144,251)'
-                        : 'rgb(125,125,125)'
-                  },
-                  styles.settingRoomEnterTouch
-                ]}
-                onPressOut={onConferenceEnter}
-                disabled={!buttonActive || isLoading}
+              <LinearGradient
+                end={{ x: 0, y: 0 }}
+                start={{ x: 1, y: 0 }}
+                colors={
+                  !buttonActive || isLoading
+                    ? ['rgb(125,125,125)', 'rgb(125,125,125)']
+                    : ['#3BBFF0', '#1C90FB']
+                }
+                style={styles.settingRoomEnterTouch}
               >
-                <Text style={styles.settingRoomEnterText}>
-                  {t('renewal.roomstate_setting_enter')}
-                </Text>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.settingRoomEnterTouch}
+                  onPressOut={onConferenceEnter}
+                  disabled={!buttonActive || isLoading}
+                >
+                  <Text style={styles.settingRoomEnterText}>
+                    {t('renewal.roomstate_setting_enter')}
+                  </Text>
+                </TouchableOpacity>
+              </LinearGradient>
             </View>
           </TouchableOpacity>
         </KeyboardAwareScrollView>
@@ -288,7 +346,8 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     marginBottom: 20,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   rctView: {
     position: 'absolute',
@@ -297,16 +356,54 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     backgroundColor: '#1D1D1D',
-    zIndex: 0
+    zIndex: 0,
+    borderRadius: isPad ? 15 : 0 
   },
-  buttonImage: {
-    width: 48,
-    height: 48
+  toonRow: {
+    flexDirection: 'row',
+    zIndex: 2,
+    elevation: 2,
+    justifyContent: 'center'
+  },
+  characterView: {
+    width: 104,
+    height: 104
+  },
+  characterImage: {
+    width: 104,
+    height: 104
+  },
+  characterCheckVeiw: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#1c90fb',
+    position: 'absolute',
+    top: 4,
+    right: 4
   },
   toggleView: {
     width: 48,
     height: 48,
-    borderRadius: 24
+    borderRadius: 24,
+    backgroundColor: 'rgba(255,255,255,0.5)',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  buttonImageView: {
+    position: 'absolute',
+    bottom: 30,
+    zIndex: 2,
+    elevation: 2,
+    paddingHorizontal: '35%',
+    flexDirection: 'row',
+    justifyContent: 'center'
+  },
+  buttonImage: {
+    width: 24,
+    height: 24
   },
   settingUserNameTitle: {
     width: '100%',
@@ -348,262 +445,6 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     borderColor: '#fff',
     fontFamily: 'DOUZONEText30'
-  }
+  },
+  icCheck: { width: 11.1, height: 8.4 }
 });
-
-// export default function SettingScreenPresenter(props: any) {
-//   const {tracks, onConferenceEnter, onToggleAudio, onToggleVideo, setName,  nameField, buttonActive, goBack} = props;
-//   const t = getT();
-//   return (
-//     <Fragment>
-//       {/* <SafeAreaView style={{ flex: 0, backgroundColor: '#1c90fb' }} /> */}
-//       <SafeAreaView style={styles.container}>
-//         <View style={[styles.topTitle]}>
-//           <TouchableOpacity onPress={goBack}>
-//             <Image
-//               source={icBack}
-//               style={{ width: 24, height: 24 }}
-//               resizeMode="cover"
-//             />
-//           </TouchableOpacity>
-//           <Text style={styles.HeaderTitleText}>기본 설정</Text>
-//           <TouchableOpacity disabled={true}>
-//             <Text style={styles.emptyText}>확인</Text>
-//           </TouchableOpacity>
-//         </View>
-//         {/* <View
-//           style={{
-//             height: 50,
-//             backgroundColor: '#1c90fb',
-//             flexDirection: 'row',
-//             paddingHorizontal: 20,
-//             justifyContent: 'center',
-//             alignItems: 'center'
-//           }}
-//         >
-//           <TouchableOpacity onPress={goBack}>
-//             <Image
-//               source={icBack}
-//               resizeMode={'contain'}
-//               style={{ width: 30 }}
-//             />
-//           </TouchableOpacity>
-//           <Text
-//             style={{
-//               flex: 1,
-//               textAlign: 'center',
-//               fontSize: 18,
-//               color: '#fff'
-//             }}
-//           >
-//             {t('option_awards')}
-//           </Text>
-//           <View style={{ width: 30 }} />
-//         </View> */}
-//         <KeyboardAvoidingView
-//           style={{
-//             ...styles.container,
-//             paddingHorizontal: orientation === 'horizontal' ? '20%' : 15,
-//             paddingVertical: orientation === 'horizontal' ? 20 : 0
-//           }}
-//           behavior={'height'}
-//         >
-//           <TouchableOpacity style={{ flex: 1 }} activeOpacity={1}>
-//             <View
-//               style={{
-//                 justifyContent: 'center',
-//                 alignItems: 'center',
-//                 height: '100%',
-//                 flex: 1
-//               }}
-//             >
-//               <Text style={{ fontSize: 17, color: '#000', paddingBottom: 10 }}>
-//                 {t('roomstate_setting_title')}
-//               </Text>
-//               <Text style={{ fontSize: 12, color: 'rgb(140,140,140)' }}>
-//                 {t('roomstate_setting_detail')}
-//               </Text>
-//             </View>
-//             <View
-//               style={{
-//                 // justifyContent: 'center',
-//                 alignItems: 'center',
-//                 // height: '100%',
-//                 flex: 3
-//                 // backgroundColor: '#158'
-//               }}
-//             >
-//               <Text
-//                 style={{
-//                   fontSize: 14,
-//                   color: 'rgb(51,51,51)',
-//                   paddingBottom: 5
-//                 }}
-//               >
-//                 {t('roomstate_setting_output')}
-//               </Text>
-
-//               <View
-//                 style={{
-//                   flex: 1,
-//                   width: '100%',
-//                   marginBottom: 20,
-//                   alignItems: 'center',
-//                   justifyContent: 'space-around',
-//                   flexDirection: 'row'
-//                 }}
-//               >
-//                 {tracks && tracks[0] && !tracks[0]?.isMuted() && (
-//                   <RTCView
-//                     style={{
-//                       // flex: 1,
-//                       position: 'absolute',
-//                       top: 0,
-//                       bottom: 0,
-//                       left: 0,
-//                       right: 0,
-//                       // height: '100%',
-//                       backgroundColor: '#1D1D1D',
-//                       zIndex: 0
-//                     }}
-//                     mirror={true}
-//                     // mirror={!isVideoReverse}
-//                     objectFit={'cover'}
-//                     streamURL={tracks[0]?.getOriginalStream().toURL()}
-//                     zOrder={1} // zOrder 는 [0, 1] 만 사용가능 (아마?)
-//                   />
-//                 )}
-//                 <View
-//                   style={{
-//                     position: 'absolute',
-//                     top: 0,
-//                     bottom: 0,
-//                     left: 0,
-//                     right: 0,
-//                     zIndex: 1,
-//                     backgroundColor: '#00000077'
-//                   }}
-//                 ></View>
-//                 <TouchableOpacity style={{ flex: 1 }}></TouchableOpacity>
-//                 <TouchableOpacity
-//                   style={{
-//                     flex: 2,
-//                     alignItems: 'center',
-//                     zIndex: 2
-//                   }}
-//                   onPress={onToggleVideo}
-//                 >
-//                   <Image
-//                     source={
-//                       tracks && tracks[0]?.isMuted()
-//                         ? ButtonCameraOff
-//                         : ButtonCamera
-//                     }
-//                     resizeMode={'contain'}
-//                     style={{
-//                       width: 55,
-//                       height: 55
-//                     }}
-//                   />
-//                 </TouchableOpacity>
-//                 <TouchableOpacity
-//                   style={{
-//                     flex: 2,
-//                     alignItems: 'center',
-//                     zIndex: 2
-//                   }}
-//                   onPress={onToggleAudio}
-//                 >
-//                   <Image
-//                     source={
-//                       tracks && tracks[1]?.isMuted() ? ButtonMicOff : ButtonMic
-//                     }
-//                     resizeMode={'contain'}
-//                     style={{
-//                       width: 55,
-//                       height: 55
-//                     }}
-//                   />
-//                 </TouchableOpacity>
-//                 <TouchableOpacity style={{ flex: 1 }}></TouchableOpacity>
-//               </View>
-//             </View>
-//             {nameField && (
-//               <View
-//                 style={{
-//                   justifyContent: 'center',
-//                   alignItems: 'center',
-//                   height: '100%',
-//                   flex: 1
-//                 }}
-//               >
-//                 <Text style={{ width: '100%', paddingLeft: 5 }}>
-//                   {t('roomstate_setting_name')}
-//                 </Text>
-//                 <TextInput
-//                   placeholder={t('roomstate_setting_setname')}
-//                   placeholderTextColor={'#999'}
-//                   style={{
-//                     borderColor: 'rgb(201,205,213)',
-//                     borderWidth: 1,
-//                     width: '100%',
-//                     height: 52,
-//                     marginVertical: 10,
-//                     paddingHorizontal: 5
-//                   }}
-//                   maxLength={20}
-//                   onChangeText={onSetName}
-//                   blurOnSubmit={true}
-//                 ></TextInput>
-//                 <Text
-//                   style={{
-//                     width: '100%',
-//                     paddingLeft: 5,
-//                     color: 'rgb(140,140,140)',
-//                     fontSize: 11
-//                   }}
-//                 >
-//                   {t('roomstate_setting_nameDefault')}
-//                 </Text>
-//               </View>
-//             )}
-//             <View
-//               style={{
-//                 justifyContent: 'center',
-//                 alignItems: 'center',
-//                 height: '100%',
-//                 flex: 1
-//               }}
-//             >
-//               <TouchableOpacity
-//                 style={{
-//                   backgroundColor: buttonActive
-//                     ? 'rgb(28,144,251)'
-//                     : 'rgb(125,125,125)',
-//                   borderRadius: 110,
-//                   width: '80%',
-//                   height: 50,
-//                   justifyContent: 'center',
-//                   alignItems: 'center'
-//                 }}
-//                 onPressOut={onConferenceEnter}
-//                 disabled={!buttonActive}
-//               >
-//                 <Text
-//                   style={{
-//                     fontSize: 15,
-//                     color: '#fff',
-//                     borderWidth: 0,
-//                     borderColor: '#fff'
-//                   }}
-//                 >
-//                   {t('roomstate_setting_enter')}
-//                 </Text>
-//               </TouchableOpacity>
-//             </View>
-//           </TouchableOpacity>
-//         </KeyboardAvoidingView>
-//       </SafeAreaView>
-//     </Fragment>
-//   );
-// }

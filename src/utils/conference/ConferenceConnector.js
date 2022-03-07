@@ -101,7 +101,6 @@ class ConferenceConnector {
    */
   connect = (connection, roomName, tracks, attributes) => {
     return new Promise(async (resolve, reject) => {
-      console.log(3333);
       // 참여할 room object 생성
       this._room = this._createRoom(connection, roomName);
       // 이벤트 연결
@@ -204,6 +203,12 @@ class ConferenceConnector {
     //   }
     // );
 
+    // 강제추방
+    this._room.on(conferenceEvents.KICKED, id => {
+      console.log(id);
+      this._room.kickParticipant(id);
+      this._handlers.KICK_USER(id);
+    })
     // 대화방 참가 성공 이벤트 연결
     this._room.on(conferenceEvents.CONFERENCE_JOINED, () => {
       // this._handlers.CONFERENCE_JOINED(this._room);
@@ -239,7 +244,6 @@ class ConferenceConnector {
 
     // 비디오 Mute 변경
     this._room.on(conferenceEvents.TRACK_MUTE_CHANGED, track => {
-      console.log(4444);
       if (track.getType() === 'video') {
         this._handlers.VIDEO_MUTE_CHANGED(track);
       }

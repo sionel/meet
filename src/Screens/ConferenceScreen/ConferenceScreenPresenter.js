@@ -56,6 +56,7 @@ const ConferenceScreenPresenter = props => {
           onChangeDocumentPage={props.onChangeDocumentPage}
           onChangeMicMaster={props.onChangeMicMaster}
           createdTime={props.createdTime}
+          handleKickUser={props.handleKickUser}
           {...props.route.params}
         />
       ) : isWehagoV ? (

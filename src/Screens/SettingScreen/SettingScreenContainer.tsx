@@ -20,6 +20,9 @@ export default function SettingScreenContainer(props: any) {
   const [tracks, setTracks] = useState<any[] | null>([]);
   const [nameField, setNameField] = useState(false);
   const [buttonActive, setButtonActive] = useState(false);
+  const [selectedToon, setSelectedToon] = useState<'jangok' | 'suzy' | 'jessie'>(
+    'jangok'
+  );
   // const ref = useRef<any>({tracks:null});
   //강제 업데이트
   const [, updateState] = useState<undefined | {}>();
@@ -86,6 +89,7 @@ export default function SettingScreenContainer(props: any) {
         devices: ['video'],
         resolution: 320
       });
+      
       const audioTrack = await JitsiMeetJS.createLocalTracks({
         devices: ['audio'],
         resolution: 320
@@ -175,7 +179,7 @@ export default function SettingScreenContainer(props: any) {
               ...params,
               accessType: params?.accessType,
               externalUser: user,
-              avatar: '{"label":"기본 제공 캐릭터3","value":"jessie"}'
+              avatar: selectedToon === 'jangok' ? '{"label":"기본 제공 캐릭터1","value":"jangok"}' : selectedToon === 'suzy' ? '{"label":"기본 제공 캐릭터2","value":"suzy"}' :'{"label":"기본 제공 캐릭터3","value":"jessie"}'
             }
           }
         ]
@@ -224,6 +228,8 @@ export default function SettingScreenContainer(props: any) {
       isHorizon={isHorizon}
       roomName={params.selectedRoomName}
       isLoading={isLoading}
+      selectedToon={selectedToon}
+      setSelectedToon={setSelectedToon}
     />
   );
 }

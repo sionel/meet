@@ -39,10 +39,13 @@ type ContentPresenterProps = {
   documentListMode: any;
   onChangeSharingMode: any;
   handdlePersonPlus: () => void;
+  handleKickUser: (id: string) => void;
   // limitedTime: number;
 };
 
 const ContentPresenter = (props: ContentPresenterProps) => {
+  // console.log(props);
+  
   const {
     mainUser,
     callType,
@@ -117,6 +120,7 @@ const ContentPresenter = (props: ContentPresenterProps) => {
           handelProfieBackButton={handelProfieBackButton}
           setIsPopupTouch={setIsPopupTouch}
           handdlePersonPlus={handdlePersonPlus}
+          handleKickUser={props.handleKickUser}
         />
       )}
       {/* OverView 영역 */}

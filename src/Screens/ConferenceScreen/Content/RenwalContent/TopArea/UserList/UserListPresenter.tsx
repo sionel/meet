@@ -37,14 +37,21 @@ type UserListPresenter = {
   isMasterControl: boolean;
   swipeRef: MutableRefObject<any>;
   handelProfileTouch: (item: ParticipantsTypes) => void;
+  handleKickUser: (id: string) => void;
+  isRoomMaster: boolean;
 };
 
 const UserListPresenter = gestureHandlerRootHOC((props: UserListPresenter) => {
-  const { userList, isMasterControl, handelProfileTouch, swipeRef } = props;
+  const {
+    userList,
+    isMasterControl,
+    handelProfileTouch,
+    swipeRef,
+    isRoomMaster,
+    handleKickUser
+  } = props;
 
   const t = getT();
-
-  // console.log(rightSwipeWidth);
 
   return (
     <FlatList
@@ -54,7 +61,7 @@ const UserListPresenter = gestureHandlerRootHOC((props: UserListPresenter) => {
       renderItem={({ item, index }: any) => {
         // console.log('item : ', item);
 
-        const { isMaster, userInfo } = item;
+        const { isMaster, userInfo, id } = item;
         // 마이크음소거여부
         const isMuteMic = item.isLocal
           ? item.isMuteMic
@@ -139,7 +146,7 @@ const UserListPresenter = gestureHandlerRootHOC((props: UserListPresenter) => {
                 outputRange: [0, rightSwipeWidth]
               });
 
-          return (
+          return isRoomMaster && index !== 0 ? (
             <Animated.View
               style={[
                 styles.rightSwipeView,
@@ -155,7 +162,10 @@ const UserListPresenter = gestureHandlerRootHOC((props: UserListPresenter) => {
               <TouchableOpacity
                 style={styles.kickView}
                 activeOpacity={0.2}
-                onPress={() => swipeRef.current[index].close()}
+                onPress={() => {
+                  handleKickUser(id);
+                  swipeRef.current[index].close();
+                }}
               >
                 <Image
                   source={icOut}
@@ -164,7 +174,7 @@ const UserListPresenter = gestureHandlerRootHOC((props: UserListPresenter) => {
                 />
               </TouchableOpacity>
             </Animated.View>
-          );
+          ) : null;
         };
 
         return (

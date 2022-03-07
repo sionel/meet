@@ -6,11 +6,14 @@ import deviceInfoModule from 'react-native-device-info';
 import { useSelector, useDispatch } from 'react-redux';
 
 const isPad = deviceInfoModule.isTablet();
-const { width, height } = Dimensions.get('screen');
+// const { width, height } = Dimensions.get('screen');
 
 export default function SimpleNoti() {
   const toggleFlag = useSelector(state => state.toast['toggleFlag']);
   const toastMessage = useSelector(state => state.toast['toastMessage']);
+
+  const [width, setWidth] = useState(Dimensions.get('screen').width);
+  const [height, setHeight] = useState(Dimensions.get('screen').height);
 
   const [isFirst, setIsFirst] = useState(true);
   const [message, setMessage] = useState('');
@@ -69,12 +72,27 @@ export default function SimpleNoti() {
     );
   }, [toggleFlag]);
 
+  useEffect(() => {
+    const updateLayout = () => {
+      setWidth(Dimensions.get('screen').width);
+      setHeight(Dimensions.get('screen').height);
+    };
+
+    Dimensions.addEventListener('change', updateLayout);
+
+    return () => {
+      Dimensions.removeEventListener('change', updateLayout);
+    };
+  });
+
   return message ? (
     <Animated.View
       style={[
         styles.container,
         {
-          opacity: fadeAnimation // Bind opacity to animated value
+          opacity: fadeAnimation, // Bind opacity to animated value
+          marginHorizontal: width * 0.04,
+          bottom: height * 0.7
         },
         isPad && {
           bottom: height * 0.3,
@@ -102,13 +120,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     left: 0,
     right: 0,
-    bottom: height * 0.7,
     backgroundColor: 'rgba(0,0,0,0.75)',
     elevation: 4,
     zIndex: 4,
     justifyContent: 'center',
-    alignItems: 'center',
-    marginHorizontal: width * 0.04
+    alignItems: 'center'
   },
   noti: {
     fontFamily: 'DOUZONEText30',

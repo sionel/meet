@@ -100,8 +100,8 @@ function reducer(state = initialState, action: AnyAction) {
       return applySetUserInfo(state, action);
     case SET_CHANGED_STATUS:
       return applyChangedStatus(state, action);
-    // case SET_KICK:
-    //   return applySetKickFlag(state, action);
+    case SET_KICK:
+      return applySetKickFlag(state, action);
     default:
       return state;
   }
@@ -134,7 +134,7 @@ function joinUser(user: any): ThunkAction<void, RootState, unknown> {
 
 function applyJoinUser(state: state, action: AnyAction) {
   const { user } = action;
-  
+
   const list = state.list.slice(0);
   const participant = {
     id: user.getId(),
@@ -147,6 +147,34 @@ function applyJoinUser(state: state, action: AnyAction) {
     isKicked: false
   };
   list.push(participant);
+
+  return {
+    ...state,
+    list
+  };
+}
+
+//#endregion JOIN_USER
+
+//#region KICK_USER : 유저추방
+
+function kickUser(id: string): ThunkAction<void, RootState, unknown> {
+  return (dispatch, getState) => {
+    // 나가는 사람이 현재 메인이라면 메인을 변경
+    const mainUser = getState().mainUser;
+    if (mainUser.mainUserId === id) {
+      dispatch(mainUserActionCreators.setMainUser('localUser'));
+    }
+    dispatch({
+      type: SET_KICK,
+      id
+    });
+  };
+}
+
+function applySetKickFlag(state: state, action: AnyAction) {
+  const { id } = action;
+  const list = state.list.filter((participant: any) => participant.id !== id);
 
   return {
     ...state,
@@ -346,7 +374,7 @@ function setUserInfo(
 
 function applySetUserInfo(state: state, action: AnyAction) {
   const { id, info } = action;
-  
+
   const list = state.list.slice(0);
   const findUser = list.find((user: ParticipantsTypes) => {
     // WEHAGO_ID로 sendCommand 받는데 이상한 로직에서도 받는게 있어서 중복처리 하려고 둔 로직
@@ -376,7 +404,8 @@ export const actionCreators = {
   // updateMuteAudio,
   setUserInfo,
   changedStatus,
-  initParticipants
+  initParticipants,
+  kickUser
 };
 
 export default reducer;
