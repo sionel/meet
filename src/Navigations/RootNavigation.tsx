@@ -126,6 +126,7 @@ export default function RootNavigation(props: any) {
     let wehago = await Linking.canOpenURL('wehago://');
     let nahago = await Linking.canOpenURL('staffmanagment://');
     let loginType = wehago ? 'wehago' : nahago ? 'nahago' : 'none';
+    
     Alert.alert(
       '앱 설치여부',
       `위하고 : ${wehago ? '설치' : '미설치'}\n 나하고 : ${
