@@ -13,6 +13,7 @@ interface ReservationCardProps {
   roomId: string;
   isPublic: boolean;
   reservationMoreClick: (roomId: string) => void;
+  enterConference: (roomId: string) => void;
   isTablet: boolean;
 }
 
@@ -26,6 +27,7 @@ export default function ConferenceBox(props: ReservationCardProps) {
     roomId,
     isPublic,
     reservationMoreClick,
+    enterConference,
     isTablet
   } = props;
 
@@ -36,7 +38,7 @@ export default function ConferenceBox(props: ReservationCardProps) {
         [styles.cardView, { width: isTablet ? '48%' : '100%' }]
       }
     >
-      <View style={styles.cardLeftContents}>
+      <TouchableOpacity style={styles.cardLeftContents} activeOpacity={0.5} onPress={() => enterConference(roomId)}>
         <View
           style={{
             flex: 1,
@@ -61,28 +63,30 @@ export default function ConferenceBox(props: ReservationCardProps) {
             {date + '\n' + start + ' ~ ' + end}
           </Text>
         </View>
-      </View>
+      </TouchableOpacity>
       <TouchableOpacity
         style={styles.cardRightView}
         onPress={() => reservationMoreClick(roomId)}
       >
         <View style={styles.profileImageList}>
-          {users.map((user: { type: string | number; value: string }, index) => {     
-            return user.type === 'string' ? (
-              <Image
-                key={index}
-                source={{
-                  uri: user.value
-                }}
-                resizeMode={'cover'}
-                style={styles.profileImage}
-              />
-            ) : (
-              <View style={styles.noImage}>
-                <Text>{'+' + user.value}</Text>
-              </View>
-            );
-          })}
+          {users.map(
+            (user: { type: string | number; value: string }, index) => {
+              return user.type === 'string' ? (
+                <Image
+                  key={index}
+                  source={{
+                    uri: user.value
+                  }}
+                  resizeMode={'cover'}
+                  style={styles.profileImage}
+                />
+              ) : (
+                <View style={styles.noImage}>
+                  <Text>{'+' + user.value}</Text>
+                </View>
+              );
+            }
+          )}
         </View>
 
         <Image source={icMore} resizeMode={'contain'} style={styles.icMore} />

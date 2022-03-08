@@ -268,6 +268,8 @@ class ConferenceScreenContainer extends React.Component {
       isExternalParticipant: !isLogin,
       externalUserId: externalUser,
       isMobile: true,
+      user_contact: auth.user_contact,
+      user_email: auth.user_eamil ? auth.user_eamil : auth.user_default_email,
       avatar: avatar
     };
 
@@ -554,7 +556,7 @@ class ConferenceScreenContainer extends React.Component {
 
   _handleKickUser = id => {
     this._conferenceManager._kickUser(id);
-  }
+  };
 }
 
 export default ConferenceScreenContainer;

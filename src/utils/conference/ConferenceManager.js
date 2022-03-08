@@ -189,6 +189,11 @@ class ConferenceManager {
     this._dispatch(masterAcionCreators.checkMasterList(this._roomToken));
   };
 
+  /**
+   * KICK_USER
+   * 대화방에 참여자 강퇴
+   */
+
   _kickUser = id => {
     this._dispatch(participantsAcionCreators.kickUser(id))
   }

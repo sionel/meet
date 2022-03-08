@@ -49,7 +49,6 @@ export const UserListContainer = (props: UserListContainer) => {
   const handelProfileTouch = (item: ParticipantsTypes) => {
     let userList = contentList.slice(0);
     const findUser = userList.find(user => user.id === item.id);
-
     if (findUser) {
       handleBottomPopup({
         ...bottomPopup,

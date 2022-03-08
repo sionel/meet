@@ -510,7 +510,14 @@ export default function HomeScreenContainer(props: any) {
                 roomId: conference.room_id,
                 isPublic: conference.is_public,
                 reservationMoreClick: (roomId: string) =>
-                  _reservationMoreClick(conference, isMaster, roomId)
+                  _reservationMoreClick(conference, isMaster, roomId),
+                enterConference: () =>
+                  navigation.navigate('ConferenceStateView', {
+                    id: conference.room_id,
+                    from: 'meet',
+                    accessType: 'auth',
+                    selectedRoomName: conference.name
+                  })
               };
               return data;
             })

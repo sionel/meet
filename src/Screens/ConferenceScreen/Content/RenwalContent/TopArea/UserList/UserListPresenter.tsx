@@ -59,7 +59,7 @@ const UserListPresenter = gestureHandlerRootHOC((props: UserListPresenter) => {
       data={userList}
       keyExtractor={(item, index) => String(index)}
       renderItem={({ item, index }: any) => {
-        // console.log('item : ', item);
+        // console.log('UserList_Item : ', item);
 
         const { isMaster, userInfo, id } = item;
         // 마이크음소거여부
@@ -163,7 +163,7 @@ const UserListPresenter = gestureHandlerRootHOC((props: UserListPresenter) => {
                 style={styles.kickView}
                 activeOpacity={0.2}
                 onPress={() => {
-                  handleKickUser(id);
+                  // handleKickUser(id);
                   swipeRef.current[index].close();
                 }}
               >

@@ -124,10 +124,8 @@ export default function RootNavigation(props: any) {
   // };
   const verifyCanOpenUrl = async () => {
     let wehago = await Linking.canOpenURL('wehago://');
-    let nahago = await Linking.canOpenURL('staffmanagment://').catch((e)=>{console.log('nahago link fail : ', e);
-    });
-
-    console.log('nahago : ', nahago);
+    let nahago = await Linking.canOpenURL('staffmanagment://')
+    console.log(nahago);
     
     let loginType = wehago ? 'wehago' : nahago ? 'nahago' : 'none';
     setLoginType(loginType);

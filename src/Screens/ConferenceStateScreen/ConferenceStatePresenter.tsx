@@ -6,7 +6,8 @@ import {
   StatusBar,
   StyleSheet,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  Text
 } from 'react-native';
 import { CustomIcon } from '@components/index';
 import ReservationInfoScreen from './subScreens/ReservationInfoScreen';
@@ -14,6 +15,10 @@ import FullroomScreen from './subScreens/FullroomScreen';
 import WatingScreen from './subScreens/WatingScreen';
 import DeletedScreen from './subScreens/DeletedScreen';
 import icBack from '@assets/icons/ic_back.png';
+import LinearGradient from 'react-native-linear-gradient';
+
+import patternTop from '@assets/patterns/waiting_pattern_top.png';
+import patternBot from '@assets/patterns/waiting_pattern_bottom.png';
 
 interface presenterProps {
   conferenceState: string;
@@ -26,13 +31,64 @@ interface presenterProps {
   iscret: boolean;
   handleClickBack: () => void;
   isTablet: boolean;
+  selectedRoomName: string;
 }
 
-
 export default function ConferenceStatePresenter(props: presenterProps) {
-  const { conferenceState, spin, handleClickBack } = props;
+  const { conferenceState, spin, handleClickBack, selectedRoomName, isTablet } = props;
 
-  return (
+  return conferenceState === 'wating' ? (
+    <LinearGradient
+      start={{ x: 0, y: 0 }}
+      end={{ x: 0, y: 1 }}
+      colors={['#dbecfe', '#fcfdff', '#fcfdff']}
+      style={{ flex: 1 }}
+    >
+      {isTablet && (
+        <Fragment>
+          <Image
+            source={patternTop}
+            style={{
+              position: 'absolute',
+              width: 240,
+              height: 240,
+              top: 0,
+              right: 0
+            }}
+          />
+          <Image
+            source={patternBot}
+            style={{
+              position: 'absolute',
+              width: 260,
+              height: 82,
+              bottom: '35%'              
+            }}
+          />
+        </Fragment>
+      )}
+      <SafeAreaView style={{ backgroundColor: 'transparent', flex: 1 }}>
+        <StatusBar barStyle={'dark-content'} />
+        <View style={[styles.topTitle, { backgroundColor: 'transparent' }]}>
+          <TouchableOpacity onPress={handleClickBack}>
+            <Image
+              source={icBack}
+              style={{ width: 24, height: 24 }}
+              resizeMode="cover"
+            />
+          </TouchableOpacity>
+          <Text
+            style={{ fontFamily: 'DOUZONEText50', fontSize: 18, color: '#333' }}
+          >
+            {selectedRoomName}
+          </Text>
+          {/* 회의제목 중앙정렬처리를 위해 빈공간 */}
+          <View style={{ width: 24, height: 24 }} />
+        </View>
+        <WatingScreen {...props} />
+      </SafeAreaView>
+    </LinearGradient>
+  ) : (
     <SafeAreaView style={{ backgroundColor: '#f8f8fa', flex: 1 }}>
       <StatusBar barStyle={'dark-content'} />
       <View style={[styles.topTitle]}>
@@ -48,8 +104,6 @@ export default function ConferenceStatePresenter(props: presenterProps) {
         <DeletedScreen {...props} />
       ) : conferenceState === 'reservationInfo' ? (
         <ReservationInfoScreen {...props} />
-      ) : conferenceState === 'wating' ? (
-        <WatingScreen {...props} />
       ) : conferenceState === 'fullroom' ? (
         <FullroomScreen {...props} />
       ) : (
