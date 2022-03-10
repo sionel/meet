@@ -1,5 +1,5 @@
 import { ParticipantsTypes } from '@redux/participants';
-import React, { Component, Fragment, MutableRefObject } from 'react';
+import React, { Component, Fragment, MutableRefObject, useMemo } from 'react';
 import {
   Animated,
   Dimensions,
@@ -26,6 +26,7 @@ import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { FlatList, gestureHandlerRootHOC } from 'react-native-gesture-handler';
 
 import Device from 'react-native-device-info';
+import { getConferenceManager } from '@utils/ConferenceManager';
 
 const isPad = Device.isTablet();
 const { width } = Dimensions.get('window');
@@ -37,8 +38,9 @@ type UserListPresenter = {
   isMasterControl: boolean;
   swipeRef: MutableRefObject<any>;
   handelProfileTouch: (item: ParticipantsTypes) => void;
-  handleKickUser: (id: string) => void;
+  handleKickUser: (id: string, userName: string) => void;
   isRoomMaster: boolean;
+  authName: string;
 };
 
 const UserListPresenter = gestureHandlerRootHOC((props: UserListPresenter) => {
@@ -48,7 +50,8 @@ const UserListPresenter = gestureHandlerRootHOC((props: UserListPresenter) => {
     handelProfileTouch,
     swipeRef,
     isRoomMaster,
-    handleKickUser
+    handleKickUser,
+    authName
   } = props;
 
   const t = getT();
@@ -136,6 +139,8 @@ const UserListPresenter = gestureHandlerRootHOC((props: UserListPresenter) => {
           progress: any,
           dragX: Animated.AnimatedInterpolation
         ) => {
+          let conferenceManager = getConferenceManager();
+
           const trans = isPad
             ? dragX.interpolate({
                 inputRange: [-40, 0],
@@ -163,7 +168,8 @@ const UserListPresenter = gestureHandlerRootHOC((props: UserListPresenter) => {
                 style={styles.kickView}
                 activeOpacity={0.2}
                 onPress={() => {
-                  // handleKickUser(id);
+                  handleKickUser(id, userName);
+                  // conferenceManager.kickUserFromMaster(id, userName)
                   swipeRef.current[index].close();
                 }}
               >

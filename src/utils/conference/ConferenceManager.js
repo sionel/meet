@@ -194,9 +194,9 @@ class ConferenceManager {
    * 대화방에 참여자 강퇴
    */
 
-  _kickUser = id => {
-    this._dispatch(participantsAcionCreators.kickUser(id))
-  }
+  // _kickUser = id => {
+  //   this._dispatch(participantsAcionCreators.kickUser(id))
+  // }
 
   /**
    * LEFT_USER
@@ -405,6 +405,9 @@ class ConferenceManager {
   stopAttention = name => {
     this._conferenceConnector.stopAttention(name);
   };
+  kickUserFromMaster = (id, masterName, targetName) => {
+    this._conferenceConnector.kickUserFromMaster(id,masterName, targetName);
+  }
 
   rejectedByMaster = () => {
     this._dispatch(
@@ -419,8 +422,11 @@ class ConferenceManager {
   // 마스터가 참여자를 추방
   requestKick = (masterInfo, targetInfo) => {
     const { name: masterName } = JSON.parse(masterInfo);
-    const { name: targetName, id: targetId } = JSON.parse(targetInfo);
+    const { name: targetName, id: targetId} = JSON.parse(targetInfo);
+
     const myId = this._room.myUserId();
+    console.log('myId : ', myId);
+    console.log('targetId : ',targetId);
     if (myId === targetId) {
       const message = `${masterName} 님이 ${targetName} 님을 \n화상회의방에서 추방하였습니다.`;
       this._endCall();

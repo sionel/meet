@@ -180,7 +180,7 @@ class ConferenceScreenContainer extends React.Component {
         onChangeMicMaster={this._handleToggleMic}
         isDeployedServices={this.state.isDeployedServices}
         toggleScreenFlag={this.props.toggleScreenFlag}
-        handleKickuser={this._handleKickUser}
+        handleKickUser={this._handleKickUser}
       />
     ) : (
       <EndCallMessage
@@ -554,8 +554,8 @@ class ConferenceScreenContainer extends React.Component {
     }
   };
 
-  _handleKickUser = id => {
-    this._conferenceManager._kickUser(id);
+  _handleKickUser = (id, masterName, targetName) => {
+    this._conferenceManager.kickUserFromMaster(id, masterName, targetName);
   };
 }
 

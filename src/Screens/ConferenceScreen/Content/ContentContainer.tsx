@@ -70,6 +70,9 @@ function ContentContainer(props: any) {
     title: '',
     popupType: 'NORMAL'
   });
+
+  // console.log('bottomPopup.contentList : ', bottomPopup.contentList);
+
   const [isPopupTouch, setIsPopupTouch] = useState(false);
   // console.log('props : ', props);
 
@@ -129,9 +132,6 @@ function ContentContainer(props: any) {
     dispatch(toastActionCreators.setToastMessage(msg));
 
   let userList = participants.slice(0);
-  
-  // console.log(participants);
-  
 
   if (auth.portal_id) {
     userList.unshift({
@@ -162,12 +162,9 @@ function ContentContainer(props: any) {
       }
     });
   }
-
   userList.forEach((user: any) => {
     user.isMaster = masters.includes(user?.userInfo?.wehagoId);
   });
-
-  // console.log('userList : ', userList);
 
   useEffect(() => {
     _handleChangeSpeaker();
@@ -205,6 +202,15 @@ function ContentContainer(props: any) {
   useEffect(() => {
     isMultipleView && setConferenceMode(ConferenceModes.CONTROL);
   }, [isMultipleView]);
+
+  useEffect(() => {
+    if (bottomPopup.show === true && bottomPopup.popupType === 'USERLIST') {
+      
+      setTimeout(() => {
+        setBottomPopup({ ...bottomPopup, contentList: userList });
+      }, 2000); 
+    }
+  }, [userList.length]);
 
   const _toggleConferenceMode = (NativeTouchEvent: NativeTouchEvent) => {
     const { pageY } = NativeTouchEvent;

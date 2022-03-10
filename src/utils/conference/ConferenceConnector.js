@@ -52,6 +52,8 @@ export const REQUEST_FLOOR = 'REQUEST_FLOOR';
 // 제어중일때 발언권 취소
 export const STOP_FLOOR = 'STOP_FLOOR';
 
+export const KICK_PARTICIPANT = 'KICK_PARTICIPANT';
+
 // export const REQUEST_GET_CONTROL = 'CONFERENCE.EVENT.REQUEST.REQUEST_GET_CONTROL'; // 마스터 제어 권한 위임 요청 이벤트
 
 // export const RESPONSE_GET_CONTROL = 'CONFERENCE.EVENT.REQUEST.RESPONSE_GET_CONTROL'; // 마스터 제어 권한 위임 반환 이벤트
@@ -67,6 +69,8 @@ export const REQUEST_ROOM_STOP_RECORDING =
   'CONFERENCE.EVENT.ROOM.REQUEST_ROOM_STOP_RECORDING';
 export const REQUEST_ROOM_START_RECORDING =
   'CONFERENCE.EVENT.ROOM.REQUEST_ROOM_START_RECORDING';
+
+
 /**
  * ConferenceConnector
  * 화상회의 방 생성/참가 및 디바이스 연결을 담당하는 클래스
@@ -202,13 +206,7 @@ class ConferenceConnector {
     //     this._handlers.CREATED_TIME(createdTime);
     //   }
     // );
-
-    // 강제추방
-    this._room.on(conferenceEvents.KICKED, id => {
-      console.log(id);
-      this._room.kickParticipant(id);
-      this._handlers.KICK_USER(id);
-    })
+    
     // 대화방 참가 성공 이벤트 연결
     this._room.on(conferenceEvents.CONFERENCE_JOINED, () => {
       // this._handlers.CONFERENCE_JOINED(this._room);
@@ -701,6 +699,24 @@ class ConferenceConnector {
           name: name ? name : null
         }),
         isMasterControlTarget: name ? false : true
+      }
+    });
+  };
+
+  //추방
+  kickUserFromMaster = async(id, masterName, targetName) => {
+    // this._room.kickParticipant(id);
+    await this._room.sendCommandOnce(REQUEST_KICK, {
+      value: id,
+      attributes: {
+        targetUser: JSON.stringify({
+          id,
+          name: targetName ? targetName : null
+        }),
+        requestUser: JSON.stringify({
+          jitsiId: this._room.myUserId(),
+          name: masterName? masterName : null
+        })
       }
     });
   };

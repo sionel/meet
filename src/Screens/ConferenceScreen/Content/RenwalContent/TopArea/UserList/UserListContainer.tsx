@@ -1,7 +1,7 @@
 import { ParticipantsTypes } from '@redux/participants';
 import { ConferenceBottomPopupProps } from '@screens/ConferenceScreen/Content/ContentContainer';
 import { getT } from '@utils/translateManager';
-import React, { MutableRefObject, useEffect, useState } from 'react';
+import React, { MutableRefObject, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/configureStore';
 import UserListPresenter from './UserListPresenter';
@@ -13,7 +13,7 @@ type UserListContainer = {
     React.SetStateAction<ConferenceBottomPopupProps>
   >;
   setIsPopupTouch: React.Dispatch<React.SetStateAction<boolean>>;
-  handleKickUser: (id: string) => void;
+  handleKickUser: (id: string, masterName: string, userName: string) => void;
 };
 
 export const UserListContainer = (props: UserListContainer) => {
@@ -29,26 +29,27 @@ export const UserListContainer = (props: UserListContainer) => {
   const [isRoomMaster, setIsRoomMaster] = useState(false);
   const swipeRef: MutableRefObject<any> = React.useRef([]);
 
-  const { isMasterControl, masters, userID } = useSelector(
+  const { isMasterControl, masters, authID, authName } = useSelector(
     (state: RootState) => {
       const { master, user } = state;
       return {
         isMasterControl: master.isMasterControl,
         masters: master.masterList,
-        userID: user.auth.portal_id
+        authID: user.auth.portal_id,
+        authName: user.auth.user_name
       };
     }
   );
 
   useEffect(() => {
-    let master = masters.find(id => id === userID);
+    let master = masters.find(id => id === authID);
     setIsRoomMaster(master ? true : false);
     return () => {};
   });
 
   const handelProfileTouch = (item: ParticipantsTypes) => {
-    let userList = contentList.slice(0);
-    const findUser = userList.find(user => user.id === item.id);
+    let newUserList = contentList.slice(0);
+    const findUser = newUserList.find(user => user.id === item.id);
     if (findUser) {
       handleBottomPopup({
         ...bottomPopup,
@@ -61,14 +62,22 @@ export const UserListContainer = (props: UserListContainer) => {
     }
   };
 
+  const _handleKickUser = (id: string, userName: string) => {
+    handleKickUser(id, authName, userName);
+    // let newUserList = contentList.slice(0);
+    // const findUser = newUserList.filter(user => user.id !== id);
+    // handleBottomPopup({ ...bottomPopup, contentList: findUser });
+  };
+
   return (
     <UserListPresenter
       userList={contentList}
       isMasterControl={isMasterControl}
       swipeRef={swipeRef}
       handelProfileTouch={handelProfileTouch}
-      handleKickUser={handleKickUser}
+      handleKickUser={_handleKickUser}
       isRoomMaster={isRoomMaster}
+      authName={authName}
     />
   );
 };

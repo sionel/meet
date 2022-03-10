@@ -259,6 +259,7 @@ export default function ConferenceStateContainer(props: any) {
       isPublic={isPublic}
       iscret={iscret}
       isTablet={isTablet}
+      isHorizon={isHorizon}
       handleClickBack={handleClickBack}
       selectedRoomName={params.selectedRoomName}
     />

@@ -56,7 +56,7 @@ export default function WatingScreen(props: watingScreenProps) {
 
   const second2String = (second: number) => {
     let minutes: any = Math.ceil(second / 60);
-    let seconds: any = Math.ceil(second - (minutes - 1) * 60);
+    let seconds: any = second - (minutes - 1) * 60;
 
     if (minutes < 1 && seconds < 60) {
       // console.log('minutes : ', minutes);
@@ -67,115 +67,126 @@ export default function WatingScreen(props: watingScreenProps) {
   };
 
   return (
-    <View style={styles.watingContainer}>
-      <View style={styles.titleContainer}>
-        <View style={styles.titleHeadView}>
-          {time > 0 && (
-            <Fragment>
-              <Text style={styles.titleHeadText}>{`화상회의  시작 `}</Text>
-              <Text style={styles.titleHeadTimeText}>{`${second2String(
-                time
-              )} `}</Text>
-              <Text style={styles.titleHeadText}>{`전`}</Text>
-            </Fragment>
-          )}
-        </View>
-        <Text
-          style={styles.titleSubText1}
-        >{`해당 화상회의방은 현재 오픈 대기중입니다.`}</Text>
-        <View style={styles.titleSubView}>
-          <Text style={styles.titleSubText2}>{start}</Text>
-          <Text style={styles.titleSubText1}>{`시작예정`}</Text>
-        </View>
-      </View>
-
-      <Image
-        source={waiting}
+    <View style={styles.watingHorizonContainer}>
+      <View
         style={{
-          width: isTablet ? 500 : 330,
-          height: isTablet ? 500 : 330,
-          marginBottom: 24,
-          alignSelf: 'center'
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center'
         }}
-        resizeMode={'cover'}
-      />
-
-      <View style={styles.botContainer}>
-        <View style={styles.botHeadView}>
-          <View style={{ flexDirection: 'row' }}>
-            <Text style={styles.botHeadText}>{`참여예정자 `}</Text>
-            <Text style={styles.botHeadUserCount}>{length}</Text>
-          </View>
-          <View>
-            <Text
-              style={{
-                fontFamily: 'DOUZONEText30',
-                fontSize: 13,
-                color: '#333'
-              }}
-            >{``}</Text>
-          </View>
-        </View>
-        <FlatList
-          data={accessUser}
-          horizontal={true}
-          windowSize={7}
-          scrollEnabled={length > 8 ? true : false}
-          showsHorizontalScrollIndicator={false}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item, index }) => {
-            const profileUrl = item.profile_url
-              ? wehagoMainURL + item.profile_url
-              : wehagoDummyImageURL;
-            const userName = item.user_name ? item.user_name : '외부';
-            const isMaster = item.is_master;
-            return (
-              <View
-                style={{
-                  paddingRight: 16,
-                  justifyContent: 'center',
-                  alignItems: 'center'
-                }}
-              >
-                <View style={{ marginBottom: 6 }}>
-                  <Image
-                    source={{ uri: profileUrl }}
-                    style={styles.profileSize}
-                  />
-                  {isMaster && (
-                    <View style={styles.masterCircle}>
-                      <Image
-                        source={icMaster}
-                        style={{ width: 10, height: 10 }}
-                        resizeMode={'cover'}
-                      />
-                    </View>
-                  )}
-                </View>
-                <Text style={styles.nameText}>{userName}</Text>
-              </View>
-            );
+      >
+        <Image
+          source={waiting}
+          style={{
+            width: isTablet ? 500 : 330,
+            height: isTablet ? 500 : 330,
+            marginBottom: 24,
+            alignSelf: 'center'
           }}
+          resizeMode={'cover'}
         />
       </View>
-      <View
-        style={{ justifyContent: 'center', alignItems: 'center', flex: 0.5 }}
-      >
-        <TouchableOpacity style={styles.buttonContainer}>
-          <Text style={styles.buttonText}>{`오픈 대기중입니다.`}</Text>
-        </TouchableOpacity>
+
+      <View style={{ flex: 1, justifyContent: 'center' }}>
+        <View style={styles.botContainer}>
+          <View style={styles.titleContainer}>
+            <View style={styles.titleHeadView}>
+              {time > 0 && (
+                <Fragment>
+                  <Text style={styles.titleHeadText}>{`화상회의  시작 `}</Text>
+                  <Text style={styles.titleHeadTimeText}>{`${second2String(
+                    time
+                  )} `}</Text>
+                  <Text style={styles.titleHeadText}>{`전`}</Text>
+                </Fragment>
+              )}
+            </View>
+            <Text
+              style={styles.titleSubText1}
+            >{`해당 화상회의방은 현재 오픈 대기중입니다.`}</Text>
+            <View style={styles.titleSubView}>
+              <Text style={styles.titleSubText2}>{start}</Text>
+              <Text style={styles.titleSubText1}>{`시작예정`}</Text>
+            </View>
+          </View>
+          <View style={styles.botHeadView}>
+            <View style={{ flexDirection: 'row' }}>
+              <Text style={styles.botHeadText}>{`참여예정자 `}</Text>
+              <Text style={styles.botHeadUserCount}>{length}</Text>
+            </View>
+            <View>
+              <Text
+                style={{
+                  fontFamily: 'DOUZONEText30',
+                  fontSize: 13,
+                  color: '#333'
+                }}
+              >{``}</Text>
+            </View>
+          </View>
+          <FlatList
+            data={accessUser}
+            horizontal={true}
+            windowSize={7}
+            scrollEnabled={length > 6 ? true : false}
+            showsHorizontalScrollIndicator={true}
+            style={{ alignSelf: 'flex-start', marginLeft: 30 }}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item, index }) => {
+              const profileUrl = item.profile_url
+                ? wehagoMainURL + item.profile_url
+                : wehagoDummyImageURL;
+              const userName = item.user_name ? item.user_name : '외부';
+              const isMaster = item.is_master;
+              return (
+                <View
+                  style={{
+                    paddingRight: 16,
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                  }}
+                >
+                  <View style={{ marginBottom: 6 }}>
+                    <Image
+                      source={{ uri: profileUrl }}
+                      style={styles.profileSize}
+                    />
+                    {isMaster && (
+                      <View style={styles.masterCircle}>
+                        <Image
+                          source={icMaster}
+                          style={{ width: 10, height: 10 }}
+                          resizeMode={'cover'}
+                        />
+                      </View>
+                    )}
+                  </View>
+                  <Text style={styles.nameText}>{userName}</Text>
+                </View>
+              );
+            }}
+          />
+        </View>
+        <View
+          style={{ justifyContent: 'center', alignItems: 'center', flex: 0.4 }}
+        >
+          <TouchableOpacity style={styles.buttonContainer}>
+            <Text style={styles.buttonText}>{`오픈 대기중입니다.`}</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
 }
 const styles = StyleSheet.create({
-  watingContainer: {
-    flex: 1
+  watingHorizonContainer: {
+    flex: 1,
+    flexDirection: 'row'
   },
   titleContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    flex: 1
+    marginBottom: 60
   },
   titleHeadView: {
     flexDirection: 'row',
@@ -188,16 +199,13 @@ const styles = StyleSheet.create({
     marginBottom: 9
   },
   botContainer: {
-    flex: 0.7,
-    paddingLeft: isTablet() ? 30 : 20,
-    marginBottom: 24
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   botHeadView: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginRight: 20,
+    alignSelf: 'flex-start',
+    marginHorizontal: 30,
     marginBottom: 27
-    // backgroundColor: 'blue'
   },
   masterCircle: {
     width: 14,

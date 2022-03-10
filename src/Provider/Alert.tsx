@@ -7,7 +7,8 @@ import {
   Modal,
   Platform,
   Image,
-  Button
+  Button,
+  Dimensions
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../redux/configureStore';
@@ -15,6 +16,9 @@ import { actionCreators } from '@redux/alert';
 import { BlurView } from '@react-native-community/blur';
 
 import icOut from '@assets/icons/ic_out.png';
+
+const { height, width } = Dimensions.get('window');
+const { OS } = Platform;
 
 export default function AlertScreenPresenter() {
   const alert = useSelector((state: RootState) => state.alert);
@@ -87,23 +91,14 @@ export default function AlertScreenPresenter() {
       </Modal>
     </View>
   ) : (
-    <BlurView
-      blurAmount={50}
-      style={{
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
-        zIndex: 10,
-        justifyContent: 'center',
-        alignItems: 'center'
-      }}
-    >
+    <BlurView blurAmount={50} style={styles.osBlurStyle}>
       <View
         style={{
           backgroundColor: '#fff',
           width: 268,
           height: 302,
           borderRadius: 14,
+          justifyContent: 'center',
           alignItems: 'center'
         }}
       >
@@ -225,5 +220,27 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     fontFamily: 'DOUZONEText30',
     color: '#1c90fb'
-  }
+  },
+  osBlurStyle:
+    OS === 'android'
+      ? {
+          position: 'absolute',
+          marginVertical: (height - 302) / 2,
+          marginHorizontal: (width - 268) / 2,
+          zIndex: 10,
+          elevation: 10,
+          justifyContent: 'center',
+          alignItems: 'center'
+        }
+      : {
+          position: 'absolute',
+          top: 0,
+          bottom: 0,
+          right: 0,
+          left: 0,
+          zIndex: 10,
+          elevation: 10,
+          justifyContent: 'center',
+          alignItems: 'center'
+        }
 });

@@ -42,7 +42,8 @@ type BottomPopupProps = {
   handelProfieBackButton: () => void;
   setIsPopupTouch: React.Dispatch<React.SetStateAction<boolean>>;
   handdlePersonPlus: () => void;
-  handleKickUser: (id: string) => void;
+  handleKickUser: (id: string, masterName: string, userName: string) => void;
+  userList: any;
 };
 
 const { width, height } = Dimensions.get('window');
@@ -59,7 +60,8 @@ export default function BottomPopup(
     handelProfieBackButton,
     setIsPopupTouch,
     handdlePersonPlus,
-    handleKickUser
+    handleKickUser,
+    userList
   } = props;
 
   const { OS } = Platform;

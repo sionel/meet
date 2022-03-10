@@ -13,12 +13,13 @@ import { CustomIcon } from '@components/index';
 import ReservationInfoScreen from './subScreens/ReservationInfoScreen';
 import FullroomScreen from './subScreens/FullroomScreen';
 import WatingScreen from './subScreens/WatingScreen';
+import WatingHorizonScreen from './subScreens/WatingHorizonScreen';
 import DeletedScreen from './subScreens/DeletedScreen';
 import icBack from '@assets/icons/ic_back.png';
 import LinearGradient from 'react-native-linear-gradient';
 
 import patternTop from '@assets/patterns/waiting_pattern_top.png';
-import patternBot from '@assets/patterns/waiting_pattern_bottom.png';
+import patternBot from '@assets/patterns/waiting_pattern_bot.png';
 
 interface presenterProps {
   conferenceState: string;
@@ -31,11 +32,12 @@ interface presenterProps {
   iscret: boolean;
   handleClickBack: () => void;
   isTablet: boolean;
+  isHorizon: boolean;
   selectedRoomName: string;
 }
 
 export default function ConferenceStatePresenter(props: presenterProps) {
-  const { conferenceState, spin, handleClickBack, selectedRoomName, isTablet } = props;
+  const { conferenceState, spin, handleClickBack, selectedRoomName, isTablet, isHorizon } = props;
 
   return conferenceState === 'wating' ? (
     <LinearGradient
@@ -62,7 +64,8 @@ export default function ConferenceStatePresenter(props: presenterProps) {
               position: 'absolute',
               width: 260,
               height: 82,
-              bottom: '35%'              
+              left: 0,
+              bottom: isHorizon ? '15%' : '35%'
             }}
           />
         </Fragment>
@@ -85,7 +88,11 @@ export default function ConferenceStatePresenter(props: presenterProps) {
           {/* 회의제목 중앙정렬처리를 위해 빈공간 */}
           <View style={{ width: 24, height: 24 }} />
         </View>
-        <WatingScreen {...props} />
+        {isHorizon ? (
+          <WatingHorizonScreen {...props} />
+        ) : (
+          <WatingScreen {...props} />
+        )}
       </SafeAreaView>
     </LinearGradient>
   ) : (

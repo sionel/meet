@@ -39,13 +39,13 @@ type ContentPresenterProps = {
   documentListMode: any;
   onChangeSharingMode: any;
   handdlePersonPlus: () => void;
-  handleKickUser: (id: string) => void;
+  handleKickUser: (id: string, masterName: string, userName: string) => void;
   // limitedTime: number;
 };
 
 const ContentPresenter = (props: ContentPresenterProps) => {
   // console.log(props);
-  
+
   const {
     mainUser,
     callType,
@@ -85,7 +85,7 @@ const ContentPresenter = (props: ContentPresenterProps) => {
         // right: 0,
         flex: 1
       }}
-      onTouchEnd={({nativeEvent}) => toggleConferenceMode(nativeEvent)}
+      onTouchEnd={({ nativeEvent }) => toggleConferenceMode(nativeEvent)}
     >
       {!localPipMode && Number(callType) !== 2 && !drawingMode && (
         <TopArea
@@ -121,6 +121,7 @@ const ContentPresenter = (props: ContentPresenterProps) => {
           setIsPopupTouch={setIsPopupTouch}
           handdlePersonPlus={handdlePersonPlus}
           handleKickUser={props.handleKickUser}
+          userList={userList}
         />
       )}
       {/* OverView 영역 */}
