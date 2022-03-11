@@ -204,8 +204,8 @@ function toggleMuteMicByMe(micMute: any): ThunkAction<void, RootState, unknown> 
 }
 
 function applyToggleMuteMicByMe(state: state, action: AnyAction) {
-  console.log('state1111');
-  console.log(state);
+  // console.log('state1111');
+  // console.log(state);
   
   const { user } = state;
   const { micMute } = action;

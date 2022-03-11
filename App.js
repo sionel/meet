@@ -7,7 +7,7 @@ import CustomProvider from './src/Provider';
 
 import { withTranslation } from 'react-i18next';
 import './src/locales/index';
-import { setT } from './src/utils/translateManager';
+import { setT, getT } from './src/utils/translateManager';
 
 import Splash from 'react-native-splash-screen';
 import RootNavigation from './src/Navigations/RootNavigation';
@@ -49,7 +49,7 @@ function AppWapper(props) {
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-        <CustomProvider>
+        <CustomProvider getT={getT}>
           <App {...props} />
         </CustomProvider>
       </PersistGate>

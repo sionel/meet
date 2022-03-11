@@ -4,7 +4,7 @@
  * 참조 : http://wiki.duzon.com:8080/display/sky/3.+API
  */
 
- import {
+import {
   isDev,
   meetURL,
   securityRequest,
@@ -57,7 +57,7 @@ export default {
       if (response.status !== 201) {
         throw response.resultCode;
       }
-      return { result } = response.json();
+      return ({ result } = response.json());
     } catch (err) {
       console.warn('1.createMeetRoom : ', err);
       return false;
@@ -281,7 +281,7 @@ export default {
         }
       };
       const response = await fetch(url, data);
-      
+
       if (response.status !== 204) {
         throw response.resultCode;
       } else {
@@ -346,7 +346,7 @@ export default {
     }
   },
 
-    // 3-11 종료된 화상회의방 접속했던 사용자 리스트 조회
+  // 3-11 종료된 화상회의방 접속했던 사용자 리스트 조회
   getFinishedParticipant: async (auth, roomId) => {
     const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
 
@@ -372,8 +372,6 @@ export default {
       return false;
     }
   },
-
-
 
   // 3-12 화상회의 토큰 생성
   getMeetRoomToken: async (auth, roomId) => {
@@ -799,16 +797,23 @@ export default {
     }
   },
 
-  getExpireTime: async (auth, roomId) => {
-    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY } = auth;
-    const url = `${meetURL}/room/expire-time?room=${roomId}`;
-    const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
+  getExpireTime: async roomId => {
+    let url = '';
+    let signature;
+
+    const accsessUrl = `/video/room/expire-time?room=${roomId}`;
+    const token = await getToken(accsessUrl);
+    const encText = accsessUrl + token.cur_date + token.token;
+    const hashText = CryptoJS.SHA256(encText);
+    signature = CryptoJS.enc.Base64.stringify(hashText);
+    url = `${wehagoBaseURL0}${accsessUrl}`;
+
     try {
       const data = {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          ...headers
+          signature
         }
       };
 

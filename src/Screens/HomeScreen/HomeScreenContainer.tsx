@@ -152,8 +152,10 @@ export default function HomeScreenContainer(props: any) {
   const isTablet = deviceInfoModule.isTablet();
   const today = new Date();
   useEffect(() => {
-    _getConferences();
-    _getFinishedConferences();
+    if(auth.cno !== undefined) {
+      _getConferences();
+      _getFinishedConferences();
+    }
     BackHandler.addEventListener('hardwareBackPress', _handleBackButton);
 
     // const reload = setInterval(() => {
@@ -182,7 +184,9 @@ export default function HomeScreenContainer(props: any) {
   }, [reservationConference, finishedConference]);
 
   useEffect(() => {
+    if(auth.cno !== undefined) {
     _getFinishedConferences();
+    }
   }, [finishDate, finishIndex]);
 
   const _handleBackButton = () => {
@@ -263,14 +267,17 @@ export default function HomeScreenContainer(props: any) {
             .map((user: any) => user.user)
             .filter((user: any) => user);
 
+          //TODO: 다음주화요일에 room/connected-user api 수정되면 삭제하고 accessedUser 에서 값받아서 처리   
           const participants: any[] = await MeetApi.getUserInfoList(
             auth,
             portalIdList
-          );
+          );          
 
-          participants.push(...users.filter((e: any) => e.user_type === 2));
+          const newParticipants = participants.filter(user => user.is_primary === 'T');
 
-          const uriList = participants.reduce<
+          newParticipants.push(...users.filter((e: any) => e.user_type === 2));
+
+          const uriList = newParticipants.reduce<
             { type: string; value: string | number }[]
           >((prev, present) => {
             if (prev.length > 2) return prev;
@@ -281,17 +288,17 @@ export default function HomeScreenContainer(props: any) {
               ? wehagoMainURL + present.profile_url
               : wehagoDummyImageURL;
 
-            if (participants.length <= 3) {
+            if (newParticipants.length <= 3) {
               type = 'string';
               value = uri;
             } else {
               type = prev.length < 2 ? 'string' : 'number';
-              value = prev.length < 2 ? uri : participants.length - 2;
+              value = prev.length < 2 ? uri : newParticipants.length - 2;
             }
 
             return [...prev, { type, value }];
           }, []);
-
+          
           const roomId = conference.t_room_id;
           const data = {
             conferenceName: conference.name,
@@ -301,6 +308,7 @@ export default function HomeScreenContainer(props: any) {
             roomId,
             finishedMoreClick: () => _finishedMoreClick(conference)
           };
+
           return data;
         })
       );
@@ -328,9 +336,9 @@ export default function HomeScreenContainer(props: any) {
                 : conference.created_at
             ).toTimeString();
 
-            const ampm = parseInt(startTime.slice(0, 2)) < 12 ? 'AM' : 'PM'
+            const ampm = parseInt(startTime.slice(0, 2)) < 12 ? 'AM' : 'PM';
             const time = ampm + ' ' + startTime.slice(0, 5);
-                
+
             const onMinte = Math.floor(
               (new Date().getTime() -
                 (conference.start_date_time
@@ -357,13 +365,16 @@ export default function HomeScreenContainer(props: any) {
               .map((user: any) => user.user)
               .filter((user: any) => user);
 
+            //TODO: 다음주화요일에 room/connected-user api 수정되면 삭제하고 accessedUser 에서 값받아서 처리 
             const participants: any[] = await MeetApi.getUserInfoList(
               auth,
               portalIdList
             );
 
+            const newParticipants = participants.filter(user => user.is_primary === 'T');
+
             const sortedPortalIdList: any[] = portalIdList.map((id: any) => {
-              const item = participants.find(e => e.portal_id === id);
+              const item = newParticipants.find(e => e.portal_id === id);
               return item;
             });
 
@@ -443,14 +454,18 @@ export default function HomeScreenContainer(props: any) {
               .map((user: any) => user.user)
               .filter((user: any) => user);
 
+            //TODO: 다음주화요일에 room/connected-user api 수정되면 삭제하고 accessedUser 에서 값받아서 처리 
             const participants: any[] = await MeetApi.getUserInfoList(
               auth,
               portalIdList
             );
 
+            const newParticipants = participants.filter(user => user.is_primary === 'T');
+            //
+
             const sortedPortalIdList: any[] = portalIdList.map((id: any) => {
               const item =
-                participants.find(e => e.portal_id === id) ||
+              newParticipants.find(e => e.portal_id === id) ||
                 sortedAccessUserList.find(e => e.user === id);
               return item;
             });
@@ -474,11 +489,11 @@ export default function HomeScreenContainer(props: any) {
             }, []);
 
             const start = new Date(conference.r_start_date_time).toTimeString();
-            const sAmPm = parseInt(start.slice(0, 2)) < 12 ? 'AM' : 'PM'
+            const sAmPm = parseInt(start.slice(0, 2)) < 12 ? 'AM' : 'PM';
             const startTime = sAmPm + ' ' + start.slice(0, 5);
 
             const end = new Date(conference.r_end_date_time).toTimeString();
-            const eAaPm = parseInt(end.slice(0, 2)) < 12 ? 'AM' : 'PM'
+            const eAaPm = parseInt(end.slice(0, 2)) < 12 ? 'AM' : 'PM';
             const endTime = eAaPm + ' ' + end.slice(0, 5);
 
             const data = {
@@ -685,6 +700,8 @@ export default function HomeScreenContainer(props: any) {
       const portalIdList = accessedUser
         .map((user: any) => user.user)
         .filter((user: any) => user);
+
+      //TODO: 다음주화요일에 room/connected-user api 수정되면 삭제하고 accessedUser 에서 값받아서 처리 
       const participantInfoList: any[] = await MeetApi.getUserInfoList(
         auth,
         portalIdList
@@ -696,10 +713,11 @@ export default function HomeScreenContainer(props: any) {
           user_type,
           user_name: username
         }));
+      
+      const newPartipantInfoList = participantInfoList.filter(user => user.is_primary === 'T');
+      newPartipantInfoList.push(...extraUser);
 
-      participantInfoList.push(...extraUser);
-
-      participants = participantInfoList
+      participants = newPartipantInfoList
         .map(participant => ({
           image: participant?.profile_url
             ? wehagoMainURL + participant.profile_url

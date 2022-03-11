@@ -14,17 +14,16 @@ import { actionCreators as orientationAction } from '../redux/modules/orientatio
 import { RootState } from '../redux/configureStore';
 import { UserApi, ServiceCheckApi } from '../services';
 
-import { getT } from '../utils/translateManager';
-
 import { actionCreators as AlertActions } from '../redux/modules/alert';
 import { actionCreators as UserActions } from '../redux/modules/user';
 import { actionCreators as RootActions } from '../redux/modules/root';
 import { actionCreators as DeployedActions } from '../redux/modules/deployed';
 import deviceInfoModule from 'react-native-device-info';
 import * as RootNavigation from '../Navigations/RootNavigation';
+import { getConferenceManager } from '../utils/ConferenceManager';
 
 export default function CustomProvider(props: any) {
-  const { children } = props;
+  const { children, getT } = props;
   const {
     alert,
     indicator,
@@ -75,12 +74,13 @@ export default function CustomProvider(props: any) {
     const interval =
       isLogin &&
       network &&
+      auth.cno !== undefined &&
       setInterval(() => {
-        _loginCheckRequest();
+         _loginCheckRequest();
       }, 10000);
     setSessionInterval(interval);
 
-    (!isLogin || !network) && sessionInterval && clearInterval(sessionInterval);
+    (!isLogin || !network || auth.cno === undefined) && sessionInterval && clearInterval(sessionInterval);
 
     return () => {
       sessionInterval && clearInterval(sessionInterval);
@@ -178,7 +178,13 @@ export default function CustomProvider(props: any) {
       HASH_KEY
     );
     if (checkResult.errors) {
+      const { name } = RootNavigation.getCurrentRoute();
+      // console.log('RootNavigation.getCurrentRoute() : ', RootNavigation.getCurrentRoute());
       if (checkResult.errors.code === 'E002') {
+        if (name === 'ConferenceView') {
+          let conferenceManager = getConferenceManager();
+          conferenceManager._endCall();
+        }
         _setAlert({
           type: 1,
           title: t('renewal.alert_title_error'),

@@ -101,15 +101,16 @@ export const navigateReset = (name: string, params?: any) => {
   });
 };
 
+export const getCurrentRoute = () => {
+  return navigationRef.current?.getCurrentRoute();
+};
+
 export default function RootNavigation(props: any) {
   // let nowStack = '';
   let cnt = 0;
   const dispatch = useDispatch();
   const setIsConference = (flag: boolean) => {
     dispatch(ConferenceActions.setIsConference(flag));
-  };
-  const setConferenceManager = (state: string) => {
-    dispatch(ConferenceActions.setConferenceManager(state));
   };
   const setLoginType = (loginType: string) => {
     dispatch(UserActions.setLoginType(loginType));
@@ -126,13 +127,6 @@ export default function RootNavigation(props: any) {
     let wehago = await Linking.canOpenURL('wehago://');
     let nahago = await Linking.canOpenURL('staffmanagment://');
     let loginType = wehago ? 'wehago' : nahago ? 'nahago' : 'none';
-    
-    Alert.alert(
-      '앱 설치여부',
-      `위하고 : ${wehago ? '설치' : '미설치'}\n 나하고 : ${
-        nahago ? '설치' : '미설치'
-      }`
-    );
 
     setLoginType(loginType);
   };
@@ -157,14 +151,14 @@ export default function RootNavigation(props: any) {
     verifyCanOpenUrl();
 
     if (props.url?.url) {
-      console.log('딥링크 인데 Linking 분기 안탐');
+      // console.log('딥링크 인데 Linking 분기 안탐');
       navigate('SplashView', { deeplink: props.url.url });
     }
 
     // 앱이 꺼져 있을때(딥링크)
     Linking.getInitialURL()
       .then(url => {
-        console.log('앱이 꺼져 있을때(딥링크)');
+        // console.log('앱이 꺼져 있을때(딥링크)');
         url && navigate('SplashView', { deeplink: url });
       })
       .catch(err => console.error('error ', err));
@@ -172,11 +166,11 @@ export default function RootNavigation(props: any) {
     // 앱이 이미 실행중일때(딥링크)
     Linking.addEventListener('url', async ({ url }) => {
       let { name } = navigationRef.current.getCurrentRoute();
-      console.log('앱이 이미 실행중일때(딥링크)');
+      // console.log('앱이 이미 실행중일때(딥링크)');
       if (name === 'ConferenceView') {
         Alert.alert('경고', '이미 진행중인 회의가 있습니다.');
         let result: any = querystringParser(url);
-        const {video_id} = result;
+        const { video_id } = result;
         await MeetApi.deleteConferenceRoom(auth, video_id);
 
         return;
