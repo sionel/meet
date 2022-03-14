@@ -187,7 +187,7 @@ export default function CustomProvider(props: any) {
         }
         _setAlert({
           type: 1,
-          title: t('renewal.alert_title_error'),
+          title: t('renewal.alert_title_notion'),
           message: t('renewal.alert_text_duplicate_logout'),
           onConfirm: () => {
             _onLogout();
@@ -197,7 +197,7 @@ export default function CustomProvider(props: any) {
       } else {
         _setAlert({
           type: 1,
-          title: t('renewal.alert_title_error'),
+          title: t('renewal.alert_title_notion'),
           message: t('renewal.alert_text_network_problem_ocurred'),
           onConfirm: () => {
             _onLogout();
