@@ -271,7 +271,7 @@ export default function HomeScreenContainer(props: any) {
           const participants: any[] = await MeetApi.getUserInfoList(
             auth,
             portalIdList
-          );          
+          );
 
           const newParticipants = participants.filter(user => user.is_primary === 'T');
 
@@ -696,6 +696,9 @@ export default function HomeScreenContainer(props: any) {
         auth,
         conference.t_room_id
       );
+
+      console.log('accessedUser : ', accessedUser);
+      
 
       const portalIdList = accessedUser
         .map((user: any) => user.user)

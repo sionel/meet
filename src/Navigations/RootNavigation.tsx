@@ -123,21 +123,18 @@ export default function RootNavigation(props: any) {
     };
   });
 
-  const verifyCanOpenUrl = async () => {
-    let wehago = await Linking.canOpenURL('wehago://');
-    let nahago = await Linking.canOpenURL('staffmanagment://');
-    let loginType = wehago ? 'wehago' : nahago ? 'nahago' : 'none';
-
-    setLoginType(loginType);
-  };
-
   const handleAppStateChange = async (nextAppState: AppStateStatus) => {
     if (nextAppState === 'active') {
-      await verifyCanOpenUrl();
+      let wehago = await Linking.canOpenURL('wehago://');
+      let nahago = await Linking.canOpenURL('staffmanagment://');
+      let loginType = wehago ? 'wehago' : nahago ? 'nahago' : 'none';
+
+      setLoginType(loginType);
     }
   };
 
   useEffect(() => {
+    handleAppStateChange('active');
     AppState.addEventListener('change', handleAppStateChange);
     // TODO: 안드로이드 => 리액트 네이티브가 액티비티가 1개라서 위하고에서 Meet으로 올때 App이 재시작됨
     // 위하고 측에서 딥링크 넘겨줄때 위하고 앱측에서 launchMode 방식에서 생기는 현상인거 같음 ?
@@ -146,9 +143,6 @@ export default function RootNavigation(props: any) {
       setIsConference(false);
       return;
     }
-
-    //나하고 설치여부 확인
-    verifyCanOpenUrl();
 
     if (props.url?.url) {
       // console.log('딥링크 인데 Linking 분기 안탐');
