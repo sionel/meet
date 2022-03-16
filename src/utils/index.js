@@ -14,8 +14,8 @@
  const OSID = OS === 'ios' ? 'mobile-ios' : 'mobile-android';
  
  // 개발기,운영기 로 바꾸려면 해당 주석을 이용하자
- // export const isDev = true;
- export const isDev = false;
+ export const isDev = true;
+//  export const isDev = false;
  /**
   * Back-end URL
   */

@@ -70,7 +70,6 @@ export const REQUEST_ROOM_STOP_RECORDING =
 export const REQUEST_ROOM_START_RECORDING =
   'CONFERENCE.EVENT.ROOM.REQUEST_ROOM_START_RECORDING';
 
-
 /**
  * ConferenceConnector
  * 화상회의 방 생성/참가 및 디바이스 연결을 담당하는 클래스
@@ -206,7 +205,7 @@ class ConferenceConnector {
     //     this._handlers.CREATED_TIME(createdTime);
     //   }
     // );
-    
+
     // 대화방 참가 성공 이벤트 연결
     this._room.on(conferenceEvents.CONFERENCE_JOINED, () => {
       // this._handlers.CONFERENCE_JOINED(this._room);
@@ -457,6 +456,7 @@ class ConferenceConnector {
 
     this._room.addCommandListener(GRANT_FLOOR, value => {
       const result = JSON.parse(value.attributes.targetUser);
+      console.log('GRANT_FLOOR : ', result);
       if (result.find(e => e.jitsiId === this._room.myUserId())) {
         if (value.attributes.type === 'reject') {
           this._handlers.REJECTED_BY_MASTER();
@@ -468,6 +468,7 @@ class ConferenceConnector {
 
     this._room.addCommandListener(GRANT_FLOOR_TARGET, value => {
       const result = JSON.parse(value.attributes.targetUser);
+      console.log('GRANT_FLOOR_TARGET : ', result);
       if (result.jitsiId === this._room.myUserId()) {
         if (value.attributes.type === 'reject') {
           this._handlers.REJECTED_BY_MASTER();
@@ -704,7 +705,7 @@ class ConferenceConnector {
   };
 
   //추방
-  kickUserFromMaster = async(id, masterName, targetName) => {
+  kickUserFromMaster = async (id, masterName, targetName) => {
     // this._room.kickParticipant(id);
     await this._room.sendCommandOnce(REQUEST_KICK, {
       value: id,
@@ -715,12 +716,18 @@ class ConferenceConnector {
         }),
         requestUser: JSON.stringify({
           jitsiId: this._room.myUserId(),
-          name: masterName? masterName : null
+          name: masterName ? masterName : null
         })
       }
     });
   };
   //#endregion
+
+  updateRolefromMaster = async () => {
+    await this._room.sendCommandOnce(UPDATE_MASTER_USERS, {
+      value: this._room.myUserId()
+    });
+  };
 }
 
 export default ConferenceConnector;

@@ -45,7 +45,6 @@ interface userInfoParam {
   full_path: string;
   user_type: string;
   is_master: boolean;
-  direction: 'LEFT' | 'RIGHT' | 'NONE';
 }
 
 type PartialAccessUserParam = Partial<accessUserParam>;
@@ -184,12 +183,9 @@ export default function ConferenceModfiyScreenContainer(props: any) {
               : wehagoDummyImageURL,
             full_path: user.user_no
               ? user.full_path_list[pathLng - 1].path
-              : user.user_name !== null
-              ? user.user
               : '',
             user_type: user.user_type === 2 ? 'ext' : 'org',
-            is_master: sortedAccessUserList[i].is_master,
-            direction: 'NONE'
+            is_master: sortedAccessUserList[i].is_master
           };
           return data;
         })

@@ -122,22 +122,18 @@ export default function RootNavigation(props: any) {
   //   if (name === 'ConferenceView') nowStack = 'ConferenceView';
   //   else nowStack = '';
   // };
-  const verifyCanOpenUrl = async () => {
-    let wehago = await Linking.canOpenURL('wehago://');
-    let nahago = await Linking.canOpenURL('staffmanagment://')
-    console.log(nahago);
-    
-    let loginType = wehago ? 'wehago' : nahago ? 'nahago' : 'none';
-    setLoginType(loginType);
-  };
 
   const handleAppStateChange = async (nextAppState: AppStateStatus) => {
     if (nextAppState === 'active') {
-      await verifyCanOpenUrl();
+      let wehago = await Linking.canOpenURL('wehago://');
+      let nahago = await Linking.canOpenURL('staffmanagment://');
+      let loginType = wehago ? 'wehago' : nahago ? 'nahago' : 'none';
+      setLoginType(loginType);
     }
   };
 
   useEffect(() => {
+    handleAppStateChange('active');
     AppState.addEventListener('change', handleAppStateChange);
     // TODO: 안드로이드 액티비티가 1개이면서 위하고에서 백그라운드에서 포그라운드로 넘어올때 App이 재시작됨으로 재시작 처리를 우선으로함
     // 위하고 측에서 딥링크 넘겨줄때 위하고 앱측에서 launchMode 방식에서 생기는 현상인거 같음.
@@ -146,8 +142,6 @@ export default function RootNavigation(props: any) {
       setIsConference(false);
       return;
     }
-
-    verifyCanOpenUrl();
 
     if (props.url?.url) navigate('SplashView', { deeplink: props.url.url });
 

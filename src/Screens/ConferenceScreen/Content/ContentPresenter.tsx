@@ -40,6 +40,7 @@ type ContentPresenterProps = {
   onChangeSharingMode: any;
   handdlePersonPlus: () => void;
   handleKickUser: (id: string, masterName: string, userName: string) => void;
+  updateRolefromMaster: (newMaster: string) => void;
   // limitedTime: number;
 };
 
@@ -121,6 +122,7 @@ const ContentPresenter = (props: ContentPresenterProps) => {
           setIsPopupTouch={setIsPopupTouch}
           handdlePersonPlus={handdlePersonPlus}
           handleKickUser={props.handleKickUser}
+          updateRolefromMaster={props.updateRolefromMaster}
           userList={userList}
         />
       )}

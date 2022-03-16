@@ -205,10 +205,9 @@ function ContentContainer(props: any) {
 
   useEffect(() => {
     if (bottomPopup.show === true && bottomPopup.popupType === 'USERLIST') {
-      
       setTimeout(() => {
         setBottomPopup({ ...bottomPopup, contentList: userList });
-      }, 2000); 
+      }, 2000);
     }
   }, [userList.length]);
 
@@ -360,6 +359,23 @@ function ContentContainer(props: any) {
     }
   };
 
+  const _updateRolefromMaster = (newMaster: string) => {
+    let conferenceManager = getConferenceManager();
+    const newMasters: string[] = masters;
+    newMasters.push(newMaster);
+    console.log('newMasters : ', newMasters);
+    
+    const params: { master: string[]; unmaster: string[] } = {
+      master: newMasters,
+      unmaster: []
+    };
+    MeetApi.setMasterList(auth, roomId, params);
+    conferenceManager.updateRolefromMaster();
+  };
+
+  // console.log('masters : ', masters);
+  
+
   // console.log('attributes : ', attributes);
 
   return attributes ? (
@@ -406,6 +422,7 @@ function ContentContainer(props: any) {
       limitedTime={limitedTime}
       setLimitedTime={setLimitedTime}
       handdlePersonPlus={handdlePersonPlus}
+      updateRolefromMaster={_updateRolefromMaster}
     />
   );
 }

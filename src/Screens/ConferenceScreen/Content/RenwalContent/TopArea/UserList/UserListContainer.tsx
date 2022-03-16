@@ -1,5 +1,6 @@
 import { ParticipantsTypes } from '@redux/participants';
 import { ConferenceBottomPopupProps } from '@screens/ConferenceScreen/Content/ContentContainer';
+import { MeetApi } from '@services/index';
 import { getT } from '@utils/translateManager';
 import React, { MutableRefObject, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -14,6 +15,7 @@ type UserListContainer = {
   >;
   setIsPopupTouch: React.Dispatch<React.SetStateAction<boolean>>;
   handleKickUser: (id: string, masterName: string, userName: string) => void;
+  updateRolefromMaster: (newMaster: string) => void;
 };
 
 export const UserListContainer = (props: UserListContainer) => {
@@ -23,20 +25,22 @@ export const UserListContainer = (props: UserListContainer) => {
     bottomPopup,
     handleBottomPopup,
     setIsPopupTouch,
-    handleKickUser
+    handleKickUser,
+    updateRolefromMaster
   } = props;
 
   const [isRoomMaster, setIsRoomMaster] = useState(false);
   const swipeRef: MutableRefObject<any> = React.useRef([]);
 
-  const { isMasterControl, masters, authID, authName } = useSelector(
+  const { isMasterControl, masters, authID, authName, auth } = useSelector(
     (state: RootState) => {
       const { master, user } = state;
       return {
         isMasterControl: master.isMasterControl,
         masters: master.masterList,
         authID: user.auth.portal_id,
-        authName: user.auth.user_name
+        authName: user.auth.user_name,
+        auth: user.auth
       };
     }
   );
@@ -76,8 +80,10 @@ export const UserListContainer = (props: UserListContainer) => {
       swipeRef={swipeRef}
       handelProfileTouch={handelProfileTouch}
       handleKickUser={_handleKickUser}
+      updateRolefromMaster={updateRolefromMaster}
       isRoomMaster={isRoomMaster}
       authName={authName}
+      masters={masters}
     />
   );
 };

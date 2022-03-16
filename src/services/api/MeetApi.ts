@@ -181,6 +181,36 @@ export default {
     }
   },
 
+  // 3-5 마스터 리스트 수정
+  setMasterList: async (
+    auth: apiAuthInfo,
+    roomId: string,
+    param: { master: string[]; unmaster: string[] }
+  ) => {
+    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
+    const url = `${meetURL}/room/master?cno=${cno}&room=${roomId}`;
+    const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
+    const data = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...headers
+      },
+      body: JSON.stringify({
+        ...param
+      })
+    };
+
+    const response = await Axios(url, data);
+
+    if (isSuccess(response)) {
+      return response;
+    } else {
+      console.warn('5.setMasterList : ', response);
+      return response;
+    }
+  },
+
   getUserInfoList: async (auth: apiAuthInfo, portalIdList: string[]) => {
     const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
 
@@ -754,10 +784,7 @@ export default {
     }
   },
   // 3-46 접속코드 검색
-  getJoincode: async (
-    auth: apiAuthInfo,
-    roomId: string,
-  ) => {
+  getJoincode: async (auth: apiAuthInfo, roomId: string) => {
     const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
     const url = `${meetURL}/joincode/session?room=${roomId}&cno=${cno}`;
     const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);

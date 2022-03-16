@@ -1070,14 +1070,14 @@ const styles = StyleSheet.create({
   name: {
     fontFamily: 'DOUZONEText30',
     fontSize: 14,
-    lineHeight: 15,
+    // lineHeight: 15,
     letterSpacing: -0.3,
     paddingBottom: '0.5%',
     color: '#000'
   },
   tree: {
     fontSize: 12,
-    lineHeight: 15,
+    // lineHeight: 15,
     letterSpacing: -0.24,
     color: '#939393',
     fontFamily: 'DOUZONEText30'

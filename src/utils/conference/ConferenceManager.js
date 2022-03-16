@@ -406,7 +406,11 @@ class ConferenceManager {
     this._conferenceConnector.stopAttention(name);
   };
   kickUserFromMaster = (id, masterName, targetName) => {
-    this._conferenceConnector.kickUserFromMaster(id,masterName, targetName);
+    this._conferenceConnector.kickUserFromMaster(id, masterName, targetName);
+  };
+
+  updateRolefromMaster = () => {
+    this._conferenceConnector.updateRolefromMaster();
   }
 
   rejectedByMaster = () => {
@@ -415,18 +419,18 @@ class ConferenceManager {
     );
     this._dispatch(masterAcionCreators.setMicRequest(false));
   };
+
   changeMasterList = () => {
     this._dispatch(masterAcionCreators.checkMasterList(this._roomToken));
+    this._dispatch(toastAcionCreators.setToastMessage('마스터권한이 부여되었습니다.'));
   };
 
   // 마스터가 참여자를 추방
   requestKick = (masterInfo, targetInfo) => {
     const { name: masterName } = JSON.parse(masterInfo);
-    const { name: targetName, id: targetId} = JSON.parse(targetInfo);
+    const { name: targetName, id: targetId } = JSON.parse(targetInfo);
 
     const myId = this._room.myUserId();
-    console.log('myId : ', myId);
-    console.log('targetId : ',targetId);
     if (myId === targetId) {
       const message = `${masterName} 님이 ${targetName} 님을 \n화상회의방에서 추방하였습니다.`;
       this._endCall();

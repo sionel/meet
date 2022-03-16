@@ -133,7 +133,7 @@ const HomeScreenPresenter = (props: presenterProps) => {
           backgroundColor: bottomPopup.show ? 'rgba(0,0,0,0.5)' : '#F7F8FA'
         }}
       />
-   
+
       <View style={styles.safeContainer}>
         <View
           style={[styles.header, { paddingHorizontal: isTablet ? 40 : 20 }]}
@@ -539,7 +539,9 @@ const styles = StyleSheet.create({
     shadowColor: '#aaa',
     shadowOpacity: 10,
     borderWidth: 1,
-    paddingBottom: '5%'
+    paddingBottom: '5%',
+    zIndex: 1,
+    elevation: 1
   },
   monthTouchContainer: {
     height: '100%',

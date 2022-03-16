@@ -39,8 +39,10 @@ type UserListPresenter = {
   swipeRef: MutableRefObject<any>;
   handelProfileTouch: (item: ParticipantsTypes) => void;
   handleKickUser: (id: string, userName: string) => void;
+  updateRolefromMaster: (newMaster: string) => void;
   isRoomMaster: boolean;
   authName: string;
+  masters: string[];
 };
 
 const UserListPresenter = gestureHandlerRootHOC((props: UserListPresenter) => {
@@ -51,8 +53,12 @@ const UserListPresenter = gestureHandlerRootHOC((props: UserListPresenter) => {
     swipeRef,
     isRoomMaster,
     handleKickUser,
-    authName
+    updateRolefromMaster,
+    authName,
+    masters
   } = props;
+
+  // console.log('userList : ', userList);
 
   const t = getT();
 
@@ -63,8 +69,11 @@ const UserListPresenter = gestureHandlerRootHOC((props: UserListPresenter) => {
       keyExtractor={(item, index) => String(index)}
       renderItem={({ item, index }: any) => {
         // console.log('UserList_Item : ', item);
+        
+        
 
         const { isMaster, userInfo, id } = item;
+        // console.log('userInfo : ', userInfo);
         // 마이크음소거여부
         const isMuteMic = item.isLocal
           ? item.isMuteMic
@@ -89,9 +98,14 @@ const UserListPresenter = gestureHandlerRootHOC((props: UserListPresenter) => {
                 inputRange: [0, 56, 112],
                 outputRange: [-112, -56, 0]
               })
-            : dragX.interpolate({
+            : isRoomMaster
+            ? dragX.interpolate({
                 inputRange: [0, leftSwipeWidth / 2, leftSwipeWidth],
                 outputRange: [-leftSwipeWidth, -(leftSwipeWidth / 2), 0]
+              })
+            : dragX.interpolate({
+                inputRange: [0, leftSwipeWidth / 2],
+                outputRange: [-leftSwipeWidth / 2, 0]
               });
 
           return (
@@ -104,6 +118,13 @@ const UserListPresenter = gestureHandlerRootHOC((props: UserListPresenter) => {
                       translateX: trans
                     }
                   ]
+                },
+                {
+                  width: isPad
+                    ? 112
+                    : isRoomMaster
+                    ? leftSwipeWidth
+                    : leftSwipeWidth / 2
                 }
               ]}
             >
@@ -120,17 +141,22 @@ const UserListPresenter = gestureHandlerRootHOC((props: UserListPresenter) => {
                   resizeMode="cover"
                 />
               </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.masterTouchView}
-                activeOpacity={0.2}
-                onPress={() => swipeRef.current[index].close()}
-              >
-                <Image
-                  source={icMaster}
-                  style={styles.imageSize}
-                  resizeMode="cover"
-                />
-              </TouchableOpacity>
+              {isRoomMaster && index !== 0 && (
+                <TouchableOpacity
+                  style={styles.masterTouchView}
+                  activeOpacity={0.2}
+                  onPress={() => {
+                    updateRolefromMaster(userInfo.wehagoId);
+                    swipeRef.current[index].close();
+                  }}
+                >
+                  <Image
+                    source={icMaster}
+                    style={styles.imageSize}
+                    resizeMode="cover"
+                  />
+                </TouchableOpacity>
+              )}
             </Animated.View>
           );
         };
@@ -169,7 +195,6 @@ const UserListPresenter = gestureHandlerRootHOC((props: UserListPresenter) => {
                 activeOpacity={0.2}
                 onPress={() => {
                   handleKickUser(id, userName);
-                  // conferenceManager.kickUserFromMaster(id, userName)
                   swipeRef.current[index].close();
                 }}
               >
@@ -298,8 +323,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8
   },
   leftSwipeView: {
-    flexDirection: 'row',
-    width: isPad ? 112 : leftSwipeWidth
+    flexDirection: 'row'
     // marginRight: 15
   },
   rightSwipeView: {

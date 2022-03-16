@@ -43,6 +43,7 @@ type BottomPopupProps = {
   setIsPopupTouch: React.Dispatch<React.SetStateAction<boolean>>;
   handdlePersonPlus: () => void;
   handleKickUser: (id: string, masterName: string, userName: string) => void;
+  updateRolefromMaster: (newMaster: string) => void;
   userList: any;
 };
 
@@ -61,6 +62,7 @@ export default function BottomPopup(
     setIsPopupTouch,
     handdlePersonPlus,
     handleKickUser,
+    updateRolefromMaster,
     userList
   } = props;
 
@@ -163,6 +165,7 @@ export default function BottomPopup(
             handleBottomPopup={handleBottomPopup}
             setIsPopupTouch={setIsPopupTouch}
             handleKickUser={handleKickUser}
+            updateRolefromMaster={updateRolefromMaster}
           />
         )}
         {popupType === 'PROFILE' && <Profile content={contentList} />}
