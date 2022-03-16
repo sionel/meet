@@ -50,7 +50,6 @@ interface userInfoParam {
   full_path: string;
   user_type: string;
   is_master: boolean;
-  direction: 'LEFT' | 'RIGHT' | 'NONE';
 }
 
 interface roomModifyParam {
@@ -189,28 +188,23 @@ export default function ConferenceModfiyScreenContainer(props: any) {
 
     const reservationUserInfos: PartialUserInfoParam[] = await Promise.all(
       sortedPortalIdList.map(async (user, i) => {
-        const pathLng: number = user.full_path_list.length;
+        const pathLng: number = user?.full_path_list?.length;
         const data: PartialUserInfoParam = {
           portal_id: user.portal_id,
           rank_name: user.rank_name,
           user_no: user.user_no,
           user_name: user.user_name ? user.user_name : user.user,
-          profile_url: user.profile_url
+          profile_url: user.profile_url 
             ? wehagoMainURL + user.profile_url
             : wehagoDummyImageURL,
-          full_path: user.user_no
-            ? user.full_path_list[pathLng-1].path
-            : user.user_name !== null
-            ? user.user
-            : '',
+          full_path: user.user_no ? user.full_path_list[pathLng - 1].path : '',
           user_type: user.user_type === 2 ? 'ext' : 'org',
-          is_master: sortedAccessUserList[i].is_master,
-          direction: 'NONE'
+          is_master: sortedAccessUserList[i].is_master
         };
         return data;
       })
     );
-    
+
     setSelectedEmployee({ member: reservationUserInfos, group: {} });
 
     const {

@@ -261,8 +261,17 @@ export default function HomeScreenContainer(props: any) {
           const timeString = `${dateString}\n${startTimeString}${ampmStart} ~ ${endTimeString}${ampmEnd}`;
           const { hour, minutes } = conference.usage_time;
           const usageTime = hour * 60 + minutes;
-          const users = conference.users;
+          
+          const accessedUser: any[] = await MeetApi.getFinishedParticipant(
+            auth,
+            conference.t_room_id
+          );
 
+          // console.log('accessedUser : ', accessedUser);
+          
+
+          const users = conference.users;
+          
           const portalIdList = users
             .map((user: any) => user.user)
             .filter((user: any) => user);
@@ -273,17 +282,19 @@ export default function HomeScreenContainer(props: any) {
             portalIdList
           );
 
+
           const newParticipants = participants.filter(user => user.is_primary === 'T');
 
           newParticipants.push(...users.filter((e: any) => e.user_type === 2));
-
+           
           const uriList = newParticipants.reduce<
-            { type: string; value: string | number }[]
+            { type: string; value: string | number}[]
           >((prev, present) => {
             if (prev.length > 2) return prev;
 
             let type;
             let value;
+            let isMaster;
             const uri = present?.profile_url
               ? wehagoMainURL + present.profile_url
               : wehagoDummyImageURL;
@@ -296,7 +307,7 @@ export default function HomeScreenContainer(props: any) {
               value = prev.length < 2 ? uri : newParticipants.length - 2;
             }
 
-            return [...prev, { type, value }];
+            return [...prev, { type, value, isMaster }];
           }, []);
           
           const roomId = conference.t_room_id;
@@ -697,18 +708,24 @@ export default function HomeScreenContainer(props: any) {
         conference.t_room_id
       );
 
-      console.log('accessedUser : ', accessedUser);
+      // console.log('accessedUser : ', accessedUser);
       
 
       const portalIdList = accessedUser
         .map((user: any) => user.user)
         .filter((user: any) => user);
 
+      // console.log('portalIdList : ', portalIdList);
+      
+
       //TODO: 다음주화요일에 room/connected-user api 수정되면 삭제하고 accessedUser 에서 값받아서 처리 
       const participantInfoList: any[] = await MeetApi.getUserInfoList(
         auth,
         portalIdList
       );
+
+      // console.log('participantInfoList : ', participantInfoList);
+      
 
       const extraUser = accessedUser
         .filter((e: any) => e.user_type === 2)

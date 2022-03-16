@@ -539,7 +539,9 @@ const styles = StyleSheet.create({
     shadowColor: '#aaa',
     shadowOpacity: 10,
     borderWidth: 1,
-    paddingBottom: '5%'
+    paddingBottom: '5%',
+    zIndex:1,
+    elevation:1
   },
   monthTouchContainer: {
     height: '100%',

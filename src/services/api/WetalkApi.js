@@ -1,4 +1,4 @@
-import { wehagoBaseURL, securityRequest } from '../../utils';
+import { wehagoBaseURL, securityRequest, meetURL } from '../../utils';
 import { getT } from '../../utils/translateManager';
 
 export default {
@@ -11,7 +11,7 @@ export default {
 		room_type: 0 - 전체 
     */
     // alert(1);
-    const url = `${wehagoBaseURL}/communication/rtc/rtc-room-list?user_id=${user_id}&cno=${cno}`;
+    const url = `${meetURL}/communication/rtc-room-list?user_id=${user_id}&cno=${cno}`;
     const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
     const t = getT();
     try {

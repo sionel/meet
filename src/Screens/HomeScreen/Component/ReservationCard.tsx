@@ -78,7 +78,7 @@ export default function ConferenceBox(props: ReservationCardProps) {
                 style={styles.profileImage}
               />
             ) : (
-              <View style={styles.noImage}>
+              <View key={index}style={styles.noImage}>
                 <Text>{'+' + user.value}</Text>
               </View>
             );
