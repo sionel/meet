@@ -468,18 +468,26 @@ class ConferenceConnector {
 
     this._room.addCommandListener(GRANT_FLOOR_TARGET, value => {
       const result = JSON.parse(value.attributes.targetUser);
-      console.log('GRANT_FLOOR_TARGET : ', result);
+      console.log('GRANT_FLOOR_TARGET : ', value);
+      console.log(
+        'isMasterControlTarget : ',
+        value.attributes.isMasterControlTarget
+      );
+
       if (result.jitsiId === this._room.myUserId()) {
-        if (value.attributes.type === 'reject') {
+        if (value.attributes.isMasterControlTarget) {
+          // 마스터 권한 부여 관련
+        } else if (value.attributes.type === 'reject') {
           this._handlers.REJECTED_BY_MASTER();
-        } else {
+        } else if (value.attributes.type === 'accept') {
           this._handlers.CHANGED_MIC_MUTE_BY_MASTER(false);
         }
       }
     });
 
     this._room.addCommandListener(UPDATE_MASTER_USERS, value => {
-      this._handlers.CHANGE_MASTER_LIST();
+      const { cancel, myCommand } = value.attributes;
+      this._handlers.CHANGE_MASTER_LIST(cancel, myCommand);
     });
 
     this._room.addCommandListener(REQUEST_KICK, value => {
@@ -489,10 +497,12 @@ class ConferenceConnector {
     });
 
     this._room.addCommandListener(STOP_FLOOR, value => {
+      console.log('STOP_FLOOR : ', value);
       const result = JSON.parse(value.attributes.targetUser);
       if (
         result.jitsiId === this._room.myUserId() &&
-        value.value !== this._room.myUserId()
+        value.value !== this._room.myUserId() &&
+        !value.attributes.isMasterControlTarget === 'true'
       ) {
         // 본인이 끈건지 마스터가 끈건지 판단
         this._handlers.CHANGED_MIC_MUTE_BY_MASTER(true);
@@ -723,9 +733,13 @@ class ConferenceConnector {
   };
   //#endregion
 
-  updateRolefromMaster = async () => {
+  updateRolefromMaster = async cancel => {
     await this._room.sendCommandOnce(UPDATE_MASTER_USERS, {
-      value: this._room.myUserId()
+      value: this._room.myUserId(),
+      attributes: {
+        cancel,
+        myCommand: true
+      }
     });
   };
 }

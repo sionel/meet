@@ -409,8 +409,8 @@ class ConferenceManager {
     this._conferenceConnector.kickUserFromMaster(id, masterName, targetName);
   };
 
-  updateRolefromMaster = () => {
-    this._conferenceConnector.updateRolefromMaster();
+  updateRolefromMaster = (cancel) => {
+    this._conferenceConnector.updateRolefromMaster(cancel);
   }
 
   rejectedByMaster = () => {
@@ -420,9 +420,10 @@ class ConferenceManager {
     this._dispatch(masterAcionCreators.setMicRequest(false));
   };
 
-  changeMasterList = () => {
+  changeMasterList = (cancel, myCommand) => {
     this._dispatch(masterAcionCreators.checkMasterList(this._roomToken));
-    this._dispatch(toastAcionCreators.setToastMessage('마스터권한이 부여되었습니다.'));
+    const toastMessage = cancel ? '마스터 권한을 해제했습니다.' : '마스터 권한을 부여했습니다.'
+    myCommand && this._dispatch(toastAcionCreators.setToastMessage(toastMessage));
   };
 
   // 마스터가 참여자를 추방

@@ -166,6 +166,9 @@ function ContentContainer(props: any) {
     user.isMaster = masters.includes(user?.userInfo?.wehagoId);
   });
 
+  // console.log('userList : ', userList);
+  
+
   useEffect(() => {
     _handleChangeSpeaker();
     const _timer = setInterval(() => {
@@ -361,16 +364,27 @@ function ContentContainer(props: any) {
 
   const _updateRolefromMaster = (newMaster: string) => {
     let conferenceManager = getConferenceManager();
-    const newMasters: string[] = masters;
-    newMasters.push(newMaster);
-    console.log('newMasters : ', newMasters);
+    let newMasters: string[] = [];
+    let unMasters: string[] = [];
+
+    const cancel = masters.find((master) => master === newMaster); 
+    cancel && unMasters.push(cancel);
+       
+    if(cancel) {
+      newMasters = masters.filter((master) => master !== newMaster);
+
+    } else {
+      newMasters = masters;
+      newMasters.push(newMaster);
+    }
     
     const params: { master: string[]; unmaster: string[] } = {
       master: newMasters,
-      unmaster: []
+      unmaster: unMasters
     };
+
     MeetApi.setMasterList(auth, roomId, params);
-    conferenceManager.updateRolefromMaster();
+    conferenceManager.updateRolefromMaster(cancel);
   };
 
   // console.log('masters : ', masters);

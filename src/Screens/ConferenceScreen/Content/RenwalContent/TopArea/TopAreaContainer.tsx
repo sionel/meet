@@ -59,7 +59,8 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
     isScreenShare,
     isHorizon,
     expireTime,
-    message
+    message,
+    masters
   } = useSelector((state: RootState) => {
     const {
       local,
@@ -130,6 +131,15 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
       show: false
     });
   };
+
+  useEffect(() => {
+    bottomPopup.show &&
+      handleBottomPopup({
+        ...bottomPopup,
+        contentList: userList
+      });
+    return () => {};
+  }, [masters.length]);
 
   const handdleUserListClick = (e: GestureResponderEvent) => {
     if (bottomPopup.show) {

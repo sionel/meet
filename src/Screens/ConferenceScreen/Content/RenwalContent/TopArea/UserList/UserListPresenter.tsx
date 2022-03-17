@@ -58,7 +58,7 @@ const UserListPresenter = gestureHandlerRootHOC((props: UserListPresenter) => {
     masters
   } = props;
 
-  // console.log('userList : ', userList);
+  // console.log('isRoomMaster : ', isRoomMaster);
 
   const t = getT();
 

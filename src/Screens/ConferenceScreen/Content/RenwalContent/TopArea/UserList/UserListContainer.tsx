@@ -47,9 +47,9 @@ export const UserListContainer = (props: UserListContainer) => {
 
   useEffect(() => {
     let master = masters.find(id => id === authID);
-    setIsRoomMaster(master ? true : false);
+    setIsRoomMaster(master !== undefined ? true : false);
     return () => {};
-  });
+  }, [masters.length]);
 
   const handelProfileTouch = (item: ParticipantsTypes) => {
     let newUserList = contentList.slice(0);
@@ -68,9 +68,6 @@ export const UserListContainer = (props: UserListContainer) => {
 
   const _handleKickUser = (id: string, userName: string) => {
     handleKickUser(id, authName, userName);
-    // let newUserList = contentList.slice(0);
-    // const findUser = newUserList.filter(user => user.id !== id);
-    // handleBottomPopup({ ...bottomPopup, contentList: findUser });
   };
 
   return (
