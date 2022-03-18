@@ -197,37 +197,43 @@ export default function CreateScreenContainer(props: any) {
 
   const _createConferenceRoom = async (conference: any) => {
     setIndicatorFlag(true);
-    const { room_id } = conference;
+    const { room_id, room_title: roomTitle } = conference;
+
     const {
-      portal_id,
-      user_name,
       last_access_company_no,
-      AUTH_A_TOKEN,
-      AUTH_R_TOKEN,
-      HASH_KEY,
-      employee_list,
-      cno
+      employee_list
     } = auth;
+
     const company_code = employee_list.filter(
       (e: any) => e.company_no == last_access_company_no
     )[0].company_code;
-    const bodyData = [
-      room_id, // 방 id
-      portal_id, // 유저아이디
-      user_name, // 유저이름
-      last_access_company_no, // 회사번호
-      company_code, // 회사코드
-      AUTH_A_TOKEN, // 토큰
-      AUTH_R_TOKEN, // 토큰
-      HASH_KEY
-      // null
-    ];
-    const createResult = await ConferenceApi.create(...bodyData);
-    if (createResult.resultCode === 200) {
+
+    // const bodyData = [
+    //   room_id, // 방 id
+    //   portal_id, // 유저아이디
+    //   user_name, // 유저이름
+    //   last_access_company_no, // 회사번호
+    //   company_code, // 회사코드
+    //   AUTH_A_TOKEN, // 토큰
+    //   AUTH_R_TOKEN, // 토큰
+    //   HASH_KEY
+    //   // null
+    // ];
+
+    const param = {
+      service_code: 'communication',
+      name: roomTitle,
+      communication_id: room_id
+    };
+
+    const createResult = await MeetApi.createMeetRoom(auth, param);
+    // await ConferenceApi.create(bodyData);
+
+    if (createResult.resultCode === 201) {
       // 생성완료 메시지 보내기
       const sendWetalkResult = await ConferenceApi.sendWetalk(
         room_id,
-        createResult.resultData,
+        createResult.resultData.room,
         auth.last_access_company_no,
         company_code,
         auth.AUTH_A_TOKEN,
@@ -249,7 +255,6 @@ export default function CreateScreenContainer(props: any) {
         id: videoRoomId,
         selectedRoomName: room_title
       });
-
     } else if (createResult.resultCode === 400) {
       setIndicatorFlag(false);
 

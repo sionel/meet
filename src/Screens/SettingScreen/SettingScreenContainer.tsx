@@ -36,6 +36,7 @@ export default function SettingScreenContainer(props: any) {
     navigation,
     route: { params }
   }: MeetNavigationProps<'SettingView'> = props;
+  
   const { webAuth } = props;
 
   const dispatch = useDispatch();

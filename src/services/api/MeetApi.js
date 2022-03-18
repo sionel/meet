@@ -801,12 +801,16 @@ export default {
     let url = '';
     let signature;
 
-    const accsessUrl = `/video/room/expire-time?room=${roomId}`;
-    const token = await getToken(accsessUrl);
-    const encText = accsessUrl + token.cur_date + token.token;
-    const hashText = CryptoJS.SHA256(encText);
-    signature = CryptoJS.enc.Base64.stringify(hashText);
-    url = `${wehagoBaseURL0}${accsessUrl}`;
+    if (isDev) {
+      url = `${meetURL}/room/expire-time?room=${roomId}`;
+    } else {
+      const accsessUrl = `/video/room/expire-time?room=${roomId}`;
+      const token = await getToken(accsessUrl);
+      const encText = accsessUrl + token.cur_date + token.token;
+      const hashText = CryptoJS.SHA256(encText);
+      signature = CryptoJS.enc.Base64.stringify(hashText);
+      url = `${wehagoBaseURL0}${accsessUrl}`;
+    }
 
     try {
       const data = {
