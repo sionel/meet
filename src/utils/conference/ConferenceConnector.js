@@ -431,6 +431,7 @@ class ConferenceConnector {
     // - 마스터가 마이크 제어 mute를 함 사용자들은 마이크 임의로 킬 수 없음
     // 간단한 토스트 메시지 띄움
     this._room.addCommandListener(REQUEST_MIC_CONTROL, value => {
+      console.log('REQUEST_MIC_CONTROL[ 마이크 전체 제어 ] : ', value);
       const {
         attributes: { controlType }
       } = value;
@@ -441,12 +442,17 @@ class ConferenceConnector {
     // 화상대화 전체 마이크 제어 요청자 사용자 정보 이벤트
     //- 마스터가 마이크 제어 모드 시작하기/종료하기
     this._room.addCommandListener(REQUEST_MIC_CONTROL_USER, value => {
+      console.log('REQUEST_MIC_CONTROL_USER[ 발언권 제어모드 ] : ', value);
       this._handlers.CHANGED_MIC_CONTROL_USER_MODE_BY_MASTER(value.value);
     });
 
     // 화상대화 타겟 유저 마이크 제어 요청 이벤트
     // - 마스터가 단일 마일 제어 id형식 8자
     this._room.addCommandListener(REQUEST_MIC_CONTROL_TARGET, value => {
+      console.log(
+        'REQUEST_MIC_CONTROL_TARGET[ 특정 유저 마이크 제어 ] : ',
+        value
+      );
       if (this._room.myUserId() === value.attributes.target) {
         this._handlers.CHANGED_MIC_MUTE_BY_MASTER(
           value.attributes.isMute === 'true'
@@ -469,17 +475,20 @@ class ConferenceConnector {
     this._room.addCommandListener(GRANT_FLOOR_TARGET, value => {
       const result = JSON.parse(value.attributes.targetUser);
       console.log('GRANT_FLOOR_TARGET : ', value);
-      console.log(
-        'isMasterControlTarget : ',
-        value.attributes.isMasterControlTarget
-      );
+      // console.log(
+      //   'isMasterControlTarget : ',
+      //   value.attributes.isMasterControlTarget
+      // );
 
       if (result.jitsiId === this._room.myUserId()) {
-        if (value.attributes.isMasterControlTarget) {
-          // 마스터 권한 부여 관련
-        } else if (value.attributes.type === 'reject') {
+        // if (value.attributes.isMasterControlTarget) {
+        //   console.log(1111);
+        //   // 마스터 권한 부여 관련
+        // } else 
+        if (value.attributes.type === 'reject') {
           this._handlers.REJECTED_BY_MASTER();
         } else if (value.attributes.type === 'accept') {
+          console.log(2222);
           this._handlers.CHANGED_MIC_MUTE_BY_MASTER(false);
         }
       }
@@ -501,11 +510,13 @@ class ConferenceConnector {
       const result = JSON.parse(value.attributes.targetUser);
       if (
         result.jitsiId === this._room.myUserId() &&
-        value.value !== this._room.myUserId() &&
-        !value.attributes.isMasterControlTarget === 'true'
+        value.value !== this._room.myUserId() 
+        // &&!value.attributes.isMasterControlTarget === 'true'
       ) {
         // 본인이 끈건지 마스터가 끈건지 판단
         this._handlers.CHANGED_MIC_MUTE_BY_MASTER(true);
+      } else {
+
       }
     });
     this._room.addCommandListener(REQUEST_ROOM_STOP_RECORDING, value => {
@@ -741,6 +752,30 @@ class ConferenceConnector {
         myCommand: true
       }
     });
+  };
+
+  //발언권 제어모드
+  micControlFromMaster = async flag => {
+    if (flag) {
+      await this._room.sendCommandOnce(REQUEST_MIC_CONTROL_USER, {
+        value: this._room.myUserId(),
+        attributes: {}
+      });
+
+      this._room.sendCommand(REQUEST_MIC_CONTROL, {
+        value: this._room.myUserId(),
+        attributes: { controlType: 'mute' }
+      });
+    } else {
+      await this._room.sendCommand(REQUEST_MIC_CONTROL, {
+        value: this._room.myUserId(),
+        attributes: { controlType: 'unmute' }
+      });
+
+      this._room.sendCommandOnce(REQUEST_MIC_CONTROL_USER, {
+        attributes: {}
+      });
+    }
   };
 }
 

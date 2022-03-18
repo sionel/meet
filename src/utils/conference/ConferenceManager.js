@@ -373,28 +373,29 @@ class ConferenceManager {
   /*
    * 마스터가 참가자들 컨트롤 할 때
    */
-  //CHANGED_MIC_CONTROL_MODE_BY_MASTER
-  //CHANGED_MIC_CONTROL_USER_MODE_BY_MASTER
-  //CHANGED_MIC_MODE_BY_MASTER
+  //CHANGED_MIC_CONTROL_MODE_BY_MASTER : 전체 마이크 제어
+  //CHANGED_MIC_CONTROL_USER_MODE_BY_MASTER : 마스터의 발언권 제어모드 시작/종료
+  //CHANGED_MIC_MODE_BY_MASTER : 특저 유정 마이크 제어
   changeMicControlUserModeByMaster = flag => {
     this._dispatch(masterAcionCreators.changeMasterControlMode(flag));
     const msg = flag
-      ? this.t('toast_master_clton')
-      : this.t('toast_master_cltoff');
+      ? this.t('toast_master_clton') //발언권 제어 시작
+      : this.t('toast_master_cltoff'); //발언권 제어 종료
     this._dispatch(toastAcionCreators.setToastMessage(msg));
   };
   changeMicControlModeByMaster = value => {
     this._dispatch(masterAcionCreators.changeAudioActive(value));
 
     const msg = value
-      ? this.t('toast_master_micoffbymaster')
-      : this.t('toast_master_miconbymaster');
+      ? this.t('toast_master_micoffbymaster') // 마스터가 마이크 비활성화
+      : this.t('toast_master_miconbymaster'); // 마스터가 마이크 활성화
     this._dispatch(toastAcionCreators.setToastMessage(msg));
   };
   changeMicMuteByMaster = flag => {
+    console.log('flag : ', flag);
     const msg = flag
-      ? this.t('toast_master_micoffbymaster')
-      : this.t('toast_master_miconbymaster');
+      ? this.t('toast_master_micoffbymaster') // 마스터가 마이크 비활성화
+      : this.t('toast_master_miconbymaster'); // 마스터가 마이크 활성화
     this._dispatch(toastAcionCreators.setToastMessage(msg));
     this._dispatch(masterAcionCreators.changeMuteMicMaster(flag));
   };
@@ -405,13 +406,6 @@ class ConferenceManager {
   stopAttention = name => {
     this._conferenceConnector.stopAttention(name);
   };
-  kickUserFromMaster = (id, masterName, targetName) => {
-    this._conferenceConnector.kickUserFromMaster(id, masterName, targetName);
-  };
-
-  updateRolefromMaster = (cancel) => {
-    this._conferenceConnector.updateRolefromMaster(cancel);
-  }
 
   rejectedByMaster = () => {
     this._dispatch(
@@ -420,10 +414,19 @@ class ConferenceManager {
     this._dispatch(masterAcionCreators.setMicRequest(false));
   };
 
+  //UPDATE_MASTER_USERS 요청을 들었을때
   changeMasterList = (cancel, myCommand) => {
     this._dispatch(masterAcionCreators.checkMasterList(this._roomToken));
-    const toastMessage = cancel ? '마스터 권한을 해제했습니다.' : '마스터 권한을 부여했습니다.'
-    myCommand && this._dispatch(toastAcionCreators.setToastMessage(toastMessage));
+    const toastMessage = cancel
+      ? '마스터 권한을 해제했습니다.'
+      : '마스터 권한을 부여했습니다.';
+    myCommand &&
+      this._dispatch(toastAcionCreators.setToastMessage(toastMessage));
+  };
+
+  //UPDATE_MASTER_USERS 커맨트를 요청할때
+  updateRolefromMaster = cancel => {
+    this._conferenceConnector.updateRolefromMaster(cancel);
   };
 
   // 마스터가 참여자를 추방
@@ -446,6 +449,16 @@ class ConferenceManager {
       this._dispatch(toastAcionCreators.kickMessage(targetName));
     }
   };
+
+  //REQUEST_KICK 커맨드를 요청할때
+  kickUserFromMaster = (id, masterName, targetName) => {
+    this._conferenceConnector.kickUserFromMaster(id, masterName, targetName);
+  };
+
+  micControlFromMaster = flag => {
+    this._conferenceConnector.micControlFromMaster(flag);
+  };
+
   startRecord = () => {
     this._dispatch(
       toastAcionCreators.setToastMessage(this.t('녹화가 시작 되었습니다.'))

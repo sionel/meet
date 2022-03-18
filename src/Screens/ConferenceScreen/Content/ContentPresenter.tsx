@@ -41,6 +41,7 @@ type ContentPresenterProps = {
   handdlePersonPlus: () => void;
   handleKickUser: (id: string, masterName: string, userName: string) => void;
   updateRolefromMaster: (newMaster: string) => void;
+  handleMicControlFromMaster: ()=>void;
   // limitedTime: number;
 };
 
@@ -102,6 +103,7 @@ const ContentPresenter = (props: ContentPresenterProps) => {
           isMultipleView={isMultipleView}
           setIsMultipleView={setIsMultipleView}
           selectedRoomName={selectedRoomName}
+          handleMicControlFromMaster={props.handleMicControlFromMaster}
           // limitedTime={limitedTime}
         />
       )}

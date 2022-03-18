@@ -94,6 +94,12 @@ export interface createApiParmas {
   end_date_time?: any;
 } 
 
+export interface createCommunicationParams {
+  service_code: string;
+  name: string;
+  communication_id: string;
+}
+
 export interface roomDetailData {
   name: string;
   is_public: boolean;

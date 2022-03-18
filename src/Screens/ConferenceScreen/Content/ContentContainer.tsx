@@ -63,6 +63,7 @@ function ContentContainer(props: any) {
   const [height, setHeight] = useState(Dimensions.get('window').height);
   const [elapsedTime, setElapsedTime] = useState(0);
   const [limitedTime, setLimitedTime] = useState(3600000);
+  const [micControlMode, setIsMicControlMode] = useState(false);
 
   const [bottomPopup, setBottomPopup] = useState<ConferenceBottomPopupProps>({
     show: false,
@@ -387,10 +388,12 @@ function ContentContainer(props: any) {
     conferenceManager.updateRolefromMaster(cancel);
   };
 
-  // console.log('masters : ', masters);
-  
-
-  // console.log('attributes : ', attributes);
+  const _micControlFromMaster = () => {
+    let conferenceManager = getConferenceManager();
+    console.log('micControlMode : ', micControlMode);
+    conferenceManager.micControlFromMaster(!micControlMode);
+    setIsMicControlMode(!micControlMode);
+  }
 
   return attributes ? (
     <FileSharing
@@ -437,6 +440,7 @@ function ContentContainer(props: any) {
       setLimitedTime={setLimitedTime}
       handdlePersonPlus={handdlePersonPlus}
       updateRolefromMaster={_updateRolefromMaster}
+      handleMicControlFromMaster={_micControlFromMaster}
     />
   );
 }

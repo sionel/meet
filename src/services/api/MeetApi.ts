@@ -21,6 +21,7 @@ import {
   apiAuthInfo,
   conference,
   createApiParmas,
+  createCommunicationParams,
   roomDetailData,
   roomModifyParam
 } from './types';
@@ -46,7 +47,7 @@ const getToken = async (accessUrl: string) => {
 // #region
 export default {
   // 3-1 화상회의방 생성
-  createMeetRoom: async (auth: apiAuthInfo, param: createApiParmas) => {
+  createMeetRoom: async (auth: apiAuthInfo, param: createApiParmas | createCommunicationParams) => {
     const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
     const url = `${meetURL}/room?cno=${cno}`;
     const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
@@ -61,7 +62,7 @@ export default {
       })
     };
 
-    const response = await Axios(url, data);
+    const response = await Axios<{room:string}>(url, data);
 
     if (isSuccess(response)) {
       return response;
@@ -809,12 +810,16 @@ export default {
     let url = '';
     let signature;
 
-    const accsessUrl = `/video/room/expire-time?room=${roomId}`;
-    const token = await getToken(accsessUrl);
-    const encText = accsessUrl + token.cur_date + token.token;
-    const hashText = CryptoJS.SHA256(encText);
-    signature = CryptoJS.enc.Base64.stringify(hashText);
-    url = `${wehagoBaseURL0}${accsessUrl}`;
+    if (isDev) {
+      url = `${meetURL}/room/expire-time?room=${roomId}`;
+    } else {
+      const accsessUrl = `/video/room/expire-time?room=${roomId}`;
+      const token = await getToken(accsessUrl);
+      const encText = accsessUrl + token.cur_date + token.token;
+      const hashText = CryptoJS.SHA256(encText);
+      signature = CryptoJS.enc.Base64.stringify(hashText);
+      url = `${wehagoBaseURL0}${accsessUrl}`;
+    }
 
     const data = {
       method: 'GET',

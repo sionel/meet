@@ -34,6 +34,7 @@ type TopAreaContainerProps = {
   isMultipleView: boolean;
   setIsMultipleView: () => void;
   selectedRoomName: string;
+  handleMicControlFromMaster: ()=>void;
 };
 
 const isPad = deviceInfoModule.isTablet();
@@ -42,6 +43,7 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
   const t = getT();
   const [isMainUserMaster, setIsMainUserMaster] = useState(false);
   const [messageCount, setMessageCount] = useState(0);
+
   const {
     callType,
     mainUser,
@@ -51,8 +53,11 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
     userList,
     isMultipleView,
     selectedRoomName,
-    onChangeDrawingMode
+    onChangeDrawingMode,
+    handleMicControlFromMaster
   } = props;
+
+  //start selector
   const {
     conferenceMode,
     deployedServices,
@@ -88,12 +93,16 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
       message: local.message
     };
   });
+  //end selector
+
+  //start dispatch
   const dispatch = useDispatch();
   const toggleCameraFacingMode = () =>
     dispatch(localAction.toggleCameraFacingMode());
   const toggleDocumentListMode = (documentListMode: string[]) =>
     dispatch(mainUserAction.setDocumentListMode(documentListMode));
   const toggleScreenFlag = () => dispatch(ScreenShareAction.toggleScreenFlag());
+  //end dispatch
 
   const talkButton = callType === 3;
   const penButton = true;
@@ -191,11 +200,11 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
         name: t('화면공유'),
         onClick: () => toggleScreenFlag()
       };
-      // const hand = {
-      //   icon1: icHand,
-      //   name: t('발언권'),
-      //   onClick: () => {}
-      // };
+      const hand = {
+        icon1: icHand,
+        name: t('발언권'),
+        onClick: () => handleMicControlFromMaster()
+      };
       // const record = {
       //   icon1: icRecord,
       //   name: t('회의녹화'),
@@ -209,13 +218,13 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
 
       isPad
         ? handleBottomPopup({
-            contentList: [sketch, document],
+            contentList: [sketch, document, hand],
             show: true,
             title: t('더보기'),
             popupType: 'NORMAL'
           })
         : handleBottomPopup({
-            contentList: [sketch, document, share],
+            contentList: [sketch, document, share, hand],
             show: true,
             title: t('더보기'),
             popupType: 'NORMAL'
