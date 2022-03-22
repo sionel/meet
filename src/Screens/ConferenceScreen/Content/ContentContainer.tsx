@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Dimensions, NativeModules, Platform } from 'react-native';
+import { DeviceEventEmitter, Dimensions, NativeModules, Platform } from 'react-native';
 import ContentPresenter from './ContentPresenter';
 import FileSharing from './FileSharing';
 import { ConferenceModes } from '../../../utils/Constants';
@@ -12,11 +12,10 @@ import { actionCreators as localAction } from '../../../redux/modules/local';
 import { actionCreators as mainUserAction } from '../../../redux/modules/mainUser';
 import { RootState } from '../../../redux/configureStore';
 import { getConferenceManager } from '../../../utils/ConferenceManager';
+import InCallManager from 'react-native-incall-manager';
 
 const isIOS = Platform.OS === 'ios';
-const InCallManager = !isIOS && require('react-native-incall-manager').default;
 
-const { AudioMode } = NativeModules;
 const hasNotch = DeviceInfo.hasNotch() && isIOS;
 
 function ContentContainer(props: any) {
@@ -65,7 +64,25 @@ function ContentContainer(props: any) {
   const setDocumentListMode = (value: any) =>
     dispatch(mainUserAction.setDocumentListMode(value));
 
+  const audioInit = async () => {
+    InCallManager.start({ media: 'audio', auto: true });
+
+    const audioPermmit = await InCallManager.requestRecordPermission() 
+    if ( audioPermmit !== 'granted') {
+      InCallManager.requestRecordPermission();
+    }
+
+    if (isIOS) {
+    } else {
+      DeviceEventEmitter.addListener('onAudioDeviceChanged', event => {
+        console.log('onAudioDeviceChanged: ', event.selectedAudioDevice);
+        InCallManager.updateAudioDeviceState;
+        //TODO: 이거 필요한 함수인지 확인필요함
+      });
+    }
+  }
   useEffect(() => {
+    audioInit();
     _handleChangeSpeaker();
     Orientation.addOrientationListener(_setOrientation);
     return () => {
@@ -100,15 +117,26 @@ function ContentContainer(props: any) {
   }, 1000);
 
   const _handleChangeSpeaker = () => {
-    setSpeaker(speaker == 2 ? 1 : 2);
+    setSpeaker(speaker === 2 ? 1 : 2);
+
     if (isIOS) {
-      AudioMode.setAudioDevice(
-        speaker === 1 ? 'Built-In Microphone' : 'SPEAKER'
-      );
+      InCallManager.stop();
+      if (speaker === 2) {
+        InCallManager.setSpeakerphoneOn(true);
+        InCallManager.setForceSpeakerphoneOn(true);
+      } else {
+        InCallManager.setSpeakerphoneOn(false);
+        InCallManager.setForceSpeakerphoneOn(false);
+      }
     } else {
-      InCallManager &&
-        InCallManager.setSpeakerphoneOn &&
-        InCallManager.setSpeakerphoneOn(speaker == 2);
+      // android
+      if (speaker === 2) {
+        InCallManager.setSpeakerphoneOn(true);
+        InCallManager.chooseAudioRoute('SPEAKER_PHONE');
+      } else {
+        InCallManager.setSpeakerphoneOn(false);
+        InCallManager.chooseAudioRoute('BLUETOOTH');
+      }
     }
   };
 
