@@ -40,6 +40,7 @@ const BottomAreaContainer = (props: BottomAreaProps) => {
     isScreenShare,
     isMasterControl,
     isAudioActive,
+    masters,
     isMuteMic,
     isMuteVideo,
     isMicRequest,
@@ -47,15 +48,17 @@ const BottomAreaContainer = (props: BottomAreaProps) => {
     user,
     mainUserId,
     list,
-    orientation
+    orientation,
+    authID
   } = useSelector((state: RootState) => {
-    const { local, screenShare, master, mainUser, participants, orientation } =
+    const { local, screenShare, master, mainUser, participants, orientation, user } =
       state;
     return {
       conferenceMode: local.conferenceMode,
       isMuteMic: local.user.isMuteMic,
       isMuteVideo: local.user.isMuteVideo,
       name: local.user.name,
+      masters: master.masterList,
       isMicRequest: master.isMicRequest,
       isMasterControl: master.isMasterControl,
       isAudioActive: master.isAudioActive,
@@ -63,7 +66,8 @@ const BottomAreaContainer = (props: BottomAreaProps) => {
       user: local.user,
       mainUserId: mainUser.mainUserId,
       list: participants.list,
-      orientation: orientation.orientation
+      orientation: orientation.orientation,
+      authID: user.auth.portal_id
     };
   });
   //#endregion
@@ -80,8 +84,8 @@ const BottomAreaContainer = (props: BottomAreaProps) => {
 
   const _handleToggleMic = () => {
     let conferenceManager = getConferenceManager();
-
-    if (isMasterControl) {
+    let isMaster = masters.find(masterID => masterID === authID)
+    if (isMasterControl && !isMaster) {
       if (isAudioActive) {
         // 참가자는 마스터가 제어중일때 오디오가 꺼져있으면 직접 컨트롤 할 수 없음
       } else {

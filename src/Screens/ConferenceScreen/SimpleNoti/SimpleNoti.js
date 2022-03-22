@@ -4,13 +4,25 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, StyleSheet, Animated, Text, Dimensions } from 'react-native';
 import deviceInfoModule from 'react-native-device-info';
 import { useSelector, useDispatch } from 'react-redux';
+import { actionCreators as masterActionCreators } from '@redux/master';
 
 const isPad = deviceInfoModule.isTablet();
 // const { width, height } = Dimensions.get('screen');
 
 export default function SimpleNoti() {
-  const toggleFlag = useSelector(state => state.toast['toggleFlag']);
-  const toastMessage = useSelector(state => state.toast['toastMessage']);
+  const { toggleFlag, toastMessage, isUserMicRequest, userList } = useSelector(
+    state => {
+      const { toast, master } = state;
+      return {
+        toggleFlag: toast.toggleFlag,
+        toastMessage: toast.toastMessage,
+        isUserMicRequest: master.userMicRequest,
+        userList: master.targetUserList
+      };
+    }
+  );
+  // const toggleFlag = useSelector(state => state.toast['toggleFlag']);
+  // const toastMessage = useSelector(state => state.toast['toastMessage']);
 
   const [width, setWidth] = useState(Dimensions.get('screen').width);
   const [height, setHeight] = useState(Dimensions.get('screen').height);
@@ -18,6 +30,8 @@ export default function SimpleNoti() {
   const [isFirst, setIsFirst] = useState(true);
   const [message, setMessage] = useState('');
   const dispatch = useDispatch();
+  const setIsUserMicRequest = () =>
+    dispatch(masterActionCreators.setUserMicRequest(false));
 
   const fadeAnimation = useRef(new Animated.Value(0)).current;
   const [fadeout, setFadeout] = useState(null);
@@ -85,7 +99,19 @@ export default function SimpleNoti() {
     };
   });
 
-  return message ? (
+  const micRequestPopup = (
+    <View style={[styles.container, { height: 100, flexDirection: 'row' }]}>
+      <View>
+        <Text></Text>
+        <Text></Text>
+      </View>
+    </View>
+  );
+
+
+  return userList.length > 0 && isUserMicRequest ? (
+    micRequestPopup
+  ) : message ? (
     <Animated.View
       style={[
         styles.container,

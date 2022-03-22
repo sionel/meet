@@ -161,7 +161,8 @@ class ConferenceManager {
       REQUEST_KICK: this.requestKick,
       START_RECORDING: this.startRecord,
       STOP_RECORDING: this.stopRecord,
-      REQUEST_RECORD_USER: this.requestRecordUser
+      REQUEST_RECORD_USER: this.requestRecordUser,
+      STOP_FLOOR: this.stopFloor
     };
     return handler;
   };
@@ -414,19 +415,27 @@ class ConferenceManager {
     this._dispatch(masterAcionCreators.setMicRequest(false));
   };
 
+  stopFloor = (targetUser) => {
+    console.log('taegetUser : ', targetUser);
+    this._dispatch(masterAcionCreators.setUserMicRequest(true));
+    this._dispatch(masterAcionCreators.setTargetUserList(targetUser));
+  }
+
   //UPDATE_MASTER_USERS 요청을 들었을때
   changeMasterList = (cancel, myCommand) => {
     this._dispatch(masterAcionCreators.checkMasterList(this._roomToken));
-    const toastMessage = cancel
-      ? '마스터 권한을 해제했습니다.'
-      : '마스터 권한을 부여했습니다.';
-    myCommand &&
+    if (myCommand) {
+      const toastMessage = cancel
+        ? '마스터 권한을 해제했습니다.'
+        : '마스터 권한을 부여했습니다.';
+
       this._dispatch(toastAcionCreators.setToastMessage(toastMessage));
+    }
   };
 
   //UPDATE_MASTER_USERS 커맨트를 요청할때
-  updateRolefromMaster = cancel => {
-    this._conferenceConnector.updateRolefromMaster(cancel);
+  updateRolefromMaster = (newMaster, cancel) => {
+    this._conferenceConnector.updateRolefromMaster(newMaster, cancel);
   };
 
   // 마스터가 참여자를 추방

@@ -1,21 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
   Alert,
+  DeviceEventEmitter,
   Dimensions,
-  GestureResponderEvent,
   Linking,
-  NativeModules,
   NativeTouchEvent,
   Platform,
   Share
 } from 'react-native';
 
+import Clipboard from '@react-native-clipboard/clipboard';
+import DeviceInfo from 'react-native-device-info';
+import InCallManager from 'react-native-incall-manager';
+import _ from 'underscore';
+
 import ContentPresenter from './ContentPresenter';
 import FileSharing from './FileSharing';
 import { ConferenceBotPopupContent } from './RenwalContent/Component/BottomPopup';
-import Clipboard from '@react-native-clipboard/clipboard';
-import DeviceInfo from 'react-native-device-info';
-import _ from 'underscore';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { actionCreators as localAction } from '@redux/local';
@@ -44,9 +45,7 @@ export type ConferenceBottomPopupProps = {
 };
 
 const isIOS = Platform.OS === 'ios';
-const InCallManager = !isIOS && require('react-native-incall-manager').default;
 
-const { AudioMode } = NativeModules;
 const hasNotch = DeviceInfo.hasNotch() && isIOS;
 
 const { height: screenHeight } = Dimensions.get('screen');
@@ -168,9 +167,9 @@ function ContentContainer(props: any) {
   });
 
   // console.log('userList : ', userList);
-  
 
   useEffect(() => {
+    audioInit();
     _handleChangeSpeaker();
     const _timer = setInterval(() => {
       if (createdTime) {
@@ -214,6 +213,24 @@ function ContentContainer(props: any) {
       }, 2000);
     }
   }, [userList.length]);
+
+  const audioInit = async () => {
+    InCallManager.start({ media: 'audio', auto: true });
+
+    const audioPermmit = await InCallManager.requestRecordPermission();
+    if (audioPermmit !== 'granted') {
+      InCallManager.requestRecordPermission();
+    }
+
+    if (isIOS) {
+    } else {
+      DeviceEventEmitter.addListener('onAudioDeviceChanged', event => {
+        console.log('onAudioDeviceChanged: ', event.selectedAudioDevice);
+        InCallManager.updateAudioDeviceState;
+        //TODO: 이거 필요한 함수인지 확인필요함
+      });
+    }
+  };
 
   const _toggleConferenceMode = (NativeTouchEvent: NativeTouchEvent) => {
     const { pageY } = NativeTouchEvent;
@@ -351,15 +368,26 @@ function ContentContainer(props: any) {
   }, 1000);
 
   const _handleChangeSpeaker = () => {
-    setSpeaker(speaker == 2 ? 1 : 2);
+    setSpeaker(speaker === 2 ? 1 : 2);
+
     if (isIOS) {
-      AudioMode.setAudioDevice(
-        speaker === 1 ? 'Built-In Microphone' : 'SPEAKER'
-      );
+      InCallManager.stop();
+      if (speaker === 2) {
+        InCallManager.setSpeakerphoneOn(true);
+        InCallManager.setForceSpeakerphoneOn(true);
+      } else {
+        InCallManager.setSpeakerphoneOn(false);
+        InCallManager.setForceSpeakerphoneOn(false);
+      }
     } else {
-      InCallManager &&
-        InCallManager.setSpeakerphoneOn &&
-        InCallManager.setSpeakerphoneOn(speaker == 2);
+      // android
+      if (speaker === 2) {
+        InCallManager.setSpeakerphoneOn(true);
+        InCallManager.chooseAudioRoute('SPEAKER_PHONE');
+      } else {
+        InCallManager.setSpeakerphoneOn(false);
+        InCallManager.chooseAudioRoute('BLUETOOTH');
+      }
     }
   };
 
@@ -368,32 +396,30 @@ function ContentContainer(props: any) {
     let newMasters: string[] = [];
     let unMasters: string[] = [];
 
-    const cancel = masters.find((master) => master === newMaster); 
+    const cancel = masters.find(master => master === newMaster);
     cancel && unMasters.push(cancel);
-       
-    if(cancel) {
-      newMasters = masters.filter((master) => master !== newMaster);
 
+    if (cancel) {
+      newMasters = masters.filter(master => master !== newMaster);
     } else {
       newMasters = masters;
       newMasters.push(newMaster);
     }
-    
+
     const params: { master: string[]; unmaster: string[] } = {
       master: newMasters,
       unmaster: unMasters
     };
 
     MeetApi.setMasterList(auth, roomId, params);
-    conferenceManager.updateRolefromMaster(cancel);
+    conferenceManager.updateRolefromMaster(newMaster, cancel);
   };
 
   const _micControlFromMaster = () => {
     let conferenceManager = getConferenceManager();
-    console.log('micControlMode : ', micControlMode);
     conferenceManager.micControlFromMaster(!micControlMode);
     setIsMicControlMode(!micControlMode);
-  }
+  };
 
   return attributes ? (
     <FileSharing

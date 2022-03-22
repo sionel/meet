@@ -69,8 +69,6 @@ const UserListPresenter = gestureHandlerRootHOC((props: UserListPresenter) => {
       keyExtractor={(item, index) => String(index)}
       renderItem={({ item, index }: any) => {
         // console.log('UserList_Item : ', item);
-        
-        
 
         const { isMaster, userInfo, id } = item;
         // console.log('userInfo : ', userInfo);
@@ -88,6 +86,7 @@ const UserListPresenter = gestureHandlerRootHOC((props: UserListPresenter) => {
           : wehagoDummyImageURL;
         // 이름
         const userName = item.name ? item.name : userInfo.userName;
+        const external = userInfo.isExternalParticipant === 'true';
 
         const renderLeftActions = (
           progress: any,
@@ -99,10 +98,15 @@ const UserListPresenter = gestureHandlerRootHOC((props: UserListPresenter) => {
                 outputRange: [-112, -56, 0]
               })
             : isRoomMaster
-            ? dragX.interpolate({
-                inputRange: [0, leftSwipeWidth / 2, leftSwipeWidth],
-                outputRange: [-leftSwipeWidth, -(leftSwipeWidth / 2), 0]
-              })
+            ? external || index === 0
+              ? dragX.interpolate({
+                  inputRange: [0, leftSwipeWidth / 2],
+                  outputRange: [-leftSwipeWidth / 2, 0]
+                })
+              : dragX.interpolate({
+                  inputRange: [0, leftSwipeWidth / 2, leftSwipeWidth],
+                  outputRange: [-leftSwipeWidth, -(leftSwipeWidth / 2), 0]
+                })
             : dragX.interpolate({
                 inputRange: [0, leftSwipeWidth / 2],
                 outputRange: [-leftSwipeWidth / 2, 0]
@@ -123,7 +127,9 @@ const UserListPresenter = gestureHandlerRootHOC((props: UserListPresenter) => {
                   width: isPad
                     ? 112
                     : isRoomMaster
-                    ? leftSwipeWidth
+                    ? external || index === 0
+                      ? leftSwipeWidth / 2
+                      : leftSwipeWidth
                     : leftSwipeWidth / 2
                 }
               ]}
@@ -141,7 +147,7 @@ const UserListPresenter = gestureHandlerRootHOC((props: UserListPresenter) => {
                   resizeMode="cover"
                 />
               </TouchableOpacity>
-              {isRoomMaster && index !== 0 && (
+              {isRoomMaster && index !== 0 && !external && (
                 <TouchableOpacity
                   style={styles.masterTouchView}
                   activeOpacity={0.2}

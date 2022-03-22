@@ -284,7 +284,6 @@ const SplashScreenContainer = ({
                 });
               } else {
                 console.warn('getMeetRoom : ', getMeetRoom.errors);
-                
               }
             }
           } else {
@@ -335,6 +334,15 @@ const SplashScreenContainer = ({
         });
       } else {
         //error
+        let alertText = '해당 회의가 종료되거나 네트워크 상태가 좋지 않습니다\n다시 한번 확인해주세요.'
+        Alert.alert('알림', alertText, [
+          {
+            text: '확인',
+            onPress: () => {
+              navigation.reset({ routes: [{ name: 'LoginStack' }] });
+            }
+          }
+        ]);
       }
     } else if (result.video_id) {
       // TODO: 컨퍼런스로 받았을때 이 분기 처리를 어떻게 해야할지 검토필요성 있음

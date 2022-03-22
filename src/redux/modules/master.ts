@@ -26,6 +26,10 @@ const TOGGLE_MUTE_MIC_BY_ME = 'master.TOGGLE_MUTE_MIC_BY_ME';
 const TOAST_MESSAGE = 'master.TOAST_MESSAGE';
 
 const SPEEK_REQUEST = 'master.SPEEK_REQUEST';
+
+const USER_MIC_REQUEST = 'master.USER_MIC_REQUEST';
+
+const SET_TARGET_USERLIST = 'maseter.SET_TARGET_USERLIST';
 //#endregion
 
 export interface state {
@@ -33,7 +37,9 @@ export interface state {
   isMasterControl: boolean; // 제어
   isAudioActive: boolean; // 마이크 활성화
   isMasterMicControl: boolean; // 마스터가 켜고 껐는지
-  isMicRequest: boolean;
+  isMicRequest: boolean; // 마이크 요청 했을때
+  userMicRequest: boolean;
+  targetUserList: any[];
 }
 //#region initState
 const initialState = {
@@ -41,7 +47,9 @@ const initialState = {
   isMasterControl: false, // 제어
   isAudioActive: true, // 마이크 활성화
   isMasterMicControl: false, // 마스터가 켜고 껐는지
-  isMicRequest: false
+  isMicRequest: false,
+  userMicRequest: false,
+  targetUserList: []
 };
 //#endregion
 
@@ -62,6 +70,10 @@ function reducer(state = initialState, action: AnyAction) {
     //   return applyToggleMuteMicByMe(state, action);
     case SPEEK_REQUEST:
       return applyToggleMicRequest(state, action);
+    case USER_MIC_REQUEST:
+      return _setUserMicRequest(state, action);
+    case USER_MIC_REQUEST:
+      return _setTargetUserList(state, action);
     default:
       return state;
   }
@@ -69,20 +81,17 @@ function reducer(state = initialState, action: AnyAction) {
 //#endregion
 //#region 마스터 리스트
 function checkMasterList(token: string): ThunkAction<void, RootState, unknown> {
-  
   return async dispatch => {
     const result = await MeetApi.getMasterList(token);
     let masterList: any[] = [];
     if (isSuccess(result)) {
-      masterList = result.resultData.reduce((a: any[], b:any) => {
+      masterList = result.resultData.reduce((a: any[], b: any) => {
         a.push(b.user);
         return a;
       }, []);
     } else {
-
     }
 
-    
     dispatch({
       type: UPDATE_MASTER_LIST,
       masterList
@@ -99,8 +108,9 @@ function updateMasterList(state: state, action: AnyAction) {
 //#endregion
 
 //#region  SET_IS_CONTROL (마스터가 제어모드 중인지 아닌지)
-function changeMasterControlMode(id: string): ThunkAction<void, RootState, unknown> {
-  
+function changeMasterControlMode(
+  id: string
+): ThunkAction<void, RootState, unknown> {
   return dispatch => {
     dispatch({
       type: SET_IS_CONTROL,
@@ -121,17 +131,16 @@ function setIsContorl(state: state, action: AnyAction) {
 //#region  SET_IS_CONTROL (마스터가 제어모드 중인지 아닌지)
 function noWhereMaster(): ThunkAction<void, RootState, unknown> {
   return (dispatch, getState, extraArgument) => {
-    const isMasterControl = getState()['master']['isMasterControl']
-    isMasterControl && dispatch({
-      type: 'local.TOGGLE_MUTE_MIC',
-      micMute: false
-    });
+    const isMasterControl = getState()['master']['isMasterControl'];
+    isMasterControl &&
+      dispatch({
+        type: 'local.TOGGLE_MUTE_MIC',
+        micMute: false
+      });
     dispatch({
       type: SET_IS_CONTROL,
       flag: false
     });
-
-
   };
 }
 
@@ -139,8 +148,9 @@ function noWhereMaster(): ThunkAction<void, RootState, unknown> {
 
 //#region SET_AUDIO_ACTIVE (마스터가 전체마이크 활성화인지 아닌지)
 
-function changeAudioActive(flag: boolean): ThunkAction<void, RootState, unknown> {
-  
+function changeAudioActive(
+  flag: boolean
+): ThunkAction<void, RootState, unknown> {
   return (dispatch, getState, extraArgument) => {
     const user = getState()['local']['user'];
     dispatch({
@@ -169,8 +179,9 @@ function setAudioActive(state: state, action: AnyAction) {
 
 //#region TOGGLE_MUTE_MIC_MASTER
 
-function changeMuteMicMaster(micMuteFlag: boolean): ThunkAction<void, RootState, unknown> {
-  
+function changeMuteMicMaster(
+  micMuteFlag: boolean
+): ThunkAction<void, RootState, unknown> {
   return (dispatch, getState, extraArgument) => {
     dispatch({
       type: 'local.TOGGLE_MUTE_MIC',
@@ -250,6 +261,46 @@ function applyToggleMicRequest(state: state, action: AnyAction) {
 }
 //#endregion
 
+//#region USER_MIC_REQUEST
+function setUserMicRequest(flag: boolean) {
+  return {
+    type: USER_MIC_REQUEST,
+    flag
+  };
+}
+
+const _setUserMicRequest = (state: state, action: AnyAction) => {
+  return { ...state, userMicRequest: action.flag };
+};
+//#endregion
+
+//#region USER_MIC_REQUEST
+function setTargetUserList(targetUser: any) {
+  return {
+    type: SET_TARGET_USERLIST,
+    targetUser
+  };
+}
+
+const _setTargetUserList = (state: state, action: AnyAction) => {
+  const {
+    targetUser: { jitsiId }
+  } = action;
+   
+  let requestUserList = state.targetUserList.slice(0);
+  let isOverlap = requestUserList.find(user => user.jitsiId === jitsiId);
+
+  if(isOverlap) {
+    //타켓유저가 중복일때
+  } else {
+    //타켓유저가 중복이 아닐때
+    requestUserList.push(action.targetUser);
+  }
+
+  return { ...state, targetUserList: requestUserList };
+};
+//#endregion
+
 export const actionCreators = {
   checkMasterList,
   changeMasterControlMode,
@@ -257,7 +308,9 @@ export const actionCreators = {
   changeMuteMicMaster,
   // toggleMuteMicByMe,
   setMicRequest,
-  noWhereMaster
+  noWhereMaster,
+  setUserMicRequest,
+  setTargetUserList
 };
 
 export default reducer;

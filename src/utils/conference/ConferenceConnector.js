@@ -474,21 +474,13 @@ class ConferenceConnector {
 
     this._room.addCommandListener(GRANT_FLOOR_TARGET, value => {
       const result = JSON.parse(value.attributes.targetUser);
+      const iMaster = value.attributes.isMasterControlTarget;
       console.log('GRANT_FLOOR_TARGET : ', value);
-      // console.log(
-      //   'isMasterControlTarget : ',
-      //   value.attributes.isMasterControlTarget
-      // );
 
       if (result.jitsiId === this._room.myUserId()) {
-        // if (value.attributes.isMasterControlTarget) {
-        //   console.log(1111);
-        //   // 마스터 권한 부여 관련
-        // } else 
         if (value.attributes.type === 'reject') {
-          this._handlers.REJECTED_BY_MASTER();
+          iMaster !== 'true' && this._handlers.REJECTED_BY_MASTER();
         } else if (value.attributes.type === 'accept') {
-          console.log(2222);
           this._handlers.CHANGED_MIC_MUTE_BY_MASTER(false);
         }
       }
@@ -496,6 +488,7 @@ class ConferenceConnector {
 
     this._room.addCommandListener(UPDATE_MASTER_USERS, value => {
       const { cancel, myCommand } = value.attributes;
+      console.log('UPDATE_MASTER_USERS : ', value);
       this._handlers.CHANGE_MASTER_LIST(cancel, myCommand);
     });
 
@@ -507,18 +500,41 @@ class ConferenceConnector {
 
     this._room.addCommandListener(STOP_FLOOR, value => {
       console.log('STOP_FLOOR : ', value);
+      this._handlers.STOP_FLOOR();
       const result = JSON.parse(value.attributes.targetUser);
       if (
         result.jitsiId === this._room.myUserId() &&
-        value.value !== this._room.myUserId() 
-        // &&!value.attributes.isMasterControlTarget === 'true'
+        value.value !== this._room.myUserId() &&
+        value.attributes.isMasterControlTarget !== 'true'
       ) {
         // 본인이 끈건지 마스터가 끈건지 판단
         this._handlers.CHANGED_MIC_MUTE_BY_MASTER(true);
       } else {
-
       }
     });
+
+    this._room.addCommandListener(REQUEST_FLOOR, value => {
+      console.log('REQUEST_FLOOR : ', value);
+      const targetUser = JSON.parse(value.attributes.targetUser);
+
+      
+      //권한요청 받았을때( 권한요청자와 마스터가 다른 사람일경우)
+      if (value.value !== this._room.myUserId()) {
+
+        // this._room.sendCommandOnce(GRANT_FLOOR_TARGET, {
+        //   value: this._room.myUserId(),
+        //   attributes: {
+        //     targetUser: JSON.stringify({
+        //       jitsiId: targetUser.jitsiId,
+        //       name: targetUser.name
+        //     }),
+        //     type: 'reject',
+        //     isMasterControlTarget: 'false'
+        //   }
+        // });
+      }
+    });
+
     this._room.addCommandListener(REQUEST_ROOM_STOP_RECORDING, value => {
       if (this._room.isModerator()) {
         if (this._sessionID) {
@@ -568,6 +584,7 @@ class ConferenceConnector {
     this._room.removeCommandListener(REQUEST_KICK);
     this._room.removeCommandListener(REQUEST_ROOM_STOP_RECORDING);
     this._room.removeCommandListener(REQUEST_ROOM_START_RECORDING);
+    this._room.removeCommandListener(REQUEST_FLOOR);
   };
 
   /**
@@ -744,7 +761,8 @@ class ConferenceConnector {
   };
   //#endregion
 
-  updateRolefromMaster = async cancel => {
+  //마스터권한 부여하기
+  updateRolefromMaster = async (newMaster, cancel) => {
     await this._room.sendCommandOnce(UPDATE_MASTER_USERS, {
       value: this._room.myUserId(),
       attributes: {
@@ -752,6 +770,29 @@ class ConferenceConnector {
         myCommand: true
       }
     });
+
+    if (!cancel) {
+      this._room.sendCommandOnce(GRANT_FLOOR_TARGET, {
+        value: this._room.myUserId(),
+        attributes: {
+          targetUser: JSON.stringify({
+            jitsiId: newMaster
+          }),
+          type: 'reject',
+          isMasterControlTarget: 'true'
+        }
+      });
+
+      this._room.sendCommandOnce(STOP_FLOOR, {
+        value: this._room.myUserId(),
+        attributes: {
+          targetUser: JSON.stringify({
+            jitsiId: newMaster
+          }),
+          isMasterControlTarget: 'true'
+        }
+      });
+    }
   };
 
   //발언권 제어모드
@@ -762,12 +803,12 @@ class ConferenceConnector {
         attributes: {}
       });
 
-      this._room.sendCommand(REQUEST_MIC_CONTROL, {
+      this._room.sendCommandOnce(REQUEST_MIC_CONTROL, {
         value: this._room.myUserId(),
         attributes: { controlType: 'mute' }
       });
     } else {
-      await this._room.sendCommand(REQUEST_MIC_CONTROL, {
+      await this._room.sendCommandOnce(REQUEST_MIC_CONTROL, {
         value: this._room.myUserId(),
         attributes: { controlType: 'unmute' }
       });
