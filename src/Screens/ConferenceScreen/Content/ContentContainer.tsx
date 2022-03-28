@@ -12,6 +12,7 @@ import {
 import Clipboard from '@react-native-clipboard/clipboard';
 import DeviceInfo from 'react-native-device-info';
 import InCallManager from 'react-native-incall-manager';
+import { BluetoothStatus } from 'react-native-bluetooth-status';
 import _ from 'underscore';
 
 import ContentPresenter from './ContentPresenter';
@@ -20,7 +21,7 @@ import { ConferenceBotPopupContent } from './RenwalContent/Component/BottomPopup
 
 import { useDispatch, useSelector } from 'react-redux';
 import { actionCreators as localAction } from '@redux/local';
-import { actionCreators as mainUserAction } from '@redux/mainUser';
+import { actionCreators as masterAction } from '../../../redux/modules/master';
 import { actionCreators as toastActionCreators } from '@redux/toast';
 import { RootState } from '../../../redux/configureStore';
 
@@ -36,6 +37,7 @@ import { getT } from '@utils/translateManager';
 import { ConferenceModes } from '@utils/Constants';
 import { MeetApi } from '@services/index';
 import { isSuccess } from '@services/types';
+
 
 export type ConferenceBottomPopupProps = {
   show: boolean;
@@ -93,7 +95,12 @@ function ContentContainer(props: any) {
     masters,
     expireTime,
     isLogin,
-    isScreenShare
+    isScreenShare,
+    isMuteMic,
+    isAudioActive,
+    name,
+    isMicRequest,
+    isMasterControl
   } = useSelector((state: RootState) => {
     const {
       local,
@@ -119,17 +126,23 @@ function ContentContainer(props: any) {
       isLogin: user.isLogin,
       participants: participants.list,
       masters: master.masterList,
-      isScreenShare: screenShare.isScreenShare
+      isScreenShare: screenShare.isScreenShare,
+      isMuteMic: local.user.isMuteMic,
+      isAudioActive: master.isAudioActive,
+      name: local.user.name,
+      isMicRequest: master.isMicRequest,
+      isMasterControl: master.isMasterControl
     };
   });
 
   const dispatch = useDispatch();
   const setConferenceMode = (mode: any) =>
     dispatch(localAction.setConferenceMode(mode));
-  const setDocumentListMode = (value: any) =>
-    dispatch(mainUserAction.setDocumentListMode(value));
   const setToastMessage = (msg: string) =>
     dispatch(toastActionCreators.setToastMessage(msg));
+  const setMicRequest = (flag: any) =>
+    dispatch(masterAction.setMicRequest(flag));
+  const toggleMuteMic = () => dispatch(localAction.toggleMuteMic(undefined));
 
   let userList = participants.slice(0);
 
@@ -222,12 +235,18 @@ function ContentContainer(props: any) {
       InCallManager.requestRecordPermission();
     }
 
-    if (isIOS) {
-    } else {
+    if (!isIOS) {
       DeviceEventEmitter.addListener('onAudioDeviceChanged', event => {
-        console.log('onAudioDeviceChanged: ', event.selectedAudioDevice);
-        InCallManager.updateAudioDeviceState;
-        //TODO: 이거 필요한 함수인지 확인필요함
+        const { availableAudioDeviceList } = event;
+        const deviceList = JSON.parse(availableAudioDeviceList);
+        let enableBluetooth = false;
+        enableBluetooth = deviceList.find(
+          (list: string) => list === 'BLUETOOTH'
+        );
+        if (enableBluetooth) {
+          InCallManager.chooseAudioRoute('BLUETOOTH');
+          speaker === 2 && setSpeaker(1);
+        }
       });
     }
   };
@@ -367,27 +386,56 @@ function ContentContainer(props: any) {
     setIsVideoReverse(!isVideoReverse);
   }, 1000);
 
-  const _handleChangeSpeaker = () => {
-    setSpeaker(speaker === 2 ? 1 : 2);
+  const _handleChangeSpeaker = async () => {
+    const bluetooth = await BluetoothStatus.state();
 
-    if (isIOS) {
-      InCallManager.stop();
-      if (speaker === 2) {
-        InCallManager.setSpeakerphoneOn(true);
-        InCallManager.setForceSpeakerphoneOn(true);
+    if (!bluetooth) {
+      setSpeaker(speaker === 2 ? 1 : 2);
+
+      if (isIOS) {
+        if (speaker === 2) {
+          InCallManager.setSpeakerphoneOn(false);
+          InCallManager.setForceSpeakerphoneOn(false);
+        } else {
+          InCallManager.setSpeakerphoneOn(true);
+          InCallManager.setForceSpeakerphoneOn(true);
+        }
       } else {
-        InCallManager.setSpeakerphoneOn(false);
-        InCallManager.setForceSpeakerphoneOn(false);
+        // android
+        if (speaker === 2) {
+          InCallManager.setForceSpeakerphoneOn(false);
+        } else {
+          InCallManager.chooseAudioRoute('SPEAKER_PHONE');
+        }
       }
     } else {
-      // android
-      if (speaker === 2) {
-        InCallManager.setSpeakerphoneOn(true);
-        InCallManager.chooseAudioRoute('SPEAKER_PHONE');
+      isIOS && speaker === 2 && setSpeaker(1);
+    }
+  };
+
+  const _handleToggleMic = () => {
+    let conferenceManager = getConferenceManager();
+
+    if (isMasterControl) {
+      if (isAudioActive) {
+        // 참가자는 마스터가 제어중일때 오디오가 꺼져있으면 직접 컨트롤 할 수 없음
       } else {
-        InCallManager.setSpeakerphoneOn(false);
-        InCallManager.chooseAudioRoute('BLUETOOTH');
+        if (isMuteMic) {
+          if (isMicRequest) {
+            setToastMessage(t('toast_master_waiting'));
+          } else {
+            conferenceManager.requestAttention(name);
+            setMicRequest(true);
+            setToastMessage(t('toast_master_ask'));
+          }
+        } else {
+          conferenceManager.stopAttention(name);
+          setToastMessage(t('toast_master_finish'));
+          toggleMuteMic();
+        }
       }
+    } else {
+      toggleMuteMic();
     }
   };
 
@@ -429,6 +477,7 @@ function ContentContainer(props: any) {
       orientation={orientation}
       hasNotch={hasNotch}
       onChangeSpeaker={_handleChangeSpeaker}
+      handleToggleMic={_handleToggleMic}
     />
   ) : (
     <ContentPresenter
@@ -467,6 +516,7 @@ function ContentContainer(props: any) {
       handdlePersonPlus={handdlePersonPlus}
       updateRolefromMaster={_updateRolefromMaster}
       handleMicControlFromMaster={_micControlFromMaster}
+      handleToggleMic={_handleToggleMic}
     />
   );
 }

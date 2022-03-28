@@ -14,6 +14,7 @@ const mapStateToProps = state => ({
   page: state.documentShare.page,
   documentListMode: state.documentShare.documentListMode,
   mode: state.documentShare.mode,
+  isMuteMic: state.local.user.isMuteMic
 });
 
 // map dispatch to props

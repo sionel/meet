@@ -520,7 +520,7 @@ class ConferenceConnector {
       
       //권한요청 받았을때( 권한요청자와 마스터가 다른 사람일경우)
       if (value.value !== this._room.myUserId()) {
-
+        this._handlers.REQUEST_FLOOR(targetUser);
         // this._room.sendCommandOnce(GRANT_FLOOR_TARGET, {
         //   value: this._room.myUserId(),
         //   attributes: {

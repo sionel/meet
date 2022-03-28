@@ -212,6 +212,8 @@ class ReactInstanceManagerHolder {
                 new org.reactnative.maskedview.RNCMaskedViewPackage(),
                 new com.cmcewen.blurview.BlurViewPackage(),
                 new com.reactnativecommunity.clipboard.ClipboardPackage(),
+                new com.solinor.bluetoothstatus.RNBluetoothManagerPackage(),
+                
                 new ReactPackageAdapter() {
                     @Override
                     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {

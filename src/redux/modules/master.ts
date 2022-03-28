@@ -32,14 +32,20 @@ const USER_MIC_REQUEST = 'master.USER_MIC_REQUEST';
 const SET_TARGET_USERLIST = 'maseter.SET_TARGET_USERLIST';
 //#endregion
 
+type targetUser = {
+  jitsiId: string;
+  wehagoId: string;
+  id: string;
+  name: string;
+};
+
 export interface state {
   masterList: string[];
   isMasterControl: boolean; // 제어
   isAudioActive: boolean; // 마이크 활성화
   isMasterMicControl: boolean; // 마스터가 켜고 껐는지
   isMicRequest: boolean; // 마이크 요청 했을때
-  userMicRequest: boolean;
-  targetUserList: any[];
+  targetUserList: targetUser[]; // 마스터일때 참가자로부터 요청받을때
 }
 //#region initState
 const initialState = {
@@ -48,7 +54,6 @@ const initialState = {
   isAudioActive: true, // 마이크 활성화
   isMasterMicControl: false, // 마스터가 켜고 껐는지
   isMicRequest: false,
-  userMicRequest: false,
   targetUserList: []
 };
 //#endregion
@@ -58,12 +63,10 @@ function reducer(state = initialState, action: AnyAction) {
   switch (action.type) {
     case UPDATE_MASTER_LIST:
       return updateMasterList(state, action);
-
     case SET_IS_CONTROL:
       return setIsContorl(state, action);
     case SET_AUDIO_ACTIVE:
       return setAudioActive(state, action);
-
     case TOGGLE_MUTE_MIC_MASTER:
       return applyToggleMuteMicMaster(state, action);
     // case TOGGLE_MUTE_MIC_BY_ME:
@@ -72,7 +75,7 @@ function reducer(state = initialState, action: AnyAction) {
       return applyToggleMicRequest(state, action);
     case USER_MIC_REQUEST:
       return _setUserMicRequest(state, action);
-    case USER_MIC_REQUEST:
+    case SET_TARGET_USERLIST:
       return _setTargetUserList(state, action);
     default:
       return state;
@@ -261,36 +264,41 @@ function applyToggleMicRequest(state: state, action: AnyAction) {
 }
 //#endregion
 
-//#region USER_MIC_REQUEST
-function setUserMicRequest(flag: boolean) {
-  return {
-    type: USER_MIC_REQUEST,
-    flag
-  };
-}
+//#region SET_TARGET_USERLIST
 
-const _setUserMicRequest = (state: state, action: AnyAction) => {
-  return { ...state, userMicRequest: action.flag };
-};
-//#endregion
-
-//#region USER_MIC_REQUEST
-function setTargetUserList(targetUser: any) {
+function setTargetUserList(jitsiId: string) {
   return {
     type: SET_TARGET_USERLIST,
-    targetUser
+    jitsiId
   };
 }
 
 const _setTargetUserList = (state: state, action: AnyAction) => {
+  const { jitsiId } = action;
+  let requestUserList = state.targetUserList.slice(0);
+  let newUserList = requestUserList.filter(user => user.jitsiId !== jitsiId);
+  return { ...state, targetUserList: newUserList };
+};
+//#endregion
+
+//#region USER_MIC_REQUEST
+
+function setUserMicRequest(targetUser: targetUser) {
+  return {
+    type: USER_MIC_REQUEST,
+    targetUser
+  };
+}
+
+const _setUserMicRequest = (state: state, action: AnyAction) => {
   const {
     targetUser: { jitsiId }
   } = action;
-   
+
   let requestUserList = state.targetUserList.slice(0);
   let isOverlap = requestUserList.find(user => user.jitsiId === jitsiId);
 
-  if(isOverlap) {
+  if (isOverlap) {
     //타켓유저가 중복일때
   } else {
     //타켓유저가 중복이 아닐때

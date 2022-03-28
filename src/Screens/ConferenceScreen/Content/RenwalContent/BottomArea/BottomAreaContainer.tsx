@@ -22,6 +22,7 @@ type BottomAreaProps = {
   onClose: () => void;
   onChangeSpeaker: () => void;
   onChangeMicMaster: () => void;
+  handleToggleMic: () => void;
   userList: ParticipantsTypes[];
   isMultipleView: boolean;
   setIsMultipleView: React.Dispatch<React.SetStateAction<boolean>>;
@@ -82,32 +83,6 @@ const BottomAreaContainer = (props: BottomAreaProps) => {
     dispatch(masterActionCreators.setMicRequest(flag));
   //#endregion
 
-  const _handleToggleMic = () => {
-    let conferenceManager = getConferenceManager();
-    let isMaster = masters.find(masterID => masterID === authID)
-    if (isMasterControl && !isMaster) {
-      if (isAudioActive) {
-        // 참가자는 마스터가 제어중일때 오디오가 꺼져있으면 직접 컨트롤 할 수 없음
-      } else {
-        if (isMuteMic) {
-          if (isMicRequest) {
-            setToastMessage(t('toast_master_waiting'));
-          } else {
-            conferenceManager.requestAttention(name);
-            setMicRequest(true);
-            setToastMessage(t('toast_master_ask'));
-          }
-        } else {
-          conferenceManager.stopAttention(name);
-          setToastMessage(t('toast_master_finish'));
-          toggleMuteMic();
-        }
-      }
-    } else {
-      toggleMuteMic();
-    }
-  };
-
   useEffect(() => {
     const updateLayout = () => {
       setWidth(Dimensions.get('screen').width);
@@ -133,7 +108,7 @@ const BottomAreaContainer = (props: BottomAreaProps) => {
       isScreenShare={isScreenShare}
       isMuteMic={isMuteMic}
       isMuteVideo={isMuteVideo}
-      handleToggleMic={_handleToggleMic}
+      handleToggleMic={props.handleToggleMic}
       toggleMuteVideo={toggleMuteVideo}
       // toggleMuteMic={toggleMuteMic}
       user={user}

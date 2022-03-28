@@ -41,7 +41,8 @@ type ContentPresenterProps = {
   handdlePersonPlus: () => void;
   handleKickUser: (id: string, masterName: string, userName: string) => void;
   updateRolefromMaster: (newMaster: string) => void;
-  handleMicControlFromMaster: ()=>void;
+  handleMicControlFromMaster: () => void;
+  handleToggleMic: () => void;
   // limitedTime: number;
 };
 
@@ -70,7 +71,8 @@ const ContentPresenter = (props: ContentPresenterProps) => {
     setIsMultipleView,
     handelProfieBackButton,
     setIsPopupTouch,
-    handdlePersonPlus
+    handdlePersonPlus,
+    handleToggleMic
   } = props;
 
   // const localPipMode = useSelector((state: RootState) => state.local.pipMode);

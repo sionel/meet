@@ -18,6 +18,9 @@ import OverView from '../OverView';
 import { getT } from '@utils/translateManager';
 import { gestureHandlerRootHOC, ScrollView, FlatList } from 'react-native-gesture-handler';
 
+import micOFF from '@assets/icons/mic_off.png';
+import micON from '@assets/icons/mic_on.png';
+
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 const { width, height } = Dimensions.get('screen');
 
@@ -31,7 +34,8 @@ const FileSharingPresenter = gestureHandlerRootHOC((props) => {
     page,
     mode,
     onChangeState,
-    onChangePage
+    onChangePage,
+    isMuteMic
   } = props;
 
   const localPipMode = useSelector(state => state.local.pipMode);
@@ -65,6 +69,25 @@ const FileSharingPresenter = gestureHandlerRootHOC((props) => {
           ? props.attributes.fileName
           : props.selectedRoomName}
       </Text>
+      <TouchableOpacity
+        style={[
+          {
+            width: 30,
+            height: 30,
+            borderRadius: 15,
+            justifyContent: 'center',
+            alignItems: 'center'
+          },
+          !isMuteMic && { backgroundColor: '#1c90fb' }
+        ]}
+        onPress={() => handleToggleMic()}
+      >
+        <Image
+          source={isMuteMic ? micOFF : micON}
+          resizeMode={'cover'}
+          style={{ width: 24, height: 24 }}
+        />
+      </TouchableOpacity>
       {/* <CustomButton
         name={'talk'}
         onPress={() => props.setDocumentListMode(['CHATTING', 'USERLIST'])}

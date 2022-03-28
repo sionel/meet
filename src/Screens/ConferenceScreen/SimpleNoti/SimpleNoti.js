@@ -1,29 +1,34 @@
 // 확장성을 고려해봤지만 관리가 쉽게끔 그냥 여기서 전부 처리하는게 나아보임
 
 import React, { useState, useEffect, useRef } from 'react';
-import { View, StyleSheet, Animated, Text, Dimensions } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Animated,
+  Text,
+  Dimensions,
+  TouchableOpacity
+} from 'react-native';
 import deviceInfoModule from 'react-native-device-info';
 import { useSelector, useDispatch } from 'react-redux';
 import { actionCreators as masterActionCreators } from '@redux/master';
+import { getT } from '@utils/translateManager';
 
 const isPad = deviceInfoModule.isTablet();
 // const { width, height } = Dimensions.get('screen');
 
 export default function SimpleNoti() {
-  const { toggleFlag, toastMessage, isUserMicRequest, userList } = useSelector(
-    state => {
-      const { toast, master } = state;
-      return {
-        toggleFlag: toast.toggleFlag,
-        toastMessage: toast.toastMessage,
-        isUserMicRequest: master.userMicRequest,
-        userList: master.targetUserList
-      };
-    }
-  );
+  const { toggleFlag, toastMessage, userList } = useSelector(state => {
+    const { toast, master } = state;
+    return {
+      toggleFlag: toast.toggleFlag,
+      toastMessage: toast.toastMessage,
+      userList: master.targetUserList
+    };
+  });
   // const toggleFlag = useSelector(state => state.toast['toggleFlag']);
   // const toastMessage = useSelector(state => state.toast['toastMessage']);
-
+  const t = getT();
   const [width, setWidth] = useState(Dimensions.get('screen').width);
   const [height, setHeight] = useState(Dimensions.get('screen').height);
 
@@ -99,18 +104,56 @@ export default function SimpleNoti() {
     };
   });
 
-  const micRequestPopup = (
-    <View style={[styles.container, { height: 100, flexDirection: 'row' }]}>
-      <View>
-        <Text></Text>
-        <Text></Text>
+  const micRequestPopup = (name, index) => (
+    <View
+      key={index}
+      style={[
+        styles.container,
+        { height: 100, flexDirection: 'row', bottom: height * 0.7, paddingHorizontal: 20 }
+      ]}
+    >
+      <View style={{alignItems: 'flex-start', marginRight: 30}}>
+        <Text
+          style={{ color: '#fff', fontFamily: 'DOUZONEText50', fontSize: 15, lineHeight: 30 }}
+        >
+          {t('발언권 요청')}
+        </Text>
+        <Text
+          style={{ color: '#fff', fontFamily: 'DOUZONEText30', fontSize: 13 }}
+        >{`${name} 님이 발언권을 요청하였습니다.`}</Text>
+      </View>
+      <View style={{ flexDirection: 'row' }}>
+        <TouchableOpacity
+          style={{
+            backgroundColor: '#1c90fb',
+            width: 40,
+            height: 25,
+            borderRadius: 5,
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginRight: 10
+          }}
+        >
+          <Text style={{ color: '#fff' }}>{t('수락')}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            backgroundColor: '#fc5356',
+            width: 40,
+            height: 25,
+            borderRadius: 5,
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}
+        >
+          <Text style={{ color: '#fff' }}>{t('거부')}</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
 
-
-  return userList.length > 0 && isUserMicRequest ? (
-    micRequestPopup
+  return userList.length > 0 ? (
+    userList.map((user, index) => micRequestPopup(user.name, index))
   ) : message ? (
     <Animated.View
       style={[

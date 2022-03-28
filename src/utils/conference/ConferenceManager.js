@@ -162,7 +162,8 @@ class ConferenceManager {
       START_RECORDING: this.startRecord,
       STOP_RECORDING: this.stopRecord,
       REQUEST_RECORD_USER: this.requestRecordUser,
-      STOP_FLOOR: this.stopFloor
+      STOP_FLOOR: this.stopFloor,
+      REQUEST_FLOOR: this.requestFloor
     };
     return handler;
   };
@@ -419,6 +420,11 @@ class ConferenceManager {
     console.log('taegetUser : ', targetUser);
     this._dispatch(masterAcionCreators.setUserMicRequest(true));
     this._dispatch(masterAcionCreators.setTargetUserList(targetUser));
+  }
+
+  requestFloor = (targetUser) => {
+    console.log('taegetUser : ', targetUser);
+    this._dispatch(masterAcionCreators.setUserMicRequest(targetUser));
   }
 
   //UPDATE_MASTER_USERS 요청을 들었을때
