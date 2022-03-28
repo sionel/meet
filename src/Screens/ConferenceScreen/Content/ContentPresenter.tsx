@@ -111,6 +111,7 @@ const ContentPresenter = (props: any) => {
             callType={callType}
             speaker={speaker}
             onChangeMicMaster={props.onChangeMicMaster}
+            handleToggleMic={props.handleToggleMic}
           />
         </View>
       )}

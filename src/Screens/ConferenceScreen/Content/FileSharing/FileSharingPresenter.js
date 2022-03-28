@@ -8,7 +8,8 @@ import {
   TouchableOpacity,
   ScrollView,
   FlatList,
-  SafeAreaView
+  SafeAreaView,
+  Image
 } from 'react-native';
 import { useSelector } from 'react-redux';
 import FastImage from 'react-native-fast-image';
@@ -18,6 +19,9 @@ import CustomButton from '../../../../components/CustomButton';
 import CustomAlert from '../../../../components/CustomAlert';
 import OverView from '../OverView';
 import { getT } from '../../../../utils/translateManager';
+
+import micOFF from '../../../../../assets/new/icons/mic_off.png';
+import micON from '../../../../../assets/new/icons/mic_on.png';
 
 const SafetyView = Platform.OS === 'ios' ? SafeAreaView : View;
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
@@ -32,7 +36,8 @@ const FileSharingPresenter = props => {
     page,
     mode,
     onChangeState,
-    onChangePage
+    onChangePage,
+    isMuteMic
   } = props;
 
   const localPipMode = useSelector(state => state.local.pipMode);
@@ -66,6 +71,25 @@ const FileSharingPresenter = props => {
           ? props.attributes.fileName
           : props.selectedRoomName}
       </Text>
+      <TouchableOpacity
+        style={[
+          {
+            width: 28,
+            height: 28,
+            borderRadius: 14,
+            justifyContent: 'center',
+            alignItems: 'center'
+          },
+          !isMuteMic && { backgroundColor: '#1c90fb' }
+        ]}
+        onPress={() => handleToggleMic()}
+      >
+        <Image
+          source={isMuteMic ? micOFF : micON}
+          resizeMode={'cover'}
+          style={{ width: 24, height: 24 }}
+        />
+      </TouchableOpacity>
       <CustomButton
         name={'talk'}
         onPress={() => props.setDocumentListMode(['CHATTING', 'USERLIST'])}

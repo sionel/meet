@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { DeviceEventEmitter, Dimensions, NativeModules, Platform } from 'react-native';
+import {
+  DeviceEventEmitter,
+  Dimensions,
+  NativeModules,
+  Platform
+} from 'react-native';
 import ContentPresenter from './ContentPresenter';
 import FileSharing from './FileSharing';
 import { ConferenceModes } from '../../../utils/Constants';
@@ -9,10 +14,13 @@ import _ from 'underscore';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { actionCreators as localAction } from '../../../redux/modules/local';
-import { actionCreators as mainUserAction } from '../../../redux/modules/mainUser';
+import { actionCreators as masterAction } from '../../../redux/modules/master';
+import { actionCreators as toastAction } from '../../../redux/modules/toast';
 import { RootState } from '../../../redux/configureStore';
 import { getConferenceManager } from '../../../utils/ConferenceManager';
 import InCallManager from 'react-native-incall-manager';
+import { BluetoothStatus } from 'react-native-bluetooth-status';
+import { getT } from '../../../utils/translateManager';
 
 const isIOS = Platform.OS === 'ios';
 
@@ -39,51 +47,71 @@ function ContentContainer(props: any) {
   const { videoTrack, isMuteVideo } = mainUser;
   const [limitedTime, setLimitedTime] = useState(3600000);
 
+  const t = getT();
+
   // const localPipMode = useSelector((state: RootState) => state.local.pipMode);
   const {
     conferenceMode,
     drawingMode,
     documentListMode,
     attributes,
-    localPipMode
+    localPipMode,
+    isMuteMic,
+    isAudioActive,
+    name,
+    isMicRequest,
+    isMasterControl
   } = useSelector((state: RootState) => {
+    const { local, master, documentShare } = state;
     return {
-      conferenceMode: state.local.conferenceMode,
-      drawingMode: state.mainUser.drawingMode,
-      documentListMode: state.mainUser.documentListMode,
-      attributes: state.documentShare.attributes,
-      localPipMode: state.local.pipMode
+      conferenceMode: local.conferenceMode,
+      drawingMode: mainUser.drawingMode,
+      documentListMode: mainUser.documentListMode,
+      attributes: documentShare.attributes,
+      localPipMode: local.pipMode,
+      isMuteMic: local.user.isMuteMic,
+      isAudioActive: master.isAudioActive,
+      name: local.user.name,
+      isMicRequest: master.isMicRequest,
+      isMasterControl: master.isMasterControl
     };
   });
 
   const dispatch = useDispatch();
   const setConferenceMode = (mode: any) =>
     dispatch(localAction.setConferenceMode(mode));
-  const setDrawingMode = (value: any) =>
-    dispatch(mainUserAction.setDrawingMode(value));
-  const setDocumentListMode = (value: any) =>
-    dispatch(mainUserAction.setDocumentListMode(value));
+    const setToastMessage = (msg: string) =>
+    dispatch(toastAction.setToastMessage(msg));
+  const setMicRequest = (flag: any) =>
+    dispatch(masterAction.setMicRequest(flag));
+  const toggleMuteMic = () => dispatch(localAction.toggleMuteMic(undefined));
 
   const audioInit = async () => {
-    InCallManager.start({ media: 'audio', auto: true });
+    InCallManager.start({ media: 'video', auto: true });
 
-    const audioPermmit = await InCallManager.requestRecordPermission() 
-    if ( audioPermmit !== 'granted') {
+    const audioPermmit = await InCallManager.requestRecordPermission();
+    if (audioPermmit !== 'granted') {
       InCallManager.requestRecordPermission();
     }
 
-    if (isIOS) {
-    } else {
+    if (!isIOS) {
       DeviceEventEmitter.addListener('onAudioDeviceChanged', event => {
-        console.log('onAudioDeviceChanged: ', event.selectedAudioDevice);
-        InCallManager.updateAudioDeviceState;
-        //TODO: 이거 필요한 함수인지 확인필요함
+        const { availableAudioDeviceList } = event;
+        const deviceList = JSON.parse(availableAudioDeviceList);
+        let enableBluetooth = false;
+        enableBluetooth = deviceList.find(
+          (list: string) => list === 'BLUETOOTH'
+        );
+        if (enableBluetooth) {
+          InCallManager.chooseAudioRoute('BLUETOOTH');
+        }
       });
     }
-  }
+  };
   useEffect(() => {
     audioInit();
     _handleChangeSpeaker();
+    BluetoothStatus.listener = _handleChangeSpeaker;
     Orientation.addOrientationListener(_setOrientation);
     return () => {
       Orientation.removeOrientationListener(_setOrientation);
@@ -116,27 +144,55 @@ function ContentContainer(props: any) {
     setIsVideoReverse(!isVideoReverse);
   }, 1000);
 
-  const _handleChangeSpeaker = () => {
-    setSpeaker(speaker === 2 ? 1 : 2);
+  const _handleChangeSpeaker = async () => {
+    const bluetooth = await BluetoothStatus.state();
 
-    if (isIOS) {
-      InCallManager.stop();
-      if (speaker === 2) {
-        InCallManager.setSpeakerphoneOn(true);
-        InCallManager.setForceSpeakerphoneOn(true);
+    if (!bluetooth) {
+      setSpeaker(speaker === 2 ? 1: 2);
+
+
+      if (isIOS) {
+        if (speaker === 2) {
+          InCallManager.setSpeakerphoneOn(false);
+          InCallManager.setForceSpeakerphoneOn(false);
+        } else {
+          InCallManager.setSpeakerphoneOn(true);
+          InCallManager.setForceSpeakerphoneOn(true);
+        }
       } else {
-        InCallManager.setSpeakerphoneOn(false);
-        InCallManager.setForceSpeakerphoneOn(false);
+        // android
+        if (speaker === 2) {
+          InCallManager.setForceSpeakerphoneOn(false);
+        } else {
+          InCallManager.chooseAudioRoute('SPEAKER_PHONE');
+        }
+      }
+    }
+  };
+
+  const _handleToggleMic = () => {
+    let conferenceManager = getConferenceManager();
+
+    if (isMasterControl) {
+      if (isAudioActive) {
+        // 참가자는 마스터가 제어중일때 오디오가 꺼져있으면 직접 컨트롤 할 수 없음
+      } else {
+        if (isMuteMic) {
+          if (isMicRequest) {
+            setToastMessage(t('toast_master_waiting'));
+          } else {
+            conferenceManager.requestAttention(name);
+            setMicRequest(true);
+            setToastMessage(t('toast_master_ask'));
+          }
+        } else {
+          conferenceManager.stopAttention(name);
+          setToastMessage(t('toast_master_finish'));
+          toggleMuteMic();
+        }
       }
     } else {
-      // android
-      if (speaker === 2) {
-        InCallManager.setSpeakerphoneOn(true);
-        InCallManager.chooseAudioRoute('SPEAKER_PHONE');
-      } else {
-        InCallManager.setSpeakerphoneOn(false);
-        InCallManager.chooseAudioRoute('BLUETOOTH');
-      }
+      toggleMuteMic();
     }
   };
 
@@ -148,6 +204,7 @@ function ContentContainer(props: any) {
       orientation={orientation}
       hasNotch={hasNotch}
       onChangeSpeaker={_handleChangeSpeaker}
+      handleToggleMic={_handleToggleMic}
     />
   ) : (
     <ContentPresenter
@@ -174,6 +231,7 @@ function ContentContainer(props: any) {
       onChangeSpeaker={_handleChangeSpeaker}
       limitedTime={limitedTime}
       setLimitedTime={setLimitedTime}
+      handleToggleMic={_handleToggleMic}
       // onChangeState={_handleChangeState}
     />
   );

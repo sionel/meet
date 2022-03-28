@@ -15,6 +15,7 @@ const BottomAreaPresenter = props =>
       callType={props.callType}
       speaker={props.speaker}
       onChangeMicMaster={props.onChangeMicMaster}
+      handleToggleMic={props.handleToggleMic}
     />
   ) : (
     <SubVideoBox
