@@ -122,6 +122,14 @@ class ConferenceScreenContainer extends React.Component {
         documentShare
       );
     }
+
+    // if (
+    //   this._conferenceManager &&
+    //   list.length > 0 &&
+    //   list.length > prevProps.list.length
+    // ) {
+    //   this._conferenceManager.micControlFromMaster(true)
+    // }
   }
 
   /**
@@ -387,7 +395,8 @@ class ConferenceScreenContainer extends React.Component {
       isLogin,
       resetVideoId,
       setIsConference,
-      setConferenceCreatedTime
+      setConferenceCreatedTime,
+      resetTargetUserList
       // auth,
       // screenProps,
     } = this.props;
@@ -402,6 +411,7 @@ class ConferenceScreenContainer extends React.Component {
     resetVideoId();
     setIsConference(false);
     setConferenceCreatedTime(null);
+    resetTargetUserList();
     if (!isLogin) {
       navigation.reset({ routes: [{ name: 'LoginStack' }] });
     } else {

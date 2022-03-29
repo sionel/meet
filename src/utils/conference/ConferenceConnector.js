@@ -2,6 +2,7 @@ import JitsiMeetJS from '@jitsi/base/lib-jitsi-meet';
 import config from './config';
 import { getDrawingManager } from '@utils/index';
 import DrawingMananger from '@utils/DrawingManager';
+import { MeetApi } from '@services/index';
 
 // 위하고 아이디 커멘드 이름 정의
 const WEHAGO_ID = 'wehagoid';
@@ -431,28 +432,43 @@ class ConferenceConnector {
     // - 마스터가 마이크 제어 mute를 함 사용자들은 마이크 임의로 킬 수 없음
     // 간단한 토스트 메시지 띄움
     this._room.addCommandListener(REQUEST_MIC_CONTROL, value => {
-      console.log('REQUEST_MIC_CONTROL[ 마이크 전체 제어 ] : ', value);
+      // console.log('REQUEST_MIC_CONTROL[ 마이크 전체 제어 ] : ', value);
       const {
         attributes: { controlType }
       } = value;
-      this._handlers.CHANGED_MIC_CONTROL_MODE_BY_MASTER(controlType === 'mute');
+
+      if (value.value === this._room.myUserId()) {
+        this._handlers.CHANGED_MIC_CONTROL_MODE_BY_MASTER(
+          controlType === 'mute',
+          true
+        );
+      } else {
+        this._handlers.CHANGED_MIC_CONTROL_MODE_BY_MASTER(
+          controlType === 'mute',
+          false
+        );
+      }
       // value.attribute === 'mute' ? true : false
     });
 
     // 화상대화 전체 마이크 제어 요청자 사용자 정보 이벤트
     //- 마스터가 마이크 제어 모드 시작하기/종료하기
     this._room.addCommandListener(REQUEST_MIC_CONTROL_USER, value => {
-      console.log('REQUEST_MIC_CONTROL_USER[ 발언권 제어모드 ] : ', value);
-      this._handlers.CHANGED_MIC_CONTROL_USER_MODE_BY_MASTER(value.value);
+      // console.log('REQUEST_MIC_CONTROL_USER[ 발언권 제어모드 ] : ', value);
+      let controlMode = value.value !== this._room.myUserId();
+      this._handlers.CHANGED_MIC_CONTROL_USER_MODE_BY_MASTER(
+        value.value,
+        controlMode
+      );
     });
 
     // 화상대화 타겟 유저 마이크 제어 요청 이벤트
     // - 마스터가 단일 마일 제어 id형식 8자
     this._room.addCommandListener(REQUEST_MIC_CONTROL_TARGET, value => {
-      console.log(
-        'REQUEST_MIC_CONTROL_TARGET[ 특정 유저 마이크 제어 ] : ',
-        value
-      );
+      // console.log(
+      //   'REQUEST_MIC_CONTROL_TARGET[ 특정 유저 마이크 제어 ] : ',
+      //   value
+      // );
       if (this._room.myUserId() === value.attributes.target) {
         this._handlers.CHANGED_MIC_MUTE_BY_MASTER(
           value.attributes.isMute === 'true'
@@ -500,7 +516,6 @@ class ConferenceConnector {
 
     this._room.addCommandListener(STOP_FLOOR, value => {
       console.log('STOP_FLOOR : ', value);
-      this._handlers.STOP_FLOOR();
       const result = JSON.parse(value.attributes.targetUser);
       if (
         result.jitsiId === this._room.myUserId() &&
@@ -517,21 +532,9 @@ class ConferenceConnector {
       console.log('REQUEST_FLOOR : ', value);
       const targetUser = JSON.parse(value.attributes.targetUser);
 
-      
       //권한요청 받았을때( 권한요청자와 마스터가 다른 사람일경우)
       if (value.value !== this._room.myUserId()) {
         this._handlers.REQUEST_FLOOR(targetUser);
-        // this._room.sendCommandOnce(GRANT_FLOOR_TARGET, {
-        //   value: this._room.myUserId(),
-        //   attributes: {
-        //     targetUser: JSON.stringify({
-        //       jitsiId: targetUser.jitsiId,
-        //       name: targetUser.name
-        //     }),
-        //     type: 'reject',
-        //     isMasterControlTarget: 'false'
-        //   }
-        // });
       }
     });
 
@@ -796,7 +799,7 @@ class ConferenceConnector {
   };
 
   //발언권 제어모드
-  micControlFromMaster = async flag => {
+  micControlFromMaster = async (flag, cno, roomToken, audio_active) => {
     if (flag) {
       await this._room.sendCommandOnce(REQUEST_MIC_CONTROL_USER, {
         value: this._room.myUserId(),
@@ -807,6 +810,14 @@ class ConferenceConnector {
         value: this._room.myUserId(),
         attributes: { controlType: 'mute' }
       });
+
+      let param = {
+        audio_active: false,
+        videoseq: this._room.myUserId()
+      };
+
+      MeetApi.updateMasterControlUser(cno, roomToken, param);
+
     } else {
       await this._room.sendCommandOnce(REQUEST_MIC_CONTROL, {
         value: this._room.myUserId(),
@@ -815,6 +826,41 @@ class ConferenceConnector {
 
       this._room.sendCommandOnce(REQUEST_MIC_CONTROL_USER, {
         attributes: {}
+      });
+
+      let param = {
+        audio_active: true,
+        videoseq: null
+      };
+
+      MeetApi.updateMasterControlUser(cno, roomToken, param);
+    }
+  };
+
+  replyUserRequest = (targetUser, command) => {
+    if (command) {
+      this._room.sendCommandOnce(GRANT_FLOOR_TARGET, {
+        value: this._room.myUserId(),
+        attributes: {
+          targetUser: JSON.stringify({
+            jitsiId: targetUser.jitsiId,
+            name: targetUser.name
+          }),
+          type: 'accept',
+          isMasterControlTarget: 'false'
+        }
+      });
+    } else {
+      this._room.sendCommandOnce(GRANT_FLOOR_TARGET, {
+        value: this._room.myUserId(),
+        attributes: {
+          targetUser: JSON.stringify({
+            jitsiId: targetUser.jitsiId,
+            name: targetUser.name
+          }),
+          type: 'reject',
+          isMasterControlTarget: 'false'
+        }
       });
     }
   };

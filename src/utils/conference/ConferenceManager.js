@@ -86,6 +86,7 @@ class ConferenceManager {
       attributes
     );
     this.tracks = tracks;
+    this._dispatch(masterAcionCreators.checkMasterList(this._roomToken));
     if (this._room) return true;
     else return false;
   };
@@ -378,23 +379,22 @@ class ConferenceManager {
   //CHANGED_MIC_CONTROL_MODE_BY_MASTER : 전체 마이크 제어
   //CHANGED_MIC_CONTROL_USER_MODE_BY_MASTER : 마스터의 발언권 제어모드 시작/종료
   //CHANGED_MIC_MODE_BY_MASTER : 특저 유정 마이크 제어
-  changeMicControlUserModeByMaster = flag => {
-    this._dispatch(masterAcionCreators.changeMasterControlMode(flag));
-    const msg = flag
+  changeMicControlUserModeByMaster = (value, flag) => {
+    flag && this._dispatch(masterAcionCreators.changeMasterControlMode(value));
+    const msg = value
       ? this.t('toast_master_clton') //발언권 제어 시작
       : this.t('toast_master_cltoff'); //발언권 제어 종료
     this._dispatch(toastAcionCreators.setToastMessage(msg));
   };
-  changeMicControlModeByMaster = value => {
-    this._dispatch(masterAcionCreators.changeAudioActive(value));
+  changeMicControlModeByMaster = (flag, iMaster) => {
+    !iMaster && this._dispatch(masterAcionCreators.changeAudioActive(flag));
 
-    const msg = value
+    const msg = flag
       ? this.t('toast_master_micoffbymaster') // 마스터가 마이크 비활성화
       : this.t('toast_master_miconbymaster'); // 마스터가 마이크 활성화
-    this._dispatch(toastAcionCreators.setToastMessage(msg));
+    !iMaster && this._dispatch(toastAcionCreators.setToastMessage(msg));
   };
   changeMicMuteByMaster = flag => {
-    console.log('flag : ', flag);
     const msg = flag
       ? this.t('toast_master_micoffbymaster') // 마스터가 마이크 비활성화
       : this.t('toast_master_miconbymaster'); // 마스터가 마이크 활성화
@@ -416,16 +416,14 @@ class ConferenceManager {
     this._dispatch(masterAcionCreators.setMicRequest(false));
   };
 
-  stopFloor = (targetUser) => {
-    console.log('taegetUser : ', targetUser);
-    this._dispatch(masterAcionCreators.setUserMicRequest(true));
-    this._dispatch(masterAcionCreators.setTargetUserList(targetUser));
-  }
-
-  requestFloor = (targetUser) => {
-    console.log('taegetUser : ', targetUser);
+  requestFloor = targetUser => {
     this._dispatch(masterAcionCreators.setUserMicRequest(targetUser));
-  }
+  };
+
+  replyUserRequest = (targetUser, command) => {
+    this._dispatch(masterAcionCreators.setTargetUserList(targetUser.jitsiId));
+    this._conferenceConnector.replyUserRequest(targetUser, command);
+  };
 
   //UPDATE_MASTER_USERS 요청을 들었을때
   changeMasterList = (cancel, myCommand) => {
@@ -470,8 +468,8 @@ class ConferenceManager {
     this._conferenceConnector.kickUserFromMaster(id, masterName, targetName);
   };
 
-  micControlFromMaster = flag => {
-    this._conferenceConnector.micControlFromMaster(flag);
+  micControlFromMaster = (flag, cno, audio_active) => {
+    this._conferenceConnector.micControlFromMaster(flag, cno, this._roomToken, audio_active);
   };
 
   startRecord = () => {

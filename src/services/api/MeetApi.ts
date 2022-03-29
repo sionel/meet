@@ -47,7 +47,10 @@ const getToken = async (accessUrl: string) => {
 // #region
 export default {
   // 3-1 화상회의방 생성
-  createMeetRoom: async (auth: apiAuthInfo, param: createApiParmas | createCommunicationParams) => {
+  createMeetRoom: async (
+    auth: apiAuthInfo,
+    param: createApiParmas | createCommunicationParams
+  ) => {
     const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno } = auth;
     const url = `${meetURL}/room?cno=${cno}`;
     const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
@@ -62,7 +65,7 @@ export default {
       })
     };
 
-    const response = await Axios<{room:string}>(url, data);
+    const response = await Axios<{ room: string }>(url, data);
 
     if (isSuccess(response)) {
       return response;
@@ -683,6 +686,46 @@ export default {
       return response;
     } else {
       console.warn('29.checkMasterControlUser : ', response);
+      return response;
+    }
+  },
+
+  // ?? 마스터 발언권 제어 유저 수정
+  updateMasterControlUser: async (
+    cno: string,
+    roomToken: string,
+    param: { audio_active: boolean; videoseq: string }
+  ) => {
+    let url = '';
+    let signature;
+    if (isDev) {
+      url = `${meetURL}/room/master/control/user?cno=${cno}&jwt=${roomToken}`;
+    } else {
+      const accsessUrl = `/video/room/master/control/user?cno=${cno}&jwt=${roomToken}`;
+      const token = await getToken(accsessUrl);
+      const encText = accsessUrl + token.cur_date + token.token;
+      const hashText = CryptoJS.SHA256(encText);
+      signature = CryptoJS.enc.Base64.stringify(hashText);
+      url = `${wehagoBaseURL0}${accsessUrl}`;
+    }
+
+    const data = {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        signature
+      },
+      body: JSON.stringify({
+        ...param
+      })
+    };
+
+    const response = await Axios(url, data);
+
+    if (isSuccess(response)) {
+      return response;
+    } else {
+      console.warn('???.updateMasterControlUser : ', response);
       return response;
     }
   },

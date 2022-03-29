@@ -59,6 +59,19 @@ const TopAreaPresenter = (props: TopAreaPresenterProps) => {
     isHorizon
   } = props;
 
+  /**
+   * 닉네임 표기 방법
+   * 닉네임(이름) > 이름
+   * @param {*} user
+   */
+   const getUserName = (user: any) => {
+    if (user.userInfo) {
+      if (user.userInfo.nickname) {
+        return user.userInfo.nickname + '(' + user.userInfo.userName + ')';
+      } else return user.userInfo.userName;
+    } else return user.name;
+  };
+
   return (
     <View style={styles.topContainer}>
       <View style={styles.topRow}>
@@ -77,7 +90,7 @@ const TopAreaPresenter = (props: TopAreaPresenterProps) => {
                 style={{ width: 18, height: 18, marginRight: 4 }}
               />
             )}
-            <Text style={styles.name}>{mainUser.userInfo?.userName}</Text>
+            <Text style={styles.name}>{getUserName(mainUser)}</Text>
           </View>
         )}
 
@@ -218,7 +231,7 @@ const TopAreaPresenter = (props: TopAreaPresenterProps) => {
               style={{ width: 18, height: 18, marginRight: 4 }}
             />
           )}
-          <Text style={styles.name}>{mainUser.userInfo?.userName}</Text>
+          <Text style={styles.name}>{getUserName(mainUser)}</Text>
         </View>
       )}
     </View>

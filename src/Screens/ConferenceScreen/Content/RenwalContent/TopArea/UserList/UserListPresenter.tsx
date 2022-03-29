@@ -61,6 +61,13 @@ const UserListPresenter = gestureHandlerRootHOC((props: UserListPresenter) => {
   // console.log('isRoomMaster : ', isRoomMaster);
 
   const t = getT();
+  const getUserName = (user: any) => {
+    if (user.userInfo) {
+      if (user.userInfo.nickname) {
+        return user.userInfo.nickname + '(' + user.userInfo.userName + ')';
+      } else return user.userInfo.userName;
+    } else return user.name;
+  };
 
   return (
     <FlatList
@@ -241,7 +248,7 @@ const UserListPresenter = gestureHandlerRootHOC((props: UserListPresenter) => {
               </View>
 
               <View style={styles.infoBox}>
-                <Text style={styles.nameText}>{userName}</Text>
+                <Text style={styles.nameText}>{getUserName(item)}</Text>
                 {fullPath && (
                   <Text
                     numberOfLines={1}

@@ -34,16 +34,16 @@ type TopAreaContainerProps = {
   isMultipleView: boolean;
   setIsMultipleView: () => void;
   selectedRoomName: string;
-  handleMicControlFromMaster: ()=>void;
+  handleMicControlFromMaster: () => void;
 };
 
 const isPad = deviceInfoModule.isTablet();
 
 const TopAreaContainer = (props: TopAreaContainerProps) => {
   const t = getT();
+  const [isControlMode, setIsControlMode] = useState(false);
   const [isMainUserMaster, setIsMainUserMaster] = useState(false);
   const [messageCount, setMessageCount] = useState(0);
-
   const {
     callType,
     mainUser,
@@ -65,7 +65,8 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
     isHorizon,
     expireTime,
     message,
-    masters
+    masters,
+    auth
   } = useSelector((state: RootState) => {
     const {
       local,
@@ -110,6 +111,7 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
   const screenShareButton = Platform.OS === 'ios' ? !isPad : true;
   const switchButton = !isScreenShare;
   const reverseButton = !isScreenShare;
+  const isMaster = masters.find(master => master === auth.portal_id);
 
   useEffect(() => {
     userList.find(v => {
@@ -185,26 +187,35 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
     if (bottomPopup.show) {
       onExitPopup();
     } else {
-      const sketch = {
-        icon1: icSketch,
-        name: t('스케치'),
-        onClick: () => onChangeDrawingMode(true)
-      };
-      const document = {
+      const sketch = penButton
+        ? {
+            icon1: icSketch,
+            name: t('스케치'),
+            onClick: () => onChangeDrawingMode(true)
+          }
+        : undefined;
+      const document = docShareButton ? {
         icon1: icDocument,
         name: t('문서공유'),
         onClick: () => toggleDocumentListMode(['FILELIST'])
-      };
-      const share = {
+      } : undefined;
+      const share = screenShareButton ? {
         icon1: icoScreenShagre,
         name: t('화면공유'),
         onClick: () => toggleScreenFlag()
-      };
-      const hand = {
-        icon1: icHand,
-        name: t('발언권'),
-        onClick: () => handleMicControlFromMaster()
-      };
+      } : undefined;
+      const hand = isMaster
+        ? {
+            icon1: icHand,
+            name: !isControlMode ? t('발언권 시작') : t('발언권 종료'),
+            onClick: () => {
+              handleMicControlFromMaster();
+              setIsControlMode(!isControlMode);
+            }
+          }
+        : undefined;
+
+      //TODO: 기능 미구현
       // const record = {
       //   icon1: icRecord,
       //   name: t('회의녹화'),
@@ -216,19 +227,14 @@ const TopAreaContainer = (props: TopAreaContainerProps) => {
       //   onClick: () => {}
       // };
 
-      isPad
-        ? handleBottomPopup({
-            contentList: [sketch, document, hand],
-            show: true,
-            title: t('더보기'),
-            popupType: 'NORMAL'
-          })
-        : handleBottomPopup({
-            contentList: [sketch, document, share, hand],
-            show: true,
-            title: t('더보기'),
-            popupType: 'NORMAL'
-          });
+      const popupList = [sketch, document, share, hand];
+      const filterList = popupList.filter(popup => popup !== undefined);
+      handleBottomPopup({
+        contentList: filterList,
+        show: true,
+        title: t('더보기'),
+        popupType: 'NORMAL'
+      });
     }
   };
 

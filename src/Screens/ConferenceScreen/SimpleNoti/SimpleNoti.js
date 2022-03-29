@@ -7,12 +7,16 @@ import {
   Animated,
   Text,
   Dimensions,
-  TouchableOpacity
+  TouchableOpacity,
+  FlatList
 } from 'react-native';
 import deviceInfoModule from 'react-native-device-info';
 import { useSelector, useDispatch } from 'react-redux';
 import { actionCreators as masterActionCreators } from '@redux/master';
 import { getT } from '@utils/translateManager';
+
+import _ from 'underscore';
+import { getConferenceManager } from '@utils/ConferenceManager';
 
 const isPad = deviceInfoModule.isTablet();
 // const { width, height } = Dimensions.get('screen');
@@ -56,6 +60,11 @@ export default function SimpleNoti() {
       duration: 1000
     }).start();
   };
+
+  const replyUserRequest = (jitsid, command) => {
+    let conferenceManager = getConferenceManager();
+    conferenceManager.replyUserRequest(jitsid, command);
+  }
 
   useEffect(() => {
     if (isFirst) {
@@ -104,23 +113,35 @@ export default function SimpleNoti() {
     };
   });
 
-  const micRequestPopup = (name, index) => (
+  const micRequestPopup = (targetUser) => (
     <View
-      key={index}
-      style={[
-        styles.container,
-        { height: 100, flexDirection: 'row', bottom: height * 0.7, paddingHorizontal: 20 }
-      ]}
+      style={{
+        width: '90%',
+        height: 100,
+        flexDirection: 'row',
+        paddingHorizontal: 20,
+        marginBottom: 10,
+        borderRadius: 10,
+        backgroundColor: 'rgba(0,0,0,0.75)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'center'
+      }}
     >
-      <View style={{alignItems: 'flex-start', marginRight: 30}}>
+      <View style={{ alignItems: 'flex-start', marginRight: 30 }}>
         <Text
-          style={{ color: '#fff', fontFamily: 'DOUZONEText50', fontSize: 15, lineHeight: 30 }}
+          style={{
+            color: '#fff',
+            fontFamily: 'DOUZONEText50',
+            fontSize: 15,
+            lineHeight: 30
+          }}
         >
           {t('발언권 요청')}
         </Text>
         <Text
           style={{ color: '#fff', fontFamily: 'DOUZONEText30', fontSize: 13 }}
-        >{`${name} 님이 발언권을 요청하였습니다.`}</Text>
+        >{`${targetUser.name} 님이 발언권을 요청하였습니다.`}</Text>
       </View>
       <View style={{ flexDirection: 'row' }}>
         <TouchableOpacity
@@ -133,6 +154,7 @@ export default function SimpleNoti() {
             alignItems: 'center',
             marginRight: 10
           }}
+          onPress={_.throttle(() => replyUserRequest(targetUser, true), 750)}
         >
           <Text style={{ color: '#fff' }}>{t('수락')}</Text>
         </TouchableOpacity>
@@ -145,6 +167,7 @@ export default function SimpleNoti() {
             justifyContent: 'center',
             alignItems: 'center'
           }}
+          onPress={_.throttle(() => replyUserRequest(targetUser, false), 750)}
         >
           <Text style={{ color: '#fff' }}>{t('거부')}</Text>
         </TouchableOpacity>
@@ -153,7 +176,26 @@ export default function SimpleNoti() {
   );
 
   return userList.length > 0 ? (
-    userList.map((user, index) => micRequestPopup(user.name, index))
+    <FlatList
+      style={{
+        position: 'absolute',
+        flex: 1,
+        minHeight: 100,
+        maxHeight: 400,
+        top: height * 0.2,
+        left: 0,
+        right: 0,
+        elevation: 4,
+        zIndex: 4
+      }}
+      scrollEnabled={userList.length > 2}
+      data={userList}
+      showsVerticalScrollIndicator={false}
+      keyExtractor={(item, index) => index.toString()}
+      renderItem={({ item }) => {
+        return micRequestPopup(item);
+      }}
+    />
   ) : message ? (
     <Animated.View
       style={[

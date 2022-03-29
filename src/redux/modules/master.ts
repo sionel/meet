@@ -30,6 +30,7 @@ const SPEEK_REQUEST = 'master.SPEEK_REQUEST';
 const USER_MIC_REQUEST = 'master.USER_MIC_REQUEST';
 
 const SET_TARGET_USERLIST = 'maseter.SET_TARGET_USERLIST';
+const RESET_TARGET_USERLIST = 'maseter.RESET_TARGET_USERLIST';
 //#endregion
 
 type targetUser = {
@@ -77,6 +78,8 @@ function reducer(state = initialState, action: AnyAction) {
       return _setUserMicRequest(state, action);
     case SET_TARGET_USERLIST:
       return _setTargetUserList(state, action);
+    case RESET_TARGET_USERLIST:
+      return _resetTargetUserList(state, action);
     default:
       return state;
   }
@@ -309,6 +312,16 @@ const _setUserMicRequest = (state: state, action: AnyAction) => {
 };
 //#endregion
 
+function resetTargetUserList() {
+  return {
+    type: RESET_TARGET_USERLIST
+  };
+}
+
+const _resetTargetUserList = (state: state, action: AnyAction) => {
+  return { ...state, targetUserList: [] };
+}
+
 export const actionCreators = {
   checkMasterList,
   changeMasterControlMode,
@@ -318,7 +331,8 @@ export const actionCreators = {
   setMicRequest,
   noWhereMaster,
   setUserMicRequest,
-  setTargetUserList
+  setTargetUserList,
+  resetTargetUserList
 };
 
 export default reducer;

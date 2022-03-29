@@ -35,11 +35,11 @@ const mapStateToProps = state => {
     },
     mainUser: { mainUserId },
     participants: { list },
-    user: { auth,isLogin},
+    user: { auth, isLogin },
     documentShare,
     screenShare: { isScreenShare, screenToggleFlag },
-    root: { destination,url },
-    conference: {isConference}
+    root: { destination, url },
+    conference: { isConference }
   } = state;
 
   const mainUser = getMainUser(mainUserId, user, list);
@@ -95,7 +95,8 @@ const mapDispatchToProps = dispatch => {
     resetVideoId: () => dispatch(RootActions.setVideoId('')),
     setIsConference: flag => dispatch(ConferenceActions.setIsConference(flag)),
     setConferenceCreatedTime: createdTime =>
-      dispatch(LocalActions.setConferenceCreatedTime(createdTime))
+      dispatch(LocalActions.setConferenceCreatedTime(createdTime)),
+    resetTargetUserList: () => dispatch(MasterActions.resetTargetUserList())
   };
 };
 

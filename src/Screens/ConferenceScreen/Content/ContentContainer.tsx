@@ -38,7 +38,6 @@ import { ConferenceModes } from '@utils/Constants';
 import { MeetApi } from '@services/index';
 import { isSuccess } from '@services/types';
 
-
 export type ConferenceBottomPopupProps = {
   show: boolean;
   title: string;
@@ -228,7 +227,7 @@ function ContentContainer(props: any) {
   }, [userList.length]);
 
   const audioInit = async () => {
-    InCallManager.start({ media: 'audio', auto: true });
+    InCallManager.start({ media: 'video' });
 
     const audioPermmit = await InCallManager.requestRecordPermission();
     if (audioPermmit !== 'granted') {
@@ -389,27 +388,27 @@ function ContentContainer(props: any) {
   const _handleChangeSpeaker = async () => {
     const bluetooth = await BluetoothStatus.state();
 
+    let stateSpeaker = speaker === 2 ? 1 : 2;
+
     if (!bluetooth) {
       setSpeaker(speaker === 2 ? 1 : 2);
 
       if (isIOS) {
-        if (speaker === 2) {
-          InCallManager.setSpeakerphoneOn(false);
+        if (stateSpeaker === 2) {
           InCallManager.setForceSpeakerphoneOn(false);
         } else {
-          InCallManager.setSpeakerphoneOn(true);
           InCallManager.setForceSpeakerphoneOn(true);
         }
       } else {
         // android
-        if (speaker === 2) {
+        if (stateSpeaker === 2) {
           InCallManager.setForceSpeakerphoneOn(false);
         } else {
           InCallManager.chooseAudioRoute('SPEAKER_PHONE');
         }
       }
     } else {
-      isIOS && speaker === 2 && setSpeaker(1);
+      isIOS && stateSpeaker === 2 && setSpeaker(1);
     }
   };
 
@@ -465,7 +464,7 @@ function ContentContainer(props: any) {
 
   const _micControlFromMaster = () => {
     let conferenceManager = getConferenceManager();
-    conferenceManager.micControlFromMaster(!micControlMode);
+    conferenceManager.micControlFromMaster(!micControlMode, auth.cno, false);
     setIsMicControlMode(!micControlMode);
   };
 

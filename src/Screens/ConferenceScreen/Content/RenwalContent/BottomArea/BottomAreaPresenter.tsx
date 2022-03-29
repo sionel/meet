@@ -179,7 +179,7 @@ const BottomAreaPresenter = (props: BottomAreaProps) => {
             onPressOut={onChangeSpeaker}
           >
             <Image
-              source={speaker == 2 ? icSpeakerOff : icSpeakerOn}
+              source={speaker === 2 ? icSpeakerOff : icSpeakerOn}
               style={styles.buttonImage}
               resizeMode={'cover'}
             />
