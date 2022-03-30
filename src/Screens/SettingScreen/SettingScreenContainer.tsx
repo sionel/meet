@@ -14,8 +14,6 @@ import { MeetNavigationProps } from '../../Navigations/RootNavigation';
 
 import { MeetApi } from '../../services';
 
-import { BluetoothStatus } from 'react-native-bluetooth-status';
-
 export default function SettingScreenContainer(props: any) {
   const [name, setName] = useState('');
   const [tracks, setTracks] = useState<any[] | null>([]);
@@ -80,8 +78,6 @@ export default function SettingScreenContainer(props: any) {
     setTracks(tracks ? tracks : null);
     setNameField(!isLogin);
     setButtonActive(tracks ? true : false);
-
-    let blutetooth = await BluetoothStatus.state();
   };
 
   const _getTrack = async () => {

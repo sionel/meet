@@ -210,6 +210,7 @@ class ReactInstanceManagerHolder {
                 new com.swmansion.reanimated.ReanimatedPackage(),
                 new com.swmansion.rnscreens.RNScreensPackage(),
                 new org.reactnative.maskedview.RNCMaskedViewPackage(),
+                
                 new ReactPackageAdapter() {
                     @Override
                     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {

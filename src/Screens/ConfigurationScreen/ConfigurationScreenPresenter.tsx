@@ -76,7 +76,7 @@ export default function ConfigurationScreenPresenter(props: propsTypes) {
             {' '}
             {t('renewal.option_version')}{' '}
           </Text>
-          <Text style={{ fontFamily: 'DOUZONEText30' }}>{'2.4.0(15)'}</Text>
+          <Text style={{ fontFamily: 'DOUZONEText30' }}>{'2.4.1'}</Text>
         </View>
 
         <TouchableOpacity

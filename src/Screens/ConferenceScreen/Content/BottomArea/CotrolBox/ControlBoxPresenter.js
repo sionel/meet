@@ -17,7 +17,7 @@ const ControlBoxPresenter = props => (
     {!isTablet && (
       <ControlButton
         name={'speaker'}
-        on={props.speaker == 2 ? false : true}
+        on={props.speaker === 2 ? false : true}
         onPress={props.onChangeSpeaker}
       />
     )}

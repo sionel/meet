@@ -377,7 +377,7 @@ PODS:
     - ReactCommon/jscallinvoker (= 0.61.5-jitsi.2)
     - ReactCommon/turbomodule/core (= 0.61.5-jitsi.2)
   - ReactNativeIncallManager (3.3.0):
-    - React
+    - React-Core
   - ReactNativePermissions (1.2.0):
     - React
   - RNCAsyncStorage (1.13.2):
@@ -694,7 +694,7 @@ SPEC CHECKSUMS:
   React-RCTText: 4f1b99f228278d2a5e9008eced8dc9c974c4a270
   React-RCTVibration: c1041024893fdfdb8371e7c720c437751b711676
   ReactCommon: 18014e1d98dbeb9141e935cfe35fc93bd511ffb6
-  ReactNativeIncallManager: a840ef75640518065742a893e6c6ff98ee820039
+  ReactNativeIncallManager: 384174d6789c1acb60db451fd71b54ddf52d3143
   ReactNativePermissions: f3beb8871251594a8ea2c6b19a3f8252d5c7379d
   RNCAsyncStorage: 05bae7ecfab1cbd5441993f1ca098f7c3b3f8d0e
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489

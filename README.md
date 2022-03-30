@@ -202,6 +202,9 @@ node_modules/react-native/scripts/react-native-xcode.sh 상단에
 export NODE_BINARY=node *
 참조 : https://github.com/facebook/react-native/issues/25522
 
+14. react-native-incall-manager로 인해 ios에서 스피커 음소거일시 조도센서 가려지면 화면 꺼짐 
+   react-native-incall-manager < ios < RNInCallManager.m 파일 안에 startProximitySensor -> stopProximitySensor
+
 ## 스토어 주소
 ios : https://itunes.apple.com/app/id1455726925?mt=8
 android : https://play.google.com/store/apps/details?id=com.wehago.meet

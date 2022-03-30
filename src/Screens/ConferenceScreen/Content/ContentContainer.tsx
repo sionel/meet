@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
   DeviceEventEmitter,
   Dimensions,
+  NativeEventEmitter,
   NativeModules,
   Platform
 } from 'react-native';
@@ -18,12 +19,23 @@ import { actionCreators as masterAction } from '../../../redux/modules/master';
 import { actionCreators as toastAction } from '../../../redux/modules/toast';
 import { RootState } from '../../../redux/configureStore';
 import { getConferenceManager } from '../../../utils/ConferenceManager';
-import InCallManager from 'react-native-incall-manager';
-import { BluetoothStatus } from 'react-native-bluetooth-status';
+
 import { getT } from '../../../utils/translateManager';
 
 const isIOS = Platform.OS === 'ios';
+const AudioMode = isIOS && NativeModules.AudioMode;
+const NativeAudio = new NativeEventEmitter(AudioMode);
 
+type speakerInfo = {
+  name: string;
+  selected: boolean;
+  type: string;
+  uid: string;
+};
+
+console.log('isIOS : ', isIOS);
+
+const InCallManager = !isIOS && require('react-native-incall-manager').default;
 const hasNotch = DeviceInfo.hasNotch() && isIOS;
 
 function ContentContainer(props: any) {
@@ -46,6 +58,7 @@ function ContentContainer(props: any) {
   const { mainUser } = props;
   const { videoTrack, isMuteVideo } = mainUser;
   const [limitedTime, setLimitedTime] = useState(3600000);
+  const [isLink, setIsLink] = useState(false);
 
   const t = getT();
 
@@ -62,11 +75,11 @@ function ContentContainer(props: any) {
     isMicRequest,
     isMasterControl
   } = useSelector((state: RootState) => {
-    const { local, master, documentShare } = state;
+    const { local, master, mainUser, documentShare } = state;
     return {
       conferenceMode: local.conferenceMode,
       drawingMode: mainUser.drawingMode,
-      documentListMode: mainUser.documentListMode,
+      documentListMode: documentShare.documentListMode,
       attributes: documentShare.attributes,
       localPipMode: local.pipMode,
       isMuteMic: local.user.isMuteMic,
@@ -80,21 +93,44 @@ function ContentContainer(props: any) {
   const dispatch = useDispatch();
   const setConferenceMode = (mode: any) =>
     dispatch(localAction.setConferenceMode(mode));
-    const setToastMessage = (msg: string) =>
+  const setToastMessage = (msg: string) =>
     dispatch(toastAction.setToastMessage(msg));
   const setMicRequest = (flag: any) =>
     dispatch(masterAction.setMicRequest(flag));
   const toggleMuteMic = () => dispatch(localAction.toggleMuteMic(undefined));
 
   const audioInit = async () => {
-    InCallManager.start({ media: 'video', auto: true });
+    if (isIOS) {
+      const kDevicesChanged =
+        'org.jitsi.meet:features/audio-mode#devices-update';
+      let enableBluetooth: any = false;
 
-    const audioPermmit = await InCallManager.requestRecordPermission();
-    if (audioPermmit !== 'granted') {
-      InCallManager.requestRecordPermission();
-    }
+      NativeAudio.addListener(kDevicesChanged, event => {
+        console.log('event : ', event);
 
-    if (!isIOS) {
+        enableBluetooth = event.find(
+          (deviceInfo: speakerInfo) =>
+            deviceInfo.selected === true && deviceInfo.type === 'BLUETOOTH'
+        );
+
+        console.log('enableBluetooth1 : ', enableBluetooth);
+
+        if (enableBluetooth) {
+          console.log('enableBluetooth2 : ', enableBluetooth);
+          speaker === 2 && setSpeaker(1);
+          setIsLink(true);
+        } else {
+          setIsLink(false);
+        }
+      });
+    } else {
+      InCallManager.start({ media: 'video' });
+
+      const audioPermmit = await InCallManager.requestRecordPermission();
+      if (audioPermmit !== 'granted') {
+        InCallManager.requestRecordPermission();
+      }
+
       DeviceEventEmitter.addListener('onAudioDeviceChanged', event => {
         const { availableAudioDeviceList } = event;
         const deviceList = JSON.parse(availableAudioDeviceList);
@@ -102,8 +138,13 @@ function ContentContainer(props: any) {
         enableBluetooth = deviceList.find(
           (list: string) => list === 'BLUETOOTH'
         );
+
         if (enableBluetooth) {
           InCallManager.chooseAudioRoute('BLUETOOTH');
+          speaker === 2 && setSpeaker(1);
+          setIsLink(true);
+        } else {
+          setIsLink(false);
         }
       });
     }
@@ -111,10 +152,37 @@ function ContentContainer(props: any) {
   useEffect(() => {
     audioInit();
     _handleChangeSpeaker();
-    BluetoothStatus.listener = _handleChangeSpeaker;
     Orientation.addOrientationListener(_setOrientation);
     return () => {
       Orientation.removeOrientationListener(_setOrientation);
+      if (isIOS) {
+        const kDevicesChanged =
+          'org.jitsi.meet:features/audio-mode#devices-update';
+        let enableBluetooth: any = false;
+
+        NativeAudio.removeAllListeners(kDevicesChanged);
+
+        if (enableBluetooth) {
+          console.log('enableBluetooth : ', enableBluetooth);
+          // device = enableBluetooth.uid;
+          // AudioMode.setAudioDevice(device);
+          speaker === 2 && setSpeaker(1);
+          setIsLink(true);
+        }
+      } else {
+        DeviceEventEmitter.removeListener('onAudioDeviceChanged', event => {
+          const { availableAudioDeviceList } = event;
+          const deviceList = JSON.parse(availableAudioDeviceList);
+          let enableBluetooth = false;
+          enableBluetooth = deviceList.find(
+            (list: string) => list === 'BLUETOOTH'
+          );
+          if (enableBluetooth) {
+            InCallManager.chooseAudioRoute('BLUETOOTH');
+            speaker === 2 && setSpeaker(1);
+          }
+        });
+      }
     };
   }, []);
 
@@ -145,23 +213,20 @@ function ContentContainer(props: any) {
   }, 1000);
 
   const _handleChangeSpeaker = async () => {
-    const bluetooth = await BluetoothStatus.state();
+    let stateSpeaker = speaker === 2 ? 1 : 2;
 
-    if (!bluetooth) {
-      setSpeaker(speaker === 2 ? 1: 2);
-
+    if (!isLink) {
+      setSpeaker(speaker === 2 ? 1 : 2);
 
       if (isIOS) {
-        if (speaker === 2) {
-          InCallManager.setSpeakerphoneOn(false);
-          InCallManager.setForceSpeakerphoneOn(false);
+        if (stateSpeaker === 2) {
+          AudioMode.setAudioDevice('Built-In Microphone');
         } else {
-          InCallManager.setSpeakerphoneOn(true);
-          InCallManager.setForceSpeakerphoneOn(true);
+          AudioMode.setAudioDevice('SPEAKER');
         }
       } else {
         // android
-        if (speaker === 2) {
+        if (stateSpeaker === 2) {
           InCallManager.setForceSpeakerphoneOn(false);
         } else {
           InCallManager.chooseAudioRoute('SPEAKER_PHONE');

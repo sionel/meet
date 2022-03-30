@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { actionCreators as localAction } from '../../../../redux/modules/local';
 import { actionCreators as mainUserAction } from '../../../../redux/modules/mainUser';
 import { actionCreators as ScreenShareAction } from '../../../../redux/modules/ScreenShare';
+import { actionCreators as documentShareAction } from '../../../../redux/modules/documentShare';
 import { RootState } from '../../../../redux/configureStore';
 
 function TopAreaContainer(props:any) {
@@ -30,7 +31,7 @@ function TopAreaContainer(props:any) {
   const toggleCameraFacingMode = () =>
     dispatch(localAction.toggleCameraFacingMode());
   const toggleDocumentListMode = (documentListMode:any) =>
-    dispatch(mainUserAction.setDocumentListMode(documentListMode));
+    dispatch(documentShareAction.setDocumentListMode(documentListMode));
   const setScreenFlag = (flag:any) => dispatch(ScreenShareAction.setScreenFlag(flag));
   const toggleScreenFlag = () => dispatch(ScreenShareAction.toggleScreenFlag());
 

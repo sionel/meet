@@ -9,7 +9,8 @@ import {
   ScrollView,
   FlatList,
   SafeAreaView,
-  Image
+  Image,
+  StatusBar
 } from 'react-native';
 import { useSelector } from 'react-redux';
 import FastImage from 'react-native-fast-image';
@@ -22,6 +23,8 @@ import { getT } from '../../../../utils/translateManager';
 
 import micOFF from '../../../../../assets/new/icons/mic_off.png';
 import micON from '../../../../../assets/new/icons/mic_on.png';
+import buttonTalk from '../../../../../assets/buttons/btn_tnavi_talk_none.png';
+import buttonClose from '../../../../../assets/buttons/btnTnaviCloseNone_3x.png';
 
 const SafetyView = Platform.OS === 'ios' ? SafeAreaView : View;
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
@@ -36,7 +39,7 @@ const FileSharingPresenter = props => {
     page,
     mode,
     onChangeState,
-    onChangePage,
+    handleToggleMic,
     isMuteMic
   } = props;
 
@@ -47,21 +50,29 @@ const FileSharingPresenter = props => {
     <View
       style={{
         ...styles.topArea,
-        paddingTop: 12,
-        paddingBottom: 12,
-        paddingLeft: 6,
-        paddingRight: 6
+        paddingTop: 11,
+        paddingBottom: 11,
+        paddingLeft: 16,
+        paddingRight: 16
       }}
     >
-      <CustomButton
-        name={'buttonClose'}
+      <TouchableOpacity
+        style={{
+          width: 24,
+          height: 24,
+          justifyContent: 'center',
+          alignItems: 'flex-start',
+          marginRight: 7.5
+        }}
         onPress={() => props.onChangeState('modal')}
-        style={{ margin: 0, marginRight: 10 }}
-        width={22}
-        height={22}
-        areaWidth={28}
-        areaHeight={28}
-      />
+      >
+        <Image
+          source={buttonClose}
+          resizeMode={'cover'}
+          style={{ width: 16.5, height: 17 }}
+        />
+      </TouchableOpacity>
+
       <Text
         numberOfLines={1}
         ellipsizeMode={'tail'}
@@ -71,6 +82,7 @@ const FileSharingPresenter = props => {
           ? props.attributes.fileName
           : props.selectedRoomName}
       </Text>
+
       <TouchableOpacity
         style={[
           {
@@ -78,7 +90,8 @@ const FileSharingPresenter = props => {
             height: 28,
             borderRadius: 14,
             justifyContent: 'center',
-            alignItems: 'center'
+            alignItems: 'center',
+            marginRight: 20
           },
           !isMuteMic && { backgroundColor: '#1c90fb' }
         ]}
@@ -90,15 +103,22 @@ const FileSharingPresenter = props => {
           style={{ width: 24, height: 24 }}
         />
       </TouchableOpacity>
-      <CustomButton
-        name={'talk'}
+
+      <TouchableOpacity
+        style={{
+          width: 24,
+          height: 24,
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}
         onPress={() => props.setDocumentListMode(['CHATTING', 'USERLIST'])}
-        style={{ margin: 0 }}
-        width={28}
-        height={28}
-        areaWidth={42}
-        areaHeight={32}
-      />
+      >
+        <Image
+          source={buttonTalk}
+          resizeMode={'cover'}
+          style={{ width: 22.5, height: 20 }}
+        />
+      </TouchableOpacity>
     </View>
   );
 
@@ -210,6 +230,7 @@ const FileSharingPresenter = props => {
       <SafetyView
         style={{ flex: 1, backgroundColor: '#000', position: 'relative' }}
       >
+        <StatusBar barStyle={'dark-content'} />
         <View style={styles.container}>
           {!localPipMode && (
             <View style={styles.headerTitle}>
@@ -341,7 +362,8 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     backgroundColor: '#000',
-    justifyContent: 'flex-start'
+    justifyContent: 'flex-start',
+    alignItems: 'center'
   },
   hideTopArea: {
     width: '100%'
