@@ -63,10 +63,6 @@ function setDocumentListMode(
       type: SET_DOCUMENT_LIST_MODE,
       documentListMode
     });
-    dispatch({
-      type: 'mainUser.SET_DOCUMENT_LIST_MODE',
-      documentListMode
-    });
   };
 }
 
@@ -96,11 +92,6 @@ function setSharingMode(
       page,
       documentData,
       mode
-    });
-    dispatch({
-      type: 'mainUser.SET_SHARING_MODE',
-      attributes,
-      presenter
     });
   };
 }

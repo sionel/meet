@@ -23,13 +23,13 @@ const MainContainer = (props: MainContainerProps) => {
   let timeout: ReturnType<typeof setTimeout>,
     timer: ReturnType<typeof setInterval>;
 
-  const { localPipMode, drawingMode, isScreenShare } = useSelector(
+  const { localPipMode, isScreenShare, presenter } = useSelector(
     (state: RootState) => {
-      const { local, mainUser, screenShare } = state;
+      const { local, screenShare, documentShare } = state;
       return {
         localPipMode: local.pipMode,
-        drawingMode: mainUser.drawingMode,
-        isScreenShare: screenShare.isScreenShare
+        isScreenShare: screenShare.isScreenShare,
+        presenter: documentShare.presenter,
       };
     }
   );
@@ -111,7 +111,7 @@ const MainContainer = (props: MainContainerProps) => {
       stream={stream}
       videoType={videoType}
       isVideoReverse={isVideoReverse}
-      drawing={drawingMode}
+      presenter={presenter}
       localPipMode={localPipMode}
       objectFit={objectFit}
       mainUser={mainUser}

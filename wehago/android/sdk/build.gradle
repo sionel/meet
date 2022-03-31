@@ -102,9 +102,6 @@ dependencies {
     implementation project(':react-native-screens')
     implementation project(':react-native-blur')
     implementation project(':react-native-clipboard')
-    implementation project(':react-native-bluetooth-status')
-
-
 
     testImplementation 'junit:junit:4.12'
 }

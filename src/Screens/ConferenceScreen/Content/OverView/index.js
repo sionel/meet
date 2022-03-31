@@ -17,7 +17,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => {
   return {
     setDocumentListMode: value => {
-      return dispatch(mainUserActions.setDocumentListMode(value));
+      return dispatch(DocumentShareActions.setDocumentListMode(value));
     },
     setSharingMode: value => {
       return dispatch(DocumentShareActions.setSharingMode(value));

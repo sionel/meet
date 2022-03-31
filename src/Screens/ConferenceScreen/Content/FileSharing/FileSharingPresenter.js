@@ -6,25 +6,30 @@ import {
   Dimensions,
   Platform,
   TouchableOpacity,
+  ScrollView,
+  FlatList,
+  SafeAreaView,
+  Image,
   StatusBar
 } from 'react-native';
 import { useSelector } from 'react-redux';
 import FastImage from 'react-native-fast-image';
 
 import DrawingSketch from '../DrawingSketch';
-import CustomButton from '@components/CustomButton';
-import CustomAlert from '@components/CustomAlert';
+import CustomButton from '../../../../components/CustomButton';
+import CustomAlert from '../../../../components/CustomAlert';
 import OverView from '../OverView';
-import { getT } from '@utils/translateManager';
-import { gestureHandlerRootHOC, ScrollView, FlatList } from 'react-native-gesture-handler';
+import { getT } from '../../../../utils/translateManager';
 
-import micOFF from '@assets/icons/mic_off.png';
-import micON from '@assets/icons/mic_on.png';
+import micOFF from '../../../../../assets/new/icons/mic_off.png';
+import micON from '../../../../../assets/new/icons/mic_on.png';
+import buttonTalk from '../../../../../assets/buttons/btn_tnavi_talk_none.png';
+import buttonClose from '../../../../../assets/buttons/btnTnaviCloseNone_3x.png';
 
+const SafetyView = Platform.OS === 'ios' ? SafeAreaView : View;
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
-const { width, height } = Dimensions.get('screen');
 
-const FileSharingPresenter = gestureHandlerRootHOC((props) => {
+const FileSharingPresenter = props => {
   const {
     orientation,
     showTool,
@@ -34,7 +39,7 @@ const FileSharingPresenter = gestureHandlerRootHOC((props) => {
     page,
     mode,
     onChangeState,
-    onChangePage,
+    handleToggleMic,
     isMuteMic
   } = props;
 
@@ -45,21 +50,23 @@ const FileSharingPresenter = gestureHandlerRootHOC((props) => {
     <View
       style={{
         ...styles.topArea,
-        paddingTop: 12,
-        paddingBottom: 12,
-        paddingLeft: 6,
-        paddingRight: 6
+        paddingTop: 11,
+        paddingBottom: 11,
+        paddingLeft: 16,
+        paddingRight: 16
       }}
     >
-      <CustomButton
-        name={'buttonClose'}
+      <TouchableOpacity
+        style={styles.exitButton}
         onPress={() => props.onChangeState('modal')}
-        style={{ margin: 0, marginRight: 10 }}
-        width={22}
-        height={22}
-        areaWidth={28}
-        areaHeight={28}
-      />
+      >
+        <Image
+          source={buttonClose}
+          resizeMode={'cover'}
+          style={{ width: 16.5, height: 17 }}
+        />
+      </TouchableOpacity>
+
       <Text
         numberOfLines={1}
         ellipsizeMode={'tail'}
@@ -69,17 +76,9 @@ const FileSharingPresenter = gestureHandlerRootHOC((props) => {
           ? props.attributes.fileName
           : props.selectedRoomName}
       </Text>
+
       <TouchableOpacity
-        style={[
-          {
-            width: 30,
-            height: 30,
-            borderRadius: 15,
-            justifyContent: 'center',
-            alignItems: 'center'
-          },
-          !isMuteMic && { backgroundColor: '#1c90fb' }
-        ]}
+        style={[styles.micButton, !isMuteMic && { backgroundColor: '#1c90fb' }]}
         onPress={() => handleToggleMic()}
       >
         <Image
@@ -88,15 +87,17 @@ const FileSharingPresenter = gestureHandlerRootHOC((props) => {
           style={{ width: 24, height: 24 }}
         />
       </TouchableOpacity>
-      {/* <CustomButton
-        name={'talk'}
+
+      {/* <TouchableOpacity
+        style={styles.talkButton}
         onPress={() => props.setDocumentListMode(['CHATTING', 'USERLIST'])}
-        style={{ margin: 0 }}
-        width={28}
-        height={28}
-        areaWidth={42}
-        areaHeight={32}
-      /> */}
+      >
+        <Image
+          source={buttonTalk}
+          resizeMode={'cover'}
+          style={{ width: 22.5, height: 20 }}
+        />
+      </TouchableOpacity> */}
     </View>
   );
 
@@ -148,7 +149,7 @@ const FileSharingPresenter = gestureHandlerRootHOC((props) => {
           horizontal={true}
           renderItem={({ item, index }) => (
             <TouchableOpacity
-              onPress={() => onChangePage(index, presenter)}
+              onPress={() => props.onChangePage(index, presenter)}
               style={[
                 styles.resourceItem,
                 index === imgList.length - 1 && { marginRight: 10 }
@@ -205,85 +206,89 @@ const FileSharingPresenter = gestureHandlerRootHOC((props) => {
 
   return (
     <Fragment>
-      <StatusBar barStyle={'dark-content'} />
-      <View style={[styles.container, Platform.OS ==='ios' && {marginBottom: height * 0.05}]}>
-        {!localPipMode && (
-          <View style={styles.headerTitle}>
-            {showTool && headerTitle}
-            {resources.length > 0 && preView}
+      <SafetyView
+        style={{ flex: 1, backgroundColor: '#000', position: 'relative' }}
+      >
+        <StatusBar barStyle={'dark-content'} />
+        <View style={styles.container}>
+          {!localPipMode && (
+            <View style={styles.headerTitle}>
+              {showTool && headerTitle}
+              {resources.length > 0 && preView}
 
-            {resources.length > 0 && (
-              <CustomButton
-                name={showPreView ? 'btnArrowUp' : 'btnArrowDown'}
-                onPress={() => onChangeState('showPreView')}
-                style={{ padding: 0, margin: 0 }}
-                width={24}
-                height={24}
-                areaWidth={24}
-                areaHeight={24}
-              />
-            )}
-          </View>
-        )}
-
-        <View
-          style={[
-            styles.mainArea,
-            {
-              paddingLeft: 0,
-              paddingRight: 0
-            }
-          ]}
-        >
-          {props.isLoading ? (
-            <View
-              style={{
-                flex: 1,
-                alignContent: 'center',
-                justifyContent: 'center'
-              }}
-            >
-              <Text
-                style={{ fontFamily: 'DOUZONEText30', textAlign: 'center' }}
-              >
-                {localPipMode ? t('meet_back') : t('meet_storage')}
-              </Text>
-            </View>
-          ) : (
-            <View
-              style={[
-                styles.mainContainer,
-                orientation === 'vertical'
-                  ? styles.mainContainerVertical
-                  : styles.mainContainerHorizontal
-              ]}
-              onLayout={event => {
-                props.onChangeState('viewSize', {
-                  viewWidth: event.nativeEvent.layout.width,
-                  viewHeight: event.nativeEvent.layout.height
-                });
-              }}
-            >
-              <DrawingSketch
-                viewWidth={props.viewWidth}
-                viewHeight={props.viewHeight}
-                image={resources[page]}
-                imgList={imgList}
-                imageSize={props.imageSize}
-                showTool={showTool}
-                presenter={presenter}
-                orientation={orientation}
-                mode={mode}
-                onChangeShowToolState={onChangeState}
-                onChangeDrawing={props.setDrawingMode}
-                onSetDrawingData={props.onSetDrawingData}
-                onChangePage={props.onChangePage}
-                hasNotch={props.hasNotch}
-              />
+              {resources.length > 0 && (
+                <CustomButton
+                  name={showPreView ? 'btnArrowUp' : 'btnArrowDown'}
+                  onPress={() => onChangeState('showPreView')}
+                  style={{ padding: 0, margin: 0 }}
+                  width={24}
+                  height={24}
+                  areaWidth={24}
+                  areaHeight={24}
+                />
+              )}
             </View>
           )}
+
+          <View
+            style={[
+              styles.mainArea,
+              {
+                paddingLeft: 0,
+                paddingRight: 0
+              }
+            ]}
+          >
+            {props.isLoading ? (
+              <View
+                style={{
+                  flex: 1,
+                  alignContent: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                <Text
+                  style={{ fontFamily: 'DOUZONEText30', textAlign: 'center' }}
+                >
+                  {localPipMode ? t('meet_back') : t('meet_storage')}
+                </Text>
+              </View>
+            ) : (
+              <View
+                style={[
+                  styles.mainContainer,
+                  orientation === 'vertical'
+                    ? styles.mainContainerVertical
+                    : styles.mainContainerHorizontal
+                ]}
+                onLayout={event => {
+                  props.onChangeState('viewSize', {
+                    viewWidth: event.nativeEvent.layout.width,
+                    viewHeight: event.nativeEvent.layout.height
+                  });
+                }}
+              >
+                <DrawingSketch
+                  viewWidth={props.viewWidth}
+                  viewHeight={props.viewHeight}
+                  image={resources[page]}
+                  imgList={imgList}
+                  imageSize={props.imageSize}
+                  showTool={showTool}
+                  presenter={presenter}
+                  orientation={orientation}
+                  mode={mode}
+                  onChangeShowToolState={onChangeState}
+                  // onChangeDrawing={props.setDrawingMode}
+                  onSetDrawingData={props.onSetDrawingData}
+                  onChangePage={props.onChangePage}
+                  hasNotch={props.hasNotch}
+                />
+              </View>
+            )}
+          </View>
         </View>
-      </View>
+      </SafetyView>
 
       {props.documentListMode && !localPipMode && (
         <OverView
@@ -315,12 +320,13 @@ const FileSharingPresenter = gestureHandlerRootHOC((props) => {
       )}
     </Fragment>
   );
-});
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: Platform.OS === 'ios' ? height * 0.05 : height * 0.055,
+    width: '100%',
+    height: '100%',
     backgroundColor: 'rgb(242, 242, 242)'
   },
   headerTitle: {
@@ -329,14 +335,14 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     zIndex: 10,
-    elevation: 10,
     alignItems: 'center'
   },
   topArea: {
     width: '100%',
     flexDirection: 'row',
     backgroundColor: '#000',
-    justifyContent: 'flex-start'
+    justifyContent: 'flex-start',
+    alignItems: 'center'
   },
   hideTopArea: {
     width: '100%'
@@ -409,6 +415,27 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderColor: 'red',
     borderWidth: 1
+  },
+  exitButton: {
+    width: 24,
+    height: 24,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    marginRight: 7.5
+  },
+  micButton: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 20
+  },
+  talkButton: {
+    width: 24,
+    height: 24,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });
 

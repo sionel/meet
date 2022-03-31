@@ -25,13 +25,13 @@ type MainPresenterProps = {
   stream: any;
   videoType: any;
   isVideoReverse: boolean;
-  drawing: any;
+  presenter: any;
   localPipMode: boolean;
   objectFit: 'cover' | 'contain';
   mainUser: any;
   isMultipleView: boolean;
   isScreenShare: boolean;
-  toggleScreenFlag: ()=>void;
+  toggleScreenFlag: () => void;
   character: string;
 };
 
@@ -41,7 +41,7 @@ const MainPresenter = (props: MainPresenterProps) => {
     stream,
     videoType,
     isVideoReverse,
-    drawing,
+    presenter,
     localPipMode,
     objectFit,
     mainUser,
@@ -50,6 +50,7 @@ const MainPresenter = (props: MainPresenterProps) => {
     toggleScreenFlag,
     character
   } = props;
+  
 
   const muteView = (
     <View
@@ -93,7 +94,11 @@ const MainPresenter = (props: MainPresenterProps) => {
         alignItems: 'center'
       }}
     >
-      <Image source={icoScreenShagre} style={{width: 70, height: 70}} resizeMode={'cover'}/>
+      <Image
+        source={icoScreenShagre}
+        style={{ width: 70, height: 70 }}
+        resizeMode={'cover'}
+      />
       <Text
         style={{
           textAlign: 'center',
@@ -152,12 +157,16 @@ const MainPresenter = (props: MainPresenterProps) => {
         backgroundColor: '#000'
       }}
     />
-  ) : !isMuteVideo && stream && !drawing ? (
+  ) : !isMuteVideo && stream && !presenter ? (
     <RTCView
       style={styles.RTCVideo}
       mirror={videoType !== 'desktop' && !isVideoReverse}
       objectFit={
-        localPipMode || isTablet ? 'cover' : videoType === undefined ? 'contain' : objectFit
+        localPipMode || isTablet
+          ? 'cover'
+          : videoType === undefined
+          ? 'contain'
+          : objectFit
       }
       streamURL={stream.toURL()}
       zOrder={0} // zOrder 는 [0, 1] 만 사용가능 (아마?)
@@ -171,12 +180,18 @@ const MainPresenter = (props: MainPresenterProps) => {
       colors={['rgb(187,197,208)', 'rgb(161,173,180)']}
       style={styles.imageContainer}
     >
-      {!drawing && (
-        <Image source={character === 'jessie'
-        ? icWoman1
-        : character === 'suzy'
-        ? icWoman2
-        : icMan1} style={{ width: '100%', height: '150%' }} resizeMode={'contain'}/>
+      {!presenter && (
+        <Image
+          source={
+            character === 'jessie'
+              ? icWoman1
+              : character === 'suzy'
+              ? icWoman2
+              : icMan1
+          }
+          style={{ width: '100%', height: '150%' }}
+          resizeMode={'contain'}
+        />
       )}
     </LinearGradient>
   );

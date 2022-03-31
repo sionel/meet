@@ -97,7 +97,6 @@ target 'JitsiMeetSDK' do
     pod 'RNScreens', :path => '../node_modules/react-native-screens'
     pod 'react-native-blur', :path => '../node_modules/@react-native-community/blur'
     pod 'RNCClipboard', :path => '../node_modules/@react-native-clipboard/clipboard'
-    pod 'react-native-bluetooth-status', :path => '../node_modules/react-native-bluetooth-status'
   # Native pod dependencies
   #
 

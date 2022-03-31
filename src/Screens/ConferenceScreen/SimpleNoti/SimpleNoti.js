@@ -64,7 +64,7 @@ export default function SimpleNoti() {
   const replyUserRequest = (jitsid, command) => {
     let conferenceManager = getConferenceManager();
     conferenceManager.replyUserRequest(jitsid, command);
-  }
+  };
 
   useEffect(() => {
     if (isFirst) {
@@ -113,63 +113,26 @@ export default function SimpleNoti() {
     };
   });
 
-  const micRequestPopup = (targetUser) => (
-    <View
-      style={{
-        width: '90%',
-        height: 100,
-        flexDirection: 'row',
-        paddingHorizontal: 20,
-        marginBottom: 10,
-        borderRadius: 10,
-        backgroundColor: 'rgba(0,0,0,0.75)',
-        justifyContent: 'center',
-        alignItems: 'center',
-        alignSelf: 'center'
-      }}
-    >
+  const micRequestPopup = targetUser => (
+    <View style={styles.requestView}>
       <View style={{ alignItems: 'flex-start', marginRight: 30 }}>
+        <Text style={styles.requestTitle}>{t('발언권 요청')}</Text>
         <Text
-          style={{
-            color: '#fff',
-            fontFamily: 'DOUZONEText50',
-            fontSize: 15,
-            lineHeight: 30
-          }}
-        >
-          {t('발언권 요청')}
-        </Text>
-        <Text
-          style={{ color: '#fff', fontFamily: 'DOUZONEText30', fontSize: 13 }}
+          style={styles.requestContent}
         >{`${targetUser.name} 님이 발언권을 요청하였습니다.`}</Text>
       </View>
       <View style={{ flexDirection: 'row' }}>
         <TouchableOpacity
-          style={{
-            backgroundColor: '#1c90fb',
-            width: 40,
-            height: 25,
-            borderRadius: 5,
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginRight: 10
-          }}
+          style={styles.acceptButton}
           onPress={_.throttle(() => replyUserRequest(targetUser, true), 750)}
         >
-          <Text style={{ color: '#fff' }}>{t('수락')}</Text>
+          <Text style={styles.buttonText}>{t('수락')}</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={{
-            backgroundColor: '#fc5356',
-            width: 40,
-            height: 25,
-            borderRadius: 5,
-            justifyContent: 'center',
-            alignItems: 'center'
-          }}
+          style={styles.denyButton}
           onPress={_.throttle(() => replyUserRequest(targetUser, false), 750)}
         >
-          <Text style={{ color: '#fff' }}>{t('거부')}</Text>
+          <Text style={styles.buttonText}>{t('거부')}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -177,17 +140,7 @@ export default function SimpleNoti() {
 
   return userList.length > 0 ? (
     <FlatList
-      style={{
-        position: 'absolute',
-        flex: 1,
-        minHeight: 100,
-        maxHeight: 400,
-        top: height * 0.2,
-        left: 0,
-        right: 0,
-        elevation: 4,
-        zIndex: 4
-      }}
+      style={[styles.userListView, { top: height * 0.2 }]}
       scrollEnabled={userList.length > 2}
       data={userList}
       showsVerticalScrollIndicator={false}
@@ -241,6 +194,59 @@ const styles = StyleSheet.create({
     fontFamily: 'DOUZONEText30',
     fontSize: 13,
     lineHeight: 21,
+    color: '#fff'
+  },
+  userListView: {
+    position: 'absolute',
+    flex: 1,
+    minHeight: 100,
+    maxHeight: 400,
+    left: 0,
+    right: 0,
+    elevation: 4,
+    zIndex: 4
+  },
+  requestView: {
+    width: '90%',
+    height: 100,
+    flexDirection: 'row',
+    paddingHorizontal: 20,
+    marginBottom: 10,
+    borderRadius: 10,
+    backgroundColor: 'rgba(0,0,0,0.75)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center'
+  },
+  requestTitle: {
+    color: '#fff',
+    fontFamily: 'DOUZONEText50',
+    fontSize: 15,
+    lineHeight: 30
+  },
+  requestContent: {
+    color: '#fff',
+    fontFamily: 'DOUZONEText30',
+    fontSize: 13
+  },
+  acceptButton: {
+    backgroundColor: '#1c90fb',
+    width: 40,
+    height: 25,
+    borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 10
+  },
+  denyButton: {
+    backgroundColor: '#fc5356',
+    width: 40,
+    height: 25,
+    borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  buttonText: {
     color: '#fff'
   }
 });

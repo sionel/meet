@@ -6,13 +6,13 @@ import {
   Linking,
   NativeTouchEvent,
   Platform,
-  Share
+  NativeModules,
+  Share,
+  NativeEventEmitter
 } from 'react-native';
 
 import Clipboard from '@react-native-clipboard/clipboard';
 import DeviceInfo from 'react-native-device-info';
-import InCallManager from 'react-native-incall-manager';
-import { BluetoothStatus } from 'react-native-bluetooth-status';
 import _ from 'underscore';
 
 import ContentPresenter from './ContentPresenter';
@@ -45,7 +45,18 @@ export type ConferenceBottomPopupProps = {
   contentList: ConferenceBotPopupContent[] | any;
 };
 
+type speakerInfo = {
+  name: string;
+  selected: boolean;
+  type: string;
+  uid: string;
+};
+
 const isIOS = Platform.OS === 'ios';
+const AudioMode = isIOS && NativeModules.AudioMode;
+const NativeAudio = new NativeEventEmitter(AudioMode);
+
+const InCallManager = !isIOS && require('react-native-incall-manager').default;
 
 const hasNotch = DeviceInfo.hasNotch() && isIOS;
 
@@ -64,6 +75,7 @@ function ContentContainer(props: any) {
   const [elapsedTime, setElapsedTime] = useState(0);
   const [limitedTime, setLimitedTime] = useState(3600000);
   const [micControlMode, setIsMicControlMode] = useState(false);
+  const [isLink, setIsLink] = useState(false);
 
   const [bottomPopup, setBottomPopup] = useState<ConferenceBottomPopupProps>({
     show: false,
@@ -84,7 +96,7 @@ function ContentContainer(props: any) {
   // const localPipMode = useSelector((state: RootState) => state.local.pipMode);
   const {
     conferenceMode,
-    drawingMode,
+    presenter,
     documentListMode,
     attributes,
     localPipMode,
@@ -116,8 +128,8 @@ function ContentContainer(props: any) {
       localPipMode: local.pipMode,
       expireTime: local.expireTime,
       user: local.user,
-      drawingMode: mainUser.drawingMode,
-      documentListMode: mainUser.documentListMode,
+      presenter: documentShare.presenter,
+      documentListMode: documentShare.documentListMode,
       attributes: documentShare.attributes,
       videoPolicy: root.videoPolicy,
       loginType: user.loginType,
@@ -179,10 +191,24 @@ function ContentContainer(props: any) {
   });
 
   // console.log('userList : ', userList);
-
   useEffect(() => {
     audioInit();
     _handleChangeSpeaker();
+
+    return () => {
+      if (isIOS) {
+        const kDevicesChanged =
+          'org.jitsi.meet:features/audio-mode#devices-update';
+        NativeAudio.removeAllListeners(kDevicesChanged);
+      } else {
+        DeviceEventEmitter.removeListener('onAudioDeviceChanged', event => {
+          androidAudioInit(event);
+        });
+      }
+    };
+  }, []);
+
+  useEffect(() => {
     const _timer = setInterval(() => {
       if (createdTime) {
         if (expireTime !== null) {
@@ -226,26 +252,49 @@ function ContentContainer(props: any) {
     }
   }, [userList.length]);
 
-  const audioInit = async () => {
-    InCallManager.start({ media: 'video' });
+  const androidAudioInit = (event: any) => {
+    const { availableAudioDeviceList } = event;
+    const deviceList = JSON.parse(availableAudioDeviceList);
+    let enableBluetooth = false;
+    enableBluetooth = deviceList.find((list: string) => list === 'BLUETOOTH');
 
-    const audioPermmit = await InCallManager.requestRecordPermission();
-    if (audioPermmit !== 'granted') {
-      InCallManager.requestRecordPermission();
+    if (enableBluetooth) {
+      InCallManager.chooseAudioRoute('BLUETOOTH');
+      speaker === 2 && setSpeaker(1);
+      setIsLink(true);
+    } else {
+      setIsLink(false);
     }
+  };
 
-    if (!isIOS) {
-      DeviceEventEmitter.addListener('onAudioDeviceChanged', event => {
-        const { availableAudioDeviceList } = event;
-        const deviceList = JSON.parse(availableAudioDeviceList);
-        let enableBluetooth = false;
-        enableBluetooth = deviceList.find(
-          (list: string) => list === 'BLUETOOTH'
+  const audioInit = async () => {
+    if (isIOS) {
+      const kDevicesChanged =
+        'org.jitsi.meet:features/audio-mode#devices-update';
+      let enableBluetooth: any = false;
+
+      NativeAudio.addListener(kDevicesChanged, event => {
+        enableBluetooth = event.find(
+          (deviceInfo: speakerInfo) =>
+            deviceInfo.selected === true && deviceInfo.type === 'BLUETOOTH'
         );
         if (enableBluetooth) {
-          InCallManager.chooseAudioRoute('BLUETOOTH');
           speaker === 2 && setSpeaker(1);
+          setIsLink(true);
+        } else {
+          setIsLink(false);
         }
+      });
+    } else {
+      InCallManager.start({ media: 'video' });
+
+      const audioPermmit = await InCallManager.requestRecordPermission();
+      if (audioPermmit !== 'granted') {
+        InCallManager.requestRecordPermission();
+      }
+
+      DeviceEventEmitter.addListener('onAudioDeviceChanged', event => {
+        androidAudioInit(event);
       });
     }
   };
@@ -386,18 +435,16 @@ function ContentContainer(props: any) {
   }, 1000);
 
   const _handleChangeSpeaker = async () => {
-    const bluetooth = await BluetoothStatus.state();
-
     let stateSpeaker = speaker === 2 ? 1 : 2;
 
-    if (!bluetooth) {
+    if (!isLink) {
       setSpeaker(speaker === 2 ? 1 : 2);
 
       if (isIOS) {
         if (stateSpeaker === 2) {
-          InCallManager.setForceSpeakerphoneOn(false);
+          AudioMode.setAudioDevice('Built-In Microphone');
         } else {
-          InCallManager.setForceSpeakerphoneOn(true);
+          AudioMode.setAudioDevice('SPEAKER');
         }
       } else {
         // android
@@ -407,8 +454,6 @@ function ContentContainer(props: any) {
           InCallManager.chooseAudioRoute('SPEAKER_PHONE');
         }
       }
-    } else {
-      isIOS && stateSpeaker === 2 && setSpeaker(1);
     }
   };
 
@@ -489,7 +534,7 @@ function ContentContainer(props: any) {
         localPipMode,
         videoTrack,
         isMuteVideo,
-        drawingMode,
+        presenter,
         documentListMode,
         attributes,
         mainUser,

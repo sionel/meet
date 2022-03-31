@@ -15,7 +15,7 @@ type ContentPresenterProps = {
   selectedRoomName: any;
   isVideoReverse: any;
   speaker: any;
-  drawingMode: any;
+  presenter: any;
   conferenceMode: any;
   createdTime: any;
   orientation: any;
@@ -55,7 +55,7 @@ const ContentPresenter = (props: ContentPresenterProps) => {
     selectedRoomName,
     isVideoReverse,
     speaker,
-    drawingMode,
+    presenter,
     conferenceMode,
     createdTime,
     orientation,
@@ -91,7 +91,7 @@ const ContentPresenter = (props: ContentPresenterProps) => {
       }}
       onTouchEnd={({ nativeEvent }) => toggleConferenceMode(nativeEvent)}
     >
-      {!localPipMode && Number(callType) !== 2 && !drawingMode && (
+      {!localPipMode && Number(callType) !== 2 && !presenter && (
         <TopArea
           callType={Number(callType)}
           onReverseVideo={props.onReverseVideo}

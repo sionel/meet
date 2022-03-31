@@ -939,7 +939,7 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 14,
-    lineHeight: 15,
+    // lineHeight: 15,
     letterSpacing: -0.3,
     paddingBottom: '0.5%',
     color: '#000',
@@ -947,7 +947,7 @@ const styles = StyleSheet.create({
   },
   tree: {
     fontSize: 12,
-    lineHeight: 15,
+    // lineHeight: 15,
     letterSpacing: -0.24,
     color: '#939393',
     fontFamily: 'DOUZONEText30'

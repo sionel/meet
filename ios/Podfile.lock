@@ -297,8 +297,6 @@ PODS:
   - React-jsinspector (0.61.5-jitsi.2)
   - react-native-background-timer (2.4.0):
     - React
-  - react-native-bluetooth-status (1.5.1):
-    - React
   - react-native-blur (0.8.0):
     - React
   - react-native-calendar-events (1.6.4):
@@ -454,7 +452,6 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-background-timer (from `../node_modules/react-native-background-timer`)
-  - react-native-bluetooth-status (from `../node_modules/react-native-bluetooth-status`)
   - "react-native-blur (from `../node_modules/@react-native-community/blur`)"
   - react-native-calendar-events (from `../node_modules/react-native-calendar-events`)
   - react-native-date-picker (from `../node_modules/react-native-date-picker`)
@@ -562,8 +559,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   react-native-background-timer:
     :path: "../node_modules/react-native-background-timer"
-  react-native-bluetooth-status:
-    :path: "../node_modules/react-native-bluetooth-status"
   react-native-blur:
     :path: "../node_modules/@react-native-community/blur"
   react-native-calendar-events:
@@ -688,7 +683,6 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 67106691c60030ec888d7cbbc4f48a3168e27a02
   React-jsinspector: 92ceee6c66dc19886289b52436ade7e020b89602
   react-native-background-timer: 029c606b3fd6dd476b153e177c518b6ade4c169f
-  react-native-bluetooth-status: 306a9e5311c377813ea68066dd81b66165b3026f
   react-native-blur: cad4d93b364f91e7b7931b3fa935455487e5c33c
   react-native-calendar-events: cafbac5457a0dc449e3fb407814b2091b7f259be
   react-native-date-picker: 414fe8f73392bae030dc4efec39d743b5c5de283
@@ -733,6 +727,6 @@ SPEC CHECKSUMS:
   SDWebImageWebPCoder: 947093edd1349d820c40afbd9f42acb6cdecd987
   Yoga: 96b469c5e81ff51b917b92e8c3390642d4ded30c
 
-PODFILE CHECKSUM: 821d5b0271712ab06117965d77ff3aa6122219c9
+PODFILE CHECKSUM: 271b50d433837e7dd035cd64692887e48aebc3b3
 
 COCOAPODS: 1.11.2
