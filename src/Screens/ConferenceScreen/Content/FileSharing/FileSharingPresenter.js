@@ -57,13 +57,7 @@ const FileSharingPresenter = props => {
       }}
     >
       <TouchableOpacity
-        style={{
-          width: 24,
-          height: 24,
-          justifyContent: 'center',
-          alignItems: 'flex-start',
-          marginRight: 7.5
-        }}
+        style={styles.exitButton}
         onPress={() => props.onChangeState('modal')}
       >
         <Image
@@ -84,17 +78,7 @@ const FileSharingPresenter = props => {
       </Text>
 
       <TouchableOpacity
-        style={[
-          {
-            width: 28,
-            height: 28,
-            borderRadius: 14,
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginRight: 20
-          },
-          !isMuteMic && { backgroundColor: '#1c90fb' }
-        ]}
+        style={[styles.micButton, !isMuteMic && { backgroundColor: '#1c90fb' }]}
         onPress={() => handleToggleMic()}
       >
         <Image
@@ -105,12 +89,7 @@ const FileSharingPresenter = props => {
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={{
-          width: 24,
-          height: 24,
-          justifyContent: 'center',
-          alignItems: 'center'
-        }}
+        style={styles.talkButton}
         onPress={() => props.setDocumentListMode(['CHATTING', 'USERLIST'])}
       >
         <Image
@@ -436,6 +415,27 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderColor: 'red',
     borderWidth: 1
+  },
+  exitButton: {
+    width: 24,
+    height: 24,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    marginRight: 7.5
+  },
+  micButton: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 20
+  },
+  talkButton: {
+    width: 24,
+    height: 24,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });
 
