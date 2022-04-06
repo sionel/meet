@@ -209,7 +209,7 @@ const FileSharingPresenter = props => {
       <SafetyView
         style={{ flex: 1, backgroundColor: '#000', position: 'relative' }}
       >
-        <StatusBar barStyle={'dark-content'} />
+        <StatusBar barStyle={'light-content'} />
         <View style={styles.container}>
           {!localPipMode && (
             <View style={styles.headerTitle}>
