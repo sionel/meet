@@ -9,6 +9,7 @@ const icLockwhite = require('../../../../assets/new/icons/ic_lock_white.png');
 const icLive = require('../../../../assets/new/icons/ic_live.png');
 const icClock = require('../../../../assets/new/icons/ic_clock.png');
 const icMoreWhite = require('../../../../assets/new/icons/ic_more_w.png');
+const icMaster = require('../../../../assets/new/icons/ic_master.png');
 
 interface cardProps {
   index: number;
@@ -48,6 +49,7 @@ export default function ConferenceCard(props: cardProps) {
     ['rgb(174,124,255)', 'rgb(99,93,245)'],
     ['rgb(238,135,206)', 'rgb(183,88,234)']
   ];
+  // console.log('participants : ', participants);
 
   return (
     <View
@@ -67,14 +69,16 @@ export default function ConferenceCard(props: cardProps) {
           style={styles.gradient}
         >
           <View style={styles.titleView}>
-            <Image
-              source={icLive}
-              resizeMode={'contain'}
-              style={styles.icLive}
-            />
-            <Text style={styles.titleText} numberOfLines={1}>
-              {conferenceName}
-            </Text>
+            <View style={styles.titleLeftView}>
+              <Image
+                source={icLive}
+                resizeMode={'contain'}
+                style={styles.icLive}
+              />
+              <Text style={styles.titleText} numberOfLines={1}>
+                {conferenceName}
+              </Text>
+            </View>
             {isLock && (
               <Image
                 source={icLockwhite}
@@ -86,30 +90,50 @@ export default function ConferenceCard(props: cardProps) {
 
           <View style={styles.startTimeView}>
             <Text style={styles.timeText}>{time}</Text>
-            <Text style={styles.timeText}>{t('renewal.create_room_start')}</Text>
+            <Text style={styles.timeText}>
+              {t('renewal.create_room_start')}
+            </Text>
             <View style={styles.onGoingTimeView}>
               <Image
                 source={icClock}
                 resizeMode={'contain'}
                 style={styles.icClock}
               />
-              <Text style={styles.onGoingText}>{`${onMinte}${t('renewal.main_minute_during')}`}</Text>
+              <Text style={styles.onGoingText}>{`${onMinte}${t(
+                'renewal.main_minute_during'
+              )}`}</Text>
             </View>
           </View>
 
           <View style={styles.cardBotView}>
             <View style={styles.profileImageList}>
               {participants.map(
-                (user: { type: string | number; value: string }, index) => {                
+                (
+                  user: {
+                    type: string | number;
+                    value: string;
+                    isMaster: boolean;
+                  },
+                  index
+                ) => {
                   return user.type === 'string' ? (
-                    <Image
-                      key={index}
-                      source={{
-                        uri: user.value
-                      }}
-                      resizeMode={'cover'}
-                      style={styles.userImage}
-                    />
+                    <View key={index}>
+                      <Image
+                        source={{
+                          uri: user.value
+                        }}
+                        resizeMode={'cover'}
+                        style={styles.userImage}
+                      />
+                      {user.isMaster === true && (
+                        <View style={styles.masterView}>
+                          <Image
+                            source={icMaster}
+                            style={{ width: 10, height: 10 }}
+                          />
+                        </View>
+                      )}
+                    </View>
                   ) : (
                     <TouchableOpacity
                       key={index}
@@ -125,7 +149,7 @@ export default function ConferenceCard(props: cardProps) {
             <TouchableOpacity onPress={() => goingMoreClick(roomId)}>
               <Image
                 source={icMoreWhite}
-                style={{ height: '50%' }}
+                style={{ width: 18, height: 18 }}
                 resizeMode={'contain'}
               />
             </TouchableOpacity>
@@ -138,9 +162,9 @@ export default function ConferenceCard(props: cardProps) {
 
 const styles = StyleSheet.create({
   container: {
-    width: 290,
-    height: 150,
-    marginBottom: 10,
+    width: 294,
+    height: 156,
+    // marginBottom: 40,
     // backgroundColor: '#fff',
     borderRadius: 12,
     shadowColor: 'rgb(9,33,60)',
@@ -151,32 +175,39 @@ const styles = StyleSheet.create({
     }
   },
   gradient: {
-    // width: 300,
-    height: '100%',
-    padding: 15,
+    width: 294,
+    height: 148,
+    padding: 20,
     borderRadius: 12
   },
   titleView: {
-    height: 30,
+    height: 24,
     flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 3
+    justifyContent: 'space-between',
+    alignContent: 'center',
+    marginBottom: 10
+  },
+  titleLeftView: {
+    flexDirection: 'row',
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center'
   },
   titleText: {
     color: '#fff',
-    fontSize: 18,
-    flex: 1,
+    fontSize: 16,
+    letterSpacing: -0.32,
     fontFamily: 'DOUZONEText50'
   },
   startTimeView: {
-    height: 30,
+    height: 20,
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 3
+    marginBottom: 24
   },
   timeText: {
     color: '#fff',
-    fontSize: 14,
+    fontSize: 12,
     marginRight: 5,
     fontFamily: 'DOUZONEText30'
   },
@@ -185,16 +216,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: '#fff',
-    borderRadius: 30,
+    width: 89,
+    height: 20,
+    borderRadius: 45,
     paddingHorizontal: 5
   },
   onGoingText: {
     color: '#fff',
-    fontSize: 12,
+    fontSize: 11,
     fontFamily: 'DOUZONEText30'
   },
   cardBotView: {
-    flex: 2,
+    // flex: 2,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between'
@@ -204,33 +237,44 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   icLive: {
-    width: 30,
-    height: 30,
-    marginRight: 5
+    width: 24,
+    height: 24,
+    marginRight: 4
   },
   icLockWhite: {
-    width: 30,
-    height: 30,
-    marginLeft: 10
+    width: 18,
+    height: 18,
+    marginVertical: 3
   },
   icClock: {
     height: 12,
     width: 12,
-    marginRight: 3
+    marginRight: 1
   },
   userImage: {
-    height: 40,
-    width: 40,
-    borderRadius: 40,
-    marginRight: 5
+    height: 32,
+    width: 32,
+    borderRadius: 16,
+    marginRight: 4
   },
   noImage: {
     backgroundColor: 'rgba(255,255,255,0.25)',
-    height: 40,
-    width: 40,
-    borderRadius: 40,
+    height: 32,
+    width: 32,
+    borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center'
     // zIndex: 10
+  },
+  masterView: {
+    width: 14,
+    height: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 10,
+    backgroundColor: '#febc2c',
+    bottom: 0,
+    left: -4,
+    position: 'absolute'
   }
 });

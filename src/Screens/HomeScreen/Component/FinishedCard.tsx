@@ -3,6 +3,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 
 const icMore = require('../../../../assets/new/icons/ic_more.png');
 const icLockBlack = require('../../../../assets/new/icons/ic_lock_black.png');
+const icMaster = require('../../../../assets/new/icons/ic_master.png');
 
 interface conferenceBoxProps {
   conferenceName: string;
@@ -24,6 +25,8 @@ export default function ConferenceBox(props: conferenceBoxProps) {
     finishedMoreClick,
     isTablet
   } = props;
+
+  // console.log('users : ', users);
 
   return (
     <View style={[styles.cardView, { width: isTablet ? '48%' : '100%' }]}>
@@ -48,19 +51,32 @@ export default function ConferenceBox(props: conferenceBoxProps) {
       >
         <View style={styles.profileImageList}>
           {users.map(
-            (user: { type: string | number; value: string }, index) => {
+            (
+              user: { type: string | number; value: string; isMaster: boolean },
+              index
+            ) => {
               return user.type === 'string' ? (
-                <Image
-                  key={index}
-                  source={{
-                    uri: user.value
-                  }}
-                  resizeMode={'cover'}
-                  style={[
-                    styles.profileImage,
-                    { right: index * 10, zIndex: -index }
-                  ]}
-                />
+                <View key={index}>
+                  <Image
+                    key={index}
+                    source={{
+                      uri: user.value
+                    }}
+                    resizeMode={'cover'}
+                    style={[
+                      styles.profileImage,
+                      { right: index * 10, zIndex: -index }
+                    ]}
+                  />
+                  {user.isMaster === true && (
+                    <View style={styles.masterView}>
+                      <Image
+                        source={icMaster}
+                        style={{ width: 10, height: 10 }}
+                      />
+                    </View>
+                  )}
+                </View>
               ) : (
                 <View
                   key={index}
@@ -147,5 +163,16 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  masterView: {
+    width: 14,
+    height: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 10,
+    backgroundColor: '#febc2c',
+    bottom: 0,
+    left: -4,
+    position: 'absolute'
   }
 });

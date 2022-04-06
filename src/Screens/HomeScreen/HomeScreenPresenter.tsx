@@ -174,7 +174,7 @@ const HomeScreenPresenter = (props: presenterProps) => {
 
           <View style={styles.buttonContainer}>
             <TouchableOpacity
-              style={styles.topButtons}
+              style={[styles.topButtons, {marginRight: 15}]}
               onPress={createConference}
             >
               <Image
@@ -240,9 +240,10 @@ const HomeScreenPresenter = (props: presenterProps) => {
               keyExtractor={(item, index) => index.toString()}
               horizontal={true}
               data={ongoingConference}
-              renderItem={conference => {
+              renderItem={conference => {                
                 return (
                   <ConferenceCard
+                    key={conference.index}
                     index={conference.index}
                     conference={conference.item}
                     isHorizon={isHorizon}
@@ -334,9 +335,11 @@ const HomeScreenPresenter = (props: presenterProps) => {
                 ? reservationConference
                 : finishedConference
             }
+            windowSize={20}
             renderItem={data => {
               const { item } = data;
-
+              // console.log('item : ', item);
+              
               return highlight === 'reservation' ? (
                 <ReservationCard {...item} isTablet={isTablet} />
               ) : (
@@ -457,8 +460,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center'
   },
-  settingImg: { width: 30, height: 30, borderRadius: 24, marginRight: 10 },
-  downArrow: { width: 25, height: 25 },
+  settingImg: { 
+    width: 24, 
+    height: 24, 
+    borderRadius: 12, 
+    marginRight: 4 
+  },
+  downArrow: { 
+    width: 18, 
+    height: 18 
+  },
   helloContainer: {
     width: '100%',
     justifyContent: 'space-between',
@@ -475,51 +486,56 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: 'DOUZONEText50',
     marginRight: 10,
-    textAlign: 'center'
+    textAlign: 'center',
+    color: '#333'
   },
   greeting: {
     fontSize: 20
   },
   buttonContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     // backgroundColor: '#583',
-    paddingBottom: 20
+    marginBottom: 40
   },
   topButtons: {
     borderRadius: 12,
-    borderWidth: 1,
+    // borderWidth: 1,
     backgroundColor: '#fff',
-    borderColor: '#fff',
-    width: '45%',
-    height: 100,
+    // borderColor: '#fff',
+    width: 102,
+    height: 90,
     justifyContent: 'space-evenly',
     alignItems: 'center',
     padding: 5,
     shadowColor: 'rgb(0,0,0)',
-    shadowOpacity: 0.2,
+    shadowOpacity: 0.08,
     shadowOffset: {
       width: 0,
       height: 8
     }
   },
-  topButtonImg: { width: 40, height: 40 },
+  topButtonImg: {
+    width: 32,
+    height: 32
+  },
   ongoingContainer: {
-    width: '100%',
+    // width: '100%',
     // height: '28%',
-    paddingVertical: 20
+    marginBottom: 32
   },
   goingTextContainer: {
     justifyContent: 'flex-start',
     flexDirection: 'row',
     alignItems: 'center',
-    paddingBottom: 20
+    paddingBottom: 14
   },
   goingText: {
-    fontSize: 16,
-    fontFamily: 'DOUZONEText30',
-    marginRight: 5
+    fontSize: 14,
+    fontFamily: 'DOUZONEText50',
+    marginRight: 5,
+    color: 'rgba(0,0,0, 0.87)'
   },
   calendarTopView: {
     flexDirection: 'row',
@@ -540,8 +556,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 10,
     borderWidth: 1,
     paddingBottom: '5%',
-    zIndex:1,
-    elevation:1
+    zIndex: 1,
+    elevation: 1
   },
   monthTouchContainer: {
     height: '100%',
@@ -601,7 +617,7 @@ const styles = StyleSheet.create({
   ConferenceListContainer: {
     width: '100%',
     flex: 1,
-    marginVertical: '2%'
+    // marginVertical: '2%'
     // backgroundColor: 'red'
   },
   ConferenceListTitle: {
