@@ -133,7 +133,7 @@ const HomeScreenPresenter = (props: presenterProps) => {
           backgroundColor: bottomPopup.show ? 'rgba(0,0,0,0.5)' : '#F7F8FA'
         }}
       />
-   
+
       <View style={styles.safeContainer}>
         <View
           style={[styles.header, { paddingHorizontal: isTablet ? 40 : 20 }]}
@@ -174,7 +174,7 @@ const HomeScreenPresenter = (props: presenterProps) => {
 
           <View style={styles.buttonContainer}>
             <TouchableOpacity
-              style={[styles.topButtons, {marginRight: 15}]}
+              style={[styles.topButtons, { marginRight: 15 }]}
               onPress={createConference}
             >
               <Image
@@ -240,7 +240,7 @@ const HomeScreenPresenter = (props: presenterProps) => {
               keyExtractor={(item, index) => index.toString()}
               horizontal={true}
               data={ongoingConference}
-              renderItem={conference => {                
+              renderItem={conference => {
                 return (
                   <ConferenceCard
                     key={conference.index}
@@ -266,7 +266,7 @@ const HomeScreenPresenter = (props: presenterProps) => {
             {reservationConference.length > 0 && (
               <Fragment>
                 <TouchableOpacity
-                  style={{ flexDirection: 'row' }}
+                  style={{ flexDirection: 'row', marginVertical: 5 }}
                   onPress={() => {
                     setHighlight('reservation');
                   }}
@@ -335,11 +335,11 @@ const HomeScreenPresenter = (props: presenterProps) => {
                 ? reservationConference
                 : finishedConference
             }
-            windowSize={20}
+            windowSize={10}
             renderItem={data => {
               const { item } = data;
               // console.log('item : ', item);
-              
+
               return highlight === 'reservation' ? (
                 <ReservationCard {...item} isTablet={isTablet} />
               ) : (
@@ -347,12 +347,27 @@ const HomeScreenPresenter = (props: presenterProps) => {
               );
             }}
             showsVerticalScrollIndicator={false}
-            onEndReached={onEndReached}
+            onEndReached={({distanceFromEnd}) => {
+              // console.log('distanceFromEnd : ', distanceFromEnd);             
+              distanceFromEnd > 100 && onEndReached();
+            }}
             onEndReachedThreshold={1}
             {...(isTablet && {
               columnWrapperStyle: { justifyContent: 'space-between' }
             })}
           />
+          {highlight === 'finished' && finishedConference.length === 0 && (
+            <View
+              style={styles.finConferenceNone}
+            >
+              <Image source={icEmpty} style={{ width: 134, height: 110 }} />
+              <Text
+                style={styles.noConferenceText}
+              >
+                {'회의기록이 없습니다.'}
+              </Text>
+            </View>
+          )}
         </View>
 
         {bottomPopup.show && (
@@ -460,15 +475,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center'
   },
-  settingImg: { 
-    width: 24, 
-    height: 24, 
-    borderRadius: 12, 
-    marginRight: 4 
+  settingImg: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    marginRight: 4
   },
-  downArrow: { 
-    width: 18, 
-    height: 18 
+  downArrow: {
+    width: 18,
+    height: 18
   },
   helloContainer: {
     width: '100%',
@@ -609,14 +624,14 @@ const styles = StyleSheet.create({
     flex: 1
   },
   GraySplitBar: {
-    borderWidth: 1,
+    borderWidth: 0.7,
     borderColor: '#aaa',
-    height: '100%',
+    height: 14,
     marginHorizontal: 10
   },
   ConferenceListContainer: {
     width: '100%',
-    flex: 1,
+    flex: 1
     // marginVertical: '2%'
     // backgroundColor: 'red'
   },
@@ -634,6 +649,16 @@ const styles = StyleSheet.create({
     fontFamily: 'DOUZONEText30',
     fontSize: 11,
     color: '#333'
+  },
+  finConferenceNone: {
+    alignItems: 'center',
+    paddingTop: 40,
+    height: '100%'
+  },
+  noConferenceText: {
+    fontFamily: 'DOUZONEText30',
+    fontSize: 14,
+    color: 'rgba(0,0,0,0.6)'
   }
   // container: {
   //   flex: 1,

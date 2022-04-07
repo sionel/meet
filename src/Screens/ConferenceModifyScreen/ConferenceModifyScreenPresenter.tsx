@@ -8,10 +8,7 @@ import {
   FlatList,
   Image,
   Switch,
-  ScrollView,
   NativeSyntheticEvent,
-  NativeScrollEvent,
-  GestureResponderEvent,
   Animated,
   TextInputChangeEventData
 } from 'react-native';
@@ -35,8 +32,6 @@ const icMasterCircle = require('../../../assets/new/icons/ic_master_circle.png')
 const icAttdCircle = require('../../../assets/new/icons/ic_attd_circle.png');
 const icModify = require('../../../assets/new/icons/ic_modify.png');
 const icBack = require('../../../assets/new/icons/ic_back.png');
-const icOut = require('../../../assets/new/icons/ic_out.png');
-const icUserW = require('../../../assets/new/icons/ic_user_w.png');
 
 interface PresenterProps {
   roomName: string;
@@ -579,12 +574,12 @@ const ConferenceModfiyScreenPresenter = (props: PresenterProps) => {
 
             <View
               style={{ flex: 1, paddingHorizontal: '5%' }}
-              pointerEvents={isNormal ? 'none' : 'auto'}
+              // pointerEvents={isNormal ? 'none' : 'auto'}
             >
               <FlatList
                 showsVerticalScrollIndicator={false}
-                bounces={true}
-                contentContainerStyle={{ flex: 1 }}
+                bounces={false}
+                contentContainerStyle={{ flexGrow: 1 }}
                 data={selectedEmployee.member}
                 keyExtractor={(item, index) => String(index)}
                 renderItem={({ item, index }: any) => {
@@ -601,7 +596,7 @@ const ConferenceModfiyScreenPresenter = (props: PresenterProps) => {
                         onPress={() => {
                           clickDeleteUser(item, index);
                         }}
-                        disabled={item.user_no === auth.user_no}
+                        disabled={item.user_no === auth.user_no || isNormal}
                       >
                         <View
                           style={[
@@ -677,7 +672,7 @@ const ConferenceModfiyScreenPresenter = (props: PresenterProps) => {
                         onPress={() => {
                           clickChangeRole(item, index);
                         }}
-                        disabled={item.user_no === auth.user_no}
+                        disabled={item.user_no === auth.user_no || isNormal}
                         activeOpacity={isNormal ? 1 : 0.6}
                       >
                         {isMaster ? (

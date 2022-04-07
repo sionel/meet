@@ -3,6 +3,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 
 const icMore = require('../../../../assets/new/icons/ic_more.png');
 const icLockBlack = require('../../../../assets/new/icons/ic_lock_black.png');
+const icMaster = require('../../../../assets/new/icons/ic_master.png');
 
 interface ReservationCardProps {
   roomName: string;
@@ -29,6 +30,8 @@ export default function ConferenceBox(props: ReservationCardProps) {
     isTablet
   } = props;
 
+  // console.log('users : ', users);
+
   return (
     <View
       style={
@@ -42,7 +45,7 @@ export default function ConferenceBox(props: ReservationCardProps) {
             flex: 1,
             alignItems: 'center',
             flexDirection: 'row',
-            width: '80%'
+            width: '90%'
           }}
         >
           <Text numberOfLines={1} style={styles.cardTitle}>
@@ -67,22 +70,45 @@ export default function ConferenceBox(props: ReservationCardProps) {
         onPress={() => reservationMoreClick(roomId)}
       >
         <View style={styles.profileImageList}>
-          {users.map((user: { type: string | number; value: string },index) => {
-            return user.type === 'string' ? (
-              <Image
-                key={index}
-                source={{
-                  uri: user.value
-                }}
-                resizeMode={'cover'}
-                style={styles.profileImage}
-              />
-            ) : (
-              <View key={index}style={styles.noImage}>
-                <Text>{'+' + user.value}</Text>
-              </View>
-            );
-          })}
+          {users.map(
+            (
+              user: { type: string | number; value: string; isMaster: boolean },
+              index
+            ) => {
+              return user.type === 'string' ? (
+                <View key={index}>
+                  <Image
+                    key={index}
+                    source={{
+                      uri: user.value
+                    }}
+                    resizeMode={'cover'}
+                    style={styles.profileImage}
+                  />
+                  {user.isMaster === true && (
+                    <View style={styles.masterView}>
+                      <Image
+                        source={icMaster}
+                        style={{ width: 10, height: 10 }}
+                      />
+                    </View>
+                  )}
+                </View>
+              ) : (
+                <View key={index} style={styles.noImage}>
+                  <Text
+                    style={{
+                      color: '#1c90fb',
+                      fontSize: 8,
+                      fontFamily: 'DOUZONEText50'
+                    }}
+                  >
+                    {'+' + user.value}
+                  </Text>
+                </View>
+              );
+            }
+          )}
         </View>
 
         <Image source={icMore} resizeMode={'contain'} style={styles.icMore} />
@@ -93,21 +119,24 @@ export default function ConferenceBox(props: ReservationCardProps) {
 
 const styles = StyleSheet.create({
   icLock: {
-    height: 20,
-    width: 20
+    marginLeft: 4,
+    height: 18,
+    width: 18
   },
   icMore: {
-    height: 30,
-    width: 30
+    marginLeft: 10,
+    height: 18,
+    width: 18
   },
   cardView: {
-    height: 120,
+    height: 80,
     borderRadius: 20,
     backgroundColor: '#fff',
     borderColor: '#e6e6e6',
     borderWidth: 2,
-    marginBottom: 15,
-    padding: 20,
+    marginBottom: 4,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
     flexDirection: 'row'
   },
   cardLeftContents: {
@@ -117,7 +146,7 @@ const styles = StyleSheet.create({
     marginRight: 10
   },
   cardTitle: {
-    fontSize: 17,
+    fontSize: 15,
     color: '#333',
     fontFamily: 'DOUZONEText30'
   },
@@ -128,31 +157,46 @@ const styles = StyleSheet.create({
   },
   dateTimeText: {
     fontFamily: 'DOUZONEText30',
-    color: '#333'
+    fontSize: 12,
+    color: 'rgb(147,147,147)'
     // 예약회의 시간 표현에 따라 바뀔 예정
   },
   cardRightView: {
-    width: 120,
+    width: 100,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between'
     // backgroundColor:'#21f'
   },
   profileImageList: {
+    flex: 1,
     flexDirection: 'row',
-    alignItems: 'center'
+    justifyContent: 'flex-end'
   },
   profileImage: {
-    height: 30,
-    width: 30,
-    borderRadius: 30
+    height: 24,
+    width: 24,
+    borderRadius: 12,
+    borderColor: 'rgba(0,0,0,0.1)',
+    borderWidth: 1
   },
   noImage: {
     backgroundColor: '#e9f5ff',
-    height: 30,
-    width: 30,
-    borderRadius: 30,
+    height: 24,
+    width: 24,
+    borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  masterView: {
+    width: 14,
+    height: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 10,
+    backgroundColor: '#febc2c',
+    bottom: 0,
+    left: -4,
+    position: 'absolute'
   }
 });

@@ -17,13 +17,10 @@ import CalendarPicker from '../../custom_modules/react-native-calendar-picker/Ca
 
 import { getT } from '../../utils/translateManager';
 
-import { wehagoMainURL, wehagoDummyImageURL } from '../../utils';
+import { wehagoDummyImageURL } from '../../utils';
 import { SafeAreaView } from 'react-native-safe-area-context';
 // import { add, last, parseInt } from 'lodash';
 import LinearGradient from 'react-native-linear-gradient';
-import { RootState } from '../../redux/configureStore';
-import { length } from '../../../webpack.config';
-import { stubTrue } from 'lodash';
 
 const icCode = require('../../../assets/new/icons/ic_code.png');
 const icLock_W = require('../../../assets/new/icons/ic_lock_w.png');

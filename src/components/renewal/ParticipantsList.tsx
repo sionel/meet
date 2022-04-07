@@ -6,12 +6,14 @@ import {
   Dimensions,
   FlatList,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  Platform
 } from 'react-native';
 
 import icBack from '../../../assets/new/icons/ic_back.png';
 import icMaster from '../../../assets/new/icons/ic_master.png';
 
+const { OS } = Platform;
 const { height, width } = Dimensions.get('window');
 
 export interface participantsListProps {
@@ -100,6 +102,7 @@ export default function ParticipantsList(
         <FlatList
           keyExtractor={(item, index) => index.toString()}
           data={participants}
+          style={{marginBottom: OS === 'android'  ? 50 : 20}}
           renderItem={user => {
             const { index, item, separators } = user;
 

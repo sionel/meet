@@ -192,7 +192,8 @@ export default function HomeScreenContainer(props: any) {
   }, [reservationConference, finishedConference]);
 
   useEffect(() => {
-    console.log('finishIndex : ', finishIndex);
+    // console.log('finishDate : ', finishDate);
+    // console.log('finishIndex : ', finishIndex);
         
     if (auth.cno !== undefined) {
       _getFinishedConferences();
@@ -241,7 +242,7 @@ export default function HomeScreenContainer(props: any) {
     ).then(async result => {
       setFinishCount(result.total);
       const finished = result.list;
-      console.log('finished : ', finished);
+      // console.log('finished : ', finished);
       
       const conference = await Promise.all(
         finished.map(async (conference: any) => {
@@ -528,7 +529,7 @@ export default function HomeScreenContainer(props: any) {
               if (prev.length > 2) return prev;
               let type;
               let value;
-              let isMaster = present?.isMaster;
+              let isMaster = present?.is_master;
               const uri = present?.profile_url
                 ? wehagoMainURL + present.profile_url
                 : wehagoDummyImageURL;
@@ -751,32 +752,32 @@ export default function HomeScreenContainer(props: any) {
         conference.t_room_id
       );
 
-      // console.log('accessedUser : ', accessedUser);
+      // const portalIdList = accessedUser
+      //   .map((user: any) => user.user)
+      //   .filter((user: any) => user);
 
-      const portalIdList = accessedUser
-        .map((user: any) => user.user)
-        .filter((user: any) => user);
-
-      // console.log('portalIdList : ', portalIdList);
-
-      //TODO: 다음주화요일에 room/connected-user api 수정되면 삭제하고 accessedUser 에서 값받아서 처리
-      const participantInfoList: any[] = await MeetApi.getUserInfoList(
-        auth,
-        portalIdList
-      );
-
-      // console.log('participantInfoList : ', participantInfoList);
+      // const participantInfoList: any[] = await MeetApi.getUserInfoList(
+      //   auth,
+      //   portalIdList
+      // );
 
       const extraUser = accessedUser
         .filter((e: any) => e.user_type === 2)
         .map(({ username, user_type }) => ({
           user_type,
-          user_name: username
+          user_name: username,
+          profile_url: undefined,
+          is_master: false
         }));
-
-      const newPartipantInfoList = participantInfoList.filter(
-        user => user.is_primary === 'T'
-      );
+      
+      const newPartipantInfoList = accessedUser
+      .filter((e: any) => e.user_type === 1)
+      .map(({ username, user_type, profile_url, is_master }) => ({
+        user_type,
+        user_name: username,
+        profile_url,
+        is_master
+      }));
       newPartipantInfoList.push(...extraUser);
 
       participants = newPartipantInfoList

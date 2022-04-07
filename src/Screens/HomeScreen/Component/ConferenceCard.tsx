@@ -140,7 +140,15 @@ export default function ConferenceCard(props: cardProps) {
                       style={styles.noImage}
                       onPress={() => goingMoreClick(roomId)}
                     >
-                      <Text>{'+' + user.value}</Text>
+                      <Text
+                        style={{
+                          fontFamily: 'DOUZONEText50',
+                          fontSize: 10,
+                          color: '#fff'
+                        }}
+                      >
+                        {'+' + user.value}
+                      </Text>
                     </TouchableOpacity>
                   );
                 }
@@ -213,6 +221,7 @@ const styles = StyleSheet.create({
   },
   onGoingTimeView: {
     flexDirection: 'row',
+    justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
     borderColor: '#fff',
