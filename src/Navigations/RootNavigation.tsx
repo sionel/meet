@@ -75,12 +75,16 @@ export type MeetParamList = {
     selectedRoomName: string;
     tracks: any;
   };
+  ConferenceView_new : {
+    roomId: string
+    roomToken: string;
+  }
 };
 
 export type MeetNavigationProps<T extends keyof MeetParamList> =
   StackScreenProps<MeetParamList, T>;
 
-const RootStack = createStackNavigator();
+const RootStack = createStackNavigator<MeetParamList>();
 
 const navigationRef: RefObject<any> = React.createRef();
 
