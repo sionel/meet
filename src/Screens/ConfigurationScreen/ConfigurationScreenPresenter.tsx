@@ -6,17 +6,21 @@ import {
   Image,
   TouchableOpacity,
   TouchableHighlight,
-  StyleSheet
+  StyleSheet,
+  Dimensions
 } from 'react-native';
+
+const { width } = Dimensions.get('screen');
 
 // import icBack from '../../../assets/new/icons/ic_back_w.png';
 
-import icMenuInfo from '../../../assets/new/icons/ic_menu_info.png';
-import icMenuInfoLaw from '../../../assets/new/icons/ic_menu_info_law.png';
-import icMenuTrophy from '../../../assets/new/icons/ic_menu_trophy.png';
-import icMenuLogin from '../../../assets/new/icons/ic_menu_login.png';
+// import icMenuInfo from '../../../assets/new/icons/ic_menu_info.png';
+// import icMenuInfoLaw from '../../../assets/new/icons/ic_menu_info_law.png';
+// import icMenuTrophy from '../../../assets/new/icons/ic_menu_trophy.png';
+// import icMenuLogin from '../../../assets/new/icons/ic_menu_login.png';
 import icArrowRight from '../../../assets/new/icons/ic_arrow_right.png';
 import icBack from '../../../assets/new/icons/ic_back.png';
+import icArrowDownBlack from '../../../assets/new/icons/ic_arrow_down_black.png';
 import { getT } from '../../utils/translateManager';
 
 interface propsTypes {
@@ -26,6 +30,14 @@ interface propsTypes {
   handleGoPolicy: () => void;
   handleGoAwards: () => void;
   handleGoOpenSource: () => void;
+  authInfo: {
+    user_name: any;
+    rankname: any;
+    profile_url: any;
+    user_default_email: any;
+    companyName: any;
+  };
+  onCompanyChange: () => void;
 }
 
 export default function ConfigurationScreenPresenter(props: propsTypes) {
@@ -34,7 +46,9 @@ export default function ConfigurationScreenPresenter(props: propsTypes) {
     goBack,
     handleGoAwards,
     handleGoOpenSource,
-    handleGoPolicy
+    handleGoPolicy,
+    authInfo,
+    onCompanyChange
   } = props;
 
   const t = getT();
@@ -43,7 +57,7 @@ export default function ConfigurationScreenPresenter(props: propsTypes) {
     // <Fragment>
     //   <SafeAreaView style={{ flex: 0, backgroundColor: '#1c90fb' }} />
     //   <SafeAreaView style={{ flex: 1 }}>
-    <SafeAreaView style={{ backgroundColor: '#F7F8FA' }}>
+    <SafeAreaView style={{ backgroundColor: '#fff', flex: 1 }}>
       <View style={[styles.topTitle]}>
         <TouchableOpacity onPress={goBack}>
           <Image
@@ -59,35 +73,62 @@ export default function ConfigurationScreenPresenter(props: propsTypes) {
           <Text style={styles.emptyText}>확인</Text>
         </TouchableOpacity>
       </View>
+      <View style={styles.profileView}>
+        <Image
+          source={{ uri: authInfo.profile_url }}
+          style={styles.profileImage}
+        />
+        <View>
+          <Text style={styles.userName}>
+            {authInfo.user_name + ' ' + authInfo.rankname}
+          </Text>
+          <Text style={styles.userEmail}>{authInfo.user_default_email}</Text>
+        </View>
+      </View>
+      <View
+        style={{
+          width: '100%',
+          backgroundColor: 'rgb(230,230,230)',
+          height: 1
+        }}
+      />
+      <View style={styles.menuText}>
+        <Text style={styles.menuTextStyle}>{`Space`}</Text>
+        <TouchableOpacity
+          style={styles.selectConpany}
+          onPress={()=>onCompanyChange()}
+        >
+          <Text style={styles.menuTextStyle}>{authInfo.companyName}</Text>
+          <Image
+            source={icArrowDownBlack}
+            style={styles.downArrow}
+            resizeMode={'cover'}
+          />
+        </TouchableOpacity>
+      </View>
+      <View
+        style={{
+          width: '100%',
+          backgroundColor: 'rgb(247,248,250)',
+          height: 8
+        }}
+      />
       <View
         style={{
           // flex: 1,
           width: '100%',
-          backgroundColor: '#F7F8FA'
+          backgroundColor: '#fff'
         }}
       >
-        <View style={styles.menuText}>
-          <Image
-            source={icMenuInfo}
-            style={styles.imgStyle}
-            resizeMode={'contain'}
-          />
-          <Text style={styles.menuTextStyle}>
-            {' '}
-            {t('renewal.option_version')}{' '}
-          </Text>
-          <Text style={{ fontFamily: 'DOUZONEText30' }}>{'2.4.1'}</Text>
-        </View>
-
         <TouchableOpacity
           onPress={() => handleGoPolicy()}
           style={styles.menuText}
         >
-          <Image
+          {/* <Image
             source={icMenuInfoLaw}
             style={styles.imgStyle}
             resizeMode={'contain'}
-          />
+          /> */}
           <Text style={styles.menuTextStyle}>{t('renewal.option_legal')}</Text>
           <Image
             source={icArrowRight}
@@ -100,11 +141,11 @@ export default function ConfigurationScreenPresenter(props: propsTypes) {
           onPress={() => handleGoAwards()}
           style={styles.menuText}
         >
-          <Image
+          {/* <Image
             source={icMenuTrophy}
             style={styles.imgStyle}
             resizeMode={'contain'}
-          />
+          /> */}
           <Text style={styles.menuTextStyle}> {t('option_awards')} </Text>
           <Image
             source={icArrowRight}
@@ -113,12 +154,48 @@ export default function ConfigurationScreenPresenter(props: propsTypes) {
           />
         </TouchableOpacity>
 
+        <View
+          style={{
+            height: 48,
+            width: width - 30,
+            paddingLeft: 20,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            backgroundColor: '#fff'
+          }}
+        >
+          {/* <Image
+            source={icMenuInfo}
+            style={styles.imgStyle}
+            resizeMode={'contain'}
+          /> */}
+          <Text style={styles.menuTextStyle}>
+            {t('renewal.option_version')}
+          </Text>
+          <Text
+            style={{
+              fontFamily: 'DOUZONEText30',
+              color: '#1c90fb',
+              fontSize: 13
+            }}
+          >
+            {'2.4.2'}
+          </Text>
+        </View>
+        <View
+          style={{
+            width: '100%',
+            backgroundColor: 'rgb(247,248,250)',
+            height: 8
+          }}
+        />
         <TouchableOpacity onPress={() => onLogout()} style={styles.menuText}>
-          <Image
+          {/* <Image
             source={icMenuLogin}
             style={styles.imgStyle}
             resizeMode={'contain'}
-          />
+          /> */}
           <Text style={styles.menuTextStyle}>
             {' '}
             {t('renewal.option_logout')}{' '}
@@ -174,14 +251,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '100%',
     height: 50,
-    borderColor: '#d1d1d1',
-    borderBottomWidth: 1,
-    backgroundColor: '#F7F8FA'
+    // borderColor: '#d1d1d1',
+    // borderBottomWidth: 1,
+    backgroundColor: '#fff'
   },
   HeaderTitleText: {
     fontSize: 18,
-    fontWeight: '600',
-    color: '#000'
+    // fontWeight: '600',
+    color: '#333',
+    fontFamily: 'DOUZONEText50'
   },
   emptyText: {
     fontSize: 14,
@@ -189,28 +267,63 @@ const styles = StyleSheet.create({
     color: '#00ff0000'
   },
   menuText: {
-    // width: '100%',
-    // flex: 1,
-    height: 50,
-    paddingHorizontal: 15,
+    height: 48,
+    paddingHorizontal: 20,
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    borderColor: '#d1d1d1',
-    borderBottomWidth: 1,
-    backgroundColor: '#F7F8FA'
-    // backgroundColor: 'red'
+    backgroundColor: '#fff'
   },
   menuTextStyle: {
-    flex: 1,
-    fontFamily: 'DOUZONEText30'
+    fontSize: 15,
+    fontFamily: 'DOUZONEText30',
+    color: '#333'
   },
   imgStyle: {
     width: 30,
     height: 25,
     marginRight: 15
   },
-  icRightArrow: { width: 30, height: 25 }
+  icRightArrow: {
+    width: 30,
+    height: 25
+  },
+  profileView: {
+    flexDirection: 'row',
+    paddingHorizontal: 20,
+    paddingVertical: 14,
+    justifyContent: 'flex-start',
+    alignItems: 'center'
+  },
+  profileImage: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    borderColor: 'rgba(0,0,0,0.1)',
+    borderWidth: 1,
+    marginRight: 10
+  },
+  userName: {
+    fontSize: 15,
+    fontFamily: 'DOUZONEText30',
+    color: '#000',
+    marginBottom: 2
+  },
+  userEmail: {
+    fontSize: 12,
+    fontFamily: 'DOUZONEText30',
+    color: 'rgb(147,147,147)'
+  },
+  selectConpany: {
+    justifyContent: 'flex-start',
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  downArrow: {
+    width: 18,
+    height: 18,
+    marginLeft: 4
+  }
 });
 
 // /**

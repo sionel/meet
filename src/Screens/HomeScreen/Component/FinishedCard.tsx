@@ -36,12 +36,7 @@ export default function ConferenceBox(props: conferenceBoxProps) {
             {conferenceName}
           </Text>
         </View>
-        <View
-          style={
-            styles.dateTimeView
-            // backgroundColor:'black'
-          }
-        >
+        <View style={styles.dateTimeView}>
           <Text style={styles.dateTimeText}>{timeString}</Text>
         </View>
       </View>
@@ -107,31 +102,35 @@ const styles = StyleSheet.create({
     width: 18
   },
   cardView: {
-    height: 80,
-    borderRadius: 20,
+    height: 97,
+    borderRadius: 12,
     borderColor: '#e6e6e6',
     borderWidth: 1,
     backgroundColor: '#fff',
-    marginBottom: 4,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
+    marginBottom: 8,
+    paddingLeft: 20,
+    paddingRight: 14,
+    paddingVertical: 20,
     flexDirection: 'row'
   },
   cardLeftContents: {
-    flex: 2,
+    flex: 1,
     alignItems: 'flex-start',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    marginRight: 10
   },
   cardTitleView: {
-    flex: 1,
+    // flex: 1,
     alignItems: 'center',
     flexDirection: 'row',
-    width: '90%'
+    width: '90%',
+    marginBottom: 6
   },
   cardTitle: {
     fontSize: 15,
     color: '#333',
     fontFamily: 'DOUZONEText30'
+    // lineHeight: 20
   },
   dateTimeView: {
     flex: 1,

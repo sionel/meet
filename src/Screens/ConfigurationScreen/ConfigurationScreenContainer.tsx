@@ -8,11 +8,13 @@ import { actionCreators as UserActions } from '../../redux/modules/user';
 // import { actionCreators as RootActions } from '../../redux/modules/root';
 import { actionCreators as DeployedAcions } from '../../redux/modules/deployed';
 import { actionCreators as RecentsActions } from '../../redux/modules/recentsInvited';
+import { actionCreators as SelectCompanyActions } from '../../redux/modules/selectCompany';
 
 import UserApi from '../../services/api/UserApi';
 
 import ConfigurationScreenPresenter from './ConfigurationScreenPresenter';
 import { ConfigurationNavigationProps } from '../../Navigations/ConfigurationStack';
+import { wehagoDummyImageURL, wehagoMainURL } from '../../utils';
 
 export default function ConfigurationScreenContainer(props: any) {
   const { auth, from, isHorizon } = useSelector((state: RootState) => {
@@ -24,6 +26,19 @@ export default function ConfigurationScreenContainer(props: any) {
     };
   });
 
+  const { user_name, rankname, user_default_email, profile_url, last_company } =
+    auth;
+
+  const authInfo = {
+    user_name,
+    rankname,
+    user_default_email,
+    profile_url: profile_url
+      ? wehagoMainURL + profile_url
+      : wehagoDummyImageURL,
+    companyName: last_company?.company_name_kr
+  };
+
   const { navigation, route }: ConfigurationNavigationProps<'Configuration'> =
     props;
 
@@ -34,6 +49,8 @@ export default function ConfigurationScreenContainer(props: any) {
   };
   const _resetDeployedServices = () =>
     dispatch(DeployedAcions.resetDeployedServices());
+
+  const _openCompany = () => dispatch(SelectCompanyActions.openCompany());
 
   const isTablet = deviceInfoModule.isTablet();
 
@@ -65,6 +82,8 @@ export default function ConfigurationScreenContainer(props: any) {
       handleGoPolicy={handleGoPolicy}
       handleGoAwards={handleGoAwards}
       handleGoOpenSource={handleGoOpenSource}
+      authInfo={authInfo}
+      onCompanyChange={_openCompany}
     />
   );
 }

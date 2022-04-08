@@ -241,19 +241,22 @@ export default function CreateScreenContainer(props: any) {
         auth.HASH_KEY
       );
 
-      const { mobile_key: videoRoomId, room_title } =
+      const { mobile_key: videoRoomId, room_title, receiver_users } =
         sendWetalkResult.resultData.chatList[0];
 
       // 토큰받고
       // const roomToken = (await MeetApi.getMeetRoomToken(auth, videoRoomId))
       //   .resultData;
 
+      let receiverUserName = receiver_users[1].user_name;
+      let selectedRoom = room_title ? room_title : receiverUserName;
+
       setIndicatorFlag(false);
       //TODO: 화상대화 포인트이용해서 필요할경우 state
       navigation.navigate('SettingView', {
         accessType: 'auth',
         id: videoRoomId,
-        selectedRoomName: room_title
+        selectedRoomName: selectedRoom
       });
     } else if (createResult.resultCode === 400) {
       setIndicatorFlag(false);

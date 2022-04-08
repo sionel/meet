@@ -327,6 +327,7 @@ const HomeScreenPresenter = (props: presenterProps) => {
               )}
             </View>
           </View>
+          {/* {console.log('finishedConference : ', finishedConference)} */}
           <FlatList
             numColumns={isTablet ? 2 : 1}
             keyExtractor={(item, index) => index.toString()}
@@ -338,7 +339,6 @@ const HomeScreenPresenter = (props: presenterProps) => {
             windowSize={10}
             renderItem={data => {
               const { item } = data;
-              // console.log('item : ', item);
 
               return highlight === 'reservation' ? (
                 <ReservationCard {...item} isTablet={isTablet} />
@@ -347,23 +347,18 @@ const HomeScreenPresenter = (props: presenterProps) => {
               );
             }}
             showsVerticalScrollIndicator={false}
-            onEndReached={({distanceFromEnd}) => {
-              // console.log('distanceFromEnd : ', distanceFromEnd);             
-              distanceFromEnd > 100 && onEndReached();
+            onEndReached={({ distanceFromEnd }) => {
+              distanceFromEnd > 0 && onEndReached();
             }}
-            onEndReachedThreshold={1}
+            onEndReachedThreshold={0.5}
             {...(isTablet && {
               columnWrapperStyle: { justifyContent: 'space-between' }
             })}
           />
           {highlight === 'finished' && finishedConference.length === 0 && (
-            <View
-              style={styles.finConferenceNone}
-            >
+            <View style={styles.finConferenceNone}>
               <Image source={icEmpty} style={{ width: 134, height: 110 }} />
-              <Text
-                style={styles.noConferenceText}
-              >
+              <Text style={styles.noConferenceText}>
                 {'회의기록이 없습니다.'}
               </Text>
             </View>
@@ -509,7 +504,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
-    justifyContent: 'flex-start',
+    justifyContent: 'space-between',
     alignItems: 'center',
     // backgroundColor: '#583',
     marginBottom: 40
@@ -519,7 +514,8 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
     backgroundColor: '#fff',
     // borderColor: '#fff',
-    width: 102,
+    // width: 102,
+    flex: 1,
     height: 90,
     justifyContent: 'space-evenly',
     alignItems: 'center',

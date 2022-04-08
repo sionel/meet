@@ -190,11 +190,18 @@ const check = async (a_token, r_token, cno, HASH_KEY) => {
       responseJson2.resultData &&
       responseJson2.resultData[0] &&
       responseJson2.resultData[0].nickname;
+    const rankname = 
+    responseJson2 &&
+    responseJson2.resultData &&
+    responseJson2.resultData[0] &&
+    responseJson2.resultData[0].rank_name;
+
 
     return {
       status: response.status,
       ...responseJson,
-      nickname
+      nickname,
+      rankname
     };
   } catch (errors) {
     console.warn('errors', errors);

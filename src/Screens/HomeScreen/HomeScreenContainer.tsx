@@ -220,8 +220,8 @@ export default function HomeScreenContainer(props: any) {
   const _getFinishDate = () => {
     const tmpDate = new Date(finishDate);
     const startDate = new Date(tmpDate.setDate(1));
-    const endDate = new Date(tmpDate.setMonth(tmpDate.getMonth() + 1));
-
+    const endDate = new Date(tmpDate.getFullYear(), tmpDate.getMonth() + 1, 0);
+    
     const startDateString = `${startDate.getFullYear()}-${
       startDate.getMonth() + 1
     }-${startDate.getDate()}`;
@@ -233,16 +233,20 @@ export default function HomeScreenContainer(props: any) {
   };
   const _getFinishedConferences = () => {
     const { startDateString, endDateString } = _getFinishDate();
+    
     MeetApi.getMeetFinished(
       auth,
       startDateString,
       endDateString,
       finishIndex,
-      15
+      20
     ).then(async result => {
       setFinishCount(result.total);
       const finished = result.list;
-      // console.log('finished : ', finished);
+    
+      if(finished.length === 0) {
+        return
+      }
       
       const conference = await Promise.all(
         finished.map(async (conference: any) => {
@@ -308,7 +312,7 @@ export default function HomeScreenContainer(props: any) {
           //   .map((user: any) => user.user)
           //   .filter((user: any) => user);
 
-          //TODO: 다음주화요일에 room/connected-user api 수정되면 삭제하고 accessedUser 에서 값받아서 처리
+        
           // const participants: any[] = await MeetApi.getUserInfoList(
           //   auth,
           //   portalIdList
@@ -412,7 +416,6 @@ export default function HomeScreenContainer(props: any) {
               .map((user: any) => user.user)
               .filter((user: any) => user);
 
-            //TODO: 다음주화요일에 room/connected-user api 수정되면 삭제하고 accessedUser 에서 값받아서 처리
             // const participants: any[] = await MeetApi.getUserInfoList(
             //   auth,
             //   portalIdList
@@ -499,15 +502,10 @@ export default function HomeScreenContainer(props: any) {
               (user: any, _user: any) => _user.is_master - user.is_master
             );
 
-            // console.log('sortedAccessUserList : ', sortedAccessUserList);
-
             const portalIdList = sortedAccessUserList
               .map((user: any) => user.user)
               .filter((user: any) => user);
 
-            // console.log('portalIdList : ', portalIdList);
-
-            //TODO: 다음주화요일에 room/connected-user api 수정되면 삭제하고 accessedUser 에서 값받아서 처리
             // const participants: any[] = await MeetApi.getUserInfoList(
             //   auth,
             //   portalIdList
@@ -876,7 +874,7 @@ export default function HomeScreenContainer(props: any) {
     setCalendarView(false);
   };
   const handleEndReached = () => {
-    setFinishIndex(finishIndex + 10);
+    setFinishIndex(finishIndex + 20);
   };
 
   const presenterProps = {

@@ -33,21 +33,9 @@ export default function ConferenceBox(props: ReservationCardProps) {
   // console.log('users : ', users);
 
   return (
-    <View
-      style={
-        // flex:0.45,
-        [styles.cardView, { width: isTablet ? '48%' : '100%' }]
-      }
-    >
+    <View style={[styles.cardView, { width: isTablet ? '48%' : '100%' }]}>
       <View style={styles.cardLeftContents}>
-        <View
-          style={{
-            flex: 1,
-            alignItems: 'center',
-            flexDirection: 'row',
-            width: '90%'
-          }}
-        >
+        <View style={styles.cardTitleView}>
           <Text numberOfLines={1} style={styles.cardTitle}>
             {roomName}
           </Text>
@@ -129,14 +117,15 @@ const styles = StyleSheet.create({
     width: 18
   },
   cardView: {
-    height: 80,
-    borderRadius: 20,
+    height: 97,
+    borderRadius: 12,
     backgroundColor: '#fff',
+    borderWidth: 1,
     borderColor: '#e6e6e6',
-    borderWidth: 2,
-    marginBottom: 4,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
+    marginBottom: 8,
+    paddingLeft: 20,
+    paddingRight: 14,
+    paddingVertical: 20,
     flexDirection: 'row'
   },
   cardLeftContents: {
@@ -144,6 +133,12 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     justifyContent: 'center',
     marginRight: 10
+  },
+  cardTitleView: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    width: '90%',
+    marginBottom: 6
   },
   cardTitle: {
     fontSize: 15,
@@ -156,6 +151,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   dateTimeText: {
+    height: '100%',
     fontFamily: 'DOUZONEText30',
     fontSize: 12,
     color: 'rgb(147,147,147)'
