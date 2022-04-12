@@ -8,7 +8,9 @@ type ConferenceScreenNavigationProps = StackNavigationProp<
 
 export interface ConferenceScreenContainerProps
   extends StackScreenProps<MeetParamList, 'ConferenceView_new'> {}
-export interface ConferenceScreenPresenterProps {}
+export interface ConferenceScreenPresenterProps {
+  handleClose: () => void;
+}
 
 export interface TopPopupContainerProps {}
 export interface TopPopupPresenterProps {}
@@ -31,8 +33,15 @@ export interface SplitVideoPresenterProps {}
 export interface BottomPopupContainerProps {}
 export interface BottomPopupPresenterProps extends MenuListProps {}
 
-export interface BottomContentContainerProps {}
-export interface BottomContentPresenterProps {}
+export interface BottomContentContainerProps {
+  handleCloseConf: () => void;
+}
+export interface BottomContentPresenterProps {
+  ToggleSpeakerClick: () => void;
+  ToggleMikeClick: () => void;
+  ToggleVideoClick: () => void;
+  EndCallClick: () => void;
+}
 
 export interface MenuListProps {
   onPressScreenShare: () => void;

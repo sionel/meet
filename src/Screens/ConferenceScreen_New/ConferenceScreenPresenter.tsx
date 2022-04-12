@@ -11,22 +11,17 @@ import BottomContent from './BottomContent';
 const ConferenceScreenPresenter: React.FC<
   ConferenceScreenPresenterProps
 > = props => {
+  const { handleClose } = props;
   return (
-    // <SafeAreaView style={{ flex: 1 }}>
-    <View>
-      {Platform.OS === 'ios' ? (
-        <StatusBar barStyle={'light-content'} />
-      ) : (
-        <StatusBar backgroundColor="transparent" translucent={true} />
-      )}
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'black' }}>
+      <StatusBar barStyle={'light-content'} />
       <TopPopup />
       <TopContent />
       <MainVideo />
       <SplitVideo />
       <BottomPopup />
-      <BottomContent />
-    </View>
-    // </SafeAreaView>
+      <BottomContent handleCloseConf={handleClose} />
+    </SafeAreaView>
   );
 };
 

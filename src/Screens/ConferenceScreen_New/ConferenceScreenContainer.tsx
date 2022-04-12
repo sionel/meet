@@ -18,6 +18,8 @@ const ConferenceScreenContainer: React.FC<
 
   const dispatch = useDispatch();
 
-  return <ConferenceScreenPresenter />;
+  const _handleClose = () => {};
+
+  return <ConferenceScreenPresenter handleClose={_handleClose} />;
 };
 export default ConferenceScreenContainer;
