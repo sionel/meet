@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -14,7 +14,7 @@ import icBack from '../../../assets/new/icons/ic_back.png';
 import icMaster from '../../../assets/new/icons/ic_master.png';
 
 const { OS } = Platform;
-const { height, width } = Dimensions.get('window');
+// const { height, width } = Dimensions.get('window');
 
 export interface participantsListProps {
   onClose: () => void;
@@ -29,7 +29,22 @@ export interface participantsListProps {
 export default function ParticipantsList(
   props: participantsListProps & { isHorizon: boolean }
 ) {
+  const [width, setWidth] = useState(Dimensions.get('window').width);
+  const [height, setHeight] = useState(Dimensions.get('window').height);
+
   const { onClose, participants, title } = props;
+
+  useEffect(() => {
+    const updateLayout = () => {
+      setWidth(Dimensions.get('window').width);
+      setHeight(Dimensions.get('window').height);
+    };
+    Dimensions.addEventListener('change', updateLayout);
+    return () => {
+      Dimensions.removeEventListener('change', updateLayout);
+    };
+  });
+
   return (
     <SafeAreaView
       style={{
@@ -54,7 +69,7 @@ export default function ParticipantsList(
           }}
         >
           <TouchableOpacity
-            style={{ marginLeft: '3%', width: '10%' }}
+            style={{ marginLeft: '4.5%', width: '10%' }}
             onPress={onClose}
           >
             <Image
@@ -111,7 +126,7 @@ export default function ParticipantsList(
                 style={{
                   // width: '100%',
                   flexDirection: 'row',
-                  height: 70,
+                  // height: 70,
                   paddingVertical: 10,
                   // marginBottom:30,
                   marginHorizontal: '5%',

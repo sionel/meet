@@ -585,9 +585,7 @@ const ConferenceModfiyScreenPresenter = (props: PresenterProps) => {
                 renderItem={({ item, index }: any) => {
                   const isMaster = item.is_master;
                   return (
-                    <View
-                      style={[styles.participantList, { width: width * 0.9 }]}
-                    >
+                    <View style={[styles.participantList]}>
                       <TouchableOpacity
                         style={[
                           styles.profileView,
@@ -632,36 +630,34 @@ const ConferenceModfiyScreenPresenter = (props: PresenterProps) => {
                           resizeMode={'cover'}
                         />
                       </TouchableOpacity>
-                      <TouchableOpacity
-                        style={styles.infoBox}
-                        activeOpacity={1}
+
+                      <View
+                        style={[styles.infoBox, isHorizon && { width: '70%' }]}
                       >
-                        <View style={styles.infoBox}>
-                          {item.full_path !== '' ? (
-                            <Fragment>
-                              <Text style={styles.name}>
-                                {item.user_name}{' '}
-                                {item.rank_name ? item.rank_name : ''}
-                              </Text>
-                              <Text
-                                numberOfLines={1}
-                                ellipsizeMode="tail"
-                                style={styles.tree}
-                              >
-                                {item.full_path}
-                              </Text>
-                            </Fragment>
-                          ) : (
+                        {item.full_path !== '' ? (
+                          <Fragment>
+                            <Text style={styles.name}>
+                              {item.user_name}{' '}
+                              {item.rank_name ? item.rank_name : ''}
+                            </Text>
                             <Text
                               numberOfLines={1}
                               ellipsizeMode="tail"
-                              style={[styles.tree, { fontSize: 15 }]}
+                              style={styles.tree}
                             >
-                              {item.user_name}
+                              {item.full_path}
                             </Text>
-                          )}
-                        </View>
-                      </TouchableOpacity>
+                          </Fragment>
+                        ) : (
+                          <Text
+                            numberOfLines={1}
+                            ellipsizeMode="tail"
+                            style={[styles.tree, { fontSize: 15 }]}
+                          >
+                            {item.user_name}
+                          </Text>
+                        )}
+                      </View>
                       <TouchableOpacity
                         style={[
                           styles.roleContainer,
@@ -1023,19 +1019,17 @@ const styles = StyleSheet.create({
   },
   participantList: {
     flexDirection: 'row',
-    justifyContent: 'center',
-    // flex: 1,
+    justifyContent: 'space-between',
     alignItems: 'center',
     height: 56,
-    paddingHorizontal: '1%'
-    // backgroundColor: 'rgba(255,0,0,0.2)'
+    // paddingHorizontal: '1%'
   },
   profileView: {
     width: 40,
     height: 40,
     position: 'relative',
     zIndex: 1,
-    marginRight: 10
+    marginRight: 8
   },
   profile: {
     flex: 1,
@@ -1043,7 +1037,7 @@ const styles = StyleSheet.create({
     zIndex: 2
     // position: 'absolute',
   },
-  infoBox: { flex: 1, justifyContent: 'center' },
+  infoBox: { width: '67%' },
   myView: {
     width: 19,
     height: 16,

@@ -6,7 +6,9 @@ import {
   TouchableOpacity,
   Image,
   Dimensions,
-  FlatList
+  FlatList,
+  Platform,
+  TouchableHighlight
 } from 'react-native';
 import RNRestart from 'react-native-restart';
 
@@ -15,6 +17,8 @@ import { RootState } from '../redux/configureStore';
 import { actionCreators as selectCompanyAction } from '../redux/modules/selectCompany';
 import { actionCreators as userAction } from '../redux/modules/user';
 import { getT } from '../utils/translateManager';
+
+const { OS } = Platform;
 const { width, height } = Dimensions.get('window');
 
 const icCheckB = require('../../assets/new/icons/ic_check_b.png');
@@ -60,7 +64,7 @@ export default function CompanyChange() {
   useEffect(() => {
     if (prevAuth === null) {
       setPrevAuth(auth);
-    } else if (prevAuth.cno !== auth.cno) {      
+    } else if (prevAuth.cno !== auth.cno) {
       RNRestart.Restart();
     }
   }, [auth]);
@@ -161,13 +165,7 @@ export default function CompanyChange() {
     </View>
   ) : (
     <View
-      style={{
-        position: 'absolute',
-        width,
-        height,
-        backgroundColor: 'rgba(0,0,0,0.5)',
-        zIndex: 2
-      }}
+      style={styles.companyOuterView}
     >
       <TouchableOpacity
         style={{ flex: 1 }}
@@ -175,32 +173,9 @@ export default function CompanyChange() {
         onPress={_closeCompany}
       />
 
-      <View
-        style={{
-          backgroundColor: '#fff',
-          borderTopLeftRadius: 20,
-          borderTopRightRadius: 20,
-          maxHeight: 600,
-          zIndex: 3
-        }}
-      >
-        <View
-          style={{
-            marginTop: 25,
-            marginBottom: 10,
-            paddingBottom: 10,
-            height: 40,
-            alignItems: 'center',
-            borderBottomWidth: 2,
-            borderColor: '#e6e6e6'
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 20,
-              fontFamily: 'DOUZONEText50'
-            }}
-          >
+      <View style={styles.companyContainer}>
+        <View style={styles.companyTitle}>
+          <Text style={styles.companyTitleText}>
             {t('renewal.company_select')}
           </Text>
         </View>
@@ -210,47 +185,86 @@ export default function CompanyChange() {
           renderItem={data => {
             const { item } = data;
             return (
-              <TouchableOpacity
-                style={{
-                  marginHorizontal: 20,
-                  marginVertical: 8,
-                  flexDirection: 'row',
-                  height: 40,
-                  alignItems: 'center'
-                }}
-                activeOpacity={0.3}
+              <TouchableHighlight
+                style={styles.companyRow}
                 onPress={item.onClick}
+                underlayColor={'rgba(0,0,0,0.05)'}
               >
-                {item.icon1 && (
-                  <Image
-                    source={item.icon1}
-                    resizeMode={'contain'}
-                    style={{ height: '80%', marginRight: 10 }}
-                  />
-                )}
-                <Text
-                  style={{
-                    fontSize: 18,
-                    flex: 1,
-                    fontFamily: 'DOUZONEText30'
-                  }}
-                  numberOfLines={1}
-                >
-                  {item.name}
-                </Text>
-                {item.icon2 && (
-                  <Image
-                    source={item.icon2}
-                    resizeMode={'contain'}
-                    style={{ height: '80%' }}
-                  />
-                )}
-              </TouchableOpacity>
+                <View style={styles.rowInner}>
+                  <Text style={styles.companyText} numberOfLines={1}>
+                    {item.name}
+                  </Text>
+                  {item.icon2 && (
+                    <Image
+                      source={item.icon2}
+                      resizeMode={'contain'}
+                      style={styles.companyCheck}
+                    />
+                  )}
+                </View>
+              </TouchableHighlight>
             );
           }}
         />
-        <View style={{ height: 20 }}></View>
+        {OS === 'ios' && <View style={styles.iosBottomPadding} />}
       </View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  companyOuterView: {
+    position: 'absolute',
+    width: width,
+    height: height,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    zIndex: 2
+  },
+  companyContainer: {
+    backgroundColor: '#fff',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    maxHeight: 600,
+    zIndex: 3
+  },
+  companyTitle: {
+    marginTop: 16,
+    height: 48,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderBottomWidth: 1,
+    borderColor: '#e6e6e6'
+  },
+  companyTitleText: {
+    fontSize: 18,
+    fontFamily: 'DOUZONEText50',
+    color: '#000',
+    letterSpacing: -0.36
+  },
+  companyRow: {
+    height: 48,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  rowInner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: 24,
+    paddingHorizontal: 20,
+  },
+  companyText: {
+    flex: 1,
+    fontSize: 15,
+    fontFamily: 'DOUZONEText30',
+    color: '#333',
+    letterSpacing: -0.3,
+    lineHeight: 20
+  },
+  companyCheck: {
+    width: 24,
+    height: 24
+  },
+  iosBottomPadding: {
+    height: 24
+  }
+});

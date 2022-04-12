@@ -248,7 +248,7 @@ export default function CreateScreenContainer(props: any) {
       // const roomToken = (await MeetApi.getMeetRoomToken(auth, videoRoomId))
       //   .resultData;
 
-      let receiverUserName = receiver_users[1].user_name;
+      let receiverUserName = receiver_users[1]?.user_name;
       let selectedRoom = room_title ? room_title : receiverUserName;
 
       setIndicatorFlag(false);

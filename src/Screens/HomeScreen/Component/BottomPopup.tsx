@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -9,11 +9,14 @@ import {
   ImageSourcePropType,
   FlatList,
   StyleSheet,
-  Platform
+  Platform,
+  TouchableHighlight
 } from 'react-native';
+import deviceInfo from 'react-native-device-info';
 // import {Text,TextInput} from '../../../components/StyledText';
 const { OS } = Platform;
-const { width, height } = Dimensions.get('window');
+const { isTablet } = deviceInfo;
+// const { width, height } = Dimensions.get('window');
 const icPerson = require('../../../../assets/new/icons/ic_user.png');
 
 export interface content {
@@ -33,12 +36,26 @@ export default function BottomPopup(
   props: BottomPopupProps & { isHorizon: boolean }
 ) {
   const { title, contentList, onClickOutside, isHorizon } = props;
+  const [width, setWidth] = useState(Dimensions.get('window').width);
+  const [height, setHeight] = useState(Dimensions.get('window').height);
+
+  useEffect(() => {
+    const updateLayout = () => {
+      setWidth(Dimensions.get('window').width);
+      setHeight(Dimensions.get('window').height);
+    };
+    Dimensions.addEventListener('change', updateLayout);
+    return () => {
+      Dimensions.removeEventListener('change', updateLayout);
+    };
+  });
+
   return isHorizon ? (
-    <View style={styles.botPopContainer}>
+    <View style={[styles.botPopContainer, { width: width, height: height }]}>
       <SafeAreaView style={styles.popupSafeAreaView}>
         <TouchableOpacity
           onPress={onClickOutside}
-          style={styles.outsideTouch}
+          style={[styles.outsideTouch, { width: width, height: height }]}
           activeOpacity={1}
         />
         <View style={styles.botPopupContainer}>
@@ -81,7 +98,7 @@ export default function BottomPopup(
       </SafeAreaView>
     </View>
   ) : (
-    <View style={styles.botVerPopContainer}>
+    <View style={[styles.botVerPopContainer, { width: width, height: height }]}>
       <SafeAreaView
         style={{
           flex: 1
@@ -93,12 +110,15 @@ export default function BottomPopup(
           onPress={onClickOutside}
         />
 
-        <View style={[
+        <View
+          style={[
             styles.botVerPopupContainer,
-            OS === 'ios' && {
-              marginBottom: 10
-            }
-          ]}>
+            OS === 'ios' &&
+              !isTablet() && {
+                marginBottom: 10
+              }
+          ]}
+        >
           <View style={styles.verHeaderConatainer}>
             <Text style={styles.headerText}>{title}</Text>
           </View>
@@ -108,33 +128,35 @@ export default function BottomPopup(
             renderItem={data => {
               const { item } = data;
               return (
-                <TouchableOpacity
+                <TouchableHighlight
                   style={styles.verMenuRow}
-                  activeOpacity={0.3}
                   onPress={item.onClick}
+                  underlayColor={'rgba(0,0,0,0.05)'}
                 >
-                  {item.icon1 && (
-                    <Image
-                      source={item.icon1}
-                      resizeMode={'contain'}
-                      style={styles.frontIcon}
-                    />
-                  )}
-                  <Text style={styles.menuText} numberOfLines={1}>
-                    {item.name}
-                  </Text>
-                  {item.icon2 && (
-                    <Image
-                      source={item.icon2}
-                      resizeMode={'contain'}
-                      style={{ height: '80%' }}
-                    />
-                  )}
-                </TouchableOpacity>
+                  <View style={styles.verRowInner}>
+                    {item.icon1 && (
+                      <Image
+                        source={item.icon1}
+                        resizeMode={'contain'}
+                        style={styles.frontIcon}
+                      />
+                    )}
+                    <Text style={styles.menuText} numberOfLines={1}>
+                      {item.name}
+                    </Text>
+                    {item.icon2 && (
+                      <Image
+                        source={item.icon2}
+                        resizeMode={'contain'}
+                        style={{ width: 24, height: 24 }}
+                      />
+                    )}
+                  </View>
+                </TouchableHighlight>
               );
             }}
           />
-          <View style={{ height: 20 }}></View>
+          {OS === 'ios' && <View style={{ height: 24 }} />}
         </View>
       </SafeAreaView>
     </View>
@@ -144,14 +166,10 @@ export default function BottomPopup(
 const styles = StyleSheet.create({
   botPopContainer: {
     position: 'absolute',
-    width,
-    height,
     backgroundColor: 'rgba(0,0,0,0.5)'
   },
   botVerPopContainer: {
     position: 'absolute',
-    width,
-    height,
     backgroundColor: 'rgba(0,0,0,0.5)'
   },
   popupSafeAreaView: {
@@ -161,8 +179,6 @@ const styles = StyleSheet.create({
   },
   outsideTouch: {
     position: 'absolute',
-    width,
-    height,
     backgroundColor: 'rgba(0,0,0,0.5)'
   },
   botPopupContainer: {
@@ -180,42 +196,55 @@ const styles = StyleSheet.create({
   headerConatainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 20,
-    borderBottomWidth: 2,
-    borderBottomColor: '#d1d1d1'
+    paddingTop: 28,
+    paddingBottom: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e6e6e6'
   },
   verHeaderConatainer: {
-    marginTop: 25,
-    marginBottom: 10,
-    paddingBottom: 10,
-    height: 40,
+    marginTop: 16,
+    height: 48,
     alignItems: 'center',
-    borderBottomWidth: 2,
+    justifyContent: 'center',
+    borderBottomWidth: 1,
     borderColor: '#e6e6e6'
   },
   headerText: {
-    fontSize: 19,
-    color: '#333',
-    fontFamily: 'DOUZONEText50'
+    fontSize: 18,
+    color: '#000',
+    fontFamily: 'DOUZONEText50',
+    letterSpacing: -0.36
   },
   menuRow: {
-    marginHorizontal: 20,
+    marginHorizontal: 17,
     marginVertical: 10,
     flexDirection: 'row',
     height: 40,
     alignItems: 'center'
   },
   verMenuRow: {
-    marginHorizontal: 20,
-    marginVertical: 8,
-    flexDirection: 'row',
-    height: 40,
-    alignItems: 'center'
+    height: 48,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
-  frontIcon: { height: '80%', marginRight: 10 },
+  verRowInner: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 24,
+    paddingHorizontal: 17
+  },
+  frontIcon: {
+    width: 24,
+    height: 24,
+    marginRight: 16
+  },
   menuText: {
-    fontSize: 16,
+    // backgroundColor: 'blue',
+    fontSize: 15,
     flex: 1,
-    fontFamily: 'DOUZONEText30'
+    fontFamily: 'DOUZONEText30',
+    lineHeight: 20,
+    letterSpacing: -0.3
   }
 });

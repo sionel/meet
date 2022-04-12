@@ -10,7 +10,7 @@ import {
   Dimensions
 } from 'react-native';
 
-const { width } = Dimensions.get('screen');
+// const { width } = Dimensions.get('screen');
 
 // import icBack from '../../../assets/new/icons/ic_back_w.png';
 
@@ -22,6 +22,7 @@ import icArrowRight from '../../../assets/new/icons/ic_arrow_right.png';
 import icBack from '../../../assets/new/icons/ic_back.png';
 import icArrowDownBlack from '../../../assets/new/icons/ic_arrow_down_black.png';
 import { getT } from '../../utils/translateManager';
+import { isTablet } from 'react-native-device-info';
 
 interface propsTypes {
   // onRedirect: (destination: string) => void;
@@ -38,6 +39,7 @@ interface propsTypes {
     companyName: any;
   };
   onCompanyChange: () => void;
+  width: number;
 }
 
 export default function ConfigurationScreenPresenter(props: propsTypes) {
@@ -48,7 +50,8 @@ export default function ConfigurationScreenPresenter(props: propsTypes) {
     handleGoOpenSource,
     handleGoPolicy,
     authInfo,
-    onCompanyChange
+    onCompanyChange,
+    width
   } = props;
 
   const t = getT();
@@ -58,7 +61,7 @@ export default function ConfigurationScreenPresenter(props: propsTypes) {
     //   <SafeAreaView style={{ flex: 0, backgroundColor: '#1c90fb' }} />
     //   <SafeAreaView style={{ flex: 1 }}>
     <SafeAreaView style={{ backgroundColor: '#fff', flex: 1 }}>
-      <View style={[styles.topTitle]}>
+      <View style={[styles.topTitle, {paddingHorizontal: isTablet() ? 20 : '5%'}]}>
         <TouchableOpacity onPress={goBack}>
           <Image
             source={icBack}
@@ -245,7 +248,6 @@ export default function ConfigurationScreenPresenter(props: propsTypes) {
 
 const styles = StyleSheet.create({
   topTitle: {
-    paddingHorizontal: '5%',
     justifyContent: 'space-between',
     alignItems: 'center',
     flexDirection: 'row',

@@ -21,9 +21,10 @@ import { actionCreators as DeployedActions } from '../redux/modules/deployed';
 import deviceInfoModule from 'react-native-device-info';
 import * as RootNavigation from '../Navigations/RootNavigation';
 import { getConferenceManager } from '../utils/ConferenceManager';
+import { getT } from '../utils/translateManager';
 
 export default function CustomProvider(props: any) {
-  const { children, getT } = props;
+  const { children } = props;
   const {
     alert,
     indicator,

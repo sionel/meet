@@ -43,6 +43,7 @@ const icKeyboard = require('../../../assets/new/icons/ic_keyboard.png');
 const icArrowDownBlack = require('../../../assets/new/icons/ic_arrow_down_black.png');
 const icChange = require('../../../assets/new/icons/ic_change.png');
 const icCancel = require('../../../assets/new/icons/ic_cancel.png');
+const icEmpty = require('../../../assets/new/icons/ic_empty.png');
 
 {
   /*
@@ -112,7 +113,7 @@ const HomeScreenPresenter = (props: presenterProps) => {
             <Text style={styles.name}>{userName}</Text>
             <View style={{ flex: 1 }} />
             <TouchableOpacity style={styles.setting} onPress={onClickSetting}>
-              <Image source={icSet} />
+              <Image source={icSet} style={{ width: 18, height: 18 }} />
             </TouchableOpacity>
           </View>
           <TouchableOpacity
@@ -174,7 +175,7 @@ const HomeScreenPresenter = (props: presenterProps) => {
               style={[
                 styles.ongoingContainer,
                 ,
-                { paddingHorizontal: isTablet ? 40 : 20 }
+                { paddingHorizontal: isTablet ? 30 : 20 }
               ]}
             >
               <View style={styles.goingTextContainer}>
@@ -214,14 +215,14 @@ const HomeScreenPresenter = (props: presenterProps) => {
           <View
             style={[
               styles.ConferenceListContainer,
-              { paddingHorizontal: isTablet ? 40 : 20 }
+              { paddingHorizontal: isTablet ? 30 : 20 }
             ]}
           >
             <View style={styles.ConferenceListTitle}>
               {reservationConference.length > 0 && (
                 <Fragment>
                   <TouchableOpacity
-                    style={{ flexDirection: 'row' }}
+                    style={{ flexDirection: 'row', marginVertical: 5 }}
                     onPress={() => {
                       setHighlight('reservation');
                     }}
@@ -246,14 +247,7 @@ const HomeScreenPresenter = (props: presenterProps) => {
                   <View style={styles.GraySplitBar} />
                 </Fragment>
               )}
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  flex: 1
-                }}
-              >
+              <View style={styles.FinishedCotainer}>
                 <TouchableOpacity
                   style={{ flexDirection: 'row' }}
                   onPress={() => {
@@ -277,15 +271,14 @@ const HomeScreenPresenter = (props: presenterProps) => {
                     {finishCount}
                   </Text>
                 </TouchableOpacity>
-
                 {highlight === 'finished' && (
                   <TouchableOpacity
                     onPress={() => setCalendarView(true)}
                     style={styles.monthTouchContainer}
                   >
-                    <Text>{`${finishDate.getMonth() + 1}${t(
-                      'renewal.common_month'
-                    )}`}</Text>
+                    <Text style={styles.selectedMonth}>{`${
+                      finishDate.getMonth() + 1
+                    }${t('renewal.common_month')}`}</Text>
                   </TouchableOpacity>
                 )}
               </View>
@@ -298,6 +291,7 @@ const HomeScreenPresenter = (props: presenterProps) => {
                   ? reservationConference
                   : finishedConference
               }
+              windowSize={10}
               renderItem={data => {
                 const { item } = data;
 
@@ -308,12 +302,22 @@ const HomeScreenPresenter = (props: presenterProps) => {
                 );
               }}
               showsVerticalScrollIndicator={false}
-              onEndReached={onEndReached}
-              onEndReachedThreshold={1}
+              onEndReached={({ distanceFromEnd }) => {
+                distanceFromEnd > 0 && onEndReached();
+              }}
+              onEndReachedThreshold={0.5}
               {...(isTablet && {
                 columnWrapperStyle: { justifyContent: 'space-between' }
               })}
             />
+            {highlight === 'finished' && finishedConference.length === 0 && (
+            <View style={styles.finConferenceNone}>
+              <Image source={icEmpty} style={{ width: 134, height: 110 }} />
+              <Text style={styles.noConferenceText}>
+                {'회의기록이 없습니다.'}
+              </Text>
+            </View>
+          )}
           </View>
         </View>
 
@@ -403,15 +407,28 @@ const styles = StyleSheet.create({
     flexDirection: 'row-reverse',
     alignItems: 'center'
   },
-  companyText: { fontSize: 13, textAlign: 'right',  fontFamily: 'DOUZONEText30'},
+  companyText: {
+    fontSize: 12,
+    textAlign: 'right',
+    fontFamily: 'DOUZONEText30',
+    letterSpacing: -0.24
+  },
   selectConpany: {
     justifyContent: 'flex-start',
     flexDirection: 'row',
     alignItems: 'center',
-    marginLeft: 40
+    marginLeft: 28
   },
-  settingImg: { width: 30, height: 30, borderRadius: 24, marginRight: 10 },
-  downArrow: { width: 30, height: 30, borderRadius: 24 },
+  selectedMonth: {
+    fontFamily: 'DOUZONEText30',
+    fontSize: 11,
+    color: '#333'
+  },
+  // settingImg: { width: 30, height: 30, borderRadius: 24, marginRight: 10 },
+  downArrow: {
+    width: 18,
+    height: 18
+  },
   helloContainer: {
     width: '100%',
     justifyContent: 'space-between',
@@ -427,7 +444,6 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 18,
     color: '#333',
-    marginRight: 10,
     textAlign: 'center',
     fontFamily: 'DOUZONEText50'
   },
@@ -463,19 +479,21 @@ const styles = StyleSheet.create({
   ongoingContainer: {
     width: '100%',
     // height: '28%',
-    paddingVertical: 20,
-    paddingHorizontal: 40
+    paddingTop: 20,
+    paddingBottom: 40
   },
   goingTextContainer: {
     justifyContent: 'flex-start',
     flexDirection: 'row',
     alignItems: 'center',
-    paddingBottom: 20
+    paddingBottom: 14
   },
   goingText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginRight: 5
+    fontSize: 14,
+    fontFamily: 'DOUZONEText50',
+    letterSpacing: -0.28,
+    marginRight: 5,
+    color: 'rgba(0,0,0, 0.87)'
   },
   calendarTopView: {
     flexDirection: 'row',
@@ -547,23 +565,27 @@ const styles = StyleSheet.create({
     flex: 1
   },
   GraySplitBar: {
-    borderWidth: 1,
+    borderWidth: 0.7,
     borderColor: '#aaa',
-    height: '100%',
+    height: 14,
     marginHorizontal: 10
   },
   ConferenceListContainer: {
     width: '100%',
-    flex: 1,
-    marginVertical: '2%'
+    flex: 1
+    // marginVertical: '2%'
     // backgroundColor: 'red'
   },
   ConferenceListTitle: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10
+    marginBottom: 14
   },
-  ImageText: { fontSize: 13, fontFamily: 'DOUZONEText30', color: '#333' },
+  ImageText: {
+    fontSize: 13,
+    fontFamily: 'DOUZONEText30',
+    color: '#333'
+  },
   PadHorizonLeftContainter: {
     width: 250,
     paddingHorizontal: 30,
@@ -578,11 +600,21 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   userImageView: {
-    height: 40,
-    width: 40,
+    height: 24,
+    width: 24,
     borderRadius: 20,
     marginRight: 5,
     backgroundColor: '#939393'
+  },
+  finConferenceNone: {
+    alignItems: 'center',
+    paddingTop: 120,
+    height: '100%'
+  },
+  noConferenceText: {
+    fontFamily: 'DOUZONEText30',
+    fontSize: 14,
+    color: 'rgba(0,0,0,0.6)'
   }
   // container: {
   //   flex: 1,

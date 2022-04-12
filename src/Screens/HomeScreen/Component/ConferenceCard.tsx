@@ -1,5 +1,12 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+  Platform
+} from 'react-native';
 import deviceInfoModule from 'react-native-device-info';
 
 import LinearGradient from 'react-native-linear-gradient';
@@ -54,12 +61,27 @@ export default function ConferenceCard(props: cardProps) {
   return (
     <View
       style={
-        isHorizon ? { paddingRight: 40 } : { paddingLeft: isTablet ? 40 : 20 }
+        [isHorizon ? { paddingRight: 40 } : { paddingLeft: isTablet ? 40 : 20 }, {backgroundColor: 'transparent'}]
       }
     >
       <TouchableOpacity
         activeOpacity={0.8}
-        style={styles.container}
+        style={[
+          styles.container,
+          Platform.select({
+            ios: {
+              shadowColor: 'rgba(9,33,60,0.3)',
+              shadowOpacity: 0.5,
+              shadowOffset: {
+                width: 0,
+                height: 8
+              }
+            },
+            // android: {
+            //   elevation: 5
+            // }
+          })
+        ]}
         onPress={() => enterConference(roomId)}
       >
         <LinearGradient
@@ -171,16 +193,10 @@ export default function ConferenceCard(props: cardProps) {
 const styles = StyleSheet.create({
   container: {
     width: 294,
-    height: 156,
+    height: 160,
     // marginBottom: 40,
     // backgroundColor: '#fff',
-    borderRadius: 12,
-    shadowColor: 'rgb(9,33,60)',
-    shadowOpacity: 0.3,
-    shadowOffset: {
-      width: 0,
-      height: 8
-    }
+    borderRadius: 12
   },
   gradient: {
     width: 294,

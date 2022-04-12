@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Dimensions } from 'react-native';
 import deviceInfoModule from 'react-native-device-info';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/configureStore';
@@ -29,6 +29,8 @@ export default function ConfigurationScreenContainer(props: any) {
   const { user_name, rankname, user_default_email, profile_url, last_company } =
     auth;
 
+  console.log('rankname: ', rankname);
+  
   const authInfo = {
     user_name,
     rankname,
@@ -42,6 +44,9 @@ export default function ConfigurationScreenContainer(props: any) {
   const { navigation, route }: ConfigurationNavigationProps<'Configuration'> =
     props;
 
+  const [width, setWidth] = useState(Dimensions.get('screen').width);
+  const [height, setHeight] = useState(Dimensions.get('screen').height);
+
   const dispatch = useDispatch();
   const _logout = () => {
     dispatch(UserActions.logout());
@@ -52,7 +57,16 @@ export default function ConfigurationScreenContainer(props: any) {
 
   const _openCompany = () => dispatch(SelectCompanyActions.openCompany());
 
-  const isTablet = deviceInfoModule.isTablet();
+  useEffect(() => {
+    const updateLayout = () => {
+      setWidth(Dimensions.get('screen').width);
+      setHeight(Dimensions.get('screen').height);
+    };
+    Dimensions.addEventListener('change', updateLayout);
+    return () => {
+      Dimensions.removeEventListener('change', updateLayout);
+    };
+  });
 
   const _handleLogout = () => {
     _logout();
@@ -84,6 +98,7 @@ export default function ConfigurationScreenContainer(props: any) {
       handleGoOpenSource={handleGoOpenSource}
       authInfo={authInfo}
       onCompanyChange={_openCompany}
+      width={width}
     />
   );
 }

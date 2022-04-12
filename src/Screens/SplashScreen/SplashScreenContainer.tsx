@@ -404,6 +404,8 @@ const SplashScreenContainer = ({
       HASH_KEY
     );
     if (checkResult.resultCode === 200) {
+      console.log('checkResult.rankname : ', checkResult.rankname);
+      
       const userData = {
         // login api data
         AUTH_A_TOKEN,
