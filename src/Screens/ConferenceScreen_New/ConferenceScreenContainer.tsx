@@ -17,9 +17,12 @@ const ConferenceScreenContainer: React.FC<
   const { testFlag } = useSelector((state: RootState) => ({
     testFlag: state.test.testFlag
   }));
-  const testfunction = test('asd')
+
+  // const testfunction = new test('asd')
+  
+  // testfunction.valtest()
+
   useEffect(() => {
-    testfunction.valtest()
   }, []);
 
   const dispatch = useDispatch();

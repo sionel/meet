@@ -3,6 +3,7 @@ import config from './config';
 import { getDrawingManager } from '@utils/index';
 import DrawingMananger from '@utils/DrawingManager';
 import { MeetApi } from '@services/index';
+import { ConferenceHandler } from './ConferenceHandler';
 
 // 위하고 아이디 커멘드 이름 정의
 const WEHAGO_ID = 'wehagoid';
@@ -76,8 +77,8 @@ export const REQUEST_ROOM_START_RECORDING =
  * 화상회의 방 생성/참가 및 디바이스 연결을 담당하는 클래스
  */
 class ConferenceConnector {
-  constructor(handlers) {
-    // room : 화상회의방
+  constructor(handlers:ConferenceHandler) {
+  // room : 화상회의방
     this._room = null;
     this._tracks = [];
     this._handlers = handlers;
@@ -98,8 +99,6 @@ class ConferenceConnector {
   get room() {
     return this._room;
   }
-  //#region Public Functions
-
   /**
    * 대화방 참가
    */
@@ -162,8 +161,6 @@ class ConferenceConnector {
     this._room.documentData = data;
   };
   //#endregion
-
-  //#region Private Functions
 
   /**
    * 참가할 대화방을 생성한다.(실제 화상회의의 방을 생성하는 것은 아님)

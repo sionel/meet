@@ -14,7 +14,13 @@ export interface TopPopupContainerProps {}
 export interface TopPopupPresenterProps {}
 
 export interface TopContentContainerProps {}
-export interface TopContentPresenterProps {}
+export interface TopContentPresenterProps {
+  UserListClick: () => void;
+  ChattingClick: () => void;
+  ReverseCamaraClick: () => void;
+  DisplayInvertClick: () => void;
+  MoreClick: () => void;
+}
 
 export interface MainVideoContainerProps {}
 export interface MainVideoPresenterProps {}

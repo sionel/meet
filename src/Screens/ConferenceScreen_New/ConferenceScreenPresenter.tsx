@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView } from 'react-native';
+import { View, Text, SafeAreaView, Platform, StatusBar } from 'react-native';
 import React from 'react';
 // import { ConferenceScreenPresenterProps } from './types';
 import TopPopup from './TopPopup';

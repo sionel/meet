@@ -4,7 +4,20 @@ import { TopContentContainerProps } from '../types';
 import TopContentPresenter from './TopContentPresenter';
 
 const TopContentContainer: React.FC<TopContentContainerProps> = () => {
-  return <TopContentPresenter />;
+  const _handleUserList = () => {};
+  const _handleChatting = () => {};
+  const _handleReverseCamara = () => {};
+  const _handleDisplayInvert = () => {};
+  const _handleMore = () => {};
+  return (
+    <TopContentPresenter
+      UserListClick={_handleUserList}
+      ChattingClick={_handleChatting}
+      ReverseCamaraClick={_handleReverseCamara}
+      DisplayInvertClick={_handleDisplayInvert}
+      MoreClick={_handleMore}
+    />
+  );
 };
 
 export default TopContentContainer;

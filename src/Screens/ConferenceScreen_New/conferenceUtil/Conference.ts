@@ -8,12 +8,16 @@ class Conference {
     this._connection = this._creaeteJitsiConnection(conferenceParams);
   }
 
-  join = () =>
+  connect = () =>
     new Promise((resolve, reject) => {
       this._bindEvents(resolve, reject);
       this._connection.connect();
     });
 
+  join = () => new Promise((resolve, reject) => {
+
+  });
+  
   _creaeteJitsiConnection = (conferenceParams: any) => {
     const options = { ...config };
     options.bosh = `https:${options.bosh}?room=${conferenceParams.roomName}`;
