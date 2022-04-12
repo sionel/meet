@@ -12,16 +12,18 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import thunk from 'redux-thunk';
 import local, { state as LocalState } from '@redux/local';
 import mainUser, { state as MainUserState } from '@redux/mainUser';
-import participants, {state as ParticipantsState} from '@redux/participants';
-import user, {state as UserState} from '@redux/user';
-import wetalk, {state as WetalkState} from '@redux/wetalk';
-import wedrive, {state as WedriveState} from '@redux/wedrive';
-import documentShare, {state as DocumentShareState} from '@redux/documentShare';
+import participants, { state as ParticipantsState } from '@redux/participants';
+import user, { state as UserState } from '@redux/user';
+import wetalk, { state as WetalkState } from '@redux/wetalk';
+import wedrive, { state as WedriveState } from '@redux/wedrive';
+import documentShare, {
+  state as DocumentShareState
+} from '@redux/documentShare';
 import conference, { state as ConferenceState } from '@redux/conference';
-import webUser, {state as WebUserState} from '@redux/webUser';
+import webUser, { state as WebUserState } from '@redux/webUser';
 import master, { state as MasterState } from '@redux/master';
 import alert from '@redux/alert';
-import toast, {state as ToastState} from '@redux/toast';
+import toast, { state as ToastState } from '@redux/toast';
 // import root from '@redux/root';
 import deployed, { state as DeployedState } from '@redux/deployed';
 import screenShare, { state as ScreenShageState } from '@redux/ScreenShare';
@@ -29,6 +31,7 @@ import indicator, { state as IndicatorState } from '@redux/indicator';
 import orientation, { state as OrientationState } from '@redux/orientation';
 import root, { state as RootStates } from '@redux/root';
 import recents, { state as RecentsState } from '@redux/recentsInvited';
+import test, { State as testState } from '@redux/test';
 import selectCompany, {
   state as SelectCompanyState
 } from '@redux/selectCompany';
@@ -64,6 +67,7 @@ export interface RootState {
   root: RootStates;
   recents: RecentsState;
   selectCompany: SelectCompanyState;
+  test: testState;
 }
 
 /**
@@ -115,7 +119,8 @@ const reducer = persistCombineReducers(persistConfig, {
   orientation,
   root,
   recents,
-  selectCompany
+  selectCompany,
+  test
 });
 
 /**

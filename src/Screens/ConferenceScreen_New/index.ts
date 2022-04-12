@@ -1,2 +1,2 @@
-import ConferenceScreenContainer from './ConferenceScreenContainer';
-export default ConferenceScreenContainer;
+import ConferenceScreen from './ConferenceScreenContainer';
+export default ConferenceScreen;

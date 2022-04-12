@@ -1,24 +1,36 @@
 import { View, Text, SafeAreaView } from 'react-native';
 import React from 'react';
-import { ConferenceScreenPresenterProps } from './types';
+// import { ConferenceScreenPresenterProps } from './types';
 import TopPopup from './TopPopup';
 import TopContent from './TopContent';
 import MainVideo from './MainVideo';
 import SplitVideo from './SplitVideo';
 import BottomPopup from './BottomPopup';
 import BottomContent from './BottomContent';
+import { WEHAGO_TYPE } from 'config';
 
-const ConferenceScreenPresenter: React.FC<
-  ConferenceScreenPresenterProps
-> = props => {
+interface ConferenceScreenPresenterProps {
+  isConnected: boolean;
+}
+const ConferenceScreenPresenter: React.FC<ConferenceScreenPresenterProps> = ({
+  isConnected
+}) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <TopPopup />
-      <TopContent />
-      <MainVideo />
-      <SplitVideo />
-      <BottomPopup />
-      <BottomContent />
+      {isConnected ? (
+        <>
+          <TopPopup />
+          <TopContent />
+          <MainVideo />
+          <SplitVideo />
+          <BottomPopup />
+          <BottomContent />
+        </>
+      ) : WEHAGO_TYPE === 'WEHAGO' ? (
+        <></>
+      ) : (
+        <></>
+      )}
     </SafeAreaView>
   );
 };
