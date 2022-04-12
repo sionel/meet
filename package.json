@@ -27,7 +27,8 @@
     "get-android": "~/Library/Android/sdk/platform-tools/adb devices",
     "device": "~/Library/Android/sdk/emulator/emulator @Nexus_5X_API_29",
     "clean:android": "cd ./wehago/android && sudo ./gradlew clean && cd ../..",
-    "clean:ios": "cd ios && sudo xcodebuild clean && cd ../"
+    "clean:ios": "cd ios && sudo xcodebuild clean && cd ../",
+    "xed": "cd ios && xed . && cd ../"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "1.13.2",

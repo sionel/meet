@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView } from 'react-native';
+import { View, Text, SafeAreaView, Platform, StatusBar } from 'react-native';
 import React from 'react';
 import { ConferenceScreenPresenterProps } from './types';
 import TopPopup from './TopPopup';
@@ -12,14 +12,21 @@ const ConferenceScreenPresenter: React.FC<
   ConferenceScreenPresenterProps
 > = props => {
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    // <SafeAreaView style={{ flex: 1 }}>
+    <View>
+      {Platform.OS === 'ios' ? (
+        <StatusBar barStyle={'light-content'} />
+      ) : (
+        <StatusBar backgroundColor="transparent" translucent={true} />
+      )}
       <TopPopup />
       <TopContent />
       <MainVideo />
       <SplitVideo />
       <BottomPopup />
       <BottomContent />
-    </SafeAreaView>
+    </View>
+    // </SafeAreaView>
   );
 };
 
