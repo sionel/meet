@@ -13,7 +13,7 @@ const ConferenceScreenContainer: React.FC<
   let conferenceManager = null;
 
   const [first, setfirst] = useState();
-  const [isConnected, setIsConnected] = useState(false);
+  const [isConnected, setIsConnected] = useState(true);
   const { testFlag } = useSelector((state: RootState) => ({
     testFlag: state.test.testFlag
   }));
@@ -27,19 +27,22 @@ const ConferenceScreenContainer: React.FC<
 
   const dispatch = useDispatch();
 
+
   const _connectConference = () => {
-    conferenceManager = new ConferenceManager(dispatch)
+    // conferenceManager = new ConferenceManager(dispatch)
   };
-  return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
-      <View style={{ flex: 1, backgroundColor: '#ffa' }}>
-        <TouchableOpacity
-          style={{ top: 100, width: 100, height: 100, backgroundColor: '#0fa' }}
-        >
-          <Text>{'testtests'}</Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+
+  const _handleClose = () => {}
+  return ( <ConferenceScreenPresenter isConnected={isConnected} handleClose={_handleClose} />
+    // <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+    //   <View style={{ flex: 1, backgroundColor: '#ffa' }}>
+    //     <TouchableOpacity
+    //       style={{ top: 100, width: 100, height: 100, backgroundColor: '#0fa' }}
+    //     >
+    //       <Text>{'testtests'}</Text>
+    //     </TouchableOpacity>
+    //   </View>
+    // </SafeAreaView>
   );
   // return <ConferenceScreenPresenter isConnected={isConnected} />;
 };
