@@ -5,7 +5,7 @@ import JitsiMeetJS, { JitsiConnectionEvents } from '@jitsi/base/lib-jitsi-meet';
 import config from './config';
 
 class Connection {
-  private _jitsiConnection:any = null;
+  private _jitsiConnection: any = null;
   constructor() {
     this._jitsiConnection;
   }
@@ -14,10 +14,10 @@ class Connection {
     return this._jitsiConnection;
   }
 
-  connect = (roomName: string, token: string) =>
+  public connect = (roomId: string, roomToken: string) =>
     new Promise((resolve, reject) => {
       // jitsi connection 을 생성한다.
-      const jitsiConnection = this._creaeteJitsiConnection(roomName, token);
+      const jitsiConnection = this._creaeteJitsiConnection(roomId, roomToken);
       // 이벤트를 바인딩한다. -> 바인딩된 이벤트가 호출되어야지 프라미스가 종료된다.
       this._bindEvents(jitsiConnection, resolve, reject);
       // 커넥션을 연결한다.
@@ -30,12 +30,12 @@ class Connection {
     }
   };
 
-  _creaeteJitsiConnection = (roomName: string, token: string) => {
+  _creaeteJitsiConnection = (roomId: string, roomToken: string) => {
     const options = { ...config };
-    options.bosh = `https:${options.bosh}?room=${roomName}`;
+    options.bosh = `https:${options.bosh}?room=${roomId}`;
     const jitsiConnection = new JitsiMeetJS.JitsiConnection(
       null,
-      token ? token : null,
+      roomToken ? roomToken : null,
       options
     );
     this._jitsiConnection = jitsiConnection;
@@ -58,7 +58,7 @@ class Connection {
       JitsiConnectionEvents.CONNECTION_FAILED,
       () => {
         this.dispose();
-        reject();
+        reject('화상 연결에 실패하였습니다.');
       }
     );
 
@@ -67,7 +67,7 @@ class Connection {
       JitsiConnectionEvents.CONNECTION_DISCONNECTED,
       () => {
         this.dispose();
-        reject();
+        reject('Connection  - 화상 연결에 실패하였습니다.');
       }
     );
   };

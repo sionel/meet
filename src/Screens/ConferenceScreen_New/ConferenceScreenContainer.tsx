@@ -4,8 +4,9 @@ import ConferenceScreenPresenter from './ConferenceScreenPresenter';
 import { ConferenceScreenContainerProps } from './types';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'src/redux/configureStore';
-import ConferenceManager from './conferenceUtil/ConferenceManager';
+// import ConferenceManager from './conferenceUtil/ConferenceManager';
 import test from './conferenceUtil/test';
+import Conference from './conferenceUtil/Conference';
 
 const ConferenceScreenContainer: React.FC<
   ConferenceScreenContainerProps
@@ -14,21 +15,23 @@ const ConferenceScreenContainer: React.FC<
 
   const [first, setfirst] = useState();
   const [isConnected, setIsConnected] = useState(false);
-  const { testFlag } = useSelector((state: RootState) => ({
-    testFlag: state.test.testFlag
+  const { testFlag, auth } = useSelector((state: RootState) => ({
+    testFlag: state.test.testFlag,
+    auth: state.user.auth
   }));
 
   // const testfunction = new test('asd')
-  
+
   // testfunction.valtest()
 
   useEffect(() => {
+    // _connectConference();
   }, []);
-
   const dispatch = useDispatch();
 
   const _connectConference = () => {
-    conferenceManager = new ConferenceManager(dispatch)
+    const conference = new Conference();
+    conference.join({ id: '', token: '' }, auth, dispatch);
   };
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
