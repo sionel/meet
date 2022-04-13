@@ -1,11 +1,21 @@
-import { View, Text } from 'react-native';
 import React from 'react';
-import BottomContentPresenter from './BottomContentPresenter';
 import { BottomContentContainerProps } from '../types';
+import BottomContentPresenter from './BottomContentPresenter';
 
-const BottomContentContainer: React.FC<BottomContentContainerProps> = props => {
+const BottomContentContainer: React.FC<BottomContentContainerProps> = ({
+  handleCloseConf
+}) => {
+  const _handleSpeakerClick = () => {};
+  const _handleMikeClick = () => {};
+  const _handleVideoClick = () => {};
+
   return (
-    <BottomContentPresenter />
+    <BottomContentPresenter
+      ToggleSpeakerClick={_handleSpeakerClick}
+      ToggleMikeClick={_handleMikeClick}
+      ToggleVideoClick={_handleVideoClick}
+      EndCallClick={handleCloseConf}
+    />
   );
 };
 export default BottomContentContainer;
