@@ -14,6 +14,7 @@ import MainStack from './MainStack';
 import SettingView from '@screens/SettingScreen';
 import ConferenceStateView from '@screens/ConferenceStateScreen';
 import ConferenceView from '@screens/ConferenceScreen';
+import ConferenceRenewalView from '@screens/ConferenceScreen_New';
 import SelectCompanyView from '@screens/SelectCompanyScreen';
 import SplashView from '@screens/SplashScreen';
 
@@ -192,7 +193,7 @@ export default function RootNavigation(props: any) {
   return (
     <NavigationContainer ref={navigationRef}>
       <RootStack.Navigator
-        initialRouteName="SplashView"
+        initialRouteName="ConferenceView_new"
         screenOptions={{ headerShown: false }}
       >
         <RootStack.Screen name="SplashView" component={SplashView} />
@@ -205,6 +206,7 @@ export default function RootNavigation(props: any) {
         <RootStack.Screen name="SettingView" component={SettingView} />
         <RootStack.Screen name="ConferenceView" component={ConferenceView} />
         <RootStack.Screen name="SelectCompany" component={SelectCompanyView} />
+        <RootStack.Screen name="ConferenceView_new" component={ConferenceRenewalView} />
       </RootStack.Navigator>
     </NavigationContainer>
   );
