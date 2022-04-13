@@ -20,14 +20,12 @@ import deviceInfoModule from 'react-native-device-info';
 
 const isTablet = deviceInfoModule.isTablet();
 
-const BottomContentPresenter: React.FC<BottomContentPresenterProps> = props => {
-  const {
-    ToggleSpeakerClick,
-    ToggleMikeClick,
-    ToggleVideoClick,
-    EndCallClick
-  } = props;
-
+const BottomContentPresenter: React.FC<BottomContentPresenterProps> = ({
+  ToggleSpeakerClick,
+  ToggleMikeClick,
+  ToggleVideoClick,
+  EndCallClick
+}) => {
   return (
     <View style={styles.bottomArea}>
       <View style={{ flexDirection: 'row', marginTop: 24 }}>
