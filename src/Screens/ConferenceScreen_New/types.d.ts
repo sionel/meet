@@ -9,6 +9,7 @@ type ConferenceScreenNavigationProps = StackNavigationProp<
 export interface ConferenceScreenContainerProps
   extends StackScreenProps<MeetParamList, 'ConferenceView_new'> {}
 export interface ConferenceScreenPresenterProps {
+  isConnected: boolean;
   handleClose: () => void;
 }
 
