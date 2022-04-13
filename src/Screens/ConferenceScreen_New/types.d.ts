@@ -1,5 +1,7 @@
 import { MeetParamList } from '@navigations/RootNavigation';
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
+import { MutableRefObject } from 'react';
+import { EdgeInsets } from 'react-native-safe-area-context';
 
 type ConferenceScreenNavigationProps = StackNavigationProp<
   MeetParamList,
@@ -11,6 +13,7 @@ export interface ConferenceScreenContainerProps
 export interface ConferenceScreenPresenterProps {
   isConnected: boolean;
   handleClose: () => void;
+  handleSpeaker: () => void;
 }
 
 export interface TopPopupContainerProps {}
@@ -31,8 +34,13 @@ export interface MainVideoPresenterProps {}
 export interface SplitVideoContainerProps {}
 export interface SplitVideoPresenterProps {}
 
-export interface BottomPopupContainerProps {}
-export interface BottomPopupPresenterProps extends MenuListProps {}
+export interface BottomPopupContainerProps {
+  handleSpeaker: () => void;
+}
+export interface BottomPopupPresenterProps
+  extends MenuListProps,
+    ChattingProps,
+    ParticipantsProps {}
 
 export interface BottomContentContainerProps {
   handleCloseConf: () => void;
@@ -45,9 +53,26 @@ export interface BottomContentPresenterProps {
 }
 
 export interface MenuListProps {
+  onPressSketch: () => void;
+  onPressDocumentShare: () => void;
   onPressScreenShare: () => void;
   onPressRequestMic: () => void;
   isMaster: Boolean;
+  insets: EdgeInsets;
 }
 
-export interface ChattingProps {}
+export interface ChattingProps {
+  onPressSend: () => void;
+  myMessage: string;
+  insets: EdgeInsets;
+}
+export interface ParticipantsProps {
+  ToggleSpeakerClick: () => void;
+  onPressProfile: () => void;
+  onPressMaster: () => void;
+  onPressKick: () => void;
+  onPressInvite: () => void;
+  isRoomMaster: boolean;
+  swipeRef: MutableRefObject<any>;
+  insets: EdgeInsets;
+}
