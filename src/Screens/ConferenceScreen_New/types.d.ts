@@ -2,7 +2,7 @@ import { MeetParamList } from '@navigations/RootNavigation';
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import { ParticipantsTypes } from '@redux/participants';
 import { MutableRefObject } from 'react';
-import { NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
+import { Animated, NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
 import { EdgeInsets } from 'react-native-safe-area-context';
 
 type ConferenceScreenNavigationProps = StackNavigationProp<
@@ -19,7 +19,19 @@ export interface ConferenceScreenPresenterProps {
 }
 
 export interface TopPopupContainerProps {}
-export interface TopPopupPresenterProps {}
+export interface TopPopupPresenterProps
+  extends RequestMessagesProps,
+    ToastMessageProps {}
+
+export interface RequestMessagesProps {
+  userList: any[];
+  insets: EdgeInsets;
+}
+export interface ToastMessageProps {
+  insets: EdgeInsets;
+  message: string | undefined;
+  fadeAnimation: Animated.Value
+}
 
 export interface TopContentContainerProps {}
 export interface TopContentPresenterProps {
