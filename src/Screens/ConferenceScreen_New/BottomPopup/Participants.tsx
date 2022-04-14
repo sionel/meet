@@ -26,7 +26,10 @@ import icOut from '@assets/icons/ic_out_w.png';
 import icMicOn from '@assets/icons/ic_mic_on.png';
 import icMicOff from '@assets/icons/ic_mic_off.png';
 import icHandW from '@assets/icons/ic_hand_w.png';
+import icBackW from '@assets/icons/ic_back_w.png';
 import { getT } from '@utils/translateManager';
+import Profile from './Profile';
+import InviteList from './InviteList';
 
 const isPad = deviceInfoModule.isTablet();
 const { width } = Dimensions.get('window');
@@ -37,12 +40,22 @@ const leftSwipeWidth = width * 0.3;
 const Participant: React.FC<ParticipantsProps> = ({
   insets,
   isRoomMaster,
+  isProfile,
+  isInviteList,
   swipeRef,
+  userInfo,
   onPressInvite,
   onPressProfile,
   onPressMaster,
   ToggleSpeakerClick,
-  onPressKick
+  onPressKick,
+  setIsProfile,
+  // InviteList
+  onClickEmail,
+  onClickSms,
+  onClickShare,
+  onClickLink,
+  onClickCode
 }) => {
   const t = getT();
   const userList = [
@@ -51,28 +64,10 @@ const Participant: React.FC<ParticipantsProps> = ({
       isMaster: true,
       userInfo: {
         companyFullpath: '플랫폼사업부문 | 서비스개발2센터 | 설..',
-        profileUrl: ''
-      }
-    },
-    {
-      name: '김연길',
-      userInfo: {
-        companyFullpath: '플랫폼사업부문 | 서비스개발2센터 | 설..',
-        profileUrl: ''
-      }
-    },
-    {
-      name: '김연길',
-      userInfo: {
-        companyFullpath: '플랫폼사업부문 | 서비스개발2센터 | 설..',
-        profileUrl: ''
-      }
-    },
-    {
-      name: '김연길',
-      userInfo: {
-        companyFullpath: '플랫폼사업부문 | 서비스개발2센터 | 설..',
-        profileUrl: ''
+        profileUrl: '',
+        userName: '김연길',
+        user_email: 'kimdouzone@wehago.com',
+        user_contact: '010-1234-5678'
       }
     },
     {
@@ -80,12 +75,46 @@ const Participant: React.FC<ParticipantsProps> = ({
       userInfo: {
         companyFullpath: '플랫폼사업부문 | 서비스개발2센터 | 설..',
         profileUrl: '',
+        userName: '김연길'
+      }
+    },
+    {
+      name: '김연길',
+      userInfo: {
+        companyFullpath: '플랫폼사업부문 | 서비스개발2센터 | 설..',
+        profileUrl: '',
+        userName: '김연길'
+      }
+    },
+    {
+      name: '김연길',
+      userInfo: {
+        companyFullpath: '플랫폼사업부문 | 서비스개발2센터 | 설..',
+        profileUrl: '',
+        userName: '김연길'
+      }
+    },
+    {
+      name: '김연길',
+      userInfo: {
+        companyFullpath: '플랫폼사업부문 | 서비스개발2센터 | 설..',
+        profileUrl: '',
+        userName: '김연길',
         isExternalParticipant: 'true'
       }
     }
   ];
 
-  return (
+  return isInviteList ? (
+    <InviteList
+      insets={insets}
+      onClickEmail={onClickEmail}
+      onClickSms={onClickSms}
+      onClickShare={onClickShare}
+      onClickLink={onClickLink}
+      onClickCode={onClickCode}
+    />
+  ) : (
     <BlurView
       style={[styles.popupContainer, { bottom: insets.bottom }]}
       overlayColor="rgba(255,255,255,0.01)"
@@ -96,239 +125,264 @@ const Participant: React.FC<ParticipantsProps> = ({
         }}
       >
         <View style={styles.popupHeader}>
-          <View
-            style={styles.popupHeaderRow}
-          >
-            <View style={styles.iconSize24} />
-            <Text style={styles.headerText}>{`참석자 리스트`}</Text>
-            <TouchableHighlight
-              activeOpacity={0.5}
-              onPress={onPressInvite}
-              underlayColor="transparent"
-            >
-              <Image source={icPersonPlusW} style={styles.iconSize24} />
-            </TouchableHighlight>
+          <View style={styles.popupHeaderRow}>
+            {isProfile ? (
+              <TouchableHighlight
+                activeOpacity={0.5}
+                onPress={() => setIsProfile(false)}
+                underlayColor="transparent"
+              >
+                <Image source={icBackW} style={styles.iconSize24} />
+              </TouchableHighlight>
+            ) : (
+              <View style={styles.iconSize24} />
+            )}
+            <Text style={styles.headerText}>
+              {isProfile ? `프로필` : `참석자 리스트`}
+            </Text>
+            {isProfile ? (
+              <View style={styles.iconSize24} />
+            ) : (
+              <TouchableHighlight
+                activeOpacity={0.5}
+                onPress={() => onPressInvite()}
+                underlayColor="transparent"
+              >
+                <Image source={icPersonPlusW} style={styles.iconSize24} />
+              </TouchableHighlight>
+            )}
           </View>
         </View>
         <View>
-          <FlatList
-            contentContainerStyle={{ flexGrow: 1 }}
-            data={userList}
-            keyExtractor={(item, index) => String(index)}
-            renderItem={({ item, index }: any) => {
-              const { isMaster, userInfo, id } = item;
+          {isProfile ? (
+            <Profile user={userInfo} />
+          ) : (
+            <FlatList
+              contentContainerStyle={{ flexGrow: 1 }}
+              data={userList}
+              keyExtractor={(item, index) => String(index)}
+              renderItem={({ item, index }: any) => {
+                const { isMaster, userInfo, id } = item;
 
-              // 마이크음소거여부
-              const isMuteMic = item.isLocal
-                ? item.isMuteMic
-                : item.audioTrack === null
-                ? true
-                : item.audioTrack?.muted;
-              // 회사 조직경로
-              const fullPath = userInfo?.companyFullpath;
-              // 프로필뷰
-              const profileUrl = userInfo.profile_url
-                ? wehagoMainURL + userInfo.profile_url
-                : wehagoDummyImageURL;
-              // 이름
-              const userName = item.name ? item.name : userInfo.userName;
-              const external = userInfo?.isExternalParticipant === 'true';
+                // 마이크음소거여부
+                const isMuteMic = item.isLocal
+                  ? item.isMuteMic
+                  : item.audioTrack === null
+                  ? true
+                  : item.audioTrack?.muted;
+                // 회사 조직경로
+                const fullPath = userInfo?.companyFullpath;
+                // 프로필뷰
+                const profileUrl = userInfo.profile_url
+                  ? wehagoMainURL + userInfo.profile_url
+                  : wehagoDummyImageURL;
+                // 이름
+                const userName = item.name ? item.name : userInfo.userName;
+                const external = userInfo?.isExternalParticipant === 'true';
 
-              const renderLeftActions = (
-                progress: any,
-                dragX: Animated.AnimatedInterpolation
-              ) => {
-                const trans = isPad
-                  ? dragX.interpolate({
-                      inputRange: [0, 56, 112],
-                      outputRange: [-112, -56, 0]
-                    })
-                  : isRoomMaster
-                  ? external || index === 0
+                const renderLeftActions = (
+                  progress: any,
+                  dragX: Animated.AnimatedInterpolation
+                ) => {
+                  const trans = isPad
                     ? dragX.interpolate({
+                        inputRange: [0, 56, 112],
+                        outputRange: [-112, -56, 0]
+                      })
+                    : isRoomMaster
+                    ? external || index === 0
+                      ? dragX.interpolate({
+                          inputRange: [0, leftSwipeWidth / 2],
+                          outputRange: [-leftSwipeWidth / 2, 0]
+                        })
+                      : dragX.interpolate({
+                          inputRange: [0, leftSwipeWidth / 2, leftSwipeWidth],
+                          outputRange: [
+                            -leftSwipeWidth,
+                            -(leftSwipeWidth / 2),
+                            0
+                          ]
+                        })
+                    : dragX.interpolate({
                         inputRange: [0, leftSwipeWidth / 2],
                         outputRange: [-leftSwipeWidth / 2, 0]
-                      })
-                    : dragX.interpolate({
-                        inputRange: [0, leftSwipeWidth / 2, leftSwipeWidth],
-                        outputRange: [-leftSwipeWidth, -(leftSwipeWidth / 2), 0]
-                      })
-                  : dragX.interpolate({
-                      inputRange: [0, leftSwipeWidth / 2],
-                      outputRange: [-leftSwipeWidth / 2, 0]
-                    });
+                      });
 
-                return (
-                  <Animated.View
-                    style={[
-                      styles.leftSwipeView,
-                      {
-                        transform: [
-                          {
-                            translateX: trans
-                          }
-                        ]
-                      },
-                      {
-                        width: isPad
-                          ? 112
-                          : isRoomMaster
-                          ? external || index === 0
-                            ? leftSwipeWidth / 2
-                            : leftSwipeWidth
-                          : leftSwipeWidth / 2
-                      }
-                    ]}
-                  >
-                    <TouchableOpacity
-                      style={styles.userTouchView}
-                      activeOpacity={0.2}
-                      onPress={(e: GestureResponderEvent) => {
-                        onPressProfile();
-                      }}
+                  return (
+                    <Animated.View
+                      style={[
+                        styles.leftSwipeView,
+                        {
+                          transform: [
+                            {
+                              translateX: trans
+                            }
+                          ]
+                        },
+                        {
+                          width: isPad
+                            ? 112
+                            : isRoomMaster
+                            ? external || index === 0
+                              ? leftSwipeWidth / 2
+                              : leftSwipeWidth
+                            : leftSwipeWidth / 2
+                        }
+                      ]}
                     >
-                      <Image
-                        source={icUserW}
-                        style={styles.iconSize18}
-                        resizeMode="cover"
-                      />
-                    </TouchableOpacity>
-                    {isRoomMaster && index !== 0 && !external && (
                       <TouchableOpacity
-                        style={styles.masterTouchView}
+                        style={styles.userTouchView}
                         activeOpacity={0.2}
-                        onPress={() => {
-                          // updateRolefromMaster(userInfo.wehagoId);
-                          onPressMaster();
-                          swipeRef.current[index].close();
+                        onPress={(e: GestureResponderEvent) => {
+                          onPressProfile(item);
                         }}
                       >
                         <Image
-                          source={icMaster}
+                          source={icUserW}
                           style={styles.iconSize18}
                           resizeMode="cover"
                         />
                       </TouchableOpacity>
-                    )}
-                  </Animated.View>
-                );
-              };
-
-              const renderRightActions = (
-                progress: any,
-                dragX: Animated.AnimatedInterpolation
-              ) => {
-                const trans = isPad
-                  ? dragX.interpolate({
-                      inputRange: [-40, 0],
-                      outputRange: [0, 40]
-                    })
-                  : dragX.interpolate({
-                      inputRange: [-rightSwipeWidth, 0],
-                      outputRange: [0, rightSwipeWidth]
-                    });
-
-                return isRoomMaster && index !== 0 ? (
-                  <Animated.View
-                    style={[
-                      styles.rightSwipeView,
-                      {
-                        transform: [
-                          {
-                            translateX: trans
-                          }
-                        ]
-                      }
-                    ]}
-                  >
-                    <TouchableOpacity
-                      style={styles.kickView}
-                      activeOpacity={0.2}
-                      onPress={() => {
-                        //   handleKickUser(id, userName);
-                        onPressKick();
-                        swipeRef.current[index].close();
-                      }}
-                    >
-                      <Image
-                        source={icOut}
-                        style={styles.iconSize18}
-                        resizeMode="cover"
-                      />
-                    </TouchableOpacity>
-                  </Animated.View>
-                ) : null;
-              };
-
-              return (
-                <Swipeable
-                  ref={el => (swipeRef.current[index] = el)}
-                  renderLeftActions={renderLeftActions}
-                  renderRightActions={renderRightActions}
-                  // onSwipeableLeftOpen={() => console.log('left!!!')}
-                  // onSwipeableRightOpen={() => console.log('right!!!')}
-                >
-                  <View style={styles.userRow}>
-                    <View style={{ width: 40, height: 40 }}>
-                      {item.isLocal && (
-                        <View style={styles.myTextView}>
-                          <Text style={styles.myText}>
-                            {t('renewal.chatting_me')}
-                          </Text>
-                        </View>
-                      )}
-                      <Image
-                        style={styles.profileSize}
-                        source={{
-                          uri: profileUrl
-                        }}
-                        resizeMode={'cover'}
-                      />
-                    </View>
-
-                    <View style={styles.infoBox}>
-                      <Text style={styles.nameText}>{userName}</Text>
-                      {fullPath !== '' && (
-                        <Text
-                          numberOfLines={1}
-                          ellipsizeMode="tail"
-                          style={styles.treeText}
+                      {isRoomMaster && index !== 0 && !external && (
+                        <TouchableOpacity
+                          style={styles.masterTouchView}
+                          activeOpacity={0.2}
+                          onPress={() => {
+                            // updateRolefromMaster(userInfo.wehagoId);
+                            onPressMaster();
+                            swipeRef.current[index].close();
+                          }}
                         >
-                          {fullPath}
-                        </Text>
+                          <Image
+                            source={icMaster}
+                            style={styles.iconSize18}
+                            resizeMode="cover"
+                          />
+                        </TouchableOpacity>
                       )}
-                    </View>
+                    </Animated.View>
+                  );
+                };
 
-                    <View
+                const renderRightActions = (
+                  progress: any,
+                  dragX: Animated.AnimatedInterpolation
+                ) => {
+                  const trans = isPad
+                    ? dragX.interpolate({
+                        inputRange: [-40, 0],
+                        outputRange: [0, 40]
+                      })
+                    : dragX.interpolate({
+                        inputRange: [-rightSwipeWidth, 0],
+                        outputRange: [0, rightSwipeWidth]
+                      });
+
+                  return isRoomMaster && index !== 0 ? (
+                    <Animated.View
                       style={[
-                        styles.roleView,
-                        isMaster && { backgroundColor: '#febc2c' },
-                        userInfo?.isExternalParticipant === 'true' && {
-                          backgroundColor: '#75b7cb'
+                        styles.rightSwipeView,
+                        {
+                          transform: [
+                            {
+                              translateX: trans
+                            }
+                          ]
                         }
-                        //   !isMaster &&
-                        //     isMasterControl &&
-                        //     !isMuteMic && { backgroundColor: '#1c90fb' }
                       ]}
                     >
-                      {isMaster && (
-                        <Fragment>
-                          <Image
-                            style={{ width: 14, height: 14, marginRight: '5%' }}
-                            source={icMaster}
-                            resizeMode={'contain'}
-                          />
-                          <Text style={styles.roleText}>
-                            {t('renewal.chatting_master')}
+                      <TouchableOpacity
+                        style={styles.kickView}
+                        activeOpacity={0.2}
+                        onPress={() => {
+                          //   handleKickUser(id, userName);
+                          onPressKick();
+                          swipeRef.current[index].close();
+                        }}
+                      >
+                        <Image
+                          source={icOut}
+                          style={styles.iconSize18}
+                          resizeMode="cover"
+                        />
+                      </TouchableOpacity>
+                    </Animated.View>
+                  ) : null;
+                };
+
+                return (
+                  <Swipeable
+                    ref={el => (swipeRef.current[index] = el)}
+                    renderLeftActions={renderLeftActions}
+                    renderRightActions={renderRightActions}
+                    // onSwipeableLeftOpen={() => console.log('left!!!')}
+                    // onSwipeableRightOpen={() => console.log('right!!!')}
+                  >
+                    <View style={styles.userRow}>
+                      <View style={{ width: 40, height: 40 }}>
+                        {item.isLocal && (
+                          <View style={styles.myTextView}>
+                            <Text style={styles.myText}>
+                              {t('renewal.chatting_me')}
+                            </Text>
+                          </View>
+                        )}
+                        <Image
+                          style={styles.profileSize}
+                          source={{
+                            uri: profileUrl
+                          }}
+                          resizeMode={'cover'}
+                        />
+                      </View>
+
+                      <View style={styles.infoBox}>
+                        <Text style={styles.nameText}>{userName}</Text>
+                        {fullPath !== '' && (
+                          <Text
+                            numberOfLines={1}
+                            ellipsizeMode="tail"
+                            style={styles.treeText}
+                          >
+                            {fullPath}
                           </Text>
-                        </Fragment>
-                      )}
-                      {userInfo?.isExternalParticipant === 'true' && (
-                        <Text style={styles.roleText}>
-                          {t('renewal.chatting_external')}
-                        </Text>
-                      )}
-                      {/* {!isMaster && isMasterControl && !isMuteMic && (
+                        )}
+                      </View>
+
+                      <View
+                        style={[
+                          styles.roleView,
+                          isMaster && { backgroundColor: '#febc2c' },
+                          userInfo?.isExternalParticipant === 'true' && {
+                            backgroundColor: '#75b7cb'
+                          }
+                          //   !isMaster &&
+                          //     isMasterControl &&
+                          //     !isMuteMic && { backgroundColor: '#1c90fb' }
+                        ]}
+                      >
+                        {isMaster && (
+                          <Fragment>
+                            <Image
+                              style={{
+                                width: 14,
+                                height: 14,
+                                marginRight: '5%'
+                              }}
+                              source={icMaster}
+                              resizeMode={'contain'}
+                            />
+                            <Text style={styles.roleText}>
+                              {t('renewal.chatting_master')}
+                            </Text>
+                          </Fragment>
+                        )}
+                        {userInfo?.isExternalParticipant === 'true' && (
+                          <Text style={styles.roleText}>
+                            {t('renewal.chatting_external')}
+                          </Text>
+                        )}
+                        {/* {!isMaster && isMasterControl && !isMuteMic && (
                       <Fragment>
                         <Image
                           style={{ width: 14, height: 14, marginRight: '5%' }}
@@ -338,26 +392,27 @@ const Participant: React.FC<ParticipantsProps> = ({
                         <Text style={styles.roleText}>{t('발언중')}</Text>
                       </Fragment>
                     )} */}
+                      </View>
+                      <TouchableHighlight
+                        activeOpacity={0.5}
+                        style={styles.micView}
+                        onPress={ToggleSpeakerClick}
+                      >
+                        <Image
+                          source={isMuteMic ? icMicOff : icMicOn}
+                          resizeMode={'cover'}
+                          style={[
+                            { width: 17, height: 17 },
+                            isMuteMic && { opacity: 0.5 }
+                          ]}
+                        />
+                      </TouchableHighlight>
                     </View>
-                    <TouchableHighlight
-                      activeOpacity={0.5}
-                      style={styles.micView}
-                      onPress={ToggleSpeakerClick}
-                    >
-                      <Image
-                        source={isMuteMic ? icMicOff : icMicOn}
-                        resizeMode={'cover'}
-                        style={[
-                          { width: 17, height: 17 },
-                          isMuteMic && { opacity: 0.5 }
-                        ]}
-                      />
-                    </TouchableHighlight>
-                  </View>
-                </Swipeable>
-              );
-            }}
-          />
+                  </Swipeable>
+                );
+              }}
+            />
+          )}
         </View>
       </View>
     </BlurView>

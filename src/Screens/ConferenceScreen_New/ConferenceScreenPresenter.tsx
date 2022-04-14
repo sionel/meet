@@ -27,7 +27,7 @@ const ConferenceScreenPresenter: React.FC<ConferenceScreenPresenterProps> = ({
             <TopContent />
             <MainVideo />
             <SplitVideo />
-            {/* <BottomPopup handleSpeaker={handleSpeaker} /> */}
+            {/* <BottomPopup roomId={'213564782'} handleSpeaker={handleSpeaker} /> */}
             <BottomContent handleCloseConf={handleClose} />
           </Fragment>
         ) : WEHAGO_TYPE === 'WEHAGO' ? (
