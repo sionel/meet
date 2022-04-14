@@ -31,7 +31,15 @@ export interface TopContentPresenterProps {
 }
 
 export interface MainVideoContainerProps {}
-export interface MainVideoPresenterProps {}
+export interface MainVideoPresenterProps {
+  insets: EdgeInsets;
+  isScreenShare: boolean;
+  isMuteVideo: boolean;
+  presenter: any;
+  character: string;
+  stream: any;
+  onPressShareStop: () => void;
+}
 
 export interface SplitVideoContainerProps {}
 export interface SplitVideoPresenterProps {}

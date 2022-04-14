@@ -1,4 +1,4 @@
-import { WEHAGO_ENV } from '../../../../config';
+import { WEHAGO_ENV } from '../../../../../config';
 
 const isWehagoV = WEHAGO_ENV === 'WEHAGOV';
 

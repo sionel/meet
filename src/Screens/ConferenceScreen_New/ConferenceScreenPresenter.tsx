@@ -20,8 +20,8 @@ const ConferenceScreenPresenter: React.FC<ConferenceScreenPresenterProps> = ({
 }) => {
   return (
     <SafeAreaProvider>
-      <SafeAreaView style={{ flex: 1, backgroundColor: '#ccc' }}>
-        {isConnected ? (
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#000' }}>
+        {!isConnected ? (
           <Fragment>
             <TopPopup />
             <TopContent />
