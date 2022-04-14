@@ -23,18 +23,28 @@ const BottomPopupPresenter: React.FC<BottomPopupPresenterProps> = ({
   setMyMessage,
   setIsEndScroll,
   setCdm,
-  // Participant
+  // Participants
   isRoomMaster,
   swipeRef,
+  isProfile,
+  isInviteList,
+  userInfo,
   onPressInvite,
   ToggleSpeakerClick,
   onPressProfile,
   onPressMaster,
-  onPressKick
+  onPressKick,
+  setIsProfile,
+  // InviteList,
+  onClickEmail,
+  onClickSms,
+  onClickShare,
+  onClickLink,
+  onClickCode
 }) => {
   return (
     <Fragment>
-      <MenuList
+      {/* <MenuList
         insets={insets}
         isMaster={isMaster}
         onPressSketch={onPressSketch}
@@ -52,16 +62,26 @@ const BottomPopupPresenter: React.FC<BottomPopupPresenterProps> = ({
         setIsEndScroll={setIsEndScroll}
         setCdm={setCdm}
         getUserName={getUserName}
-      />
+      /> */}
       <Participant
         insets={insets}
         isRoomMaster={isRoomMaster}
+        isProfile={isProfile}
+        isInviteList={isInviteList}
         swipeRef={swipeRef}
+        userInfo={userInfo}
         onPressInvite={onPressInvite}
         ToggleSpeakerClick={ToggleSpeakerClick}
         onPressProfile={onPressProfile}
         onPressMaster={onPressMaster}
         onPressKick={onPressKick}
+        setIsProfile={setIsProfile}
+        //InviteList
+        onClickEmail={onClickEmail}
+        onClickSms={onClickSms}
+        onClickShare={onClickShare}
+        onClickLink={onClickLink}
+        onClickCode={onClickCode}
       />
     </Fragment>
   );

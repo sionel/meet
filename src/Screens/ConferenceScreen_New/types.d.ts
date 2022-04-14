@@ -37,6 +37,7 @@ export interface SplitVideoContainerProps {}
 export interface SplitVideoPresenterProps {}
 
 export interface BottomPopupContainerProps {
+  roomId: string;
   handleSpeaker: () => void;
 }
 export interface BottomPopupPresenterProps
@@ -76,13 +77,30 @@ export interface ChattingProps {
   cdm: boolean;
   keyboardShow: boolean;
 }
-export interface ParticipantsProps {
+export interface ParticipantsProps extends InviteListProps {
+  setIsProfile: any;
   ToggleSpeakerClick: () => void;
-  onPressProfile: () => void;
+  onPressProfile: (user: any) => void;
   onPressMaster: () => void;
   onPressKick: () => void;
   onPressInvite: () => void;
+  userInfo: any;
   isRoomMaster: boolean;
+  isProfile: boolean;
+  isInviteList: boolean;
   swipeRef: MutableRefObject<any>;
   insets: EdgeInsets;
+}
+
+export interface ProfileProps {
+  user: any;
+}
+
+export interface InviteListProps {
+  insets: EdgeInsets;
+  onClickEmail: () => void;
+  onClickSms: () => void;
+  onClickShare: () => void;
+  onClickLink: () => void;
+  onClickCode: () => void;
 }
