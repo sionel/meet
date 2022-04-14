@@ -13,21 +13,20 @@ import icChatW from '@assets/icons/ic_chat_w.png';
 import icReverseW from '@assets/icons/ic_change_w2.png';
 import icInvertW from '@assets/icons/ic_invert_w.png';
 import icMoreW from '@assets/icons/ic_more_w.png';
+import icMaster from '@assets/icons/ic_master.png';
 
 //시간, 방제목, 상단 버튼
-const TopContentPresenter: React.FC<TopContentPresenterProps> = (
-  props: TopContentPresenterProps
-) => {
-  const {
-    UserListClick,
-    ChattingClick,
-    ReverseCamaraClick,
-    DisplayInvertClick,
-    MoreClick
-  } = props;
-
+const TopContentPresenter: React.FC<TopContentPresenterProps> = ({
+  insets,
+  isMaster,
+  UserListClick,
+  ChattingClick,
+  ReverseCamaraClick,
+  DisplayInvertClick,
+  MoreClick
+}) => {
   return (
-    <View style={styles.topContainer}>
+    <View style={[styles.topContainer, { top: insets.top }]}>
       <View style={styles.topRow}>
         <Text style={styles.topRowText}>{`01:20`}</Text>
         <Text style={styles.topRowText}>{`기획팀 주간회의`}</Text>
@@ -69,6 +68,16 @@ const TopContentPresenter: React.FC<TopContentPresenterProps> = (
           </TouchableHighlight>
         </View>
       </View>
+      <View style={[styles.mainUserNameView, isMaster && { paddingLeft: 12 }]}>
+        {isMaster && (
+          <Image
+            source={icMaster}
+            resizeMode={'cover'}
+            style={styles.MasterIcon}
+          />
+        )}
+        <Text style={styles.name}>{`김연길`}</Text>
+      </View>
     </View>
   );
 };
@@ -78,18 +87,15 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
-    top: 48,
     zIndex: 1,
-    elevation: 1,
-    backgroundColor: 'blue'
+    elevation: 1
   },
   topRow: {
     justifyContent: 'space-between',
     alignItems: 'center',
     flexDirection: 'row',
     marginHorizontal: 20,
-    height: 48,
-    backgroundColor: 'yellow'
+    height: 48
   },
   topRowText: {
     fontFamily: 'DOUZONEText50',
@@ -101,6 +107,21 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     height: 24
+  },
+  mainUserNameView: {
+    flexDirection: 'row',
+    marginTop: 10,
+    paddingHorizontal: 15,
+    height: 32,
+    borderRadius: 4,
+    alignSelf: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.2)'
+  },
+  name: {
+    color: '#fff',
+    fontFamily: 'DOUZONEText30',
+    fontSize: 16
   },
   UserIcon: {
     width: 24,
@@ -125,6 +146,11 @@ const styles = StyleSheet.create({
   MoreIcon: {
     width: 24,
     height: 24
+  },
+  MasterIcon: {
+    width: 18,
+    height: 18,
+    marginRight: 4
   }
 });
 

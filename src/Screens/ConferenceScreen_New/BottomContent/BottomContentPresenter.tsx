@@ -21,13 +21,14 @@ import deviceInfoModule from 'react-native-device-info';
 const isTablet = deviceInfoModule.isTablet();
 
 const BottomContentPresenter: React.FC<BottomContentPresenterProps> = ({
+  insets,
   ToggleSpeakerClick,
   ToggleMikeClick,
   ToggleVideoClick,
   EndCallClick
 }) => {
   return (
-    <View style={styles.bottomArea}>
+    <View style={[styles.bottomArea, {bottom: insets.bottom + 14}]}>
       <View style={{ flexDirection: 'row', marginTop: 24 }}>
         {/* 스피커 */}
         {!isTablet && (
@@ -99,8 +100,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
     elevation: 1,
     left: 0,
-    right: 0,
-    bottom: 48
+    right: 0
   },
 
   bottonTouch: {

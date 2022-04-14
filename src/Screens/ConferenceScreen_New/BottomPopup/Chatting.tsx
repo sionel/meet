@@ -10,11 +10,11 @@ import {
   Platform,
   StyleSheet
 } from 'react-native';
-import React from 'react';
-import { ChattingProps } from '../types';
+ import React from 'react';
+ import { ChattingProps } from '../types';
 import { getT } from '@utils/translateManager';
 import { wehagoMainURL, wehagoDummyImageURL } from '@utils/index';
-
+ 
 import icTrans from '@assets/icons/ic_translator.png';
 import icSend from '@assets/icons/ic_send.png';
 import icSendW from '@assets/icons/ic_send_w.png';
@@ -98,7 +98,7 @@ const Chatting: React.FC<ChattingProps> = ({
       userInfo: { profile_url: '', userName: 'rladusrlf1' }
     }
   ];
-  return (
+   return (
     <KeyboardAvoidingView
       style={[styles.container, isPad && { width: true ? '36%' : '49%' }]}
       behavior={OS === 'ios' ? 'padding' : 'height'}
@@ -122,7 +122,7 @@ const Chatting: React.FC<ChattingProps> = ({
               nativeEvent.layoutMeasurement.height; // 자식의 단일 component 높이
             const contentSizeHeight = nativeEvent.contentSize.height; // 전체 component 높이
             const isOverScroll =
-              contentOffsetY + layoutMeasurementHeight + 2 > contentSizeHeight; // + 2 은 오차계산
+              contentOffsetY + layoutMeasurementHeight + 2 > contentSizeHeight; //  2 은 오차계산
             setIsEndScroll(isOverScroll);
           }
         }}
@@ -226,8 +226,8 @@ const Chatting: React.FC<ChattingProps> = ({
         </View>
       )}
     </KeyboardAvoidingView>
-  );
-};
+   );
+ };
 
 const styles = StyleSheet.create({
   none: {
@@ -315,4 +315,4 @@ const styles = StyleSheet.create({
   },
   sendImage: { width: 15, height: 15 }
 });
-export default Chatting;
+ export default Chatting;

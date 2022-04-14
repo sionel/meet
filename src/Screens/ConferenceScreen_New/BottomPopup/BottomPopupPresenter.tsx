@@ -52,6 +52,7 @@ const BottomPopupPresenter: React.FC<BottomPopupPresenterProps> = ({
         onPressRequestMic={onPressRequestMic}
         onPressScreenShare={onPressScreenShare}
       />
+      */}
       <Chatting
         myMessage={myMessage}
         cdm={cdm}
@@ -62,8 +63,8 @@ const BottomPopupPresenter: React.FC<BottomPopupPresenterProps> = ({
         setIsEndScroll={setIsEndScroll}
         setCdm={setCdm}
         getUserName={getUserName}
-      /> */}
-      <Participant
+      /> 
+      {/* <Participant
         insets={insets}
         isRoomMaster={isRoomMaster}
         isProfile={isProfile}
@@ -82,7 +83,7 @@ const BottomPopupPresenter: React.FC<BottomPopupPresenterProps> = ({
         onClickShare={onClickShare}
         onClickLink={onClickLink}
         onClickCode={onClickCode}
-      />
+      /> */}
     </Fragment>
   );
 };

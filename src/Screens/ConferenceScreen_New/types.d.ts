@@ -35,6 +35,8 @@ export interface ToastMessageProps {
 
 export interface TopContentContainerProps {}
 export interface TopContentPresenterProps {
+  insets: EdgeInsets;
+  isMaster: boolean;
   UserListClick: () => void;
   ChattingClick: () => void;
   ReverseCamaraClick: () => void;
@@ -71,6 +73,7 @@ export interface BottomContentContainerProps {
   handleCloseConf: () => void;
 }
 export interface BottomContentPresenterProps {
+  insets: EdgeInsets;
   ToggleSpeakerClick: () => void;
   ToggleMikeClick: () => void;
   ToggleVideoClick: () => void;
