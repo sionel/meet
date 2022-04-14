@@ -38,7 +38,14 @@ const ConferenceScreenContainer: React.FC<
   };
 
   const _handleClose = () => {}
-  return ( <ConferenceScreenPresenter isConnected={isConnected} handleClose={_handleClose} />
+  const _handleSpeaker = () => {}
+  
+  return (
+    <ConferenceScreenPresenter
+      isConnected={isConnected}
+      handleClose={_handleClose}
+      handleSpeaker={_handleSpeaker}
+    />
     // <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
     //   <View style={{ flex: 1, backgroundColor: '#ffa' }}>
     //     <TouchableOpacity

@@ -1,5 +1,9 @@
 import { MeetParamList } from '@navigations/RootNavigation';
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
+import { ParticipantsTypes } from '@redux/participants';
+import { MutableRefObject } from 'react';
+import { NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
+import { EdgeInsets } from 'react-native-safe-area-context';
 
 type ConferenceScreenNavigationProps = StackNavigationProp<
   MeetParamList,
@@ -11,6 +15,7 @@ export interface ConferenceScreenContainerProps
 export interface ConferenceScreenPresenterProps {
   isConnected: boolean;
   handleClose: () => void;
+  handleSpeaker: () => void;
 }
 
 export interface TopPopupContainerProps {}
@@ -31,8 +36,15 @@ export interface MainVideoPresenterProps {}
 export interface SplitVideoContainerProps {}
 export interface SplitVideoPresenterProps {}
 
-export interface BottomPopupContainerProps {}
-export interface BottomPopupPresenterProps extends MenuListProps {}
+export interface BottomPopupContainerProps {
+  handleSpeaker: () => void;
+}
+export interface BottomPopupPresenterProps
+  extends MenuListProps,
+    ChattingProps,
+    ParticipantsProps {
+  getUserName: (uesr: ParticipantsTypes) => string;
+}
 
 export interface BottomContentContainerProps {
   handleCloseConf: () => void;
@@ -45,9 +57,32 @@ export interface BottomContentPresenterProps {
 }
 
 export interface MenuListProps {
+  onPressSketch: () => void;
+  onPressDocumentShare: () => void;
   onPressScreenShare: () => void;
   onPressRequestMic: () => void;
   isMaster: Boolean;
+  insets: EdgeInsets;
 }
 
-export interface ChattingProps {}
+export interface ChattingProps {
+  onPressSend: () => void;
+  setMyMessage: React.Dispatch<React.SetStateAction<string>>;
+  setIsEndScroll: Function;
+  setCdm: React.Dispatch<React.SetStateAction<boolean>>;
+  getUserName: (uesr: ParticipantsTypes) => string;
+  scrollRef: MutableRefObject<any>;
+  myMessage: string;
+  cdm: boolean;
+  keyboardShow: boolean;
+}
+export interface ParticipantsProps {
+  ToggleSpeakerClick: () => void;
+  onPressProfile: () => void;
+  onPressMaster: () => void;
+  onPressKick: () => void;
+  onPressInvite: () => void;
+  isRoomMaster: boolean;
+  swipeRef: MutableRefObject<any>;
+  insets: EdgeInsets;
+}
