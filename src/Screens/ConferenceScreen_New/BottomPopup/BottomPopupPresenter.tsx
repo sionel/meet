@@ -7,6 +7,7 @@ import Participant from './Participants';
 
 const BottomPopupPresenter: React.FC<BottomPopupPresenterProps> = ({
   insets,
+  getUserName,
   // MenuList
   isMaster,
   onPressSketch,
@@ -15,7 +16,13 @@ const BottomPopupPresenter: React.FC<BottomPopupPresenterProps> = ({
   onPressRequestMic,
   // Chatting
   myMessage,
+  cdm,
+  scrollRef,
+  keyboardShow,
   onPressSend,
+  setMyMessage,
+  setIsEndScroll,
+  setCdm,
   // Participant
   isRoomMaster,
   swipeRef,
@@ -27,19 +34,25 @@ const BottomPopupPresenter: React.FC<BottomPopupPresenterProps> = ({
 }) => {
   return (
     <Fragment>
-      {/* <MenuList
+      <MenuList
         insets={insets}
         isMaster={isMaster}
         onPressSketch={onPressSketch}
         onPressDocumentShare={onPressDocumentShare}
         onPressRequestMic={onPressRequestMic}
         onPressScreenShare={onPressScreenShare}
-      /> */}
-      {/* <Chatting
-        insets={insets}
+      />
+      <Chatting
         myMessage={myMessage}
+        cdm={cdm}
+        scrollRef={scrollRef}
+        keyboardShow={keyboardShow}
         onPressSend={onPressSend}
-      /> */}
+        setMyMessage={setMyMessage}
+        setIsEndScroll={setIsEndScroll}
+        setCdm={setCdm}
+        getUserName={getUserName}
+      />
       <Participant
         insets={insets}
         isRoomMaster={isRoomMaster}

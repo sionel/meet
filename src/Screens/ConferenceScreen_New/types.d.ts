@@ -1,6 +1,8 @@
 import { MeetParamList } from '@navigations/RootNavigation';
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
+import { ParticipantsTypes } from '@redux/participants';
 import { MutableRefObject } from 'react';
+import { NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
 import { EdgeInsets } from 'react-native-safe-area-context';
 
 type ConferenceScreenNavigationProps = StackNavigationProp<
@@ -40,7 +42,9 @@ export interface BottomPopupContainerProps {
 export interface BottomPopupPresenterProps
   extends MenuListProps,
     ChattingProps,
-    ParticipantsProps {}
+    ParticipantsProps {
+  getUserName: (uesr: ParticipantsTypes) => string;
+}
 
 export interface BottomContentContainerProps {
   handleCloseConf: () => void;
@@ -63,8 +67,14 @@ export interface MenuListProps {
 
 export interface ChattingProps {
   onPressSend: () => void;
+  setMyMessage: React.Dispatch<React.SetStateAction<string>>;
+  setIsEndScroll: Function;
+  setCdm: React.Dispatch<React.SetStateAction<boolean>>;
+  getUserName: (uesr: ParticipantsTypes) => string;
+  scrollRef: MutableRefObject<any>;
   myMessage: string;
-  insets: EdgeInsets;
+  cdm: boolean;
+  keyboardShow: boolean;
 }
 export interface ParticipantsProps {
   ToggleSpeakerClick: () => void;
