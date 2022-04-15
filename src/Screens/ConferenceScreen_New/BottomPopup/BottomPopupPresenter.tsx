@@ -1,8 +1,9 @@
-import { View, Text } from 'react-native';
+import { View, Text, Platform } from 'react-native';
 import React, { Fragment } from 'react';
 import { BottomPopupPresenterProps } from '../types';
 import MenuList from './MenuList';
-import Chatting from './Chatting';
+import ChattingIOS from './ChattingIOS';
+import ChattingANDROID from './ChattingANDROID';
 import Participant from './Participants';
 
 const BottomPopupPresenter: React.FC<BottomPopupPresenterProps> = ({
@@ -23,6 +24,8 @@ const BottomPopupPresenter: React.FC<BottomPopupPresenterProps> = ({
   setMyMessage,
   setIsEndScroll,
   setCdm,
+  messages,
+  keyboardH,
   // Participants
   isRoomMaster,
   swipeRef,
@@ -53,17 +56,37 @@ const BottomPopupPresenter: React.FC<BottomPopupPresenterProps> = ({
         onPressScreenShare={onPressScreenShare}
       />
       */}
-      <Chatting
-        myMessage={myMessage}
-        cdm={cdm}
-        scrollRef={scrollRef}
-        keyboardShow={keyboardShow}
-        onPressSend={onPressSend}
-        setMyMessage={setMyMessage}
-        setIsEndScroll={setIsEndScroll}
-        setCdm={setCdm}
-        getUserName={getUserName}
-      /> 
+      {Platform.OS === 'ios' ? (
+        <ChattingIOS
+          myMessage={myMessage}
+          insets={insets}
+          cdm={cdm}
+          scrollRef={scrollRef}
+          keyboardShow={keyboardShow}
+          messages={messages}
+          keyboardH={keyboardH}
+          onPressSend={onPressSend}
+          setMyMessage={setMyMessage}
+          setIsEndScroll={setIsEndScroll}
+          setCdm={setCdm}
+          getUserName={getUserName}
+        />
+      ) : (
+        <ChattingANDROID
+          myMessage={myMessage}
+          insets={insets}
+          cdm={cdm}
+          scrollRef={scrollRef}
+          keyboardShow={keyboardShow}
+          messages={messages}
+          keyboardH={keyboardH}
+          onPressSend={onPressSend}
+          setMyMessage={setMyMessage}
+          setIsEndScroll={setIsEndScroll}
+          setCdm={setCdm}
+          getUserName={getUserName}
+        />
+      )}
       {/* <Participant
         insets={insets}
         isRoomMaster={isRoomMaster}

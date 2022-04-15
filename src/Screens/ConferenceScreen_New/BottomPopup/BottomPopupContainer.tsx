@@ -2,7 +2,14 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import { ParticipantsTypes } from '@redux/participants';
 import { MeetApi } from '@services/index';
 import { getT } from '@utils/translateManager';
-import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
+import React, {
+  Key,
+  KeyboardEvent,
+  MutableRefObject,
+  useEffect,
+  useRef,
+  useState
+} from 'react';
 import { Keyboard, Linking, Platform, Share } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BottomPopupContainerProps } from '../types';
@@ -24,10 +31,99 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
   const [cdm, setCdm] = useState(false);
   const [isEndScroll, setIsEndScroll] = useState(true);
   const scrollRef: MutableRefObject<any> = useRef();
+  const [keyboardShow, setKeyboardShow] = useState(false);
+  const [keyboardH, setKeyboardH] = useState(0);
+  const [messages, setMessages] = useState([
+    {
+      text: 'test',
+      user: '123456',
+      userInfo: { profile_url: '', userName: 'rladusrlf' }
+    },
+    {
+      text: 'test1',
+      name: 'rladusrlf1',
+      userInfo: { profile_url: '', userName: 'rladusrlf1' }
+    },
+    {
+      text: 'test2',
+      user: '123456',
+      userInfo: { profile_url: '', userName: 'rladusrlf' }
+    },
+    {
+      text: 'test3',
+      name: 'rladusrlf1',
+      userInfo: { profile_url: '', userName: 'rladusrlf1' }
+    },
+    {
+      text: 'test4',
+      user: '123456',
+      userInfo: { profile_url: '', userName: 'rladusrlf' }
+    },
+    {
+      text: 'test5',
+      name: 'rladusrlf1',
+      userInfo: { profile_url: '', userName: 'rladusrlf1' }
+    },
+    {
+      text: 'test6',
+      user: '123456',
+      userInfo: { profile_url: '', userName: 'rladusrlf' }
+    },
+    {
+      text: 'test7',
+      name: 'rladusrlf1',
+      userInfo: { profile_url: '', userName: 'rladusrlf1' }
+    },
+    {
+      text: 'test4',
+      user: '123456',
+      userInfo: { profile_url: '', userName: 'rladusrlf' }
+    },
+    {
+      text: 'test5',
+      name: 'rladusrlf1',
+      userInfo: { profile_url: '', userName: 'rladusrlf1' }
+    },
+    {
+      text: 'test6',
+      user: '123456',
+      userInfo: { profile_url: '', userName: 'rladusrlf' }
+    },
+    {
+      text: 'test7',
+      name: 'rladusrlf1',
+      userInfo: { profile_url: '', userName: 'rladusrlf1' }
+    },
+    {
+      text: 'test7',
+      name: 'rladusrlf1',
+      userInfo: { profile_url: '', userName: 'rladusrlf1' }
+    },
+    {
+      text: 'test4',
+      user: '123456',
+      userInfo: { profile_url: '', userName: 'rladusrlf' }
+    },
+    {
+      text: 'test5',
+      name: 'rladusrlf1',
+      userInfo: { profile_url: '', userName: 'rladusrlf1' }
+    },
+    {
+      text: 'test6',
+      user: '123456',
+      userInfo: { profile_url: '', userName: 'rladusrlf' }
+    },
+    {
+      text: 'test7',
+      name: 'rladusrlf1',
+      userInfo: { profile_url: '', userName: 'rladusrlf1' }
+    }
+  ]);
+
   // UserList
   const swipeRef: MutableRefObject<any> = React.useRef([]);
   const [isRoomMaster, setIsRoomMaster] = useState(true);
-  const [keyboardShow, setKeyboardShow] = useState(false);
   const [isProfile, setIsProfile] = useState(false);
   const [isInviteList, setIsInviteList] = useState(false);
   const [userInfo, setUserInfo] = useState();
@@ -51,7 +147,21 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
   const handlePressRequestMic = () => {};
 
   // Chat
-  const handlePressSend = () => {};
+  const handlePressSend = () => {
+    let newMsg = messages;
+
+    if (myMessage.length > 0) {
+      newMsg.push({
+        text: myMessage,
+        user: '123456',
+        userInfo: { profile_url: '', userName: 'rladusrlf1' }
+      });
+      setMessages(newMsg);
+      setMyMessage('');
+    } else {
+      return;
+    }
+  };
 
   // UserList
   const handlePressInvite = () => {
@@ -121,21 +231,46 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
   //#endregion Method
 
   useEffect(() => {
-    Keyboard.addListener('keyboardDidShow', () => handdleKeyboardShow());
-    Keyboard.addListener('keyboardDidHide', () => handdleKeyboardHide());
+    let timeout: number | NodeJS.Timeout = setTimeout(() => {});
+
+    if (messages.length > 0) {
+      if (scrollRef) {
+        if (timeout) clearTimeout(timeout);
+        timeout = setTimeout(() => {
+          scrollRef.current.scrollToEnd();
+        }, 0);
+      }
+    } else if (isEndScroll) {
+      if (timeout) clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        scrollRef.current.scrollToEnd();
+      }, 0);
+    }
 
     return () => {
-      Keyboard.removeListener('keyboardDidShow', () => handdleKeyboardShow());
+      typeof timeout === 'number' && clearTimeout(timeout);
+    };
+  }, [cdm, keyboardH]);
+
+  useEffect(() => {
+    Keyboard.addListener('keyboardDidShow', e => handdleKeyboardShow(e));
+    Keyboard.addListener('keyboardDidHide', () => handdleKeyboardHide());
+    return () => {
+      Keyboard.removeListener('keyboardDidShow', e => handdleKeyboardShow(e));
       Keyboard.removeListener('keyboardDidHide', () => handdleKeyboardHide());
     };
   }, []);
 
-  const handdleKeyboardShow = () => {
-    setKeyboardShow(true);
+  useEffect(() => {
+    keyboardH > 1 && scrollRef.current.scrollToEnd();
+  }, [keyboardH])
+
+  const handdleKeyboardShow = (e: any) => {
+    setKeyboardH(e.endCoordinates.width);
   };
 
   const handdleKeyboardHide = () => {
-    setKeyboardShow(false);
+    setKeyboardH(0);
   };
 
   return (
@@ -153,6 +288,8 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
       cdm={cdm}
       scrollRef={scrollRef}
       keyboardShow={keyboardShow}
+      messages={messages}
+      keyboardH={keyboardH}
       onPressSend={handlePressSend}
       setMyMessage={setMyMessage}
       setIsEndScroll={setIsEndScroll}

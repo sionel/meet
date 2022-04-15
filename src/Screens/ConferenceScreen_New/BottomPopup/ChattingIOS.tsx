@@ -10,11 +10,11 @@ import {
   Platform,
   StyleSheet
 } from 'react-native';
- import React from 'react';
- import { ChattingProps } from '../types';
+import React from 'react';
+import { ChattingProps } from '../types';
 import { getT } from '@utils/translateManager';
 import { wehagoMainURL, wehagoDummyImageURL } from '@utils/index';
- 
+
 import icTrans from '@assets/icons/ic_translator.png';
 import icSend from '@assets/icons/ic_send.png';
 import icSendW from '@assets/icons/ic_send_w.png';
@@ -31,80 +31,20 @@ const Chatting: React.FC<ChattingProps> = ({
   cdm,
   myMessage,
   scrollRef,
-  keyboardShow
+  insets,
+  keyboardShow,
+  messages
 }) => {
   const t = getT();
   const { OS } = Platform;
   const user = { cid: '123456' };
-  const messages = [
-    {
-      text: 'test',
-      user: '123456',
-      userInfo: { profile_url: '', userName: 'rladusrlf' }
-    },
-    {
-      text: 'test1',
-      name: 'rladusrlf1',
-      userInfo: { profile_url: '', userName: 'rladusrlf1' }
-    },
-    {
-      text: 'test2',
-      user: '123456',
-      userInfo: { profile_url: '', userName: 'rladusrlf' }
-    },
-    {
-      text: 'test3',
-      name: 'rladusrlf1',
-      userInfo: { profile_url: '', userName: 'rladusrlf1' }
-    },
-    {
-      text: 'test4',
-      user: '123456',
-      userInfo: { profile_url: '', userName: 'rladusrlf' }
-    },
-    {
-      text: 'test5',
-      name: 'rladusrlf1',
-      userInfo: { profile_url: '', userName: 'rladusrlf1' }
-    },
-    {
-      text: 'test6',
-      user: '123456',
-      userInfo: { profile_url: '', userName: 'rladusrlf' }
-    },
-    {
-      text: 'test7',
-      name: 'rladusrlf1',
-      userInfo: { profile_url: '', userName: 'rladusrlf1' }
-    },
-    {
-      text: 'test4',
-      user: '123456',
-      userInfo: { profile_url: '', userName: 'rladusrlf' }
-    },
-    {
-      text: 'test5',
-      name: 'rladusrlf1',
-      userInfo: { profile_url: '', userName: 'rladusrlf1' }
-    },
-    {
-      text: 'test6',
-      user: '123456',
-      userInfo: { profile_url: '', userName: 'rladusrlf' }
-    },
-    {
-      text: 'test7',
-      name: 'rladusrlf1',
-      userInfo: { profile_url: '', userName: 'rladusrlf1' }
-    }
-  ];
-   return (
+
+  return (
     <KeyboardAvoidingView
       style={[styles.container, isPad && { width: true ? '36%' : '49%' }]}
-      behavior={OS === 'ios' ? 'padding' : 'height'}
+      behavior={'padding'}
       enabled={true}
     >
-      <View style={{ flex: 0.23 }} />
       <ScrollView
         ref={el => (scrollRef.current = el)}
         showsVerticalScrollIndicator={false}
@@ -114,10 +54,7 @@ const Chatting: React.FC<ChattingProps> = ({
         onScrollBeginDrag={setIsEndScroll(false)}
         onScrollEndDrag={({ nativeEvent }) => {
           if (nativeEvent.targetContentOffset) {
-            const contentOffsetY =
-              OS === 'ios'
-                ? nativeEvent.targetContentOffset.y
-                : nativeEvent.contentOffset.y; // 현재 스크롤 좌표
+            const contentOffsetY = nativeEvent.targetContentOffset.y; // 현재 스크롤 좌표
             const layoutMeasurementHeight =
               nativeEvent.layoutMeasurement.height; // 자식의 단일 component 높이
             const contentSizeHeight = nativeEvent.contentSize.height; // 전체 component 높이
@@ -127,15 +64,9 @@ const Chatting: React.FC<ChattingProps> = ({
           }
         }}
       >
-        {messages.length === 0 && (
-          <View style={{ flex: 1, alignItems: 'center', paddingBottom: 30 }}>
-            <Text style={{ color: '#fff', fontFamily: 'DOUZONEText30' }}>
-              {t('chatting_nochat')}
-            </Text>
-          </View>
-        )}
         <FlatList
           bounces={false}
+          onContentSizeChange={() => scrollRef.current.scrollToEnd()}
           data={messages}
           keyExtractor={(item, index) => String(index)}
           renderItem={({ item, index }) => {
@@ -198,14 +129,7 @@ const Chatting: React.FC<ChattingProps> = ({
           <TouchableOpacity
             style={[
               styles.sendImageContainer,
-              OS === 'android' && {
-                backgroundColor:
-                  myMessage.substring(0, 1) === '' ||
-                  (myMessage.length === 1 && myMessage.substring(0, 2) === ' ')
-                    ? 'rgba(255,255,255,0.3)'
-                    : '#1c90fb'
-              },
-              OS === 'ios' && {
+              {
                 backgroundColor:
                   myMessage.length > 0 ? '#1c90fb' : 'rgba(255,255,255,0.3)'
               }
@@ -220,22 +144,17 @@ const Chatting: React.FC<ChattingProps> = ({
           </TouchableOpacity>
         </View>
       </View>
-      {OS === 'android' && keyboardShow && (
-        <View>
-          <TextInput style={styles.none} value={myMessage} caretHidden={true} />
-        </View>
-      )}
     </KeyboardAvoidingView>
-   );
- };
+  );
+};
 
 const styles = StyleSheet.create({
-  none: {
-    fontSize: 1
-  },
   container: {
     flex: 1,
-    paddingHorizontal: 16
+    paddingHorizontal: 16,
+    marginTop: 90,
+    justifyContent: 'center',
+    alignContent: 'center'
   },
   chatContainer: {
     alignItems: 'flex-start',
@@ -315,4 +234,4 @@ const styles = StyleSheet.create({
   },
   sendImage: { width: 15, height: 15 }
 });
- export default Chatting;
+export default Chatting;
