@@ -32,8 +32,8 @@ const ConferenceScreenContainer: React.FC<
 
 
   const _connectConference = () => {
-    const conference = new Conference();
-    conference.join({ id: '', token: '' }, auth, dispatch);
+    // const conference = new Conference();
+    // conference.join({ id: '', token: '' }, auth, dispatch);
     // conferenceManager = new ConferenceManager(dispatch)
   };
 
