@@ -13,6 +13,9 @@ import thunk from 'redux-thunk';
 import local, { state as LocalState } from '@redux/local';
 import mainUser, { state as MainUserState } from '@redux/mainUser';
 import participants, { state as ParticipantsState } from '@redux/participants';
+import participants_copy, {
+  InitialState as ParticipantsState_copy
+} from '@redux/participants_copy';
 import user, { state as UserState } from '@redux/user';
 import wetalk, { state as WetalkState } from '@redux/wetalk';
 import wedrive, { state as WedriveState } from '@redux/wedrive';
@@ -50,6 +53,7 @@ export interface RootState {
   user: UserState;
   mainUser: MainUserState;
   participants: ParticipantsState;
+  participants_copy: ParticipantsState_copy;
   wetalk: WetalkState;
   wedrive: WedriveState;
   documentShare: DocumentShareState;
@@ -81,6 +85,7 @@ const persistConfig = {
     'local',
     'mainUser',
     'participants',
+    'participants_copy',
     'wetalk',
     'wedrive',
     'documentShare',
@@ -104,6 +109,7 @@ const reducer = persistCombineReducers(persistConfig, {
   local,
   mainUser,
   participants,
+  participants_copy,
   user,
   wetalk,
   wedrive,

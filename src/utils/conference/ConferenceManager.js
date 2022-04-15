@@ -76,7 +76,7 @@ class ConferenceManager {
     this._connection = new Connection();
     // 대화방 연결을 위한 ConferenceConnector
     this._conferenceConnector = new ConferenceConnector(this._createHandlers());
-    // connection 연결
+    // connection 연결1
     await this._connection.connect(roomName.toLowerCase(), token);
     // 대화방 참가
     this._room = await this._conferenceConnector.connect(

@@ -54,6 +54,7 @@ const BottomAreaContainer = (props: BottomAreaProps) => {
   } = useSelector((state: RootState) => {
     const { local, screenShare, master, mainUser, participants, orientation, user } =
       state;
+    debugger
     return {
       conferenceMode: local.conferenceMode,
       isMuteMic: local.user.isMuteMic,

@@ -402,7 +402,7 @@ export default {
       })
     };
 
-    const response = await Axios(url, data);
+    const response = await Axios<string>(url, data);
     if (isSuccess(response)) {
       return response;
     } else {
