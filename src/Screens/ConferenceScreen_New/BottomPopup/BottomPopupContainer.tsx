@@ -2,26 +2,18 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import { ParticipantsTypes } from '@redux/participants';
 import { MeetApi } from '@services/index';
 import { getT } from '@utils/translateManager';
-import React, {
-  Key,
-  KeyboardEvent,
-  MutableRefObject,
-  useEffect,
-  useRef,
-  useState
-} from 'react';
+import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { Keyboard, Linking, Platform, Share } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BottomPopupContainerProps } from '../types';
 import BottomPopupPresenter from './BottomPopupPresenter';
 import InviteList from './InviteList';
 
 const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
   roomId,
+  insets,
   handleSpeaker
 }) => {
   const t = getT();
-  const insets = useSafeAreaInsets();
   const { OS } = Platform;
   //#region UseState
   // MenuList
@@ -31,94 +23,99 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
   const [cdm, setCdm] = useState(false);
   const [isEndScroll, setIsEndScroll] = useState(true);
   const scrollRef: MutableRefObject<any> = useRef();
-  const [keyboardShow, setKeyboardShow] = useState(false);
   const [keyboardH, setKeyboardH] = useState(0);
-  const [messages, setMessages] = useState([
+  const [messages, setMessages] = useState<
     {
-      text: 'test',
-      user: '123456',
-      userInfo: { profile_url: '', userName: 'rladusrlf' }
-    },
-    {
-      text: 'test1',
-      name: 'rladusrlf1',
-      userInfo: { profile_url: '', userName: 'rladusrlf1' }
-    },
-    {
-      text: 'test2',
-      user: '123456',
-      userInfo: { profile_url: '', userName: 'rladusrlf' }
-    },
-    {
-      text: 'test3',
-      name: 'rladusrlf1',
-      userInfo: { profile_url: '', userName: 'rladusrlf1' }
-    },
-    {
-      text: 'test4',
-      user: '123456',
-      userInfo: { profile_url: '', userName: 'rladusrlf' }
-    },
-    {
-      text: 'test5',
-      name: 'rladusrlf1',
-      userInfo: { profile_url: '', userName: 'rladusrlf1' }
-    },
-    {
-      text: 'test6',
-      user: '123456',
-      userInfo: { profile_url: '', userName: 'rladusrlf' }
-    },
-    {
-      text: 'test7',
-      name: 'rladusrlf1',
-      userInfo: { profile_url: '', userName: 'rladusrlf1' }
-    },
-    {
-      text: 'test4',
-      user: '123456',
-      userInfo: { profile_url: '', userName: 'rladusrlf' }
-    },
-    {
-      text: 'test5',
-      name: 'rladusrlf1',
-      userInfo: { profile_url: '', userName: 'rladusrlf1' }
-    },
-    {
-      text: 'test6',
-      user: '123456',
-      userInfo: { profile_url: '', userName: 'rladusrlf' }
-    },
-    {
-      text: 'test7',
-      name: 'rladusrlf1',
-      userInfo: { profile_url: '', userName: 'rladusrlf1' }
-    },
-    {
-      text: 'test7',
-      name: 'rladusrlf1',
-      userInfo: { profile_url: '', userName: 'rladusrlf1' }
-    },
-    {
-      text: 'test4',
-      user: '123456',
-      userInfo: { profile_url: '', userName: 'rladusrlf' }
-    },
-    {
-      text: 'test5',
-      name: 'rladusrlf1',
-      userInfo: { profile_url: '', userName: 'rladusrlf1' }
-    },
-    {
-      text: 'test6',
-      user: '123456',
-      userInfo: { profile_url: '', userName: 'rladusrlf' }
-    },
-    {
-      text: 'test7',
-      name: 'rladusrlf1',
-      userInfo: { profile_url: '', userName: 'rladusrlf1' }
-    }
+      text: string;
+      user: string;
+      userInfo: { profile_url: string; userName: string };
+    }[]
+  >([
+    // {
+    //   text: 'test',
+    //   user: '123456',
+    //   userInfo: { profile_url: '', userName: 'rladusrlf' }
+    // },
+    // {
+    //   text: 'test1',
+    //   name: 'rladusrlf1',
+    //   userInfo: { profile_url: '', userName: 'rladusrlf1' }
+    // },
+    // {
+    //   text: 'test2',
+    //   user: '123456',
+    //   userInfo: { profile_url: '', userName: 'rladusrlf' }
+    // },
+    // {
+    //   text: 'test3',
+    //   name: 'rladusrlf1',
+    //   userInfo: { profile_url: '', userName: 'rladusrlf1' }
+    // },
+    // {
+    //   text: 'test4',
+    //   user: '123456',
+    //   userInfo: { profile_url: '', userName: 'rladusrlf' }
+    // },
+    // {
+    //   text: 'test5',
+    //   name: 'rladusrlf1',
+    //   userInfo: { profile_url: '', userName: 'rladusrlf1' }
+    // },
+    // {
+    //   text: 'test6',
+    //   user: '123456',
+    //   userInfo: { profile_url: '', userName: 'rladusrlf' }
+    // },
+    // {
+    //   text: 'test7',
+    //   name: 'rladusrlf1',
+    //   userInfo: { profile_url: '', userName: 'rladusrlf1' }
+    // },
+    // {
+    //   text: 'test4',
+    //   user: '123456',
+    //   userInfo: { profile_url: '', userName: 'rladusrlf' }
+    // },
+    // {
+    //   text: 'test5',
+    //   name: 'rladusrlf1',
+    //   userInfo: { profile_url: '', userName: 'rladusrlf1' }
+    // },
+    // {
+    //   text: 'test6',
+    //   user: '123456',
+    //   userInfo: { profile_url: '', userName: 'rladusrlf' }
+    // },
+    // {
+    //   text: 'test7',
+    //   name: 'rladusrlf1',
+    //   userInfo: { profile_url: '', userName: 'rladusrlf1' }
+    // },
+    // {
+    //   text: 'test7',
+    //   name: 'rladusrlf1',
+    //   userInfo: { profile_url: '', userName: 'rladusrlf1' }
+    // },
+    // {
+    //   text: 'test4',
+    //   user: '123456',
+    //   userInfo: { profile_url: '', userName: 'rladusrlf' }
+    // },
+    // {
+    //   text: 'test5',
+    //   name: 'rladusrlf1',
+    //   userInfo: { profile_url: '', userName: 'rladusrlf1' }
+    // },
+    // {
+    //   text: 'test6',
+    //   user: '123456',
+    //   userInfo: { profile_url: '', userName: 'rladusrlf' }
+    // },
+    // {
+    //   text: 'test7',
+    //   name: 'rladusrlf1',
+    //   userInfo: { profile_url: '', userName: 'rladusrlf1' }
+    // }
   ]);
 
   // UserList
@@ -261,10 +258,6 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
     };
   }, []);
 
-  useEffect(() => {
-    keyboardH > 1 && scrollRef.current.scrollToEnd();
-  }, [keyboardH])
-
   const handdleKeyboardShow = (e: any) => {
     setKeyboardH(e.endCoordinates.width);
   };
@@ -287,9 +280,7 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
       myMessage={myMessage}
       cdm={cdm}
       scrollRef={scrollRef}
-      keyboardShow={keyboardShow}
       messages={messages}
-      keyboardH={keyboardH}
       onPressSend={handlePressSend}
       setMyMessage={setMyMessage}
       setIsEndScroll={setIsEndScroll}

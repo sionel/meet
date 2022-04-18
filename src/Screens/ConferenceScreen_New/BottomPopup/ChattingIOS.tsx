@@ -32,7 +32,6 @@ const Chatting: React.FC<ChattingProps> = ({
   myMessage,
   scrollRef,
   insets,
-  keyboardShow,
   messages
 }) => {
   const t = getT();
@@ -41,7 +40,11 @@ const Chatting: React.FC<ChattingProps> = ({
 
   return (
     <KeyboardAvoidingView
-      style={[styles.container, isPad && { width: true ? '36%' : '49%' }]}
+      style={[
+        styles.container,
+        { top: insets.top + 120, bottom: insets.bottom },
+        isPad && { width: true ? '36%' : '49%' }
+      ]}
       behavior={'padding'}
       enabled={true}
     >
@@ -66,8 +69,8 @@ const Chatting: React.FC<ChattingProps> = ({
       >
         <FlatList
           bounces={false}
-          onContentSizeChange={() => scrollRef.current.scrollToEnd()}
           data={messages}
+          onContentSizeChange={() => scrollRef.current.scrollToEnd()}
           keyExtractor={(item, index) => String(index)}
           renderItem={({ item, index }) => {
             if (!cdm && index === messages.length - 1) {
@@ -122,9 +125,6 @@ const Chatting: React.FC<ChattingProps> = ({
             autoCapitalize="none"
             style={styles.chatInput}
             onChangeText={text => setMyMessage(text)}
-            onFocus={() => {
-              OS === 'android' && setMyMessage(' ');
-            }}
           />
           <TouchableOpacity
             style={[
@@ -150,11 +150,9 @@ const Chatting: React.FC<ChattingProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    paddingHorizontal: 16,
-    marginTop: 90,
-    justifyContent: 'center',
-    alignContent: 'center'
+    position: 'absolute',
+    left: 16,
+    right: 16
   },
   chatContainer: {
     alignItems: 'flex-start',

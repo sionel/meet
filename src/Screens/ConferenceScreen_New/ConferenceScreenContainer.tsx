@@ -7,6 +7,7 @@ import { RootState } from 'src/redux/configureStore';
 // import ConferenceManager from './conferenceUtil/ConferenceManager';
 import test from './conferenceUtil/test';
 import Conference from './conferenceUtil/Conference';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const ConferenceScreenContainer: React.FC<
   ConferenceScreenContainerProps
@@ -41,11 +42,13 @@ const ConferenceScreenContainer: React.FC<
   const _handleSpeaker = () => {}
   
   return (
-    <ConferenceScreenPresenter
-      isConnected={isConnected}
-      handleClose={_handleClose}
-      handleSpeaker={_handleSpeaker}
-    />
+    <SafeAreaProvider>
+      <ConferenceScreenPresenter
+        isConnected={isConnected}
+        handleClose={_handleClose}
+        handleSpeaker={_handleSpeaker}
+      />
+    </SafeAreaProvider>
     // <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
     //   <View style={{ flex: 1, backgroundColor: '#ffa' }}>
     //     <TouchableOpacity

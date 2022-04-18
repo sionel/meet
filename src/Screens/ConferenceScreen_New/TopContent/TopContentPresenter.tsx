@@ -31,35 +31,35 @@ const TopContentPresenter: React.FC<TopContentPresenterProps> = ({
         <Text style={styles.topRowText}>{`01:20`}</Text>
         <Text style={styles.topRowText}>{`기획팀 주간회의`}</Text>
         <View style={styles.topButtonContainer}>
-          <TouchableHighlight onPress={UserListClick}>
+          <TouchableHighlight underlayColor={'rgba(0,0,0,0)'} onPress={UserListClick}>
             <Image
               source={icUserW}
               resizeMode={'cover'}
               style={styles.UserIcon}
             />
           </TouchableHighlight>
-          <TouchableHighlight onPress={ChattingClick}>
+          <TouchableHighlight underlayColor={'rgba(0,0,0,0)'} onPress={ChattingClick}>
             <Image
               source={icChatW}
               resizeMode={'cover'}
               style={styles.ChatIcon}
             />
           </TouchableHighlight>
-          <TouchableHighlight onPress={ReverseCamaraClick}>
+          <TouchableHighlight underlayColor={'rgba(0,0,0,0)'} onPress={ReverseCamaraClick}>
             <Image
               source={icReverseW}
               resizeMode={'cover'}
               style={styles.ReverseIcon}
             />
           </TouchableHighlight>
-          <TouchableHighlight onPress={DisplayInvertClick}>
+          <TouchableHighlight underlayColor={'rgba(0,0,0,0)'} onPress={DisplayInvertClick}>
             <Image
               source={icInvertW}
               resizeMode={'cover'}
               style={styles.InvertIcon}
             />
           </TouchableHighlight>
-          <TouchableHighlight onPress={MoreClick}>
+          <TouchableHighlight underlayColor={'rgba(0,0,0,0)'} onPress={MoreClick}>
             <Image
               source={icMoreW}
               resizeMode={'cover'}

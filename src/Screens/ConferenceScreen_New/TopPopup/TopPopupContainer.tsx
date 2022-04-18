@@ -1,12 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import TopPopupPresenter from './TopPopupPresenter';
 import { TopPopupContainerProps } from '../types';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Animated } from 'react-native';
 
-const TopPopupContainer: React.FC<TopPopupContainerProps> = ({}) => {
-  const insets = useSafeAreaInsets();
-
+const TopPopupContainer: React.FC<TopPopupContainerProps> = ({ insets }) => {
   const [isFirst, setIsFirst] = useState(true);
   const [fadeout, setFadeout] = useState<any>(null);
 
@@ -75,6 +72,13 @@ const TopPopupContainer: React.FC<TopPopupContainerProps> = ({}) => {
   }, []);
 
   const fadeAnimation = useRef(new Animated.Value(0)).current;
-  return <TopPopupPresenter userList={[]} insets={insets} message={message} fadeAnimation={fadeAnimation} />;
+  return (
+    <TopPopupPresenter
+      userList={[]}
+      insets={insets}
+      message={message}
+      fadeAnimation={fadeAnimation}
+    />
+  );
 };
 export default TopPopupContainer;

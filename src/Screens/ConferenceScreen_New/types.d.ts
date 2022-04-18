@@ -2,7 +2,11 @@ import { MeetParamList } from '@navigations/RootNavigation';
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import { ParticipantsTypes } from '@redux/participants';
 import { MutableRefObject } from 'react';
-import { Animated, NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
+import {
+  Animated,
+  NativeScrollEvent,
+  NativeSyntheticEvent
+} from 'react-native';
 import { EdgeInsets } from 'react-native-safe-area-context';
 
 type ConferenceScreenNavigationProps = StackNavigationProp<
@@ -18,7 +22,9 @@ export interface ConferenceScreenPresenterProps {
   handleSpeaker: () => void;
 }
 
-export interface TopPopupContainerProps {}
+export interface TopPopupContainerProps {
+  insets: EdgeInsets;
+}
 export interface TopPopupPresenterProps
   extends RequestMessagesProps,
     ToastMessageProps {}
@@ -30,10 +36,12 @@ export interface RequestMessagesProps {
 export interface ToastMessageProps {
   insets: EdgeInsets;
   message: string | undefined;
-  fadeAnimation: Animated.Value
+  fadeAnimation: Animated.Value;
 }
 
-export interface TopContentContainerProps {}
+export interface TopContentContainerProps {
+  insets: EdgeInsets;
+}
 export interface TopContentPresenterProps {
   insets: EdgeInsets;
   isMaster: boolean;
@@ -44,7 +52,9 @@ export interface TopContentPresenterProps {
   MoreClick: () => void;
 }
 
-export interface MainVideoContainerProps {}
+export interface MainVideoContainerProps {
+  insets: EdgeInsets;
+}
 export interface MainVideoPresenterProps {
   insets: EdgeInsets;
   isScreenShare: boolean;
@@ -59,6 +69,7 @@ export interface SplitVideoContainerProps {}
 export interface SplitVideoPresenterProps {}
 
 export interface BottomPopupContainerProps {
+  insets: EdgeInsets;
   roomId: string;
   handleSpeaker: () => void;
 }
@@ -66,10 +77,12 @@ export interface BottomPopupPresenterProps
   extends MenuListProps,
     ChattingProps,
     ParticipantsProps {
+  insets: EdgeInsets;
   getUserName: (uesr: ParticipantsTypes) => string;
 }
 
 export interface BottomContentContainerProps {
+  insets: EdgeInsets;
   handleCloseConf: () => void;
 }
 export interface BottomContentPresenterProps {
@@ -98,7 +111,8 @@ export interface ChattingProps {
   scrollRef: MutableRefObject<any>;
   myMessage: string;
   cdm: boolean;
-  keyboardShow: boolean;
+  insets: EdgeInsets;
+  messages: any[];
 }
 export interface ParticipantsProps extends InviteListProps {
   setIsProfile: any;

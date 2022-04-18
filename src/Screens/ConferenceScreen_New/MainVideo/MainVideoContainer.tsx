@@ -1,24 +1,21 @@
-import { View, Text } from 'react-native';
 import React, { useState } from 'react';
 import MainVideoPresenter from './MainVideoPresenter';
 import { MainVideoContainerProps } from '../types';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-const MainVideoContainer: React.FC<MainVideoContainerProps> = () => {
-  const [isScreenShare, setIsScreenShare] = useState(true);
-  const insets = useSafeAreaInsets();
+const MainVideoContainer: React.FC<MainVideoContainerProps> = ({ insets }) => {
+  const [isScreenShare, setIsScreenShare] = useState(false);
   const onPressShareStop = () => {
     setIsScreenShare(false);
-  }
+  };
 
   return (
     <MainVideoPresenter
+      insets={insets}
       character={'jessie'}
       presenter={false}
       isScreenShare={isScreenShare}
       isMuteVideo={true}
       stream={false}
-      insets={insets}
       onPressShareStop={onPressShareStop}
     />
   );

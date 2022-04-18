@@ -19,13 +19,11 @@ const BottomPopupPresenter: React.FC<BottomPopupPresenterProps> = ({
   myMessage,
   cdm,
   scrollRef,
-  keyboardShow,
   onPressSend,
   setMyMessage,
   setIsEndScroll,
   setCdm,
   messages,
-  keyboardH,
   // Participants
   isRoomMaster,
   swipeRef,
@@ -62,9 +60,7 @@ const BottomPopupPresenter: React.FC<BottomPopupPresenterProps> = ({
           insets={insets}
           cdm={cdm}
           scrollRef={scrollRef}
-          keyboardShow={keyboardShow}
           messages={messages}
-          keyboardH={keyboardH}
           onPressSend={onPressSend}
           setMyMessage={setMyMessage}
           setIsEndScroll={setIsEndScroll}
@@ -77,9 +73,7 @@ const BottomPopupPresenter: React.FC<BottomPopupPresenterProps> = ({
           insets={insets}
           cdm={cdm}
           scrollRef={scrollRef}
-          keyboardShow={keyboardShow}
           messages={messages}
-          keyboardH={keyboardH}
           onPressSend={onPressSend}
           setMyMessage={setMyMessage}
           setIsEndScroll={setIsEndScroll}

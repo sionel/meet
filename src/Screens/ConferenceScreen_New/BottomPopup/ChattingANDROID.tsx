@@ -8,7 +8,8 @@ import {
   TextInput,
   Image,
   Platform,
-  StyleSheet
+  StyleSheet,
+  SafeAreaView
 } from 'react-native';
 import React from 'react';
 import { ChattingProps } from '../types';
@@ -34,12 +35,8 @@ const Chatting: React.FC<ChattingProps> = ({
   myMessage,
   scrollRef,
   insets,
-  keyboardShow,
-  messages,
-  keyboardH
+  messages
 }) => {
-  console.log('keyboardH : ', keyboardH);
-
   const t = getT();
   const { OS } = Platform;
   const user = { cid: '123456' };
@@ -47,8 +44,8 @@ const Chatting: React.FC<ChattingProps> = ({
     <View
       style={[
         styles.container,
-        { height: keyboardH < 1 ? height - 90 : 400 },
-        keyboardH > 0 && { maxHeight: keyboardH + 1 }
+        { top: insets.top + 120 },
+        isPad && { width: true ? '36%' : '49%' }
       ]}
     >
       <ScrollView
@@ -56,7 +53,6 @@ const Chatting: React.FC<ChattingProps> = ({
         showsVerticalScrollIndicator={false}
         scrollEnabled={true}
         style={{ flex: 1 }}
-        contentContainerStyle={{ flexGrow: 1 }}
         onScrollBeginDrag={setIsEndScroll(false)}
         onScrollEndDrag={({ nativeEvent }) => {
           if (nativeEvent.targetContentOffset) {
@@ -71,8 +67,7 @@ const Chatting: React.FC<ChattingProps> = ({
         }}
       >
         <FlatList
-          // bounces={false}
-          ref={el => (scrollRef.current = el)}
+          bounces={false}
           data={messages}
           onContentSizeChange={() => scrollRef.current.scrollToEnd()}
           showsVerticalScrollIndicator={false}
@@ -126,24 +121,17 @@ const Chatting: React.FC<ChattingProps> = ({
           <TextInput
             multiline={true}
             value={myMessage}
-            selectionColor="#fff"
             autoCapitalize="none"
             style={styles.chatInput}
             onChangeText={text => setMyMessage(text)}
             underlineColorAndroid={'rgba(0,0,0,0)'}
-            onFocus={() => {
-              setMyMessage(' ');
-            }}
           />
           <TouchableOpacity
             style={[
               styles.sendImageContainer,
               {
                 backgroundColor:
-                  myMessage.substring(0, 1) === '' ||
-                  (myMessage.length === 1 && myMessage.substring(0, 2) === ' ')
-                    ? 'rgba(255,255,255,0.3)'
-                    : '#1c90fb'
+                  myMessage.length > 0 ? '#1c90fb' : 'rgba(255,255,255,0.3)'
               }
             ]}
             onPressOut={onPressSend}
@@ -161,12 +149,11 @@ const Chatting: React.FC<ChattingProps> = ({
 };
 
 const styles = StyleSheet.create({
-  none: {
-    fontSize: 1
-  },
   container: {
-    // backgroundColor: '#ccc',
-    marginTop: 90
+    position: 'absolute',
+    left: 16,
+    right: 16,
+    bottom: 0
   },
   chatContainer: {
     alignItems: 'flex-start',
