@@ -2,7 +2,8 @@ import {
   KeyboardAvoidingView,
   SafeAreaView,
   StatusBar,
-  StyleSheet
+  StyleSheet,
+  View
 } from 'react-native';
 import React, { Fragment } from 'react';
 import TopPopup from './TopPopup';
@@ -23,17 +24,14 @@ const ConferenceScreenPresenter: React.FC<ConferenceScreenPresenterProps> = ({
   const insets = useSafeAreaInsets();
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#000' }}>
-      <StatusBar backgroundColor="#000" barStyle={'light-content'} />
+    // <SafeAreaView style={{ flex: 1, backgroundColor: '#000' }}>
+    <View style={{flex:1, backgroundColor: '#000'}}>
+      <StatusBar backgroundColor={'blue'} barStyle={'light-content'} />
       {!isConnected ? (
         <Fragment>
           <TopPopup insets={insets} />
           <TopContent insets={insets} />
-          {/* <KeyboardAvoidingView
-            style={[styles.avoidingView, { top: insets.top, bottom: insets.bottom }]}
-          > */}
-            <MainVideo insets={insets}/>
-          {/* </KeyboardAvoidingView> */}
+          <MainVideo insets={insets} />
           {/* <SplitVideo /> */}
           <BottomPopup
             roomId="213564782"
@@ -47,7 +45,8 @@ const ConferenceScreenPresenter: React.FC<ConferenceScreenPresenterProps> = ({
       ) : (
         <Fragment></Fragment>
       )}
-    </SafeAreaView>
+      </View>
+    // </SafeAreaView>
   );
 };
 

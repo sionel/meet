@@ -153,7 +153,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 16,
     right: 16,
-    bottom: 0
+    bottom: 0,
+    zIndex: 2,
+    elevation: 2
   },
   chatContainer: {
     alignItems: 'flex-start',

@@ -27,20 +27,21 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
   const [messages, setMessages] = useState<
     {
       text: string;
-      user: string;
+      user?: string;
+      name?: string;
       userInfo: { profile_url: string; userName: string };
     }[]
   >([
-    // {
-    //   text: 'test',
-    //   user: '123456',
-    //   userInfo: { profile_url: '', userName: 'rladusrlf' }
-    // },
-    // {
-    //   text: 'test1',
-    //   name: 'rladusrlf1',
-    //   userInfo: { profile_url: '', userName: 'rladusrlf1' }
-    // },
+    {
+      text: 'test',
+      user: '123456',
+      userInfo: { profile_url: '', userName: 'rladusrlf' }
+    },
+    {
+      text: 'test1',
+      name: 'rladusrlf1',
+      userInfo: { profile_url: '', userName: 'rladusrlf1' }
+    },
     // {
     //   text: 'test2',
     //   user: '123456',

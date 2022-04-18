@@ -1,4 +1,14 @@
-import { View, Text, TouchableOpacity, Image, StyleSheet, KeyboardAvoidingView, SafeAreaView, ImageBackground } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+  KeyboardAvoidingView,
+  SafeAreaView,
+  ImageBackground,
+  StatusBar
+} from 'react-native';
 import React, { useEffect, useRef } from 'react';
 import { MainVideoPresenterProps } from '../types';
 import { RTCView } from 'react-native-webrtc';
@@ -35,27 +45,16 @@ const MainVideoPresenter: React.FC<MainVideoPresenterProps> = ({
   //     />
   //   </View>
   // );
-  const key = useRef(null)
-  // useEffect(() => {
-  //   debugger
-  
-    
-  // }, [key])
-  
-  const test = () => {
-    console.log(key);
-    
-    debugger
-  }
   return (
-    <KeyboardAvoidingView style={[styles.avoidingContainer]}>
-      <SafeAreaView style={{ flex: 1 }}>
-      <Image
-            source={icWoman3}
-            style={{ flex: 1, backgroundColor: 'red' }}
-            resizeMode={'cover'}
-          />
-        {/* {isScreenShare ? (
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'blue' }}>
+      <KeyboardAvoidingView
+        style={[
+          styles.avoidingContainer,
+          { top: insets.top, bottom: insets.bottom }
+        ]}
+        behavior={undefined}
+      >
+        {isScreenShare ? (
           <View style={styles.shareContainer}>
             <Image
               source={icoScreenShagre}
@@ -75,50 +74,43 @@ const MainVideoPresenter: React.FC<MainVideoPresenterProps> = ({
           </View>
         ) : !isMuteVideo && stream && !presenter ? (
           <View style={styles.RTCVideo} />
-        ) : // <RTCView
-        //   style={styles.RTCVideo}
-        //   mirror={videoType !== 'desktop' && !isVideoReverse}
-        //   objectFit={
-        //     localPipMode || isTablet
-        //       ? 'cover'
-        //       : videoType === undefined
-        //       ? 'contain'
-        //       : objectFit
-        //   }
-        //   streamURL={stream.toURL()}
-        //   zOrder={0} // zOrder 는 [0, 1] 만 사용가능 (아마?)
-        // />
-        mainUser.status === 'interrupted' ? (
-          <View style={styles.networkErrView}>
-            <Text
-              style={styles.networkErrText}
-            >{`네트워크가 불안정해요 :(`}</Text>
-          </View>
         ) : (
-          // <ImageBackground source={icWoman3} resizeMode="cover">
+          // <RTCView
+          //   style={styles.RTCVideo}
+          //   mirror={videoType !== 'desktop' && !isVideoReverse}
+          //   objectFit={
+          //     localPipMode || isTablet
+          //       ? 'cover'
+          //       : videoType === undefined
+          //       ? 'contain'
+          //       : objectFit
+          //   }
+          //   streamURL={stream.toURL()}
+          //   zOrder={0} // zOrder 는 [0, 1] 만 사용가능 (아마?)
+          // />
+          // <View style={styles.imageContainer}>
           <Image
-            source={icWoman3}
-            style={{ flex: 1, backgroundColor: 'red' }}
-            resizeMode={'cover'}
+            source={icWoman1}
+            style={{ width: '100%'}}
+            resizeMode={'contain'}
           />
-          // </ImageBackground>
-        )} */}
-      </SafeAreaView>
-    </KeyboardAvoidingView>
+          // </View>
+        )}
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
-  
-  
 };
 
 const styles = StyleSheet.create({
   avoidingContainer: {
     position: 'absolute',
-    height: '100%',
-    width: '100%',
+    left: 0,
+    right: 0,
     justifyContent: 'center',
     alignItems: 'center',
-    // zIndex: 0,
-    // elevation: 0
+    zIndex: 0,
+    elevation: 0,
+    backgroundColor: '#ccc'
   },
   RTCVideo: {
     flex: 1,
@@ -126,8 +118,8 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     flex: 1,
-    justifyContent:'center',
-    alignItems:'center',
+    justifyContent: 'center',
+    alignItems: 'center',
     // alignItems: 'flex-end',
     // justifyContent: 'flex-start',
     backgroundColor: 'rgb(187,197,208)'
