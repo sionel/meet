@@ -83,7 +83,8 @@ export default class sendMessage {
       user_email: user.user_eamil ? user.user_eamil : user.user_default_email,
       avatar: user.avatar
     };
-
+    console.log('니 혹시 여러번 날아가나 진짜?');
+    
     this._room.sendCommand(WEHAGO_ID, {
       value: this._room.myUserId(),
       attributes

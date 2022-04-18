@@ -222,6 +222,7 @@ class ConferenceConnector {
     this._room.on(conferenceEvents.USER_JOINED, (id, user) => {
       if (new Set(['wehagorecord', 'wehagorecord-dev']).has(user.getStatsID()))
         return;
+      debugger;
       this._handlers.JOIN_USER(user);
     });
 
@@ -273,6 +274,7 @@ class ConferenceConnector {
 
     // 위하고 접속 아이디 및 정보 가져오기
     this._room.addCommandListener(WEHAGO_ID, user => {
+      debugger;
       const id = user.value;
       this._handlers.SET_USER_INFO(id, user.attributes);
       //
@@ -817,7 +819,6 @@ class ConferenceConnector {
       };
 
       MeetApi.updateMasterControlUser(cno, roomToken, param);
-
     } else {
       await this._room.sendCommandOnce(REQUEST_MIC_CONTROL, {
         value: this._room.myUserId(),

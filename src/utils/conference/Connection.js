@@ -1,9 +1,7 @@
 /**
  * Connection
  **/
-import JitsiMeetJS, {
-  JitsiConnectionEvents
-} from '@jitsi/base/lib-jitsi-meet';
+import JitsiMeetJS, { JitsiConnectionEvents } from '@jitsi/base/lib-jitsi-meet';
 import config from './config';
 
 class Connection {
@@ -13,6 +11,7 @@ class Connection {
   constructor() {
     // Jitsi Connection
     this._jitsiConnection = null;
+    debugger;
   }
 
   /**
@@ -32,7 +31,7 @@ class Connection {
       // jitsi connection 을 생성한다.
       this._jitsiConnection = this._creaeteJitsiConnection(roomName, token);
       // 이벤트를 바인딩한다. -> 바인딩된 이벤트가 호출되어야지 프라미스가 종료된다.
-      this._bindEvents(this.jitsiConnection, resolve, reject, ()=>{});
+      this._bindEvents(this.jitsiConnection, resolve, reject, () => {});
       // 커넥션을 연결한다.
       this._jitsiConnection.connect({});
     });

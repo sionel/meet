@@ -8,18 +8,22 @@ import { RootState } from 'src/redux/configureStore';
 import test from './conferenceUtil/test';
 import Conference from './conferenceUtil/Conference';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { isSuccess } from '@services/types';
+import MeetApi from '@services/api/MeetApi';
+
 
 const ConferenceScreenContainer: React.FC<
   ConferenceScreenContainerProps
 > = props => {
-  let conferenceManager = null;
+  let conference: Conference;
 
   const [first, setfirst] = useState();
   const [isConnected, setIsConnected] = useState(false);
-  
-  const { testFlag, auth } = useSelector((state: RootState) => ({
+
+  const { state, testFlag, auth } = useSelector((state: RootState) => ({
     testFlag: state.test.testFlag,
-    auth: state.user.auth
+    auth: state.user.auth,
+    state
   }));
 
   // const testfunction = new test('asd')
@@ -27,22 +31,25 @@ const ConferenceScreenContainer: React.FC<
   // testfunction.valtest()
 
   useEffect(() => {
-    // _connectConference();
+    _connectConference();
   }, []);
   const dispatch = useDispatch();
 
-
-  const _connectConference = () => {
-    // const conference = new Conference();
-    // conference.join({ id: '', token: '' }, auth, dispatch);
-    // conferenceManager = new ConferenceManager(dispatch)
+  const _connectConference = async () => {
+    console.log('한번만 나와야하는데 이게 여러번 나오나 싶어서');
+    const id = 'b896e8fb-008f-4fd3-98c9-240a2f166ce3';
+    const getMeetRoomToken = await MeetApi.getMeetRoomToken(auth, id);
+    if (isSuccess(getMeetRoomToken)) {
+      const token = getMeetRoomToken.resultData;
+      conference = new Conference();
+      conference.join({ id, token }, auth, dispatch);
+    }
   };
 
-  const _handleClose = () => {}
-  const _handleSpeaker = () => {}
-  
-  return (
-    <SafeAreaProvider>
+  const _handleClose = () => {};
+  const _handleSpeaker = () => {};
+
+  return ( <SafeAreaProvider>
       <ConferenceScreenPresenter
         isConnected={isConnected}
         handleClose={_handleClose}
@@ -53,6 +60,27 @@ const ConferenceScreenContainer: React.FC<
     //   <View style={{ flex: 1, backgroundColor: '#ffa' }}>
     //     <TouchableOpacity
     //       style={{ top: 100, width: 100, height: 100, backgroundColor: '#0fa' }}
+    //     >
+    //       <Text>{'testtests'}</Text>
+    //     </TouchableOpacity>
+    //   </View>
+    // </SafeAreaView>
+
+    
+    // <ConferenceScreenPresenter
+    //   isConnected={isConnected}
+    //   handleClose={_handleClose}
+    //   handleSpeaker={_handleSpeaker}
+    // />
+    // <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+    //   <View style={{ flex: 1, backgroundColor: '#ffa' }}>
+    //     <TouchableOpacity
+    //       style={{ top: 100, width: 100, height: 100, backgroundColor: '#0fa' }}
+    //       onPress={() => {
+    //         console.log(state);
+
+    //         debugger;
+    //       }}
     //     >
     //       <Text>{'testtests'}</Text>
     //     </TouchableOpacity>

@@ -6,6 +6,7 @@ import { RootState } from '../../../../../redux/configureStore';
 
 export default function SubVideoBoxContainer(props) {
   const { user, mainUserId, list } = useSelector((state: RootState) => {
+    debugger
     return {
       user: state.local.user,
       mainUserId: state.mainUser.mainUserId,

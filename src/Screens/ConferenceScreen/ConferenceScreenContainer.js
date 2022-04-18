@@ -266,7 +266,7 @@ class ConferenceScreenContainer extends React.Component {
       dispatch,
       this._handleConferenceClose
     );
-
+    debugger
     const sendCommandParams = {
       wehagoId: auth.portal_id,
       companyFullpath: auth.last_company?.full_path,
@@ -287,7 +287,7 @@ class ConferenceScreenContainer extends React.Component {
       tracks,
       sendCommandParams
     );
-
+    debugger
     if (!joinResult) {
       if (this._screen) {
         this.props.setAlert({

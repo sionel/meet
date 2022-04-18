@@ -1,5 +1,71 @@
 import JitsiMeetJS from '@jitsi/base/lib-jitsi-meet';
 import { ConferenceHandler } from './ConferenceHandler';
+// 위하고 아이디 커멘드 이름 정의
+
+// 드로잉 이미지 전달 커멘드 타입
+export const actions = {
+  WEHAGO_ID: 'wehagoid',
+
+  UPDATE_DRAWING_DATA: 'UPDATE_DRAWING_DATA',
+
+  // 드로잉 전체 지우기
+  // export const CLEAR_DRAWING_CANVAS : 'CLEAR_DRAWING_CANVAS',
+  CLEAR_DOCUMENT_CANVAS: 'CLEAR_DOCUMENT_CANVAS',
+
+  // 캔버스 뒤로가기 앞으로가기 커맨드 타입
+  DRAWING_REDO_UNDO: 'DRAWING_REDO_UNDO',
+
+  // 문서 공유모드 설정 커맨드 타입
+  SET_DOCUMENT_SHARE_IS_OPEN: 'SET_DOCUMENT_SHARE_IS_OPEN',
+  // 문서 공유모드 해제 커맨드 타입
+  SET_DOCUMENT_SHARE_IS_CLOSE: 'SET_DOCUMENT_SHARE_IS_CLOSE',
+  // 드로잉 모드 설정 커맨드 타입
+  SET_DRAWING_IS_SHARE: 'SET_DRAWING_IS_SHARE',
+
+  // 문서 공유 페이지 설정 커맨드 타입
+  SET_DOCUMENT_PAGE: 'SET_DOCUMENT_PAGE',
+
+  // 문서공유 데이터 전달 커멘드 타입
+  UPDATE_DOCUMENT_DATA: 'UPDATE_DOCUMENT_DATA',
+
+  // 특정 타켓한데만 전달 커맨드 타입
+  DOCUMENT_SHARE_TARGET: 'DOCUMENT_SHARE_TARGET',
+  DRAWING_SHARE_TARGET: 'DRAWING_SHARE_TARGET',
+
+  // export const REQUEST_INVITE : 'CONFERENCE.EVENT.REQUEST.INVITE', // 초대 요청 이벤트
+  // export const REQUEST_KICK : 'CONFERENCE.EVENT.REQUEST.KICK', // 추방 요청 이벤트
+
+  REQUEST_MIC_CONTROL: 'CONFERENCE.EVENT.REQUEST.MIC_CONTROL', // 화상대화 전체 마이크 제어 요청 이벤트
+  REQUEST_MIC_CONTROL_USER: 'CONFERENCE.EVENT.REQUEST.MIC_CONTROL_USER', // 화상대화 전체 마이크 제어 요청자 사용자 정보 이벤트
+  REQUEST_MIC_CONTROL_TARGET: 'CONFERENCE.EVENT.REQUEST.MIC_CONTROL_TARGET', // 화상대화 타겟 유저 마이크 제어 요청 이벤트
+
+  // 제어중일때 발언권 요청 보낸 뒤 승인 또는 거부 이벤트 (마스터가 전체 발언권 허용)
+  GRANT_FLOOR: 'GRANT_FLOOR',
+  // 제어중일때 발언권 요청 보낸 뒤 승인 또는 거부 이벤트 (마스터가 전체 특정 발언권 허용)
+  GRANT_FLOOR_TARGET: 'GRANT_FLOOR_TARGET',
+
+  // 제어중일때 발언권 요청
+  REQUEST_FLOOR: 'REQUEST_FLOOR',
+  // 제어중일때 발언권 취소
+  STOP_FLOOR: 'STOP_FLOOR',
+
+  KICK_PARTICIPANT: 'KICK_PARTICIPANT',
+
+  // export const REQUEST_GET_CONTROL : 'CONFERENCE.EVENT.REQUEST.REQUEST_GET_CONTROL', // 마스터 제어 권한 위임 요청 이벤트
+
+  // export const RESPONSE_GET_CONTROL : 'CONFERENCE.EVENT.REQUEST.RESPONSE_GET_CONTROL', // 마스터 제어 권한 위임 반환 이벤트
+
+  // 마스터 권한 유저 리스트 변경 이벤트
+  UPDATE_MASTER_USERS: 'CONFERENCE.EVENT.REQUEST.UPDATE_MASTER_USERS',
+
+  // 마스터가 유저 추방
+  REQUEST_KICK: 'CONFERENCE.EVENT.REQUEST.KICK',
+
+  REQUEST_ROOM_STOP_RECORDING:
+    'CONFERENCE.EVENT.ROOM.REQUEST_ROOM_STOP_RECORDING',
+  REQUEST_ROOM_START_RECORDING:
+    'CONFERENCE.EVENT.ROOM.REQUEST_ROOM_START_RECORDING'
+};
 
 export function bindEvent(dispatch: any, room: any, resolve: any, reject: any) {
   const conferenceEvents = JitsiMeetJS.events.conference;
@@ -33,11 +99,12 @@ export function bindEvent(dispatch: any, room: any, resolve: any, reject: any) {
   });
 
   // JOIN_USER 이벤트 연결
-  // room.on(conferenceEvents.USER_JOINED, (id, user) => {
-  //   if (new Set(['wehagorecord', 'wehagorecord-dev']).has(user.getStatsID()))
-  //     return;
-  //   handler.JOIN_USER(user);
-  // });
+  room.on(conferenceEvents.USER_JOINED, (id: any, user: any) => {
+    if (new Set(['wehagorecord', 'wehagorecord-dev']).has(user.getStatsID()))
+      return;
+    if (id === room.myUserId()) return;
+    handler.joinUser(user);
+  });
 
   // // LEFT_USER 이벤트 연결
   // room.on(conferenceEvents.USER_LEFT, id => {
@@ -47,12 +114,12 @@ export function bindEvent(dispatch: any, room: any, resolve: any, reject: any) {
   //   handler.LEFT_USER(id);
   // });
 
-  // // 트랙추가 이벤트 연결
-  // room.on(conferenceEvents.TRACK_ADDED, track => {
-  //   if (!track.isLocal()) {
-  //     handler.ADD_REMOTE_TRACK(track);
-  //   }
-  // });
+  // 트랙추가 이벤트 연결
+  room.on(conferenceEvents.TRACK_ADDED, (track: any) => {
+    if (!track.isLocal()) {
+      handler.setUserTrack(track);
+    }
+  });
 
   // // 비디오 Mute 변경
   // room.on(conferenceEvents.TRACK_MUTE_CHANGED, track => {
@@ -86,11 +153,12 @@ export function bindEvent(dispatch: any, room: any, resolve: any, reject: any) {
   // ======== addEventListener ========== //
 
   // // 위하고 접속 아이디 및 정보 가져오기
-  // room.addCommandListener(WEHAGO_ID, user => {
-  //   const id = user.value;
-  //   handler.SET_USER_INFO(id, user.attributes);
-  //   //
-  // });
+  room.addCommandListener(actions.WEHAGO_ID, (user: any) => {
+    // if (user.id === room.myUserId()) return;
+    if (user.value === room.myUserId()) return;
+
+    handler.setUserInfo(user);
+  });
 
   // /**
   //  * 문서 공유 페이지 전환 감지
