@@ -155,6 +155,8 @@ export function bindEvent(dispatch: any, room: any, resolve: any, reject: any) {
   // // 위하고 접속 아이디 및 정보 가져오기
   room.addCommandListener(actions.WEHAGO_ID, (user: any) => {
     // if (user.id === room.myUserId()) return;
+    if (user.value === room.myUserId()) return;
+
     handler.setUserInfo(user);
   });
 

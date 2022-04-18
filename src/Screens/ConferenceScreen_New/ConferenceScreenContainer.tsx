@@ -18,9 +18,10 @@ const ConferenceScreenContainer: React.FC<
   const [first, setfirst] = useState();
   const [isConnected, setIsConnected] = useState(false);
 
-  const { testFlag, auth } = useSelector((state: RootState) => ({
+  const { state, testFlag, auth } = useSelector((state: RootState) => ({
     testFlag: state.test.testFlag,
-    auth: state.user.auth
+    auth: state.user.auth,
+    state
   }));
 
   // const testfunction = new test('asd')
@@ -28,15 +29,13 @@ const ConferenceScreenContainer: React.FC<
   // testfunction.valtest()
 
   useEffect(() => {
-    
-    
     _connectConference();
   }, []);
   const dispatch = useDispatch();
 
   const _connectConference = async () => {
-    console.log("한번만 나와야하는데 이게 여러번 나오나 싶어서");
-    const id = '60babe23-21e0-4456-87be-8856ed78e905';
+    console.log('한번만 나와야하는데 이게 여러번 나오나 싶어서');
+    const id = 'b896e8fb-008f-4fd3-98c9-240a2f166ce3';
     const getMeetRoomToken = await MeetApi.getMeetRoomToken(auth, id);
     if (isSuccess(getMeetRoomToken)) {
       const token = getMeetRoomToken.resultData;
@@ -59,7 +58,9 @@ const ConferenceScreenContainer: React.FC<
         <TouchableOpacity
           style={{ top: 100, width: 100, height: 100, backgroundColor: '#0fa' }}
           onPress={() => {
-            conference?.dispose();
+            console.log(state);
+
+            debugger;
           }}
         >
           <Text>{'testtests'}</Text>

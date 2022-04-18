@@ -8,8 +8,6 @@ const SET_USER_INFO = 'participants_copy.SET_USER_INFO';
 const SET_USER_TRACK = 'participants_copy.SET_USER_TRACK';
 
 export interface Participant {
-  // isMainUser:boolean
-
   jitsiId: string;
   videoTrack: any;
   audioTrack: any;
@@ -20,7 +18,7 @@ export interface Participant {
   nickname: string;
   wehagoId: string;
   avatar: string;
-  fullPath: string;
+  companyFullpath: string;
   profileUrl: string;
   phonenumber: string;
   email: string;
@@ -73,10 +71,29 @@ const setUserInfo = (user: any): ThunkAction<void, RootState, unknown> => {
 };
 const _setUserInfo = (state: InitialState, action: AnyAction) => {
   const { user } = action;
-  console.log('_setUserInfo');
-  console.log(user);
+  const { list } = state;
+  if (list.some(({ jitsiId }) => jitsiId === user.value)) return { ...state };
+
+  const avatar = JSON.parse(user.attributes.avatar).value;
+  const newUser: Participant = {
+    jitsiId: user.value,
+    videoTrack: null,
+    audioTrack: null,
+
+    isMaster: false,
+
+    name: user.attributes.userName,
+    nickname: user.attributes.nickname,
+    avatar,
+    email: user.attributes.user_email,
+    companyFullpath: user.attributes.companyFullpath,
+    phonenumber: user.attributes.user_contact,
+    profileUrl: user.attributes.profile_url,
+    wehagoId: user.attributes.wehagoId
+  };
+  list.push(newUser);
   return {
-    ...state
+    list
   };
 };
 
@@ -90,10 +107,19 @@ const setUserTrack = (track: any): ThunkAction<void, RootState, unknown> => {
 };
 const _setUserTrack = (state: InitialState, action: AnyAction) => {
   const { track } = action;
-  console.log('_setUserTrack');
-  console.log(track);
+  const { list } = state;
+  const trackType = track.getType();
+  const index = state.list.findIndex(
+    ({ jitsiId }) => track.ownerEndpointId === jitsiId
+  );
+  if (trackType === 'audio') {
+    list[index].audioTrack = track;
+  } else {
+    list[index].videoTrack = track;
+  }
+
   return {
-    ...state
+    list
   };
 };
 
