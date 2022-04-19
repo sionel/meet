@@ -6,7 +6,7 @@ export const ConferenceHandler = (dispatch: any) => ({
     dispatch(testAction.test());
   },
   joinUser: (user: any) => {
-    dispatch(participantsAction.joinUser(user));
+    // dispatch(participantsAction.joinUser(user));
   },
   setUserInfo: (user:any) => {
     dispatch(participantsAction.setUserInfo(user));

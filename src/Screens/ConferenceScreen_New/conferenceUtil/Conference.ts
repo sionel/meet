@@ -5,6 +5,8 @@ import config from './config';
 import Connection from './Connection';
 import sendMessage from './sendMessage';
 
+import { actionCreators as participantsAction } from '@redux/participants_copy';
+
 interface Room {
   token: string;
   id: string;
@@ -14,6 +16,9 @@ class Conference {
   private _connection: any;
   private _room: any;
   private _sendMessage: any;
+  private _dispatch: any;
+  private _handler: any;
+
   constructor() {
     // this._conferenceParams = conferenceParams;
     // this._handler = ConferenceHandler(dispatch);
@@ -26,24 +31,25 @@ class Conference {
   join = async ({ id, token }: Room, user: any, dispatch: any) => {
     this._init();
     this._connection = new Connection();
+    this._handler = ConferenceHandler(dispatch);
     await this._connection.connect(id, token);
     await new Promise((resolve, reject) => {
       this._room = this._createRoom(id);
       this._sendMessage = new sendMessage(this._room);
-      this._sendMessage.sendWehagoId(user);
-      bindEvent(dispatch, this._room, resolve, reject);
+      const attributes = this._sendMessage.sendWehagoId(user);
+      this._handler.setUserInfo(attributes);
+      bindEvent(this._handler, this._room, resolve, reject);
       this._room.join();
     });
     this._addTracks();
   };
 
   dispose = () => {
-    this._room.dispose()
-    this._connection.dispose()
-    this._connection = null
-    this._sendMessage = null
-
-  }
+    this._room.dispose();
+    this._connection.dispose();
+    this._connection = null;
+    this._sendMessage = null;
+  };
 
   _init = () => {
     JitsiMeetJS.init({
@@ -63,7 +69,10 @@ class Conference {
 
   _addTracks = async () => {
     const tracks = await this._createTracks();
-    tracks.forEach(track => this._room.addTrack(track));
+    tracks.forEach(track => () => {
+      this._room.addTrack(track);
+      this._handler.setUserTrack(track);
+    });
   };
 
   _createTracks = async (): Promise<any[]> => {

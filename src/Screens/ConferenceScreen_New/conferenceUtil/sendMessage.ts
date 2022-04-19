@@ -84,10 +84,11 @@ export default class sendMessage {
       avatar: user.avatar
     };
     console.log('니 혹시 여러번 날아가나 진짜?');
-    
+
     this._room.sendCommand(WEHAGO_ID, {
       value: this._room.myUserId(),
       attributes
     });
+    return attributes;
   };
 }

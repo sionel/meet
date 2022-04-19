@@ -32,8 +32,8 @@ const initialState: InitialState = {
 
 function reducer(state = initialState, action: AnyAction) {
   switch (action.type) {
-    case JOIN_USER:
-      return _joinUser(state, action);
+    // case JOIN_USER:
+    //   return _joinUser(state, action);
     case SET_USER_INFO:
       return _setUserInfo(state, action);
     case SET_USER_TRACK:
@@ -43,23 +43,23 @@ function reducer(state = initialState, action: AnyAction) {
   }
 }
 
-const joinUser = (user: any): ThunkAction<void, RootState, unknown> => {
-  return dispatch => {
-    dispatch({
-      type: JOIN_USER,
-      user
-    });
-  };
-};
-const _joinUser = (state: InitialState, action: AnyAction) => {
-  const { user } = action;
-  console.log('_joinUser');
-  console.log(user);
+// const joinUser = (user: any): ThunkAction<void, RootState, unknown> => {
+//   return dispatch => {
+//     dispatch({
+//       type: JOIN_USER,
+//       user
+//     });
+//   };
+// };
+// const _joinUser = (state: InitialState, action: AnyAction) => {
+//   const { user } = action;
+//   console.log('_joinUser');
+//   console.log(user);
 
-  return {
-    ...state
-  };
-};
+//   return {
+//     ...state
+//   };
+// };
 
 const setUserInfo = (user: any): ThunkAction<void, RootState, unknown> => {
   return dispatch => {
@@ -124,7 +124,7 @@ const _setUserTrack = (state: InitialState, action: AnyAction) => {
 };
 
 export const actionCreators = {
-  joinUser,
+  // joinUser,
   setUserInfo,
   setUserTrack
 };

@@ -36,13 +36,13 @@ const ConferenceScreenContainer: React.FC<
 
   const _connectConference = async () => {
     // console.log('한번만 나와야하는데 이게 여러번 나오나 싶어서');
-    // const id = 'b896e8fb-008f-4fd3-98c9-240a2f166ce3';
-    // const getMeetRoomToken = await MeetApi.getMeetRoomToken(auth, id);
-    // if (isSuccess(getMeetRoomToken)) {
-    //   const token = getMeetRoomToken.resultData;
-    //   conference = new Conference();
-    //   conference.join({ id, token }, auth, dispatch);
-    // }
+    const id = 'b896e8fb-008f-4fd3-98c9-240a2f166ce3';
+    const getMeetRoomToken = await MeetApi.getMeetRoomToken(auth, id);
+    if (isSuccess(getMeetRoomToken)) {
+      const token = getMeetRoomToken.resultData;
+      conference = new Conference();
+      conference.join({ id, token }, auth, dispatch);
+    }
   };
 
   const _handleClose = () => {};

@@ -67,9 +67,8 @@ export const actions = {
     'CONFERENCE.EVENT.ROOM.REQUEST_ROOM_START_RECORDING'
 };
 
-export function bindEvent(dispatch: any, room: any, resolve: any, reject: any) {
+export function bindEvent(handler: any, room: any, resolve: any, reject: any) {
   const conferenceEvents = JitsiMeetJS.events.conference;
-  const handler = ConferenceHandler(dispatch);
 
   // ===== Additional ===== //
   // room.on(conferenceEvents.CONNECTION_DROPPED_ERROR, () => {});
