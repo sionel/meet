@@ -34,128 +34,130 @@ const Chatting: React.FC<ChattingProps> = ({
   cdm,
   myMessage,
   scrollRef,
-  insets,
   messages
 }) => {
   const t = getT();
   const { OS } = Platform;
   const user = { cid: '123456' };
   return (
-    <View
-      style={[
-        styles.container,
-        { top: insets.top + 120 },
-        isPad && { width: true ? '36%' : '49%' }
-      ]}
+    <SafeAreaView
+      style={{
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        bottom: 0,
+        zIndex: 1
+      }}
     >
-      <ScrollView
-        ref={el => (scrollRef.current = el)}
-        showsVerticalScrollIndicator={false}
-        scrollEnabled={true}
-        style={{ flex: 1 }}
-        onScrollBeginDrag={setIsEndScroll(false)}
-        onScrollEndDrag={({ nativeEvent }) => {
-          if (nativeEvent.targetContentOffset) {
-            const contentOffsetY = nativeEvent.contentOffset.y; // 현재 스크롤 좌표
-            const layoutMeasurementHeight =
-              nativeEvent.layoutMeasurement.height; // 자식의 단일 component 높이
-            const contentSizeHeight = nativeEvent.contentSize.height; // 전체 component 높이
-            const isOverScroll =
-              contentOffsetY + layoutMeasurementHeight + 2 > contentSizeHeight; //  2 은 오차계산
-            setIsEndScroll(isOverScroll);
-          }
-        }}
+      <View
+        style={[styles.container, isPad && { width: true ? '36%' : '49%' }]}
       >
-        <FlatList
-          bounces={false}
-          data={messages}
-          onContentSizeChange={() => scrollRef.current.scrollToEnd()}
+        <ScrollView
+          ref={el => (scrollRef.current = el)}
           showsVerticalScrollIndicator={false}
-          keyExtractor={(item, index) => String(index)}
-          renderItem={({ item, index }) => {
-            if (!cdm && index === messages.length - 1) {
-              setCdm(true);
+          scrollEnabled={true}
+          style={{ flex: 1 }}
+          onScrollBeginDrag={setIsEndScroll(false)}
+          onScrollEndDrag={({ nativeEvent }) => {
+            if (nativeEvent.targetContentOffset) {
+              const contentOffsetY = nativeEvent.contentOffset.y; // 현재 스크롤 좌표
+              const layoutMeasurementHeight =
+                nativeEvent.layoutMeasurement.height; // 자식의 단일 component 높이
+              const contentSizeHeight = nativeEvent.contentSize.height; // 전체 component 높이
+              const isOverScroll =
+                contentOffsetY + layoutMeasurementHeight + 2 >
+                contentSizeHeight; //  2 은 오차계산
+              setIsEndScroll(isOverScroll);
             }
-            const localUser = user.cid === item.user;
-            const { userInfo } = item;
-            const profileUrl = userInfo.profile_url
-              ? wehagoMainURL + userInfo.profile_url
-              : wehagoDummyImageURL;
-            const userName = item.name ? item.name : userInfo.userName;
+          }}
+        >
+          <FlatList
+            bounces={false}
+            data={messages}
+            onContentSizeChange={() => scrollRef.current.scrollToEnd()}
+            showsVerticalScrollIndicator={false}
+            keyExtractor={(item, index) => String(index)}
+            renderItem={({ item, index }) => {
+              if (!cdm && index === messages.length - 1) {
+                setCdm(true);
+              }
+              const localUser = user.cid === item.user;
+              const { userInfo } = item;
+              const profileUrl = userInfo.profile_url
+                ? wehagoMainURL + userInfo.profile_url
+                : wehagoDummyImageURL;
+              const userName = item.name ? item.name : userInfo.userName;
 
-            return (
-              <View style={styles.chatContainer}>
-                <View
-                  style={[
-                    styles.normalChatView,
-                    localUser && { backgroundColor: '#1c90fb' }
-                  ]}
-                >
-                  <View style={styles.chatProfileView}>
-                    <Image
-                      source={{ uri: profileUrl }}
-                      style={styles.chatProfile}
-                      resizeMode="cover"
-                    />
-                  </View>
-                  <View style={styles.chatTextView}>
-                    <Text style={styles.userName}>
-                      {userName}
-                      {localUser && `(나)`}
-                    </Text>
+              return (
+                <View style={styles.chatContainer}>
+                  <View
+                    style={[
+                      styles.normalChatView,
+                      localUser && { backgroundColor: '#1c90fb' }
+                    ]}
+                  >
+                    <View style={styles.chatProfileView}>
+                      <Image
+                        source={{ uri: profileUrl }}
+                        style={styles.chatProfile}
+                        resizeMode="cover"
+                      />
+                    </View>
+                    <View style={styles.chatTextView}>
+                      <Text style={styles.userName}>
+                        {userName}
+                        {localUser && `(나)`}
+                      </Text>
 
-                    <Text style={styles.chatText}>{item.text}</Text>
+                      <Text style={styles.chatText}>{item.text}</Text>
+                    </View>
                   </View>
                 </View>
-              </View>
-            );
-          }}
-        />
-      </ScrollView>
-      <View style={styles.inputArea}>
-        <TouchableOpacity style={{ marginRight: 4 }}>
-          <Image source={icTrans} style={{ width: 24, height: 24 }} />
-        </TouchableOpacity>
-
-        <View style={styles.textArea}>
-          <TextInput
-            multiline={true}
-            value={myMessage}
-            autoCapitalize="none"
-            style={styles.chatInput}
-            onChangeText={text => setMyMessage(text)}
-            underlineColorAndroid={'rgba(0,0,0,0)'}
+              );
+            }}
           />
-          <TouchableOpacity
-            style={[
-              styles.sendImageContainer,
-              {
-                backgroundColor:
-                  myMessage.length > 0 ? '#1c90fb' : 'rgba(255,255,255,0.3)'
-              }
-            ]}
-            onPressOut={onPressSend}
-          >
-            <Image
-              source={myMessage.length > 0 ? icSendW : icSend}
-              style={styles.sendImage}
-              resizeMode="cover"
-            />
+        </ScrollView>
+        <View style={styles.inputArea}>
+          <TouchableOpacity style={{ marginRight: 4 }}>
+            <Image source={icTrans} style={{ width: 24, height: 24 }} />
           </TouchableOpacity>
+
+          <View style={styles.textArea}>
+            <TextInput
+              multiline={true}
+              value={myMessage}
+              autoCapitalize="none"
+              style={styles.chatInput}
+              onChangeText={text => setMyMessage(text)}
+              underlineColorAndroid={'rgba(0,0,0,0)'}
+            />
+            <TouchableOpacity
+              style={[
+                styles.sendImageContainer,
+                {
+                  backgroundColor:
+                    myMessage.length > 0 ? '#1c90fb' : 'rgba(255,255,255,0.3)'
+                }
+              ]}
+              onPressOut={onPressSend}
+            >
+              <Image
+                source={myMessage.length > 0 ? icSendW : icSend}
+                style={styles.sendImage}
+                resizeMode="cover"
+              />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
-    left: 16,
-    right: 16,
-    bottom: 0,
-    zIndex: 2,
-    elevation: 2
+    flex: 1,
+    paddingHorizontal: 15
   },
   chatContainer: {
     alignItems: 'flex-start',

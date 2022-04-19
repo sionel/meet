@@ -3,7 +3,7 @@ import TopPopupPresenter from './TopPopupPresenter';
 import { TopPopupContainerProps } from '../types';
 import { Animated } from 'react-native';
 
-const TopPopupContainer: React.FC<TopPopupContainerProps> = ({ insets }) => {
+const TopPopupContainer: React.FC<TopPopupContainerProps> = ({}) => {
   const [isFirst, setIsFirst] = useState(true);
   const [fadeout, setFadeout] = useState<any>(null);
 
@@ -75,7 +75,6 @@ const TopPopupContainer: React.FC<TopPopupContainerProps> = ({ insets }) => {
   return (
     <TopPopupPresenter
       userList={[]}
-      insets={insets}
       message={message}
       fadeAnimation={fadeAnimation}
     />

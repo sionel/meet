@@ -3,7 +3,6 @@ import { Animated, Dimensions, StyleSheet, Text, View } from 'react-native';
 import { ToastMessageProps } from '../types';
 
 const ToastMessage: React.FC<ToastMessageProps> = ({
-  insets,
   message,
   fadeAnimation
 }) => {

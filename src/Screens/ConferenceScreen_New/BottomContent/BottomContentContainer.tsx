@@ -3,7 +3,6 @@ import { BottomContentContainerProps } from '../types';
 import BottomContentPresenter from './BottomContentPresenter';
 
 const BottomContentContainer: React.FC<BottomContentContainerProps> = ({
-  insets,
   handleCloseConf
 }) => {
   const _handleSpeakerClick = () => {};
@@ -12,7 +11,6 @@ const BottomContentContainer: React.FC<BottomContentContainerProps> = ({
 
   return (
     <BottomContentPresenter
-      insets={insets}
       ToggleSpeakerClick={_handleSpeakerClick}
       ToggleMikeClick={_handleMikeClick}
       ToggleVideoClick={_handleVideoClick}

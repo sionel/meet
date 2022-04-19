@@ -15,13 +15,12 @@ import { RTCView } from 'react-native-webrtc';
 import LinearGradient from 'react-native-linear-gradient';
 
 import icMan1 from '@assets/icons/ic_man1.png';
-import icWoman1 from '@assets/icons/ic_woman1.png';
+import icWoman1 from '@assets/icons/ic_woman3.png';
 import icWoman2 from '@assets/icons/ic_woman2.png';
 import icWoman3 from '@assets/icons/img_character_woman1.png';
 import icoScreenShagre from '@oldassets/icons/icoScreenShagre.png';
 
 const MainVideoPresenter: React.FC<MainVideoPresenterProps> = ({
-  insets,
   isScreenShare,
   presenter,
   character,
@@ -29,31 +28,9 @@ const MainVideoPresenter: React.FC<MainVideoPresenterProps> = ({
   stream,
   onPressShareStop
 }) => {
-  const mainUser = { status: '' };
-  // return (
-  //   <View style={{ flex: 1, backgroundColor: '#ccc' }}>
-  //     <Image
-  //       source={
-  //         character === 'jessie'
-  //           ? icWoman1
-  //           : character === 'suzy'
-  //           ? icWoman2
-  //           : icMan1
-  //       }
-  //       style={{ width: '100%'}}
-  //       resizeMode={'contain'}
-  //     />
-  //   </View>
-  // );
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: 'blue' }}>
-      <KeyboardAvoidingView
-        style={[
-          styles.avoidingContainer,
-          { top: insets.top, bottom: insets.bottom }
-        ]}
-        behavior={undefined}
-      >
+    <SafeAreaView style={styles.mainVideoSAV}>
+      <KeyboardAvoidingView style={styles.avoidingContainer} enabled={false} behavior={'height'}>
         {isScreenShare ? (
           <View style={styles.shareContainer}>
             <Image
@@ -89,12 +66,14 @@ const MainVideoPresenter: React.FC<MainVideoPresenterProps> = ({
           //   zOrder={0} // zOrder 는 [0, 1] 만 사용가능 (아마?)
           // />
           // <View style={styles.imageContainer}>
-          <Image
-            source={icWoman1}
-            style={{ width: '100%'}}
-            resizeMode={'contain'}
-          />
-          // </View>
+          <View style={styles.imageContainer}>
+            <Image
+              source={icWoman2}
+              style={{ width: '100%', height: '100%' }}
+              // , backgroundColor: 'rgba(243,216,119,0.6)' }
+              resizeMode={'cover'}
+            />
+          </View>
         )}
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -102,15 +81,15 @@ const MainVideoPresenter: React.FC<MainVideoPresenterProps> = ({
 };
 
 const styles = StyleSheet.create({
-  avoidingContainer: {
+  mainVideoSAV: {
     position: 'absolute',
-    left: 0,
-    right: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 0,
-    elevation: 0,
-    backgroundColor: '#ccc'
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'transparent',
+    zIndex: 0
+  },
+  avoidingContainer: {
+    flex: 1
   },
   RTCVideo: {
     flex: 1,
@@ -118,10 +97,6 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    // alignItems: 'flex-end',
-    // justifyContent: 'flex-start',
     backgroundColor: 'rgb(187,197,208)'
   },
   shareContainer: {

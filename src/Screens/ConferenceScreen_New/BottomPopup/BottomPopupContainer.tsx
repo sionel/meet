@@ -3,14 +3,22 @@ import { ParticipantsTypes } from '@redux/participants';
 import { MeetApi } from '@services/index';
 import { getT } from '@utils/translateManager';
 import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
-import { Keyboard, Linking, Platform, Share } from 'react-native';
+import {
+  Animated,
+  Dimensions,
+  Keyboard,
+  Linking,
+  Platform,
+  Share,
+  TextInput,
+  UIManager
+} from 'react-native';
 import { BottomPopupContainerProps } from '../types';
 import BottomPopupPresenter from './BottomPopupPresenter';
 import InviteList from './InviteList';
 
 const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
   roomId,
-  insets,
   handleSpeaker
 }) => {
   const t = getT();
@@ -19,6 +27,7 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
   // MenuList
 
   // Chat
+  const [shift, setShift] = useState(new Animated.Value(0));
   const [myMessage, setMyMessage] = useState('');
   const [cdm, setCdm] = useState(false);
   const [isEndScroll, setIsEndScroll] = useState(true);
@@ -41,7 +50,7 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
       text: 'test1',
       name: 'rladusrlf1',
       userInfo: { profile_url: '', userName: 'rladusrlf1' }
-    },
+    }
     // {
     //   text: 'test2',
     //   user: '123456',
@@ -228,27 +237,27 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
 
   //#endregion Method
 
-  useEffect(() => {
-    let timeout: number | NodeJS.Timeout = setTimeout(() => {});
+  // useEffect(() => {
+  //   let timeout: number | NodeJS.Timeout = setTimeout(() => {});
 
-    if (messages.length > 0) {
-      if (scrollRef) {
-        if (timeout) clearTimeout(timeout);
-        timeout = setTimeout(() => {
-          scrollRef.current.scrollToEnd();
-        }, 0);
-      }
-    } else if (isEndScroll) {
-      if (timeout) clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        scrollRef.current.scrollToEnd();
-      }, 0);
-    }
+  //   if (messages.length > 0) {
+  //     if (scrollRef) {
+  //       if (timeout) clearTimeout(timeout);
+  //       timeout = setTimeout(() => {
+  //         scrollRef.current.scrollToEnd();
+  //       }, 0);
+  //     }
+  //   } else if (isEndScroll) {
+  //     if (timeout) clearTimeout(timeout);
+  //     timeout = setTimeout(() => {
+  //       scrollRef.current.scrollToEnd();
+  //     }, 0);
+  //   }
 
-    return () => {
-      typeof timeout === 'number' && clearTimeout(timeout);
-    };
-  }, [cdm, keyboardH]);
+  //   return () => {
+  //     typeof timeout === 'number' && clearTimeout(timeout);
+  //   };
+  // }, [cdm, keyboardH]);
 
   useEffect(() => {
     Keyboard.addListener('keyboardDidShow', e => handdleKeyboardShow(e));
@@ -272,7 +281,6 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
       getUserName={getUserName}
       //MenuList
       isMaster={true}
-      insets={insets}
       onPressSketch={handlePressSketch}
       onPressDocumentShare={handlePressDocumentShare}
       onPressRequestMic={handlePressRequestMic}

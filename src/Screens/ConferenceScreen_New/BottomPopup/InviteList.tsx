@@ -28,7 +28,6 @@ const { height } = Dimensions.get('window');
 const { OS } = Platform;
 
 const InviteList: React.FC<InviteListProps> = ({
-  insets,
   onClickCode,
   onClickEmail,
   onClickSms,
@@ -37,7 +36,7 @@ const InviteList: React.FC<InviteListProps> = ({
 }) => {
   return (
     <BlurView
-      style={[styles.popupContainer, { bottom: insets.bottom }]}
+      style={[styles.popupContainer]}
       overlayColor="rgba(255,255,255,0.01)"
     >
       <View

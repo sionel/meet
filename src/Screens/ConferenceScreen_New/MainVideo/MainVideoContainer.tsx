@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import MainVideoPresenter from './MainVideoPresenter';
 import { MainVideoContainerProps } from '../types';
 
-const MainVideoContainer: React.FC<MainVideoContainerProps> = ({ insets }) => {
+const MainVideoContainer: React.FC<MainVideoContainerProps> = ({}) => {
   const [isScreenShare, setIsScreenShare] = useState(false);
   const onPressShareStop = () => {
     setIsScreenShare(false);
@@ -10,7 +10,6 @@ const MainVideoContainer: React.FC<MainVideoContainerProps> = ({ insets }) => {
 
   return (
     <MainVideoPresenter
-      insets={insets}
       character={'jessie'}
       presenter={false}
       isScreenShare={isScreenShare}

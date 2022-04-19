@@ -10,14 +10,11 @@ import {
 } from 'react-native';
 import { RequestMessagesProps } from '../types';
 
-const RequestMessages: React.FC<RequestMessagesProps> = ({
-  insets,
-  userList
-}) => {
+const RequestMessages: React.FC<RequestMessagesProps> = ({ userList }) => {
   const t = getT();
   return (
     <FlatList
-      style={[styles.userListView, { top: insets.top + 100 }]}
+      style={[styles.userListView]}
       scrollEnabled={userList.length > 2}
       data={userList}
       showsVerticalScrollIndicator={false}

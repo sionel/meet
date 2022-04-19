@@ -23,7 +23,6 @@ export interface ConferenceScreenPresenterProps {
 }
 
 export interface TopPopupContainerProps {
-  insets: EdgeInsets;
 }
 export interface TopPopupPresenterProps
   extends RequestMessagesProps,
@@ -31,19 +30,15 @@ export interface TopPopupPresenterProps
 
 export interface RequestMessagesProps {
   userList: any[];
-  insets: EdgeInsets;
 }
 export interface ToastMessageProps {
-  insets: EdgeInsets;
   message: string | undefined;
   fadeAnimation: Animated.Value;
 }
 
 export interface TopContentContainerProps {
-  insets: EdgeInsets;
 }
 export interface TopContentPresenterProps {
-  insets: EdgeInsets;
   isMaster: boolean;
   UserListClick: () => void;
   ChattingClick: () => void;
@@ -53,10 +48,8 @@ export interface TopContentPresenterProps {
 }
 
 export interface MainVideoContainerProps {
-  insets: EdgeInsets;
 }
 export interface MainVideoPresenterProps {
-  insets: EdgeInsets;
   isScreenShare: boolean;
   isMuteVideo: boolean;
   presenter: any;
@@ -69,7 +62,6 @@ export interface SplitVideoContainerProps {}
 export interface SplitVideoPresenterProps {}
 
 export interface BottomPopupContainerProps {
-  insets: EdgeInsets;
   roomId: string;
   handleSpeaker: () => void;
 }
@@ -77,16 +69,13 @@ export interface BottomPopupPresenterProps
   extends MenuListProps,
     ChattingProps,
     ParticipantsProps {
-  insets: EdgeInsets;
   getUserName: (uesr: ParticipantsTypes) => string;
 }
 
 export interface BottomContentContainerProps {
-  insets: EdgeInsets;
   handleCloseConf: () => void;
 }
 export interface BottomContentPresenterProps {
-  insets: EdgeInsets;
   ToggleSpeakerClick: () => void;
   ToggleMikeClick: () => void;
   ToggleVideoClick: () => void;
@@ -99,7 +88,6 @@ export interface MenuListProps {
   onPressScreenShare: () => void;
   onPressRequestMic: () => void;
   isMaster: Boolean;
-  insets: EdgeInsets;
 }
 
 export interface ChattingProps {
@@ -111,7 +99,6 @@ export interface ChattingProps {
   scrollRef: MutableRefObject<any>;
   myMessage: string;
   cdm: boolean;
-  insets: EdgeInsets;
   messages: any[];
 }
 export interface ParticipantsProps extends InviteListProps {
@@ -126,7 +113,6 @@ export interface ParticipantsProps extends InviteListProps {
   isProfile: boolean;
   isInviteList: boolean;
   swipeRef: MutableRefObject<any>;
-  insets: EdgeInsets;
 }
 
 export interface ProfileProps {
@@ -134,7 +120,6 @@ export interface ProfileProps {
 }
 
 export interface InviteListProps {
-  insets: EdgeInsets;
   onClickEmail: () => void;
   onClickSms: () => void;
   onClickShare: () => void;

@@ -3,9 +3,7 @@ import React from 'react';
 import { TopContentContainerProps } from '../types';
 import TopContentPresenter from './TopContentPresenter';
 
-const TopContentContainer: React.FC<TopContentContainerProps> = ({
-  insets
-}) => {
+const TopContentContainer: React.FC<TopContentContainerProps> = ({}) => {
   const _handleUserList = () => {};
   const _handleChatting = () => {};
   const _handleReverseCamara = () => {};
@@ -13,7 +11,6 @@ const TopContentContainer: React.FC<TopContentContainerProps> = ({
   const _handleMore = () => {};
   return (
     <TopContentPresenter
-      insets={insets}
       isMaster={true}
       UserListClick={_handleUserList}
       ChattingClick={_handleChatting}

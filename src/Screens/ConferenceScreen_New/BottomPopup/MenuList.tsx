@@ -28,7 +28,6 @@ const { height } = Dimensions.get('window');
 const { OS } = Platform;
 
 const MenuList: React.FC<MenuListProps> = ({
-  insets,
   onPressSketch,
   onPressDocumentShare,
   onPressScreenShare,
@@ -38,7 +37,7 @@ const MenuList: React.FC<MenuListProps> = ({
 
   return (
     <BlurView
-      style={[styles.popupContainer, { bottom: insets.bottom }]}
+      style={[styles.popupContainer]}
       overlayColor="rgba(255,255,255,0.01)"
     >
       <View

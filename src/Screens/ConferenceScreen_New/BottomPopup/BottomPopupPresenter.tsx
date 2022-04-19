@@ -7,7 +7,6 @@ import ChattingANDROID from './ChattingANDROID';
 import Participant from './Participants';
 
 const BottomPopupPresenter: React.FC<BottomPopupPresenterProps> = ({
-  insets,
   getUserName,
   // MenuList
   isMaster,
@@ -46,7 +45,7 @@ const BottomPopupPresenter: React.FC<BottomPopupPresenterProps> = ({
   return (
     <Fragment>
       {/* <MenuList
-        insets={insets}
+        
         isMaster={isMaster}
         onPressSketch={onPressSketch}
         onPressDocumentShare={onPressDocumentShare}
@@ -57,7 +56,6 @@ const BottomPopupPresenter: React.FC<BottomPopupPresenterProps> = ({
       {Platform.OS === 'ios' ? (
         <ChattingIOS
           myMessage={myMessage}
-          insets={insets}
           cdm={cdm}
           scrollRef={scrollRef}
           messages={messages}
@@ -70,7 +68,6 @@ const BottomPopupPresenter: React.FC<BottomPopupPresenterProps> = ({
       ) : (
         <ChattingANDROID
           myMessage={myMessage}
-          insets={insets}
           cdm={cdm}
           scrollRef={scrollRef}
           messages={messages}
@@ -82,7 +79,7 @@ const BottomPopupPresenter: React.FC<BottomPopupPresenterProps> = ({
         />
       )}
       {/* <Participant
-        insets={insets}
+        
         isRoomMaster={isRoomMaster}
         isProfile={isProfile}
         isInviteList={isInviteList}

@@ -38,7 +38,6 @@ const rightSwipeWidth = Platform.OS === 'ios' ? width * 0.185 : width * 0.175;
 const leftSwipeWidth = width * 0.3;
 
 const Participant: React.FC<ParticipantsProps> = ({
-  insets,
   isRoomMaster,
   isProfile,
   isInviteList,
@@ -107,7 +106,6 @@ const Participant: React.FC<ParticipantsProps> = ({
 
   return isInviteList ? (
     <InviteList
-      insets={insets}
       onClickEmail={onClickEmail}
       onClickSms={onClickSms}
       onClickShare={onClickShare}
@@ -116,7 +114,7 @@ const Participant: React.FC<ParticipantsProps> = ({
     />
   ) : (
     <BlurView
-      style={[styles.popupContainer, { bottom: insets.bottom }]}
+      style={[styles.popupContainer]}
       overlayColor="rgba(255,255,255,0.01)"
     >
       <View

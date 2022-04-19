@@ -3,7 +3,8 @@ import {
   Text,
   StyleSheet,
   TouchableHighlight,
-  Image
+  Image,
+  SafeAreaView
 } from 'react-native';
 import React from 'react';
 import { TopContentPresenterProps } from '../types';
@@ -17,7 +18,6 @@ import icMaster from '@assets/icons/ic_master.png';
 
 //시간, 방제목, 상단 버튼
 const TopContentPresenter: React.FC<TopContentPresenterProps> = ({
-  insets,
   isMaster,
   UserListClick,
   ChattingClick,
@@ -26,69 +26,97 @@ const TopContentPresenter: React.FC<TopContentPresenterProps> = ({
   MoreClick
 }) => {
   return (
-    <View style={[styles.topContainer, { top: insets.top }]}>
-      <View style={styles.topRow}>
-        <Text style={styles.topRowText}>{`01:20`}</Text>
-        <Text style={styles.topRowText}>{`기획팀 주간회의`}</Text>
-        <View style={styles.topButtonContainer}>
-          <TouchableHighlight underlayColor={'rgba(0,0,0,0)'} onPress={UserListClick}>
+    <SafeAreaView
+      style={{
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        top: 0,
+        zIndex: 1
+      }}
+    >
+      <View style={[styles.topContainer]}>
+        <View style={styles.topRow}>
+          <Text style={styles.topRowText}>{`01:20`}</Text>
+          <Text style={styles.topRowText}>{`기획팀 주간회의`}</Text>
+          <View style={styles.topButtonContainer}>
+            <TouchableHighlight
+              underlayColor={'rgba(0,0,0,0)'}
+              onPress={UserListClick}
+            >
+              <Image
+                source={icUserW}
+                resizeMode={'cover'}
+                style={styles.UserIcon}
+              />
+            </TouchableHighlight>
+            <TouchableHighlight
+              underlayColor={'rgba(0,0,0,0)'}
+              onPress={ChattingClick}
+            >
+              <Image
+                source={icChatW}
+                resizeMode={'cover'}
+                style={styles.ChatIcon}
+              />
+            </TouchableHighlight>
+            <TouchableHighlight
+              underlayColor={'rgba(0,0,0,0)'}
+              onPress={ReverseCamaraClick}
+            >
+              <Image
+                source={icReverseW}
+                resizeMode={'cover'}
+                style={styles.ReverseIcon}
+              />
+            </TouchableHighlight>
+            <TouchableHighlight
+              underlayColor={'rgba(0,0,0,0)'}
+              onPress={DisplayInvertClick}
+            >
+              <Image
+                source={icInvertW}
+                resizeMode={'cover'}
+                style={styles.InvertIcon}
+              />
+            </TouchableHighlight>
+            <TouchableHighlight
+              underlayColor={'rgba(0,0,0,0)'}
+              onPress={MoreClick}
+            >
+              <Image
+                source={icMoreW}
+                resizeMode={'cover'}
+                style={styles.MoreIcon}
+              />
+            </TouchableHighlight>
+          </View>
+        </View>
+        <View
+          style={[styles.mainUserNameView, isMaster && { paddingLeft: 12 }]}
+        >
+          {isMaster && (
             <Image
-              source={icUserW}
+              source={icMaster}
               resizeMode={'cover'}
-              style={styles.UserIcon}
+              style={styles.MasterIcon}
             />
-          </TouchableHighlight>
-          <TouchableHighlight underlayColor={'rgba(0,0,0,0)'} onPress={ChattingClick}>
-            <Image
-              source={icChatW}
-              resizeMode={'cover'}
-              style={styles.ChatIcon}
-            />
-          </TouchableHighlight>
-          <TouchableHighlight underlayColor={'rgba(0,0,0,0)'} onPress={ReverseCamaraClick}>
-            <Image
-              source={icReverseW}
-              resizeMode={'cover'}
-              style={styles.ReverseIcon}
-            />
-          </TouchableHighlight>
-          <TouchableHighlight underlayColor={'rgba(0,0,0,0)'} onPress={DisplayInvertClick}>
-            <Image
-              source={icInvertW}
-              resizeMode={'cover'}
-              style={styles.InvertIcon}
-            />
-          </TouchableHighlight>
-          <TouchableHighlight underlayColor={'rgba(0,0,0,0)'} onPress={MoreClick}>
-            <Image
-              source={icMoreW}
-              resizeMode={'cover'}
-              style={styles.MoreIcon}
-            />
-          </TouchableHighlight>
+          )}
+          <Text style={styles.name}>{`김연길`}</Text>
         </View>
       </View>
-      <View style={[styles.mainUserNameView, isMaster && { paddingLeft: 12 }]}>
-        {isMaster && (
-          <Image
-            source={icMaster}
-            resizeMode={'cover'}
-            style={styles.MasterIcon}
-          />
-        )}
-        <Text style={styles.name}>{`김연길`}</Text>
-      </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   topContainer: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    zIndex: 1,
-    elevation: 1
+    flex: 1
+    // position: 'absolute',
+    // left: 0,
+    // right: 0,
+    // zIndex: 1,
+    // elevation: 1
   },
   topRow: {
     justifyContent: 'space-between',

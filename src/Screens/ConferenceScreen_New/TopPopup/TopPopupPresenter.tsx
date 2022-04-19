@@ -6,14 +6,13 @@ import ToastMessage from './ToastMessage';
 
 const TopPopupPresenter: React.FC<TopPopupPresenterProps> = ({
   userList,
-  insets,
   message,
   fadeAnimation
 }) => {
   return userList.length > 0 ? (
-    <RequestMessages insets={insets} userList={userList} />
+    <RequestMessages  userList={userList} />
   ) : message ?  (
-    <ToastMessage insets={insets} message={message} fadeAnimation={fadeAnimation} />
+    <ToastMessage  message={message} fadeAnimation={fadeAnimation} />
   ) : null;
 };
 
