@@ -28,8 +28,6 @@ export default function ConfigurationScreenContainer(props: any) {
 
   const { user_name, rankname, user_default_email, profile_url, last_company } =
     auth;
-
-  console.log('rankname: ', rankname);
   
   const authInfo = {
     user_name,

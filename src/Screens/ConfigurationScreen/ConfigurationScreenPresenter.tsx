@@ -55,13 +55,17 @@ export default function ConfigurationScreenPresenter(props: propsTypes) {
   } = props;
 
   const t = getT();
+  const userName = authInfo?.user_name;
+  const rankName = authInfo?.rankname; 
 
   return (
     // <Fragment>
     //   <SafeAreaView style={{ flex: 0, backgroundColor: '#1c90fb' }} />
     //   <SafeAreaView style={{ flex: 1 }}>
     <SafeAreaView style={{ backgroundColor: '#fff', flex: 1 }}>
-      <View style={[styles.topTitle, {paddingHorizontal: isTablet() ? 20 : '5%'}]}>
+      <View
+        style={[styles.topTitle, { paddingHorizontal: isTablet() ? 20 : '5%' }]}
+      >
         <TouchableOpacity onPress={goBack}>
           <Image
             source={icBack}
@@ -83,9 +87,11 @@ export default function ConfigurationScreenPresenter(props: propsTypes) {
         />
         <View>
           <Text style={styles.userName}>
-            {authInfo.user_name + ' ' + authInfo.rankname}
+            {userName ? userName + ' ' + rankName : ''}
           </Text>
-          <Text style={styles.userEmail}>{authInfo.user_default_email}</Text>
+          <Text style={styles.userEmail}>
+            {authInfo.user_default_email ? authInfo.user_default_email : ''}
+          </Text>
         </View>
       </View>
       <View
@@ -99,7 +105,7 @@ export default function ConfigurationScreenPresenter(props: propsTypes) {
         <Text style={styles.menuTextStyle}>{`Space`}</Text>
         <TouchableOpacity
           style={styles.selectConpany}
-          onPress={()=>onCompanyChange()}
+          onPress={() => onCompanyChange()}
         >
           <Text style={styles.menuTextStyle}>{authInfo.companyName}</Text>
           <Image
