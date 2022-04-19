@@ -1,6 +1,7 @@
 import { MeetParamList } from '@navigations/RootNavigation';
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import { ParticipantsTypes } from '@redux/participants';
+import { Participant } from '@redux/participants_copy';
 import { MutableRefObject } from 'react';
 import {
   Animated,
@@ -20,10 +21,10 @@ export interface ConferenceScreenPresenterProps {
   isConnected: boolean;
   handleClose: () => void;
   handleSpeaker: () => void;
+  participants: Participant[];
 }
 
-export interface TopPopupContainerProps {
-}
+export interface TopPopupContainerProps {}
 export interface TopPopupPresenterProps
   extends RequestMessagesProps,
     ToastMessageProps {}
@@ -36,8 +37,7 @@ export interface ToastMessageProps {
   fadeAnimation: Animated.Value;
 }
 
-export interface TopContentContainerProps {
-}
+export interface TopContentContainerProps {}
 export interface TopContentPresenterProps {
   isMaster: boolean;
   UserListClick: () => void;
@@ -48,6 +48,7 @@ export interface TopContentPresenterProps {
 }
 
 export interface MainVideoContainerProps {
+  mainUser: Participant;
 }
 export interface MainVideoPresenterProps {
   isScreenShare: boolean;
@@ -55,6 +56,8 @@ export interface MainVideoPresenterProps {
   presenter: any;
   character: string;
   stream: any;
+  videoType: string;
+  mainUser: Participant;
   onPressShareStop: () => void;
 }
 

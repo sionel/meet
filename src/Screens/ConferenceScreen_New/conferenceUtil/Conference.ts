@@ -37,7 +37,7 @@ class Conference {
       this._room = this._createRoom(id);
       this._sendMessage = new sendMessage(this._room);
       const attributes = this._sendMessage.sendWehagoId(user);
-      this._handler.setUserInfo(attributes);
+      this._handler.setUserInfo({attributes});
       bindEvent(this._handler, this._room, resolve, reject);
       this._room.join();
     });

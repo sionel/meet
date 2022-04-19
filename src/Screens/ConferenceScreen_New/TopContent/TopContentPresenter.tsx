@@ -26,15 +26,7 @@ const TopContentPresenter: React.FC<TopContentPresenterProps> = ({
   MoreClick
 }) => {
   return (
-    <SafeAreaView
-      style={{
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
-        top: 0,
-        zIndex: 1
-      }}
-    >
+    <SafeAreaView style={styles.topContentSAV}>
       <View style={[styles.topContainer]}>
         <View style={styles.topRow}>
           <Text style={styles.topRowText}>{`01:20`}</Text>
@@ -110,13 +102,15 @@ const TopContentPresenter: React.FC<TopContentPresenterProps> = ({
 };
 
 const styles = StyleSheet.create({
+  topContentSAV: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    top: 0,
+    zIndex: 1
+  },
   topContainer: {
     flex: 1
-    // position: 'absolute',
-    // left: 0,
-    // right: 0,
-    // zIndex: 1,
-    // elevation: 1
   },
   topRow: {
     justifyContent: 'space-between',

@@ -39,46 +39,15 @@ const Chatting: React.FC<ChattingProps> = ({
   const { OS } = Platform;
   const user = { cid: '123456' };
 
-  const data = [
-    { title: 'aa' },
-    { title: 'bb' },
-    { title: 'cc' },
-    { title: 'dd' },
-    { title: 'ee' },
-    { title: 'ff' },
-    { title: 'gg' },
-    { title: 'hh' },
-    { title: 'ii' },
-    { title: 'jj' },
-    { title: 'kk' },
-    { title: 'll' },
-    { title: 'mm' },
-    { title: 'nn' },
-    { title: 'oo' },
-    { title: 'pp' },
-    { title: 'qq' },
-    { title: 'rr' },
-    { title: 'ss' },
-    { title: 'tt' }
-  ];
-
   return (
-    <SafeAreaView
-      style={{
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
-        bottom: 0,
-        zIndex: 1
-      }}
-    >
+    <SafeAreaView style={styles.chatIosSAV}>
       <KeyboardAvoidingView
         style={[styles.container, isPad && { width: true ? '36%' : '49%' }]}
         behavior={'padding'}
         enabled={true}
       >
         <View style={{ height: 120 }} />
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={{ flex: 1, backgroundColor: '#rgba(0,0,255,0.2)' }}
           onPress={() => {
             Keyboard.dismiss();
@@ -90,9 +59,9 @@ const Chatting: React.FC<ChattingProps> = ({
               <Text style={{ fontSize: 25 }}>{title}</Text>
             )}
           />
-        </TouchableOpacity>
-        {/* <View style={{flex:}} /> */}
-        {/* <ScrollView
+        </TouchableOpacity> */}
+
+        <ScrollView
           ref={el => (scrollRef.current = el)}
           showsVerticalScrollIndicator={false}
           scrollEnabled={true}
@@ -156,7 +125,7 @@ const Chatting: React.FC<ChattingProps> = ({
               );
             }}
           />
-        </ScrollView> */}
+        </ScrollView>
         <View style={styles.inputArea}>
           <TouchableOpacity style={{ marginRight: 4 }}>
             <Image source={icTrans} style={{ width: 24, height: 24 }} />
@@ -195,6 +164,13 @@ const Chatting: React.FC<ChattingProps> = ({
 };
 
 const styles = StyleSheet.create({
+  chatIosSAV: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    bottom: 0,
+    zIndex: 1
+  },
   container: {
     flex: 1,
     paddingHorizontal: 15

@@ -81,7 +81,7 @@ export default class sendMessage {
       isMobile: true,
       user_contact: user.user_contact,
       user_email: user.user_eamil ? user.user_eamil : user.user_default_email,
-      avatar: user.avatar
+      avatar: user.avatar ? user.avatar : '{"label":"기본 제공 캐릭터1","value":"jangok"}'
     };
     console.log('니 혹시 여러번 날아가나 진짜?');
 

@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     maxHeight: 258,
     left: 16,
     right: 16,
-    elevation: 4,
+    // elevation: 4,
     zIndex: 4
   },
   requestView: {

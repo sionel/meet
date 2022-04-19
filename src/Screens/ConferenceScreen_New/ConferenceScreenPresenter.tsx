@@ -1,10 +1,4 @@
-import {
-  KeyboardAvoidingView,
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
-  View
-} from 'react-native';
+import { StatusBar, View } from 'react-native';
 import React, { Fragment } from 'react';
 import TopPopup from './TopPopup';
 import TopContent from './TopContent';
@@ -14,22 +8,21 @@ import BottomPopup from './BottomPopup';
 import BottomContent from './BottomContent';
 import { WEHAGO_TYPE } from '../../../config';
 import { ConferenceScreenPresenterProps } from './types';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const ConferenceScreenPresenter: React.FC<ConferenceScreenPresenterProps> = ({
   isConnected,
+  participants,
   handleClose,
   handleSpeaker
 }) => {
   return (
-    // <SafeAreaView style={{ flex: 1, backgroundColor: '#000' }}>
     <View style={{ flex: 1, backgroundColor: '#000' }}>
       <StatusBar backgroundColor="#000" barStyle={'light-content'} />
       {!isConnected ? (
         <Fragment>
           {/* <TopPopup />*/}
-          <TopContent /> 
-          <MainVideo />
+          <TopContent />
+          <MainVideo mainUser={participants[2]} />
           {/* <SplitVideo /> */}
           <BottomPopup roomId="213564782" handleSpeaker={handleSpeaker} />
           {/* <BottomContent handleCloseConf={handleClose}  /> */}
@@ -40,7 +33,6 @@ const ConferenceScreenPresenter: React.FC<ConferenceScreenPresenterProps> = ({
         <Fragment></Fragment>
       )}
     </View>
-    // </SafeAreaView>
   );
 };
 

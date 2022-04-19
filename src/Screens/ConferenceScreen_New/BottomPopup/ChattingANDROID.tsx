@@ -40,18 +40,11 @@ const Chatting: React.FC<ChattingProps> = ({
   const { OS } = Platform;
   const user = { cid: '123456' };
   return (
-    <SafeAreaView
-      style={{
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
-        bottom: 0,
-        zIndex: 1
-      }}
-    >
+    <SafeAreaView style={styles.chatAndSAV}>
       <View
         style={[styles.container, isPad && { width: true ? '36%' : '49%' }]}
       >
+        <View style={{ height: 120 }} />
         <ScrollView
           ref={el => (scrollRef.current = el)}
           showsVerticalScrollIndicator={false}
@@ -155,6 +148,13 @@ const Chatting: React.FC<ChattingProps> = ({
 };
 
 const styles = StyleSheet.create({
+  chatAndSAV: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    bottom: 0,
+    zIndex: 1
+  },
   container: {
     flex: 1,
     paddingHorizontal: 15

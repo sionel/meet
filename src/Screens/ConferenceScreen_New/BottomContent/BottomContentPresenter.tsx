@@ -4,7 +4,8 @@ import {
   Platform,
   StyleSheet,
   TouchableOpacity,
-  Image
+  Image,
+  SafeAreaView
 } from 'react-native';
 import React from 'react';
 import { BottomContentPresenterProps } from '../types';
@@ -27,46 +28,49 @@ const BottomContentPresenter: React.FC<BottomContentPresenterProps> = ({
   EndCallClick
 }) => {
   return (
-    <View style={[styles.bottomArea]}>
-      <View style={{ flexDirection: 'row', marginTop: 24 }}>
-        {/* 스피커 */}
-        {!isTablet && (
+    <SafeAreaView
+      style={styles.BotContentSAV}
+    >
+      <View style={styles.bottomArea}>
+        <View style={{ flexDirection: 'row', marginTop: 24 }}>
+          {/* 스피커 */}
+          {!isTablet && (
+            <TouchableOpacity
+              style={styles.bottonTouch}
+              onPressOut={ToggleSpeakerClick}
+            >
+              <Image
+                source={icSpeakerOn}
+                style={styles.buttonImage}
+                resizeMode={'cover'}
+              />
+            </TouchableOpacity>
+          )}
+          {/* 마이크 */}
           <TouchableOpacity
             style={styles.bottonTouch}
-            onPressOut={ToggleSpeakerClick}
+            onPressOut={ToggleMikeClick}
           >
             <Image
-              source={icSpeakerOn}
+              source={icMicOn}
               style={styles.buttonImage}
               resizeMode={'cover'}
             />
           </TouchableOpacity>
-        )}
-        {/* 마이크 */}
-        <TouchableOpacity
-          style={styles.bottonTouch}
-          onPressOut={ToggleMikeClick}
-        >
-          <Image
-            source={icMicOn}
-            style={styles.buttonImage}
-            resizeMode={'cover'}
-          />
-        </TouchableOpacity>
-        {/* 카메라 */}
+          {/* 카메라 */}
 
-        <TouchableOpacity
-          style={styles.bottonTouch}
-          onPressOut={ToggleVideoClick}
-        >
-          <Image
-            source={icVideoOn}
-            style={styles.buttonImage}
-            resizeMode={'cover'}
-          />
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.bottonTouch}
+            onPressOut={ToggleVideoClick}
+          >
+            <Image
+              source={icVideoOn}
+              style={styles.buttonImage}
+              resizeMode={'cover'}
+            />
+          </TouchableOpacity>
 
-        {/* {isScreenShare && (
+          {/* {isScreenShare && (
           <TouchableOpacity style={styles.bottonTouch} onPress={() => {}}>
             <Image
               source={icVideoOff}
@@ -75,33 +79,37 @@ const BottomContentPresenter: React.FC<BottomContentPresenterProps> = ({
             />
           </TouchableOpacity>
         )} */}
-        {/* 회의종료 */}
-        <TouchableOpacity
-          style={[styles.bottonTouch, { backgroundColor: '#ef5334' }]}
-          onPressOut={EndCallClick}
-        >
-          <Image
-            source={icCallEnd}
-            style={styles.buttonImage}
-            resizeMode={'cover'}
-          />
-        </TouchableOpacity>
+          {/* 회의종료 */}
+          <TouchableOpacity
+            style={[styles.bottonTouch, { backgroundColor: '#ef5334' }]}
+            onPressOut={EndCallClick}
+          >
+            <Image
+              source={icCallEnd}
+              style={styles.buttonImage}
+              resizeMode={'cover'}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  bottomArea: {
+  BotContentSAV: {
     position: 'absolute',
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 1,
-    elevation: 1,
-    left: 0,
-    right: 0
+    width: '100%',
+    height: '50%',
+    bottom: 0,
+    zIndex: 1
   },
-
+  bottomArea: {
+    flex: 1,
+    paddingHorizontal: 15,
+    justifyContent: 'flex-end',
+    alignItems: 'center'
+  },
   bottonTouch: {
     width: 48,
     height: 48,
@@ -111,7 +119,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-
   buttonImage: {
     width: 24,
     height: 24

@@ -73,8 +73,10 @@ const _setUserInfo = (state: InitialState, action: AnyAction) => {
   const { user } = action;
   const { list } = state;
   if (list.some(({ jitsiId }) => jitsiId === user.value)) return { ...state };
+  const avatar = user.attributes.avatar
+    ? JSON.parse(user.attributes.avatar).value
+    : 'jangok';
 
-  const avatar = JSON.parse(user.attributes.avatar).value;
   const newUser: Participant = {
     jitsiId: user.value,
     videoTrack: null,
@@ -83,13 +85,13 @@ const _setUserInfo = (state: InitialState, action: AnyAction) => {
     isMaster: false,
 
     name: user.attributes.userName,
-    nickname: user.attributes.nickname,
+    nickname: user.attributes?.nickname,
     avatar,
-    email: user.attributes.user_email,
-    companyFullpath: user.attributes.companyFullpath,
-    phonenumber: user.attributes.user_contact,
+    email: user.attributes?.user_email,
+    companyFullpath: user.attributes?.companyFullpath,
+    phonenumber: user.attributes?.user_contact,
     profileUrl: user.attributes.profile_url,
-    wehagoId: user.attributes.wehagoId
+    wehagoId: user.attributes?.wehagoId
   };
   list.push(newUser);
   return {

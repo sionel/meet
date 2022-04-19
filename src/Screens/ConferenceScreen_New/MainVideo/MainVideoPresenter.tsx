@@ -6,13 +6,11 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   SafeAreaView,
-  ImageBackground,
-  StatusBar
+  Platform
 } from 'react-native';
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { MainVideoPresenterProps } from '../types';
 import { RTCView } from 'react-native-webrtc';
-import LinearGradient from 'react-native-linear-gradient';
 
 import icMan1 from '@assets/icons/ic_man1.png';
 import icWoman1 from '@assets/icons/ic_woman3.png';
@@ -26,11 +24,18 @@ const MainVideoPresenter: React.FC<MainVideoPresenterProps> = ({
   character,
   isMuteVideo,
   stream,
+  mainUser,
+  videoType,
   onPressShareStop
 }) => {
   return (
     <SafeAreaView style={styles.mainVideoSAV}>
-      <KeyboardAvoidingView style={styles.avoidingContainer} enabled={false} behavior={'height'}>
+      <KeyboardAvoidingView
+        style={styles.avoidingContainer}
+        keyboardVerticalOffset={1}
+        enabled={false}
+        behavior={Platform.OS === 'android' ? 'height' : undefined}
+      >
         {isScreenShare ? (
           <View style={styles.shareContainer}>
             <Image
@@ -50,27 +55,18 @@ const MainVideoPresenter: React.FC<MainVideoPresenterProps> = ({
             </TouchableOpacity>
           </View>
         ) : !isMuteVideo && stream && !presenter ? (
-          <View style={styles.RTCVideo} />
+          <RTCView
+            style={styles.RTCVideo}
+            mirror={videoType !== 'desktop'}
+            objectFit={'contain'}
+            streamURL={stream.toURL()}
+            zOrder={0} // zOrder 는 [0, 1] 만 사용가능 (아마?)
+          />
         ) : (
-          // <RTCView
-          //   style={styles.RTCVideo}
-          //   mirror={videoType !== 'desktop' && !isVideoReverse}
-          //   objectFit={
-          //     localPipMode || isTablet
-          //       ? 'cover'
-          //       : videoType === undefined
-          //       ? 'contain'
-          //       : objectFit
-          //   }
-          //   streamURL={stream.toURL()}
-          //   zOrder={0} // zOrder 는 [0, 1] 만 사용가능 (아마?)
-          // />
-          // <View style={styles.imageContainer}>
           <View style={styles.imageContainer}>
             <Image
               source={icWoman2}
               style={{ width: '100%', height: '100%' }}
-              // , backgroundColor: 'rgba(243,216,119,0.6)' }
               resizeMode={'cover'}
             />
           </View>

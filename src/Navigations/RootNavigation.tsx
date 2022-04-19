@@ -193,7 +193,7 @@ export default function RootNavigation(props: any) {
   return (
     <NavigationContainer ref={navigationRef}>
       <RootStack.Navigator
-        initialRouteName="ConferenceView_new"
+        initialRouteName="SplashView"
         screenOptions={{ headerShown: false }}
       >
         <RootStack.Screen name="SplashView" component={SplashView} />
