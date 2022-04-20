@@ -1,3 +1,4 @@
+import Conference from '@screens/ConferenceScreen_New/conferenceUtil/Conference';
 import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import { RootState } from '../configureStore';
@@ -5,12 +6,14 @@ import { RootState } from '../configureStore';
 const SET_LIST = 'conference.SET_LIST';
 const SET_INITIAL_LIST = 'conference.SET_INITIAL_LIST';
 const SET_ROOM_ID = 'conference.SET_ROOM_ID';
+const SET_ROOM = 'conference.SET_ROOM';
 const SET_IS_CONFERENCE = 'conference.SET_IS_CONFERENCE';
 const SET_TOPDISPLAY_TYPE = 'conference SET_TOPDISPLAY_TYPE';
 const SET_MAINDISPLAY_TYPE = 'conference SET_MAINDISPLAY_TYPE';
 
 export interface state {
   roomId: string;
+  room: any ;
   isConference: boolean;
   topDisplayType: 'FUNCTION' | 'NAME';
   mainDisplayType:
@@ -23,6 +26,7 @@ export interface state {
 
 const initialState: state = {
   roomId: '',
+  room: undefined,
   isConference: false,
   topDisplayType: 'FUNCTION',
   mainDisplayType: 'CHARACTER'
@@ -35,6 +39,8 @@ const reducer: (state: state, action: AnyAction) => state = (
   switch (action.type) {
     case SET_ROOM_ID:
       return _setRoomId(state, action);
+    case SET_ROOM:
+      return _setRoom(state, action);
     case SET_IS_CONFERENCE:
       return _setIsConference(state, action);
     case SET_TOPDISPLAY_TYPE:
@@ -58,6 +64,16 @@ const setRoomId = (id: string) => {
 };
 const _setRoomId = (state: state, action: AnyAction) => {
   return { ...state, roomId: action.id };
+};
+
+const setRoom = (room: Conference) => {
+  return {
+    type: SET_ROOM,
+    room
+  };
+};
+const _setRoom = (state: state, action: AnyAction) => {
+  return { ...state, room: action.room };
 };
 
 function setIsConference(isConference: boolean) {
@@ -99,6 +115,7 @@ const _setMainDisplayType = (state: state, action: AnyAction) => {
 
 export const actionCreators = {
   setRoomId,
+  setRoom,
   setIsConference,
   setTopDisplayType,
   setMainDisplayType

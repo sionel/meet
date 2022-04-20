@@ -9,6 +9,8 @@ import Conference from './conferenceUtil/Conference';
 import { isSuccess } from '@services/types';
 import MeetApi from '@services/api/MeetApi';
 
+import { actionCreators as ConferenceActions } from '@redux/conference';
+
 const ConferenceScreenContainer: React.FC<
   ConferenceScreenContainerProps
 > = props => {
@@ -17,37 +19,51 @@ const ConferenceScreenContainer: React.FC<
   const [first, setfirst] = useState();
   const [isConnected, setIsConnected] = useState(false);
 
-  const { state, testFlag, auth, participants } = useSelector(
+  const { state, testFlag, auth, participants, room } = useSelector(
     (state: RootState) => ({
       testFlag: state.test.testFlag,
       auth: state.user.auth,
       state,
-      participants: state.participants_copy.list
+      participants: state.participants_copy.list,
+      room: state.conference.room
     })
   );
 
+  const dispatch = useDispatch();
+  const setRoom = (conference: Conference) => {
+    dispatch(ConferenceActions.setRoom(conference));
+  };
   // const testfunction = new test('asd')
 
   // testfunction.valtest()
 
   useEffect(() => {
-    // _connectConference();
+    _connectConference();
   }, []);
-  const dispatch = useDispatch();
 
   const _connectConference = async () => {
     // console.log('한번만 나와야하는데 이게 여러번 나오나 싶어서');
-    const id = 'a819307c-fec5-47a2-9bc5-0cc175254366';
+    const id = '4cd6a9ad-87f5-4209-83a4-28927da96962';
     const getMeetRoomToken = await MeetApi.getMeetRoomToken(auth, id);
 
     if (isSuccess(getMeetRoomToken)) {
       const token = getMeetRoomToken.resultData;
       conference = new Conference();
+      setRoom(conference);
+
       conference.join({ id, token }, auth, dispatch);
+      setIsConnected(true);
     }
   };
+  const _handleClose = () => {
+    room.dispose();
+    setIsConnected(false);
 
-  const _handleClose = () => {};
+    console.log('participants : ', participants);
+    
+    // participants[0].audioTrack.dispose();
+    // participants[0].videoTrack.dispose();
+  };
   const _handleSpeaker = () => {};
 
   return (

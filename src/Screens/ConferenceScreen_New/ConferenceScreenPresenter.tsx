@@ -1,4 +1,4 @@
-import { StatusBar, View } from 'react-native';
+import { StatusBar, Text, View } from 'react-native';
 import React, { Fragment } from 'react';
 import TopPopup from './TopPopup';
 import TopContent from './TopContent';
@@ -15,22 +15,26 @@ const ConferenceScreenPresenter: React.FC<ConferenceScreenPresenterProps> = ({
   handleClose,
   handleSpeaker
 }) => {
+  console.log('isConnected : ', isConnected);
+  
   return (
     <View style={{ flex: 1, backgroundColor: '#000' }}>
       <StatusBar backgroundColor="#000" barStyle={'light-content'} />
-      {!isConnected ? (
+      {isConnected ? (
         <Fragment>
           {/* <TopPopup />*/}
           <TopContent />
-          <Main mainUser={participants[2]} />
+          <Main mainUser={participants[1]} />
           {/* <SplitVideo /> */}
           {/* <BottomPopup roomId="213564782" handleSpeaker={handleSpeaker} /> */}
-          <BottomContent handleCloseConf={handleClose}  />
+          <BottomContent handleCloseConf={handleClose} />
         </Fragment>
-      ) : WEHAGO_TYPE === 'WEHAGO' ? (
-        <Fragment></Fragment>
       ) : (
-        <Fragment></Fragment>
+        <View
+          style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}
+        >
+          <Text style={{ color: '#fff', fontSize: 20 }}>{`대화종료`}</Text>
+        </View>
       )}
     </View>
   );
