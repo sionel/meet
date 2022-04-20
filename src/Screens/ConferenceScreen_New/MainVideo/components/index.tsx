@@ -1,5 +1,0 @@
-export {default as Character } from './Character' 
-export {default as DocumentShare } from './DocumentShare' 
-export {default as MainVideo } from './MainVideo' 
-export {default as Scetch } from './Scetch' 
-export {default as ScreenShare } from './ScreenShare1' 

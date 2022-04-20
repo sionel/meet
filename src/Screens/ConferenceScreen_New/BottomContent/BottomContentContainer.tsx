@@ -5,16 +5,16 @@ import BottomContentPresenter from './BottomContentPresenter';
 const BottomContentContainer: React.FC<BottomContentContainerProps> = ({
   handleCloseConf
 }) => {
-  const _handleSpeakerClick = () => {};
-  const _handleMikeClick = () => {};
-  const _handleVideoClick = () => {};
+  const _handlePressSpeaker = () => {};
+  const _handlePressMike = () => {};
+  const _handlePressVideo = () => {};
 
   return (
     <BottomContentPresenter
-      ToggleSpeakerClick={_handleSpeakerClick}
-      ToggleMikeClick={_handleMikeClick}
-      ToggleVideoClick={_handleVideoClick}
-      EndCallClick={handleCloseConf}
+    onPressSpeaker={_handlePressSpeaker}
+    onPressMike={_handlePressMike}
+    onPressVideo={_handlePressVideo}
+    onPressEndCall={handleCloseConf}
     />
   );
 };

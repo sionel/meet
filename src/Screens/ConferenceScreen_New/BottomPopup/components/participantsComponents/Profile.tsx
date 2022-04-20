@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 
 import { wehagoMainURL, wehagoDummyImageURL } from '@utils/index';
 
@@ -7,11 +7,7 @@ import icMail from '@assets/icons/ic_mail.png';
 import icCall from '@assets/icons/ic_call.png';
 import wehagoIcon from '@assets/icons/appicon_wehago.png';
 
-import Device from 'react-native-device-info';
-import { ProfileProps } from '../types';
-
-const isPad = Device.isTablet();
-const { width, height } = Dimensions.get('window');
+import { ProfileProps } from '@screens/ConferenceScreen_New/types';
 
 const Profile: React.FC<ProfileProps> = ({ user }) => {
   const { userInfo } = user;
@@ -27,7 +23,11 @@ const Profile: React.FC<ProfileProps> = ({ user }) => {
   return (
     <Fragment>
       <View style={styles.middleContainer}>
-        <Image source={{ uri: profileUrl }} style={styles.profileSize} resizeMode={'cover'} />
+        <Image
+          source={{ uri: profileUrl }}
+          style={styles.profileSize}
+          resizeMode={'cover'}
+        />
         <Text style={styles.nameStyle}>{userName}</Text>
         <Text style={styles.pathStyle}>{fullPath}</Text>
         <Image

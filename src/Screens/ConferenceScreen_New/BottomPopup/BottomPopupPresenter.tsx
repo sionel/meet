@@ -1,10 +1,12 @@
-import { View, Text, Platform } from 'react-native';
+import { View, Text, Platform, SafeAreaView, StyleSheet } from 'react-native';
 import React, { Fragment } from 'react';
-import { BottomPopupPresenterProps } from '../types';
-import MenuList from './MenuList';
-import ChattingIOS from './ChattingIOS';
-import ChattingANDROID from './ChattingANDROID';
-import Participant from './Participants';
+import { BottomPopupPresenterProps } from '@screens/ConferenceScreen_New/types';
+import {
+  ChattingANDROID,
+  ChattingIOS,
+  MenuList,
+  Participants
+} from './components';
 
 const BottomPopupPresenter: React.FC<BottomPopupPresenterProps> = ({
   getUserName,
@@ -36,24 +38,22 @@ const BottomPopupPresenter: React.FC<BottomPopupPresenterProps> = ({
   onPressKick,
   setIsProfile,
   // InviteList,
-  onClickEmail,
-  onClickSms,
-  onClickShare,
-  onClickLink,
-  onClickCode
+  onPressEmail,
+  onPressSms,
+  onPressShare,
+  onPressLink,
+  onPressCode
 }) => {
   return (
-    <Fragment>
-      {/* <MenuList
-        
+    <SafeAreaView style={styles.BotPopupSAV}>
+      <MenuList
         isMaster={isMaster}
         onPressSketch={onPressSketch}
         onPressDocumentShare={onPressDocumentShare}
         onPressRequestMic={onPressRequestMic}
         onPressScreenShare={onPressScreenShare}
       />
-      */}
-      {Platform.OS === 'ios' ? (
+      {/* {Platform.OS === 'ios' ? (
         <ChattingIOS
           myMessage={myMessage}
           cdm={cdm}
@@ -77,9 +77,8 @@ const BottomPopupPresenter: React.FC<BottomPopupPresenterProps> = ({
           setCdm={setCdm}
           getUserName={getUserName}
         />
-      )}
-      {/* <Participant
-        
+      )} */}
+      {/* <Participants
         isRoomMaster={isRoomMaster}
         isProfile={isProfile}
         isInviteList={isInviteList}
@@ -92,13 +91,22 @@ const BottomPopupPresenter: React.FC<BottomPopupPresenterProps> = ({
         onPressKick={onPressKick}
         setIsProfile={setIsProfile}
         //InviteList
-        onClickEmail={onClickEmail}
-        onClickSms={onClickSms}
-        onClickShare={onClickShare}
-        onClickLink={onClickLink}
-        onClickCode={onClickCode}
+        onPressEmail={onPressEmail}
+        onPressSms={onPressSms}
+        onPressShare={onPressShare}
+        onPressLink={onPressLink}
+        onPressCode={onPressCode}
       /> */}
-    </Fragment>
+    </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  BotPopupSAV: {
+    position: 'absolute',
+    width: '100%',
+    bottom: 0,
+    zIndex: 1
+  }
+});
 export default BottomPopupPresenter;

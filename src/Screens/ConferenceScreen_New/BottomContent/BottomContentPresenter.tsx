@@ -22,10 +22,10 @@ import deviceInfoModule from 'react-native-device-info';
 const isTablet = deviceInfoModule.isTablet();
 
 const BottomContentPresenter: React.FC<BottomContentPresenterProps> = ({
-  ToggleSpeakerClick,
-  ToggleMikeClick,
-  ToggleVideoClick,
-  EndCallClick
+  onPressSpeaker,
+  onPressMike,
+  onPressVideo,
+  onPressEndCall
 }) => {
   return (
     <SafeAreaView
@@ -37,7 +37,7 @@ const BottomContentPresenter: React.FC<BottomContentPresenterProps> = ({
           {!isTablet && (
             <TouchableOpacity
               style={styles.bottonTouch}
-              onPressOut={ToggleSpeakerClick}
+              onPressOut={onPressSpeaker}
             >
               <Image
                 source={icSpeakerOn}
@@ -49,7 +49,7 @@ const BottomContentPresenter: React.FC<BottomContentPresenterProps> = ({
           {/* 마이크 */}
           <TouchableOpacity
             style={styles.bottonTouch}
-            onPressOut={ToggleMikeClick}
+            onPressOut={onPressMike}
           >
             <Image
               source={icMicOn}
@@ -61,7 +61,7 @@ const BottomContentPresenter: React.FC<BottomContentPresenterProps> = ({
 
           <TouchableOpacity
             style={styles.bottonTouch}
-            onPressOut={ToggleVideoClick}
+            onPressOut={onPressVideo}
           >
             <Image
               source={icVideoOn}
@@ -82,7 +82,7 @@ const BottomContentPresenter: React.FC<BottomContentPresenterProps> = ({
           {/* 회의종료 */}
           <TouchableOpacity
             style={[styles.bottonTouch, { backgroundColor: '#ef5334' }]}
-            onPressOut={EndCallClick}
+            onPressOut={onPressEndCall}
           >
             <Image
               source={icCallEnd}
@@ -100,13 +100,13 @@ const styles = StyleSheet.create({
   BotContentSAV: {
     position: 'absolute',
     width: '100%',
-    height: '50%',
     bottom: 0,
     zIndex: 1
   },
   bottomArea: {
     flex: 1,
     paddingHorizontal: 15,
+    marginBottom: 14,
     justifyContent: 'flex-end',
     alignItems: 'center'
   },

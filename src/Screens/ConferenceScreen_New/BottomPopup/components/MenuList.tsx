@@ -13,7 +13,7 @@ import { BlurView } from '@react-native-community/blur';
 import deviceInfoModule from 'react-native-device-info';
 import _ from 'lodash';
 
-import { MenuListProps } from '../types';
+import { MenuListProps } from '@screens/ConferenceScreen_New/types';
 
 //Icon
 import icDocument from '@assets/icons/ic_document.png';
@@ -34,10 +34,9 @@ const MenuList: React.FC<MenuListProps> = ({
   onPressRequestMic,
   isMaster
 }) => {
-
   return (
     <BlurView
-      style={[styles.popupContainer]}
+      style={styles.popupContainer}
       overlayColor="rgba(255,255,255,0.01)"
     >
       <View
@@ -121,14 +120,8 @@ const MenuList: React.FC<MenuListProps> = ({
 
 const styles = StyleSheet.create({
   popupContainer: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    zIndex: 2,
-    elevation: 2,
     flex: 1
   },
-
   popupHeader: {
     flexDirection: 'row',
     alignItems: 'center',

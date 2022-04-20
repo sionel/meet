@@ -39,28 +39,54 @@ export interface ToastMessageProps {
 
 export interface TopContentContainerProps {}
 export interface TopContentPresenterProps {
-  isMaster: boolean;
-  UserListClick: () => void;
-  ChattingClick: () => void;
-  ReverseCamaraClick: () => void;
-  DisplayInvertClick: () => void;
-  MoreClick: () => void;
+  onPressUserList: () => void;
+  onPressChatting: () => void;
+  onPressCamaraReverse: () => void;
+  onPressDisplayInvert: () => void;
+  onPressMore: () => void;
+  displayType: 'FUNCTION' | 'NAME';
 }
 
-export interface MainVideoContainerProps {
+export interface MainContainerProps {
   mainUser: Participant;
 }
-export interface MainVideoPresenterProps {
-  isScreenShare: boolean;
-  isMuteVideo: boolean;
-  presenter: any;
-  character: string;
-  stream: any;
+export interface MainPresenterProps
+  extends CharacterProps,
+    RtcViewProps,
+    DocumentShareProps,
+    SketchProps,
+    ScreenShareProps {
+  // isScreenShare: boolean;
+  // isMuteVideo: boolean;
+  // presenter: any;
+  // isStream: boolean;
+  displayType:
+    | 'CHARACTER'
+    | 'RTCVIEW'
+    | 'SCREENSHARE'
+    | 'DOCUMENTSHARE'
+    | 'SKETCH';
   videoType: string;
-  mainUser: Participant;
   onPressShareStop: () => void;
 }
 
+export interface CharacterProps {
+  avartar: string;
+  isMaster: boolean;
+  userName: string;
+}
+
+export interface RtcViewProps {
+  videoType: string;
+  streamURL: string;
+  isMaster: boolean;
+  userName: string;
+}
+export interface DocumentShareProps {}
+export interface SketchProps {}
+export interface ScreenShareProps {
+  onPressShareStop: () => void;
+}
 export interface SplitVideoContainerProps {}
 export interface SplitVideoPresenterProps {}
 
@@ -79,10 +105,10 @@ export interface BottomContentContainerProps {
   handleCloseConf: () => void;
 }
 export interface BottomContentPresenterProps {
-  ToggleSpeakerClick: () => void;
-  ToggleMikeClick: () => void;
-  ToggleVideoClick: () => void;
-  EndCallClick: () => void;
+  onPressSpeaker: () => void;
+  onPressMike: () => void;
+  onPressVideo: () => void;
+  onPressEndCall: () => void;
 }
 
 export interface MenuListProps {
@@ -102,7 +128,14 @@ export interface ChattingProps {
   scrollRef: MutableRefObject<any>;
   myMessage: string;
   cdm: boolean;
-  messages: any[];
+  messages: ChattingCardProps[];
+}
+
+export interface ChattingCardProps {
+  isLocalUser: boolean;
+  profileUrl: string;
+  userName: string;
+  text: string;
 }
 export interface ParticipantsProps extends InviteListProps {
   setIsProfile: any;
@@ -118,14 +151,24 @@ export interface ParticipantsProps extends InviteListProps {
   swipeRef: MutableRefObject<any>;
 }
 
+export interface ParticipantCardPros {
+  userList: any[];
+  swipeRef: MutableRefObject<any>;
+  isRoomMaster: boolean;
+  isPad: boolean;
+  onPressProfile: (user: any) => void;
+  onPressMaster: () => void;
+  onPressKick: () => void;
+}
+
 export interface ProfileProps {
   user: any;
 }
 
 export interface InviteListProps {
-  onClickEmail: () => void;
-  onClickSms: () => void;
-  onClickShare: () => void;
-  onClickLink: () => void;
-  onClickCode: () => void;
+  onPressEmail: () => void;
+  onPressSms: () => void;
+  onPressShare: () => void;
+  onPressLink: () => void;
+  onPressCode: () => void;
 }

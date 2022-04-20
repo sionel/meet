@@ -13,7 +13,7 @@ import { BlurView } from '@react-native-community/blur';
 import deviceInfoModule from 'react-native-device-info';
 import _ from 'lodash';
 
-import { InviteListProps } from '../types';
+import { InviteListProps } from '@screens/ConferenceScreen_New/types';
 
 //Icon
 import icOrganizationW from '@assets/icons/ic_organization_w.png';
@@ -28,11 +28,11 @@ const { height } = Dimensions.get('window');
 const { OS } = Platform;
 
 const InviteList: React.FC<InviteListProps> = ({
-  onClickCode,
-  onClickEmail,
-  onClickSms,
-  onClickLink,
-  onClickShare
+  onPressCode,
+  onPressEmail,
+  onPressSms,
+  onPressLink,
+  onPressShare
 }) => {
   return (
     <BlurView
@@ -69,7 +69,7 @@ const InviteList: React.FC<InviteListProps> = ({
             style={styles.MenuRow}
             activeOpacity={0.9}
             underlayColor="rgba(242,242,242,0.1)"
-            onPress={_.throttle(() => onClickEmail(), 750)}
+            onPress={_.throttle(() => onPressEmail(), 750)}
           >
             <View style={styles.MenuRowView}>
               <Image
@@ -85,7 +85,7 @@ const InviteList: React.FC<InviteListProps> = ({
             style={styles.MenuRow}
             activeOpacity={0.9}
             underlayColor="rgba(242,242,242,0.1)"
-            onPress={_.throttle(() => onClickSms, 750)}
+            onPress={_.throttle(() => onPressSms, 750)}
           >
             <View style={styles.MenuRowView}>
               <Image
@@ -101,7 +101,7 @@ const InviteList: React.FC<InviteListProps> = ({
             style={styles.MenuRow}
             activeOpacity={0.9}
             underlayColor="rgba(242,242,242,0.1)"
-            onPress={_.throttle(() => onClickShare, 750)}
+            onPress={_.throttle(() => onPressShare, 750)}
           >
             <View style={styles.MenuRowView}>
               <Image
@@ -117,7 +117,7 @@ const InviteList: React.FC<InviteListProps> = ({
             style={styles.MenuRow}
             activeOpacity={0.9}
             underlayColor="rgba(242,242,242,0.1)"
-            onPress={_.throttle(() => onClickLink, 750)}
+            onPress={_.throttle(() => onPressLink, 750)}
           >
             <View style={styles.MenuRowView}>
               <Image
@@ -133,7 +133,7 @@ const InviteList: React.FC<InviteListProps> = ({
             style={styles.MenuRow}
             activeOpacity={0.9}
             underlayColor="rgba(242,242,242,0.1)"
-            onPress={_.throttle(() => onClickCode, 750)}
+            onPress={_.throttle(() => onPressCode, 750)}
           >
             <View style={styles.MenuRowView}>
               <Image

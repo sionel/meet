@@ -13,9 +13,9 @@ import {
   TextInput,
   UIManager
 } from 'react-native';
-import { BottomPopupContainerProps } from '../types';
+import { BottomPopupContainerProps } from '@screens/ConferenceScreen_New/types';
 import BottomPopupPresenter from './BottomPopupPresenter';
-import InviteList from './InviteList';
+import InviteList from './components/participantsComponents/InviteList';
 
 const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
   roomId,
@@ -27,7 +27,6 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
   // MenuList
 
   // Chat
-  const [shift, setShift] = useState(new Animated.Value(0));
   const [myMessage, setMyMessage] = useState('');
   const [cdm, setCdm] = useState(false);
   const [isEndScroll, setIsEndScroll] = useState(true);
@@ -35,97 +34,24 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
   const [keyboardH, setKeyboardH] = useState(0);
   const [messages, setMessages] = useState<
     {
+      isLocalUser: boolean;
+      profileUrl: string;
+      userName: string;
       text: string;
-      user?: string;
-      name?: string;
-      userInfo: { profile_url: string; userName: string };
     }[]
   >([
     {
-      text: 'test',
-      user: '123456',
-      userInfo: { profile_url: '', userName: 'rladusrlf' }
+      isLocalUser: true,
+      profileUrl: '',
+      userName: '김연길',
+      text: 'text'
     },
     {
-      text: 'test1',
-      name: 'rladusrlf1',
-      userInfo: { profile_url: '', userName: 'rladusrlf1' }
+      isLocalUser: false,
+      profileUrl: '',
+      userName: '김연길',
+      text: 'text'
     }
-    // {
-    //   text: 'test2',
-    //   user: '123456',
-    //   userInfo: { profile_url: '', userName: 'rladusrlf' }
-    // },
-    // {
-    //   text: 'test3',
-    //   name: 'rladusrlf1',
-    //   userInfo: { profile_url: '', userName: 'rladusrlf1' }
-    // },
-    // {
-    //   text: 'test4',
-    //   user: '123456',
-    //   userInfo: { profile_url: '', userName: 'rladusrlf' }
-    // },
-    // {
-    //   text: 'test5',
-    //   name: 'rladusrlf1',
-    //   userInfo: { profile_url: '', userName: 'rladusrlf1' }
-    // },
-    // {
-    //   text: 'test6',
-    //   user: '123456',
-    //   userInfo: { profile_url: '', userName: 'rladusrlf' }
-    // },
-    // {
-    //   text: 'test7',
-    //   name: 'rladusrlf1',
-    //   userInfo: { profile_url: '', userName: 'rladusrlf1' }
-    // },
-    // {
-    //   text: 'test4',
-    //   user: '123456',
-    //   userInfo: { profile_url: '', userName: 'rladusrlf' }
-    // },
-    // {
-    //   text: 'test5',
-    //   name: 'rladusrlf1',
-    //   userInfo: { profile_url: '', userName: 'rladusrlf1' }
-    // },
-    // {
-    //   text: 'test6',
-    //   user: '123456',
-    //   userInfo: { profile_url: '', userName: 'rladusrlf' }
-    // },
-    // {
-    //   text: 'test7',
-    //   name: 'rladusrlf1',
-    //   userInfo: { profile_url: '', userName: 'rladusrlf1' }
-    // },
-    // {
-    //   text: 'test7',
-    //   name: 'rladusrlf1',
-    //   userInfo: { profile_url: '', userName: 'rladusrlf1' }
-    // },
-    // {
-    //   text: 'test4',
-    //   user: '123456',
-    //   userInfo: { profile_url: '', userName: 'rladusrlf' }
-    // },
-    // {
-    //   text: 'test5',
-    //   name: 'rladusrlf1',
-    //   userInfo: { profile_url: '', userName: 'rladusrlf1' }
-    // },
-    // {
-    //   text: 'test6',
-    //   user: '123456',
-    //   userInfo: { profile_url: '', userName: 'rladusrlf' }
-    // },
-    // {
-    //   text: 'test7',
-    //   name: 'rladusrlf1',
-    //   userInfo: { profile_url: '', userName: 'rladusrlf1' }
-    // }
   ]);
 
   // UserList
@@ -159,9 +85,10 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
 
     if (myMessage.length > 0) {
       newMsg.push({
+        isLocalUser: true,
+        profileUrl: '',
         text: myMessage,
-        user: '123456',
-        userInfo: { profile_url: '', userName: 'rladusrlf1' }
+        userName: '김연길'
       });
       setMessages(newMsg);
       setMyMessage('');
@@ -182,20 +109,20 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
   const handlePressKick = () => {};
 
   // InviteList
-  const handleEmail = () => {
+  const handlePressEmail = () => {
     Linking.openURL(
       `mailto:?subject=&body=https://video.wehago.com/video?room%3D${roomId}`
     );
   };
 
-  const handleSms = () => {
+  const handlePressSms = () => {
     const Divider: string = OS === 'ios' ? '&' : '?';
     Linking.openURL(
       `sms:${Divider}body=https://video.wehago.com/video?room=${roomId}`
     );
   };
 
-  const handleShare = async () => {
+  const handlePressShare = async () => {
     try {
       const result = await Share.share({
         title: '링크 공유',
@@ -216,13 +143,13 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
     }
   };
 
-  const handleLinkCopy = () => {
+  const handlePressLinkCopy = () => {
     // Clipboard.setString(`https://video.wehago.com/video?room=${roomId}`);
     // //다국어 필요
     // setToastMessage(t('공유링크가 복사되었습니다.'));
   };
 
-  const handleJoincodeCopy = async () => {
+  const handlePressJoincodeCopy = async () => {
     // let joincode;
     // const getJoincode = await MeetApi.getJoincode(auth, roomId);
     // if (isSuccess(getJoincode)) {
@@ -307,11 +234,11 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
       ToggleSpeakerClick={handleSpeaker}
       setIsProfile={setIsProfile}
       //InviteList
-      onClickEmail={handleEmail}
-      onClickSms={handleSms}
-      onClickShare={handleShare}
-      onClickLink={handleLinkCopy}
-      onClickCode={handleJoincodeCopy}
+      onPressEmail={handlePressEmail}
+      onPressSms={handlePressSms}
+      onPressShare={handlePressShare}
+      onPressLink={handlePressLinkCopy}
+      onPressCode={handlePressJoincodeCopy}
     />
   );
 };

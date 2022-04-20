@@ -12,7 +12,7 @@ import {
   SafeAreaView
 } from 'react-native';
 import React from 'react';
-import { ChattingProps } from '../types';
+import { ChattingProps } from '@screens/ConferenceScreen_New/types';
 import { getT } from '@utils/translateManager';
 import { wehagoMainURL, wehagoDummyImageURL } from '@utils/index';
 import { Dimensions } from 'react-native';
@@ -21,9 +21,9 @@ import icTrans from '@assets/icons/ic_translator.png';
 import icSend from '@assets/icons/ic_send.png';
 import icSendW from '@assets/icons/ic_send_w.png';
 import deviceInfoModule from 'react-native-device-info';
+import ChattingCard from './chatComponents/ChattingCard';
 
 const isPad = deviceInfoModule.isTablet();
-const { height } = Dimensions.get('window');
 
 const Chatting: React.FC<ChattingProps> = ({
   onPressSend,
@@ -74,38 +74,13 @@ const Chatting: React.FC<ChattingProps> = ({
               if (!cdm && index === messages.length - 1) {
                 setCdm(true);
               }
-              const localUser = user.cid === item.user;
-              const { userInfo } = item;
-              const profileUrl = userInfo.profile_url
-                ? wehagoMainURL + userInfo.profile_url
-                : wehagoDummyImageURL;
-              const userName = item.name ? item.name : userInfo.userName;
-
               return (
-                <View style={styles.chatContainer}>
-                  <View
-                    style={[
-                      styles.normalChatView,
-                      localUser && { backgroundColor: '#1c90fb' }
-                    ]}
-                  >
-                    <View style={styles.chatProfileView}>
-                      <Image
-                        source={{ uri: profileUrl }}
-                        style={styles.chatProfile}
-                        resizeMode="cover"
-                      />
-                    </View>
-                    <View style={styles.chatTextView}>
-                      <Text style={styles.userName}>
-                        {userName}
-                        {localUser && `(나)`}
-                      </Text>
-
-                      <Text style={styles.chatText}>{item.text}</Text>
-                    </View>
-                  </View>
-                </View>
+                <ChattingCard
+                  isLocalUser={item.isLocalUser}
+                  profileUrl={item.profileUrl}
+                  userName={item.userName}
+                  text={item.text}
+                />
               );
             }}
           />
