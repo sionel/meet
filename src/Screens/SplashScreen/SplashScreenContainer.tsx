@@ -234,6 +234,7 @@ const SplashScreenContainer = ({
 
     if (!url) return;
     let result: any = querystringParser(url);
+    debugger
     // if(result.type === 'conference') {
     // 화상회의 요청인지 판별
     if (result.is_creater) {
@@ -244,7 +245,7 @@ const SplashScreenContainer = ({
         message: 'meet 앱에서 다시 접근 해주시길 바랍니다'
       });
       navigation.reset({ routes: [{ name: 'LoginStack' }] });
-    } else if (result.mHASH_KEY && result.cno) {
+    } else if (result.mHASH_KEY && result.mPORTAL_ID) {
       //토근정보가 있을때
       const { mHASH_KEY, mAuth_r_token, mAuth_a_token, cno, video_id } = result;
       onLogout();

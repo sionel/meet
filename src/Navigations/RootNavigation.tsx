@@ -152,6 +152,7 @@ export default function RootNavigation(props: any) {
     // 앱이 꺼져 있을때(딥링크)
     Linking.getInitialURL()
       .then(url => {
+        debugger
         // console.log('앱이 꺼져 있을때(딥링크)');
         url && navigate('SplashView', { deeplink: url });
       })
@@ -159,6 +160,7 @@ export default function RootNavigation(props: any) {
 
     // 앱이 이미 실행중일때(딥링크)
     Linking.addEventListener('url', async ({ url }) => {
+
       let { name } = navigationRef.current.getCurrentRoute();
       // console.log('앱이 이미 실행중일때(딥링크)');
       if (name === 'ConferenceView') {
@@ -172,7 +174,6 @@ export default function RootNavigation(props: any) {
         navigate('SplashView', { deeplink: url });
       }
     });
-
     return () => {};
   }, []);
 
