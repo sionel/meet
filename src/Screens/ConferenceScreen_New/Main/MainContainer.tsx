@@ -33,7 +33,7 @@ const MainContainer: React.FC<MainContainerProps> = ({ mainUser }) => {
   useEffect(() => {
     if (isScreenShare) {
       setMainDisplayType('SCREENSHARE');
-    } else if (mainUser?.videoTrack) {
+    } else if (mainUser.videoTrack.isMuted()) {
       setMainDisplayType('RTCVIEW');
     } else {
       setMainDisplayType('CHARACTER');

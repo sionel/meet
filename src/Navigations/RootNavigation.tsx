@@ -77,8 +77,18 @@ export type MeetParamList = {
     tracks: any;
   };
   ConferenceView_new : {
-    roomId: string
+    accessType: string;
+    callType: number;
+    externalUser: any;
+    id: string;
+    isCreator?: any;
+    joincode: string;
+    name: string;
     roomToken: string;
+    roomType?: string;
+    selectedRoomName: string;
+    tracks: any;
+    avatar: string;
   }
 };
 

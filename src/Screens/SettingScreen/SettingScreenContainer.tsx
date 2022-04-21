@@ -20,9 +20,9 @@ export default function SettingScreenContainer(props: any) {
   const [tracks, setTracks] = useState<any[] | null>([]);
   const [nameField, setNameField] = useState(false);
   const [buttonActive, setButtonActive] = useState(false);
-  const [selectedToon, setSelectedToon] = useState<'jangok' | 'suzy' | 'jessie'>(
-    'jangok'
-  );
+  const [selectedToon, setSelectedToon] = useState<
+    'jangok' | 'suzy' | 'jessie'
+  >('jangok');
   // const ref = useRef<any>({tracks:null});
   //강제 업데이트
   const [, updateState] = useState<undefined | {}>();
@@ -44,7 +44,8 @@ export default function SettingScreenContainer(props: any) {
 
   const dispatch = useDispatch();
   const setAlert = (params: any) => dispatch(AlertAcions.setAlert(params));
-  const setConferenceExpireTime = (expireTime: number | null) => dispatch(LocalActions.setConferenceExpireTime(expireTime));
+  const setConferenceExpireTime = (expireTime: number | null) =>
+    dispatch(LocalActions.setConferenceExpireTime(expireTime));
 
   const t = getT();
 
@@ -89,7 +90,7 @@ export default function SettingScreenContainer(props: any) {
         devices: ['video'],
         resolution: 320
       });
-      
+
       const audioTrack = await JitsiMeetJS.createLocalTracks({
         devices: ['audio'],
         resolution: 320
@@ -114,7 +115,7 @@ export default function SettingScreenContainer(props: any) {
       tmpName = name;
       if (!tmpName) {
         const getExternalUserId = await MeetApi.getExternalUserId(params.id);
-        if(isSuccess(getExternalUserId)) {
+        if (isSuccess(getExternalUserId)) {
           tmpName = getExternalUserId.resultData;
         }
       }
@@ -165,13 +166,15 @@ export default function SettingScreenContainer(props: any) {
       });
     } else {
       const getExpireTime = await MeetApi.getExpireTime(params.id);
-      if(isSuccess(getExpireTime)) {
-        setConferenceExpireTime(getExpireTime.resultData.expire_time)
+      if (isSuccess(getExpireTime)) {
+        setConferenceExpireTime(getExpireTime.resultData.expire_time);
       }
+
       navigation.reset({
         routes: [
           {
-            name: 'ConferenceView',
+            // name: 'ConferenceView',
+            name: 'ConferenceView_new',
             params: {
               tracks,
               roomToken,
@@ -179,7 +182,12 @@ export default function SettingScreenContainer(props: any) {
               ...params,
               accessType: params?.accessType,
               externalUser: user,
-              avatar: selectedToon === 'jangok' ? '{"label":"기본 제공 캐릭터1","value":"jangok"}' : selectedToon === 'suzy' ? '{"label":"기본 제공 캐릭터2","value":"suzy"}' :'{"label":"기본 제공 캐릭터3","value":"jessie"}'
+              avatar:
+                selectedToon === 'jangok'
+                  ? '{"label":"기본 제공 캐릭터1","value":"jangok"}'
+                  : selectedToon === 'suzy'
+                  ? '{"label":"기본 제공 캐릭터2","value":"suzy"}'
+                  : '{"label":"기본 제공 캐릭터3","value":"jessie"}'
             }
           }
         ]

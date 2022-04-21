@@ -1,4 +1,4 @@
-import { StatusBar, Text, View } from 'react-native';
+import { StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import React, { Fragment } from 'react';
 import TopPopup from './TopPopup';
 import TopContent from './TopContent';
@@ -15,7 +15,8 @@ const ConferenceScreenPresenter: React.FC<ConferenceScreenPresenterProps> = ({
   handleClose,
   handleSpeaker
 }) => {
-  console.log('isConnected : ', isConnected);
+  // console.log('isConnected : ', isConnected);
+  console.log('participants : ', participants);
   
   return (
     <View style={{ flex: 1, backgroundColor: '#000' }}>
@@ -24,16 +25,18 @@ const ConferenceScreenPresenter: React.FC<ConferenceScreenPresenterProps> = ({
         <Fragment>
           {/* <TopPopup />*/}
           <TopContent />
-          <Main mainUser={participants[1]} />
+          <Main mainUser={participants[0]} />
           {/* <SplitVideo /> */}
           {/* <BottomPopup roomId="213564782" handleSpeaker={handleSpeaker} /> */}
           <BottomContent handleCloseConf={handleClose} />
         </Fragment>
       ) : (
         <View
-          style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}
+          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
         >
-          <Text style={{ color: '#fff', fontSize: 20 }}>{`대화종료`}</Text>
+          <TouchableOpacity onPress={() =>{}}>
+            <Text style={{ color: '#fff', fontSize: 20 }}>{`Loading...`}</Text>
+          </TouchableOpacity>
         </View>
       )}
     </View>

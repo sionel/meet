@@ -28,7 +28,7 @@ class Conference {
     return this._sendMessage;
   }
 
-  join = async ({ id, token }: Room, user: any, dispatch: any) => {
+  join = async ({ id, token }: Room, user: any, dispatch: any, tracks: any) => {
     this._init();
     this._connection = new Connection();
     this._handler = ConferenceHandler(dispatch);
@@ -37,11 +37,11 @@ class Conference {
       this._room = this._createRoom(id);
       this._sendMessage = new sendMessage(this._room);
       const attributes = this._sendMessage.sendWehagoId(user);
-      this._handler.setUserInfo({ attributes });
+      this._handler.setUserInfo({ value: this._room.myUserId(), attributes });
       bindEvent(this._handler, this._room, resolve, reject);
       this._room.join();
     });
-    this._addTracks();
+    this._addTracks(tracks);
   };
 
   dispose = async () => {
@@ -68,26 +68,29 @@ class Conference {
     return room;
   };
 
-  _addTracks = async () => {
-    const tracks = await this._createTracks();
-    tracks.forEach(track => () => {
+  _addTracks = async (tracks: any) => {
+    // const tracks = await this._createTracks();
+    // console.log('tracks : ', tracks);
+
+    tracks.forEach((track: any) => {
       this._room.addTrack(track);
       this._handler.setUserTrack(track);
     });
   };
 
-  _createTracks = async (): Promise<any[]> => {
-    const videoTrack = await JitsiMeetJS.createLocalTracks({
-      devices: ['video'],
-      resolution: 320
-    });
-    const audioTrack = await JitsiMeetJS.createLocalTracks({
-      devices: ['audio'],
-      resolution: 320
-    });
-
-    return [videoTrack[0], audioTrack[0]];
-  };
+  //TODO: 셋팅에서 다 준비 된 상태에서 컨퍼런스로 넘어올건지 ? => 셋팅페이지에서 해당 함수를 통해서 트랙 미리 생성
+  //      컨퍼런스 넘어와서 트랙 설정등을 할것인지 ? => 그렇다면 createLocalTracks를 통해서 트랙 생성이 필요
+  // _createTracks = async (): Promise<any[]> => {
+  //   const videoTrack = await JitsiMeetJS.createLocalTracks({
+  //     devices: ['video'],
+  //     resolution: 320
+  //   });
+  //   const audioTrack = await JitsiMeetJS.createLocalTracks({
+  //     devices: ['audio'],
+  //     resolution: 320
+  //   });
+  //   return [videoTrack[0], audioTrack[0]];
+  // };
 }
 
 export default Conference;

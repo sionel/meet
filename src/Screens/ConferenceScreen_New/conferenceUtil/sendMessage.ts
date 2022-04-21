@@ -71,20 +71,22 @@ export default class sendMessage {
 
   sendWehagoId = (user: any) => {
     const attributes = {
-      wehagoId: user.portal_id,
-      companyFullpath: user.last_company?.full_path,
-      profile_url: user.profile_url ? user.profile_url : '',
-      userName: user.name,
-      nickname: user.nickname,
-      isExternalParticipant: user.isLogin,
-      externalUserId: user.externalUser,
-      isMobile: true,
-      user_contact: user.user_contact,
-      user_email: user.user_eamil ? user.user_eamil : user.user_default_email,
-      avatar: user.avatar ? user.avatar : '{"label":"기본 제공 캐릭터1","value":"jangok"}'
+      ...user
+      // wehagoId: user.portal_id,
+      // companyFullpath: user.last_company?.full_path,
+      // profile_url: user.profile_url ? user.profile_url : '',
+      // userName: user.name,
+      // nickname: user.nickname,
+      // isExternalParticipant: user.isLogin,
+      // externalUserId: user.externalUser,
+      // isMobile: true,
+      // user_contact: user.user_contact,
+      // user_email: user.user_eamil ? user.user_eamil : user.user_default_email,
+      // avatar: user.avatar ? user.avatar : '{"label":"기본 제공 캐릭터1","value":"jangok"}'
     };
-    console.log('니 혹시 여러번 날아가나 진짜?');
 
+    // console.log('니 혹시 여러번 날아가나 진짜?');
+    
     this._room.sendCommand(WEHAGO_ID, {
       value: this._room.myUserId(),
       attributes

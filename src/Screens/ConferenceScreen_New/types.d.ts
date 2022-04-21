@@ -109,6 +109,7 @@ export interface BottomContentPresenterProps {
   onPressMike: () => void;
   onPressVideo: () => void;
   onPressEndCall: () => void;
+  userInfo: any;
 }
 
 export interface MenuListProps {
