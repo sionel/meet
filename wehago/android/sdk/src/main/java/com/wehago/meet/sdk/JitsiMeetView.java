@@ -170,7 +170,7 @@ public class JitsiMeetView extends BaseReactView<JitsiMeetViewListener>
         // JavaScript source code. The workaround implemented bellow introduces
         // "imperativeness" in React Component props by defining a unique value
         // per setProps() invocation.
-        props.putLong("timestamp", System.currentTimeMillis());
+        // props.putLong("timestamp", System.currentTimeMillis());
 
         createReactRootView("App", props);
     }

@@ -35,7 +35,7 @@ const SplashScreenContainer = ({
   route
 }: MeetNavigationProps<'SplashView'>) => {
   const { params } = route;
-  const [serverNoti, setServerNoti] = useState([]);
+  const [serverNoti, setServerNoti] = useState<any[]>([]);
   const [notiIndex, setNotiIndex] = useState(0);
   const [first, setFirst] = useState(true);
   const deeplink = params?.deeplink;
@@ -77,57 +77,68 @@ const SplashScreenContainer = ({
   //#endregion
 
   useEffect(() => {
-    // 강제종료 했을때를 위한 강제 초기화
-    setInitInfo();
-    setSharingMode();
+    // _setLinkingEvent();
     _handleInit();
   }, []);
 
-  useEffect(() => {
-    let t0 = Date.now();
-    if (!first) {
-      if (deeplink) {
-        _handleGetDeeplink(deeplink);
-      } else _handleCheckAutoLogin();
-    }
-    let t1 = Date.now();
+  // const _setLinkingEvent = () => {
+  //   // 앱 처음 진입시
+  //   Linking.getInitialURL().then(url => {
+  //     console.log(1);
 
-    if (t1 > t0 + 20000) {
-      Alert.alert('알림', '요청시간 초과오류', [
-        {
-          text: '확인',
-          onPress: () => {
-            navigation.reset({
-              routes: [
-                { name: loginType === 'wehago' ? 'InputLogin' : 'LoginStack' }
-              ]
-            });
-          }
-        }
-      ]);
-    }
-  }, [first, deeplink]);
+  //     url && _handleGetDeeplink({ url });
+  //   });
+  //   // 앱 실행중일때
+  //   Linking.addEventListener('url', url => {
+  //     console.log(2);
+
+  //     _handleGetDeeplink(url);
+  //   });
+  // };
+
+  const _handleGetDeeplink1 = ({ url }: { url: string }) => {
+    if (!url) return;
+    // let { name } = navigationRef.current.getCurrentRoute();
+    // if (isConference && name === 'ConferenceView') {
+    //   _deeplinkWhenConferenceOngoing();
+    // } else {
+    //   _deeplinkNormalAccess(url);
+    // }
+  };
+
+  useEffect(() => {
+    if (deeplink) _handleGetDeeplink(deeplink);
+
+    // Alert.alert('알림', '요청시간 초과오류', [
+    //   {
+    //     text: '확인',
+    //     onPress: () => {
+    //       navigation.reset({
+    //         routes: [
+    //           { name: loginType === 'wehago' ? 'InputLogin' : 'LoginStack' }
+    //         ]
+    //       });
+    //     }
+    //   }
+    // ]);
+  }, [deeplink]);
 
   const _handleInit = async () => {
     // 버전 확인
     await _handleCheckVersion();
     // 노티 확인
-    let servernoti: [] = [];
-    servernoti = await _handleCheckNotice(servernoti);
-    if (servernoti.length > 0) {
-      setServerNoti(servernoti);
-    } else {
-      setTimeout(() => {
-        setFirst(false);
-      }, 3000);
-    }
+    await _handleCheckNotice();
+
+    setTimeout(() => {
+      _handleCheckAutoLogin();
+    }, 3000);
   };
 
   const _handleCheckVersion = async () => {
     const os = Platform.OS;
     const majorVersion = 13;
     const result = await MeetApi.checkVersion(os, majorVersion);
-    if (!result.resultData.update || result.resultData.dev_mode) return [];
+    if (!result.resultData.update || result.resultData.dev_mode) return;
     const title = t('renewal.servernoti_title_update');
     const message = t('renewal.servernoti_message_power_update');
     const marketUrl =
@@ -148,29 +159,33 @@ const SplashScreenContainer = ({
     });
   };
 
-  const _handleCheckNotice = async (noti: any) => {
-    const result = await MeetApi.checkNotice();
-    if (!result) return [];
-    // 확인코드 :101
-    // 강제종료 코드 : 102
-    result.resultData.forEach((e: any) => {
-      if (!e.dev_mode) {
-        e.buttons = [
-          {
-            text:
-              e.button_type === 102
-                ? t('renewal.alert_button_exit')
-                : t('renewal.alert_button_confirm'),
-            onclick:
-              e.button_type === 102
-                ? () => RNExitApp.exitApp()
-                : () => _handleNextNotice()
-          }
-        ];
-      }
-    });
-    noti = noti.concat(result.resultData);
-    return noti;
+  const _handleCheckNotice = async () => {
+    try {
+      // 확인코드 :101
+      // 강제종료 코드 : 102
+      const { resultData } = await MeetApi.checkNotice();
+
+      let noti: any[] = [...resultData];
+      noti.forEach((e: any) => {
+        if (!e.dev_mode) {
+          e.buttons = [
+            {
+              text:
+                e.button_type === 102
+                  ? t('renewal.alert_button_exit')
+                  : t('renewal.alert_button_confirm'),
+              onclick:
+                e.button_type === 102
+                  ? () => RNExitApp.exitApp()
+                  : () => _handleNextNotice()
+            }
+          ];
+        }
+      });
+      setServerNoti(noti);
+    } catch (error) {
+      console.warn('6-3.checkNotice : ', error);
+    }
   };
 
   const _handleNextNotice = async () => {
@@ -234,7 +249,7 @@ const SplashScreenContainer = ({
 
     if (!url) return;
     let result: any = querystringParser(url);
-    debugger
+    debugger;
     // if(result.type === 'conference') {
     // 화상회의 요청인지 판별
     if (result.is_creater) {
@@ -406,7 +421,7 @@ const SplashScreenContainer = ({
     );
     if (checkResult.resultCode === 200) {
       console.log('checkResult.rankname : ', checkResult.rankname);
-      
+
       const userData = {
         // login api data
         AUTH_A_TOKEN,

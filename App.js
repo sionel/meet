@@ -20,6 +20,10 @@ function App(props) {
   useEffect(() => {
     Splash.hide();
     setT(props.t);
+    Linking.getInitialURL().then(url => {
+      debugger;
+      url && _handleGetDeeplink({ url });
+    });
   }, []);
 
   // useEffect(() => {

@@ -25,6 +25,8 @@ import { querystringParser } from '../utils';
 import { JitsiConferenceErrors } from '../../jitsi/features/base/lib-jitsi-meet';
 import { getConferenceManager } from '../utils/ConferenceManager';
 import { MeetApi } from '../services';
+import RNExitApp from 'react-native-exit-app';
+import { useDeepLink } from '../Hooks';
 
 // roomToken?: string;
 export type MeetParamList = {
@@ -115,6 +117,11 @@ export default function RootNavigation(props: any) {
   const setLoginType = (loginType: string) => {
     dispatch(UserActions.setLoginType(loginType));
   };
+  // const [url] = useDeepLink();
+
+  // useEffect(() => {
+  //   debugger;
+  // }, [url]);
 
   const { isConference, auth } = useSelector((state: RootState) => {
     return {
@@ -123,7 +130,7 @@ export default function RootNavigation(props: any) {
     };
   });
 
-  const handleAppStateChange = async (nextAppState: AppStateStatus) => {
+  const _setAppStateChange = async (nextAppState: AppStateStatus) => {
     if (nextAppState === 'active') {
       let wehago = await Linking.canOpenURL('wehago://');
       let nahago = await Linking.canOpenURL('staffmanagment://');
@@ -133,48 +140,49 @@ export default function RootNavigation(props: any) {
     }
   };
 
-  useEffect(() => {
-    handleAppStateChange('active');
-    AppState.addEventListener('change', handleAppStateChange);
-    // TODO: 안드로이드 => 리액트 네이티브가 액티비티가 1개라서 위하고에서 Meet으로 올때 App이 재시작됨
-    // 위하고 측에서 딥링크 넘겨줄때 위하고 앱측에서 launchMode 방식에서 생기는 현상인거 같음 ?
-    if (isConference) {
-      Alert.alert('허용되지 않은 접근', '앱이 재시작됩니다.');
-      setIsConference(false);
-      return;
-    }
+  const _handleAppStateChange = () => {
+    _setAppStateChange('active');
+    AppState.addEventListener('change', _setAppStateChange);
+  };
 
-    if (props.url?.url) {
-      // console.log('딥링크 인데 Linking 분기 안탐');
-      navigate('SplashView', { deeplink: props.url.url });
-    }
-
-    // 앱이 꺼져 있을때(딥링크)
-    Linking.getInitialURL()
-      .then(url => {
-        debugger
-        // console.log('앱이 꺼져 있을때(딥링크)');
-        url && navigate('SplashView', { deeplink: url });
-      })
-      .catch(err => console.error('error ', err));
-
-    // 앱이 이미 실행중일때(딥링크)
-    Linking.addEventListener('url', async ({ url }) => {
-
-      let { name } = navigationRef.current.getCurrentRoute();
-      // console.log('앱이 이미 실행중일때(딥링크)');
-      if (name === 'ConferenceView') {
-        Alert.alert('경고', '이미 진행중인 회의가 있습니다.');
-        let result: any = querystringParser(url);
-        const { video_id } = result;
-        await MeetApi.deleteConferenceRoom(auth, video_id);
-
-        return;
-      } else {
-        navigate('SplashView', { deeplink: url });
-      }
+  const _setLinkingEvent = () => {
+    // 앱 처음 진입시 (ios / android , deeplink android)
+    Linking.getInitialURL().then(url => {
+      url && _handleGetDeeplink({ url });
     });
-    return () => {};
+
+    // 앱 실행중일때 (deeplink ios)
+    Linking.addEventListener('url', _handleGetDeeplink);
+  };
+
+  const _handleGetDeeplink = ({ url }: { url: string }) => {
+    if (!url) return;
+    let { name } = navigationRef.current.getCurrentRoute();
+    if (isConference && name === 'ConferenceView') {
+      _deeplinkWhenConferenceOngoing();
+    } else {
+      _deeplinkNormalAccess(url);
+    }
+  };
+
+  const _deeplinkWhenConferenceOngoing = () => {
+    RNExitApp.exitApp();
+  };
+
+  const _deeplinkNormalAccess = (url: string) => {
+    debugger;
+    navigate('SplashView', { deeplink: url });
+  };
+  const _deleteLinkingEvent = () => {
+    Linking.removeAllListeners('url');
+  };
+
+  useEffect(() => {
+    _handleAppStateChange();
+    // _setLinkingEvent();
+    return () => {
+      _deleteLinkingEvent();
+    };
   }, []);
 
   return (
@@ -183,7 +191,11 @@ export default function RootNavigation(props: any) {
         initialRouteName="SplashView"
         screenOptions={{ headerShown: false }}
       >
-        <RootStack.Screen name="SplashView" component={SplashView} />
+        <RootStack.Screen
+          name="SplashView"
+          component={SplashView}
+          initialParams={props}
+        />
         <RootStack.Screen name="LoginStack" component={LoginStack} />
         <RootStack.Screen name="MainStack" component={MainStack} />
         <RootStack.Screen

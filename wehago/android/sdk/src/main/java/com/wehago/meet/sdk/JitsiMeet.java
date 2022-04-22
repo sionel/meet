@@ -60,9 +60,9 @@ public class JitsiMeet {
      * @return a {@link Bundle} with the default conference options.
      */
     static Bundle getDefaultProps() {
-        if (defaultConferenceOptions != null) {
-            return defaultConferenceOptions.asProps();
-        }
+        // if (defaultConferenceOptions != null) {
+        //     return defaultConferenceOptions.asProps();
+        // }
 
         return new Bundle();
     }

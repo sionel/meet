@@ -236,12 +236,12 @@ public class JitsiMeetActivity extends FragmentActivity
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
 
-        JitsiMeetConferenceOptions options;
+        // JitsiMeetConferenceOptions options;
 
-        if ((options = getConferenceOptions(intent)) != null) {
-            join(options);
-            return;
-        }
+        // if ((options = getConferenceOptions(intent)) != null) {
+        //     join(options);
+        //     return;
+        // }
 
         JitsiMeetActivityDelegate.onNewIntent(intent);
     }

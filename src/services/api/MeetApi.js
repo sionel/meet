@@ -600,24 +600,19 @@ export default {
       url = `${wehagoBaseURL0}${accsessUrl}`;
     }
 
-    try {
-      const data = {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          signature
-        }
-      };
-
-      const response = await fetch(url, data);
-      if (response.status !== 200) {
-        throw await response.json();
+    const data = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        signature
       }
-      return response.json();
-    } catch (err) {
-      console.warn('6-3.checkNotice : ', err);
-      return false;
+    };
+
+    const response = await fetch(url, data);
+    if (response.status !== 200) {
+      throw await response.json();
     }
+    return response.json();
   },
 
   // 3-22 화상회의 접속코드 검색
