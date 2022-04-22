@@ -41,20 +41,20 @@
 
         // Apple rejected our app because they claim requiring a
         // Dropbox account for recording is not acceptable.
-#if DEBUG
+      #if DEBUG
         [builder setFeatureFlag:@"ios.recording.enabled" withBoolean:YES];
-#endif
+      #endif
     }];
 
   [jitsiMeet application:application didFinishLaunchingWithOptions:launchOptions];
 
     // Initialize Crashlytics and Firebase if a valid GoogleService-Info.plist file was provided.
-  if ([FIRUtilities appContainsRealServiceInfoPlist]) {
-        NSLog(@"Enabling Firebase");
-        [FIRApp configure];
-        // Crashlytics defaults to disabled with the FirebaseCrashlyticsCollectionEnabled Info.plist key.
-        [[FIRCrashlytics crashlytics] setCrashlyticsCollectionEnabled:![jitsiMeet isCrashReportingDisabled]];
-    }
+  // if ([FIRUtilities appContainsRealServiceInfoPlist]) {
+  //       NSLog(@"Enabling Firebase");
+  //       [FIRApp configure];
+  //       // Crashlytics defaults to disabled with the FirebaseCrashlyticsCollectionEnabled Info.plist key.
+  //       [[FIRCrashlytics crashlytics] setCrashlyticsCollectionEnabled:![jitsiMeet isCrashReportingDisabled]];
+  //   }
 
     ViewController *rootController = (ViewController *)self.window.rootViewController;
     [jitsiMeet showSplashScreen:rootController.view];

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { AppRegistry, Linking } from 'react-native';
+import { Alert, AppRegistry, Linking } from 'react-native';
 import { Provider, useDispatch } from 'react-redux';
 import { PersistGate } from 'redux-persist/es/integration/react';
 import configureStore from './src/redux/configureStore';
@@ -21,7 +21,11 @@ function App(props) {
     Splash.hide();
     setT(props.t);
     Linking.getInitialURL().then(url => {
-      debugger;
+      console.log("@@@@@@@@");
+      console.log(props.url);
+      console.log("--------");
+      console.log(url);
+      console.log("@@@@@@@@");
       url && _handleGetDeeplink({ url });
     });
   }, []);

@@ -78,7 +78,7 @@
 
     _launchOptions = [launchOptions copy];
 
-    [Dropbox setAppKey];
+    // [Dropbox setAppKey];
 
     return YES;
 }
@@ -120,6 +120,7 @@
 #pragma mark - Utility methods
 
 - (JitsiMeetConferenceOptions *)getInitialConferenceOptions {
+    return nil;
     if (_launchOptions[UIApplicationLaunchOptionsURLKey]) {
         NSURL *url = _launchOptions[UIApplicationLaunchOptionsURLKey];
         return [JitsiMeetConferenceOptions fromBuilder:^(JitsiMeetConferenceOptionsBuilder *builder) {
