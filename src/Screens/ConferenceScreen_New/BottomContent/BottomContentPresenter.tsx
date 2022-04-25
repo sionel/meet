@@ -107,7 +107,6 @@ const styles = StyleSheet.create({
     marginBottom: 14,
     justifyContent: 'flex-end',
     alignItems: 'center',
-    backgroundColor: '#000'
   },
   bottonTouch: {
     width: 48,

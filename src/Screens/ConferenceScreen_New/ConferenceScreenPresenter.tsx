@@ -11,22 +11,23 @@ import { ConferenceScreenPresenterProps } from '@screens/ConferenceScreen_New/ty
 
 const ConferenceScreenPresenter: React.FC<ConferenceScreenPresenterProps> = ({
   isConnected,
-  participants,
+  roomName,
+  id,
   handleClose
 }) => {
   // console.log('isConnected : ', isConnected);
-  // console.log('participants : ', participants);
+  // console.log('participant : ', participants[0]);
   
   return (
     <View style={{ flex: 1, backgroundColor: '#000' }}>
       <StatusBar backgroundColor="#000" barStyle={'light-content'} />
       {isConnected ? (
         <Fragment>
-          {/* <TopPopup />*/}
-          <TopContent />
-          <Main mainUser={participants[0]} />
+          <TopPopup />
+          <TopContent roomName={roomName} id={id} handleClose={handleClose}/>
+          <Main/>
           {/* <SplitVideo /> */}
-          {/* <BottomPopup roomId="213564782" handleSpeaker={handleSpeaker} /> */}
+          <BottomPopup roomId={id} />
           <BottomContent handleCloseConf={handleClose} />
         </Fragment>
       ) : (

@@ -2,7 +2,8 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   SafeAreaView,
-  Platform
+  Platform,
+  TouchableOpacity
 } from 'react-native';
 import React from 'react';
 import { MainPresenterProps } from '@screens/ConferenceScreen_New/types';
@@ -13,53 +14,59 @@ import {
   ScreenShare,
   Sketch
 } from './components';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const MainPresenter: React.FC<MainPresenterProps> = ({
   displayType,
+  onPressMainView,
   // RTCVIEW, CHARACTER
   isMaster,
   userName,
   // RTCVIEW
   streamURL,
   videoType,
+  mirrorMode,
   // CHARACTER
-  avartar,
+  avatar,
   // SCREENSHARE
   onPressShareStop
 }) => {
   return (
-    <SafeAreaProvider>
-      <SafeAreaView style={styles.mainVideoSAV}>
-        <KeyboardAvoidingView
-          style={styles.avoidingContainer}
-          keyboardVerticalOffset={1}
-          enabled={false}
-          behavior={Platform.OS === 'android' ? 'height' : undefined}
+    <SafeAreaView style={styles.mainVideoSAV}>
+      <KeyboardAvoidingView
+        style={styles.avoidingContainer}
+        keyboardVerticalOffset={1}
+        enabled={false}
+        behavior={Platform.OS === 'android' ? 'height' : undefined}
+      >
+        <TouchableOpacity
+          activeOpacity={1}
+          style={{ flex: 1 }}
+          onPress={onPressMainView}
         >
-          {displayType === 'SCREENSHARE' && (
+          {displayType === 'screen' && (
             <ScreenShare onPressShareStop={onPressShareStop} />
           )}
-          {displayType === 'RTCVIEW' && (
+          {displayType === 'track' && (
             <RtcView
               streamURL={streamURL}
               videoType={videoType}
               isMaster={isMaster}
               userName={userName}
+              mirrorMode={mirrorMode}
             />
           )}
-          {displayType === 'CHARACTER' && (
+          {displayType === 'character' && (
             <Character
-              avartar={avartar}
+              avatar={avatar}
               isMaster={isMaster}
               userName={userName}
             />
           )}
-          {displayType === 'DOCUMENTSHARE' && <DocumentShare />}
-          {displayType === 'SKETCH' && <Sketch />}
-        </KeyboardAvoidingView>
-      </SafeAreaView>
-    </SafeAreaProvider>
+          {displayType === 'document' && <DocumentShare />}
+          {displayType === 'sketch' && <Sketch />}
+        </TouchableOpacity>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 

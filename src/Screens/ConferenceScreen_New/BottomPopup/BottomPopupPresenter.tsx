@@ -9,7 +9,8 @@ import {
 } from './components';
 
 const BottomPopupPresenter: React.FC<BottomPopupPresenterProps> = ({
-  getUserName,
+  // getUserName,
+  bottomDisplayType,
   // MenuList
   isMaster,
   onPressSketch,
@@ -46,14 +47,16 @@ const BottomPopupPresenter: React.FC<BottomPopupPresenterProps> = ({
 }) => {
   return (
     <SafeAreaView style={styles.BotPopupSAV}>
-      <MenuList
-        isMaster={isMaster}
-        onPressSketch={onPressSketch}
-        onPressDocumentShare={onPressDocumentShare}
-        onPressRequestMic={onPressRequestMic}
-        onPressScreenShare={onPressScreenShare}
-      />
-      {/* {Platform.OS === 'ios' ? (
+      {bottomDisplayType === 'MENU' && (
+        <MenuList
+          isMaster={isMaster}
+          onPressSketch={onPressSketch}
+          onPressDocumentShare={onPressDocumentShare}
+          onPressRequestMic={onPressRequestMic}
+          onPressScreenShare={onPressScreenShare}
+        />
+      )}
+      {bottomDisplayType === 'CHATTING' && Platform.OS === 'ios' && (
         <ChattingIOS
           myMessage={myMessage}
           cdm={cdm}
@@ -63,9 +66,9 @@ const BottomPopupPresenter: React.FC<BottomPopupPresenterProps> = ({
           setMyMessage={setMyMessage}
           setIsEndScroll={setIsEndScroll}
           setCdm={setCdm}
-          getUserName={getUserName}
         />
-      ) : (
+      )}
+      {bottomDisplayType === 'CHATTING' && Platform.OS === 'android' && (
         <ChattingANDROID
           myMessage={myMessage}
           cdm={cdm}
@@ -75,28 +78,29 @@ const BottomPopupPresenter: React.FC<BottomPopupPresenterProps> = ({
           setMyMessage={setMyMessage}
           setIsEndScroll={setIsEndScroll}
           setCdm={setCdm}
-          getUserName={getUserName}
         />
-      )} */}
-      {/* <Participants
-        isRoomMaster={isRoomMaster}
-        isProfile={isProfile}
-        isInviteList={isInviteList}
-        swipeRef={swipeRef}
-        userInfo={userInfo}
-        onPressInvite={onPressInvite}
-        ToggleSpeakerClick={ToggleSpeakerClick}
-        onPressProfile={onPressProfile}
-        onPressMaster={onPressMaster}
-        onPressKick={onPressKick}
-        setIsProfile={setIsProfile}
-        //InviteList
-        onPressEmail={onPressEmail}
-        onPressSms={onPressSms}
-        onPressShare={onPressShare}
-        onPressLink={onPressLink}
-        onPressCode={onPressCode}
-      /> */}
+      )}
+      {bottomDisplayType === 'CHATTING' && (
+        <Participants
+          isRoomMaster={isRoomMaster}
+          isProfile={isProfile}
+          isInviteList={isInviteList}
+          swipeRef={swipeRef}
+          userInfo={userInfo}
+          onPressInvite={onPressInvite}
+          ToggleSpeakerClick={ToggleSpeakerClick}
+          onPressProfile={onPressProfile}
+          onPressMaster={onPressMaster}
+          onPressKick={onPressKick}
+          setIsProfile={setIsProfile}
+          //InviteList
+          onPressEmail={onPressEmail}
+          onPressSms={onPressSms}
+          onPressShare={onPressShare}
+          onPressLink={onPressLink}
+          onPressCode={onPressCode}
+        />
+      )}
     </SafeAreaView>
   );
 };
@@ -106,7 +110,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     bottom: 0,
-    zIndex: 1
+    zIndex: 2
   }
 });
 export default BottomPopupPresenter;

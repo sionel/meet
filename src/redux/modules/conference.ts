@@ -9,28 +9,29 @@ const SET_INITIAL_LIST = 'conference.SET_INITIAL_LIST';
 const SET_ROOM_ID = 'conference.SET_ROOM_ID';
 const SET_ROOM = 'conference.SET_ROOM';
 const SET_IS_CONFERENCE = 'conference.SET_IS_CONFERENCE';
-const SET_TOPDISPLAY_TYPE = 'conference SET_TOPDISPLAY_TYPE';
-const SET_MAINDISPLAY_TYPE = 'conference SET_MAINDISPLAY_TYPE';
+const SET_TOP_DISPLAY_TYPE = 'conference SET_TOP_DISPLAY_TYPE';
+const SET_BOTTOM_DISPLAY_TYPE = 'conference SET_BOTTOM_DISPLAY_TYPE';
 const SET_VIDEO_STATE = 'conference SET_VIDEO_STATE';
 const SET_MIKE_STATE = 'conference SET_MIKE_STATE';
 const SET_IS_SPEAKER_ON = 'conference SET_IS_SPEAKER_ON';
 const SET_IS_BT_ON = 'conference SET_IS_BT_ON';
+const SET_FACING_MODE = 'conference SET_FACING_MODE';
+const SET_MIRROR_MODE = 'conference SET_MIRROR_MODE';
+const SET_EXPIRE_TIME = 'conference.SET_EXPIRE_TIME';
 
 export interface state {
   roomId: string;
   room: any;
   isConference: boolean;
   topDisplayType: 'FUNCTION' | 'NAME';
-  mainDisplayType:
-    | 'CHARACTER'
-    | 'RTCVIEW'
-    | 'SCREENSHARE'
-    | 'DOCUMENTSHARE'
-    | 'SKETCH';
+  bottomDisplayType: 'MENU' | 'CHATTING' | 'PARTICIPANTS' | 'NONE';
   videoState: any;
   mikeState: any;
   isSpeakerOn: boolean;
   isBtOn: boolean;
+  facingMode: 'FRONT' | 'BACK';
+  mirrorMode: boolean;
+  expireTime: number | null;
 }
 
 const initialState: state = {
@@ -38,11 +39,14 @@ const initialState: state = {
   room: undefined,
   isConference: false,
   topDisplayType: 'FUNCTION',
-  mainDisplayType: 'CHARACTER',
+  bottomDisplayType: 'NONE',
   videoState: undefined,
   mikeState: undefined,
   isSpeakerOn: false,
-  isBtOn: false
+  isBtOn: false,
+  facingMode: 'FRONT',
+  mirrorMode: false,
+  expireTime: null
 };
 
 const reducer: (state: state, action: AnyAction) => state = (
@@ -56,10 +60,10 @@ const reducer: (state: state, action: AnyAction) => state = (
       return _setRoom(state, action);
     case SET_IS_CONFERENCE:
       return _setIsConference(state, action);
-    case SET_TOPDISPLAY_TYPE:
+    case SET_TOP_DISPLAY_TYPE:
       return _setTopDisplayType(state, action);
-    case SET_MAINDISPLAY_TYPE:
-      return _setMainDisplayType(state, action);
+    case SET_BOTTOM_DISPLAY_TYPE:
+      return _setBottomDisplayType(state, action);
     case SET_VIDEO_STATE:
       return _setVideoState(state, action);
     case SET_MIKE_STATE:
@@ -68,6 +72,12 @@ const reducer: (state: state, action: AnyAction) => state = (
       return _setIsSpeakerOn(state, action);
     case SET_IS_BT_ON:
       return _setIsBtOn(state, action);
+    case SET_FACING_MODE:
+      return _setFacingMode(state, action);
+    case SET_MIRROR_MODE:
+      return _setMirrorMode(state);
+    case SET_EXPIRE_TIME:
+      return _setExpireTime(state, action);
 
     // case SET_LIST:
     //   return { ...state, list: action.list };
@@ -110,7 +120,7 @@ const _setIsConference = (state: state, action: AnyAction) => {
 
 const setTopDisplayType = (displayType: 'FUNCTION' | 'NAME') => {
   return {
-    type: SET_TOPDISPLAY_TYPE,
+    type: SET_TOP_DISPLAY_TYPE,
     displayType
   };
 };
@@ -118,21 +128,16 @@ const _setTopDisplayType = (state: state, action: AnyAction) => {
   return { ...state, topDisplayType: action.displayType };
 };
 
-const setMainDisplayType = (
-  displayType:
-    | 'CHARACTER'
-    | 'RTCVIEW'
-    | 'SCREENSHARE'
-    | 'DOCUMENTSHARE'
-    | 'SKETCH'
+const setBottomDisplayType = (
+  displayType: 'MENU' | 'CHATTING' | 'PARTICIPANTS' | 'NONE'
 ) => {
   return {
-    type: SET_MAINDISPLAY_TYPE,
+    type: SET_BOTTOM_DISPLAY_TYPE,
     displayType
   };
 };
-const _setMainDisplayType = (state: state, action: AnyAction) => {
-  return { ...state, mainDisplayType: action.displayType };
+const _setBottomDisplayType = (state: state, action: AnyAction) => {
+  return { ...state, bottomDisplayType: action.displayType };
 };
 
 const setVideoState = (videoTrack: any) => {
@@ -175,16 +180,61 @@ const _setIsBtOn = (state: state, action: AnyAction) => {
   return { ...state, isBtOn: action.isBtOn };
 };
 
+const setFacingMode = (
+  facingMode: 'FRONT' | 'BACK'
+): ThunkAction<void, RootState, unknown> => {
+  return (distpach, getState) => {
+    const { list } = getState()['participants_copy'];
+    const copyList = list.slice(0);
+    copyList[0] && copyList[0].videoTrack._switchCamera();
+    distpach({ type: SET_FACING_MODE, facingMode });
+  };
+};
+const _setFacingMode = (state: state, action: AnyAction) => {
+  return { ...state, facingMode: action.facingMode };
+};
+
+const setMirrorMode = () => {
+  return {
+    type: SET_MIRROR_MODE
+  };
+};
+const _setMirrorMode = (state: state) => {
+  return { ...state, mirrorMode: !state.mirrorMode };
+};
+
+const setExpireTime = (
+  expireTime: number | null
+): ThunkAction<void, RootState, unknown> => {
+  return async dispatch => {
+    dispatch({
+      type: SET_EXPIRE_TIME,
+      expireTime
+    });
+  };
+};
+
+function _setExpireTime(state: state, action: AnyAction) {
+  const { expireTime } = action;
+  return {
+    ...state,
+    expireTime: expireTime
+  };
+}
+
 export const actionCreators = {
   setRoomId,
   setRoom,
   setIsConference,
   setTopDisplayType,
-  setMainDisplayType,
+  setBottomDisplayType,
   setVideoState,
   setMikeState,
   setIsSpeakerOn,
-  setIsBtOn
+  setIsBtOn,
+  setFacingMode,
+  setMirrorMode,
+  setExpireTime
 };
 export default reducer;
 

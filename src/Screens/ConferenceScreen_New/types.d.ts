@@ -18,9 +18,10 @@ type ConferenceScreenNavigationProps = StackNavigationProp<
 export interface ConferenceScreenContainerProps
   extends StackScreenProps<MeetParamList, 'ConferenceView_new'> {}
 export interface ConferenceScreenPresenterProps {
+  roomName: string;
+  id: string;
   isConnected: boolean;
   handleClose: () => void;
-  participants: Participant[];
 }
 
 export interface TopPopupContainerProps {}
@@ -36,7 +37,11 @@ export interface ToastMessageProps {
   fadeAnimation: Animated.Value;
 }
 
-export interface TopContentContainerProps {}
+export interface TopContentContainerProps {
+  roomName: string;
+  id: string;
+  handleClose: () => void;
+}
 export interface TopContentPresenterProps {
   onPressUserList: () => void;
   onPressChatting: () => void;
@@ -44,11 +49,11 @@ export interface TopContentPresenterProps {
   onPressDisplayInvert: () => void;
   onPressMore: () => void;
   displayType: 'FUNCTION' | 'NAME';
+  roomName: string;
+  time: string;
 }
 
-export interface MainContainerProps {
-  mainUser: Participant;
-}
+export interface MainContainerProps {}
 export interface MainPresenterProps
   extends CharacterProps,
     RtcViewProps,
@@ -59,18 +64,14 @@ export interface MainPresenterProps
   // isMuteVideo: boolean;
   // presenter: any;
   // isStream: boolean;
-  displayType:
-    | 'CHARACTER'
-    | 'RTCVIEW'
-    | 'SCREENSHARE'
-    | 'DOCUMENTSHARE'
-    | 'SKETCH';
+  displayType: 'track' | 'sketch' | 'document' | 'screen' | 'character';
   videoType: string;
   onPressShareStop: () => void;
+  onPressMainView: () => void;
 }
 
 export interface CharacterProps {
-  avartar: string;
+  avatar?: string;
   isMaster: boolean;
   userName: string;
 }
@@ -80,6 +81,7 @@ export interface RtcViewProps {
   streamURL: string;
   isMaster: boolean;
   userName: string;
+  mirrorMode: boolean;
 }
 export interface DocumentShareProps {}
 export interface SketchProps {}
@@ -96,7 +98,7 @@ export interface BottomPopupPresenterProps
   extends MenuListProps,
     ChattingProps,
     ParticipantsProps {
-  getUserName: (uesr: ParticipantsTypes) => string;
+  bottomDisplayType: 'MENU' | 'CHATTING' | 'PARTICIPANTS' | 'NONE';
 }
 
 export interface BottomContentContainerProps {
@@ -126,7 +128,6 @@ export interface ChattingProps {
   setMyMessage: React.Dispatch<React.SetStateAction<string>>;
   setIsEndScroll: Function;
   setCdm: React.Dispatch<React.SetStateAction<boolean>>;
-  getUserName: (uesr: ParticipantsTypes) => string;
   scrollRef: MutableRefObject<any>;
   myMessage: string;
   cdm: boolean;

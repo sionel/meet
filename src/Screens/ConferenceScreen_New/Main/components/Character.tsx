@@ -7,20 +7,18 @@ import icMan1 from '@assets/icons/ic_man1.png';
 import icWoman1 from '@assets/icons/ic_woman1.png';
 import icWoman2 from '@assets/icons/ic_woman2.png';
 import icMaster from '@assets/icons/ic_master.png';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const Character: React.FC<CharacterProps> = ({
   isMaster,
   userName,
-  avartar
+  avatar
 }) => {
-  const insets = useSafeAreaInsets();
   return (
     <Fragment>
       <View
         style={[
           styles.mainUserNameView,
-          { top: insets.top + 58 },
+          { top: 58 },
           isMaster && { paddingLeft: 12 }
         ]}
       >
@@ -31,12 +29,17 @@ const Character: React.FC<CharacterProps> = ({
             style={styles.MasterIcon}
           />
         )}
-        <Text style={styles.name}>{userName}</Text>
+        <Text style={styles.name}>{`${userName}`}</Text>
       </View>
       <View style={styles.imageContainer}>
         <Image
-          source={icWoman2}
-          // source={avartar}
+          source={
+            avatar === 'jessie'
+              ? icWoman1
+              : avatar === 'suzy'
+              ? icWoman2
+              : icMan1
+          }
           style={{ width: '100%', height: '100%' }}
           resizeMode={'cover'}
         />
@@ -54,7 +57,8 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     alignSelf: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.2)'
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    zIndex: 1
   },
   name: {
     color: '#fff',

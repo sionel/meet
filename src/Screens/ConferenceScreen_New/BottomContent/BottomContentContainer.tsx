@@ -3,6 +3,7 @@ import { NativeModules, Platform } from 'react-native';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { actionCreators as ConferenceActions } from '@redux/conference';
+import { actionCreators as MainUserActions } from '@redux/mainUser_copy';
 
 import { RootState } from 'src/redux/configureStore';
 import { BottomContentContainerProps } from '../types';
@@ -17,6 +18,7 @@ const InCallManager =
 const BottomContentContainer: React.FC<BottomContentContainerProps> = ({
   handleCloseConf
 }) => {
+  //#region selector
   const { videoState, mikeState, isSpeakerOn, isBtOn } = useSelector(
     (state: RootState) => ({
       videoState: state.conference.videoState,
@@ -25,14 +27,20 @@ const BottomContentContainer: React.FC<BottomContentContainerProps> = ({
       isBtOn: state.conference.isBtOn
     })
   );
+  //#endregion
 
   const [isVideoOn, setIsVideoOn] = useState(!videoState.isMuted());
   const [isMikeOn, setIsMikeOn] = useState(!mikeState.isMuted());
 
+  //#region dispatch
   const dispatch = useDispatch();
-  const setIsSpeakerOn = (isSpeakerOn: boolean) => {
+  const setIsSpeakerOn = (isSpeakerOn: boolean) =>
     dispatch(ConferenceActions.setIsSpeakerOn(isSpeakerOn));
-  };
+
+  const setMainView = (
+    view: 'track' | 'sketch' | 'document' | 'screen' | 'character'
+  ) => dispatch(MainUserActions.setMainView(view));
+  //#endregion
 
   useEffect(() => {
     _handlePressSpeaker();
@@ -42,8 +50,10 @@ const BottomContentContainer: React.FC<BottomContentContainerProps> = ({
   const _handlePressVideo = () => {
     if (isVideoOn) {
       videoState.mute();
+      setMainView('character');
     } else {
       videoState.unmute();
+      setMainView('track');
     }
     setIsVideoOn(!isVideoOn);
   };
@@ -58,8 +68,6 @@ const BottomContentContainer: React.FC<BottomContentContainerProps> = ({
   };
 
   const _handlePressSpeaker = () => {
-    console.log('isBtOn : ', isBtOn);
-
     if (!isBtOn) {
       if (OS === 'ios') {
         if (isSpeakerOn) {

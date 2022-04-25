@@ -12,6 +12,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import thunk from 'redux-thunk';
 import local, { state as LocalState } from '@redux/local';
 import mainUser, { state as MainUserState } from '@redux/mainUser';
+import mainUser_copy, { InitialState as MainUserState_copy } from '@redux/mainUser_copy';
 import participants, { state as ParticipantsState } from '@redux/participants';
 import participants_copy, {
   InitialState as ParticipantsState_copy
@@ -52,6 +53,7 @@ export interface RootState {
   local: LocalState;
   user: UserState;
   mainUser: MainUserState;
+  mainUser_copy: MainUserState_copy;
   participants: ParticipantsState;
   participants_copy: ParticipantsState_copy;
   wetalk: WetalkState;
@@ -84,6 +86,7 @@ const persistConfig = {
   blacklist: [
     'local',
     'mainUser',
+    'mainUser_copy',
     'participants',
     'participants_copy',
     'wetalk',
@@ -109,6 +112,7 @@ const persistConfig = {
 const reducer = persistCombineReducers(persistConfig, {
   local,
   mainUser,
+  mainUser_copy,
   participants,
   participants_copy,
   user,

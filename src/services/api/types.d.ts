@@ -106,6 +106,7 @@ export interface roomDetailData {
   portal_id: string;
   r_start_datetime: number;
   r_end_datetime: number;
+  start_datetime: number;
   is_send_update_email: boolean;
   invite_message: string;
   error?: any;

@@ -17,6 +17,8 @@ import MeetApi from '@services/api/MeetApi';
 
 import { actionCreators as ConferenceActions } from '@redux/conference';
 import { actionCreators as ParticipantsActions } from '@redux/participants_copy';
+import { actionCreators as MasterActions } from '@redux/master';
+// import { actionCreators as MainuserActions } from '@redux/mainUser_copy';
 
 type speakerInfo = {
   name: string;
@@ -62,11 +64,8 @@ const ConferenceScreenContainer: React.FC<
   const setRoom = (conference: Conference) => {
     dispatch(ConferenceActions.setRoom(conference));
   };
-  const resetUserlist = () => {
-    dispatch(ParticipantsActions.resetUserlist());
-  };
-  const resetVideoState = () => {
-    dispatch(ConferenceActions.setVideoState(undefined));
+  const retriveMasters = (token: string) => {
+    dispatch(MasterActions.checkMasterList(token));
   };
   const setIsSpeakerOn = (isSpeakerOn: boolean) => {
     dispatch(ConferenceActions.setIsSpeakerOn(isSpeakerOn));
@@ -74,6 +73,16 @@ const ConferenceScreenContainer: React.FC<
   const setIsBtOn = (isBtOn: boolean) => {
     dispatch(ConferenceActions.setIsBtOn(isBtOn));
   };
+  const resetUserlist = () => {
+    dispatch(ParticipantsActions.resetUserlist());
+  };
+  const resetVideoState = () => {
+    dispatch(ConferenceActions.setVideoState(undefined));
+  };
+  const resetMikeState = () => {
+    dispatch(ConferenceActions.setMikeState(undefined));
+  };
+  const resetExpireTime = () => dispatch(ConferenceActions.setExpireTime(null));
   //#endregion
 
   useEffect(() => {
@@ -102,12 +111,15 @@ const ConferenceScreenContainer: React.FC<
         videoTrack: params.tracks[0],
         audioTrack: params.tracks[1]
       };
+
       await conference.join(
         { id: params.id, token: params.roomToken },
         userInfo,
         dispatch,
         params.tracks
       );
+
+      retriveMasters(params.roomToken);
       setRoom(conference);
       setIsConnected(true);
     } catch (error) {
@@ -117,15 +129,9 @@ const ConferenceScreenContainer: React.FC<
       //TODO: 화상대화 dispose 처리 필요
       // _handleClose();
     }
-
-    // console.log('한번만 나와야하는데 이게 여러번 나오나 싶어서');
-    // const id = '4cd6a9ad-87f5-4209-83a4-28927da96962';
-    // const getMeetRoomToken = await MeetApi.getMeetRoomToken(auth, params.id);
-    // if (isSuccess(getMeetRoomToken)) {
-    //   const token = getMeetRoomToken.resultData;
-    // }
   };
 
+  //#region 스피커 장치 변경 Listenr
   const _addSpeakerListner = async () => {
     if (OS === 'ios') {
       NativeAudio.addListener(
@@ -145,8 +151,9 @@ const ConferenceScreenContainer: React.FC<
       });
     }
   };
+  //#endregion
 
-  //#region   IOS 블루투스 이어폰 연결 여부
+  //#region IOS 블루투스 이어폰 연결 여부
   const _handleIosSpeaker = (event: any) => {
     let enableBluetooth = false;
     enableBluetooth = event.find(
@@ -185,8 +192,10 @@ const ConferenceScreenContainer: React.FC<
     setIsConnected(false);
     resetUserlist();
     resetVideoState();
+    resetMikeState();
     setIsSpeakerOn(false);
     setIsBtOn(false);
+    resetExpireTime();
     if (OS === 'ios') {
       NativeAudio.removeAllListeners(
         'org.jitsi.meet:features/audio-mode#devices-update'
@@ -204,8 +213,9 @@ const ConferenceScreenContainer: React.FC<
 
   return (
     <ConferenceScreenPresenter
-      participants={participants}
       isConnected={isConnected}
+      roomName={params.selectedRoomName}
+      id={params.id}
       handleClose={_handleClose}
     />
   );

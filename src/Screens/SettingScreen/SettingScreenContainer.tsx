@@ -46,7 +46,7 @@ export default function SettingScreenContainer(props: any) {
   const dispatch = useDispatch();
   const setAlert = (params: any) => dispatch(AlertAcions.setAlert(params));
   const setConferenceExpireTime = (expireTime: number | null) =>
-    dispatch(LocalActions.setConferenceExpireTime(expireTime));
+    dispatch(ConferenceActions.setExpireTime(expireTime));
   const setVideoState = (videoTrack: any) => {
     dispatch(ConferenceActions.setVideoState(videoTrack));
   };

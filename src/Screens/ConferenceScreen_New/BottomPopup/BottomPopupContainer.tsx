@@ -16,14 +16,17 @@ import {
 import { BottomPopupContainerProps } from '@screens/ConferenceScreen_New/types';
 import BottomPopupPresenter from './BottomPopupPresenter';
 import InviteList from './components/participantsComponents/InviteList';
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/redux/configureStore';
 
 const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
-  roomId,
-  handleSpeaker
+  roomId
 }) => {
   const t = getT();
   const { OS } = Platform;
   //#region UseState
+  ////#endregion
+
   // MenuList
 
   // Chat
@@ -63,16 +66,13 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
 
   //#endregion UseState
 
+  //#region useSelector
+  const { bottomDisplayType } = useSelector((state: RootState) => ({
+    bottomDisplayType: state.conference.bottomDisplayType
+  }));
+  //#endregion
+
   //#region Method
-
-  const getUserName = (user: ParticipantsTypes) => {
-    if (user.userInfo) {
-      if (user.userInfo.nickname) {
-        return user.userInfo.nickname + '(' + user.userInfo.userName + ')';
-      } else return user.userInfo.userName;
-    } else return user.name;
-  };
-
   // MenuList
   const handlePressSketch = () => {};
   const handlePressDocumentShare = () => {};
@@ -203,9 +203,12 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
     setKeyboardH(0);
   };
 
+  const handlePressSpeaker = () => {};
+
   return (
     <BottomPopupPresenter
-      getUserName={getUserName}
+      bottomDisplayType={bottomDisplayType}
+      // getUserName={getUserName}
       //MenuList
       isMaster={true}
       onPressSketch={handlePressSketch}
@@ -231,7 +234,7 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
       onPressProfile={handlePressProfile}
       onPressMaster={handlePressMaster}
       onPressKick={handlePressKick}
-      ToggleSpeakerClick={handleSpeaker}
+      ToggleSpeakerClick={handlePressSpeaker}
       setIsProfile={setIsProfile}
       //InviteList
       onPressEmail={handlePressEmail}

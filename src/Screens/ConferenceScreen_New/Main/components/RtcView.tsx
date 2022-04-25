@@ -1,26 +1,24 @@
 import React, { Fragment } from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { RTCView } from 'react-native-webrtc';
 
 import { RtcViewProps } from '@screens/ConferenceScreen_New/types';
 
 import icMaster from '@assets/icons/ic_master.png';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const RtcView: React.FC<RtcViewProps> = ({
   videoType,
   streamURL,
   isMaster,
-  userName
+  userName,
+  mirrorMode
 }) => {
-  const insets = useSafeAreaInsets();
-
   return (
     <Fragment>
       <View
         style={[
           styles.mainUserNameView,
-          { top: insets.top +  58 },
+          { top: 58 },
           isMaster && { paddingLeft: 12 }
         ]}
       >
@@ -33,14 +31,14 @@ const RtcView: React.FC<RtcViewProps> = ({
         )}
         <Text style={styles.name}>{userName}</Text>
       </View>
-      <RTCView
-        style={styles.RTCVideo}
-        mirror={videoType !== 'desktop'}
-        objectFit={'contain'}
-        // streamURL={stream.toURL()}
-        streamURL={streamURL}
-        zOrder={0} // zOrder 는 [0, 1] 만 사용가능 (아마?)
-      />
+        <RTCView
+          style={styles.RTCVideo}
+          mirror={mirrorMode}
+          objectFit={'contain'}
+          // streamURL={stream.toURL()}
+          streamURL={streamURL}
+          zOrder={0} // zOrder 는 [0, 1] 만 사용가능 (아마?)
+        />
     </Fragment>
   );
 };
@@ -67,8 +65,7 @@ const styles = StyleSheet.create({
     marginRight: 4
   },
   RTCVideo: {
-    flex: 1,
-    backgroundColor: '#000'
+    flex: 1
   }
 });
 

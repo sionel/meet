@@ -22,15 +22,17 @@ const TopContentPresenter: React.FC<TopContentPresenterProps> = ({
   onPressCamaraReverse,
   onPressDisplayInvert,
   onPressMore,
-  displayType
+  displayType,
+  roomName,
+  time
 }) => {
   return (
     <SafeAreaView style={styles.topContentSAV}>
       <View style={styles.topContainer}>
         <View style={styles.topRow}>
-          <Text style={styles.topRowText}>{`01:20`}</Text>
+          <Text style={styles.topRowText}>{`${time}`}</Text>
           {displayType === 'NAME' && (
-            <Text style={styles.topRowText}>{`기획팀 주간회의`}</Text>
+            <Text style={styles.topRowText}>{`${roomName}`}</Text>
           )}
           <View style={styles.topButtonContainer}>
             {displayType === 'FUNCTION' && (
@@ -98,7 +100,7 @@ const styles = StyleSheet.create({
   topContentSAV: {
     position: 'absolute',
     width: '100%',
-    height: '100%',
+    height: '10%',
     top: 0,
     zIndex: 1
   },
