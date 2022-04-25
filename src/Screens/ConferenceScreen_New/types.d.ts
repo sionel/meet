@@ -20,7 +20,6 @@ export interface ConferenceScreenContainerProps
 export interface ConferenceScreenPresenterProps {
   isConnected: boolean;
   handleClose: () => void;
-  handleSpeaker: () => void;
   participants: Participant[];
 }
 
@@ -92,7 +91,6 @@ export interface SplitVideoPresenterProps {}
 
 export interface BottomPopupContainerProps {
   roomId: string;
-  handleSpeaker: () => void;
 }
 export interface BottomPopupPresenterProps
   extends MenuListProps,
@@ -109,7 +107,10 @@ export interface BottomContentPresenterProps {
   onPressMike: () => void;
   onPressVideo: () => void;
   onPressEndCall: () => void;
-  userInfo: any;
+  // userInfo: any;
+  isVideoOn: boolean;
+  isMikeOn: boolean;
+  isSpeakerOn: boolean;
 }
 
 export interface MenuListProps {

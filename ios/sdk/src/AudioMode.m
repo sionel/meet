@@ -372,7 +372,7 @@ RCT_EXPORT_METHOD(updateDeviceList) {
                @"selected": [NSNumber numberWithBool:[kDeviceTypeSpeaker isEqualToString:currentPort]]
         }];
         
-        // [self sendEventWithName:kDevicesChanged body:data];
+        [self sendEventWithName:kDevicesChanged body:data];
     });
 }
 

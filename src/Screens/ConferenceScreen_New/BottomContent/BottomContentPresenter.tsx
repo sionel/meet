@@ -25,12 +25,13 @@ const BottomContentPresenter: React.FC<BottomContentPresenterProps> = ({
   onPressSpeaker,
   onPressMike,
   onPressVideo,
-  onPressEndCall
+  onPressEndCall,
+  isVideoOn,
+  isMikeOn,
+  isSpeakerOn
 }) => {
   return (
-    <SafeAreaView
-      style={styles.BotContentSAV}
-    >
+    <SafeAreaView style={styles.BotContentSAV}>
       <View style={styles.bottomArea}>
         <View style={{ flexDirection: 'row', marginTop: 24 }}>
           {/* 스피커 */}
@@ -40,19 +41,16 @@ const BottomContentPresenter: React.FC<BottomContentPresenterProps> = ({
               onPressOut={onPressSpeaker}
             >
               <Image
-                source={icSpeakerOn}
+                source={isSpeakerOn ? icSpeakerOn : icSpeakerOff}
                 style={styles.buttonImage}
                 resizeMode={'cover'}
               />
             </TouchableOpacity>
           )}
           {/* 마이크 */}
-          <TouchableOpacity
-            style={styles.bottonTouch}
-            onPressOut={onPressMike}
-          >
+          <TouchableOpacity style={styles.bottonTouch} onPressOut={onPressMike}>
             <Image
-              source={icMicOn}
+              source={isMikeOn ? icMicOn : icMicOff}
               style={styles.buttonImage}
               resizeMode={'cover'}
             />
@@ -64,7 +62,7 @@ const BottomContentPresenter: React.FC<BottomContentPresenterProps> = ({
             onPressOut={onPressVideo}
           >
             <Image
-              source={icVideoOn}
+              source={isVideoOn ? icVideoOn : icVideoOff}
               style={styles.buttonImage}
               resizeMode={'cover'}
             />
@@ -108,7 +106,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     marginBottom: 14,
     justifyContent: 'flex-end',
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: '#000'
   },
   bottonTouch: {
     width: 48,

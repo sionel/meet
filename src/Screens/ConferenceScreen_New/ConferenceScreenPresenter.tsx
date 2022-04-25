@@ -12,11 +12,10 @@ import { ConferenceScreenPresenterProps } from '@screens/ConferenceScreen_New/ty
 const ConferenceScreenPresenter: React.FC<ConferenceScreenPresenterProps> = ({
   isConnected,
   participants,
-  handleClose,
-  handleSpeaker
+  handleClose
 }) => {
   // console.log('isConnected : ', isConnected);
-  console.log('participants : ', participants);
+  // console.log('participants : ', participants);
   
   return (
     <View style={{ flex: 1, backgroundColor: '#000' }}>

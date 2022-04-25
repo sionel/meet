@@ -9,6 +9,7 @@ import { getT } from '@utils/translateManager';
 
 import { actionCreators as AlertAcions } from '@redux/alert';
 import { actionCreators as LocalActions } from '@redux/local';
+import { actionCreators as ConferenceActions } from '@redux/conference';
 import { RootState } from '../../redux/configureStore';
 import { MeetNavigationProps } from '@navigations/RootNavigation';
 
@@ -46,6 +47,12 @@ export default function SettingScreenContainer(props: any) {
   const setAlert = (params: any) => dispatch(AlertAcions.setAlert(params));
   const setConferenceExpireTime = (expireTime: number | null) =>
     dispatch(LocalActions.setConferenceExpireTime(expireTime));
+  const setVideoState = (videoTrack: any) => {
+    dispatch(ConferenceActions.setVideoState(videoTrack));
+  };
+  const setMikeState = (videoTrack: any) => {
+    dispatch(ConferenceActions.setMikeState(videoTrack));
+  };
 
   const t = getT();
 
@@ -168,6 +175,10 @@ export default function SettingScreenContainer(props: any) {
       const getExpireTime = await MeetApi.getExpireTime(params.id);
       if (isSuccess(getExpireTime)) {
         setConferenceExpireTime(getExpireTime.resultData.expire_time);
+      }
+      if (tracks) {
+        setVideoState(tracks[0]);
+        setMikeState(tracks[1]);
       }
 
       navigation.reset({

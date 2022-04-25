@@ -1,4 +1,5 @@
 import Conference from '@screens/ConferenceScreen_New/conferenceUtil/Conference';
+import { MediaStreamTrackState, RTCViewProps } from 'react-native-webrtc';
 import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import { RootState } from '../configureStore';
@@ -10,10 +11,14 @@ const SET_ROOM = 'conference.SET_ROOM';
 const SET_IS_CONFERENCE = 'conference.SET_IS_CONFERENCE';
 const SET_TOPDISPLAY_TYPE = 'conference SET_TOPDISPLAY_TYPE';
 const SET_MAINDISPLAY_TYPE = 'conference SET_MAINDISPLAY_TYPE';
+const SET_VIDEO_STATE = 'conference SET_VIDEO_STATE';
+const SET_MIKE_STATE = 'conference SET_MIKE_STATE';
+const SET_IS_SPEAKER_ON = 'conference SET_IS_SPEAKER_ON';
+const SET_IS_BT_ON = 'conference SET_IS_BT_ON';
 
 export interface state {
   roomId: string;
-  room: any ;
+  room: any;
   isConference: boolean;
   topDisplayType: 'FUNCTION' | 'NAME';
   mainDisplayType:
@@ -22,6 +27,10 @@ export interface state {
     | 'SCREENSHARE'
     | 'DOCUMENTSHARE'
     | 'SKETCH';
+  videoState: any;
+  mikeState: any;
+  isSpeakerOn: boolean;
+  isBtOn: boolean;
 }
 
 const initialState: state = {
@@ -29,7 +38,11 @@ const initialState: state = {
   room: undefined,
   isConference: false,
   topDisplayType: 'FUNCTION',
-  mainDisplayType: 'CHARACTER'
+  mainDisplayType: 'CHARACTER',
+  videoState: undefined,
+  mikeState: undefined,
+  isSpeakerOn: false,
+  isBtOn: false
 };
 
 const reducer: (state: state, action: AnyAction) => state = (
@@ -47,6 +60,15 @@ const reducer: (state: state, action: AnyAction) => state = (
       return _setTopDisplayType(state, action);
     case SET_MAINDISPLAY_TYPE:
       return _setMainDisplayType(state, action);
+    case SET_VIDEO_STATE:
+      return _setVideoState(state, action);
+    case SET_MIKE_STATE:
+      return _setMikeState(state, action);
+    case SET_IS_SPEAKER_ON:
+      return _setIsSpeakerOn(state, action);
+    case SET_IS_BT_ON:
+      return _setIsBtOn(state, action);
+
     // case SET_LIST:
     //   return { ...state, list: action.list };
     // case SET_INITIAL_LIST:
@@ -113,12 +135,56 @@ const _setMainDisplayType = (state: state, action: AnyAction) => {
   return { ...state, mainDisplayType: action.displayType };
 };
 
+const setVideoState = (videoTrack: any) => {
+  return {
+    type: SET_VIDEO_STATE,
+    videoTrack
+  };
+};
+const _setVideoState = (state: state, action: AnyAction) => {
+  return { ...state, videoState: action.videoTrack };
+};
+
+const setMikeState = (audioTrack: any) => {
+  return {
+    type: SET_MIKE_STATE,
+    audioTrack
+  };
+};
+const _setMikeState = (state: state, action: AnyAction) => {
+  return { ...state, mikeState: action.audioTrack };
+};
+
+const setIsSpeakerOn = (isSpeakerOn: boolean) => {
+  return {
+    type: SET_IS_SPEAKER_ON,
+    isSpeakerOn
+  };
+};
+const _setIsSpeakerOn = (state: state, action: AnyAction) => {
+  return { ...state, isSpeakerOn: action.isSpeakerOn };
+};
+
+const setIsBtOn = (isBtOn: boolean) => {
+  return {
+    type: SET_IS_BT_ON,
+    isBtOn
+  };
+};
+const _setIsBtOn = (state: state, action: AnyAction) => {
+  return { ...state, isBtOn: action.isBtOn };
+};
+
 export const actionCreators = {
   setRoomId,
   setRoom,
   setIsConference,
   setTopDisplayType,
-  setMainDisplayType
+  setMainDisplayType,
+  setVideoState,
+  setMikeState,
+  setIsSpeakerOn,
+  setIsBtOn
 };
 export default reducer;
 

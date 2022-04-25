@@ -80,7 +80,7 @@ export interface RootState {
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['user', 'recents', 'conference'],
+  whitelist: ['user', 'recents'],
   blacklist: [
     'local',
     'mainUser',
@@ -98,6 +98,7 @@ const persistConfig = {
     'indicator',
     'orientation',
     'root',
+    'conference',
     'selectCompany'
   ]
 };

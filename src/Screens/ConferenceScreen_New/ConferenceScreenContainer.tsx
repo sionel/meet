@@ -1,4 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import {
+  DeviceEventEmitter,
+  NativeEventEmitter,
+  NativeModules,
+  Platform
+} from 'react-native';
 import ConferenceScreenPresenter from './ConferenceScreenPresenter';
 import { ConferenceScreenContainerProps } from './types';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,6 +18,19 @@ import MeetApi from '@services/api/MeetApi';
 import { actionCreators as ConferenceActions } from '@redux/conference';
 import { actionCreators as ParticipantsActions } from '@redux/participants_copy';
 
+type speakerInfo = {
+  name: string;
+  selected: boolean;
+  type: string;
+  uid: string;
+};
+
+const { OS } = Platform;
+const AudioMode = OS === 'ios' && NativeModules.AudioMode;
+const NativeAudio = new NativeEventEmitter(AudioMode);
+const InCallManager =
+  OS === 'android' && require('react-native-incall-manager').default;
+
 const ConferenceScreenContainer: React.FC<
   ConferenceScreenContainerProps
 > = props => {
@@ -19,25 +38,26 @@ const ConferenceScreenContainer: React.FC<
     navigation,
     route: { params }
   } = props;
-  // console.log('navigation : ', navigation);
-  // console.log('route : ', route);
 
   let conference: Conference;
 
   const [first, setfirst] = useState();
   const [isConnected, setIsConnected] = useState(false);
 
-  const { state, testFlag, auth, participants, room, isLogin } = useSelector(
-    (state: RootState) => ({
+  //#region useSelector
+  const { state, testFlag, auth, participants, room, isSpeakerOn, isLogin } =
+    useSelector((state: RootState) => ({
       testFlag: state.test.testFlag,
       auth: state.user.auth,
       state,
       participants: state.participants_copy.list,
       room: state.conference.room,
+      isSpeakerOn: state.conference.isSpeakerOn,
       isLogin: state.user.isLogin
-    })
-  );
+    }));
+  //#endregion
 
+  //#region useDispatch
   const dispatch = useDispatch();
   const setRoom = (conference: Conference) => {
     dispatch(ConferenceActions.setRoom(conference));
@@ -45,13 +65,22 @@ const ConferenceScreenContainer: React.FC<
   const resetUserlist = () => {
     dispatch(ParticipantsActions.resetUserlist());
   };
-  // const testfunction = new test('asd')
-
-  // testfunction.valtest()
+  const resetVideoState = () => {
+    dispatch(ConferenceActions.setVideoState(undefined));
+  };
+  const setIsSpeakerOn = (isSpeakerOn: boolean) => {
+    dispatch(ConferenceActions.setIsSpeakerOn(isSpeakerOn));
+  };
+  const setIsBtOn = (isBtOn: boolean) => {
+    dispatch(ConferenceActions.setIsBtOn(isBtOn));
+  };
+  //#endregion
 
   useEffect(() => {
-    console.log('ttt');    
+    _addSpeakerListner();
     _connectConference();
+
+    return () => {};
   }, []);
 
   const _connectConference = async () => {
@@ -83,7 +112,7 @@ const ConferenceScreenContainer: React.FC<
       setIsConnected(true);
     } catch (error) {
       console.log('error: ', error);
-      
+
       console.log('화상대화 접속에 실패하였습니다');
       //TODO: 화상대화 dispose 처리 필요
       // _handleClose();
@@ -96,28 +125,88 @@ const ConferenceScreenContainer: React.FC<
     //   const token = getMeetRoomToken.resultData;
     // }
   };
+
+  const _addSpeakerListner = async () => {
+    if (OS === 'ios') {
+      NativeAudio.addListener(
+        'org.jitsi.meet:features/audio-mode#devices-update',
+        event => {
+          _handleIosSpeaker(event);
+        }
+      );
+    } else {
+      InCallManager.start({ media: 'video' });
+      const audioPermmit = await InCallManager.requestRecordPermission();
+      if (audioPermmit !== 'granted') {
+        InCallManager.requestRecordPermission();
+      }
+      DeviceEventEmitter.addListener('onAudioDeviceChanged', event => {
+        _handleAndroidSpeaker(event);
+      });
+    }
+  };
+
+  //#region   IOS 블루투스 이어폰 연결 여부
+  const _handleIosSpeaker = (event: any) => {
+    let enableBluetooth = false;
+    enableBluetooth = event.find(
+      (deviceInfo: speakerInfo) =>
+        deviceInfo.selected === true && deviceInfo.type === 'BLUETOOTH'
+    );
+    if (enableBluetooth) {
+      !isSpeakerOn && setIsSpeakerOn(true);
+      setIsBtOn(true);
+    } else {
+      setIsBtOn(false);
+    }
+  };
+  //#endregion
+
+  //#region ANDROID 블루투스 이어폰 연결 여부
+  const _handleAndroidSpeaker = async (event: any) => {
+    const { availableAudioDeviceList } = event;
+    const deviceList = JSON.parse(availableAudioDeviceList);
+    const enableBluetooth = deviceList.find(
+      (list: string) => list === 'BLUETOOTH'
+    );
+    if (enableBluetooth) {
+      await InCallManager.chooseAudioRoute('BLUETOOTH');
+      !isSpeakerOn && setIsSpeakerOn(true);
+      setIsBtOn(true);
+    } else {
+      setIsBtOn(false);
+    }
+  };
+  //#endregion
+
+  //#region 화상회의 종료( 자원 정리 )
   const _handleClose = () => {
     room.dispose();
     setIsConnected(false);
     resetUserlist();
+    resetVideoState();
+    setIsSpeakerOn(false);
+    setIsBtOn(false);
+    if (OS === 'ios') {
+      NativeAudio.removeAllListeners(
+        'org.jitsi.meet:features/audio-mode#devices-update'
+      );
+    } else {
+      DeviceEventEmitter.removeAllListeners('onAudioDeviceChanged');
+    }
     if (!isLogin) {
       navigation.reset({ routes: [{ name: 'LoginStack' }] });
     } else {
       navigation.reset({ routes: [{ name: 'MainStack' }] });
     }
-    // console.log('participants : ', participants);
-
-    // participants[0].audioTrack.dispose();
-    // participants[0].videoTrack.dispose();
   };
-  const _handleSpeaker = () => {};
+  //#endregion
 
   return (
     <ConferenceScreenPresenter
       participants={participants}
       isConnected={isConnected}
       handleClose={_handleClose}
-      handleSpeaker={_handleSpeaker}
     />
   );
 };
