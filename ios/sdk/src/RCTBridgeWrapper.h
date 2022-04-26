@@ -1,4 +1,4 @@
-/*
+    /*
  * Copyright @ 2017-present Atlassian Pty Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,6 +31,8 @@
  * it, though that's not currently used.
  */
 @interface RCTBridgeWrapper : NSObject<RCTBridgeDelegate>
+
+- (instancetype)initWithOptions:(NSDictionary *)launchOptions;
 
 @property (nonatomic, readonly, strong)  RCTBridge *bridge;
 

@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { Component, useEffect, useRef, useState } from 'react';
 import { Platform, Linking, BackHandler, Alert } from 'react-native';
 import SplashScreenPresenter from './SplashScreenPresenter';
 import { WEHAGO_ENV } from '../../../config';
@@ -39,13 +39,15 @@ const SplashScreenContainer = ({
   const [notiIndex, setNotiIndex] = useState(0);
   const [first, setFirst] = useState(true);
   const deeplink = params?.deeplink;
+  const timeout = useRef<ReturnType<typeof setTimeout>>();
 
   const t = getT();
 
   //#region  selector
-  const { auth, from, updateNoti, autoLogin, loginType } = useSelector(
+  const { auth, from, updateNoti, autoLogin, loginType, url } = useSelector(
     (state: RootState) => {
       return {
+        url: state.app.url,
         auth: state.user.auth,
         from: state.user.from,
         updateNoti: state.user.updateNoti,
@@ -77,61 +79,23 @@ const SplashScreenContainer = ({
   //#endregion
 
   useEffect(() => {
-    // _setLinkingEvent();
     _handleInit();
   }, []);
 
-  // const _setLinkingEvent = () => {
-  //   // 앱 처음 진입시
-  //   Linking.getInitialURL().then(url => {
-  //     console.log(1);
-
-  //     url && _handleGetDeeplink({ url });
-  //   });
-  //   // 앱 실행중일때
-  //   Linking.addEventListener('url', url => {
-  //     console.log(2);
-
-  //     _handleGetDeeplink(url);
-  //   });
-  // };
-
-  const _handleGetDeeplink1 = ({ url }: { url: string }) => {
-    if (!url) return;
-    // let { name } = navigationRef.current.getCurrentRoute();
-    // if (isConference && name === 'ConferenceView') {
-    //   _deeplinkWhenConferenceOngoing();
-    // } else {
-    //   _deeplinkNormalAccess(url);
-    // }
-  };
-
   useEffect(() => {
-    if (deeplink) _handleGetDeeplink(deeplink);
-
-    // Alert.alert('알림', '요청시간 초과오류', [
-    //   {
-    //     text: '확인',
-    //     onPress: () => {
-    //       navigation.reset({
-    //         routes: [
-    //           { name: loginType === 'wehago' ? 'InputLogin' : 'LoginStack' }
-    //         ]
-    //       });
-    //     }
-    //   }
-    // ]);
-  }, [deeplink]);
+    debugger;
+    _handleGetDeeplink(url);
+  }, [url]);
 
   const _handleInit = async () => {
+    timeout.current = setTimeout(() => {
+      _handleCheckAutoLogin();
+    }, 4000);
     // 버전 확인
     await _handleCheckVersion();
+
     // 노티 확인
     await _handleCheckNotice();
-
-    setTimeout(() => {
-      _handleCheckAutoLogin();
-    }, 3000);
   };
 
   const _handleCheckVersion = async () => {
@@ -246,11 +210,10 @@ const SplashScreenContainer = ({
     */
     // const m = getConferenceManager();
     // console.log(m);
-
     if (!url) return;
+    if (timeout.current) clearTimeout(timeout.current);
+
     let result: any = querystringParser(url);
-    debugger;
-    // if(result.type === 'conference') {
     // 화상회의 요청인지 판별
     if (result.is_creater) {
       // 오래된 딥링크 주소 차단
@@ -354,14 +317,31 @@ const SplashScreenContainer = ({
           ]
         });
       } else {
-        Alert.alert(t('비회원 접속'), t('참여코드를 입력해주시기 바랍니다.'), [
-          {
-            text: '확인',
-            onPress: () => {
-              navigation.reset({ routes: [{ name: 'LoginStack' }] });
+        const { joincode, video_id } = result;
+        debugger;
+        const { name } = await MeetApi.getMeetRoomNoCert(video_id);
+        navigation.reset({
+          routes: [
+            {
+              name: 'ConferenceStateView',
+              params: {
+                accessType: 'joincode',
+                id: video_id,
+                joincode: joincode,
+                selectedRoomName: name
+              }
             }
-          }
-        ]);
+          ]
+        });
+
+        // Alert.alert(t('비회원 접속'), t('참여코드를 입력해주시기 바랍니다.'), [
+        //   {
+        //     text: '확인',
+        //     onPress: () => {
+        //       navigation.reset({ routes: [{ name: 'LoginStack' }] });
+        //     }
+        //   }
+        // ]);
       }
     } else {
       if (!result.video_id) {

@@ -123,10 +123,11 @@ export default function RootNavigation(props: any) {
   //   debugger;
   // }, [url]);
 
-  const { isConference, auth } = useSelector((state: RootState) => {
+  const { isConference, auth, url } = useSelector((state: RootState) => {
     return {
       auth: state.user.auth,
-      isConference: state.conference.isConference
+      isConference: state.conference.isConference,
+      url: state.app.url
     };
   });
 
@@ -145,23 +146,28 @@ export default function RootNavigation(props: any) {
     AppState.addEventListener('change', _setAppStateChange);
   };
 
-  const _setLinkingEvent = () => {
-    // 앱 처음 진입시 (ios / android , deeplink android)
-    Linking.getInitialURL().then(url => {
-      url && _handleGetDeeplink({ url });
-    });
+  useEffect(() => {
+    debugger
+    _handleGetDeeplink(url);
+  }, [url]);
 
-    // 앱 실행중일때 (deeplink ios)
-    Linking.addEventListener('url', _handleGetDeeplink);
-  };
+  // const _setLinkingEvent = () => {
+  //   // 앱 처음 진입시 (ios / android , deeplink android)
+  //   Linking.getInitialURL().then(url => {
+  //     url && _handleGetDeeplink({ url });
+  //   });
 
-  const _handleGetDeeplink = ({ url }: { url: string }) => {
+  //   // 앱 실행중일때 (deeplink ios)
+  //   Linking.addEventListener('url', _handleGetDeeplink);
+  // };
+
+  const _handleGetDeeplink = (url: string) => {
     if (!url) return;
     let { name } = navigationRef.current.getCurrentRoute();
     if (isConference && name === 'ConferenceView') {
       _deeplinkWhenConferenceOngoing();
     } else {
-      _deeplinkNormalAccess(url);
+      _deeplinkNormalAccess();
     }
   };
 
@@ -169,20 +175,12 @@ export default function RootNavigation(props: any) {
     RNExitApp.exitApp();
   };
 
-  const _deeplinkNormalAccess = (url: string) => {
-    debugger;
-    navigate('SplashView', { deeplink: url });
-  };
-  const _deleteLinkingEvent = () => {
-    Linking.removeAllListeners('url');
+  const _deeplinkNormalAccess = () => {
+    navigate('SplashView');
   };
 
   useEffect(() => {
     _handleAppStateChange();
-    // _setLinkingEvent();
-    return () => {
-      _deleteLinkingEvent();
-    };
   }, []);
 
   return (

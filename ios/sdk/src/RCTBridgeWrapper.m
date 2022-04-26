@@ -33,6 +33,17 @@
     return self;
 }
 
+- (instancetype)initWithOptions:(NSDictionary *)launchOptions {
+    self = [super init];
+    if (self) {
+        _bridge
+            = [[RCTBridge alloc] initWithDelegate:self
+                                    launchOptions:launchOptions];
+    }
+
+    return self;
+}
+
 #pragma mark helper methods for getting the packager URL
 
 #if DEBUG

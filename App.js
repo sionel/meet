@@ -12,56 +12,37 @@ import { setT } from './src/utils/translateManager';
 import Splash from 'react-native-splash-screen';
 import RootNavigation from './src/Navigations/RootNavigation';
 
+import { actionCreators as appAction } from './src/redux/modules/app';
+
 // import { io } from "socket.io-client";
 
 function App(props) {
-  const dispatch = useDispatch();
-  
-  useEffect(() => {
-    Splash.hide();
-    setT(props.t);
-    Linking.getInitialURL().then(url => {
-      console.log("@@@@@@@@");
-      console.log(props.url);
-      console.log("--------");
-      console.log(url);
-      console.log("@@@@@@@@");
-      url && _handleGetDeeplink({ url });
-    });
-  }, []);
-
-  // useEffect(() => {
-  //   dispatch(actionCreators.setUrl(props?.url?.url));
-  // //     ios : 앱이 꺼져있을때(딥링크)
-  // // android : 앱이 꺼져있을때, 앱 켜져 있을때(딥링크)
-     
-  //   //  dispatch(actionCreators.setUrl("com.wehago.meet://?login_info=email&type=conference&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ2aWRlby53ZWhhZ28uY29tIiwicm9vbSI6ImZiYjY2MTliLWFlMmYtNDE0MS05MmNjLTA3NWEyOTBkZWVjNyIsImVtYWlsIjoieWVvbmdpbDQ3NjRAbmF2ZXIuY29tIiwiaWF0IjoxNjM1NzQ3OTY3LCJleHAiOjE5NTExMDc5Njd9.O6UMML-qjav_-rkvLb-6tZvY-NYctt6Yxy0TF03gfxU&timeStamp=1635750152425"));
-  // }, [props.url]);
-
-  return <RootNavigation {...props} />;
-}
-
-// const test = async () =>{
-//   console.log('a');
-//   const a=  await Linking.canOpenURL('wehago://?')
-//   console.log(a);
-// }
-
-function AppWapper(props) {
   const { persistor, store } = configureStore();
   console.reportErrorsAsExceptions = false;
-  store.dispatch({
-    type: 'local.SET_EXTERNAL',
-    externalAPIScope: props.externalAPIScope
-  });
+
+  useEffect(() => {
+
+    setExternalAPIScope(props.externalAPIScope);
+    setUrl(props?.url?.url ?? '');
+    
+    setT(props.t);
+    Splash.hide();
+    Linking.addEventListener('url', ({ url }) => {
+      setUrl(url);
+    });
+  }, []);
+  const setExternalAPIScope = externalAPIScope =>
+    store.dispatch(appAction.setExternalAPIScope(externalAPIScope));
+  const setUrl = url => store.dispatch(appAction.setUrl(url));
+
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
         <CustomProvider>
-          <App {...props} />
+          <RootNavigation {...props} />
         </CustomProvider>
       </PersistGate>
     </Provider>
   );
 }
-AppRegistry.registerComponent('App', () => withTranslation()(AppWapper));
+AppRegistry.registerComponent('App', () => withTranslation()(App));

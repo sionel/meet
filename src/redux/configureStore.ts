@@ -24,6 +24,7 @@ import alert from './modules/alert';
 import toast from './modules/toast';
 // import root from './modules/root';
 import deployed, { state as deployedState } from './modules/deployed';
+import app, { State as appState } from './modules/app';
 import screenShare, { state as screenShageState } from './modules/ScreenShare';
 import indicator, { state as indicatorState } from './modules/indicator';
 import orientation, { state as orientationState } from './modules/orientation';
@@ -64,6 +65,7 @@ export interface RootState {
   root: rootState;
   recents: recentsState;
   selectCompany: selectCompanyState;
+  app: appState;
 }
 
 /**
@@ -89,7 +91,8 @@ const persistConfig = {
     'indicator',
     'orientation',
     'root',
-    'selectCompany'
+    'selectCompany',
+    'app'
   ]
 };
 
@@ -115,7 +118,8 @@ const reducer = persistCombineReducers(persistConfig, {
   orientation,
   root,
   recents,
-  selectCompany
+  selectCompany,
+  app
 });
 
 /**

@@ -30,6 +30,7 @@
 -             (BOOL)application:(UIApplication *)application
   didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     JitsiMeet *jitsiMeet = [JitsiMeet sharedInstance];
+    // JitsiMeet *jitsiMeet = [JitsiMeet initWhitOption:launchOptions];
 
     jitsiMeet.conferenceActivityType = JitsiMeetConferenceActivityType;
 
@@ -113,26 +114,10 @@
 - (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
   return [Orientation getOrientation];
 }
+
 // - (BOOL)application:(UIApplication *)app
 //             openURL:(NSURL *)url
 //             options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
-
-//     // This shows up during a reload in development, skip it.
-//     // https://github.com/firebase/firebase-ios-sdk/issues/233
-//     if ([[url absoluteString] containsString:@"google/link/?dismiss=1&is_weak_match=1"]) {
-//         return NO;
-//     }
-
-//     NSURL *openUrl = url;
-
-//     if ([FIRUtilities appContainsRealServiceInfoPlist]) {
-//         // Process Firebase Dynamic Links
-//         FIRDynamicLink *dynamicLink = [[FIRDynamicLinks dynamicLinks] dynamicLinkFromCustomSchemeURL:url];
-//         NSURL *firebaseUrl = [FIRUtilities extractURL:dynamicLink];
-//         if (firebaseUrl != nil) {
-//             openUrl = firebaseUrl;
-//         }
-//     }
 
 //     return [[JitsiMeet sharedInstance] application:app
 //                                            openURL:openUrl

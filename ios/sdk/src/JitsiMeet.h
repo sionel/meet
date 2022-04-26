@@ -44,6 +44,8 @@
 
 + (instancetype _Nonnull)sharedInstance;
 
+// + (instancetype)initWhitOption:(NSDictionary *)launchOptions;
+
 #pragma mark - Methods that the App delegate must call
 
 -             (BOOL)application:(UIApplication *_Nonnull)application

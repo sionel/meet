@@ -26,20 +26,15 @@ const getMainUser = (mainUserId, localUser, participants) => {
 
 const mapStateToProps = state => {
   const {
-    local: {
-      user,
-      createdTime,
-      isMasterControl,
-      isMasterMicControl,
-      externalAPIScope
-    },
+    local: { user, createdTime, isMasterControl, isMasterMicControl },
     mainUser: { mainUserId },
     participants: { list },
-    user: { auth,isLogin},
+    user: { auth, isLogin },
     documentShare,
     screenShare: { isScreenShare, screenToggleFlag },
-    root: { destination,url },
-    conference: {isConference}
+    root: { destination, url },
+    conference: { isConference },
+    app: { externalAPIScope }
   } = state;
 
   const mainUser = getMainUser(mainUserId, user, list);
@@ -70,7 +65,8 @@ const mapDispatchToProps = dispatch => {
   return {
     dispatch: dispatch,
     setSharingMode: () => {
-      return dispatch(DocumentShareActions.setSharingMode())},
+      return dispatch(DocumentShareActions.setSharingMode());
+    },
     toggleMuteVideo: muteState =>
       dispatch(LocalActions.toggleMuteVideo(muteState)),
     toggleMuteMic: muteState => dispatch(LocalActions.toggleMuteMic(muteState)),
@@ -92,8 +88,9 @@ const mapDispatchToProps = dispatch => {
     setIndicator: () =>
       dispatch(indicatorAcionCreators.setIndicator('화상회의 종료 중')),
     resetVideoId: () => dispatch(RootActions.setVideoId('')),
-    setIsConference:flag => dispatch(ConferenceActions.setIsConference(flag)),
-    setConferenceCreatedTime:(createdTime) => dispatch(LocalActions.setConferenceCreatedTime(createdTime))
+    setIsConference: flag => dispatch(ConferenceActions.setIsConference(flag)),
+    setConferenceCreatedTime: createdTime =>
+      dispatch(LocalActions.setConferenceCreatedTime(createdTime))
   };
 };
 
