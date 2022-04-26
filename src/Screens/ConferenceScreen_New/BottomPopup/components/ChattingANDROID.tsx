@@ -30,17 +30,13 @@ const Chatting: React.FC<ChattingProps> = ({
   setMyMessage,
   setCdm,
   setIsEndScroll,
-  getUserName,
   cdm,
   myMessage,
   scrollRef,
-  messages
+  messages,
+  myJitsiId
 }) => {
-  const t = getT();
-  const { OS } = Platform;
-  const user = { cid: '123456' };
   return (
-    <SafeAreaView style={styles.chatAndSAV}>
       <View
         style={[styles.container, isPad && { width: true ? '36%' : '49%' }]}
       >
@@ -50,6 +46,7 @@ const Chatting: React.FC<ChattingProps> = ({
           showsVerticalScrollIndicator={false}
           scrollEnabled={true}
           style={{ flex: 1 }}
+          contentContainerStyle={{ flexGrow: 1 }}
           onScrollBeginDrag={setIsEndScroll(false)}
           onScrollEndDrag={({ nativeEvent }) => {
             if (nativeEvent.targetContentOffset) {
@@ -74,11 +71,16 @@ const Chatting: React.FC<ChattingProps> = ({
               if (!cdm && index === messages.length - 1) {
                 setCdm(true);
               }
+              const isLocalUser = myJitsiId === item.user;
+              const profileUrl = item.profileUrl
+                ? wehagoMainURL + item.profileUrl
+                : wehagoDummyImageURL;
+
               return (
                 <ChattingCard
-                  isLocalUser={item.isLocalUser}
-                  profileUrl={item.profileUrl}
-                  userName={item.userName}
+                  isLocalUser={isLocalUser}
+                  profileUrl={profileUrl}
+                  userName={item.name}
                   text={item.text}
                 />
               );
@@ -118,18 +120,10 @@ const Chatting: React.FC<ChattingProps> = ({
           </View>
         </View>
       </View>
-    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  chatAndSAV: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    bottom: 0,
-    zIndex: 1
-  },
   container: {
     flex: 1,
     paddingHorizontal: 15

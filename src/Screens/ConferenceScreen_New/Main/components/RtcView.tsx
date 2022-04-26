@@ -11,10 +11,15 @@ const RtcView: React.FC<RtcViewProps> = ({
   streamURL,
   isMaster,
   userName,
-  mirrorMode
+  mirrorMode,
+  onPressMainView
 }) => {
   return (
-    <Fragment>
+    <TouchableOpacity
+      activeOpacity={1}
+      style={{ flex: 1 }}
+      onPress={onPressMainView}
+    >
       <View
         style={[
           styles.mainUserNameView,
@@ -31,15 +36,15 @@ const RtcView: React.FC<RtcViewProps> = ({
         )}
         <Text style={styles.name}>{userName}</Text>
       </View>
-        <RTCView
-          style={styles.RTCVideo}
-          mirror={mirrorMode}
-          objectFit={'contain'}
-          // streamURL={stream.toURL()}
-          streamURL={streamURL}
-          zOrder={0} // zOrder 는 [0, 1] 만 사용가능 (아마?)
-        />
-    </Fragment>
+      <RTCView
+        style={styles.RTCVideo}
+        mirror={mirrorMode}
+        objectFit={videoType === 'camera' ? 'cover' : 'contain'}
+        // streamURL={stream.toURL()}
+        streamURL={streamURL}
+        zOrder={0} // zOrder 는 [0, 1] 만 사용가능 (아마?)
+      />
+    </TouchableOpacity>
   );
 };
 
@@ -65,7 +70,8 @@ const styles = StyleSheet.create({
     marginRight: 4
   },
   RTCVideo: {
-    flex: 1
+    flex: 1,
+    backgroundColor: '#000'
   }
 });
 

@@ -38,11 +38,6 @@ const MainPresenter: React.FC<MainPresenterProps> = ({
         enabled={false}
         behavior={Platform.OS === 'android' ? 'height' : undefined}
       >
-        <TouchableOpacity
-          activeOpacity={1}
-          style={{ flex: 1 }}
-          onPress={onPressMainView}
-        >
           {displayType === 'screen' && (
             <ScreenShare onPressShareStop={onPressShareStop} />
           )}
@@ -53,6 +48,7 @@ const MainPresenter: React.FC<MainPresenterProps> = ({
               isMaster={isMaster}
               userName={userName}
               mirrorMode={mirrorMode}
+              onPressMainView={onPressMainView}
             />
           )}
           {displayType === 'character' && (
@@ -60,11 +56,11 @@ const MainPresenter: React.FC<MainPresenterProps> = ({
               avatar={avatar}
               isMaster={isMaster}
               userName={userName}
+              onPressMainView={onPressMainView}
             />
           )}
           {displayType === 'document' && <DocumentShare />}
           {displayType === 'sketch' && <Sketch />}
-        </TouchableOpacity>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );

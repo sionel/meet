@@ -7,6 +7,8 @@ const JOIN_USER = 'participants_copy.JOIN_USER';
 const SET_USER_INFO = 'participants_copy.SET_USER_INFO';
 const RESET_USERLIST = 'participants_copy.RESET_USERLIST';
 const SET_USER_TRACK = 'participants_copy.SET_USER_TRACK';
+const UPDATE_PARTICIPANTS_IS_MASTER =
+  'participants_copy.UPDATE_PARTICIPANTS_IS_MASTER';
 const TOGGLE_MUTE_VIDEO = 'participants_copy.TOGGLE_MUTE_VIDEO';
 
 export interface Participant {
@@ -40,8 +42,8 @@ function reducer(state = initialState, action: AnyAction) {
       return _resetUserlist(state);
     case SET_USER_TRACK:
       return _setUserTrack(state, action);
-    // case TOGGLE_MUTE_VIDEO:
-    //   return _toggleMuteVideo(state);
+    case UPDATE_PARTICIPANTS_IS_MASTER:
+      return _updateParticipantsIsMaster(state, action);
     default:
       return state;
   }
@@ -129,28 +131,6 @@ const _setUserTrack = (state: InitialState, action: AnyAction) => {
   };
 };
 
-// const toggleMuteVideo = (): ThunkAction<void, RootState, unknown> => {
-//   return dispatch => {
-//     dispatch({
-//       type: TOGGLE_MUTE_VIDEO
-//     });
-//   };
-// };
-
-// const _toggleMuteVideo = (state: InitialState) => {
-//   const { list } = state;
-
-//   if (list[0].videoTrack.isMuted()) {
-//     list[0].videoTrack.unmute();
-//   } else {
-//     list[0].videoTrack.mute();
-//   }
-
-//   return {
-//     list
-//   };
-// };
-
 const resetUserlist = (): ThunkAction<void, RootState, unknown> => {
   return dispatch => {
     dispatch({
@@ -165,11 +145,40 @@ const _resetUserlist = (state: InitialState) => {
   };
 };
 
+const updateParticipantsIsMaster = (): ThunkAction<void, RootState, unknown> => {
+  return (dispatch, getState) => {
+    const { masterList } = getState()['master'];
+    const copyList = masterList.slice(0);
+    dispatch({
+      type: UPDATE_PARTICIPANTS_IS_MASTER,
+      copyList
+    });
+  };
+};
+const _updateParticipantsIsMaster = (state: InitialState, action: AnyAction) => {
+  const { copyList } = action;
+  const participantsCopy = state.list;
+  participantsCopy.map(v =>
+    {
+      let isMaster = copyList.find(
+        (masterId: string) => masterId === v.wehagoId
+      );
+      if (isMaster) v.isMaster = true;
+    }
+  );
+
+  return {
+    ...state,
+    list: participantsCopy
+  };
+};
+
 export const actionCreators = {
   // joinUser,
   setUserInfo,
   resetUserlist,
-  setUserTrack
+  setUserTrack,
+  updateParticipantsIsMaster
   // toggleMuteVideo
 };
 

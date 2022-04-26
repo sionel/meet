@@ -133,9 +133,9 @@ export function bindEvent(handler: any, room: any, resolve: any, reject: any) {
   //   handler.SUSPEND_DETECTED();
   // });
 
-  // room.on(conferenceEvents.MESSAGE_RECEIVED, (user, text, date) => {
-  //   handler.MESSAGE_RECEIVED(user, text, date);
-  // });
+  room.on(conferenceEvents.MESSAGE_RECEIVED, (user: any, text: any, date: any) => {
+    handler.setMessage(user, text, date);
+  });
 
   // room.on(conferenceEvents.RECORDER_STATE_CHANGED, data => {
   //   const { _status, _sessionID, _initiator } = data;

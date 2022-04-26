@@ -21,6 +21,7 @@ const BottomPopupPresenter: React.FC<BottomPopupPresenterProps> = ({
   myMessage,
   cdm,
   scrollRef,
+  myJitsiId,
   onPressSend,
   setMyMessage,
   setIsEndScroll,
@@ -32,6 +33,8 @@ const BottomPopupPresenter: React.FC<BottomPopupPresenterProps> = ({
   isProfile,
   isInviteList,
   userInfo,
+  participants,
+  roomId,
   onPressInvite,
   ToggleSpeakerClick,
   onPressProfile,
@@ -46,7 +49,7 @@ const BottomPopupPresenter: React.FC<BottomPopupPresenterProps> = ({
   onPressCode
 }) => {
   return (
-    <SafeAreaView style={styles.BotPopupSAV}>
+    <SafeAreaView style={[styles.BotPopupSAV, bottomDisplayType === 'CHATTING' && {height: '100%', zIndex: 0}]}>
       {bottomDisplayType === 'MENU' && (
         <MenuList
           isMaster={isMaster}
@@ -62,6 +65,7 @@ const BottomPopupPresenter: React.FC<BottomPopupPresenterProps> = ({
           cdm={cdm}
           scrollRef={scrollRef}
           messages={messages}
+          myJitsiId={myJitsiId}
           onPressSend={onPressSend}
           setMyMessage={setMyMessage}
           setIsEndScroll={setIsEndScroll}
@@ -74,19 +78,22 @@ const BottomPopupPresenter: React.FC<BottomPopupPresenterProps> = ({
           cdm={cdm}
           scrollRef={scrollRef}
           messages={messages}
+          myJitsiId={myJitsiId}
           onPressSend={onPressSend}
           setMyMessage={setMyMessage}
           setIsEndScroll={setIsEndScroll}
           setCdm={setCdm}
         />
       )}
-      {bottomDisplayType === 'CHATTING' && (
+      {bottomDisplayType === 'PARTICIPANTS' && (
         <Participants
           isRoomMaster={isRoomMaster}
           isProfile={isProfile}
           isInviteList={isInviteList}
           swipeRef={swipeRef}
           userInfo={userInfo}
+          participants={participants}
+          roomId={roomId}
           onPressInvite={onPressInvite}
           ToggleSpeakerClick={ToggleSpeakerClick}
           onPressProfile={onPressProfile}

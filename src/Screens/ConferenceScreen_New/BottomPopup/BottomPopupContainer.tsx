@@ -1,7 +1,3 @@
-import Clipboard from '@react-native-clipboard/clipboard';
-import { ParticipantsTypes } from '@redux/participants';
-import { MeetApi } from '@services/index';
-import { getT } from '@utils/translateManager';
 import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
 import {
   Animated,
@@ -13,19 +9,54 @@ import {
   TextInput,
   UIManager
 } from 'react-native';
+
 import { BottomPopupContainerProps } from '@screens/ConferenceScreen_New/types';
+import { ParticipantsTypes } from '@redux/participants';
+
+import { MeetApi } from '@services/index';
+
+import { getT } from '@utils/translateManager';
+import Clipboard from '@react-native-clipboard/clipboard';
+
 import BottomPopupPresenter from './BottomPopupPresenter';
-import InviteList from './components/participantsComponents/InviteList';
-import { useSelector } from 'react-redux';
+
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'src/redux/configureStore';
+
+import { actionCreators as ParticipantsActions } from '@redux/participants_copy';
+import { actionCreators as MainUserActions } from '@redux/mainUser_copy';
+import { isSuccess } from '@services/types';
 
 const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
   roomId
 }) => {
   const t = getT();
   const { OS } = Platform;
+  //#region useSelector
+  const {
+    bottomDisplayType,
+    participants,
+    myId,
+    myJitsiId,
+    masterList,
+    messages,
+    room,
+    auth
+  } = useSelector((state: RootState) => ({
+    bottomDisplayType: state.conference.bottomDisplayType,
+    participants: state.participants_copy.list,
+    myId: state.user.auth.portal_id,
+    myJitsiId: state.participants_copy.list[0].jitsiId,
+    masterList: state.master.masterList,
+    messages: state.conference.messages,
+    room: state.conference.room,
+    auth: state.user.auth
+  }));
+  //#endregion
+
+  // console.log('bot.participants : ', participants);
+
   //#region UseState
-  ////#endregion
 
   // MenuList
 
@@ -35,65 +66,47 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
   const [isEndScroll, setIsEndScroll] = useState(true);
   const scrollRef: MutableRefObject<any> = useRef();
   const [keyboardH, setKeyboardH] = useState(0);
-  const [messages, setMessages] = useState<
-    {
-      isLocalUser: boolean;
-      profileUrl: string;
-      userName: string;
-      text: string;
-    }[]
-  >([
-    {
-      isLocalUser: true,
-      profileUrl: '',
-      userName: '김연길',
-      text: 'text'
-    },
-    {
-      isLocalUser: false,
-      profileUrl: '',
-      userName: '김연길',
-      text: 'text'
-    }
-  ]);
+  //
 
   // UserList
   const swipeRef: MutableRefObject<any> = React.useRef([]);
-  const [isRoomMaster, setIsRoomMaster] = useState(true);
+  const [isRoomMaster, setIsRoomMaster] = useState(
+    masterList.find(id => id === myId) !== undefined ? true : false
+  );
   const [isProfile, setIsProfile] = useState(false);
   const [isInviteList, setIsInviteList] = useState(false);
   const [userInfo, setUserInfo] = useState();
+  //
 
   //#endregion UseState
 
-  //#region useSelector
-  const { bottomDisplayType } = useSelector((state: RootState) => ({
-    bottomDisplayType: state.conference.bottomDisplayType
-  }));
+  //#region useDispatch
+  const dispatch = useDispatch();
+  const updateParticipants = () =>
+    dispatch(ParticipantsActions.updateParticipantsIsMaster());
+  const setMainView = (
+    mode: 'track' | 'sketch' | 'document' | 'screen' | 'character'
+  ) => dispatch(MainUserActions.setMainView(mode));
   //#endregion
 
   //#region Method
   // MenuList
-  const handlePressSketch = () => {};
-  const handlePressDocumentShare = () => {};
-  const handlePressScreenShare = () => {};
+  const handlePressSketch = () => {
+    setMainView('sketch');
+  };
+  const handlePressDocumentShare = () => {
+    setMainView('document');
+  };
+  const handlePressScreenShare = () => {
+    setMainView('screen');
+  };
   const handlePressRequestMic = () => {};
 
   // Chat
   const handlePressSend = () => {
-    let newMsg = messages;
-
-    if (myMessage.length > 0) {
-      newMsg.push({
-        isLocalUser: true,
-        profileUrl: '',
-        text: myMessage,
-        userName: '김연길'
-      });
-      setMessages(newMsg);
+    if (myMessage && myMessage.slice().replace(/(\s*)/g, '') !== '') {
       setMyMessage('');
-    } else {
-      return;
+      room.sendTextMessage(myMessage);
     }
   };
 
@@ -113,6 +126,7 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
     Linking.openURL(
       `mailto:?subject=&body=https://video.wehago.com/video?room%3D${roomId}`
     );
+    setIsInviteList(false);
   };
 
   const handlePressSms = () => {
@@ -120,6 +134,7 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
     Linking.openURL(
       `sms:${Divider}body=https://video.wehago.com/video?room=${roomId}`
     );
+    setIsInviteList(false);
   };
 
   const handlePressShare = async () => {
@@ -138,53 +153,56 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
       } else if (result.action === Share.dismissedAction) {
         // dismissed
       }
+      setIsInviteList(false);
     } catch (error) {
       console.warn(error);
     }
   };
 
   const handlePressLinkCopy = () => {
-    // Clipboard.setString(`https://video.wehago.com/video?room=${roomId}`);
-    // //다국어 필요
+    Clipboard.setString(`https://video.wehago.com/video?room=${roomId}`);
+    //다국어 필요
     // setToastMessage(t('공유링크가 복사되었습니다.'));
+    setIsInviteList(false);
   };
 
   const handlePressJoincodeCopy = async () => {
-    // let joincode;
-    // const getJoincode = await MeetApi.getJoincode(auth, roomId);
-    // if (isSuccess(getJoincode)) {
-    //   joincode = getJoincode.resultData;
-    //   Clipboard.setString(joincode);
-    //   //다국어 필요
-    //   setToastMessage(t('참여코드가 복사되었습니다.'));
-    // } else {
-    //   console.warn('3-46 getJoincode : ', getJoincode.errors);
-    // }
+    let joincode;
+    const getJoincode = await MeetApi.getJoincode(auth, roomId);
+    if (isSuccess(getJoincode)) {
+      joincode = getJoincode.resultData;
+      Clipboard.setString(joincode);
+      //다국어 필요
+      // setToastMessage(t('참여코드가 복사되었습니다.'));
+    } else {
+      console.warn('3-46 getJoincode : ', getJoincode.errors);
+    }
+    setIsInviteList(false);
   };
 
   //#endregion Method
 
-  // useEffect(() => {
-  //   let timeout: number | NodeJS.Timeout = setTimeout(() => {});
-
-  //   if (messages.length > 0) {
-  //     if (scrollRef) {
-  //       if (timeout) clearTimeout(timeout);
-  //       timeout = setTimeout(() => {
-  //         scrollRef.current.scrollToEnd();
-  //       }, 0);
-  //     }
-  //   } else if (isEndScroll) {
-  //     if (timeout) clearTimeout(timeout);
-  //     timeout = setTimeout(() => {
-  //       scrollRef.current.scrollToEnd();
-  //     }, 0);
-  //   }
-
-  //   return () => {
-  //     typeof timeout === 'number' && clearTimeout(timeout);
-  //   };
-  // }, [cdm, keyboardH]);
+  useEffect(() => {
+    let timeout: number | NodeJS.Timeout = setTimeout(() => {});
+    if (bottomDisplayType === 'CHATTING') {
+      if (messages.length > 0) {
+        if (scrollRef) {
+          if (timeout) clearTimeout(timeout);
+          timeout = setTimeout(() => {
+            scrollRef.current.scrollToEnd();
+          }, 0);
+        }
+      } else if (isEndScroll) {
+        if (timeout) clearTimeout(timeout);
+        timeout = setTimeout(() => {
+          scrollRef.current.scrollToEnd();
+        }, 0);
+      }
+    }
+    return () => {
+      typeof timeout === 'number' && clearTimeout(timeout);
+    };
+  }, [cdm, messages, keyboardH]);
 
   useEffect(() => {
     Keyboard.addListener('keyboardDidShow', e => handdleKeyboardShow(e));
@@ -194,6 +212,23 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
       Keyboard.removeListener('keyboardDidHide', () => handdleKeyboardHide());
     };
   }, []);
+
+  useEffect(() => {
+    updateParticipants();
+  }, [participants.length]);
+
+  useEffect(() => {
+    setIsRoomMaster(
+      masterList.find(mid => mid === myId) !== undefined ? true : false
+    );
+  }, [masterList.length]);
+
+  useEffect(() => {
+    if (bottomDisplayType === 'NONE') {
+      setIsInviteList(false);
+      setIsProfile(false);
+    }
+  }, [bottomDisplayType])
 
   const handdleKeyboardShow = (e: any) => {
     setKeyboardH(e.endCoordinates.width);
@@ -220,6 +255,7 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
       cdm={cdm}
       scrollRef={scrollRef}
       messages={messages}
+      myJitsiId={myJitsiId}
       onPressSend={handlePressSend}
       setMyMessage={setMyMessage}
       setIsEndScroll={setIsEndScroll}
@@ -230,6 +266,8 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
       isInviteList={isInviteList}
       swipeRef={swipeRef}
       userInfo={userInfo}
+      participants={participants}
+      roomId={roomId}
       onPressInvite={handlePressInvite}
       onPressProfile={handlePressProfile}
       onPressMaster={handlePressMaster}

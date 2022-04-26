@@ -534,10 +534,9 @@ export default function HomeScreenContainer(props: any) {
         // setReservationConference([]);
       })
       .then(() => {
-        const time = setTimeout(() => {
+        ref.current.time = setTimeout(() => {
           _getConferences();
         }, 15000);
-        ref.current.time = time;
       });
   };
 

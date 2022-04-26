@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { CharacterProps } from '@screens/ConferenceScreen_New/types';
 
@@ -11,10 +11,15 @@ import icMaster from '@assets/icons/ic_master.png';
 const Character: React.FC<CharacterProps> = ({
   isMaster,
   userName,
-  avatar
+  avatar,
+  onPressMainView
 }) => {
   return (
-    <Fragment>
+    <TouchableOpacity
+      activeOpacity={1}
+      style={{ flex: 1 }}
+      onPress={onPressMainView}
+    >
       <View
         style={[
           styles.mainUserNameView,
@@ -44,7 +49,7 @@ const Character: React.FC<CharacterProps> = ({
           resizeMode={'cover'}
         />
       </View>
-    </Fragment>
+    </TouchableOpacity>
   );
 };
 

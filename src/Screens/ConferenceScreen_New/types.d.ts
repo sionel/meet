@@ -1,6 +1,6 @@
 import { MeetParamList } from '@navigations/RootNavigation';
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
-import { ParticipantsTypes } from '@redux/participants';
+import { messageType } from '@redux/conference';
 import { Participant } from '@redux/participants_copy';
 import { MutableRefObject } from 'react';
 import {
@@ -8,7 +8,6 @@ import {
   NativeScrollEvent,
   NativeSyntheticEvent
 } from 'react-native';
-import { EdgeInsets } from 'react-native-safe-area-context';
 
 type ConferenceScreenNavigationProps = StackNavigationProp<
   MeetParamList,
@@ -21,6 +20,7 @@ export interface ConferenceScreenPresenterProps {
   roomName: string;
   id: string;
   isConnected: boolean;
+  isChatting: boolean;
   handleClose: () => void;
 }
 
@@ -67,13 +67,13 @@ export interface MainPresenterProps
   displayType: 'track' | 'sketch' | 'document' | 'screen' | 'character';
   videoType: string;
   onPressShareStop: () => void;
-  onPressMainView: () => void;
 }
 
 export interface CharacterProps {
   avatar?: string;
   isMaster: boolean;
   userName: string;
+  onPressMainView: () => void;
 }
 
 export interface RtcViewProps {
@@ -82,6 +82,7 @@ export interface RtcViewProps {
   isMaster: boolean;
   userName: string;
   mirrorMode: boolean;
+  onPressMainView: () => void;
 }
 export interface DocumentShareProps {}
 export interface SketchProps {}
@@ -131,7 +132,8 @@ export interface ChattingProps {
   scrollRef: MutableRefObject<any>;
   myMessage: string;
   cdm: boolean;
-  messages: ChattingCardProps[];
+  messages: messageType[];
+  myJitsiId: string;
 }
 
 export interface ChattingCardProps {
@@ -152,10 +154,12 @@ export interface ParticipantsProps extends InviteListProps {
   isProfile: boolean;
   isInviteList: boolean;
   swipeRef: MutableRefObject<any>;
+  participants: Participant[];
+  roomId: string;
 }
 
 export interface ParticipantCardPros {
-  userList: any[];
+  participants: Participant[];
   swipeRef: MutableRefObject<any>;
   isRoomMaster: boolean;
   isPad: boolean;

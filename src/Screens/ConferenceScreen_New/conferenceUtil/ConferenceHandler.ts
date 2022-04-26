@@ -1,6 +1,7 @@
 import { actionCreators as testAction } from '@redux/test';
-import { actionCreators as participantsAction } from '@redux/participants_copy';
-import { actionCreators as mainuserAction } from '@redux/mainUser_copy';
+import { actionCreators as participantsActions } from '@redux/participants_copy';
+import { actionCreators as mainuserActions } from '@redux/mainUser_copy';
+import { actionCreators as conferenceActions } from '@redux/conference';
 import { actionCreators as masterAction } from '@redux/master';
 
 export const ConferenceHandler = (dispatch: any) => ({
@@ -8,19 +9,26 @@ export const ConferenceHandler = (dispatch: any) => ({
     dispatch(testAction.test());
   },
   joinUser: (user: any) => {
-    // dispatch(participantsAction.joinUser(user));
+    // dispatch(participantsActions.joinUser(user));
   },
   setUserInfo: (user: any) => {
-    dispatch(participantsAction.setUserInfo(user));
-  },
-  setMainUser: (user: any) => {
-    dispatch(mainuserAction.setMainUser(user));
-  },
-  retriveMasters: (token: string) => {
-    dispatch(masterAction.checkMasterList(token));
+    dispatch(participantsActions.setUserInfo(user));
   },
   setUserTrack: (track: any) => {
-    dispatch(participantsAction.setUserTrack(track));
+    dispatch(participantsActions.setUserTrack(track));
+  },
+  setMainUser: (user: any) => {
+    dispatch(mainuserActions.setMainUser(user));
+  },
+  setMessage: (user: any, text: string, date: string) => {
+    if (date) return;
+    const message = {
+      user,
+      text,
+      date: new Date().toISOString(),
+      isRead: false
+    };
+    dispatch(conferenceActions.receivedMessage(message));
   }
 });
 

@@ -13,28 +13,29 @@ const ConferenceScreenPresenter: React.FC<ConferenceScreenPresenterProps> = ({
   isConnected,
   roomName,
   id,
+  isChatting,
   handleClose
 }) => {
   // console.log('isConnected : ', isConnected);
   // console.log('participant : ', participants[0]);
-  
+
   return (
     <View style={{ flex: 1, backgroundColor: '#000' }}>
       <StatusBar backgroundColor="#000" barStyle={'light-content'} />
       {isConnected ? (
         <Fragment>
           <TopPopup />
-          <TopContent roomName={roomName} id={id} handleClose={handleClose}/>
-          <Main/>
+          <TopContent roomName={roomName} id={id} handleClose={handleClose} />
+          <Main />
           {/* <SplitVideo /> */}
           <BottomPopup roomId={id} />
-          <BottomContent handleCloseConf={handleClose} />
+          {!isChatting && <BottomContent handleCloseConf={handleClose} />}
         </Fragment>
       ) : (
         <View
           style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
         >
-          <TouchableOpacity onPress={() =>{}}>
+          <TouchableOpacity onPress={() => {}}>
             <Text style={{ color: '#fff', fontSize: 20 }}>{`Loading...`}</Text>
           </TouchableOpacity>
         </View>

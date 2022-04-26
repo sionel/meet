@@ -10,26 +10,20 @@ import wehagoIcon from '@assets/icons/appicon_wehago.png';
 import { ProfileProps } from '@screens/ConferenceScreen_New/types';
 
 const Profile: React.FC<ProfileProps> = ({ user }) => {
-  const { userInfo } = user;
-
-  const profileUrl = userInfo.profile_url
-    ? wehagoMainURL + userInfo.profile_url
+  const { profileUrl, name, companyFullpath, email, phonenumber } = user;
+  const profile_Url = profileUrl
+    ? wehagoMainURL + profileUrl
     : wehagoDummyImageURL;
-  const { userName } = userInfo;
-  const fullPath = userInfo.companyFullpath;
-  const userEamil = userInfo.user_email;
-  const userContact = userInfo.user_contact;
-
   return (
     <Fragment>
       <View style={styles.middleContainer}>
         <Image
-          source={{ uri: profileUrl }}
+          source={{ uri: profile_Url }}
           style={styles.profileSize}
           resizeMode={'cover'}
         />
-        <Text style={styles.nameStyle}>{userName}</Text>
-        <Text style={styles.pathStyle}>{fullPath}</Text>
+        <Text style={styles.nameStyle}>{name}</Text>
+        <Text style={styles.pathStyle}>{companyFullpath}</Text>
         <Image
           source={wehagoIcon}
           style={{ width: 50, height: 50 }}
@@ -45,7 +39,7 @@ const Profile: React.FC<ProfileProps> = ({ user }) => {
               resizeMode={'cover'}
             />
           </View>
-          <Text style={styles.contentStyle}>{userEamil}</Text>
+          <Text style={styles.contentStyle}>{email}</Text>
         </View>
         <View style={styles.rowCenter}>
           <View style={styles.imageContainer}>
@@ -55,7 +49,7 @@ const Profile: React.FC<ProfileProps> = ({ user }) => {
               resizeMode={'cover'}
             />
           </View>
-          <Text style={styles.contentStyle}>{userContact}</Text>
+          <Text style={styles.contentStyle}>{phonenumber}</Text>
         </View>
       </View>
     </Fragment>

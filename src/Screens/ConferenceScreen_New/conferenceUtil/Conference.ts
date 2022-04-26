@@ -79,6 +79,11 @@ class Conference {
     });
   };
 
+  sendTextMessage = (text: string) => {
+    if (text && text === '') return;
+    this._room.sendTextMessage(text);
+  };
+
   //TODO: 셋팅에서 다 준비 된 상태에서 컨퍼런스로 넘어올건지 ? => 셋팅페이지에서 해당 함수를 통해서 트랙 미리 생성
   //      컨퍼런스 넘어와서 트랙 설정등을 할것인지 ? => 그렇다면 createLocalTracks를 통해서 트랙 생성이 필요
   // _createTracks = async (): Promise<any[]> => {

@@ -31,7 +31,7 @@ const rightSwipeWidth = Platform.OS === 'ios' ? width * 0.185 : width * 0.175;
 const leftSwipeWidth = width * 0.3;
 
 const ParticipantCard: React.FC<ParticipantCardPros> = ({
-  userList,
+  participants,
   swipeRef,
   isRoomMaster,
   isPad,
@@ -43,26 +43,25 @@ const ParticipantCard: React.FC<ParticipantCardPros> = ({
   return (
     <FlatList
       contentContainerStyle={{ flexGrow: 1 }}
-      data={userList}
+      data={participants}
       keyExtractor={(item, index) => String(index)}
       renderItem={({ item, index }: any) => {
-        const { isMaster, userInfo, id } = item;
-
+        const {
+          audioTrack,
+          companyFullpath,
+          profileUrl,
+          name,
+          isMaster,
+          wehagoId
+        } = item;
         // 마이크음소거여부
-        const isMuteMic = item.isLocal
-          ? item.isMuteMic
-          : item.audioTrack === null
-          ? true
-          : item.audioTrack?.muted;
-        // 회사 조직경로
-        const fullPath = userInfo?.companyFullpath;
+        const isMuteMic = audioTrack ? audioTrack.isMuted() : true;
         // 프로필뷰
-        const profileUrl = userInfo.profile_url
-          ? wehagoMainURL + userInfo.profile_url
+        const profile_Url = profileUrl
+          ? wehagoMainURL + profileUrl
           : wehagoDummyImageURL;
-        // 이름
-        const userName = item.name ? item.name : userInfo.userName;
-        const external = userInfo?.isExternalParticipant === 'true';
+        // 외부참여자
+        const external = wehagoId ? false : true;
 
         const renderLeftActions = (
           progress: any,
@@ -196,8 +195,6 @@ const ParticipantCard: React.FC<ParticipantCardPros> = ({
             ref={el => (swipeRef.current[index] = el)}
             renderLeftActions={renderLeftActions}
             renderRightActions={renderRightActions}
-            // onSwipeableLeftOpen={() => console.log('left!!!')}
-            // onSwipeableRightOpen={() => console.log('right!!!')}
           >
             <View style={styles.userRow}>
               <View style={{ width: 40, height: 40 }}>
@@ -211,21 +208,21 @@ const ParticipantCard: React.FC<ParticipantCardPros> = ({
                 <Image
                   style={styles.profileSize}
                   source={{
-                    uri: profileUrl
+                    uri: profile_Url
                   }}
                   resizeMode={'cover'}
                 />
               </View>
 
               <View style={styles.infoBox}>
-                <Text style={styles.nameText}>{userName}</Text>
-                {fullPath !== '' && (
+                <Text style={styles.nameText}>{name}</Text>
+                {companyFullpath !== '' && (
                   <Text
                     numberOfLines={1}
                     ellipsizeMode="tail"
                     style={styles.treeText}
                   >
-                    {fullPath}
+                    {companyFullpath}
                   </Text>
                 )}
               </View>
@@ -234,7 +231,7 @@ const ParticipantCard: React.FC<ParticipantCardPros> = ({
                 style={[
                   styles.roleView,
                   isMaster && { backgroundColor: '#febc2c' },
-                  userInfo?.isExternalParticipant === 'true' && {
+                  external && {
                     backgroundColor: '#75b7cb'
                   }
                   //   !isMaster &&
@@ -258,7 +255,7 @@ const ParticipantCard: React.FC<ParticipantCardPros> = ({
                     </Text>
                   </Fragment>
                 )}
-                {userInfo?.isExternalParticipant === 'true' && (
+                {external && (
                   <Text style={styles.roleText}>
                     {t('renewal.chatting_external')}
                   </Text>

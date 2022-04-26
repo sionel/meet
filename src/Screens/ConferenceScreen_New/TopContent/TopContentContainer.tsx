@@ -65,7 +65,6 @@ const TopContentContainer: React.FC<TopContentContainerProps> = ({
         } else {
           let nowTime = Date.now();
           let normalTime = Math.floor((nowTime - createdTime) / 1000);
-
           normalTime > 0 && setElapsedTime(normalTime);
         }
       }
@@ -79,22 +78,27 @@ const TopContentContainer: React.FC<TopContentContainerProps> = ({
     timeInit();
   }, []);
 
-  const _handlePressUserList = () =>
+  const _handlePressUserList = () => {
     setBottomDisplayType(
       bottomDisplayType === 'NONE' ? 'PARTICIPANTS' : 'NONE'
     );
-  const _handlePressChatting = () =>
+  };
+
+  const _handlePressChatting = () => {
     setBottomDisplayType(bottomDisplayType === 'NONE' ? 'CHATTING' : 'NONE');
-  const _handlePressCamaraReverse = () =>
+  };
+
+  const _handlePressCamaraReverse = () => {
     setFacingMode(facingMode === 'FRONT' ? 'BACK' : 'FRONT');
+  };
 
-  const _handlePressDisplayInvert = () =>
-    _.throttle(() => {
-      setMirrorMode();
-    }, 1000);
+  const _handlePressDisplayInvert = () => {
+    setMirrorMode();
+  };
 
-  const _handlePressMore = () =>
+  const _handlePressMore = () => {
     setBottomDisplayType(bottomDisplayType === 'NONE' ? 'MENU' : 'NONE');
+  };
 
   const timeInit = async () => {
     let roomInfo = await MeetApi.getMeetRoomNoCert(id);
@@ -102,6 +106,7 @@ const TopContentContainer: React.FC<TopContentContainerProps> = ({
     if (isSuccess(roomInfo)) {
       start_datetime = roomInfo.resultData.start_datetime;
     } else {
+      //getMeetRoomNoCert Error
       start_datetime = 0;
     }
     setCreatedTime(start_datetime);

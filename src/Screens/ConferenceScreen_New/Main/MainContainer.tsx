@@ -14,14 +14,21 @@ const MainContainer: React.FC<MainContainerProps> = ({}) => {
   };
 
   //#region selector
-  const { mainDisplayType, topDisplayType, mirrorMode, masters, mainUser } =
-    useSelector((state: RootState) => ({
-      mainUser: state.mainUser_copy,
-      mainDisplayType: state.mainUser_copy.mode,
-      masters: state.master.masterList,
-      topDisplayType: state.conference.topDisplayType,
-      mirrorMode: state.conference.mirrorMode
-    }));
+  const {
+    mainDisplayType,
+    topDisplayType,
+    bottomDisplayType,
+    mirrorMode,
+    masters,
+    mainUser
+  } = useSelector((state: RootState) => ({
+    mainUser: state.mainUser_copy,
+    mainDisplayType: state.mainUser_copy.mode,
+    masters: state.master.masterList,
+    topDisplayType: state.conference.topDisplayType,
+    bottomDisplayType: state.conference.bottomDisplayType,
+    mirrorMode: state.conference.mirrorMode
+  }));
   //#endregion selector
 
   // console.log('mainDisplayType : ', mainDisplayType);
@@ -30,13 +37,18 @@ const MainContainer: React.FC<MainContainerProps> = ({}) => {
   const dispatch = useDispatch();
 
   const handleTopDisplay = () => {
-    let displayType = topDisplayType;
-    if (displayType === 'FUNCTION') {
-      displayType = 'NAME';
+    let top = topDisplayType;
+    let bot = bottomDisplayType;
+    if (bot !== 'NONE') {
+      dispatch(ConferenceActions.setBottomDisplayType('NONE'));
     } else {
-      displayType = 'FUNCTION';
+      if (top === 'FUNCTION') {
+        top = 'NAME';
+      } else {
+        top = 'FUNCTION';
+      }
+      dispatch(ConferenceActions.setTopDisplayType(top));
     }
-    dispatch(ConferenceActions.setTopDisplayType(displayType));
   };
 
   const setMainUserMaster = () =>

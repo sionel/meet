@@ -28,6 +28,7 @@ const Participant: React.FC<ParticipantsProps> = ({
   isInviteList,
   swipeRef,
   userInfo,
+  participants,
   onPressInvite,
   onPressProfile,
   onPressMaster,
@@ -41,52 +42,8 @@ const Participant: React.FC<ParticipantsProps> = ({
   onPressCode
 }) => {
   const t = getT();
-  const userList = [
-    {
-      name: '김연길',
-      isMaster: true,
-      userInfo: {
-        companyFullpath: '플랫폼사업부문 | 서비스개발2센터 | 설..',
-        profileUrl: '',
-        userName: '김연길',
-        user_email: 'kimdouzone@wehago.com',
-        user_contact: '010-1234-5678'
-      }
-    },
-    {
-      name: '김연길',
-      userInfo: {
-        companyFullpath: '플랫폼사업부문 | 서비스개발2센터 | 설..',
-        profileUrl: '',
-        userName: '김연길'
-      }
-    },
-    {
-      name: '김연길',
-      userInfo: {
-        companyFullpath: '플랫폼사업부문 | 서비스개발2센터 | 설..',
-        profileUrl: '',
-        userName: '김연길'
-      }
-    },
-    {
-      name: '김연길',
-      userInfo: {
-        companyFullpath: '플랫폼사업부문 | 서비스개발2센터 | 설..',
-        profileUrl: '',
-        userName: '김연길'
-      }
-    },
-    {
-      name: '김연길',
-      userInfo: {
-        companyFullpath: '플랫폼사업부문 | 서비스개발2센터 | 설..',
-        profileUrl: '',
-        userName: '김연길',
-        isExternalParticipant: 'true'
-      }
-    }
-  ];
+  // const userList = [
+  // ];
 
   return isInviteList ? (
     <InviteList
@@ -140,7 +97,7 @@ const Participant: React.FC<ParticipantsProps> = ({
             <Profile user={userInfo} />
           ) : (
             <ParticipantCard
-              userList={userList}
+              participants={participants}
               isPad={isPad}
               isRoomMaster={isRoomMaster}
               swipeRef={swipeRef}

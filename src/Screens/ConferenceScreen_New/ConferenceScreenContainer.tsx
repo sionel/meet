@@ -47,15 +47,15 @@ const ConferenceScreenContainer: React.FC<
   const [isConnected, setIsConnected] = useState(false);
 
   //#region useSelector
-  const { state, testFlag, auth, participants, room, isSpeakerOn, isLogin } =
+  const { state, testFlag, auth, room, isSpeakerOn, isLogin, bottomDisplayType } =
     useSelector((state: RootState) => ({
       testFlag: state.test.testFlag,
       auth: state.user.auth,
       state,
-      participants: state.participants_copy.list,
       room: state.conference.room,
       isSpeakerOn: state.conference.isSpeakerOn,
-      isLogin: state.user.isLogin
+      isLogin: state.user.isLogin,
+      bottomDisplayType: state.conference.bottomDisplayType
     }));
   //#endregion
 
@@ -76,13 +76,7 @@ const ConferenceScreenContainer: React.FC<
   const resetUserlist = () => {
     dispatch(ParticipantsActions.resetUserlist());
   };
-  const resetVideoState = () => {
-    dispatch(ConferenceActions.setVideoState(undefined));
-  };
-  const resetMikeState = () => {
-    dispatch(ConferenceActions.setMikeState(undefined));
-  };
-  const resetExpireTime = () => dispatch(ConferenceActions.setExpireTime(null));
+  const resetResource = () => dispatch(ConferenceActions.resetResource());
   //#endregion
 
   useEffect(() => {
@@ -190,12 +184,8 @@ const ConferenceScreenContainer: React.FC<
   const _handleClose = () => {
     room.dispose();
     setIsConnected(false);
+    resetResource();
     resetUserlist();
-    resetVideoState();
-    resetMikeState();
-    setIsSpeakerOn(false);
-    setIsBtOn(false);
-    resetExpireTime();
     if (OS === 'ios') {
       NativeAudio.removeAllListeners(
         'org.jitsi.meet:features/audio-mode#devices-update'
@@ -217,6 +207,7 @@ const ConferenceScreenContainer: React.FC<
       roomName={params.selectedRoomName}
       id={params.id}
       handleClose={_handleClose}
+      isChatting={bottomDisplayType==='CHATTING'}
     />
   );
 };

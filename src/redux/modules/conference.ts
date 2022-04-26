@@ -3,11 +3,14 @@ import { MediaStreamTrackState, RTCViewProps } from 'react-native-webrtc';
 import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import { RootState } from '../configureStore';
+import { MobileInfoType, WebInfoType } from './participants';
+import { Participant } from './participants_copy';
 
 const SET_LIST = 'conference.SET_LIST';
 const SET_INITIAL_LIST = 'conference.SET_INITIAL_LIST';
 const SET_ROOM_ID = 'conference.SET_ROOM_ID';
 const SET_ROOM = 'conference.SET_ROOM';
+const SET_DRAWING = 'conference.SET_DRAWING';
 const SET_IS_CONFERENCE = 'conference.SET_IS_CONFERENCE';
 const SET_TOP_DISPLAY_TYPE = 'conference SET_TOP_DISPLAY_TYPE';
 const SET_BOTTOM_DISPLAY_TYPE = 'conference SET_BOTTOM_DISPLAY_TYPE';
@@ -18,11 +21,22 @@ const SET_IS_BT_ON = 'conference SET_IS_BT_ON';
 const SET_FACING_MODE = 'conference SET_FACING_MODE';
 const SET_MIRROR_MODE = 'conference SET_MIRROR_MODE';
 const SET_EXPIRE_TIME = 'conference.SET_EXPIRE_TIME';
+const MESSAGE_RECEIVED = 'conference.MESSAGE_RECEIVED';
+const RESET_RESOURCE = 'conference.RESET_RESOURCE';
 
+export type messageType = {
+  user: string;
+  name: string;
+  profileUrl: string;
+  text: string;
+  date: string;
+  isRead: boolean;
+};
 export interface state {
   roomId: string;
   room: any;
-  isConference: boolean;
+  drawing: any;
+  // isConference: boolean;
   topDisplayType: 'FUNCTION' | 'NAME';
   bottomDisplayType: 'MENU' | 'CHATTING' | 'PARTICIPANTS' | 'NONE';
   videoState: any;
@@ -32,12 +46,14 @@ export interface state {
   facingMode: 'FRONT' | 'BACK';
   mirrorMode: boolean;
   expireTime: number | null;
+  messages: messageType[];
 }
 
 const initialState: state = {
   roomId: '',
   room: undefined,
-  isConference: false,
+  drawing: undefined,
+  // isConference: false,
   topDisplayType: 'FUNCTION',
   bottomDisplayType: 'NONE',
   videoState: undefined,
@@ -46,7 +62,8 @@ const initialState: state = {
   isBtOn: false,
   facingMode: 'FRONT',
   mirrorMode: false,
-  expireTime: null
+  expireTime: null,
+  messages: []
 };
 
 const reducer: (state: state, action: AnyAction) => state = (
@@ -58,8 +75,8 @@ const reducer: (state: state, action: AnyAction) => state = (
       return _setRoomId(state, action);
     case SET_ROOM:
       return _setRoom(state, action);
-    case SET_IS_CONFERENCE:
-      return _setIsConference(state, action);
+    // case SET_IS_CONFERENCE:
+    //   return _setIsConference(state, action);
     case SET_TOP_DISPLAY_TYPE:
       return _setTopDisplayType(state, action);
     case SET_BOTTOM_DISPLAY_TYPE:
@@ -78,7 +95,10 @@ const reducer: (state: state, action: AnyAction) => state = (
       return _setMirrorMode(state);
     case SET_EXPIRE_TIME:
       return _setExpireTime(state, action);
-
+    case MESSAGE_RECEIVED:
+      return _setMessage(state, action);
+    case RESET_RESOURCE:
+      return _resetResource();
     // case SET_LIST:
     //   return { ...state, list: action.list };
     // case SET_INITIAL_LIST:
@@ -108,15 +128,25 @@ const _setRoom = (state: state, action: AnyAction) => {
   return { ...state, room: action.room };
 };
 
-function setIsConference(isConference: boolean) {
+const setDrawing = (drawing: any) => {
   return {
-    type: SET_IS_CONFERENCE,
-    isConference
+    type: SET_DRAWING,
+    drawing
   };
-}
-const _setIsConference = (state: state, action: AnyAction) => {
-  return { ...state, isConference: action.isConference };
 };
+const _setDrawing = (state: state, action: AnyAction) => {
+  return { ...state, drawing: action.drawing };
+};
+
+// function setIsConference(isConference: boolean) {
+//   return {
+//     type: SET_IS_CONFERENCE,
+//     isConference
+//   };
+// }
+// const _setIsConference = (state: state, action: AnyAction) => {
+//   return { ...state, isConference: action.isConference };
+// };
 
 const setTopDisplayType = (displayType: 'FUNCTION' | 'NAME') => {
   return {
@@ -222,10 +252,57 @@ function _setExpireTime(state: state, action: AnyAction) {
   };
 }
 
+const receivedMessage = (
+  newMessage: {
+    user: any;
+    text: string;
+    date: string;
+    isRead: boolean;
+  }
+): ThunkAction<void, RootState, unknown> => {
+  return async (dispatch, getState) => {
+    dispatch({
+      type: MESSAGE_RECEIVED,
+      newMessage,
+      participants: getState()['participants_copy'].list
+    });
+  };
+};
+
+const _setMessage = (state: state, action: AnyAction) => {
+  const { newMessage, participants } = action;
+  const { messages } = state;
+
+  const sendUserInfo:Participant = participants.find(
+    (v: Participant) => v.jitsiId === newMessage.user
+  );
+  
+  const messageList = messages.slice(0);
+  messageList.push({
+    ...newMessage,
+    name: sendUserInfo.name,
+    profileUrl: sendUserInfo.profileUrl
+  });
+
+  return {
+    ...state,
+    messages: messageList
+  }
+};
+
+const resetResource = () => {
+  return {
+    type: RESET_RESOURCE
+  };
+};
+const _resetResource = () => {
+  return { ...initialState };
+};
+
 export const actionCreators = {
   setRoomId,
   setRoom,
-  setIsConference,
+  // setIsConference,
   setTopDisplayType,
   setBottomDisplayType,
   setVideoState,
@@ -234,7 +311,9 @@ export const actionCreators = {
   setIsBtOn,
   setFacingMode,
   setMirrorMode,
-  setExpireTime
+  setExpireTime,
+  receivedMessage,
+  resetResource
 };
 export default reducer;
 
