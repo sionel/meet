@@ -24,7 +24,8 @@ const TopContentPresenter: React.FC<TopContentPresenterProps> = ({
   onPressMore,
   displayType,
   roomName,
-  time
+  time,
+  messageCount
 }) => {
   return (
     <SafeAreaView style={styles.topContentSAV}>
@@ -51,11 +52,22 @@ const TopContentPresenter: React.FC<TopContentPresenterProps> = ({
                   underlayColor={'rgba(0,0,0,0)'}
                   onPress={onPressChatting}
                 >
-                  <Image
-                    source={icChatW}
-                    resizeMode={'cover'}
+                  <View
                     style={styles.ChatIcon}
-                  />
+                  >
+                    <Image
+                      source={icChatW}
+                      resizeMode={'cover'}
+                      style={styles.ChatIcon}
+                    />
+                    {messageCount > 0 && (
+                      <View style={styles.messagesCountView}>
+                        <Text style={styles.messagesCountText}>
+                          {messageCount}
+                        </Text>
+                      </View>
+                    )}
+                  </View>
                 </TouchableHighlight>
                 <TouchableHighlight
                   underlayColor={'rgba(0,0,0,0)'}
@@ -124,6 +136,22 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     height: 24
+  },
+  messagesCountView: {
+    position: 'absolute',
+    top: -6,
+    right: -6,
+    backgroundColor: '#1c90fb',
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  messagesCountText: {
+    color: '#fff',
+    fontFamily: 'DOUZONEText50',
+    fontSize: 10
   },
   UserIcon: {
     width: 24,

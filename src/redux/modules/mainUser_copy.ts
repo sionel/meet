@@ -46,6 +46,7 @@ const initialState: InitialState = {
 //#region reducer
 
 function reducer(state = initialState, action: AnyAction) {
+  
   switch (action.type) {
     case SET_MAINUSER:
       return _setMainUser(state, action);
@@ -138,6 +139,7 @@ const setMainView = (
 
 const _setMainView = (state: InitialState, action: AnyAction) => {
   const { mode } = action;
+  
   if (mode === 'track' || mode === 'character') {
     return {
       ...state,

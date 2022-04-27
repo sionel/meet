@@ -12,16 +12,17 @@ const SET_ROOM_ID = 'conference.SET_ROOM_ID';
 const SET_ROOM = 'conference.SET_ROOM';
 const SET_DRAWING = 'conference.SET_DRAWING';
 const SET_IS_CONFERENCE = 'conference.SET_IS_CONFERENCE';
-const SET_TOP_DISPLAY_TYPE = 'conference SET_TOP_DISPLAY_TYPE';
-const SET_BOTTOM_DISPLAY_TYPE = 'conference SET_BOTTOM_DISPLAY_TYPE';
-const SET_VIDEO_STATE = 'conference SET_VIDEO_STATE';
-const SET_MIKE_STATE = 'conference SET_MIKE_STATE';
-const SET_IS_SPEAKER_ON = 'conference SET_IS_SPEAKER_ON';
-const SET_IS_BT_ON = 'conference SET_IS_BT_ON';
-const SET_FACING_MODE = 'conference SET_FACING_MODE';
-const SET_MIRROR_MODE = 'conference SET_MIRROR_MODE';
+const SET_TOP_DISPLAY_TYPE = 'conference.SET_TOP_DISPLAY_TYPE';
+const SET_BOTTOM_DISPLAY_TYPE = 'conference.SET_BOTTOM_DISPLAY_TYPE';
+const SET_VIDEO_STATE = 'conference.SET_VIDEO_STATE';
+const SET_MIKE_STATE = 'conference.SET_MIKE_STATE';
+const SET_IS_SPEAKER_ON = 'conference.SET_IS_SPEAKER_ON';
+const SET_IS_BT_ON = 'conference.SET_IS_BT_ON';
+const SET_FACING_MODE = 'conference.SET_FACING_MODE';
+const SET_MIRROR_MODE = 'conference.SET_MIRROR_MODE';
 const SET_EXPIRE_TIME = 'conference.SET_EXPIRE_TIME';
 const MESSAGE_RECEIVED = 'conference.MESSAGE_RECEIVED';
+const INIT_MESSAGES_COUNT = 'conference.INIT_MESSAGES_COUNT';
 const RESET_RESOURCE = 'conference.RESET_RESOURCE';
 
 export type messageType = {
@@ -75,6 +76,8 @@ const reducer: (state: state, action: AnyAction) => state = (
       return _setRoomId(state, action);
     case SET_ROOM:
       return _setRoom(state, action);
+    case SET_DRAWING:
+      return _setDrawing(state, action);
     // case SET_IS_CONFERENCE:
     //   return _setIsConference(state, action);
     case SET_TOP_DISPLAY_TYPE:
@@ -97,6 +100,8 @@ const reducer: (state: state, action: AnyAction) => state = (
       return _setExpireTime(state, action);
     case MESSAGE_RECEIVED:
       return _setMessage(state, action);
+    case INIT_MESSAGES_COUNT:
+      return _initMessagesCount(state);
     case RESET_RESOURCE:
       return _resetResource();
     // case SET_LIST:
@@ -252,14 +257,12 @@ function _setExpireTime(state: state, action: AnyAction) {
   };
 }
 
-const receivedMessage = (
-  newMessage: {
-    user: any;
-    text: string;
-    date: string;
-    isRead: boolean;
-  }
-): ThunkAction<void, RootState, unknown> => {
+const receivedMessage = (newMessage: {
+  user: any;
+  text: string;
+  date: string;
+  isRead: boolean;
+}): ThunkAction<void, RootState, unknown> => {
   return async (dispatch, getState) => {
     dispatch({
       type: MESSAGE_RECEIVED,
@@ -273,10 +276,10 @@ const _setMessage = (state: state, action: AnyAction) => {
   const { newMessage, participants } = action;
   const { messages } = state;
 
-  const sendUserInfo:Participant = participants.find(
+  const sendUserInfo: Participant = participants.find(
     (v: Participant) => v.jitsiId === newMessage.user
   );
-  
+
   const messageList = messages.slice(0);
   messageList.push({
     ...newMessage,
@@ -287,7 +290,23 @@ const _setMessage = (state: state, action: AnyAction) => {
   return {
     ...state,
     messages: messageList
-  }
+  };
+};
+
+const initMessagesCount = () => {
+  return {
+    type: INIT_MESSAGES_COUNT
+  };
+};
+const _initMessagesCount = (state: state) => {
+  const { messages } = state;
+  const messagesList = messages.slice(0);
+  messages.forEach(message => {
+    if (message.isRead === false) {
+      message.isRead = true;
+    }
+  });
+  return { ...state, messages: messagesList };
 };
 
 const resetResource = () => {
@@ -302,6 +321,7 @@ const _resetResource = () => {
 export const actionCreators = {
   setRoomId,
   setRoom,
+  setDrawing,
   // setIsConference,
   setTopDisplayType,
   setBottomDisplayType,
@@ -313,6 +333,7 @@ export const actionCreators = {
   setMirrorMode,
   setExpireTime,
   receivedMessage,
+  initMessagesCount,
   resetResource
 };
 export default reducer;

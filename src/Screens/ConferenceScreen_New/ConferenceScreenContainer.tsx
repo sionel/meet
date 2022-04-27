@@ -17,8 +17,10 @@ import MeetApi from '@services/api/MeetApi';
 
 import { actionCreators as ConferenceActions } from '@redux/conference';
 import { actionCreators as ParticipantsActions } from '@redux/participants_copy';
+import { actionCreators as MainuserActions } from '@redux/mainUser_copy';
 import { actionCreators as MasterActions } from '@redux/master';
-// import { actionCreators as MainuserActions } from '@redux/mainUser_copy';
+// import { actionCreators as ScreenShareActions } from '@redux/ScreenShare';
+import DrawingManager from './conferenceUtil/DrawingManager';
 
 type speakerInfo = {
   name: string;
@@ -42,21 +44,38 @@ const ConferenceScreenContainer: React.FC<
   } = props;
 
   let conference: Conference;
+  let drawing: DrawingManager;
+
+  let ExternalAPI = NativeModules.ExternalAPI;
+  let eventEmitter = new NativeEventEmitter(ExternalAPI);
 
   const [first, setfirst] = useState();
   const [isConnected, setIsConnected] = useState(false);
 
   //#region useSelector
-  const { state, testFlag, auth, room, isSpeakerOn, isLogin, bottomDisplayType } =
-    useSelector((state: RootState) => ({
-      testFlag: state.test.testFlag,
-      auth: state.user.auth,
-      state,
-      room: state.conference.room,
-      isSpeakerOn: state.conference.isSpeakerOn,
-      isLogin: state.user.isLogin,
-      bottomDisplayType: state.conference.bottomDisplayType
-    }));
+  const {
+    state,
+    testFlag,
+    auth,
+    room,
+    isSpeakerOn,
+    isLogin,
+    bottomDisplayType,
+    myVideoState,
+    mode,
+    screenToggleFlag
+  } = useSelector((state: RootState) => ({
+    testFlag: state.test.testFlag,
+    auth: state.user.auth,
+    state,
+    room: state.conference.room,
+    isSpeakerOn: state.conference.isSpeakerOn,
+    isLogin: state.user.isLogin,
+    bottomDisplayType: state.conference.bottomDisplayType,
+    myVideoState: state.conference.videoState,
+    mode: state.mainUser_copy.mode,
+    screenToggleFlag: state.screenShare.screenToggleFlag
+  }));
   //#endregion
 
   //#region useDispatch
@@ -64,8 +83,16 @@ const ConferenceScreenContainer: React.FC<
   const setRoom = (conference: Conference) => {
     dispatch(ConferenceActions.setRoom(conference));
   };
+  const setDrawing = (drawing: DrawingManager) => {
+    dispatch(ConferenceActions.setDrawing(drawing));
+  };
   const retriveMasters = (token: string) => {
     dispatch(MasterActions.checkMasterList(token));
+  };
+  const setMainView = (
+    mode: 'track' | 'sketch' | 'document' | 'screen' | 'character'
+  ) => {
+    dispatch(MainuserActions.setMainView(mode));
   };
   const setIsSpeakerOn = (isSpeakerOn: boolean) => {
     dispatch(ConferenceActions.setIsSpeakerOn(isSpeakerOn));
@@ -82,12 +109,16 @@ const ConferenceScreenContainer: React.FC<
   useEffect(() => {
     _addSpeakerListner();
     _connectConference();
-
     return () => {};
   }, []);
 
+  useEffect(() => {
+    // OS === 'android' && _handleShareScreen();
+  }, [screenToggleFlag])
+
   const _connectConference = async () => {
     conference = new Conference();
+    drawing = new DrawingManager();
 
     try {
       const userInfo = {
@@ -115,7 +146,12 @@ const ConferenceScreenContainer: React.FC<
 
       retriveMasters(params.roomToken);
       setRoom(conference);
+      setDrawing(drawing);
       setIsConnected(true);
+
+      eventEmitter.addListener(ExternalAPI.TOGGLE_SCREEN_SHARE, event =>
+        _handleShareScreen(event, room, mode)
+      );
     } catch (error) {
       console.log('error: ', error);
 
@@ -180,6 +216,33 @@ const ConferenceScreenContainer: React.FC<
   };
   //#endregion
 
+  //#region 화면공유
+  const _handleShareScreen = async (event: any, a: any, b: any) => {
+    console.log('event : ', event);
+    console.log('a : ', a);
+    console.log('b : ', b);
+    
+    // const { enabled } = value;
+    // const newTrackType = enabled ? 'video' : 'desktop';
+    // try {
+    //   console.log('enabled : ', enabled);
+    //   console.log('room : ', room);
+      
+    //   await room.changeTrack(newTrackType, myVideoState);
+    //   if(enabled) setMainView('screen');
+    //   else setMainView('track');
+    //   if (newTrackType === 'video') {
+    //     myVideoState.mute();
+    //     setTimeout(() => {
+    //       myVideoState.unmute();
+    //     }, 500);
+    //   }
+    // } catch (error) {
+    //   myVideoState.unmute();
+    // }
+  };
+  //#endregion
+
   //#region 화상회의 종료( 자원 정리 )
   const _handleClose = () => {
     room.dispose();
@@ -207,7 +270,7 @@ const ConferenceScreenContainer: React.FC<
       roomName={params.selectedRoomName}
       id={params.id}
       handleClose={_handleClose}
-      isChatting={bottomDisplayType==='CHATTING'}
+      isChatting={bottomDisplayType === 'CHATTING'}
     />
   );
 };

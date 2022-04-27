@@ -10,6 +10,7 @@ import { getT } from '@utils/translateManager';
 import { actionCreators as AlertAcions } from '@redux/alert';
 import { actionCreators as LocalActions } from '@redux/local';
 import { actionCreators as ConferenceActions } from '@redux/conference';
+import { actionCreators as MainUserActions } from '@redux/mainUser_copy';
 import { RootState } from '../../redux/configureStore';
 import { MeetNavigationProps } from '@navigations/RootNavigation';
 
@@ -52,6 +53,11 @@ export default function SettingScreenContainer(props: any) {
   };
   const setMikeState = (videoTrack: any) => {
     dispatch(ConferenceActions.setMikeState(videoTrack));
+  };
+  const setMainView = (
+    mode: 'track' | 'sketch' | 'document' | 'screen' | 'character'
+  ) => {
+    dispatch(MainUserActions.setMainView(mode));
   };
 
   const t = getT();
@@ -178,6 +184,11 @@ export default function SettingScreenContainer(props: any) {
       }
       if (tracks) {
         setVideoState(tracks[0]);
+        if (tracks[0].isMuted()) {
+          setMainView('character');
+        } else {
+          setMainView('track');
+        }
         setMikeState(tracks[1]);
       }
 

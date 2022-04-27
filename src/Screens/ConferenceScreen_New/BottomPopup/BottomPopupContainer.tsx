@@ -25,6 +25,8 @@ import { RootState } from 'src/redux/configureStore';
 
 import { actionCreators as ParticipantsActions } from '@redux/participants_copy';
 import { actionCreators as MainUserActions } from '@redux/mainUser_copy';
+import { actionCreators as ConferenceActions } from '@redux/conference';
+import { actionCreators as ScreenShareAction } from '@redux/ScreenShare';
 import { isSuccess } from '@services/types';
 
 const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
@@ -41,7 +43,8 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
     masterList,
     messages,
     room,
-    auth
+    auth,
+    mainView
   } = useSelector((state: RootState) => ({
     bottomDisplayType: state.conference.bottomDisplayType,
     participants: state.participants_copy.list,
@@ -50,7 +53,8 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
     masterList: state.master.masterList,
     messages: state.conference.messages,
     room: state.conference.room,
-    auth: state.user.auth
+    auth: state.user.auth,
+    mainView: state.mainUser_copy.mode
   }));
   //#endregion
 
@@ -59,6 +63,9 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
   //#region UseState
 
   // MenuList
+  const [beforeView, setBeforeView] = useState<
+    'track' | 'sketch' | 'document' | 'screen' | 'character'
+  >('character');
 
   // Chat
   const [myMessage, setMyMessage] = useState('');
@@ -87,20 +94,44 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
   const setMainView = (
     mode: 'track' | 'sketch' | 'document' | 'screen' | 'character'
   ) => dispatch(MainUserActions.setMainView(mode));
+  const setBottomDisplayType = (
+    displayType: 'MENU' | 'CHATTING' | 'PARTICIPANTS' | 'NONE'
+  ) => dispatch(ConferenceActions.setBottomDisplayType(displayType));
+  const toggleScreenFlag = () => dispatch(ScreenShareAction.toggleScreenFlag());
   //#endregion
 
   //#region Method
   // MenuList
   const handlePressSketch = () => {
-    setMainView('sketch');
+    setBottomDisplayType('NONE');
+    setBeforeView(mainView);
+    if (mainView === 'sketch') {
+      setMainView(beforeView);
+    } else {
+      setMainView('sketch');
+    }
   };
   const handlePressDocumentShare = () => {
-    setMainView('document');
+    setBottomDisplayType('NONE');
+    setBeforeView(mainView);
+    if (mainView === 'document') {
+      setMainView(beforeView);
+    } else {
+      setMainView('document');
+    }
   };
   const handlePressScreenShare = () => {
-    setMainView('screen');
+    setBottomDisplayType('NONE');
+    toggleScreenFlag();
+    // if (mainView === 'screen') {
+    //   setMainView('track');
+    // } else {
+    //   setMainView('screen');
+    // }
   };
-  const handlePressRequestMic = () => {};
+  const handlePressRequestMic = () => {
+    setBottomDisplayType('NONE');
+  };
 
   // Chat
   const handlePressSend = () => {
@@ -228,7 +259,7 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
       setIsInviteList(false);
       setIsProfile(false);
     }
-  }, [bottomDisplayType])
+  }, [bottomDisplayType]);
 
   const handdleKeyboardShow = (e: any) => {
     setKeyboardH(e.endCoordinates.width);

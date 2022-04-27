@@ -23,14 +23,14 @@ const TopContentContainer: React.FC<TopContentContainerProps> = ({
     topDisplayType,
     bottomDisplayType,
     facingMode,
-    mirrorMode,
-    expireTime
+    expireTime,
+    messages
   } = useSelector((state: RootState) => ({
     topDisplayType: state.conference.topDisplayType,
     bottomDisplayType: state.conference.bottomDisplayType,
     facingMode: state.conference.facingMode,
-    mirrorMode: state.conference.mirrorMode,
-    expireTime: state.conference.expireTime
+    expireTime: state.conference.expireTime,
+    messages: state.conference.messages
   }));
   //#endregion selector
 
@@ -42,11 +42,13 @@ const TopContentContainer: React.FC<TopContentContainerProps> = ({
   const setFacingMode = (mode: 'FRONT' | 'BACK') =>
     dispatch(ConferenceActions.setFacingMode(mode));
   const setMirrorMode = () => dispatch(ConferenceActions.setMirrorMode());
+  const initMessagesCount = () => dispatch(ConferenceActions.initMessagesCount());
   //#endregion dispatch
 
   const [createdTime, setCreatedTime] = useState(0);
   const [elapsedTime, setElapsedTime] = useState(0);
   const [limitedTime, setLimitedTime] = useState(3600000);
+  const [messageCount, setMessageCount] = useState(0);
 
   useEffect(() => {
     const _timer = setInterval(() => {
@@ -77,6 +79,19 @@ const TopContentContainer: React.FC<TopContentContainerProps> = ({
   useEffect(() => {
     timeInit();
   }, []);
+
+  useEffect(() => {
+    let count = 0;
+    if(bottomDisplayType === 'CHATTING') {
+      initMessagesCount();
+    }
+    messages.forEach(list => {
+      if (!list.isRead) {
+        count = count + 1;
+      }
+    });
+    setMessageCount(count);
+  }, [messages.length, bottomDisplayType]);
 
   const _handlePressUserList = () => {
     setBottomDisplayType(
@@ -141,6 +156,7 @@ const TopContentContainer: React.FC<TopContentContainerProps> = ({
       displayType={topDisplayType}
       roomName={roomName}
       time={time}
+      messageCount={messageCount}
     />
   );
 };

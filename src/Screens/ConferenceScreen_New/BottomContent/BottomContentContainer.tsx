@@ -19,12 +19,13 @@ const BottomContentContainer: React.FC<BottomContentContainerProps> = ({
   handleCloseConf
 }) => {
   //#region selector
-  const { videoState, mikeState, isSpeakerOn, isBtOn } = useSelector(
+  const { videoState, mikeState, isSpeakerOn, isBtOn, mode } = useSelector(
     (state: RootState) => ({
       videoState: state.conference.videoState,
       mikeState: state.conference.mikeState,
       isSpeakerOn: state.conference.isSpeakerOn,
-      isBtOn: state.conference.isBtOn
+      isBtOn: state.conference.isBtOn,
+      mode: state.mainUser_copy.mode
     })
   );
   //#endregion
@@ -46,6 +47,10 @@ const BottomContentContainer: React.FC<BottomContentContainerProps> = ({
     _handlePressSpeaker();
     return () => {};
   }, []);
+
+  useEffect(() => {
+    setIsVideoOn(!videoState.isMuted());
+  }, [videoState.track.muted])
 
   const _handlePressVideo = () => {
     if (isVideoOn) {
@@ -96,6 +101,7 @@ const BottomContentContainer: React.FC<BottomContentContainerProps> = ({
       isVideoOn={isVideoOn}
       isMikeOn={isMikeOn}
       isSpeakerOn={isSpeakerOn}
+      mode={mode}
     />
   );
 };

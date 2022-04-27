@@ -8,10 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'src/redux/configureStore';
 
 const MainContainer: React.FC<MainContainerProps> = ({}) => {
-  const [isScreenShare, setIsScreenShare] = useState(false);
-  const _handlePressShareStop = () => {
-    setIsScreenShare(false);
-  };
+  // const [isScreenShare, setIsScreenShare] = useState(false);
 
   //#region selector
   const {
@@ -20,14 +17,16 @@ const MainContainer: React.FC<MainContainerProps> = ({}) => {
     bottomDisplayType,
     mirrorMode,
     masters,
-    mainUser
+    mainUser,
+    isScreenShare
   } = useSelector((state: RootState) => ({
     mainUser: state.mainUser_copy,
     mainDisplayType: state.mainUser_copy.mode,
     masters: state.master.masterList,
     topDisplayType: state.conference.topDisplayType,
     bottomDisplayType: state.conference.bottomDisplayType,
-    mirrorMode: state.conference.mirrorMode
+    mirrorMode: state.conference.mirrorMode,
+    isScreenShare: state.screenShare.isScreenShare
   }));
   //#endregion selector
 
@@ -53,6 +52,12 @@ const MainContainer: React.FC<MainContainerProps> = ({}) => {
 
   const setMainUserMaster = () =>
     dispatch(MainuserActions.updateMainUserIsMaster());
+
+  const setMainView = (
+    mode: 'track' | 'sketch' | 'document' | 'screen' | 'character'
+  ) => dispatch(MainuserActions.setMainView(mode));
+
+  // const toggleScreenFlag = () => dispatch(ScreenShareAction.toggleScreenFlag());
   //#endregion dispatch
 
   // useEffect(() => {
@@ -74,6 +79,10 @@ const MainContainer: React.FC<MainContainerProps> = ({}) => {
     return () => {};
   }, [masters]);
 
+  const _handlePressShareStop = () => {
+    setMainView('track');
+  };
+
   const userName = mainUser.nickname
     ? `${mainUser.name} (${mainUser.nickname})`
     : `${mainUser.name}`;
@@ -93,11 +102,7 @@ const MainContainer: React.FC<MainContainerProps> = ({}) => {
       mirrorMode={mirrorMode}
       // ScreenShare
       onPressShareStop={_handlePressShareStop}
-      // TODO: 이거 합쳐서 생각해야하는데..
-      // isScreenShare={isScreenShare}
-      // isStream={false}
-      // isMuteVideo={mainUser?.videoTrack?.muted}
-      // presenter={false}
+      isScreenShare={isScreenShare}
     />
   );
 };

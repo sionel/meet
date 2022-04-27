@@ -28,7 +28,8 @@ const MainPresenter: React.FC<MainPresenterProps> = ({
   // CHARACTER
   avatar,
   // SCREENSHARE
-  onPressShareStop
+  onPressShareStop,
+  isScreenShare
 }) => {
   return (
     <SafeAreaView style={styles.mainVideoSAV}>
@@ -38,7 +39,7 @@ const MainPresenter: React.FC<MainPresenterProps> = ({
         enabled={false}
         behavior={Platform.OS === 'android' ? 'height' : undefined}
       >
-          {displayType === 'screen' && (
+          {displayType ==='screen' && (
             <ScreenShare onPressShareStop={onPressShareStop} />
           )}
           {displayType === 'track' && (

@@ -1,4 +1,4 @@
-import { StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import { Platform, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import React, { Fragment } from 'react';
 import TopPopup from './TopPopup';
 import TopContent from './TopContent';
@@ -8,6 +8,7 @@ import BottomPopup from './BottomPopup';
 import BottomContent from './BottomContent';
 import { WEHAGO_TYPE } from '../../../config';
 import { ConferenceScreenPresenterProps } from '@screens/ConferenceScreen_New/types';
+import ScreenShareIOS from './ScreenShare/ScreenShareIOS';
 
 const ConferenceScreenPresenter: React.FC<ConferenceScreenPresenterProps> = ({
   isConnected,
@@ -22,6 +23,7 @@ const ConferenceScreenPresenter: React.FC<ConferenceScreenPresenterProps> = ({
   return (
     <View style={{ flex: 1, backgroundColor: '#000' }}>
       <StatusBar backgroundColor="#000" barStyle={'light-content'} />
+      {Platform.OS === 'ios' && <ScreenShareIOS />}
       {isConnected ? (
         <Fragment>
           <TopPopup />

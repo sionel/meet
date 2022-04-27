@@ -51,6 +51,7 @@ export interface TopContentPresenterProps {
   displayType: 'FUNCTION' | 'NAME';
   roomName: string;
   time: string;
+  messageCount: number;
 }
 
 export interface MainContainerProps {}
@@ -67,6 +68,7 @@ export interface MainPresenterProps
   displayType: 'track' | 'sketch' | 'document' | 'screen' | 'character';
   videoType: string;
   onPressShareStop: () => void;
+  isScreenShare: boolean;
 }
 
 export interface CharacterProps {
@@ -114,6 +116,7 @@ export interface BottomContentPresenterProps {
   isVideoOn: boolean;
   isMikeOn: boolean;
   isSpeakerOn: boolean;
+  mode: "track" | "sketch" | "document" | "screen" | "character";
 }
 
 export interface MenuListProps {

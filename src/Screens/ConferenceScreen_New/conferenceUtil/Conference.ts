@@ -6,6 +6,7 @@ import Connection from './Connection';
 import sendMessage from './sendMessage';
 
 import { actionCreators as participantsAction } from '@redux/participants_copy';
+import { actionCreators as conferenceActions } from '@redux/conference';
 
 interface Room {
   token: string;
@@ -82,6 +83,20 @@ class Conference {
   sendTextMessage = (text: string) => {
     if (text && text === '') return;
     this._room.sendTextMessage(text);
+  };
+
+  changeTrack = async (type: 'video' | 'desktop', oldTrack: any) => {
+    console.log('type : ', type);
+    
+    const newTrack = (
+      await JitsiMeetJS.createLocalTracks({
+        devices: [type],
+        resolution: 320
+      })
+    )[0];
+    await this._room.replaceTrack(oldTrack, newTrack);
+    this._dispatch(conferenceActions.setVideoState(newTrack));
+    // this._dispatch(participantsAction.setUserTrack(newTrack));
   };
 
   //TODO: 셋팅에서 다 준비 된 상태에서 컨퍼런스로 넘어올건지 ? => 셋팅페이지에서 해당 함수를 통해서 트랙 미리 생성

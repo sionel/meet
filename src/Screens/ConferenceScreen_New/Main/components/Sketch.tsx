@@ -4,7 +4,7 @@ import { SketchProps } from '@screens/ConferenceScreen_New/types';
 
 const Sketch: React.FC<SketchProps> = ({}) => {
   return (
-    <View>
+    <View style={{flex: 1}}>
       <Text>Sketch</Text>
     </View>
   );

@@ -28,7 +28,8 @@ const BottomContentPresenter: React.FC<BottomContentPresenterProps> = ({
   onPressEndCall,
   isVideoOn,
   isMikeOn,
-  isSpeakerOn
+  isSpeakerOn,
+  mode
 }) => {
   return (
     <SafeAreaView style={styles.BotContentSAV}>
@@ -57,26 +58,26 @@ const BottomContentPresenter: React.FC<BottomContentPresenterProps> = ({
           </TouchableOpacity>
           {/* 카메라 */}
 
-          <TouchableOpacity
-            style={styles.bottonTouch}
-            onPressOut={onPressVideo}
-          >
-            <Image
-              source={isVideoOn ? icVideoOn : icVideoOff}
-              style={styles.buttonImage}
-              resizeMode={'cover'}
-            />
-          </TouchableOpacity>
-
-          {/* {isScreenShare && (
-          <TouchableOpacity style={styles.bottonTouch} onPress={() => {}}>
-            <Image
-              source={icVideoOff}
-              style={styles.buttonImage}
-              resizeMode={'cover'}
-            />
-          </TouchableOpacity>
-        )} */}
+          {!(mode === 'screen') ? (
+            <TouchableOpacity
+              style={styles.bottonTouch}
+              onPressOut={onPressVideo}
+            >
+              <Image
+                source={isVideoOn ? icVideoOn : icVideoOff}
+                style={styles.buttonImage}
+                resizeMode={'cover'}
+              />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity style={styles.bottonTouch} onPress={() => {}}>
+              <Image
+                source={icVideoOff}
+                style={styles.buttonImage}
+                resizeMode={'cover'}
+              />
+            </TouchableOpacity>
+          )}
           {/* 회의종료 */}
           <TouchableOpacity
             style={[styles.bottonTouch, { backgroundColor: '#ef5334' }]}
@@ -106,7 +107,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     marginBottom: 14,
     justifyContent: 'flex-end',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   bottonTouch: {
     width: 48,
