@@ -25,7 +25,8 @@ const TopContentPresenter: React.FC<TopContentPresenterProps> = ({
   displayType,
   roomName,
   time,
-  messageCount
+  messageCount,
+  isScreenShare
 }) => {
   return (
     <SafeAreaView style={styles.topContentSAV}>
@@ -52,9 +53,7 @@ const TopContentPresenter: React.FC<TopContentPresenterProps> = ({
                   underlayColor={'rgba(0,0,0,0)'}
                   onPress={onPressChatting}
                 >
-                  <View
-                    style={styles.ChatIcon}
-                  >
+                  <View style={styles.ChatIcon}>
                     <Image
                       source={icChatW}
                       resizeMode={'cover'}
@@ -69,26 +68,30 @@ const TopContentPresenter: React.FC<TopContentPresenterProps> = ({
                     )}
                   </View>
                 </TouchableHighlight>
-                <TouchableHighlight
-                  underlayColor={'rgba(0,0,0,0)'}
-                  onPress={onPressCamaraReverse}
-                >
-                  <Image
-                    source={icReverseW}
-                    resizeMode={'cover'}
-                    style={styles.ReverseIcon}
-                  />
-                </TouchableHighlight>
-                <TouchableHighlight
-                  underlayColor={'rgba(0,0,0,0)'}
-                  onPress={onPressDisplayInvert}
-                >
-                  <Image
-                    source={icInvertW}
-                    resizeMode={'cover'}
-                    style={styles.InvertIcon}
-                  />
-                </TouchableHighlight>
+                {!isScreenShare && (
+                  <Fragment>
+                    <TouchableHighlight
+                      underlayColor={'rgba(0,0,0,0)'}
+                      onPress={onPressCamaraReverse}
+                    >
+                      <Image
+                        source={icReverseW}
+                        resizeMode={'cover'}
+                        style={styles.ReverseIcon}
+                      />
+                    </TouchableHighlight>
+                    <TouchableHighlight
+                      underlayColor={'rgba(0,0,0,0)'}
+                      onPress={onPressDisplayInvert}
+                    >
+                      <Image
+                        source={icInvertW}
+                        resizeMode={'cover'}
+                        style={styles.InvertIcon}
+                      />
+                    </TouchableHighlight>
+                  </Fragment>
+                )}
               </Fragment>
             )}
             <TouchableHighlight

@@ -35,7 +35,7 @@ const toggleScreenFlag = (): ThunkAction<void, RootState, unknown> => {
     });
   };
 };
-const _toggleScreenFlag = (state:state) => ({
+const _toggleScreenFlag = (state: state) => ({
   ...state,
   screenToggleFlag: !state.screenToggleFlag
 });
@@ -44,10 +44,11 @@ const setScreenFlag = (
   flag: boolean
 ): ThunkAction<void, RootState, unknown> => {
   return async (dispatch, getState) => {
-    const local = getState().local;
+    const { facingMode } = getState().conference;
     // 카메라가 back를 보는 도중에 화면공유를 하는 경우 다시 복구가 안됨
-    if (local.facingMode === 'back')
-      dispatch({ type: 'local.TOGGLE_CAMERA_FACING_MODE' });
+    if (facingMode === 'BACK') {
+      dispatch({ type: 'conference.SET_FACING_MODE', facingMode: 'FRONT' });
+    }
 
     dispatch({
       type: SET,
@@ -55,7 +56,7 @@ const setScreenFlag = (
     });
   };
 };
-const _setScreenFlag = (state:state, action:AnyAction) => ({
+const _setScreenFlag = (state: state, action: AnyAction) => ({
   ...state,
   isScreenShare: action.flag
 });

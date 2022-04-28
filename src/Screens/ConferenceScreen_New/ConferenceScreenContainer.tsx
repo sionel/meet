@@ -19,7 +19,7 @@ import { actionCreators as ConferenceActions } from '@redux/conference';
 import { actionCreators as ParticipantsActions } from '@redux/participants_copy';
 import { actionCreators as MainuserActions } from '@redux/mainUser_copy';
 import { actionCreators as MasterActions } from '@redux/master';
-// import { actionCreators as ScreenShareActions } from '@redux/ScreenShare';
+import { actionCreators as ScreenShareActions } from '@redux/ScreenShare';
 import DrawingManager from './conferenceUtil/DrawingManager';
 
 type speakerInfo = {
@@ -30,6 +30,9 @@ type speakerInfo = {
 };
 
 const { OS } = Platform;
+const ExternalAPI = NativeModules.ExternalAPI;
+const eventEmitter = new NativeEventEmitter(ExternalAPI);
+
 const AudioMode = OS === 'ios' && NativeModules.AudioMode;
 const NativeAudio = new NativeEventEmitter(AudioMode);
 const InCallManager =
@@ -46,10 +49,7 @@ const ConferenceScreenContainer: React.FC<
   let conference: Conference;
   let drawing: DrawingManager;
 
-  let ExternalAPI = NativeModules.ExternalAPI;
-  let eventEmitter = new NativeEventEmitter(ExternalAPI);
-
-  const [first, setfirst] = useState();
+  const [first, setFirst] = useState(true);
   const [isConnected, setIsConnected] = useState(false);
 
   //#region useSelector
@@ -63,6 +63,7 @@ const ConferenceScreenContainer: React.FC<
     bottomDisplayType,
     myVideoState,
     mode,
+    isScreenShare,
     screenToggleFlag
   } = useSelector((state: RootState) => ({
     testFlag: state.test.testFlag,
@@ -74,6 +75,7 @@ const ConferenceScreenContainer: React.FC<
     bottomDisplayType: state.conference.bottomDisplayType,
     myVideoState: state.conference.videoState,
     mode: state.mainUser_copy.mode,
+    isScreenShare: state.screenShare.isScreenShare,
     screenToggleFlag: state.screenShare.screenToggleFlag
   }));
   //#endregion
@@ -83,9 +85,6 @@ const ConferenceScreenContainer: React.FC<
   const setRoom = (conference: Conference) => {
     dispatch(ConferenceActions.setRoom(conference));
   };
-  const setDrawing = (drawing: DrawingManager) => {
-    dispatch(ConferenceActions.setDrawing(drawing));
-  };
   const retriveMasters = (token: string) => {
     dispatch(MasterActions.checkMasterList(token));
   };
@@ -93,6 +92,10 @@ const ConferenceScreenContainer: React.FC<
     mode: 'track' | 'sketch' | 'document' | 'screen' | 'character'
   ) => {
     dispatch(MainuserActions.setMainView(mode));
+  };
+
+  const setScreenFlag = (flag: boolean) => {
+    dispatch(ScreenShareActions.setScreenFlag(flag));
   };
   const setIsSpeakerOn = (isSpeakerOn: boolean) => {
     dispatch(ConferenceActions.setIsSpeakerOn(isSpeakerOn));
@@ -106,20 +109,8 @@ const ConferenceScreenContainer: React.FC<
   const resetResource = () => dispatch(ConferenceActions.resetResource());
   //#endregion
 
-  useEffect(() => {
-    _addSpeakerListner();
-    _connectConference();
-    return () => {};
-  }, []);
-
-  useEffect(() => {
-    // OS === 'android' && _handleShareScreen();
-  }, [screenToggleFlag])
-
   const _connectConference = async () => {
     conference = new Conference();
-    drawing = new DrawingManager();
-
     try {
       const userInfo = {
         wehagoId: auth.portal_id,
@@ -146,12 +137,16 @@ const ConferenceScreenContainer: React.FC<
 
       retriveMasters(params.roomToken);
       setRoom(conference);
-      setDrawing(drawing);
       setIsConnected(true);
 
-      eventEmitter.addListener(ExternalAPI.TOGGLE_SCREEN_SHARE, event =>
-        _handleShareScreen(event, room, mode)
+      eventEmitter.addListener(
+        ExternalAPI.TOGGLE_SCREEN_SHARE,
+        _handleShareScreen
       );
+
+      const userId = conference.getMyId();
+
+      MeetApi.enterMeetRoom(params.roomToken, userId, params.name);
     } catch (error) {
       console.log('error: ', error);
 
@@ -217,38 +212,33 @@ const ConferenceScreenContainer: React.FC<
   //#endregion
 
   //#region 화면공유
-  const _handleShareScreen = async (event: any, a: any, b: any) => {
-    console.log('event : ', event);
-    console.log('a : ', a);
-    console.log('b : ', b);
-    
-    // const { enabled } = value;
-    // const newTrackType = enabled ? 'video' : 'desktop';
-    // try {
-    //   console.log('enabled : ', enabled);
-    //   console.log('room : ', room);
-      
-    //   await room.changeTrack(newTrackType, myVideoState);
-    //   if(enabled) setMainView('screen');
-    //   else setMainView('track');
-    //   if (newTrackType === 'video') {
-    //     myVideoState.mute();
-    //     setTimeout(() => {
-    //       myVideoState.unmute();
-    //     }, 500);
-    //   }
-    // } catch (error) {
-    //   myVideoState.unmute();
-    // }
+  const _handleShareScreen = async () => {
+    const newTrackType = isScreenShare ? 'video' : 'desktop';
+    try {
+      room && await room.changeTrack(newTrackType, myVideoState);
+      setScreenFlag(!isScreenShare);
+      if (newTrackType === 'video') {
+        myVideoState.mute();
+        setTimeout(() => {
+          myVideoState.unmute();
+        }, 500);
+        setMainView('track');
+      } else {
+        setMainView('screen');
+      }
+    } catch (error) {
+      myVideoState.unmute();
+    }
   };
   //#endregion
 
   //#region 화상회의 종료( 자원 정리 )
   const _handleClose = () => {
-    room.dispose();
+    room && room.dispose();
     setIsConnected(false);
     resetResource();
     resetUserlist();
+    eventEmitter.removeAllListeners(ExternalAPI.TOGGLE_SCREEN_SHARE);
     if (OS === 'ios') {
       NativeAudio.removeAllListeners(
         'org.jitsi.meet:features/audio-mode#devices-update'
@@ -263,6 +253,17 @@ const ConferenceScreenContainer: React.FC<
     }
   };
   //#endregion
+
+  useEffect(() => {
+    _addSpeakerListner();
+    _connectConference();
+    return () => {};
+  }, []);
+
+  useEffect(() => {
+    first && setFirst(false);
+    OS === 'android' && !first && _handleShareScreen();
+  }, [screenToggleFlag]);
 
   return (
     <ConferenceScreenPresenter

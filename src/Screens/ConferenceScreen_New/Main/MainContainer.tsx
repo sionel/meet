@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import MainVideoPresenter from './MainPresenter';
+import MainPresenter from './MainPresenter';
 import { MainContainerProps } from '@screens/ConferenceScreen_New/types';
 
 import { actionCreators as ConferenceActions } from '@redux/conference';
 import { actionCreators as MainuserActions } from '@redux/mainUser_copy';
+import { actionCreators as ScreenShareActions } from '@redux/ScreenShare';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'src/redux/configureStore';
+import { Alert } from 'react-native';
+import { getT } from '@utils/translateManager';
 
-const MainContainer: React.FC<MainContainerProps> = ({}) => {
-  // const [isScreenShare, setIsScreenShare] = useState(false);
-
+const MainContainer: React.FC<MainContainerProps> = ({ roomName }) => {
+  const t = getT();
   //#region selector
   const {
     mainDisplayType,
@@ -18,7 +20,9 @@ const MainContainer: React.FC<MainContainerProps> = ({}) => {
     mirrorMode,
     masters,
     mainUser,
-    isScreenShare
+    isScreenShare,
+    mikeState,
+    videoState
   } = useSelector((state: RootState) => ({
     mainUser: state.mainUser_copy,
     mainDisplayType: state.mainUser_copy.mode,
@@ -26,53 +30,36 @@ const MainContainer: React.FC<MainContainerProps> = ({}) => {
     topDisplayType: state.conference.topDisplayType,
     bottomDisplayType: state.conference.bottomDisplayType,
     mirrorMode: state.conference.mirrorMode,
-    isScreenShare: state.screenShare.isScreenShare
+    isScreenShare: state.screenShare.isScreenShare,
+    mikeState: state.conference.mikeState,
+    videoState: state.conference.videoState
   }));
   //#endregion selector
+
+  const [isMikeOn, setIsMikeOn] = useState(!mikeState.isMuted());
 
   // console.log('mainDisplayType : ', mainDisplayType);
 
   //#region dispatch
   const dispatch = useDispatch();
 
-  const handleTopDisplay = () => {
-    let top = topDisplayType;
-    let bot = bottomDisplayType;
-    if (bot !== 'NONE') {
-      dispatch(ConferenceActions.setBottomDisplayType('NONE'));
-    } else {
-      if (top === 'FUNCTION') {
-        top = 'NAME';
-      } else {
-        top = 'FUNCTION';
-      }
-      dispatch(ConferenceActions.setTopDisplayType(top));
-    }
-  };
-
-  const setMainUserMaster = () =>
-    dispatch(MainuserActions.updateMainUserIsMaster());
+  const setTopDisplayType = (displayType: 'FUNCTION' | 'NAME') =>
+    dispatch(ConferenceActions.setTopDisplayType(displayType));
 
   const setMainView = (
     mode: 'track' | 'sketch' | 'document' | 'screen' | 'character'
   ) => dispatch(MainuserActions.setMainView(mode));
 
-  // const toggleScreenFlag = () => dispatch(ScreenShareAction.toggleScreenFlag());
+  const setBotDisplayType = (
+    displayType: 'MENU' | 'CHATTING' | 'PARTICIPANTS' | 'NONE'
+  ) => dispatch(ConferenceActions.setBottomDisplayType(displayType));
+
+  const setMainUserMaster = () =>
+    dispatch(MainuserActions.updateMainUserIsMaster());
+
+  const toggleScreenFlag = () =>
+    dispatch(ScreenShareActions.toggleScreenFlag());
   //#endregion dispatch
-
-  // useEffect(() => {
-  //   if (isScreenShare) {
-  //     // setMainDisplayType('SCREENSHARE');
-  //   } else if (!mainUser.videoTrack.isMuted()) {
-  //     // setMainDisplayType('RTCVIEW');
-  //   } else {
-  //     // setMainDisplayType('CHARACTER');
-  //   }
-
-  //   return () => {
-  //     // setMainDisplayType('CHARACTER');
-  //   };
-  // }, [mainDisplayType]);
 
   useEffect(() => {
     setMainUserMaster();
@@ -80,7 +67,59 @@ const MainContainer: React.FC<MainContainerProps> = ({}) => {
   }, [masters]);
 
   const _handlePressShareStop = () => {
-    setMainView('track');
+    toggleScreenFlag();
+  };
+
+  const handleTopDisplay = () => {
+    let top = topDisplayType;
+    let bot = bottomDisplayType;
+    if (bot !== 'NONE') {
+      setBotDisplayType('NONE');
+    } else {
+      if (top === 'FUNCTION') {
+        top = 'NAME';
+      } else {
+        top = 'FUNCTION';
+      }
+      setTopDisplayType(top);
+    }
+  };
+
+  const _onPressExit = () => {
+    const MODE =
+      mainDisplayType === 'sketch' ? t('meet_sketch') : t('meet_share');
+    const title = t('alert_title_mode_exit').replace('[@mode@]', MODE);
+    const text = t('alert_text_quit')
+      .replace('[@mode@]', MODE)
+      .replace('[@mode@]', MODE);
+    const handleConfirm = () => {
+      // TODO: 스케치모드 종료하는 함수 추가
+      let isVideoOn = !videoState.isMuted();
+      if (isVideoOn) {
+        setMainView('track');
+      } else {
+        setMainView('character');
+      }
+    };
+    Alert.alert(title, text, [
+      {
+        text: t('alert_button_cancel'),
+        onPress: () => {}
+      },
+      {
+        text: t('alert_button_confirm'),
+        onPress: () => handleConfirm()
+      }
+    ]);
+  };
+
+  const _onPressMike = () => {
+    if (isMikeOn) {
+      mikeState.mute();
+    } else {
+      mikeState.unmute();
+    }
+    setIsMikeOn(!isMikeOn);
   };
 
   const userName = mainUser.nickname
@@ -88,7 +127,7 @@ const MainContainer: React.FC<MainContainerProps> = ({}) => {
     : `${mainUser.name}`;
 
   return (
-    <MainVideoPresenter
+    <MainPresenter
       displayType={mainDisplayType}
       onPressMainView={handleTopDisplay}
       // RTCView, Character
@@ -102,7 +141,11 @@ const MainContainer: React.FC<MainContainerProps> = ({}) => {
       mirrorMode={mirrorMode}
       // ScreenShare
       onPressShareStop={_handlePressShareStop}
-      isScreenShare={isScreenShare}
+      // Sketch
+      isMikeOn={isMikeOn}
+      roomName={roomName}
+      onPressExit={_onPressExit}
+      onPressMike={_onPressMike}
     />
   );
 };

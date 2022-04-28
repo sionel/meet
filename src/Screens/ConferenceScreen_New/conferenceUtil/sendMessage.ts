@@ -1,3 +1,4 @@
+import DrawingMananger from './DrawingManager';
 // 위하고 아이디 커멘드 이름 정의
 const WEHAGO_ID = 'wehagoid';
 
@@ -65,8 +66,10 @@ const REQUEST_ROOM_START_RECORDING =
 
 export default class sendMessage {
   private _room: any;
+  private _drawingManager: any
   constructor(room: any) {
     this._room = room;
+    this._drawingManager = new DrawingMananger();
   }
 
   sendWehagoId = (user: any) => {
@@ -86,11 +89,39 @@ export default class sendMessage {
     };
 
     // console.log('니 혹시 여러번 날아가나 진짜?');
-    
+
     this._room.sendCommand(WEHAGO_ID, {
       value: this._room.myUserId(),
       attributes
     });
     return attributes;
+  };
+
+  setDrawingShareMode = (isDrawingShare: boolean) => {
+    this._room.sendCommandOnce(SET_DRAWING_IS_SHARE, {
+      value: this._room.myUserId(),
+      attributes: { isDrawingShare }
+    });
+  };
+
+  setDrawingData = (data: any, page: any) => {
+    // 로그 기록이 있을 경우 참여자들에게 기록 전송
+    const newData = this._drawingManager.handleConvertFormat('mobile', data);
+    console.log('newData : ', newData);
+    
+    this._room.sendCommandOnce(UPDATE_DOCUMENT_DATA, {
+      value: this._room.myUserId(),
+      attributes: {
+        documentData: newData.attributes.documentData,
+        selectResource: page,
+        width: newData.attributes.width,
+        height: newData.attributes.height,
+        from: 'mobile'
+      }
+    });
+    // this._handlers.CHANGED_DRAW_DATA(
+    //   JSON.parse(newData.attributes.documentData),
+    //   page
+    // );
   };
 }

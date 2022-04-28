@@ -133,9 +133,12 @@ export function bindEvent(handler: any, room: any, resolve: any, reject: any) {
   //   handler.SUSPEND_DETECTED();
   // });
 
-  room.on(conferenceEvents.MESSAGE_RECEIVED, (user: any, text: any, date: any) => {
-    handler.setMessage(user, text, date);
-  });
+  room.on(
+    conferenceEvents.MESSAGE_RECEIVED,
+    (user: any, text: any, date: any) => {
+      handler.setMessage(user, text, date);
+    }
+  );
 
   // room.on(conferenceEvents.RECORDER_STATE_CHANGED, data => {
   //   const { _status, _sessionID, _initiator } = data;
@@ -205,33 +208,41 @@ export function bindEvent(handler: any, room: any, resolve: any, reject: any) {
   // /**
   //  * @description 드로잉 모드 설정 감지
   //  */
-  // room.addCommandListener(SET_DRAWING_IS_SHARE, value => {
-  //   const {
-  //     value: userId,
-  //     attributes: { isDrawingShare }
-  //   } = value;
-  //   const presenter = userId === room.myUserId() ? 'localUser' : userId;
-  //   const isClosed = isDrawingShare === 'false';
+  room.addCommandListener(
+    actions.SET_DRAWING_IS_SHARE,
+    (value: {
+      value: string;
+      attributes: {
+        isDrawingShare: 'true' | 'false';
+      };
+    }) => {
+      console.log('actions.SET_DRAWING_IS_SHARE');
+      console.log('value : ', value);
+      const {
+        value: userId,
+        attributes: { isDrawingShare }
+      } = value;
+      const presenter = userId === room.myUserId() ? 'localUser' : userId;
+      const isClosed = isDrawingShare === 'false';
 
-  //   handler.CHANGED_DRAWING_SHARE_MODE(!isClosed, presenter);
-  // });
+      handler.changeDrawingShareMode(!isClosed, presenter);
+    }
+  );
 
   // /**
   //  * 드로잉 데이터 변경 감지
   //  */
-  // room.addCommandListener(UPDATE_DOCUMENT_DATA, value => {
-  //   const {
-  //     attributes: { documentData, from, selectResource },
-  //     value: userId
-  //   } = value;
+  room.addCommandListener(actions.UPDATE_DOCUMENT_DATA, (value: any) => {
+    const {
+      attributes: { documentData, from, selectResource },
+      value: userId
+    } = value;
 
-  //   // 데이터 변경자가 본인과 다를 경우 캔버스 그리기
-  //   if (userId !== room.myUserId()) {
-  //     // const _drawData = JSON.parse(drawData);
-  //     // this._drawingManager.handleConvertFormat('web', value);
-  //     handler.CHANGED_DRAW_DATA(JSON.parse(documentData), selectResource);
-  //   }
-  // });
+    // 데이터 변경자가 본인과 다를 경우 캔버스 그리기
+    if (userId !== room.myUserId()) {
+      handler.changeDrawData(JSON.parse(documentData), selectResource);
+    }
+  });
 
   // /**
   //  * 드로잉 캔버스 클리어 감지

@@ -241,7 +241,7 @@ const DrawingPresenter = props => {
             justifyContent: 'center',
             alignItems: 'center'
           }}
-          onPress={() => onChangeShowToolState('showTool')}
+          onPress={() => onChangeShowToolState(!showTool)}
         >
           <DrawingBoard
             mode={['stroke'].some(val => val === selectedTab)}
@@ -326,7 +326,7 @@ const DrawingPresenter = props => {
                 <TouchableOpacity
                   activeOpacity={1}
                   style={{ flex: 1 }}
-                  onPress={() => onChangeShowToolState('showTool')}
+                  onPress={() => onChangeShowToolState(!showTool)}
                 >
                   <View
                     style={[

@@ -24,7 +24,9 @@ export interface InitialState
 interface TrackType {
   videoTrack?: any;
 }
-interface SketchType {}
+interface SketchType {
+  attribute?: any
+}
 interface DocumentType {}
 interface ScreenType {}
 interface CharacterType {

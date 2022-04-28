@@ -15,21 +15,19 @@ const SET_DRAW_DATA = 'documentShare.SET_DRAW_DATA';
 export interface state {
   documentListMode: string[] | boolean;
   attributes: any;
-  presenter: string | boolean;
+  presenter: string;
   page: number;
   documentData: any[];
-  mode: string | null;
 }
 
 //#region Initial State
 
 const initialState = {
   documentListMode: false,
-  attributes: false,
-  presenter: false,
+  attributes: [],
+  presenter: '',
   page: 0,
-  documentData: [],
-  mode: null
+  documentData: []
 };
 
 //#endregion
@@ -78,34 +76,33 @@ function applySetDocumentListMode(state: state, action: AnyAction) {
 
 //#region SET_SHARING_MODE
 function setSharingMode(
-  attributes = false,
-  presenter = false,
+  attributes: any,
+  presenter = '',
   page = 0,
-  documentData = [],
-  mode = null
+  documentData = []
 ): ThunkAction<void, RootState, unknown> {
+  console.log('attributes : ', attributes);
+  
   return dispatch => {
     dispatch({
       type: SET_SHARING_MODE,
       attributes,
       presenter,
       page,
-      documentData,
-      mode
+      documentData
     });
   };
 }
 
 function applySetSharingMode(state: state, action: AnyAction) {
-  const { attributes, presenter, page, documentData, mode } = action;
+  const { attributes, presenter, page, documentData } = action;
   return {
     ...state,
     documentListMode: false,
     attributes: attributes,
     presenter: presenter,
     page: page,
-    documentData: documentData,
-    mode: mode
+    documentData: documentData
   };
 }
 

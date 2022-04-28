@@ -104,12 +104,8 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
   // MenuList
   const handlePressSketch = () => {
     setBottomDisplayType('NONE');
-    setBeforeView(mainView);
-    if (mainView === 'sketch') {
-      setMainView(beforeView);
-    } else {
-      setMainView('sketch');
-    }
+    room && room.sendMessage.setDrawingShareMode(true);
+    setMainView('sketch');
   };
   const handlePressDocumentShare = () => {
     setBottomDisplayType('NONE');
@@ -123,11 +119,6 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
   const handlePressScreenShare = () => {
     setBottomDisplayType('NONE');
     toggleScreenFlag();
-    // if (mainView === 'screen') {
-    //   setMainView('track');
-    // } else {
-    //   setMainView('screen');
-    // }
   };
   const handlePressRequestMic = () => {
     setBottomDisplayType('NONE');
@@ -137,7 +128,7 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
   const handlePressSend = () => {
     if (myMessage && myMessage.slice().replace(/(\s*)/g, '') !== '') {
       setMyMessage('');
-      room.sendTextMessage(myMessage);
+      room && room.sendTextMessage(myMessage);
     }
   };
 

@@ -35,8 +35,7 @@ export type messageType = {
 };
 export interface state {
   roomId: string;
-  room: any;
-  drawing: any;
+  room: Conference | undefined;
   // isConference: boolean;
   topDisplayType: 'FUNCTION' | 'NAME';
   bottomDisplayType: 'MENU' | 'CHATTING' | 'PARTICIPANTS' | 'NONE';
@@ -53,7 +52,6 @@ export interface state {
 const initialState: state = {
   roomId: '',
   room: undefined,
-  drawing: undefined,
   // isConference: false,
   topDisplayType: 'FUNCTION',
   bottomDisplayType: 'NONE',
@@ -76,8 +74,8 @@ const reducer: (state: state, action: AnyAction) => state = (
       return _setRoomId(state, action);
     case SET_ROOM:
       return _setRoom(state, action);
-    case SET_DRAWING:
-      return _setDrawing(state, action);
+    // case SET_DRAWING:
+    //   return _setDrawing(state, action);
     // case SET_IS_CONFERENCE:
     //   return _setIsConference(state, action);
     case SET_TOP_DISPLAY_TYPE:
@@ -133,15 +131,15 @@ const _setRoom = (state: state, action: AnyAction) => {
   return { ...state, room: action.room };
 };
 
-const setDrawing = (drawing: any) => {
-  return {
-    type: SET_DRAWING,
-    drawing
-  };
-};
-const _setDrawing = (state: state, action: AnyAction) => {
-  return { ...state, drawing: action.drawing };
-};
+// const setDrawing = (drawing: any) => {
+//   return {
+//     type: SET_DRAWING,
+//     drawing
+//   };
+// };
+// const _setDrawing = (state: state, action: AnyAction) => {
+//   return { ...state, drawing: action.drawing };
+// };
 
 // function setIsConference(isConference: boolean) {
 //   return {
@@ -321,7 +319,7 @@ const _resetResource = () => {
 export const actionCreators = {
   setRoomId,
   setRoom,
-  setDrawing,
+  // setDrawing,
   // setIsConference,
   setTopDisplayType,
   setBottomDisplayType,

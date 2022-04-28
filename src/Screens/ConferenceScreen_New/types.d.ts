@@ -52,9 +52,12 @@ export interface TopContentPresenterProps {
   roomName: string;
   time: string;
   messageCount: number;
+  isScreenShare: boolean;
 }
 
-export interface MainContainerProps {}
+export interface MainContainerProps {
+  roomName: string;
+}
 export interface MainPresenterProps
   extends CharacterProps,
     RtcViewProps,
@@ -68,7 +71,7 @@ export interface MainPresenterProps
   displayType: 'track' | 'sketch' | 'document' | 'screen' | 'character';
   videoType: string;
   onPressShareStop: () => void;
-  isScreenShare: boolean;
+  onPressExit: () => void;
 }
 
 export interface CharacterProps {
@@ -86,8 +89,18 @@ export interface RtcViewProps {
   mirrorMode: boolean;
   onPressMainView: () => void;
 }
-export interface DocumentShareProps {}
-export interface SketchProps {}
+export interface DocumentShareProps {
+  isMikeOn: boolean;
+  roomName: string;
+  onPressExit: () => void;
+  onPressMike: () => void;
+}
+export interface SketchProps {
+  isMikeOn: boolean;
+  roomName: string;
+  onPressExit: () => void;
+  onPressMike: () => void;
+}
 export interface ScreenShareProps {
   onPressShareStop: () => void;
 }

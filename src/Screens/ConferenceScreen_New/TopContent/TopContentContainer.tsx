@@ -24,13 +24,15 @@ const TopContentContainer: React.FC<TopContentContainerProps> = ({
     bottomDisplayType,
     facingMode,
     expireTime,
-    messages
+    messages,
+    isScreenShare
   } = useSelector((state: RootState) => ({
     topDisplayType: state.conference.topDisplayType,
     bottomDisplayType: state.conference.bottomDisplayType,
     facingMode: state.conference.facingMode,
     expireTime: state.conference.expireTime,
-    messages: state.conference.messages
+    messages: state.conference.messages,
+    isScreenShare: state.screenShare.isScreenShare
   }));
   //#endregion selector
 
@@ -157,6 +159,7 @@ const TopContentContainer: React.FC<TopContentContainerProps> = ({
       roomName={roomName}
       time={time}
       messageCount={messageCount}
+      isScreenShare={isScreenShare}
     />
   );
 };

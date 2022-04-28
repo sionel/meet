@@ -28,7 +28,7 @@ const ConferenceScreenPresenter: React.FC<ConferenceScreenPresenterProps> = ({
         <Fragment>
           <TopPopup />
           <TopContent roomName={roomName} id={id} handleClose={handleClose} />
-          <Main />
+          <Main roomName={roomName} />
           {/* <SplitVideo /> */}
           <BottomPopup roomId={id} />
           {!isChatting && <BottomContent handleCloseConf={handleClose} />}
