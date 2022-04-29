@@ -189,7 +189,7 @@ export default function ConfigurationScreenPresenter(props: propsTypes) {
               fontSize: 13
             }}
           >
-            {'2.4.2'}
+            {'2.4.3'}
           </Text>
         </View>
         <View

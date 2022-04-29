@@ -145,7 +145,7 @@ const checkMembership = async (AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, cno) => {
  */
 const companyStatusCheck = async (auth, company) => {
   const isTEdge = auth.last_company.membership_code === 'WE';
-
+  const t = getT();
   if (isTEdge) {
     // TEdge 미납 여부 확인
     const isPurchase = await checkPurchaseTEdge(auth, company);

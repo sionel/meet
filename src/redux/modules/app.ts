@@ -25,7 +25,6 @@ export default (state = initialState, action: AnyAction) => {
   }
 };
 const _setUrl = (state: State, action: AnyAction) => {
-  debugger
   return { ...state, ...action.payload };
 };
 const _setExternalAPIScope = (state: State, action: AnyAction) => {

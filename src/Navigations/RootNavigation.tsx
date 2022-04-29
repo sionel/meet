@@ -147,7 +147,6 @@ export default function RootNavigation(props: any) {
   };
 
   useEffect(() => {
-    debugger
     _handleGetDeeplink(url);
   }, [url]);
 

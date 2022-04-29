@@ -83,7 +83,6 @@ const SplashScreenContainer = ({
   }, []);
 
   useEffect(() => {
-    debugger;
     _handleGetDeeplink(url);
   }, [url]);
 
@@ -212,7 +211,6 @@ const SplashScreenContainer = ({
     // console.log(m);
     if (!url) return;
     if (timeout.current) clearTimeout(timeout.current);
-
     let result: any = querystringParser(url);
     // 화상회의 요청인지 판별
     if (result.is_creater) {
@@ -318,7 +316,6 @@ const SplashScreenContainer = ({
         });
       } else {
         const { joincode, video_id } = result;
-        debugger;
         const { name } = await MeetApi.getMeetRoomNoCert(video_id);
         navigation.reset({
           routes: [
@@ -360,28 +357,28 @@ const SplashScreenContainer = ({
 
   const serviceCheck = async (auth: any) => {
     // 회사 상태 조회 후 진행
-    const statusCheck = await ServiceCheckApi.companyStatusCheck(
-      auth,
-      auth.last_company
-    );
+    // const statusCheck = await ServiceCheckApi.companyStatusCheck(
+    //   auth,
+    //   auth.last_company
+    // );
     // 이상이 없는 회사일 경우 로그인 정상 진행
-    if (statusCheck && statusCheck.code === 200) {
-      // 서비스 배포여부 조회
-      const isDeployWehagomeet = await ServiceCheckApi.serviceCheck(auth);
-      const isDeploy = isDeployWehagomeet;
+    // if (statusCheck && statusCheck.code === 200) {
+    // 서비스 배포여부 조회
 
-      // 서비스 구매여부 조회
-      // const isDeployWebrtc = await ServiceCheckApi.serviceCheck(
-      //   auth,
-      //   'webrtc'  구매여부 확인
-      // );
-      // 'wehagomeet' 배포여부 확인
-      // || isDeployWebrtc;
-      setPermission(isDeploy);
-      return isDeploy;
-    } else {
-      return false;
-    }
+    const isDeploy = await ServiceCheckApi.serviceCheck(auth);
+    // const isDeploy = isDeployWehagomeet;
+    // 서비스 구매여부 조회
+    // const isDeployWebrtc = await ServiceCheckApi.serviceCheck(
+    //   auth,
+    //   'webrtc'  구매여부 확인
+    // );
+    // 'wehagomeet' 배포여부 확인
+    // || isDeployWebrtc;
+    setPermission(isDeploy);
+    return isDeploy;
+    // } else {
+    //   return false;
+    // }
   };
 
   //로그인 요청
