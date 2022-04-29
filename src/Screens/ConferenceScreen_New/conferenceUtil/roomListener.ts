@@ -216,8 +216,9 @@ export function bindEvent(handler: any, room: any, resolve: any, reject: any) {
         isDrawingShare: 'true' | 'false';
       };
     }) => {
-      console.log('actions.SET_DRAWING_IS_SHARE');
+      console.log('SET_DRAWING_IS_SHARE');
       console.log('value : ', value);
+      
       const {
         value: userId,
         attributes: { isDrawingShare }
@@ -303,19 +304,19 @@ export function bindEvent(handler: any, room: any, resolve: any, reject: any) {
   // /**
   //  * 새로 참가한 사람만 받아라 (드로잉공유)
   //  */
-  // room.addCommandListener(DRAWING_SHARE_TARGET, value => {
-  //   if (room.myUserId() === value.attributes.target) {
-  //     const drawingData = value.attributes.objectData
-  //       ? JSON.parse(value.attributes.objectData)
-  //       : [{ object: [] }];
-  //     handler.CHANGED_DRAWING_SHARE_MODE(
-  //       { resources: '[]', ...value.attributes }, // attributes
-  //       value.value, // presenter Id
-  //       0, //page
-  //       drawingData[0].object ? [drawingData[0].object] : drawingData //documentData
-  //     );
-  //   }
-  // });
+  room.addCommandListener(actions.DRAWING_SHARE_TARGET, (value: any) => {
+    if (room.myUserId() === value.attributes.target) {
+      const drawingData = value.attributes.objectData
+        ? JSON.parse(value.attributes.objectData)
+        : [{ object: [] }];
+      handler.CHANGED_DRAWING_SHARE_MODE(
+        { resources: '[]', ...value.attributes }, // attributes
+        value.value, // presenter Id
+        0, //page
+        drawingData[0].object ? [drawingData[0].object] : drawingData //documentData
+      );
+    }
+  });
 
   // // 화상대화 전체 마이크 제어 요청 이벤트
   // // - 마스터가 마이크 제어 mute를 함 사용자들은 마이크 임의로 킬 수 없음

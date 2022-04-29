@@ -3,6 +3,7 @@
 import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import { RootState } from '../configureStore';
+import { Participant } from './participants_copy';
 
 const SET_MAINUSER = 'mainUser_copy.SET_MAINUSER';
 const UPDATE_MAAINUSER_IS_MASTER = 'mainUser_copy.UPDATE_MAINUSER_IS_MASTER';
@@ -19,13 +20,14 @@ export interface InitialState
   nickname?: string;
   isMaster: boolean;
   mode: 'track' | 'sketch' | 'document' | 'screen' | 'character';
+  isLocal: boolean;
 }
 
 interface TrackType {
   videoTrack?: any;
 }
 interface SketchType {
-  attribute?: any
+  attribute?: any;
 }
 interface DocumentType {}
 interface ScreenType {}
@@ -40,7 +42,8 @@ const initialState: InitialState = {
   wehagoId: '',
   isMaster: false,
   mode: 'character',
-  name: ''
+  name: '',
+  isLocal: false
 };
 
 //#endregion
@@ -48,7 +51,6 @@ const initialState: InitialState = {
 //#region reducer
 
 function reducer(state = initialState, action: AnyAction) {
-  
   switch (action.type) {
     case SET_MAINUSER:
       return _setMainUser(state, action);
@@ -61,44 +63,54 @@ function reducer(state = initialState, action: AnyAction) {
   }
 }
 
-const setMainUser = (user: any): ThunkAction<void, RootState, unknown> => {
-  return dispatch => {
+const setMainUser = (
+  jitsiId: string
+): ThunkAction<void, RootState, unknown> => {
+  return (dispatch, getState) => {
+    const { list } = getState()['participants_copy'];
+    const { videoState } = getState()['conference'];
     dispatch({
       type: SET_MAINUSER,
-      user
+      jitsiId,
+      list,
+      videoState
     });
   };
 };
 
 const _setMainUser = (state: InitialState, action: AnyAction) => {
-  const { user } = action;
-
-  if (user === undefined) {
+  const { jitsiId, list, videoState } = action;
+  console.log('videoState : ', videoState);
+  const userList = list.slice(0);
+  if (jitsiId === undefined) {
     return {
       ...initialState
     };
   }
 
+  const index = userList.findIndex(
+    (info: Participant) => info.jitsiId === jitsiId
+  );
+  const mainUserInfo = userList[index];
   const mainUser = {
-    jitsiId: user.value,
-    videoTrack: user.attributes?.videoTrack,
-    name: user.attributes.userName,
-    wehagoId: user.attributes?.wehagoId,
-    nickname: user.attributes?.nickname
+    videoTrack: index === 0 ? videoState : mainUserInfo?.videoTrack,
+    name: mainUserInfo?.name,
+    wehagoId: mainUserInfo?.wehagoId,
+    nickname: mainUserInfo?.nickname,
+    avatar: mainUserInfo?.avatar,
+    isLocal: index === 0 ? true : false
   };
-
-  const avatar = user.attributes.avatar
-    ? JSON.parse(user.attributes.avatar).value
-    : 'jangok';
+  console.log('mainUser : ', mainUser);
 
   return {
     ...state,
-    jitsiId: mainUser.jitsiId,
+    jitsiId,
     wehagoId: mainUser.wehagoId,
     videoTrack: mainUser.videoTrack,
     name: mainUser.name,
     nickname: mainUser.nickname,
-    avatar
+    avatar: mainUser.avatar,
+    isLocal: mainUser.isLocal
   };
 };
 
@@ -141,7 +153,7 @@ const setMainView = (
 
 const _setMainView = (state: InitialState, action: AnyAction) => {
   const { mode } = action;
-  
+
   if (mode === 'track' || mode === 'character') {
     return {
       ...state,

@@ -30,10 +30,7 @@ const MainPresenter: React.FC<MainPresenterProps> = ({
   // SCREENSHARE
   onPressShareStop,
   // SKETCH
-  isMikeOn,
-  roomName,
-  onPressExit,
-  onPressMike
+  roomName
 }) => {
   return (
     <SafeAreaView
@@ -71,18 +68,12 @@ const MainPresenter: React.FC<MainPresenterProps> = ({
         )}
         {displayType === 'document' && (
           <DocumentShare
-            isMikeOn={isMikeOn}
             roomName={roomName}
-            onPressExit={onPressExit}
-            onPressMike={onPressMike}
           />
         )}
         {displayType === 'sketch' && (
           <Sketch
-            isMikeOn={isMikeOn}
             roomName={roomName}
-            onPressExit={onPressExit}
-            onPressMike={onPressMike}
           />
         )}
       </KeyboardAvoidingView>

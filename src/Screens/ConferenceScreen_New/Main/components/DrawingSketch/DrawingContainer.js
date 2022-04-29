@@ -5,7 +5,7 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import DrawingPresenter from './DrawingPresenter';
-import DrawingManager from '@utils/DrawingManager';
+import DrawingManager from '../../../conferenceUtil/DrawingManager';
 
 class DrawingContainer extends Component {
   constructor(props) {

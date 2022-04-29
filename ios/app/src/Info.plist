@@ -53,11 +53,11 @@
 	<false/>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
-  <key>LSApplicationQueriesSchemes</key>
-  <array>
-    <string>wehago</string>
-    <string>staffmanagment</string>
-  </array>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>wehago</string>
+		<string>staffmanagment</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -140,6 +140,8 @@
 		<string>armv7</string>
 	</array>
 	<key>UIRequiresFullScreen</key>
+	<true/>
+	<key>UIStatusBarHidden</key>
 	<true/>
 	<key>UIStatusBarStyle</key>
 	<string>UIStatusBarStyleLightContent</string>

@@ -20,9 +20,10 @@ const MainContainer: React.FC<MainContainerProps> = ({ roomName }) => {
     mirrorMode,
     masters,
     mainUser,
-    isScreenShare,
-    mikeState,
-    videoState
+    // isScreenShare,
+    room,
+    mainVideoTrack,
+    localVideoTrack
   } = useSelector((state: RootState) => ({
     mainUser: state.mainUser_copy,
     mainDisplayType: state.mainUser_copy.mode,
@@ -30,15 +31,15 @@ const MainContainer: React.FC<MainContainerProps> = ({ roomName }) => {
     topDisplayType: state.conference.topDisplayType,
     bottomDisplayType: state.conference.bottomDisplayType,
     mirrorMode: state.conference.mirrorMode,
-    isScreenShare: state.screenShare.isScreenShare,
-    mikeState: state.conference.mikeState,
-    videoState: state.conference.videoState
+    // isScreenShare: state.screenShare.isScreenShare,
+    room: state.conference.room,
+    mainVideoTrack: state.mainUser_copy.videoTrack,
+    localVideoTrack: state.conference.videoState
   }));
   //#endregion selector
 
-  const [isMikeOn, setIsMikeOn] = useState(!mikeState.isMuted());
-
-  // console.log('mainDisplayType : ', mainDisplayType);
+  // 메인컨테이너 말고 필요한 스케치나, 파일공유에서 처리
+  // const [isMikeOn, setIsMikeOn] = useState(!mikeState.isMuted());
 
   //#region dispatch
   const dispatch = useDispatch();
@@ -59,12 +60,71 @@ const MainContainer: React.FC<MainContainerProps> = ({ roomName }) => {
 
   const toggleScreenFlag = () =>
     dispatch(ScreenShareActions.toggleScreenFlag());
+
+  const setMainuser = (jitsiId: string) =>
+    dispatch(MainuserActions.setMainUser(jitsiId));
   //#endregion dispatch
 
-  useEffect(() => {
-    setMainUserMaster();
-    return () => {};
-  }, [masters]);
+  const [isVideoOn, setIsVideoOn] = useState(!mainVideoTrack.isMuted());
+
+    useEffect(() => {
+    setIsVideoOn(!mainVideoTrack.isMuted());
+    console.log('mainVideoTrack.track.muted : ', mainVideoTrack);
+    
+  }, [localVideoTrack.isMuted()])
+  // useEffect(() => {
+  //   console.log('mainVideoTrack.track.muted : ', mainVideoTrack.track.muted);
+  //   console.log('localVideoTrack.track.muted : ', localVideoTrack.track.muted);
+
+  //   console.log('mainUser.isLocal : ', mainUser.isLocal);
+
+  //   if (mainUser.isLocal) {
+  //     setIsVideoOn(!localVideoTrack.isMuted());
+  //   } else {
+  //     setIsVideoOn(!mainVideoTrack.isMuted());
+  //   }
+
+  //   // console.log('isVideoOn : ', isVideoOn);
+
+  //   if (isVideoOn) {
+  //     setMainView('track');
+      
+  //   } else {
+  //     setMainView('character');
+  //   }
+  // }, [localVideoTrack.track.muted]);
+
+
+  // useEffect(() => {
+  //   setMainUserMaster();
+  //   return () => {};
+  // }, [masters]);
+
+  // useEffect(() => {
+  //   // console.log('presenter : ', presenter);
+  //   if (presenter !== '') {
+  //     setMainuser(presenter);
+  //     setMainUserMaster();
+  //   } else {
+  //     if (!mainUser.isLocal) {
+  //       if (!mainUser.videoTrack.isMuted()) {
+  //         setMainView('character');
+  //       } else {
+  //         setMainView('track');
+  //       }
+  //     }
+  //   }
+  // }, [presenter]);
+
+  // useEffect(() => {
+  //   if (!mainUser.isLocal) {
+  //     if (!mainUser.videoTrack.isMuted()) {
+  //       setMainView('character');
+  //     } else {
+  //       setMainView('track');
+  //     }
+  //   }
+  // }, [mainUser.videoTrack.isMuted()]);
 
   const _handlePressShareStop = () => {
     toggleScreenFlag();
@@ -85,45 +145,48 @@ const MainContainer: React.FC<MainContainerProps> = ({ roomName }) => {
     }
   };
 
-  const _onPressExit = () => {
-    const MODE =
-      mainDisplayType === 'sketch' ? t('meet_sketch') : t('meet_share');
-    const title = t('alert_title_mode_exit').replace('[@mode@]', MODE);
-    const text = t('alert_text_quit')
-      .replace('[@mode@]', MODE)
-      .replace('[@mode@]', MODE);
-    const handleConfirm = () => {
-      // TODO: 스케치모드 종료하는 함수 추가
-      let isVideoOn = !videoState.isMuted();
-      if (isVideoOn) {
-        setMainView('track');
-      } else {
-        setMainView('character');
-      }
-    };
-    Alert.alert(title, text, [
-      {
-        text: t('alert_button_cancel'),
-        onPress: () => {}
-      },
-      {
-        text: t('alert_button_confirm'),
-        onPress: () => handleConfirm()
-      }
-    ]);
-  };
+  // const _handlePressExit = () => {
+  //   const MODE =
+  //     mainDisplayType === 'sketch' ? t('meet_sketch') : t('meet_share');
+  //   const title = t('alert_title_mode_exit').replace('[@mode@]', MODE);
+  //   const text = t('alert_text_quit')
+  //     .replace('[@mode@]', MODE)
+  //     .replace('[@mode@]', MODE);
+  //   const handleConfirm = () => {
+  //     // TODO: 스케치모드 종료하는 함수 추가
+  //     let isVideoOn = !videoState.isMuted();
+  //     room && room.sendMessage.setDrawingData();
+  //     room && room.sendMessage.setDrawingShareMode(false);
+  //     if (isVideoOn) {
+  //       setMainView('track');
+  //     } else {
+  //       setMainView('character');
+  //     }
+  //   };
+  //   Alert.alert(title, text, [
+  //     {
+  //       text: t('alert_button_cancel'),
+  //       onPress: () => {}
+  //     },
+  //     {
+  //       text: t('alert_button_confirm'),
+  //       onPress: () => handleConfirm()
+  //     }
+  //   ]);
+  // };
 
-  const _onPressMike = () => {
-    if (isMikeOn) {
-      mikeState.mute();
-    } else {
-      mikeState.unmute();
-    }
-    setIsMikeOn(!isMikeOn);
-  };
+  // Sketch, document 안에 넣어서 함수 제공
+  // const _handlePressMike = () => {
+  //   if (isMikeOn) {
+  //     mikeState.mute();
+  //   } else {
+  //     mikeState.unmute();
+  //   }
+  //   setIsMikeOn(!isMikeOn);
+  // };
 
   const userName = mainUser.nickname
-    ? `${mainUser.name} (${mainUser.nickname})`
+    ? `${mainUser.nickname}(${mainUser.name})`
     : `${mainUser.name}`;
 
   return (
@@ -141,11 +204,8 @@ const MainContainer: React.FC<MainContainerProps> = ({ roomName }) => {
       mirrorMode={mirrorMode}
       // ScreenShare
       onPressShareStop={_handlePressShareStop}
-      // Sketch
-      isMikeOn={isMikeOn}
+      // Sketch, Document
       roomName={roomName}
-      onPressExit={_onPressExit}
-      onPressMike={_onPressMike}
     />
   );
 };

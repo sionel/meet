@@ -15,11 +15,12 @@ const Sketch: React.FC<SketchProps> = ({
   onPressExit,
   onPressMike
 }) => {
-  const { orientation, presenter, attributes, room } = useSelector(
+  const { orientation, presenter, attributes, page, room } = useSelector(
     (state: RootState) => ({
       orientation: state.orientation.orientation,
       presenter: state.documentShare.presenter,
       attributes: state.documentShare.attributes,
+      page: state.documentShare.page,
       room: state.conference.room
     })
   );
@@ -103,7 +104,7 @@ const Sketch: React.FC<SketchProps> = ({
           <DrawingSketch
             viewWidth={viewSize.viewWidth}
             viewHeight={viewSize.viewHeight}
-            image={resources[0]}
+            image={resources[page]}
             // imgList={imgList}
             imageSize={imageSize}
             showTool={showTool}

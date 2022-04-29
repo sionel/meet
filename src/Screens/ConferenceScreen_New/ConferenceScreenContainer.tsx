@@ -20,7 +20,6 @@ import { actionCreators as ParticipantsActions } from '@redux/participants_copy'
 import { actionCreators as MainuserActions } from '@redux/mainUser_copy';
 import { actionCreators as MasterActions } from '@redux/master';
 import { actionCreators as ScreenShareActions } from '@redux/ScreenShare';
-import DrawingManager from './conferenceUtil/DrawingManager';
 
 type speakerInfo = {
   name: string;
@@ -47,7 +46,6 @@ const ConferenceScreenContainer: React.FC<
   } = props;
 
   let conference: Conference;
-  let drawing: DrawingManager;
 
   const [first, setFirst] = useState(true);
   const [isConnected, setIsConnected] = useState(false);
@@ -85,6 +83,9 @@ const ConferenceScreenContainer: React.FC<
   const setRoom = (conference: Conference) => {
     dispatch(ConferenceActions.setRoom(conference));
   };
+  // const setDrawing = (Drawing: any) => {
+  //   dispatch(ConferenceActions.setDrawing(Drawing));
+  // };
   const retriveMasters = (token: string) => {
     dispatch(MasterActions.checkMasterList(token));
   };
@@ -137,6 +138,7 @@ const ConferenceScreenContainer: React.FC<
 
       retriveMasters(params.roomToken);
       setRoom(conference);
+      // setDrawing(drawing);
       setIsConnected(true);
 
       eventEmitter.addListener(

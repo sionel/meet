@@ -111,9 +111,7 @@ const setUserTrack = (track: any): ThunkAction<void, RootState, unknown> => {
   };
 };
 const _setUserTrack = (state: InitialState, action: AnyAction) => {
-  const { track } = action;
-  console.log('track : ', track);
-  
+  const { track } = action;  
   const { list } = state;
   const trackType = track.getType();
   const index = state.list.findIndex(

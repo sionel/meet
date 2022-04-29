@@ -18,8 +18,8 @@ export const ConferenceHandler = (dispatch: any) => ({
   setUserTrack: (track: any) => {
     dispatch(participantsActions.setUserTrack(track));
   },
-  setMainUser: (user: any) => {
-    dispatch(mainuserActions.setMainUser(user));
+  setMainUser: (jitsiId: string) => {
+    dispatch(mainuserActions.setMainUser(jitsiId));
   },
   setMessage: (user: any, text: string, date: string) => {
     if (date) return;

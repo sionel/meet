@@ -71,7 +71,7 @@ export interface MainPresenterProps
   displayType: 'track' | 'sketch' | 'document' | 'screen' | 'character';
   videoType: string;
   onPressShareStop: () => void;
-  onPressExit: () => void;
+  // onPressExit: () => void;
 }
 
 export interface CharacterProps {
@@ -90,16 +90,16 @@ export interface RtcViewProps {
   onPressMainView: () => void;
 }
 export interface DocumentShareProps {
-  isMikeOn: boolean;
+  // isMikeOn: boolean;
   roomName: string;
-  onPressExit: () => void;
-  onPressMike: () => void;
+  // onPressExit: () => void;
+  // onPressMike: () => void;
 }
 export interface SketchProps {
-  isMikeOn: boolean;
+  // isMikeOn: boolean;
   roomName: string;
-  onPressExit: () => void;
-  onPressMike: () => void;
+//   onPressExit: () => void;
+//   onPressMike: () => void;
 }
 export interface ScreenShareProps {
   onPressShareStop: () => void;

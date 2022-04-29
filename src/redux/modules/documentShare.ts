@@ -81,8 +81,6 @@ function setSharingMode(
   page = 0,
   documentData = []
 ): ThunkAction<void, RootState, unknown> {
-  console.log('attributes : ', attributes);
-  
   return dispatch => {
     dispatch({
       type: SET_SHARING_MODE,

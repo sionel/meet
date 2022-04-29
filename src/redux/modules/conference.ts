@@ -36,6 +36,7 @@ export type messageType = {
 export interface state {
   roomId: string;
   room: Conference | undefined;
+  // drawing: any;
   // isConference: boolean;
   topDisplayType: 'FUNCTION' | 'NAME';
   bottomDisplayType: 'MENU' | 'CHATTING' | 'PARTICIPANTS' | 'NONE';
@@ -52,6 +53,7 @@ export interface state {
 const initialState: state = {
   roomId: '',
   room: undefined,
+  // drawing: undefined,
   // isConference: false,
   topDisplayType: 'FUNCTION',
   bottomDisplayType: 'NONE',

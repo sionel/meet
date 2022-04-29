@@ -37,10 +37,6 @@ const BottomContentContainer: React.FC<BottomContentContainerProps> = ({
   const dispatch = useDispatch();
   const setIsSpeakerOn = (isSpeakerOn: boolean) =>
     dispatch(ConferenceActions.setIsSpeakerOn(isSpeakerOn));
-
-  const setMainView = (
-    view: 'track' | 'sketch' | 'document' | 'screen' | 'character'
-  ) => dispatch(MainUserActions.setMainView(view));
   //#endregion
 
   useEffect(() => {
@@ -48,17 +44,12 @@ const BottomContentContainer: React.FC<BottomContentContainerProps> = ({
     return () => {};
   }, []);
 
-  useEffect(() => {
-    setIsVideoOn(!videoState.isMuted());
-  }, [videoState.track.muted])
 
   const _handlePressVideo = () => {
     if (isVideoOn) {
       videoState.mute();
-      setMainView('character');
     } else {
       videoState.unmute();
-      setMainView('track');
     }
     setIsVideoOn(!isVideoOn);
   };
