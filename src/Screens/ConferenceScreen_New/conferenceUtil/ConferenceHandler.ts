@@ -39,14 +39,14 @@ export const ConferenceHandler = (dispatch: any) => ({
   ) => {
     dispatch(
       documentShareActions.setSharingMode(
-        isDrawingShare ? { resources: '[]' } : false,
+        isDrawingShare ? true : false,
         isDrawingShare ? presenter : '',
         0, // page
         documentData //documentData
       )
     );
   },
-  changeDrawData: (drawData: any, selectResource: number) => {
+  changeDrawData: (drawData: any, selectResource: number) => {    
     dispatch(documentShareActions.setDrawData(drawData, selectResource));
   }
 });

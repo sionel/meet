@@ -8,6 +8,7 @@ import { Participant } from './participants_copy';
 const SET_MAINUSER = 'mainUser_copy.SET_MAINUSER';
 const UPDATE_MAAINUSER_IS_MASTER = 'mainUser_copy.UPDATE_MAINUSER_IS_MASTER';
 const SET_MAIN_VIEW = 'mainUser_copy.SET_MAIN_VIEW';
+const TOGGLE_MUTEVIDEO = 'mainUser_copy.TOGGLE_MUTEVIDEO';
 export interface InitialState
   extends TrackType,
     SketchType,
@@ -25,6 +26,7 @@ export interface InitialState
 
 interface TrackType {
   videoTrack?: any;
+  isMuteVideo?: boolean;
 }
 interface SketchType {
   attribute?: any;
@@ -58,6 +60,8 @@ function reducer(state = initialState, action: AnyAction) {
       return _updateMainUserIsMaster(state, action);
     case SET_MAIN_VIEW:
       return _setMainView(state, action);
+    case TOGGLE_MUTEVIDEO:
+      return _toggleMuteVideo(state, action);
     default:
       return state;
   }
@@ -80,7 +84,6 @@ const setMainUser = (
 
 const _setMainUser = (state: InitialState, action: AnyAction) => {
   const { jitsiId, list, videoState } = action;
-  console.log('videoState : ', videoState);
   const userList = list.slice(0);
   if (jitsiId === undefined) {
     return {
@@ -98,9 +101,9 @@ const _setMainUser = (state: InitialState, action: AnyAction) => {
     wehagoId: mainUserInfo?.wehagoId,
     nickname: mainUserInfo?.nickname,
     avatar: mainUserInfo?.avatar,
-    isLocal: index === 0 ? true : false
+    isLocal: index === 0 ? true : false,
+    isMuteVideo: index === 0 ? videoState.isMuted() : mainUserInfo?.videoTrack.isMuted(),
   };
-  console.log('mainUser : ', mainUser);
 
   return {
     ...state,
@@ -110,7 +113,8 @@ const _setMainUser = (state: InitialState, action: AnyAction) => {
     name: mainUser.name,
     nickname: mainUser.nickname,
     avatar: mainUser.avatar,
-    isLocal: mainUser.isLocal
+    isLocal: mainUser.isLocal,
+    isMuteVideo: mainUser.isMuteVideo
   };
 };
 
@@ -128,7 +132,10 @@ const _updateMainUserIsMaster = (state: InitialState, action: AnyAction) => {
   const { wehagoId } = state;
   const { masterList } = action;
   let masters = masterList.slice(0);
+  // console.log('wehagoId : ', wehagoId);
   let isMaster = masters.find((master: string) => master === wehagoId);
+  // console.log('isMaster : ', isMaster);
+  
   if (isMaster) {
     isMaster = true;
   } else {
@@ -177,10 +184,37 @@ const _setMainView = (state: InitialState, action: AnyAction) => {
   }
 };
 
+const toggleMuteVideo = (
+  isMute?: boolean
+): ThunkAction<void, RootState, unknown> => {
+  return dispatch =>
+    dispatch({
+      type: TOGGLE_MUTEVIDEO,
+      isMute
+    });
+};
+
+const _toggleMuteVideo = (state: InitialState, action: AnyAction) => {
+  const { isMuteVideo } = state;
+  const { isMute } = action;
+  if (isMute !== undefined) {
+    return {
+      ...state,
+      isMuteVideo: isMute
+    };
+  } else {
+    return {
+      ...state,
+      isMuteVideo: !isMuteVideo
+    };
+  }
+};
+
 export const actionCreators = {
   setMainUser,
   updateMainUserIsMaster,
-  setMainView
+  setMainView,
+  toggleMuteVideo
 };
 
 export default reducer;

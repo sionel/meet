@@ -1,44 +1,89 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  Alert
+} from 'react-native';
 import { SketchProps } from '@screens/ConferenceScreen_New/types';
 
 import icMicOff from '@assets/icons/mic_off.png';
 import icMicOn from '@assets/icons/mic_on.png';
 import buttonClose from '@oldassets/buttons/btnTnaviCloseNone_3x.png';
 import DrawingSketch from './DrawingSketch';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'src/redux/configureStore';
+import { actionCreators as MainUserActions } from '@redux/mainUser_copy';
+import { getT } from '@utils/translateManager';
 
 const Sketch: React.FC<SketchProps> = ({
-  isMikeOn,
-  roomName,
-  onPressExit,
-  onPressMike
+  roomName
 }) => {
-  const { orientation, presenter, attributes, page, room } = useSelector(
-    (state: RootState) => ({
-      orientation: state.orientation.orientation,
-      presenter: state.documentShare.presenter,
-      attributes: state.documentShare.attributes,
-      page: state.documentShare.page,
-      room: state.conference.room
-    })
-  );
+  const t = getT();
+  const {
+    orientation,
+    presenter,
+    // attributes,
+    page,
+    room,
+    mikeState,
+    // mainView
+  } = useSelector((state: RootState) => ({
+    orientation: state.orientation.orientation,
+    presenter: state.documentShare.presenter,
+    // attributes: state.documentShare.attributes,
+    page: state.documentShare.page,
+    room: state.conference.room,
+    mikeState: state.conference.mikeState,
+    // mainView: state.mainUser_copy.mode
+  }));  
 
+  const [isMikeOn, setIsMikeOn] = useState(!mikeState.isMuted());
   const [showTool, setShowTool] = useState(true);
   const [viewSize, setViewSize] = useState<{
     viewWidth: number;
     viewHeight: number;
   }>({ viewWidth: 0, viewHeight: 0 });
   const imageSize = [{ imgWidth: 4000, imgHeight: 3000 }];
-  const [resources, setResources] = useState<any[]>(
-    attributes ? JSON.parse(attributes?.resources) : []
-  );
 
-  const handleDrawingData = (data: any, page: number) => {
-    console.log('handleDrawingData');
+  const resources: any[] = [];
+
+  const handleDrawingData = (data: any, param_page: number) => {
     room && room.sendMessage.setDrawingData(data, page);
-  }
+  };
+
+  const _handlePressMike = () => {
+    if (isMikeOn) {
+      mikeState.mute();
+    } else {
+      mikeState.unmute();
+    }
+    setIsMikeOn(!isMikeOn);
+  };
+
+  const _handlePressExit = () => {
+    const MODE = t('meet_sketch');
+    const title = t('alert_title_mode_exit').replace('[@mode@]', MODE);
+    const text = t('alert_text_quit')
+      .replace('[@mode@]', MODE)
+      .replace('[@mode@]', MODE);
+    const handleConfirm = () => {
+      room && room.sendMessage.setDrawingData();
+      room && room.sendMessage.setDrawingShareMode(false);
+    };
+    Alert.alert(title, text, [
+      {
+        text: t('alert_button_cancel'),
+        onPress: () => {}
+      },
+      {
+        text: t('alert_button_confirm'),
+        onPress: () => handleConfirm()
+      }
+    ]);
+  };
 
   return (
     <View style={styles.backGroundView}>
@@ -52,7 +97,10 @@ const Sketch: React.FC<SketchProps> = ({
             paddingRight: 16
           }}
         >
-          <TouchableOpacity style={styles.exitButton} onPress={onPressExit}>
+          <TouchableOpacity
+            style={styles.exitButton}
+            onPress={_handlePressExit}
+          >
             <Image
               source={buttonClose}
               resizeMode={'cover'}
@@ -73,7 +121,7 @@ const Sketch: React.FC<SketchProps> = ({
               styles.micButton,
               isMikeOn && { backgroundColor: '#1c90fb' }
             ]}
-            onPress={onPressMike}
+            onPress={_handlePressMike}
           >
             <Image
               source={isMikeOn ? icMicOn : icMicOff}

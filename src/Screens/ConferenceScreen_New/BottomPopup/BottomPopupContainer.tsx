@@ -27,6 +27,7 @@ import { actionCreators as ParticipantsActions } from '@redux/participants_copy'
 import { actionCreators as MainUserActions } from '@redux/mainUser_copy';
 import { actionCreators as ConferenceActions } from '@redux/conference';
 import { actionCreators as ScreenShareAction } from '@redux/ScreenShare';
+import { actionCreators as DocumentActions } from '@redux/documentShare';
 import { isSuccess } from '@services/types';
 
 const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
@@ -89,15 +90,20 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
 
   //#region useDispatch
   const dispatch = useDispatch();
-  const updateParticipants = () =>
+  const updateParticipants = () => {
     dispatch(ParticipantsActions.updateParticipantsIsMaster());
-  const setMainView = (
-    mode: 'track' | 'sketch' | 'document' | 'screen' | 'character'
-  ) => dispatch(MainUserActions.setMainView(mode));
+  };
   const setBottomDisplayType = (
     displayType: 'MENU' | 'CHATTING' | 'PARTICIPANTS' | 'NONE'
-  ) => dispatch(ConferenceActions.setBottomDisplayType(displayType));
-  const toggleScreenFlag = () => dispatch(ScreenShareAction.toggleScreenFlag());
+  ) => {
+    dispatch(ConferenceActions.setBottomDisplayType(displayType));
+  };
+  const toggleScreenFlag = () => {
+    dispatch(ScreenShareAction.toggleScreenFlag());
+  };
+  const toggleDocumentListMode = () => {
+    dispatch(DocumentActions.setDocumentListMode());
+  }
   //#endregion
 
   //#region Method
@@ -105,16 +111,17 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
   const handlePressSketch = () => {
     setBottomDisplayType('NONE');
     room && room.sendMessage.setDrawingShareMode(true);
-    setMainView('sketch');
+    // setMainView('sketch');
   };
   const handlePressDocumentShare = () => {
     setBottomDisplayType('NONE');
-    setBeforeView(mainView);
-    if (mainView === 'document') {
-      setMainView(beforeView);
-    } else {
-      setMainView('document');
-    }
+    toggleDocumentListMode();
+    // setBeforeView(mainView);
+    // if (mainView === 'document') {
+    //   setMainView(beforeView);
+    // } else {
+    //   setMainView('document');
+    // }
   };
   const handlePressScreenShare = () => {
     setBottomDisplayType('NONE');

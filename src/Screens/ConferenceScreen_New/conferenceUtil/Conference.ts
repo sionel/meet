@@ -37,7 +37,7 @@ class Conference {
     await this._connection.connect(id, token);
     await new Promise((resolve, reject) => {
       this._room = this._createRoom(id);
-      this._sendMessage = new sendMessage(this._room);
+      this._sendMessage = new sendMessage(this._room, this._handler);
       const attributes = this._sendMessage.sendWehagoId(user);
       this._handler.setUserInfo({ value: this._room.myUserId(), attributes });
       this._handler.setMainUser(this._room.myUserId());

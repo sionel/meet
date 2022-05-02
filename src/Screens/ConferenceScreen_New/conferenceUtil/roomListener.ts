@@ -216,9 +216,6 @@ export function bindEvent(handler: any, room: any, resolve: any, reject: any) {
         isDrawingShare: 'true' | 'false';
       };
     }) => {
-      console.log('SET_DRAWING_IS_SHARE');
-      console.log('value : ', value);
-      
       const {
         value: userId,
         attributes: { isDrawingShare }
@@ -238,7 +235,6 @@ export function bindEvent(handler: any, room: any, resolve: any, reject: any) {
       attributes: { documentData, from, selectResource },
       value: userId
     } = value;
-
     // 데이터 변경자가 본인과 다를 경우 캔버스 그리기
     if (userId !== room.myUserId()) {
       handler.changeDrawData(JSON.parse(documentData), selectResource);

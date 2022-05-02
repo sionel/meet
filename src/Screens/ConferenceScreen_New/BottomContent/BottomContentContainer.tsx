@@ -19,13 +19,14 @@ const BottomContentContainer: React.FC<BottomContentContainerProps> = ({
   handleCloseConf
 }) => {
   //#region selector
-  const { videoState, mikeState, isSpeakerOn, isBtOn, mode } = useSelector(
+  const { videoState, mikeState, isSpeakerOn, isBtOn, mode, isLocal } = useSelector(
     (state: RootState) => ({
       videoState: state.conference.videoState,
       mikeState: state.conference.mikeState,
       isSpeakerOn: state.conference.isSpeakerOn,
       isBtOn: state.conference.isBtOn,
-      mode: state.mainUser_copy.mode
+      mode: state.mainUser_copy.mode,
+      isLocal: state.mainUser_copy.isLocal
     })
   );
   //#endregion
@@ -37,6 +38,7 @@ const BottomContentContainer: React.FC<BottomContentContainerProps> = ({
   const dispatch = useDispatch();
   const setIsSpeakerOn = (isSpeakerOn: boolean) =>
     dispatch(ConferenceActions.setIsSpeakerOn(isSpeakerOn));
+  const toggleMuteVideo = () => dispatch(MainUserActions.toggleMuteVideo());
   //#endregion
 
   useEffect(() => {
@@ -51,6 +53,7 @@ const BottomContentContainer: React.FC<BottomContentContainerProps> = ({
     } else {
       videoState.unmute();
     }
+    isLocal && toggleMuteVideo();
     setIsVideoOn(!isVideoOn);
   };
 

@@ -67,9 +67,11 @@ const REQUEST_ROOM_START_RECORDING =
 export default class sendMessage {
   private _room: any;
   private _drawingManager: any
-  constructor(room: any) {
+  private _handlers: any
+  constructor(room: any, handler: any) {
     this._room = room;
     this._drawingManager = new DrawingMananger();
+    this._handlers = handler;
   }
 
   sendWehagoId = (user: any) => {
@@ -107,7 +109,6 @@ export default class sendMessage {
   setDrawingData = (data: any, page: any) => {
     // 로그 기록이 있을 경우 참여자들에게 기록 전송
     const newData = this._drawingManager.handleConvertFormat('mobile', data);
-    console.log('newData : ', newData);
     
     this._room.sendCommandOnce(UPDATE_DOCUMENT_DATA, {
       value: this._room.myUserId(),
@@ -119,9 +120,9 @@ export default class sendMessage {
         from: 'mobile'
       }
     });
-    // this._handlers.CHANGED_DRAW_DATA(
-    //   JSON.parse(newData.attributes.documentData),
-    //   page
-    // );
+    this._handlers.changeDrawData(
+      JSON.parse(newData.attributes.documentData),
+      page
+    );
   };
 }
