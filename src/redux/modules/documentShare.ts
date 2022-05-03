@@ -10,10 +10,9 @@ const SET_SHARING_MODE = 'documentShare.SET_SHARING_MODE';
 const SET_DOCUMENT_PAGE = 'documentShare.SET_DOCUMENT_PAGE';
 const SET_DRAW_DATA = 'documentShare.SET_DRAW_DATA';
 
-// boolean 다 제거 해야할거 같음.
 //#endregion Action Types
 export interface state {
-  documentListMode: string[] | boolean;
+  documentListMode: boolean;
   attributes: any;
   presenter: string;
   page: number;
@@ -37,7 +36,7 @@ const initialState = {
 function reducer(state = initialState, action: AnyAction) {
   switch (action.type) {
     case SET_DOCUMENT_LIST_MODE:
-      return applySetDocumentListMode(state, action);
+      return applySetDocumentListMode(state);
     case SET_SHARING_MODE:
       return applySetSharingMode(state, action);
     case SET_DOCUMENT_PAGE:
@@ -53,22 +52,19 @@ function reducer(state = initialState, action: AnyAction) {
 
 //#region SET_DOCUMENT_LIST_MODE
 
-function setDocumentListMode(
-  documentListMode: string[]
-): ThunkAction<void, RootState, unknown> {
+function setDocumentListMode(): ThunkAction<void, RootState, unknown> {
   return dispatch => {
     dispatch({
-      type: SET_DOCUMENT_LIST_MODE,
-      documentListMode
+      type: SET_DOCUMENT_LIST_MODE
     });
   };
 }
 
-function applySetDocumentListMode(state: state, action: AnyAction) {
-  const { documentListMode } = action;
+function applySetDocumentListMode(state: state) {
+  const { documentListMode } = state;
   return {
     ...state,
-    documentListMode: documentListMode
+    documentListMode: !documentListMode
   };
 }
 
@@ -96,7 +92,6 @@ function applySetSharingMode(state: state, action: AnyAction) {
   const { attributes, presenter, page, documentData } = action;
   return {
     ...state,
-    documentListMode: false,
     attributes: attributes,
     presenter: presenter,
     page: page,

@@ -98,8 +98,8 @@ export interface DocumentShareProps {
 export interface SketchProps {
   // isMikeOn: boolean;
   roomName: string;
-//   onPressExit: () => void;
-//   onPressMike: () => void;
+  //   onPressExit: () => void;
+  //   onPressMike: () => void;
 }
 export interface ScreenShareProps {
   onPressShareStop: () => void;
@@ -129,7 +129,16 @@ export interface BottomContentPresenterProps {
   isVideoOn: boolean;
   isMikeOn: boolean;
   isSpeakerOn: boolean;
-  mode: "track" | "sketch" | "document" | "screen" | "character";
+  mode: 'track' | 'sketch' | 'document' | 'screen' | 'character';
+}
+
+export interface FileListContainerProps {}
+export interface FileListPresenterProps {
+  isLoading: string;
+  documentList: any[];
+  setSharingMode: (file: any) => void;
+  setConvertFileSize: (byte: any) => string;
+  getWedriveToken: () => void;
 }
 
 export interface MenuListProps {

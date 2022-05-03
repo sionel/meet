@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -12,10 +12,10 @@ import { SketchProps } from '@screens/ConferenceScreen_New/types';
 import icMicOff from '@assets/icons/mic_off.png';
 import icMicOn from '@assets/icons/mic_on.png';
 import buttonClose from '@oldassets/buttons/btnTnaviCloseNone_3x.png';
+
 import DrawingSketch from './DrawingSketch';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/configureStore';
-import { actionCreators as MainUserActions } from '@redux/mainUser_copy';
 import { getT } from '@utils/translateManager';
 
 const Sketch: React.FC<SketchProps> = ({

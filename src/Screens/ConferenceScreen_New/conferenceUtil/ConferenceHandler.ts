@@ -48,6 +48,21 @@ export const ConferenceHandler = (dispatch: any) => ({
   },
   changeDrawData: (drawData: any, selectResource: number) => {    
     dispatch(documentShareActions.setDrawData(drawData, selectResource));
+  },
+  changeDocumentShareMode: (
+    attributes = false,
+    presenter = '',
+    page = 0,
+    documentData = []
+  ) => {
+    dispatch(
+      documentShareActions.setSharingMode(
+        attributes,
+        presenter,
+        page,
+        documentData
+      )
+    );
   }
 });
 

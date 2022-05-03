@@ -1,14 +1,5 @@
 import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
-import {
-  Animated,
-  Dimensions,
-  Keyboard,
-  Linking,
-  Platform,
-  Share,
-  TextInput,
-  UIManager
-} from 'react-native';
+import { Keyboard, Linking, Platform, Share } from 'react-native';
 
 import { BottomPopupContainerProps } from '@screens/ConferenceScreen_New/types';
 import { ParticipantsTypes } from '@redux/participants';
@@ -64,9 +55,6 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
   //#region UseState
 
   // MenuList
-  const [beforeView, setBeforeView] = useState<
-    'track' | 'sketch' | 'document' | 'screen' | 'character'
-  >('character');
 
   // Chat
   const [myMessage, setMyMessage] = useState('');
@@ -103,7 +91,7 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
   };
   const toggleDocumentListMode = () => {
     dispatch(DocumentActions.setDocumentListMode());
-  }
+  };
   //#endregion
 
   //#region Method
@@ -116,12 +104,6 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
   const handlePressDocumentShare = () => {
     setBottomDisplayType('NONE');
     toggleDocumentListMode();
-    // setBeforeView(mainView);
-    // if (mainView === 'document') {
-    //   setMainView(beforeView);
-    // } else {
-    //   setMainView('document');
-    // }
   };
   const handlePressScreenShare = () => {
     setBottomDisplayType('NONE');

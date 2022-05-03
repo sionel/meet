@@ -92,7 +92,15 @@ const MainContainer: React.FC<MainContainerProps> = ({ roomName }) => {
   }, [isMuteVideo]);
 
   useEffect(() => {
-    documentListMode && setMainView('document');
+    if (documentListMode) {
+      setMainView('document');
+    } else {
+      if (isMuteVideo) {
+        setMainView('character');
+      } else {
+        setMainView('track');
+      }
+    }
   }, [documentListMode]);
 
   //TODO: 추후에 스플릿비디오에서 메인화면 지정시 카메라 ON/OFF 잘되는지 확인 !
@@ -116,7 +124,6 @@ const MainContainer: React.FC<MainContainerProps> = ({ roomName }) => {
       if (typeof attributes === 'boolean') {
         attributes && setMainView('sketch');
       }
-      
     } else {
       setMainUser(myId);
       if (isMuteVideo) {

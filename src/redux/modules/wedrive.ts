@@ -48,7 +48,7 @@ interface fileInfo {
 
 export interface state {
   status: string;
-  TokenID: string | null;
+  TokenID: string;
   storageList: any[];
   fileInfo: any[];
   temp: any[];
@@ -64,7 +64,7 @@ const setStatusLoading = (status: string) => {
 const setInitInfo = (initInfo?: Partial<state>) => {
   const data = initInfo || {
     status: 'INIT',
-    TokenID: null,
+    TokenID: '',
     storageList: [],
     fileInfo: [],
     temp: []
@@ -72,6 +72,15 @@ const setInitInfo = (initInfo?: Partial<state>) => {
   return {
     type: SET_INIT_INFO,
     initInfo: data
+  };
+};
+
+const applyInitInfo = (state: state, action: AnyAction) => {
+  const { initInfo } = action;
+  
+  return {
+    ...state,
+    ...initInfo
   };
 };
 
@@ -108,13 +117,7 @@ const applySetStatusLoading = (state: state, action: AnyAction) => {
   };
 };
 
-const applyInitInfo = (state: state, action: AnyAction) => {
-  const { initInfo } = action;
-  return {
-    ...state,
-    ...initInfo
-  };
-};
+
 
 const applyFileList = (state: state, action: AnyAction) => {
   const { storageList } = action;
@@ -157,7 +160,7 @@ const applyFileInfo = (state: state, action: AnyAction) => {
 
 const initialState = {
   status: 'INIT',
-  TokenID: null,
+  TokenID: '',
   storageList: [],
   fileInfo: [],
   temp: []
@@ -189,66 +192,12 @@ const reducer = (state = initialState, action: AnyAction) => {
 /**
  * initInfoRequest
  */
-const initInfoRequest = (
-  authData: any,
-  last_access_company_no: number
-): ThunkAction<void, RootState, unknown> => {
-  return async dispatch => {
-    await dispatch(setStatusLoading('LOADING'));
 
-    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, portalID } = authData;
-    const tokenResult = await WedriveApi.getToken(
-      AUTH_A_TOKEN,
-      AUTH_R_TOKEN,
-      HASH_KEY,
-      portalID
-    );
-
-    await dispatch(setStatusLoading('FINISH'));
-
-    if (tokenResult.resultList) {
-      const wedriveToken = {
-        TokenID: `${tokenResult.resultList[0][last_access_company_no].objectTokenId}@@${AUTH_A_TOKEN}`
-      };
-
-      return dispatch(setInitInfo(wedriveToken));
-    } else {
-      await dispatch(setStatusLoading('FINISH'));
-      return tokenResult;
-    }
-  };
-};
 
 /**
  * getFileListRequest
- */
-const getFileListRequest = (
-  authData: any,
-  TokenID: string
-): ThunkAction<void, RootState, unknown> => {
-  return async dispatch => {
-    await dispatch(setStatusLoading('LOADING'));
-    const fileListResult = await WedriveApi.getList(authData, TokenID);
+//  */
 
-    dispatch(setStatusLoading('FINISH'));
-
-    if (fileListResult.resultList) {
-      // 이름 순으로 정렬
-      const sortedList = await fileListResult.resultList.sort(
-        (a: any, b: any) => {
-          if (a.directory) return -1;
-          if (b.directory) return 1;
-          return a.fileName > b.fileName ? 1 : -1;
-        }
-      );
-
-      return dispatch(setFileList(sortedList));
-    } else {
-      await dispatch(setStatusLoading('FINISH'));
-      return fileListResult;
-    }
-  };
-};
 
 /**
  * getFileInfoRequest
@@ -262,7 +211,8 @@ const getFileInfoRequest = (
     const fileListResult = await WedriveApi.getFileInfo(authData, fileData);
 
     dispatch(setStatusLoading('FINISH'));
-
+    console.log('fileListResult : ', fileListResult);
+    
     if (fileListResult.resultList) {
       return dispatch(setFileInfo(fileListResult.resultList));
     } else {
@@ -319,8 +269,8 @@ const cancelLoadDocument = (
 
 export const actionCreators = {
   setInitInfo,
-  initInfoRequest,
-  getFileListRequest,
+  setStatusLoading,
+  setFileList,
   getFileInfoRequest,
   getDirectoryInfoRequest,
   cancelLoadDocument
