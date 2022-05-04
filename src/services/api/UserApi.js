@@ -185,23 +185,16 @@ const check = async (a_token, r_token, cno, HASH_KEY) => {
       headers: headers2
     });
     const responseJson2 = await response2.json();
-    const nickname =
-      responseJson2 &&
-      responseJson2.resultData &&
-      responseJson2.resultData[0] &&
-      responseJson2.resultData[0].nickname;
-    const rankname = 
-    responseJson2 &&
-    responseJson2.resultData &&
-    responseJson2.resultData[0] &&
-    responseJson2.resultData[0].rank_name;
-
-
+    const nickname = responseJson2?.resultData[0]?.nickname;
+    const rankname = responseJson2?.resultData[0]?.rank_name;
+    const isFreelancer = responseJson2?.resultData[0]?.company_class === '3';
+    debugger
     return {
       status: response.status,
       ...responseJson,
       nickname,
-      rankname
+      rankname,
+      isFreelancer
     };
   } catch (errors) {
     console.warn('errors', errors);

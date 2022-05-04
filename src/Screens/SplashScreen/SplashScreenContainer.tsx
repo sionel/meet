@@ -366,6 +366,7 @@ const SplashScreenContainer = ({
     // 서비스 배포여부 조회
 
     const isDeploy = await ServiceCheckApi.serviceCheck(auth);
+    debugger
     // const isDeploy = isDeployWehagomeet;
     // 서비스 구매여부 조회
     // const isDeployWebrtc = await ServiceCheckApi.serviceCheck(
@@ -428,6 +429,7 @@ const SplashScreenContainer = ({
         member_type: checkResult.resultData.member_type, // 0: 일반회원, 1: 개인회원
         nickname: checkResult.nickname,
         rankname: checkResult.rankname,
+        isFreelancer: checkResult.isFreelancer,
         membership_code: checkResult.resultData.employee_list[0].membership_code
       };
 

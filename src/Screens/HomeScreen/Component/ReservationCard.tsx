@@ -53,6 +53,7 @@ export default function ConferenceBox(props: ReservationCardProps) {
           </Text>
         </View>
       </View>
+
       <TouchableOpacity
         style={styles.cardRightView}
         onPress={() => reservationMoreClick(roomId)}
@@ -125,7 +126,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     paddingLeft: 20,
     paddingRight: 14,
-    paddingVertical: 20,
+    paddingVertical: 10,
     flexDirection: 'row'
   },
   cardLeftContents: {
@@ -133,12 +134,14 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     justifyContent: 'center',
     marginRight: 10
+    // backgroundColor:'#faa'
   },
   cardTitleView: {
     alignItems: 'center',
     flexDirection: 'row',
     width: '90%',
-    marginBottom: 6
+    // marginBottom: 6,
+    flex: 1
   },
   cardTitle: {
     fontSize: 15,

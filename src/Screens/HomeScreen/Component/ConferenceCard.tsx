@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: '#fff',
-    width: 89,
+    // width: 89,
     height: 20,
     borderRadius: 45,
     paddingHorizontal: 5

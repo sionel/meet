@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     paddingLeft: 20,
     paddingRight: 14,
-    paddingVertical: 20,
+    paddingVertical: 10,
     flexDirection: 'row'
   },
   cardLeftContents: {
@@ -120,11 +120,11 @@ const styles = StyleSheet.create({
     marginRight: 10
   },
   cardTitleView: {
-    // flex: 1,
+    flex: 1,
     alignItems: 'center',
     flexDirection: 'row',
     width: '90%',
-    marginBottom: 6
+    // marginBottom: 6
   },
   cardTitle: {
     fontSize: 15,

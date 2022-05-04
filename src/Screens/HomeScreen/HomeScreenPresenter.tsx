@@ -359,6 +359,7 @@ const HomeScreenPresenter = (props: presenterProps) => {
               )}
             </View>
           </View>
+          
           <FlatList
             numColumns={isTablet ? 2 : 1}
             keyExtractor={(item, index) => index.toString()}

@@ -37,6 +37,7 @@ interface propsTypes {
     profile_url: any;
     user_default_email: any;
     companyName: any;
+    isFreelancer: boolean;
   };
   onCompanyChange: () => void;
   width: number;
@@ -56,8 +57,8 @@ export default function ConfigurationScreenPresenter(props: propsTypes) {
 
   const t = getT();
   const userName = authInfo?.user_name;
-  const rankName = authInfo?.rankname; 
-
+  const rankName = authInfo?.rankname;
+  debugger;
   return (
     // <Fragment>
     //   <SafeAreaView style={{ flex: 0, backgroundColor: '#1c90fb' }} />
@@ -89,9 +90,9 @@ export default function ConfigurationScreenPresenter(props: propsTypes) {
           <Text style={styles.userName}>
             {userName ? userName + ' ' + rankName : ''}
           </Text>
-          <Text style={styles.userEmail}>
-            {authInfo.user_default_email ? authInfo.user_default_email : ''}
-          </Text>
+          {!authInfo.isFreelancer && authInfo.user_default_email && (
+            <Text style={styles.userEmail}>{authInfo.user_default_email}</Text>
+          )}
         </View>
       </View>
       <View

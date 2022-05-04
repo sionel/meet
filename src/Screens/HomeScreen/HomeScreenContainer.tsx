@@ -841,9 +841,13 @@ export default function HomeScreenContainer(props: any) {
         navigation.navigate('DirectCreateConference');
       }
     };
+    const contentList = [];
+    contentList.push(chat);
+    !auth.isFreelancer && contentList.push(meet);
+    
     setBottomPopup({
       onClickOutside: _onClickOutside,
-      contentList: [chat, meet],
+      contentList,
       show: true,
       title: t('renewal.main_create_videoconference')
     });
