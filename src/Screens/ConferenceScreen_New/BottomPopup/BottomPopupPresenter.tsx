@@ -7,6 +7,7 @@ import {
   MenuList,
   Participants
 } from './components';
+import FileList from './components/FileList';
 
 const BottomPopupPresenter: React.FC<BottomPopupPresenterProps> = ({
   // getUserName,
@@ -107,6 +108,9 @@ const BottomPopupPresenter: React.FC<BottomPopupPresenterProps> = ({
           onPressLink={onPressLink}
           onPressCode={onPressCode}
         />
+      )}
+      {bottomDisplayType === 'FILELIST' && (
+        <FileList/>
       )}
     </SafeAreaView>
   );

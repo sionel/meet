@@ -1,29 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, StyleSheet } from 'react-native';
+import { Alert, Animated } from 'react-native';
 import FileListPresenter from './FileListPresenter';
 
-import { actionCreators as WedriveActions } from '@redux/wedrive';
-import { actionCreators as DocumentShareActions } from '@redux/documentShare';
+import { actionCreators as ConferenceActions } from '@redux/conference';
 
 import { FileListContainerProps } from '@screens/ConferenceScreen_New/types';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'src/redux/configureStore';
-import { getT } from '@utils/translateManager';
 import { WedriveApi } from '@services/index';
+import { useTranslation } from 'react-i18next';
+import alert from '@redux/alert';
 
 const FileListContainer: React.FC<FileListContainerProps> = ({}) => {
-  const t = getT();
-
-  const { auth, TokenID, fileInfo, room, isLoading, wedriveList } = useSelector(
-    (state: RootState) => ({
-      auth: state.user.auth,
-      TokenID: state.wedrive.TokenID,
-      fileInfo: state.wedrive.fileInfo,
-      room: state.conference.room,
-      isLoading: state.wedrive.status,
-      wedriveList: state.wedrive.storageList
-    })
-  );
+  const { t } = useTranslation();
+  const { auth, room } = useSelector((state: RootState) => ({
+    auth: state.user.auth,
+    room: state.conference.room
+  }));
 
   const {
     AUTH_A_TOKEN,
@@ -33,45 +26,63 @@ const FileListContainer: React.FC<FileListContainerProps> = ({}) => {
     last_access_company_no
   } = auth;
 
-  let pk: any[] = [];
+  const [loading, setLoading] = useState('INIT');
+  const [wedriveList, setWedriveList] = useState<any[]>([]);
+  const [token, setToken] = useState('')
+  const rotate = new Animated.Value(0);
+  const spin = rotate.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '360deg']
+  });
 
+  let pk: any[] = [];
+  let TokenID = '';
+  
   //#region  dispatch
   const dispatch = useDispatch();
 
-  // const getFileListRequest = (authData: any, initInfo: any) => {
-  //   dispatch(WedriveActions.getFileListRequest(authData, initInfo));
-  // };
-
-  const setDocumentListMode = () => {
-    dispatch(DocumentShareActions.setDocumentListMode());
-  };
-
-  const getDirectoryInfoRequest = (authData: any, directory: any) => {
-    dispatch(WedriveActions.getDirectoryInfoRequest(authData, directory));
-  };
-
-  const getFileInfoRequest = (authData: any, fileInfo: any) => {
-    dispatch(WedriveActions.getFileInfoRequest(authData, fileInfo));
-  };
-
-  const setStatusLoading = (status: string) => {
-    dispatch(WedriveActions.setStatusLoading(status));
-  };
-
-  const setInitInfo = (info: any) => {
-    dispatch(WedriveActions.setInitInfo(info));
-  };
-
-  const setFileList = (list: any[]) => {
-    dispatch(WedriveActions.setFileList(list));
+  
+  const setBottomDisplayType = () => {
+    dispatch(ConferenceActions.setBottomDisplayType('NONE'));
   };
   //#endregion
+  
+  useEffect(() => {
+    init()
+  }, []);
+  
+  const init = async () => {
+    setLoading('LOADING');
+    
+    try {
+      const token = await _getWedriveTokenId();
+      setToken(token)
+      const fileList = await _getFileList(token)
+      setWedriveList(fileList)
+    } catch (error:string) {
+      Alert.alert(error)
+    }
+    
+    setLoading('FINISH');
+    
+  }
+
+  const handleRefreshList = () => {
+    const fileList = _getFileList(token)
+    setWedriveList(fileList)
+  }
 
   const getFileList = async () => {
-    await _handleGetWedriveToken();
+    await _handleGetWedriveTokenId();
+    if (TokenID) {
+      _handleGetFileList();
+    } else {
+      Alert.alert(t('alert_title_error'), t('alert_text_fail_user_info'));
+      setBottomDisplayType();
+    }
   };
 
-  const _handleGetWedriveToken = async () => {
+  const _handleGetWedriveTokenId = async () => {
     const authData = {
       AUTH_A_TOKEN: AUTH_A_TOKEN,
       AUTH_R_TOKEN: AUTH_R_TOKEN,
@@ -79,36 +90,66 @@ const FileListContainer: React.FC<FileListContainerProps> = ({}) => {
       portalID: `${portal_id}`,
       last_access_company_no
     };
-    setStatusLoading('LOADING');
+
+    setLoading('LOADING');
+
     const tokenResult = await WedriveApi.getToken(
       authData.AUTH_A_TOKEN,
       authData.AUTH_R_TOKEN,
       authData.HASH_KEY,
       authData.portalID
-    );
-    setStatusLoading('FINISH');
+    ); // 매개변수 하나로
 
-    const wedriveToken = {
-      TokenID: `${tokenResult.resultList[0][last_access_company_no].objectTokenId}@@${AUTH_A_TOKEN}`
-    };
-    setInitInfo(wedriveToken);
+    setLoading('FINISH');
 
-    if (!TokenID) {
-      Alert.alert(t('alert_title_error'), t('alert_text_fail_user_info'));
-      setDocumentListMode();
-      return;
+    const tokenID = `${tokenResult.resultList[0][last_access_company_no].objectTokenId}@@${AUTH_A_TOKEN}`;
+    // TokenID = tokenID;
+    if (!tokenID) {
+      throw '토큰이 없습니다, 정상이 아닙낟'
     } else {
-      await _handleGetFileList(authData);
+      return tokenID;
     }
+    //TODO: 일단 현재 구조로 봤을때 파일정보를 관해서 리덕스에 저장할 필요가 없어보임.
+    // 추후에 해당 정보를 미리 저장해놓기 위해 whiteList 넣을 필요가 있다면 그때 로직 수정
+
+    // setInitInfo(wedriveToken);
   };
 
-  const _handleGetFileList = async (authData: any) => {
+  const _handleGetFileList = async () => {
     // wedrive file list 가져오기
+    const authData = {
+      AUTH_A_TOKEN: AUTH_A_TOKEN,
+      AUTH_R_TOKEN: AUTH_R_TOKEN,
+      HASH_KEY,
+      portalID: `${portal_id}`,
+      last_access_company_no
+    };
 
-    setStatusLoading('LOADING');
+    setLoading('LOADING');
     const fileListResult = await WedriveApi.getList(authData, TokenID);
+    setLoading('FINISH');
 
-    setStatusLoading('FINISH');
+    // 이름 순으로 정렬
+    const sortedList = await fileListResult.resultList.sort(
+      (a: any, b: any) => {
+        if (a.directory) return -1;
+        if (b.directory) return 1;
+        return a.fileName > b.fileName ? 1 : -1;
+      }
+    );
+  const _getFileList = async (token:string) => {
+    // wedrive file list 가져오기
+    const authData = {
+      AUTH_A_TOKEN: AUTH_A_TOKEN,
+      AUTH_R_TOKEN: AUTH_R_TOKEN,
+      HASH_KEY,
+      portalID: `${portal_id}`,
+      last_access_company_no
+    };
+
+    setLoading('LOADING');
+    const fileListResult = await WedriveApi.getList(authData, TokenID);
+    setLoading('FINISH');
 
     // 이름 순으로 정렬
     const sortedList = await fileListResult.resultList.sort(
@@ -119,11 +160,13 @@ const FileListContainer: React.FC<FileListContainerProps> = ({}) => {
       }
     );
 
-    setFileList(sortedList);
+    setWedriveList(sortedList);
 
-    if (wedriveList.length === 0) {
-      Alert.alert(t('alert_title_error'), t('alert_text_fail_file_list'));
-      return;
+    if (sortedList.length === 0) {
+      // Alert.alert(t('alert_title_error'), t('alert_text_fail_file_list'));
+      throw  t('alert_text_fail_file_list')
+    }else {
+      return sortedList
     }
   };
 
@@ -142,14 +185,44 @@ const FileListContainer: React.FC<FileListContainerProps> = ({}) => {
     }
 
     const directoryInfo = {
-      TokenID: TokenID,
+      TokenID,
       FileUniqueKey: preFolder || directory.fileUniqueKey,
       fileUniqueKey: preFolder || directory.fileUniqueKey,
       parentFileUniqueKey: directory.parentFileUniqueKey,
       path: portal_id + '@'
     };
 
-    await getDirectoryInfoRequest(authData, directoryInfo);
+    setLoading('LOADING');
+
+    const fileListResult = await WedriveApi.getDirectoryInfo(
+      authData,
+      directoryInfo
+    );
+
+    setLoading('FINISH');
+
+    const sortedList = await fileListResult.resultList.sort(
+      (a: any, b: any) => {
+        if (a.directory) return -1;
+        if (b.directory) return 1;
+        return a.fileName > b.fileName ? 1 : -1;
+      }
+    );
+
+    let newList = sortedList.list.slice(0);
+
+    directory.fileUniqueKey !== directory.path &&
+      newList.unshift({
+        directory: true,
+        fileName: '이전폴더',
+        type: 'preFolder',
+        fileUniqueKey: directory.parentFileUniqueKey,
+        parentFileUniqueKey: directory.path,
+        path: directory.parentFileUniqueKey,
+        preFolder: true
+      });
+
+    setWedriveList(newList);
   };
 
   const _handleConvertFileSize = (byte: any) => {
@@ -238,28 +311,33 @@ const FileListContainer: React.FC<FileListContainerProps> = ({}) => {
       BucketName: 'undefined',
       isWedrive: 'true',
       isFullPreview: 'false',
-      TokenID: TokenID,
+      TokenID,
       method: method
     };
 
-    await getFileInfoRequest(authData, fileInfo);
+    setLoading('FILE_LOADING');
+    const fileListResult = await WedriveApi.getFileInfo(authData, fileInfo);
+    setLoading('FINISH');
 
-    if (wedriveList.length > 0) {
-      _handleChangeSharingMode(file.fileName);
+    // setFileInfo(fileListResult.resultList);
+
+    if (fileListResult.resultList.length > 0) {
+      _handleChangeSharingMode(fileListResult.resultList, file.fileName);
       return;
     }
 
-    // if (fileInfoResponse.resultCode === 'E2021') {
-    //   Alert.alert(t('alert_title_conversion'),t('alert_text_wait'));
-    //   return;
-    // }
+    if (fileListResult.resultCode === 'E2021') {
+      Alert.alert(t('alert_title_conversion'), t('alert_text_wait'));
+      return;
+    }
 
     Alert.alert(t('alert_title_loading_fail'), t('alert_text_wait'));
     return;
   };
 
-  const _handleChangeSharingMode = (fileName: any) => {
+  const _handleChangeSharingMode = (fileInfo: any, fileName: any) => {
     let resources = [];
+
     if (typeof fileInfo[0] === 'string') {
       // 이미지 리소스가 1개 일 때는 배열로 안줌
       resources = fileInfo;
@@ -276,23 +354,28 @@ const FileListContainer: React.FC<FileListContainerProps> = ({}) => {
       owner: portal_id,
       resources: JSON.stringify(resources)
     });
+    setBottomDisplayType();
   };
 
-  useEffect(() => {
-    getFileList();
-  }, []);
+  const getExtentionType = (fileName: any) => {
+    const ext = fileName.split('.').pop().toLowerCase();
+    return ext;
+  };
+
+
 
   return (
     <FileListPresenter
-      isLoading={isLoading}
+      isLoading={loading}
       documentList={wedriveList}
+      spin={spin}
       setSharingMode={_handleSharingMode}
       setConvertFileSize={_handleConvertFileSize}
-      getWedriveToken={_handleGetWedriveToken}
+      getWedriveToken={_handleGetWedriveTokenId}
+      getExtentionType={getExtentionType}
+      t={t}
     />
   );
 };
 
 export default FileListContainer;
-
-const styles = StyleSheet.create({});

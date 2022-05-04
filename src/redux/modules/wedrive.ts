@@ -193,65 +193,17 @@ const reducer = (state = initialState, action: AnyAction) => {
  * initInfoRequest
  */
 
-
 /**
  * getFileListRequest
 //  */
 
-
 /**
  * getFileInfoRequest
  */
-const getFileInfoRequest = (
-  authData: any,
-  fileData: any
-): ThunkAction<void, RootState, unknown> => {
-  return async dispatch => {
-    await dispatch(setStatusLoading('FILE_LOADING'));
-    const fileListResult = await WedriveApi.getFileInfo(authData, fileData);
-
-    dispatch(setStatusLoading('FINISH'));
-    console.log('fileListResult : ', fileListResult);
-    
-    if (fileListResult.resultList) {
-      return dispatch(setFileInfo(fileListResult.resultList));
-    } else {
-      return fileListResult;
-    }
-  };
-};
 
 /**
  * getDirectoryInfoRequest
  */
-const getDirectoryInfoRequest = (
-  authData: any,
-  directory: any
-): ThunkAction<void, RootState, unknown> => {
-  return async dispatch => {
-    await dispatch(setStatusLoading('LOADING'));
-
-    const fileListResult = await WedriveApi.getDirectoryInfo(
-      authData,
-      directory
-    );
-
-    await dispatch(setStatusLoading('FINISH'));
-
-    if (fileListResult.resultList) {
-      const sortedList = await fileListResult.resultList.sort(
-        (a: any, b: any) => {
-          if (a.directory) return -1;
-          if (b.directory) return 1;
-          return a.fileName > b.fileName ? 1 : -1;
-        }
-      );
-      return dispatch(updateFileList(sortedList, directory));
-    } else {
-      return fileListResult;
-    }
-  };
-};
 
 const cancelLoadDocument = (
   requestName: any
@@ -271,8 +223,8 @@ export const actionCreators = {
   setInitInfo,
   setStatusLoading,
   setFileList,
-  getFileInfoRequest,
-  getDirectoryInfoRequest,
+  updateFileList,
+  setFileInfo,
   cancelLoadDocument
 };
 

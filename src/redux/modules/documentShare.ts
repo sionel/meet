@@ -5,14 +5,14 @@ import { ThunkAction } from 'redux-thunk';
 import { RootState } from '../configureStore';
 
 // 문서공유 모드
-const SET_DOCUMENT_LIST_MODE = 'documentShare.SET_DOCUMENT_LIST_MODE';
+// const SET_DOCUMENT_LIST_MODE = 'documentShare.SET_DOCUMENT_LIST_MODE';
 const SET_SHARING_MODE = 'documentShare.SET_SHARING_MODE';
 const SET_DOCUMENT_PAGE = 'documentShare.SET_DOCUMENT_PAGE';
 const SET_DRAW_DATA = 'documentShare.SET_DRAW_DATA';
 
 //#endregion Action Types
 export interface state {
-  documentListMode: boolean;
+  // documentListMode: boolean;
   attributes: any;
   presenter: string;
   page: number;
@@ -22,7 +22,7 @@ export interface state {
 //#region Initial State
 
 const initialState = {
-  documentListMode: false,
+  // documentListMode: false,
   attributes: [],
   presenter: '',
   page: 0,
@@ -35,8 +35,8 @@ const initialState = {
 
 function reducer(state = initialState, action: AnyAction) {
   switch (action.type) {
-    case SET_DOCUMENT_LIST_MODE:
-      return applySetDocumentListMode(state);
+    // case SET_DOCUMENT_LIST_MODE:
+    //   return applySetDocumentListMode(state);
     case SET_SHARING_MODE:
       return applySetSharingMode(state, action);
     case SET_DOCUMENT_PAGE:
@@ -52,21 +52,21 @@ function reducer(state = initialState, action: AnyAction) {
 
 //#region SET_DOCUMENT_LIST_MODE
 
-function setDocumentListMode(): ThunkAction<void, RootState, unknown> {
-  return dispatch => {
-    dispatch({
-      type: SET_DOCUMENT_LIST_MODE
-    });
-  };
-}
+// function setDocumentListMode(): ThunkAction<void, RootState, unknown> {
+//   return dispatch => {
+//     dispatch({
+//       type: SET_DOCUMENT_LIST_MODE
+//     });
+//   };
+// }
 
-function applySetDocumentListMode(state: state) {
-  const { documentListMode } = state;
-  return {
-    ...state,
-    documentListMode: !documentListMode
-  };
-}
+// function applySetDocumentListMode(state: state) {
+//   const { documentListMode } = state;
+//   return {
+//     ...state,
+//     documentListMode: !documentListMode
+//   };
+// }
 
 //#endregion
 
@@ -153,7 +153,7 @@ function applysetDrawData(state: state, action: AnyAction) {
 //#endregion
 
 export const actionCreators = {
-  setDocumentListMode,
+  // setDocumentListMode,
   setSharingMode,
   setDocumentPage,
   setDrawData

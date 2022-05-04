@@ -82,15 +82,12 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
     dispatch(ParticipantsActions.updateParticipantsIsMaster());
   };
   const setBottomDisplayType = (
-    displayType: 'MENU' | 'CHATTING' | 'PARTICIPANTS' | 'NONE'
+    displayType: 'MENU' | 'CHATTING' | 'PARTICIPANTS' | 'FILELIST' | 'NONE'
   ) => {
     dispatch(ConferenceActions.setBottomDisplayType(displayType));
   };
   const toggleScreenFlag = () => {
     dispatch(ScreenShareAction.toggleScreenFlag());
-  };
-  const toggleDocumentListMode = () => {
-    dispatch(DocumentActions.setDocumentListMode());
   };
   //#endregion
 
@@ -102,8 +99,8 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
     // setMainView('sketch');
   };
   const handlePressDocumentShare = () => {
-    setBottomDisplayType('NONE');
-    toggleDocumentListMode();
+    setBottomDisplayType('FILELIST');
+    // toggleDocumentListMode();
   };
   const handlePressScreenShare = () => {
     setBottomDisplayType('NONE');

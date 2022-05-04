@@ -2,12 +2,14 @@ import { MeetParamList } from '@navigations/RootNavigation';
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import { messageType } from '@redux/conference';
 import { Participant } from '@redux/participants_copy';
+import i18next from 'i18next';
 import { MutableRefObject } from 'react';
 import {
   Animated,
   NativeScrollEvent,
   NativeSyntheticEvent
 } from 'react-native';
+import { OrientationType } from 'react-native-orientation-locker';
 
 type ConferenceScreenNavigationProps = StackNavigationProp<
   MeetParamList,
@@ -61,17 +63,12 @@ export interface MainContainerProps {
 export interface MainPresenterProps
   extends CharacterProps,
     RtcViewProps,
-    DocumentShareProps,
+    DocumentShareContainerProps,
     SketchProps,
     ScreenShareProps {
-  // isScreenShare: boolean;
-  // isMuteVideo: boolean;
-  // presenter: any;
-  // isStream: boolean;
   displayType: 'track' | 'sketch' | 'document' | 'screen' | 'character';
   videoType: string;
   onPressShareStop: () => void;
-  // onPressExit: () => void;
 }
 
 export interface CharacterProps {
@@ -89,17 +86,21 @@ export interface RtcViewProps {
   mirrorMode: boolean;
   onPressMainView: () => void;
 }
-export interface DocumentShareProps {
-  // isMikeOn: boolean;
-  roomName: string;
-  // onPressExit: () => void;
-  // onPressMike: () => void;
+export interface DocumentShareContainerProps {
+}
+export interface DocumentSharePresenterProps extends ShareHeader {
+  fileName: string;
+  imageSize: any[];
+  orientation: string;
+  presenter: string;
+  viewSize: { viewWidth: number; viewHeight: number };
+  setViewSize: any;
+  setShowTool: any;
+  handleDrawingData: (data: any, page: number) => void;
+  _handleChangeImageSize: (value: any, index: number) => void;
 }
 export interface SketchProps {
-  // isMikeOn: boolean;
   roomName: string;
-  //   onPressExit: () => void;
-  //   onPressMike: () => void;
 }
 export interface ScreenShareProps {
   onPressShareStop: () => void;
@@ -114,7 +115,7 @@ export interface BottomPopupPresenterProps
   extends MenuListProps,
     ChattingProps,
     ParticipantsProps {
-  bottomDisplayType: 'MENU' | 'CHATTING' | 'PARTICIPANTS' | 'NONE';
+  bottomDisplayType: 'MENU' | 'CHATTING' | 'PARTICIPANTS' | 'FILELIST' | 'NONE';
 }
 
 export interface BottomContentContainerProps {
@@ -133,12 +134,12 @@ export interface BottomContentPresenterProps {
 }
 
 export interface FileListContainerProps {}
-export interface FileListPresenterProps {
+export interface FileListPresenterProps extends FileCardProps {
   isLoading: string;
   documentList: any[];
-  setSharingMode: (file: any) => void;
-  setConvertFileSize: (byte: any) => string;
+  spin: any;
   getWedriveToken: () => void;
+  t: any;
 }
 
 export interface MenuListProps {
@@ -197,10 +198,32 @@ export interface ProfileProps {
   user: any;
 }
 
+export interface ShareHeader {
+  showTool: boolean;
+  isMikeOn: boolean;
+  fileName: string;
+  resources: any;
+  scrollRef: any;
+  showPreView: boolean;
+  imgList: any[];
+  page:number;
+  onPressExit: () => void;
+  onPressMike: () => void;
+  onPressImageList: () => void;
+  onPressArrow: () => void;
+}
+
 export interface InviteListProps {
   onPressEmail: () => void;
   onPressSms: () => void;
   onPressShare: () => void;
   onPressLink: () => void;
   onPressCode: () => void;
+}
+
+export interface FileCardProps {
+  setConvertFileSize: (byte: any) => string;
+  setSharingMode: (file: any) => void;
+  getExtentionType: (fileName: string) => string;
+  file?: any;
 }

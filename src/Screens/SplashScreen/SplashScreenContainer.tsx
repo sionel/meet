@@ -68,7 +68,7 @@ const SplashScreenContainer = ({
   };
   const setPermission = (permission: any) =>
     dispatch(UserActions.setPermission(permission));
-  const setSharingMode = () => dispatch(DocumentShareActions.setSharingMode());
+  const setSharingMode = (flag: boolean) => dispatch(DocumentShareActions.setSharingMode(flag));
   const setInitInfo = () => dispatch(WedriveAcions.setInitInfo());
   const toggleUpdateNoti = () => dispatch(UserActions.toggleUpdateNoti());
   const setAlert = (params: any) => dispatch(AlertAcions.setAlert(params));
@@ -81,7 +81,7 @@ const SplashScreenContainer = ({
   useEffect(() => {
     // 강제종료 했을때를 위한 강제 초기화
     setInitInfo();
-    setSharingMode();
+    setSharingMode(false);
     _handleInit();
   }, []);
 

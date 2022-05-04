@@ -39,7 +39,7 @@ export interface state {
   // drawing: any;
   // isConference: boolean;
   topDisplayType: 'FUNCTION' | 'NAME';
-  bottomDisplayType: 'MENU' | 'CHATTING' | 'PARTICIPANTS' | 'NONE';
+  bottomDisplayType: 'MENU' | 'CHATTING' | 'PARTICIPANTS' | 'FILELIST' |'NONE';
   videoState: any;
   mikeState: any;
   isSpeakerOn: boolean;
@@ -164,7 +164,7 @@ const _setTopDisplayType = (state: state, action: AnyAction) => {
 };
 
 const setBottomDisplayType = (
-  displayType: 'MENU' | 'CHATTING' | 'PARTICIPANTS' | 'NONE'
+  displayType: 'MENU' | 'CHATTING' | 'PARTICIPANTS' | 'FILELIST'  |'NONE'
 ) => {
   return {
     type: SET_BOTTOM_DISPLAY_TYPE,

@@ -12,13 +12,16 @@ import axios from 'axios';
 
 import FetchCancel from 'react-native-cancelable-fetch';
 
-interface authDataType {
+type authDataType = {
   AUTH_A_TOKEN: string;
   AUTH_R_TOKEN: string;
   HASH_KEY: string;
   portalID: string;
   last_access_company_no: string;
 }
+
+type partialAuthData = Partial<authDataType>
+
 /**
  * getWedriveToken
  */
@@ -95,7 +98,7 @@ const getList = async (authData:authDataType, TokenID:string) => {
 /**
  * wedrive file 상세정보
  */
-const getFileInfo = async (authData:authDataType, fileInfo:any, isFullPreview = 'false') => {
+const getFileInfo = async (authData:partialAuthData, fileInfo:any, isFullPreview = 'false') => {
   try {
     const url = `${wehagoBaseURL}/ObjectStorageCommon/services/common`;
     const headers = securityRequest(
@@ -210,7 +213,7 @@ const getFileInfo = async (authData:authDataType, fileInfo:any, isFullPreview = 
 /**
  * wedrive directory 상세정보
  */
-const getDirectoryInfo = async (authData:authDataType, directory:any) => {
+const getDirectoryInfo = async (authData:partialAuthData, directory:any) => {
   try {
     const url = `${wehagoBaseURL}/WeDriveStorage/services/login`;
     const headers = securityRequest(

@@ -26,8 +26,7 @@ const MainContainer: React.FC<MainContainerProps> = ({ roomName }) => {
     isMuteVideo,
     isLocal,
     presenter,
-    attributes,
-    documentListMode
+    attributes
   } = useSelector((state: RootState) => ({
     mainUser: state.mainUser_copy,
     mainDisplayType: state.mainUser_copy.mode,
@@ -41,8 +40,7 @@ const MainContainer: React.FC<MainContainerProps> = ({ roomName }) => {
     isMuteVideo: state.mainUser_copy.isMuteVideo,
     isLocal: state.mainUser_copy.isLocal,
     presenter: state.documentShare.presenter,
-    attributes: state.documentShare.attributes,
-    documentListMode: state.documentShare.documentListMode
+    attributes: state.documentShare.attributes
   }));
   //#endregion selector
 
@@ -91,18 +89,6 @@ const MainContainer: React.FC<MainContainerProps> = ({ roomName }) => {
     }
   }, [isMuteVideo]);
 
-  useEffect(() => {
-    if (documentListMode) {
-      setMainView('document');
-    } else {
-      if (isMuteVideo) {
-        setMainView('character');
-      } else {
-        setMainView('track');
-      }
-    }
-  }, [documentListMode]);
-
   //TODO: 추후에 스플릿비디오에서 메인화면 지정시 카메라 ON/OFF 잘되는지 확인 !
   useEffect(() => {
     if (!isLocal) {
@@ -123,6 +109,8 @@ const MainContainer: React.FC<MainContainerProps> = ({ roomName }) => {
 
       if (typeof attributes === 'boolean') {
         attributes && setMainView('sketch');
+      } else {
+        attributes && setMainView('document');
       }
     } else {
       setMainUser(myId);

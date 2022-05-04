@@ -130,11 +130,8 @@ export default class sendMessage {
     const command = attributes
       ? SET_DOCUMENT_SHARE_IS_OPEN
       : SET_DOCUMENT_SHARE_IS_CLOSE;
-
-    console.log('command : ', command);
     
     // 공유모드 설정 참가자들에게 공유
-
     this._room.sendCommandOnce(command, {
       value: this._room.myUserId(),
       attributes
