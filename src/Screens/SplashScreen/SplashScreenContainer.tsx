@@ -366,7 +366,6 @@ const SplashScreenContainer = ({
     // 서비스 배포여부 조회
 
     const isDeploy = await ServiceCheckApi.serviceCheck(auth);
-    debugger
     // const isDeploy = isDeployWehagomeet;
     // 서비스 구매여부 조회
     // const isDeployWebrtc = await ServiceCheckApi.serviceCheck(
@@ -399,7 +398,6 @@ const SplashScreenContainer = ({
     );
     if (checkResult.resultCode === 200) {
       console.log('checkResult.rankname : ', checkResult.rankname);
-
       const userData = {
         // login api data
         AUTH_A_TOKEN,
@@ -430,9 +428,10 @@ const SplashScreenContainer = ({
         nickname: checkResult.nickname,
         rankname: checkResult.rankname,
         isFreelancer: checkResult.isFreelancer,
+        full_path: checkResult.full_path,
         membership_code: checkResult.resultData.employee_list[0].membership_code
       };
-
+      debugger;
       await onLogin(userData, from, flag);
       return userData;
     } else {

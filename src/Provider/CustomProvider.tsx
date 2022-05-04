@@ -69,7 +69,8 @@ export default function CustomProvider(props: any) {
   const _setDeployedServices = (params: any) =>
     dispatch(DeployedActions.setDeployedServices(params));
 
-  const [sessionInterval, setSessionInterval] = useState();
+  // const [sessionInterval, setSessionInterval] = useState();
+  
 
   useEffect(() => {
     const interval =
@@ -79,12 +80,12 @@ export default function CustomProvider(props: any) {
       setInterval(() => {
          _loginCheckRequest();
       }, 10000);
-    setSessionInterval(interval);
+    // setSessionInterval(interval);
 
-    (!isLogin || !network || auth.cno === undefined) && sessionInterval && clearInterval(sessionInterval);
+    // (!isLogin || !network || auth.cno === undefined) && sessionInterval && clearInterval(sessionInterval);
 
     return () => {
-      sessionInterval && clearInterval(sessionInterval);
+      interval && clearInterval(interval);
     };
   }, [isLogin, network]);
 
@@ -171,7 +172,8 @@ export default function CustomProvider(props: any) {
   };
   const _loginCheckRequest = async () => {
     const { AUTH_A_TOKEN, AUTH_R_TOKEN, cno, HASH_KEY } = auth;
-
+    console.log('인터벌안 ' + cno);
+    
     const checkResult = await UserApi.check(
       AUTH_A_TOKEN,
       AUTH_R_TOKEN,

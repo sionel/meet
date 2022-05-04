@@ -178,7 +178,10 @@ const check = async (a_token, r_token, cno, HASH_KEY) => {
     });
     const responseJson = await response.json();
     if (responseJson.errors) throw { ...responseJson };
-    const url2 = `${wehagoBaseURL}/common/user/userinfo?cno=${cno}&selected_company_no=${cno}`; // 유저 정보 (닉네임 가져오려고 굳이 이걸 불러야하나...)
+    const lastCno = responseJson.resultData.last_access_company_no
+      ? responseJson.resultData.last_access_company_no
+      : cno;
+    const url2 = `${wehagoBaseURL}/common/user/userinfo?cno=${lastCno}&selected_company_no=${lastCno}`; // 유저 정보 (닉네임 가져오려고 굳이 이걸 불러야하나...)
     const headers2 = securityRequest(a_token, r_token, url2, HASH_KEY);
     const response2 = await fetch(url2, {
       method: 'GET',
@@ -188,13 +191,14 @@ const check = async (a_token, r_token, cno, HASH_KEY) => {
     const nickname = responseJson2?.resultData[0]?.nickname;
     const rankname = responseJson2?.resultData[0]?.rank_name;
     const isFreelancer = responseJson2?.resultData[0]?.company_class === '3';
-    debugger
+    const full_path = responseJson2?.resultData[0]?.full_path;
     return {
       status: response.status,
       ...responseJson,
       nickname,
       rankname,
-      isFreelancer
+      isFreelancer,
+      full_path
     };
   } catch (errors) {
     console.warn('errors', errors);

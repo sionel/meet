@@ -117,11 +117,6 @@ export default function RootNavigation(props: any) {
   const setLoginType = (loginType: string) => {
     dispatch(UserActions.setLoginType(loginType));
   };
-  // const [url] = useDeepLink();
-
-  // useEffect(() => {
-  //   debugger;
-  // }, [url]);
 
   const { isConference, auth, url } = useSelector((state: RootState) => {
     return {

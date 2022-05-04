@@ -19,7 +19,6 @@ import { wehagoDummyImageURL, wehagoMainURL } from '../../utils';
 export default function ConfigurationScreenContainer(props: any) {
   const { auth, from, isHorizon } = useSelector((state: RootState) => {
     const { isHorizon } = state.orientation;
-    debugger
     return {
       auth: state.user.auth,
       from: state.user.from,
@@ -30,7 +29,7 @@ export default function ConfigurationScreenContainer(props: any) {
   const {
     user_name,
     rankname,
-    user_default_email,
+    full_path,
     profile_url,
     last_company,
     isFreelancer
@@ -39,7 +38,7 @@ export default function ConfigurationScreenContainer(props: any) {
   const authInfo = {
     user_name,
     rankname,
-    user_default_email,
+    full_path,
     profile_url: profile_url
       ? wehagoMainURL + profile_url
       : wehagoDummyImageURL,

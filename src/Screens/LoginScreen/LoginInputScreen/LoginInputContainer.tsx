@@ -442,12 +442,15 @@ const LoginInputContainer = ({
               (e: any) =>
                 e.company_no == checkResult.resultData.last_access_company_no
             )[0]
-          : checkResult.resultData.employee_list[0], // last_access_company_no가 비어있는 상태로 올 수 있어서 null이 뜬다면 리스트중 첫번째 인덱스로 처리
+          : checkResult.resultData.employee_list[0], // last_access_company_no가 비어있는 상태로 올 수 있어서 null이 뜬다면 리스트중 첫번째 인덱스로 처리
         member_type: checkResult.resultData.member_type, // 0: 일반회원, 1: 개인회원
         nickname: checkResult.nickname,
         rankname: checkResult.rankname,
+        isFreelancer: checkResult.isFreelancer,
+        full_path: checkResult.full_path,
         membership_code: checkResult.resultData.employee_list[0].membership_code
       };
+      debugger;
       login(userData, from, check);
       return checkResult;
     } else {

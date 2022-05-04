@@ -35,7 +35,7 @@ interface propsTypes {
     user_name: any;
     rankname: any;
     profile_url: any;
-    user_default_email: any;
+    full_path: any;
     companyName: any;
     isFreelancer: boolean;
   };
@@ -90,8 +90,8 @@ export default function ConfigurationScreenPresenter(props: propsTypes) {
           <Text style={styles.userName}>
             {userName ? userName + ' ' + rankName : ''}
           </Text>
-          {!authInfo.isFreelancer && authInfo.user_default_email && (
-            <Text style={styles.userEmail}>{authInfo.user_default_email}</Text>
+          {!authInfo.isFreelancer && authInfo.full_path && (
+            <Text style={styles.userEmail}>{authInfo.full_path}</Text>
           )}
         </View>
       </View>

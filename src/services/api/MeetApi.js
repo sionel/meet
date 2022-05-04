@@ -714,7 +714,6 @@ export default {
         throw response.resultCode;
       }
       const { resultData } = await response.json();
-      // debugger
       return resultData;
     } catch (err) {
       console.warn('27.getParticipantCount : ', err);

@@ -382,7 +382,6 @@ function applySetConferenceCreatedTime(state: state, action: AnyAction) {
 //#region SET_CONFERENCE_EXPIRE_TIME
 
 function setConferenceExpireTime(expireTime: number | null): ThunkAction<void, RootState, unknown> {
-  // debugger
   return async dispatch => {
     dispatch({
       type: SET_CONFERENCE_EXPIRE_TIME,
