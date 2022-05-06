@@ -10,7 +10,7 @@ import { RootState } from 'src/redux/configureStore';
 import { Alert } from 'react-native';
 import { getT } from '@utils/translateManager';
 
-const MainContainer: React.FC<MainContainerProps> = ({ roomName }) => {
+const MainContainer: React.FC<MainContainerProps> = ({ roomName, onClose }) => {
   const t = getT();
   //#region selector
   const {
@@ -91,12 +91,12 @@ const MainContainer: React.FC<MainContainerProps> = ({ roomName }) => {
 
   //TODO: 추후에 스플릿비디오에서 메인화면 지정시 카메라 ON/OFF 잘되는지 확인 !
   useEffect(() => {
-    if (!isLocal) {
+    if (!isLocal && presenter === '') {
       let isMute;
-      isMute = mainVideoTrack && mainVideoTrack.isMuted();
+      isMute = mainVideoTrack ? mainVideoTrack.isMuted() : true ;
       toggleMuteVideo(!isMute);
     }
-  }, [mainVideoTrack.isMuted()]);
+  }, [mainVideoTrack?.isMuted()]);
 
   useEffect(() => {
     const myId = room?.getMyId();
@@ -162,6 +162,7 @@ const MainContainer: React.FC<MainContainerProps> = ({ roomName }) => {
       onPressShareStop={_handlePressShareStop}
       // Sketch, Document
       roomName={roomName}
+      onClose={onClose}
     />
   );
 };

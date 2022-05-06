@@ -1,5 +1,13 @@
 import React, { Fragment } from 'react';
-import { FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  FlatList,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from 'react-native';
 import { ShareHeader } from '@screens/ConferenceScreen_New/types';
 import CustomButton from '@components/CustomButton';
 
@@ -76,7 +84,7 @@ const Header: React.FC<ShareHeader> = ({
               horizontal={true}
               renderItem={({ item, index }) => (
                 <TouchableOpacity
-                  onPress={onPressImageList}
+                  onPress={() => onPressImageList(index)}
                   style={[
                     styles.resourceItem,
                     index === imgList.length - 1 && { marginRight: 10 }
@@ -103,7 +111,7 @@ const Header: React.FC<ShareHeader> = ({
         </View>
       )}
       {resources.length > 0 && (
-        <CustomButton 
+        <CustomButton
           name={showPreView ? 'btnArrowUp' : 'btnArrowDown'}
           onPress={onPressArrow}
           style={{ padding: 0, margin: 0 }}
@@ -180,5 +188,5 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginBottom: 3,
     fontFamily: 'DOUZONEText30'
-  },
+  }
 });

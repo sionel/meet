@@ -44,7 +44,8 @@ const TopContentContainer: React.FC<TopContentContainerProps> = ({
   const setFacingMode = (mode: 'FRONT' | 'BACK') =>
     dispatch(ConferenceActions.setFacingMode(mode));
   const setMirrorMode = () => dispatch(ConferenceActions.setMirrorMode());
-  const initMessagesCount = () => dispatch(ConferenceActions.initMessagesCount());
+  const initMessagesCount = () =>
+    dispatch(ConferenceActions.initMessagesCount());
   //#endregion dispatch
 
   const [createdTime, setCreatedTime] = useState(0);
@@ -69,6 +70,7 @@ const TopContentContainer: React.FC<TopContentContainerProps> = ({
         } else {
           let nowTime = Date.now();
           let normalTime = Math.floor((nowTime - createdTime) / 1000);
+
           normalTime > 0 && setElapsedTime(normalTime);
         }
       }
@@ -84,7 +86,7 @@ const TopContentContainer: React.FC<TopContentContainerProps> = ({
 
   useEffect(() => {
     let count = 0;
-    if(bottomDisplayType === 'CHATTING') {
+    if (bottomDisplayType === 'CHATTING') {
       initMessagesCount();
     }
     messages.forEach(list => {
@@ -122,9 +124,25 @@ const TopContentContainer: React.FC<TopContentContainerProps> = ({
     let start_datetime;
     if (isSuccess(roomInfo)) {
       start_datetime = roomInfo.resultData.start_datetime;
-    } else {
-      //getMeetRoomNoCert Error
-      start_datetime = 0;
+    }
+    let cnt = 1;
+    while (!start_datetime) {
+      roomInfo = await MeetApi.getMeetRoomNoCert(id);
+      if (isSuccess(roomInfo)) {
+        start_datetime = roomInfo.resultData.start_datetime;
+      }
+      cnt = cnt + 1;
+      cnt > 60 &&
+        Alert.alert(
+          '네트연결 지연',
+          '네트연결 상태가 좋지 않습니다. 회의를 재입장 해주세요.',
+          [
+            {
+              text: '확인',
+              onPress: () => handleClose()
+            }
+          ]
+        );
     }
     setCreatedTime(start_datetime);
   };

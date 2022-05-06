@@ -2,6 +2,7 @@
  * Wedrive API
  */
 
+import { authInfo } from '@redux/user';
 import {
   wehagoBaseURL,
   securityRequest,
@@ -18,22 +19,18 @@ type authDataType = {
   HASH_KEY: string;
   portalID: string;
   last_access_company_no: string;
-}
+};
 
-type partialAuthData = Partial<authDataType>
+type partialAuthData = Partial<authDataType>;
 
 /**
  * getWedriveToken
  */
-const getToken = async (
-  a_token: string,
-  r_token: string,
-  HASH_KEY: string,
-  portalID: string
-) => {
+const getToken = async (auth: authInfo) => {
   try {
+    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, portal_id } = auth;
     const url = `${wehagoBaseURL}/WeDriveStorage/services/login`;
-    const headers = securityRequest(a_token, r_token, url, HASH_KEY);
+    const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
 
     const data = {
       method: 'POST',
@@ -45,8 +42,8 @@ const getToken = async (
         service: 'loginService'
       },
       body: JSON.stringify({
-        TokenID: a_token,
-        portalID: portalID
+        TokenID: AUTH_A_TOKEN,
+        portalID: portal_id
       })
     };
 
@@ -62,15 +59,11 @@ const getToken = async (
 /**
  * wedrive file list 조회
  */
-const getList = async (authData:authDataType, TokenID:string) => {
+const getList = async (auth: authInfo, TokenID: string) => {
   try {
+    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY, portal_id } = auth;
     const url = `${wehagoBaseURL}/WeDriveStorage/services/login`;
-    const headers = securityRequest(
-      authData.AUTH_A_TOKEN,
-      authData.AUTH_R_TOKEN,
-      url,
-      authData.HASH_KEY
-    );
+    const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
     const data = {
       method: 'POST',
       headers: {
@@ -84,7 +77,7 @@ const getList = async (authData:authDataType, TokenID:string) => {
       },
       body: JSON.stringify({
         TokenID: TokenID,
-        FileUniqueKey: `${authData.portalID}@` // 공유폴더까지 조회
+        FileUniqueKey: `${portal_id}@` // 공유폴더까지 조회
       })
     };
     const response = await fetch(url, data);
@@ -98,15 +91,15 @@ const getList = async (authData:authDataType, TokenID:string) => {
 /**
  * wedrive file 상세정보
  */
-const getFileInfo = async (authData:partialAuthData, fileInfo:any, isFullPreview = 'false') => {
+const getFileInfo = async (
+  auth: authInfo,
+  fileInfo: any,
+  isFullPreview = 'false'
+) => {
   try {
+    const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY } = auth;
     const url = `${wehagoBaseURL}/ObjectStorageCommon/services/common`;
-    const headers = securityRequest(
-      authData.AUTH_A_TOKEN,
-      authData.AUTH_R_TOKEN,
-      url,
-      authData.HASH_KEY
-    );
+    const headers = securityRequest(AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY);
     const data = {
       method: 'POST',
       headers: {
@@ -122,16 +115,16 @@ const getFileInfo = async (authData:partialAuthData, fileInfo:any, isFullPreview
         isFullPreview
       })
     };
-    
+
     return FetchCancel(url, data, 'getFileInfo')
-      .then((response:Response) => response.json())
-      .then((responseJson:any) => {
+      .then((response: Response) => response.json())
+      .then((responseJson: any) => {
         if (
           responseJson.resultList &&
           responseJson.resultList[0].isFullPreview === false
         ) {
           // 썸네일이 없을 경우 생성 (2MB 이상일 경우)
-          return getFileInfo(authData, fileInfo, 'true');
+          return getFileInfo(auth, fileInfo, 'true');
           // } else if (
           //   responseJson.resultList &&
           //   responseJson.resultList[0].isFullPreview === true &&
@@ -213,7 +206,7 @@ const getFileInfo = async (authData:partialAuthData, fileInfo:any, isFullPreview
 /**
  * wedrive directory 상세정보
  */
-const getDirectoryInfo = async (authData:partialAuthData, directory:any) => {
+const getDirectoryInfo = async (authData: partialAuthData, directory: any) => {
   try {
     const url = `${wehagoBaseURL}/WeDriveStorage/services/login`;
     const headers = securityRequest(

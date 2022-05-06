@@ -18,9 +18,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/configureStore';
 import { getT } from '@utils/translateManager';
 
-const Sketch: React.FC<SketchProps> = ({
-  roomName
-}) => {
+const Sketch: React.FC<SketchProps> = ({ roomName, onClose }) => {
   const t = getT();
   const {
     orientation,
@@ -28,7 +26,7 @@ const Sketch: React.FC<SketchProps> = ({
     // attributes,
     page,
     room,
-    mikeState,
+    mikeState
     // mainView
   } = useSelector((state: RootState) => ({
     orientation: state.orientation.orientation,
@@ -36,9 +34,9 @@ const Sketch: React.FC<SketchProps> = ({
     // attributes: state.documentShare.attributes,
     page: state.documentShare.page,
     room: state.conference.room,
-    mikeState: state.conference.mikeState,
+    mikeState: state.conference.mikeState
     // mainView: state.mainUser_copy.mode
-  }));  
+  }));
 
   const [isMikeOn, setIsMikeOn] = useState(!mikeState.isMuted());
   const [showTool, setShowTool] = useState(true);
@@ -50,7 +48,7 @@ const Sketch: React.FC<SketchProps> = ({
 
   const resources: any[] = [];
 
-  const handleDrawingData = (data: any, param_page: number) => {
+  const handleDrawingData = (data: any) => {
     room && room.sendMessage.setDrawingData(data, page);
   };
 
@@ -65,13 +63,24 @@ const Sketch: React.FC<SketchProps> = ({
 
   const _handlePressExit = () => {
     const MODE = t('meet_sketch');
-    const title = t('alert_title_mode_exit').replace('[@mode@]', MODE);
-    const text = t('alert_text_quit')
+    const title =
+      presenter === 'localUser'
+        ? t('alert_title_mode_exit').replace('[@mode@]', MODE)
+        : t('alert_title_exit');
+    const text = (
+      presenter === 'localUser'
+        ? t('alert_text_quit')
+        : t('alert_text_quitconference')
+    )
       .replace('[@mode@]', MODE)
       .replace('[@mode@]', MODE);
     const handleConfirm = () => {
-      room && room.sendMessage.setDrawingData();
-      room && room.sendMessage.setDrawingShareMode(false);
+      if (presenter === 'localUser') {
+        room && room.sendMessage.setDrawingData();
+        room && room.sendMessage.setDrawingShareMode(false);
+      } else {
+        onClose();
+      }
     };
     Alert.alert(title, text, [
       {
@@ -153,14 +162,12 @@ const Sketch: React.FC<SketchProps> = ({
             viewWidth={viewSize.viewWidth}
             viewHeight={viewSize.viewHeight}
             image={resources[page]}
-            // imgList={imgList}
             imageSize={imageSize}
             showTool={showTool}
             presenter={presenter}
             orientation={orientation}
             mode={'drawing'}
             onChangeShowToolState={setShowTool}
-            // onChangeDrawing={props.setDrawingMode}
             onSetDrawingData={handleDrawingData}
           />
         </View>

@@ -63,7 +63,7 @@ const DrawingPresenter = props => {
     height: props.imageSize[props.page].imgHeight * scale
   };
 
-  const t = getT()
+  const t = getT();
   const mainPaletteRender = () => {
     const renderList = ['stroke'];
     let rednerTab = [];
@@ -279,7 +279,7 @@ const DrawingPresenter = props => {
           horizontal={true}
           pagingEnabled={true}
           showsHorizontalScrollIndicator={false}
-          //scrollEnabled={스캐치 활성화시 false}
+          scrollEnabled={selectedTab === -1 || !showTool}
           onLayout={e => {
             // console.log('onLayout', props.page);
             props.onScrollViewIsOnLayout();
@@ -297,12 +297,12 @@ const DrawingPresenter = props => {
               props.page < props.imgList.length - 1
             ) {
               props.onSetRef('isSwipe', true);
-              props.onChangePage(props.page + 1, props.presenter);
+              props.onChangePage(props.page + 1);
             } else if (offset / width < props.page - 0.01 && props.page > 0) {
               props.onSetRef('isSwipe', true);
-              props.onChangePage(props.page - 1, props.presenter);
+              props.onChangePage(props.page - 1);
             } else {
-              props.onChangePage(props.page, props.presenter);
+              props.onChangePage(props.page);
             }
             // console.log('onScrollEndDrag');
           }}

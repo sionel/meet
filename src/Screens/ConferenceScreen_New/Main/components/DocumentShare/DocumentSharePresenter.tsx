@@ -6,7 +6,8 @@ import {
   Image,
   Alert,
   StyleSheet,
-  Dimensions
+  Dimensions,
+  ActivityIndicator
 } from 'react-native';
 
 import { DocumentSharePresenterProps } from '@screens/ConferenceScreen_New/types';
@@ -32,22 +33,8 @@ const DocumentSharePresenter: React.FC<DocumentSharePresenterProps> = ({
   setViewSize,
   onPressArrow,
   setShowTool,
-  handleDrawingData,
-  _handleChangeImageSize
+  handleDrawingData
 }) => {
-
-  if (imageSize.length === 0) {
-    console.log(1);
-    
-    _handleChangeImageSize(
-      {
-        imgWidth: 4000,
-        imgHeight: 3000
-      },
-      0
-    );
-  }
-  
   return (
     <View style={styles.backGroundView}>
       <View style={styles.headerTitle}>
@@ -84,20 +71,26 @@ const DocumentSharePresenter: React.FC<DocumentSharePresenterProps> = ({
             })
           }
         >
-          <DrawingSketch
-                viewWidth={viewSize.viewWidth}
-                viewHeight={viewSize.viewHeight}
-                image={resources[page]}
-                // imgList={imgList}
-                imageSize={imageSize}
-                showTool={showTool}
-                presenter={presenter}
-                orientation={orientation}
-                mode={'document'}
-                onChangeShowToolState={setShowTool}
-                // onChangeDrawing={props.setDrawingMode}
-                onSetDrawingData={handleDrawingData}
-              />
+          {imageSize.length > 0 ? (
+            <DrawingSketch
+              viewWidth={viewSize.viewWidth}
+              viewHeight={viewSize.viewHeight}
+              image={resources[page]}
+              imgList={imgList}
+              imageSize={imageSize}
+              showTool={showTool}
+              presenter={presenter}
+              orientation={orientation}
+              mode={'document'}
+              onChangeShowToolState={setShowTool}
+              onSetDrawingData={handleDrawingData}
+              onChangePage={onPressImageList}
+            />
+          ) : (
+            <View style={styles.indicatorContainer}>
+              <ActivityIndicator size="large" color="#000" />
+            </View>
+          )}
         </View>
       </View>
     </View>
@@ -106,7 +99,8 @@ const DocumentSharePresenter: React.FC<DocumentSharePresenterProps> = ({
 
 const styles = StyleSheet.create({
   backGroundView: {
-    flex: 1
+    flex: 1,
+    backgroundColor: 'rgb(242, 242, 242)'
   },
   headerTitle: {
     position: 'absolute',
@@ -114,7 +108,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     zIndex: 10,
-    alignItems: 'center',
+    alignItems: 'center'
   },
   topButtonBar: {
     position: 'absolute',
@@ -181,6 +175,11 @@ const styles = StyleSheet.create({
   listHeaderText: {
     color: 'rgb(28, 144, 251)',
     fontFamily: 'DOUZONEText30'
+  },
+  indicatorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });
 

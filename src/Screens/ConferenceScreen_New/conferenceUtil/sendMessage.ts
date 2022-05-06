@@ -66,8 +66,8 @@ const REQUEST_ROOM_START_RECORDING =
 
 export default class sendMessage {
   private _room: any;
-  private _drawingManager: any
-  private _handlers: any
+  private _drawingManager: any;
+  private _handlers: any;
   constructor(room: any, handler: any) {
     this._room = room;
     this._drawingManager = new DrawingMananger();
@@ -109,7 +109,7 @@ export default class sendMessage {
   setDrawingData = (data: any, page: any) => {
     // 로그 기록이 있을 경우 참여자들에게 기록 전송
     const newData = this._drawingManager.handleConvertFormat('mobile', data);
-    
+
     this._room.sendCommandOnce(UPDATE_DOCUMENT_DATA, {
       value: this._room.myUserId(),
       attributes: {
@@ -130,16 +130,48 @@ export default class sendMessage {
     const command = attributes
       ? SET_DOCUMENT_SHARE_IS_OPEN
       : SET_DOCUMENT_SHARE_IS_CLOSE;
-    
+
     // 공유모드 설정 참가자들에게 공유
     this._room.sendCommandOnce(command, {
       value: this._room.myUserId(),
       attributes
     });
 
-    this._handlers.changeDocumentShareMode(
-      attributes,
-      this._room.myUserId()
-    );
+    this._handlers.changeDocumentShareMode(attributes, this._room.myUserId());
+  };
+
+  setDocumentPage = (page: number, presenter: string) => {
+    if (presenter === 'localUser' || presenter === this._room.myUserId()) {
+      this._room.sendCommandOnce(SET_DOCUMENT_PAGE, {
+        value: this._room.myUserId(),
+        attributes: { page: page }
+      });
+    }
+
+    this._handlers.changeDocumentPage(page);
+  };
+
+  documentShareTarget = (user: any, documentData: any, mode: string) => {
+    console.log('user : ', user);
+    console.log('documentData : ', documentData);
+    console.log('mode : ', mode);
+    
+    if (documentData.presenter === 'localUser') {
+      const command =
+        mode === 'document'
+          ? DOCUMENT_SHARE_TARGET
+          : DRAWING_SHARE_TARGET;
+
+      this._room.sendCommandOnce(command, {
+        value: this._room.myUserId(),
+        attributes: {
+          ...documentData.attributes,
+          selectResource: documentData.page,
+          target: user.jitsiId,
+          objectData: JSON.stringify(documentData.documentData),
+          from: 'mobile'
+        }
+      });
+    }
   };
 }

@@ -3,7 +3,7 @@ import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import { messageType } from '@redux/conference';
 import { Participant } from '@redux/participants_copy';
 import i18next from 'i18next';
-import { MutableRefObject } from 'react';
+import React, { MutableRefObject } from 'react';
 import {
   Animated,
   NativeScrollEvent,
@@ -59,6 +59,7 @@ export interface TopContentPresenterProps {
 
 export interface MainContainerProps {
   roomName: string;
+  onClose: () => void;
 }
 export interface MainPresenterProps
   extends CharacterProps,
@@ -87,6 +88,7 @@ export interface RtcViewProps {
   onPressMainView: () => void;
 }
 export interface DocumentShareContainerProps {
+  onClose: () => void;
 }
 export interface DocumentSharePresenterProps extends ShareHeader {
   fileName: string;
@@ -97,10 +99,10 @@ export interface DocumentSharePresenterProps extends ShareHeader {
   setViewSize: any;
   setShowTool: any;
   handleDrawingData: (data: any, page: number) => void;
-  _handleChangeImageSize: (value: any, index: number) => void;
 }
 export interface SketchProps {
   roomName: string;
+  onClose: () => void;
 }
 export interface ScreenShareProps {
   onPressShareStop: () => void;
@@ -134,11 +136,13 @@ export interface BottomContentPresenterProps {
 }
 
 export interface FileListContainerProps {}
-export interface FileListPresenterProps extends FileCardProps {
+export interface FileListPresenterProps {
   isLoading: string;
   documentList: any[];
-  spin: any;
-  getWedriveToken: () => void;
+  TokenID: string;
+  onRefreshList: () => void;
+  setLoading: React.Dispatch<React.SetStateAction<string>>;
+  setWedriveList: React.Dispatch<React.SetStateAction<any>>;
   t: any;
 }
 
@@ -206,10 +210,10 @@ export interface ShareHeader {
   scrollRef: any;
   showPreView: boolean;
   imgList: any[];
-  page:number;
+  page: number;
   onPressExit: () => void;
   onPressMike: () => void;
-  onPressImageList: () => void;
+  onPressImageList: (pressPage: number) => void;
   onPressArrow: () => void;
 }
 
@@ -221,9 +225,16 @@ export interface InviteListProps {
   onPressCode: () => void;
 }
 
-export interface FileCardProps {
-  setConvertFileSize: (byte: any) => string;
-  setSharingMode: (file: any) => void;
-  getExtentionType: (fileName: string) => string;
-  file?: any;
+export interface FileCardContainerProps {
+  file: any;
+  TokenID: string;
+  setLoading: React.Dispatch<React.SetStateAction<string>>;
+  setWedriveList: React.Dispatch<React.SetStateAction<any>>;
+}
+
+export interface FileCardPresenterProps {
+  file: any;
+  onPressFile: (file: any) => void;
+  ExtentionType: (fileName: any) => any;
+  ConvertFileSize: (byte: any) => string;
 }

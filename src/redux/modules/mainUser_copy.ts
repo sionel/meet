@@ -6,7 +6,7 @@ import { RootState } from '../configureStore';
 import { Participant } from './participants_copy';
 
 const SET_MAINUSER = 'mainUser_copy.SET_MAINUSER';
-const UPDATE_MAAINUSER_IS_MASTER = 'mainUser_copy.UPDATE_MAINUSER_IS_MASTER';
+const UPDATE_MAINUSER_IS_MASTER = 'mainUser_copy.UPDATE_MAINUSER_IS_MASTER';
 const SET_MAIN_VIEW = 'mainUser_copy.SET_MAIN_VIEW';
 const TOGGLE_MUTEVIDEO = 'mainUser_copy.TOGGLE_MUTEVIDEO';
 export interface InitialState
@@ -56,7 +56,7 @@ function reducer(state = initialState, action: AnyAction) {
   switch (action.type) {
     case SET_MAINUSER:
       return _setMainUser(state, action);
-    case UPDATE_MAAINUSER_IS_MASTER:
+    case UPDATE_MAINUSER_IS_MASTER:
       return _updateMainUserIsMaster(state, action);
     case SET_MAIN_VIEW:
       return _setMainView(state, action);
@@ -95,6 +95,7 @@ const _setMainUser = (state: InitialState, action: AnyAction) => {
     (info: Participant) => info.jitsiId === jitsiId
   );
   const mainUserInfo = userList[index];
+  
   const mainUser = {
     videoTrack: index === 0 ? videoState : mainUserInfo?.videoTrack,
     name: mainUserInfo?.name,
@@ -102,7 +103,7 @@ const _setMainUser = (state: InitialState, action: AnyAction) => {
     nickname: mainUserInfo?.nickname,
     avatar: mainUserInfo?.avatar,
     isLocal: index === 0 ? true : false,
-    isMuteVideo: index === 0 ? videoState.isMuted() : mainUserInfo?.videoTrack.isMuted(),
+    isMuteVideo: index === 0 ? videoState.isMuted() : mainUserInfo?.videoTrack?.isMuted(),
   };
 
   return {
@@ -122,7 +123,7 @@ const updateMainUserIsMaster = (): ThunkAction<void, RootState, unknown> => {
   return (dispatch, getState) => {
     const { masterList } = getState()['master'];
     dispatch({
-      type: UPDATE_MAAINUSER_IS_MASTER,
+      type: UPDATE_MAINUSER_IS_MASTER,
       masterList
     });
   };

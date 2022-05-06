@@ -46,7 +46,7 @@ export const ConferenceHandler = (dispatch: any) => ({
       )
     );
   },
-  changeDrawData: (drawData: any, selectResource: number) => {    
+  changeDrawData: (drawData: any, selectResource: number) => {
     dispatch(documentShareActions.setDrawData(drawData, selectResource));
   },
   changeDocumentShareMode: (
@@ -63,6 +63,9 @@ export const ConferenceHandler = (dispatch: any) => ({
         documentData
       )
     );
+  },
+  changeDocumentPage: (page: number) => {
+    dispatch(documentShareActions.setDocumentPage(page));
   }
 });
 

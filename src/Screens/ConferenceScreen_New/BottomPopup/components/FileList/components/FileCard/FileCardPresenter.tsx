@@ -1,19 +1,21 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
-import { FileCardProps } from '@screens/ConferenceScreen_New/types';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+
+import { FileCardPresenterProps } from '@screens/ConferenceScreen_New/types';
+
 import CustomIcon from '@components/CustomIcon';
 
-const FileCard: React.FC<FileCardProps> = ({
-  setConvertFileSize,
-  setSharingMode,
-  getExtentionType,
-  file
+const FileCardPresenter: React.FC<FileCardPresenterProps> = ({
+  file,
+  onPressFile,
+  ExtentionType,
+  ConvertFileSize
 }) => {
   return (
     <TouchableOpacity
       activeOpacity={0.3}
       onPress={() => {
-        setSharingMode(file);
+        onPressFile(file);
       }}
       style={styles.itemBox}
     >
@@ -23,20 +25,20 @@ const FileCard: React.FC<FileCardProps> = ({
             ? file.shareFolder
               ? 'shareFolder'
               : 'folder'
-            : getExtentionType(file.fileName)
+            : ExtentionType(file.fileName)
         }
       />
       <Text numberOfLines={1} ellipsizeMode={'tail'} style={styles.itemInfo}>
         {file.fileName}
       </Text>
       {!file.directory && (
-        <Text style={styles.itemSize}>{setConvertFileSize(file.size)}</Text>
+        <Text style={styles.itemSize}>{ConvertFileSize(file.size)}</Text>
       )}
     </TouchableOpacity>
   );
 };
 
-export default FileCard;
+export default FileCardPresenter;
 
 const styles = StyleSheet.create({
   itemBox: {

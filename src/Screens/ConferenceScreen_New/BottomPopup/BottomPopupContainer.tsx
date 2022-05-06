@@ -2,7 +2,6 @@ import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { Keyboard, Linking, Platform, Share } from 'react-native';
 
 import { BottomPopupContainerProps } from '@screens/ConferenceScreen_New/types';
-import { ParticipantsTypes } from '@redux/participants';
 
 import { MeetApi } from '@services/index';
 
@@ -15,16 +14,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'src/redux/configureStore';
 
 import { actionCreators as ParticipantsActions } from '@redux/participants_copy';
-import { actionCreators as MainUserActions } from '@redux/mainUser_copy';
 import { actionCreators as ConferenceActions } from '@redux/conference';
 import { actionCreators as ScreenShareAction } from '@redux/ScreenShare';
-import { actionCreators as DocumentActions } from '@redux/documentShare';
 import { isSuccess } from '@services/types';
 
 const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
   roomId
 }) => {
-  const t = getT();
   const { OS } = Platform;
   //#region useSelector
   const {
@@ -90,6 +86,54 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
     dispatch(ScreenShareAction.toggleScreenFlag());
   };
   //#endregion
+
+  useEffect(() => {
+    let timeout: number | NodeJS.Timeout = setTimeout(() => {});
+    if (bottomDisplayType === 'CHATTING') {
+      if (messages.length > 0) {
+        if (scrollRef) {
+          if (timeout) clearTimeout(timeout);
+          timeout = setTimeout(() => {
+            scrollRef.current.scrollToEnd();
+          }, 0);
+        }
+      } else if (isEndScroll) {
+        if (timeout) clearTimeout(timeout);
+        timeout = setTimeout(() => {
+          scrollRef.current.scrollToEnd();
+        }, 0);
+      }
+    }
+    return () => {
+      typeof timeout === 'number' && clearTimeout(timeout);
+    };
+  }, [cdm, messages, keyboardH]);
+
+  useEffect(() => {
+    Keyboard.addListener('keyboardDidShow', e => handdleKeyboardShow(e));
+    Keyboard.addListener('keyboardDidHide', () => handdleKeyboardHide());
+    return () => {
+      Keyboard.removeListener('keyboardDidShow', e => handdleKeyboardShow(e));
+      Keyboard.removeListener('keyboardDidHide', () => handdleKeyboardHide());
+    };
+  }, []);
+
+  useEffect(() => {
+    updateParticipants();
+  }, [participants.length]);
+
+  useEffect(() => {
+    setIsRoomMaster(
+      masterList.find(mid => mid === myId) !== undefined ? true : false
+    );
+  }, [masterList.length]);
+
+  useEffect(() => {
+    if (bottomDisplayType === 'NONE') {
+      setIsInviteList(false);
+      setIsProfile(false);
+    }
+  }, [bottomDisplayType]);
 
   //#region Method
   // MenuList
@@ -189,54 +233,6 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
   };
 
   //#endregion Method
-
-  useEffect(() => {
-    let timeout: number | NodeJS.Timeout = setTimeout(() => {});
-    if (bottomDisplayType === 'CHATTING') {
-      if (messages.length > 0) {
-        if (scrollRef) {
-          if (timeout) clearTimeout(timeout);
-          timeout = setTimeout(() => {
-            scrollRef.current.scrollToEnd();
-          }, 0);
-        }
-      } else if (isEndScroll) {
-        if (timeout) clearTimeout(timeout);
-        timeout = setTimeout(() => {
-          scrollRef.current.scrollToEnd();
-        }, 0);
-      }
-    }
-    return () => {
-      typeof timeout === 'number' && clearTimeout(timeout);
-    };
-  }, [cdm, messages, keyboardH]);
-
-  useEffect(() => {
-    Keyboard.addListener('keyboardDidShow', e => handdleKeyboardShow(e));
-    Keyboard.addListener('keyboardDidHide', () => handdleKeyboardHide());
-    return () => {
-      Keyboard.removeListener('keyboardDidShow', e => handdleKeyboardShow(e));
-      Keyboard.removeListener('keyboardDidHide', () => handdleKeyboardHide());
-    };
-  }, []);
-
-  useEffect(() => {
-    updateParticipants();
-  }, [participants.length]);
-
-  useEffect(() => {
-    setIsRoomMaster(
-      masterList.find(mid => mid === myId) !== undefined ? true : false
-    );
-  }, [masterList.length]);
-
-  useEffect(() => {
-    if (bottomDisplayType === 'NONE') {
-      setIsInviteList(false);
-      setIsProfile(false);
-    }
-  }, [bottomDisplayType]);
 
   const handdleKeyboardShow = (e: any) => {
     setKeyboardH(e.endCoordinates.width);

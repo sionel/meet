@@ -60,9 +60,11 @@ const ConferenceScreenContainer: React.FC<
     isLogin,
     bottomDisplayType,
     myVideoState,
-    mode,
     isScreenShare,
-    screenToggleFlag
+    screenToggleFlag,
+    documentShare,
+    participants,
+    mode
   } = useSelector((state: RootState) => ({
     testFlag: state.test.testFlag,
     auth: state.user.auth,
@@ -72,9 +74,11 @@ const ConferenceScreenContainer: React.FC<
     isLogin: state.user.isLogin,
     bottomDisplayType: state.conference.bottomDisplayType,
     myVideoState: state.conference.videoState,
-    mode: state.mainUser_copy.mode,
     isScreenShare: state.screenShare.isScreenShare,
-    screenToggleFlag: state.screenShare.screenToggleFlag
+    screenToggleFlag: state.screenShare.screenToggleFlag,
+    documentShare: state.documentShare,
+    participants: state.participants_copy.list,
+    mode: state.mainUser_copy.mode
   }));
   //#endregion
 
@@ -109,6 +113,28 @@ const ConferenceScreenContainer: React.FC<
   };
   const resetResource = () => dispatch(ConferenceActions.resetResource());
   //#endregion
+
+  useEffect(() => {
+    _addSpeakerListner();
+    _connectConference();
+    return () => {};
+  }, []);
+
+  useEffect(() => {
+    first && setFirst(false);
+    OS === 'android' && !first && _handleShareScreen();
+  }, [screenToggleFlag]);
+
+  useEffect(() => {
+    let plength = participants.length;
+    if (documentShare.attributes && plength > 0) {
+      room?.sendMessage.documentShareTarget(
+        participants[plength - 1],
+        documentShare,
+        mode
+      );
+    }
+  }, [participants.length]);
 
   const _connectConference = async () => {
     conference = new Conference();
@@ -217,7 +243,7 @@ const ConferenceScreenContainer: React.FC<
   const _handleShareScreen = async () => {
     const newTrackType = isScreenShare ? 'video' : 'desktop';
     try {
-      room && await room.changeTrack(newTrackType, myVideoState);
+      room && (await room.changeTrack(newTrackType, myVideoState));
       setScreenFlag(!isScreenShare);
       if (newTrackType === 'video') {
         myVideoState.mute();
@@ -255,17 +281,6 @@ const ConferenceScreenContainer: React.FC<
     }
   };
   //#endregion
-
-  useEffect(() => {
-    _addSpeakerListner();
-    _connectConference();
-    return () => {};
-  }, []);
-
-  useEffect(() => {
-    first && setFirst(false);
-    OS === 'android' && !first && _handleShareScreen();
-  }, [screenToggleFlag]);
 
   return (
     <ConferenceScreenPresenter

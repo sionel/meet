@@ -9,6 +9,7 @@ import BottomContent from './BottomContent';
 import { WEHAGO_TYPE } from '../../../config';
 import { ConferenceScreenPresenterProps } from '@screens/ConferenceScreen_New/types';
 import ScreenShareIOS from './ScreenShare/ScreenShareIOS';
+import LoadingIndicator from './LoadingIndicator';
 
 const ConferenceScreenPresenter: React.FC<ConferenceScreenPresenterProps> = ({
   isConnected,
@@ -28,19 +29,20 @@ const ConferenceScreenPresenter: React.FC<ConferenceScreenPresenterProps> = ({
         <Fragment>
           <TopPopup />
           <TopContent roomName={roomName} id={id} handleClose={handleClose} />
-          <Main roomName={roomName} />
+          <Main roomName={roomName} onClose={handleClose} />
           {/* <SplitVideo /> */}
           <BottomPopup roomId={id} />
           {!isChatting && <BottomContent handleCloseConf={handleClose} />}
         </Fragment>
       ) : (
-        <View
-          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-        >
-          <TouchableOpacity onPress={() => {}}>
-            <Text style={{ color: '#fff', fontSize: 20 }}>{`Loading...`}</Text>
-          </TouchableOpacity>
-        </View>
+        <LoadingIndicator />
+        // <View
+        //   style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+        // >
+        //   <TouchableOpacity onPress={() => {}}>
+        //     <Text style={{ color: '#fff', fontSize: 20 }}>{`Loading...`}</Text>
+        //   </TouchableOpacity>
+        // </View>
       )}
     </View>
   );

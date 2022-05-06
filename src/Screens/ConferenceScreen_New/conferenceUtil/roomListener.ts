@@ -162,18 +162,19 @@ export function bindEvent(handler: any, room: any, resolve: any, reject: any) {
     handler.setUserInfo(user);
   });
 
-  // /**
-  //  * 문서 공유 페이지 전환 감지
-  //  */
-  // room.addCommandListener(SET_DOCUMENT_PAGE, value => {
-  //   const {
-  //     value: userId,
-  //     attributes: { page }
-  //   } = value;
-  //   if (userId !== room.myUserId()) {
-  //     handler.CHANGED_DOCUMENT_PAGE(Number(page));
-  //   }
-  // });
+  /**
+   * 문서 공유 페이지 전환 감지
+   */
+  room.addCommandListener(actions.SET_DOCUMENT_PAGE, (value: any) => {
+    const {
+      value: userId,
+      attributes: { page }
+    } = value;
+    if (userId !== room.myUserId()) {
+
+      handler.changeDocumentPage(Number(page));
+    }
+  });
 
   // room.on(conferenceEvents.RECORDER_STATE_CHANGED, data => {
   //   const { _status, _sessionID } = data;
@@ -185,25 +186,26 @@ export function bindEvent(handler: any, room: any, resolve: any, reject: any) {
   //     this._sessionID = null;
   //   }
   // });
-  // /**
-  //  * @description 문서 공유 모드 설정 감지
-  //  */
-  // room.addCommandListener(SET_DOCUMENT_SHARE_IS_OPEN, value => {
-  //   const { value: userId, attributes } = value;
-  //   // if (attributes.user === 'ALL' || attributes.user === room.myUserId())
-  //   room.presenter = userId;
-  //   if (userId !== room.myUserId()) {
-  //     handler.CHANGED_DOCUMENT_SHARE_MODE(attributes, userId);
-  //   } else {
-  //     handler.CHANGED_DOCUMENT_SHARE_MODE(attributes, 'localUser');
-  //   }
-  // });
-  // room.addCommandListener(SET_DOCUMENT_SHARE_IS_CLOSE, value => {
-  //   // const { value: userId } = value;
-  //   // if (userId !== room.myUserId()) {
-  //   handler.CHANGED_DOCUMENT_SHARE_MODE(false, false);
-  //   // }
-  // });
+  /**
+   * @description 문서 공유 모드 설정 감지
+   */
+  room.addCommandListener(actions.SET_DOCUMENT_SHARE_IS_OPEN, (value: any) => {
+    const { value: userId, attributes } = value;
+    // if (attributes.user === 'ALL' || attributes.user === room.myUserId())
+    room.presenter = userId;
+    if (userId !== room.myUserId()) {
+      handler.changeDocumentShareMode(attributes, userId);
+    } else {
+      handler.changeDocumentShareMode(attributes, 'localUser');
+    }
+  });
+
+  room.addCommandListener(actions.SET_DOCUMENT_SHARE_IS_CLOSE, (value: any) => {
+    // const { value: userId } = value;
+    // if (userId !== room.myUserId()) {
+    handler.changeDocumentShareMode(false);
+    // }
+  });
 
   // /**
   //  * @description 드로잉 모드 설정 감지
@@ -279,23 +281,23 @@ export function bindEvent(handler: any, room: any, resolve: any, reject: any) {
   //   }
   // });
 
-  // /**
-  //  * 새로 참가한 사람만 받아라 (문서공유)
-  //  */
-  // room.addCommandListener(DOCUMENT_SHARE_TARGET, value => {
-  //   if (room.myUserId() === value.attributes.target) {
-  //     handler.CHANGED_DOCUMENT_SHARE_MODE(
-  //       {
-  //         fileName: value.attributes.fileName,
-  //         owner: value.attributes.owner,
-  //         resources: value.attributes.resources
-  //       },
-  //       value.value,
-  //       Number(value.attributes.selectResource),
-  //       JSON.parse(value.attributes.objectData)
-  //     );
-  //   }
-  // });
+  /**
+   * 새로 참가한 사람만 받아라 (문서공유)
+   */
+  room.addCommandListener(actions.DOCUMENT_SHARE_TARGET, (value: any) => {  
+    if (room.myUserId() === value.attributes.target) {
+      handler.changeDocumentShareMode(
+        {
+          fileName: value.attributes.fileName,
+          owner: value.attributes.owner,
+          resources: value.attributes.resources
+        },
+        value.value,
+        Number(value.attributes.selectResource),
+        JSON.parse(value.attributes.objectData)
+      );
+    }
+  });
 
   // /**
   //  * 새로 참가한 사람만 받아라 (드로잉공유)
@@ -305,7 +307,7 @@ export function bindEvent(handler: any, room: any, resolve: any, reject: any) {
       const drawingData = value.attributes.objectData
         ? JSON.parse(value.attributes.objectData)
         : [{ object: [] }];
-      handler.CHANGED_DRAWING_SHARE_MODE(
+      handler.changeDrawingShareMode(
         { resources: '[]', ...value.attributes }, // attributes
         value.value, // presenter Id
         0, //page

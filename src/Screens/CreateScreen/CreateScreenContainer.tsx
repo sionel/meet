@@ -263,7 +263,7 @@ export default function CreateScreenContainer(props: any) {
           receiver_users
         } = sendWetalkResult.resultData.chatList[0];
 
-        let receiverUserName = receiver_users[1].user_name;
+        let receiverUserName = receiver_users[1]?.user_name;
         let selectedRoom = room_title ? room_title : receiverUserName;
 
         // 토큰받고

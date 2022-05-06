@@ -1,22 +1,7 @@
-import React, {
-  Fragment,
-  MutableRefObject,
-  useEffect,
-  useRef,
-  useState
-} from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-  Alert,
-  StyleSheet,
-  Dimensions
-} from 'react-native';
+import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
+import { Alert, Dimensions } from 'react-native';
 
 import { DocumentShareContainerProps } from '@screens/ConferenceScreen_New/types';
-import DrawingSketch from '../DrawingSketch';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'src/redux/configureStore';
@@ -25,8 +10,11 @@ import FastImage from 'react-native-fast-image';
 import DocumentSharePresenter from './DocumentSharePresenter';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+const previewWidth = 78;
 
-const DocumentShareContainer: React.FC<DocumentShareContainerProps> = ({}) => {
+const DocumentShareContainer: React.FC<DocumentShareContainerProps> = ({
+  onClose
+}) => {
   const t = getT();
   const { room, mikeState, page, orientation, presenter, attributes } =
     useSelector((state: RootState) => ({
@@ -52,77 +40,121 @@ const DocumentShareContainer: React.FC<DocumentShareContainerProps> = ({}) => {
   }>({ viewWidth: 0, viewHeight: 0 });
   const [scrollX, setScrollX] = useState<{ start: number; here: number }>({
     start: 0,
-    here: 78
+    here: previewWidth
   });
-  const [resources, setResources] = useState(
-    attributes ? JSON.parse(attributes.resources) : []
-  );
+  const [resources, setResources] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [prePage, setPrePage] = useState(-1);
+  // const [preImageList, setPreImageList] = useState<any>(undefined);
 
-  let preImgList = attributes ? JSON.parse(attributes.resources) : [];
-  preImgList = preImgList.map((src: any) => ({
-    uri: src,
-    priority: FastImage.priority.high,
-    cache: FastImage.cacheControl.cacheOnly
-  }));
-  console.log('preImgList : ', preImgList);
-  FastImage.preload(preImgList);
+  useEffect(() => {
+    if (prePage > -1 && scrollRef) {
+      const { width } = Dimensions.get('window');
+      const raise = page > prePage;
+      scrollX.here = (page + 1) * previewWidth;
+
+      if(raise) {
+        if (scrollX.start + width < scrollX.here) {
+          const gap = scrollX.here - (scrollX.start + width);
+          scrollX.start += gap + 10;
+          scrollRef.current.scrollTo({
+            x: scrollX.start,
+            y: 0,
+            animated: false
+          });
+        }
+      } else {
+        if (scrollX.start > scrollX.here - previewWidth) {
+          scrollX.start = page * previewWidth;
+          scrollRef.current.scrollTo({
+            x: scrollX.start,
+            y: 0,
+            animated: false
+          });
+        }
+      }
+    }
+
+    console.log('page : ', page);
+    setPrePage(page);
+  }, [page]);
+
+  useEffect(() => {
+    let parseResources =
+      typeof attributes !== 'boolean' ? JSON.parse(attributes.resources) : [];
+    parseResources.length > 0 && setResources(JSON.parse(attributes.resources));
+  }, [attributes]);
+
+  useEffect(() => {
+    if (resources.length > 0) {
+      let preImgList = resources;
+      preImgList = preImgList.map((src: any) => ({
+        uri: src,
+        priority: FastImage.priority.high,
+        cache: FastImage.cacheControl.cacheOnly
+      }));
+      FastImage.preload(preImgList);
+    }
+  }, [resources]);
 
   const imgList = (() => {
-    const list = resources.map((item: any, index: number) => (
-      <FastImage
-        source={{
-          uri: item,
-          priority: FastImage.priority.high
-        }}
-        resizeMode={FastImage.resizeMode.contain}
-        onLoad={event => {
-          const size = {
-            imgWidth: event.nativeEvent.width,
-            imgHeight: event.nativeEvent.height
-          };
-          const scale = Math.max(
-            screenWidth / size.imgWidth,
-            screenHeight / size.imgHeight
-          );
-          if (scale > 1) {
-            size.imgWidth = size.imgWidth * scale * 1.5;
-            size.imgHeight = size.imgHeight * scale * 1.5;
-          } else {
-            size.imgWidth = size.imgWidth * 1.5;
-            size.imgHeight = size.imgHeight * 1.5;
-          }
-          _handleChangeImageSize(size, index);
-        }}
-        style={{
-          width: '100%',
-          height: '100%'
-        }}
-      />
-    ));
-    return list;
+    if (resources.length > 0) {
+      const list = resources.map((item: any, index: number) => (
+        <FastImage
+          source={{
+            uri: item,
+            priority: FastImage.priority.high
+          }}
+          resizeMode={FastImage.resizeMode.contain}
+          onLoad={event => {
+            const size = {
+              imgWidth: event.nativeEvent.width,
+              imgHeight: event.nativeEvent.height
+            };
+            const scale = Math.max(
+              screenWidth / size.imgWidth,
+              screenHeight / size.imgHeight
+            );
+            if (scale > 1) {
+              size.imgWidth = size.imgWidth * scale * 1.5;
+              size.imgHeight = size.imgHeight * scale * 1.5;
+            } else {
+              size.imgWidth = size.imgWidth * 1.5;
+              size.imgHeight = size.imgHeight * 1.5;
+            }
+            _handleChangeImageSize(size, index);
+          }}
+          style={{
+            width: '100%',
+            height: '100%'
+          }}
+        />
+      ));
+      return list;
+    }
   })();
 
   const _handleChangeImageSize = (value: any, index: number) => {
     const imgLength = resources.length;
-    let newimageSize=[];
 
+    let newImage = [];
     if (imageSize.length !== imgLength) {
-      newimageSize = new Array(imgLength);
+      newImage = new Array(imgLength);
     }
-    newimageSize[index] = value;
+    newImage[index] = value;
 
-    debugger
-    if (JSON.stringify(newimageSize).indexOf('null') < 0) {
-      setImageSize(newimageSize);
+    let sizeList = imageSize.slice(0);
+    sizeList.unshift(newImage[index]);
+    setImageSize(sizeList);
+
+    if (JSON.stringify(newImage).indexOf('null') < 0) {
+      setImageSize(newImage);
       setIsLoading(false);
-      
     }
-    
   };
 
-  const handleDrawingData = (data: any, param_page: number) => {
-    room && room.sendMessage.setDrawingData(data, param_page);
+  const handleDrawingData = (data: any) => {
+    room && room.sendMessage.setDrawingData(data, page);
   };
 
   const _handlePressMike = () => {
@@ -136,14 +168,24 @@ const DocumentShareContainer: React.FC<DocumentShareContainerProps> = ({}) => {
 
   const _handlePressExit = () => {
     const MODE = t('meet_share');
-    const title = t('alert_title_mode_exit').replace('[@mode@]', MODE);
-    const text = t('alert_text_quit')
+    const title =
+      presenter === 'localUser'
+        ? t('alert_title_mode_exit').replace('[@mode@]', MODE)
+        : t('alert_title_exit');
+    const text = (
+      presenter === 'localUser'
+        ? t('alert_text_quit')
+        : t('alert_text_quitconference')
+    )
       .replace('[@mode@]', MODE)
       .replace('[@mode@]', MODE);
     const handleConfirm = () => {
-      room && room.sendMessage.setDrawingData();
-      room && room.sendMessage.setDrawingShareMode(false);
-      room && room.sendMessage.setToogleDocumentShare(false);
+      if (presenter === 'localUser') {
+        room && room.sendMessage.setDrawingData();
+        room && room.sendMessage.setToogleDocumentShare(false);
+      } else {
+        onClose();
+      }
     };
     Alert.alert(title, text, [
       {
@@ -157,24 +199,15 @@ const DocumentShareContainer: React.FC<DocumentShareContainerProps> = ({}) => {
     ]);
   };
 
-  const _handlePressImgList = () => {};
+  const _handlePressImgList = (pressPage: number) => {
+    if (page !== pressPage) {
+      room && room.sendMessage.setDocumentPage(pressPage, presenter);
+    }
+  };
 
   const _handlePressArrow = () => {
     setShowPreView(!showPreView);
-  }
-
-  useEffect(() => {
-    console.log('page : ', page);
-    // if(scrollRef) {
-    //   const { width } = Dimensions.get('window');
-    //   const raise =
-    // }
-  }, [page]);
-
-  useEffect(() => {
-    console.log('attributes : ', attributes);
-    setResources(attributes ? JSON.parse(attributes.resources) : []);
-  }, [attributes]);
+  };
 
   return (
     <DocumentSharePresenter
@@ -197,81 +230,8 @@ const DocumentShareContainer: React.FC<DocumentShareContainerProps> = ({}) => {
       onPressArrow={_handlePressArrow}
       setShowTool={setShowTool}
       handleDrawingData={handleDrawingData}
-      _handleChangeImageSize={_handleChangeImageSize}
     />
   );
 };
-
-const styles = StyleSheet.create({
-  backGroundView: {
-    flex: 1
-  },
-  topButtonBar: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    zIndex: 10,
-    flexDirection: 'row',
-    backgroundColor: '#000',
-    justifyContent: 'flex-start',
-    alignItems: 'center'
-  },
-  exitButton: {
-    width: 24,
-    height: 24,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    marginRight: 7.5
-  },
-  headerText: {
-    color: '#fff',
-    fontSize: 18,
-    height: 28,
-    lineHeight: 28,
-    fontFamily: 'DOUZONEText30'
-  },
-  micButton: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  mainArea: {
-    flex: 1,
-    alignItems: 'center'
-  },
-  mainContainer: {
-    flex: 1,
-    width: '100%',
-    height: '100%'
-  },
-  topArea: {
-    flex: 1,
-    backgroundColor: '#00000090'
-  },
-  bottomArea: {
-    flex: 3,
-    width: '100%',
-    height: '100%',
-    backgroundColor: 'rgb(232, 235, 239)'
-  },
-  header: {
-    flexDirection: 'row',
-    height: 45,
-    width: '100%',
-    backgroundColor: '#fff'
-  },
-  headerView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  listHeaderText: {
-    color: 'rgb(28, 144, 251)',
-    fontFamily: 'DOUZONEText30'
-  }
-});
 
 export default DocumentShareContainer;
