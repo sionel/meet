@@ -180,7 +180,7 @@ export default function CreateScreenContainer(props: any) {
       _createConferenceRoom(conference);
     };
     const title = t('alert_title_create');
-    const type = 1;
+    const type = 2;
     setAlert({ message, onConfirm, title, type });
   };
   const onRefresh = () => {
@@ -262,21 +262,21 @@ export default function CreateScreenContainer(props: any) {
       setIndicatorFlag(false);
 
       const message = createResult.resultMsg;
-      const title = t('alert_title_fail');
+      const title = t('renewal.alert_title_fail');
       const type = 1;
       setAlert({ message, title, type });
 
       // 이미 화상채팅방이 생성되어 있습니다. 대화방당 1개의 화상채팅방을 제공합니다
     } else if (createResult.errors && createResult.errors.code === 'E002') {
       setIndicatorFlag(false);
-      const message = t('alert_text_failcreate');
-      const title = t('alert_title_fail');
+      const message = t('renewal.alert_text_failcreate');
+      const title = t('renewal.alert_title_fail');
       const type = 1;
       setAlert({ message, title, type });
     } else {
       setIndicatorFlag(false);
-      const message = t('alert_text_failcreate');
-      const title = t('alert_title_fail');
+      const message = t('renewal.alert_text_failcreate');
+      const title = t('renewal.alert_title_fail');
       const type = 1;
       setAlert({ message, title, type });
     }

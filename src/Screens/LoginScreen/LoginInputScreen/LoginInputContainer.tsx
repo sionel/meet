@@ -450,7 +450,6 @@ const LoginInputContainer = ({
         full_path: checkResult.full_path,
         membership_code: checkResult.resultData.employee_list[0].membership_code
       };
-      debugger;
       login(userData, from, check);
       return checkResult;
     } else {

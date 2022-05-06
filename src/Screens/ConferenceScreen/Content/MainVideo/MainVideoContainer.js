@@ -4,7 +4,8 @@ import {
   NativeModules,
   ToastAndroid,
   findNodeHandle,
-  NativeEventEmitter
+  NativeEventEmitter,
+  Alert
 } from 'react-native';
 import MainVideoPresenter from './MainVideoPresenter';
 import { getT } from '../../../../utils/translateManager';
@@ -39,14 +40,14 @@ class MainVideoContainer extends React.Component {
           this.setState({ time: remainTime });
           this.props.setLimitedTime(limitTime);
 
-          if (limitTime < 3540000) {
-            this.props.onClose();
-            Alert.alert('회의 종료', '회의시간이 60분 지나 회의가 종료됩니다.');
-          }
-          // if (limitTime < 500) {
+          // if (limitTime < 3580000) {
           //   this.props.onClose();
           //   Alert.alert('회의 종료', '회의시간이 60분 지나 회의가 종료됩니다.');
           // }
+          if (limitTime < 500) {
+            this.props.onClose();
+            Alert.alert('회의 종료', '회의시간이 60분 지나 회의가 종료됩니다.');
+          }
         } else {
           let nowTime = Date.now();
           let normalTime = Math.floor(

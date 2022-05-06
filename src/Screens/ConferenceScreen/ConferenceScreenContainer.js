@@ -392,7 +392,6 @@ class ConferenceScreenContainer extends React.Component {
     setIsConference(false);
     // setConferenceManager('');
     setConferenceCreatedTime(null);
-
     if (!isLogin) {
       navigation.reset({ routes: [{ name: 'LoginStack' }] });
     } else {

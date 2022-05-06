@@ -58,7 +58,6 @@ export default function ConfigurationScreenPresenter(props: propsTypes) {
   const t = getT();
   const userName = authInfo?.user_name;
   const rankName = authInfo?.rankname;
-  debugger;
   return (
     // <Fragment>
     //   <SafeAreaView style={{ flex: 0, backgroundColor: '#1c90fb' }} />
@@ -206,10 +205,7 @@ export default function ConfigurationScreenPresenter(props: propsTypes) {
             style={styles.imgStyle}
             resizeMode={'contain'}
           /> */}
-          <Text style={styles.menuTextStyle}>
-            {' '}
-            {t('renewal.option_logout')}{' '}
-          </Text>
+          <Text style={styles.menuTextStyle}>{t('renewal.option_logout')}</Text>
           <Image
             source={icArrowRight}
             style={styles.icRightArrow}
