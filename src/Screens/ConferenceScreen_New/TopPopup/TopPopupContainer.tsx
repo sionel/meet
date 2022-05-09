@@ -7,7 +7,7 @@ const TopPopupContainer: React.FC<TopPopupContainerProps> = ({}) => {
   const [isFirst, setIsFirst] = useState(true);
   const [fadeout, setFadeout] = useState<any>(null);
 
-  const [message, setMessage] = useState<string | undefined>('테스트중입니다.');
+  const [message, setMessage] = useState<string | undefined>(undefined);
 
   const fadeIn = () => {
     Animated.timing(fadeAnimation, {

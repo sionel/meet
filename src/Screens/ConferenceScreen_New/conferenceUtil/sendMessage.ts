@@ -152,10 +152,6 @@ export default class sendMessage {
   };
 
   documentShareTarget = (user: any, documentData: any, mode: string) => {
-    console.log('user : ', user);
-    console.log('documentData : ', documentData);
-    console.log('mode : ', mode);
-    
     if (documentData.presenter === 'localUser') {
       const command =
         mode === 'document'

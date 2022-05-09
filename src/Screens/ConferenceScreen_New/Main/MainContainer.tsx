@@ -7,7 +7,7 @@ import { actionCreators as MainuserActions } from '@redux/mainUser_copy';
 import { actionCreators as ScreenShareActions } from '@redux/ScreenShare';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'src/redux/configureStore';
-import { Alert } from 'react-native';
+import { Alert, Platform } from 'react-native';
 import { getT } from '@utils/translateManager';
 
 const MainContainer: React.FC<MainContainerProps> = ({ roomName, onClose }) => {
@@ -20,13 +20,14 @@ const MainContainer: React.FC<MainContainerProps> = ({ roomName, onClose }) => {
     mirrorMode,
     masters,
     mainUser,
-    // isScreenShare,
+    isScreenShare,
     room,
     mainVideoTrack,
     isMuteVideo,
     isLocal,
     presenter,
-    attributes
+    attributes,
+    myVideoState
   } = useSelector((state: RootState) => ({
     mainUser: state.mainUser_copy,
     mainDisplayType: state.mainUser_copy.mode,
@@ -34,13 +35,14 @@ const MainContainer: React.FC<MainContainerProps> = ({ roomName, onClose }) => {
     topDisplayType: state.conference.topDisplayType,
     bottomDisplayType: state.conference.bottomDisplayType,
     mirrorMode: state.conference.mirrorMode,
-    // isScreenShare: state.screenShare.isScreenShare,
+    isScreenShare: state.screenShare.isScreenShare,
     room: state.conference.room,
     mainVideoTrack: state.mainUser_copy.videoTrack,
     isMuteVideo: state.mainUser_copy.isMuteVideo,
     isLocal: state.mainUser_copy.isLocal,
     presenter: state.documentShare.presenter,
-    attributes: state.documentShare.attributes
+    attributes: state.documentShare.attributes,
+    myVideoState: state.conference.videoState
   }));
   //#endregion selector
 
@@ -62,10 +64,6 @@ const MainContainer: React.FC<MainContainerProps> = ({ roomName, onClose }) => {
     dispatch(MainuserActions.updateMainUserIsMaster());
   };
 
-  const toggleScreenFlag = () => {
-    dispatch(ScreenShareActions.toggleScreenFlag());
-  };
-
   const setMainUser = (jitsiId: string) => {
     dispatch(MainuserActions.setMainUser(jitsiId));
   };
@@ -73,6 +71,14 @@ const MainContainer: React.FC<MainContainerProps> = ({ roomName, onClose }) => {
   const toggleMuteVideo = (isMute: boolean) => {
     dispatch(MainuserActions.toggleMuteVideo(isMute));
   };
+
+  const setScreenFlag = (flag: boolean) => {
+    dispatch(ScreenShareActions.setScreenFlag(flag));
+  };
+
+  const toggleScreenFlag = () => {
+    dispatch(ScreenShareActions.toggleScreenFlag());
+  }
   //#endregion dispatch
 
   useEffect(() => {
@@ -93,7 +99,7 @@ const MainContainer: React.FC<MainContainerProps> = ({ roomName, onClose }) => {
   useEffect(() => {
     if (!isLocal && presenter === '') {
       let isMute;
-      isMute = mainVideoTrack ? mainVideoTrack.isMuted() : true ;
+      isMute = mainVideoTrack ? mainVideoTrack.isMuted() : true;
       toggleMuteVideo(!isMute);
     }
   }, [mainVideoTrack?.isMuted()]);
@@ -122,8 +128,36 @@ const MainContainer: React.FC<MainContainerProps> = ({ roomName, onClose }) => {
     }
   }, [presenter]);
 
+  useEffect(() => {
+    console.log('MainCtr_isScreenShare : ', isScreenShare);
+
+    if (isScreenShare) {
+      setMainView('screen');
+    } else {
+      if (isMuteVideo) {
+        setMainView('character');
+      } else {
+        setMainView('track');
+      }
+    }
+  }, [isScreenShare]);
+
   const _handlePressShareStop = () => {
-    toggleScreenFlag();
+    if (Platform.OS === 'android') {
+      try {
+        room && room.changeTrack('video', myVideoState);
+        setScreenFlag(false);
+        toggleMuteVideo(true);
+        setTimeout(() => {
+          toggleMuteVideo(false);
+        }, 500);
+      } catch(error) {
+        console.log('error : ', error);
+        setScreenFlag(false);
+      }
+    } else {
+      toggleScreenFlag();
+    }
   };
 
   const handleTopDisplay = () => {

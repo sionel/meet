@@ -22,6 +22,7 @@ const reducer: (state: state, action: AnyAction) => state = (
     case SET:
       return _setScreenFlag(state, action);
     case TOGGLE:
+      debugger
       return _toggleScreenFlag(state);
     default:
       return state;

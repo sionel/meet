@@ -8,6 +8,8 @@ import {
   Participants
 } from './components';
 import FileList from './components/FileList';
+import ScreenShareIOS from '../ScreenShare/ScreenShareIOS';
+import ScreenShareANDROID from '../ScreenShare/ScreenShareANDROID';
 
 const BottomPopupPresenter: React.FC<BottomPopupPresenterProps> = ({
   // getUserName,
@@ -51,6 +53,7 @@ const BottomPopupPresenter: React.FC<BottomPopupPresenterProps> = ({
 }) => {
   return (
     <SafeAreaView style={[styles.BotPopupSAV, bottomDisplayType === 'CHATTING' && {height: '100%', zIndex: 0}]}>
+      {Platform.OS === 'ios' ? <ScreenShareIOS /> : <ScreenShareANDROID />}
       {bottomDisplayType === 'MENU' && (
         <MenuList
           isMaster={isMaster}

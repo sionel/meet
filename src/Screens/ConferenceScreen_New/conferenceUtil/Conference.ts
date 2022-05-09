@@ -7,6 +7,7 @@ import sendMessage from './sendMessage';
 
 import { actionCreators as participantsAction } from '@redux/participants_copy';
 import { actionCreators as conferenceActions } from '@redux/conference';
+import { actionCreators as mainUserActions } from '@redux/mainUser_copy';
 import DrawingManager from './DrawingManager';
 
 interface Room {
@@ -34,6 +35,7 @@ class Conference {
     this._init();
     this._connection = new Connection();
     this._handler = ConferenceHandler(dispatch);
+    this._dispatch = dispatch;
     await this._connection.connect(id, token);
     await new Promise((resolve, reject) => {
       this._room = this._createRoom(id);
@@ -59,7 +61,7 @@ class Conference {
     JitsiMeetJS.init({
       ...config
     });
-    JitsiMeetJS.isDesktopSharingEnabled();
+    JitsiMeetJS.isDesktopSharingEnabled();    
     JitsiMeetJS.setLogLevel(JitsiMeetJS.logLevels.ERROR);
   };
   _createRoom = (roomId: string) => {
@@ -94,6 +96,7 @@ class Conference {
     )[0];
     await this._room.replaceTrack(oldTrack, newTrack);
     this._dispatch(conferenceActions.setVideoState(newTrack));
+    this._dispatch(mainUserActions.setMainUser(this.getMyId()));
     // this._dispatch(participantsAction.setUserTrack(newTrack));
   };
 

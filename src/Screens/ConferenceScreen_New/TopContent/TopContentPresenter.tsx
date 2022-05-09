@@ -40,7 +40,8 @@ const TopContentPresenter: React.FC<TopContentPresenterProps> = ({
             {displayType === 'FUNCTION' && (
               <Fragment>
                 <TouchableHighlight
-                  underlayColor={'rgba(0,0,0,0)'}
+                  underlayColor={'rgba(0,0,0,0.2)'}
+                  style={styles.buttonShadow}
                   onPress={onPressUserList}
                 >
                   <Image
@@ -50,7 +51,8 @@ const TopContentPresenter: React.FC<TopContentPresenterProps> = ({
                   />
                 </TouchableHighlight>
                 <TouchableHighlight
-                  underlayColor={'rgba(0,0,0,0)'}
+                  underlayColor={'rgba(0,0,0,0.2)'}
+                  style={styles.buttonShadow}
                   onPress={onPressChatting}
                 >
                   <View style={styles.ChatIcon}>
@@ -71,7 +73,8 @@ const TopContentPresenter: React.FC<TopContentPresenterProps> = ({
                 {!isScreenShare && (
                   <Fragment>
                     <TouchableHighlight
-                      underlayColor={'rgba(0,0,0,0)'}
+                      underlayColor={'rgba(0,0,0,0.2)'}
+                      style={styles.buttonShadow}
                       onPress={onPressCamaraReverse}
                     >
                       <Image
@@ -81,7 +84,8 @@ const TopContentPresenter: React.FC<TopContentPresenterProps> = ({
                       />
                     </TouchableHighlight>
                     <TouchableHighlight
-                      underlayColor={'rgba(0,0,0,0)'}
+                      underlayColor={'rgba(0,0,0,0.2)'}
+                      style={styles.buttonShadow}
                       onPress={onPressDisplayInvert}
                     >
                       <Image
@@ -95,7 +99,8 @@ const TopContentPresenter: React.FC<TopContentPresenterProps> = ({
               </Fragment>
             )}
             <TouchableHighlight
-              underlayColor={'rgba(0,0,0,0)'}
+              underlayColor={'rgba(0,0,0,0.2)'}
+              style={styles.buttonShadow}
               onPress={onPressMore}
             >
               <Image
@@ -126,7 +131,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     flexDirection: 'row',
-    marginHorizontal: 20,
+    marginLeft: 20,
+    marginRight: 10,
     height: 48
   },
   topRowText: {
@@ -158,27 +164,34 @@ const styles = StyleSheet.create({
   },
   UserIcon: {
     width: 24,
-    height: 24,
-    marginRight: 20
+    height: 24
+    // marginRight: 20
   },
   ChatIcon: {
     width: 24,
-    height: 24,
-    marginRight: 20.4
+    height: 24
+    // marginRight: 20.4
   },
   ReverseIcon: {
-    width: 23.2,
-    height: 19.3,
-    marginRight: 20.4
+    width: 24,
+    height: 24
+    // marginRight: 20.4
   },
   InvertIcon: {
     width: 24,
-    height: 24,
-    marginRight: 20
+    height: 24
+    // marginRight: 20
   },
   MoreIcon: {
     width: 24,
     height: 24
+  },
+  buttonShadow: {
+    borderRadius: 20,
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });
 

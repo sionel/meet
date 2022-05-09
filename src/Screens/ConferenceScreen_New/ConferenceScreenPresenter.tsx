@@ -1,4 +1,10 @@
-import { Platform, StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Platform,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  View
+} from 'react-native';
 import React, { Fragment } from 'react';
 import TopPopup from './TopPopup';
 import TopContent from './TopContent';
@@ -36,13 +42,6 @@ const ConferenceScreenPresenter: React.FC<ConferenceScreenPresenterProps> = ({
         </Fragment>
       ) : (
         <LoadingIndicator />
-        // <View
-        //   style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-        // >
-        //   <TouchableOpacity onPress={() => {}}>
-        //     <Text style={{ color: '#fff', fontSize: 20 }}>{`Loading...`}</Text>
-        //   </TouchableOpacity>
-        // </View>
       )}
     </View>
   );

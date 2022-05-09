@@ -45,7 +45,7 @@ function AppWapper(props) {
   const { persistor, store } = configureStore();
   console.reportErrorsAsExceptions = false;
   store.dispatch({
-    type: 'local.SET_EXTERNAL',
+    type: 'conference.SET_EXTERNAL',
     externalAPIScope: props.externalAPIScope
   });
   return (

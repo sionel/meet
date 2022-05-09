@@ -19,16 +19,23 @@ const BottomContentContainer: React.FC<BottomContentContainerProps> = ({
   handleCloseConf
 }) => {
   //#region selector
-  const { videoState, mikeState, isSpeakerOn, isBtOn, mode, isLocal } = useSelector(
-    (state: RootState) => ({
-      videoState: state.conference.videoState,
-      mikeState: state.conference.mikeState,
-      isSpeakerOn: state.conference.isSpeakerOn,
-      isBtOn: state.conference.isBtOn,
-      mode: state.mainUser_copy.mode,
-      isLocal: state.mainUser_copy.isLocal
-    })
-  );
+  const {
+    videoState,
+    mikeState,
+    isSpeakerOn,
+    isBtOn,
+    mode,
+    isLocal,
+    isMuteVideo
+  } = useSelector((state: RootState) => ({
+    videoState: state.conference.videoState,
+    mikeState: state.conference.mikeState,
+    isSpeakerOn: state.conference.isSpeakerOn,
+    isBtOn: state.conference.isBtOn,
+    mode: state.mainUser_copy.mode,
+    isLocal: state.mainUser_copy.isLocal,
+    isMuteVideo: state.mainUser_copy.isMuteVideo
+  }));
   //#endregion
 
   const [isVideoOn, setIsVideoOn] = useState(!videoState.isMuted());
@@ -46,6 +53,9 @@ const BottomContentContainer: React.FC<BottomContentContainerProps> = ({
     return () => {};
   }, []);
 
+  useEffect(() => {if(isLocal) {
+    setIsVideoOn(!isMuteVideo);
+  }}, [isMuteVideo]);
 
   const _handlePressVideo = () => {
     if (isVideoOn) {
@@ -53,8 +63,8 @@ const BottomContentContainer: React.FC<BottomContentContainerProps> = ({
     } else {
       videoState.unmute();
     }
-    isLocal && toggleMuteVideo();
     setIsVideoOn(!isVideoOn);
+    isLocal && toggleMuteVideo();
   };
 
   const _handlePressMike = () => {

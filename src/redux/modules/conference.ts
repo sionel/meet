@@ -23,6 +23,7 @@ const SET_MIRROR_MODE = 'conference.SET_MIRROR_MODE';
 const SET_EXPIRE_TIME = 'conference.SET_EXPIRE_TIME';
 const MESSAGE_RECEIVED = 'conference.MESSAGE_RECEIVED';
 const INIT_MESSAGES_COUNT = 'conference.INIT_MESSAGES_COUNT';
+const SET_EXTERNAL = 'conference.SET_EXTERNAL';
 const RESET_RESOURCE = 'conference.RESET_RESOURCE';
 
 export type messageType = {
@@ -39,7 +40,7 @@ export interface state {
   // drawing: any;
   // isConference: boolean;
   topDisplayType: 'FUNCTION' | 'NAME';
-  bottomDisplayType: 'MENU' | 'CHATTING' | 'PARTICIPANTS' | 'FILELIST' |'NONE';
+  bottomDisplayType: 'MENU' | 'CHATTING' | 'PARTICIPANTS' | 'FILELIST' | 'NONE';
   videoState: any;
   mikeState: any;
   isSpeakerOn: boolean;
@@ -48,6 +49,7 @@ export interface state {
   mirrorMode: boolean;
   expireTime: number | null;
   messages: messageType[];
+  externalAPIScope: string;
 }
 
 const initialState: state = {
@@ -64,7 +66,8 @@ const initialState: state = {
   facingMode: 'FRONT',
   mirrorMode: false,
   expireTime: null,
-  messages: []
+  messages: [],
+  externalAPIScope: ''
 };
 
 const reducer: (state: state, action: AnyAction) => state = (
@@ -98,12 +101,15 @@ const reducer: (state: state, action: AnyAction) => state = (
       return _setMirrorMode(state);
     case SET_EXPIRE_TIME:
       return _setExpireTime(state, action);
+    case SET_EXTERNAL:
+      return _setExternalAPI(state, action);
     case MESSAGE_RECEIVED:
       return _setMessage(state, action);
     case INIT_MESSAGES_COUNT:
       return _initMessagesCount(state);
     case RESET_RESOURCE:
-      return _resetResource();
+      return _resetResource(state);
+
     // case SET_LIST:
     //   return { ...state, list: action.list };
     // case SET_INITIAL_LIST:
@@ -164,7 +170,7 @@ const _setTopDisplayType = (state: state, action: AnyAction) => {
 };
 
 const setBottomDisplayType = (
-  displayType: 'MENU' | 'CHATTING' | 'PARTICIPANTS' | 'FILELIST'  |'NONE'
+  displayType: 'MENU' | 'CHATTING' | 'PARTICIPANTS' | 'FILELIST' | 'NONE'
 ) => {
   return {
     type: SET_BOTTOM_DISPLAY_TYPE,
@@ -182,6 +188,8 @@ const setVideoState = (videoTrack: any) => {
   };
 };
 const _setVideoState = (state: state, action: AnyAction) => {
+  console.log('action.videoTrack : ', action.videoTrack);
+
   return { ...state, videoState: action.videoTrack };
 };
 
@@ -309,13 +317,28 @@ const _initMessagesCount = (state: state) => {
   return { ...state, messages: messagesList };
 };
 
+const setExternalAPI = (externalAPI: string) => {
+  return {
+    type: SET_EXTERNAL,
+    externalAPI
+  };
+};
+
+const _setExternalAPI = (state: state, action: AnyAction) => {
+  const { externalAPIScope } = action;
+  return {
+    ...state,
+    externalAPIScope
+  };
+};
+
 const resetResource = () => {
   return {
     type: RESET_RESOURCE
   };
 };
-const _resetResource = () => {
-  return { ...initialState };
+const _resetResource = (state: state) => {
+  return { ...initialState, externalAPIScope: state.externalAPIScope };
 };
 
 export const actionCreators = {
@@ -334,7 +357,8 @@ export const actionCreators = {
   setExpireTime,
   receivedMessage,
   initMessagesCount,
-  resetResource
+  resetResource,
+  setExternalAPI
 };
 export default reducer;
 

@@ -16,7 +16,9 @@ import { RootState } from 'src/redux/configureStore';
 import { actionCreators as ParticipantsActions } from '@redux/participants_copy';
 import { actionCreators as ConferenceActions } from '@redux/conference';
 import { actionCreators as ScreenShareAction } from '@redux/ScreenShare';
+import { actionCreators as MainUserAction } from '@redux/mainUser_copy';
 import { isSuccess } from '@services/types';
+import { useScreenShareStatus } from '../ScreenShare/hooks/useScreenShare';
 
 const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
   roomId
@@ -32,7 +34,8 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
     messages,
     room,
     auth,
-    mainView
+    isScreenShare,
+    myVideoState
   } = useSelector((state: RootState) => ({
     bottomDisplayType: state.conference.bottomDisplayType,
     participants: state.participants_copy.list,
@@ -42,16 +45,17 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
     messages: state.conference.messages,
     room: state.conference.room,
     auth: state.user.auth,
-    mainView: state.mainUser_copy.mode
+    isScreenShare: state.screenShare.isScreenShare,
+    myVideoState: state.conference.videoState
   }));
   //#endregion
 
-  // console.log('bot.participants : ', participants);
+  const screenFlag = useScreenShareStatus();
 
   //#region UseState
 
   // MenuList
-
+  const [isFirst, setIsFirst] = useState(true);
   // Chat
   const [myMessage, setMyMessage] = useState('');
   const [cdm, setCdm] = useState(false);
@@ -82,10 +86,26 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
   ) => {
     dispatch(ConferenceActions.setBottomDisplayType(displayType));
   };
+  const setScreenFlag = (flag: boolean) => {
+    dispatch(ScreenShareAction.setScreenFlag(flag));
+  };
+
   const toggleScreenFlag = () => {
     dispatch(ScreenShareAction.toggleScreenFlag());
+  }
+
+  const toggleMuteVideo = (flag: boolean) => {
+    dispatch(MainUserAction.toggleMuteVideo(flag));
   };
   //#endregion
+
+  useEffect(() => {
+    console.log('screenFlag : ', screenFlag);
+    
+    if (!isFirst) {
+    handleScreenShareIOS();
+  } else setIsFirst(false);
+  }, [screenFlag])
 
   useEffect(() => {
     let timeout: number | NodeJS.Timeout = setTimeout(() => {});
@@ -146,10 +166,50 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
     setBottomDisplayType('FILELIST');
     // toggleDocumentListMode();
   };
-  const handlePressScreenShare = () => {
+  const handlePressScreenShare = async () => {
+    const newTrackType = isScreenShare ? 'video' : 'desktop';
+    if (Platform.OS === 'android') {
+      try {
+        room && (await room.changeTrack(newTrackType, myVideoState));
+        setScreenFlag(!isScreenShare);
+        if (newTrackType === 'video') {
+          toggleMuteVideo(true);
+          setTimeout(() => {
+            toggleMuteVideo(false);
+          }, 500);
+        }
+      } catch (error) {
+        console.log('error : ', error);
+        setScreenFlag(false);
+      }
+      // 맨처음 컨퍼런스 조인을 네이티브 모듈로 한번 보내고
+      // 플래그 상태에 따라서 데스크탖 또는 비디오 트랙 생성
+      // 생성한 트랙 체인지
+      // room&& room.changeTrack('')
+    } else {
+     toggleScreenFlag();
+    }
     setBottomDisplayType('NONE');
-    toggleScreenFlag();
   };
+
+  const handleScreenShareIOS = async () => {
+    const newTrackType = isScreenShare ? 'video' : 'desktop';
+    try {
+      console.log('room : ', room);
+      room && (await room.changeTrack(newTrackType, myVideoState));
+      setScreenFlag(!isScreenShare);
+      if (newTrackType === 'video') {
+        toggleMuteVideo(true);
+        setTimeout(() => {
+          toggleMuteVideo(false);
+        }, 500);
+      }
+    } catch (error) {
+      console.log('error : ', error);
+      setScreenFlag(false);
+    }
+  }
+
   const handlePressRequestMic = () => {
     setBottomDisplayType('NONE');
   };
