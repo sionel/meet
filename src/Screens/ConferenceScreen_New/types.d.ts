@@ -21,6 +21,7 @@ export interface ConferenceScreenContainerProps
 export interface ConferenceScreenPresenterProps {
   roomName: string;
   id: string;
+  roomToken: string;
   isConnected: boolean;
   isChatting: boolean;
   handleClose: () => void;
@@ -112,6 +113,7 @@ export interface SplitVideoPresenterProps {}
 
 export interface BottomPopupContainerProps {
   roomId: string;
+  roomToken: string;
 }
 export interface BottomPopupPresenterProps
   extends MenuListProps,
@@ -151,7 +153,8 @@ export interface MenuListProps {
   onPressDocumentShare: () => void;
   onPressScreenShare: () => void;
   onPressRequestMic: () => void;
-  isMaster: Boolean;
+  isMaster: boolean;
+  isMicControl: boolean;
 }
 
 export interface ChattingProps {

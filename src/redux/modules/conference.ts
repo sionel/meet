@@ -24,6 +24,7 @@ const SET_EXPIRE_TIME = 'conference.SET_EXPIRE_TIME';
 const MESSAGE_RECEIVED = 'conference.MESSAGE_RECEIVED';
 const INIT_MESSAGES_COUNT = 'conference.INIT_MESSAGES_COUNT';
 const SET_EXTERNAL = 'conference.SET_EXTERNAL';
+const SET_IS_MUTE_MIKE = 'conference.SET_IS_MUTE_MIKE';
 const RESET_RESOURCE = 'conference.RESET_RESOURCE';
 
 export type messageType = {
@@ -45,6 +46,7 @@ export interface state {
   mikeState: any;
   isSpeakerOn: boolean;
   isBtOn: boolean;
+  isMuteMike: boolean;
   facingMode: 'FRONT' | 'BACK';
   mirrorMode: boolean;
   expireTime: number | null;
@@ -63,6 +65,7 @@ const initialState: state = {
   mikeState: undefined,
   isSpeakerOn: false,
   isBtOn: false,
+  isMuteMike: false,
   facingMode: 'FRONT',
   mirrorMode: false,
   expireTime: null,
@@ -103,6 +106,8 @@ const reducer: (state: state, action: AnyAction) => state = (
       return _setExpireTime(state, action);
     case SET_EXTERNAL:
       return _setExternalAPI(state, action);
+    case SET_IS_MUTE_MIKE:
+      return _setIsMuteMike(state, action);
     case MESSAGE_RECEIVED:
       return _setMessage(state, action);
     case INIT_MESSAGES_COUNT:
@@ -188,8 +193,6 @@ const setVideoState = (videoTrack: any) => {
   };
 };
 const _setVideoState = (state: state, action: AnyAction) => {
-  console.log('action.videoTrack : ', action.videoTrack);
-
   return { ...state, videoState: action.videoTrack };
 };
 
@@ -332,6 +335,31 @@ const _setExternalAPI = (state: state, action: AnyAction) => {
   };
 };
 
+const setIsMuteMike = (flag?: boolean) => {
+  return {
+    type: SET_IS_MUTE_MIKE,
+    flag
+  };
+};
+
+const _setIsMuteMike = (state: state, action: AnyAction) => {
+  const { mikeState } = state;
+  const { flag } = action;
+
+  const currentMute = typeof flag === 'undefined' ? mikeState.isMute() : !flag;
+  
+  if (currentMute) {
+    mikeState.unmute();
+  } else {
+    mikeState.mute();
+  }
+  return {
+    ...state,
+    mikeState,
+    isMuteMike: !currentMute
+  };
+};
+
 const resetResource = () => {
   return {
     type: RESET_RESOURCE
@@ -352,6 +380,7 @@ export const actionCreators = {
   setMikeState,
   setIsSpeakerOn,
   setIsBtOn,
+  setIsMuteMike,
   setFacingMode,
   setMirrorMode,
   setExpireTime,
@@ -361,61 +390,3 @@ export const actionCreators = {
   setExternalAPI
 };
 export default reducer;
-
-// const SET_LIST = 'conference.SET_LIST';
-// const SET_INITIAL_LIST = 'conference.SET_INITIAL_LIST';
-
-// //#region Action Creators
-
-// /**
-//  * setList
-//  */
-// setList = list => {
-//   return {
-//     type: SET_LIST,
-//     list
-//   };
-// };
-
-// setInitialList = () => {
-//   return {
-//     type: SET_INITIAL_LIST
-//   };
-// };
-
-// //#endregion
-
-// //#region initialState
-
-// const initialState = {
-//   list: []
-// };
-
-// //#endregion initialState
-
-// //#region Reducer
-
-// reducer = (state = initialState, action) => {
-//   switch (action.type) {
-//     case SET_LIST:
-//       return { ...state, list: action.list };
-//     case SET_INITIAL_LIST:
-//       return { ...state, list: [] };
-//     default:
-//       return state;
-//   }
-// };
-
-// //#endregion Reducer
-
-// //#region Export
-
-// const actionCreators = {
-//   setList,
-//   setInitialList
-// };
-
-// export { actionCreators };
-// export default reducer;
-
-// //#endregion Export

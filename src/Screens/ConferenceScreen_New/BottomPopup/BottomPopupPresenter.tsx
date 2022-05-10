@@ -16,6 +16,7 @@ const BottomPopupPresenter: React.FC<BottomPopupPresenterProps> = ({
   bottomDisplayType,
   // MenuList
   isMaster,
+  isMicControl,
   onPressSketch,
   onPressDocumentShare,
   onPressScreenShare,
@@ -57,6 +58,7 @@ const BottomPopupPresenter: React.FC<BottomPopupPresenterProps> = ({
       {bottomDisplayType === 'MENU' && (
         <MenuList
           isMaster={isMaster}
+          isMicControl={isMicControl}
           onPressSketch={onPressSketch}
           onPressDocumentShare={onPressDocumentShare}
           onPressRequestMic={onPressRequestMic}

@@ -120,12 +120,14 @@ function changeMasterControlMode(
   return dispatch => {
     dispatch({
       type: SET_IS_CONTROL,
-      flag: id ? true : false
+      flag: id !== null ? true : false
     });
   };
 }
 
 function setIsContorl(state: state, action: AnyAction) {
+  console.log('action.flag : ', action.flag);
+  
   return {
     ...state,
     isMasterControl: action.flag,
@@ -186,17 +188,16 @@ function setAudioActive(state: state, action: AnyAction) {
 //#region TOGGLE_MUTE_MIC_MASTER
 
 function changeMuteMicMaster(
-  micMuteFlag: boolean
+  flag: boolean
 ): ThunkAction<void, RootState, unknown> {
   return (dispatch, getState, extraArgument) => {
     dispatch({
-      type: 'local.TOGGLE_MUTE_MIC',
-      micMute: micMuteFlag
-    });
-
+      type: 'conference.SET_IS_MUTE_MIKE',
+      flag
+    })
     dispatch({
       type: TOGGLE_MUTE_MIC_MASTER,
-      micMuteFlag
+      // micMuteFlag
     });
   };
 }
@@ -248,8 +249,8 @@ function applyToggleMuteMicMaster(state: state, action: AnyAction) {
 // }
 //#endregion
 
-//#region SPEEK_REQUEST
-function setMicRequest(flag = null): ThunkAction<void, RootState, unknown> {
+//#region SPEAK_REQUEST
+function setMicRequest(flag:boolean | null = null): ThunkAction<void, RootState, unknown> {
   return dispatch => {
     dispatch({
       type: SPEEK_REQUEST,

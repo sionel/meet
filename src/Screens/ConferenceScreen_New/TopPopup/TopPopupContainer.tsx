@@ -2,12 +2,30 @@ import React, { useEffect, useRef, useState } from 'react';
 import TopPopupPresenter from './TopPopupPresenter';
 import { TopPopupContainerProps } from '../types';
 import { Animated } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from 'src/redux/configureStore';
+import { actionCreators as ToastActions} from '@redux/toast';
 
 const TopPopupContainer: React.FC<TopPopupContainerProps> = ({}) => {
   const [isFirst, setIsFirst] = useState(true);
   const [fadeout, setFadeout] = useState<any>(null);
-
   const [message, setMessage] = useState<string | undefined>(undefined);
+
+  const { toggleFlag, toastMessage, userList } = useSelector(
+    (state: RootState) => {
+      return {
+        toggleFlag: state.toast.toggleFlag,
+        toastMessage: state.toast.toastMessage,
+        userList: state.master.targetUserList
+      };
+    }
+  );
+
+  const dispatch = useDispatch();
+  const setToastMessage = (toastMessage: string) => {
+    dispatch(ToastActions.setToastMessage(toastMessage));
+  };
+
 
   const fadeIn = () => {
     Animated.timing(fadeAnimation, {
@@ -38,8 +56,8 @@ const TopPopupContainer: React.FC<TopPopupContainerProps> = ({}) => {
 
   useEffect(() => {
     if (isFirst) {
-      if (message) {
-        // setMessage(toastMessage);
+      if (toastMessage) {
+        setMessage(toastMessage);
         fadeIn();
         setFadeout(
           setTimeout(() => {
@@ -51,25 +69,21 @@ const TopPopupContainer: React.FC<TopPopupContainerProps> = ({}) => {
     }
     return () => {
       setIsFirst(true);
-      setMessage(undefined);
-      // dispatch({
-      //   type: 'master.TOAST_MESSAGE',
-      //   toastMessage: ''
-      // });
+      setToastMessage('');
     };
   }, []);
 
   useEffect(() => {
     if (isFirst) return;
     if (fadeout) clearTimeout(fadeout);
-    // setMessage(toastMessage);
+    setMessage(toastMessage);
     fadeIn();
     setFadeout(
       setTimeout(() => {
         fadeOut();
       }, 2000)
     );
-  }, []);
+  }, [toggleFlag]);
 
   const fadeAnimation = useRef(new Animated.Value(0)).current;
   return (

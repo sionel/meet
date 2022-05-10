@@ -24,6 +24,8 @@ import icMicOff from '@assets/icons/ic_mic_off.png';
 import icHandW from '@assets/icons/ic_hand_w.png';
 import { getT } from '@utils/translateManager';
 import { ParticipantCardPros } from '@screens/ConferenceScreen_New/types';
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/redux/configureStore';
 
 const { width } = Dimensions.get('window');
 
@@ -40,6 +42,10 @@ const ParticipantCard: React.FC<ParticipantCardPros> = ({
   onPressKick
 }) => {
   const t = getT();
+  const { masterContorl } = useSelector((state: RootState) => ({
+    masterContorl: state.master.isMasterControl
+  }));
+  
   return (
     <FlatList
       contentContainerStyle={{ flexGrow: 1 }}
@@ -198,7 +204,7 @@ const ParticipantCard: React.FC<ParticipantCardPros> = ({
           >
             <View style={styles.userRow}>
               <View style={{ width: 40, height: 40 }}>
-                {item.isLocal && (
+                {index === 0 && (
                   <View style={styles.myTextView}>
                     <Text style={styles.myText}>
                       {t('renewal.chatting_me')}
@@ -233,10 +239,10 @@ const ParticipantCard: React.FC<ParticipantCardPros> = ({
                   isMaster && { backgroundColor: '#febc2c' },
                   external && {
                     backgroundColor: '#75b7cb'
-                  }
-                  //   !isMaster &&
-                  //     isMasterControl &&
-                  //     !isMuteMic && { backgroundColor: '#1c90fb' }
+                  },
+                  !isMaster &&
+                    masterContorl &&
+                    !isMuteMic && { backgroundColor: '#1c90fb' }
                 ]}
               >
                 {isMaster && (
@@ -260,16 +266,16 @@ const ParticipantCard: React.FC<ParticipantCardPros> = ({
                     {t('renewal.chatting_external')}
                   </Text>
                 )}
-                {/* {!isMaster && isMasterControl && !isMuteMic && (
-                      <Fragment>
-                        <Image
-                          style={{ width: 14, height: 14, marginRight: '5%' }}
-                          source={icHandW}
-                          resizeMode={'contain'}
-                        />
-                        <Text style={styles.roleText}>{t('발언중')}</Text>
-                      </Fragment>
-                    )} */}
+                {!isMaster && masterContorl && !isMuteMic && (
+                  <Fragment>
+                    <Image
+                      style={{ width: 14, height: 14, marginRight: '5%' }}
+                      source={icHandW}
+                      resizeMode={'contain'}
+                    />
+                    <Text style={styles.roleText}>{t('발언중')}</Text>
+                  </Fragment>
+                )}
               </View>
               <TouchableHighlight
                 activeOpacity={0.5}

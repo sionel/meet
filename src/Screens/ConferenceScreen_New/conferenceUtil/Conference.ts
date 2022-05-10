@@ -31,10 +31,10 @@ class Conference {
     return this._sendMessage;
   }
 
-  join = async ({ id, token }: Room, user: any, dispatch: any, tracks: any) => {
+  join = async ({ id, token }: Room, user: any, dispatch: any, tracks: any, t: any) => {
     this._init();
     this._connection = new Connection();
-    this._handler = ConferenceHandler(dispatch);
+    this._handler = ConferenceHandler(dispatch, t);
     this._dispatch = dispatch;
     await this._connection.connect(id, token);
     await new Promise((resolve, reject) => {

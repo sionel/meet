@@ -1,3 +1,4 @@
+import { MeetApi } from '@services/index';
 import DrawingMananger from './DrawingManager';
 // 위하고 아이디 커멘드 이름 정의
 const WEHAGO_ID = 'wehagoid';
@@ -99,6 +100,7 @@ export default class sendMessage {
     return attributes;
   };
 
+  // 스케치 모드를 알림
   setDrawingShareMode = (isDrawingShare: boolean) => {
     this._room.sendCommandOnce(SET_DRAWING_IS_SHARE, {
       value: this._room.myUserId(),
@@ -106,6 +108,7 @@ export default class sendMessage {
     });
   };
 
+  // 스케치한 데이터들을 회의 참가자들에게 전송
   setDrawingData = (data: any, page: any) => {
     // 로그 기록이 있을 경우 참여자들에게 기록 전송
     const newData = this._drawingManager.handleConvertFormat('mobile', data);
@@ -126,6 +129,7 @@ export default class sendMessage {
     );
   };
 
+  // 문서공유를 알림
   setToogleDocumentShare = (attributes: any, user = 'ALL') => {
     const command = attributes
       ? SET_DOCUMENT_SHARE_IS_OPEN
@@ -140,6 +144,7 @@ export default class sendMessage {
     this._handlers.changeDocumentShareMode(attributes, this._room.myUserId());
   };
 
+  // 문서공유시 페이지 전환
   setDocumentPage = (page: number, presenter: string) => {
     if (presenter === 'localUser' || presenter === this._room.myUserId()) {
       this._room.sendCommandOnce(SET_DOCUMENT_PAGE, {
@@ -151,12 +156,11 @@ export default class sendMessage {
     this._handlers.changeDocumentPage(page);
   };
 
+  //스케치 및 문서공유 진행중 회의 참여 했을경우
   documentShareTarget = (user: any, documentData: any, mode: string) => {
     if (documentData.presenter === 'localUser') {
       const command =
-        mode === 'document'
-          ? DOCUMENT_SHARE_TARGET
-          : DRAWING_SHARE_TARGET;
+        mode === 'document' ? DOCUMENT_SHARE_TARGET : DRAWING_SHARE_TARGET;
 
       this._room.sendCommandOnce(command, {
         value: this._room.myUserId(),
@@ -168,6 +172,75 @@ export default class sendMessage {
           from: 'mobile'
         }
       });
+    }
+  };
+
+  stopAttention = (myName: string) => {
+    // 이름이 담겨 있으면 본인이 끈거여서 이름을 보내서 마스터 하단에 메시지를 띄워줘야하고
+    // 이름이 없으면 마스터가 껐기때문에 이름을 보내줄 필요 없음
+    this._room.sendCommandOnce(STOP_FLOOR, {
+      value: this._room.myUserId(),
+      attributes: {
+        targetUser: JSON.stringify({
+          jitsiId: this._room.myUserId(),
+          name: myName ? myName : null
+        }),
+        isMasterControlTarget: myName ? false : true
+      }
+    });
+  };
+
+  requestAttention = (myName: string) => {
+    this._room.sendCommandOnce(REQUEST_FLOOR, {
+      value: this._room.myUserId(),
+      attributes: {
+        targetUser: JSON.stringify({
+          jitsiId: this._room.myUserId(),
+          name: myName
+        })
+      }
+    });
+  };
+
+  micControlMode = async (
+    flag: boolean,
+    cno: string,
+    roomToken: string,
+    audio_active: boolean
+  ) => {
+    if (flag) {
+      await this._room.sendCommandOnce(REQUEST_MIC_CONTROL_USER, {
+        value: this._room.myUserId(),
+        attributes: {}
+      });
+
+      this._room.sendCommandOnce(REQUEST_MIC_CONTROL, {
+        value: this._room.myUserId(),
+        attributes: { controlType: 'mute' }
+      });
+
+      let param = {
+        audio_active,
+        videoseq: this._room.myUserId()
+      };
+
+      MeetApi.updateMasterControlUser(cno, roomToken, param);
+    } else {
+      await this._room.sendCommandOnce(REQUEST_MIC_CONTROL, {
+        value: this._room.myUserId(),
+        attributes: { controlType: 'mute' }
+      });
+
+      this._room.sendCommandOnce(REQUEST_MIC_CONTROL_USER, {
+        attributes: {}
+      });
+
+      let param = {
+        audio_active,
+        videoseq: null
+      };
+
+      MeetApi.updateMasterControlUser(cno, roomToken, param);
     }
   };
 }

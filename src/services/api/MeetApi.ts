@@ -694,7 +694,7 @@ export default {
   updateMasterControlUser: async (
     cno: string,
     roomToken: string,
-    param: { audio_active: boolean; videoseq: string }
+    param: { audio_active: boolean; videoseq: string | null }
   ) => {
     let url = '';
     let signature;
@@ -785,7 +785,10 @@ export default {
       }
     };
 
-    const response = await Axios(url, data);
+    const response = await Axios<{ videoseq: string; audio_active: boolean }>(
+      url,
+      data
+    );
 
     if (isSuccess(response)) {
       return response;

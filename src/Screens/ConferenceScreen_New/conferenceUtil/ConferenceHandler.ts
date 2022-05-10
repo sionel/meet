@@ -3,9 +3,10 @@ import { actionCreators as participantsActions } from '@redux/participants_copy'
 import { actionCreators as mainuserActions } from '@redux/mainUser_copy';
 import { actionCreators as conferenceActions } from '@redux/conference';
 import { actionCreators as documentShareActions } from '@redux/documentShare';
-import { actionCreators as masterAction } from '@redux/master';
+import { actionCreators as masterActions } from '@redux/master';
+import { actionCreators as toastActions } from '@redux/toast';
 
-export const ConferenceHandler = (dispatch: any) => ({
+export const ConferenceHandler = (dispatch: any, t: any) => ({
   test: () => {
     dispatch(testAction.test());
   },
@@ -66,6 +67,35 @@ export const ConferenceHandler = (dispatch: any) => ({
   },
   changeDocumentPage: (page: number) => {
     dispatch(documentShareActions.setDocumentPage(page));
+  },
+  changeMicControlModeByMaster: (flag: boolean, iMaster: boolean) => {
+    !iMaster && dispatch(masterActions.changeAudioActive(flag));
+
+    const msg = flag
+      ? t('toast_master_micoffbymaster') // 마스터가 마이크 비활성화
+      : t('toast_master_miconbymaster'); // 마스터가 마이크 활성화
+    !iMaster && dispatch(toastActions.setToastMessage(msg));
+  },
+  changeMicControlUserModeByMaster: (value: any, flag: boolean) => {
+    flag && dispatch(masterActions.changeMasterControlMode(value));
+    const msg = value
+      ? t('toast_master_clton') //발언권 제어 시작
+      : t('toast_master_cltoff'); //발언권 제어 종료
+    dispatch(toastActions.setToastMessage(msg));
+  },
+  changeMicMuteByMaster: (flag: boolean) => {
+    const msg = flag
+      ? t('toast_master_micoffbymaster') // 마스터가 마이크 비활성화
+      : t('toast_master_miconbymaster'); // 마스터가 마이크 활성화
+    dispatch(toastActions.setToastMessage(msg));
+    dispatch(masterActions.changeMuteMicMaster(flag));
+  },
+  rejectedByMaster: () => {
+    dispatch(toastActions.setToastMessage(t('toast_master_denied')));
+    dispatch(masterActions.setMicRequest(false));
+  },
+  requestFloor: (targetUser: any) => {
+    dispatch(masterActions.setUserMicRequest(targetUser));
   }
 });
 

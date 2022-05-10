@@ -18,11 +18,10 @@ export default function ScreenShareIOS(props: any) {
   const _setNativeComponent = (component: any) => {
     _nativeComponent = component;
   };
-  // const isScreenShare = useScreenShareStatus();
   const [isFirst, setIsFirst] = useState(true);
 
   useEffect(() => {
-    debugger
+    console.log('ScreenShareIOS');
     console.log('screenToggleFlag : ', screenToggleFlag);
     if (!isFirst) {
       const handle = findNodeHandle(_nativeComponent);

@@ -19,9 +19,11 @@ import { actionCreators as ScreenShareAction } from '@redux/ScreenShare';
 import { actionCreators as MainUserAction } from '@redux/mainUser_copy';
 import { isSuccess } from '@services/types';
 import { useScreenShareStatus } from '../ScreenShare/hooks/useScreenShare';
+import { REQUEST_MIC_CONTROL } from '@utils/conference/ConferenceConnector';
 
 const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
-  roomId
+  roomId,
+  roomToken
 }) => {
   const { OS } = Platform;
   //#region useSelector
@@ -35,7 +37,8 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
     room,
     auth,
     isScreenShare,
-    myVideoState
+    myVideoState,
+    isMaster
   } = useSelector((state: RootState) => ({
     bottomDisplayType: state.conference.bottomDisplayType,
     participants: state.participants_copy.list,
@@ -46,7 +49,8 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
     room: state.conference.room,
     auth: state.user.auth,
     isScreenShare: state.screenShare.isScreenShare,
-    myVideoState: state.conference.videoState
+    myVideoState: state.conference.videoState,
+    isMaster: state.participants_copy.list[0].isMaster
   }));
   //#endregion
 
@@ -56,6 +60,7 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
 
   // MenuList
   const [isFirst, setIsFirst] = useState(true);
+  const [isMicControl, setIsMicControl] = useState(false);
   // Chat
   const [myMessage, setMyMessage] = useState('');
   const [cdm, setCdm] = useState(false);
@@ -92,7 +97,7 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
 
   const toggleScreenFlag = () => {
     dispatch(ScreenShareAction.toggleScreenFlag());
-  }
+  };
 
   const toggleMuteVideo = (flag: boolean) => {
     dispatch(MainUserAction.toggleMuteVideo(flag));
@@ -100,12 +105,10 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
   //#endregion
 
   useEffect(() => {
-    console.log('screenFlag : ', screenFlag);
-    
     if (!isFirst) {
-    handleScreenShareIOS();
-  } else setIsFirst(false);
-  }, [screenFlag])
+      Platform.OS === 'ios' && handleScreenShareIOS();
+    } else setIsFirst(false);
+  }, [screenFlag]);
 
   useEffect(() => {
     let timeout: number | NodeJS.Timeout = setTimeout(() => {});
@@ -156,17 +159,17 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
   }, [bottomDisplayType]);
 
   //#region Method
+
   // MenuList
   const handlePressSketch = () => {
     setBottomDisplayType('NONE');
     room && room.sendMessage.setDrawingShareMode(true);
-    // setMainView('sketch');
   };
   const handlePressDocumentShare = () => {
     setBottomDisplayType('FILELIST');
-    // toggleDocumentListMode();
   };
   const handlePressScreenShare = async () => {
+    setBottomDisplayType('NONE');
     const newTrackType = isScreenShare ? 'video' : 'desktop';
     if (Platform.OS === 'android') {
       try {
@@ -182,20 +185,14 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
         console.log('error : ', error);
         setScreenFlag(false);
       }
-      // 맨처음 컨퍼런스 조인을 네이티브 모듈로 한번 보내고
-      // 플래그 상태에 따라서 데스크탖 또는 비디오 트랙 생성
-      // 생성한 트랙 체인지
-      // room&& room.changeTrack('')
     } else {
-     toggleScreenFlag();
+      toggleScreenFlag();
     }
-    setBottomDisplayType('NONE');
   };
 
   const handleScreenShareIOS = async () => {
     const newTrackType = isScreenShare ? 'video' : 'desktop';
     try {
-      console.log('room : ', room);
       room && (await room.changeTrack(newTrackType, myVideoState));
       setScreenFlag(!isScreenShare);
       if (newTrackType === 'video') {
@@ -208,10 +205,18 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
       console.log('error : ', error);
       setScreenFlag(false);
     }
-  }
+  };
 
-  const handlePressRequestMic = () => {
+  const handlePressRequestMic = async () => {
     setBottomDisplayType('NONE');
+    room &&
+      (await room.sendMessage.micControlMode(
+        !isMicControl,
+        auth.cno,
+        roomToken,
+        false
+      ));
+    setIsMicControl(!isMicControl);
   };
 
   // Chat
@@ -309,7 +314,8 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
       bottomDisplayType={bottomDisplayType}
       // getUserName={getUserName}
       //MenuList
-      isMaster={true}
+      isMaster={isMaster}
+      isMicControl={isMicControl}
       onPressSketch={handlePressSketch}
       onPressDocumentShare={handlePressDocumentShare}
       onPressRequestMic={handlePressRequestMic}

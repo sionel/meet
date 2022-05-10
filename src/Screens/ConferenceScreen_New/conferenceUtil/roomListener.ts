@@ -319,65 +319,68 @@ export function bindEvent(handler: any, room: any, resolve: any, reject: any) {
   // // 화상대화 전체 마이크 제어 요청 이벤트
   // // - 마스터가 마이크 제어 mute를 함 사용자들은 마이크 임의로 킬 수 없음
   // // 간단한 토스트 메시지 띄움
-  // room.addCommandListener(REQUEST_MIC_CONTROL, value => {
-  //   // console.log('REQUEST_MIC_CONTROL[ 마이크 전체 제어 ] : ', value);
-  //   const {
-  //     attributes: { controlType }
-  //   } = value;
+  room.addCommandListener(actions.REQUEST_MIC_CONTROL, (value: any) => {
+    // console.log('REQUEST_MIC_CONTROL[ 마이크 전체 제어 ] : ', value);
+    const {
+      attributes: { controlType }
+    } = value;
 
-  //   if (value.value === room.myUserId()) {
-  //     handler.CHANGED_MIC_CONTROL_MODE_BY_MASTER(controlType === 'mute', true);
-  //   } else {
-  //     handler.CHANGED_MIC_CONTROL_MODE_BY_MASTER(controlType === 'mute', false);
-  //   }
-  //   // value.attribute === 'mute' ? true : false
-  // });
+    if (value.value === room.myUserId()) {
+      handler.changeMicControlModeByMaster(controlType === 'mute', true);
+    } else {
+      handler.changeMicControlModeByMaster(controlType === 'mute', false);
+    }
+    // value.attribute === 'mute' ? true : false
+  });
 
   // // 화상대화 전체 마이크 제어 요청자 사용자 정보 이벤트
   // //- 마스터가 마이크 제어 모드 시작하기/종료하기
-  // room.addCommandListener(REQUEST_MIC_CONTROL_USER, value => {
-  //   // console.log('REQUEST_MIC_CONTROL_USER[ 발언권 제어모드 ] : ', value);
-  //   let controlMode = value.value !== room.myUserId();
-  //   handler.CHANGED_MIC_CONTROL_USER_MODE_BY_MASTER(value.value, controlMode);
-  // });
+  room.addCommandListener(actions.REQUEST_MIC_CONTROL_USER, async (value: any) => {
+    console.log('REQUEST_MIC_CONTROL_USER[ 발언권 제어모드 ] : ', value);
+    let controlMode = value.value !== room.myUserId();
+    
+    console.log('controlMode : ', controlMode);
+    
+    handler.changeMicControlUserModeByMaster(value.value, controlMode);
+  });
 
   // // 화상대화 타겟 유저 마이크 제어 요청 이벤트
   // // - 마스터가 단일 마일 제어 id형식 8자
-  // room.addCommandListener(REQUEST_MIC_CONTROL_TARGET, value => {
-  //   // console.log(
-  //   //   'REQUEST_MIC_CONTROL_TARGET[ 특정 유저 마이크 제어 ] : ',
-  //   //   value
-  //   // );
-  //   if (room.myUserId() === value.attributes.target) {
-  //     handler.CHANGED_MIC_MUTE_BY_MASTER(value.attributes.isMute === 'true');
-  //   }
-  // });
+  room.addCommandListener(actions.REQUEST_MIC_CONTROL_TARGET, (value: any) => {
+    // console.log(
+    //   'REQUEST_MIC_CONTROL_TARGET[ 특정 유저 마이크 제어 ] : ',
+    //   value
+    // );
+    if (room.myUserId() === value.attributes.target) {
+      handler.changeMicMuteByMaster(value.attributes.isMute === 'true');
+    }
+  });
 
-  // room.addCommandListener(GRANT_FLOOR, value => {
-  //   const result = JSON.parse(value.attributes.targetUser);
-  //   console.log('GRANT_FLOOR : ', result);
-  //   if (result.find(e => e.jitsiId === room.myUserId())) {
-  //     if (value.attributes.type === 'reject') {
-  //       handler.REJECTED_BY_MASTER();
-  //     } else {
-  //       handler.CHANGED_MIC_MUTE_BY_MASTER(false);
-  //     }
-  //   }
-  // });
+  room.addCommandListener(actions.GRANT_FLOOR, (value: any) => {
+    const result = JSON.parse(value.attributes.targetUser);
+    console.log('GRANT_FLOOR : ', result);
+    if (result.find((e: any) => e.jitsiId === room.myUserId())) {
+      if (value.attributes.type === 'reject') {
+        handler.rejectedByMaster();
+      } else {
+        handler.changeMicMuteByMaster(false);
+      }
+    }
+  });
 
-  // room.addCommandListener(GRANT_FLOOR_TARGET, value => {
-  //   const result = JSON.parse(value.attributes.targetUser);
-  //   const iMaster = value.attributes.isMasterControlTarget;
-  //   console.log('GRANT_FLOOR_TARGET : ', value);
+  room.addCommandListener(actions.GRANT_FLOOR_TARGET, (value: any) => {
+    console.log('GRANT_FLOOR_TARGET : ', value);
 
-  //   if (result.jitsiId === room.myUserId()) {
-  //     if (value.attributes.type === 'reject') {
-  //       iMaster !== 'true' && handler.REJECTED_BY_MASTER();
-  //     } else if (value.attributes.type === 'accept') {
-  //       handler.CHANGED_MIC_MUTE_BY_MASTER(false);
-  //     }
-  //   }
-  // });
+    const targetUser = JSON.parse(value.attributes.targetUser);
+    const iMaster = value.attributes.isMasterControlTarget;
+    if (targetUser.jitsiId === room.myUserId()) {
+      if (value.attributes.type === 'reject') {
+        iMaster !== 'true' && handler.rejectedByMaster();
+      } else if (value.attributes.type === 'accept') {
+        handler.changeMicMuteByMaster(false);
+      }
+    }
+  });
 
   // room.addCommandListener(UPDATE_MASTER_USERS, value => {
   //   const { cancel, myCommand } = value.attributes;
@@ -391,29 +394,26 @@ export function bindEvent(handler: any, room: any, resolve: any, reject: any) {
   //   handler.REQUEST_KICK(master, target);
   // });
 
-  // room.addCommandListener(STOP_FLOOR, value => {
-  //   console.log('STOP_FLOOR : ', value);
-  //   const result = JSON.parse(value.attributes.targetUser);
-  //   if (
-  //     result.jitsiId === room.myUserId() &&
-  //     value.value !== room.myUserId() &&
-  //     value.attributes.isMasterControlTarget !== 'true'
-  //   ) {
-  //     // 본인이 끈건지 마스터가 끈건지 판단
-  //     handler.CHANGED_MIC_MUTE_BY_MASTER(true);
-  //   } else {
-  //   }
-  // });
+  //마스터유저로부터 마이크 권한 OFF
+  room.addCommandListener(actions.STOP_FLOOR, (value: any) => {
+    console.log('STOP_FLOOR : ', value);
+    const result = JSON.parse(value.attributes.targetUser);
+    if (
+      result.jitsiId === room.myUserId() &&
+      value.value !== room.myUserId()
+    ) {
+      handler.changeMicMuteByMaster(true);
+    }
+  });
 
-  // room.addCommandListener(REQUEST_FLOOR, value => {
-  //   console.log('REQUEST_FLOOR : ', value);
-  //   const targetUser = JSON.parse(value.attributes.targetUser);
-
-  //   //권한요청 받았을때( 권한요청자와 마스터가 다른 사람일경우)
-  //   if (value.value !== room.myUserId()) {
-  //     handler.REQUEST_FLOOR(targetUser);
-  //   }
-  // });
+  //마스터 유저일시 마이크 권한 요쳥 들어왔을경우
+  room.addCommandListener(actions.REQUEST_FLOOR, (value: any) => {
+    console.log('REQUEST_FLOOR : ', value);
+    const targetUser = JSON.parse(value.attributes.targetUser);
+    if (value.value !== room.myUserId()) {
+      handler.requestFloor(targetUser);
+    }
+  });
 
   // room.addCommandListener(REQUEST_ROOM_STOP_RECORDING, value => {
   //   if (room.isModerator()) {

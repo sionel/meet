@@ -32,7 +32,8 @@ const MenuList: React.FC<MenuListProps> = ({
   onPressDocumentShare,
   onPressScreenShare,
   onPressRequestMic,
-  isMaster
+  isMaster,
+  isMicControl
 }) => {
   return (
     <BlurView
@@ -97,21 +98,25 @@ const MenuList: React.FC<MenuListProps> = ({
             </View>
           </TouchableHighlight>
           {/* 발언권 모드 */}
-          <TouchableHighlight
-            style={styles.MenuRow}
-            activeOpacity={0.9}
-            underlayColor="rgba(242,242,242,0.1)"
-            onPress={_.throttle(() => onPressRequestMic, 750)}
-          >
-            <View style={styles.MenuRowView}>
-              <Image
-                source={icHand}
-                resizeMode={'contain'}
-                style={styles.frontIcon}
-              />
-              <Text style={styles.menuText}>{`발언권 모드`}</Text>
-            </View>
-          </TouchableHighlight>
+          {isMaster && (
+            <TouchableHighlight
+              style={styles.MenuRow}
+              activeOpacity={0.9}
+              underlayColor="rgba(242,242,242,0.1)"
+              onPress={_.throttle(() => onPressRequestMic(), 750)}
+            >
+              <View style={styles.MenuRowView}>
+                <Image
+                  source={icHand}
+                  resizeMode={'contain'}
+                  style={styles.frontIcon}
+                />
+                <Text style={styles.menuText}>
+                  {isMicControl ? '발언권 모드 종료' : '발언권 모드'}
+                </Text>
+              </View>
+            </TouchableHighlight>
+          )}
         </View>
       </View>
     </BlurView>

@@ -21,6 +21,7 @@ const ConferenceScreenPresenter: React.FC<ConferenceScreenPresenterProps> = ({
   isConnected,
   roomName,
   id,
+  roomToken,
   isChatting,
   handleClose
 }) => {
@@ -30,14 +31,13 @@ const ConferenceScreenPresenter: React.FC<ConferenceScreenPresenterProps> = ({
   return (
     <View style={{ flex: 1, backgroundColor: '#000' }}>
       <StatusBar backgroundColor="#000" barStyle={'light-content'} />
-      {Platform.OS === 'ios' && <ScreenShareIOS />}
       {isConnected ? (
         <Fragment>
           <TopPopup />
           <TopContent roomName={roomName} id={id} handleClose={handleClose} />
           <Main roomName={roomName} onClose={handleClose} />
           {/* <SplitVideo /> */}
-          <BottomPopup roomId={id} />
+          <BottomPopup roomId={id} roomToken={roomToken} />
           {!isChatting && <BottomContent handleCloseConf={handleClose} />}
         </Fragment>
       ) : (

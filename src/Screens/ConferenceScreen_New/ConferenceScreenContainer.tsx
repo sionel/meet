@@ -9,17 +9,19 @@ import ConferenceScreenPresenter from './ConferenceScreenPresenter';
 import { ConferenceScreenContainerProps } from './types';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'src/redux/configureStore';
-// import ConferenceManager from './conferenceUtil/ConferenceManager';
-import test from './conferenceUtil/test';
+// import test from './conferenceUtil/test';
 import Conference from './conferenceUtil/Conference';
-import { isSuccess } from '@services/types';
+// import { isSuccess } from '@services/types';
 import MeetApi from '@services/api/MeetApi';
 
 import { actionCreators as ConferenceActions } from '@redux/conference';
 import { actionCreators as ParticipantsActions } from '@redux/participants_copy';
-import { actionCreators as MainuserActions } from '@redux/mainUser_copy';
+// import { actionCreators as MainuserActions } from '@redux/mainUser_copy';
 import { actionCreators as MasterActions } from '@redux/master';
-import { actionCreators as ScreenShareActions } from '@redux/ScreenShare';
+import { actionCreators as ToastActions } from '@redux/toast';
+import { useTranslation } from 'react-i18next';
+import { isSuccess } from '@services/types';
+// import { actionCreators as ScreenShareActions } from '@redux/ScreenShare';
 
 type speakerInfo = {
   name: string;
@@ -45,7 +47,7 @@ const ConferenceScreenContainer: React.FC<
   } = props;
   let conference: Conference;
   const [isConnected, setIsConnected] = useState(false);
-
+  const { t } = useTranslation();
   //#region useSelector
   const {
     state,
@@ -56,9 +58,10 @@ const ConferenceScreenContainer: React.FC<
     isSpeakerOn,
     bottomDisplayType,
     externalAPIScope,
+    mikeState,
     documentShare,
     participants,
-    mode,
+    mode
   } = useSelector((state: RootState) => ({
     testFlag: state.test.testFlag,
     state,
@@ -69,6 +72,7 @@ const ConferenceScreenContainer: React.FC<
     isSpeakerOn: state.conference.isSpeakerOn,
     bottomDisplayType: state.conference.bottomDisplayType,
     externalAPIScope: state.conference.externalAPIScope,
+    mikeState: state.conference.mikeState,
     //문서공유
     documentShare: state.documentShare,
     //참여자
@@ -92,10 +96,26 @@ const ConferenceScreenContainer: React.FC<
   const setIsBtOn = (isBtOn: boolean) => {
     dispatch(ConferenceActions.setIsBtOn(isBtOn));
   };
+  const setIsMuteMike = (flag: boolean) => {
+    dispatch(ConferenceActions.setIsMuteMike(flag));
+  };
   const resetUserlist = () => {
     dispatch(ParticipantsActions.resetUserlist());
   };
   const resetResource = () => dispatch(ConferenceActions.resetResource());
+
+  const setToastMessage = (toastMessage: string) => {
+    dispatch(ToastActions.setToastMessage(toastMessage));
+  };
+
+  const changeMasterControlMode = (masterID: string) => {
+    dispatch(MasterActions.changeMasterControlMode(masterID));
+  };
+
+  const changeAudioActive = (flag: boolean) => {
+    dispatch(MasterActions.changeAudioActive(flag));
+  };
+
   //#endregion
 
   useEffect(() => {
@@ -103,11 +123,6 @@ const ConferenceScreenContainer: React.FC<
     _connectConference();
     return () => {};
   }, []);
-
-  // useEffect(() => {
-  //   first && setFirst(false);
-  //   OS === 'android' && !first && _handleShareScreen();
-  // }, [screenToggleFlag]);
 
   useEffect(() => {
     let plength = participants.length;
@@ -143,13 +158,29 @@ const ConferenceScreenContainer: React.FC<
         { id: params.id, token: params.roomToken },
         userInfo,
         dispatch,
-        params.tracks
+        params.tracks,
+        t
       );
 
       retriveMasters(params.roomToken);
       const userId = conference.getMyId();
       MeetApi.enterMeetRoom(params.roomToken, userId, params.name);
-      
+
+      const master = await MeetApi.checkMasterControl(params.id);
+      if (isSuccess(master)) {
+        console.log('master : ',  master);
+        
+        const { videoseq, audio_active } = master.resultData;
+        const id = videoseq;
+        const audioPolicy = audio_active;
+
+        changeMasterControlMode(id);
+        changeAudioActive(id ? !audioPolicy : mikeState.isMuted());
+        setIsMuteMike(id ? !audioPolicy : mikeState.isMuted());
+
+        setToastMessage(id ? t('toast_master_clton') : '');
+      }
+
       // 안드로이드 화면공유를 위해서 네이티브단에 회의입장했다는 노티를 보내줌
       ExternalAPI.sendEvent(
         'CONFERENCE_JOINED',
@@ -250,6 +281,7 @@ const ConferenceScreenContainer: React.FC<
       isConnected={isConnected}
       roomName={params.selectedRoomName}
       id={params.id}
+      roomToken={params.roomToken}
       handleClose={_handleClose}
       isChatting={bottomDisplayType === 'CHATTING'}
     />
