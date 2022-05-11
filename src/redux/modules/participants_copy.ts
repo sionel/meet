@@ -32,7 +32,7 @@ const initialState: InitialState = {
   list: []
 };
 
-function reducer(state = initialState, action: AnyAction) {
+function reducer(state = initialState, action: AnyAction) { 
   switch (action.type) {
     // case JOIN_USER:
     //   return _joinUser(state, action);

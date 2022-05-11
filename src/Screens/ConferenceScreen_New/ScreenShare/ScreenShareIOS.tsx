@@ -21,8 +21,8 @@ export default function ScreenShareIOS(props: any) {
   const [isFirst, setIsFirst] = useState(true);
 
   useEffect(() => {
-    console.log('ScreenShareIOS');
-    console.log('screenToggleFlag : ', screenToggleFlag);
+    // console.log('ScreenShareIOS');
+    // console.log('screenToggleFlag : ', screenToggleFlag);
     if (!isFirst) {
       const handle = findNodeHandle(_nativeComponent);
       NativeModules.ScreenCapturePickerViewManager.show(handle);

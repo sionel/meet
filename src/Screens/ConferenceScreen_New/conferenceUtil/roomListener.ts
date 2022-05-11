@@ -120,6 +120,14 @@ export function bindEvent(handler: any, room: any, resolve: any, reject: any) {
     }
   });
 
+  // 참가자 오디오트랙 mute 여부 실시간 감지
+  room.on(conferenceEvents.TRACK_MUTE_CHANGED, (track: any) => {
+    const trackType = track.getType();
+    if (trackType === 'audio' && !track.isLocal()) {
+      handler.setUserTrack(track);
+    }
+  });
+
   // // 비디오 Mute 변경
   // room.on(conferenceEvents.TRACK_MUTE_CHANGED, track => {
   //   if (track.getType() === 'video') {
@@ -171,7 +179,6 @@ export function bindEvent(handler: any, room: any, resolve: any, reject: any) {
       attributes: { page }
     } = value;
     if (userId !== room.myUserId()) {
-
       handler.changeDocumentPage(Number(page));
     }
   });
@@ -284,7 +291,7 @@ export function bindEvent(handler: any, room: any, resolve: any, reject: any) {
   /**
    * 새로 참가한 사람만 받아라 (문서공유)
    */
-  room.addCommandListener(actions.DOCUMENT_SHARE_TARGET, (value: any) => {  
+  room.addCommandListener(actions.DOCUMENT_SHARE_TARGET, (value: any) => {
     if (room.myUserId() === value.attributes.target) {
       handler.changeDocumentShareMode(
         {
@@ -316,41 +323,38 @@ export function bindEvent(handler: any, room: any, resolve: any, reject: any) {
     }
   });
 
+  // // 화상대화 전체 마이크 제어 요청자 사용자 정보 이벤트
+  // //- 마스터가 마이크 제어 모드 시작하기/종료하기
+  room.addCommandListener(
+    actions.REQUEST_MIC_CONTROL_USER,
+    async (value: any) => {
+      console.log('REQUEST_MIC_CONTROL_USER[ 발언권 제어모드 ] : ', value);
+      handler.changeMicControlUserModeByMaster(value.value);
+    }
+  );
+
   // // 화상대화 전체 마이크 제어 요청 이벤트
   // // - 마스터가 마이크 제어 mute를 함 사용자들은 마이크 임의로 킬 수 없음
   // // 간단한 토스트 메시지 띄움
   room.addCommandListener(actions.REQUEST_MIC_CONTROL, (value: any) => {
-    // console.log('REQUEST_MIC_CONTROL[ 마이크 전체 제어 ] : ', value);
+    console.log('REQUEST_MIC_CONTROL[ 마이크 전체 제어 ] : ', value);
     const {
       attributes: { controlType }
     } = value;
 
-    if (value.value === room.myUserId()) {
-      handler.changeMicControlModeByMaster(controlType === 'mute', true);
+    if (value?.value === room.myUserId()) {
     } else {
-      handler.changeMicControlModeByMaster(controlType === 'mute', false);
+      handler.changeMicControlModeByMaster(controlType === 'mute');
     }
-    // value.attribute === 'mute' ? true : false
-  });
-
-  // // 화상대화 전체 마이크 제어 요청자 사용자 정보 이벤트
-  // //- 마스터가 마이크 제어 모드 시작하기/종료하기
-  room.addCommandListener(actions.REQUEST_MIC_CONTROL_USER, async (value: any) => {
-    console.log('REQUEST_MIC_CONTROL_USER[ 발언권 제어모드 ] : ', value);
-    let controlMode = value.value !== room.myUserId();
-    
-    console.log('controlMode : ', controlMode);
-    
-    handler.changeMicControlUserModeByMaster(value.value, controlMode);
   });
 
   // // 화상대화 타겟 유저 마이크 제어 요청 이벤트
   // // - 마스터가 단일 마일 제어 id형식 8자
   room.addCommandListener(actions.REQUEST_MIC_CONTROL_TARGET, (value: any) => {
-    // console.log(
-    //   'REQUEST_MIC_CONTROL_TARGET[ 특정 유저 마이크 제어 ] : ',
-    //   value
-    // );
+    console.log(
+      'REQUEST_MIC_CONTROL_TARGET[ 특정 유저 마이크 제어 ] : ',
+      value
+    );
     if (room.myUserId() === value.attributes.target) {
       handler.changeMicMuteByMaster(value.attributes.isMute === 'true');
     }
@@ -369,8 +373,7 @@ export function bindEvent(handler: any, room: any, resolve: any, reject: any) {
   });
 
   room.addCommandListener(actions.GRANT_FLOOR_TARGET, (value: any) => {
-    console.log('GRANT_FLOOR_TARGET : ', value);
-
+    console.log('GRANT_FLOOR_TARGET[ 특정 유저 마이크 제어 ] : ', value);
     const targetUser = JSON.parse(value.attributes.targetUser);
     const iMaster = value.attributes.isMasterControlTarget;
     if (targetUser.jitsiId === room.myUserId()) {
@@ -382,33 +385,36 @@ export function bindEvent(handler: any, room: any, resolve: any, reject: any) {
     }
   });
 
-  // room.addCommandListener(UPDATE_MASTER_USERS, value => {
-  //   const { cancel, myCommand } = value.attributes;
-  //   console.log('UPDATE_MASTER_USERS : ', value);
-  //   handler.CHANGE_MASTER_LIST(cancel, myCommand);
-  // });
+  room.addCommandListener(actions.UPDATE_MASTER_USERS, (value: any) => {
+    console.log('UPDATE_MASTER_USERS [ 마스터 유저 업데이트 시 ] : ', value);
+    const { cancel, myCommand } = value.attributes;
+    handler.changeMasterList(cancel, myCommand);
+  });
 
-  // room.addCommandListener(REQUEST_KICK, value => {
-  //   const target = value.attributes.targetUser;
-  //   const master = value.attributes.requestUser;
-  //   handler.REQUEST_KICK(master, target);
-  // });
+  room.addCommandListener(actions.REQUEST_KICK, (value: any) => {
+    console.log('REQUEST_KICK : ', value);
+    const target = value.attributes.targetUser;
+    const master = value.attributes.requestUser;
+    // handler.REQUEST_KICK(master, target);
+  });
 
   //마스터유저로부터 마이크 권한 OFF
   room.addCommandListener(actions.STOP_FLOOR, (value: any) => {
-    console.log('STOP_FLOOR : ', value);
+    console.log('STOP_FLOOR [ 마이크 권한 OFF ]: ', value);
     const result = JSON.parse(value.attributes.targetUser);
-    if (
-      result.jitsiId === room.myUserId() &&
+    if (result.jitsiId === room.myUserId() && value.value !== room.myUserId()) {
+      handler.changeMicMuteByMaster(true);
+    } else if (
+      result.jitsiId !== room.myUserId() &&
       value.value !== room.myUserId()
     ) {
-      handler.changeMicMuteByMaster(true);
+      handler.changeMicMuteByMaster(undefined, result.name);
     }
   });
 
   //마스터 유저일시 마이크 권한 요쳥 들어왔을경우
   room.addCommandListener(actions.REQUEST_FLOOR, (value: any) => {
-    console.log('REQUEST_FLOOR : ', value);
+    console.log('REQUEST_FLOOR [ 마이크 제어 권한 요청 ] : ', value);
     const targetUser = JSON.parse(value.attributes.targetUser);
     if (value.value !== room.myUserId()) {
       handler.requestFloor(targetUser);

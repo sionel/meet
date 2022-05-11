@@ -1,16 +1,16 @@
 import React from 'react';
 import { TopPopupPresenterProps } from '../types';
 import _ from 'lodash';
-import RequestMessages from './RequestMessages';
+import RequestMessages from './RequestMessages/RequestMessages';
 import ToastMessage from './ToastMessage';
 
 const TopPopupPresenter: React.FC<TopPopupPresenterProps> = ({
-  userList,
+  requestUserList,
   message,
   fadeAnimation
 }) => {
-  return userList.length > 0 ? (
-    <RequestMessages  userList={userList} />
+  return requestUserList.length > 0 ? (
+    <RequestMessages requestUserList={requestUserList} />
   ) : message ?  (
     <ToastMessage  message={message} fadeAnimation={fadeAnimation} />
   ) : null;

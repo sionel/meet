@@ -18,7 +18,7 @@ const MainContainer: React.FC<MainContainerProps> = ({ roomName, onClose }) => {
     topDisplayType,
     bottomDisplayType,
     mirrorMode,
-    masters,
+    masterList,
     mainUser,
     isScreenShare,
     room,
@@ -31,7 +31,7 @@ const MainContainer: React.FC<MainContainerProps> = ({ roomName, onClose }) => {
   } = useSelector((state: RootState) => ({
     mainUser: state.mainUser_copy,
     mainDisplayType: state.mainUser_copy.mode,
-    masters: state.master.masterList,
+    masterList: state.master.masterList,
     topDisplayType: state.conference.topDisplayType,
     bottomDisplayType: state.conference.bottomDisplayType,
     mirrorMode: state.conference.mirrorMode,
@@ -78,6 +78,10 @@ const MainContainer: React.FC<MainContainerProps> = ({ roomName, onClose }) => {
 
   const toggleScreenFlag = () => {
     dispatch(ScreenShareActions.toggleScreenFlag());
+  }
+
+  const updateMainUserIsMaster = () => {
+    dispatch(MainuserActions.updateMainUserIsMaster());
   }
   //#endregion dispatch
 
@@ -141,6 +145,10 @@ const MainContainer: React.FC<MainContainerProps> = ({ roomName, onClose }) => {
       }
     }
   }, [isScreenShare]);
+
+  useEffect(() => {
+    updateMainUserIsMaster();
+  }, [masterList.length])
 
   const _handlePressShareStop = () => {
     if (Platform.OS === 'android') {

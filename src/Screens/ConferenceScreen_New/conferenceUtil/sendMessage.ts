@@ -1,3 +1,4 @@
+import { requestUser } from '@redux/master';
 import { MeetApi } from '@services/index';
 import DrawingMananger from './DrawingManager';
 // 위하고 아이디 커멘드 이름 정의
@@ -202,6 +203,7 @@ export default class sendMessage {
     });
   };
 
+  //마이크 제어모드
   micControlMode = async (
     flag: boolean,
     cno: string,
@@ -220,7 +222,7 @@ export default class sendMessage {
       });
 
       let param = {
-        audio_active,
+        audio_active: false,
         videoseq: this._room.myUserId()
       };
 
@@ -228,7 +230,7 @@ export default class sendMessage {
     } else {
       await this._room.sendCommandOnce(REQUEST_MIC_CONTROL, {
         value: this._room.myUserId(),
-        attributes: { controlType: 'mute' }
+        attributes: { controlType: 'unmute' }
       });
 
       this._room.sendCommandOnce(REQUEST_MIC_CONTROL_USER, {
@@ -236,11 +238,68 @@ export default class sendMessage {
       });
 
       let param = {
-        audio_active,
+        audio_active: true,
         videoseq: null
       };
 
       MeetApi.updateMasterControlUser(cno, roomToken, param);
+    }
+  };
+
+  //다른 유저 마이크 요청처리
+  replyUserRequest = (requestUser: requestUser, command: boolean) => {
+    this._handlers.setRequestList(requestUser.jitsiId);
+    if (command) {
+      this._room.sendCommandOnce(GRANT_FLOOR_TARGET, {
+        value: this._room.myUserId(),
+        attributes: {
+          targetUser: JSON.stringify({
+            jitsiId: requestUser.jitsiId,
+            name: requestUser.name
+          }),
+          type: 'accept',
+          isMasterControlTarget: 'false'
+        }
+      });
+    } else {
+      this._room.sendCommandOnce(GRANT_FLOOR_TARGET, {
+        value: this._room.myUserId(),
+        attributes: {
+          targetUser: JSON.stringify({
+            jitsiId: requestUser.jitsiId,
+            name: requestUser.name
+          }),
+          type: 'reject',
+          isMasterControlTarget: 'false'
+        }
+      });
+    }
+  };
+
+  handleOtherUserMikeDirectControl = (muteFlag: boolean, jitsiID: string) => {
+    if (muteFlag) {
+      //유저 마이크가 꺼져있을때
+      this._room.sendCommandOnce(GRANT_FLOOR_TARGET, {
+        value: this._room.myUserId(),
+        attributes: {
+          targetUser: JSON.stringify({
+            jitsiId: jitsiID
+          }),
+          type: 'accept',
+          isMasterControlTarget: 'false'
+        }
+      });
+    } else {
+      //유저 마이크가 켜져있을때
+      this._room.sendCommandOnce(STOP_FLOOR, {
+        value: this._room.myUserId(),
+        attributes: {
+          targetUser: JSON.stringify({
+            jitsiId: jitsiID
+          }),
+          isMasterControlTarget: 'false'
+        }
+      });
     }
   };
 }

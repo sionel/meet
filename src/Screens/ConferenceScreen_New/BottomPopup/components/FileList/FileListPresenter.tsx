@@ -26,19 +26,20 @@ const FileListPresenter: React.FC<FileListPresenterProps> = ({
     <BlurView
       style={styles.popupContainer}
       overlayColor="rgba(255,255,255,0.01)"
+      // blurType='dark'
     >
-      <View style={styles.popupHeader}>
-        <Text style={styles.headerText}>{t('meet_storage')}</Text>
-      </View>
-      {isLoading === 'LOADING' ? (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#fff" />
+      <View style={{
+          backgroundColor: 'rgba(0,0,0,0.4)'
+        }}>
+        <View style={styles.popupHeader}>
+          <Text style={styles.headerText}>{t('meet_storage')}</Text>
         </View>
-      ) : (
         <View
           style={{ height: 350 }} // 높이 하드코딩 패드보고 이상함 없으면 패스
         >
-          {documentList.length === 0 ? (
+          {isLoading === 'LOADING' ? (
+            <ActivityIndicator size="small" color="#fff" />
+          ) : documentList.length === 0 ? (
             <View
               style={{
                 paddingTop: 20,
@@ -75,7 +76,7 @@ const FileListPresenter: React.FC<FileListPresenterProps> = ({
             />
           )}
         </View>
-      )}
+      </View>
     </BlurView>
   );
 };

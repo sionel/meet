@@ -1,5 +1,5 @@
 import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
-import { Keyboard, Linking, Platform, Share } from 'react-native';
+import { Alert, Keyboard, Linking, Platform, Share } from 'react-native';
 
 import { BottomPopupContainerProps } from '@screens/ConferenceScreen_New/types';
 
@@ -17,9 +17,10 @@ import { actionCreators as ParticipantsActions } from '@redux/participants_copy'
 import { actionCreators as ConferenceActions } from '@redux/conference';
 import { actionCreators as ScreenShareAction } from '@redux/ScreenShare';
 import { actionCreators as MainUserAction } from '@redux/mainUser_copy';
+import { actionCreators as MasterActions } from '@redux/master';
+import { actionCreators as ToastActions } from '@redux/toast';
 import { isSuccess } from '@services/types';
 import { useScreenShareStatus } from '../ScreenShare/hooks/useScreenShare';
-import { REQUEST_MIC_CONTROL } from '@utils/conference/ConferenceConnector';
 
 const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
   roomId,
@@ -38,7 +39,8 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
     auth,
     isScreenShare,
     myVideoState,
-    isMaster
+    isMaster,
+    isMuteMike
   } = useSelector((state: RootState) => ({
     bottomDisplayType: state.conference.bottomDisplayType,
     participants: state.participants_copy.list,
@@ -50,7 +52,8 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
     auth: state.user.auth,
     isScreenShare: state.screenShare.isScreenShare,
     myVideoState: state.conference.videoState,
-    isMaster: state.participants_copy.list[0].isMaster
+    isMaster: state.participants_copy.list[0].isMaster,
+    isMuteMike: state.conference.isMuteMike
   }));
   //#endregion
 
@@ -101,6 +104,18 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
 
   const toggleMuteVideo = (flag: boolean) => {
     dispatch(MainUserAction.toggleMuteVideo(flag));
+  };
+
+  const setIsMuteMike = (flag: boolean) => {
+    dispatch(ConferenceActions.setIsMuteMike(flag));
+  };
+
+  const setToastMessage = (message: string) => {
+    dispatch(ToastActions.setToastMessage(message));
+  };
+
+  const resetRequestUserList = () => {
+    dispatch(MasterActions.resetRequestUserList());
   };
   //#endregion
 
@@ -216,6 +231,9 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
         roomToken,
         false
       ));
+    if (isMicControl) {
+      resetRequestUserList();
+    }
     setIsMicControl(!isMicControl);
   };
 
@@ -237,6 +255,18 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
   };
   const handlePressMaster = () => {};
   const handlePressKick = () => {};
+
+  const handlePressMike = (jitsiID: string, muteFlag: boolean) => {
+    if (jitsiID === myJitsiId) {
+      setIsMuteMike(!isMuteMike);
+    } else {
+      if (isMicControl && isRoomMaster) {
+        room && room.sendMessage.handleOtherUserMikeDirectControl(muteFlag, jitsiID);
+      } else {
+        setToastMessage('마이크 제어 권한이 없습니다.');
+      }
+    }
+  };
 
   // InviteList
   const handlePressEmail = () => {
@@ -307,8 +337,6 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
     setKeyboardH(0);
   };
 
-  const handlePressSpeaker = () => {};
-
   return (
     <BottomPopupPresenter
       bottomDisplayType={bottomDisplayType}
@@ -342,7 +370,7 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
       onPressProfile={handlePressProfile}
       onPressMaster={handlePressMaster}
       onPressKick={handlePressKick}
-      ToggleSpeakerClick={handlePressSpeaker}
+      onPressMike={handlePressMike}
       setIsProfile={setIsProfile}
       //InviteList
       onPressEmail={handlePressEmail}

@@ -1,6 +1,7 @@
 import { MeetParamList } from '@navigations/RootNavigation';
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import { messageType } from '@redux/conference';
+import { requestUser } from '@redux/master';
 import { Participant } from '@redux/participants_copy';
 import i18next from 'i18next';
 import React, { MutableRefObject } from 'react';
@@ -33,7 +34,13 @@ export interface TopPopupPresenterProps
     ToastMessageProps {}
 
 export interface RequestMessagesProps {
-  userList: any[];
+  requestUserList: any[];
+}
+
+export interface MessagesCardProps {
+  requestUser: requestUser;
+  replyUserRequest: (requestUser: requestUser, reply: boolean) => void;
+  t: any;
 }
 export interface ToastMessageProps {
   message: string | undefined;
@@ -177,10 +184,10 @@ export interface ChattingCardProps {
 }
 export interface ParticipantsProps extends InviteListProps {
   setIsProfile: any;
-  ToggleSpeakerClick: () => void;
   onPressProfile: (user: any) => void;
   onPressMaster: () => void;
   onPressKick: () => void;
+  onPressMike: (jitsiID: string, isMute: boolean) => void;
   onPressInvite: () => void;
   userInfo: any;
   isRoomMaster: boolean;
@@ -199,6 +206,7 @@ export interface ParticipantCardPros {
   onPressProfile: (user: any) => void;
   onPressMaster: () => void;
   onPressKick: () => void;
+  onPressMike: (jitsiID: string, isMute: boolean) => void;
 }
 
 export interface ProfileProps {

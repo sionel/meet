@@ -39,13 +39,15 @@ const ParticipantCard: React.FC<ParticipantCardPros> = ({
   isPad,
   onPressProfile,
   onPressMaster,
-  onPressKick
+  onPressKick,
+  onPressMike
 }) => {
   const t = getT();
-  const { masterContorl } = useSelector((state: RootState) => ({
-    masterContorl: state.master.isMasterControl
+  const { masterContorl, isMuteMike } = useSelector((state: RootState) => ({
+    masterContorl: state.master.isMasterControl,
+    isMuteMike: state.conference.isMuteMike
   }));
-  
+
   return (
     <FlatList
       contentContainerStyle={{ flexGrow: 1 }}
@@ -58,10 +60,17 @@ const ParticipantCard: React.FC<ParticipantCardPros> = ({
           profileUrl,
           name,
           isMaster,
-          wehagoId
+          wehagoId,
+          jitsiId
         } = item;
+
         // 마이크음소거여부
-        const isMuteMic = audioTrack ? audioTrack.isMuted() : true;
+        const isMuteMic = audioTrack
+          ? index === 0
+            ? isMuteMike
+            : audioTrack.muted
+          : true;
+
         // 프로필뷰
         const profile_Url = profileUrl
           ? wehagoMainURL + profileUrl
@@ -280,7 +289,7 @@ const ParticipantCard: React.FC<ParticipantCardPros> = ({
               <TouchableHighlight
                 activeOpacity={0.5}
                 style={styles.micView}
-                onPress={() => {}}
+                onPress={() => onPressMike(jitsiId, isMuteMic)}
               >
                 <Image
                   source={isMuteMic ? icMicOff : icMicOn}

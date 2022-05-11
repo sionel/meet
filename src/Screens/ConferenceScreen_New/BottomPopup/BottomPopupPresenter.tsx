@@ -40,10 +40,10 @@ const BottomPopupPresenter: React.FC<BottomPopupPresenterProps> = ({
   participants,
   roomId,
   onPressInvite,
-  ToggleSpeakerClick,
   onPressProfile,
   onPressMaster,
   onPressKick,
+  onPressMike,
   setIsProfile,
   // InviteList,
   onPressEmail,
@@ -101,10 +101,10 @@ const BottomPopupPresenter: React.FC<BottomPopupPresenterProps> = ({
           participants={participants}
           roomId={roomId}
           onPressInvite={onPressInvite}
-          ToggleSpeakerClick={ToggleSpeakerClick}
           onPressProfile={onPressProfile}
           onPressMaster={onPressMaster}
           onPressKick={onPressKick}
+          onPressMike={onPressMike}
           setIsProfile={setIsProfile}
           //InviteList
           onPressEmail={onPressEmail}

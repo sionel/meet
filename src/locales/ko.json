@@ -161,6 +161,7 @@
     "toast_master_clton": "마스터가 참여자 전원의 발언권 제어를 시작합니다.",
     "toast_master_cltoff": "참여자 발언권 제어기능이 종료 되었습니다.",
     "toast_master_finish": "발언을 종료하였습니다.",
+    "toast_speech_finish": "[@name@]님이 발언을 종료하였습니다.",
     "toast_master_denied": "발언권 요청이 거부되었습니다.",
     "toast_master_waiting": "요청 수락을 기다리는 중 입니다.",
     "toast_master_ask": "마스터에게 발언권을 요청하였습니다.",

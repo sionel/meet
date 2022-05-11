@@ -116,6 +116,9 @@ const ConferenceScreenContainer: React.FC<
     dispatch(MasterActions.changeAudioActive(flag));
   };
 
+  const resetRequestUserList = () => {
+    dispatch(MasterActions.resetRequestUserList());
+  };
   //#endregion
 
   useEffect(() => {
@@ -168,8 +171,6 @@ const ConferenceScreenContainer: React.FC<
 
       const master = await MeetApi.checkMasterControl(params.id);
       if (isSuccess(master)) {
-        console.log('master : ',  master);
-        
         const { videoseq, audio_active } = master.resultData;
         const id = videoseq;
         const audioPolicy = audio_active;
@@ -182,13 +183,13 @@ const ConferenceScreenContainer: React.FC<
       }
 
       // 안드로이드 화면공유를 위해서 네이티브단에 회의입장했다는 노티를 보내줌
-      ExternalAPI.sendEvent(
-        'CONFERENCE_JOINED',
-        {
-          url: `https://video.wehago.com/${params.id}`
-        },
-        externalAPIScope
-      );
+      // ExternalAPI.sendEvent(
+      //   'CONFERENCE_JOINED',
+      //   {
+      //     url: `https://video.wehago.com/${params.id}`
+      //   },
+      //   externalAPIScope
+      // );
 
       setRoom(conference);
       setIsConnected(true);
@@ -256,11 +257,12 @@ const ConferenceScreenContainer: React.FC<
   //#endregion
 
   //#region 화상회의 종료( 자원 정리 )
-  const _handleClose = () => {
-    room && room.dispose();
+  const _handleClose = async() => {
+    room && await room.dispose();
     setIsConnected(false);
     resetResource();
     resetUserlist();
+    resetRequestUserList();
     if (OS === 'ios') {
       NativeAudio.removeAllListeners(
         'org.jitsi.meet:features/audio-mode#devices-update'

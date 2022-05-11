@@ -35,7 +35,7 @@ const BottomContentContainer: React.FC<BottomContentContainerProps> = ({
     mode,
     isLocal,
     isMuteVideo,
-    myName
+    myInfo
   } = useSelector((state: RootState) => ({
     videoState: state.conference.videoState,
     mikeState: state.conference.mikeState,
@@ -49,12 +49,10 @@ const BottomContentContainer: React.FC<BottomContentContainerProps> = ({
     mode: state.mainUser_copy.mode,
     isLocal: state.mainUser_copy.isLocal,
     isMuteVideo: state.mainUser_copy.isMuteVideo,
-    myName: state.participants_copy.list[0].name
+    myInfo: state.participants_copy.list[0]
   }));
   //#endregion
 
-  // console.log('BotContent');
-  
   const { t } = useTranslation();
   const [isVideoOn, setIsVideoOn] = useState(!videoState.isMuted());
   // const [isMikeOn, setIsMikeOn] = useState(!isMuteMike);
@@ -97,30 +95,25 @@ const BottomContentContainer: React.FC<BottomContentContainerProps> = ({
 
   const _handlePressMike = () => {
     //마스터가 마이크를 제어중일때
-    if (isMasterControl) {
+    if (isMasterControl && !myInfo.isMaster) {
       if (isAudioActive) {
         // 참가자는 마스터가 제어중일때 오디오가 꺼져있으면 직접 컨트롤 할 수 없음
       } else {
         if (!isMuteMike) {
-          room && room.sendMessage.stopAttention(myName);
+          room && room.sendMessage.stopAttention(myInfo.name);
           setToastMessage(t('toast_master_finish'));
           setIsMuteMike(!isMuteMike);
         } else {
           if (isMicRequest) {
             setToastMessage(t('toast_master_waiting'));
           } else {
-            room && room.sendMessage.requestAttention(myName);
+            room && room.sendMessage.requestAttention(myInfo.name);
             setMicRequest(true);
             setToastMessage(t('toast_master_ask'));
           }
         }
       }
     } else {
-      // if (!isMuteMike) {
-      //   mikeState.mute();
-      // } else {
-      //   mikeState.unmute();
-      // }
       setIsMuteMike(!isMuteMike);
     }
   };

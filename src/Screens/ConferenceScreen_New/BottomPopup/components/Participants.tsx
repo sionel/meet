@@ -4,13 +4,7 @@ import {
   Text,
   StyleSheet,
   TouchableHighlight,
-  Image,
-  FlatList,
-  Animated,
-  TouchableOpacity,
-  GestureResponderEvent,
-  Platform,
-  Dimensions
+  Image
 } from 'react-native';
 import { BlurView } from '@react-native-community/blur';
 import deviceInfoModule from 'react-native-device-info';
@@ -33,6 +27,7 @@ const Participant: React.FC<ParticipantsProps> = ({
   onPressProfile,
   onPressMaster,
   onPressKick,
+  onPressMike,
   setIsProfile,
   // InviteList
   onPressEmail,
@@ -104,6 +99,7 @@ const Participant: React.FC<ParticipantsProps> = ({
               onPressProfile={onPressProfile}
               onPressMaster={onPressMaster}
               onPressKick={onPressKick}
+              onPressMike={onPressMike}
             />
           )}
         </View>

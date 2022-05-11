@@ -34,7 +34,7 @@ class Conference {
   join = async ({ id, token }: Room, user: any, dispatch: any, tracks: any, t: any) => {
     this._init();
     this._connection = new Connection();
-    this._handler = ConferenceHandler(dispatch, t);
+    this._handler = ConferenceHandler(dispatch, t, token);
     this._dispatch = dispatch;
     await this._connection.connect(id, token);
     await new Promise((resolve, reject) => {
@@ -52,6 +52,7 @@ class Conference {
   dispose = async () => {
     // this._room.dispose();
     await this._room.leave();
+    this._room = null;
     this._connection.dispose();
     this._connection = null;
     this._sendMessage = null;
