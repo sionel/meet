@@ -11,6 +11,7 @@ import {
   NativeSyntheticEvent
 } from 'react-native';
 import { OrientationType } from 'react-native-orientation-locker';
+import Conference from './conferenceUtil/Conference';
 
 type ConferenceScreenNavigationProps = StackNavigationProp<
   MeetParamList,
@@ -23,6 +24,7 @@ export interface ConferenceScreenPresenterProps {
   roomName: string;
   id: string;
   roomToken: string;
+  isKick: string | undefined;
   isConnected: boolean;
   isChatting: boolean;
   handleClose: () => void;
@@ -185,7 +187,7 @@ export interface ChattingCardProps {
 export interface ParticipantsProps extends InviteListProps {
   setIsProfile: any;
   onPressProfile: (user: any) => void;
-  onPressMaster: () => void;
+  onPressMaster: (wehagoID: string) => void;
   onPressKick: () => void;
   onPressMike: (jitsiID: string, isMute: boolean) => void;
   onPressInvite: () => void;
@@ -204,7 +206,7 @@ export interface ParticipantCardPros {
   isRoomMaster: boolean;
   isPad: boolean;
   onPressProfile: (user: any) => void;
-  onPressMaster: () => void;
+  onPressMaster: (wehagoID: string) => void;
   onPressKick: () => void;
   onPressMike: (jitsiID: string, isMute: boolean) => void;
 }

@@ -6,22 +6,23 @@ import {
   Platform
 } from 'react-native';
 import ConferenceScreenPresenter from './ConferenceScreenPresenter';
+import EndCallMessage from './EndCallMessage';
+
 import { ConferenceScreenContainerProps } from './types';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'src/redux/configureStore';
-// import test from './conferenceUtil/test';
 import Conference from './conferenceUtil/Conference';
-// import { isSuccess } from '@services/types';
 import MeetApi from '@services/api/MeetApi';
-
+// import test from './conferenceUtil/test';
+// import { isSuccess } from '@services/types';
 import { actionCreators as ConferenceActions } from '@redux/conference';
 import { actionCreators as ParticipantsActions } from '@redux/participants_copy';
-// import { actionCreators as MainuserActions } from '@redux/mainUser_copy';
+import { actionCreators as MainUserActions } from '@redux/mainUser_copy';
 import { actionCreators as MasterActions } from '@redux/master';
 import { actionCreators as ToastActions } from '@redux/toast';
 import { useTranslation } from 'react-i18next';
 import { isSuccess } from '@services/types';
-// import { actionCreators as ScreenShareActions } from '@redux/ScreenShare';
+import { actionCreators as ScreenShareActions } from '@redux/ScreenShare';
 
 type speakerInfo = {
   name: string;
@@ -47,6 +48,7 @@ const ConferenceScreenContainer: React.FC<
   } = props;
   let conference: Conference;
   const [isConnected, setIsConnected] = useState(false);
+  const [endCall, setEndCall] = useState(false);
   const { t } = useTranslation();
   //#region useSelector
   const {
@@ -59,9 +61,11 @@ const ConferenceScreenContainer: React.FC<
     bottomDisplayType,
     externalAPIScope,
     mikeState,
+    isKick,
     documentShare,
     participants,
-    mode
+    mode,
+    isScreenShare
   } = useSelector((state: RootState) => ({
     testFlag: state.test.testFlag,
     state,
@@ -73,12 +77,14 @@ const ConferenceScreenContainer: React.FC<
     bottomDisplayType: state.conference.bottomDisplayType,
     externalAPIScope: state.conference.externalAPIScope,
     mikeState: state.conference.mikeState,
+    isKick: state.conference.isKick,
     //문서공유
     documentShare: state.documentShare,
     //참여자
     participants: state.participants_copy.list,
     //메인화면
-    mode: state.mainUser_copy.mode
+    mode: state.mainUser_copy.mode,
+    isScreenShare: state.screenShare.isScreenShare
   }));
   //#endregion
 
@@ -87,9 +93,7 @@ const ConferenceScreenContainer: React.FC<
   const setRoom = (conference: Conference) => {
     dispatch(ConferenceActions.setRoom(conference));
   };
-  const retriveMasters = (token: string) => {
-    dispatch(MasterActions.checkMasterList(token));
-  };
+
   const setIsSpeakerOn = (isSpeakerOn: boolean) => {
     dispatch(ConferenceActions.setIsSpeakerOn(isSpeakerOn));
   };
@@ -99,13 +103,20 @@ const ConferenceScreenContainer: React.FC<
   const setIsMuteMike = (flag: boolean) => {
     dispatch(ConferenceActions.setIsMuteMike(flag));
   };
+  const resetResource = () => {
+    dispatch(ConferenceActions.resetResource());
+  };
+
   const resetUserlist = () => {
     dispatch(ParticipantsActions.resetUserlist());
   };
-  const resetResource = () => dispatch(ConferenceActions.resetResource());
 
-  const setToastMessage = (toastMessage: string) => {
-    dispatch(ToastActions.setToastMessage(toastMessage));
+  const resetMainUser = () => {
+    dispatch(MainUserActions.setMainUser());
+  };
+
+  const retriveMasters = (token: string) => {
+    dispatch(MasterActions.checkMasterList(token));
   };
 
   const changeMasterControlMode = (masterID: string) => {
@@ -119,12 +130,28 @@ const ConferenceScreenContainer: React.FC<
   const resetRequestUserList = () => {
     dispatch(MasterActions.resetRequestUserList());
   };
+
+  const toggleScreenFlag = () => {
+    dispatch(ScreenShareActions.toggleScreenFlag());
+  };
+
+  const setToastMessage = (toastMessage: string) => {
+    dispatch(ToastActions.setToastMessage(toastMessage));
+  };
   //#endregion
 
   useEffect(() => {
     _addSpeakerListner();
     _connectConference();
-    return () => {};
+    return () => {
+      if (OS === 'ios') {
+        NativeAudio.removeAllListeners(
+          'org.jitsi.meet:features/audio-mode#devices-update'
+        );
+      } else {
+        DeviceEventEmitter.removeAllListeners('onAudioDeviceChanged');
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -183,13 +210,13 @@ const ConferenceScreenContainer: React.FC<
       }
 
       // 안드로이드 화면공유를 위해서 네이티브단에 회의입장했다는 노티를 보내줌
-      // ExternalAPI.sendEvent(
-      //   'CONFERENCE_JOINED',
-      //   {
-      //     url: `https://video.wehago.com/${params.id}`
-      //   },
-      //   externalAPIScope
-      // );
+      ExternalAPI.sendEvent(
+        'CONFERENCE_JOINED',
+        {
+          url: `https://video.wehago.com/${params.id}`
+        },
+        externalAPIScope
+      );
 
       setRoom(conference);
       setIsConnected(true);
@@ -206,9 +233,7 @@ const ConferenceScreenContainer: React.FC<
     if (OS === 'ios') {
       NativeAudio.addListener(
         'org.jitsi.meet:features/audio-mode#devices-update',
-        event => {
-          _handleIosSpeaker(event);
-        }
+        _handleIosSpeaker
       );
     } else {
       InCallManager.start({ media: 'video' });
@@ -216,9 +241,10 @@ const ConferenceScreenContainer: React.FC<
       if (audioPermmit !== 'granted') {
         InCallManager.requestRecordPermission();
       }
-      DeviceEventEmitter.addListener('onAudioDeviceChanged', event => {
-        _handleAndroidSpeaker(event);
-      });
+      DeviceEventEmitter.addListener(
+        'onAudioDeviceChanged',
+        _handleAndroidSpeaker
+      );
     }
   };
   //#endregion
@@ -257,36 +283,41 @@ const ConferenceScreenContainer: React.FC<
   //#endregion
 
   //#region 화상회의 종료( 자원 정리 )
-  const _handleClose = async() => {
-    room && await room.dispose();
-    setIsConnected(false);
-    resetResource();
-    resetUserlist();
-    resetRequestUserList();
-    if (OS === 'ios') {
-      NativeAudio.removeAllListeners(
-        'org.jitsi.meet:features/audio-mode#devices-update'
-      );
-    } else {
-      DeviceEventEmitter.removeAllListeners('onAudioDeviceChanged');
+  const _handleClose = () => {
+    if (isScreenShare) {
+      toggleScreenFlag();
+      if (OS === 'ios') return;
     }
+    resetUserlist();
+    resetMainUser();
+    resetResource();
+
+    room && room.dispose();
+
+    resetRequestUserList();
+
     if (!isLogin) {
       navigation.reset({ routes: [{ name: 'LoginStack' }] });
     } else {
       navigation.reset({ routes: [{ name: 'MainStack' }] });
     }
+    setEndCall(true);
+    setIsConnected(false);
   };
   //#endregion
 
-  return (
+  return !endCall ? (
     <ConferenceScreenPresenter
       isConnected={isConnected}
+      isKick={isKick}
       roomName={params.selectedRoomName}
       id={params.id}
       roomToken={params.roomToken}
       handleClose={_handleClose}
       isChatting={bottomDisplayType === 'CHATTING'}
     />
+  ) : (
+    <EndCallMessage onClose={_handleClose} />
   );
 };
 export default ConferenceScreenContainer;

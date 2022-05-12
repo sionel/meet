@@ -100,7 +100,7 @@ export default {
       return response;
     }
   },
-  // 3-2-2 화상회의방 상세 조회
+  // 3-2-2 화상회의방 상세 조회(비인증)
   getMeetRoomNoCert: async (roomId: string) => {
     let url = '';
     let signature;

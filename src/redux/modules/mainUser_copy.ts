@@ -68,7 +68,7 @@ function reducer(state = initialState, action: AnyAction) {
 }
 
 const setMainUser = (
-  jitsiId: string
+  jitsiId?: string
 ): ThunkAction<void, RootState, unknown> => {
   return (dispatch, getState) => {
     const { list } = getState()['participants_copy'];
@@ -85,6 +85,7 @@ const setMainUser = (
 const _setMainUser = (state: InitialState, action: AnyAction) => {
   const { jitsiId, list, videoState } = action;
   const userList = list.slice(0);
+  
   if (jitsiId === undefined) {
     return {
       ...initialState
@@ -133,9 +134,7 @@ const _updateMainUserIsMaster = (state: InitialState, action: AnyAction) => {
   const { wehagoId } = state;
   const { masterList } = action;
   let masters = masterList.slice(0);
-  // console.log('wehagoId : ', wehagoId);
   let isMaster = masters.find((master: string) => master === wehagoId);
-  // console.log('isMaster : ', isMaster);
   
   if (isMaster) {
     isMaster = true;

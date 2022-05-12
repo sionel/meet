@@ -1,5 +1,4 @@
 import { ConferenceModes, FacingModes } from '@utils/Constants';
-import { getConferenceManager } from '@utils/ConferenceManager';
 import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import { RootState } from '../configureStore';

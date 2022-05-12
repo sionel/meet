@@ -89,7 +89,6 @@ function reducer(state = initialState, action: AnyAction) {
 function checkMasterList(token: string): ThunkAction<void, RootState, unknown> {
   return async dispatch => {
     const result = await MeetApi.getMasterList(token);
-    console.log('result : ', result);
     
     let masterList: any[] = [];
     if (isSuccess(result)) {

@@ -143,7 +143,7 @@ const ParticipantCard: React.FC<ParticipantCardPros> = ({
                   activeOpacity={0.2}
                   onPress={() => {
                     // updateRolefromMaster(userInfo.wehagoId);
-                    onPressMaster();
+                    onPressMaster(wehagoId);
                     swipeRef.current[index].close();
                   }}
                 >

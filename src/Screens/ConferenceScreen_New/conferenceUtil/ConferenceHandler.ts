@@ -5,6 +5,7 @@ import { actionCreators as conferenceActions } from '@redux/conference';
 import { actionCreators as documentShareActions } from '@redux/documentShare';
 import { actionCreators as masterActions, requestUser } from '@redux/master';
 import { actionCreators as toastActions } from '@redux/toast';
+import { Alert } from 'react-native';
 
 export const ConferenceHandler = (dispatch: any, t: any, token: string) => ({
   test: () => {
@@ -12,6 +13,10 @@ export const ConferenceHandler = (dispatch: any, t: any, token: string) => ({
   },
   joinUser: (user: any) => {
     // dispatch(participantsActions.joinUser(user));
+  },
+  leftUser: (id: string) => {
+    dispatch(participantsActions.setLeftUser(id));
+    dispatch(masterActions.checkMasterList(token));
   },
   setUserInfo: (user: any) => {
     dispatch(participantsActions.setUserInfo(user));
@@ -86,7 +91,6 @@ export const ConferenceHandler = (dispatch: any, t: any, token: string) => ({
   },
   changeMicMuteByMaster: (flag: boolean, name?: string) => {
     let message: string;
-    console.log('flag : ', flag);
 
     if (flag !== undefined) {
       message = flag
@@ -109,14 +113,28 @@ export const ConferenceHandler = (dispatch: any, t: any, token: string) => ({
   setRequestList: (jitsiid: string) => {
     dispatch(masterActions.setRequestList(jitsiid));
   },
-  changeMasterList: (cancel: boolean, myCommand: boolean) => {
+  changeMasterList: (isRemoveAuth: string | undefined, myCommand: boolean) => {
     dispatch(masterActions.checkMasterList(token));
+
     if (myCommand) {
-      const toastMessage = cancel
+      const toastMessage = isRemoveAuth
         ? '마스터 권한을 해제했습니다.'
         : '마스터 권한을 부여했습니다.';
 
       dispatch(toastActions.setToastMessage(toastMessage));
+    }
+  },
+  requestKick: (masterInfo:any, targetInfo:any, isTargetMe: boolean) => {
+    const { name: masterName } = JSON.parse(masterInfo);
+    const { name: targetName } = JSON.parse(targetInfo);
+
+    if (isTargetMe) {
+      dispatch(conferenceActions.setIsKick(masterName));
+      // const message = `${masterName} 님이 ${targetName} 님을 \n화상회의방에서 추방하였습니다.`;
+      // endCall();
+      // Alert.alert(t('alert_kick'), message);
+    } else {
+      dispatch(toastActions.kickMessage(targetName));
     }
   }
 });

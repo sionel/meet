@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { NativeEventEmitter, NativeModules } from 'react-native';
 
 export function useScreenShareStatus() {
@@ -6,11 +6,12 @@ export function useScreenShareStatus() {
   const eventEmitter = new NativeEventEmitter(ExternalAPI);
   const [isScreenShare, setIsScreenShare] = useState(false);
 
-  useEffect(() => {
-    const handelStatusChange = () => {
-      setIsScreenShare(!isScreenShare);
-    };
+  const handelStatusChange = (event: { enabled: boolean }) => {
+    const { enabled } = event;
+    setIsScreenShare(enabled);
+  };
 
+  useEffect(() => {
     eventEmitter.addListener(
       ExternalAPI.TOGGLE_SCREEN_SHARE,
       handelStatusChange
@@ -18,7 +19,7 @@ export function useScreenShareStatus() {
     return () => {
       eventEmitter.removeAllListeners(ExternalAPI.TOGGLE_SCREEN_SHARE);
     };
-  });
+  }, []);
 
   return isScreenShare;
 }

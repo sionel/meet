@@ -4,8 +4,6 @@ import { Alert, Keyboard, Linking, Platform, Share } from 'react-native';
 import { BottomPopupContainerProps } from '@screens/ConferenceScreen_New/types';
 
 import { MeetApi } from '@services/index';
-
-import { getT } from '@utils/translateManager';
 import Clipboard from '@react-native-clipboard/clipboard';
 
 import BottomPopupPresenter from './BottomPopupPresenter';
@@ -21,12 +19,14 @@ import { actionCreators as MasterActions } from '@redux/master';
 import { actionCreators as ToastActions } from '@redux/toast';
 import { isSuccess } from '@services/types';
 import { useScreenShareStatus } from '../ScreenShare/hooks/useScreenShare';
+import { useTranslation } from 'react-i18next';
 
 const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
   roomId,
   roomToken
 }) => {
   const { OS } = Platform;
+  const { t } = useTranslation();
   //#region useSelector
   const {
     bottomDisplayType,
@@ -57,10 +57,11 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
   }));
   //#endregion
 
+  // console.log('masterList : ', masterList);
+
   const screenFlag = useScreenShareStatus();
-
   //#region UseState
-
+  
   // MenuList
   const [isFirst, setIsFirst] = useState(true);
   const [isMicControl, setIsMicControl] = useState(false);
@@ -71,9 +72,10 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
   const scrollRef: MutableRefObject<any> = useRef();
   const [keyboardH, setKeyboardH] = useState(0);
   //
-
+  
   // UserList
   const swipeRef: MutableRefObject<any> = React.useRef([]);
+  const [initMasterID, setInitMasterID] = useState('');
   const [isRoomMaster, setIsRoomMaster] = useState(
     masterList.find(id => id === myId) !== undefined ? true : false
   );
@@ -148,11 +150,12 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
   }, [cdm, messages, keyboardH]);
 
   useEffect(() => {
-    Keyboard.addListener('keyboardDidShow', e => handdleKeyboardShow(e));
-    Keyboard.addListener('keyboardDidHide', () => handdleKeyboardHide());
+    Keyboard.addListener('keyboardDidShow', handdleKeyboardShow);
+    Keyboard.addListener('keyboardDidHide', handdleKeyboardHide);
+    getInitMasterID();
     return () => {
-      Keyboard.removeListener('keyboardDidShow', e => handdleKeyboardShow(e));
-      Keyboard.removeListener('keyboardDidHide', () => handdleKeyboardHide());
+      Keyboard.removeListener('keyboardDidShow', handdleKeyboardShow);
+      Keyboard.removeListener('keyboardDidHide', handdleKeyboardHide);
     };
   }, []);
 
@@ -161,6 +164,9 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
   }, [participants.length]);
 
   useEffect(() => {
+    console.log('masterList.length : ', masterList.length);
+
+    updateParticipants();
     setIsRoomMaster(
       masterList.find(mid => mid === myId) !== undefined ? true : false
     );
@@ -246,6 +252,12 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
   };
 
   // UserList
+  const getInitMasterID = async () => {
+    const roomInfo = await MeetApi.getMeetRoomNoCert(roomId);
+    if (isSuccess(roomInfo)) {
+      setInitMasterID(roomInfo.resultData.portal_id);
+    }
+  };
   const handlePressInvite = () => {
     setIsInviteList(true);
   };
@@ -253,7 +265,37 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
     setUserInfo(user);
     setIsProfile(true);
   };
-  const handlePressMaster = () => {};
+  const handlePressMaster = async (wehagoID: string) => {
+    if (initMasterID === wehagoID) {
+      setToastMessage('방 개설자의 마스터 권한을 해제시킬 수 없습니다.');
+    } else {
+      let empowerList: string[] = [];
+      let removeList: string[] = [];
+      const copyMasterList = masterList.slice(0);
+
+      const removeAuthUser = copyMasterList.find(
+        masterID => masterID === wehagoID
+      );
+      removeAuthUser && removeList.push(removeAuthUser);
+
+      if (removeAuthUser) {
+        empowerList = copyMasterList.filter(
+          master => master !== removeAuthUser
+        );
+      } else {
+        empowerList = copyMasterList;
+        empowerList.push(wehagoID);
+      }
+
+      const params: { master: string[]; unmaster: string[] } = {
+        master: empowerList,
+        unmaster: removeList
+      };
+
+      await MeetApi.setMasterList(auth, roomId, params);
+      room && room.sendMessage.empowerMaster(wehagoID, removeAuthUser);
+    }
+  };
   const handlePressKick = () => {};
 
   const handlePressMike = (jitsiID: string, muteFlag: boolean) => {
@@ -261,7 +303,8 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
       setIsMuteMike(!isMuteMike);
     } else {
       if (isMicControl && isRoomMaster) {
-        room && room.sendMessage.handleOtherUserMikeDirectControl(muteFlag, jitsiID);
+        room &&
+          room.sendMessage.handleOtherUserMikeDirectControl(muteFlag, jitsiID);
       } else {
         setToastMessage('마이크 제어 권한이 없습니다.');
       }
@@ -309,7 +352,7 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
   const handlePressLinkCopy = () => {
     Clipboard.setString(`https://video.wehago.com/video?room=${roomId}`);
     //다국어 필요
-    // setToastMessage(t('공유링크가 복사되었습니다.'));
+    setToastMessage(t('공유링크가 복사되었습니다.'));
     setIsInviteList(false);
   };
 
@@ -320,7 +363,7 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
       joincode = getJoincode.resultData;
       Clipboard.setString(joincode);
       //다국어 필요
-      // setToastMessage(t('참여코드가 복사되었습니다.'));
+      setToastMessage(t('참여코드가 복사되었습니다.'));
     } else {
       console.warn('3-46 getJoincode : ', getJoincode.errors);
     }
@@ -329,11 +372,11 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
 
   //#endregion Method
 
-  const handdleKeyboardShow = (e: any) => {
+  const handdleKeyboardShow = (e?: any) => {
     setKeyboardH(e.endCoordinates.width);
   };
 
-  const handdleKeyboardHide = () => {
+  const handdleKeyboardHide = (e?: any) => {
     setKeyboardH(0);
   };
 

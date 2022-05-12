@@ -11,7 +11,6 @@ import { Alert, Platform } from 'react-native';
 import { getT } from '@utils/translateManager';
 
 const MainContainer: React.FC<MainContainerProps> = ({ roomName, onClose }) => {
-  const t = getT();
   //#region selector
   const {
     mainDisplayType,
@@ -78,18 +77,20 @@ const MainContainer: React.FC<MainContainerProps> = ({ roomName, onClose }) => {
 
   const toggleScreenFlag = () => {
     dispatch(ScreenShareActions.toggleScreenFlag());
-  }
+  };
 
   const updateMainUserIsMaster = () => {
     dispatch(MainuserActions.updateMainUserIsMaster());
-  }
+  };
   //#endregion dispatch
 
   useEffect(() => {
+    // 메인유저가 변경될때마다 마스터 여부체크
     setMainUserMaster();
   }, [mainUser.jitsiId]);
 
   useEffect(() => {
+    // 내가 메인유저일때 화면전환 처리
     if (presenter === '') {
       if (isMuteVideo) {
         setMainView('character');
@@ -99,8 +100,8 @@ const MainContainer: React.FC<MainContainerProps> = ({ roomName, onClose }) => {
     }
   }, [isMuteVideo]);
 
-  //TODO: 추후에 스플릿비디오에서 메인화면 지정시 카메라 ON/OFF 잘되는지 확인 !
   useEffect(() => {
+    //TODO: 추후에 스플릿비디오에서 메인화면 지정시 카메라 ON/OFF 잘되는지 확인 !
     if (!isLocal && presenter === '') {
       let isMute;
       isMute = mainVideoTrack ? mainVideoTrack.isMuted() : true;
@@ -109,6 +110,7 @@ const MainContainer: React.FC<MainContainerProps> = ({ roomName, onClose }) => {
   }, [mainVideoTrack?.isMuted()]);
 
   useEffect(() => {
+    // 스케치, 문서공유모드 화면전환 처리
     const myId = room?.getMyId();
     if (presenter !== '') {
       if (presenter !== 'localUser') {
@@ -133,8 +135,7 @@ const MainContainer: React.FC<MainContainerProps> = ({ roomName, onClose }) => {
   }, [presenter]);
 
   useEffect(() => {
-    console.log('MainCtr_isScreenShare : ', isScreenShare);
-
+    // 화면공유시 화면전환 처리
     if (isScreenShare) {
       setMainView('screen');
     } else {
@@ -147,8 +148,9 @@ const MainContainer: React.FC<MainContainerProps> = ({ roomName, onClose }) => {
   }, [isScreenShare]);
 
   useEffect(() => {
+    // 회의 진행중 마스터 변경에 대한 처리
     updateMainUserIsMaster();
-  }, [masterList.length])
+  }, [masterList.length]);
 
   const _handlePressShareStop = () => {
     if (Platform.OS === 'android') {
@@ -159,7 +161,7 @@ const MainContainer: React.FC<MainContainerProps> = ({ roomName, onClose }) => {
         setTimeout(() => {
           toggleMuteVideo(false);
         }, 500);
-      } catch(error) {
+      } catch (error) {
         console.log('error : ', error);
         setScreenFlag(false);
       }

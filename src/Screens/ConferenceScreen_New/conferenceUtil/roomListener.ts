@@ -69,7 +69,7 @@ export const actions = {
 
 export function bindEvent(handler: any, room: any, resolve: any, reject: any) {
   const conferenceEvents = JitsiMeetJS.events.conference;
-
+  let presenter = '';
   // ===== Additional ===== //
   // room.on(conferenceEvents.CONNECTION_DROPPED_ERROR, () => {});
 
@@ -105,13 +105,14 @@ export function bindEvent(handler: any, room: any, resolve: any, reject: any) {
     handler.joinUser(user);
   });
 
-  // // LEFT_USER 이벤트 연결
-  // room.on(conferenceEvents.USER_LEFT, id => {
-  //   if (room.presenter === id) {
-  //     handler.CHANGED_DOCUMENT_SHARE_MODE(false, false);
-  //   }
-  //   handler.LEFT_USER(id);
-  // });
+  // LEFT_USER 이벤트 연결
+  room.on(conferenceEvents.USER_LEFT, (id: any) => {
+    if (id === room.myUserId()) return;
+    if (presenter === id) {
+      handler.changeDocumentShareMode(false, false);
+    }
+    handler.leftUser(id);
+  });
 
   // 트랙추가 이벤트 연결
   room.on(conferenceEvents.TRACK_ADDED, (track: any) => {
@@ -199,7 +200,7 @@ export function bindEvent(handler: any, room: any, resolve: any, reject: any) {
   room.addCommandListener(actions.SET_DOCUMENT_SHARE_IS_OPEN, (value: any) => {
     const { value: userId, attributes } = value;
     // if (attributes.user === 'ALL' || attributes.user === room.myUserId())
-    room.presenter = userId;
+    presenter = userId;
     if (userId !== room.myUserId()) {
       handler.changeDocumentShareMode(attributes, userId);
     } else {
@@ -210,6 +211,7 @@ export function bindEvent(handler: any, room: any, resolve: any, reject: any) {
   room.addCommandListener(actions.SET_DOCUMENT_SHARE_IS_CLOSE, (value: any) => {
     // const { value: userId } = value;
     // if (userId !== room.myUserId()) {
+    presenter = '';
     handler.changeDocumentShareMode(false);
     // }
   });
@@ -387,32 +389,47 @@ export function bindEvent(handler: any, room: any, resolve: any, reject: any) {
 
   room.addCommandListener(actions.UPDATE_MASTER_USERS, (value: any) => {
     console.log('UPDATE_MASTER_USERS [ 마스터 유저 업데이트 시 ] : ', value);
-    const { cancel, myCommand } = value.attributes;
-    handler.changeMasterList(cancel, myCommand);
+    const { isRemoveAuth, myCommand } = value.attributes;
+    handler.changeMasterList(isRemoveAuth, myCommand);
   });
 
   room.addCommandListener(actions.REQUEST_KICK, (value: any) => {
-    console.log('REQUEST_KICK : ', value);
+    console.log('REQUEST_KICK[ 화상회의에서 내보내기 ] : ', value);
     const target = value.attributes.targetUser;
     const master = value.attributes.requestUser;
-    // handler.REQUEST_KICK(master, target);
+    
+    const { id: targetId } = JSON.parse(target);
+    console.log('targetId : ', targetId);
+    const isTargetMe = targetId === room.myUserId() ? true : false;
+
+    
+    handler.requestKick(master, target, isTargetMe);
   });
 
   //마스터유저로부터 마이크 권한 OFF
-  room.addCommandListener(actions.STOP_FLOOR, (value: any) => {
-    console.log('STOP_FLOOR [ 마이크 권한 OFF ]: ', value);
-    const result = JSON.parse(value.attributes.targetUser);
-    if (result.jitsiId === room.myUserId() && value.value !== room.myUserId()) {
-      handler.changeMicMuteByMaster(true);
-    } else if (
-      result.jitsiId !== room.myUserId() &&
-      value.value !== room.myUserId()
-    ) {
-      handler.changeMicMuteByMaster(undefined, result.name);
-    }
-  });
+  room.addCommandListener(
+    actions.STOP_FLOOR,
+    (value: { attributes: any; value: string }) => {
+      console.log('STOP_FLOOR [ 마이크 권한 OFF ]: ', value);
+      const result = JSON.parse(value.attributes.targetUser);
+      const { isMasterControlTarget } = value.attributes;
 
-  //마스터 유저일시 마이크 권한 요쳥 들어왔을경우
+      if (isMasterControlTarget === 'true') {
+        // 내가 마스터일때
+      } else {
+        // 내가 마스터가 아닐때
+        if (value.value !== room.myUserId()) {
+          if (result.jitsiId === room.myUserId()) {
+            handler.changeMicMuteByMaster(true);
+          } else {
+            handler.changeMicMuteByMaster(undefined, result.name);
+          }
+        }
+      }
+    }
+  );
+
+  //마스터 유저일때 다른 유저로부터 마이크 권한 요쳥이 들어온 경우
   room.addCommandListener(actions.REQUEST_FLOOR, (value: any) => {
     console.log('REQUEST_FLOOR [ 마이크 제어 권한 요청 ] : ', value);
     const targetUser = JSON.parse(value.attributes.targetUser);

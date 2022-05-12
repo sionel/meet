@@ -1,4 +1,3 @@
-import { actionCreators as mainUserActionCreators } from './mainUser';
 import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import { RootState } from '../configureStore';
@@ -9,7 +8,7 @@ const RESET_USERLIST = 'participants_copy.RESET_USERLIST';
 const SET_USER_TRACK = 'participants_copy.SET_USER_TRACK';
 const UPDATE_PARTICIPANTS_IS_MASTER =
   'participants_copy.UPDATE_PARTICIPANTS_IS_MASTER';
-const TOGGLE_MUTE_VIDEO = 'participants_copy.TOGGLE_MUTE_VIDEO';
+const SET_LEFT_USER = 'participants_copy.SET_LEFT_USER';
 
 export interface Participant {
   jitsiId: string;
@@ -32,7 +31,7 @@ const initialState: InitialState = {
   list: []
 };
 
-function reducer(state = initialState, action: AnyAction) { 
+function reducer(state = initialState, action: AnyAction) {
   switch (action.type) {
     // case JOIN_USER:
     //   return _joinUser(state, action);
@@ -42,6 +41,8 @@ function reducer(state = initialState, action: AnyAction) {
       return _resetUserlist(state);
     case SET_USER_TRACK:
       return _setUserTrack(state, action);
+    case SET_LEFT_USER:
+      return _setLeftUser(state, action);
     case UPDATE_PARTICIPANTS_IS_MASTER:
       return _updateParticipantsIsMaster(state, action);
     default:
@@ -111,7 +112,7 @@ const setUserTrack = (track: any): ThunkAction<void, RootState, unknown> => {
   };
 };
 const _setUserTrack = (state: InitialState, action: AnyAction) => {
-  const { track } = action;  
+  const { track } = action;
   const { list } = state;
   const trackType = track.getType();
   const index = state.list.findIndex(
@@ -131,6 +132,25 @@ const _setUserTrack = (state: InitialState, action: AnyAction) => {
   };
 };
 
+const setLeftUser = (id: string): ThunkAction<void, RootState, unknown> => {
+  return dispatch => {
+    dispatch({
+      type: SET_LEFT_USER,
+      id
+    });
+  };
+};
+const _setLeftUser = (state: InitialState, action: AnyAction) => {
+  const { id } = action;
+  const copyList = state.list.slice(0);
+  const remainUsers = copyList.filter(user => user.jitsiId !== id);
+  
+  return {
+    ...state,
+    list: remainUsers
+  };
+};
+
 const resetUserlist = (): ThunkAction<void, RootState, unknown> => {
   return dispatch => {
     dispatch({
@@ -145,7 +165,11 @@ const _resetUserlist = (state: InitialState) => {
   };
 };
 
-const updateParticipantsIsMaster = (): ThunkAction<void, RootState, unknown> => {
+const updateParticipantsIsMaster = (): ThunkAction<
+  void,
+  RootState,
+  unknown
+> => {
   return (dispatch, getState) => {
     const { masterList } = getState()['master'];
     const copyList = masterList.slice(0);
@@ -155,17 +179,20 @@ const updateParticipantsIsMaster = (): ThunkAction<void, RootState, unknown> => 
     });
   };
 };
-const _updateParticipantsIsMaster = (state: InitialState, action: AnyAction) => {
+const _updateParticipantsIsMaster = (
+  state: InitialState,
+  action: AnyAction
+) => {
   const { copyList } = action;
   const participantsCopy = state.list;
-  participantsCopy.map(v =>
-    {
-      let isMaster = copyList.find(
-        (masterId: string) => masterId === v.wehagoId
-      );
-      if (isMaster) v.isMaster = true;
+  participantsCopy.map(v => {
+    let isMaster = copyList.find((masterId: string) => masterId === v.wehagoId);
+    if (isMaster) {
+      v.isMaster = true;
+    } else {
+      v.isMaster = false;
     }
-  );
+  });
 
   return {
     ...state,
@@ -176,6 +203,7 @@ const _updateParticipantsIsMaster = (state: InitialState, action: AnyAction) => 
 export const actionCreators = {
   // joinUser,
   setUserInfo,
+  setLeftUser,
   resetUserlist,
   setUserTrack,
   updateParticipantsIsMaster

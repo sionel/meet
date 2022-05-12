@@ -16,8 +16,7 @@ import {
   ListItemComp,
   SearchForm,
   Placeholder,
-  CustomAlert,
-  SectionListHeader
+  CustomAlert
 } from '@components/index';
 import { getT } from '@utils/translateManager';
 

@@ -5,10 +5,10 @@
 
  import { Platform } from 'react-native';
  import CryptoJS from 'crypto-js';
- import { WEHAGO_ENV } from '../../config';
+//  import { WEHAGO_ENV } from '../../config';
  import { v4 as uuidv4 } from 'uuid';
  
- export const isWehagoV = WEHAGO_ENV === 'WEHAGOV';
+//  export const isWehagoV = WEHAGO_ENV === 'WEHAGOV';
  
  const OS = Platform.OS;
  const OSID = OS === 'ios' ? 'mobile-ios' : 'mobile-android';

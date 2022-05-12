@@ -25,6 +25,8 @@ const MESSAGE_RECEIVED = 'conference.MESSAGE_RECEIVED';
 const INIT_MESSAGES_COUNT = 'conference.INIT_MESSAGES_COUNT';
 const SET_EXTERNAL = 'conference.SET_EXTERNAL';
 const SET_IS_MUTE_MIKE = 'conference.SET_IS_MUTE_MIKE';
+const SET_IS_KICK = 'conference.SET_IS_KICK';
+
 const RESET_RESOURCE = 'conference.RESET_RESOURCE';
 
 export type messageType = {
@@ -52,6 +54,7 @@ export interface state {
   expireTime: number | null;
   messages: messageType[];
   externalAPIScope: string;
+  isKick: string | undefined;
 }
 
 const initialState: state = {
@@ -70,7 +73,8 @@ const initialState: state = {
   mirrorMode: false,
   expireTime: null,
   messages: [],
-  externalAPIScope: ''
+  externalAPIScope: '',
+  isKick: undefined
 };
 
 const reducer: (state: state, action: AnyAction) => state = (
@@ -112,6 +116,8 @@ const reducer: (state: state, action: AnyAction) => state = (
       return _setMessage(state, action);
     case INIT_MESSAGES_COUNT:
       return _initMessagesCount(state);
+    case SET_IS_KICK:
+      return _setIsKick(state, action);
     case RESET_RESOURCE:
       return _resetResource(state);
 
@@ -360,6 +366,17 @@ const _setIsMuteMike = (state: state, action: AnyAction) => {
   };
 };
 
+const setIsKick = (masterID: string) => {
+  return {
+    type: RESET_RESOURCE,
+    masterID
+  };
+};
+const _setIsKick = (state: state, action: AnyAction) => {
+  const { masterID } = action;
+  return { ...state, isKick: masterID };
+};
+
 const resetResource = () => {
   return {
     type: RESET_RESOURCE
@@ -387,6 +404,7 @@ export const actionCreators = {
   receivedMessage,
   initMessagesCount,
   resetResource,
-  setExternalAPI
+  setExternalAPI,
+  setIsKick
 };
 export default reducer;

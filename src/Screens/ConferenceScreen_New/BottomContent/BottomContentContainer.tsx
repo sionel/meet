@@ -119,22 +119,26 @@ const BottomContentContainer: React.FC<BottomContentContainerProps> = ({
   };
 
   const _handlePressSpeaker = () => {
-    if (!isBtOn) {
-      if (OS === 'ios') {
-        if (isSpeakerOn) {
-          AudioMode.setAudioDevice('Built-In Microphone');
+    try {
+      if (!isBtOn) {
+        if (OS === 'ios') {
+          if (isSpeakerOn) {
+            AudioMode.setAudioDevice('Built-In Microphone');
+          } else {
+            AudioMode.setAudioDevice('SPEAKER');
+          }
         } else {
-          AudioMode.setAudioDevice('SPEAKER');
+          // android
+          if (isSpeakerOn) {
+            InCallManager.setForceSpeakerphoneOn(false);
+          } else {
+            InCallManager.chooseAudioRoute('SPEAKER_PHONE');
+          }
         }
-      } else {
-        // android
-        if (isSpeakerOn) {
-          InCallManager.setForceSpeakerphoneOn(false);
-        } else {
-          InCallManager.chooseAudioRoute('SPEAKER_PHONE');
-        }
+        setIsSpeakerOn(!isSpeakerOn);
       }
-      setIsSpeakerOn(!isSpeakerOn);
+    } catch (error: any) {
+      console.log('error: ', error);
     }
   };
 

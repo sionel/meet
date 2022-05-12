@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { CustomButton } from '../components';
+import { CustomButton } from '@components/index';
 
 const SectionListHeader = props => {
   const { title, collapse, customStyle, onPress } = props;

@@ -302,4 +302,40 @@ export default class sendMessage {
       });
     }
   };
+
+  empowerMaster = async (
+    wehagoID: string,
+    removeAuthUser: string | undefined
+  ) => {
+    await this._room.sendCommandOnce(UPDATE_MASTER_USERS, {
+      value: this._room.myUserId(),
+      attributes: {
+        isRemoveAuth: removeAuthUser,
+        myCommand: true
+      }
+    });
+
+    if (!removeAuthUser) {
+      this._room.sendCommandOnce(GRANT_FLOOR_TARGET, {
+        value: this._room.myUserId(),
+        attributes: {
+          targetUser: JSON.stringify({
+            jitsiId: wehagoID
+          }),
+          type: 'reject',
+          isMasterControlTarget: 'true'
+        }
+      });
+
+      this._room.sendCommandOnce(STOP_FLOOR, {
+        value: this._room.myUserId(),
+        attributes: {
+          targetUser: JSON.stringify({
+            jitsiId: wehagoID
+          }),
+          isMasterControlTarget: 'true'
+        }
+      });
+    }
+  };
 }

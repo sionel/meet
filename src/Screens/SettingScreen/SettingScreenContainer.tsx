@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import SettingScreenPresenter from './SettingScreenPresenter';
 import JitsiMeetJS from '@jitsi/base/lib-jitsi-meet';
-import config from '@utils/conference/config';
+import config from '../ConferenceScreen_New/conferenceUtil/config';
 import { v4 as uuidv4 } from 'uuid';
 import { getT } from '@utils/translateManager';
 

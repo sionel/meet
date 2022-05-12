@@ -1,14 +1,12 @@
 import JitsiMeetJS, { JitsiConnectionEvents } from '@jitsi/base/lib-jitsi-meet';
-import { bindEvent, disposeEvent } from './roomListener';
+import { bindEvent } from './roomListener';
 import { ConferenceHandler } from './ConferenceHandler';
 import config from './config';
 import Connection from './Connection';
 import sendMessage from './sendMessage';
 
-import { actionCreators as participantsAction } from '@redux/participants_copy';
 import { actionCreators as conferenceActions } from '@redux/conference';
 import { actionCreators as mainUserActions } from '@redux/mainUser_copy';
-import DrawingManager from './DrawingManager';
 
 interface Room {
   token: string;
