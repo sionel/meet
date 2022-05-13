@@ -8,13 +8,14 @@ import BottomPopup from './BottomPopup';
 import BottomContent from './BottomContent';
 import { ConferenceScreenPresenterProps } from '@screens/ConferenceScreen_New/types';
 import LoadingIndicator from './LoadingIndicator';
+// import KickScreen from './KickScreen';
 
 const ConferenceScreenPresenter: React.FC<ConferenceScreenPresenterProps> = ({
   isConnected,
   roomName,
   id,
   roomToken,
-  isKick,
+  // isKick,
   isChatting,
   handleClose
 }) => {
@@ -23,7 +24,8 @@ const ConferenceScreenPresenter: React.FC<ConferenceScreenPresenterProps> = ({
       <StatusBar backgroundColor="#000" barStyle={'light-content'} />
       {isConnected ? (
         <Fragment>
-          {/* {isKick && <Fragment isKick={isKick} {onClose={handleClose}}/>} */}
+          {/* {isKick && <KickScreen isKick={isKick} onClose={handleClose}/>} */}
+          {/* TODO: 공통 ALERT 창 만들어서 추후에 강퇴처리 */}
           <TopPopup />
           <TopContent roomName={roomName} id={id} handleClose={handleClose} />
           <Main roomName={roomName} onClose={handleClose} />

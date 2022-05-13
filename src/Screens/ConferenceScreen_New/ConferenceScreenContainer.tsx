@@ -61,7 +61,6 @@ const ConferenceScreenContainer: React.FC<
     bottomDisplayType,
     externalAPIScope,
     mikeState,
-    isKick,
     documentShare,
     participants,
     mode,
@@ -77,7 +76,6 @@ const ConferenceScreenContainer: React.FC<
     bottomDisplayType: state.conference.bottomDisplayType,
     externalAPIScope: state.conference.externalAPIScope,
     mikeState: state.conference.mikeState,
-    isKick: state.conference.isKick,
     //문서공유
     documentShare: state.documentShare,
     //참여자
@@ -189,7 +187,8 @@ const ConferenceScreenContainer: React.FC<
         userInfo,
         dispatch,
         params.tracks,
-        t
+        t,
+        _handleClose
       );
 
       retriveMasters(params.roomToken);
@@ -283,33 +282,33 @@ const ConferenceScreenContainer: React.FC<
   //#endregion
 
   //#region 화상회의 종료( 자원 정리 )
-  const _handleClose = () => {
+  const _handleClose = async () => {
     if (isScreenShare) {
       toggleScreenFlag();
       if (OS === 'ios') return;
     }
+    // console.log('room : ', room);
+    
     resetUserlist();
     resetMainUser();
-    resetResource();
-
-    room && room.dispose();
-
     resetRequestUserList();
-
+    room && room.dispose();
+    
     if (!isLogin) {
       navigation.reset({ routes: [{ name: 'LoginStack' }] });
     } else {
       navigation.reset({ routes: [{ name: 'MainStack' }] });
     }
+
     setEndCall(true);
     setIsConnected(false);
+    // resetResource();
   };
   //#endregion
 
   return !endCall ? (
     <ConferenceScreenPresenter
       isConnected={isConnected}
-      isKick={isKick}
       roomName={params.selectedRoomName}
       id={params.id}
       roomToken={params.roomToken}

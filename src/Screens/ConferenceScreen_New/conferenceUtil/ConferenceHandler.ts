@@ -7,7 +7,12 @@ import { actionCreators as masterActions, requestUser } from '@redux/master';
 import { actionCreators as toastActions } from '@redux/toast';
 import { Alert } from 'react-native';
 
-export const ConferenceHandler = (dispatch: any, t: any, token: string) => ({
+export const ConferenceHandler = (
+  dispatch: any,
+  t: any,
+  token: string,
+  endCall: () => void
+) => ({
   test: () => {
     dispatch(testAction.test());
   },
@@ -124,15 +129,14 @@ export const ConferenceHandler = (dispatch: any, t: any, token: string) => ({
       dispatch(toastActions.setToastMessage(toastMessage));
     }
   },
-  requestKick: (masterInfo:any, targetInfo:any, isTargetMe: boolean) => {
+  requestKick: (masterInfo: any, targetInfo: any, isTargetMe: boolean) => {
     const { name: masterName } = JSON.parse(masterInfo);
     const { name: targetName } = JSON.parse(targetInfo);
 
     if (isTargetMe) {
-      dispatch(conferenceActions.setIsKick(masterName));
-      // const message = `${masterName} 님이 ${targetName} 님을 \n화상회의방에서 추방하였습니다.`;
-      // endCall();
-      // Alert.alert(t('alert_kick'), message);
+      const message = `${masterName} 님이 ${targetName} 님을 \n화상회의방에서 추방하였습니다.`;
+      endCall();
+      Alert.alert(t('추방되었습니다.'), message);
     } else {
       dispatch(toastActions.kickMessage(targetName));
     }

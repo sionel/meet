@@ -45,14 +45,14 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
     bottomDisplayType: state.conference.bottomDisplayType,
     participants: state.participants_copy.list,
     myId: state.user.auth.portal_id,
-    myJitsiId: state.participants_copy.list[0].jitsiId,
+    myJitsiId: state.participants_copy.list[0]?.jitsiId,
     masterList: state.master.masterList,
     messages: state.conference.messages,
     room: state.conference.room,
     auth: state.user.auth,
     isScreenShare: state.screenShare.isScreenShare,
     myVideoState: state.conference.videoState,
-    isMaster: state.participants_copy.list[0].isMaster,
+    isMaster: state.participants_copy.list[0]?.isMaster,
     isMuteMike: state.conference.isMuteMike
   }));
   //#endregion
@@ -164,8 +164,6 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
   }, [participants.length]);
 
   useEffect(() => {
-    console.log('masterList.length : ', masterList.length);
-
     updateParticipants();
     setIsRoomMaster(
       masterList.find(mid => mid === myId) !== undefined ? true : false

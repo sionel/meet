@@ -338,4 +338,21 @@ export default class sendMessage {
       });
     }
   };
+
+  kickUser = async (id: string, masterName: string, targetName: string) => {
+    // this._room.kickParticipant(id);
+    await this._room.sendCommandOnce(REQUEST_KICK, {
+      value: this._room.myUserId(),
+      attributes: {
+        targetUser: JSON.stringify({
+          id,
+          name: targetName
+        }),
+        requestUser: JSON.stringify({
+          jitsiId: this._room.myUserId(),
+          name: masterName
+        })
+      }
+    });
+  };
 }

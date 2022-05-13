@@ -24,7 +24,6 @@ export interface ConferenceScreenPresenterProps {
   roomName: string;
   id: string;
   roomToken: string;
-  isKick: string | undefined;
   isConnected: boolean;
   isChatting: boolean;
   handleClose: () => void;
