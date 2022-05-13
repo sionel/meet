@@ -19,7 +19,10 @@ export interface userInfo {
   user_no: number;
   user_state: number;
   user_zipcode: string | null;
-  nickname?: string;
+  nickname: string;
+  rankname: any
+  isFreelancer: any
+  full_path: any
 }
 
 export interface apiAuthInfo {

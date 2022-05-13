@@ -180,7 +180,8 @@ node_modules/react-native/ReactCommon/turbomodule/core/platform/ios/RCTTurboModu
 <!-- 11, 12번 patch적용에 따라 필요 없음. -->
 11. 안드로이드 빌드시 datepicker NumberPickerView 1.1.5 설치 오류
 
-node_modules/react-native-date-picker/android/build.gradle에서
+node_modules/react-native-date-picker/android/build.gradle
+에서
 
 implementation 'com.github.henninghall:numberpickerview:v1.1.5' => 
 implementation group: 'com.henninghall.android', name: 'NumberPickerView', version: '1.1.5' 

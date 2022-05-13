@@ -21,9 +21,6 @@ import { wehagoMainURL, wehagoDummyImageURL } from '@utils/index';
 import { SafeAreaView } from 'react-native-safe-area-context';
 // import { add, last, parseInt } from 'lodash';
 import LinearGradient from 'react-native-linear-gradient';
-import { RootState } from '../../redux/configureStore';
-import { length } from '../../../webpack.config';
-import { stubTrue } from 'lodash';
 
 const icCode = require('@assets/icons/ic_code.png');
 const icLock_W = require('@assets/icons/ic_lock_w.png');
@@ -167,7 +164,7 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
       disabledDatesTextStyle={{ fontSize: isTablet ? 18 : 14 }}
     />
   );
-  
+
   return (
     <Fragment>
       <SafeAreaView style={styles.safeArea} onTouchStart={onFocusOut}>
@@ -483,17 +480,15 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
           />
         </View>
 
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, paddingHorizontal: '5%' }}>
           {selectedEmployee.member[0].user_no !== undefined && (
             <FlatList
               showsVerticalScrollIndicator={false}
               bounces={false}
-              contentContainerStyle={[
-                {
-                  flexGrow: 1,
-                  paddingHorizontal: '5%'
-                }
-              ]}
+              contentContainerStyle={{
+                flexGrow: 1
+                // paddingHorizontal: '5%'
+              }}
               data={selectedEmployee.member}
               keyExtractor={(item, index) => String(index)}
               renderItem={({ item, index }: any) => {
@@ -903,14 +898,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     height: 56,
-    paddingTop: '1%',
-    paddingBottom: '1%'
+    // paddingHorizontal: '1%'
   },
   profileView: {
     width: 40,
     height: 40,
     position: 'relative',
-    zIndex: 1
+    zIndex: 1,
+    marginRight: 8
   },
   profile: {
     flex: 1,

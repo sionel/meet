@@ -72,21 +72,23 @@ export default function CustomProvider(props: any) {
   const _setDeployedServices = (params: any) =>
     dispatch(DeployedActions.setDeployedServices(params));
 
-  const [sessionInterval, setSessionInterval] = useState();
+  // const [sessionInterval, setSessionInterval] = useState();
+  
 
   useEffect(() => {
     const interval =
       isLogin &&
       network &&
+      auth.cno !== undefined &&
       setInterval(() => {
-        _loginCheckRequest();
+         _loginCheckRequest();
       }, 10000);
-    setSessionInterval(interval);
+    // setSessionInterval(interval);
 
-    (!isLogin || !network) && sessionInterval && clearInterval(sessionInterval);
+    // (!isLogin || !network || auth.cno === undefined) && sessionInterval && clearInterval(sessionInterval);
 
     return () => {
-      sessionInterval && clearInterval(sessionInterval);
+      interval && clearInterval(interval);
     };
   }, [isLogin, network]);
 

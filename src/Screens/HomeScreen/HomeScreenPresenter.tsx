@@ -15,7 +15,8 @@ import {
   Image,
   TouchableOpacity,
   Text,
-  FlatList
+  FlatList,
+  Platform
 } from 'react-native';
 
 import CalendarPicker from '../../custom_modules/react-native-calendar-picker';
@@ -136,7 +137,7 @@ const HomeScreenPresenter = (props: presenterProps) => {
 
       <View style={styles.safeContainer}>
         <View
-          style={[styles.header, { paddingHorizontal: isTablet ? 40 : 20 }]}
+          style={[styles.header, { paddingHorizontal: isTablet ? 30 : 20 }]}
         >
           <Image
             source={loginLogo}
@@ -145,7 +146,7 @@ const HomeScreenPresenter = (props: presenterProps) => {
           />
           <View style={{ flex: 1 }} />
           <TouchableOpacity style={styles.setting} onPress={onClickSetting}>
-            <Image source={icSet} style={{ width: 25, height: 25 }} />
+            <Image source={icSet} style={{ width: 18, height: 18 }} />
           </TouchableOpacity>
         </View>
 
@@ -153,11 +154,11 @@ const HomeScreenPresenter = (props: presenterProps) => {
         <View
           style={[
             styles.helloContainer,
-            { paddingHorizontal: isTablet ? 40 : 20 }
+            { paddingHorizontal: isTablet ? 30 : 20 }
           ]}
         >
           <View style={styles.helloTextContainer}>
-            <Image source={{ uri: userImg }} style={styles.settingImg} />
+            <Image source={{ uri: userImg }} style={styles.userImageView} />
             <Text style={styles.name}>{userName}</Text>
             <TouchableOpacity
               style={styles.selectConpany}
@@ -174,7 +175,23 @@ const HomeScreenPresenter = (props: presenterProps) => {
 
           <View style={styles.buttonContainer}>
             <TouchableOpacity
-              style={styles.topButtons}
+              style={[
+                styles.topButtons,
+                { marginRight: 15 },
+                Platform.select({
+                  ios: {
+                    shadowColor: 'rgb(0,0,0)',
+                    shadowOpacity: 0.08,
+                    shadowOffset: {
+                      width: 0,
+                      height: 8
+                    }
+                  },
+                  // android: {
+                  //   elevation: 10
+                  // }
+                })
+              ]}
               onPress={createConference}
             >
               <Image
@@ -198,7 +215,22 @@ const HomeScreenPresenter = (props: presenterProps) => {
               <Text>{'회의일정'}</Text>
             </TouchableOpacity> */}
             <TouchableOpacity
-              style={styles.topButtons}
+              style={[
+                styles.topButtons,
+                Platform.select({
+                  ios: {
+                    shadowColor: 'rgb(0,0,0)',
+                    shadowOpacity: 0.08,
+                    shadowOffset: {
+                      width: 0,
+                      height: 8
+                    }
+                  },
+                  // android: {
+                  //   elevation: 10
+                  // }
+                })
+              ]}
               onPress={enterInviteCode}
             >
               <Image
@@ -219,7 +251,7 @@ const HomeScreenPresenter = (props: presenterProps) => {
             <View
               style={[
                 styles.goingTextContainer,
-                { paddingHorizontal: isTablet ? 40 : 20 }
+                { paddingHorizontal: isTablet ? 30 : 20 }
               ]}
             >
               <Text style={styles.goingText}>
@@ -243,6 +275,7 @@ const HomeScreenPresenter = (props: presenterProps) => {
               renderItem={conference => {
                 return (
                   <ConferenceCard
+                    key={conference.index}
                     index={conference.index}
                     conference={conference.item}
                     isHorizon={isHorizon}
@@ -258,14 +291,14 @@ const HomeScreenPresenter = (props: presenterProps) => {
         <View
           style={[
             styles.ConferenceListContainer,
-            { paddingHorizontal: isTablet ? 40 : 20 }
+            { paddingHorizontal: isTablet ? 30 : 20 }
           ]}
         >
           <View style={styles.ConferenceListTitle}>
             {reservationConference.length > 0 && (
               <Fragment>
                 <TouchableOpacity
-                  style={{ flexDirection: 'row' }}
+                  style={{ flexDirection: 'row', marginVertical: 5 }}
                   onPress={() => {
                     setHighlight('reservation');
                   }}
@@ -326,6 +359,7 @@ const HomeScreenPresenter = (props: presenterProps) => {
               )}
             </View>
           </View>
+          
           <FlatList
             numColumns={isTablet ? 2 : 1}
             keyExtractor={(item, index) => index.toString()}
@@ -334,6 +368,7 @@ const HomeScreenPresenter = (props: presenterProps) => {
                 ? reservationConference
                 : finishedConference
             }
+            windowSize={10}
             renderItem={data => {
               const { item } = data;
 
@@ -344,12 +379,27 @@ const HomeScreenPresenter = (props: presenterProps) => {
               );
             }}
             showsVerticalScrollIndicator={false}
-            onEndReached={onEndReached}
-            onEndReachedThreshold={1}
+            onEndReached={({ distanceFromEnd }) => {
+              distanceFromEnd > 0 && onEndReached();
+            }}
+            onEndReachedThreshold={0.5}
             {...(isTablet && {
               columnWrapperStyle: { justifyContent: 'space-between' }
             })}
           />
+          {highlight === 'finished' && finishedConference.length === 0 && (
+            <View
+              style={[
+                styles.finConferenceNone,
+                { paddingTop: isTablet ? 120 : 40 }
+              ]}
+            >
+              <Image source={icEmpty} style={{ width: 134, height: 110 }} />
+              <Text style={styles.noConferenceText}>
+                {'회의기록이 없습니다.'}
+              </Text>
+            </View>
+          )}
         </View>
 
         {bottomPopup.show && (
@@ -457,8 +507,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center'
   },
-  settingImg: { width: 30, height: 30, borderRadius: 24, marginRight: 10 },
-  downArrow: { width: 25, height: 25 },
+  userImageView: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    marginRight: 4
+  },
+  downArrow: {
+    width: 18,
+    height: 18
+  },
   helloContainer: {
     width: '100%',
     justifyContent: 'space-between',
@@ -475,7 +533,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: 'DOUZONEText50',
     marginRight: 10,
-    textAlign: 'center'
+    textAlign: 'center',
+    color: '#333'
   },
   greeting: {
     fontSize: 20
@@ -485,41 +544,41 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     // backgroundColor: '#583',
-    paddingBottom: 20
+    marginBottom: 40
   },
   topButtons: {
     borderRadius: 12,
-    borderWidth: 1,
+    // borderWidth: 1,
     backgroundColor: '#fff',
-    borderColor: '#fff',
-    width: '45%',
-    height: 100,
+    // borderColor: '#fff',
+    // width: 102,
+    flex: 1,
+    height: 90,
     justifyContent: 'space-evenly',
     alignItems: 'center',
-    padding: 5,
-    shadowColor: 'rgb(0,0,0)',
-    shadowOpacity: 0.2,
-    shadowOffset: {
-      width: 0,
-      height: 8
-    }
+    padding: 5
   },
-  topButtonImg: { width: 40, height: 40 },
+  topButtonImg: {
+    width: 32,
+    height: 32
+  },
   ongoingContainer: {
-    width: '100%',
+    // width: '100%',
     // height: '28%',
-    paddingVertical: 20
+    marginBottom: 28
   },
   goingTextContainer: {
     justifyContent: 'flex-start',
     flexDirection: 'row',
     alignItems: 'center',
-    paddingBottom: 20
+    paddingBottom: 14
   },
   goingText: {
-    fontSize: 16,
-    fontFamily: 'DOUZONEText30',
-    marginRight: 5
+    fontSize: 14,
+    fontFamily: 'DOUZONEText50',
+    letterSpacing: -0.28,
+    marginRight: 5,
+    color: 'rgba(0,0,0, 0.87)'
   },
   calendarTopView: {
     flexDirection: 'row',
@@ -593,21 +652,21 @@ const styles = StyleSheet.create({
     flex: 1
   },
   GraySplitBar: {
-    borderWidth: 1,
+    borderWidth: 0.7,
     borderColor: '#aaa',
-    height: '100%',
+    height: 14,
     marginHorizontal: 10
   },
   ConferenceListContainer: {
     width: '100%',
-    flex: 1,
-    marginVertical: '2%'
+    flex: 1
+    // marginVertical: '2%'
     // backgroundColor: 'red'
   },
   ConferenceListTitle: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10
+    marginBottom: 14
   },
   ImageText: {
     fontSize: 13,
@@ -618,6 +677,15 @@ const styles = StyleSheet.create({
     fontFamily: 'DOUZONEText30',
     fontSize: 11,
     color: '#333'
+  },
+  finConferenceNone: {
+    alignItems: 'center',
+    height: '100%'
+  },
+  noConferenceText: {
+    fontFamily: 'DOUZONEText30',
+    fontSize: 14,
+    color: 'rgba(0,0,0,0.6)'
   }
   // container: {
   //   flex: 1,

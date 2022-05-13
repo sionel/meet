@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { AppRegistry, Linking } from 'react-native';
+import { Alert, AppRegistry, Linking } from 'react-native';
 import { Provider, useDispatch } from 'react-redux';
 import { PersistGate } from 'redux-persist/es/integration/react';
 import configureStore from './src/redux/configureStore';
@@ -14,15 +14,27 @@ import RootNavigation from '@navigations/RootNavigation';
 import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
 import ConferenceScreen from '@screens/ConferenceScreen_New';
 
+import { actionCreators as appAction } from './src/redux/modules/app';
+
 // import { io } from "socket.io-client";
 
 function App(props) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    Splash.hide();
+
+    setExternalAPIScope(props.externalAPIScope);
+    setUrl(props?.url?.url ?? '');
+    
     setT(props.t);
+    Splash.hide();
+    Linking.addEventListener('url', ({ url }) => {
+      setUrl(url);
+    });
   }, []);
+  const setExternalAPIScope = externalAPIScope =>
+    store.dispatch(appAction.setExternalAPIScope(externalAPIScope));
+  const setUrl = url => store.dispatch(appAction.setUrl(url));
 
   // useEffect(() => {
   //   dispatch(actionCreators.setUrl(props?.url?.url));
@@ -52,7 +64,7 @@ function AppWapper(props) {
     <Provider store={store}>
       <PersistGate persistor={persistor}>
         <CustomProvider>
-          <App {...props} />
+          <RootNavigation {...props} />
         </CustomProvider>
       </PersistGate>
     </Provider>

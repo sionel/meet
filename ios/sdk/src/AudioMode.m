@@ -361,6 +361,7 @@ RCT_EXPORT_METHOD(updateDeviceList) {
                     @"selected": [NSNumber numberWithBool:[portDesc.UID isEqualToString:currentPort]]
                 };
             [data addObject:deviceData];
+            
         }
 
         // We need to manually add the speaker because it will never show up in the
@@ -371,7 +372,6 @@ RCT_EXPORT_METHOD(updateDeviceList) {
                @"uid": kDeviceTypeSpeaker,
                @"selected": [NSNumber numberWithBool:[kDeviceTypeSpeaker isEqualToString:currentPort]]
         }];
-        
         [self sendEventWithName:kDevicesChanged body:data];
     });
 }

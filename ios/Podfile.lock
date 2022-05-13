@@ -301,7 +301,7 @@ PODS:
     - React
   - react-native-calendar-events (1.6.4):
     - React
-  - react-native-date-picker (4.1.1):
+  - react-native-date-picker (4.2.1):
     - React-Core
   - react-native-keep-awake (4.0.0):
     - React
@@ -315,11 +315,6 @@ PODS:
     - React
   - react-native-splash-screen (3.2.0):
     - React
-  - react-native-video (5.1.1):
-    - React-Core
-    - react-native-video/Video (= 5.1.1)
-  - react-native-video/Video (5.1.1):
-    - React-Core
   - react-native-webrtc (1.89.1):
     - React-Core
   - react-native-webview (11.0.2):
@@ -461,7 +456,6 @@ DEPENDENCIES:
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
-  - react-native-video (from `../node_modules/react-native-video/react-native-video.podspec`)
   - react-native-webrtc (from `../node_modules/react-native-webrtc`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -577,8 +571,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/slider"
   react-native-splash-screen:
     :path: "../node_modules/react-native-splash-screen"
-  react-native-video:
-    :path: "../node_modules/react-native-video/react-native-video.podspec"
   react-native-webrtc:
     :path: "../node_modules/react-native-webrtc"
   react-native-webview:
@@ -685,14 +677,13 @@ SPEC CHECKSUMS:
   react-native-background-timer: 029c606b3fd6dd476b153e177c518b6ade4c169f
   react-native-blur: cad4d93b364f91e7b7931b3fa935455487e5c33c
   react-native-calendar-events: cafbac5457a0dc449e3fb407814b2091b7f259be
-  react-native-date-picker: 414fe8f73392bae030dc4efec39d743b5c5de283
+  react-native-date-picker: 211dead8aeaecab3904a07b967f580e6ea3dee88
   react-native-keep-awake: afad8a51dfef9fe9655a6344771be32c8596d774
   react-native-netinfo: 0e563248a4b9a99c33ec29bd03c2d50767db22a6
   react-native-orientation-locker: 998c0744e26624407dac068c04c605b4af7304a2
   react-native-safe-area-context: 584dc04881deb49474363f3be89e4ca0e854c057
   react-native-slider: e99fc201cefe81270fc9d81714a7a0f5e566b168
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
-  react-native-video: 0bb76b6d6b77da3009611586c7dbf817b947f30e
   react-native-webrtc: ccb0c21eb4fb04326648fbdb4a5d49977e2cf274
   react-native-webview: dfd7202ff115c44d3ea401c2f36122fb3ac79f07
   React-RCTActionSheet: bcbc311dc3b47bc8efb2737ff0940239a45789a9

@@ -30,7 +30,7 @@ const LoginScreenContainer = ({
   }));
 
   const t = getT();
-  const isTablet: boolean = deviceInfoModule.isTablet();
+  const isTablet = deviceInfoModule.isTablet();
 
   //참여코드 입력시 정규식 체크하고 입력
   const changeInputcode = async (value: string) => {
@@ -87,6 +87,14 @@ const LoginScreenContainer = ({
     } else {
       setFocusingNum(0);
       setInputcodeErr(true);
+    } else {
+      const { name } = await MeetApi.getMeetRoomNoCert(resultData.room);
+      navigation.navigate('ConferenceStateView', {
+        accessType: 'joincode',
+        id: resultData.room,
+        joincode: joincode,
+        selectedRoomName: name
+      });
     }
   };
 

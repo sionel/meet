@@ -109,6 +109,7 @@ static void initializeViewsMap() {
 
 - (void)join:(JitsiMeetConferenceOptions *)options {
     [self setProps:options == nil ? @{} : [options asProps]];
+    // [self setProps: @{}];
 }
 
 - (void)leave {

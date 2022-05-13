@@ -61,7 +61,8 @@ const setStatusLoading = (status: string) => {
   };
 };
 
-const setInitInfo = (initInfo?: Partial<state>) => {
+const setInitInfo = (initInfo?: any) => {
+
   const data = initInfo || {
     status: 'INIT',
     TokenID: '',

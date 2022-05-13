@@ -30,6 +30,7 @@
 -             (BOOL)application:(UIApplication *)application
   didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     JitsiMeet *jitsiMeet = [JitsiMeet sharedInstance];
+    // JitsiMeet *jitsiMeet = [JitsiMeet initWhitOption:launchOptions];
 
     jitsiMeet.conferenceActivityType = JitsiMeetConferenceActivityType;
 
@@ -41,20 +42,20 @@
 
         // Apple rejected our app because they claim requiring a
         // Dropbox account for recording is not acceptable.
-#if DEBUG
+      #if DEBUG
         [builder setFeatureFlag:@"ios.recording.enabled" withBoolean:YES];
-#endif
+      #endif
     }];
 
   [jitsiMeet application:application didFinishLaunchingWithOptions:launchOptions];
 
     // Initialize Crashlytics and Firebase if a valid GoogleService-Info.plist file was provided.
-  if ([FIRUtilities appContainsRealServiceInfoPlist]) {
-        NSLog(@"Enabling Firebase");
-        [FIRApp configure];
-        // Crashlytics defaults to disabled with the FirebaseCrashlyticsCollectionEnabled Info.plist key.
-        [[FIRCrashlytics crashlytics] setCrashlyticsCollectionEnabled:![jitsiMeet isCrashReportingDisabled]];
-    }
+  // if ([FIRUtilities appContainsRealServiceInfoPlist]) {
+  //       NSLog(@"Enabling Firebase");
+  //       [FIRApp configure];
+  //       // Crashlytics defaults to disabled with the FirebaseCrashlyticsCollectionEnabled Info.plist key.
+  //       [[FIRCrashlytics crashlytics] setCrashlyticsCollectionEnabled:![jitsiMeet isCrashReportingDisabled]];
+  //   }
 
     ViewController *rootController = (ViewController *)self.window.rootViewController;
     [jitsiMeet showSplashScreen:rootController.view];
@@ -113,26 +114,10 @@
 - (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
   return [Orientation getOrientation];
 }
+
 // - (BOOL)application:(UIApplication *)app
 //             openURL:(NSURL *)url
 //             options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
-
-//     // This shows up during a reload in development, skip it.
-//     // https://github.com/firebase/firebase-ios-sdk/issues/233
-//     if ([[url absoluteString] containsString:@"google/link/?dismiss=1&is_weak_match=1"]) {
-//         return NO;
-//     }
-
-//     NSURL *openUrl = url;
-
-//     if ([FIRUtilities appContainsRealServiceInfoPlist]) {
-//         // Process Firebase Dynamic Links
-//         FIRDynamicLink *dynamicLink = [[FIRDynamicLinks dynamicLinks] dynamicLinkFromCustomSchemeURL:url];
-//         NSURL *firebaseUrl = [FIRUtilities extractURL:dynamicLink];
-//         if (firebaseUrl != nil) {
-//             openUrl = firebaseUrl;
-//         }
-//     }
 
 //     return [[JitsiMeet sharedInstance] application:app
 //                                            openURL:openUrl

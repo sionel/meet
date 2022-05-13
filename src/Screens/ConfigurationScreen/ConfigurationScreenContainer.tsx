@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Dimensions } from 'react-native';
 import deviceInfoModule from 'react-native-device-info';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/configureStore';
@@ -8,11 +8,13 @@ import { actionCreators as UserActions } from '@redux/user';
 // import { actionCreators as RootActions } from '@redux/root';
 import { actionCreators as DeployedAcions } from '@redux/deployed';
 import { actionCreators as RecentsActions } from '@redux/recentsInvited';
+import { actionCreators as SelectCompanyActions } from '@redux/selectCompany';
 
 import UserApi from '@services/api/UserApi';
 
 import ConfigurationScreenPresenter from './ConfigurationScreenPresenter';
-import { ConfigurationNavigationProps } from '@navigations/ConfigurationStack';
+import { ConfigurationNavigationProps } from '../../Navigations/ConfigurationStack';
+import { wehagoDummyImageURL, wehagoMainURL } from '../../utils';
 
 export default function ConfigurationScreenContainer(props: any) {
   const { auth, from, isHorizon } = useSelector((state: RootState) => {
@@ -24,8 +26,30 @@ export default function ConfigurationScreenContainer(props: any) {
     };
   });
 
+  const {
+    user_name,
+    rankname,
+    full_path,
+    profile_url,
+    last_company,
+    isFreelancer
+  } = auth;
+
+  const authInfo = {
+    user_name,
+    rankname,
+    full_path,
+    profile_url: profile_url
+      ? wehagoMainURL + profile_url
+      : wehagoDummyImageURL,
+    companyName: last_company?.company_name_kr,
+    isFreelancer
+  };
   const { navigation, route }: ConfigurationNavigationProps<'Configuration'> =
     props;
+
+  const [width, setWidth] = useState(Dimensions.get('screen').width);
+  const [height, setHeight] = useState(Dimensions.get('screen').height);
 
   const dispatch = useDispatch();
   const _logout = () => {
@@ -35,7 +59,18 @@ export default function ConfigurationScreenContainer(props: any) {
   const _resetDeployedServices = () =>
     dispatch(DeployedAcions.resetDeployedServices());
 
-  const isTablet = deviceInfoModule.isTablet();
+  const _openCompany = () => dispatch(SelectCompanyActions.openCompany());
+
+  useEffect(() => {
+    const updateLayout = () => {
+      setWidth(Dimensions.get('screen').width);
+      setHeight(Dimensions.get('screen').height);
+    };
+    Dimensions.addEventListener('change', updateLayout);
+    return () => {
+      Dimensions.removeEventListener('change', updateLayout);
+    };
+  });
 
   const _handleLogout = () => {
     _logout();
@@ -65,6 +100,9 @@ export default function ConfigurationScreenContainer(props: any) {
       handleGoPolicy={handleGoPolicy}
       handleGoAwards={handleGoAwards}
       handleGoOpenSource={handleGoOpenSource}
+      authInfo={authInfo}
+      onCompanyChange={_openCompany}
+      width={width}
     />
   );
 }

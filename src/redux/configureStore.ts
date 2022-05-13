@@ -36,6 +36,8 @@ import orientation, { state as OrientationState } from '@redux/orientation';
 import root, { state as RootStates } from '@redux/root';
 import recents, { state as RecentsState } from '@redux/recentsInvited';
 import test, { State as testState } from '@redux/test';
+// import root from './modules/root';
+import app, { State as appState } from '@redux/app';
 import selectCompany, {
   state as SelectCompanyState
 } from '@redux/selectCompany';
@@ -67,13 +69,13 @@ export interface RootState {
   alert: any;
   screenShare: ScreenShageState;
   record: any;
-  indicator: IndicatorState;
-  deployed: DeployedState;
-  orientation: OrientationState;
-  root: RootStates;
-  recents: RecentsState;
-  selectCompany: SelectCompanyState;
-  test: testState;
+  indicator: indicatorState;
+  deployed: deployedState;
+  orientation: orientationState;
+  root: rootState;
+  recents: recentsState;
+  selectCompany: selectCompanyState;
+  app: appState;
 }
 
 /**
@@ -102,7 +104,8 @@ const persistConfig = {
     'orientation',
     'root',
     'conference',
-    'selectCompany'
+    'selectCompany',
+    'app'
   ]
 };
 
@@ -131,7 +134,7 @@ const reducer = persistCombineReducers(persistConfig, {
   root,
   recents,
   selectCompany,
-  test
+  app
 });
 
 /**
