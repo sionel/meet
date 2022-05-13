@@ -23,8 +23,9 @@ import moment from 'moment';
 import { getT } from '@utils/translateManager';
 import { RootState } from '../../redux/configureStore';
 import deviceInfoModule from 'react-native-device-info';
-import { wehagoMainURL } from '@utils/index';
-import { MainNavigationProps } from '@navigations/MainStack';
+
+import { wehagoMainURL, wehagoDummyImageURL } from '@utils/index';
+import { MainNavigationProps } from '../../Navigations/MainStack';
 
 import _ from 'lodash';
 import { conference, createApiParmas } from '@services/api/types';
@@ -81,7 +82,9 @@ export default function CreateMeetScreenContainer(props: any) {
       {
         user_name: auth.user_name,
         rank_name: auth.last_company.rank_name,
-        profile_url: wehagoMainURL + auth.profile_url,
+        profile_url: auth.profile_url
+          ? wehagoMainURL + auth.profile_url
+          : wehagoDummyImageURL,
         full_path: auth.last_company.full_path,
         user_no: auth.user_no,
         is_master: true

@@ -90,7 +90,8 @@ dependencies {
     
     implementation 'com.facebook.fresco:fresco:1.+'
     implementation 'com.facebook.fresco:animated-gif:1.+'
-    
+    implementation 'com.android.support:support-v4:28.0.0'
+
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
 
     if (!rootProject.ext.libreBuild) {

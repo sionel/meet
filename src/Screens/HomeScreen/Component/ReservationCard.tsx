@@ -1,8 +1,9 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 
-const icMore = require('@assets/icons/ic_more.png');
-const icLockBlack = require('@assets/icons/ic_lock_black.png');
+const icMore = require('../../../../assets/new/icons/ic_more.png');
+const icLockBlack = require('../../../../assets/new/icons/ic_lock_black.png');
+const icMaster = require('../../../../assets/new/icons/ic_master.png');
 
 interface ReservationCardProps {
   roomName: string;
@@ -31,22 +32,12 @@ export default function ConferenceBox(props: ReservationCardProps) {
     isTablet
   } = props;
 
+  // console.log('users : ', users);
+
   return (
-    <View
-      style={
-        // flex:0.45,
-        [styles.cardView, { width: isTablet ? '48%' : '100%' }]
-      }
-    >
-      <TouchableOpacity style={styles.cardLeftContents} activeOpacity={0.5} onPress={() => enterConference(roomId)}>
-        <View
-          style={{
-            flex: 1,
-            alignItems: 'center',
-            flexDirection: 'row',
-            width: '80%'
-          }}
-        >
+    <View style={[styles.cardView, { width: isTablet ? '48%' : '100%' }]}>
+      <View style={styles.cardLeftContents}>
+        <View style={styles.cardTitleView}>
           <Text numberOfLines={1} style={styles.cardTitle}>
             {roomName}
           </Text>
@@ -63,26 +54,48 @@ export default function ConferenceBox(props: ReservationCardProps) {
             {date + '\n' + start + ' ~ ' + end}
           </Text>
         </View>
-      </TouchableOpacity>
+      </View>
+
       <TouchableOpacity
         style={styles.cardRightView}
         onPress={() => reservationMoreClick(roomId)}
       >
         <View style={styles.profileImageList}>
           {users.map(
-            (user: { type: string | number; value: string }, index) => {
+            (
+              user: { type: string | number; value: string; isMaster: boolean },
+              index
+            ) => {
               return user.type === 'string' ? (
-                <Image
-                  key={index}
-                  source={{
-                    uri: user.value
-                  }}
-                  resizeMode={'cover'}
-                  style={styles.profileImage}
-                />
+                <View key={index}>
+                  <Image
+                    key={index}
+                    source={{
+                      uri: user.value
+                    }}
+                    resizeMode={'cover'}
+                    style={styles.profileImage}
+                  />
+                  {user.isMaster === true && (
+                    <View style={styles.masterView}>
+                      <Image
+                        source={icMaster}
+                        style={{ width: 10, height: 10 }}
+                      />
+                    </View>
+                  )}
+                </View>
               ) : (
-                <View style={styles.noImage}>
-                  <Text>{'+' + user.value}</Text>
+                <View key={index} style={styles.noImage}>
+                  <Text
+                    style={{
+                      color: '#1c90fb',
+                      fontSize: 8,
+                      fontFamily: 'DOUZONEText50'
+                    }}
+                  >
+                    {'+' + user.value}
+                  </Text>
                 </View>
               );
             }
@@ -97,21 +110,25 @@ export default function ConferenceBox(props: ReservationCardProps) {
 
 const styles = StyleSheet.create({
   icLock: {
-    height: 20,
-    width: 20
+    marginLeft: 4,
+    height: 18,
+    width: 18
   },
   icMore: {
-    height: 30,
-    width: 30
+    marginLeft: 10,
+    height: 18,
+    width: 18
   },
   cardView: {
-    height: 120,
-    borderRadius: 20,
+    height: 97,
+    borderRadius: 12,
     backgroundColor: '#fff',
+    borderWidth: 1,
     borderColor: '#e6e6e6',
-    borderWidth: 2,
-    marginBottom: 15,
-    padding: 20,
+    marginBottom: 8,
+    paddingLeft: 20,
+    paddingRight: 14,
+    paddingVertical: 10,
     flexDirection: 'row'
   },
   cardLeftContents: {
@@ -119,9 +136,17 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     justifyContent: 'center',
     marginRight: 10
+    // backgroundColor:'#faa'
+  },
+  cardTitleView: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    width: '90%',
+    // marginBottom: 6,
+    flex: 1
   },
   cardTitle: {
-    fontSize: 17,
+    fontSize: 15,
     color: '#333',
     fontFamily: 'DOUZONEText30'
   },
@@ -131,32 +156,48 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   dateTimeText: {
+    height: '100%',
     fontFamily: 'DOUZONEText30',
-    color: '#333'
+    fontSize: 12,
+    color: 'rgb(147,147,147)'
     // 예약회의 시간 표현에 따라 바뀔 예정
   },
   cardRightView: {
-    width: 120,
+    width: 100,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between'
     // backgroundColor:'#21f'
   },
   profileImageList: {
+    flex: 1,
     flexDirection: 'row',
-    alignItems: 'center'
+    justifyContent: 'flex-end'
   },
   profileImage: {
-    height: 30,
-    width: 30,
-    borderRadius: 30
+    height: 24,
+    width: 24,
+    borderRadius: 12,
+    borderColor: 'rgba(0,0,0,0.1)',
+    borderWidth: 1
   },
   noImage: {
     backgroundColor: '#e9f5ff',
-    height: 30,
-    width: 30,
-    borderRadius: 30,
+    height: 24,
+    width: 24,
+    borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  masterView: {
+    width: 14,
+    height: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 10,
+    backgroundColor: '#febc2c',
+    bottom: 0,
+    left: -4,
+    position: 'absolute'
   }
 });

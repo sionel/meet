@@ -20,10 +20,15 @@ import SplashView from '@screens/SplashScreen';
 
 import { RootState } from '../redux/configureStore';
 import { useDispatch, useSelector } from 'react-redux';
-import { actionCreators as ConferenceActions } from '@redux/conference';
-import { actionCreators as UserActions } from '@redux/user';
-import { MeetApi } from '@services/index';
 import { querystringParser } from '@utils/index';
+
+import { actionCreators as ConferenceActions } from '../redux/modules/conference';
+import { actionCreators as UserActions } from '../redux/modules/user';
+import { JitsiConferenceErrors } from '../../jitsi/features/base/lib-jitsi-meet';
+import { getConferenceManager } from '../utils/ConferenceManager';
+import { MeetApi } from '../services';
+import RNExitApp from 'react-native-exit-app';
+import { useDeepLink } from '../Hooks';
 
 // roomToken?: string;
 export type MeetParamList = {
@@ -114,9 +119,13 @@ export const navigateReset = (name: string, params?: any) => {
   });
 };
 
+export const getCurrentRoute = () => {
+  return navigationRef.current?.getCurrentRoute();
+};
+
 export default function RootNavigation(props: any) {
   // let nowStack = '';
-
+  let cnt = 0;
   const dispatch = useDispatch();
   // const setIsConference = (flag: boolean) => {
   //   dispatch(ConferenceActions.setIsConference(flag));
@@ -125,81 +134,53 @@ export default function RootNavigation(props: any) {
     dispatch(UserActions.setLoginType(loginType));
   };
 
-  const { auth } = useSelector((state: RootState) => {
+  const { isConference, auth, url } = useSelector((state: RootState) => {
     return {
-      // isConference: state.conference.isConference,
-      auth: state.user.auth
+      auth: state.user.auth,
+      isConference: state.conference.isConference,
+      url: state.app.url
     };
   });
 
-  // const checkConference = (state: Readonly<NavigationState> | undefined) => {
-  //   const name = state?.routes[0].name;
-  //   if (name === 'ConferenceView') nowStack = 'ConferenceView';
-  //   else nowStack = '';
-  // };
-
-  const handleAppStateChange = async (nextAppState: AppStateStatus) => {
+  const _setAppStateChange = async (nextAppState: AppStateStatus) => {
     if (nextAppState === 'active') {
       let wehago = await Linking.canOpenURL('wehago://');
       let nahago = await Linking.canOpenURL('staffmanagment://');
       let loginType = wehago ? 'wehago' : nahago ? 'nahago' : 'none';
+
       setLoginType(loginType);
     }
   };
 
+  const _handleAppStateChange = () => {
+    _setAppStateChange('active');
+    AppState.addEventListener('change', _setAppStateChange);
+  };
+
   useEffect(() => {
-    handleAppStateChange('active');
-    AppState.addEventListener('change', handleAppStateChange);
-    // TODO: 회의 진행중에 다른 경로를 통해서 중복적으로 회의 접속에 대한 처리
-    // 원래 conference 리덕스에서 회의진행중인지로 판단을 했으나 해당 리스트를 whiteList에 넣을시
-    // 에러가 발생하여 whiteList에서 제거한 상태이기때문에 다른 리덕스를 통해서 처리가 필요함
+    _handleGetDeeplink(url);
+  }, [url]);
 
-    // if (isConference) {
-    //   Alert.alert('허용되지 않은 접근', '앱이 재시작됩니다.');
-    //   setIsConference(false);
-    //   return;
-    // }
+  const _handleGetDeeplink = (url: string) => {
+    if (!url) return;
+    let { name } = navigationRef.current.getCurrentRoute();
+    if (isConference && name === 'ConferenceView') {
+      _deeplinkWhenConferenceOngoing();
+    } else {
+      _deeplinkNormalAccess();
+    }
+  };
 
-    if (props.url?.url) navigate('SplashView', { deeplink: props.url.url });
+  const _deeplinkWhenConferenceOngoing = () => {
+    RNExitApp.exitApp();
+  };
 
-    // 앱이 꺼져 있을때(딥링크)
-    Linking.getInitialURL()
-      .then(url => url && navigate('SplashView', { deeplink: url }))
-      .catch(err => console.error('error ', err));
+  const _deeplinkNormalAccess = () => {
+    navigate('SplashView');
+  };
 
-    // return () => {
-    //   Linking.removeListener('url', _handleOpenURL);
-    // };
-    // 앱이 이미 실행중일때(딥링크)
-    Linking.addEventListener('url', async ({ url }) => {
-      let { name } = navigationRef.current.getCurrentRoute();
-      console.log('앱이 이미 실행중일때(딥링크)');
-      if (name === 'ConferenceView') {
-        Alert.alert('경고', '이미 진행중인 회의가 있습니다.');
-        let result: any = querystringParser(url);
-        const { video_id } = result;
-        await MeetApi.deleteConferenceRoom(auth, video_id);
-        return;
-      } else {
-        navigate('SplashView', { deeplink: url });
-      }
-    });
-
-    return () => {
-      Linking.removeEventListener('url', async ({ url }) => {
-        let { name } = navigationRef.current.getCurrentRoute();
-        console.log('앱이 이미 실행중일때(딥링크)');
-        if (name === 'ConferenceView') {
-          Alert.alert('경고', '이미 진행중인 회의가 있습니다.');
-          let result: any = querystringParser(url);
-          const { video_id } = result;
-          await MeetApi.deleteConferenceRoom(auth, video_id);
-          return;
-        } else {
-          navigate('SplashView', { deeplink: url });
-        }
-      });
-    };
+  useEffect(() => {
+    _handleAppStateChange();
   }, []);
 
   return (
@@ -208,7 +189,11 @@ export default function RootNavigation(props: any) {
         initialRouteName="SplashView"
         screenOptions={{ headerShown: false }}
       >
-        <RootStack.Screen name="SplashView" component={SplashView} />
+        <RootStack.Screen
+          name="SplashView"
+          component={SplashView}
+          initialParams={props}
+        />
         <RootStack.Screen name="LoginStack" component={LoginStack} />
         <RootStack.Screen name="MainStack" component={MainStack} />
         <RootStack.Screen

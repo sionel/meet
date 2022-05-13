@@ -190,7 +190,7 @@ class ReactInstanceManagerHolder {
                 new com.reactnativecommunity.slider.ReactSliderPackage(),
                 new com.reactnativecommunity.webview.RNCWebViewPackage(),
                 new com.rnimmersive.RNImmersivePackage(),
-                new com.brentvatne.react.ReactVideoPackage(),
+//                new com.brentvatne.react.ReactVideoPackage(),
 
                 new com.zoontek.rnlocalize.RNLocalizePackage(),
                 new com.swmansion.gesturehandler.react.RNGestureHandlerPackage(),

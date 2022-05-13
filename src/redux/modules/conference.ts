@@ -55,6 +55,8 @@ export interface state {
   messages: messageType[];
   externalAPIScope: string;
   isKick: string | undefined;
+  isConference: boolean;
+  conferenceManager: ''
 }
 
 const initialState: state = {
@@ -75,6 +77,8 @@ const initialState: state = {
   messages: [],
   externalAPIScope: '',
   isKick: undefined
+  isConference: false,
+  conferenceManager: ''
 };
 
 const reducer: (state: state, action: AnyAction) => state = (

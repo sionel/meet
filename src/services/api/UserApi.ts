@@ -189,8 +189,14 @@ const check = async (
 
   if (isSuccess(response)) {
     if (isSuccess(response2)) {
-      let nickname = response2?.resultData[0]?.nickname;
+      const nickname = response2?.resultData[0]?.nickname;
+      const rankname = response2?.resultData[0]?.rank_name;
+      const isFreelancer = response2?.resultData[0]?.company_class === '3';
+      const full_path = response2?.resultData[0]?.full_path;
       response.resultData.nickname = nickname;
+      response.resultData.rankname = rankname;
+      response.resultData.isFreelancer = isFreelancer;
+      response.resultData.full_path = full_path;
     } else {
       return response2;
     }

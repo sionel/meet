@@ -183,7 +183,7 @@ export default function CreateScreenContainer(props: any) {
       _createConferenceRoom(conference);
     };
     const title = t('alert_title_create');
-    const type = 1;
+    const type = 2;
     setAlert({ message, onConfirm, title, type });
   };
   const onRefresh = () => {
@@ -210,30 +210,11 @@ export default function CreateScreenContainer(props: any) {
   const _createConferenceRoom = async (conference: any) => {
     setIndicatorFlag(true);
     const { room_id, room_title: roomTitle } = conference;
-    const {
-      portal_id,
-      user_name,
-      last_access_company_no,
-      AUTH_A_TOKEN,
-      AUTH_R_TOKEN,
-      HASH_KEY,
-      employee_list,
-      cno
-    } = auth;
+    const { last_access_company_no, employee_list } = auth;
+
     const company_code = employee_list.filter(
       (e: any) => e.company_no == last_access_company_no
     )[0].company_code;
-    const bodyData = {
-      room_id, // 방 id
-      portal_id, // 유저아이디
-      user_name, // 유저이름
-      last_access_company_no, // 회사번호
-      company_code, // 회사코드
-      AUTH_A_TOKEN, // 토큰
-      AUTH_R_TOKEN, // 토큰
-      HASH_KEY
-      // null
-    };
 
     const param = {
       service_code: 'communication',
@@ -254,7 +235,7 @@ export default function CreateScreenContainer(props: any) {
         auth.AUTH_R_TOKEN,
         auth.HASH_KEY
       );
-      
+
       if (isSuccess(sendWetalkResult)) {
         const {
           mobile_key: videoRoomId,

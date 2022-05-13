@@ -71,14 +71,41 @@
     return self;
 }
 
+// + (instancetype)initWhitOption:(NSDictionary *)launchOptions {
+
+//     static JitsiMeet *sharedInstance = nil;
+
+//     if (sharedInstance = [super init]) {
+//         // Initialize the on and only bridge for interfacing with React Native.
+//         _bridgeWrapper = [[RCTBridgeWrapper alloc] initWithOptions:launchOptions];
+        
+//         // Initialize the listener for handling start/stop screensharing notifications.
+//         _screenshareEventEmiter = [[ScheenshareEventEmiter alloc] init];
+
+//         // Register a fatal error handler for React.
+//         registerReactFatalErrorHandler();
+
+//         // Register a log handler for React.
+//         registerReactLogHandler();
+
+// #if 0
+//         // Enable WebRTC logs
+//         RTCSetMinDebugLogLevel(RTCLoggingSeverityInfo);
+// #endif
+//     }
+
+//     return sharedInstance;
+// }
+
 #pragma mark - Methods that the App delegate must call
 
 -             (BOOL)application:(UIApplication *)application
   didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
     _launchOptions = [launchOptions copy];
+    _bridgeWrapper = [[RCTBridgeWrapper alloc] initWithOptions:launchOptions];
 
-    [Dropbox setAppKey];
+    // [Dropbox setAppKey];
 
     return YES;
 }
@@ -96,20 +123,6 @@
             openURL:(NSURL *)url
             options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
 
-    if ([Dropbox application:app openURL:url options:options]) {
-        return YES;
-    }
-
-    if ([RNGoogleSignin application:app
-                            openURL:url
-                            options:options]) {
-        return YES;
-    }
-
-    if (_customUrlScheme == nil || ![_customUrlScheme isEqualToString:url.scheme]) {
-        return NO;
-    }
-
     JitsiMeetConferenceOptions *conferenceOptions = [JitsiMeetConferenceOptions fromBuilder:^(JitsiMeetConferenceOptionsBuilder *builder) {
         builder.room = [url absoluteString];
     }];
@@ -120,6 +133,7 @@
 #pragma mark - Utility methods
 
 - (JitsiMeetConferenceOptions *)getInitialConferenceOptions {
+    // return nil;
     if (_launchOptions[UIApplicationLaunchOptionsURLKey]) {
         NSURL *url = _launchOptions[UIApplicationLaunchOptionsURLKey];
         return [JitsiMeetConferenceOptions fromBuilder:^(JitsiMeetConferenceOptionsBuilder *builder) {

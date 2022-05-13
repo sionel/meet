@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { Component, useEffect, useRef, useState } from 'react';
 import { Platform, Linking, BackHandler, Alert } from 'react-native';
 import SplashScreenPresenter from './SplashScreenPresenter';
 import { WEHAGO_ENV } from '../../../config';
@@ -25,29 +25,24 @@ import { MeetNavigationProps } from '@navigations/RootNavigation';
 import { isSuccess } from '@services/types';
 import { errorType } from '@services/api/types';
 
-// const iswehagov = WEHAGO_ENV === 'WEHAGOV';
-
-// const JailMonkey =
-//   Platform.OS === 'android' && iswehagov
-//     ? require('jail-monkey').default
-//     : null;
-
 const SplashScreenContainer = ({
   navigation,
   route
 }: MeetNavigationProps<'SplashView'>) => {
   const { params } = route;
-  const [serverNoti, setServerNoti] = useState([]);
+  const [serverNoti, setServerNoti] = useState<any[]>([]);
   const [notiIndex, setNotiIndex] = useState(0);
   const [first, setFirst] = useState(true);
   const deeplink = params?.deeplink;
+  const timeout = useRef<ReturnType<typeof setTimeout>>();
 
   const t = getT();
 
   //#region  selector
-  const { auth, from, updateNoti, autoLogin, loginType } = useSelector(
+  const { auth, from, updateNoti, autoLogin, loginType, url } = useSelector(
     (state: RootState) => {
       return {
+        url: state.app.url,
         auth: state.user.auth,
         from: state.user.from,
         updateNoti: state.user.updateNoti,
@@ -68,7 +63,8 @@ const SplashScreenContainer = ({
   };
   const setPermission = (permission: any) =>
     dispatch(UserActions.setPermission(permission));
-  const setSharingMode = (flag: boolean) => dispatch(DocumentShareActions.setSharingMode(flag));
+  const setSharingMode = (flag: boolean) =>
+    dispatch(DocumentShareActions.setSharingMode(flag));
   const setInitInfo = () => dispatch(WedriveAcions.setInitInfo());
   const toggleUpdateNoti = () => dispatch(UserActions.toggleUpdateNoti());
   const setAlert = (params: any) => dispatch(AlertAcions.setAlert(params));
@@ -86,43 +82,18 @@ const SplashScreenContainer = ({
   }, []);
 
   useEffect(() => {
-    let t0 = Date.now();
-    if (!first) {
-      if (deeplink) {
-        _handleGetDeeplink(deeplink);
-      } else _handleCheckAutoLogin();
-    }
-    let t1 = Date.now();
-
-    if (t1 > t0 + 20000) {
-      Alert.alert('알림', '요청시간 초과오류', [
-        {
-          text: '확인',
-          onPress: () => {
-            navigation.reset({
-              routes: [
-                { name: loginType === 'wehago' ? 'InputLogin' : 'LoginStack' }
-              ]
-            });
-          }
-        }
-      ]);
-    }
-  }, [first, deeplink]);
+    _handleGetDeeplink(url);
+  }, [url]);
 
   const _handleInit = async () => {
+    timeout.current = setTimeout(() => {
+      _handleCheckAutoLogin();
+    }, 4000);
     // 버전 확인
     await _handleCheckVersion();
+
     // 노티 확인
-    let servernoti: [] = [];
-    servernoti = await _handleCheckNotice(servernoti);
-    if (servernoti.length > 0) {
-      setServerNoti(servernoti);
-    } else {
-      setTimeout(() => {
-        setFirst(false);
-      }, 3000);
-    }
+    await _handleCheckNotice();
   };
 
   const _handleCheckVersion = async () => {
@@ -155,35 +126,35 @@ const SplashScreenContainer = ({
     });
   };
 
-  const _handleCheckNotice = async (noti: any) => {
-    let result: any[] = [];
-    const checkNotice = await MeetApi.checkNotice();
-    if (isSuccess(checkNotice)) {
-      result = checkNotice.resultData;
-    } else {
-      return [];
-    }
-    // if (!result) return [];
-    // 확인코드 :101
-    // 강제종료 코드 : 102
-    result.forEach((e: any) => {
-      if (!e.dev_mode) {
-        e.buttons = [
-          {
-            text:
-              e.button_type === 102
-                ? t('renewal.alert_button_exit')
-                : t('renewal.alert_button_confirm'),
-            onclick:
-              e.button_type === 102
-                ? () => RNExitApp.exitApp()
-                : () => _handleNextNotice()
+  const _handleCheckNotice = async () => {
+    try {
+      // 확인코드 :101
+      // 강제종료 코드 : 102
+      const result = await MeetApi.checkNotice();
+      if (isSuccess(result)) {
+        const { resultData } = result;
+        let noti: any[] = [...resultData];
+        noti.forEach((e: any) => {
+          if (!e.dev_mode) {
+            e.buttons = [
+              {
+                text:
+                  e.button_type === 102
+                    ? t('renewal.alert_button_exit')
+                    : t('renewal.alert_button_confirm'),
+                onclick:
+                  e.button_type === 102
+                    ? () => RNExitApp.exitApp()
+                    : () => _handleNextNotice()
+              }
+            ];
           }
-        ];
+        });
+        setServerNoti(noti);
       }
-    });
-    noti = noti.concat(result);
-    return noti;
+    } catch (error) {
+      console.warn('6-3.checkNotice : ', error);
+    }
   };
 
   const _handleNextNotice = async () => {
@@ -237,14 +208,10 @@ const SplashScreenContainer = ({
       room_name=123 // talk방 이름
     */
     // const m = getConferenceManager();
-
+    // console.log(m);
     if (!url) return;
-    // console.log('url : ', url);
-
+    if (timeout.current) clearTimeout(timeout.current);
     let result: any = querystringParser(url);
-    // console.log('result: ', result);
-
-    // if(result.type === 'conference') {
     // 화상회의 요청인지 판별
     if (result.is_creater) {
       // 오래된 딥링크 주소 차단
@@ -254,7 +221,7 @@ const SplashScreenContainer = ({
         message: 'meet 앱에서 다시 접근 해주시길 바랍니다'
       });
       navigation.reset({ routes: [{ name: 'LoginStack' }] });
-    } else if (result.mHASH_KEY && result.cno) {
+    } else if (result.mHASH_KEY && result.mPORTAL_ID) {
       //토근정보가 있을때
       const { mHASH_KEY, mAuth_r_token, mAuth_a_token, cno, video_id } = result;
       onLogout();
@@ -332,84 +299,69 @@ const SplashScreenContainer = ({
             }
           ]
         });
-      } else {
-        //error
-        let alertText = '해당 회의가 종료되거나 네트워크 상태가 좋지 않습니다\n다시 한번 확인해주세요.'
-        Alert.alert('알림', alertText, [
-          {
-            text: '확인',
-            onPress: () => {
-              navigation.reset({ routes: [{ name: 'LoginStack' }] });
-            }
-          }
-        ]);
-      }
-    } else if (result.video_id) {
-      // TODO: 컨퍼런스로 받았을때 이 분기 처리를 어떻게 해야할지 검토필요성 있음
-      // CASE: 해당 화상회의 URL을 통해서 직접 접속 했을 경우
-      // WEHAGO에서 계정 정보를 가지고 올때 이 분기랑 토큰이 있는 분기랑 둘다 접근함 문제가 없는건지 ?
-      if (auth.user_no) {
-        const linkResult = await MeetApi.getMeetRoomNoCert(result.video_id);
+      } else if (result.video_id) {
+        // TODO: 컨퍼런스로 받았을때 이 분기 처리를 어떻게 해야할지 검토필요성 있음
+        // CASE: 해당 화상회의 URL을 통해서 직접 접속 했을 경우
+        // WEHAGO에서 계정 정보를 가지고 올때 이 분기랑 토큰이 있는 분기랑 둘다 접근함 문제가 없는건지 ?
+        if (auth.user_no) {
+          const linkResult = await MeetApi.getMeetRoomNoCert(result.video_id);
 
-        if (isSuccess(linkResult)) {
-          const { name } = linkResult.resultData;
+          if (isSuccess(linkResult)) {
+            const { name } = linkResult.resultData;
 
-          navigation.reset({
-            routes: [
-              {
-                name: 'ConferenceStateView',
-                params: {
-                  id: result.video_id,
-                  accessType: 'auth',
-                  selectedRoomName: name
+            navigation.reset({
+              routes: [
+                {
+                  name: 'ConferenceStateView',
+                  params: {
+                    id: result.video_id,
+                    accessType: 'auth',
+                    selectedRoomName: name
+                  }
                 }
-              }
-            ]
-          });
+              ]
+            });
+          } else {
+            //error
+          }
         } else {
-          //error
+          const { joincode, video_id } = result;
+          const cert = await MeetApi.getMeetRoomNoCert(video_id);
+          if (isSuccess(cert)) {
+            navigation.reset({
+              routes: [
+                {
+                  name: 'ConferenceStateView',
+                  params: {
+                    accessType: 'joincode',
+                    id: video_id,
+                    joincode: joincode,
+                    selectedRoomName: cert.resultData.name
+                  }
+                }
+              ]
+            });
+          }
         }
       } else {
-        Alert.alert(t('비회원 접속'), t('참여코드를 입력해주시기 바랍니다.'), [
-          {
-            text: '확인',
-            onPress: () => {
-              navigation.reset({ routes: [{ name: 'LoginStack' }] });
+        if (!result.video_id) {
+          onLogout();
+          Alert.alert(t('알림'), t('비정상적인 접근입니다.'), [
+            {
+              text: '확인',
+              onPress: () => {
+                navigation.reset({ routes: [{ name: 'LoginStack' }] });
+              }
             }
-          }
-        ]);
-      }
-    } else {
-      if (!result.video_id) {
-        onLogout();
-        Alert.alert(t('알림'), t('비정상적인 접근입니다.'), [
-          {
-            text: '확인',
-            onPress: () => {
-              navigation.reset({ routes: [{ name: 'LoginStack' }] });
-            }
-          }
-        ]);
+          ]);
+        }
       }
     }
   };
-
   const serviceCheck = async (auth: any) => {
-    // 회사 상태 조회 후 진행
-    const statusCheck = await ServiceCheckApi.companyStatusCheck(
-      auth,
-      auth.last_company
-    );
-    // 이상이 없는 회사일 경우 로그인 정상 진행
-    if (statusCheck && statusCheck.code === 200) {
-      // 서비스 배포여부 조회
-      const isDeployWehagomeet = await ServiceCheckApi.serviceCheck(auth);
-      const isDeploy = isDeployWehagomeet;
-      setPermission(isDeploy);
-      return isDeploy;
-    } else {
-      return false;
-    }
+    const isDeploy = await ServiceCheckApi.serviceCheck(auth);
+    setPermission(isDeploy);
+    return isDeploy;
   };
 
   //로그인 요청
@@ -454,12 +406,14 @@ const SplashScreenContainer = ({
               (e: any) =>
                 e.company_no == checkResult.resultData.last_access_company_no
             )[0]
-          : checkResult.resultData.employee_list[0], // last_access_company_no가 비어있는 상태로 올 수 있어서 null이 뜬다면 리스트중 첫번째 인덱스로 처리
+          : checkResult.resultData.employee_list[0], // last_access_company_no가 비어있는 상태로 올 수 있어서 null이 뜬다면 리스트중 첫번째 인덱스로 처리
         member_type: checkResult.resultData.member_type, // 0: 일반회원, 1: 개인회원
         nickname: checkResult.resultData.nickname,
+        rankname: checkResult.resultData.rankname,
+        isFreelancer: checkResult.resultData.isFreelancer,
+        full_path: checkResult.resultData.full_path,
         membership_code: checkResult.resultData.employee_list[0].membership_code
       };
-
       await onLogin(userData, from, flag);
       return userData;
     } else {
