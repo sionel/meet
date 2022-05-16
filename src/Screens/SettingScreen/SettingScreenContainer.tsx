@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import SettingScreenPresenter from './SettingScreenPresenter';
 import JitsiMeetJS from '@jitsi/base/lib-jitsi-meet';
-import config from '../ConferenceScreen_New/conferenceUtil/config';
+import config from '../ConferenceScreen/conferenceUtil/config';
 import { v4 as uuidv4 } from 'uuid';
 import { getT } from '@utils/translateManager';
 
@@ -196,8 +196,8 @@ export default function SettingScreenContainer(props: any) {
       navigation.reset({
         routes: [
           {
-            // name: 'ConferenceView',
-            name: 'ConferenceView_new',
+            name: 'ConferenceView',
+            // name: 'ConferenceView_new',
             params: {
               tracks,
               roomToken,

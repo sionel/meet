@@ -9,6 +9,7 @@ import deviceInfoModule from 'react-native-device-info';
 import { RootState } from '../../redux/configureStore';
 import { LoginNavigationProps } from '@navigations/LoginStack';
 import { isSuccess } from '@services/types';
+import { useTranslation } from 'react-i18next';
 
 const LoginScreenContainer = ({
   navigation
@@ -29,7 +30,7 @@ const LoginScreenContainer = ({
     loginType: state.user.loginType
   }));
 
-  const t = getT();
+  const { t } = useTranslation();
   const isTablet = deviceInfoModule.isTablet();
 
   //참여코드 입력시 정규식 체크하고 입력
@@ -87,14 +88,6 @@ const LoginScreenContainer = ({
     } else {
       setFocusingNum(0);
       setInputcodeErr(true);
-    } else {
-      const { name } = await MeetApi.getMeetRoomNoCert(resultData.room);
-      navigation.navigate('ConferenceStateView', {
-        accessType: 'joincode',
-        id: resultData.room,
-        joincode: joincode,
-        selectedRoomName: name
-      });
     }
   };
 

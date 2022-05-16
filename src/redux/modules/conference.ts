@@ -1,9 +1,7 @@
-import Conference from '@screens/ConferenceScreen_New/conferenceUtil/Conference';
-import { MediaStreamTrackState, RTCViewProps } from 'react-native-webrtc';
+import Conference from '@screens/ConferenceScreen/conferenceUtil/Conference';
 import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import { RootState } from '../configureStore';
-import { MobileInfoType, WebInfoType } from './participants';
 import { Participant } from './participants_copy';
 
 const SET_LIST = 'conference.SET_LIST';
@@ -23,8 +21,9 @@ const SET_MIRROR_MODE = 'conference.SET_MIRROR_MODE';
 const SET_EXPIRE_TIME = 'conference.SET_EXPIRE_TIME';
 const MESSAGE_RECEIVED = 'conference.MESSAGE_RECEIVED';
 const INIT_MESSAGES_COUNT = 'conference.INIT_MESSAGES_COUNT';
-const SET_EXTERNAL = 'conference.SET_EXTERNAL';
+// const SET_EXTERNAL = 'conference.SET_EXTERNAL';
 const SET_IS_MUTE_MIKE = 'conference.SET_IS_MUTE_MIKE';
+const SET_IS_CLOSED = 'conference.SET_IS_CLOSED';
 // const SET_IS_KICK = 'conference.SET_IS_KICK';
 
 const RESET_RESOURCE = 'conference.RESET_RESOURCE';
@@ -53,10 +52,10 @@ export interface state {
   mirrorMode: boolean;
   expireTime: number | null;
   messages: messageType[];
-  externalAPIScope: string;
-  isKick: string | undefined;
-  isConference: boolean;
-  conferenceManager: ''
+  // externalAPIScope: string;
+  // isKick: string | undefined;
+  // isConference: boolean;
+  // conferenceManager: ''
 }
 
 const initialState: state = {
@@ -75,10 +74,10 @@ const initialState: state = {
   mirrorMode: false,
   expireTime: null,
   messages: [],
-  externalAPIScope: '',
-  isKick: undefined,
-  isConference: false,
-  conferenceManager: ''
+  // externalAPIScope: '',
+  // isKick: undefined,
+  // isConference: false,
+  // conferenceManager: ''
 };
 
 const reducer: (state: state, action: AnyAction) => state = (
@@ -112,8 +111,8 @@ const reducer: (state: state, action: AnyAction) => state = (
       return _setMirrorMode(state);
     case SET_EXPIRE_TIME:
       return _setExpireTime(state, action);
-    case SET_EXTERNAL:
-      return _setExternalAPI(state, action);
+    // case SET_EXTERNAL:
+    //   return _setExternalAPI(state, action);
     case SET_IS_MUTE_MIKE:
       return _setIsMuteMike(state, action);
     case MESSAGE_RECEIVED:
@@ -122,7 +121,6 @@ const reducer: (state: state, action: AnyAction) => state = (
       return _initMessagesCount(state);
     case RESET_RESOURCE:
       return _resetResource(state);
-
     // case SET_LIST:
     //   return { ...state, list: action.list };
     // case SET_INITIAL_LIST:
@@ -328,20 +326,20 @@ const _initMessagesCount = (state: state) => {
   return { ...state, messages: messagesList };
 };
 
-const setExternalAPI = (externalAPI: string) => {
-  return {
-    type: SET_EXTERNAL,
-    externalAPI
-  };
-};
+// const setExternalAPI = (externalAPI: string) => {
+//   return {
+//     type: SET_EXTERNAL,
+//     externalAPI
+//   };
+// };
 
-const _setExternalAPI = (state: state, action: AnyAction) => {
-  const { externalAPIScope } = action;
-  return {
-    ...state,
-    externalAPIScope
-  };
-};
+// const _setExternalAPI = (state: state, action: AnyAction) => {
+//   const { externalAPIScope } = action;
+//   return {
+//     ...state,
+//     externalAPIScope
+//   };
+// };
 
 const setIsMuteMike = (flag?: boolean) => {
   return {
@@ -374,11 +372,24 @@ const resetResource = () => {
   };
 };
 const _resetResource = (state: state) => {
-  const { mikeState, videoState } = state;
+  const {
+    mikeState,
+    videoState
+  } = state;
   videoState && videoState.dispose();
   mikeState && mikeState.dispose();
 
-  return { ...state, externalAPIScope: state.externalAPIScope };
+  return {
+    ...state,
+    bottomDisplayType: initialState.bottomDisplayType,
+    expireTime: initialState.expireTime,
+    messages: initialState.messages,
+    facingMode: initialState.facingMode,
+    isBtOn: initialState.isBtOn,
+    isSpeakerOn: initialState.isSpeakerOn,
+    room: initialState.room,
+    mirrorMode: initialState.mirrorMode
+  };
 };
 
 export const actionCreators = {
@@ -398,7 +409,6 @@ export const actionCreators = {
   setExpireTime,
   receivedMessage,
   initMessagesCount,
-  resetResource,
-  setExternalAPI
+  resetResource
 };
 export default reducer;

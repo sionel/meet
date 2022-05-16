@@ -301,7 +301,7 @@ PODS:
     - React
   - react-native-calendar-events (1.6.4):
     - React
-  - react-native-date-picker (4.2.1):
+  - react-native-date-picker (4.1.1):
     - React-Core
   - react-native-keep-awake (4.0.0):
     - React
@@ -677,7 +677,7 @@ SPEC CHECKSUMS:
   react-native-background-timer: 029c606b3fd6dd476b153e177c518b6ade4c169f
   react-native-blur: cad4d93b364f91e7b7931b3fa935455487e5c33c
   react-native-calendar-events: cafbac5457a0dc449e3fb407814b2091b7f259be
-  react-native-date-picker: 211dead8aeaecab3904a07b967f580e6ea3dee88
+  react-native-date-picker: 414fe8f73392bae030dc4efec39d743b5c5de283
   react-native-keep-awake: afad8a51dfef9fe9655a6344771be32c8596d774
   react-native-netinfo: 0e563248a4b9a99c33ec29bd03c2d50767db22a6
   react-native-orientation-locker: 998c0744e26624407dac068c04c605b4af7304a2
@@ -718,6 +718,6 @@ SPEC CHECKSUMS:
   SDWebImageWebPCoder: 947093edd1349d820c40afbd9f42acb6cdecd987
   Yoga: 96b469c5e81ff51b917b92e8c3390642d4ded30c
 
-PODFILE CHECKSUM: 271b50d433837e7dd035cd64692887e48aebc3b3
+PODFILE CHECKSUM: ec5cd2039951f4ec84de6d52cd84a2b11eed32b3
 
 COCOAPODS: 1.11.2

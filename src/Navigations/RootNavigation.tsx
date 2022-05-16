@@ -14,21 +14,15 @@ import MainStack from './MainStack';
 import SettingView from '@screens/SettingScreen';
 import ConferenceStateView from '@screens/ConferenceStateScreen';
 // import ConferenceView from '@screens/ConferenceScreen';
-import ConferenceRenewalView from '@screens/ConferenceScreen_New';
+import ConferenceRenewalView from '@screens/ConferenceScreen';
 import SelectCompanyView from '@screens/SelectCompanyScreen';
 import SplashView from '@screens/SplashScreen';
 
 import { RootState } from '../redux/configureStore';
 import { useDispatch, useSelector } from 'react-redux';
-import { querystringParser } from '@utils/index';
 
-import { actionCreators as ConferenceActions } from '../redux/modules/conference';
 import { actionCreators as UserActions } from '../redux/modules/user';
-import { JitsiConferenceErrors } from '../../jitsi/features/base/lib-jitsi-meet';
-import { getConferenceManager } from '../utils/ConferenceManager';
-import { MeetApi } from '../services';
 import RNExitApp from 'react-native-exit-app';
-import { useDeepLink } from '../Hooks';
 
 // roomToken?: string;
 export type MeetParamList = {
@@ -134,10 +128,10 @@ export default function RootNavigation(props: any) {
     dispatch(UserActions.setLoginType(loginType));
   };
 
-  const { isConference, auth, url } = useSelector((state: RootState) => {
+  const { auth, url } = useSelector((state: RootState) => {
     return {
       auth: state.user.auth,
-      isConference: state.conference.isConference,
+      // isConference: state.conference.isConference,
       url: state.app.url
     };
   });
@@ -164,7 +158,9 @@ export default function RootNavigation(props: any) {
   const _handleGetDeeplink = (url: string) => {
     if (!url) return;
     let { name } = navigationRef.current.getCurrentRoute();
-    if (isConference && name === 'ConferenceView') {
+    // if (isConference && name === 'ConferenceView') {
+    // TODO: isConference 현재 없음
+    if (name === 'ConferenceView') {
       _deeplinkWhenConferenceOngoing();
     } else {
       _deeplinkNormalAccess();
@@ -203,7 +199,7 @@ export default function RootNavigation(props: any) {
         <RootStack.Screen name="SettingView" component={SettingView} />
         {/* <RootStack.Screen name="ConferenceView" component={ConferenceView} /> */}
         <RootStack.Screen name="SelectCompany" component={SelectCompanyView} />
-        <RootStack.Screen name="ConferenceView_new" component={ConferenceRenewalView} />
+        <RootStack.Screen name="ConferenceView" component={ConferenceRenewalView} />
       </RootStack.Navigator>
     </NavigationContainer>
   );

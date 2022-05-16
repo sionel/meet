@@ -444,27 +444,6 @@ function applySetConferenceExpireTime(state: state, action: AnyAction) {
 
 //#endregion SET_CONFERENCE_EXPIRE_TIME
 
-//#region SET_CONFERENCE_EXPIRE_TIME
-
-function setConferenceExpireTime(expireTime: number | null): ThunkAction<void, RootState, unknown> {
-  return async dispatch => {
-    dispatch({
-      type: SET_CONFERENCE_EXPIRE_TIME,
-      expireTime
-    });
-  };
-}
-
-function applySetConferenceExpireTime(state: state, action: AnyAction) {
-  const { expireTime } = action;
-  return {
-    ...state,
-    expireTime: expireTime
-  };
-}
-
-//#endregion SET_CONFERENCE_EXPIRE_TIME
-
 //#region  CONFERENCE_MESSAGE_RECEIVED
 function receiceConferenceMessage(
   newMessage = null

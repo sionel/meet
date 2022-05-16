@@ -69,12 +69,12 @@ export interface RootState {
   alert: any;
   screenShare: ScreenShageState;
   record: any;
-  indicator: indicatorState;
-  deployed: deployedState;
-  orientation: orientationState;
-  root: rootState;
-  recents: recentsState;
-  selectCompany: selectCompanyState;
+  indicator: IndicatorState;
+  deployed: DeployedState;
+  orientation: OrientationState;
+  root: RootState;
+  recents: RecentsState;
+  selectCompany: SelectCompanyState;
   app: appState;
 }
 
