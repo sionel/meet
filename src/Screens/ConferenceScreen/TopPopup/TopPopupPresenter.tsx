@@ -7,9 +7,10 @@ import ToastMessage from './ToastMessage';
 const TopPopupPresenter: React.FC<TopPopupPresenterProps> = ({
   requestUserList,
   message,
-  fadeAnimation
+  fadeAnimation,
+  isMaster
 }) => {
-  return requestUserList.length > 0 ? (
+  return requestUserList.length > 0 && isMaster ? (
     <RequestMessages requestUserList={requestUserList} />
   ) : message ?  (
     <ToastMessage  message={message} fadeAnimation={fadeAnimation} />

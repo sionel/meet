@@ -191,7 +191,7 @@ const ParticipantCard: React.FC<ParticipantCardPros> = ({
                 activeOpacity={0.2}
                 onPress={() => {
                   //   handleKickUser(id, userName);
-                  onPressKick();
+                  onPressKick(jitsiId, name);
                   swipeRef.current[index].close();
                 }}
               >

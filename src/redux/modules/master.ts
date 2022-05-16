@@ -61,6 +61,8 @@ const initialState = {
 
 //#region reducer
 function reducer(state = initialState, action: AnyAction) {
+  // console.log('state.masterList : ', state.masterList);
+
   switch (action.type) {
     case UPDATE_MASTER_LIST:
       return updateMasterList(state, action);
@@ -89,7 +91,7 @@ function reducer(state = initialState, action: AnyAction) {
 function checkMasterList(token: string): ThunkAction<void, RootState, unknown> {
   return async dispatch => {
     const result = await MeetApi.getMasterList(token);
-    
+
     let masterList: any[] = [];
     if (isSuccess(result)) {
       masterList = result.resultData.reduce((a: any[], b: any) => {
@@ -126,7 +128,7 @@ function changeMasterControlMode(
   };
 }
 
-function setIsContorl(state: state, action: AnyAction) { 
+function setIsContorl(state: state, action: AnyAction) {
   return {
     ...state,
     isMasterControl: action.flag,
@@ -192,9 +194,9 @@ function changeMuteMicMaster(
     dispatch({
       type: 'conference.SET_IS_MUTE_MIKE',
       flag
-    })
+    });
     dispatch({
-      type: TOGGLE_MUTE_MIC_MASTER,
+      type: TOGGLE_MUTE_MIC_MASTER
       // micMuteFlag
     });
   };
@@ -248,7 +250,9 @@ function applyToggleMuteMicMaster(state: state, action: AnyAction) {
 //#endregion
 
 //#region SPEAK_REQUEST
-function setMicRequest(flag:boolean | null = null): ThunkAction<void, RootState, unknown> {
+function setMicRequest(
+  flag: boolean | null = null
+): ThunkAction<void, RootState, unknown> {
   return dispatch => {
     dispatch({
       type: SPEEK_REQUEST,
@@ -285,29 +289,41 @@ const _setRequestList = (state: state, action: AnyAction) => {
 
 //#region OTHER_USER_MIC_REQUEST
 
-function setOtherUserMicRequest(requestUser: requestUser) {
-  return {
-    type: OTHER_USER_MIC_REQUEST,
-    requestUser
+function setOtherUserMicRequest(
+  requestUser: requestUser
+): ThunkAction<void, RootState, unknown> {
+  return (dispatch, getState) => {
+    const { list } = getState()['participants_copy'];
+    const isMaster = list[0].isMaster;
+    dispatch({
+      type: OTHER_USER_MIC_REQUEST,
+      requestUser,
+      isMaster
+    });
   };
 }
 
 const _setOtherUserMicRequest = (state: state, action: AnyAction) => {
   const {
-    requestUser: { jitsiId }
+    requestUser: { jitsiId },
+    isMaster
   } = action;
 
-  let newRequestUserList = state.requestUserList.slice(0);
-  let isOverlap = newRequestUserList.find(user => user.jitsiId === jitsiId);
-
-  if (isOverlap) {
-    //마이크 요청자가 중복일때
+  if (!isMaster) {
+    return { ...state };
   } else {
-    //마이크 요청자가 중복이 아닐때
-    newRequestUserList.push(action.requestUser);
-  }
+    let newRequestUserList = state.requestUserList.slice(0);
+    let isOverlap = newRequestUserList.find(user => user.jitsiId === jitsiId);
 
-  return { ...state, requestUserList: newRequestUserList };
+    if (isOverlap) {
+      //마이크 요청자가 중복일때
+      return { ...state };
+    } else {
+      //마이크 요청자가 중복이 아닐때
+      newRequestUserList.push(action.requestUser);
+      return { ...state, requestUserList: newRequestUserList };
+    }
+  }
 };
 //#endregion
 
@@ -319,7 +335,7 @@ function resetRequestUserList() {
 
 const _resetRequestUserList = (state: state, action: AnyAction) => {
   return { ...state, requestUserList: [] };
-}
+};
 
 export const actionCreators = {
   checkMasterList,

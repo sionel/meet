@@ -32,7 +32,9 @@ export interface ConferenceScreenPresenterProps {
 export interface TopPopupContainerProps {}
 export interface TopPopupPresenterProps
   extends RequestMessagesProps,
-    ToastMessageProps {}
+    ToastMessageProps {
+      isMaster: boolean | undefined;
+    }
 
 export interface RequestMessagesProps {
   requestUserList: any[];
@@ -187,7 +189,7 @@ export interface ParticipantsProps extends InviteListProps {
   setIsProfile: any;
   onPressProfile: (user: any) => void;
   onPressMaster: (wehagoID: string) => void;
-  onPressKick: () => void;
+  onPressKick: (kickJitsiID: string, kickUserName: string) => void;
   onPressMike: (jitsiID: string, isMute: boolean) => void;
   onPressInvite: () => void;
   userInfo: any;
@@ -206,7 +208,7 @@ export interface ParticipantCardPros {
   isPad: boolean;
   onPressProfile: (user: any) => void;
   onPressMaster: (wehagoID: string) => void;
-  onPressKick: () => void;
+  onPressKick: (kickJitsiID: string, kickUserName: string) => void;
   onPressMike: (jitsiID: string, isMute: boolean) => void;
 }
 

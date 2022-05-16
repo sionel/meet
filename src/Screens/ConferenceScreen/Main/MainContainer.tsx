@@ -92,6 +92,8 @@ const MainContainer: React.FC<MainContainerProps> = ({ roomName, onClose }) => {
   useEffect(() => {
     // 내가 메인유저일때 화면전환 처리
     if (presenter === '') {
+
+
       if (isMuteVideo) {
         setMainView('character');
       } else {
@@ -103,6 +105,7 @@ const MainContainer: React.FC<MainContainerProps> = ({ roomName, onClose }) => {
   useEffect(() => {
     //TODO: 추후에 스플릿비디오에서 메인화면 지정시 카메라 ON/OFF 잘되는지 확인 !
     if (!isLocal && presenter === '') {
+
       let isMute;
       isMute = mainVideoTrack ? mainVideoTrack.isMuted() : true;
       toggleMuteVideo(!isMute);
@@ -119,7 +122,11 @@ const MainContainer: React.FC<MainContainerProps> = ({ roomName, onClose }) => {
         setMainUser(myId);
       }
 
+
+
+
       if (typeof attributes === 'boolean') {
+  
         attributes && setMainView('sketch');
       } else {
         attributes && setMainView('document');
@@ -139,10 +146,12 @@ const MainContainer: React.FC<MainContainerProps> = ({ roomName, onClose }) => {
     if (isScreenShare) {
       setMainView('screen');
     } else {
-      if (isMuteVideo) {
-        setMainView('character');
-      } else {
-        setMainView('track');
+      if (presenter === '') {
+        if (isMuteVideo) {
+          setMainView('character');
+        } else {
+          setMainView('track');
+        }
       }
     }
   }, [isScreenShare]);

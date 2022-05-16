@@ -11,12 +11,13 @@ const TopPopupContainer: React.FC<TopPopupContainerProps> = ({}) => {
   const [fadeout, setFadeout] = useState<any>(null);
   const [message, setMessage] = useState<string | undefined>(undefined);
 
-  const { toggleFlag, toastMessage, requestUserList } = useSelector(
+  const { toggleFlag, toastMessage, requestUserList, isMaster } = useSelector(
     (state: RootState) => {
       return {
         toggleFlag: state.toast.toggleFlag,
         toastMessage: state.toast.toastMessage,
-        requestUserList: state.master.requestUserList
+        requestUserList: state.master.requestUserList,
+        isMaster: state.participants_copy.list[0].isMaster
       };
     }
   );
@@ -91,6 +92,7 @@ const TopPopupContainer: React.FC<TopPopupContainerProps> = ({}) => {
       requestUserList={requestUserList}
       message={message}
       fadeAnimation={fadeAnimation}
+      isMaster={isMaster}
     />
   );
 };

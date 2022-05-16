@@ -339,13 +339,17 @@ export default class sendMessage {
     }
   };
 
-  kickUser = async (id: string, masterName: string, targetName: string) => {
+  kickUser = async (
+    targetJitsiID: string,
+    targetName: string,
+    masterName: string
+  ) => {
     // this._room.kickParticipant(id);
     await this._room.sendCommandOnce(REQUEST_KICK, {
       value: this._room.myUserId(),
       attributes: {
         targetUser: JSON.stringify({
-          id,
+          id: targetJitsiID,
           name: targetName
         }),
         requestUser: JSON.stringify({

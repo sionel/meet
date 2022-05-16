@@ -113,8 +113,12 @@ export const ConferenceHandler = (
     dispatch(toastActions.setToastMessage(t('toast_master_denied')));
     dispatch(masterActions.setMicRequest(false));
   },
-  requestFloor: (requestUser: requestUser) => {
-    dispatch(masterActions.setOtherUserMicRequest(requestUser));
+  handleRequestFloor: (requestUser: requestUser, isOtherMasterPassed: boolean) => {
+    if(isOtherMasterPassed) {
+      dispatch(masterActions.setRequestList(requestUser.jitsiId));
+    } else {
+      dispatch(masterActions.setOtherUserMicRequest(requestUser));
+    }
   },
   setRequestList: (jitsiid: string) => {
     dispatch(masterActions.setRequestList(jitsiid));

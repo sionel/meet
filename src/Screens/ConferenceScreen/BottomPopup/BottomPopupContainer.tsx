@@ -61,7 +61,7 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
 
   const screenFlag = useScreenShareStatus();
   //#region UseState
-  
+
   // MenuList
   const [isFirst, setIsFirst] = useState(true);
   const [isMicControl, setIsMicControl] = useState(false);
@@ -72,7 +72,7 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
   const scrollRef: MutableRefObject<any> = useRef();
   const [keyboardH, setKeyboardH] = useState(0);
   //
-  
+
   // UserList
   const swipeRef: MutableRefObject<any> = React.useRef([]);
   const [initMasterID, setInitMasterID] = useState('');
@@ -294,8 +294,9 @@ const BottomPopupContainer: React.FC<BottomPopupContainerProps> = ({
       room && room.sendMessage.empowerMaster(wehagoID, removeAuthUser);
     }
   };
-  const handlePressKick = () => {
-    room && room.sendMessage.kickUser();
+  const handlePressKick = (kickJitsiID: string, kikcUserName: string) => {
+    room &&
+      room.sendMessage.kickUser(kickJitsiID, kikcUserName, auth.user_name);
   };
 
   const handlePressMike = (jitsiID: string, muteFlag: boolean) => {

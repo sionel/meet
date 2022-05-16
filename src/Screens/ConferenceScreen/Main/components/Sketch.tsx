@@ -16,26 +16,22 @@ import buttonClose from '@oldassets/buttons/btnTnaviCloseNone_3x.png';
 import DrawingSketch from './DrawingSketch';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/configureStore';
-import { getT } from '@utils/translateManager';
+import { useTranslation } from 'react-i18next';
 
 const Sketch: React.FC<SketchProps> = ({ roomName, onClose }) => {
-  const t = getT();
+  const { t } = useTranslation();
   const {
     orientation,
     presenter,
-    // attributes,
     page,
     room,
     mikeState
-    // mainView
   } = useSelector((state: RootState) => ({
     orientation: state.orientation.orientation,
     presenter: state.documentShare.presenter,
-    // attributes: state.documentShare.attributes,
     page: state.documentShare.page,
     room: state.conference.room,
     mikeState: state.conference.mikeState
-    // mainView: state.mainUser_copy.mode
   }));
 
   const [isMikeOn, setIsMikeOn] = useState(!mikeState.isMuted());

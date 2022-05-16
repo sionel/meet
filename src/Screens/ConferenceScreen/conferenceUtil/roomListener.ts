@@ -1,5 +1,107 @@
 import JitsiMeetJS from '@jitsi/base/lib-jitsi-meet';
 import { ConferenceHandler } from './ConferenceHandler';
+
+type DEFAULT_PARAM = {
+  value: string;
+};
+
+type UPDATE_MASTER_USERS_TYPE = DEFAULT_PARAM & {
+  attributes: {
+    isRemoveAuth?: string | undefined;
+    myCommand?: boolean;
+  };
+  value: string;
+};
+
+type REQUEST_KICK = DEFAULT_PARAM & {
+  attributes: {
+    requestUser: string;
+    targetUser: string;
+  };
+};
+
+type WEHAGO_ID_TYPE = DEFAULT_PARAM & {
+  attributes: {
+    avatar: string;
+    companyFullpath: string;
+    host: string;
+    is_screen: string;
+    nickname: string;
+    profile_url: string;
+    userIdentificationCode: string;
+    userName: string;
+    user_contact: string;
+    user_email: string;
+    wehagoId: string;
+  };
+};
+
+type SET_DRAWING_IS_SHARE_TYPE = DEFAULT_PARAM & {
+  attributes: {
+    isDrawingShare: 'true' | 'false';
+  };
+};
+
+type UPDATE_DOCUMENT_DATA_TYPE = DEFAULT_PARAM & {
+  attributes: {
+    canvasType: string;
+    dataURL: string;
+    documentData: string;
+    from: 'web' | 'mobile';
+    selectResource: string;
+  };
+};
+
+type DRAWING_SHARE_TARGET_TYPE = DEFAULT_PARAM & {
+  attributes: { from: string; objectData: string; target: string };
+};
+
+type SET_DOCUMENT_SHARE_IS_OPEN_TYPE = DEFAULT_PARAM & {
+  attributes: {
+    fileName: string;
+    owner: string;
+    resources: string;
+  };
+};
+
+type DOCUMENT_SHARE_TARGET_TYPE = DEFAULT_PARAM & {
+  attributes: {
+    fileName: string;
+    objectData: string;
+    owner: string;
+    resources: string;
+    selectResource: string;
+    target: string;
+  };
+};
+
+type REQUEST_MIC_CONTROL_TYPE = DEFAULT_PARAM & {
+  attributes: {
+    controlType: 'mute' | 'unmute';
+  };
+};
+
+type REQUEST_FLOOR_TYPE = DEFAULT_PARAM & {
+  attributes: {
+    targetUser: string;
+  };
+};
+
+type GRANT_FLOOR_TARGET_TYPE = DEFAULT_PARAM & {
+  attributes: {
+    isMasterControlTarget: 'false' | 'true';
+    type: 'reject' | 'accept';
+    targetUser: string;
+  };
+};
+
+type STOP_FLOOR_TYPE = DEFAULT_PARAM & {
+  attributes: {
+    isMasterControlTarget: 'false' | 'true';
+    targetUser: string;
+  };
+};
+
 // 위하고 아이디 커멘드 이름 정의
 
 // 드로잉 이미지 전달 커멘드 타입
@@ -106,7 +208,7 @@ export function bindEvent(handler: any, room: any, resolve: any, reject: any) {
   });
 
   // LEFT_USER 이벤트 연결
-  room.on(conferenceEvents.USER_LEFT, (id: any) => {
+  room.on(conferenceEvents.USER_LEFT, (id: string) => {
     if (id === room.myUserId()) return;
     if (presenter === id) {
       handler.changeDocumentShareMode(false, false);
@@ -144,8 +246,8 @@ export function bindEvent(handler: any, room: any, resolve: any, reject: any) {
 
   room.on(
     conferenceEvents.MESSAGE_RECEIVED,
-    (user: any, text: any, date: any) => {
-      handler.setMessage(user, text, date);
+    (sendUser: string, receivedMessage: string, sendDate: string) => {
+      handler.setMessage(sendUser, receivedMessage, sendDate);
     }
   );
 
@@ -164,10 +266,9 @@ export function bindEvent(handler: any, room: any, resolve: any, reject: any) {
   // ======== addEventListener ========== //
 
   // // 위하고 접속 아이디 및 정보 가져오기
-  room.addCommandListener(actions.WEHAGO_ID, (user: any) => {
+  room.addCommandListener(actions.WEHAGO_ID, (user: WEHAGO_ID_TYPE) => {
     // if (user.id === room.myUserId()) return;
     if (user.value === room.myUserId()) return;
-
     handler.setUserInfo(user);
   });
 
@@ -175,6 +276,8 @@ export function bindEvent(handler: any, room: any, resolve: any, reject: any) {
    * 문서 공유 페이지 전환 감지
    */
   room.addCommandListener(actions.SET_DOCUMENT_PAGE, (value: any) => {
+    console.log('SET_DOCUMENT_PAGE : ', value);
+
     const {
       value: userId,
       attributes: { page }
@@ -197,36 +300,34 @@ export function bindEvent(handler: any, room: any, resolve: any, reject: any) {
   /**
    * @description 문서 공유 모드 설정 감지
    */
-  room.addCommandListener(actions.SET_DOCUMENT_SHARE_IS_OPEN, (value: any) => {
-    const { value: userId, attributes } = value;
-    // if (attributes.user === 'ALL' || attributes.user === room.myUserId())
-    presenter = userId;
-    if (userId !== room.myUserId()) {
-      handler.changeDocumentShareMode(attributes, userId);
-    } else {
-      handler.changeDocumentShareMode(attributes, 'localUser');
-    }
-  });
+  room.addCommandListener(
+    actions.SET_DOCUMENT_SHARE_IS_OPEN,
+    (value: SET_DOCUMENT_SHARE_IS_OPEN_TYPE) => {
+      const { value: userId, attributes } = value;
+      presenter = userId;
 
-  room.addCommandListener(actions.SET_DOCUMENT_SHARE_IS_CLOSE, (value: any) => {
-    // const { value: userId } = value;
-    // if (userId !== room.myUserId()) {
-    presenter = '';
-    handler.changeDocumentShareMode(false);
-    // }
-  });
+      if (userId !== room.myUserId()) {
+        handler.changeDocumentShareMode(attributes, userId);
+      } else {
+        handler.changeDocumentShareMode(attributes, 'localUser');
+      }
+    }
+  );
+
+  room.addCommandListener(
+    actions.SET_DOCUMENT_SHARE_IS_CLOSE,
+    (value: DEFAULT_PARAM) => {
+      presenter = '';
+      handler.changeDocumentShareMode(false);
+    }
+  );
 
   // /**
   //  * @description 드로잉 모드 설정 감지
   //  */
   room.addCommandListener(
     actions.SET_DRAWING_IS_SHARE,
-    (value: {
-      value: string;
-      attributes: {
-        isDrawingShare: 'true' | 'false';
-      };
-    }) => {
+    (value: SET_DRAWING_IS_SHARE_TYPE) => {
       const {
         value: userId,
         attributes: { isDrawingShare }
@@ -241,16 +342,19 @@ export function bindEvent(handler: any, room: any, resolve: any, reject: any) {
   // /**
   //  * 드로잉 데이터 변경 감지
   //  */
-  room.addCommandListener(actions.UPDATE_DOCUMENT_DATA, (value: any) => {
-    const {
-      attributes: { documentData, from, selectResource },
-      value: userId
-    } = value;
-    // 데이터 변경자가 본인과 다를 경우 캔버스 그리기
-    if (userId !== room.myUserId()) {
-      handler.changeDrawData(JSON.parse(documentData), selectResource);
+  room.addCommandListener(
+    actions.UPDATE_DOCUMENT_DATA,
+    (value: UPDATE_DOCUMENT_DATA_TYPE) => {
+      const {
+        attributes: { documentData, selectResource },
+        value: userId
+      } = value;
+      // 데이터 변경자가 본인과 다를 경우 캔버스 그리기
+      if (userId !== room.myUserId()) {
+        handler.changeDrawData(JSON.parse(documentData), selectResource);
+      }
     }
-  });
+  );
 
   // /**
   //  * 드로잉 캔버스 클리어 감지
@@ -293,44 +397,54 @@ export function bindEvent(handler: any, room: any, resolve: any, reject: any) {
   /**
    * 새로 참가한 사람만 받아라 (문서공유)
    */
-  room.addCommandListener(actions.DOCUMENT_SHARE_TARGET, (value: any) => {
-    if (room.myUserId() === value.attributes.target) {
-      handler.changeDocumentShareMode(
-        {
-          fileName: value.attributes.fileName,
-          owner: value.attributes.owner,
-          resources: value.attributes.resources
-        },
-        value.value,
-        Number(value.attributes.selectResource),
-        JSON.parse(value.attributes.objectData)
-      );
+  room.addCommandListener(
+    actions.DOCUMENT_SHARE_TARGET,
+    (value: DOCUMENT_SHARE_TARGET_TYPE) => {
+      if (room.myUserId() === value.attributes.target) {
+        const { fileName, owner, resources, selectResource, objectData } =
+          value.attributes;
+
+        handler.changeDocumentShareMode(
+          {
+            fileName,
+            owner,
+            resources
+          },
+          value.value,
+          Number(selectResource),
+          JSON.parse(objectData)
+        );
+      }
     }
-  });
+  );
 
   // /**
   //  * 새로 참가한 사람만 받아라 (드로잉공유)
   //  */
-  room.addCommandListener(actions.DRAWING_SHARE_TARGET, (value: any) => {
-    if (room.myUserId() === value.attributes.target) {
-      const drawingData = value.attributes.objectData
-        ? JSON.parse(value.attributes.objectData)
-        : [{ object: [] }];
-      handler.changeDrawingShareMode(
-        { resources: '[]', ...value.attributes }, // attributes
-        value.value, // presenter Id
-        0, //page
-        drawingData[0].object ? [drawingData[0].object] : drawingData //documentData
-      );
-    }
-  });
+  room.addCommandListener(
+    actions.DRAWING_SHARE_TARGET,
+    (value: DRAWING_SHARE_TARGET_TYPE) => {
+      if (room.myUserId() === value.attributes.target) {
+        const drawingData = value.attributes.objectData
+          ? JSON.parse(value.attributes.objectData)
+          : [{ object: [] }];
 
-  // // 화상대화 전체 마이크 제어 요청자 사용자 정보 이벤트
-  // //- 마스터가 마이크 제어 모드 시작하기/종료하기
+        handler.changeDrawingShareMode(
+          { resources: '[]', ...value.attributes }, // attributes
+          value.value, // presenter Id
+          0, //page
+          drawingData[0].object ? [drawingData[0].object] : drawingData //documentData
+        );
+      }
+    }
+  );
+
+  // 화상대화 전체 마이크 제어 요청자 사용자 정보 이벤트
+  //- 마스터가 마이크 제어 모드 시작하기/종료하기
   room.addCommandListener(
     actions.REQUEST_MIC_CONTROL_USER,
-    async (value: any) => {
-      console.log('REQUEST_MIC_CONTROL_USER[ 발언권 제어모드 ] : ', value);
+    async (value: DEFAULT_PARAM) => {
+      // console.log('REQUEST_MIC_CONTROL_USER[ 발언권 제어모드 ] : ', value);
       handler.changeMicControlUserModeByMaster(value.value);
     }
   );
@@ -338,17 +452,20 @@ export function bindEvent(handler: any, room: any, resolve: any, reject: any) {
   // // 화상대화 전체 마이크 제어 요청 이벤트
   // // - 마스터가 마이크 제어 mute를 함 사용자들은 마이크 임의로 킬 수 없음
   // // 간단한 토스트 메시지 띄움
-  room.addCommandListener(actions.REQUEST_MIC_CONTROL, (value: any) => {
-    console.log('REQUEST_MIC_CONTROL[ 마이크 전체 제어 ] : ', value);
-    const {
-      attributes: { controlType }
-    } = value;
+  room.addCommandListener(
+    actions.REQUEST_MIC_CONTROL,
+    (value: REQUEST_MIC_CONTROL_TYPE) => {
+      // console.log('REQUEST_MIC_CONTROL[ 마이크 전체 제어 ] : ', value);
+      const {
+        attributes: { controlType }
+      } = value;
 
-    if (value?.value === room.myUserId()) {
-    } else {
-      handler.changeMicControlModeByMaster(controlType === 'mute');
+      if (value?.value === room.myUserId()) {
+      } else {
+        handler.changeMicControlModeByMaster(controlType === 'mute');
+      }
     }
-  });
+  );
 
   // // 화상대화 타겟 유저 마이크 제어 요청 이벤트
   // // - 마스터가 단일 마일 제어 id형식 8자
@@ -363,8 +480,10 @@ export function bindEvent(handler: any, room: any, resolve: any, reject: any) {
   });
 
   room.addCommandListener(actions.GRANT_FLOOR, (value: any) => {
+    console.log('GRANT_FLOOR : ', value);
+
     const result = JSON.parse(value.attributes.targetUser);
-    console.log('GRANT_FLOOR : ', result);
+    // console.log('GRANT_FLOOR : ', result);
     if (result.find((e: any) => e.jitsiId === room.myUserId())) {
       if (value.attributes.type === 'reject') {
         handler.rejectedByMaster();
@@ -374,69 +493,88 @@ export function bindEvent(handler: any, room: any, resolve: any, reject: any) {
     }
   });
 
-  room.addCommandListener(actions.GRANT_FLOOR_TARGET, (value: any) => {
-    console.log('GRANT_FLOOR_TARGET[ 특정 유저 마이크 제어 ] : ', value);
-    const targetUser = JSON.parse(value.attributes.targetUser);
-    const iMaster = value.attributes.isMasterControlTarget;
-    if (targetUser.jitsiId === room.myUserId()) {
-      if (value.attributes.type === 'reject') {
-        iMaster !== 'true' && handler.rejectedByMaster();
-      } else if (value.attributes.type === 'accept') {
-        handler.changeMicMuteByMaster(false);
-      }
-    }
-  });
-
-  room.addCommandListener(actions.UPDATE_MASTER_USERS, (value: any) => {
-    console.log('UPDATE_MASTER_USERS [ 마스터 유저 업데이트 시 ] : ', value);
-    const { isRemoveAuth, myCommand } = value.attributes;
-    handler.changeMasterList(isRemoveAuth, myCommand);
-  });
-
-  room.addCommandListener(actions.REQUEST_KICK, (value: any) => {
-    // console.log('REQUEST_KICK[ 화상회의에서 내보내기 ] : ', value);
-    const target = value.attributes.targetUser;
-    const master = value.attributes.requestUser;
-    
-    const { id: targetId } = JSON.parse(target);
-    // console.log('targetId : ', targetId);
-    const isTargetMe = targetId === room.myUserId() ? true : false;
-
-    
-    handler.requestKick(master, target, isTargetMe);
-  });
-
-  //마스터유저로부터 마이크 권한 OFF
   room.addCommandListener(
-    actions.STOP_FLOOR,
-    (value: { attributes: any; value: string }) => {
-      console.log('STOP_FLOOR [ 마이크 권한 OFF ]: ', value);
-      const result = JSON.parse(value.attributes.targetUser);
-      const { isMasterControlTarget } = value.attributes;
+    actions.GRANT_FLOOR_TARGET,
+    (value: GRANT_FLOOR_TARGET_TYPE) => {
+      // [ 특정 유저 마이크 제어 ];
+      console.log('GRANT_FLOOR_TARGET : ', value);
+      
+      const {
+        attributes: { targetUser, isMasterControlTarget, type }
+      } = value;
 
-      if (isMasterControlTarget === 'true') {
-        // 내가 마스터일때
-      } else {
-        // 내가 마스터가 아닐때
-        if (value.value !== room.myUserId()) {
-          if (result.jitsiId === room.myUserId()) {
-            handler.changeMicMuteByMaster(true);
-          } else {
-            handler.changeMicMuteByMaster(undefined, result.name);
-          }
+      // PARSE DATA TYPE : {jitsiId: string; name: string;}
+      const targetUserInfo = JSON.parse(targetUser);
+      const iMaster = isMasterControlTarget;
+      if (targetUserInfo.jitsiId === room.myUserId()) {
+        if (type === 'reject') {
+          iMaster !== 'true' && handler.rejectedByMaster();
+        } else if (type === 'accept') {
+          handler.changeMicMuteByMaster(false);
         }
+      } else if(value.value !== room.myUserId()){
+        // const isProcessedMy = value.value === room.myUserId();
+        handler.handleRequestFloor(targetUserInfo, true);
       }
     }
   );
 
-  //마스터 유저일때 다른 유저로부터 마이크 권한 요쳥이 들어온 경우
-  room.addCommandListener(actions.REQUEST_FLOOR, (value: any) => {
-    console.log('REQUEST_FLOOR [ 마이크 제어 권한 요청 ] : ', value);
-    const targetUser = JSON.parse(value.attributes.targetUser);
+  room.addCommandListener(
+    actions.UPDATE_MASTER_USERS,
+    (value: UPDATE_MASTER_USERS_TYPE) => {
+      console.log('UPDATE_MASTER_USERS [ 마스터 유저 업데이트 시 ] : ', value);
+      const { isRemoveAuth, myCommand } = value.attributes;
+      handler.changeMasterList(isRemoveAuth, myCommand);
+    }
+  );
+
+  room.addCommandListener(actions.REQUEST_KICK, (value: REQUEST_KICK) => {
+    //강퇴 요청 리스너
+    const {
+      attributes: { targetUser: target, requestUser: master }
+    } = value;
+
+    // JSON-PARSE DATA TYPE {id: string, name: string}
+    const { id: targetId } = JSON.parse(target);
+
+    const isTargetMe = targetId === room.myUserId() ? true : false;
+
+    handler.requestKick(master, target, isTargetMe);
+  });
+
+  //마스터유저로부터 마이크 권한 OFF
+  room.addCommandListener(actions.STOP_FLOOR, (value: STOP_FLOOR_TYPE) => {
+    console.log('STOP_FLOOR [ 마이크 권한 OFF ]: ', value);
+    const { isMasterControlTarget , targetUser } = value.attributes;
+    const result = JSON.parse(targetUser);
+
+    // if (isMasterControlTarget === 'true') {
+    //   // 내가 마스터일때
+    // } else {
+    // 내가 마스터가 아닐때
     if (value.value !== room.myUserId()) {
-      handler.requestFloor(targetUser);
+      if (result.jitsiId === room.myUserId()) {
+        handler.changeMicMuteByMaster(true);
+      } else {
+        handler.changeMicMuteByMaster(undefined, result.name);
+      }
+      // }
     }
   });
+
+  //마스터 일때 다른 유저로부터 마이크 권한 요쳥이 들어온 경우
+  room.addCommandListener(
+    actions.REQUEST_FLOOR,
+    (value: REQUEST_FLOOR_TYPE) => {
+      console.log('REQUEST_FLOOR [ 마이크 제어 권한 요청 ] : ', value);
+
+      // PARSE DATA TYPE : {jitsiID: string; name: string;}
+      const targetUser = JSON.parse(value.attributes.targetUser);
+      if (value.value !== room.myUserId()) {
+        handler.handleRequestFloor(targetUser, false);
+      }
+    }
+  );
 
   // room.addCommandListener(REQUEST_ROOM_STOP_RECORDING, value => {
   //   if (room.isModerator()) {
