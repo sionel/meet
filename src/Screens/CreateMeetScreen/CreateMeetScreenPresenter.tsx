@@ -13,23 +13,28 @@ import {
 } from 'react-native';
 
 import DatePicker from 'react-native-date-picker';
-import CalendarPicker from '../../custom_modules/react-native-calendar-picker/CalendarPicker';
-
-import { getT } from '@utils/translateManager';
-
-import { wehagoMainURL, wehagoDummyImageURL } from '@utils/index';
+import { wehagoDummyImageURL } from '@utils/index';
 import { SafeAreaView } from 'react-native-safe-area-context';
-// import { add, last, parseInt } from 'lodash';
-import LinearGradient from 'react-native-linear-gradient';
+import { CalendarPicker } from './Components'
 
-const icCode = require('@assets/icons/ic_code.png');
-const icLock_W = require('@assets/icons/ic_lock_w.png');
-const icPersonPlus = require('@assets/icons/ic_person_plus.png');
-const icCancel_W = require('@assets/icons/ic_cancel_w.png');
-const icCancel = require('@assets/icons/ic_cancel.png');
-const icCheck = require('@assets/icons/ic_check.png');
-const icMasterCircle = require('@assets/icons/ic_master_circle.png');
-const icAttdCircle = require('@assets/icons/ic_attd_circle.png');
+import {
+  ic_unlock as icUnlock,
+  ic_lock_w as icLock_W,
+  ic_person_plus as icPersonPlus,
+  ic_cancel_w as icCancel_W,
+  ic_master_circle as icMasterCircle,
+  ic_attd_circle as icAttdCircle
+} from '@assets/index';
+import { useTranslation } from 'react-i18next';
+
+// const icCode = require('@assets/icons/ic_code.png');
+// const icLock_W = require('@assets/icons/ic_lock_w.png');
+// const icPersonPlus = require('@assets/icons/ic_person_plus.png');
+// const icCancel_W = require('@assets/icons/ic_cancel_w.png');
+// const icCancel = require('@assets/icons/ic_cancel.png');
+// const icCheck = require('@assets/icons/ic_check.png');
+// const icMasterCircle = require('@assets/icons/ic_master_circle.png');
+// const icAttdCircle = require('@assets/icons/ic_attd_circle.png');
 
 interface PresenterProps {
   roomName: string;
@@ -122,48 +127,7 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
     nameduplication,
     isLoading
   } = props;
-  const t = getT();
-  const CalendarPickerComponent = (
-    <CalendarPicker
-      weekdays={[
-        t('renewal.calendar_sun'),
-        t('renewal.calendar_mon'),
-        t('renewal.calendar_tue'),
-        t('renewal.calendar_wed'),
-        t('renewal.calendar_thur'),
-        t('renewal.calendar_fri'),
-        t('renewal.calendar_sat')
-      ]}
-      months={[
-        t('renewal.calendar_jan'),
-        t('renewal.calendar_feb'),
-        t('renewal.calendar_mar'),
-        t('renewal.calendar_apr'),
-        t('renewal.calendar_may'),
-        t('renewal.calendar_jun'),
-        t('renewal.calendar_jul'),
-        t('renewal.calendar_aug'),
-        t('renewal.calendar_sep'),
-        t('renewal.calendar_oct'),
-        t('renewal.calendar_nov'),
-        t('renewal.calendar_dec')
-      ]}
-      previousTitle="<"
-      nextTitle=">"
-      minDate={new Date()}
-      selectedStartDate={startTime.current}
-      selectedDayTextColor="#fff"
-      selectedDayStyle={{ borderRadius: 5, backgroundColor: '#1c90fb' }}
-      todayBackgroundColor="#febc2c"
-      dayShape="square"
-      width={isTablet ? 500 : 360}
-      onDateChange={onDateChange}
-      selectYearTitle={t('renewal.main_select_year')}
-      selectMonthTitle={t('renewal.common_year')}
-      textStyle={{ fontSize: isTablet ? 18 : 14 }}
-      disabledDatesTextStyle={{ fontSize: isTablet ? 18 : 14 }}
-    />
-  );
+  const { t } = useTranslation();
 
   return (
     <Fragment>
@@ -198,18 +162,6 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
           onPress={togglePublic}
           style={[styles.privateContainer]}
         >
-          <LinearGradient
-            end={{ x: 1, y: 1 }}
-            start={{ x: 0, y: 0 }}
-            colors={isPublic ? ['#a460ff', '#5d5dff'] : ['#1cc8fb', '#1c90fb']}
-            style={styles.codeContainer}
-          >
-            <Image
-              source={isPublic ? icCode : icLock_W}
-              style={styles.icCode}
-            />
-          </LinearGradient>
-
           <View style={styles.privateTextContainer}>
             <Text style={styles.privateMainText}>
               {isPublic
@@ -222,6 +174,24 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
                 : t('renewal.direct_create_private_guide')}
             </Text>
           </View>
+          {/* <LinearGradient
+            end={{ x: 1, y: 1 }}
+            start={{ x: 0, y: 0 }}
+            colors={isPublic ? ['#a460ff', '#5d5dff'] : ['#1cc8fb', '#1c90fb']}
+            style={styles.codeContainer}
+          > */}
+          <View
+            style={[
+              styles.codeContainer,
+              { backgroundColor: isPublic ? '#d3d3d3' : '#1c90fb' }
+            ]}
+          >
+            <Image
+              source={isPublic ? icUnlock : icLock_W}
+              style={styles.icCode}
+            />
+          </View>
+          {/* </LinearGradient> */}
         </TouchableOpacity>
 
         <View
@@ -334,7 +304,8 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
                       datePicker === 'start' && {
                         borderColor: 'rgb(28, 144, 251)'
                       },
-                      isTablet && { width: '20%' }
+                      isTablet && { width: '20%' },
+                      { marginRight: 8 }
                     ]}
                     onPress={() => {
                       openDatePicker('start');
@@ -390,7 +361,8 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
                       datePicker === 'end' && {
                         borderColor: 'rgb(28, 144, 251)'
                       },
-                      isTablet && { width: '20%' }
+                      isTablet && { width: '20%' },
+                      { marginRight: 8 }
                     ]}
                     onPress={() => {
                       openDatePicker('end');
@@ -627,43 +599,47 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
       </SafeAreaView>
 
       {(timePicker !== 'none' || datePicker !== 'none') && (
+        <SafeAreaView style={styles.bottomComponent}>
         <View
           style={[
-            styles.bottomComponent,
+            {flex: 1},
             isHorizon && { width: '66%', left: '17%' }
           ]}
         >
           <View style={{ flex: 1, backgroundColor: '#666', zIndex: 2 }} />
-          <View style={styles.dateTimePickerHeader}>
-            {!calendarError && (
-              <TouchableOpacity onPress={exitDateTime} style={styles.icCancel}>
-                <Image source={icCancel} style={styles.icCancel} />
-              </TouchableOpacity>
-            )}
-
-            {timePicker !== 'none' && (
-              <TouchableOpacity onPress={onTimeConfirm} style={styles.icCancel}>
-                <Image source={icCheck} style={styles.icCancel} />
-              </TouchableOpacity>
-            )}
-          </View>
           {timePicker !== 'none' && (
-            <View style={styles.timePickerView}>
-              <DatePicker
-                onDateChange={time => timeChange(time)}
-                mode={'time'}
-                date={
-                  timeChangeDetect
-                    ? time
-                    : timeType === 'start'
-                    ? startTime.current
-                    : endTime.current
-                }
-              />
+            <View style={{height: 332}}>
+              <View style={styles.dateTimePickerHeader}>
+                <Text
+                  style={styles.selectedTimeText}
+                >{`예약시간 설정`}</Text>
+              </View>
+              <View style={styles.timePickerView}>
+                <DatePicker
+                  onDateChange={time => timeChange(time)}
+                  mode={'time'}
+                  date={
+                    timeChangeDetect
+                      ? time
+                      : timeType === 'start'
+                      ? startTime.current
+                      : endTime.current
+                  }
+                  androidVariant={'iosClone'}
+                  dividerHeight={40}
+                />
+              </View>
+              <TouchableOpacity
+                style={styles.selectedTimeButton}
+                onPress={onTimeConfirm}
+              >
+                <Text style={styles.selectedButtonText}>{`적용`}</Text>
+              </TouchableOpacity>
             </View>
           )}
-          {datePicker !== 'none' && CalendarPickerComponent}
+          {datePicker !== 'none' && <CalendarPicker onDateChange={onDateChange} startTime={startTime} />}
         </View>
+        </SafeAreaView>
       )}
     </Fragment>
   );
@@ -693,12 +669,12 @@ const styles = StyleSheet.create({
     height: '8%',
     paddingHorizontal: '5%',
     flexDirection: 'row',
-    justifyContent: 'flex-start',
+    justifyContent: 'space-between',
     alignItems: 'center'
   },
   privateTextContainer: {
-    flexDirection: 'column',
-    paddingLeft: '3%'
+    flexDirection: 'column'
+    // paddingLeft: '3%'
   },
   privateMainText: {
     fontSize: 15,
@@ -794,7 +770,12 @@ const styles = StyleSheet.create({
   },
   datetimeBox: {
     width: '35%',
-    alignItems: 'flex-end'
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderRadius: 6,
+    height: 32,
+    borderColor: '#e6e6e6'
     // marginRight: 5,
   },
   datetimeText: {
@@ -822,16 +803,16 @@ const styles = StyleSheet.create({
   },
   //이미지(icCode)
   codeContainer: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     alignItems: 'center',
     justifyContent: 'center'
   },
   icCode: {
     resizeMode: 'cover',
-    width: 19.5,
-    height: 17
+    width: 24,
+    height: 24
   },
   icPersonPlus: {
     resizeMode: 'cover',
@@ -897,7 +878,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: 56,
+    height: 56
     // paddingHorizontal: '1%'
   },
   profileView: {
@@ -978,10 +959,34 @@ const styles = StyleSheet.create({
   },
   dateTimePickerHeader: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: '5%',
-    marginBottom: '3%',
-    paddingHorizontal: '4%'
+    justifyContent: 'center',
+    alignItems: 'center',
+    // marginTop: '5%',
+    // marginBottom: '3%',
+    height: 48,
+    marginTop: 16,
+    borderBottomColor: '#e6e6e6',
+    borderBottomWidth: 1
+  },
+  selectedTimeText: {
+    fontSize: 18,
+    color: '#000',
+    fontFamily: 'DOUZONEText50'
+  },
+  selectedTimeButton: {
+    backgroundColor: '#127eff',
+    marginTop: 30,
+    height: 48,
+    width: 335,
+    alignSelf: 'center',
+    borderRadius: 28,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  selectedButtonText: {
+    color: '#fff',
+    fontFamily: 'DOUZONEText50',
+    fontSize: 14
   },
   timePickerView: {
     marginTop: 20,

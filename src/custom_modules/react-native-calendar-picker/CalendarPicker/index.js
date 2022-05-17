@@ -311,10 +311,12 @@ export default class CalendarPicker extends Component {
     }
   };
 
-  handleOnPressPrevious = () => {
+  handleOnPressPrevious = (param) => {
     const { currentMonth, currentYear } = this.state;
+    let previousYear = currentYear - 1;
     let previousMonth = currentMonth - 1;
     let year = currentYear;
+    let month = currentMonth;
     // if previousMonth is negative it means the current month is January,
     // so we have to go back to previous year and set the current month to December
     if (previousMonth < 0) {
@@ -322,13 +324,19 @@ export default class CalendarPicker extends Component {
       year--;
     }
     const scrollFinisher = this.props.scrollable && this.scroller.scrollLeft;
-    this.handleOnPressFinisher({ year, month: previousMonth, scrollFinisher });
+    if(param === 'year') {
+      this.handleOnPressFinisher({ year: previousYear, month, scrollFinisher})
+    } else {
+      this.handleOnPressFinisher({ year, month: previousMonth, scrollFinisher });
+    }
   };
 
-  handleOnPressNext = () => {
+  handleOnPressNext = (param) => {
     const { currentMonth, currentYear } = this.state;
+    let nextYear = currentYear + 1;
     let nextMonth = currentMonth + 1;
     let year = currentYear;
+    let month = currentMonth;
     // if nextMonth is greater than 11 it means the current month is December,
     // so we have to go forward to the next year and set the current month to January
     if (nextMonth > 11) {
@@ -336,7 +344,11 @@ export default class CalendarPicker extends Component {
       year++;
     }
     const scrollFinisher = this.props.scrollable && this.scroller.scrollRight;
-    this.handleOnPressFinisher({ year, month: nextMonth, scrollFinisher });
+    if(param === 'year') {
+      this.handleOnPressFinisher({ year: nextYear, month, scrollFinisher})
+    } else {
+      this.handleOnPressFinisher({ year, month: nextMonth, scrollFinisher });
+    }
   };
 
   handleOnPressFinisher = ({ year, month, scrollFinisher, extraState }) => {

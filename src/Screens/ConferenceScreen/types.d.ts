@@ -3,15 +3,10 @@ import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import { messageType } from '@redux/conference';
 import { requestUser } from '@redux/master';
 import { Participant } from '@redux/participants_copy';
-import i18next from 'i18next';
 import React, { MutableRefObject } from 'react';
 import {
-  Animated,
-  NativeScrollEvent,
-  NativeSyntheticEvent
+  Animated
 } from 'react-native';
-import { OrientationType } from 'react-native-orientation-locker';
-import Conference from './conferenceUtil/Conference';
 
 type ConferenceScreenNavigationProps = StackNavigationProp<
   MeetParamList,

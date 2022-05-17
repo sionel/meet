@@ -51,7 +51,8 @@ export function makeStyles(params) {
     dayLabel: {
       fontSize: 14*scaler,
       color: '#000',
-      alignSelf: 'center'
+      alignSelf: 'center',
+      fontFamily: 'DOUZONEText30'
     },
 
     selectedDayLabel: {
@@ -60,14 +61,14 @@ export function makeStyles(params) {
 
     dayLabelsWrapper: {
       flexDirection: 'row',
-      borderBottomWidth: 1,
-      borderTopWidth: 1,
-      paddingTop: 10*scaler,
-      paddingBottom: 10*scaler,
+      // borderBottomWidth: 1,
+      // borderTopWidth: 1,
+      paddingTop: 20*scaler,
+      // paddingBottom: 10*scaler,
       alignSelf: 'center',
       justifyContent: 'center',
       backgroundColor: 'rgba(0,0,0,0.0)',
-      borderColor: 'rgba(0,0,0,0.2)'
+      // borderColor: 'rgba(0,0,0,0.2)'
     },
 
     daysWrapper: {
@@ -78,7 +79,7 @@ export function makeStyles(params) {
     dayLabels: {
       width: 50*scaler,
       fontSize: 12*scaler,
-      color: '#000',
+      fontFamily: 'DOUZONEText30',
       textAlign: 'center'
     },
 
@@ -144,11 +145,14 @@ export function makeStyles(params) {
       alignItems: 'center',
       alignSelf: 'center',
       justifyContent:'space-around',
-      width: containerWidth,
-      padding: 5*scaler,
+      width: '100%',
+      // padding: 5*scaler,
       paddingBottom: 3*scaler,
       marginBottom: 10*scaler,
-      backgroundColor: 'rgba(0,0,0,0.0)'
+      backgroundColor: 'rgba(0,0,0,0.0)',
+      borderBottomColor: '#e6e6e6',
+      borderBottomWidth: 1,
+      height: 48*scaler,
     },
 
     monthYearHeaderWrapper: {
@@ -183,7 +187,8 @@ export function makeStyles(params) {
       fontSize: 14*scaler,
       color: '#BBBBBB',
       alignSelf: 'center',
-      justifyContent: 'center'
+      justifyContent: 'center',
+      fontFamily: 'DOUZONEText30'
     },
 
     disabledMonthText: {

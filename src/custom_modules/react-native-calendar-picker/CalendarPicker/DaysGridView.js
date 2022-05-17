@@ -12,12 +12,7 @@ export default class DaysGridView extends Component {
     super(props);
 
     this.initMonthSettings = props => {
-      const {
-        month,
-        year,
-        showDayStragglers,
-        firstDay = 0,
-      } = props;
+      const { month, year, showDayStragglers, firstDay = 0 } = props;
 
       // Retrieve total days in this month & year, accounting for leap years.
       const numDaysInMonth = Utils.getDaysInMonth(month, year);
@@ -44,7 +39,10 @@ export default class DaysGridView extends Component {
       const firstWeekDay = firstDayOfMonth.isoWeekday();
 
       // Determine starting index based on first day of week prop.
-      const startIndex = (firstDay > 0) ? (firstWeekDay + Utils.FIRST_DAY_OFFSETS[firstDay]) % 7 : firstWeekDay;
+      const startIndex =
+        firstDay > 0
+          ? (firstWeekDay + Utils.FIRST_DAY_OFFSETS[firstDay]) % 7
+          : firstWeekDay;
 
       return {
         maxWeekRows: 6,
@@ -53,65 +51,77 @@ export default class DaysGridView extends Component {
         numDaysInPrevMonth,
         firstDayOfMonth,
         firstWeekDay,
-        startIndex,
+        startIndex
       };
     };
 
     const monthSettings = this.initMonthSettings(props);
     this.state = {
       monthSettings,
-      daysGrid: this.generateDaysGrid(monthSettings),
+      daysGrid: this.generateDaysGrid(monthSettings)
     };
   }
 
   componentDidUpdate(prevProps) {
     // Optimize re-renders by checking props, with special handling for selected dates.
     // Shallow compare prop changes, excluding selected dates.
-    const propDiffs = Utils.shallowDiff(this.props, prevProps, ['selectedStartDate', 'selectedEndDate']);
+    const propDiffs = Utils.shallowDiff(this.props, prevProps, [
+      'selectedStartDate',
+      'selectedEndDate'
+    ]);
     if (propDiffs.length) {
       // Recreate days
       const monthSettings = this.initMonthSettings(this.props);
       this.setState({
         monthSettings,
-        daysGrid: this.generateDaysGrid(monthSettings),
+        daysGrid: this.generateDaysGrid(monthSettings)
       });
-    }
-    else {
+    } else {
       // Update daysGrid entries when selected date(s) affect this month.
       const { selectedStartDate, selectedEndDate } = this.props;
-      const { selectedStartDate: prevSelStart, selectedEndDate: prevSelEnd } = prevProps;
+      const { selectedStartDate: prevSelStart, selectedEndDate: prevSelEnd } =
+        prevProps;
       const { firstDayOfMonth } = this.state.monthSettings;
       const isSelectedDiff =
         !Utils.compareDates(selectedStartDate, prevSelStart, 'day') ||
         !Utils.compareDates(selectedEndDate, prevSelEnd, 'day');
       // Check that selected date(s) match this month.
-      if (isSelectedDiff && (
-        Utils.compareDates(selectedStartDate, firstDayOfMonth, 'month') ||
+      if (
+        isSelectedDiff &&
+        (Utils.compareDates(selectedStartDate, firstDayOfMonth, 'month') ||
           Utils.compareDates(selectedEndDate, firstDayOfMonth, 'month') ||
           Utils.compareDates(prevSelStart, firstDayOfMonth, 'month') ||
-          Utils.compareDates(prevSelEnd, firstDayOfMonth, 'month') ))
-      {
+          Utils.compareDates(prevSelEnd, firstDayOfMonth, 'month'))
+      ) {
         // Range selection potentially affects all dates in the month. Recreate.
         if (this.props.allowRangeSelection) {
           this.setState({
-            daysGrid: this.generateDaysGrid(this.state.monthSettings),
+            daysGrid: this.generateDaysGrid(this.state.monthSettings)
           });
-        }
-        else {
+        } else {
           // Search for affected dates and modify those only
           const daysGrid = [...this.state.daysGrid];
           const { year } = this.props;
-          for (let i = 0; i <daysGrid.length; i++) {
-            for (let j = 0; j <daysGrid[i].length; j++) {
+          for (let i = 0; i < daysGrid.length; i++) {
+            for (let j = 0; j < daysGrid[i].length; j++) {
               const { month, day } = daysGrid[i][j];
               // Empty days and stragglers can't be selected.
-              if (month === undefined) { continue; }
+              if (month === undefined) {
+                continue;
+              }
               // Check single date
               const thisDay = { year, month, day };
-              const isSelected = Utils.compareDates(selectedStartDate, thisDay, 'day');
-              const isPrevSelected = Utils.compareDates(prevSelStart, thisDay, 'day');
-              if (isSelected || isPrevSelected)
-              {
+              const isSelected = Utils.compareDates(
+                selectedStartDate,
+                thisDay,
+                'day'
+              );
+              const isPrevSelected = Utils.compareDates(
+                prevSelStart,
+                thisDay,
+                'day'
+              );
+              if (isSelected || isPrevSelected) {
                 daysGrid[i][j] = this.renderDayInCurrentMonth(day);
               }
             }
@@ -122,38 +132,28 @@ export default class DaysGridView extends Component {
     }
   }
 
-  renderDayInCurrentMonth(day) {
-    return ({
+  renderDayInCurrentMonth(day, key) {
+    return {
       day,
       month: this.props.month,
-      component: (
-        <Day
-          key={day}
-          day={day}
-          {...this.props}
-        />
-      ),
-    });
+      component: <Day key={day} sepValue={key} day={day} {...this.props} />
+    };
   }
 
   renderEmptyDay(key) {
-    return ({
-      component: (
-        <EmptyDay
-          key={'empty' + key}
-          styles={this.props.styles}
-        />
-      ),
-    });
+    return {
+      component: <EmptyDay key={'empty' + key} sepValue={key} styles={this.props.styles} />
+    };
   }
 
-  renderDayStraggler({key, day}) {
-    return ({
+  renderDayStraggler({ key, day }) {
+    return {
       day,
       // month doesn't matter for stragglers as long as isn't set to current month
       component: (
         <Day
           key={key}
+          sepValue={key}
           day={day}
           styles={this.props.styles}
           disabledDates={() => true}
@@ -161,7 +161,7 @@ export default class DaysGridView extends Component {
           textStyle={this.props.textStyle}
         />
       )
-    });
+    };
   }
 
   // Create grid of days.
@@ -187,55 +187,54 @@ export default class DaysGridView extends Component {
           // first row: start current month's day on the correct weekday
           if (j >= startIndex) {
             if (dayOfMonth <= numDaysInMonth) {
-              daysGrid[i].push(this.renderDayInCurrentMonth(dayOfMonth++));
+              const key =  '' + i + j;
+              daysGrid[i].push(this.renderDayInCurrentMonth(dayOfMonth++, key));
             }
           } else {
             const key = '' + i + j;
-            daysGrid[i].push(this.props.showDayStragglers ?
-              // Show previous month's days
-              this.renderDayStraggler({
-                key,
-                day: numDaysInPrevMonth - startIndex + j + 1,
-              })
-              :
-              //... otherwise blank
-              this.renderEmptyDay(key)
+            daysGrid[i].push(
+              this.props.showDayStragglers
+                ? // Show previous month's days
+                  this.renderDayStraggler({
+                    key,
+                    day: numDaysInPrevMonth - startIndex + j + 1
+                  })
+                : //... otherwise blank
+                  this.renderEmptyDay(key)
             );
           }
         } else {
           if (dayOfMonth <= numDaysInMonth) {
+            const key =  '' + i + j;
             lastFilledRow = i;
-            daysGrid[i].push(this.renderDayInCurrentMonth(dayOfMonth++));
-          }
-          else {
+            daysGrid[i].push(this.renderDayInCurrentMonth(dayOfMonth++, key));
+          } else {
             if (this.props.showDayStragglers && i <= lastFilledRow) {
               // Show next month's days
-              daysGrid[i].push(this.renderDayStraggler({
-                key: '' + i + j,
-                day: dayNextMonth++,
-              }));
+              daysGrid[i].push(
+                this.renderDayStraggler({
+                  key: '' + i + j,
+                  day: dayNextMonth++
+                })
+              );
             }
           }
         }
       }
     }
     return daysGrid;
-  }
+  };
 
   render() {
     const { styles } = this.props;
     const { daysGrid } = this.state;
     const renderedDaysGrid = daysGrid.map((weekRow, i) => (
       <View key={i} style={styles.weekRow}>
-        { weekRow.map(day => day.component ) }
+        {weekRow.map(day => day.component)}
       </View>
     ));
 
-    return (
-      <View style={styles.daysWrapper}>
-        { renderedDaysGrid }
-      </View>
-    );
+    return <View style={styles.daysWrapper}>{renderedDaysGrid}</View>;
   }
 }
 
@@ -253,19 +252,21 @@ DaysGridView.propTypes = {
   selectedDayTextStyle: stylePropType,
   customDatesStyles: PropTypes.oneOfType([
     PropTypes.func,
-    PropTypes.arrayOf(PropTypes.shape({
-      date: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.instanceOf(Date),
-        PropTypes.instanceOf(moment)
-      ]),
-      containerStyle: stylePropType,
-      style: stylePropType,
-      textStyle: stylePropType,
-    })),
+    PropTypes.arrayOf(
+      PropTypes.shape({
+        date: PropTypes.oneOfType([
+          PropTypes.string,
+          PropTypes.instanceOf(Date),
+          PropTypes.instanceOf(moment)
+        ]),
+        containerStyle: stylePropType,
+        style: stylePropType,
+        textStyle: stylePropType
+      })
+    )
   ]),
   disabledDates: PropTypes.oneOfType([PropTypes.array, PropTypes.func]),
   disabledDatesTextStyle: stylePropType,
   minRangeDuration: PropTypes.oneOfType([PropTypes.array, PropTypes.number]),
-  maxRangeDuration: PropTypes.oneOfType([PropTypes.array, PropTypes.number]),
+  maxRangeDuration: PropTypes.oneOfType([PropTypes.array, PropTypes.number])
 };

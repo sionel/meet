@@ -85,8 +85,8 @@ const _setUserInfo = (state: InitialState, action: AnyAction) => {
 
   const newUser: Participant = {
     jitsiId: user.value,
-    videoTrack: user.attributes.videoTrack,
-    audioTrack: user.attributes.audioTrack,
+    videoTrack: null, // user.attributes.videoTrack,
+    audioTrack: null, // user.attributes.audioTrack,
     isMaster: false,
     name: user.attributes.userName,
     nickname: user.attributes?.nickname,

@@ -16,7 +16,7 @@ import MeetApi from '@services/api/MeetApi';
 // import test from './conferenceUtil/test';
 // import { isSuccess } from '@services/types';
 import { actionCreators as ConferenceActions } from '@redux/conference';
-import { actionCreators as ParticipantsActions } from '@redux/participants_copy';
+import { actionCreators as ParticipantsActions, Participant } from '@redux/participants_copy';
 import { actionCreators as MainUserActions } from '@redux/mainUser_copy';
 import { actionCreators as MasterActions } from '@redux/master';
 import { actionCreators as ToastActions } from '@redux/toast';
@@ -42,13 +42,17 @@ const InCallManager =
 const ConferenceScreenContainer: React.FC<
   ConferenceScreenContainerProps
 > = props => {
+
   const {
     navigation,
     route: { params }
   } = props;
+
   let conference: Conference;
+
   const [isConnected, setIsConnected] = useState(false);
   const [endCall, setEndCall] = useState(false);
+  
   const { t } = useTranslation();
   //#region useSelector
   const {
@@ -115,6 +119,21 @@ const ConferenceScreenContainer: React.FC<
 
   const retriveMasters = (token: string) => {
     dispatch(MasterActions.checkMasterList(token));
+    /* 
+    const masterList = MeetApi.getMasterList(token).then(res=>{
+      let masterList: any[] = [];
+      if (isSuccess(res)) {
+        masterList = res.resultData.reduce((a: any[], b: any) => {
+          a.push(b.user);
+          return a;
+        }, []);
+      } else {
+      }
+      dispatch(MasterActions.setMasterList(masterList));
+    })
+    
+    */
+
   };
 
   const changeMasterControlMode = (masterID: string) => {
@@ -142,18 +161,15 @@ const ConferenceScreenContainer: React.FC<
     _addSpeakerListner();
     _connectConference();
     return () => {
-      if (OS === 'ios') {
-        NativeAudio.removeAllListeners(
-          'org.jitsi.meet:features/audio-mode#devices-update'
-        );
-      } else {
-        DeviceEventEmitter.removeAllListeners('onAudioDeviceChanged');
-      }
+      _removeSpeakerListner()
     };
   }, []);
 
-
   useEffect(() => {
+    sendDocumentDataToNewPaticipant(participants)
+  }, [participants.length]);
+
+  const sendDocumentDataToNewPaticipant = (participants:Participant[]) => {
     let plength = participants.length;
     if (documentShare.attributes && plength > 0) {
       room?.sendMessage.documentShareTarget(
@@ -162,7 +178,7 @@ const ConferenceScreenContainer: React.FC<
         mode
       );
     }
-  }, [participants.length]);
+  }
 
   const _connectConference = async () => {
     conference = new Conference();
@@ -179,8 +195,8 @@ const ConferenceScreenContainer: React.FC<
         user_contact: auth.user_contact,
         user_email: auth.user_eamil ? auth.user_eamil : auth.user_default_email,
         avatar: params.avatar,
-        videoTrack: params.tracks[0],
-        audioTrack: params.tracks[1]
+        // videoTrack: params.tracks[0],
+        // audioTrack: params.tracks[1]
       };
 
       await conference.join(
@@ -249,6 +265,18 @@ const ConferenceScreenContainer: React.FC<
   };
   //#endregion
 
+  //#region 리스너 삭제
+  const _removeSpeakerListner = () => {
+    if (OS === 'ios') {
+      NativeAudio.removeAllListeners(
+        'org.jitsi.meet:features/audio-mode#devices-update'
+      );
+    } else {
+      DeviceEventEmitter.removeAllListeners('onAudioDeviceChanged');
+    }
+  }
+  //#endregion
+  
   //#region IOS 블루투스 이어폰 연결 여부
   const _handleIosSpeaker = (event: any) => {
     let enableBluetooth = false;

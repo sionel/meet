@@ -21,6 +21,7 @@ export const ConferenceHandler = (
     // dispatch(participantsActions.joinUser(user));
   },
   leftUser: (id: string) => {
+    
     dispatch(participantsActions.setLeftUser(id));
     dispatch(masterActions.checkMasterList(token));
   },

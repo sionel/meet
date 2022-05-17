@@ -39,6 +39,7 @@ import moment from 'moment';
 import { isSuccess } from '@services/types';
 import { conference } from '@services/api/types';
 
+import { ic_chat, ic_video_b } from '@assets/index';
 const icUser = require('@assets/icons/ic_user.png');
 const icModify = require('@assets/icons/ic_modify.png');
 const icLink = require('@assets/icons/ic_link.png');
@@ -824,14 +825,14 @@ export default function HomeScreenContainer(props: any) {
 
     const chat = {
       name: t('renewal.main_create_messenger'),
-      // icon1: icUser,
+      icon1: ic_chat,
       onClick: () => {
         navigation.navigate('CreateConference');
       }
     };
     const meet = {
       name: t('renewal.main_create_direct_input'),
-      // icon1: icLink,
+      icon1: ic_video_b,
       onClick: () => {
         navigation.navigate('DirectCreateConference');
       }
