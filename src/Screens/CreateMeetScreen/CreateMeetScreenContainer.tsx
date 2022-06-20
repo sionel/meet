@@ -57,6 +57,10 @@ export default function CreateMeetScreenContainer(props: any) {
   const [roomName, setRoomName] = useState('');
 
   const [isPublic, setIsPublic] = useState(true);
+  const [emailInviteList, setEmailInviteList] = useState<{
+    value: string;
+    type: string;
+  }[]>([]);
   const [timePicker, setTimePicker] = useState<'none' | 'start' | 'end'>(
     'none'
   );
@@ -630,16 +634,16 @@ export default function CreateMeetScreenContainer(props: any) {
       );
     } else if (item.value) {
       idx = deletedList.findIndex((i: any) => i.value === item.value);
-      // const invitedList: { type: string; value: string }[] = invited;
-      // const invitedIndex: number = invitedList.findIndex(
-      //   (i: any) => i.value === item.value
-      // );
-      // if (invitedIndex !== -1) {
-      //   const deletedList: any[] = invitedList.filter(
-      //     (v: any, i: number) => i !== invitedIndex
-      //   );
-      //   setInvited([...deletedList]);
-      // }
+      const invitedList: { type: string; value: string }[] = emailInviteList;
+      const invitedIndex: number = invitedList.findIndex(
+        (i: any) => i.value === item.value
+      );
+      if (invitedIndex !== -1) {
+        const deletedEmailList: any[] = invitedList.filter(
+          (v: any, i: number) => i !== invitedIndex
+        );
+        setEmailInviteList([...deletedEmailList]);
+      }
     } else {
       console.log('error');
     }
@@ -669,12 +673,12 @@ export default function CreateMeetScreenContainer(props: any) {
           {...props}
           employee={employee}
           selectedEmployee={selectedEmployee}
-          // invited={invited}
+          emailInviteList={emailInviteList}
           // recents={recents}
           // inviteText={inviteText}
           setSelectMode={setSelectMode}
           setSelectedEmployee={setSelectedEmployee}
-          // setInvited={setInvited}
+          setEmailInviteList={setEmailInviteList}
           // setInviteText={setInviteText}
           // participantList={participantList}
           // setParticipantList={setParticipantList}

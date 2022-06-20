@@ -13,7 +13,7 @@ import { CustomIcon } from '@components/index';
 import { wehagoDummyImageURL, wehagoMainURL } from '@utils/index';
 
 const ic_cancel = require('@assets/icons/ic_cancel_w.png');
-const ic_mail = require('@assets/icons/ic_mail.png');
+const ic_mail = require('@assets/icons/ic_mail_w.png');
 
 const SelectedPreview = (props: any) => {
   const { selectedEmployee, auth, selectEmployee } = props;
@@ -22,9 +22,10 @@ const SelectedPreview = (props: any) => {
   const member: any[] = selectedEmployee.member;
 
   if (Object.keys(group).length > 0)
-    // console.log('1wrjajs fhsjdgfhjksg hks dghkashgfjk');
-  // 선택된 데이터가 없을 시 return null
-  if (Object.keys(group).length + Object.keys(member).length === 0) return null;
+    if (Object.keys(group).length + Object.keys(member).length === 0)
+      // console.log('1wrjajs fhsjdgfhjksg hks dghkashgfjk');
+      // 선택된 데이터가 없을 시 return null
+      return null;
 
   const createFlatList = (data: any[], type: string) => (
     <FlatList
@@ -61,21 +62,37 @@ const SelectedPreview = (props: any) => {
                     <CustomIcon name={'icoMenuPlace'} size={30} />
                   </View>
                 ) : (
-                  <Image
-                    source={
-                      item.value
-                        ? ic_mail
-                        : {
-                            uri: item.profile_url
-                          }
-                    }
-                    style={styles.mailStyle}
-                  />
+                  <View
+                    style={[
+                      styles.mailStyle,
+                      item.value && {
+                        backgroundColor: 'rgb(155,174,199)',
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                      }
+                    ]}
+                  >
+                    <Image
+                      source={
+                        item.value
+                          ? ic_mail
+                          : {
+                              uri: item.profile_url
+                            }
+                      }
+                      style={[
+                        styles.mailStyle,
+                        item.value && {
+                          width: 24,
+                          height: 24,
+                          backgroundColor: 'transparent'
+                        }
+                      ]}
+                    />
+                  </View>
                 )}
                 {item.user_no !== auth.user_no && (
-                  <View
-                    style={styles.cancelContainer}
-                  >
+                  <View style={styles.cancelContainer}>
                     <Image
                       source={ic_cancel}
                       style={{ width: 10, height: 10 }}

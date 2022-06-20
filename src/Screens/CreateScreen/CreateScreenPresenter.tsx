@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Dispatch, Fragment, SetStateAction } from 'react';
 import {
   View,
   Text,
@@ -9,7 +9,9 @@ import {
   Image,
   TouchableOpacity,
   FlatList,
-  ActivityIndicator
+  ActivityIndicator,
+  TextInput,
+  Platform
 } from 'react-native';
 
 import {
@@ -20,48 +22,64 @@ import {
 } from '@components/index';
 import { getT } from '@utils/translateManager';
 
-import icBack from '@assets/icons/ic_back.png';
+import {
+  ic_back as icBack,
+  ic_cancel as icCancel,
+  ic_search as icSearch,
+  ic_cancel2 as icCancel2
+} from '@assets/index';
+
 import btnArrowDown from '@oldassets/buttons/btnArrowDown.png';
+import { useTranslation } from 'react-i18next';
 
 export interface section {
   title: string;
   data: any[];
-  type: 'personal' | 'group' | 'semu' | 'suim' | '';
+  type: 'personal' | 'group' | 'semu';
   collapse: boolean;
   height: Animated.Value;
   zIndex?: number;
 }
 
 interface createProps {
-  onSearch: (key: string) => void;
-  group: section;
-  personal: section;
-  semu: section;
-  suim: section;
+  // onSearch: (key: string) => void;
+  onEditingSearching: () => void;
+  group: any[];
+  personal: any[];
+  semu: any[];
+  // suim: section;
   loaded: boolean;
   indicatorFlag: boolean;
+  keyword: string;
+  tabType: 'personal' | 'group' | 'semu';
   onRefresh: () => void;
   onClickBack: () => void;
-  onClickHeader: (section: section) => void;
+  // onClickHeader: (section: section) => void;
   onClickStartButton: (conference: any) => void;
+  setKeyword: Dispatch<SetStateAction<string>>;
+  setTabType: Dispatch<SetStateAction<'personal' | 'group' | 'semu'>>;
 }
 
 function CreateScreenPresenter(props: createProps) {
   const {
     indicatorFlag,
-    onSearch,
+    onEditingSearching,
     loaded,
     onRefresh,
     group,
     personal,
     semu,
-    suim,
+    // suim,
+    keyword,
+    tabType,
     onClickBack,
-    onClickHeader,
-    onClickStartButton
+    // onClickHeader,
+    onClickStartButton,
+    setKeyword,
+    setTabType
   } = props;
   const a = new Animated.Value(100);
-  const t = getT();
+  const { t } = useTranslation();
 
   return (
     <Fragment>
@@ -73,121 +91,254 @@ function CreateScreenPresenter(props: createProps) {
           color={'#1c90fb'}
           style={styles.indicatoer}
         />
-        <View style={[styles.topTitle]}>
+        <View style={styles.topTitle}>
           <TouchableOpacity onPress={onClickBack}>
             <Image
-              source={icBack}
+              source={icCancel2}
               style={styles.icBack}
               resizeMode="cover"
             />
           </TouchableOpacity>
-          <Text style={styles.HeaderTitleText}>{t('renewal.main_create_messenger')}</Text>
+          <Text style={styles.HeaderTitleText}>
+            {t('renewal.main_create_messenger')}
+          </Text>
           <TouchableOpacity disabled={true}>
             <Text style={styles.emptyText}>확인</Text>
           </TouchableOpacity>
         </View>
-        {/* <View style={styles.header}>
-          <TouchableOpacity style={{ width: '10%' }} onPress={onClickBack}>
-            <Image
-              source={icBack}
-              resizeMode={'contain'}
-              style={{ width: '90%' }}
+        <View
+          style={{
+            height: 52,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#f7f8fa',
+            paddingHorizontal: 20,
+            paddingVertical: 6
+          }}
+        >
+          <View style={styles.search}>
+            <TextInput
+              style={styles.input}
+              returnKeyType="search"
+              value={keyword}
+              onChangeText={setKeyword}
+              onSubmitEditing={() => {
+                onEditingSearching();
+              }}
+              placeholder={t('대화방 명을 검색하세요.')}
+              placeholderTextColor={'rgb(147,147,147)'}
+              // ref={searchRef}
             />
-          </TouchableOpacity>
-          <Text
-            style={{
-              flex: 1,
-              color: '#fff',
-              fontSize: 18,
-              marginHorizontal: 12,
-              fontFamily: 'DOUZONEText50',
-              textAlign: 'center'
-            }}
-          >
-            {'화상회의 생성하기'}
-          </Text>
-          <View style={{ width: '10%' }} />
-        </View> */}
-        <SearchForm onChange={onSearch} />
-        {loaded ? (
-          <SectionList
-            refreshing={false}
-            onRefresh={onRefresh}
-            keyExtractor={(item, index) => index.toString()}
-            sections={[group, personal, semu, suim]}
-            renderSectionHeader={({ section }) => (
-              <TouchableOpacity
-                activeOpacity={1}
-                onPress={() => {
-                  onClickHeader(section);
-                }}
-                style={[styles.roomSectionRow, {display: section.data.length > 0 ? 'flex' : 'none',}]}
-              >
-                <Text style={styles.textStyle}>{section.title}</Text>
-                <TouchableOpacity>
-                  <Image
-                    source={btnArrowDown}
-                    style={styles.icArrowDown}
-                  />
-                </TouchableOpacity>
+            {keyword ? (
+              <TouchableOpacity onPress={() => setKeyword('')}>
+                <View style={styles.cancelIcon}>
+                  <Image source={icCancel} style={styles.icCancel} />
+                </View>
               </TouchableOpacity>
-            )}
-            renderSectionFooter={({ section: { data, height } }) => {
-              return (
-                <Animated.FlatList
-                  keyExtractor={(item, index) => index.toString()}
-                  initialNumToRender={30}
-                  style={[styles.roomNameContainer, {height}]}
-                  data={data}
-                  renderItem={({
-                    item: { profile, uri, first_char, room_title },
-                    item
-                  }) => {
-                    return (
-                      <TouchableOpacity
-                        style={styles.roomNameRowTouch}
-                        onPress={() => {
-                          onClickStartButton(item);
-                        }}
-                      >
-                        <View
-                          style={styles.roomNameRow}
-                        >
-                          {profile ? (
-                            <Image
-                              source={{ uri: uri }}
-                              resizeMode={'cover'}
-                              style={styles.userImage}
-                            />
-                          ) : (
-                            <Text
-                              style={styles.roomFirstWord}
-                            >
-                              {first_char}
-                            </Text>
-                          )}
-                        </View>
-                        <View style={{ flex: 1 }}>
-                          <Text style={{fontFamily: 'DOUZONEText30'}}>{room_title}</Text>
-                        </View>
-                        <View
-                          style={styles.startButton}
-                        >
-                          <Text
-                            style={styles.startText}
-                          >
-                            {t('create_room_start')}
-                          </Text>
-                        </View>
-                      </TouchableOpacity>
-                    );
-                  }}
+            ) : null}
+            <TouchableOpacity onPress={onEditingSearching}>
+              <View style={styles.searchIcon}>
+                <Image
+                  source={icSearch}
+                  resizeMode={'cover'}
+                  style={{ width: 24, height: 24 }}
                 />
+              </View>
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            borderColor: '#e6e6e6',
+            borderBottomWidth: 1,
+            paddingHorizontal: 20,
+          }}
+        >
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => {
+              setTabType('group');
+              // focusOut();
+            }}
+            style={[styles.tabText, tabType === 'group' && styles.selectedTab]}
+          >
+            <Text
+              style={{
+                color: tabType === 'group' ? '#1c90fb' : '#8c8c8c',
+                fontFamily:
+                  tabType === 'group' ? 'DOUZONEText50' : 'DOUZONEText30',
+                fontSize: 14
+              }}
+            >
+              {t('renewal.create_room_group')}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => {
+              setTabType('personal');
+              // focusOut();
+            }}
+            style={[
+              styles.tabText,
+              tabType === 'personal' && styles.selectedTab
+            ]}
+          >
+            <Text
+              style={{
+                color: tabType === 'personal' ? '#1c90fb' : '#8c8c8c',
+                fontFamily:
+                  tabType === 'personal' ? 'DOUZONEText50' : 'DOUZONEText30',
+                fontSize: 14
+              }}
+            >
+              {t('renewal.create_room_oneonone')}
+            </Text>
+          </TouchableOpacity>
+          {semu.length > 0 && (
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={() => {
+                setTabType('semu');
+                // focusOut();
+              }}
+              style={[styles.tabText, tabType === 'semu' && styles.selectedTab]}
+            >
+              <Text
+                style={{
+                  color: tabType === 'semu' ? '#1c90fb' : '#8c8c8c',
+                  fontFamily:
+                    tabType === 'semu' ? 'DOUZONEText50' : 'DOUZONEText30',
+                  fontSize: 14
+                }}
+              >
+                {t('renewal.create_room_semu')}
+              </Text>
+            </TouchableOpacity>
+          )}
+        </View>
+        {loaded ? (
+          <Animated.FlatList
+            keyExtractor={(item, index) => index.toString()}
+            initialNumToRender={30}
+            style={[styles.roomNameContainer]}
+            data={
+              tabType === 'group'
+                ? group
+                : tabType === 'personal'
+                ? personal
+                : semu
+            }
+            renderItem={({
+              item: { profile, uri, first_char, room_title },
+              item
+            }) => {
+              return (
+                <TouchableOpacity
+                  style={styles.roomNameRowTouch}
+                  onPress={() => {
+                    onClickStartButton(item);
+                  }}
+                >
+                  <View style={styles.roomNameRow}>
+                    {profile ? (
+                      <Image
+                        source={{ uri: uri }}
+                        resizeMode={'cover'}
+                        style={styles.userImage}
+                      />
+                    ) : (
+                      <Text style={styles.roomFirstWord}>{first_char}</Text>
+                    )}
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <Text style={{ fontFamily: 'DOUZONEText30' }}>
+                      {room_title}
+                    </Text>
+                  </View>
+                  {/* <View style={styles.startButton}>
+                    <Text style={styles.startText}>
+                      {t('create_room_start')}
+                    </Text>
+                  </View> */}
+                </TouchableOpacity>
               );
             }}
-            renderItem={() => <Fragment />}
           />
         ) : (
+          //   <SectionList
+          //   refreshing={false}
+          //   onRefresh={onRefresh}
+          //   keyExtractor={(item, index) => index.toString()}
+          //   sections={[group, personal, semu, suim]}
+          //   renderSectionHeader={({ section }) => (
+          //     <TouchableOpacity
+          //       activeOpacity={1}
+          //       onPress={() => {
+          //         onClickHeader(section);
+          //       }}
+          //       style={[
+          //         styles.roomSectionRow,
+          //         { display: section.data.length > 0 ? 'flex' : 'none' }
+          //       ]}
+          //     >
+          //       <Text style={styles.textStyle}>{section.title}</Text>
+          //       <TouchableOpacity>
+          //         <Image source={btnArrowDown} style={styles.icArrowDown} />
+          //       </TouchableOpacity>
+          //     </TouchableOpacity>
+          //   )}
+          //   renderSectionFooter={({ section: { data, height } }) => {
+          //     return (
+          //       <Animated.FlatList
+          //         keyExtractor={(item, index) => index.toString()}
+          //         initialNumToRender={30}
+          //         style={[styles.roomNameContainer, { height }]}
+          //         data={data}
+          //         renderItem={({
+          //           item: { profile, uri, first_char, room_title },
+          //           item
+          //         }) => {
+          //           return (
+          //             <TouchableOpacity
+          //               style={styles.roomNameRowTouch}
+          //               onPress={() => {
+          //                 onClickStartButton(item);
+          //               }}
+          //             >
+          //               <View style={styles.roomNameRow}>
+          //                 {profile ? (
+          //                   <Image
+          //                     source={{ uri: uri }}
+          //                     resizeMode={'cover'}
+          //                     style={styles.userImage}
+          //                   />
+          //                 ) : (
+          //                   <Text style={styles.roomFirstWord}>
+          //                     {first_char}
+          //                   </Text>
+          //                 )}
+          //               </View>
+          //               <View style={{ flex: 1 }}>
+          //                 <Text style={{ fontFamily: 'DOUZONEText30' }}>
+          //                   {room_title}
+          //                 </Text>
+          //               </View>
+          //               <View style={styles.startButton}>
+          //                 <Text style={styles.startText}>
+          //                   {t('create_room_start')}
+          //                 </Text>
+          //               </View>
+          //             </TouchableOpacity>
+          //           );
+          //         }}
+          //       />
+          //     );
+          //   }}
+          //   renderItem={() => <Fragment />}
+          // />
           <Placeholder
             mainText={t('create_room_noneresult')}
             subText={t('create_room_nonetext')}
@@ -209,7 +360,7 @@ const styles = StyleSheet.create({
     zIndex: 10
   },
   container: {
-    flex: 1,
+    flex: 0,
     backgroundColor: '#fff'
   },
   header: {
@@ -251,10 +402,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     width: '100%',
-    height: 50,
-    borderColor: '#d1d1d1',
-    borderBottomWidth: 1
-    // backgroundColor: 'rgb(235,238,240)'
+    height: 50
   },
   HeaderTitleText: {
     fontSize: 18,
@@ -328,274 +476,55 @@ const styles = StyleSheet.create({
     color: '#717171',
     fontSize: 12,
     fontFamily: 'DOUZONEText30'
+  },
+  search: {
+    height: 40,
+    backgroundColor: 'rgb(250,250,250)',
+    borderRadius: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#e6e6e6'
+  },
+  input: {
+    flex: 1,
+    height: Platform.OS === 'ios' ? 30 : 50,
+    paddingLeft: 15
+  },
+  cancelIcon: {
+    backgroundColor: '#1c90fb',
+    width: 18,
+    height: 18,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 4
+  },
+  icCancel: {
+    resizeMode: 'cover',
+    width: 14,
+    height: 14
+  },
+  searchIcon: {
+    // paddingTop: 2,
+    width: 30,
+    height: 30,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  tabText: {
+    flex: 1,
+    // width: 111,
+    height: 38,
+    justifyContent: 'center',
+    alignItems: 'center'
+    // borderColor: '#e6e6e6',
+    // borderBottomWidth: 1
+  },
+  selectedTab: {
+    borderColor: '#1c90fb',
+    borderBottomWidth: 2
   }
 });
 
 export default CreateScreenPresenter;
-
-// import React from 'react';
-// import {
-//   View,
-//   StyleSheet,
-//   ScrollView,
-//   RefreshControl,
-//   SectionList,
-//   Animated
-// } from 'react-native';
-// import {
-//   ListItemComp,
-//   SearchForm,
-//   Placeholder,
-//   CustomAlert,
-//   SectionListHeader
-// } from '@components';
-
-// import { getT } from '@utils/translateManager';
-
-// const CreateScreenPresenter = props => {
-//   const personalList = props.list.filter(
-//     item => item.room_type === '1' && item.is_video_access === 'F'
-//   );
-//   const groupList = props.list.filter(
-//     item => item.room_type === '2' && item.is_video_access === 'F'
-//   );
-//   const semuList = props.list.filter(
-//     item => item.room_type === '4' && item.is_video_access === 'F'
-//   );
-//   const suimList = props.list.filter(
-//     item =>
-//       item.room_type === '5' &&
-//       item.is_video_access === 'F' &&
-//       !item.unpaid_status
-//   );
-
-//   const t = getT();
-//   const personalHeight = new Animated.Value(54 * personalList.length);
-//   const groupHeight = new Animated.Value(54 * groupList.length);
-//   const semuHeight = new Animated.Value(54 * semuList.length);
-//   const suimHeight = new Animated.Value(54 * suimList.length);
-//   const SectionFooter = ({ section }) => {
-//     const items = section.data.map((item, index) => (
-//       <ListItemComp
-//         key={item.room_id}
-//         title={item.room_title}
-//         personnel={item.receiver_user_count}
-//         updated={item.update_timestamp}
-//         room_profile_url={item.room_profile_url}
-//         lottie={false}
-//         customLottie={true}
-//         underline={index < section.length ? true : false}
-//         active={item.is_video_access === 'T' ? true : false}
-//         disable={
-//           item.receiver_user_count === 1 && item.room_type === '1'
-//             ? true
-//             : false
-//         }
-//         onClick={() => props.onActivateModal(item.room_id, item.room_title)}
-//       />
-//     ));
-
-//     return (
-//       <Animated.View
-//         style={{
-//           overflow: 'hidden',
-//           height:
-//             section.type === 'group'
-//               ? groupHeight
-//               : section.type === 'personal'
-//               ? personalHeight
-//               : section.type === 'semu'
-//               ? semuHeight
-//               : suimHeight,
-//           justifyContent: 'flex-start'
-//         }}
-//       >
-//         {items}
-//       </Animated.View>
-//     );
-//   };
-
-//   return (
-//     <View style={styles.container}>
-//       {/* 검색바 */}
-//       <SearchForm onChange={props.onSearch} />
-
-//       {props.list.length < 1 ? (
-//         <ScrollView
-//           refreshControl={
-//             <RefreshControl refreshing={false} onRefresh={props.onRefresh} />
-//           }
-//         >
-//           <Placeholder
-//             mainText={t('create_room_noneresult')}
-//             subText={t('create_room_nonetext')}
-//           />
-//         </ScrollView>
-//       ) : (
-//         <SectionList
-//           keyExtractor={(item, index) => index.toString()}
-//           refreshing={false}
-//           onRefresh={props.onRefresh}
-//           style={[
-//             styles.listContainer,
-//             props.hasNotch && {
-//               paddingLeft: props.orientation === 'LANDSCAPE-LEFT' ? 24 : 0,
-//               paddingRight: props.orientation === 'LANDSCAPE-RIGHT' ? 24 : 0
-//             }
-//           ]}
-//           sections={[
-//             {
-//               title: `${t('create_room_group')}(${groupList.length})`,
-//               data: groupList,
-//               length: groupList.length - 1,
-//               type: 'group'
-//             },
-//             {
-//               title: `${t('create_room_oneonone')}(${personalList.length})`,
-//               data: personalList,
-//               length: personalList.length - 1,
-//               type: 'personal'
-//             },
-//             {
-//               title: `${t('create_room_semu')}(${semuList.length})`,
-//               data: semuList,
-//               length: semuList.length - 1,
-//               type: 'semu'
-//             },
-//             {
-//               title: `${t('create_room_suim')}(${suimList.length})`,
-//               data: suimList,
-//               length: suimList.length - 1,
-//               type: 'suim'
-//             }
-//           ]}
-//           renderSectionHeader={({ section }) =>
-//             section.data.length > 0 && (
-//               <SectionListHeader
-//                 title={section.title}
-//                 section={section}
-//                 collapse={true}
-//                 onPress={() => {
-//                   section.type === 'group'
-//                     ? Animated.timing(groupHeight, {
-//                         toValue:
-//                           groupHeight._value === 0
-//                             ? 54 * section.data.length
-//                             : 0,
-//                         duration: 400
-//                       }).start()
-//                     : section.type === 'personal'
-//                     ? Animated.timing(personalHeight, {
-//                         toValue:
-//                           personalHeight._value === 0
-//                             ? 54 * section.data.length
-//                             : 0,
-//                         duration: 400
-//                       }).start()
-//                     : section.type === 'semu'
-//                     ? Animated.timing(semuHeight, {
-//                         toValue:
-//                           semuHeight._value === 0
-//                             ? 54 * section.data.length
-//                             : 0,
-//                         duration: 400
-//                       }).start()
-//                     : Animated.timing(suimHeight, {
-//                         toValue:
-//                           suimHeight._value === 0
-//                             ? 54 * section.data.length
-//                             : 0,
-//                         duration: 400
-//                       }).start();
-//                 }}
-//               />
-//             )
-//           }
-//           renderSectionFooter={SectionFooter}
-//           renderItem={({ item, index, section }) => null}
-//         />
-//       )}
-
-//       <CustomAlert
-//         visible={props.modal}
-//         title={t('alert_title_create')}
-//         width={320}
-//         description={t('alert_text_createroom')}
-//         actions={[
-//           {
-//             name: t('alert_button_cancel'),
-//             action: () => props.onActivateModal(null)
-//           },
-//           {
-//             name: t('alert_button_confirm'),
-//             action: () => props.onCreateConference()
-//           }
-//         ]}
-//         onClose={() => props.onActivateModal(null)}
-//       />
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: 'transparent',
-//     justifyContent: 'center',
-//     alignItems: 'center'
-//   },
-
-//   listContainer: {
-//     width: '100%',
-//     fontFamily: 'DOUZONEText30'
-//   },
-
-//   notResult: {
-//     height: '10%',
-//     justifyContent: 'center',
-//     alignItems: 'center'
-//   },
-
-//   modalWrap: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     backgroundColor: 'rgba(0,0,0, .75)'
-//   },
-
-//   modalContentWrap: {
-//     backgroundColor: '#fff',
-//     width: '100%',
-//     maxWidth: 300,
-//     padding: 0,
-//     shadowColor: '#000',
-//     shadowOffset: {
-//       width: 0,
-//       height: 2
-//     },
-//     shadowOpacity: 0.25,
-//     shadowRadius: 3.84,
-//     elevation: 5
-//   },
-
-//   modalMessage: {
-//     paddingTop: 20,
-//     paddingBottom: 30,
-//     paddingLeft: 20,
-//     paddingRight: 20
-//   },
-
-//   modalButtons: { flexDirection: 'row' },
-//   modalButton: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     paddingTop: 15,
-//     paddingBottom: 15,
-//     marginBottom: -1
-//   },
-//   modalButtonCancel: { backgroundColor: '#f1f1f1' },
-//   modalButtonConfirm: { backgroundColor: '#1C90FB' }
-// });
-
-// export default CreateScreenPresenter;

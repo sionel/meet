@@ -15,9 +15,12 @@ import { wehagoDummyImageURL, wehagoMainURL } from '@utils/index';
 import CustomCheckBox from '@components/renewal/CustomCheckBox';
 import { getT } from '@utils/translateManager';
 
-const ic_building = require('@assets/icons/ic_build.png');
+const ic_company = require('@assets/icons/ic_company.png');
 const ic_empty = require('@assets/icons/ic_empty.png');
-const ic_mail = require('@assets/icons/ic_mail.png');
+const ic_noInvited = require('@assets/icons/ic_NoInvited.png');
+const ic_send = require('@assets/icons/ic_send_w2.png');
+const ic_cancel = require('@assets/icons/ic_cancel.png');
+const ic_mail_w = require('@assets/icons/ic_mail_w.png');
 
 const OrganizationTab = (props: any) => {
   const {
@@ -32,9 +35,9 @@ const OrganizationTab = (props: any) => {
     contacts,
     inviteText,
     setInviteText,
-    // invited,
-    // setInvited,
-    recents,
+    emailInviteList,
+    // setemailInviteList,
+    // recents,
     validateExter,
     exterError,
     focusOut,
@@ -42,6 +45,7 @@ const OrganizationTab = (props: any) => {
     isHorizon
   } = props;
   const t = getT();
+  
   return (
     <Fragment>
       {/* 조직도 */}
@@ -52,16 +56,17 @@ const OrganizationTab = (props: any) => {
               <View
                 style={[styles.lineContainer, { backgroundColor: '#fbfbfb' }]}
               >
-                <Image source={ic_building} />
+                <Image
+                  source={ic_company}
+                  resizeMode={'cover'}
+                  style={{ width: 24, height: 24 }}
+                />
                 {/* <CustomIcon name={'icoCompany'} size={24} /> */}
-                <Text
-                  style={[
-                    styles.textStyle,
-                    { color: '#1c90fb', marginLeft: 4 }
-                  ]}
-                >
-                  {organization.organization_name}({organization.employee_count}
-                  )
+                <Text style={styles.textStyle}>
+                  {`${organization.organization_name} `}
+                </Text>
+                <Text style={[styles.textStyle, { color: '#1c90fb' }]}>
+                  {`${organization.employee_count}`}
                 </Text>
               </View>
               {OrganizationFlatList(organization.children)}
@@ -77,7 +82,9 @@ const OrganizationTab = (props: any) => {
             onTouchStart={() => focusOut()}
           >
             <Image source={ic_empty} style={styles.icEmpty45} />
-            <Text style={styles.searchEmpty}>{t('renewal.organization_org_empty')}</Text>
+            <Text style={styles.searchEmpty}>
+              {t('renewal.organization_org_empty')}
+            </Text>
           </View>
         ) : (
           <SectionList
@@ -125,9 +132,7 @@ const OrganizationTab = (props: any) => {
                   </View>
                   <View style={{ marginLeft: 'auto', width: 30 }}>
                     {item.user_no !== auth.user_no ? (
-                      <View
-                        style={styles.chkboxView}
-                      >
+                      <View style={styles.chkboxView}>
                         <CustomCheckBox
                           color="#ccc"
                           onCheck={() => selectEmployee('member', item)}
@@ -139,6 +144,7 @@ const OrganizationTab = (props: any) => {
                               : false
                           }
                           style={{ width: 18, height: 18 }}
+                          shape={'circle'}
                         />
                       </View>
                     ) : (
@@ -179,7 +185,9 @@ const OrganizationTab = (props: any) => {
                       style={styles.profileImg}
                     />
                     <View style={{ marginHorizontal: 10, flex: 1 }}>
-                      <Text style={{ fontFamily:'DOUZONEText50' }}>
+                      <Text
+                        style={{ fontFamily: 'DOUZONEText30', fontSize: 15 }}
+                      >
                         {item.address_name}
                       </Text>
                       <Text
@@ -191,9 +199,7 @@ const OrganizationTab = (props: any) => {
                       </Text>
                     </View>
                     <View style={{ marginLeft: 'auto', width: 30 }}>
-                      <View
-                        style={styles.chkboxView}
-                      >
+                      <View style={styles.chkboxView}>
                         <CustomCheckBox
                           color="#ccc"
                           onCheck={() => selectEmployee('member', item)}
@@ -205,7 +211,7 @@ const OrganizationTab = (props: any) => {
                               ? true
                               : false
                           }
-                          style={{ width: 18, height: 18 }}
+                          shape={'circle'}
                         />
                       </View>
                     </View>
@@ -230,7 +236,9 @@ const OrganizationTab = (props: any) => {
                   height: '45%'
                 }}
               />
-              <Text style={styles.searchEmpty}>{t('renewal.organization_contacts_empty')}</Text>
+              <Text style={styles.searchEmpty}>
+                {t('renewal.organization_contacts_empty')}
+              </Text>
             </View>
           ) : (
             <SectionList
@@ -264,9 +272,7 @@ const OrganizationTab = (props: any) => {
                       </Text>
                     </View>
                     <View style={{ marginLeft: 'auto', width: 30 }}>
-                      <View
-                        style={styles.chkboxView}
-                      >
+                      <View style={styles.chkboxView}>
                         <CustomCheckBox
                           color="#ccc"
                           onCheck={() => selectEmployee('member', item)}
@@ -274,6 +280,7 @@ const OrganizationTab = (props: any) => {
                             selectedEmployee.member[item.user_no] ? true : false
                           }
                           style={{ width: 18, height: 18 }}
+                          shape={'circle'}
                         />
                       </View>
                     </View>
@@ -285,21 +292,23 @@ const OrganizationTab = (props: any) => {
         //   외부참여자
         (tabType === 'exter' && (
           <View
-            style={{ flex: 1, justifyContent: 'flex-start' }}
+            style={{
+              flex: 1,
+              justifyContent: 'flex-start',
+              paddingHorizontal: 20
+            }}
             onTouchStart={() => focusOut()}
           >
             <View
               style={{
-                paddingHorizontal: '5%',
-                paddingVertical: '2%',
-                height: '20%',
+                paddingVertical: 14,
                 flexDirection: 'column',
-                justifyContent: 'space-between',
-                borderBottomWidth: 2,
-                borderBottomColor: '#8c8c8c'
+                justifyContent: 'space-between'
               }}
             >
-              <Text style={styles.emailInviteView}>{t('renewal.organization_email_invite')}</Text>
+              {/* <Text style={styles.emailInviteView}>
+                {t('renewal.organization_email_invite')}
+              </Text> */}
               <View style={{ flexDirection: 'column', height: 60 }}>
                 <View style={styles.rowView}>
                   <TextInput
@@ -307,7 +316,9 @@ const OrganizationTab = (props: any) => {
                       styles.emailText,
                       inviteText && { borderColor: '#1c90fb' }
                     ]}
-                    placeholder={t('renewal.organization_eamil_input_placeholder')}
+                    placeholder={t(
+                      'renewal.organization_eamil_input_placeholder'
+                    )}
                     autoCapitalize={'none'}
                     autoCompleteType={'email' || 'tel'}
                     onSubmitEditing={() => validateExter()}
@@ -315,23 +326,17 @@ const OrganizationTab = (props: any) => {
                     onChangeText={setInviteText}
                     value={inviteText}
                     ref={sendEmailRef}
+                    placeholderTextColor={'rgb(147,147,147)'}
                   />
                   <TouchableOpacity
-                    style={{
-                      width: 40,
-                      height: 30,
-                      backgroundColor: '#1c90fb',
-                      borderRadius: 5,
-                      alignItems: 'center',
-                      justifyContent: 'center'
-                    }}
+                    style={{ width: 24, height: 24 }}
                     onPress={() => validateExter()}
                   >
                     <Image
-                      source={ic_mail}
+                      source={ic_send}
                       style={{
-                        width: 35,
-                        height: 25,
+                        width: 24,
+                        height: 24,
                         resizeMode: 'cover'
                       }}
                     />
@@ -345,7 +350,7 @@ const OrganizationTab = (props: any) => {
               </View>
             </View>
 
-            {/* {invited.length > 0 && (
+            {/* {emailInviteList.length > 0 && (
               <>
                 <View style={{ backgroundColor: '#f1f2f3' }}>
                   <Text style={{ margin: 10, fontSize: 15 }}>
@@ -355,7 +360,7 @@ const OrganizationTab = (props: any) => {
                 <FlatList
                   showsVerticalScrollIndicator={false}
                   bounces={false}
-                  data={invited}
+                  data={emailInviteList}
                   keyExtractor={(item, index) => String(index)}
                   renderItem={({ item, index }) => {
                     return (
@@ -371,7 +376,7 @@ const OrganizationTab = (props: any) => {
                             }}
                           >
                             <Image
-                              source={ic_mail}
+                              source={ic_send}
                               style={{
                                 width: 18,
                                 height: 18,
@@ -387,26 +392,31 @@ const OrganizationTab = (props: any) => {
                 />
               </>
             )} */}
-            {recents.length > 0 ? (
+            {emailInviteList.length > 0 ? (
               <Fragment>
-                <View style={{ borderBottomWidth: 1, borderColor: '#ccc' }} />
-                <View style={{ backgroundColor: '#f1f2f3' }}>
+                <View>
                   <Text
-                    style={[styles.recentemailText,
+                    style={[
+                      styles.recentemailText,
                       isHorizon && { paddingVertical: '2%' }
                     ]}
                   >
-                    {t('renewal.organization_email_recent')}
+                    {t('초대 이메일')}
                   </Text>
                 </View>
                 <FlatList
                   showsVerticalScrollIndicator={false}
                   bounces={false}
-                  data={recents}
+                  data={emailInviteList}
                   keyExtractor={(item, index) => String(index)}
                   renderItem={({ item, index }) => {
                     return (
-                      <View style={[styles.recentRow, isHorizon && {paddingVertical: '1%'}]}>
+                      <View
+                        style={[
+                          styles.recentRow,
+                          isHorizon && { paddingVertical: '1%' }
+                        ]}
+                      >
                         <View
                           style={{
                             flexDirection: 'row',
@@ -415,15 +425,32 @@ const OrganizationTab = (props: any) => {
                         >
                           {item.type === 'email' && (
                             <View style={styles.mailBg}>
-                              <Image source={ic_mail} style={styles.icMail18} />
+                              <Image
+                                source={ic_mail_w}
+                                style={styles.icMail24}
+                              />
                             </View>
                           )}
-                          <Text style={{ paddingLeft: 10, fontFamily: 'DOUZONEText30' }}>{item.value}</Text>
+                          <Text
+                            style={{
+                              paddingLeft: 10,
+                              fontFamily: 'DOUZONEText30'
+                            }}
+                          >
+                            {item.value}
+                          </Text>
                         </View>
-                        <View
-                          style={styles.chkboxView}
+                        {/* {TODO: 체크 박스 말고 X 버튼으로} */}
+                        <TouchableOpacity
+                          onPress={() => selectEmployee('member', item)}
+                          style={{ width: 18, height: 18 }}
                         >
-                          <CustomCheckBox
+                          <Image
+                            source={ic_cancel}
+                            resizeMode={'cover'}
+                            style={{ width: 18, height: 18 }}
+                          />
+                          {/* <CustomCheckBox
                             color="#ccc"
                             onCheck={() => selectEmployee('member', item)}
                             checked={
@@ -434,8 +461,8 @@ const OrganizationTab = (props: any) => {
                                 : false
                             }
                             style={{ width: 18, height: 18 }}
-                          />
-                        </View>
+                          /> */}
+                        </TouchableOpacity>
                       </View>
                     );
                   }}
@@ -449,11 +476,13 @@ const OrganizationTab = (props: any) => {
                   justifyContent: 'center'
                 }}
               >
-                <Image source={ic_empty} style={styles.icEmpty} />
+                <Image source={ic_noInvited} style={styles.icEmpty} />
                 <Text style={{ margin: 10, fontFamily: 'DOUZONEText30' }}>
                   {t('renewal.organization_email_recent_empty1')}
                 </Text>
-                <Text style={{ textAlign: 'center', fontFamily: 'DOUZONEText30' }}>
+                <Text
+                  style={{ textAlign: 'center', fontFamily: 'DOUZONEText30' }}
+                >
                   {t('renewal.organization_email_recent_empty2')}
                 </Text>
               </View>
@@ -479,9 +508,9 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     // flex: 1,
-    // fontSize: 14,
+    fontSize: 16,
     color: '#000',
-    fontFamily: 'DOUZONEText30'
+    fontFamily: 'DOUZONEText50'
   },
   category: {
     flex: 1,
@@ -489,15 +518,15 @@ const styles = StyleSheet.create({
     paddingTop: 6,
     paddingBottom: 6,
     borderBottomWidth: 1,
-    borderWidth: 1,
-    borderColor: '#ececec',
-    backgroundColor: '#f6f7f8',
+    // borderWidth: 1,
+    // borderColor: '#ececec',
+    backgroundColor: '#fff',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     fontSize: 12,
-    color: '#555555',
-    fontFamily: 'DOUZONEText30'
+    color: '#333',
+    fontFamily: 'DOUZONEText50'
   },
   icEmpty: {
     resizeMode: 'contain',
@@ -509,21 +538,23 @@ const styles = StyleSheet.create({
     width: '45%',
     height: '45%'
   },
-  icMail18: {
-    width: 18,
-    height: 18,
+  icMail24: {
+    width: 24,
+    height: 24,
     resizeMode: 'cover'
   },
   recentRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 5,
     paddingVertical: '2%'
   },
   mailBg: {
-    backgroundColor: '#1c90fb',
-    padding: 5,
+    backgroundColor: 'rgb(155,174,199)',
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
     borderRadius: 20
   },
   selectedEmailRow: {
@@ -533,12 +564,10 @@ const styles = StyleSheet.create({
   },
   emailText: {
     // margin: 10,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    width: '80%',
-    height: 40,
-    paddingHorizontal: '3%',
-    fontFamily: 'DOUZONEText30'
+    flex: 1,
+    height: 18,
+    fontFamily: 'DOUZONEText30',
+    fontSize: 14
   },
   emailError: {
     color: '#fc4c60',
@@ -550,10 +579,14 @@ const styles = StyleSheet.create({
     fontFamily: 'DOUZONEText30'
   },
   rowView: {
+    flex: 1,
+    height: 44,
+    borderRadius: 6,
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    borderColor: '#000'
+    borderWidth: 1,
+    borderColor: '#e6e6e6',
+    paddingHorizontal: 16
   },
   profileImg: {
     width: 40,
@@ -563,24 +596,23 @@ const styles = StyleSheet.create({
     backgroundColor: '#ececec'
   },
   contactSub: {
-    fontSize: 13,
-    color: '#8c8c8c',
+    fontSize: 12,
+    color: 'rgb(147,147,147)',
     marginTop: 3,
     fontFamily: 'DOUZONEText30'
   },
-  searchEmpty: {fontFamily: 'DOUZONEText30'},
-  emailInviteView: { 
-    fontSize: 15, 
-    fontFamily: 'DOUZONEText30' 
-  },
-  recentemailText: {
+  searchEmpty: { fontFamily: 'DOUZONEText30' },
+  emailInviteView: {
     fontSize: 15,
-    paddingHorizontal: '5%',
-    paddingVertical: '3%',
     fontFamily: 'DOUZONEText30'
   },
+  recentemailText: {
+    fontSize: 12,
+    paddingVertical: '3%',
+    fontFamily: 'DOUZONEText50'
+  },
   orgMain: {
-    fontFamily: 'DOUZONEText50' 
+    fontFamily: 'DOUZONEText50'
   },
   orgSub: {
     fontFamily: 'DOUZONEText30',

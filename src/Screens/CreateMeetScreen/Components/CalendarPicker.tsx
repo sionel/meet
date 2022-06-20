@@ -18,7 +18,7 @@ const CalendarPicker: React.FC<CalendarPickerProps> = ({
 }) => {
   const { t } = useTranslation();
   return (
-    <View style={{ paddingTop: 16, height: 300 }}>
+    <View style={styles.calendarContainer}>
       <CalendarPickerComponent
         weekdays={[
           t('renewal.calendar_sun'),
@@ -72,6 +72,13 @@ const CalendarPicker: React.FC<CalendarPickerProps> = ({
 export default CalendarPicker;
 
 const styles = StyleSheet.create({
+  calendarContainer: {
+    paddingTop: 16,
+    height: 300,
+    backgroundColor: '#fff',
+    borderTopStartRadius: 25,
+    borderTopEndRadius: 25
+  },
   selectedTimeButton: {
     backgroundColor: '#127eff',
     marginTop: 30,
@@ -90,7 +97,7 @@ const styles = StyleSheet.create({
   selectedText: {
     backgroundColor: '#1c90fb',
     fontSize: 14,
-    fontFamily: 'DOUZONEText50',
+    fontFamily: 'DOUZONEText50'
   },
   todayText: {
     color: '#1c90fb',

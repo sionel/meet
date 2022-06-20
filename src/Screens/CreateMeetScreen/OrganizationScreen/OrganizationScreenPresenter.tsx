@@ -19,40 +19,42 @@ import OrganizationTab from './Component/OrganizationTab';
 
 const ic_cancel = require('@assets/icons/ic_cancel_w.png');
 
-const ic_arrow_up = require('@assets/icons/ic_arrow_up.png');
-const ic_arrow_down = require('@assets/icons/ic_arrow_down.png');
+const ic_search = require('@assets/icons/ic_search.png');
+const ic_folder_close = require('@assets/icons/ic_folder_close.png');
+const ic_folder_open = require('@assets/icons/ic_folder_open.png');
 const ic_user = require('@assets/icons/ic_user.png');
 
 interface PresenterProps {
-  keyword:string;
-  inviteText:string;
-  tabType:'org' | 'contact' | 'exter';
-  searchedEmployee:any[];
-  contacts:{title: string, data:{}}[];
+  keyword: string;
+  inviteText: string;
+  tabType: 'org' | 'contact' | 'exter';
+  searchedEmployee: any[];
+  contacts: { title: string; data: {} }[];
   selectedEmployee: any;
-  isOrgDataLoaded:boolean;
-  exterError:boolean;
-  isTablet:boolean;
-  isHorizon:boolean;
-  spin:Animated.AnimatedInterpolation;
-  searchRef:RefObject<any>;
-  sendEmailRef:RefObject<any>;
-  openGroup:any;
-  organization:any;
-  organizationEmployee:any;
-  recents:any;
-  t:any;
-  auth:any;
-  doSearch:() => void;
-  validateExter:() => void;
-  focusOut:() => void;
-  participantListAdd:() => void;
-  setTabType:(tap:'org' | 'contact' | 'exter') =>  void;
-  setKeyword:(keyword:string) => void;
-  setInviteText:(invite:string) => void;
-  setOpenGroup:(object:{}) => void;
-  selectEmployee:(type:string, item:any) => void;
-  getOrganizationEmployeeTree:(organization: number) => any;
+  isOrgDataLoaded: boolean;
+  exterError: boolean;
+  isTablet: boolean;
+  isHorizon: boolean;
+  spin: Animated.AnimatedInterpolation;
+  searchRef: RefObject<any>;
+  sendEmailRef: RefObject<any>;
+  openGroup: any;
+  organization: any;
+  organizationEmployee: any;
+  emailInviteList: any[];
+  // recents:any;
+  t: any;
+  auth: any;
+  doSearch: () => void;
+  validateExter: () => void;
+  focusOut: () => void;
+  participantListAdd: () => void;
+  setTabType: (tap: 'org' | 'contact' | 'exter') => void;
+  setKeyword: (keyword: string) => void;
+  setInviteText: (invite: string) => void;
+  setOpenGroup: (object: {}) => void;
+  selectEmployee: (type: string, item: any) => void;
+  getOrganizationEmployeeTree: (organization: number) => any;
   // contactType:'one' | 'email' | 'sms';
   // setContactType:(contactType:'one' | 'email' | 'sms') => void;
 }
@@ -77,7 +79,8 @@ const OrganizationScreenPresenter = (props: PresenterProps) => {
     organizationEmployee,
     // invited,
     // setInvited,
-    recents,
+    // recents,
+    emailInviteList,
     isOrgDataLoaded,
     spin,
     t,
@@ -173,11 +176,11 @@ const OrganizationScreenPresenter = (props: PresenterProps) => {
                           type === 'group'
                             ? openGroup[item.organization_no]
                               ? isParentSelected || isSelected
-                                ? ic_arrow_up
-                                : ic_arrow_down
+                                ? ic_folder_close
+                                : ic_folder_open
                               : isParentSelected || isSelected
-                              ? ic_arrow_down
-                              : ic_arrow_up
+                              ? ic_folder_open
+                              : ic_folder_close
                             : isParentSelected || isSelected
                             ? ic_user
                             : ic_user
@@ -246,6 +249,7 @@ const OrganizationScreenPresenter = (props: PresenterProps) => {
                           color="#ccc"
                           onCheck={() => selectEmployee(type, item)}
                           checked={isSelected}
+                          shape={'circle'}
                         />
                       </View>
                     )}
@@ -350,7 +354,57 @@ const OrganizationScreenPresenter = (props: PresenterProps) => {
                 auth={auth}
                 selectEmployee={selectEmployee}
               />
-              <View style={{ flexDirection: 'row' }}>
+              {tabType !== 'exter' && (
+                <View
+                  style={{
+                    height: 52,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: '#e8ebef',
+                    paddingHorizontal: 20,
+                    paddingVertical: 6
+                  }}
+                >
+                  <View style={styles.search}>
+                    <TextInput
+                      style={styles.input}
+                      returnKeyType="search"
+                      value={keyword}
+                      onChangeText={setKeyword}
+                      onSubmitEditing={() => {
+                        doSearch();
+                      }}
+                      placeholder={t('사용자명을 검색하세요.')}
+                      placeholderTextColor={'rgb(147,147,147)'}
+                      ref={searchRef}
+                    />
+                    {keyword ? (
+                      <TouchableOpacity onPress={() => setKeyword('')}>
+                        <View style={styles.cancleIcon}>
+                          <Image source={ic_cancel} style={styles.icCancel} />
+                        </View>
+                      </TouchableOpacity>
+                    ) : null}
+                    <TouchableOpacity onPress={doSearch}>
+                      <View style={styles.searchIcon}>
+                        <Image
+                          source={ic_search}
+                          resizeMode={'cover'}
+                          style={{ width: 24, height: 24 }}
+                        />
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              )}
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  borderColor: '#e6e6e6',
+                  borderBottomWidth: 1
+                }}
+              >
                 <TouchableOpacity
                   activeOpacity={0.7}
                   onPress={() => {
@@ -365,13 +419,15 @@ const OrganizationScreenPresenter = (props: PresenterProps) => {
                   <Text
                     style={{
                       color: tabType === 'org' ? '#1c90fb' : '#8c8c8c',
-                      fontFamily: 'DOUZONEText30'
+                      fontFamily:
+                        tabType === 'org' ? 'DOUZONEText50' : 'DOUZONEText30',
+                      fontSize: 14
                     }}
                   >
                     {t('renewal.organization_org')}
                   </Text>
                 </TouchableOpacity>
-                {/* <TouchableOpacity
+                <TouchableOpacity
                   activeOpacity={0.7}
                   onPress={() => {
                     setTabType('contact');
@@ -385,7 +441,11 @@ const OrganizationScreenPresenter = (props: PresenterProps) => {
                   <Text
                     style={{
                       color: tabType === 'contact' ? '#1c90fb' : '#8c8c8c',
-                      fontFamily: 'DOUZONEText30'
+                      fontFamily:
+                        tabType === 'contact'
+                          ? 'DOUZONEText50'
+                          : 'DOUZONEText30',
+                      fontSize: 14
                     }}
                   >
                     {t('renewal.organization_contacts')}
@@ -405,12 +465,14 @@ const OrganizationScreenPresenter = (props: PresenterProps) => {
                   <Text
                     style={{
                       color: tabType === 'exter' ? '#1c90fb' : '#8c8c8c',
-                      fontFamily: 'DOUZONEText30'
+                      fontFamily:
+                        tabType === 'exter' ? 'DOUZONEText50' : 'DOUZONEText30',
+                      fontSize: 14
                     }}
                   >
                     {t('renewal.organization_exter')}
                   </Text>
-                </TouchableOpacity> */}
+                </TouchableOpacity>
               </View>
 
               {/* {tabType === 'contact' && (
@@ -482,46 +544,6 @@ const OrganizationScreenPresenter = (props: PresenterProps) => {
                   </View>
                 </Fragment>
               )} */}
-              {tabType !== 'exter' && (
-                <View
-                  style={{
-                    height: 36,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    backgroundColor: '#e8ebef',
-                    padding: 3
-                  }}
-                >
-                  <View style={styles.search}>
-                    <TextInput
-                      style={styles.input}
-                      returnKeyType="search"
-                      value={keyword}
-                      onChangeText={setKeyword}
-                      onSubmitEditing={() => {
-                        doSearch();
-                      }}
-                      ref={searchRef}
-                    />
-                    {keyword ? (
-                      <TouchableOpacity onPress={() => setKeyword('')}>
-                        <View style={styles.cancleIcon}>
-                          <Image source={ic_cancel} style={styles.icCancel} />
-                        </View>
-                      </TouchableOpacity>
-                    ) : null}
-                    <TouchableOpacity onPress={doSearch}>
-                      <View style={styles.searchIcon}>
-                        <CustomIcon
-                          name={'btn_navi_search_press'}
-                          width={20}
-                          height={20}
-                        />
-                      </View>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              )}
               <OrganizationTab
                 tabType={tabType}
                 keyword={keyword}
@@ -530,13 +552,14 @@ const OrganizationScreenPresenter = (props: PresenterProps) => {
                 searchedEmployee={searchedEmployee}
                 selectEmployee={selectEmployee}
                 auth={auth}
+                emailInviteList={emailInviteList}
                 // invited={invited}
                 selectedEmployee={selectedEmployee}
                 contacts={contacts}
                 inviteText={inviteText}
                 // setInvited={setInvited}
                 setInviteText={setInviteText}
-                recents={recents}
+                // recents={recents}
                 validateExter={validateExter}
                 exterError={exterError}
                 focusOut={focusOut}
@@ -660,11 +683,13 @@ const styles = StyleSheet.create({
   },
   search: {
     flex: 1,
-    height: 30,
+    height: 40,
     backgroundColor: 'white',
-    borderRadius: 15,
+    borderRadius: 8,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#e6e6e6'
   },
   input: {
     flex: 1,
@@ -694,16 +719,17 @@ const styles = StyleSheet.create({
     height: 14
   },
   tabText: {
-    flex: 1,
-    height: 40,
+    // flex: 1,
+    width: 111,
+    height: 38,
     justifyContent: 'center',
-    alignItems: 'center',
-    borderColor: '#8c8c8c',
-    borderBottomWidth: 2
+    alignItems: 'center'
+    // borderColor: '#e6e6e6',
+    // borderBottomWidth: 1
   },
   selectedTab: {
     borderColor: '#1c90fb',
-    borderBottomWidth: 3
+    borderBottomWidth: 2
   }
 });
 

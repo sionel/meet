@@ -15,7 +15,7 @@ import {
 import DatePicker from 'react-native-date-picker';
 import { wehagoDummyImageURL } from '@utils/index';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { CalendarPicker } from './Components'
+import { CalendarPicker } from './Components';
 
 import {
   ic_unlock as icUnlock,
@@ -23,7 +23,8 @@ import {
   ic_person_plus as icPersonPlus,
   ic_cancel_w as icCancel_W,
   ic_master_circle as icMasterCircle,
-  ic_attd_circle as icAttdCircle
+  ic_attd_circle as icAttdCircle,
+  ic_master as icMaster
 } from '@assets/index';
 import { useTranslation } from 'react-i18next';
 
@@ -277,7 +278,7 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
         />
 
         <View
-          style={[styles.reserveContainer, switchReserve && { height: '15%' }]}
+          style={[styles.reserveContainer, switchReserve && { height: '16%' }]}
         >
           <View style={styles.rowContainer}>
             <Text style={[styles.ft14Dou50, { fontSize: 15 }]}>
@@ -459,7 +460,6 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
               bounces={false}
               contentContainerStyle={{
                 flexGrow: 1
-                // paddingHorizontal: '5%'
               }}
               data={selectedEmployee.member}
               keyExtractor={(item, index) => String(index)}
@@ -507,7 +507,7 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
                       />
                     </TouchableOpacity>
                     <View
-                      style={[styles.infoBox, isHorizon && { width: '70%' }]}
+                      style={[isMaster ? styles.infoBox : {flex:1}, isHorizon && { width: '70%' }]}
                     >
                       {!item.value && (
                         <Text style={styles.name}>
@@ -535,61 +535,62 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
                           : item.value}
                       </Text>
                     </View>
-                    <TouchableOpacity
-                      style={[
-                        styles.roleContainer,
-                        isMaster && { borderColor: '#01acc1' },
-                        !item.user_no && { borderColor: '#fff' },
-                        isTablet && { width: 140 }
-                      ]}
-                      onPress={() => {
-                        clickChangeRole(item);
-                      }}
-                      disabled={item.user_no === auth.user_no || !item.user_no}
-                    >
-                      {isMaster ? (
-                        <Fragment>
-                          <Text
-                            style={[
-                              styles.maseterText,
-                              isTablet && { fontSize: 14 }
-                            ]}
-                          >
-                            {t('renewal.chatting_master')}
-                          </Text>
-                          <Image
-                            style={[
-                              styles.icMaster,
-                              isTablet && styles.icTabletMaster
-                            ]}
-                            source={icMasterCircle}
-                            resizeMode={'contain'}
-                          />
-                        </Fragment>
-                      ) : item.user_no ? (
-                        <Fragment>
-                          <Image
-                            style={[
-                              styles.icMaster,
-                              isTablet && styles.icTabletMaster
-                            ]}
-                            source={icAttdCircle}
-                            resizeMode={'contain'}
-                          />
+                    {isMaster && (
+                      <TouchableOpacity
+                        style={[
+                          styles.roleContainer,
+                          isMaster && { borderColor: 'rgb(254,188,44)' },
+                          // !item.user_no && { borderColor: '#fff' },
+                          isTablet && { width: 140 }
+                        ]}
+                        // onPress={() => {
+                        //   clickChangeRole(item);
+                        // }}
+                        disabled={
+                          item.user_no === auth.user_no || !item.user_no
+                        }
+                      >
+                        <Image
+                          style={[
+                            styles.icMaster,
+                            isTablet && styles.icTabletMaster
+                          ]}
+                          source={icMaster}
+                          resizeMode={'contain'}
+                        />
+                        <Text
+                          style={[
+                            styles.maseterText,
+                            isTablet && { fontSize: 14 }
+                          ]}
+                        >
+                          {t('renewal.chatting_master')}
+                        </Text>
+                        {/* // : item.user_no ? (
+                        //   <Fragment>
+                        //     <Image
+                        //       style={[
+                        //         styles.icMaster,
+                        //         isTablet && styles.icTabletMaster
+                        //       ]}
+                        //       source={icAttdCircle}
+                        //       resizeMode={'contain'}
+                        //     />
 
-                          <Text
-                            style={[
-                              styles.attendantText,
-                              isTablet && { fontSize: 14 }
-                            ]}
-                          >
-                            {t('renewal.direct_create_participants')}
-                          </Text>
-                        </Fragment>
-                      ) : (
-                        <Fragment></Fragment>
-                      )}
-                    </TouchableOpacity>
+                        //     <Text
+                        //       style={[
+                        //         styles.attendantText,
+                        //         isTablet && { fontSize: 14 }
+                        //       ]}
+                        //     >
+                        //       {t('renewal.direct_create_participants')}
+                        //     </Text>
+                        //   </Fragment>
+                        // ) : (
+                        //   <Fragment></Fragment>
+                        // ) */}
+                      </TouchableOpacity>
+                    )}
                   </View>
                 );
               }}
@@ -600,45 +601,55 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
 
       {(timePicker !== 'none' || datePicker !== 'none') && (
         <SafeAreaView style={styles.bottomComponent}>
-        <View
-          style={[
-            {flex: 1},
-            isHorizon && { width: '66%', left: '17%' }
-          ]}
-        >
-          <View style={{ flex: 1, backgroundColor: '#666', zIndex: 2 }} />
-          {timePicker !== 'none' && (
-            <View style={{height: 332}}>
-              <View style={styles.dateTimePickerHeader}>
-                <Text
-                  style={styles.selectedTimeText}
-                >{`예약시간 설정`}</Text>
-              </View>
-              <View style={styles.timePickerView}>
-                <DatePicker
-                  onDateChange={time => timeChange(time)}
-                  mode={'time'}
-                  date={
-                    timeChangeDetect
-                      ? time
-                      : timeType === 'start'
-                      ? startTime.current
-                      : endTime.current
-                  }
-                  androidVariant={'iosClone'}
-                  dividerHeight={40}
-                />
-              </View>
-              <TouchableOpacity
-                style={styles.selectedTimeButton}
-                onPress={onTimeConfirm}
+          <View
+            style={[
+              { flex: 1, backgroundColor: '#bbb' },
+              isHorizon && { width: '66%', left: '17%' }
+            ]}
+          >
+            <View style={{ flex: 1, backgroundColor: '#bbb', zIndex: 2 }} />
+            {timePicker !== 'none' && (
+              <View
+                style={{
+                  height: 332,
+                  borderTopStartRadius: 25,
+                  borderTopEndRadius: 25,
+                  backgroundColor: '#fff'
+                }}
               >
-                <Text style={styles.selectedButtonText}>{`적용`}</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-          {datePicker !== 'none' && <CalendarPicker onDateChange={onDateChange} startTime={startTime} />}
-        </View>
+                <View style={styles.dateTimePickerHeader}>
+                  <Text style={styles.selectedTimeText}>{`예약시간 설정`}</Text>
+                </View>
+                <View style={styles.timePickerView}>
+                  <DatePicker
+                    onDateChange={time => timeChange(time)}
+                    mode={'time'}
+                    date={
+                      timeChangeDetect
+                        ? time
+                        : timeType === 'start'
+                        ? startTime.current
+                        : endTime.current
+                    }
+                    androidVariant={'iosClone'}
+                    dividerHeight={40}
+                  />
+                </View>
+                <TouchableOpacity
+                  style={styles.selectedTimeButton}
+                  onPress={onTimeConfirm}
+                >
+                  <Text style={styles.selectedButtonText}>{`적용`}</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+            {datePicker !== 'none' && (
+              <CalendarPicker
+                onDateChange={onDateChange}
+                startTime={startTime}
+              />
+            )}
+          </View>
         </SafeAreaView>
       )}
     </Fragment>
@@ -830,8 +841,8 @@ const styles = StyleSheet.create({
     height: 14
   },
   icMaster: {
-    width: 20,
-    height: 20
+    width: 14,
+    height: 14
   },
   icTabletMaster: {
     width: 30,
@@ -839,29 +850,30 @@ const styles = StyleSheet.create({
   },
   roleContainer: {
     flexDirection: 'row',
-    // backgroundColor: '#febc2c',
-    borderColor: '#f49750',
+    backgroundColor: 'rgb(254,188,44)',
+    borderColor: 'rgb(254,188,44)',
     borderWidth: 1,
-    justifyContent: 'space-evenly',
+    justifyContent: 'center',
     alignItems: 'center',
-    width: 61,
-    borderRadius: 15
+    width: 57,
+    height: 20,
+    borderRadius: 28
   },
   maseterText: {
-    fontSize: 12,
-    lineHeight: 15,
+    fontSize: 11,
+    // lineHeight: 15,
     letterSpacing: -0.22,
-    color: '#01acc1',
+    color: '#fff',
     fontFamily: 'DOUZONEText50',
-    paddingLeft: '5%'
+    paddingLeft: 2
   },
   attendantText: {
-    fontSize: 12,
+    fontSize: 11,
     lineHeight: 15,
     letterSpacing: -0.22,
     color: '#f49750',
     fontFamily: 'DOUZONEText50',
-    paddingRight: '5%'
+    paddingRight: 2
   },
   extText: {
     fontSize: 10,

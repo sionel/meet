@@ -20,27 +20,31 @@ import { wehagoDummyImageURL, wehagoMainURL } from '@utils/index';
 
 import { MainNavigationProps } from '@navigations/MainStack';
 import { isSuccess } from '@services/types';
+import { useTranslation } from 'react-i18next';
 
 export default function CreateScreenContainer(props: any) {
-  const initSection: section = {
-    data: [],
-    title: '',
-    type: '',
-    collapse: true,
-    height: new Animated.Value(0),
-    zIndex: 0
-  };
-  const t = getT();
+  // const initSection: section = {
+  //   data: [],
+  //   title: '',
+  //   type: '',
+  //   collapse: true,
+  //   height: new Animated.Value(0),
+  //   zIndex: 0
+  // };
+  const { t } = useTranslation();
 
-  const [group, setGroup] = useState<section>(initSection);
-  const [personal, setPersonal] = useState<section>(initSection);
-  const [semu, setSemu] = useState<section>(initSection);
-  const [suim, setSuim] = useState<section>(initSection);
+  const [group, setGroup] = useState<any[]>([]);
+  const [personal, setPersonal] = useState<any[]>([]);
+  const [semu, setSemu] = useState<any[]>([]);
+  // const [suim, setSuim] = useState<section>(initSection);
   const [loaded, setLoaded] = useState(false);
   const [indicatorFlag, setIndicatorFlag] = useState(false);
   const [wetalkList, setWetalkList] = useState<any[]>([]);
-  const [keyword, setKeyword] = useState('');
+  const [keyword, setKeyword] = useState<string>('');
   const [searchList, setSearchList] = useState<any[]>([]);
+  const [tabType, setTabType] = useState<'personal' | 'group' | 'semu'>(
+    'group'
+  );
 
   const { auth, alert } = useSelector((state: RootState) => {
     const { auth } = state.user;
@@ -90,61 +94,57 @@ export default function CreateScreenContainer(props: any) {
     const semuList = customList.filter(
       (item: any) => item.room_type === '4' && item.is_video_access === 'F'
     );
-    const suimList = customList.filter(
-      (item: any) =>
-        item.room_type === '5' &&
-        item.is_video_access === 'F' &&
-        !item.unpaid_status
-    );
 
-    const personalData: section = {
-      data: personalList,
-      title: `${t('create_room_oneonone')}(${personalList.length})`,
-      type: 'personal',
-      collapse: false,
-      height: new Animated.Value(50 * personalList.length),
-      zIndex: 1
-    };
-    const groupData: section = {
-      data: groupList,
-      title: `${t('create_room_group')}(${groupList.length})`,
-      type: 'group',
-      collapse: false,
-      height: new Animated.Value(50 * groupList.length),
-      zIndex: 2
-    };
-    const semuData: section = {
-      data: semuList,
-      title: `${t('create_room_semu')}(${semuList.length})`,
-      type: 'semu',
-      collapse: false,
-      height: new Animated.Value(50 * semuList.length),
-      zIndex: 3
-    };
-    const suimData: section = {
-      data: suimList,
-      title: `${t('create_room_suim')}(${suimList.length})`,
-      type: 'suim',
-      collapse: false,
-      height: new Animated.Value(50 * suimList.length),
-      zIndex: 4
-    };
+
+    // const suimList = customList.filter(
+    //   (item: any) =>
+    //     item.room_type === '5' &&
+    //     item.is_video_access === 'F' &&
+    //     !item.unpaid_status
+    // );
+
+    // const personalData: section = {
+    //   data: personalList,
+    //   title: `${t('create_room_oneonone')}(${personalList.length})`,
+    //   type: 'personal',
+    //   collapse: false,
+    //   height: new Animated.Value(50 * personalList.length),
+    //   zIndex: 1
+    // };
+    // const groupData: section = {
+    //   data: groupList,
+    //   title: `${t('create_room_group')}(${groupList.length})`,
+    //   type: 'group',
+    //   collapse: false,
+    //   height: new Animated.Value(50 * groupList.length),
+    //   zIndex: 2
+    // };
+    // const semuData: section = {
+    //   data: semuList,
+    //   title: `${t('create_room_semu')}(${semuList.length})`,
+    //   type: 'semu',
+    //   collapse: false,
+    //   height: new Animated.Value(50 * semuList.length),
+    //   zIndex: 3
+    // };
+    // const suimData: section = {
+    //   data: suimList,
+    //   title: `${t('create_room_suim')}(${suimList.length})`,
+    //   type: 'suim',
+    //   collapse: false,
+    //   height: new Animated.Value(50 * suimList.length),
+    //   zIndex: 4
+    // };
 
     Promise.all([
-      setPersonal(personalData),
-      setGroup(groupData),
-      setSemu(semuData),
-      setSuim(suimData)
+      setPersonal(personalList),
+      setGroup(groupList),
+      setSemu(semuList)
+      // setSuim(suimData)
     ]).then(() => {
       setLoaded(true);
     });
   }, [wetalkList, searchList]);
-  useEffect(() => {
-    const wetalk = wetalkList.filter((item: any) =>
-      item.room_title.toLowerCase().includes(keyword.toLowerCase())
-    );
-    setSearchList(wetalk);
-  }, [keyword]);
 
   const dispatch = useDispatch();
   const setAlert = (params: alertParam) =>
@@ -153,30 +153,30 @@ export default function CreateScreenContainer(props: any) {
   const onClickBack = () => {
     navigation.goBack();
   };
-  const onClickHeader = (section: section) => {
-    Animated.timing(section.height, {
-      toValue: !section.collapse ? 0 : section.data.length * 50,
-      useNativeDriver: false,
-      duration: 400
-    }).start();
+  // const onClickHeader = (section: section) => {
+  //   Animated.timing(section.height, {
+  //     toValue: !section.collapse ? 0 : section.data.length * 50,
+  //     useNativeDriver: false,
+  //     duration: 400
+  //   }).start();
 
-    switch (section.type) {
-      case 'personal':
-        setPersonal({ ...section, collapse: !section.collapse });
-        break;
-      case 'group':
-        setGroup({ ...section, collapse: !section.collapse });
-        break;
-      case 'semu':
-        setSemu({ ...section, collapse: !section.collapse });
-        break;
-      case 'suim':
-        setSuim({ ...section, collapse: !section.collapse });
-        break;
-      default:
-        break;
-    }
-  };
+  //   switch (section.type) {
+  //     case 'personal':
+  //       setPersonal({ ...section, collapse: !section.collapse });
+  //       break;
+  //     case 'group':
+  //       setGroup({ ...section, collapse: !section.collapse });
+  //       break;
+  //     case 'semu':
+  //       setSemu({ ...section, collapse: !section.collapse });
+  //       break;
+  //     case 'suim':
+  //       setSuim({ ...section, collapse: !section.collapse });
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // };
   const onClickStartButton = (conference: any) => {
     const message = t('alert_text_createroom');
     const onConfirm = () => {
@@ -284,21 +284,34 @@ export default function CreateScreenContainer(props: any) {
       }
     }
   };
+
+  const handleEditingSearching = () => {
+    const wetalk = wetalkList.filter((item: any) =>
+      item.room_title.toLowerCase().includes(keyword.toLowerCase())
+    );
+    setSearchList(wetalk);
+  };
+
   return (
     <CreateScreenPresenter
       {...{
         searchList,
         loaded,
         onClickBack,
-        onClickHeader,
+        // onClickHeader,
         onRefresh,
         onSearch,
         group,
         personal,
         semu,
-        suim,
+        // suim,
         indicatorFlag,
-        onClickStartButton
+        onClickStartButton,
+        onEditingSearching: handleEditingSearching,
+        keyword,
+        setKeyword,
+        tabType,
+        setTabType
       }}
     />
   );

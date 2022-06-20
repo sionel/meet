@@ -18,8 +18,8 @@ const OrganizationScreenContainer = (props: any) => {
     employee,
     selectedEmployee,
     setSelectedEmployee,
-    // invited,
-    // setInvited,
+    emailInviteList,
+    setEmailInviteList,
     // inviteText,
     // setInviteText,
     // participantList,
@@ -58,15 +58,15 @@ const OrganizationScreenContainer = (props: any) => {
 
   const t = getT();
 
-  const { recents, auth, isHorizon } = useSelector((state: RootState) => ({
-    recents: state.recents.recents,
+  const { auth, isHorizon } = useSelector((state: RootState) => ({
+    // recents: state.recents.recents,
     auth: state.user.auth,
     isHorizon: state.orientation.isHorizon
   }));
 
   const dispatch = useDispatch();
-  const setRecents = (recents: Object) =>
-    dispatch(RecentsActions.setRecents(recents));
+  // const setRecents = (recents: Object) =>
+  //   dispatch(RecentsActions.setRecents(recents));
 
   //#region 검색 이벤트
   const doSearch = async () => {
@@ -143,45 +143,40 @@ const OrganizationScreenContainer = (props: any) => {
       });
 
       if (idx !== -1) {
-        tmpList = selectedList
-          .filter((v, i) => i !== idx)
-          .map(user => {
-            const data: PartialUserInfoParam = {
-              portal_id: user.portal_id,
-              rank_name: user.rank_name,
-              user_no: user.user_no,
-              user_name: user.user_name ? user.user_name : user.user,
-              profile_url: user.profile_url
-                ? user.profile_url
-                : wehagoDummyImageURL,
-              full_path: user.user_no
-                ? user.full_path
-                : user.user_name !== null
-                ? user.user
-                : '',
-              user_type: user.user_type === 2 ? 'ext' : 'org',
-              is_master: user.is_master
-            };
-            return data;
-          });
+        tmpList = selectedList.filter((v, i) => i !== idx);
       } else {
         item.is_master = false;
-        selectedList.push({
-          portal_id: item.portal_id,
-          rank_name: item.rank_name,
-          user_no: item.user_no,
-          user_name: item.user_name ? item.user_name : item.user,
-          profile_url: item.profile_url
-            ? wehagoMainURL + item.profile_url
-            : wehagoDummyImageURL,
-          full_path: item.user_no
-            ? item.full_path
-            : item.user_name !== null
-            ? item.user
-            : '',
-          user_type: item.user_type === 2 ? 'ext' : 'org',
-          is_master: false
-        });
+        if (item.user_no) {
+          selectedList.push({
+            portal_id: item.portal_id,
+            rank_name: item.rank_name,
+            user_no: item.user_no,
+            user_name: item.user_name ? item.user_name : item.user,
+            profile_url: item.profile_url
+              ? wehagoMainURL + item.profile_url
+              : wehagoDummyImageURL,
+            full_path: item.user_no
+              ? item.full_path
+              : item.user_name !== null
+              ? item.user
+              : '',
+            user_type: item.user_type === 2 ? 'ext' : 'org',
+            is_master: false
+          });
+        } else if (item.address_service_no) {
+          selectedList.push({
+            address_service_no: item.address_service_no,
+            user_name: item.address_name,
+            profile_url: item.profile_image
+              ? wehagoMainURL + item.profile_image
+              : wehagoDummyImageURL,
+            user_type: item.user_type === 2 ? 'ext' : 'org',
+            emailinfolist: item.emailinfolist,
+            is_master: false
+          });
+        } else {
+          console.log('email push');
+        }
       }
 
       setSelectedEmployee({
@@ -189,18 +184,18 @@ const OrganizationScreenContainer = (props: any) => {
         group: selectedEmployee.group
       });
 
-      // const invitedList: { type: string; value: string }[] = invited;
-      // let tmpList2: { type: string; value: string }[] = [];
-      // let idx2 = invitedList.findIndex((i: any) => i.value === item.value);
-      // if (item.type) {
-      //   if (idx2 !== -1) {
-      //     tmpList2 = invitedList.filter((v, i) => i !== idx2);
-      //     setInvited([...tmpList2]);
-      //   } else {
-      //     invitedList.push(item);
-      //     setInvited([...invitedList]);
-      //   }
-      // }
+      const invitedList: { type: string; value: string }[] = emailInviteList;
+      let tmpList2: { type: string; value: string }[] = [];
+      let idx2 = invitedList.findIndex((i: any) => i.value === item.value);
+      if (item.type) {
+        if (idx2 !== -1) {
+          tmpList2 = invitedList.filter((v, i) => i !== idx2);
+          setEmailInviteList([...tmpList2]);
+        } else {
+          invitedList.push(item);
+          setEmailInviteList([...invitedList]);
+        }
+      }
     } else {
       // 조직 선택 시
       const newItem = JSON.parse(JSON.stringify(selectedEmployee.group));
@@ -241,50 +236,49 @@ const OrganizationScreenContainer = (props: any) => {
     let value = inviteText;
     let type = 'error';
     let flag = false;
-    const numReg1 = /^\d{2,3}-\d{3,4}-\d{4}/;
-    const numReg2 = /^01\d{9,11}/;
+    // const numReg1 = /^\d{2,3}-\d{3,4}-\d{4}/;
+    // const numReg2 = /^01\d{9,11}/;
     const emailReg =
       /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
-    if (inviteText.match(numReg1)) {
-      type = 'number';
-      flag = true;
-    } else if (inviteText.match(numReg2)) {
-      value =
-        value.length <= 10
-          ? value.replace(/(\d{3})(\d{3})(\d{3,4})/g, '$1-$2-$3')
-          : value.replace(/(\d{3})(\d{4})(\d{4})/g, '$1-$2-$3');
-      type = 'number';
-      flag = true;
-    } else if (inviteText.match(emailReg)) {
+    // if (inviteText.match(numReg1)) {
+    //   type = 'number';
+    //   flag = true;
+    // } else if (inviteText.match(numReg2)) {
+    //   value =
+    //     value.length <= 10
+    //       ? value.replace(/(\d{3})(\d{3})(\d{3,4})/g, '$1-$2-$3')
+    //       : value.replace(/(\d{3})(\d{4})(\d{4})/g, '$1-$2-$3');
+    //   type = 'number';
+    //   flag = true;
+    // } else
+    if (inviteText.match(emailReg)) {
       type = 'email';
       flag = true;
     }
 
     if (flag) {
-      // const invitedList: { type: string; value: string }[] = invited;
-      // let idx: number = invitedList.findIndex(
-      //   (i: any) => i.value === inviteText
-      // );
+      const invitedList: { type: string; value: string }[] = emailInviteList;
+      let invitedIdx: number = invitedList.findIndex(
+        (i: any) => i.value === inviteText
+      );
       const selectedList: any[] = selectedEmployee.member;
-      let idx: number = selectedList.findIndex(
+      let selectedListIdx: number = selectedList.findIndex(
         (i: any) => i.value === inviteText
       );
 
-      if (idx !== -1) {
-        // setInvited([...invited]);
+      if (invitedIdx !== -1) {
+        emailInviteList.filter((v: any, i: number) => i !== invitedIdx);
+      } else {
+        emailInviteList.push({type, value});
+      }
+
+      if (selectedListIdx !== -1) {
         setExterError(true);
       } else {
-        // setInvited([
-        //   ...invited,
-        //   {
-        //     type,
-        //     value
-        //   }
-        // ]);
         selectedList.push({ type, value });
         setExterError(false);
       }
-      setRecents({ type, value });
+      // setRecents({ type, value });
       setSelectedEmployee({ member: selectedList, group: {} });
       setInviteText('');
     } else {
@@ -368,7 +362,8 @@ const OrganizationScreenContainer = (props: any) => {
       selectedEmployee={selectedEmployee}
       getOrganizationEmployeeTree={getOrganizationEmployeeTree}
       organizationEmployee={organizationEmployee}
-      recents={recents}
+      emailInviteList={emailInviteList}
+      // recents={recents}
       isOrgDataLoaded={isOrgDataLoaded}
       spin={spin}
       t={t}

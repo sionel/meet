@@ -53,3 +53,6 @@ export { default as wehago_logo } from './logos/wehago_login.png';
 export { default as ic_chat } from './icons/ic_chat.png';
 export { default as ic_video_b } from './icons/ic_video_b.png';
 export { default as ic_unlock } from './icons/ic_unlock.png';
+export { default as ic_search } from './icons/ic_search.png';
+export { default as ic_cancel2 } from './icons/ic_cancel2.png';
+
