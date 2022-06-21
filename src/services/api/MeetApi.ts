@@ -308,11 +308,11 @@ export default {
       }
     };
     const response = await Axios(url, data);
-    if (!isSuccess(response)) {
+    if (response?.resultMsg) {
       console.warn('7.deleteConferenceRoom : ', response);
       return response;
     } else {
-      return response;
+      return true;
     }
   },
   // 3-8 화상회의방 종료 리스트 조회

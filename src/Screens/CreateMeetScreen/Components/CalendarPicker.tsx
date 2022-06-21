@@ -79,21 +79,21 @@ const styles = StyleSheet.create({
     borderTopStartRadius: 25,
     borderTopEndRadius: 25
   },
-  selectedTimeButton: {
-    backgroundColor: '#127eff',
-    marginTop: 30,
-    height: 48,
-    width: 335,
-    alignSelf: 'center',
-    borderRadius: 28,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  selectedButtonText: {
-    color: '#fff',
-    fontFamily: 'DOUZONEText50',
-    fontSize: 14
-  },
+  // selectedTimeButton: {
+  //   backgroundColor: '#127eff',
+  //   marginTop: 30,
+  //   height: 48,
+  //   width: 335,
+  //   alignSelf: 'center',
+  //   borderRadius: 28,
+  //   alignItems: 'center',
+  //   justifyContent: 'center'
+  // },
+  // selectedButtonText: {
+  //   color: '#fff',
+  //   fontFamily: 'DOUZONEText50',
+  //   fontSize: 14
+  // },
   selectedText: {
     backgroundColor: '#1c90fb',
     fontSize: 14,

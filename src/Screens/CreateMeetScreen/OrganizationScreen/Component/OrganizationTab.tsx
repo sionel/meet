@@ -9,18 +9,23 @@ import {
   Alert,
   SectionList,
   Text,
-  TextInput
+  TextInput,
+  Platform
 } from 'react-native';
 import { wehagoDummyImageURL, wehagoMainURL } from '@utils/index';
 import CustomCheckBox from '@components/renewal/CustomCheckBox';
 import { getT } from '@utils/translateManager';
+import { useTranslation } from 'react-i18next';
 
-const ic_company = require('@assets/icons/ic_company.png');
-const ic_empty = require('@assets/icons/ic_empty.png');
-const ic_noInvited = require('@assets/icons/ic_NoInvited.png');
-const ic_send = require('@assets/icons/ic_send_w2.png');
-const ic_cancel = require('@assets/icons/ic_cancel.png');
-const ic_mail_w = require('@assets/icons/ic_mail_w.png');
+import {
+  ic_company,
+  ic_empty,
+  ic_NoInvited,
+  ic_send_black,
+  ic_send_gray,
+  ic_cancel,
+  ic_mail_w
+} from '@assets/index';
 
 const OrganizationTab = (props: any) => {
   const {
@@ -42,10 +47,14 @@ const OrganizationTab = (props: any) => {
     exterError,
     focusOut,
     sendEmailRef,
-    isHorizon
+    isHorizon,
+    errorMsg,
+    setExterError,
+    exterInputBlur,
+    setExterInputBlur
   } = props;
-  const t = getT();
-  
+  const { t } = useTranslation();
+
   return (
     <Fragment>
       {/* 조직도 */}
@@ -306,16 +315,21 @@ const OrganizationTab = (props: any) => {
                 justifyContent: 'space-between'
               }}
             >
-              {/* <Text style={styles.emailInviteView}>
-                {t('renewal.organization_email_invite')}
-              </Text> */}
-              <View style={{ flexDirection: 'column', height: 60 }}>
-                <View style={styles.rowView}>
+              <View
+                style={{
+                  flexDirection: 'column',
+                  minHeight: 44
+                }}
+              >
+                <View
+                  style={[
+                    styles.rowView,
+                    !exterInputBlur && inviteText && { borderColor: '#1c90fb' },
+                    exterError && { borderColor: 'rgb(252,76,96)' }
+                  ]}
+                >
                   <TextInput
-                    style={[
-                      styles.emailText,
-                      inviteText && { borderColor: '#1c90fb' }
-                    ]}
+                    style={[styles.emailText, Platform.OS === 'ios' && {height: 18}]}
                     placeholder={t(
                       'renewal.organization_eamil_input_placeholder'
                     )}
@@ -323,7 +337,12 @@ const OrganizationTab = (props: any) => {
                     autoCompleteType={'email' || 'tel'}
                     onSubmitEditing={() => validateExter()}
                     clearButtonMode={'always'}
-                    onChangeText={setInviteText}
+                    onChangeText={text => {
+                      setInviteText(text);
+                      setExterInputBlur(false);
+                      exterError && setExterError(false);
+                    }}
+                    onBlur={() => setExterInputBlur(true)}
                     value={inviteText}
                     ref={sendEmailRef}
                     placeholderTextColor={'rgb(147,147,147)'}
@@ -333,7 +352,7 @@ const OrganizationTab = (props: any) => {
                     onPress={() => validateExter()}
                   >
                     <Image
-                      source={ic_send}
+                      source={inviteText !== '' ? ic_send_black : ic_send_gray}
                       style={{
                         width: 24,
                         height: 24,
@@ -343,55 +362,11 @@ const OrganizationTab = (props: any) => {
                   </TouchableOpacity>
                 </View>
                 {exterError && (
-                  <Text style={styles.emailError}>
-                    {t('renewal.organization_eamil_input_error')}
-                  </Text>
+                  <Text style={styles.emailError}>{errorMsg}</Text>
                 )}
               </View>
             </View>
 
-            {/* {emailInviteList.length > 0 && (
-              <>
-                <View style={{ backgroundColor: '#f1f2f3' }}>
-                  <Text style={{ margin: 10, fontSize: 15 }}>
-                    {t('선택된 이메일')}
-                  </Text>
-                </View>
-                <FlatList
-                  showsVerticalScrollIndicator={false}
-                  bounces={false}
-                  data={emailInviteList}
-                  keyExtractor={(item, index) => String(index)}
-                  renderItem={({ item, index }) => {
-                    return (
-                      <View
-                        style={styles.selectedEmailRow}
-                      >
-                        {item.type === 'email' && (
-                          <View
-                            style={{
-                              backgroundColor: '#1c90fb',
-                              padding: 5,
-                              borderRadius: 20
-                            }}
-                          >
-                            <Image
-                              source={ic_send}
-                              style={{
-                                width: 18,
-                                height: 18,
-                                resizeMode: 'cover'
-                              }}
-                            />
-                          </View>
-                        )}
-                        <Text style={{ paddingLeft: 10 }}>{item.value}</Text>
-                      </View>
-                    );
-                  }}
-                />
-              </>
-            )} */}
             {emailInviteList.length > 0 ? (
               <Fragment>
                 <View>
@@ -476,7 +451,7 @@ const OrganizationTab = (props: any) => {
                   justifyContent: 'center'
                 }}
               >
-                <Image source={ic_noInvited} style={styles.icEmpty} />
+                <Image source={ic_NoInvited} style={styles.icEmpty} />
                 <Text style={{ margin: 10, fontFamily: 'DOUZONEText30' }}>
                   {t('renewal.organization_email_recent_empty1')}
                 </Text>
@@ -563,25 +538,22 @@ const styles = StyleSheet.create({
     padding: 10
   },
   emailText: {
-    // margin: 10,
     flex: 1,
-    height: 18,
     fontFamily: 'DOUZONEText30',
-    fontSize: 14
+    fontSize: 14,
+    color: '#333'
   },
   emailError: {
     color: '#fc4c60',
     fontSize: 12,
-    paddingLeft: '1%',
-    paddingTop: -10,
-    // marginTop: -10,
-    paddingBottom: 10,
+    marginTop: 4,
     fontFamily: 'DOUZONEText30'
   },
   rowView: {
     flex: 1,
-    height: 44,
+    minHeight: 44,
     borderRadius: 6,
+    backgroundColor: '#fff',
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,

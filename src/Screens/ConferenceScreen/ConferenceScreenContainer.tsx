@@ -16,7 +16,10 @@ import MeetApi from '@services/api/MeetApi';
 // import test from './conferenceUtil/test';
 // import { isSuccess } from '@services/types';
 import { actionCreators as ConferenceActions } from '@redux/conference';
-import { actionCreators as ParticipantsActions, Participant } from '@redux/participants_copy';
+import {
+  actionCreators as ParticipantsActions,
+  Participant
+} from '@redux/participants_copy';
 import { actionCreators as MainUserActions } from '@redux/mainUser_copy';
 import { actionCreators as MasterActions } from '@redux/master';
 import { actionCreators as ToastActions } from '@redux/toast';
@@ -42,7 +45,6 @@ const InCallManager =
 const ConferenceScreenContainer: React.FC<
   ConferenceScreenContainerProps
 > = props => {
-
   const {
     navigation,
     route: { params }
@@ -52,7 +54,7 @@ const ConferenceScreenContainer: React.FC<
 
   const [isConnected, setIsConnected] = useState(false);
   const [endCall, setEndCall] = useState(false);
-  
+
   const { t } = useTranslation();
   //#region useSelector
   const {
@@ -133,7 +135,6 @@ const ConferenceScreenContainer: React.FC<
     })
     
     */
-
   };
 
   const changeMasterControlMode = (masterID: string) => {
@@ -161,15 +162,15 @@ const ConferenceScreenContainer: React.FC<
     _addSpeakerListner();
     _connectConference();
     return () => {
-      _removeSpeakerListner()
+      _removeSpeakerListner();
     };
   }, []);
 
   useEffect(() => {
-    sendDocumentDataToNewPaticipant(participants)
+    sendDocumentDataToNewPaticipant(participants);
   }, [participants.length]);
 
-  const sendDocumentDataToNewPaticipant = (participants:Participant[]) => {
+  const sendDocumentDataToNewPaticipant = (participants: Participant[]) => {
     let plength = participants.length;
     if (documentShare.attributes && plength > 0) {
       room?.sendMessage.documentShareTarget(
@@ -178,7 +179,7 @@ const ConferenceScreenContainer: React.FC<
         mode
       );
     }
-  }
+  };
 
   const _connectConference = async () => {
     conference = new Conference();
@@ -194,7 +195,7 @@ const ConferenceScreenContainer: React.FC<
         isMobile: true,
         user_contact: auth.user_contact,
         user_email: auth.user_eamil ? auth.user_eamil : auth.user_default_email,
-        avatar: params.avatar,
+        avatar: params.avatar
         // videoTrack: params.tracks[0],
         // audioTrack: params.tracks[1]
       };
@@ -274,9 +275,9 @@ const ConferenceScreenContainer: React.FC<
     } else {
       DeviceEventEmitter.removeAllListeners('onAudioDeviceChanged');
     }
-  }
+  };
   //#endregion
-  
+
   //#region IOS 블루투스 이어폰 연결 여부
   const _handleIosSpeaker = (event: any) => {
     let enableBluetooth = false;
@@ -311,8 +312,8 @@ const ConferenceScreenContainer: React.FC<
   //#endregion
 
   //#region 화상회의 종료( 자원 정리 )
-  const _handleClose =  async (isKick: boolean) => {  
-    if(!isKick) {
+  const _handleClose = async (isKick: boolean) => {
+    if (!isKick) {
       room && room.dispose();
     }
 
@@ -321,10 +322,19 @@ const ConferenceScreenContainer: React.FC<
       if (OS === 'ios') return;
     }
     
+    //화상회의 노티제거
+    ExternalAPI.sendEvent(
+      'CONFERENCE_TERMINATED',
+      {
+        url: null
+      },
+      externalAPIScope
+    );
+
     resetUserlist();
     resetMainUser();
     resetRequestUserList();
-    
+
     if (!isLogin) {
       navigation.reset({ routes: [{ name: 'LoginStack' }] });
     } else {

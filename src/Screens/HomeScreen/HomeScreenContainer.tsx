@@ -625,7 +625,7 @@ export default function HomeScreenContainer(props: any) {
           conference.room_id
         );
 
-        if (isSuccess(result)) {
+        if(result) {
           setBottomPopup({
             show: false,
             contentList: [],
@@ -634,7 +634,7 @@ export default function HomeScreenContainer(props: any) {
           });
           _getConferences();
         } else {
-          console.warn('7.deleteConferenceRoom : ', result.errors);
+          // console.warn('7.deleteConferenceRoom : ', result.errors);
           console.log('예약 취소중에 오류가 발생했습니다.');
         }
       }

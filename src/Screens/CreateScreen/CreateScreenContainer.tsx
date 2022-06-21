@@ -1,21 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Animated } from 'react-native';
-
-import CreateScreenPresenter, { section } from './CreateScreenPresenter';
+import CreateScreenPresenter from './CreateScreenPresenter';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/configureStore';
 
 import { WetalkApi, ConferenceApi, MeetApi } from '@services/index';
-// import { ConferenceApi } from '@services/index';
-// import { MeetApi } from '@services/index';
 
 import {
   actionCreators as AlertActions,
   params as alertParam
 } from '@redux/alert';
 
-import { getT } from '@utils/translateManager';
 import { wehagoDummyImageURL, wehagoMainURL } from '@utils/index';
 
 import { MainNavigationProps } from '@navigations/MainStack';
@@ -23,16 +18,8 @@ import { isSuccess } from '@services/types';
 import { useTranslation } from 'react-i18next';
 
 export default function CreateScreenContainer(props: any) {
-  // const initSection: section = {
-  //   data: [],
-  //   title: '',
-  //   type: '',
-  //   collapse: true,
-  //   height: new Animated.Value(0),
-  //   zIndex: 0
-  // };
   const { t } = useTranslation();
-
+  
   const [group, setGroup] = useState<any[]>([]);
   const [personal, setPersonal] = useState<any[]>([]);
   const [semu, setSemu] = useState<any[]>([]);
@@ -60,9 +47,13 @@ export default function CreateScreenContainer(props: any) {
   useEffect(() => {
     _getWetalkList();
   }, [alert]);
+
+  useEffect(() => {
+    handlePressSearching();
+  }, [keyword])
+
   useEffect(() => {
     const list = searchList.length !== 0 ? searchList : wetalkList;
-
     const customList = list.map((room: any) => {
       const returnRoom = { ...room };
       returnRoom.profile =
@@ -72,16 +63,15 @@ export default function CreateScreenContainer(props: any) {
           ? wehagoMainURL + returnRoom.room_profile_url
           : wehagoDummyImageURL;
       } else {
-        const title = returnRoom.room_title;
-        const split = title.split(/([\uD800-\uDBFF][\uDC00-\uDFFF])/);
-        returnRoom.first_char =
-          split[0] === title
-            ? split[0][0]
-            : split[0].lenth !== 0
-            ? split[0][0]
-            : '';
+        // const title = returnRoom.room_title;
+        // const split = title.split(/([\uD800-\uDBFF][\uDC00-\uDFFF])/);
+        // returnRoom.first_char =
+        //   split[0] === title
+        //     ? split[0][0]
+        //     : split[0].lenth !== 0
+        //     ? split[0][0]
+        //     : '';
       }
-
       return returnRoom;
     });
 
@@ -186,12 +176,13 @@ export default function CreateScreenContainer(props: any) {
     const type = 2;
     setAlert({ message, onConfirm, title, type });
   };
+
   const onRefresh = () => {
     _getWetalkList();
   };
-  const onSearch = (key: string) => {
-    setKeyword(key);
-  };
+  // const onSearch = (key: string) => {
+  //   setKeyword(key);
+  // };
 
   const _getWetalkList = async () => {
     let video_room_list: any[] = [];
@@ -285,7 +276,7 @@ export default function CreateScreenContainer(props: any) {
     }
   };
 
-  const handleEditingSearching = () => {
+  const handlePressSearching = () => {
     const wetalk = wetalkList.filter((item: any) =>
       item.room_title.toLowerCase().includes(keyword.toLowerCase())
     );
@@ -300,14 +291,14 @@ export default function CreateScreenContainer(props: any) {
         onClickBack,
         // onClickHeader,
         onRefresh,
-        onSearch,
+        // onSearch,
         group,
         personal,
         semu,
         // suim,
         indicatorFlag,
         onClickStartButton,
-        onEditingSearching: handleEditingSearching,
+        onPressSearching: handlePressSearching,
         keyword,
         setKeyword,
         tabType,

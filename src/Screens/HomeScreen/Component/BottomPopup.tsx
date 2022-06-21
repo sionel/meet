@@ -12,13 +12,12 @@ import {
   Platform,
   TouchableHighlight
 } from 'react-native';
-import deviceInfoModule from 'react-native-device-info';
-// import {Text,TextInput} from '../@components/StyledText';
-
-const isPad = deviceInfoModule.isTablet();
+import deviceInfo from 'react-native-device-info';
+// import {Text,TextInput} from '../../../components/StyledText';
 const { OS } = Platform;
-const { width, height } = Dimensions.get('window');
-const icPerson = require('@assets/icons/ic_user.png');
+const { isTablet } = deviceInfo;
+// const { width, height } = Dimensions.get('window');
+const icPerson = require('../../../../assets/new/icons/ic_user.png');
 
 export interface content {
   icon1?: ImageSourcePropType;
@@ -37,8 +36,22 @@ export default function BottomPopup(
   props: BottomPopupProps & { isHorizon: boolean }
 ) {
   const { title, contentList, onClickOutside, isHorizon } = props;
-  return isHorizon || isPad ? (
-    <View style={styles.botPopContainer}>
+  const [width, setWidth] = useState(Dimensions.get('window').width);
+  const [height, setHeight] = useState(Dimensions.get('window').height);
+
+  useEffect(() => {
+    const updateLayout = () => {
+      setWidth(Dimensions.get('window').width);
+      setHeight(Dimensions.get('window').height);
+    };
+    Dimensions.addEventListener('change', updateLayout);
+    return () => {
+      Dimensions.removeEventListener('change', updateLayout);
+    };
+  });
+
+  return isHorizon ? (
+    <View style={[styles.botPopContainer, { width: width, height: height }]}>
       <SafeAreaView style={styles.popupSafeAreaView}>
         <TouchableOpacity
           onPress={onClickOutside}
@@ -100,9 +113,10 @@ export default function BottomPopup(
         <View
           style={[
             styles.botVerPopupContainer,
-            OS === 'ios' && {
-              marginBottom: 10
-            }
+            OS === 'ios' &&
+              !isTablet() && {
+                marginBottom: 10
+              }
           ]}
         >
           <View style={styles.verHeaderConatainer}>
@@ -152,11 +166,11 @@ export default function BottomPopup(
 const styles = StyleSheet.create({
   botPopContainer: {
     position: 'absolute',
-    backgroundColor: 'rgba(0,0,0,0.5)'
+    backgroundColor: 'rgba(0,0,0,0.15)'
   },
   botVerPopContainer: {
     position: 'absolute',
-    backgroundColor: 'rgba(0,0,0,0.5)'
+    backgroundColor: 'rgba(0,0,0,0.15)'
   },
   popupSafeAreaView: {
     flex: 1,
@@ -165,7 +179,7 @@ const styles = StyleSheet.create({
   },
   outsideTouch: {
     position: 'absolute',
-    backgroundColor: 'rgba(0,0,0,0.5)'
+    backgroundColor: 'rgba(0,0,0,0.15)'
   },
   botPopupContainer: {
     width: '30%',

@@ -46,6 +46,7 @@ export { default as ic_refresh } from './icons/ic_refresh.png';
 export { default as ic_set } from './icons/ic_set.png';
 export { default as ic_user } from './icons/ic_user.png';
 export { default as ic_user_w } from './icons/ic_user_w.png';
+export { default as ic_user_blue } from './icons/ic_user_blue.png';
 export { default as ic_video } from './icons/ic_video.png';
 export { default as loadingIcon } from './icons/loadingIcon.png';
 export { default as nahago_logo } from './logos/nahago_login.png';
@@ -55,4 +56,9 @@ export { default as ic_video_b } from './icons/ic_video_b.png';
 export { default as ic_unlock } from './icons/ic_unlock.png';
 export { default as ic_search } from './icons/ic_search.png';
 export { default as ic_cancel2 } from './icons/ic_cancel2.png';
-
+export { default as ic_company } from './icons/ic_company.png';
+export { default as ic_NoInvited } from './icons/ic_NoInvited.png';
+export { default as ic_send } from './icons/ic_send.png';
+export { default as ic_send_gray } from './icons/ic_send_gray.png';
+export { default as ic_send_black } from './icons/ic_send_black.png';
+export { default as ic_mail_w } from './icons/ic_mail_w.png';

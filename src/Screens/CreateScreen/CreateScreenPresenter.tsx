@@ -4,46 +4,39 @@ import {
   Text,
   StyleSheet,
   SafeAreaView,
-  SectionList,
   Animated,
   Image,
   TouchableOpacity,
   FlatList,
-  ActivityIndicator,
-  TextInput,
-  Platform
+  ActivityIndicator
 } from 'react-native';
 
-import {
-  ListItemComp,
-  SearchForm,
-  Placeholder,
-  CustomAlert
-} from '@components/index';
-import { getT } from '@utils/translateManager';
+import { Placeholder } from '@components/index';
 
 import {
-  ic_back as icBack,
-  ic_cancel as icCancel,
-  ic_search as icSearch,
-  ic_cancel2 as icCancel2
+  ic_user_blue as icUserBlue,
+  ic_cancel2 as icCancel2,
+  ic_lock_w as icLock_W
 } from '@assets/index';
 
-import btnArrowDown from '@oldassets/buttons/btnArrowDown.png';
 import { useTranslation } from 'react-i18next';
+import { wehagoMainURL } from '@utils/index';
+import SearchTextInputBox from '@components/renewal/SearchTextInputBox';
 
-export interface section {
-  title: string;
-  data: any[];
-  type: 'personal' | 'group' | 'semu';
-  collapse: boolean;
-  height: Animated.Value;
-  zIndex?: number;
-}
+import deviceInfoModule from 'react-native-device-info';
+const isPad = deviceInfoModule.isTablet();
 
+// export interface section {
+//   title: string;
+//   data: any[];
+//   type: 'personal' | 'group' | 'semu';
+//   collapse: boolean;
+//   height: Animated.Value;
+//   zIndex?: number;
+// }
 interface createProps {
   // onSearch: (key: string) => void;
-  onEditingSearching: () => void;
+  onPressSearching: () => void;
   group: any[];
   personal: any[];
   semu: any[];
@@ -63,7 +56,7 @@ interface createProps {
 function CreateScreenPresenter(props: createProps) {
   const {
     indicatorFlag,
-    onEditingSearching,
+    onPressSearching,
     loaded,
     onRefresh,
     group,
@@ -78,7 +71,6 @@ function CreateScreenPresenter(props: createProps) {
     setKeyword,
     setTabType
   } = props;
-  const a = new Animated.Value(100);
   const { t } = useTranslation();
 
   return (
@@ -106,56 +98,13 @@ function CreateScreenPresenter(props: createProps) {
             <Text style={styles.emptyText}>확인</Text>
           </TouchableOpacity>
         </View>
-        <View
-          style={{
-            height: 52,
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: '#f7f8fa',
-            paddingHorizontal: 20,
-            paddingVertical: 6
-          }}
-        >
-          <View style={styles.search}>
-            <TextInput
-              style={styles.input}
-              returnKeyType="search"
-              value={keyword}
-              onChangeText={setKeyword}
-              onSubmitEditing={() => {
-                onEditingSearching();
-              }}
-              placeholder={t('대화방 명을 검색하세요.')}
-              placeholderTextColor={'rgb(147,147,147)'}
-              // ref={searchRef}
-            />
-            {keyword ? (
-              <TouchableOpacity onPress={() => setKeyword('')}>
-                <View style={styles.cancelIcon}>
-                  <Image source={icCancel} style={styles.icCancel} />
-                </View>
-              </TouchableOpacity>
-            ) : null}
-            <TouchableOpacity onPress={onEditingSearching}>
-              <View style={styles.searchIcon}>
-                <Image
-                  source={icSearch}
-                  resizeMode={'cover'}
-                  style={{ width: 24, height: 24 }}
-                />
-              </View>
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            borderColor: '#e6e6e6',
-            borderBottomWidth: 1,
-            paddingHorizontal: 20,
-          }}
-        >
+        <SearchTextInputBox
+          keyword={keyword}
+          inputboxPlaceholder={t('대화방 명을 검색하세요.')}
+          setKeyword={setKeyword}
+          onSearchSubmitEditing={onPressSearching}
+        />
+        <View style={styles.roomTabContainer}>
           <TouchableOpacity
             activeOpacity={0.7}
             onPress={() => {
@@ -223,7 +172,7 @@ function CreateScreenPresenter(props: createProps) {
           <Animated.FlatList
             keyExtractor={(item, index) => index.toString()}
             initialNumToRender={30}
-            style={[styles.roomNameContainer]}
+            style={styles.roomNameContainer}
             data={
               tabType === 'group'
                 ? group
@@ -231,10 +180,26 @@ function CreateScreenPresenter(props: createProps) {
                 ? personal
                 : semu
             }
+            // ListEmptyComponent
             renderItem={({
-              item: { profile, uri, first_char, room_title },
+              item: {
+                profile,
+                uri,
+                first_char,
+                room_title,
+                receiver_user_count,
+                group_room_profile_url: group_profile
+              },
               item
             }) => {
+              const profileList = group_profile?.filter(
+                (item: string) => item !== ''
+              );
+              const profileUri = profileList?.map(
+                (item: string) => item != '' && wehagoMainURL + item
+              );
+              const uriArrayLng = profileUri?.length;
+
               return (
                 <TouchableOpacity
                   style={styles.roomNameRowTouch}
@@ -242,107 +207,158 @@ function CreateScreenPresenter(props: createProps) {
                     onClickStartButton(item);
                   }}
                 >
-                  <View style={styles.roomNameRow}>
-                    {profile ? (
-                      <Image
-                        source={{ uri: uri }}
-                        resizeMode={'cover'}
-                        style={styles.userImage}
-                      />
-                    ) : (
-                      <Text style={styles.roomFirstWord}>{first_char}</Text>
-                    )}
+                  <View
+                    style={
+                      !uriArrayLng
+                        ? styles.personalThumbnailRow
+                        : styles.groupThumbnailRow
+                    }
+                  >
+                    {
+                      profile ? (
+                        <Image
+                          source={{ uri: uri }}
+                          resizeMode={'cover'}
+                          style={styles.userImage}
+                        />
+                      ) : uriArrayLng === 0 ? (
+                        <Image
+                          source={icLock_W}
+                          resizeMode={'cover'}
+                          style={{
+                            width: 24,
+                            height: 24
+                          }}
+                        />
+                      ) : uriArrayLng === 4 ? (
+                        <FlatList
+                          keyExtractor={(item, index) => index.toString()}
+                          data={profileUri}
+                          bounces={false}
+                          numColumns={2}
+                          renderItem={({ item }) => {
+                            return (
+                              <Image
+                                source={{ uri: item }}
+                                style={{
+                                  width: 20,
+                                  height: 20,
+                                  borderRadius: 10
+                                }}
+                              />
+                            );
+                          }}
+                        />
+                      ) : uriArrayLng === 3 ? (
+                        <View>
+                          <View
+                            style={{ flex: 1, alignItems: 'center', zIndex: 2 }}
+                          >
+                            <Image
+                              source={{ uri: profileUri[0] }}
+                              style={{
+                                width: 20,
+                                height: 20,
+                                borderRadius: 10
+                              }}
+                            />
+                          </View>
+                          <View style={{ flexDirection: 'row' }}>
+                            <Image
+                              source={{ uri: profileUri[1] }}
+                              style={{
+                                width: 20,
+                                height: 20,
+                                borderRadius: 10,
+                                zIndex: 0
+                              }}
+                            />
+                            <Image
+                              source={{ uri: profileUri[2] }}
+                              style={{
+                                width: 20,
+                                height: 20,
+                                borderRadius: 10,
+                                zIndex: 1
+                              }}
+                            />
+                          </View>
+                        </View>
+                      ) : uriArrayLng === 2 ? (
+                        <View style={{ flex: 1 }}>
+                          <View style={{ alignItems: 'flex-start' }}>
+                            <Image
+                              source={{ uri: profileUri[0] }}
+                              style={{
+                                width: 24,
+                                height: 24,
+                                borderRadius: 12
+                              }}
+                            />
+                          </View>
+                          <View style={{ alignItems: 'flex-end', zIndex: 1 }}>
+                            <Image
+                              source={{ uri: profileUri[1] }}
+                              style={{
+                                width: 24,
+                                height: 24,
+                                borderRadius: 12
+                              }}
+                            />
+                          </View>
+                        </View>
+                      ) : (
+                        <Image
+                          source={{ uri: profileUri[0] }}
+                          style={{
+                            width: 40,
+                            height: 40,
+                            borderRadius: 20
+                          }}
+                        />
+                      )
+
+                      // <Text style={styles.roomFirstWord}>{first_char}</Text>
+                    }
                   </View>
-                  <View style={{ flex: 1 }}>
-                    <Text style={{ fontFamily: 'DOUZONEText30' }}>
+                  <View>
+                    <Text
+                      style={styles.roomTitleText}
+                      numberOfLines={1}
+                      ellipsizeMode="tail"
+                    >
                       {room_title}
                     </Text>
                   </View>
-                  {/* <View style={styles.startButton}>
-                    <Text style={styles.startText}>
-                      {t('create_room_start')}
-                    </Text>
-                  </View> */}
+
+                  {tabType === 'group' && (
+                    <View style={styles.roomCountContainer}>
+                      <Image
+                        source={icUserBlue}
+                        style={{ width: 12, height: 12 }}
+                        resizeMode={'cover'}
+                      />
+                      <Text style={styles.roomCountText}>
+                        {receiver_user_count > 99 ? '99+' : receiver_user_count}
+                      </Text>
+                    </View>
+                  )}
                 </TouchableOpacity>
               );
             }}
           />
         ) : (
-          //   <SectionList
-          //   refreshing={false}
-          //   onRefresh={onRefresh}
-          //   keyExtractor={(item, index) => index.toString()}
-          //   sections={[group, personal, semu, suim]}
-          //   renderSectionHeader={({ section }) => (
-          //     <TouchableOpacity
-          //       activeOpacity={1}
-          //       onPress={() => {
-          //         onClickHeader(section);
-          //       }}
-          //       style={[
-          //         styles.roomSectionRow,
-          //         { display: section.data.length > 0 ? 'flex' : 'none' }
-          //       ]}
-          //     >
-          //       <Text style={styles.textStyle}>{section.title}</Text>
-          //       <TouchableOpacity>
-          //         <Image source={btnArrowDown} style={styles.icArrowDown} />
-          //       </TouchableOpacity>
-          //     </TouchableOpacity>
-          //   )}
-          //   renderSectionFooter={({ section: { data, height } }) => {
-          //     return (
-          //       <Animated.FlatList
-          //         keyExtractor={(item, index) => index.toString()}
-          //         initialNumToRender={30}
-          //         style={[styles.roomNameContainer, { height }]}
-          //         data={data}
-          //         renderItem={({
-          //           item: { profile, uri, first_char, room_title },
-          //           item
-          //         }) => {
-          //           return (
-          //             <TouchableOpacity
-          //               style={styles.roomNameRowTouch}
-          //               onPress={() => {
-          //                 onClickStartButton(item);
-          //               }}
-          //             >
-          //               <View style={styles.roomNameRow}>
-          //                 {profile ? (
-          //                   <Image
-          //                     source={{ uri: uri }}
-          //                     resizeMode={'cover'}
-          //                     style={styles.userImage}
-          //                   />
-          //                 ) : (
-          //                   <Text style={styles.roomFirstWord}>
-          //                     {first_char}
-          //                   </Text>
-          //                 )}
-          //               </View>
-          //               <View style={{ flex: 1 }}>
-          //                 <Text style={{ fontFamily: 'DOUZONEText30' }}>
-          //                   {room_title}
-          //                 </Text>
-          //               </View>
-          //               <View style={styles.startButton}>
-          //                 <Text style={styles.startText}>
-          //                   {t('create_room_start')}
-          //                 </Text>
-          //               </View>
-          //             </TouchableOpacity>
-          //           );
-          //         }}
-          //       />
-          //     );
-          //   }}
-          //   renderItem={() => <Fragment />}
+          <View style={styles.indicatorContainer}>
+            <ActivityIndicator
+              // animating={!loaded}
+              size={'large'}
+              color={'#1c90fb'}
+            />
+          </View>
+          // <Placeholder
+          //   mainText={t('create_room_noneresult')}
+          //   subText={t('create_room_nonetext')}
           // />
-          <Placeholder
-            mainText={t('create_room_noneresult')}
-            subText={t('create_room_nonetext')}
-          />
         )}
       </SafeAreaView>
     </Fragment>
@@ -360,33 +376,19 @@ const styles = StyleSheet.create({
     zIndex: 10
   },
   container: {
-    flex: 0,
+    flex: 1,
     backgroundColor: '#fff'
-  },
-  header: {
-    width: '100%',
-    height: '6%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
-    paddingHorizontal: 20,
-    backgroundColor: '#1c90fb'
   },
   listContainer: {
     width: '100%',
     fontFamily: 'DOUZONEText30'
   },
-  sectionHeader: {
-    paddingTop: 3,
-    paddingLeft: 12,
-    paddingRight: 12,
-    paddingBottom: 3,
-    backgroundColor: 'rgb(255,255,255)',
-    borderColor: 'rgba(0,0,0, 0.10)',
-    borderBottomWidth: 1,
+  roomTabContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
+    justifyContent: 'center',
+    borderColor: '#e6e6e6',
+    borderBottomWidth: 1,
+    paddingHorizontal: isPad ? 30 : 20
   },
   textStyle: {
     paddingTop: 3,
@@ -441,85 +443,84 @@ const styles = StyleSheet.create({
   roomNameContainer: {
     overflow: 'hidden',
     paddingVertical: 3,
-    paddingHorizontal: 12
+    paddingHorizontal: isPad ? 30 : 20
   },
   roomNameRowTouch: {
-    height: 50,
-    justifyContent: 'center',
+    height: 56,
+    // justifyContent: 'center',
     flexDirection: 'row',
     alignItems: 'center'
   },
-  roomNameRow: {
+  groupThumbnailRow: {
+    width: 40,
+    height: 40,
+    marginRight: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  personalThumbnailRow: {
     backgroundColor: '#c1c1c1',
     width: 40,
     height: 40,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 25,
-    marginVertical: 5,
-    marginRight: 15
+    marginRight: 10
   },
-  roomFirstWord: {
+  roomTitleText: {
+    fontFamily: 'DOUZONEText30',
     fontSize: 15,
-    fontFamily: 'DOUZONEText50'
+    letterSpacing: -0.3
   },
-  startButton: {
-    width: 60,
-    height: 30,
-    borderRadius: 7,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#c1c1c1'
-  },
-  startText: {
-    color: '#717171',
-    fontSize: 12,
-    fontFamily: 'DOUZONEText30'
-  },
-  search: {
-    height: 40,
-    backgroundColor: 'rgb(250,250,250)',
-    borderRadius: 8,
+  roomCountContainer: {
+    marginLeft: 6,
+    paddingVertical: 4,
+    paddingHorizontal: 6,
+    borderRadius: 12,
+    backgroundColor: 'rgb(233,245,255)',
     flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#e6e6e6'
-  },
-  input: {
-    flex: 1,
-    height: Platform.OS === 'ios' ? 30 : 50,
-    paddingLeft: 15
-  },
-  cancelIcon: {
-    backgroundColor: '#1c90fb',
-    width: 18,
-    height: 18,
-    borderRadius: 8,
-    alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 4
+    alignItems: 'center'
   },
-  icCancel: {
-    resizeMode: 'cover',
-    width: 14,
-    height: 14
+  roomCountText: {
+    marginLeft: 2,
+    fontFamily: 'DOUZONEText50',
+    fontSize: 10,
+    letterSpacing: -0.2,
+    color: 'rgb(28,144,251)'
   },
-  searchIcon: {
-    // paddingTop: 2,
-    width: 30,
-    height: 30,
-    alignItems: 'center',
-    justifyContent: 'center'
+  // roomFirstWord: {
+  //   fontSize: 15,
+  //   fontFamily: 'DOUZONEText50'
+  // },
+  // startButton: {
+  //   width: 60,
+  //   height: 30,
+  //   borderRadius: 7,
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  //   borderWidth: 1,
+  //   borderColor: '#c1c1c1'
+  // },
+  // startText: {
+  //   color: '#717171',
+  //   fontSize: 12,
+  //   fontFamily: 'DOUZONEText30'
+  // },
+  indicatorContainer: {
+    flex: 1,
+    zIndex: 100,
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   tabText: {
     flex: 1,
-    // width: 111,
     height: 38,
     justifyContent: 'center',
     alignItems: 'center'
-    // borderColor: '#e6e6e6',
-    // borderBottomWidth: 1
   },
   selectedTab: {
     borderColor: '#1c90fb',

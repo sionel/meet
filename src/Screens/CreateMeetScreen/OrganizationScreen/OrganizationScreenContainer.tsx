@@ -33,7 +33,7 @@ const OrganizationScreenContainer = (props: any) => {
     sendEmailRef
   } = props;
 
-  const [keyword, setKeyword] = useState('');
+  const [keyword, setKeyword] = useState<string>('');
   const [openGroup, setOpenGroup] = useState({});
   const [searchedEmployee, setSearchedEmployee] = useState(employee);
   const [tabType, setTabType] = useState<'org' | 'contact' | 'exter'>('org');
@@ -47,7 +47,9 @@ const OrganizationScreenContainer = (props: any) => {
   // const [contacts, setContacts] = useState<{ title: string; data: Object }[]>(
   //   []
   // );
+  const [exterInputBlur, setExterInputBlur] = useState(true);
   const [exterError, setExterError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string>('');
 
   const [rotate] = useState(new Animated.Value(0));
 
@@ -274,20 +276,22 @@ const OrganizationScreenContainer = (props: any) => {
 
       if (selectedListIdx !== -1) {
         setExterError(true);
+        setErrorMsg(t('이미 추가된 이메일입니다.'));
       } else {
         selectedList.push({ type, value });
         setExterError(false);
       }
       // setRecents({ type, value });
       setSelectedEmployee({ member: selectedList, group: {} });
-      setInviteText('');
     } else {
-      Alert.alert(
-        t('renewal.organization_form_error_title'),
-        t('renewal.organization_form_error_text')
-      );
-      setInviteText('');
+      setExterError(true);
+      setErrorMsg(t('올바르지 않은 양식의 이메일입니다.'));
+      // Alert.alert(
+      //   t('renewal.organization_form_error_title'),
+      //   t('renewal.organization_form_error_text')
+      // );
     }
+    setInviteText('');
   };
 
   // const recentAdd = (item: { type: string; value: string }) => {
@@ -346,6 +350,7 @@ const OrganizationScreenContainer = (props: any) => {
   return (
     <OrganizationScreenPresenter
       // setSelectMode={setSelectMode}
+      errorMsg={errorMsg}
       contacts={contacts}
       tabType={tabType}
       setTabType={setTabType}
@@ -378,6 +383,9 @@ const OrganizationScreenContainer = (props: any) => {
       isTablet={isTablet}
       isHorizon={isHorizon}
       sendEmailRef={sendEmailRef}
+      exterInputBlur={exterInputBlur}
+      setExterError={setExterError}
+      setExterInputBlur={setExterInputBlur}
     />
   );
 };

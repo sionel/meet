@@ -631,8 +631,7 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
                         ? startTime.current
                         : endTime.current
                     }
-                    androidVariant={'iosClone'}
-                    dividerHeight={40}
+                    androidVariant={'nativeAndroid'}
                   />
                 </View>
                 <TouchableOpacity
@@ -946,7 +945,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     width: '100%',
     height: '100%',
-    borderRadius: 20,
+    // borderRadius: 20,
     shadowRadius: 10,
     shadowColor: '#aaa',
     shadowOpacity: 10,

@@ -1,4 +1,4 @@
-import React, { Fragment, RefObject } from 'react';
+import React, { Dispatch, Fragment, RefObject, SetStateAction } from 'react';
 import {
   StyleSheet,
   View,
@@ -16,6 +16,7 @@ import CustomCheckBox from '@components/renewal/CustomCheckBox';
 import { CustomIcon } from '@components/index';
 import SelectedPreview from './Component/SelectedPreview';
 import OrganizationTab from './Component/OrganizationTab';
+import SearchTextInputBox from '@components/renewal/SearchTextInputBox';
 
 const ic_cancel = require('@assets/icons/ic_cancel_w.png');
 
@@ -42,21 +43,25 @@ interface PresenterProps {
   organization: any;
   organizationEmployee: any;
   emailInviteList: any[];
+  errorMsg: string;
   // recents:any;
   t: any;
   auth: any;
+  exterInputBlur: boolean;
   doSearch: () => void;
   validateExter: () => void;
   focusOut: () => void;
   participantListAdd: () => void;
   setTabType: (tap: 'org' | 'contact' | 'exter') => void;
-  setKeyword: (keyword: string) => void;
+  setKeyword: Dispatch<SetStateAction<string>>;
   setInviteText: (invite: string) => void;
   setOpenGroup: (object: {}) => void;
   selectEmployee: (type: string, item: any) => void;
   getOrganizationEmployeeTree: (organization: number) => any;
   // contactType:'one' | 'email' | 'sms';
   // setContactType:(contactType:'one' | 'email' | 'sms') => void;
+  setExterError: any;
+  setExterInputBlur: any;
 }
 
 const OrganizationScreenPresenter = (props: PresenterProps) => {
@@ -86,15 +91,17 @@ const OrganizationScreenPresenter = (props: PresenterProps) => {
     t,
     participantListAdd,
     auth,
-
     validateExter,
     exterError,
-
+    errorMsg,
     searchRef,
     focusOut,
     isTablet,
     isHorizon,
-    sendEmailRef
+    sendEmailRef,
+    setExterError,
+    exterInputBlur,
+    setExterInputBlur
   } = props;
 
   const OrganizationFlatList = (
@@ -355,47 +362,13 @@ const OrganizationScreenPresenter = (props: PresenterProps) => {
                 selectEmployee={selectEmployee}
               />
               {tabType !== 'exter' && (
-                <View
-                  style={{
-                    height: 52,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    backgroundColor: '#e8ebef',
-                    paddingHorizontal: 20,
-                    paddingVertical: 6
-                  }}
-                >
-                  <View style={styles.search}>
-                    <TextInput
-                      style={styles.input}
-                      returnKeyType="search"
-                      value={keyword}
-                      onChangeText={setKeyword}
-                      onSubmitEditing={() => {
-                        doSearch();
-                      }}
-                      placeholder={t('사용자명을 검색하세요.')}
-                      placeholderTextColor={'rgb(147,147,147)'}
-                      ref={searchRef}
-                    />
-                    {keyword ? (
-                      <TouchableOpacity onPress={() => setKeyword('')}>
-                        <View style={styles.cancleIcon}>
-                          <Image source={ic_cancel} style={styles.icCancel} />
-                        </View>
-                      </TouchableOpacity>
-                    ) : null}
-                    <TouchableOpacity onPress={doSearch}>
-                      <View style={styles.searchIcon}>
-                        <Image
-                          source={ic_search}
-                          resizeMode={'cover'}
-                          style={{ width: 24, height: 24 }}
-                        />
-                      </View>
-                    </TouchableOpacity>
-                  </View>
-                </View>
+                <SearchTextInputBox
+                  keyword={keyword}
+                  inputboxPlaceholder={t('사용자명을 검색하세요.')}
+                  setKeyword={setKeyword}
+                  onSearchSubmitEditing={() => doSearch()}
+                  searchRef={searchRef}
+                />
               )}
               <View
                 style={{
@@ -553,6 +526,8 @@ const OrganizationScreenPresenter = (props: PresenterProps) => {
                 selectEmployee={selectEmployee}
                 auth={auth}
                 emailInviteList={emailInviteList}
+                errorMsg={errorMsg}
+                exterInputBlur={exterInputBlur}
                 // invited={invited}
                 selectedEmployee={selectedEmployee}
                 contacts={contacts}
@@ -566,6 +541,8 @@ const OrganizationScreenPresenter = (props: PresenterProps) => {
                 isTablet={isTablet}
                 isHorizon={isHorizon}
                 sendEmailRef={sendEmailRef}
+                setExterError={setExterError}
+                setExterInputBlur={setExterInputBlur}
               />
             </Fragment>
           )}
@@ -697,7 +674,6 @@ const styles = StyleSheet.create({
     paddingLeft: 15
   },
   cancleIcon: {
-    backgroundColor: '#1c90fb',
     width: 18,
     height: 18,
     borderRadius: 8,
