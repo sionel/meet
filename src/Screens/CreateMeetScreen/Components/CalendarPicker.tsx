@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import React from 'react';
+import React, { Fragment } from 'react';
 
 import CalendarPickerComponent from '../../../custom_modules/react-native-calendar-picker/CalendarPicker';
 import { useTranslation } from 'react-i18next';
@@ -18,7 +18,7 @@ const CalendarPicker: React.FC<CalendarPickerProps> = ({
 }) => {
   const { t } = useTranslation();
   return (
-    <View style={styles.calendarContainer}>
+    <Fragment>
       <CalendarPickerComponent
         weekdays={[
           t('renewal.calendar_sun'),
@@ -52,12 +52,12 @@ const CalendarPicker: React.FC<CalendarPickerProps> = ({
         todayTextStyle={styles.todayText}
         todayBackgroundColor="rgba(18,126,255, 0.07)"
         dayShape="circle"
-        width={isTablet ? 500 : 360}
+        width={isTablet ? 375 : 360}
         onDateChange={onDateChange}
         // selectYearTitle={t('renewal.main_select_year')}
         // selectMonthTitle={t('renewal.common_year')}
-        textStyle={{ fontSize: isTablet ? 18 : 14 }}
-        disabledDatesTextStyle={{ fontSize: isTablet ? 18 : 14 }}
+        textStyle={{ fontSize: 14 }}
+        disabledDatesTextStyle={{ fontSize: 14 }}
       />
       {/* <TouchableOpacity
         style={styles.selectedTimeButton}
@@ -65,20 +65,13 @@ const CalendarPicker: React.FC<CalendarPickerProps> = ({
       >
         <Text style={styles.selectedButtonText}>{`적용`}</Text>
       </TouchableOpacity> */}
-    </View>
+    </Fragment>
   );
 };
 
 export default CalendarPicker;
 
 const styles = StyleSheet.create({
-  calendarContainer: {
-    paddingTop: 16,
-    height: 300,
-    backgroundColor: '#fff',
-    borderTopStartRadius: 25,
-    borderTopEndRadius: 25
-  },
   // selectedTimeButton: {
   //   backgroundColor: '#127eff',
   //   marginTop: 30,

@@ -3,31 +3,20 @@
  * 화상회의 히스토리 프레젠터
  */
 
-import React, { Fragment } from 'react';
+import React, { Dispatch, Fragment, SetStateAction } from 'react';
 import {
   View,
   StyleSheet,
-  SectionList,
-  ScrollView,
-  RefreshControl,
   StatusBar,
   SafeAreaView,
   Image,
   TouchableOpacity,
   Text,
   FlatList,
-  Platform
+  Platform,
+  SectionList
 } from 'react-native';
 
-import CalendarPicker from '../../custom_modules/react-native-calendar-picker';
-
-// import {
-//   ListItemComp,
-//   CustomAlert,
-//   Placeholder,
-//   SectionListHeader
-// } from '@components';
-import AddButton from './AddButton';
 import { getT } from '@utils/translateManager';
 import ConferenceCard from './Component/ConferenceCard';
 import FinishedCard from './Component/FinishedCard';
@@ -36,21 +25,17 @@ import BottomPopup, { content } from './Component/BottomPopup';
 import ParticipantsList, {
   participantsListProps
 } from '@components/renewal/ParticipantsList';
-// import ParticipantBox from '../ConferenceScreen/Content/BottomArea/SubVideoBox/ParticipantBox';
+import DatePicker from 'react-native-date-picker';
 
-// import { isWehagoV } from '@utils';
-// import { Text } from '@components/StyledText';
-const loginLogo = require('@assets/logos/logo.png');
-const icSet = require('@assets/icons/ic_set.png');
-const icCalendar = require('@assets/icons/ic_calendar.png');
-const icVideo = require('@assets/icons/ic_video.png');
-const icKeyboard = require('@assets/icons/ic_keyboard.png');
+import {
+  ic_set as icSet,
+  ic_video as icVideo,
+  ic_keyboard as icKeyboard,
+  ic_empty as icEmpty,
+  home_logo as homeLogo
+} from '@assets/index';
+
 const icArrowDownBlack = require('@assets/icons/ic_arrow_down_black.png');
-const icChange = require('@assets/icons/ic_change.png');
-const icEmptyConference = require('@assets/icons/ic_empty_conference.png');
-const icEmpty = require('@assets/icons/ic_empty.png');
-const icChat = require('@assets/icons/ic_chat_w.png');
-const icCancel = require('@assets/icons/ic_cancel.png');
 
 {
   /*
@@ -90,12 +75,16 @@ export interface presenterProps {
   participantsList: participantsListProps & { show: boolean };
   isHorizon: boolean;
   onConpanyChange: () => void;
-  onChangeMonth: (date: any) => void;
-  calendarView: boolean;
-  setCalendarView: (flag: boolean) => void;
+  // onChangeMonth: (date: any) => void;
+  datePickerView: boolean;
+  setDatePickerView: (flag: boolean) => void;
   finishDate: Date;
   onEndReached: () => void;
   finishCount: number;
+  onPressConfirm: () => void;
+  date: Date;
+  onChanageDate: (time: Date) => void;
+  reservationCount: number;
 }
 
 const HomeScreenPresenter = (props: presenterProps) => {
@@ -116,14 +105,20 @@ const HomeScreenPresenter = (props: presenterProps) => {
     participantsList,
     isHorizon,
     onConpanyChange,
-    onChangeMonth,
-    calendarView,
-    setCalendarView,
+    // onChangeMonth,
+    datePickerView,
+    setDatePickerView,
     finishDate,
     onEndReached,
-    finishCount
+    finishCount,
+    onPressConfirm,
+    date,
+    onChanageDate,
+    reservationCount
   } = props;
   const t = getT();
+
+  // console.log('reservationConference : ', reservationConference);
 
   return (
     <Fragment>
@@ -139,11 +134,7 @@ const HomeScreenPresenter = (props: presenterProps) => {
         <View
           style={[styles.header, { paddingHorizontal: isTablet ? 30 : 20 }]}
         >
-          <Image
-            source={loginLogo}
-            style={styles.logo}
-            resizeMode={'contain'}
-          />
+          <Image source={homeLogo} style={styles.logo} resizeMode={'contain'} />
           <View style={{ flex: 1 }} />
           <TouchableOpacity style={styles.setting} onPress={onClickSetting}>
             <Image source={icSet} style={{ width: 18, height: 18 }} />
@@ -186,7 +177,7 @@ const HomeScreenPresenter = (props: presenterProps) => {
                       width: 0,
                       height: 8
                     }
-                  },
+                  }
                   // android: {
                   //   elevation: 10
                   // }
@@ -225,7 +216,7 @@ const HomeScreenPresenter = (props: presenterProps) => {
                       width: 0,
                       height: 8
                     }
-                  },
+                  }
                   // android: {
                   //   elevation: 10
                   // }
@@ -317,7 +308,7 @@ const HomeScreenPresenter = (props: presenterProps) => {
                       highlight === 'reservation' && styles.FocusReCount
                     ]}
                   >
-                    {reservationConference.length}
+                    {reservationCount}
                   </Text>
                 </TouchableOpacity>
                 <View style={styles.GraySplitBar} />
@@ -349,7 +340,7 @@ const HomeScreenPresenter = (props: presenterProps) => {
               </TouchableOpacity>
               {highlight === 'finished' && (
                 <TouchableOpacity
-                  onPress={() => setCalendarView(true)}
+                  onPress={() => setDatePickerView(true)}
                   style={styles.monthTouchContainer}
                 >
                   <Text style={styles.selectedMonth}>{`${
@@ -359,34 +350,70 @@ const HomeScreenPresenter = (props: presenterProps) => {
               )}
             </View>
           </View>
-          
-          <FlatList
-            numColumns={isTablet ? 2 : 1}
-            keyExtractor={(item, index) => index.toString()}
-            data={
-              highlight === 'reservation'
-                ? reservationConference
-                : finishedConference
-            }
-            windowSize={10}
-            renderItem={data => {
-              const { item } = data;
+          {highlight === 'reservation' ? (
+            <SectionList
+              sections={reservationConference}
+              refreshing={false}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({ item }) => <Fragment />}
+              renderSectionHeader={({ section: { title, data } }) => (
+                <View style={styles.reservationTitleView}>
+                  <Text style={styles.reservationTitleText}>{`${title} `}</Text>
+                  <Text
+                    style={[
+                      styles.reservationTitleText,
+                      {
+                        color: '#1c90fb'
+                      }
+                    ]}
+                  >
+                    {data.length}
+                  </Text>
+                  <View style={styles.reservationSplitLine} />
+                </View>
+              )}
+              renderSectionFooter={({ section: { data } }) => {
+                return (
+                  <FlatList
+                    numColumns={isTablet ? 2 : 1}
+                    keyExtractor={(item, index) => index.toString()}
+                    data={data}
+                    windowSize={10}
+                    renderItem={({ item }) => {
+                      return <ReservationCard {...item} isTablet={isTablet} />;
+                    }}
+                    showsVerticalScrollIndicator={false}
+                    onEndReached={({ distanceFromEnd }) => {
+                      distanceFromEnd > 0 && onEndReached();
+                    }}
+                    onEndReachedThreshold={0.5}
+                    {...(isTablet && {
+                      columnWrapperStyle: { justifyContent: 'space-between' }
+                    })}
+                  />
+                );
+              }}
+            />
+          ) : (
+            <FlatList
+              numColumns={isTablet ? 2 : 1}
+              keyExtractor={(item, index) => index.toString()}
+              data={finishedConference}
+              windowSize={10}
+              renderItem={({ item }) => {
+                return <FinishedCard {...item} isTablet={isTablet} />;
+              }}
+              showsVerticalScrollIndicator={false}
+              onEndReached={({ distanceFromEnd }) => {
+                distanceFromEnd > 0 && onEndReached();
+              }}
+              onEndReachedThreshold={0.5}
+              {...(isTablet && {
+                columnWrapperStyle: { justifyContent: 'space-between' }
+              })}
+            />
+          )}
 
-              return highlight === 'reservation' ? (
-                <ReservationCard {...item} isTablet={isTablet} />
-              ) : (
-                <FinishedCard {...item} isTablet={isTablet} />
-              );
-            }}
-            showsVerticalScrollIndicator={false}
-            onEndReached={({ distanceFromEnd }) => {
-              distanceFromEnd > 0 && onEndReached();
-            }}
-            onEndReachedThreshold={0.5}
-            {...(isTablet && {
-              columnWrapperStyle: { justifyContent: 'space-between' }
-            })}
-          />
           {highlight === 'finished' && finishedConference.length === 0 && (
             <View
               style={[
@@ -403,69 +430,56 @@ const HomeScreenPresenter = (props: presenterProps) => {
         </View>
 
         {bottomPopup.show && (
-          <BottomPopup {...bottomPopup} isHorizon={isHorizon} />
+          <BottomPopup
+            {...bottomPopup}
+            isHorizon={isHorizon}
+            isTablet={isTablet}
+          />
         )}
       </View>
       {participantsList.show && (
         <ParticipantsList {...participantsList} isHorizon={isHorizon} />
       )}
 
-      {calendarView && (
-        <View style={styles.calendarView}>
-          <View style={{ flex: 1, backgroundColor: '#666', zIndex: 2 }}></View>
-          <View style={styles.calendarTopView}>
-            <TouchableOpacity
-              style={styles.icCancel}
-              onPress={() => {
-                setCalendarView(false);
-              }}
-            >
-              <Image
-                source={icCancel}
-                resizeMode="cover"
-                style={styles.icCancel}
+      {datePickerView && (
+        <View
+          style={[
+            styles.datePickerView,
+            isTablet && { justifyContent: 'center', alignItems: 'center' }
+          ]}
+        >
+          <TouchableOpacity
+            style={{ flex: 1, zIndex: 2 }}
+            onPress={() => setDatePickerView(false)}
+            activeOpacity={1}
+          />
+          <View
+            style={[
+              isTablet
+                ? styles.tabletDatePickerContainer
+                : styles.datePickerContainer
+            ]}
+          >
+            <View style={styles.datePickerHeader}>
+              <Text style={styles.datePickerHeaderText}>
+                {t('조회 월 변경')}
+              </Text>
+            </View>
+            <View style={styles.datePickerBody}>
+              <DatePicker
+                onDateChange={onChanageDate}
+                mode={'date'}
+                date={date}
+                androidVariant={'nativeAndroid'}
               />
+            </View>
+            <TouchableOpacity
+              style={[styles.datePickerButton, isTablet && { marginBottom: 0 }]}
+              onPress={onPressConfirm}
+            >
+              <Text style={styles.datePickerButtonText}>{`적용`}</Text>
             </TouchableOpacity>
           </View>
-          <CalendarPicker
-            weekdays={[
-              t('renewal.calendar_sun'),
-              t('renewal.calendar_mon'),
-              t('renewal.calendar_tue'),
-              t('renewal.calendar_wed'),
-              t('renewal.calendar_thur'),
-              t('renewal.calendar_fri'),
-              t('renewal.calendar_sat')
-            ]}
-            months={[
-              t('renewal.calendar_jan'),
-              t('renewal.calendar_feb'),
-              t('renewal.calendar_mar'),
-              t('renewal.calendar_apr'),
-              t('renewal.calendar_may'),
-              t('renewal.calendar_jun'),
-              t('renewal.calendar_jul'),
-              t('renewal.calendar_aug'),
-              t('renewal.calendar_sep'),
-              t('renewal.calendar_oct'),
-              t('renewal.calendar_nov'),
-              t('renewal.calendar_dec')
-            ]}
-            previousTitle="<"
-            nextTitle=">"
-            minDate={new Date('2020-01-01')}
-            // selectedStartDate={startTime.current}
-            selectedDayTextColor="#fff"
-            selectedDayStyle={{ borderRadius: 5, backgroundColor: '#1c90fb' }}
-            todayBackgroundColor="#febc2c"
-            dayShape="square"
-            onMonthChange={onChangeMonth}
-            selectYearTitle={t('renewal.main_select_year')}
-            selectMonthTitle={t('renewal.common_year')}
-            textStyle={{ fontSize: isTablet ? 18 : 14 }}
-            disabledDatesTextStyle={{ fontSize: isTablet ? 18 : 14 }}
-            calendarMode={'months'}
-          />
         </View>
       )}
     </Fragment>
@@ -585,20 +599,19 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginTop: '5%',
     marginBottom: '3%',
-    paddingHorizontal: '4%'
+    paddingHorizontal: '4%',
+    backgroundColor: '#fff'
   },
-  calendarView: {
+  datePickerView: {
     position: 'absolute',
-    backgroundColor: 'rgb(255,255,255)',
-    bottom: 0,
+    backgroundColor: 'rgba(0,0,0,0.15)',
     width: '100%',
     height: '100%',
-    borderRadius: 20,
     shadowRadius: 10,
     shadowColor: '#aaa',
     shadowOpacity: 10,
     borderWidth: 1,
-    paddingBottom: '5%',
+    justifyContent: 'flex-end',
     zIndex: 1,
     elevation: 1
   },
@@ -686,79 +699,76 @@ const styles = StyleSheet.create({
     fontFamily: 'DOUZONEText30',
     fontSize: 14,
     color: 'rgba(0,0,0,0.6)'
+  },
+  //메인화면 월 변경 하단팝업 스타일
+  datePickerContainer: {
+    height: 400,
+    borderTopStartRadius: 25,
+    borderTopEndRadius: 25,
+    backgroundColor: '#fff'
+  },
+  tabletDatePickerContainer: {
+    width: 300,
+    height: 342,
+    borderRadius: 16,
+    backgroundColor: '#fff',
+    paddingBottom: 30
+  },
+  datePickerHeader: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    // marginTop: '5%',
+    // marginBottom: '3%',
+    height: 48,
+    marginTop: 16,
+    borderBottomColor: '#e6e6e6',
+    borderBottomWidth: 1
+  },
+  datePickerButton: {
+    backgroundColor: '#127eff',
+    height: 48,
+    marginHorizontal: 20,
+    borderRadius: 28,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 50
+  },
+  datePickerButtonText: {
+    color: '#fff',
+    fontFamily: 'DOUZONEText50',
+    fontSize: 14
+  },
+  datePickerHeaderText: {
+    fontSize: 18,
+    color: '#000',
+    fontFamily: 'DOUZONEText50'
+  },
+  datePickerBody: {
+    flex: 1,
+    marginVertical: 20,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  reservationTitleView: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 14
+  },
+  reservationTitleText: {
+    fontFamily: 'DOUZONEText50',
+    fontSize: 14,
+    letterSpacing: -0.28,
+    color: '#000'
+  },
+  reservationSplitLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: 'rgba(60,60,67, 0.12)',
+    marginLeft: 8
   }
-  // container: {
-  //   flex: 1,
-  //   backgroundColor: '#F7F8FA',
-  //   justifyContent: 'flex-start',
-  //   alignItems: 'center'
-  // },
-  // imageContainer: {}
-
-  // reloadButtonWrap: {
-  //   marginTop: 10,
-  //   borderWidth: 1,
-  //   borderRadius: 18,
-  //   borderColor: '#aaa'
-  // },
-  // reloadButton: {
-  //   marginTop: 3,
-  //   marginBottom: 3,
-  //   marginLeft: 12,
-  //   marginRight: 12,
-  //   textAlign: ''
-  // },
-
-  // listContainer: {
-  //   width: '100%'
-  // },
-
-  // notResult: {
-  //   height: '10%',
-  //   justifyContent: 'center',
-  //   alignItems: 'center'
-  // },
-
-  // modalWrap: {
-  //   flex: 1,
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  //   backgroundColor: 'rgba(0,0,0, .75)'
-  // },
-
-  // modalContentWrap: {
-  //   backgroundColor: '#fff',
-  //   width: '100%',
-  //   maxWidth: 300,
-  //   padding: 0,
-  //   shadowColor: '#000',
-  //   shadowOffset: {
-  //     width: 0,
-  //     height: 2
-  //   },
-  //   shadowOpacity: 0.25,
-  //   shadowRadius: 3.84,
-  //   elevation: 5
-  // },
-
-  // modalMessage: {
-  //   paddingTop: 20,
-  //   paddingBottom: 30,
-  //   paddingLeft: 20,
-  //   paddingRight: 20
-  // },
-
-  // modalButtons: { flexDirection: 'row' },
-  // modalButton: {
-  //   flex: 1,
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  //   paddingTop: 15,
-  //   paddingBottom: 15,
-  //   marginBottom: -1
-  // },
-  // modalButtonCancel: { backgroundColor: '#f1f1f1' },
-  // modalButtonConfirm: { backgroundColor: '#1C90FB' }
 });
 
 export default HomeScreenPresenter;

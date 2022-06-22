@@ -51,6 +51,7 @@ export { default as ic_video } from './icons/ic_video.png';
 export { default as loadingIcon } from './icons/loadingIcon.png';
 export { default as nahago_logo } from './logos/nahago_login.png';
 export { default as wehago_logo } from './logos/wehago_login.png';
+export { default as home_logo } from './logos/logo.png';
 export { default as ic_chat } from './icons/ic_chat.png';
 export { default as ic_video_b } from './icons/ic_video_b.png';
 export { default as ic_unlock } from './icons/ic_unlock.png';

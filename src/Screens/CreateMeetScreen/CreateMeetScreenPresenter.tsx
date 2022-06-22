@@ -1,4 +1,4 @@
-import React, { Fragment, RefObject } from 'react';
+import React, { Fragment, RefObject, useEffect, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -9,7 +9,8 @@ import {
   Image,
   Switch,
   NativeSyntheticEvent,
-  TextInputChangeEventData
+  TextInputChangeEventData,
+  Dimensions
 } from 'react-native';
 
 import DatePicker from 'react-native-date-picker';
@@ -130,6 +131,20 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
   } = props;
   const { t } = useTranslation();
 
+  const [width, setWidth] = useState(Dimensions.get('window').width);
+  const [height, setHeight] = useState(Dimensions.get('window').height);
+
+  useEffect(() => {
+    const updateLayout = () => {
+      setWidth(Dimensions.get('window').width);
+      setHeight(Dimensions.get('window').height);
+    };
+    Dimensions.addEventListener('change', updateLayout);
+    return () => {
+      Dimensions.removeEventListener('change', updateLayout);
+    };
+  }, []);
+
   return (
     <Fragment>
       <SafeAreaView style={styles.safeArea} onTouchStart={onFocusOut}>
@@ -202,7 +217,7 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
           ]}
         />
 
-        <View style={[{ backgroundColor: '#fff', height: '30%' }]}>
+        <View style={[{ backgroundColor: '#fff' }]}>
           <View style={styles.middleContainer}>
             <View style={styles.directionColTitle}>
               <Text style={styles.textHeader}>
@@ -278,7 +293,10 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
         />
 
         <View
-          style={[styles.reserveContainer, switchReserve && { height: '16%' }]}
+          style={[
+            styles.reserveContainer,
+            switchReserve && { paddingBottom: 16 }
+          ]}
         >
           <View style={styles.rowContainer}>
             <Text style={[styles.ft14Dou50, { fontSize: 15 }]}>
@@ -305,7 +323,6 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
                       datePicker === 'start' && {
                         borderColor: 'rgb(28, 144, 251)'
                       },
-                      isTablet && { width: '20%' },
                       { marginRight: 8 }
                     ]}
                     onPress={() => {
@@ -330,7 +347,7 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
                       timePicker === 'start' && {
                         borderColor: 'rgb(28, 144, 251)'
                       },
-                      isTablet && { width: '30%' }
+                      { width: 101 }
                     ]}
                     onPress={() => {
                       openTimePicker('start');
@@ -362,7 +379,6 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
                       datePicker === 'end' && {
                         borderColor: 'rgb(28, 144, 251)'
                       },
-                      isTablet && { width: '20%' },
                       { marginRight: 8 }
                     ]}
                     onPress={() => {
@@ -387,7 +403,7 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
                       timePicker === 'end' && {
                         borderColor: 'rgb(28, 144, 251)'
                       },
-                      isTablet && { width: '30%' }
+                      { width: 101 }
                     ]}
                     onPress={() => {
                       openTimePicker('end');
@@ -453,7 +469,7 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
           />
         </View>
 
-        <View style={{ flex: 1, paddingHorizontal: '5%' }}>
+        <View style={{ flex: 1, paddingHorizontal: 20 }}>
           {selectedEmployee.member[0].user_no !== undefined && (
             <FlatList
               showsVerticalScrollIndicator={false}
@@ -468,10 +484,7 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
                 return (
                   <View style={styles.participantList}>
                     <TouchableOpacity
-                      style={[
-                        styles.profileView,
-                        isTablet && { width: 46, height: 46 }
-                      ]}
+                      style={[styles.profileView]}
                       onPress={() => {
                         clickDeleteUser(item);
                       }}
@@ -506,9 +519,7 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
                         resizeMode={'cover'}
                       />
                     </TouchableOpacity>
-                    <View
-                      style={[isMaster ? styles.infoBox : {flex:1}, isHorizon && { width: '70%' }]}
-                    >
+                    <View style={[{ flex: 1 }]}>
                       {!item.value && (
                         <Text style={styles.name}>
                           {item.user_name
@@ -539,9 +550,9 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
                       <TouchableOpacity
                         style={[
                           styles.roleContainer,
-                          isMaster && { borderColor: 'rgb(254,188,44)' },
+                          isMaster && { borderColor: 'rgb(254,188,44)' }
                           // !item.user_no && { borderColor: '#fff' },
-                          isTablet && { width: 140 }
+                          // isTablet && { width: 140 }
                         ]}
                         // onPress={() => {
                         //   clickChangeRole(item);
@@ -560,8 +571,8 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
                         />
                         <Text
                           style={[
-                            styles.maseterText,
-                            isTablet && { fontSize: 14 }
+                            styles.maseterText
+                            // isTablet && { fontSize: 14 }
                           ]}
                         >
                           {t('renewal.chatting_master')}
@@ -600,27 +611,47 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
       </SafeAreaView>
 
       {(timePicker !== 'none' || datePicker !== 'none') && (
-        <SafeAreaView style={styles.bottomComponent}>
+        <SafeAreaView
+          style={[
+            styles.datePickerView,
+            isTablet && {
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: width,
+              height: height
+            }
+          ]}
+        >
           <View
-            style={[
-              { flex: 1, backgroundColor: '#bbb' },
-              isHorizon && { width: '66%', left: '17%' }
-            ]}
+            style={{
+              flex: 1,
+              backgroundColor: 'rgb(217,217,217)',
+              justifyContent: 'flex-end'
+            }}
           >
-            <View style={{ flex: 1, backgroundColor: '#bbb', zIndex: 2 }} />
-            {timePicker !== 'none' && (
+            {/* {!isPad && (
               <View
                 style={{
-                  height: 332,
-                  borderTopStartRadius: 25,
-                  borderTopEndRadius: 25,
-                  backgroundColor: '#fff'
+                  flex: 1,
+                  backgroundColor: 'rgb(217,217,217)',
+                  zIndex: 2
                 }}
+              />
+            )} */}
+            {timePicker !== 'none' && (
+              <View
+                style={[
+                  isTablet
+                    ? styles.tabletDatePickerContainer
+                    : styles.datePickerContainer
+                ]}
               >
-                <View style={styles.dateTimePickerHeader}>
-                  <Text style={styles.selectedTimeText}>{`예약시간 설정`}</Text>
+                <View style={styles.datePickerHeader}>
+                  <Text
+                    style={styles.datePickerHeaderText}
+                  >{`예약시간 설정`}</Text>
                 </View>
-                <View style={styles.timePickerView}>
+                <View style={styles.datePickerBody}>
                   <DatePicker
                     onDateChange={time => timeChange(time)}
                     mode={'time'}
@@ -635,18 +666,28 @@ const CreateMeetScreenPresenter = (props: PresenterProps) => {
                   />
                 </View>
                 <TouchableOpacity
-                  style={styles.selectedTimeButton}
+                  style={[
+                    styles.datePickerButton
+                  ]}
                   onPress={onTimeConfirm}
                 >
-                  <Text style={styles.selectedButtonText}>{`적용`}</Text>
+                  <Text style={styles.datePickerButtonText}>{`적용`}</Text>
                 </TouchableOpacity>
               </View>
             )}
             {datePicker !== 'none' && (
-              <CalendarPicker
-                onDateChange={onDateChange}
-                startTime={startTime}
-              />
+              <View
+                style={
+                  isTablet
+                    ? styles.tabletCalendarContainer
+                    : styles.calendarContainer
+                }
+              >
+                <CalendarPicker
+                  onDateChange={onDateChange}
+                  startTime={startTime}
+                />
+              </View>
             )}
           </View>
         </SafeAreaView>
@@ -676,8 +717,8 @@ const styles = StyleSheet.create({
     color: '#000'
   },
   privateContainer: {
-    height: '8%',
-    paddingHorizontal: '5%',
+    height: 64,
+    paddingHorizontal: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center'
@@ -713,54 +754,55 @@ const styles = StyleSheet.create({
   },
   //중단
   directionColTitle: {
-    flexDirection: 'column',
-    height: '25%'
+    flexDirection: 'column'
   },
   directionColMessage: {
     flexDirection: 'column',
-    paddingVertical: 5,
-    height: '60%'
+    paddingTop: 31,
+    paddingBottom: 5
+    // height: '60%'
     // backgroundColor: 'red'
   },
   middleContainer: {
-    height: '100%',
-    justifyContent: 'space-between',
-    paddingHorizontal: '5%',
-    paddingVertical: '1%'
+    // height: '100%',
+    // justifyContent: 'space-between',
+    padding: 20
     // height: '40%'
   },
   textHeader: {
     fontSize: 12,
-    marginVertical: 5,
+    marginBottom: 6,
     color: '#000',
-    fontFamily: 'DOUZONEText30'
+    fontFamily: 'DOUZONEText30',
+    letterSpacing: -0.24
   },
   roomNameStyle: {
     borderWidth: 1,
-    paddingHorizontal: '3.5%',
+    paddingHorizontal: 16,
     height: 44,
     borderColor: '#E6E6E6',
     fontSize: 14,
-    borderRadius: 10,
-    fontFamily: 'DOUZONEText30'
+    borderRadius: 6,
+    fontFamily: 'DOUZONEText30',
+    color: '#333'
   },
   sendStyle: {
     borderWidth: 1,
-    paddingTop: '2%',
-    paddingHorizontal: '3.5%',
+    paddingVertical: 13,
+    paddingHorizontal: 16,
     height: 84,
     letterSpacing: -0.28,
     borderColor: '#E6E6E6',
     fontSize: 14,
-    lineHeight: 20,
-    borderRadius: 15
+    borderRadius: 6,
+    color: '#333'
   },
   countContainer: {
     justifyContent: 'flex-end',
     alignItems: 'center',
     flexDirection: 'row',
-    marginTop: 2,
-    height: 17
+    marginTop: 4,
+    height: 15
   },
   ft12: {
     fontSize: 12,
@@ -774,42 +816,41 @@ const styles = StyleSheet.create({
   },
   //예약회의
   reserveContainer: {
-    paddingHorizontal: '5%',
-    paddingVertical: 5,
-    height: '6%'
+    paddingHorizontal: 20
   },
   datetimeBox: {
-    width: '35%',
+    width: 103,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
     borderRadius: 6,
     height: 32,
     borderColor: '#e6e6e6'
-    // marginRight: 5,
   },
   datetimeText: {
-    fontSize: 14,
-    fontFamily: 'DOUZONEText30'
+    fontSize: 16,
+    fontFamily: 'DOUZONEText30',
+    color: '#000',
+    letterSpacing: -0.32
   },
   //하단
   botContainer: {
     flex: 1.4
   },
   deleteAlram: {
-    height: '6%',
+    height: 56,
+    paddingHorizontal: 20,
     backgroundColor: '#e9f5ff',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: '5%'
+    alignItems: 'center'
   },
   conferenceMember: {
-    height: '6%',
+    height: 48,
+    paddingHorizontal: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: '5%'
+    alignItems: 'center'
   },
   //이미지(icCode)
   codeContainer: {
@@ -844,8 +885,8 @@ const styles = StyleSheet.create({
     height: 14
   },
   icTabletMaster: {
-    width: 30,
-    height: 30
+    width: 19,
+    height: 16
   },
   roleContainer: {
     flexDirection: 'row',
@@ -863,8 +904,7 @@ const styles = StyleSheet.create({
     // lineHeight: 15,
     letterSpacing: -0.22,
     color: '#fff',
-    fontFamily: 'DOUZONEText50',
-    paddingLeft: 2
+    fontFamily: 'DOUZONEText50'
   },
   attendantText: {
     fontSize: 11,
@@ -905,7 +945,6 @@ const styles = StyleSheet.create({
     zIndex: 2
     // position: 'absolute',
   },
-  infoBox: { width: '67%' },
   myView: {
     width: 19,
     height: 16,
@@ -939,36 +978,58 @@ const styles = StyleSheet.create({
     color: '#939393',
     fontFamily: 'DOUZONEText30'
   },
-  bottomComponent: {
+  datePickerView: {
     position: 'absolute',
     backgroundColor: '#fff',
-    bottom: 0,
     width: '100%',
     height: '100%',
-    // borderRadius: 20,
     shadowRadius: 10,
     shadowColor: '#aaa',
     shadowOpacity: 10,
     borderWidth: 1,
-    paddingBottom: 50
+    justifyContent: 'flex-end',
+    zIndex: 1,
+    elevation: 1
   },
-  rowContainer: {
-    flexDirection: 'row',
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-between'
+  calendarContainer: {
+    paddingTop: 16,
+    height: 350,
+    backgroundColor: '#fff',
+    borderTopStartRadius: 25,
+    borderTopEndRadius: 25
   },
-  dimmed: {
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    justifyContent: 'center',
-    alignItems: 'center'
+  tabletCalendarContainer: {
+    width: 375,
+    height: 400,
+    paddingVertical: 16,
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    shadowRadius: 10,
+    shadowColor: 'rgba(0,0,0,0.16)',
+    shadowOpacity: 10,
+    paddingBottom: 30,
+    zIndex: 1,
+    elevation: 1
   },
-  dateTimePickerHeader: {
+  datePickerContainer: {
+    height: 350,
+    borderTopStartRadius: 25,
+    borderTopEndRadius: 25,
+    backgroundColor: '#fff'
+  },
+  tabletDatePickerContainer: {
+    width: 300,
+    height: 342,
+    borderRadius: 16,
+    backgroundColor: '#fff',
+    shadowRadius: 10,
+    shadowColor: 'rgba(0,0,0,0.16)',
+    shadowOpacity: 10,
+    paddingBottom: 30,
+    zIndex: 1,
+    elevation: 1
+  },
+  datePickerHeader: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -979,35 +1040,45 @@ const styles = StyleSheet.create({
     borderBottomColor: '#e6e6e6',
     borderBottomWidth: 1
   },
-  selectedTimeText: {
-    fontSize: 18,
-    color: '#000',
-    fontFamily: 'DOUZONEText50'
-  },
-  selectedTimeButton: {
+  datePickerButton: {
     backgroundColor: '#127eff',
-    marginTop: 30,
     height: 48,
-    width: 335,
-    alignSelf: 'center',
+    marginHorizontal: 20,
     borderRadius: 28,
     alignItems: 'center',
     justifyContent: 'center'
   },
-  selectedButtonText: {
+  datePickerButtonText: {
     color: '#fff',
     fontFamily: 'DOUZONEText50',
     fontSize: 14
   },
-  timePickerView: {
-    marginTop: 20,
+  datePickerHeaderText: {
+    fontSize: 18,
+    color: '#000',
+    fontFamily: 'DOUZONEText50'
+  },
+  datePickerBody: {
+    flex: 1,
+    marginVertical: 20,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  // bottomComponent: {
+  //   position: 'absolute',
+  //   backgroundColor: '#fff',
+  //   bottom: 0
+  //   // borderRadius: 20,
+  // },
+  rowContainer: {
+    flexDirection: 'row',
+    height: 48,
+    alignItems: 'center',
+    justifyContent: 'space-between'
   },
   lengthError: {
     color: '#fc4c60',
     fontSize: 12,
-    lineHeight: 17,
     letterSpacing: -0.24,
     fontFamily: 'DOUZONEText30'
   },
@@ -1017,7 +1088,8 @@ const styles = StyleSheet.create({
   },
   dateTimeRow: {
     flexDirection: 'row',
-    flex: 1,
+    height: 48,
+    // flex: 1,
     justifyContent: 'space-between',
     alignItems: 'center'
   }

@@ -33,9 +33,9 @@ interface BottomPopupProps {
 }
 
 export default function BottomPopup(
-  props: BottomPopupProps & { isHorizon: boolean }
+  props: BottomPopupProps & { isHorizon: boolean; isTablet: boolean }
 ) {
-  const { title, contentList, onClickOutside, isHorizon } = props;
+  const { title, contentList, onClickOutside, isHorizon, isTablet } = props;
   const [width, setWidth] = useState(Dimensions.get('window').width);
   const [height, setHeight] = useState(Dimensions.get('window').height);
 
@@ -50,7 +50,7 @@ export default function BottomPopup(
     };
   });
 
-  return isHorizon ? (
+  return isTablet || isHorizon ? (
     <View style={[styles.botPopContainer, { width: width, height: height }]}>
       <SafeAreaView style={styles.popupSafeAreaView}>
         <TouchableOpacity
@@ -60,7 +60,7 @@ export default function BottomPopup(
         />
         <View style={styles.botPopupContainer}>
           <View style={styles.headerConatainer}>
-            <Text style={styles.headerText}>{title}</Text>
+            <Text style={styles.headerText} numberOfLines={1} ellipsizeMode={'tail'}>{title}</Text>
           </View>
           <FlatList
             keyExtractor={(item, index) => index.toString()}
@@ -114,7 +114,7 @@ export default function BottomPopup(
           style={[
             styles.botVerPopupContainer,
             OS === 'ios' &&
-              !isTablet() && {
+              !isTablet && {
                 marginBottom: 10
               }
           ]}
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.15)'
   },
   botPopupContainer: {
-    width: '30%',
+    width: 300,
     backgroundColor: '#fff',
     zIndex: 2,
     borderRadius: 30
@@ -198,6 +198,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 28,
     paddingBottom: 14,
+    paddingHorizontal: 17,
     borderBottomWidth: 1,
     borderBottomColor: '#e6e6e6'
   },

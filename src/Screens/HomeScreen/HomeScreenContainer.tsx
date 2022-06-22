@@ -62,8 +62,11 @@ interface emptyData {
 export default function HomeScreenContainer(props: any) {
   const [test, setTest] = useState(false);
   const [indicator, setIndicator] = useState(true);
+  const [date, setDate] = useState<Date>(new Date());
+  const [detectChanageDate, setDetectChanageDate] = useState<boolean>(false);
   const [ongoingConference, setOngoingConference] = useState<any[]>([]);
-  const [reservationConference, setReservationConference] = useState<any[]>([]);
+  const [reservationConference, setReservationConference] = useState<any>([]);
+  const [reservationCount, setReservationCount] = useState<number>(0);
   const [finishedConference, setFinishedConference] = useState<any[]>([]);
   const [finishCount, setFinishCount] = useState(0);
   const [highlight, setHighlight] = useState<'reservation' | 'finished' | null>(
@@ -71,7 +74,7 @@ export default function HomeScreenContainer(props: any) {
   );
   const [finishIndex, setFinishIndex] = useState(0);
   const [finishDate, setFinishDate] = useState(new Date());
-  const [calendarView, setCalendarView] = useState(false);
+  const [datePickerView, setDatePickerView] = useState(false);
   const [conferenceInterval, setConferenceInterval] =
     useState<NodeJS.Timeout>();
   const [bottomPopup, setBottomPopup] = useState<{
@@ -447,7 +450,7 @@ export default function HomeScreenContainer(props: any) {
           const reservation: conference[] = result.filter(
             (conference: conference) => !conference.is_started
           );
-          const reservationList = await Promise.all(
+          const customReservationList = await Promise.all(
             reservation.map(async conference => {
               let accessUser: any[] = [];
               const getAccessUsersResult = await MeetApi.getAccessUsers(
@@ -494,7 +497,7 @@ export default function HomeScreenContainer(props: any) {
                 if (prev.length > 2) return prev;
                 let type;
                 let value;
-                const uri = present?.profile_url
+                const uri: any = present?.profile_url
                   ? wehagoMainURL + present.profile_url
                   : wehagoDummyImageURL;
                 if (sortedPortalIdList.length <= 3) {
@@ -507,21 +510,29 @@ export default function HomeScreenContainer(props: any) {
                 return [...prev, { type, value }];
               }, []);
 
-              const start = new Date(
-                conference.r_start_date_time
-              ).toTimeString();
+              const sDate = new Date(conference.r_start_date_time);
+
+              const start = sDate.toTimeString();
               const sAmPm = parseInt(start.slice(0, 2)) < 12 ? 'AM' : 'PM';
-              const startTime = sAmPm + ' ' + start.slice(0, 5);
+              const startTime = start.slice(0, 5) + ' ' + sAmPm;
 
               const end = new Date(conference.r_end_date_time).toTimeString();
               const eAaPm = parseInt(end.slice(0, 2)) < 12 ? 'AM' : 'PM';
-              const endTime = eAaPm + ' ' + end.slice(0, 5);
+              const endTime = end.slice(0, 5) + ' ' + eAaPm;
+
+              const day = sDate.toString().substring(0, 3).toLocaleUpperCase();
+
+              const reservationMonth = `${sDate
+                .toLocaleDateString()
+                .substring(0, 4)}${t('renewal.common_year')} ${sDate
+                .toLocaleDateString()
+                .substring(6, 7)}${t('renewal.common_month')}`;
 
               const data = {
                 roomName: conference.name,
-                date: new Date(
-                  conference.r_start_date_time
-                ).toLocaleDateString(),
+                date: sDate.toLocaleDateString(),
+                day: day,
+                reservationMonth: reservationMonth,
                 start: startTime,
                 end: endTime,
                 users: uriList,
@@ -543,11 +554,32 @@ export default function HomeScreenContainer(props: any) {
 
           if (
             ref.current.reservationConference.length === 0 &&
-            reservationList.length > 0
-          )
+            customReservationList.length > 0
+          ) {
+            setReservationCount(reservation.length);
             setHighlight('reservation');
+          }
+          const monthList: string[] = [];
 
-          setReservationConference(reservationList);
+          customReservationList.forEach(v => {
+            const flag = monthList.find(month => month === v.reservationMonth);
+            !flag && monthList.push(v.reservationMonth);
+          });
+
+          let reservationSectionData: { title: string; data: any[] }[] = [];
+          monthList.forEach((v, i) => {
+            const list = customReservationList.filter(
+              v1 => v1.reservationMonth === v
+            );
+            const obj = {
+              title: monthList[i],
+              data: list
+            };
+            reservationSectionData.push(obj);
+          });
+
+          // setReservationConference(reservationList);
+          setReservationConference(reservationSectionData);
         }
         // setReservationConference([]);
       })
@@ -625,7 +657,7 @@ export default function HomeScreenContainer(props: any) {
           conference.room_id
         );
 
-        if(result) {
+        if (result) {
           setBottomPopup({
             show: false,
             contentList: [],
@@ -840,7 +872,7 @@ export default function HomeScreenContainer(props: any) {
     const contentList = [];
     contentList.push(chat);
     !auth.isFreelancer && contentList.push(meet);
-    
+
     setBottomPopup({
       onClickOutside: _onClickOutside,
       contentList,
@@ -872,14 +904,24 @@ export default function HomeScreenContainer(props: any) {
   const handleClickSetting = () => {
     navigation.navigate('ConfigurationStack');
   };
-  const handleChangeMonth = (date: moment.Moment) => {
-    setFinishedConference([]);
-    setFinishIndex(0);
-    setFinishDate(date.toDate());
-    setCalendarView(false);
-  };
+
   const handleEndReached = () => {
     setFinishIndex(finishIndex + 20);
+  };
+
+  const handlePressConfirm = () => {
+    if (detectChanageDate) {
+      setFinishedConference([]);
+      setFinishIndex(0);
+      setFinishDate(date);
+      setDetectChanageDate(false);
+    }
+    setDatePickerView(false);
+  };
+
+  const handleDateChange = (time: any) => {
+    setDetectChanageDate(true);
+    setDate(time);
   };
 
   const presenterProps = {
@@ -901,13 +943,17 @@ export default function HomeScreenContainer(props: any) {
     isHorizon,
     enterInviteCode,
     onConpanyChange: handleConpanyChange,
-    onChangeMonth: handleChangeMonth,
-    setCalendarView,
-    calendarView,
+    // onChangeMonth: handleChangeMonth,
+    setDatePickerView,
+    datePickerView,
     finishDate,
     onEndReached: handleEndReached,
     finishCount,
-    onClickSetting: handleClickSetting
+    onClickSetting: handleClickSetting,
+    onPressConfirm: handlePressConfirm,
+    date,
+    onChanageDate: handleDateChange,
+    reservationCount
   };
   return isHorizon ? (
     <HomeScreenHorizonPresenter {...presenterProps} />

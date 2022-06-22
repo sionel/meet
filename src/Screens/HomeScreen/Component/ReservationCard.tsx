@@ -16,6 +16,7 @@ interface ReservationCardProps {
   reservationMoreClick: (roomId: string) => void;
   enterConference: (roomId: string) => void;
   isTablet: boolean;
+  day: string;
 }
 
 export default function ConferenceBox(props: ReservationCardProps) {
@@ -29,14 +30,21 @@ export default function ConferenceBox(props: ReservationCardProps) {
     isPublic,
     reservationMoreClick,
     enterConference,
-    isTablet
+    isTablet,
+    day
   } = props;
 
-  // console.log('users : ', users);
-
   return (
-    <View style={[styles.cardView, { width: isTablet ? '48%' : '100%' }]}>
-      <View style={styles.cardLeftContents}>
+    <View style={[styles.cardView, isTablet && { width: '48%' }]}>
+      <View
+        style={styles.dayCircleStyle}
+      >
+        <Text style={styles.dayNumberTextStyle}>
+          {date.substring(date.length - 3, date.length - 1)}
+        </Text>
+        <Text style={styles.dayWordTextStyle}>{day}</Text>
+      </View>
+      <View style={styles.cardCenterContents}>
         <View style={styles.cardTitleView}>
           <Text numberOfLines={1} style={styles.cardTitle}>
             {roomName}
@@ -51,7 +59,7 @@ export default function ConferenceBox(props: ReservationCardProps) {
         </View>
         <View style={styles.dateTimeView}>
           <Text style={styles.dateTimeText}>
-            {date + '\n' + start + ' ~ ' + end}
+            {date.substring(0, date.length - 1) + ' | ' + start + ' ~ ' + end}
           </Text>
         </View>
       </View>
@@ -60,7 +68,7 @@ export default function ConferenceBox(props: ReservationCardProps) {
         style={styles.cardRightView}
         onPress={() => reservationMoreClick(roomId)}
       >
-        <View style={styles.profileImageList}>
+        {/* <View style={styles.profileImageList}>
           {users.map(
             (
               user: { type: string | number; value: string; isMaster: boolean },
@@ -100,7 +108,7 @@ export default function ConferenceBox(props: ReservationCardProps) {
               );
             }
           )}
-        </View>
+        </View> */}
 
         <Image source={icMore} resizeMode={'contain'} style={styles.icMore} />
       </TouchableOpacity>
@@ -115,23 +123,25 @@ const styles = StyleSheet.create({
     width: 18
   },
   icMore: {
-    marginLeft: 10,
     height: 18,
     width: 18
   },
   cardView: {
-    height: 97,
+    width: '100%',
+    height: 80,
     borderRadius: 12,
     backgroundColor: '#fff',
     borderWidth: 1,
     borderColor: '#e6e6e6',
     marginBottom: 8,
-    paddingLeft: 20,
-    paddingRight: 14,
-    paddingVertical: 10,
-    flexDirection: 'row'
+    paddingRight: 16,
+    paddingLeft: 14,
+    paddingVertical: 20,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
-  cardLeftContents: {
+  cardCenterContents: {
     flex: 1,
     alignItems: 'flex-start',
     justifyContent: 'center',
@@ -148,10 +158,12 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 15,
     color: '#333',
-    fontFamily: 'DOUZONEText30'
+    fontFamily: 'DOUZONEText30',
+    letterSpacing: -0.3
   },
   dateTimeView: {
     flex: 1,
+    marginTop: 6,
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -163,11 +175,8 @@ const styles = StyleSheet.create({
     // 예약회의 시간 표현에 따라 바뀔 예정
   },
   cardRightView: {
-    width: 100,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between'
-    // backgroundColor:'#21f'
+    width: 18,
+    height: 18
   },
   profileImageList: {
     flex: 1,
@@ -199,5 +208,26 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: -4,
     position: 'absolute'
+  },
+  // 요일 동그라미 스타일
+  dayCircleStyle: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginRight: 6,
+    backgroundColor: '#e9f5ff',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  dayNumberTextStyle: {
+    color: '#1c90fb',
+    fontFamily: 'DOUZONEText50',
+    fontSize: 14,
+    letterSpacing: -0.28
+  },
+  dayWordTextStyle: {
+    color: '#1c90fb',
+    fontFamily: 'DOUZONEText50',
+    fontSize: 10
   }
 });
