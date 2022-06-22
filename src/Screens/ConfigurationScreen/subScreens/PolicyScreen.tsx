@@ -11,10 +11,16 @@ import {
 } from 'react-native';
 
 import { useSelector } from 'react-redux';
+<<<<<<< Updated upstream
 import { CustomIcon } from '@components/index';
 import { wehagoMainURL } from '@utils/index';
 import { WEHAGO_TYPE } from '../../../../config';
 import { getT } from '@utils/translateManager';
+=======
+import { CustomIcon } from '../../../components';
+import { wehagoMainURL } from '../../../utils';
+import { getT } from '../../../utils/translateManager';
+>>>>>>> Stashed changes
 import { RootState } from '../../../redux/configureStore';
 
 import icBack from '@assets/icons/ic_back.png';
@@ -28,7 +34,7 @@ export default function PolicyScreen(props: any) {
   const t = getT();
   const config = {
     terms: {
-      title: WEHAGO_TYPE + ` ${t('option_terms')}`,
+      title: `WEHAGO ${t('option_terms')}`,
       rightSide: <CustomIcon name={'btn_next'} width={24} height={24} />,
       action: () => {
         membership === 'WT1'

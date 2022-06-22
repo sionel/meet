@@ -14,17 +14,38 @@ import RootNavigation from '@navigations/RootNavigation';
 
 import { actionCreators as appAction } from './src/redux/modules/app';
 
-// import { io } from "socket.io-client";
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  QueryClient,
+  QueryClientProvider,
+  focusManager,
+} from 'react-query'
+
+import { useOnlineManager, useAppState } from './src/Hooks';
+
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { retry: 2 } },
+});
+
+function onAppStateChange(status) {
+  // React Query already supports in web browser refetch on window focus by default
+  if (Platform.OS !== 'web') {
+    focusManager.setFocused(status === 'active');
+  }
+}
 
 function App(props) {
   const { persistor, store } = configureStore();
   console.reportErrorsAsExceptions = false;
 
-  useEffect(() => {
+  useOnlineManager();
+  useAppState(onAppStateChange);
 
+  useEffect(() => {
     setExternalAPIScope(props.externalAPIScope);
     setUrl(props?.url?.url ?? '');
-    
     setT(props.t);
     Splash.hide();
     Linking.addEventListener('url', ({ url }) => {
@@ -36,13 +57,16 @@ function App(props) {
   const setUrl = url => store.dispatch(appAction.setUrl(url));
 
   return (
-    <Provider store={store}>
-      <PersistGate persistor={persistor}>
-        <CustomProvider>
-          <RootNavigation {...props} />
-        </CustomProvider>
-      </PersistGate>
-    </Provider>
+    <QueryClientProvider client={queryClient}>
+      <Provider store={store}>
+        <PersistGate persistor={persistor}>
+          <CustomProvider>
+            <RootNavigation {...props} />
+          </CustomProvider>
+        </PersistGate>
+      </Provider>
+    </QueryClientProvider>
+
   );
 }
 AppRegistry.registerComponent('App', () => withTranslation()(App));

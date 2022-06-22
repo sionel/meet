@@ -1,12 +1,11 @@
 import React, { Component, useEffect, useRef, useState } from 'react';
 import { Platform, Linking, BackHandler, Alert } from 'react-native';
 import SplashScreenPresenter from './SplashScreenPresenter';
-import { WEHAGO_ENV } from '../../../config';
-import { MeetApi, ServiceCheckApi } from '@services/index';
-import { UserApi } from '@services/index';
+
+import { MeetApi, ServiceCheckApi } from '../../services';
+import { UserApi } from '../../services';
 import RNExitApp from 'react-native-exit-app';
 
-import { querystringParser } from '@utils/index';
 import jwt_decode from 'jwt-decode';
 
 import { getT } from '@utils/translateManager';
@@ -24,6 +23,8 @@ import { actionCreators as RootActions } from '@redux/root';
 import { MeetNavigationProps } from '@navigations/RootNavigation';
 import { isSuccess } from '@services/types';
 import { errorType } from '@services/api/types';
+import { useQueries, useQuery } from 'react-query';
+import { videoApi } from '../../apis';
 
 const SplashScreenContainer = ({
   navigation,
@@ -35,6 +36,7 @@ const SplashScreenContainer = ({
   const [first, setFirst] = useState(true);
   const deeplink = params?.deeplink;
   const timeout = useRef<ReturnType<typeof setTimeout>>();
+  const os = Platform.OS;
 
   const t = getT();
 
@@ -85,6 +87,42 @@ const SplashScreenContainer = ({
     _handleGetDeeplink(url);
   }, [url]);
 
+  const _checkVersion = async () => {
+    const majorVersion = 13;
+    return await videoApi.checkVersion(os, majorVersion);
+  };
+
+  const updateInfomaion = (result: any) => {
+    if (!result.resultData.update || result.resultData.dev_mode) return;
+    const title = t('renewal.servernoti_title_update');
+    const message = t('renewal.servernoti_message_power_update');
+    const marketUrl =
+      os === 'ios'
+        ? 'https://itunes.apple.com/app/id1455726925?mt=8'
+        : 'https://play.google.com/store/apps/details?id=com.wehago.meet';
+
+    new Promise(() => {
+      Alert.alert(title, message, [
+        {
+          onPress: async () => {
+            await Linking.openURL(marketUrl);
+            RNExitApp.exitApp();
+          },
+          text: t('renewal.alert_button_update')
+        }
+      ]);
+    });
+  };
+
+  const [results] = useQueries([
+    {
+      queryKey: ['meet', 'checkVersion'],
+      queryFn: _checkVersion,
+      onSuccess: updateInfomaion
+    }
+    // { queryKey: ['meet', 'checkNotice'], queryFn: fetchPost }
+  ]);
+
   const _handleInit = async () => {
     timeout.current = setTimeout(() => {
       _handleCheckAutoLogin();
@@ -97,7 +135,6 @@ const SplashScreenContainer = ({
   };
 
   const _handleCheckVersion = async () => {
-    const os = Platform.OS;
     const majorVersion = 13;
 
     let result: any;
@@ -211,7 +248,7 @@ const SplashScreenContainer = ({
     // console.log(m);
     if (!url) return;
     if (timeout.current) clearTimeout(timeout.current);
-    let result: any = querystringParser(url);
+    let result = querystringParser(url);
     // 화상회의 요청인지 판별
     if (result.is_creater) {
       // 오래된 딥링크 주소 차단
@@ -358,6 +395,21 @@ const SplashScreenContainer = ({
       }
     }
   };
+
+  const querystringParser = (url: string) => {
+    let result: {
+      [key: string]: string;
+    } = {};
+    // 쿼리스트링 파싱
+    const rawData = url.split('?')[1] ? url.split('?')[1] : url.split('?')[0];
+    const params = rawData.split('&');
+    params.forEach((param: string) => {
+      const [name, value] = param.split('=');
+      result[name] = name.length && value.length ? value : '';
+    });
+    return result;
+  };
+
   const serviceCheck = async (auth: any) => {
     const isDeploy = await ServiceCheckApi.serviceCheck(auth);
     setPermission(isDeploy);

@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import AppIntroSlider from './react-native-intro-slider/AppIntroSlider';
-import { WEHAGO_TYPE } from '../../../config';
 
 import { getT } from '@utils/translateManager';
 import * as RNLocalize from 'react-native-localize';
@@ -49,8 +48,8 @@ class AppIntroSlide extends React.Component {
       this.language === 'ko'
         ? KRintroImages
         : this.language === 'ja'
-        ? JAintroImages
-        : ENintroImages;
+          ? JAintroImages
+          : ENintroImages;
     this.slides = [
       {
         key: '0',
@@ -79,7 +78,7 @@ class AppIntroSlide extends React.Component {
                 fontFamily: 'DOUZONEText50'
               }}
             >
-              {this.t('splash_1sttitle') + ' ' + WEHAGO_TYPE + ' Meet'}
+              {`${this.t('splash_1sttitle')} WEHAGO Meet`}
             </Text>
             <Text
               style={{

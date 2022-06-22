@@ -330,6 +330,7 @@ const styles = StyleSheet.create({
     marginLeft: 4
   }
 });
+<<<<<<< Updated upstream
 
 // /**
 //  * ConfigurationScreenPresenter
@@ -467,3 +468,5 @@ const styles = StyleSheet.create({
 // });
 
 // export default ConfigurationScreenPresenter;
+=======
+>>>>>>> Stashed changes

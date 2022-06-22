@@ -1,7 +1,10 @@
+<<<<<<< Updated upstream:src/Screens/ConferenceScreen/conferenceUtil/config/wehago.js
 import { WEHAGO_ENV } from '../../../../../config';
 
 const isWehagoV = WEHAGO_ENV === 'WEHAGOV';
 
+=======
+>>>>>>> Stashed changes:src/utils/conference/config/wehago.js
 /**
  * wehago 기본 config
  */

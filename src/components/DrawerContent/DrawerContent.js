@@ -20,13 +20,16 @@ import btnFax from '@oldassets/icons/shortcut/ico_service_fax.png'; // 팩스
 
 import DrawerContentContainer from './DrawerContentContainer';
 import CustomIcon from '../CustomIcon';
+<<<<<<< Updated upstream
 import { WEHAGO_ENV } from '../../../config';
 import { getT } from '@utils/translateManager';
+=======
+import { getT } from '../../utils/translateManager';
+>>>>>>> Stashed changes
 import RNrestart from 'react-native-restart';
 
 export default function DrawerContent(props) {
   const { navigation, setAlert } = props;
-  const isWehagoV = WEHAGO_ENV === 'WEHAGOV';
 
   // redux
   const auth = useSelector(state => state.user.auth);
@@ -89,23 +92,17 @@ export default function DrawerContent(props) {
 
     let deviceToken = type === 'neors' ? await UserApi.getDeviceInfo(auth) : '';
 
-    const commonLoginInfo = `mPORTAL_ID=${auth.portal_id}&mHASH_KEY=${
-      auth.HASH_KEY
-    }&mAuth_r_token=${auth.AUTH_R_TOKEN}&mAuth_a_token=${
-      auth.AUTH_A_TOKEN
-    }&cno=${auth.cno}${
-      type === 'neors'
+    const commonLoginInfo = `mPORTAL_ID=${auth.portal_id}&mHASH_KEY=${auth.HASH_KEY
+      }&mAuth_r_token=${auth.AUTH_R_TOKEN}&mAuth_a_token=${auth.AUTH_A_TOKEN
+      }&cno=${auth.cno}${type === 'neors'
         ? `&mDEVICE_TOKEN=${deviceToken?.thirdparty_a_token}`
         : ''
-    }`;
+      }`;
 
-    const androidLoginInfo = `portal_id=${auth.portal_id}&hash_key=${
-      auth.HASH_KEY
-    }&auth_r_token=${auth.AUTH_R_TOKEN}&auth_a_token=${auth.AUTH_A_TOKEN}&cno=${
-      auth.cno
-    }${
-      type === 'neors' ? `&mDeviceKey=${deviceToken?.thirdparty_a_token}` : ''
-    }`;
+    const androidLoginInfo = `portal_id=${auth.portal_id}&hash_key=${auth.HASH_KEY
+      }&auth_r_token=${auth.AUTH_R_TOKEN}&auth_a_token=${auth.AUTH_A_TOKEN}&cno=${auth.cno
+      }${type === 'neors' ? `&mDeviceKey=${deviceToken?.thirdparty_a_token}` : ''
+      }`;
 
     /*
       param = { 
@@ -119,21 +116,21 @@ export default function DrawerContent(props) {
           ? iosURL[type] + commonLoginInfo
           : androidURL[type] + androidLoginInfo
         : os === 'ios'
-        ? iosURL[type] + commonLoginInfo
-        : androidURL[type] + commonLoginInfo;
+          ? iosURL[type] + commonLoginInfo
+          : androidURL[type] + commonLoginInfo;
 
     const serviceName =
       type === 'wehago'
         ? 'WEHAGO'
         : type === 'neors'
-        ? '내PC원격접속'
-        : type === 'wedrive'
-        ? '웹스토리지'
-        : type === 'attendance'
-        ? '근태관리'
-        : type === 'eapprovals'
-        ? '전자결재'
-        : '';
+          ? '내PC원격접속'
+          : type === 'wedrive'
+            ? '웹스토리지'
+            : type === 'attendance'
+              ? '근태관리'
+              : type === 'eapprovals'
+                ? '전자결재'
+                : '';
 
     Linking.openURL(url).catch(async err => {
       const result = await new Promise(res => {
@@ -173,26 +170,26 @@ export default function DrawerContent(props) {
       type === 'wehago'
         ? 'WEHAGO'
         : type === 'neors'
-        ? '내PC원격접속'
-        : type === 'wedrive'
-        ? '웹스토리지'
-        : type === 'attendance'
-        ? '근태관리'
-        : type === 'eapprovals'
-        ? '전자결재'
-        : '';
+          ? '내PC원격접속'
+          : type === 'wedrive'
+            ? '웹스토리지'
+            : type === 'attendance'
+              ? '근태관리'
+              : type === 'eapprovals'
+                ? '전자결재'
+                : '';
     const source =
       type === 'wehago'
         ? btnWehago
         : type === 'neors'
-        ? btnRs10
-        : type === 'wedrive'
-        ? btnWedrive
-        : type === 'attendance'
-        ? btnAtr
-        : type === 'eapprovals'
-        ? btnElecapproval
-        : '';
+          ? btnRs10
+          : type === 'wedrive'
+            ? btnWedrive
+            : type === 'attendance'
+              ? btnAtr
+              : type === 'eapprovals'
+                ? btnElecapproval
+                : '';
 
     return (
       <TouchableOpacity onPress={onPress} style={styles.shortcut}>
@@ -224,7 +221,6 @@ export default function DrawerContent(props) {
 
   return (
     <DrawerContentContainer
-      wehagoType={WEHAGO_ENV}
       navigation={props.navigation}
       auth={auth}
       user={auth}
@@ -234,7 +230,7 @@ export default function DrawerContent(props) {
           style={{ justifyContent: 'center' }}
         >
           <CustomIcon
-            name={isWehagoV ? 'WEHAGO_V_BI' : 'logo64'}
+            name={'logo64'}
             width={85}
             height={16}
           />
