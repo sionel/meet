@@ -45,11 +45,7 @@
     "@react-navigation/stack": "5.14.9",
     "@svgr/webpack": "^4.3.2",
     "@terrylinla/react-native-sketch-canvas": "0.8.0",
-<<<<<<< Updated upstream
-    "@types/crypto-js": "^4.1.0",
-=======
     "@types/crypto-js": "^4.1.1",
->>>>>>> Stashed changes
     "@types/react-native-calendar-picker": "7.0.2",
     "axios": "^0.25.0",
     "babel-plugin-module-resolver": "^4.1.0",
