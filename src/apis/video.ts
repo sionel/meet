@@ -1,6 +1,7 @@
 import { PlatformOSType } from 'react-native';
 import { getToken, isDev, meetURL, wehagoBaseURL0 } from '.';
-
+import CryptoJS from 'crypto-js';
+ 
 export default {
   checkVersion: async (os: PlatformOSType, major: number) => {
     let url = '';
@@ -23,9 +24,8 @@ export default {
         signature
       }
     };
-
     const response = await fetch(url, data);
-
+    debugger
     if (response.status !== 200) {
       throw await response.json();
     }

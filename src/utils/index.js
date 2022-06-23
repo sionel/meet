@@ -184,7 +184,6 @@ _getLocation = url => {
     search: match[6],
     hash: match[7]
   };
-  debugger
   return ret;
 };
 

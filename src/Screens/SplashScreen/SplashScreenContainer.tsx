@@ -25,6 +25,7 @@ import { isSuccess } from '@services/types';
 import { errorType } from '@services/api/types';
 import { useQueries, useQuery } from 'react-query';
 import { videoApi } from '../../apis';
+import { WehagoAPI } from 'src/types/types';
 
 const SplashScreenContainer = ({
   navigation,
@@ -87,9 +88,13 @@ const SplashScreenContainer = ({
     _handleGetDeeplink(url);
   }, [url]);
 
-  const _checkVersion = async () => {
+  const _checkVersion: WehagoAPI = async () => {
     const majorVersion = 13;
     return await videoApi.checkVersion(os, majorVersion);
+  };
+
+  const _checkNotice: WehagoAPI = async () => {
+    return await MeetApi.checkNotice();
   };
 
   const updateInfomaion = (result: any) => {
@@ -114,14 +119,28 @@ const SplashScreenContainer = ({
     });
   };
 
-  const [results] = useQueries([
+  const testQuery = useQuery<string[]>(['test'], () => {
+    return new Promise<string[]>(res => res(['1', '2', '3']));
+  });
+
+
+  const [q1, q2] = useQueries([
     {
       queryKey: ['meet', 'checkVersion'],
-      queryFn: _checkVersion,
-      onSuccess: updateInfomaion
+      queryFn: _checkVersion
+      // onSuccess: updateInfomaion
+    },
+    {
+      queryKey: ['meet', 'checkNotificaion'],
+      queryFn: _checkNotice,
+      // onSuccess: updateInfomaion
     }
     // { queryKey: ['meet', 'checkNotice'], queryFn: fetchPost }
   ]);
+  useEffect(() => {
+    // q1.data?.resultData
+    // q1.data?.resultData
+  }, [q1]);
 
   const _handleInit = async () => {
     timeout.current = setTimeout(() => {

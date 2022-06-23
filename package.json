@@ -111,7 +111,7 @@
     "react-native-watch-connectivity": "0.4.3",
     "react-native-webrtc": "github:react-native-webrtc/react-native-webrtc#510d20dd62c1768885a98f36fde83f9e48a723fa",
     "react-native-webview": "11.0.2",
-    "react-query": "^3.39.1",
+    "react-query": "3.39.1",
     "react-redux": "7.1.1",
     "react-transition-group": "2.4.0",
     "redux": "4.0.0",

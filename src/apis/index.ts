@@ -3,6 +3,7 @@ import CryptoJS from 'crypto-js';
 import { v4 as uuidv4 } from 'uuid';
 
 import { Auth } from '../types/types';
+import axios from 'axios';
 
 export { default as videoApi } from './video';
 
@@ -15,10 +16,10 @@ export const isDev = false;
 
 export const wehagoBaseURL0 = isDev
   ? `http://dev.api0.wehago.com`
-  : `https://api0.wehago.com`; 
+  : `https://api0.wehago.com`;
 export const wehagoBaseURL = isDev
   ? `http://dev.api.wehago.com`
-  : `https://api.wehago.com`; 
+  : `https://api.wehago.com`;
 export const wehagoMainURL = isDev
   ? `http://dev.wehago.com`
   : `https://www.wehago.com`;
@@ -31,31 +32,6 @@ export const meetURL = isDev
 export const wehagoDummyImageURL = `https://static.wehago.com/imgs/dummy/@dummy_02.jpg`; // 더미 프로필
 export const wehagoStaticURL = `https://static.wehago.com`;
 
-export const securityRequest = (auth: Auth) => {
-  const { AUTH_A_TOKEN, AUTH_R_TOKEN, url, HASH_KEY } = auth;
-
-  const transactionId = _getTransactionId();
-  const clientId = OSID;
-  const service = _getService(url);
-  const timestamp = Math.floor(Date.now() / 1000);
-  const wehagoSign = _getWehagoSign(url, timestamp, transactionId, HASH_KEY);
-  const signature = createSignature(String(url) + String(AUTH_A_TOKEN));
-
-  const rs = {
-    Authorization: `Bearer ${AUTH_A_TOKEN}`,
-    'transaction-id': transactionId,
-    'wehago-sign': wehagoSign,
-    'client-id': clientId,
-    'Wehago-S': HASH_KEY,
-    timestamp: String(timestamp),
-    signature: signature,
-    service: service,
-    Cookie: `AUTH_A_TOKEN=${AUTH_A_TOKEN}; AUTH_R_TOKEN=${AUTH_R_TOKEN}`
-  };
-  return rs;
-};
-
-// serialize
 export const serialize = (obj: { [key: string]: string }) => {
   let str = [];
   for (let p in obj)
