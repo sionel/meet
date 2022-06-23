@@ -20,12 +20,7 @@ import btnFax from '@oldassets/icons/shortcut/ico_service_fax.png'; // 팩스
 
 import DrawerContentContainer from './DrawerContentContainer';
 import CustomIcon from '../CustomIcon';
-<<<<<<< Updated upstream
-import { WEHAGO_ENV } from '../../../config';
-import { getT } from '@utils/translateManager';
-=======
 import { getT } from '../../utils/translateManager';
->>>>>>> Stashed changes
 import RNrestart from 'react-native-restart';
 
 export default function DrawerContent(props) {

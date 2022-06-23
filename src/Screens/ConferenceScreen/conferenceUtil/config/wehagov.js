@@ -1,9 +1,4 @@
-<<<<<<< Updated upstream:src/Screens/ConferenceScreen/conferenceUtil/config/wehagov.js
-import { WEHAGO_ENV } from '../../../../../config';
-=======
 // import { WEHAGO_ENV } from '../../../../config';
->>>>>>> Stashed changes:src/utils/conference/config/wehagov.js
-
 // const isWehagoV = WEHAGO_ENV === 'WEHAGOV';
 
 // /**
