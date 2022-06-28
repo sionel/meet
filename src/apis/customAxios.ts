@@ -1,24 +1,35 @@
 import { Platform } from 'react-native';
-import { Axios, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { Axios, AxiosRequestConfig, AxiosResponse ,AxiosStatic} from 'axios';
 import CryptoJS from 'crypto-js';
 import { v4 as uuidv4 } from 'uuid';
 
 import { Auth, ResponseWehagoAPI } from 'src/types/types';
-import { getToken, isDev, meetURL, wehagoBaseURL0 } from '.';
+import { isDev, meetURL, wehagoBaseURL, wehagoBaseURL0 } from '.';
 
-class axios extends Axios {
+class customAxios extends Axios {
   private auth: undefined | Auth = undefined;
+  private static instance: customAxios;
 
   constructor(auth?: Auth) {
     super();
-    this.auth = auth;
+    if (!customAxios.instance) {
+      this.auth = auth;
+      customAxios.instance = this;
+    }
+    return customAxios.instance;
   }
+
+  public static getInstance = () => {
+    return customAxios.instance || new customAxios();
+  };
 
   setAuth = (auth: Auth) => {
     this.auth = auth;
   };
 
-  async get<T = any, R = ResponseWehagoAPI<T>, D = any>(
+
+
+  async get<T = any, R = AxiosResponse<ResponseWehagoAPI<T>>, D = any>(
     url: string,
     customConfig: AxiosRequestConfig = {
       data: {},
@@ -26,16 +37,11 @@ class axios extends Axios {
     }
   ): Promise<R> {
     const [fullUrl, config] = await this._makeConfig(url, customConfig);
-    return super.get(fullUrl, config);
+    // super.
+    return axios.get(fullUrl, config);
+    // return super.get(fullUrl, config)
   }
 
-  test = () => {
-    this.get<{ rkqt: number }>('/test', {
-      data: {
-        value: 'asd'
-      }
-    });
-  };
   _makeConfig = async (
     url: string,
     config: AxiosRequestConfig
@@ -44,32 +50,39 @@ class axios extends Axios {
     let signature = '';
     let headers = {};
     if (this.auth) {
-      const { AUTH_A_TOKEN, AUTH_R_TOKEN, HASH_KEY } = this.auth;
-
       headers = this._createHeader(this.auth, url);
     }
     if (isDev) {
-      accsessUrl = `${meetURL}/token`;
+      /* 
+        개발기의경우 /video로 시작하는 api는
+        https://rtctest.wehago.com/api-bind 록 타야하는데 /video 가 없어야 한다
+      */
+      const isMeetUrl = this._checkMeetUrl(url);
+      accsessUrl = `${
+        isMeetUrl ? meetURL + url.substring(6) : wehagoBaseURL + url
+      }`;
     } else {
-      accsessUrl = `/video/token`;
-      const token = await this._getToken(accsessUrl);
-      const encText = accsessUrl + token.cur_date + token.token;
+      const token = await this._getToken(url);
+      const encText = url + token.cur_date + token.token;
       const hashText = CryptoJS.SHA256(encText);
       signature = CryptoJS.enc.Base64.stringify(hashText);
-      accsessUrl = `${wehagoBaseURL0}${accsessUrl}`;
+      accsessUrl = `${wehagoBaseURL0}${url}`;
       headers = {
-        'Content-Type': 'application/json',
+        'Content-Type': config?.headers?.['Content-Type'] ?? 'application/json',
         signature
       };
     }
-
     return [
       accsessUrl,
       {
         headers,
-        data: JSON.stringify(config?.data)
+        data: JSON.stringify(config?.data) ?? ''
       }
     ];
+  };
+
+  _checkMeetUrl = (url: string): boolean => {
+    return url.split('/')[1] === 'video';
   };
 
   _createHeader = (auth: Auth, url: string) => {
@@ -120,16 +133,15 @@ class axios extends Axios {
   _getToken = async (accessUrl: string) => {
     try {
       const url = `${wehagoBaseURL0}/get_token/?url=${accessUrl}`;
-      const data = {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-        }
+
+      const headers = {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
       };
 
-      const response = await super.get(url, data);
-
+      const response = await axios.get(url, { headers });
       return response.data;
     } catch (err) {
+      console.log(err);
       return false;
     }
   };
@@ -226,4 +238,4 @@ class axios extends Axios {
   // ): Promise<R>;
 }
 
-export default axios;
+export default customAxios;

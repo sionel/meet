@@ -24,7 +24,7 @@ import { MeetNavigationProps } from '@navigations/RootNavigation';
 import { isSuccess } from '@services/types';
 import { errorType } from '@services/api/types';
 import { useQueries, useQuery } from 'react-query';
-import { videoApi } from '../../apis';
+import videoApi from '../../apis/video';
 import { WehagoAPI } from 'src/types/types';
 
 const SplashScreenContainer = ({
@@ -88,14 +88,15 @@ const SplashScreenContainer = ({
     _handleGetDeeplink(url);
   }, [url]);
 
-  const _checkVersion: WehagoAPI = async () => {
+  const _checkVersion: WehagoAPI | any = async () => {
     const majorVersion = 13;
-    return await videoApi.checkVersion(os, majorVersion);
+    const r = await videoApi.checkVersion(os, majorVersion);
+    return r;
   };
 
-  const _checkNotice: WehagoAPI = async () => {
-    return await MeetApi.checkNotice();
-  };
+  // const _checkNotice: WehagoAPI = async () => {
+  //   return await MeetApi.checkNotice();
+  // };
 
   const updateInfomaion = (result: any) => {
     if (!result.resultData.update || result.resultData.dev_mode) return;
@@ -123,24 +124,26 @@ const SplashScreenContainer = ({
     return new Promise<string[]>(res => res(['1', '2', '3']));
   });
 
+  const version = useQuery(['meet', 'checkVersion'], _checkVersion);
+  // const notice = useQuery(['meet', 'checkNotificaion'], _checkNotice);
 
-  const [q1, q2] = useQueries([
-    {
-      queryKey: ['meet', 'checkVersion'],
-      queryFn: _checkVersion
-      // onSuccess: updateInfomaion
-    },
-    {
-      queryKey: ['meet', 'checkNotificaion'],
-      queryFn: _checkNotice,
-      // onSuccess: updateInfomaion
-    }
-    // { queryKey: ['meet', 'checkNotice'], queryFn: fetchPost }
-  ]);
-  useEffect(() => {
-    // q1.data?.resultData
-    // q1.data?.resultData
-  }, [q1]);
+  // const [q1, q2] = useQueries([
+  //   {
+  //     queryKey: ['meet', 'checkVersion'],
+  //     queryFn: _checkVersion
+  //     // onSuccess: updateInfomaion
+  //   },
+  //   {
+  //     queryKey: ['meet', 'checkNotificaion'],
+  //     queryFn: _checkNotice
+  //     // onSuccess: updateInfomaion
+  //   }
+  //   // { queryKey: ['meet', 'checkNotice'], queryFn: fetchPost }
+  // ]);
+  // useEffect(() => {
+  //   // q1.data?.resultData
+  //   // q1.data?.resultData
+  // }, [q1]);
 
   const _handleInit = async () => {
     timeout.current = setTimeout(() => {
@@ -158,6 +161,7 @@ const SplashScreenContainer = ({
 
     let result: any;
     const checkVersion = await MeetApi.checkVersion(os, majorVersion);
+    debugger
     if (isSuccess(checkVersion)) {
       result = checkVersion;
     }

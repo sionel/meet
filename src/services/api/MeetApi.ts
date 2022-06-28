@@ -35,9 +35,7 @@ const getToken = async (accessUrl: string) => {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
       }
     };
-
     const response = await fetch(url, data);
-
     return response.json();
   } catch (err) {
     return false;

@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/es/integration/react';
 import configureStore from './src/redux/configureStore';
 import CustomProvider from './src/Provider';
+import './jitsi/features/base/lib-jitsi-meet';
 
 import { withTranslation } from 'react-i18next';
 import './src/locales/index';
@@ -24,7 +25,13 @@ import {
 } from 'react-query'
 
 import { useOnlineManager, useAppState } from './src/Hooks';
-
+// Object.prototype.fromEntries = Object.fromEntries || function (arr) {
+//   debugger
+//   return arr?.reduce(function (acc, curr) {
+//     acc[curr[0]] = curr[1];
+//     return acc;
+//   }, {});
+// };
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 2 } },
 });

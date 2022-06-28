@@ -1,34 +1,22 @@
 import { PlatformOSType } from 'react-native';
-import { getToken, isDev, meetURL, wehagoBaseURL0 } from '.';
-import CryptoJS from 'crypto-js';
- 
+import axios from './customAxios';
+import axiostest from 'axios';
+
 export default {
   checkVersion: async (os: PlatformOSType, major: number) => {
-    let url = '';
-    let signature = '';
-    if (isDev) {
-      url = `${meetURL}/mobile/version?os=${os}&major=${major}`;
-    } else {
-      const accsessUrl = `/video/mobile/version?os=${os}&major=${major}`;
-      const token = await getToken(accsessUrl);
-      const encText = accsessUrl + token.cur_date + token.token;
-      const hashText = CryptoJS.SHA256(encText);
-      signature = CryptoJS.enc.Base64.stringify(hashText);
-      url = `${wehagoBaseURL0}${accsessUrl}`;
-    }
-
-    const data = {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        signature
-      }
+    const Axios = axios.getInstance();
+    const url = `/video/mobile/version?os=${os}&major=${major}`;
+    const headers = {
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
     };
-    const response = await fetch(url, data);
-    debugger
-    if (response.status !== 200) {
-      throw await response.json();
-    }
-    return response.json();
+    const response = await Axios.get(url, { headers })
+      .then(res => {
+        res.data.resultData;
+      })
+      .catch(rej => {
+        debugger
+        console.log(rej);
+      });
+    return response;
   }
 };
