@@ -197,6 +197,19 @@ task androidSourcesJar(type: Jar) {
 } => 이부분 주석 처리
 <!-- 11, 12번 patch적용에 따라 필요 없음. -->
 
+13. Object.fromEntries 이슈
+
+node_modules/react-native/Libraries/polyfills/Object.es7.js
+맨 아에 해당 코드 추가
+   if (typeof Object.fromEntries !== 'function') {
+    Object.fromEntries = function (arr) {
+      return arr.reduce(function (acc, curr) {
+        acc[curr[0]] = curr[1];
+        return acc;
+      }, {});
+    };
+  }
+
 ## 스토어 주소
 ios : https://itunes.apple.com/app/id1455726925?mt=8
 android : https://play.google.com/store/apps/details?id=com.wehago.meet

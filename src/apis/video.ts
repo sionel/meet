@@ -9,14 +9,16 @@ export default {
     const headers = {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
     };
+    // const data = {};
     const response = await Axios.get(url, { headers })
       .then(res => {
         res.data.resultData;
       })
       .catch(rej => {
-        debugger
+        debugger;
         console.log(rej);
       });
+
     return response;
   }
 };

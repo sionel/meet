@@ -26,6 +26,7 @@ import { errorType } from '@services/api/types';
 import { useQueries, useQuery } from 'react-query';
 import videoApi from '../../apis/video';
 import { WehagoAPI } from 'src/types/types';
+import useApis from './useApis';
 
 const SplashScreenContainer = ({
   navigation,
@@ -94,9 +95,9 @@ const SplashScreenContainer = ({
     return r;
   };
 
-  // const _checkNotice: WehagoAPI = async () => {
-  //   return await MeetApi.checkNotice();
-  // };
+  const _checkNotice: WehagoAPI | any = async () => {
+    return await MeetApi.checkNotice();
+  };
 
   const updateInfomaion = (result: any) => {
     if (!result.resultData.update || result.resultData.dev_mode) return;
@@ -120,11 +121,13 @@ const SplashScreenContainer = ({
     });
   };
 
-  const testQuery = useQuery<string[]>(['test'], () => {
-    return new Promise<string[]>(res => res(['1', '2', '3']));
-  });
+  // const testQuery = useQuery<string[]>(['test'], () => {
+  //   return new Promise<string[]>(res => res(['1', '2', '3']));
+  // });
 
+  // useApis.useCheckVersionAndNoti(13)
   const version = useQuery(['meet', 'checkVersion'], _checkVersion);
+  
   // const notice = useQuery(['meet', 'checkNotificaion'], _checkNotice);
 
   // const [q1, q2] = useQueries([
@@ -161,7 +164,7 @@ const SplashScreenContainer = ({
 
     let result: any;
     const checkVersion = await MeetApi.checkVersion(os, majorVersion);
-    debugger
+    debugger;
     if (isSuccess(checkVersion)) {
       result = checkVersion;
     }

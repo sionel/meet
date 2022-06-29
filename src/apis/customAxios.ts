@@ -1,17 +1,21 @@
 import { Platform } from 'react-native';
-import axios, { Axios, AxiosRequestConfig, AxiosResponse ,AxiosStatic} from 'axios';
+import axios, {
+  Axios,
+  AxiosRequestConfig,
+  AxiosResponse,
+  AxiosStatic
+} from 'axios';
 import CryptoJS from 'crypto-js';
 import { v4 as uuidv4 } from 'uuid';
 
 import { Auth, ResponseWehagoAPI } from 'src/types/types';
 import { isDev, meetURL, wehagoBaseURL, wehagoBaseURL0 } from '.';
 
-class customAxios extends Axios {
+class customAxios {
   private auth: undefined | Auth = undefined;
   private static instance: customAxios;
 
   constructor(auth?: Auth) {
-    super();
     if (!customAxios.instance) {
       this.auth = auth;
       customAxios.instance = this;
@@ -27,8 +31,6 @@ class customAxios extends Axios {
     this.auth = auth;
   };
 
-
-
   async get<T = any, R = AxiosResponse<ResponseWehagoAPI<T>>, D = any>(
     url: string,
     customConfig: AxiosRequestConfig = {
@@ -37,9 +39,7 @@ class customAxios extends Axios {
     }
   ): Promise<R> {
     const [fullUrl, config] = await this._makeConfig(url, customConfig);
-    // super.
     return axios.get(fullUrl, config);
-    // return super.get(fullUrl, config)
   }
 
   _makeConfig = async (
@@ -200,6 +200,14 @@ class customAxios extends Axios {
     };
     return ret;
   };
+
+  // post<T = any, R = AxiosResponse<T>, D = any>(
+  //   url: string,
+  //   data?: D,
+  //   config?: AxiosRequestConfig<D>
+  // ): Promise<R>{
+  //  return new Promise<R>
+  // }
 
   // getUri(config?: AxiosRequestConfig): string;
   // request<T = any, R = AxiosResponse<T>, D = any>(
